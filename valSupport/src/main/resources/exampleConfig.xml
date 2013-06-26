@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    
+    This structure defines a validator.  A validator is made up of 
+    one or more steps.  Each step is defined by a class which 
+    extends the abstract class MessageValidator.
+-->
+<ValConfig>
+    <!-- Run validation class classname1 -->
+    <ValStep>
+        <Class>classname1</Class>
+    </ValStep>
+    
+    <!-- Run validation class classname2a if selectionClass1.select() returns true.
+         The id attribute is only necessary if the result of the ValStep is referenced
+         later in the configuration. -->
+    <ValStep id="cl2a">
+        <Selectable>selectionClass1</Selectable>
+        <Class>classname2a</Class>
+    </ValStep>
+    <!-- Run validation class classname2a if selectionClass2.select() returns true 
+         ValSteps cl2a and cl2b are not required to be mutually exclusive -->
+    <ValStep id="cl2b">
+        <Selectable>selectionClass2</Selectable>
+        <Class>classname2b</Class>
+    </ValStep>
+    
+    <!-- Run validation class classname3 if ValStep cl2 was run. -->
+    <IfRan step="cl2a">
+        <ValStep id="xyzzy">
+            <Class>classname3</Class>
+        </ValStep>
+    </IfRan>
+
+    <!-- Run validation class classname4 if ValStep cl2 was run and failed.
+         Status is determined by calling MessageValidator.isSuccess() 
+         after the validator has run. -->
+    <IfRan step="cl2a" status="failure">
+        <ValStep>
+            <Class>classname4</Class>
+        </ValStep>
+    </IfRan>
+    
+    <!-- Run validation class classname5 and classname6 if ValStep cl2 was run and succeeded -->
+    <IfRan step="cl2a" status="success">
+        <ValStep>
+            <Class>classname5</Class>
+        </ValStep>
+        <ValStep>
+            <Class>classname6</Class>
+        </ValStep>
+    </IfRan>
+</ValConfig>

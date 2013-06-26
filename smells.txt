@@ -1,0 +1,6 @@
+smells
+
+HttpClient should be replaced by something external
+
+gov.nist.toolkit.registryMetadataValidator.field.CodeValidationBase
+	- rethink 'finding codes.xml' strategy
