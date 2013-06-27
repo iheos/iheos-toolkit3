@@ -1,16 +1,16 @@
 package gov.nist.hit.ds.registrySim.sq.generic.queries;
 
+import gov.nist.hit.ds.docRef.SqDocRef;
+import gov.nist.hit.ds.registryMetadata.Metadata;
+import gov.nist.hit.ds.registryMetadata.MetadataParser;
 import gov.nist.hit.ds.registrySim.sq.generic.support.StoredQuery;
 import gov.nist.hit.ds.registrySim.sq.generic.support.StoredQuerySupport;
-import gov.nist.toolkit.docRef.SqDocRef;
-import gov.nist.toolkit.registryMetadata.Metadata;
-import gov.nist.toolkit.registryMetadata.MetadataParser;
-import gov.nist.toolkit.registrysupport.logging.LoggerException;
-import gov.nist.toolkit.xdsException.MetadataException;
-import gov.nist.toolkit.xdsException.MetadataValidationException;
-import gov.nist.toolkit.xdsException.XDSRegistryOutOfResourcesException;
-import gov.nist.toolkit.xdsException.XdsException;
-import gov.nist.toolkit.xdsException.XdsInternalException;
+import gov.nist.hit.ds.registrysupport.logging.LoggerException;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.MetadataValidationException;
+import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.List;
 

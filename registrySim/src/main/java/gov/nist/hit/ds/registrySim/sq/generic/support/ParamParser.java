@@ -1,11 +1,11 @@
 package gov.nist.hit.ds.registrySim.sq.generic.support;
 
-import gov.nist.toolkit.docRef.EbRim;
-import gov.nist.toolkit.docRef.SqDocRef;
-import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.utilities.xml.XmlUtil;
-import gov.nist.toolkit.xdsException.MetadataValidationException;
-import gov.nist.toolkit.xdsException.XdsInternalException;
+import gov.nist.hit.ds.docRef.EbRim;
+import gov.nist.hit.ds.docRef.SqDocRef;
+import gov.nist.hit.ds.registrysupport.MetadataSupport;
+import gov.nist.hit.ds.utilities.xml.XmlUtil;
+import gov.nist.hit.ds.xdsException.MetadataValidationException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

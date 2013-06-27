@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.registrySim.sq.generic.support;
 
-import gov.nist.toolkit.docRef.SqDocRef;
-import gov.nist.toolkit.xdsException.MetadataException;
-import gov.nist.toolkit.xdsException.XdsInternalException;
+import gov.nist.hit.ds.docRef.SqDocRef;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

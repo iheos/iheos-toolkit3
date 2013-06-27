@@ -52,6 +52,7 @@
   	<module>valSupport</module>
   	<module>registryMetadata</module>
   	<module>registrySupport</module>
+  	<module>registrySim</module>
   	<module>docRef</module>
   	<module>registryMsgFormats</module>
   	<module>soap</module>

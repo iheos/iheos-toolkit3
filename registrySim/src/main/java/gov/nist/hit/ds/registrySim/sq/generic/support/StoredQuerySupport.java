@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.registrySim.sq.generic.support;
 
-import gov.nist.toolkit.errorRecording.ErrorContext;
-import gov.nist.toolkit.errorRecording.ErrorRecorder;
-import gov.nist.toolkit.errorRecording.client.XdsErrorCode;
-import gov.nist.toolkit.registrysupport.logging.LoggerException;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.registrysupport.logging.LoggerException;
 
 import java.util.ArrayList;
 
