@@ -21,7 +21,8 @@ import org.w3c.dom.NodeList;
 
 public class XmlUtil {
 	static public OMFactory om_factory = OMAbstractFactory.getOMFactory();
-    
+	static public OMNamespace xml_namespace =   XmlUtil.om_factory.createOMNamespace("http://www.w3.org/XML/1998/namespace", "xml");
+
 	public static OMElement firstChildWithLocalName(OMElement ele, String localName) {
 		for (Iterator<?> it=ele.getChildElements(); it.hasNext(); ) {
 			OMElement child = (OMElement) it.next();

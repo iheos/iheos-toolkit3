@@ -2061,7 +2061,7 @@ public class Metadata {
 		OMElement locStr = XmlUtil.om_factory.createOMElement(MetadataSupport.localizedstring_qnamens);
 		nameEle.addChild(locStr);
 		
-		locStr.addAttribute("lang", "us-en", MetadataSupport.xml_namespace);
+		locStr.addAttribute("lang", "us-en", XmlUtil.xml_namespace);
 		locStr.addAttribute("charset", "UTF-8", null);
 		locStr.addAttribute("value", title, null);
 	}
@@ -2073,7 +2073,7 @@ public class Metadata {
 		OMElement locStr = XmlUtil.om_factory.createOMElement(MetadataSupport.localizedstring_qnamens);
 		nameEle.addChild(locStr);
 		
-		locStr.addAttribute("lang", "us-en", MetadataSupport.xml_namespace);
+		locStr.addAttribute("lang", "us-en", XmlUtil.xml_namespace);
 		locStr.addAttribute("charset", "UTF-8", null);
 		locStr.addAttribute("value", description, null);
 	}
@@ -3027,7 +3027,7 @@ public class Metadata {
 				Iterator<OMAttribute> it = ele.getAllAttributes(); it.hasNext();) {
 			OMAttribute a = it.next();
 			if (a.getLocalName().equals("lang"))
-				a.setOMNamespace(MetadataSupport.xml_namespace);
+				a.setOMNamespace(XmlUtil.xml_namespace);
 		}
 		for (@SuppressWarnings("unchecked")
 				Iterator<OMElement> it = ele.getChildElements(); it.hasNext();) {
