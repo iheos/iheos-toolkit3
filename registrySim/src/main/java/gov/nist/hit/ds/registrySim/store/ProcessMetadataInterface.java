@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.registrySim.store;
 
-import gov.nist.toolkit.registryMetadata.Metadata;
+import gov.nist.hit.ds.registryMetadata.Metadata;
 
 public interface ProcessMetadataInterface {
 

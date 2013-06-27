@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.registrySim.store;
 
-import gov.nist.toolkit.errorRecording.ErrorRecorder;
-import gov.nist.toolkit.valSupport.client.ValidationContext;
-import gov.nist.toolkit.valSupport.engine.MessageValidatorEngine;
-import gov.nist.toolkit.valSupport.message.MessageValidator;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.valSupport.client.ValidationContext;
+import gov.nist.hit.ds.valSupport.engine.MessageValidatorEngine;
+import gov.nist.hit.ds.valSupport.message.MessageValidator;
 
 public class Committer extends MessageValidator {
 	MetadataCollection delta;

@@ -1,21 +1,21 @@
 package gov.nist.hit.ds.registrySim.sq.generic.support;
 
-import gov.nist.toolkit.docRef.EbRS;
-import gov.nist.toolkit.docRef.SqDocRef;
-import gov.nist.toolkit.errorRecording.ErrorContext;
-import gov.nist.toolkit.errorRecording.ErrorRecorder;
-import gov.nist.toolkit.errorRecording.client.XdsErrorCode;
-import gov.nist.toolkit.registryMetadata.Metadata;
-import gov.nist.toolkit.registryMsgFormats.AdhocQueryResponse;
-import gov.nist.toolkit.registryMsgFormats.RegistryErrorListGenerator;
-import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.registrysupport.logging.LoggerException;
-import gov.nist.toolkit.utilities.xml.XmlUtil;
-import gov.nist.toolkit.xdsException.MetadataException;
-import gov.nist.toolkit.xdsException.MetadataValidationException;
-import gov.nist.toolkit.xdsException.XDSRegistryOutOfResourcesException;
-import gov.nist.toolkit.xdsException.XdsException;
-import gov.nist.toolkit.xdsException.XdsInternalException;
+import gov.nist.hit.ds.docRef.EbRS;
+import gov.nist.hit.ds.docRef.SqDocRef;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.registryMetadata.Metadata;
+import gov.nist.hit.ds.registryMsgFormats.AdhocQueryResponse;
+import gov.nist.hit.ds.registryMsgFormats.RegistryErrorListGenerator;
+import gov.nist.hit.ds.registrysupport.MetadataSupport;
+import gov.nist.hit.ds.registrysupport.logging.LoggerException;
+import gov.nist.hit.ds.utilities.xml.XmlUtil;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.MetadataValidationException;
+import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import org.apache.axiom.om.OMElement;
 

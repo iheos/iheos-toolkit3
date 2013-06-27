@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.registrySim.sq.sims;
 
+import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registrySim.sq.generic.queries.GetSubmissionSets;
 import gov.nist.hit.ds.registrySim.sq.generic.support.QueryReturnType;
 import gov.nist.hit.ds.registrySim.sq.generic.support.StoredQuerySupport;
@@ -7,10 +8,9 @@ import gov.nist.hit.ds.registrySim.store.Assoc;
 import gov.nist.hit.ds.registrySim.store.MetadataCollection;
 import gov.nist.hit.ds.registrySim.store.RegIndex;
 import gov.nist.hit.ds.registrySim.store.SubSet;
-import gov.nist.toolkit.registryMetadata.Metadata;
-import gov.nist.toolkit.registrysupport.logging.LoggerException;
-import gov.nist.toolkit.xdsException.MetadataException;
-import gov.nist.toolkit.xdsException.XdsException;
+import gov.nist.hit.ds.registrysupport.logging.LoggerException;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsException;
 
 import java.util.HashSet;
 import java.util.List;

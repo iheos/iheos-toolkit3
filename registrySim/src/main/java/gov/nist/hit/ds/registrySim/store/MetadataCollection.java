@@ -1,22 +1,22 @@
 package gov.nist.hit.ds.registrySim.store;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
+import gov.nist.hit.ds.registryMetadata.Metadata;
+import gov.nist.hit.ds.registryMetadata.MetadataParser;
+import gov.nist.hit.ds.registryMetadataValidator.object.RegistryValidationInterface;
 import gov.nist.hit.ds.registrySim.store.RegIndex.AssocType;
 import gov.nist.hit.ds.registrySim.store.RegIndex.OldValueNewValueStatus;
-import gov.nist.toolkit.errorRecording.ErrorContext;
-import gov.nist.toolkit.errorRecording.ErrorRecorder;
-import gov.nist.toolkit.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.toolkit.registryMetadata.Metadata;
-import gov.nist.toolkit.registryMetadata.MetadataParser;
-import gov.nist.toolkit.registryMetadataValidator.object.RegistryValidationInterface;
-import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.utilities.other.UuidAllocator;
-import gov.nist.toolkit.utilities.xml.OMFormatter;
-import gov.nist.toolkit.utilities.xml.XmlUtil;
-import gov.nist.toolkit.valSupport.client.ValidationContext;
-import gov.nist.toolkit.xdsException.MetadataException;
-import gov.nist.toolkit.xdsException.MetadataValidationException;
-import gov.nist.toolkit.xdsException.XdsInternalException;
+import gov.nist.hit.ds.registrysupport.MetadataSupport;
+import gov.nist.hit.ds.utilities.io.Io;
+import gov.nist.hit.ds.utilities.other.UuidAllocator;
+import gov.nist.hit.ds.utilities.xml.OMFormatter;
+import gov.nist.hit.ds.utilities.xml.XmlUtil;
+import gov.nist.hit.ds.valSupport.client.ValidationContext;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.MetadataValidationException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 import java.io.IOException;

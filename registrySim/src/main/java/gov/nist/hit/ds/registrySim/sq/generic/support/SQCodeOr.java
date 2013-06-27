@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.registrySim.sq.generic.support;
 
-import gov.nist.toolkit.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,14 +1,14 @@
 package gov.nist.hit.ds.registrySim.store;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
+import gov.nist.hit.ds.registryMetadata.Metadata;
+import gov.nist.hit.ds.registryMetadataValidator.field.SubmissionStructure;
 import gov.nist.hit.ds.registrySim.store.RegIndex.AssocType;
-import gov.nist.toolkit.errorRecording.ErrorContext;
-import gov.nist.toolkit.errorRecording.ErrorRecorder;
-import gov.nist.toolkit.errorRecording.client.XdsErrorCode;
-import gov.nist.toolkit.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.toolkit.registryMetadata.Metadata;
-import gov.nist.toolkit.registryMetadataValidator.field.SubmissionStructure;
-import gov.nist.toolkit.utilities.datatypes.Hl7Date;
-import gov.nist.toolkit.xdsException.MetadataException;
+import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
+import gov.nist.hit.ds.xdsException.MetadataException;
 
 import java.util.ArrayList;
 import java.util.List;

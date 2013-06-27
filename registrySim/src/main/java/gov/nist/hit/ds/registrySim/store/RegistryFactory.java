@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.registrySim.store;
 
-import gov.nist.toolkit.registryMetadata.Metadata;
-import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdsException.MetadataException;
+import gov.nist.hit.ds.registryMetadata.Metadata;
+import gov.nist.hit.ds.registrysupport.MetadataSupport;
+import gov.nist.hit.ds.xdsException.MetadataException;
 
 import java.util.ArrayList;
 import java.util.List;
