@@ -395,9 +395,12 @@ public class MetadataCollection implements Serializable, RegistryValidationInter
 			throw new MetadataException("id " + obj.id + " already present in registry",null);
 	}
 
-	public List<String> getIdsForObjects(List<Ro> objects) {
+	public List<String> getIdsForObjects(List<?> objects) {
+		@SuppressWarnings("unchecked")
+		List<Ro> objects2 = (List<Ro>) objects;
+
 		List<String> ids = new ArrayList<String>();
-		for (Ro object : objects) {
+		for (Ro object : objects2) {
 			ids.add(object.id);
 		}
 		return ids;

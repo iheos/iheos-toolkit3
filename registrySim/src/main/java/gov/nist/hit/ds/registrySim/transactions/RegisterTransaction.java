@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.registrySim.actor;
+package gov.nist.hit.ds.registrySim.transactions;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
