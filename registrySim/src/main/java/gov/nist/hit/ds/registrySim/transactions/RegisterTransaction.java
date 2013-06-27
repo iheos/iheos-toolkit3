@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.registrySim.transactions;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
@@ -16,6 +17,7 @@ import gov.nist.hit.ds.valSupport.client.ValidationContext;
 import gov.nist.hit.ds.valSupport.engine.MessageValidatorEngine;
 import gov.nist.hit.ds.valSupport.engine.ValidationStep;
 import gov.nist.hit.ds.valSupport.errrec.GwtErrorRecorderBuilder;
+import gov.nist.hit.ds.valSupport.fields.UuidValidator;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 
@@ -122,6 +124,11 @@ public class RegisterTransaction  {
 
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
 	public boolean runInitialValidations() throws IOException {
 		mve = vms.runValidation(vc, db, mve);
 		mve.run();
@@ -270,7 +277,7 @@ public class RegisterTransaction  {
 	void checkSubmittedIdsNotInRegistry() {
 		for (String id : submittedUUIDs) {
 			if (mc.hasObject(id))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "Submission includes pre-assigned id " + id + " which is already present in the Registry", this, null);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("Submission includes pre-assigned id " + id + " which is already present in the Registry", null), this);
 		}
 	}
 
@@ -313,12 +320,12 @@ public class RegisterTransaction  {
 						continue;
 					if (slotName.startsWith("urn:ihe:")) {
 						// there are no slots defined by ihe with this prefix - reserved for future
-						er.err(XdsErrorCode.Code.XDSRegistryError, "Illegal Slot name - " + slotName, "RegRSim.java", MetadataSupport.error_severity, "ITI-TF3:4.1.14");
+						er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Illegal Slot name - " + slotName,"ITI-TF3:4.1.14"), this);
 						continue;
 					}
 					if (!isExtraMetadataSupported) {
 						// register the warning to be returned
-						er.err(XdsErrorCode.Code.XDSExtraMetadataNotSaved, "Extra Metadata Slot - " + slotName + " present. Extra metadata not supported by this registry", "RegRSim.java", MetadataSupport.warning_severity, "ITI-TF3:4.1.14");
+						er.err(XdsErrorCode.Code.XDSExtraMetadataNotSaved, new ErrorContext("Extra Metadata Slot - " + slotName + " present. Extra metadata not supported by this registry", "ITI-TF3:4.1.14"), this);
 						// remove the slot
 						m.rmObject(slotEle);
 					}
