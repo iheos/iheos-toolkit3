@@ -76,7 +76,7 @@ public class TranslateToV2 extends Translate {
 			OMAttribute from_a = (OMAttribute) it.next();
 			String name = from_a.getLocalName();
 			String value = from_a.getAttributeValue();
-			OMNamespace xml_namespace = MetadataSupport.xml_namespace;
+			OMNamespace xml_namespace = XmlUtil.xml_namespace;
 			OMNamespace namespace = null;
 			if (name.endsWith("status"))
 				value = translate_att(value);

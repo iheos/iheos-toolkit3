@@ -11,5 +11,14 @@
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
 		</dependency>
+	  	<dependency>
+	  		<groupId>log4j</groupId>
+	  		<artifactId>log4j</artifactId>
+	  	</dependency>
+  		<dependency>
+  			<groupId>gov.nist.hit.ds</groupId>
+  			<artifactId>xdsException</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+  		</dependency>
   </dependencies>
 </project>

@@ -67,7 +67,6 @@ public class MetadataSupport {
 	static public boolean isV3Namespace(String ns) { return ns != null && (ns.equals(ebRSns3_uri) || ns.equals(ebRIMns3_uri) || ns.equals(ebQns3_uri) || ns.equals(ebLcm3_uri) || ns.equals(xdsB_uri)); }
 	static public boolean isV3Namespace(OMNamespace ns) { return isV3Namespace(ns.getNamespaceURI()); }
 
-	static public OMNamespace xml_namespace =   XmlUtil.om_factory.createOMNamespace("http://www.w3.org/XML/1998/namespace", "xml");
 
 	static public String status_type_namespace ="urn:oasis:names:tc:ebxml-regrep:StatusType:";
 	static public String response_status_type_namespace = "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:";

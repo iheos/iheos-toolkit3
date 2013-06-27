@@ -15,8 +15,6 @@ public interface ErrorRecorder extends ErrorRecorderBuilder {
 	// Object location is interesting so that the class name of the location can be output
 	public void err(XdsErrorCode.Code code, ErrorContext context, Object location);
 	public void err(XdsErrorCode.Code code, Exception e);  // error in tool
-	public void err(XdsErrorCode.Code code, ErrorContext context, String location, String severity);
-	public void err(String code, ErrorContext context, String location, String severity);
 	public void warning(String code, ErrorContext context, String location);
 	public void warning(XdsErrorCode.Code code, ErrorContext context, String location);
 	public void sectionHeading(String msg); // section heading

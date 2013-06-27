@@ -23,5 +23,15 @@
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
   	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>utilities</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>http</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
 </project>
