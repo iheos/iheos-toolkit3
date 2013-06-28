@@ -1,8 +1,11 @@
 package gov.nist.hit.ds.soap;
 
 import gov.nist.hit.ds.http.HttpEnvironment;
+import gov.nist.hit.ds.soap.exceptions.SoapFaultException;
 
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  * properly formatted.
  * 
  * TODO:  response content type needs to be set
+ * TODO: need to react to replyTo and faultTo
  * @author bill
  *
  */
@@ -27,8 +31,13 @@ public class SoapEnvironment {
 	public HttpEnvironment getHttpEnvironment() {
 		return httpEnv;
 	}
-
-	public boolean isMultipart() {
+	public String getFaultTo() {
+		return null;
+	}
+	public String getReplyTo() {
+		return null;
+	}
+ 	public boolean isMultipart() {
 		return multipart;
 	}
 	public void setMultipart(boolean multipart) {
