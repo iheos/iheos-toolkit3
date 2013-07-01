@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.http;
+package gov.nist.hit.ds.http.parser;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class HttpMessage  {
-	
+public class HttpMessageBa {
+
 	class Header {
 		String name;
 		String value;
@@ -24,50 +24,14 @@ public class HttpMessage  {
 			return name + ": " + value;
 		}
 		
-		public String getHeaderField(String fieldName) {
-			String[] parts = value.split(";");
-			for (int i=0; i<parts.length; i++) {
-				String[] nameval = parts[i].split("=");
-				if (nameval.length != 2)
-					continue;
-				if (nameval[0].trim().equals(fieldName)) {
-					String val = nameval[1].trim();
-					if (val.charAt(0) == '"')
-						val = val.substring(1);
-					if (val.charAt(val.length()-1) == '"')
-						val = val.substring(0, val.length()-1);
-					return val;
-				}
-			}
-			return "";
-		}
-		
 	}
 	
 
 	List<Header> headers = new ArrayList<Header>();
-//	String body = "";
-	byte[] bodyBytes;
-	MultipartMessage multipart;
-	
-	public String getContentName() {
-		Header contentDisposition = getHeaderObject("Content-Disposition");
-		String value = contentDisposition.getHeaderField("name");
-		return value;
-	}
-	
-	public String toString() {
-		StringBuffer buf = new StringBuffer();
-		
-		for (Header h : headers) 
-			buf.append(h.name).append(": ").append(h.value).append("\r\n");
-		buf.append("\r\n");
-		buf.append(new String(bodyBytes));
-		
-		return buf.toString();
-	}
+	byte[] body;
+	MultipartMessageBa multipart;
 
-	public HttpMessage() {}
+	public HttpMessageBa() {}
 
 	public void setHeaderMap(Map<String, String> hdrs) {		
 		for (String key : hdrs.keySet()) {
@@ -86,16 +50,12 @@ public class HttpMessage  {
 		return hs;
 	}
 
-	public String getBody() {
-		return new String(bodyBytes);
-	}
-	
-	public byte[] getBodyBytes() {
-		return bodyBytes;
+	public byte[] getBody() {
+		return body;
 	}
 
-	public void setBody(String body) {
-		this.bodyBytes = body.getBytes();
+	public void setBody(byte[] body) {
+		this.body = body;
 	}
 	
 	public String getHeadersAsString() {
@@ -114,7 +74,7 @@ public class HttpMessage  {
 		StringBuffer bodybuf = new StringBuffer();
 
 		if (multipart == null)
-			bodybuf.append(bodyBytes);
+			bodybuf.append(body);
 		else
 			bodybuf.append(multipart.asMessage());
 
@@ -136,6 +96,7 @@ public class HttpMessage  {
 	}
 
 	public boolean removeHeader(String headerName) {
+		String lcHeaderName = headerName.toLowerCase();
 		boolean changed = false;
 		
 		for (int i=0; i<headers.size(); i++) {
@@ -150,80 +111,26 @@ public class HttpMessage  {
 		
 	}
 
-	/**
-	 * Get first header with name headerName
-	 * @param headerName
-	 * @return header string (name: value)
-	 */
 	public String getHeader(String headerName) {
-		return getHeader(headerName, 0);
-//		if (headerName == null)
-//			return null;
-//		String lcHeaderName = headerName.toLowerCase();
-//		
-//		for (int i=0; i<headers.size(); i++) {
-//			if (lcHeaderName.equals(headers.get(i).lcname))
-//				return headers.get(i).name + ": " + headers.get(i).value;
-//		}
-//		return null;
-	}
-
-	/**
-	 * Get the i'th header with name headerName
-	 * @param headerName
-	 * @param i - starts counting with 0 (as first)
-	 * @return header string (name: value)
-	 */
-	public String getHeader(String headerName, int i) {
 		if (headerName == null)
 			return null;
 		String lcHeaderName = headerName.toLowerCase();
 		
-		int which = 0;
-		for (int j=0; j<headers.size(); j++) {
-			if (lcHeaderName.equals(headers.get(j).lcname)) {
-				if (which == i)
-					return headers.get(j).name + ": " + headers.get(j).value;
-				which++;
-			}
+		for (int i=0; i<headers.size(); i++) {
+			if (lcHeaderName.equals(headers.get(i).lcname))
+				return headers.get(i).name + ": " + headers.get(i).value;
 		}
 		return null;
 	}
 
 	public String getHeaderValue(String headerName) {
-		return getHeaderValue(headerName, 0);
-//		if (headerName == null)
-//			return null;
-//		String lcHeaderName = headerName.toLowerCase();
-//		
-//		for (int i=0; i<headers.size(); i++) {
-//			if (lcHeaderName.equals(headers.get(i).lcname))
-//				return headers.get(i).value;
-//		}
-//		return null;
-	}
-	
-	public Header getHeaderObject(String name) {
-		String lcName = name.toLowerCase();
-		for (Header h : headers) {
-			if (lcName.equals(h.lcname))
-				return h;
-		}
-		return null;
-	}
-	
-	public String getHeaderValue(String headerName, int i) {
 		if (headerName == null)
 			return null;
 		String lcHeaderName = headerName.toLowerCase();
 		
-		int which = 0;
-		for (int j=0; j<headers.size(); j++) {
-			if (lcHeaderName.equals(headers.get(j).lcname)) {
-				if (which == i)
-					return headers.get(j).value;
-				which++;
-			}
+		for (int i=0; i<headers.size(); i++) {
+			if (lcHeaderName.equals(headers.get(i).lcname))
+				return headers.get(i).value;
 		}
 		return null;
 	}
@@ -233,7 +140,22 @@ public class HttpMessage  {
 	}
 	
 	public String getContentType() {
-		return getHeaderValue("content-type");
+		String v = getHeaderValue("content-type");
+		String parts[] = v.split(";");
+		if (parts.length == 1)
+			return v;
+		return parts[0];
+	}
+	
+	public String getCharset() {
+		String v = getHeaderValue("content-type");
+		String parts[] = v.split(";");
+		if (parts.length == 1)
+			return null;
+		String vals[] = parts[1].split("=");
+		if (vals.length == 2)
+			return vals[1];
+		return null;
 	}
 
 	public void addHeader(String name, String value) {
