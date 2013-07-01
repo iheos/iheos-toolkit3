@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.http;
+package gov.nist.hit.ds.http.parser;
 
 import java.util.ArrayList;
 import java.util.List;

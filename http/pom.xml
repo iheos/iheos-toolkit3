@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>gov.nist.hit.ds</groupId>
-    <artifactId>toolkit</artifactId>
+    <artifactId>toolkit3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>http</artifactId>

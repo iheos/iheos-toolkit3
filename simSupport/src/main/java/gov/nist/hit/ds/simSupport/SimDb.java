@@ -3,10 +3,11 @@ package gov.nist.hit.ds.simSupport;
 import gov.nist.hit.ds.actorTransaction.ATFactory;
 import gov.nist.hit.ds.actorTransaction.ATFactory.ActorType;
 import gov.nist.hit.ds.actorTransaction.ATFactory.TransactionType;
-import gov.nist.hit.ds.http.HttpHeader.HttpHeaderParseException;
-import gov.nist.hit.ds.http.HttpMessage;
-import gov.nist.hit.ds.http.HttpParseException;
-import gov.nist.hit.ds.http.HttpParser;
+import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
+import gov.nist.hit.ds.http.parser.HttpMessage;
+import gov.nist.hit.ds.http.parser.HttpParseException;
+import gov.nist.hit.ds.http.parser.HttpParser;
+import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.simSupport.client.NoSimException;
 import gov.nist.hit.ds.simSupport.client.SimId;
@@ -369,7 +370,7 @@ public class SimDb {
 		return Io.stringFromFile(f);
 	}
 
-	public HttpMessage getParsedRequest() throws HttpParseException, HttpHeaderParseException, IOException {
+	public HttpMessage getParsedRequest() throws HttpParseException, HttpHeaderParseException, IOException, ParseException {
 		HttpParser parser = new HttpParser(getRequestMessageHeader().getBytes());
 
 		HttpMessage msg = parser.getHttpMessage();
