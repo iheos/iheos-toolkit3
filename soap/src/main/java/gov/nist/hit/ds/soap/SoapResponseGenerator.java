@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.soap;
 
-import gov.nist.hit.ds.http.HttpResponseGenerator;
+import gov.nist.hit.ds.http.parser.HttpResponseGenerator;
 import gov.nist.hit.ds.utilities.xml.OMFormatter;
 
 import org.apache.axiom.om.OMElement;
