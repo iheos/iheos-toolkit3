@@ -1,9 +1,9 @@
-package gov.nist.hit.ds.http;
+package gov.nist.hit.ds.http.parser;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
-import gov.nist.hit.ds.http.HttpHeader.HttpHeaderParseException;
+import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 
 import java.util.List;
 
@@ -140,16 +140,12 @@ public class MultipartParserBa {
 						er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Multipart boundary [" + pboundary + "] not found in message body", "http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html"), this);
 					break;
 				}
-				//System.out.println("***************\nfrom is:\n" + body.substring(from));
 				from = afterBoundary(body, from);
 				if (from == -1)
 					break;
-				//System.out.println("***************\nfrom2 is:\n" + body.substring(from));
-//				to = body.indexOf(pboundary, from);
 				to = indexOf(body, pboundary.getBytes(), from);
 				if (to == -1)
 					break;
-				//System.out.println("***************\nto is:\n" + body.substring(to));
 
 				PartParserBa pp = new PartParserBa(trim(subarray(body, from, to)), er, appendixV);
 				message.parts.add(pp.part);
@@ -189,8 +185,7 @@ public class MultipartParserBa {
 					er.detail("ContentType is " + contentTypeValue);
 				if (!"multipart/related".equals(contentTypeValue.toLowerCase()))
 					if (er != null) {
-						er.err(XdsErrorCode.Code.NoCode, 
-								new ErrorContext("Content-Type header must have value " + "multipart/related" + " - found instead " + contentTypeValue, "http://www.w3.org/TR/soap12-mtom - Section 3.2"), this);
+						er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Content-Type header must have value " + "multipart/related" + " - found instead " + contentTypeValue, "http://www.w3.org/TR/soap12-mtom - Section 3.2"), this);
 					} else {
 						throw new HttpParseException("Content-Type header must have value " + "multipart/related" + " - found instead " + contentTypeValue);
 					}
@@ -222,7 +217,7 @@ public class MultipartParserBa {
 			String name;
 			try {
 				contentTypeHeader = new HttpHeader(hp.message.getHeader("Content-Type"));
-			} catch (HttpHeaderParseException e) {
+			} catch (ParseException e) {
 				return false;
 			}
 			name = contentTypeHeader.getName();

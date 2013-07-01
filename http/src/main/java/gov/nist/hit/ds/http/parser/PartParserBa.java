@@ -1,25 +1,22 @@
-package gov.nist.hit.ds.http;
+package gov.nist.hit.ds.http.parser;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
-import gov.nist.hit.ds.http.HttpHeader.HttpHeaderParseException;
+import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 
-
-public class PartParser extends HttpParser {
-	Part part = new Part();
+public class PartParserBa extends HttpParserBa {
+	ErrorRecorder er = null;
+	PartBa part = new PartBa();
 	
-	public PartParser(byte[] msg) throws HttpParseException, HttpHeaderParseException {
-//		super(msg);
-		init(msg, part, er);
+	public PartParserBa(byte[] msg) throws HttpParseException, HttpHeaderParseException, ParseException {
+		init(msg, part);
 		initPart();
 	}
 	
-	public PartParser(byte[] msg, ErrorRecorder er, boolean appendixV) throws HttpParseException, HttpHeaderParseException {
-//		super(msg,er);
-		this.er = er;
+	public PartParserBa(byte[] msg, ErrorRecorder er, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException {
 		this.appendixV = appendixV;
-		init(msg, part, er);
+		init(msg, part);
 		initPart();
 	}
 	
@@ -28,7 +25,7 @@ public class PartParser extends HttpParser {
 		if (appendixV == false && (contentIDHeaderString == null || contentIDHeaderString.equals("")))
 			return;
 		try {
-			HttpHeader contentIDHeader = new HttpHeader(contentIDHeaderString, er);
+			HttpHeader contentIDHeader = new HttpHeader(contentIDHeaderString);
 			part.contentID = contentIDHeader.getValue();
 			if (part.contentID == null || part.contentID.equals(""))
 				throw new HttpParseException("Part has no Content-ID header");
@@ -41,7 +38,7 @@ public class PartParser extends HttpParser {
 			} else {
 				part.contentID = unWrap(part.contentID);
 			}
-		} catch (HttpHeaderParseException e) {
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -64,5 +61,5 @@ public class PartParser extends HttpParser {
 	public String getContentId() {
 		return part.contentID;
 	}
-	
+
 }
