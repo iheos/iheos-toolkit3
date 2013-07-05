@@ -10,7 +10,7 @@ import gov.nist.hit.ds.valSupport.engine.MessageValidatorEngine;
  * @author bill
  *
  */
-public class NullMessageValidator extends MessageValidator {
+public class NullMessageValidator extends AbstractMessageValidator {
 	
 	public NullMessageValidator(ValidationContext vc, ErrorRecorder er) {
 		super(vc, er);
