@@ -1,11 +1,11 @@
 package gov.nist.hit.ds.valSupport.engine;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
-import gov.nist.hit.ds.valSupport.message.MessageValidator;
+import gov.nist.hit.ds.valSupport.message.AbstractMessageValidator;
 
 public class ValidationStep {
 	String stepName;
-	MessageValidator validator;
+	AbstractMessageValidator validator;
 	ErrorRecorder er;
 	boolean ran = false;
 

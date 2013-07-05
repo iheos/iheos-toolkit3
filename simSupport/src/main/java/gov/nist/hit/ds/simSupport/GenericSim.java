@@ -6,6 +6,6 @@ package gov.nist.hit.ds.simSupport;
  *
  */
 public interface GenericSim {
-	String getState();  //used to unit test sim loader
+	String getState();  //used only to unit test sim loader
 	void run();   // start the simulator
 }

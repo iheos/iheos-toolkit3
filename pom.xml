@@ -62,6 +62,7 @@
   	<module>tk</module>
   	<module>registryMetadataValidator</module>
   	<module>actorTransaction</module>
+  	<module>httpValidator</module>
   </modules>
   <build>
   <plugins>

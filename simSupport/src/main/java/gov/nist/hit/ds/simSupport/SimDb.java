@@ -3,11 +3,6 @@ package gov.nist.hit.ds.simSupport;
 import gov.nist.hit.ds.actorTransaction.ATFactory;
 import gov.nist.hit.ds.actorTransaction.ATFactory.ActorType;
 import gov.nist.hit.ds.actorTransaction.ATFactory.TransactionType;
-import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
-import gov.nist.hit.ds.http.parser.HttpMessage;
-import gov.nist.hit.ds.http.parser.HttpParseException;
-import gov.nist.hit.ds.http.parser.HttpParser;
-import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.simSupport.client.NoSimException;
 import gov.nist.hit.ds.simSupport.client.SimId;
@@ -370,13 +365,13 @@ public class SimDb {
 		return Io.stringFromFile(f);
 	}
 
-	public HttpMessage getParsedRequest() throws HttpParseException, HttpHeaderParseException, IOException, ParseException {
-		HttpParser parser = new HttpParser(getRequestMessageHeader().getBytes());
-
-		HttpMessage msg = parser.getHttpMessage();
-		msg.setBody(new String(getRequestMessageBody()));
-		return msg;
-	}
+//	public HttpMessage getParsedRequest() throws HttpParseException, HttpHeaderParseException, IOException, ParseException {
+//		HttpParser parser = new HttpParser(getRequestMessageHeader().getBytes());
+//
+//		HttpMessage msg = parser.getHttpMessage();
+//		msg.setBody(new String(getRequestMessageBody()));
+//		return msg;
+//	}
 
 	public String getResponseMessageHeader() throws IOException {
 		return getResponseMessageHeader(event);
@@ -600,18 +595,18 @@ public class SimDb {
 		out.close();
 	}
 
-	public void putResponse(HttpMessage msg) throws IOException {
-		File hdrFile = getResponseHdrFile();
-		String hdrs = msg.getHeadersAsString();
-		OutputStream os = new FileOutputStream(hdrFile);
-		os.write(hdrs.getBytes());
-		os.close();
-
-		String body = msg.getBody();
-		File bodyFile = getResponseBodyFile();
-		os = new FileOutputStream(bodyFile);
-		os.write(body.getBytes());
-		os.close();
-	}
+//	public void putResponse(HttpMessage msg) throws IOException {
+//		File hdrFile = getResponseHdrFile();
+//		String hdrs = msg.getHeadersAsString();
+//		OutputStream os = new FileOutputStream(hdrFile);
+//		os.write(hdrs.getBytes());
+//		os.close();
+//
+//		String body = msg.getBody();
+//		File bodyFile = getResponseBodyFile();
+//		os = new FileOutputStream(bodyFile);
+//		os.write(body.getBytes());
+//		os.close();
+//	}
 
 }

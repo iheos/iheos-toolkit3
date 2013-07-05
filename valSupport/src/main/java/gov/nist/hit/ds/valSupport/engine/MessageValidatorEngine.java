@@ -2,7 +2,7 @@ package gov.nist.hit.ds.valSupport.engine;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
-import gov.nist.hit.ds.valSupport.message.MessageValidator;
+import gov.nist.hit.ds.valSupport.message.AbstractMessageValidator;
 import gov.nist.hit.ds.valSupport.message.NullMessageValidator;
 
 import java.util.ArrayList;
@@ -46,6 +46,10 @@ public class MessageValidatorEngine {
 		return cnt;
 	}
 
+	/**
+	 * Get last validation step in the queue.
+	 * @return
+	 */
 	public ValidationStep getLastValidationStep() {
 		int n = validationSteps.size();
 		if (n == 0)
@@ -58,9 +62,9 @@ public class MessageValidatorEngine {
 		return new ValidationStepEnumeration(validationSteps);
 	}
 	
-	public MessageValidator findMessageValidator(String className) {
+	public AbstractMessageValidator findMessageValidator(String className) {
 		for (ValidationStep vs : validationSteps) {
-			MessageValidator mv = vs.validator;
+			AbstractMessageValidator mv = vs.validator;
 			if (mv == null)
 				continue;
 			String clasname = mv.getClass().getName();
@@ -70,10 +74,14 @@ public class MessageValidatorEngine {
 		return null;
 	}
 
+	/**
+	 * Get the names of all the validators in the queue.
+	 * @return List<String>
+	 */
 	public List<String> getValidatorNames() {
 		List<String> names = new ArrayList<String>();
 		for (ValidationStep vs : validationSteps) {
-			MessageValidator mv = vs.validator;
+			AbstractMessageValidator mv = vs.validator;
 			if (mv == null)
 				continue;
 			String clasname = mv.getClass().getName();
@@ -104,7 +112,7 @@ public class MessageValidatorEngine {
 	 * @param er its private ErrorRecorder
 	 * @return the ValidationStep structure which is used internally to the engine
 	 */
-	public ValidationStep addMessageValidator(String stepName, MessageValidator v, ErrorRecorder er) {
+	public ValidationStep addMessageValidator(String stepName, AbstractMessageValidator v, ErrorRecorder er) {
 		ValidationStep step = new ValidationStep();
 		step.stepName = stepName;
 		step.validator = v;
@@ -114,7 +122,7 @@ public class MessageValidatorEngine {
 		return step;
 	}
 	
-	public ValidationStep addMessageValidator(String stepName, MessageValidator v) {
+	public ValidationStep addMessageValidator(String stepName, AbstractMessageValidator v) {
 		ValidationStep step = new ValidationStep();
 		step.stepName = stepName;
 		step.validator = v;

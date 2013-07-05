@@ -8,6 +8,7 @@ import java.util.Properties;
 
 /**
  * Loads simulators if necessary and launches them.
+ * Not sure how this overlaps/interacts with ValidationEngineLoader
  * @author bill
  *
  */
@@ -39,7 +40,7 @@ public class SimLoader {
 	}
 
 	 void loadSimConfig() throws IOException {
-		InputStream is = ClassLoader.getSystemResourceAsStream("simconfig.properties");
+		InputStream is = ClassLoader.getSystemResourceAsStream("gov/nist/hit/ds/simSupport/simconfig.properties");
 		simConfig = new Properties();
 		try {
 			simConfig.load(is);
