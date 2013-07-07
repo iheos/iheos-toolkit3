@@ -28,4 +28,9 @@ public class FooUserBarMaker implements ValSim {
 		System.out.println("FooUserBarMaker running - foo is " + foo.getValue());
 	}
 
+	@Override
+	public String getName() {
+		return this.getClass().getSimpleName();
+	}
+
 }

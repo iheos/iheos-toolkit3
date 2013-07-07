@@ -1,13 +1,13 @@
-package gov.nist.hit.ds.errorRecording;
+package gov.nist.hit.ds.errorRecording.factories;
 
-import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.errorRecording.SystemErrorRecorder;
 
 
 public class SystemErrorRecorderBuilder implements ErrorRecorderBuilder {
 
 	public SystemErrorRecorder buildNewErrorRecorder() {
 		SystemErrorRecorder rec =  new SystemErrorRecorder();
-		rec.errorRecorderBuilder = this;
+		rec.setErrorRecorderBuilder(this);
 		return rec;
 	}
 

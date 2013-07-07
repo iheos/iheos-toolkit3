@@ -21,5 +21,10 @@ public class FooUser implements ValSim {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public String getName() {
+		return this.getClass().getSimpleName();
+	}
 
 }

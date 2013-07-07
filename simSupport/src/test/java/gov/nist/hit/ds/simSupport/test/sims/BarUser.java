@@ -22,4 +22,8 @@ public class BarUser implements ValSim {
 		System.out.println("BarUser run");
 	}
 
+	@Override
+	public String getName() {
+		return this.getClass().getSimpleName();
+	}
 }

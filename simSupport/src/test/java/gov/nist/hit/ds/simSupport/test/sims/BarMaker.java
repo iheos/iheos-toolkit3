@@ -23,4 +23,8 @@ public class BarMaker implements ValSim {
 		
 	}
 
+	@Override
+	public String getName() {
+		return this.getClass().getSimpleName();
+	}
 }
