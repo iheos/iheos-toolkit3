@@ -4,7 +4,7 @@ import gov.nist.hit.ds.actorTransaction.ATFactory;
 import gov.nist.hit.ds.actorTransaction.ATFactory.ActorType;
 import gov.nist.hit.ds.actorTransaction.ATFactory.TransactionType;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
-import gov.nist.hit.ds.errorRecording.SystemErrorRecorderBuilder;
+import gov.nist.hit.ds.errorRecording.factories.SystemErrorRecorderBuilder;
 import gov.nist.hit.ds.http.parser.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;

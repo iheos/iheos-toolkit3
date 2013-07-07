@@ -33,6 +33,11 @@ public class SystemErrorRecorder implements ErrorRecorder  {
 		return buf.toString();
 	}
 	
+	public ErrorRecorderBuilder setErrorRecorderBuilder(ErrorRecorderBuilder erb) {
+		errorRecorderBuilder = erb;
+		return this;
+	}
+	
 	public String errToString() {
 		StringBuffer buf = new StringBuffer();
 		

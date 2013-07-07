@@ -10,5 +10,6 @@ import gov.nist.hit.ds.errorRecording.ErrorRecorder;
  */
 public interface ValSim {
 	void setErrorRecorder(ErrorRecorder er);
+	String getName();
 	void run();
 }
