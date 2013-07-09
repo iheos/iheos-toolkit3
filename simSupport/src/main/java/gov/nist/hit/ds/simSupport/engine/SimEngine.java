@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.simSupport.engine;
 
-
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.factories.SystemErrorRecorderBuilder;
+import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
+import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -10,67 +12,82 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+
 /**
- * Base type for this simEngine is Foo.
- * TODO: Add ErrorRecorder management (SimStep).
+ * Simulator Engine.
+ * TODO: Test addMessageValidator
  * @author bmajur
  *
  */
-public class SimEngine {
+public class SimEngine implements MessageValidatorEngine {
 	//	List<Object> inputs = new ArrayList<Object>();
 	//	List<ValSim> valChain;
 	SimChain simChain;
-	List<SimStep> simSteps = new ArrayList<SimStep>();
 	// This is of Object instead of ValSim since it includes the base type
 	// which may not be of type of ValSim.
-	List<Object> combinedInputs = new ArrayList<Object>();
+	List<Object> combinedInputs;
 	List<PubSubMatch> pubSubMatches = new ArrayList<PubSubMatch>();
-	private ValSim subObject;
-	private Method subMethod;
-	private Object pubObject;  // type aligns with combinedInputs
-	private Method pubMethod;
 	/**
 	 * 
 	 * @param valChain - list of validator instances
-	 * @param foo - base type of simulator engine
 	 */
 	public SimEngine(SimChain simChain) {
 		this.simChain = simChain;
-		//		this.valChain = valChain;
-		//		this.inputs.add(simChain.getBase());
 	}
 
+	/**
+	 * Run the current Simulator Chain.  This method is not re-entrant and
+	 * should only be called once to execute a chain, even if the chain grows
+	 * during its execution.
+	 * If new SimSteps are added to the Chain after execution starts then the
+	 * outer loop (while(!isComplete()) will catch the added SimSteps. 
+	 * @throws SimEngineSubscriptionException
+	 */
 	public void run() throws SimEngineSubscriptionException {
-		//		System.out.println("Base is:");
-		//		for (Object o : inputs)
-		//			System.out.println("....<" + o.getClass().getName() + ">\n........implements " + getClassNames(o.getClass().getInterfaces()));
-		//		System.out.println("Val Chain is:");
-		//		for (Object o : valChain)
-		//			System.out.println("....<" + o.getClass().getName() + ">\n........implements " + getClassNames(o.getClass().getInterfaces()));
-
 		SystemErrorRecorderBuilder erBuilder = new SystemErrorRecorderBuilder();
-		buildCombinedInputs();
-		for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
-			SimStep simStep = it.next();
-			simStep.setErrorRecorder(erBuilder.buildNewErrorRecorder());
-			ValSim valSim = simStep.getValSim();
-			matchPubSub(valSim);
-			valSim.run();
+		while(!isComplete()) {
+			buildCombinedInputs();
+			for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
+				SimStep simStep = it.next();
+				if (simStep.hasRan())
+					continue;
+				simStep.hasRan(true);
+				if (simStep.getErrorRecorder() == null)
+					simStep.setErrorRecorder(erBuilder.buildNewErrorRecorder());
+				ValSim valSim = simStep.getValSim();
+				matchPubSub(valSim);
+				valSim.run((MessageValidatorEngine) this);
+			}
 		}
 	}
-	
+
+	/**
+	 * Has the Simulator Chain run to completion?  If not, maybe a SimStep added 
+	 * a new SimStep to the chain.  Either way, run() should be called in a loop
+	 * until isComplete() returns true;
+	 * @return
+	 */
+	public boolean isComplete() {
+		for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
+			SimStep simStep = it.next();
+			if (!simStep.hasRan())
+				return false;
+		}
+		return true;
+	}
+
 	public StringBuffer getDescription(SimChain simChain) {
 		StringBuffer buf = new StringBuffer();
-		
+
 		describe(simChain.getBase(), buf);
 		for(Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 			SimStep step = it.next();
 			describe(step.getValSim(), buf);
 		}
-		
+
 		return buf;
 	}
-	
+
 	void describe(Object o, StringBuffer buf) {
 		Class<?> clas = o.getClass();
 		buf.append(clas.getName()).append("\n");
@@ -105,6 +122,7 @@ public class SimEngine {
 	 * This establishes the search order for finding publishers
 	 */
 	void buildCombinedInputs() {
+		combinedInputs = new ArrayList<Object>();
 		for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 			SimStep simStep = it.next();
 			combinedInputs.add(simStep.getValSim());
@@ -124,6 +142,10 @@ public class SimEngine {
 	 * @throws SimEngineSubscriptionException 
 	 */
 	void matchPubSub(ValSim subscriptionObject) throws SimEngineSubscriptionException {
+		ValSim subObject;
+		Method subMethod;
+		Object pubObject;  // type aligns with combinedInputs
+		Method pubMethod;
 		subObject = subscriptionObject;
 		Class<?> valClass = subObject.getClass();
 		System.out.println("Subscriber <" + valClass.getName() + ">");
@@ -140,7 +162,7 @@ public class SimEngine {
 			if (subParamTypes == null || subParamTypes.length != 1)
 				continue;  // must be single input param, input must be an object
 			Class<?> subClass = subParamTypes[0];  // subscription class
-//			System.out.println("....Needs input class <" + subClass.getName() + ">");
+			//			System.out.println("....Needs input class <" + subClass.getName() + ">");
 
 			// find a publisher for class subClass
 			// First look at sim engine inputs (base type)
@@ -152,7 +174,7 @@ public class SimEngine {
 					if (pubObject == subObject)
 						break;  // only look at sims that come before
 					Class<?> pubClass = pubObject.getClass();
-//					System.out.println("....Examining class <" + pubClass.getName() + ">");
+					//					System.out.println("....Examining class <" + pubClass.getName() + ">");
 					Method[] pubMethods = pubClass.getMethods();
 					for (int pubMethI=0; pubMethI<pubMethods.length; pubMethI++) {
 						pubMethod = pubMethods[pubMethI];
@@ -162,7 +184,7 @@ public class SimEngine {
 						Class<?> returnType = pubMethod.getReturnType();
 						if (returnType == null)
 							continue;
-//						System.out.println("........offers type <" + returnType.getName() +">");
+						//						System.out.println("........offers type <" + returnType.getName() +">");
 						if (returnType.equals(subClass)) {
 							// found a matching publisher
 							// Do something with it.....
@@ -194,7 +216,7 @@ public class SimEngine {
 		append(simChain.getBase().getClass().getName()).
 		append(" offers types\n");
 		getPublishedTypesDescription(buf, simChain.getBase());
-		
+
 		for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 			SimStep simStep = it.next();
 			ValSim pubSim = simStep.getValSim();
@@ -227,10 +249,15 @@ public class SimEngine {
 
 	List<PubSubMatch> getPubSubMatches() { return pubSubMatches; }
 
+	/**
+	 * Execute getter/setters to initialize the current ValSim with information
+	 * produced by an earlier step.
+	 * @param match
+	 */
 	void executePubSub(PubSubMatch match) {
 		try {
 			Object o = match.pubMethod.invoke(match.pubObject, (Object[]) null);
-//			System.out.println("........value is <" + o + ">");
+			//			System.out.println("........value is <" + o + ">");
 			Object[] args = new Object[1];
 			args[0] = o;
 			match.subMethod.invoke(match.subObject, args);
@@ -244,6 +271,24 @@ public class SimEngine {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * MessageValidator implements the ValSim interface. This method exists
+	 * to accommodate the v2 approach of scheduling validators as the message
+	 * is parsed - a dynamic model.
+	 */
+	@Override
+	public void addMessageValidator(String stepName, MessageValidator v,
+			ErrorRecorder er) {
+		v.setName(stepName);
+		ValSim vs = v;
+		vs.setErrorRecorder(er);
+		SimStep ss = new SimStep();
+		ss.setErrorRecorder(er);
+		ss.setName(stepName);
+		ss.setValSim(vs);
+		simChain.add(ss);
 	}
 
 }

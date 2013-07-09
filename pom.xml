@@ -5,6 +5,12 @@
 	<artifactId>toolkit3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
+  <repositories>
+    <repository>
+      <id>internal-nist-repo</id>
+	  <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
+    </repository>
+  </repositories>
   <dependencyManagement>
   	<dependencies>
 		<dependency>
@@ -43,6 +49,11 @@
 	  		<artifactId>log4j</artifactId>
 	  		<version>1.2.16</version>
 	  	</dependency>
+		<dependency>
+  			<groupId>gov.nist.toolkit</groupId>
+  			<artifactId>wsseTool</artifactId>
+  			<version>1.1.1</version>
+		</dependency>
   	</dependencies>
   </dependencyManagement>
   <modules>
@@ -62,7 +73,7 @@
   	<module>tk</module>
   	<module>registryMetadataValidator</module>
   	<module>actorTransaction</module>
-  	<module>httpValidator</module>
+  	<module>soapMessages</module>
   </modules>
   <build>
   <plugins>

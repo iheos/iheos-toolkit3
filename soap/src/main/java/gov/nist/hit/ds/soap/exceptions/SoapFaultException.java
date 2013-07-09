@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.soap.exceptions;
 
-import gov.nist.hit.ds.soap.FaultCodes;
+import gov.nist.hit.ds.soap.core.FaultCodes;
 
 public class SoapFaultException extends Exception {
 	/**

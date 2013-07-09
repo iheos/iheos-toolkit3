@@ -9,9 +9,10 @@ import gov.nist.hit.ds.errorRecording.ErrorRecorder;
  *
  */
 public class SimStep {
-	String name;
-	ErrorRecorder er;  // set by engine
-	ValSim valsim;
+	String name = null;
+	ErrorRecorder er = null;  // set by engine
+	ValSim valsim = null;
+	boolean ran = false;
 	
 	public String getName() {
 		return name;
@@ -38,8 +39,13 @@ public class SimStep {
 		return this;
 	}
 	
+	public boolean hasRan() {
+		return ran;
+	}
 	
-	
-	
+	public boolean hasRan(boolean hasRan) {
+		ran = hasRan;
+		return ran;
+	}
 	
 }
