@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.soap;
+package gov.nist.hit.ds.soap.core;
 
 import gov.nist.hit.ds.http.parser.HttpEnvironment;
 

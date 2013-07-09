@@ -15,7 +15,12 @@ public class SimChain  {
 	List<SimStep> steps = new ArrayList<SimStep>();
 
 	public SimChain setSteps(List<SimStep> steps) {
-		this.steps = steps;
+		this.steps.addAll(steps);
+		return this;
+	}
+	
+	public SimChain add(SimStep ss) {
+		steps.add(ss);
 		return this;
 	}
 	

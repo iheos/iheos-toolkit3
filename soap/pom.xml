@@ -5,7 +5,7 @@
     <artifactId>toolkit3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>soap</artifactId>
+  <artifactId>soapSupport</artifactId>
   <dependencies>
 	<dependency>
         <groupId>javax.servlet</groupId>

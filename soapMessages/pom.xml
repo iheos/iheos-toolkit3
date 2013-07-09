@@ -5,12 +5,17 @@
     <artifactId>toolkit3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>httpValidator</artifactId>
+  <artifactId>soapMessages</artifactId>
   <dependencies>
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
   		<artifactId>valSupport</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
+		<dependency>
+  			<groupId>gov.nist.toolkit</groupId>
+  			<artifactId>wsseTool</artifactId>
+  			<version>1.1.1</version>
+		</dependency>
   </dependencies>
 </project>
