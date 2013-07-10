@@ -74,6 +74,7 @@
   	<module>registryMetadataValidator</module>
   	<module>actorTransaction</module>
   	<module>soapMessages</module>
+  	<module>httpValidator</module>
   </modules>
   <build>
   <plugins>

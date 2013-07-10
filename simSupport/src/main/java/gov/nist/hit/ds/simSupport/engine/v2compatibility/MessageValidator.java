@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.simSupport.engine.v2compatibility;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.simSupport.ValidationContext;
 import gov.nist.hit.ds.simSupport.engine.ValSim;
 
-import org.codehaus.stax2.validation.ValidationContext;
 
 /**
  * This class exists to provide backwards compatibility with version 2.
@@ -12,7 +12,7 @@ import org.codehaus.stax2.validation.ValidationContext;
  *
  */
 abstract public class MessageValidator implements ValSim {
-	ValidationContext vc;
+	public ValidationContext vc;
 	public ErrorRecorder er;
 	String name;  // a descriptive name for debugging displays
 	

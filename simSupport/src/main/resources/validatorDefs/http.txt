@@ -1,2 +1,0 @@
-# HTTP format validator
-gov.nist.hit.ds.httpValidator.HttpValidatorWrapper

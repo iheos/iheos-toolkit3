@@ -27,12 +27,17 @@ public class SimEngine implements MessageValidatorEngine {
 	// which may not be of type of ValSim.
 	List<Object> combinedInputs;
 	List<PubSubMatch> pubSubMatches = new ArrayList<PubSubMatch>();
+	int simsRun = 0;
 	/**
 	 * 
 	 * @param valChain - list of validator instances
 	 */
 	public SimEngine(SimChain simChain) {
 		this.simChain = simChain;
+	}
+
+	public SimEngine() {
+		this.simChain = new SimChain();
 	}
 
 	/**
@@ -44,8 +49,9 @@ public class SimEngine implements MessageValidatorEngine {
 	 * @throws SimEngineSubscriptionException
 	 */
 	public void run() throws SimEngineSubscriptionException {
+		boolean errorsFound = false;
 		SystemErrorRecorderBuilder erBuilder = new SystemErrorRecorderBuilder();
-		while(!isComplete()) {
+		while(!errorsFound && !isComplete()) {
 			buildCombinedInputs();
 			for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 				SimStep simStep = it.next();
@@ -55,10 +61,22 @@ public class SimEngine implements MessageValidatorEngine {
 				if (simStep.getErrorRecorder() == null)
 					simStep.setErrorRecorder(erBuilder.buildNewErrorRecorder());
 				ValSim valSim = simStep.getValSim();
+				if (valSim.getName() != null)
+					simStep.getErrorRecorder().sectionHeading(valSim.getName());
 				matchPubSub(valSim);
+				simsRun++;
+				System.out.println("Engine Running: " + valSim.getName());
 				valSim.run((MessageValidatorEngine) this);
+				if (simChain.hasErrors()) {
+					System.out.println("Engine Error: " + simChain.getError());
+					errorsFound = true;
+				}
+				break;  // this gets around concurrent modification errors to SimChain
+				// in the case where dynamic sims are running (one sim
+				// schedules the next.
 			}
 		}
+		System.out.println("Engine: " + simsRun + " sims run");
 	}
 
 	/**
@@ -67,7 +85,8 @@ public class SimEngine implements MessageValidatorEngine {
 	 * until isComplete() returns true;
 	 * @return
 	 */
-	public boolean isComplete() {
+	boolean isComplete() {
+		Iterator<SimStep> f = simChain.iterator();
 		for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 			SimStep simStep = it.next();
 			if (!simStep.hasRan())
@@ -89,6 +108,8 @@ public class SimEngine implements MessageValidatorEngine {
 	}
 
 	void describe(Object o, StringBuffer buf) {
+		if (o == null)
+			return;
 		Class<?> clas = o.getClass();
 		buf.append(clas.getName()).append("\n");
 		Method[] methods = clas.getMethods();
@@ -158,6 +179,8 @@ public class SimEngine implements MessageValidatorEngine {
 				continue;
 			if (subMethName.equals("setErrorRecorder"))
 				continue;
+			if (subMethName.equals("setName"))
+				continue;
 			Class<?>[] subParamTypes = subMethod.getParameterTypes();
 			if (subParamTypes == null || subParamTypes.length != 1)
 				continue;  // must be single input param, input must be an object
@@ -195,6 +218,7 @@ public class SimEngine implements MessageValidatorEngine {
 							.setSubObject(subObject);
 							pubSubMatches.add(match);
 							System.out.println(match);
+							System.out.println(".Executing match");
 							executePubSub(match);
 							matchFound = true;
 							break outerloop;   // done with current subscriber - stop searching publishers 
@@ -257,7 +281,8 @@ public class SimEngine implements MessageValidatorEngine {
 	void executePubSub(PubSubMatch match) {
 		try {
 			Object o = match.pubMethod.invoke(match.pubObject, (Object[]) null);
-			//			System.out.println("........value is <" + o + ">");
+			if (o == null)
+				System.out.println(".Value is null");
 			Object[] args = new Object[1];
 			args[0] = o;
 			match.subMethod.invoke(match.subObject, args);
@@ -289,6 +314,10 @@ public class SimEngine implements MessageValidatorEngine {
 		ss.setName(stepName);
 		ss.setValSim(vs);
 		simChain.add(ss);
+	}
+
+	public int getSimsRun() {
+		return simsRun;
 	}
 
 }
