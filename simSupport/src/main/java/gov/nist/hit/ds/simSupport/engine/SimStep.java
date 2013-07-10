@@ -48,4 +48,10 @@ public class SimStep {
 		return ran;
 	}
 	
+	public String toString() {
+		if (name != null)
+			return name;
+		else
+			return super.toString();
+	}
 }
