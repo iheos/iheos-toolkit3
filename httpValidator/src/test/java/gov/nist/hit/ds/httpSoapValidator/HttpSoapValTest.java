@@ -44,12 +44,15 @@ public class HttpSoapValTest {
 		simSteps.add(new SimStep().
 				setName("SoapMessageValidator").
 				setValSim(new SoapMessageValidator(vc, engine)));
+		simSteps.add(new SimStep().
+				setName("ebRS Root Name Validator").
+				setValSim(new EbrsRootValidator("SubmitObjectsRequest")));
 		simChain.setSteps(simSteps);
 
 		run(engine, simChain);
 		System.out.println(simChain.getLog());
 		assertFalse(simChain.hasErrors());
-		assertTrue(5 == engine.getSimsRun());
+		assertTrue(6 == engine.getSimsRun());
 		assertFalse(simChain.hasErrors());
 	}
 
