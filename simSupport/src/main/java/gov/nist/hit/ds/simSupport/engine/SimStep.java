@@ -11,7 +11,7 @@ import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 public class SimStep {
 	String name = null;
 	ErrorRecorder er = null;  // set by engine
-	ValSim valsim = null;
+	SimElement valsim = null;
 	boolean ran = false;
 	
 	public String getName() {
@@ -28,13 +28,13 @@ public class SimStep {
 		this.er = er;
 		return this;
 	}
-	public ValSim getValSim() {
+	public SimElement getValSim() {
 		// link to ErrorRecorder here since we
 		// don't know the ordering of setter calls
 		valsim.setErrorRecorder(er);
 		return valsim;
 	}
-	public SimStep setValSim(ValSim valsim) {
+	public SimStep setValSim(SimElement valsim) {
 		this.valsim = valsim;
 		return this;
 	}

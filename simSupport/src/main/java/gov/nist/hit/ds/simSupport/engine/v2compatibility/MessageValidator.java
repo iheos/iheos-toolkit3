@@ -2,7 +2,7 @@ package gov.nist.hit.ds.simSupport.engine.v2compatibility;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.simSupport.ValidationContext;
-import gov.nist.hit.ds.simSupport.engine.ValSim;
+import gov.nist.hit.ds.simSupport.engine.SimElement;
 
 
 /**
@@ -11,7 +11,7 @@ import gov.nist.hit.ds.simSupport.engine.ValSim;
  * @author bmajur
  *
  */
-abstract public class MessageValidator implements ValSim {
+abstract public class MessageValidator implements SimElement {
 	public ValidationContext vc;
 	public ErrorRecorder er;
 	String name;  // a descriptive name for debugging displays
@@ -20,6 +20,10 @@ abstract public class MessageValidator implements ValSim {
 
 	public MessageValidator(ValidationContext vc) {
 		this.vc = vc;
+	}
+	
+	public MessageValidator() {
+		
 	}
 	
 	public ErrorRecorder getErrorRecorder() {

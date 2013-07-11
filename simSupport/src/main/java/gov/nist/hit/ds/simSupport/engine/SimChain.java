@@ -64,6 +64,7 @@ public class SimChain  {
 
 	public String getLog() {
 		StringBuffer buf = new StringBuffer();
+		buf.append("---------------------------------------------------------------\n");
 		for (SimStep step : steps) {
 			ErrorRecorder er = step.getErrorRecorder();
 			if (!(er instanceof SystemErrorRecorder))
