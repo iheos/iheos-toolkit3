@@ -10,6 +10,7 @@ import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.simSupport.ValidationContext;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
+import gov.nist.hit.ds.utilities.html.HttpMessageContent;
 
 
 /**
@@ -29,6 +30,7 @@ public class HttpMessageValidator extends MessageValidator {
 	public HttpMessageValidator(ValidationContext vc, MessageValidatorEngine mvc) {
 		super(vc);
 		this.mvc = mvc;
+		setName(getClass().getSimpleName());
 	}
 
 //	public HttpMessageValidator(ValidationContext vc, HttpParserBa hparser, MessageValidatorEngine mvc) {
@@ -61,7 +63,7 @@ public class HttpMessageValidator extends MessageValidator {
 				else
 					er.detail("Message is Multipart format");
 				er.detail("Scheduling MTOM parser");
-				mvc.addMessageValidator("Validate MTOM", new MtomMessageValidator(vc, hparser, body, mvc), er.buildNewErrorRecorder());
+				mvc.addMessageValidator("Validate MTOM", new MtomMessageValidator(vc, hparser, body, mvc));
 			} else {
 				boolean val = vc.isValid(); 
 				boolean mt = vc.requiresMtom();
@@ -71,8 +73,8 @@ public class HttpMessageValidator extends MessageValidator {
 					er.err(vc.getBasicErrorCode(), new ErrorContext("Request Message is SIMPLE SOAP but MTOM is required", "ITI TF Volumes 2a and 2b"), this);
 				else
 					er.detail("Request Message is SIMPLE SOAP format");
-				er.detail("Scheduling SIMPLE SOAP parser");
-				mvc.addMessageValidator("Validate SIMPLE SOAP", new SimpleSoapMessageValidator(vc, hparser, body, mvc), er.buildNewErrorRecorder());
+				er.detail("Scheduling SIMPLE SOAP Message Validator");
+				mvc.addMessageValidator("SimpleSoapMessageValidator", new SimpleSoapMessageValidator(vc, hparser, body, mvc));
 //				SimpleSoapMessageValidator val = new SimpleSoapMessageValidator(vc, hparser, body, erBuilder, mvc);
 //				val.run(er);
 			}
@@ -82,6 +84,11 @@ public class HttpMessageValidator extends MessageValidator {
 			er.err(vc.getBasicErrorCode(), e);
 		}
 
+	}
+
+	@Override
+	public String getDescription() {
+		return "Parse HTTP message and schedule SIMPLE SOAP or MTOM parser";
 	}
 
 }

@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.simSupport.engine.v2compatibility;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 
 public interface MessageValidatorEngine {
 	/**
@@ -10,6 +9,6 @@ public interface MessageValidatorEngine {
 	 * @param v - MessageValidator from v2 - corresponds to ValSim in v3.
 	 * @param er
 	 */
-	void addMessageValidator(String stepName, MessageValidator v, ErrorRecorder er);
+	void addMessageValidator(String stepName, MessageValidator v);
 
 }

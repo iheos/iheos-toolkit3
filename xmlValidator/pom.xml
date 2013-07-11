@@ -5,16 +5,11 @@
     <artifactId>toolkit3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>httpValidator</artifactId>
+  <artifactId>xmlValidator</artifactId>
   <dependencies>
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
-  		<artifactId>http</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>gov.nist.hit.ds</groupId>
-  		<artifactId>errorRecording</artifactId>
+  		<artifactId>utilities</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   	<dependency>
@@ -24,12 +19,8 @@
   	</dependency>
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
-  		<artifactId>xmlValidator</artifactId>
+  		<artifactId>errorRecording</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
-		<dependency>
-  			<groupId>gov.nist.toolkit</groupId>
-  			<artifactId>wsseTool</artifactId>
-		</dependency>
   </dependencies>
 </project>

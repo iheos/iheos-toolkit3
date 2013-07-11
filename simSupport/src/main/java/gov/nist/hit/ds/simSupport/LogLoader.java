@@ -1,11 +1,12 @@
-package gov.nist.hit.ds.httpSoapValidator;
+package gov.nist.hit.ds.simSupport;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.hit.ds.simSupport.SimFailureException;
-import gov.nist.hit.ds.simSupport.engine.ValSim;
+import gov.nist.hit.ds.simSupport.engine.SimElement;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
+import gov.nist.hit.ds.utilities.html.HttpMessageContent;
 import gov.nist.hit.ds.utilities.io.Io;
+import gov.nist.hit.ds.utilities.xml.XmlText;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +18,7 @@ import java.io.IOException;
  * @author bmajur
  *
  */
-public class LogLoader implements ValSim {
+public class LogLoader implements SimElement {
 	File dir;
 	String header = null;
 	byte[] body = null;
@@ -31,7 +32,10 @@ public class LogLoader implements ValSim {
 		er.detail("Loading from <" + dir + ">");
 		try {
 			header = Io.stringFromFile(new File(dir, "request_hdr.txt"));
-			body = Io.bytesFromFile(new File(dir, "request_body.bin"));
+			if (new File(dir, "request_body.txt").exists())
+				body = Io.stringFromFile(new File(dir, "request_body.txt")).getBytes();
+			else
+				body = Io.bytesFromFile(new File(dir, "request_body.bin"));
 		} catch (IOException e) {
 			er.err(Code.NoCode, e);
 		}
@@ -42,6 +46,16 @@ public class LogLoader implements ValSim {
 		return new HttpMessageContent().
 				setBody(body).
 				setHeader(header);
+	}
+	
+	/**
+	 * No guarantee the body is XML.  But since this loader
+	 * is use for testing, let the using code throw the 
+	 * exceptions if it is not xml.
+	 * @return
+	 */
+	public XmlText getXmlText() {
+		return new XmlText().setXml(body);
 	}
 
 	@Override
@@ -57,5 +71,10 @@ public class LogLoader implements ValSim {
 	@Override
 	public void run(MessageValidatorEngine mve) {
 		load();
+	}
+
+	@Override
+	public String getDescription() {
+		return "Load a pre-existing log file as input to the simulator";
 	}
 }

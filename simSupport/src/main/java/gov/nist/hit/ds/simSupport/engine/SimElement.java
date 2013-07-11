@@ -9,8 +9,9 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
  * @author bmajur
  *
  */
-public interface ValSim {
+public interface SimElement {
 	void setErrorRecorder(ErrorRecorder er);
 	String getName();
+	String getDescription();
 	void run(MessageValidatorEngine mve);
 }

@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.httpSoapValidator;
+package gov.nist.hit.ds.utilities.html;
 
 public class HttpMessageContent {
 	String header;

@@ -1,9 +1,8 @@
 package gov.nist.hit.ds.simSupport.engine;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.factories.SystemErrorRecorderBuilder;
-import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
+import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -60,9 +59,13 @@ public class SimEngine implements MessageValidatorEngine {
 				simStep.hasRan(true);
 				if (simStep.getErrorRecorder() == null)
 					simStep.setErrorRecorder(erBuilder.buildNewErrorRecorder());
-				ValSim valSim = simStep.getValSim();
-				if (valSim.getName() != null)
+				SimElement valSim = simStep.getValSim();
+				if (valSim.getName() == null)
+					simStep.getErrorRecorder().sectionHeading("Validator");
+				else
 					simStep.getErrorRecorder().sectionHeading(valSim.getName());
+				if (valSim.getDescription() != null) 
+					simStep.getErrorRecorder().sectionHeading(valSim.getDescription());
 				matchPubSub(valSim);
 				simsRun++;
 				System.out.println("Engine Running: " + valSim.getName());
@@ -97,6 +100,7 @@ public class SimEngine implements MessageValidatorEngine {
 
 	public StringBuffer getDescription(SimChain simChain) {
 		StringBuffer buf = new StringBuffer();
+		buf.append("Analyse simulator elements\n\n");
 
 		describe(simChain.getBase(), buf);
 		for(Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
@@ -116,14 +120,19 @@ public class SimEngine implements MessageValidatorEngine {
 		for (int i=0; i<methods.length; i++) {
 			Method method = methods[i];
 			String name = method.getName();
-			if (name.startsWith("get") && !name.equals("getClass"))
-				buf.append(".." + name).append("\n");
+			if (name.startsWith("get") && !name.equals("getClass") && !name.equals("getName")) {
+				Class<?> returnType = method.getReturnType(); 
+				buf.append("..Generates " + returnType.getSimpleName()).append(" <#").append(name).append(">").append("\n");
+			}
 		}
 		for (int i=0; i<methods.length; i++) {
 			Method method = methods[i];
 			String name = method.getName();
-			if (name.startsWith("set") && !name.equals("setErrorRecorder"))
-				buf.append(".." + name).append("\n");
+			if (name.startsWith("set") && !name.equals("setErrorRecorder") && !name.equals("setName")) {
+				Class<?>[] parmTypes = method.getParameterTypes();
+				if (parmTypes != null && parmTypes.length ==1)
+					buf.append("..Needs " + parmTypes[0].getSimpleName()).append(" <#").append(name).append(">").append("\n");
+			}
 		}
 	}
 
@@ -162,8 +171,8 @@ public class SimEngine implements MessageValidatorEngine {
 	 * @return
 	 * @throws SimEngineSubscriptionException 
 	 */
-	void matchPubSub(ValSim subscriptionObject) throws SimEngineSubscriptionException {
-		ValSim subObject;
+	void matchPubSub(SimElement subscriptionObject) throws SimEngineSubscriptionException {
+		SimElement subObject;
 		Method subMethod;
 		Object pubObject;  // type aligns with combinedInputs
 		Method pubMethod;
@@ -194,6 +203,8 @@ public class SimEngine implements MessageValidatorEngine {
 			outerloop:
 				for (Object pObject : priorInputs) {
 					pubObject = pObject;
+					if (pubObject == null)
+						break;
 					if (pubObject == subObject)
 						break;  // only look at sims that come before
 					Class<?> pubClass = pubObject.getClass();
@@ -234,16 +245,18 @@ public class SimEngine implements MessageValidatorEngine {
 		}
 	}
 
-	StringBuffer documentSimsUpTo(ValSim targetSim) {
+	StringBuffer documentSimsUpTo(SimElement targetSim) {
 		StringBuffer buf = new StringBuffer();
-		buf.
-		append(simChain.getBase().getClass().getName()).
-		append(" offers types\n");
-		getPublishedTypesDescription(buf, simChain.getBase());
+		if (simChain.getBase() != null) {
+			buf.
+			append(simChain.getBase().getClass().getName()).
+			append(" offers types\n");
+			getPublishedTypesDescription(buf, simChain.getBase());
+		}
 
 		for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 			SimStep simStep = it.next();
-			ValSim pubSim = simStep.getValSim();
+			SimElement pubSim = simStep.getValSim();
 			if (pubSim == targetSim)
 				break;
 			// Name, output types
@@ -264,10 +277,12 @@ public class SimEngine implements MessageValidatorEngine {
 			String methodName = pubMethod.getName();
 			if (!methodName.startsWith("get"))
 				continue;
-			buf.
-			append("....").
-			append(pubMethod.getReturnType().getName()).
-			append("\n");
+			String typeName = pubMethod.getReturnType().getName();
+			if (!typeName.startsWith("java.lang."))
+				buf.
+				append("....").
+				append(typeName).
+				append("\n");
 		}
 	}
 
@@ -304,13 +319,10 @@ public class SimEngine implements MessageValidatorEngine {
 	 * is parsed - a dynamic model.
 	 */
 	@Override
-	public void addMessageValidator(String stepName, MessageValidator v,
-			ErrorRecorder er) {
+	public void addMessageValidator(String stepName, MessageValidator v) {
 		v.setName(stepName);
-		ValSim vs = v;
-		vs.setErrorRecorder(er);
+		SimElement vs = v;
 		SimStep ss = new SimStep();
-		ss.setErrorRecorder(er);
 		ss.setName(stepName);
 		ss.setValSim(vs);
 		simChain.add(ss);
