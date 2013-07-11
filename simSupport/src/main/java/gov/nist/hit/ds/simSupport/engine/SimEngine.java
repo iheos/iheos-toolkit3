@@ -122,7 +122,8 @@ public class SimEngine implements MessageValidatorEngine {
 			String name = method.getName();
 			if (name.startsWith("get") && !name.equals("getClass") && !name.equals("getName")) {
 				Class<?> returnType = method.getReturnType(); 
-				buf.append("..Generates " + returnType.getSimpleName()).append(" <#").append(name).append(">").append("\n");
+				if (!returnType.getName().startsWith("java."))
+					buf.append("..Generates " + returnType.getSimpleName()).append(" <#").append(name).append(">").append("\n");
 			}
 		}
 		for (int i=0; i<methods.length; i++) {
@@ -194,8 +195,8 @@ public class SimEngine implements MessageValidatorEngine {
 			if (subParamTypes == null || subParamTypes.length != 1)
 				continue;  // must be single input param, input must be an object
 			Class<?> subClass = subParamTypes[0];  // subscription class
-			//			System.out.println("....Needs input class <" + subClass.getName() + ">");
-
+			if (subClass.getName().startsWith("java."))
+				throw new SimEngineSubscriptionException("Illegal subscription type: java.*: <" + subClass.getClass().getName() + "> " + "<#" + subMethName + ">");
 			// find a publisher for class subClass
 			// First look at sim engine inputs (base type)
 			boolean matchFound = false;
@@ -278,7 +279,7 @@ public class SimEngine implements MessageValidatorEngine {
 			if (!methodName.startsWith("get"))
 				continue;
 			String typeName = pubMethod.getReturnType().getName();
-			if (!typeName.startsWith("java.lang."))
+			if (!typeName.startsWith("java."))
 				buf.
 				append("....").
 				append(typeName).

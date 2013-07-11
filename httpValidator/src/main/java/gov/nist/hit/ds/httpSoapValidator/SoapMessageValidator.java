@@ -45,14 +45,8 @@ public class SoapMessageValidator extends MessageValidator {
 		return this;
 	}
 	
-	// needed for junit testing
-	public SoapMessageValidator(OMElement messagebody) {
-		super(new ValidationContext());
-		this.messagebody = messagebody;
-	}
-
-	public OMElement getMessageBody() {
-		return messagebody;
+	public SoapBody getMessageBody() {
+		return new SoapBody().setBody(messagebody);
 	}
 
 	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
