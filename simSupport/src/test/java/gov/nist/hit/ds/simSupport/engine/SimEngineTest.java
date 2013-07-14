@@ -22,7 +22,7 @@ public class SimEngineTest {
 		List<SimStep> simSteps = new ArrayList<SimStep>();
 		SimStep fooMakerStep = new SimStep().
 				setName("FooMaker").
-				setValSim(new FooMaker()); 
+				setSimComponent(new FooMaker()); 
 		simSteps.add(fooMakerStep);
 		
 		SimChain simChain = new SimChain().
@@ -46,10 +46,10 @@ public class SimEngineTest {
 		List<SimStep> simSteps = new ArrayList<SimStep>();
 		simSteps.add(new SimStep().
 				setName("FooUserBarMaker Name").
-				setValSim(new FooUserBarMaker()));
+				setSimComponent(new FooUserBarMaker()));
 		simSteps.add(new SimStep().
 				setName("BarUser Name").
-				setValSim(new BarUser()));
+				setSimComponent(new BarUser()));
 		
 		SimChain simChain = new SimChain().
 				setBase(base).
@@ -63,10 +63,10 @@ public class SimEngineTest {
 		List<SimStep> simSteps = new ArrayList<SimStep>();
 		simSteps.add(new SimStep().
 				setName("FooMakerError").
-				setValSim(new FooMakerError()));
+				setSimComponent(new FooMakerError()));
 		simSteps.add(new SimStep().
 				setName("FooUser").
-				setValSim(new FooUser()));
+				setSimComponent(new FooUser()));
 		
 		SimChain simChain = new SimChain().
 				setSteps(simSteps);

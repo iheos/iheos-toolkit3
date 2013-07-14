@@ -11,8 +11,9 @@ public class HttpEnvironment {
 	public HttpServletResponse getResponse() {
 		return response;
 	}
-	public void setResponse(HttpServletResponse response) {
+	public HttpEnvironment setResponse(HttpServletResponse response) {
 		this.response = response;
+		return this;
 	}
 	
 	public OutputStream getOutputStream() throws Exception {

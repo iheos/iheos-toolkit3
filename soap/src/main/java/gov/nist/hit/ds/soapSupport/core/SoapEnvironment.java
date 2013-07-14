@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.soap.core;
+package gov.nist.hit.ds.soapSupport.core;
 
 import gov.nist.hit.ds.http.parser.HttpEnvironment;
 
@@ -26,6 +26,10 @@ public class SoapEnvironment {
 	}
 	public HttpEnvironment getHttpEnvironment() {
 		return httpEnv;
+	}
+	
+	public SoapEnvironment getSoapEnvironment() {
+		return this;
 	}
 
 	public boolean isMultipart() {

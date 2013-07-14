@@ -1,8 +1,12 @@
 package gov.nist.hit.ds.simSupport.engine;
 
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.errorRecording.factories.SystemErrorRecorderBuilder;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
+import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
+import gov.nist.hit.ds.soapSupport.core.SoapFault;
+import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,6 +31,7 @@ public class SimEngine implements MessageValidatorEngine {
 	List<Object> combinedInputs;
 	List<PubSubMatch> pubSubMatches = new ArrayList<PubSubMatch>();
 	int simsRun = 0;
+	SoapEnvironment soapEnvironment;
 	/**
 	 * 
 	 * @param valChain - list of validator instances
@@ -48,6 +53,9 @@ public class SimEngine implements MessageValidatorEngine {
 	 * @throws SimEngineSubscriptionException
 	 */
 	public void run() throws SimEngineSubscriptionException {
+		if (simChain.getBase() != null && (simChain.getBase() instanceof SoapEnvironment))
+			soapEnvironment = (SoapEnvironment) simChain.getBase();
+		System.out.println("---------------------------------------------------------------\nRun");
 		boolean errorsFound = false;
 		SystemErrorRecorderBuilder erBuilder = new SystemErrorRecorderBuilder();
 		while(!errorsFound && !isComplete()) {
@@ -59,17 +67,28 @@ public class SimEngine implements MessageValidatorEngine {
 				simStep.hasRan(true);
 				if (simStep.getErrorRecorder() == null)
 					simStep.setErrorRecorder(erBuilder.buildNewErrorRecorder());
-				SimElement valSim = simStep.getValSim();
-				if (valSim.getName() == null)
+				SimComponent simComponent = simStep.getSimComponent();
+				if (simComponent.getName() == null)
 					simStep.getErrorRecorder().sectionHeading("Validator");
 				else
-					simStep.getErrorRecorder().sectionHeading(valSim.getName());
-				if (valSim.getDescription() != null) 
-					simStep.getErrorRecorder().sectionHeading(valSim.getDescription());
-				matchPubSub(valSim);
+					simStep.getErrorRecorder().sectionHeading(simComponent.getName());
+				if (simComponent.getDescription() != null) 
+					simStep.getErrorRecorder().sectionHeading(simComponent.getDescription());
+				matchPubSub(simComponent);
 				simsRun++;
-				System.out.println("Engine Running: " + valSim.getName());
-				valSim.run((MessageValidatorEngine) this);
+				try {
+					simComponent.run((MessageValidatorEngine) this);
+				} catch (SoapFaultException e) {
+					SoapFault soapFault = new SoapFault(soapEnvironment, e);
+					try {
+						simStep.getErrorRecorder().err(Code.SoapFault, e);
+						soapFault.send();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					return;
+				}
 				if (simChain.hasErrors()) {
 					System.out.println("Engine Error: " + simChain.getError());
 					errorsFound = true;
@@ -89,7 +108,6 @@ public class SimEngine implements MessageValidatorEngine {
 	 * @return
 	 */
 	boolean isComplete() {
-		Iterator<SimStep> f = simChain.iterator();
 		for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 			SimStep simStep = it.next();
 			if (!simStep.hasRan())
@@ -100,12 +118,12 @@ public class SimEngine implements MessageValidatorEngine {
 
 	public StringBuffer getDescription(SimChain simChain) {
 		StringBuffer buf = new StringBuffer();
-		buf.append("Analyse simulator elements\n\n");
+		buf.append("---------------------------------------------------------------\nAnalyis\n");
 
 		describe(simChain.getBase(), buf);
 		for(Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 			SimStep step = it.next();
-			describe(step.getValSim(), buf);
+			describe(step.getSimComponent(), buf);
 		}
 
 		return buf;
@@ -117,6 +135,19 @@ public class SimEngine implements MessageValidatorEngine {
 		Class<?> clas = o.getClass();
 		buf.append(clas.getName()).append("\n");
 		Method[] methods = clas.getMethods();
+		
+		for (int i=0; i<methods.length; i++) {
+			Method method = methods[i];
+			if (!method.isAnnotationPresent(Inject.class))
+				continue;
+			String name = method.getName();
+			if (name.startsWith("set") && !name.equals("setErrorRecorder") && !name.equals("setName")) {
+				Class<?>[] parmTypes = method.getParameterTypes();
+				if (parmTypes != null && parmTypes.length ==1)
+					buf.append("..Needs " + parmTypes[0].getSimpleName()).append(" <#").append(name).append(">").append("\n");
+			}
+		}
+		
 		for (int i=0; i<methods.length; i++) {
 			Method method = methods[i];
 			String name = method.getName();
@@ -124,15 +155,6 @@ public class SimEngine implements MessageValidatorEngine {
 				Class<?> returnType = method.getReturnType(); 
 				if (!returnType.getName().startsWith("java."))
 					buf.append("..Generates " + returnType.getSimpleName()).append(" <#").append(name).append(">").append("\n");
-			}
-		}
-		for (int i=0; i<methods.length; i++) {
-			Method method = methods[i];
-			String name = method.getName();
-			if (name.startsWith("set") && !name.equals("setErrorRecorder") && !name.equals("setName")) {
-				Class<?>[] parmTypes = method.getParameterTypes();
-				if (parmTypes != null && parmTypes.length ==1)
-					buf.append("..Needs " + parmTypes[0].getSimpleName()).append(" <#").append(name).append(">").append("\n");
 			}
 		}
 	}
@@ -156,7 +178,7 @@ public class SimEngine implements MessageValidatorEngine {
 		combinedInputs = new ArrayList<Object>();
 		for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 			SimStep simStep = it.next();
-			combinedInputs.add(simStep.getValSim());
+			combinedInputs.add(simStep.getSimComponent());
 		}
 		Collections.reverse(combinedInputs);
 		combinedInputs.add(simChain.getBase());
@@ -172,18 +194,15 @@ public class SimEngine implements MessageValidatorEngine {
 	 * @return
 	 * @throws SimEngineSubscriptionException 
 	 */
-	void matchPubSub(SimElement subscriptionObject) throws SimEngineSubscriptionException {
-		SimElement subObject;
-		Method subMethod;
-		Object pubObject;  // type aligns with combinedInputs
-		Method pubMethod;
-		subObject = subscriptionObject;
-		Class<?> valClass = subObject.getClass();
+	void matchPubSub(SimComponent subscriptionObject) throws SimEngineSubscriptionException {
+		Class<?> valClass = subscriptionObject.getClass();
 		System.out.println("Subscriber <" + valClass.getName() + ">");
 		Method[] valMethods = valClass.getMethods();
 		// For all setters in this subscriptionObject
 		for (int subMethI=0; subMethI<valMethods.length; subMethI++) {
-			subMethod = valMethods[subMethI];
+			Method subMethod = valMethods[subMethI];
+			if (!subMethod.isAnnotationPresent(Inject.class))
+				continue;
 			String subMethName = subMethod.getName();
 			if (!subMethName.startsWith("set"))
 				continue;
@@ -197,56 +216,61 @@ public class SimEngine implements MessageValidatorEngine {
 			Class<?> subClass = subParamTypes[0];  // subscription class
 			if (subClass.getName().startsWith("java."))
 				throw new SimEngineSubscriptionException("Illegal subscription type: java.*: <" + subClass.getClass().getName() + "> " + "<#" + subMethName + ">");
-			// find a publisher for class subClass
-			// First look at sim engine inputs (base type)
-			boolean matchFound = false;
-			List<Object> priorInputs = combinedInputs.subList(combinedInputs.indexOf(subObject)+1, combinedInputs.size());
-			outerloop:
-				for (Object pObject : priorInputs) {
-					pubObject = pObject;
-					if (pubObject == null)
-						break;
-					if (pubObject == subObject)
-						break;  // only look at sims that come before
-					Class<?> pubClass = pubObject.getClass();
-					//					System.out.println("....Examining class <" + pubClass.getName() + ">");
-					Method[] pubMethods = pubClass.getMethods();
-					for (int pubMethI=0; pubMethI<pubMethods.length; pubMethI++) {
-						pubMethod = pubMethods[pubMethI];
-						String pubMethName = pubMethod.getName();
-						if (!pubMethName.startsWith("get")) 
-							continue;
-						Class<?> returnType = pubMethod.getReturnType();
-						if (returnType == null)
-							continue;
-						//						System.out.println("........offers type <" + returnType.getName() +">");
-						if (returnType.equals(subClass)) {
-							// found a matching publisher
-							// Do something with it.....
-							PubSubMatch match = new PubSubMatch()
-							.setPubMethod(pubMethod)
-							.setPubObject(pubObject)
-							.setSubMethod(subMethod)
-							.setSubObject(subObject);
-							pubSubMatches.add(match);
-							System.out.println(match);
-							System.out.println(".Executing match");
-							executePubSub(match);
-							matchFound = true;
-							break outerloop;   // done with current subscriber - stop searching publishers 
-						}
-					}
-				}
-			if (!matchFound)
-				throw new SimEngineSubscriptionException(
-						"Input of type <" + subClass.getName() + 
-						" cannot be found to satisfy <" + valClass.getName()  + ">" + "\n" +
-						documentSimsUpTo(subscriptionObject)
-						);
+			PubSubMatch match = findMatch(subscriptionObject, subClass, subMethod);
+			pubSubMatches.add(match);
+			System.out.println(match);
+			executePubSub(match);
 		}
 	}
 
-	StringBuffer documentSimsUpTo(SimElement targetSim) {
+	/**
+	 * find a publisher for class subClass
+	 * @param subscriptionObject
+	 * @throws SimEngineSubscriptionException 
+	 */
+	PubSubMatch findMatch(SimComponent subscriptionObject, Class<?> subClass, Method subMethod) throws SimEngineSubscriptionException {
+		Object pubObject;  // type aligns with combinedInputs
+		Method pubMethod;
+		List<Object> priorInputs = combinedInputs.subList(combinedInputs.indexOf(subscriptionObject)+1, combinedInputs.size());
+		for (Object pObject : priorInputs) {
+			pubObject = pObject;
+			if (pubObject == null)
+				break;
+			if (pubObject == subscriptionObject)
+				break;  // only look at sims that come before
+			Class<?> pubClass = pubObject.getClass();
+			//					System.out.println("....Examining class <" + pubClass.getName() + ">");
+			Method[] pubMethods = pubClass.getMethods();
+			for (int pubMethI=0; pubMethI<pubMethods.length; pubMethI++) {
+				pubMethod = pubMethods[pubMethI];
+				String pubMethName = pubMethod.getName();
+				if (!pubMethName.startsWith("get")) 
+					continue;
+				Class<?> returnType = pubMethod.getReturnType();
+				if (returnType == null)
+					continue;
+				//						System.out.println("........offers type <" + returnType.getName() +">");
+				if (returnType.equals(subClass)) {
+					// found a matching publisher
+					// Do something with it.....
+					PubSubMatch match = new PubSubMatch()
+					.setPubMethod(pubMethod)
+					.setPubObject(pubObject)
+					.setSubMethod(subMethod)
+					.setSubObject(subscriptionObject);
+					return match;
+				}
+			}
+		}
+		throw new SimEngineSubscriptionException(
+				"Input of type <" + subClass.getName() + 
+				" cannot be found to satisfy <" + subscriptionObject.getClass().getName()  + ">" + "\n" +
+				documentSimsUpTo(subscriptionObject)
+				);
+
+	}
+
+	StringBuffer documentSimsUpTo(SimComponent targetSim) {
 		StringBuffer buf = new StringBuffer();
 		if (simChain.getBase() != null) {
 			buf.
@@ -257,7 +281,7 @@ public class SimEngine implements MessageValidatorEngine {
 
 		for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 			SimStep simStep = it.next();
-			SimElement pubSim = simStep.getValSim();
+			SimComponent pubSim = simStep.getSimComponent();
 			if (pubSim == targetSim)
 				break;
 			// Name, output types
@@ -322,10 +346,10 @@ public class SimEngine implements MessageValidatorEngine {
 	@Override
 	public void addMessageValidator(String stepName, MessageValidator v) {
 		v.setName(stepName);
-		SimElement vs = v;
+		SimComponent vs = v;
 		SimStep ss = new SimStep();
 		ss.setName(stepName);
-		ss.setValSim(vs);
+		ss.setSimComponent(vs);
 		simChain.add(ss);
 	}
 

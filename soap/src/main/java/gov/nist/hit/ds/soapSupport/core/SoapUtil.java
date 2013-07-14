@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.soap.core;
+package gov.nist.hit.ds.soapSupport.core;
 
 import javax.xml.namespace.QName;
 

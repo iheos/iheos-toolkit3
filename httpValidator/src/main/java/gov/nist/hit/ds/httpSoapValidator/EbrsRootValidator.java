@@ -3,10 +3,11 @@ package gov.nist.hit.ds.httpSoapValidator;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.hit.ds.simSupport.engine.SimElement;
+import gov.nist.hit.ds.simSupport.engine.Inject;
+import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 
-public class EbrsRootValidator implements SimElement {
+public class EbrsRootValidator implements SimComponent {
 	String expectedRootName;
 	ErrorRecorder er;
 	SoapBody soapBody;
@@ -15,6 +16,7 @@ public class EbrsRootValidator implements SimElement {
 		this.expectedRootName = expectedRootName;
 	}
 
+	@Inject
 	public EbrsRootValidator setSoapBody(SoapBody soapBody) {
 		this.soapBody = soapBody;
 		return this;

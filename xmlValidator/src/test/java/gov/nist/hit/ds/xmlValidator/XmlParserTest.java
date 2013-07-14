@@ -33,10 +33,10 @@ public class XmlParserTest {
 
 		simSteps.add(new SimStep().
 				setName("HTTP Log Loader").
-				setValSim(loader));
+				setSimComponent(loader));
 		simSteps.add(new SimStep().
 				setName("XML Parser").
-				setValSim(new XmlParser()));
+				setSimComponent(new XmlParser()));
 		simChain.setSteps(simSteps);
 
 		run(engine, simChain);
@@ -59,10 +59,10 @@ public class XmlParserTest {
 
 		simSteps.add(new SimStep().
 				setName("HTTP Log Loader").
-				setValSim(loader));
+				setSimComponent(loader));
 		simSteps.add(new SimStep().
 				setName("XML Parser").
-				setValSim(new XmlParser()));
+				setSimComponent(new XmlParser()));
 		simChain.setSteps(simSteps);
 
 		run(engine, simChain);
