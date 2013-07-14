@@ -5,13 +5,8 @@
     <artifactId>toolkit3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>httpValidator</artifactId>
+  <artifactId>dsValidator</artifactId>
   <dependencies>
-  	<dependency>
-  		<groupId>gov.nist.hit.ds</groupId>
-  		<artifactId>http</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
   		<artifactId>errorRecording</artifactId>
@@ -24,17 +19,13 @@
   	</dependency>
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
-  		<artifactId>xmlValidator</artifactId>
+  		<artifactId>registryMetadata</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
-		<dependency>
-  			<groupId>gov.nist.toolkit</groupId>
-  			<artifactId>wsseTool</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.nist.hit.ds</groupId>
-			<artifactId>soapSupport</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>valSupport</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
 </project>

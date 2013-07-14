@@ -1,6 +1,6 @@
-package gov.nist.hit.ds.soap.core;
+package gov.nist.hit.ds.soapSupport.core;
 
-import gov.nist.hit.ds.soap.exceptions.SoapFaultException;
+import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 
 import org.apache.axiom.om.OMElement;
@@ -21,7 +21,7 @@ public class SoapFault {
 	 *    new SoapFault(SoapEnvironment, FaultCodes, String reason).send();
 	 * @param soapEnv - SoapEnvironment describing return route.
 	 * @param code = FaultCodes
-	 * @param reason - reason string
+	 * @param faultString - reason string
 	 */
 	public SoapFault(SoapEnvironment soapEnv, SoapFaultException e) {
 		this.soapEnv = soapEnv;
@@ -62,7 +62,7 @@ public class SoapFault {
 		OMElement reason = XmlUtil.om_factory.createOMElement(SoapUtil.fault_reason_qnamens);
 		OMElement text = XmlUtil.om_factory.createOMElement(SoapUtil.fault_text_qnamens);
 		text.addAttribute("lang", "en", XmlUtil.xml_namespace);
-		text.setText(e.getFaultCode() + ": " + e.getReason());
+		text.setText(e.getFaultCode() + ": " + e.getFaultString());
 		reason.addChild(text);
 		root.addChild(reason);
 

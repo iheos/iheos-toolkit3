@@ -2,11 +2,16 @@ package gov.nist.hit.ds.httpSoapValidator;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.simSupport.ValidationContext;
+import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
+import gov.nist.hit.ds.soapSupport.core.FaultCodes;
+import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
+import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xmlValidator.SoapEnvelope;
 
@@ -32,7 +37,7 @@ public class SoapMessageValidator extends MessageValidator {
 	String wsaction = null;
 	String reqMessageId = null; 
 	MessageValidatorEngine mvc;
-
+	SoapEnvironment soapEnvironment;
 
 
 	public SoapMessageValidator(ValidationContext vc, MessageValidatorEngine mvc) {
@@ -40,6 +45,13 @@ public class SoapMessageValidator extends MessageValidator {
 		this.mvc = mvc;
 	}
 	
+	@Inject
+	public SoapMessageValidator setSoapEnvironment(SoapEnvironment soapEnvironment) {
+		this.soapEnvironment = soapEnvironment;
+		return this;
+	}
+	
+	@Inject
 	public SoapMessageValidator setEnvelope(SoapEnvelope envelope) {
 		this.envelope = envelope.getXml();
 		return this;
@@ -49,7 +61,7 @@ public class SoapMessageValidator extends MessageValidator {
 		return new SoapBody().setBody(messagebody);
 	}
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(ErrorRecorder er, MessageValidatorEngine mvc) throws SoapFaultException {
 		this.er = er;
 
 
@@ -57,12 +69,17 @@ public class SoapMessageValidator extends MessageValidator {
 		envelope();
 		header();
 		parseWSAddressing();
+		
+		soapEnvironment.setMessageId(reqMessageId);
+		soapEnvironment.setRequestAction(wsaction);
 
 		if (wsaction != null) {
 			er.challenge("WS-Addressing Action Header");
 			er.detail("Found WS-Action: " + wsaction);
-			if (!wsaction.equals(wsaction.trim()))
+			if (!wsaction.equals(wsaction.trim())) {
 				err("WS-Action contains whitespace prefix or suffix","");
+				throw new SoapFaultException(FaultCodes.ActionNotSupported, new ErrorContext("WS-Action contains whitespace prefix or suffix", null).toString());
+			}
 		}
 
 		messagebody = body();
@@ -81,6 +98,7 @@ public class SoapMessageValidator extends MessageValidator {
 //				MessageValidatorFactory.validateBasedOnValidationContext(erBuilder, messagebody, mvc, vc, rvi);
 			} else {
 				err("Cannot validate SOAP Body - WS-Addressing Action header " + wsaction + " is not understood","ITI TF-2a, 2b, XDR, XCA, MPQ Supplements");
+				throw new SoapFaultException(FaultCodes.ActionNotSupported, new ErrorContext("WS-Addressing Action header " + wsaction + " is not understood", "ITI TF-2a, 2b, XDR, XCA, MPQ Supplements").toString());
 			}
 		}
 		
@@ -97,34 +115,46 @@ public class SoapMessageValidator extends MessageValidator {
 //				mvc.addMessageValidator("SAML Validator", new WsseHeaderValidatorAdapter(vc, wsseHeader), erBuilder.buildNewErrorRecorder());
 			} catch (Exception e) {
 				er.err(XdsErrorCode.Code.NoCode, e);
+				throw new SoapFaultException(FaultCodes.Sender, new ErrorContext(e.getMessage(), null).toString());
 			}
+		}
+		
+		if (er.hasErrors()) {
+			List<ValidatorErrorItem> itemList = er.getErrMsgs();
+			ValidatorErrorItem item = itemList.get(0);
 		}
 		
 	}
 
-	void parse() {
+	void parse() throws SoapFaultException {
 		header = XmlUtil.firstChildWithLocalName(envelope, "Header");
-		if (header == null)
+		if (header == null) {
 			er.err(Code.SoapFault, new ErrorContext("SOAPEnvelope has no Header",  null), this);
+			throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("SOAPEnvelope has no Header", null).toString());
+		}
 		else
 			er.challenge("SOAP Header found");
 		body = XmlUtil.firstChildWithLocalName(envelope, "Body");
-		if (body == null)
+		if (body == null) {
 			er.err(Code.SoapFault, new ErrorContext("SOAPEnvelope has no Body",  null), this);
+			throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("SOAPEnvelope has no Body", null).toString());
+		}
 		else
 			er.challenge("SOAP Body found");
 	}
 
-	void verifywsActionCorrectForValidationContext(String wsaction) {
+	void verifywsActionCorrectForValidationContext(String wsaction) throws SoapFaultException {
 		ValidationContext v = new ValidationContext();
 		
 		v.clone(vc);
 		
 		setValidationContextFromWSAction(v, wsaction);
 		if (!v.equals(vc)) {
-			err("WS-Action wrong: " + wsaction + " not appropriate for message " + 
+			String msg = "WS-Action wrong: " + wsaction + " not appropriate for message " + 
 					vc.getTransactionName() + " required Validation Context is " + vc.toString() + 
-					" Validation Context from WS-Action is " + v.toString(),"ITI TF");
+					" Validation Context from WS-Action is " + v.toString(); 
+			err(msg, "ITI TF");
+			throw new SoapFaultException(FaultCodes.ActionNotSupported, new ErrorContext(msg, "ITI TF").toString());
 		}
 	}
 
@@ -217,7 +247,7 @@ public class SoapMessageValidator extends MessageValidator {
 	static String wsaddresingNamespace = "http://www.w3.org/2005/08/addressing";
 	static String wsaddressingRef = "http://www.w3.org/TR/ws-addr-core/";
 
-	void parseWSAddressing() {
+	void parseWSAddressing() throws SoapFaultException {
 		if (header == null)
 			return;
 		er.challenge("WS-Addressing");
@@ -277,10 +307,13 @@ public class SoapMessageValidator extends MessageValidator {
 //			er.detail("The WS-Addressing SOAP header " + hdr.getLocalName() + " has value other than \"1\""/*,"ITI TF-2x: V.3.2.2"*/);
 		}
 		if (!mufound) {
-			err("At least one WS-Addressing SOAP header element must have a soapenv:mustUnderstand attribute soapenv:mustUnderstand with value of logical true","http://www.w3.org/TR/soap12-part0/#L4697");
+			String msg = "At least one WS-Addressing SOAP header element must have a soapenv:mustUnderstand attribute soapenv:mustUnderstand with value of logical true";
+			String ref = "http://www.w3.org/TR/soap12-part0/#L4697"; 
+			err(msg, ref);
 			er.detail("Taken from the above reference:");
 			er.detail("In the SOAP 1.2 infoset-based description, the env:mustUnderstand attribute in header elements takes the (logical) value \"true\" or \"false\", whereas in SOAP 1.1 they are the literal value \"1\" or \"0\" respectively.");
 			er.detail("This validation accepts 1 or 0 or any capitalization of true or false");
+			throw new SoapFaultException(FaultCodes.MustUnderstand, new ErrorContext(msg, ref).toString());
 		}
 
 		//		if (action.size() > 0) {
@@ -320,27 +353,32 @@ public class SoapMessageValidator extends MessageValidator {
 		return false;
 	}
 
-	void httpCheck(List<OMElement> eles) {
+	void httpCheck(List<OMElement> eles) throws SoapFaultException {
 		for (OMElement ele : eles) {
 			String value = ele.getText();
-			if (!value.startsWith("http"))
-				err("Value of " + ele.getLocalName() + " must be http endpoint - found instead " + value,
-						wsaddressingRef);
+			if (!value.startsWith("http")) {
+				String msg = "Value of " + ele.getLocalName() + " must be http endpoint - found instead " + value; 
+				err(msg, wsaddressingRef);
+				throw new SoapFaultException(FaultCodes.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef).toString());
+			}
 		}
 	}
 
-	void endpointCheck(List<OMElement> eles, boolean anyURIOk) {
+	void endpointCheck(List<OMElement> eles, boolean anyURIOk) throws SoapFaultException {
 		for (OMElement ele : eles) {
 			OMElement first = ele.getFirstElement();
 			if (first == null) {
-				err("Validating contents of " + ele.getLocalName() + ": " + "not HTTP style endpoint"
-						,wsaddressingRef);
+				String msg = "Validating contents of " + ele.getLocalName() + ": " + "not HTTP style endpoint"; 
+				err(msg, wsaddressingRef);
+				throw new SoapFaultException(FaultCodes.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef).toString());
 				
 			} else {
 				String valError = validateEndpoint(first, anyURIOk);
-				if (valError != null)
-					err("Validating contents of " + ele.getLocalName() + ": " + valError
-							,wsaddressingRef);
+				if (valError != null) {
+					String msg = "Validating contents of " + ele.getLocalName() + ": " + valError; 
+					err(msg, wsaddressingRef);
+					throw new SoapFaultException(FaultCodes.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef).toString());
+				}
 			}
 		}
 	}
@@ -363,40 +401,49 @@ public class SoapMessageValidator extends MessageValidator {
 	}
 
 
-	void validateNamespace(List<OMElement> eles, String namespace) {
+	void validateNamespace(List<OMElement> eles, String namespace) throws SoapFaultException {
 		for (OMElement ele : eles) {
 			OMNamespace omns = ele.getNamespace();
 			String nsuri = omns.getNamespaceURI();
-			if (!namespace.equals(nsuri))
-				err("Namespace on element " + ele.getLocalName() + " must be " +
-						namespace + " - found instead " + nsuri, 
-						wsaddressingRef);
+			if (!namespace.equals(nsuri)) {
+				String msg = "Namespace on element " + ele.getLocalName() + " must be " +
+						namespace + " - found instead " + nsuri;
+				err(msg, wsaddressingRef);
+				throw new SoapFaultException(FaultCodes.Sender, new ErrorContext(msg, wsaddressingRef).toString());
+			}
 		}
 	}
 
 	static String soapEnvelopeNamespace = "http://www.w3.org/2003/05/soap-envelope";
 
-	void header() {
+	void header() throws SoapFaultException {
 		er.challenge("Header");
 		if (header == null) {
 			err("Header must be present","ITI TF-2x: V.3.2.2 and SOAP Version 1.2 Section 4");
-			return;
+			throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Header must be present", "ITI TF-2x: V.3.2.2 and SOAP Version 1.2 Section 4").toString());
 		}
 		OMNamespace ns = header.getNamespace();
-		if (ns == null) 
+		if (ns == null) {
 			err("Namespace must be " + soapEnvelopeNamespace + " - found instead - " 
 					+ "null","SOAP Version 1.2 Section 4");
+			throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Namespace must be " + soapEnvelopeNamespace + " - found instead - " 
+					+ "null","SOAP Version 1.2 Section 4").toString());
+		}
 		else {
 			String uri = ns.getNamespaceURI();
-			if (!soapEnvelopeNamespace.equals(uri))
+			if (!soapEnvelopeNamespace.equals(uri)) {
 				err("Namespace must be " + " - found instead - " 
 						+ uri,"SOAP Version 1.2 Section 4");
+				throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Namespace must be " + " - found instead - " 
+						+ uri,"SOAP Version 1.2 Section 4").toString());
+			}
 		}
 		
 		OMElement metadataLevel = XmlUtil.firstChildWithLocalName(header, "metadata-level");
 		if (metadataLevel != null) {
 			if (!"urn:direct:addressing".equals(metadataLevel.getNamespace().getNamespaceURI())) {
 				err("Namespace on metadata-level header element must be " + "urn:direct:addressing");
+				throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Namespace on metadata-level header element must be " + "urn:direct:addressing", null).toString());
 			}
 			String metadataLevelTxt = metadataLevel.getText();
 			if (metadataLevelTxt == null) metadataLevelTxt = "";
@@ -404,62 +451,80 @@ public class SoapMessageValidator extends MessageValidator {
 				vc.isXDRMinimal = true;
 			} else if (metadataLevelTxt.equals("XDS")) {
 				vc.isXDRMinimal = false;
-			} else
+			} else {
 				err("SOAP header metadata-level found but has invalid value = " + metadataLevelTxt + " ; must be minimal or XDS");
+				throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("SOAP header metadata-level found but has invalid value = " + metadataLevelTxt + " ; must be minimal or XDS", null).toString());
+			}
 		}
 	}
 
-	OMElement body() {
+	OMElement body() throws SoapFaultException {
 		er.challenge("Body");
 		if (body == null) {
 			err("Body must be present","ITI TF-2x: V.3.2 and SOAP Version 1.2 Section 4");
-			return null;
+			throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Body must be present","ITI TF-2x: V.3.2 and SOAP Version 1.2 Section 4").toString());
 		} 
 
 		if (header != null) {
 			OMNamespace ns = header.getNamespace();
-			if (ns == null) 
+			if (ns == null) { 
 				err("Namespace must be " + soapEnvelopeNamespace + " - found instead - " 
 						+ "null","http://www.w3.org/TR/soap12-part1/#soapenvelope");
+				throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Namespace must be " + soapEnvelopeNamespace + " - found instead - " 
+						+ "null","http://www.w3.org/TR/soap12-part1/#soapenvelope").toString());
+			}
 			else {
 				String uri = ns.getNamespaceURI();
-				if (!soapEnvelopeNamespace.equals(uri))
+				if (!soapEnvelopeNamespace.equals(uri)) {
 					err("Namespace must be " + soapEnvelopeNamespace + " - found instead - " 
 							+ uri,"http://www.w3.org/TR/soap12-part1/#soapenvelope");
+					throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Namespace must be " + soapEnvelopeNamespace + " - found instead - " 
+							+ uri,"http://www.w3.org/TR/soap12-part1/#soapenvelope").toString());
+				}
 			}
 		} 
 
 		List<String> kids = XmlUtil.childrenLocalNames(body);
 		if (kids.size() == 0) {
 			err("Body must has a single child, found none", "ebRS 3.0 Section 2.1");
-			return null;
+			throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Body must has a single child, found none", "ebRS 3.0 Section 2.1").toString());
 		} else if (kids.size() == 1) {
 			;
 		} else {
 			err("Body must have a single child, found " + kids.size(), "ebRS 3.0 Section 2.1");
+			throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Body must have a single child, found " + kids.size(), "ebRS 3.0 Section 2.1").toString());
 		}
 		return body.getFirstElement();
 	}
 
-	void envelope() {
+	void envelope() throws SoapFaultException {
 		er.challenge("Envelope");
 		OMNamespace ns = envelope.getNamespace();
-		if (ns == null) 
+		if (ns == null) { 
 			err("Envelope namespace must be " + soapEnvelopeNamespace + " - found instead - " 
 					+ "null","ITI TF-2x: V.3.2.1.3 and http://www.w3.org/TR/soap12-part1/#soapenvelope");
+			throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Envelope namespace must be " + soapEnvelopeNamespace + " - found instead - " 
+					+ "null","ITI TF-2x: V.3.2.1.3 and http://www.w3.org/TR/soap12-part1/#soapenvelope").toString());
+		}
 		else {
 			String uri = ns.getNamespaceURI();
-			if (!soapEnvelopeNamespace.equals(uri))
+			if (!soapEnvelopeNamespace.equals(uri)) {
 				err("Envelope namespace must be " + soapEnvelopeNamespace + " - found instead - " 
 						+ uri,"http://www.w3.org/TR/soap12-part1/#soapenvelope");
+				throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Envelope namespace must be " + soapEnvelopeNamespace + " - found instead - " 
+						+ uri,"http://www.w3.org/TR/soap12-part1/#soapenvelope").toString());
+			}
 		}
 
 		String eleName = envelope.getLocalName();
 		if (eleName.equals("Envelope"))
 			;
-		else
+		else {
 			err("Envelope Element name must be Envelope - found instead - " 
 					+ eleName,"http://www.w3.org/TR/soap12-part1/#soapenvelope");
+			throw new SoapFaultException(FaultCodes.Sender, new ErrorContext("Envelope Element name must be Envelope - found instead - " 
+					+ eleName,"http://www.w3.org/TR/soap12-part1/#soapenvelope").toString());
+		}
 	}
 
 	public String getWsAction() {

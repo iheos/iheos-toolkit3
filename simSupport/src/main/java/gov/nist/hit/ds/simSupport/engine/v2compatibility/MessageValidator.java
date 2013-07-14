@@ -2,7 +2,8 @@ package gov.nist.hit.ds.simSupport.engine.v2compatibility;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.simSupport.ValidationContext;
-import gov.nist.hit.ds.simSupport.engine.SimElement;
+import gov.nist.hit.ds.simSupport.engine.SimComponent;
+import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
 
 /**
@@ -11,12 +12,12 @@ import gov.nist.hit.ds.simSupport.engine.SimElement;
  * @author bmajur
  *
  */
-abstract public class MessageValidator implements SimElement {
+abstract public class MessageValidator implements SimComponent {
 	public ValidationContext vc;
 	public ErrorRecorder er;
 	String name;  // a descriptive name for debugging displays
 	
-	abstract public void run(ErrorRecorder er, MessageValidatorEngine mve);
+	abstract public void run(ErrorRecorder er, MessageValidatorEngine mve) throws SoapFaultException;
 
 	public MessageValidator(ValidationContext vc) {
 		this.vc = vc;
@@ -50,7 +51,7 @@ abstract public class MessageValidator implements SimElement {
 	 * SimEngine only know this via the ValSim interface.
 	 */
 	@Override
-	public void run(MessageValidatorEngine mve) {
+	public void run(MessageValidatorEngine mve) throws SoapFaultException {
 		run(er, mve);
 	}
 

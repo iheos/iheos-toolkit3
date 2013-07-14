@@ -2,27 +2,19 @@ package gov.nist.hit.ds.xmlValidator;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.hit.ds.simSupport.ValidationContext;
-import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
+import gov.nist.hit.ds.simSupport.engine.Inject;
+import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.utilities.xml.Parse;
 import gov.nist.hit.ds.utilities.xml.XmlText;
 
 import org.apache.axiom.om.OMElement;
 
-public class XmlParser extends MessageValidator implements SoapEnvelope {
+public class XmlParser implements SimComponent, SoapEnvelope {
 	OMElement xml;
 	ErrorRecorder er;
 	XmlText xmlText;
 		
-	public XmlParser(ValidationContext vc, MessageValidatorEngine mve) {
-		super(vc);
-	}
-	
-	public XmlParser() {
-		
-	}
-	
 	public SoapEnvelope getSoapEnvelope() {
 		return this;
 	}
@@ -31,6 +23,7 @@ public class XmlParser extends MessageValidator implements SoapEnvelope {
 		return xmlText;
 	}
 
+	@Inject
 	public XmlParser setXmlText(XmlText xmlText) {
 		this.xmlText = xmlText;
 		return this;
@@ -53,12 +46,6 @@ public class XmlParser extends MessageValidator implements SoapEnvelope {
 		} catch (Exception e) {
 			er.err(Code.NoCode, e);
 		}
-	}
-
-	@Override
-	public void run(ErrorRecorder er, MessageValidatorEngine mve) {
-		this.er = er;
-		run(mve);
 	}
 
 	@Override

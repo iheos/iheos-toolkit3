@@ -2,7 +2,7 @@ package gov.nist.hit.ds.simSupport;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.hit.ds.simSupport.engine.SimElement;
+import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.utilities.html.HttpMessageContent;
 import gov.nist.hit.ds.utilities.io.Io;
@@ -18,7 +18,7 @@ import java.io.IOException;
  * @author bmajur
  *
  */
-public class LogLoader implements SimElement {
+public class LogLoader implements SimComponent {
 	File dir;
 	String header = null;
 	byte[] body = null;

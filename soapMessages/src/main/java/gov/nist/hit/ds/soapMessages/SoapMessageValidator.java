@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.xml.security.utils.XMLUtils;
 import org.w3c.dom.Element;
 
 /**

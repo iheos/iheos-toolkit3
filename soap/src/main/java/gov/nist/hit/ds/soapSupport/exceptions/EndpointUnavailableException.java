@@ -1,6 +1,6 @@
-package gov.nist.hit.ds.soap.exceptions;
+package gov.nist.hit.ds.soapSupport.exceptions;
 
-import gov.nist.hit.ds.soap.core.FaultCodes;
+import gov.nist.hit.ds.soapSupport.core.FaultCodes;
 
 public class EndpointUnavailableException extends SoapFaultException {
 

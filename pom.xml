@@ -81,6 +81,7 @@
   	<module>soapMessages</module>
   	<module>httpValidator</module>
   	<module>xmlValidator</module>
+  	<module>dsValidator</module>
   </modules>
   <build>
   <plugins>

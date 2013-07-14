@@ -1,11 +1,11 @@
 package gov.nist.hit.ds.simSupport.test.sims;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
-import gov.nist.hit.ds.simSupport.engine.SimElement;
+import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.test.datatypes.Foo;
 
-public class FooUser implements SimElement {
+public class FooUser implements SimComponent {
 
 	public void setFoo(Foo f) {
 		// TODO Auto-generated method stub
