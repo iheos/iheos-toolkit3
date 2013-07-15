@@ -1,0 +1,10 @@
+syntax:glob
+
+# folders created by gwt
+.gwt/**
+xdstools2/.gwt
+xdstools2/gwt-unitCache/
+.gwt-tmp
+
+#MAC
+.DS_Store
