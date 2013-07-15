@@ -80,6 +80,7 @@
   	<module>registryMetadataValidator</module>
   	<module>actorTransaction</module>
   	<module>dsValidator</module>
+  	<module>xmlValidator</module>
   </modules>
   <build>
   <plugins>
