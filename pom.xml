@@ -81,6 +81,7 @@
   	<module>actorTransaction</module>
   	<module>dsValidator</module>
   	<module>xmlValidator</module>
+  	<module>siteManagement</module>
   </modules>
   <build>
   <plugins>

@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>gov.nist.hit.ds</groupId>
+    <artifactId>toolkit3</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>siteManagement</artifactId>
+  <dependencies>
+		<dependency>
+		    <groupId>org.apache.ws.commons.axiom</groupId>
+		    <artifactId>axiom-api</artifactId>
+	    </dependency>
+	  	<dependency>
+	  		<groupId>org.apache.ws.commons.axiom</groupId>
+	  		<artifactId>axiom-impl</artifactId>
+	  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>actorTransaction</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>xdsException</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>utilities</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
+</project>
