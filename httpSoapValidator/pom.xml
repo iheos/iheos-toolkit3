@@ -5,7 +5,7 @@
     <artifactId>toolkit3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>httpValidator</artifactId>
+  <artifactId>httpSoapValidator</artifactId>
   <dependencies>
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
