@@ -1,16 +1,21 @@
 package gov.nist.hit.ds.httpSoapValidator;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.http.parser.HttpEnvironment;
+import gov.nist.hit.ds.httpSoapValidator.rootValidator.SubmitObjectsRequestRootValidator;
 import gov.nist.hit.ds.simSupport.LogLoader;
 import gov.nist.hit.ds.simSupport.ValidationContext;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
+import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
 import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
 import gov.nist.hit.ds.simSupport.engine.SimStep;
+import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
+import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.xmlValidator.XmlParser;
 
 import java.io.File;
@@ -20,28 +25,26 @@ import java.util.List;
 import org.junit.Test;
 
 public class HttpSoapValTest {
-	
+
 	@Test
 	public void httpSoapTest() {		
 		LogLoader loader = new LogLoader(new File("src/test/resources/simple"));
-		
+
 		SimChain simChain = new SimChain();
-		
-		SimEngine engine = setup(loader, simChain);
+
+		engine = setup(loader, simChain);
 
 		run(engine, simChain);
 		System.out.println(simChain.getLog());
-		assertFalse(simChain.hasErrors());
-		assertTrue(6 == engine.getSimsRun());
 		assertFalse(simChain.hasErrors());
 	}
 
 	@Test
 	public void soapFaultTest() {		
-		
+
 		SimChain simChain = new SimChain();
-		
-		SimEngine engine = new SimEngine(simChain);
+
+		engine = new SimEngine(simChain);
 
 		List<SimStep> simSteps = new ArrayList<SimStep>();
 
@@ -57,14 +60,14 @@ public class HttpSoapValTest {
 		System.out.println(simChain.getLog());
 		assertTrue(simChain.hasErrors());
 	}
-	
+
 	@Test
 	public void mustUnderstandFaultTest() {		
 		LogLoader loader = new LogLoader(new File("src/test/resources/fault"));
-		
+
 		SimChain simChain = new SimChain();
-		
-		SimEngine engine = setup(loader, simChain);
+
+		engine = setup(loader, simChain);
 
 		run(engine, simChain);
 		System.out.println(simChain.getLog());
@@ -74,19 +77,20 @@ public class HttpSoapValTest {
 	@Test
 	public void noHeaderFaultTest() {		
 		LogLoader loader = new LogLoader(new File("src/test/resources/noHeaderFault"));
-		
+
 		SimChain simChain = new SimChain();
-		
-		SimEngine engine = setup(loader, simChain);
+
+		engine = setup(loader, simChain);
 
 		run(engine, simChain);
 		System.out.println(simChain.getLog());
 		assertTrue(simChain.hasErrors());
 	}
 
-
+	ValidationContext vc = new ValidationContext();
+	SimEngine engine;
+	
 	SimEngine setup(LogLoader loader, SimChain simChain) {
-		ValidationContext vc = new ValidationContext();
 		vc.hasHttp = true;
 		vc.hasSoap = true;
 		vc.isR = true;
@@ -95,23 +99,28 @@ public class HttpSoapValTest {
 		List<SimStep> simSteps = new ArrayList<SimStep>();
 
 		simChain.setBase(new SoapEnvironment(new HttpEnvironment().setResponse(new HttpServletResponseMock())));
-		SimEngine engine = new SimEngine(simChain);
+		engine = new SimEngine(simChain);
 
+		// Supplies ValidatorContext and MessageValidatorEngine
+		simSteps.add(new SimStep().
+				setName("Validation Context Source").
+				setSimComponent(new MyWrapper()));
+		
 		simSteps.add(new SimStep().
 				setName("HTTP Log Loader").
 				setSimComponent(loader));
 		simSteps.add(new SimStep().
 				setName("HttpMessageValidator").
-				setSimComponent(new HttpMessageValidator(vc, engine)));
+				setSimComponent(new HttpMessageValidator()));
 		simSteps.add(new SimStep().
 				setName("XML Parser").
 				setSimComponent(new XmlParser()));
 		simSteps.add(new SimStep().
 				setName("SoapMessageValidator").
-				setSimComponent(new SoapMessageValidator(vc, engine)));
-		simSteps.add(new SimStep().
-				setName("ebRS Root Name Validator").
-				setSimComponent(new EbrsRootValidator("SubmitObjectsRequest")));
+				setSimComponent(new SoapMessageValidator()));
+//		simSteps.add(new SimStep().
+//				setName("ebRS Root Name Validator").
+//				setSimComponent(new SubmitObjectsRequestRootValidator()));
 		simChain.setSteps(simSteps);
 		return engine;
 	}
@@ -126,5 +135,38 @@ public class HttpSoapValTest {
 			fail();
 		}
 	}
+	
+	public class MyWrapper implements SimComponent {
+		ErrorRecorder er;
+		
+		public MessageValidatorEngine getMessageValidationEngine() {
+			return engine;
+		}
+
+		public ValidationContext getValidationContext() {
+			return vc;
+		}
+
+		@Override
+		public void setErrorRecorder(ErrorRecorder er) {
+			this.er = er;
+		}
+
+		@Override
+		public String getName() {
+			return getClass().getSimpleName();
+		}
+
+		@Override
+		public String getDescription() {
+			return null;
+		}
+
+		@Override
+		public void run(MessageValidatorEngine mve) throws SoapFaultException {
+
+		}
+	}
+
 
 }

@@ -27,10 +27,18 @@ public class HttpMessageValidator extends MessageValidator {
 	MessageValidatorEngine mvc;
 //	RegistryValidationInterface rvi;
 
-	public HttpMessageValidator(ValidationContext vc, MessageValidatorEngine mvc) {
-		super(vc);
-		this.mvc = mvc;
+	public HttpMessageValidator() {
 		setName(getClass().getSimpleName());
+	}
+	
+	@Inject
+	public void setMessageValidatorEngine(MessageValidatorEngine mvc) {
+		this.mvc = mvc;
+	}
+	
+	@Inject 
+	public void setValidationContext(ValidationContext vc) {
+		this.vc = vc;
 	}
 
 //	public HttpMessageValidator(ValidationContext vc, HttpParserBa hparser, MessageValidatorEngine mvc) {

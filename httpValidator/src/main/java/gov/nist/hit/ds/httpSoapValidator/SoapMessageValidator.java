@@ -39,10 +39,15 @@ public class SoapMessageValidator extends MessageValidator {
 	MessageValidatorEngine mvc;
 	SoapEnvironment soapEnvironment;
 
-
-	public SoapMessageValidator(ValidationContext vc, MessageValidatorEngine mvc) {
-		super(vc);
+	
+	@Inject 
+	void setMessageValidatorEngine(MessageValidatorEngine mvc) {
 		this.mvc = mvc;
+	}
+	
+	@Inject
+	public void setValidationContext(ValidationContext vc) {
+		this.vc = vc;
 	}
 	
 	@Inject

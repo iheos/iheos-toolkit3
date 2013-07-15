@@ -1,19 +1,22 @@
-package gov.nist.hit.ds.httpSoapValidator;
+package gov.nist.hit.ds.httpSoapValidator.rootValidator;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
+import gov.nist.hit.ds.httpSoapValidator.SoapBody;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 
-public class EbrsRootValidator implements SimComponent {
+abstract public class EbrsRootValidator implements SimComponent {
 	String expectedRootName;
 	ErrorRecorder er;
 	SoapBody soapBody;
 	
-	public EbrsRootValidator(String expectedRootName) {
-		this.expectedRootName = expectedRootName;
+	abstract String getExpectedRootName();
+	
+	public EbrsRootValidator() {
+		this.expectedRootName = getExpectedRootName();
 	}
 
 	@Inject

@@ -219,6 +219,7 @@ public class SimEngine implements MessageValidatorEngine {
 			PubSubMatch match = findMatch(subscriptionObject, subClass, subMethod);
 			pubSubMatches.add(match);
 			System.out.println(match);
+			System.out.flush();
 			executePubSub(match);
 		}
 	}
