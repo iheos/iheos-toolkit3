@@ -73,6 +73,7 @@
   	<module>registryMsgFormats</module>
   	<module>soap</module>
   	<module>http</module>
+  	<module>httpSoapValidator</module>
   	<module>simSupport</module>
   	<module>initialization</module>
   	<module>tk</module>
