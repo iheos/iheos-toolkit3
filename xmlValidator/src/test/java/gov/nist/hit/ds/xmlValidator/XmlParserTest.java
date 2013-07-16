@@ -3,12 +3,12 @@ package gov.nist.hit.ds.xmlValidator;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
-import gov.nist.hit.ds.simSupport.LogLoader;
-import gov.nist.hit.ds.simSupport.ValidationContext;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
 import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
 import gov.nist.hit.ds.simSupport.engine.SimStep;
+import gov.nist.hit.ds.simSupport.transaction.LogLoader;
+import gov.nist.hit.ds.simSupport.transaction.ValidationContext;
 
 import java.io.File;
 import java.util.ArrayList;

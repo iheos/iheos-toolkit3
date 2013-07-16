@@ -8,9 +8,9 @@ import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.http.parser.MultipartParserBa;
 import gov.nist.hit.ds.http.parser.PartBa;
-import gov.nist.hit.ds.simSupport.ValidationContext;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
+import gov.nist.hit.ds.simSupport.transaction.ValidationContext;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;

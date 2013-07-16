@@ -2,7 +2,7 @@ package gov.nist.hit.ds.registrySim.store;
 
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registryMetadataValidator.object.RegistryValidationInterface;
-import gov.nist.hit.ds.simSupport.SimDb;
+import gov.nist.hit.ds.simSupport.sim.SimDb;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
