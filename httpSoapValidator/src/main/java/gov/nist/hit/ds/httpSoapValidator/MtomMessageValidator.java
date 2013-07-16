@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.httpSoapValidator;
 
+import gov.nist.hit.ds.docRef.Mtom;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
-import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.http.parser.MultipartParserBa;
@@ -71,11 +71,12 @@ public class MtomMessageValidator extends MessageValidator {
 
 			// no actual validation, just saves Part list on validation stack so it can
 			// be found by later steps that need it
-			mvc.addMessageValidator("MultipartContainer", new MultipartContainer(vc, mp), er.buildNewErrorRecorder());
+			// TODO: What replaces this MultipartContainer in V3?
+//			mvc.addMessageValidator("MultipartContainer", new MultipartContainer(vc, mp), er.buildNewErrorRecorder());
 
-			
+			// TODO: Replace this Validate SOAP incantation
 			er.detail("Scheduling validation of SOAP wrapper");
-			MessageValidatorFactory.getValidatorContext(erBuilder, startPart.getBody(), mvc, "Validate SOAP", vc);
+//			MessageValidatorFactory.getValidatorContext(erBuilder, startPart.getBody(), mvc, "Validate SOAP", vc);
 
 		} catch (UnsupportedEncodingException e) {
 			er.err(XdsErrorCode.Code.NoCode, e);

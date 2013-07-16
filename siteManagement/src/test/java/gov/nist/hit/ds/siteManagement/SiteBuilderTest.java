@@ -1,14 +1,14 @@
 package gov.nist.hit.ds.siteManagement;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
+import gov.nist.hit.ds.actorTransaction.ATFactory.ActorType;
+import gov.nist.hit.ds.actorTransaction.ATFactory.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
 
 import org.junit.Before;
 import org.junit.Test;
+
 
 public class SiteBuilderTest {
 	static String workdir = "/Users/bill/tmp/sitetest";

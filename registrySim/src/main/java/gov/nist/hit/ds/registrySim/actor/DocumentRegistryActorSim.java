@@ -20,4 +20,10 @@ public class DocumentRegistryActorSim implements GenericSim {
 	public String getState() {
 		return "running";
 	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
 }

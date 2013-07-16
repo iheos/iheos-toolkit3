@@ -27,4 +27,10 @@ public class BarMaker implements SimComponent {
 	public void run(MessageValidatorEngine mve) {
 		bar = new Bar("Open");
 	}
+
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

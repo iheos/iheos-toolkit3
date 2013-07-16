@@ -30,4 +30,11 @@ public class FooMaker implements SimComponent {
 	public void run(MessageValidatorEngine mve) {
 		foo = new Foo("Fubar");
 	}
+
+
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
