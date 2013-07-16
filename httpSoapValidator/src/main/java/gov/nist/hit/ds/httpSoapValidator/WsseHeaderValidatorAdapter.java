@@ -1,17 +1,13 @@
 package gov.nist.hit.ds.httpSoapValidator;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
-import gov.nist.hit.ds.errorRecording.TextErrorRecorder;
+import gov.nist.hit.ds.httpSoapValidator.wsseToolkitAdapter.log4jToErrorRecorder.AppenderForErrorRecorder;
 import gov.nist.hit.ds.simSupport.ValidationContext;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.toolkit.wsseTool.api.WsseHeaderValidator;
-import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
 import gov.nist.toolkit.wsseTool.api.config.SecurityContext;
 import gov.nist.toolkit.wsseTool.api.config.SecurityContextFactory;
-import gov.nist.toolkit.wsseTool.api.exceptions.GenerationException;
-
-import java.security.KeyStoreException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

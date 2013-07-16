@@ -2,6 +2,8 @@ package gov.nist.hit.ds.simSupport;
 
 
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.valSupport.client.MetadataTypes;
+import gov.nist.hit.ds.valSupport.client.SchematronMetadataTypes;
 
 import java.io.Serializable;
 import java.util.ArrayList;

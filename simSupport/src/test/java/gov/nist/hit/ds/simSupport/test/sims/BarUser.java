@@ -27,4 +27,10 @@ public class BarUser implements SimComponent {
 	public void run(MessageValidatorEngine mve) {
 		System.out.println("BarUser run");
 	}
+
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

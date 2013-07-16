@@ -7,6 +7,10 @@
   </parent>
   <artifactId>siteManagement</artifactId>
   <dependencies>
+	  	<dependency>
+	  		<groupId>junit</groupId>
+	  		<artifactId>junit</artifactId>
+	  	</dependency>
 		<dependency>
 		    <groupId>org.apache.ws.commons.axiom</groupId>
 		    <artifactId>axiom-api</artifactId>

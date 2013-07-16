@@ -20,6 +20,7 @@ import org.apache.axiom.om.OMElement;
 public class SQFactory extends StoredQueryFactory {
 	RegIndex ri;
 	
+	// TODO: RegistryErrorListGenerator should not be referenced here, just a model
 	public SQFactory(OMElement ahqr, RegistryErrorListGenerator response)
 			throws XdsInternalException, MetadataException, XdsException,
 			LoggerException {
@@ -55,7 +56,8 @@ public class SQFactory extends StoredQueryFactory {
 			storedQueryImpl = sim;
 		}
 		else if (query_id.equals(MetadataSupport.SQ_GetAll)) {
-			response.add_error("XDSRegistryError", "UnImplemented Stored Query query id = " + query_id, "AdhocQueryRequest.java", null);
+			// TODO: GETALL needs to be implemented
+//			response.add_error("XDSRegistryError", "UnImplemented Stored Query query id = " + query_id, "AdhocQueryRequest.java", null);
 		}
 		else if (query_id.equals(MetadataSupport.SQ_GetFolders)) {
 			GetFoldersSim sim = new GetFoldersSim(sqs);
@@ -102,7 +104,8 @@ public class SQFactory extends StoredQueryFactory {
 		else if (query_id.equals(MetadataSupport.SQ_FindFoldersForMultiplePatients)) {
 		}
 		else {
-			response.add_error("XDSRegistryError", "Unknown Stored Query query id = " + query_id, "AdhocQueryRequest.java", SqDocRef.QueryID);
+			// TODO: Error needs to go through an ErrorRecorder
+//			response.add_error("XDSRegistryError", "Unknown Stored Query query id = " + query_id, "AdhocQueryRequest.java", SqDocRef.QueryID);
 		}
 
 		return this;
