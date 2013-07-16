@@ -2,8 +2,8 @@ package gov.nist.hit.ds.httpSoapValidator.wsseToolkitAdapter.log4jToErrorRecorde
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
-import gov.nist.hit.ds.simSupport.ValidationContext;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
+import gov.nist.hit.ds.simSupport.transaction.ValidationContext;
 
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;

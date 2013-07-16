@@ -2,6 +2,7 @@ package gov.nist.hit.ds.simSupport;
 
 /**
  * All simulators must implement this interface.
+ * TODO: This will likely get deleted soon
  * @author bill
  *
  */

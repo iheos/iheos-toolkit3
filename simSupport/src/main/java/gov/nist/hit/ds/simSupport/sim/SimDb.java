@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.simSupport;
+package gov.nist.hit.ds.simSupport.sim;
 
 import gov.nist.hit.ds.actorTransaction.ATFactory;
 import gov.nist.hit.ds.actorTransaction.ATFactory.ActorType;

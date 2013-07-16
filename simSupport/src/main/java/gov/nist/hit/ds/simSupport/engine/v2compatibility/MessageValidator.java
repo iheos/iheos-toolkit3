@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.simSupport.engine.v2compatibility;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
-import gov.nist.hit.ds.simSupport.ValidationContext;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
+import gov.nist.hit.ds.simSupport.transaction.ValidationContext;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
 
