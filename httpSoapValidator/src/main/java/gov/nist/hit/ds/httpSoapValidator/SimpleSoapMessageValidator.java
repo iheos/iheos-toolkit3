@@ -85,6 +85,12 @@ public class SimpleSoapMessageValidator extends MessageValidator {
 		return "Verify details of the SIMPLE SOAP HTTP header";
 	}
 
+	@Override
+	public void setDescription(String description) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 }

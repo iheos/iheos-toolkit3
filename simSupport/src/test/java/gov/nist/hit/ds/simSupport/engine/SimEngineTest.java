@@ -3,12 +3,12 @@ package gov.nist.hit.ds.simSupport.engine;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import gov.nist.hit.ds.simSupport.test.sims.BarUser;
-import gov.nist.hit.ds.simSupport.test.sims.Base;
-import gov.nist.hit.ds.simSupport.test.sims.FooMaker;
-import gov.nist.hit.ds.simSupport.test.sims.FooMakerError;
-import gov.nist.hit.ds.simSupport.test.sims.FooUser;
-import gov.nist.hit.ds.simSupport.test.sims.FooUserBarMaker;
+import gov.nist.hit.ds.simSupport.sims.BarUser;
+import gov.nist.hit.ds.simSupport.sims.Base;
+import gov.nist.hit.ds.simSupport.sims.FooMaker;
+import gov.nist.hit.ds.simSupport.sims.FooMakerError;
+import gov.nist.hit.ds.simSupport.sims.FooUser;
+import gov.nist.hit.ds.simSupport.sims.FooUserBarMaker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +74,11 @@ public class SimEngineTest {
 		assertFalse(simChain.hasErrors());
 		run(simChain);
 		assertTrue(simChain.hasErrors());
+	}
+	
+	@Test
+	public void fromFileTest() {
+		
 	}
 
 	void run(SimChain simChain) {

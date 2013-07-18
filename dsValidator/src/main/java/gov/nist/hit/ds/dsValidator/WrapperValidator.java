@@ -229,6 +229,12 @@ public class WrapperValidator extends MessageValidator {
 		return "Validate the XML wrappers that go around the metadata";
 	}
 
+	@Override
+	public void setDescription(String description) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 }

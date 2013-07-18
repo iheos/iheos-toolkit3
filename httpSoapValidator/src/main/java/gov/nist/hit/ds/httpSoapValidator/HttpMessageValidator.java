@@ -100,4 +100,10 @@ public class HttpMessageValidator extends MessageValidator {
 		return "Parse HTTP message and schedule SIMPLE SOAP or MTOM parser";
 	}
 
+	@Override
+	public void setDescription(String description) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

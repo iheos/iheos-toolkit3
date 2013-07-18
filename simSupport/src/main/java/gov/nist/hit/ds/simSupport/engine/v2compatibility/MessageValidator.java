@@ -41,9 +41,8 @@ abstract public class MessageValidator implements SimComponent {
 		return name;
 	}
 	
-	public MessageValidator setName(String name) {
+	public void setName(String name) {
 		this.name = name;
-		return this;
 	}
 
 	/**

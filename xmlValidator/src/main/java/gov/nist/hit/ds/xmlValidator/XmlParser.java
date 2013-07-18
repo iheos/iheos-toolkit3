@@ -58,4 +58,16 @@ public class XmlParser implements SimComponent, SoapEnvelope {
 		return "Run the XML Parser";
 	}
 
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDescription(String description) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

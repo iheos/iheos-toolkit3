@@ -17,23 +17,28 @@ public class SimStep {
 	public String getName() {
 		return name;
 	}
+	
 	public SimStep setName(String name) {
 		this.name = name;
 		return this;
 	}
+	
 	public ErrorRecorder getErrorRecorder() {
 		return er;
 	}
+	
 	public SimStep setErrorRecorder(ErrorRecorder er) {
 		this.er = er;
 		return this;
 	}
+	
 	public SimComponent getSimComponent() {
 		// link to ErrorRecorder here since we
 		// don't know the ordering of setter calls
 		simComponent.setErrorRecorder(er);
 		return simComponent;
 	}
+	
 	public SimStep setSimComponent(SimComponent valsim) {
 		this.simComponent = valsim;
 		return this;

@@ -1,21 +1,23 @@
-package gov.nist.hit.ds.simSupport.test.sims;
+package gov.nist.hit.ds.simSupport.sims;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.simSupport.datatypes.Foo;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.simSupport.test.datatypes.Bar;
 
-public class BarMaker implements SimComponent {
-	Bar bar;
+public class FooMaker implements SimComponent {
+	Foo foo;
 	
-	public Bar getBar() {
-		return bar;
+	public Foo getFoo() {
+		return foo;
 	}
+
 
 	@Override
 	public String getName() {
 		return this.getClass().getSimpleName();
 	}
+
 
 	@Override
 	public void setErrorRecorder(ErrorRecorder er) {
@@ -23,14 +25,30 @@ public class BarMaker implements SimComponent {
 		
 	}
 
+
 	@Override
 	public void run(MessageValidatorEngine mve) {
-		bar = new Bar("Open");
+		foo = new Foo("Fubar");
 	}
+
 
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setDescription(String description) {
+		// TODO Auto-generated method stub
+		
 	}
 }
