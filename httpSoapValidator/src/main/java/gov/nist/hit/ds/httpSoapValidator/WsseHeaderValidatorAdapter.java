@@ -111,4 +111,10 @@ public class WsseHeaderValidatorAdapter extends MessageValidator {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void setDescription(String description) {
+		// TODO Auto-generated method stub
+		
+	}
 }

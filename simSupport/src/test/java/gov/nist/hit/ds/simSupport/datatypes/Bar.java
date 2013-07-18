@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.simSupport.test.datatypes;
+package gov.nist.hit.ds.simSupport.datatypes;
 
 public class Bar {
 	public String name = "I am Bar";

@@ -93,4 +93,11 @@ public class MtomMessageValidator extends MessageValidator {
 		return null;
 	}
 
+
+	@Override
+	public void setDescription(String description) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

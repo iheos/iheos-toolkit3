@@ -1,11 +1,11 @@
-package gov.nist.hit.ds.simSupport.test.sims;
+package gov.nist.hit.ds.simSupport.sims;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.simSupport.datatypes.Bar;
+import gov.nist.hit.ds.simSupport.datatypes.Foo;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.simSupport.test.datatypes.Bar;
-import gov.nist.hit.ds.simSupport.test.datatypes.Foo;
 
 public class FooUserBarMaker implements SimComponent {
 	Foo foo;
@@ -40,6 +40,18 @@ public class FooUserBarMaker implements SimComponent {
 	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDescription(String description) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

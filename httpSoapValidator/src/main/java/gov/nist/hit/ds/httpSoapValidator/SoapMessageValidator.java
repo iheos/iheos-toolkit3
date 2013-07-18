@@ -561,4 +561,10 @@ public class SoapMessageValidator extends MessageValidator {
 		return "Parse the SOAP Envelope and verify the structure and content are valid.";
 	}
 
+	@Override
+	public void setDescription(String description) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

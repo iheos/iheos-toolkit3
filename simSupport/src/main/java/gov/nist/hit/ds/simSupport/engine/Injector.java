@@ -1,0 +1,52 @@
+package gov.nist.hit.ds.simSupport.engine;
+
+import gov.nist.hit.ds.utilities.string.StringUtil;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Properties;
+
+/**
+ * Inject String type parameters into object.
+ * @author bmajur
+ *
+ */
+public class Injector {
+	Object object;
+	Properties paramMap;
+
+	/**
+	 * Create an Injector
+	 * @param object - object to inject to
+	 * @param paramMap - mapping of parameter names to parameter values.
+	 * Parameter names must align with available setters.  So a parameter
+	 * map item of description ==> "My Object" will result in the execution
+	 * of:
+	 *     object.setDescription("My Object").
+	 * 
+	 */
+	public Injector(Object object, Properties paramMap) {
+		this.object = object;
+		this.paramMap = paramMap;
+	}
+
+	public void run() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		for (Enumeration<?> it = paramMap.propertyNames(); it.hasMoreElements(); ) {
+			String paramName = (String) it.nextElement();
+			if ("class".equals(paramName))
+				continue;
+			String paramValue = paramMap.getProperty(paramName);
+			Object[] params = new String[] { paramValue };
+			Method setter = getSetter(paramName);
+			setter.invoke(object, params);
+		}
+	}
+
+	Method getSetter(String paramName) throws SecurityException, NoSuchMethodException  {
+		Class<?>[] parmTypes = new Class<?>[] { String.class };
+		Method method = object.getClass().getMethod("set" + StringUtil.capitalize(paramName), parmTypes);
+		return method;
+	}
+}

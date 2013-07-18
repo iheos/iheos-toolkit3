@@ -13,6 +13,8 @@ import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 public interface SimComponent {
 	void setErrorRecorder(ErrorRecorder er);
 	String getName();
+	void setName(String name);
 	String getDescription();
+	void setDescription(String description);
 	void run(MessageValidatorEngine mve) throws SoapFaultException;
 }

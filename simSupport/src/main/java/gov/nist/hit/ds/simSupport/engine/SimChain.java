@@ -22,6 +22,10 @@ public class SimChain  {
 		this.steps.addAll(steps);
 		return this;
 	}
+	
+	public List<SimStep> getSteps() {
+		return steps;
+	}
 
 	public SimChain add(SimStep ss) {
 		steps.add(ss);

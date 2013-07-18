@@ -77,4 +77,16 @@ public class LogLoader implements SimComponent {
 	public String getDescription() {
 		return "Load a pre-existing log file as input to the simulator";
 	}
+
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDescription(String description) {
+		// TODO Auto-generated method stub
+		
+	}
 }

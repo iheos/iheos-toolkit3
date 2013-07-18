@@ -8,6 +8,7 @@ import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.core.SoapFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -32,6 +33,12 @@ public class SimEngine implements MessageValidatorEngine {
 	List<PubSubMatch> pubSubMatches = new ArrayList<PubSubMatch>();
 	int simsRun = 0;
 	SoapEnvironment soapEnvironment;
+	
+	
+	public SimEngine(String simChainResource) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException {
+		this(new SimChainLoader(simChainResource).load());
+	}
+	
 	/**
 	 * 
 	 * @param valChain - list of validator instances
@@ -42,6 +49,10 @@ public class SimEngine implements MessageValidatorEngine {
 
 	public SimEngine() {
 		this.simChain = new SimChain();
+	}
+	
+	public SimChain getSimChain() {
+		return simChain;
 	}
 
 	/**
