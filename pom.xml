@@ -82,6 +82,7 @@
   	<module>dsValidator</module>
   	<module>xmlValidator</module>
   	<module>siteManagement</module>
+  	<module>repository</module>
   </modules>
   <build>
   <plugins>
