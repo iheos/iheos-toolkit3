@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpMessageBa {
+	String endpoint;
 
 	class Header {
 		String name;
@@ -26,6 +27,9 @@ public class HttpMessageBa {
 		
 	}
 	
+	public String getEndpoint() {
+		return endpoint;
+	}
 
 	List<Header> headers = new ArrayList<Header>();
 	byte[] body;
@@ -166,8 +170,14 @@ public class HttpMessageBa {
 	public void addHeader(String header) throws HttpParseException {
 		String[] parts = header.split(":",2);
 		if (parts.length != 2) {
-			if (!header.startsWith("POST"))
+			if (!header.startsWith("POST")) {
 				throw new HttpParseException("Header [" + header + "] does not parse");
+			} else {
+				String[] postParts = header.split(" ");
+				if (postParts == null || postParts.length != 3)
+					throw new HttpParseException("POST Header [" + header + "] does not parse");
+				endpoint = postParts[1];
+			}
 			return;
 		}
 		Header h = new Header(parts[0].trim(), parts[1].trim());

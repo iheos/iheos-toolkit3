@@ -37,6 +37,10 @@ public class HttpParserBa {
 	public byte[] getBody() {
 		return message.body;
 	}
+	
+	public String getEndpoint() {
+		return message.getEndpoint();
+	}
 
 	public String getRawContentId()  {
 		String hdrStr = message.getHeader("content-id");

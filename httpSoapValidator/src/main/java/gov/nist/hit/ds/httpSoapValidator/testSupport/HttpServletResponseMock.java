@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.httpSoapValidator;
+package gov.nist.hit.ds.httpSoapValidator.testSupport;
 
 import java.io.IOException;
 import java.io.OutputStream;
