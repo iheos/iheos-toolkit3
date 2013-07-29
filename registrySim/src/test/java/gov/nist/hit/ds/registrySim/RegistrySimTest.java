@@ -1,6 +1,5 @@
-package gov.nist.hit.ds.httpSoapValidator;
+package gov.nist.hit.ds.registrySim;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.http.parser.HttpEnvironment;
@@ -10,7 +9,6 @@ import gov.nist.hit.ds.simSupport.engine.SimChainLoader;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
 import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
 import gov.nist.hit.ds.simSupport.engine.SimStep;
-import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 
 import java.io.IOException;
@@ -18,14 +16,13 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
 
-
-public class ConfigFileTest {
+public class RegistrySimTest {
 
 	@Test
 	public void configFileTest() {		
 		try {
 
-			String chainDef = "httpSoapValidator.properties";
+			String chainDef = "registrySim.properties";
 
 			SimChain simChain = new SimChainLoader(chainDef).load();
 			simChain.setBase(new SoapEnvironment(new HttpEnvironment().setResponse(new HttpServletResponseMock())));

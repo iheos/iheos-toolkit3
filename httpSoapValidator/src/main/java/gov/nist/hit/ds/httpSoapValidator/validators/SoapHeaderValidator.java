@@ -44,6 +44,10 @@ public class SoapHeaderValidator extends SimComponentBase {
 		this.soapEnvironment = soapEnvironment;
 		return this;
 	}
+	
+	public MetadataLevel getMetadataLevel() {
+		return level;
+	}
 
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
