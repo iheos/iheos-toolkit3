@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.httpSoapValidator;
+package gov.nist.hit.ds.httpSoapValidator.datatypes;
 
 import org.apache.axiom.om.OMElement;
 

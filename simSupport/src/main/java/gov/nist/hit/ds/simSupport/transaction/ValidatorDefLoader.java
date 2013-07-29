@@ -15,8 +15,9 @@ public class ValidatorDefLoader {
 	void load() throws IOException {
 		props = new Properties();
 		InputStream in = getClass().getClassLoader().getResourceAsStream(propertiesPath);
-		if (in != null)
-			props.load(in);
+		if (in == null)
+			throw new IOException("Cannot load Property Resource from <" + propertiesPath + ">");
+		props.load(in);
 	}
 
 	public Properties getProperties() throws IOException {

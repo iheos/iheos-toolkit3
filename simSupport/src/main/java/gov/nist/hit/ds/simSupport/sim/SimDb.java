@@ -24,9 +24,6 @@ import org.apache.log4j.Logger;
  * Each simulator has an on-disk presence that keeps track of its long
  * term status and a log of its input/output messages. This class
  * represents that on-disk presence.
- * 
- * Simulators are created through the factory ActorSimulatorFactory and their
- * configurations are managed through ActorSimulatorConfig class.
  */
 public class SimDb {
 	SimId simId = null;    // ip is the simulator id

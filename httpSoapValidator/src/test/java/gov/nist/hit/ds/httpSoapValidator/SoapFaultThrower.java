@@ -26,7 +26,7 @@ public class SoapFaultThrower implements SimComponent {
 
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
-		throw new SoapFaultException(FaultCodes.ActionNotSupported, "This is a test");
+		throw new SoapFaultException(er, FaultCodes.ActionNotSupported, "This is a test");
 	}
 
 	@Override

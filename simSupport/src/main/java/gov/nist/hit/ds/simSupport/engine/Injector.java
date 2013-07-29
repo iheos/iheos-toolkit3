@@ -9,7 +9,9 @@ import java.util.Iterator;
 import java.util.Properties;
 
 /**
- * Inject String type parameters into object.
+ * Inject String type parameters into object. This is used by the
+ * SimChainLoader to initialize components from the property file
+ * based simulator configuration.
  * @author bmajur
  *
  */
