@@ -5,8 +5,7 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
 /**
- * Identifies a class as a valsim. Two methods are required, setErrorRecorder 
- * and run.
+ * Identifies a class as a valsim. 
  * @author bmajur
  *
  */

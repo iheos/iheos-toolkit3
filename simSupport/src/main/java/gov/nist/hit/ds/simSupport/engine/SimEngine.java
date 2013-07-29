@@ -54,6 +54,10 @@ public class SimEngine implements MessageValidatorEngine {
 	public SimChain getSimChain() {
 		return simChain;
 	}
+	
+	public MessageValidatorEngine getMessageValidatorEngine() {
+		return this;
+	}
 
 	/**
 	 * Run the current Simulator Chain.  This method is not re-entrant and
@@ -66,6 +70,7 @@ public class SimEngine implements MessageValidatorEngine {
 	public void run() throws SimEngineSubscriptionException {
 		if (simChain.getBase() != null && (simChain.getBase() instanceof SoapEnvironment))
 			soapEnvironment = (SoapEnvironment) simChain.getBase();
+		
 		System.out.println("---------------------------------------------------------------\nRun");
 		boolean errorsFound = false;
 		SystemErrorRecorderBuilder erBuilder = new SystemErrorRecorderBuilder();
@@ -118,7 +123,7 @@ public class SimEngine implements MessageValidatorEngine {
 	 * until isComplete() returns true;
 	 * @return
 	 */
-	boolean isComplete() {
+	public boolean isComplete() {
 		for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 			SimStep simStep = it.next();
 			if (!simStep.hasRan())
@@ -129,7 +134,7 @@ public class SimEngine implements MessageValidatorEngine {
 
 	public StringBuffer getDescription(SimChain simChain) {
 		StringBuffer buf = new StringBuffer();
-		buf.append("---------------------------------------------------------------\nAnalyis\n");
+		buf.append("---------------------------------------------------------------\nSimChain Analyis\n");
 
 		describe(simChain.getBase(), buf);
 		for(Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {

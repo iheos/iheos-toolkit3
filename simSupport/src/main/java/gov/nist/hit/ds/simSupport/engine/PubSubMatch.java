@@ -2,6 +2,13 @@ package gov.nist.hit.ds.simSupport.engine;
 
 import java.lang.reflect.Method;
 
+/**
+ * This is a data object that holds the result of a Publisher/Subscriber match. What the
+ * SimEngine does can be thought of as matching producers to consumers or publishers 
+ * to subscribers.  
+ * @author bmajur
+ *
+ */
 public class PubSubMatch {
 	Method pubMethod;
 	Object pubObject;

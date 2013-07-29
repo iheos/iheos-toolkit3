@@ -24,4 +24,17 @@ public class StringUtil {
 		return string.substring(prefix.length());
 	}
 	
+	static public boolean asBoolean(String value) {
+		if ("false".equalsIgnoreCase(value)) return false;
+		if ("no".equalsIgnoreCase(value)) return false;
+		if ("0".equals(value)) return false;
+		return true;
+	}
+	
+	static public String firstNChars(String s, int n) {
+		if (s == null) return null;
+		if (s.length() <= n) return s;
+		return s.substring(0, n);
+	}
+	
 }

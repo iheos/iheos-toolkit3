@@ -1,5 +1,8 @@
 package gov.nist.hit.ds.soapSupport.exceptions;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.soapSupport.core.FaultCodes;
 
 public class SoapFaultException extends Exception {
@@ -28,19 +31,33 @@ public class SoapFaultException extends Exception {
 		return faultDetail;
 	}
 
-	public SoapFaultException(FaultCodes faultCode, String faultString, String faultActor, String faultDetail) {
+	public SoapFaultException(ErrorRecorder er, FaultCodes faultCode, String faultString, String faultActor, String faultDetail) {
 		super(faultCode.toString() + ": " + faultString);
 		this.faultCode = faultCode;
 		this.faultString = faultString;
 		this.faultActor = faultActor;
 		this.faultDetail = faultDetail;
+		if (er != null)
+			er.err(Code.SoapFault, this);
 	}
 
-	public SoapFaultException(FaultCodes faultCode, String faultString) {
-		super(faultCode.toString() + ": " + faultString);
-		this.faultCode = faultCode;
-		this.faultString = faultString;
-		this.faultActor = null;
-		this.faultDetail = null;
+	public SoapFaultException(ErrorRecorder er, FaultCodes faultCode, String faultString) {
+		this(er, faultCode, faultString, null, null);
+	}
+	
+	public SoapFaultException(ErrorRecorder er, FaultCodes faultCode, ErrorContext errorContext) {
+		this(er, faultCode, errorContext.toString(), null, null);
+	}
+	
+	public String toString() {
+		StringBuffer buf = new StringBuffer();
+		
+		buf.append(faultCode.toString()).append(": ").append(faultString);
+		if (faultActor != null)
+			buf.append("\nactor: ").append(faultActor);
+		if (faultDetail != null)
+			buf.append("\ndetail: ").append(faultDetail);
+		
+		return buf.toString();
 	}
 }

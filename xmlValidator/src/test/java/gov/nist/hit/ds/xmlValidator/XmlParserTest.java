@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.xmlValidator;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
@@ -20,7 +20,7 @@ public class XmlParserTest {
 
 	@Test
 	public void goodXml() {
-		LogLoader loader = new LogLoader(new File("src/test/resources/good"));
+		LogLoader loader = new LogLoader().setSource("src/test/resources/good");
 		ValidationContext vc = new ValidationContext();
 		vc.hasHttp = true;
 		vc.hasSoap = true;
@@ -46,7 +46,7 @@ public class XmlParserTest {
 
 	@Test
 	public void badXml() {
-		LogLoader loader = new LogLoader(new File("src/test/resources/bad"));
+		LogLoader loader = new LogLoader().setSource(new File("src/test/resources/bad"));
 		ValidationContext vc = new ValidationContext();
 		vc.hasHttp = true;
 		vc.hasSoap = true;
