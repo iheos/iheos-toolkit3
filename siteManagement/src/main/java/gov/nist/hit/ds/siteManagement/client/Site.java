@@ -1,8 +1,7 @@
 package gov.nist.hit.ds.siteManagement.client;
 
-import gov.nist.hit.ds.actorTransaction.ATFactory;
-import gov.nist.hit.ds.actorTransaction.ATFactory.ActorType;
-import gov.nist.hit.ds.actorTransaction.ATFactory.TransactionType;
+import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
 
 import java.io.Serializable;
@@ -251,14 +250,14 @@ public class Site  implements IsSerializable, Serializable {
 		return name;
 	}
 
-	public String getEndpoint(ATFactory.TransactionType transaction, boolean isSecure, boolean isAsync) throws Exception {
+	public String getEndpoint(TransactionType transaction, boolean isSecure, boolean isAsync) throws Exception {
 		String endpoint = getRawEndpoint(transaction, isSecure, isAsync);
 		if (endpoint == null) 
 			throw new Exception("Site#getEndpoint: no endpoint defined for site=" + name + " transaction=" + transaction + " secure=" + isSecure + " async=" + isAsync);
 		return endpoint;
 	}
 
-	public String getRawEndpoint(ATFactory.TransactionType transaction, boolean isSecure,
+	public String getRawEndpoint(TransactionType transaction, boolean isSecure,
 			boolean isAsync) {
 		return transactions.get(transaction, isSecure, isAsync);
 	}

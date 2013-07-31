@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.simSupport.client;
 
-import gov.nist.hit.ds.actorTransaction.ATFactory;
 import gov.nist.hit.ds.actorTransaction.ATFactory.ParamType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,7 +19,7 @@ public class SimulatorConfigElement implements Serializable,IsSerializable {
 	 * Parameter type
 	 */
 	public ParamType type;
-	public ATFactory.TransactionType transType = null;
+	public TransactionType transType = null;
 
 	// cannot use Object class - will not serialize so tricks are necessary
 	enum ValueType implements IsSerializable { BOOLEAN, STRING };

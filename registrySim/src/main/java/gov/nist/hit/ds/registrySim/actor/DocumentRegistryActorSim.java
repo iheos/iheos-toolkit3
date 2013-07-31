@@ -48,7 +48,7 @@ public class DocumentRegistryActorSim extends SimComponentBase {
 
 		db.getTransInstances("foo");
 		
-		if (transType.equals(RegistrySimTransactionType.RB)) {
+		if (transType.equals(RegistrySimTransactionType.rb)) {
 			
 		} else {
 			throw new SoapFaultException(

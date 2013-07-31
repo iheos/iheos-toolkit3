@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.siteManagement;
 
 import static org.junit.Assert.*;
-import gov.nist.hit.ds.actorTransaction.ATFactory.ActorType;
-import gov.nist.hit.ds.actorTransaction.ATFactory.TransactionType;
+import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
 
