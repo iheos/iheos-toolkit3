@@ -3,7 +3,7 @@ package gov.nist.hit.ds.httpSoapValidator.rootValidator;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.hit.ds.httpSoapValidator.SoapBody;
+import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapBody;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;

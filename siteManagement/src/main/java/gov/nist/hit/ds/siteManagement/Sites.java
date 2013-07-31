@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.siteManagement;
 
-import gov.nist.hit.ds.actorTransaction.ATFactory.ActorType;
-import gov.nist.hit.ds.actorTransaction.ATFactory.TransactionType;
+import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean;
 import gov.nist.hit.ds.siteManagement.client.TransactionCollection;

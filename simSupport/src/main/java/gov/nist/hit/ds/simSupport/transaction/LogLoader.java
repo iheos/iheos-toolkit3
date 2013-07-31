@@ -24,8 +24,17 @@ public class LogLoader implements SimComponent {
 	byte[] body = null;
 	ErrorRecorder er;
 
-	public LogLoader(File dir) {
+	public LogLoader() {
+	}
+	
+	public LogLoader setSource(File dir) {
 		this.dir = dir;
+		return this;
+	}
+
+	public LogLoader setSource(String dir) {
+		this.dir = new File(dir);
+		return this;
 	}
 
 	LogLoader load()   {

@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.siteManagement.client;
 
 import gov.nist.hit.ds.actorTransaction.ATFactory;
-import gov.nist.hit.ds.actorTransaction.ATFactory.ActorType;
-import gov.nist.hit.ds.actorTransaction.ATFactory.TransactionType;
+import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
 
 import java.io.Serializable;
@@ -160,7 +160,7 @@ public class TransactionCollection implements IsSerializable, Serializable {
 		return false;
 	}
 
-	public boolean hasTransaction(ATFactory.TransactionType tt) {
+	public boolean hasTransaction(TransactionType tt) {
 		for (TransactionBean t : transactions) {
 			if (!t.hasEndpoint())
 				continue;
@@ -172,7 +172,7 @@ public class TransactionCollection implements IsSerializable, Serializable {
 		return false;
 	}
 
-	public TransactionBean find(ATFactory.TransactionType transType, boolean isSecure, boolean isAsync) {
+	public TransactionBean find(TransactionType transType, boolean isSecure, boolean isAsync) {
 		return find(transType.getName(), isSecure, isAsync);
 	}
 	
@@ -201,7 +201,7 @@ public class TransactionCollection implements IsSerializable, Serializable {
 		return tbs;
 	}
 
-	public String get(ATFactory.TransactionType name, boolean isSecure, boolean isAsync) {
+	public String get(TransactionType name, boolean isSecure, boolean isAsync) {
 		TransactionBean t = find(name, isSecure, isAsync);
 		if (t == null)
 			return null;

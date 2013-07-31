@@ -11,6 +11,12 @@ import java.util.List;
 /**
  * Define a simulator chain - mode up of
  * a base object and a list of simulator steps.
+ * The base object is like other components except that its
+ * execution is beyond the scope of the SimEngine.  It is used
+ * to initialize the chain with an outside object.  A good example
+ * is a class that holds the parsed HTTP content from some external
+ * package.
+ * 
  * @author bmajur
  *
  */
@@ -71,8 +77,14 @@ public class SimChain  {
 		buf.append("---------------------------------------------------------------\n");
 		for (SimStep step : steps) {
 			ErrorRecorder er = step.getErrorRecorder();
-			if (!(er instanceof SystemErrorRecorder))
+			if (er == null) {
+				buf.append("FATAL ERROR: Step <" + step.getName() + "> does not have an ErrorRecorder\n");
 				continue;
+			}
+			if (!(er instanceof SystemErrorRecorder)) {
+				buf.append("FATAL ERROR: Step <" + step.getName() + "> ErrorRecorder is of type <" + er.getClass().getName() + ">\n");
+				continue;
+			}
 			SystemErrorRecorder ser = (SystemErrorRecorder) er;
 			buf.append(ser.toString());
 			buf.append("---------------------------------------------------------------\n");

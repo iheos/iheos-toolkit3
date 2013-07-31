@@ -1,8 +1,7 @@
 package gov.nist.hit.ds.simSupport.sim;
 
-import gov.nist.hit.ds.actorTransaction.ATFactory;
-import gov.nist.hit.ds.actorTransaction.ATFactory.ActorType;
-import gov.nist.hit.ds.actorTransaction.ATFactory.TransactionType;
+import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.simSupport.client.NoSimException;
 import gov.nist.hit.ds.simSupport.client.SimId;
@@ -24,9 +23,6 @@ import org.apache.log4j.Logger;
  * Each simulator has an on-disk presence that keeps track of its long
  * term status and a log of its input/output messages. This class
  * represents that on-disk presence.
- * 
- * Simulators are created through the factory ActorSimulatorFactory and their
- * configurations are managed through ActorSimulatorConfig class.
  */
 public class SimDb {
 	SimId simId = null;    // ip is the simulator id
@@ -148,7 +144,7 @@ public class SimDb {
 		return new File(simDir.toString() + File.separatorChar + "simctl.ser");
 	}
 	
-	public static String getTransactionDirName(ATFactory.TransactionType tt)  {
+	public static String getTransactionDirName(TransactionType tt)  {
 		return tt.getShortName();
 	}
 	

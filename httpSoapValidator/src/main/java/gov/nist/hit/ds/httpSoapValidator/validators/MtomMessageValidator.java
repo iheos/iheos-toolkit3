@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.httpSoapValidator;
+package gov.nist.hit.ds.httpSoapValidator.validators;
 
 import gov.nist.hit.ds.docRef.Mtom;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
