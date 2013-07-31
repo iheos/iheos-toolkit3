@@ -1,12 +1,16 @@
 package gov.nist.hit.ds.httpSoapValidator;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.http.parser.HttpEnvironment;
-import gov.nist.hit.ds.httpSoapValidator.rootValidator.SubmitObjectsRequestRootValidator;
+import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
+import gov.nist.hit.ds.httpSoapValidator.validators.HttpMessageValidator;
+import gov.nist.hit.ds.httpSoapValidator.validators.SoapHeaderValidator;
+import gov.nist.hit.ds.httpSoapValidator.validators.SoapParser;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
+import gov.nist.hit.ds.simSupport.engine.SimChainLoader;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
 import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
@@ -19,16 +23,19 @@ import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.xmlValidator.XmlParser;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
+
 public class HttpSoapValTest {
 
 	@Test
 	public void httpSoapTest() {		
-		LogLoader loader = new LogLoader(new File("src/test/resources/simple"));
+		LogLoader loader = new LogLoader().setSource(new File("src/test/resources/simple"));
 
 		SimChain simChain = new SimChain();
 
@@ -63,7 +70,7 @@ public class HttpSoapValTest {
 
 	@Test
 	public void mustUnderstandFaultTest() {		
-		LogLoader loader = new LogLoader(new File("src/test/resources/fault"));
+		LogLoader loader = new LogLoader().setSource(new File("src/test/resources/fault"));
 
 		SimChain simChain = new SimChain();
 
@@ -76,7 +83,7 @@ public class HttpSoapValTest {
 
 	@Test
 	public void noHeaderFaultTest() {		
-		LogLoader loader = new LogLoader(new File("src/test/resources/noHeaderFault"));
+		LogLoader loader = new LogLoader().setSource(new File("src/test/resources/noHeaderFault"));
 
 		SimChain simChain = new SimChain();
 
@@ -86,6 +93,7 @@ public class HttpSoapValTest {
 		System.out.println(simChain.getLog());
 		assertTrue(simChain.hasErrors());
 	}
+	
 
 	ValidationContext vc = new ValidationContext();
 	SimEngine engine;
@@ -116,8 +124,11 @@ public class HttpSoapValTest {
 				setName("XML Parser").
 				setSimComponent(new XmlParser()));
 		simSteps.add(new SimStep().
+				setName("SOAP Parser").
+				setSimComponent(new SoapParser()));
+		simSteps.add(new SimStep().
 				setName("SoapMessageValidator").
-				setSimComponent(new SoapMessageValidator()));
+				setSimComponent(new SoapHeaderValidator().setExpectedWsAction("urn:ihe:iti:2007:RegisterDocumentSet-b")));
 //		simSteps.add(new SimStep().
 //				setName("ebRS Root Name Validator").
 //				setSimComponent(new SubmitObjectsRequestRootValidator()));

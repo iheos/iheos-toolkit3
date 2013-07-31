@@ -26,5 +26,9 @@
 	    <artifactId>ebxmlrr-common</artifactId>
 	    <version>1.0</version>
     </dependency>
+	<dependency>
+		<groupId>org.codehaus.jackson</groupId>
+		<artifactId>jackson-mapper-asl</artifactId>
+	</dependency>
   </dependencies>
 </project>
