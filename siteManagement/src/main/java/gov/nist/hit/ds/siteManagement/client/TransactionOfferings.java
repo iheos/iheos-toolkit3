@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.siteManagement.client;
 
-import gov.nist.hit.ds.actorTransaction.ATFactory.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
 
 import java.util.HashMap;
 import java.util.List;
