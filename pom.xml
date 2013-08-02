@@ -92,6 +92,7 @@
   	<module>xmlValidator</module>
   	<module>siteManagement</module>
   	<module>repository</module>
+  	<module>actorSimFactory</module>
   </modules>
   <build>
   <plugins>

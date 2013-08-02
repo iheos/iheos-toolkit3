@@ -24,6 +24,23 @@ public class StringUtil {
 		return string.substring(prefix.length());
 	}
 	
+	static public String removePrefixEndingWith(String string, String ending) {
+		int index = string.indexOf(ending);
+		if (index == -1)
+			return string;
+		int prefixLength = index + ending.length();
+		return string.substring(prefixLength);
+	}
+	
+	static public String lastPiece(String string, String separator) {
+		if (string == null || string.equals(""))
+			return string;
+		String[] parts = string.split(separator);
+		if (parts == null || parts.length == 0)
+			return string;
+		return parts[parts.length - 1];
+	}
+	
 	static public boolean asBoolean(String value) {
 		if ("false".equalsIgnoreCase(value)) return false;
 		if ("no".equalsIgnoreCase(value)) return false;
