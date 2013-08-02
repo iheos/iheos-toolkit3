@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.actorSimFactory;
+package gov.nist.hit.ds.actorSim.factory;
 
 import gov.nist.hit.ds.utilities.string.StringUtil;
 
