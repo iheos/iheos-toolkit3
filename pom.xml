@@ -93,6 +93,7 @@
   	<module>siteManagement</module>
   	<module>repository</module>
   	<module>actorSimFactory</module>
+  	<module>xdstools3</module>
   </modules>
   <build>
   <plugins>

@@ -16,5 +16,25 @@
 	  		<groupId>log4j</groupId>
 	  		<artifactId>log4j</artifactId>
 	  	</dependency>
+	  	<dependency>
+	  		<groupId>gov.nist.hit.ds</groupId>
+	  		<artifactId>xdsException</artifactId>
+	  		<version>0.0.1-SNAPSHOT</version>
+	  	</dependency>
+	  	<dependency>
+	  		<groupId>gov.nist.hit.ds</groupId>
+	  		<artifactId>simSupport</artifactId>
+	  		<version>0.0.1-SNAPSHOT</version>
+	  	</dependency>
+	  	<dependency>
+	  		<groupId>gov.nist.hit.ds</groupId>
+	  		<artifactId>http</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+	  	</dependency>
+	  	<dependency>
+	  		<groupId>gov.nist.hit.ds</groupId>
+	  		<artifactId>initialization</artifactId>
+	  		<version>0.0.1-SNAPSHOT</version>
+	  	</dependency>
   </dependencies>
 </project>

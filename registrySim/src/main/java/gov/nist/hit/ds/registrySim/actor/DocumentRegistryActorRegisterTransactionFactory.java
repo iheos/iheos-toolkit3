@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.registrySim.actor;
 
-import gov.nist.hit.ds.actorSimFactory.ActorFactory;
+import gov.nist.hit.ds.actorSim.factory.ActorFactory;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.httpSoapValidator.Launcher;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
