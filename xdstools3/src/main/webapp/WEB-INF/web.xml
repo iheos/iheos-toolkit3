@@ -1,0 +1,58 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Document Sharing Toolkit</display-name>
+
+<!--  The filter is necessary so the simulator response headers can be captured for the message log -->
+	<filter>
+		<filter-name>response-header-log</filter-name>
+		<filter-class>gov.nist.hit.ds.actorSim.servlet.SimServletFilter</filter-class>
+	</filter>
+	
+	<filter>
+		<filter-name>response-header-log2</filter-name>
+		<filter-class>gov.nist.hit.ds.actorSim.servlet.SimServletFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>response-header-log</filter-name>
+		<url-pattern>/sim/*</url-pattern>
+	</filter-mapping>
+ 
+	<filter-mapping>
+		<filter-name>response-header-log2</filter-name>
+		<url-pattern>/xdstools3/sim/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 
+	<listener>
+   		<listener-class>gov.nist.toolkit.xdstools2.server.SessionListener</listener-class>
+	</listener>
+ 
+	<listener>
+   		<listener-class>gov.nist.toolkit.xdstools2.server.MyServletContextListener</listener-class>
+	</listener>
+ -->
+	<servlet>
+		<servlet-name>simulatorServlet</servlet-name>
+		<servlet-class>gov.nist.hit.ds.actorSim.servlet.SimServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>simulatorServlet2</servlet-name>
+		<servlet-class>gov.nist.hit.ds.actorSim.servlet.SimServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>simulatorServlet</servlet-name>
+		<url-pattern>/sim/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>simulatorServlet</servlet-name>
+		<url-pattern>/xdstools3/sim/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>
