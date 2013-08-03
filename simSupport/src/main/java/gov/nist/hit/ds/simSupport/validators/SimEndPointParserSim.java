@@ -7,7 +7,7 @@ import gov.nist.hit.ds.simSupport.datatypes.SimEndPoint;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.soapSupport.core.FaultCodes;
+import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
 public class SimEndPointParserSim extends SimComponentBase {
@@ -32,7 +32,7 @@ public class SimEndPointParserSim extends SimComponentBase {
 		} catch (Exception e1) {
 			throw new SoapFaultException(
 					er,
-					FaultCodes.EndpointUnavailable, 
+					FaultCode.EndpointUnavailable, 
 					new ErrorContext("Endpoint <" + endpoint + "> does not parse as a simulator endpoint"));
 		}
 		er.detail("simId=<" + simEndPoint.getSimId() + "> actor=<" + simEndPoint.getActor() + "> transaction=<" + simEndPoint.getTransaction() + ">");

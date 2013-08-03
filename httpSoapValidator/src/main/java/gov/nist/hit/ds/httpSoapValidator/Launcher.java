@@ -15,6 +15,19 @@ import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 
 public class Launcher {
 
+	/**
+	 * 
+	 * @param chainDef - resource location (something in the classpath) of a property file that 
+	 * defines a SimChain. 
+	 * @return Launcher object - after SimChain has been run
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws SimEngineSubscriptionException
+	 */
 	public Launcher launch(String chainDef) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException {
 		SimChain simChain = new SimChainLoader(chainDef).load();
 		

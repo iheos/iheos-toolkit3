@@ -34,6 +34,8 @@ public class SoapResponseGenerator {
 	public void send() throws Exception {
 		if (senv.multipart)
 			throw new Exception("SoapResponseGenerator#send: cannot generate multipart responses yet");
+		
+		senv.getHttpEnvironment().getResponse().setContentType("application/soap+xml");
 		HttpResponseGenerator resp = new HttpResponseGenerator(senv.getHttpEnvironment());
 		resp.sendResponse(new OMFormatter(getEnvelope()).toString());
 	}

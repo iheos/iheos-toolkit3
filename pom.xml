@@ -91,7 +91,6 @@
   	<module>dsValidator</module>
   	<module>xmlValidator</module>
   	<module>siteManagement</module>
-  	<module>repository</module>
   	<module>actorSimFactory</module>
   	<module>xdstools3</module>
   </modules>

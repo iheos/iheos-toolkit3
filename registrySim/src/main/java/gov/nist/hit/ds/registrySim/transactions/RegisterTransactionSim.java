@@ -6,7 +6,7 @@ import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
-import gov.nist.hit.ds.soapSupport.core.FaultCodes;
+import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
 /**
@@ -35,7 +35,7 @@ public class RegisterTransactionSim extends SimComponentBase {
 		if (!"rb".equals(simEndPoint.getTransaction()))
 				throw new SoapFaultException(
 						er,
-						FaultCodes.Receiver,
+						FaultCode.Receiver,
 						new ErrorContext("Configuration error, Register Transaction (transaction rb) was expect: found <" + simEndPoint.getTransaction() + "> instead" )
 						);
 	}
