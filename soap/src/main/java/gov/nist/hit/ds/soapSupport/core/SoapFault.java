@@ -7,7 +7,8 @@ import org.apache.axiom.om.OMElement;
 
 /**
  * Generate and send a SOAP Fault.
- * TODO: comply with referece: http://www.w3.org/TR/2005/CR-ws-addr-soap-20050817
+ * TODO: comply with reference: http://www.w3.org/TR/2005/CR-ws-addr-soap-20050817
+ * TODO: comply with coding of FaultTo
  * @author bill
  *
  */
@@ -26,29 +27,9 @@ public class SoapFault {
 	public SoapFault(SoapEnvironment soapEnv, SoapFaultException e) {
 		this.soapEnv = soapEnv;
 		this.e = e;
+		soapEnv.setResponseAction("http://www.w3.org/2005/08/addressing/fault");
 	}
 	
-//	public void addDetail(String adetail) {
-//		details.add(adetail);
-//	}
-
-//	String getCodeString(FaultCodes code) {
-//		switch (code) {
-//		case VersionMismatch:
-//			return "VersionMismatch";
-//		case MustUnderstand:
-//			return "MustUnderstand";
-//		case DataEncodingUnknown:
-//			return "DataEncodingUnknown";
-//		case Sender:
-//			return "Sender";
-//		case Receiver:
-//			return "Receiver";
-//		}
-//
-//		return "Unknown";
-//	}
-
 	OMElement getXML() {
 		OMElement root = XmlUtil.om_factory.createOMElement(SoapUtil.fault_qnamens);
 

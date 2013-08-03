@@ -3,19 +3,19 @@ package gov.nist.hit.ds.soapSupport.exceptions;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.hit.ds.soapSupport.core.FaultCodes;
+import gov.nist.hit.ds.soapSupport.core.FaultCode;
 
 public class SoapFaultException extends Exception {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	FaultCodes faultCode;
+	FaultCode faultCode;
 	String faultString;
 	String faultActor;
 	String faultDetail;
 
-	public FaultCodes getFaultCode() {
+	public FaultCode getFaultCode() {
 		return faultCode;
 	}
 
@@ -31,7 +31,7 @@ public class SoapFaultException extends Exception {
 		return faultDetail;
 	}
 
-	public SoapFaultException(ErrorRecorder er, FaultCodes faultCode, String faultString, String faultActor, String faultDetail) {
+	public SoapFaultException(ErrorRecorder er, FaultCode faultCode, String faultString, String faultActor, String faultDetail) {
 		super(faultCode.toString() + ": " + faultString);
 		this.faultCode = faultCode;
 		this.faultString = faultString;
@@ -41,11 +41,11 @@ public class SoapFaultException extends Exception {
 			er.err(Code.SoapFault, this);
 	}
 
-	public SoapFaultException(ErrorRecorder er, FaultCodes faultCode, String faultString) {
+	public SoapFaultException(ErrorRecorder er, FaultCode faultCode, String faultString) {
 		this(er, faultCode, faultString, null, null);
 	}
 	
-	public SoapFaultException(ErrorRecorder er, FaultCodes faultCode, ErrorContext errorContext) {
+	public SoapFaultException(ErrorRecorder er, FaultCode faultCode, ErrorContext errorContext) {
 		this(er, faultCode, errorContext.toString(), null, null);
 	}
 	

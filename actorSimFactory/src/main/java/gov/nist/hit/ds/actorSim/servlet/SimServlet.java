@@ -1,13 +1,18 @@
 package gov.nist.hit.ds.actorSim.servlet;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.http.parser.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.initialization.Installation;
-import gov.nist.hit.ds.simSupport.client.NoSimException;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndPoint;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.simSupport.validators.SimEndpointParser;
+import gov.nist.hit.ds.soapSupport.core.FaultCode;
+import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
+import gov.nist.hit.ds.soapSupport.core.SoapFault;
+import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.io.Io;
 
 import java.io.File;
@@ -30,69 +35,59 @@ public class SimServlet extends HttpServlet {
 	static Logger logger = Logger.getLogger(SimServlet.class);
 	ServletConfig config;
 	File warHome;
-	File simDbDir;  // = "/Users/bill/tmp/xdstools2/simdb";
+	File simDbDir;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		this.config = config;
-		
+
 		warHome = new File(config.getServletContext().getRealPath("/"));
 		simDbDir = Installation.installation().propertyServiceManager().getSimDbDir();
 	}
-	
+
 	public void doPost(HttpServletRequest request, HttpServletResponse response) {
 		String uri  = request.getRequestURI().toLowerCase();
+
+		// This is being set up early in case we need to generate a SOAPFault
+		HttpEnvironment httpEnv = new HttpEnvironment().setResponse(response);
+		SoapEnvironment soapEnv = new SoapEnvironment(httpEnv);
+
 		SimEndPoint endpoint;
 		try {
 			endpoint = new SimEndpointParser().parse(uri);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			sendSoapFault(soapEnv, FaultCode.EndpointUnavailable, "Cannot parse endpoint <" + uri + ">");
 			return;
 		}
-		
-		// DB space for this simulator
+
+		// DB space for this simulator - needed here so the request message can be logged
+		//    also made available through a request attribute
+		// TODO: the SimDb instance should be moved to the HttpEnvironment
 		SimDb db;
 		try {
 			db = new SimDb(endpoint.getSimId(), endpoint.getActor(), endpoint.getTransaction());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("Internal error initializing simulator environment", e);
+			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment");
 			return;
-		} catch (NoSimException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}
+		} 
 		request.setAttribute("SimDb", db);
 
 		try {
 			logRequest(request, db, endpoint.getActor(), endpoint.getTransaction());
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (HttpHeaderParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		} catch (Exception e) {
+			logger.error("Internal error logging request message", e);
+			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error logging request message");
+			return;
+		} 
 	}
-	
+
 	void logRequest(HttpServletRequest request, SimDb db, String actor, String transaction)
-	throws FileNotFoundException, IOException, HttpHeaderParseException, ParseException {
+			throws FileNotFoundException, IOException, HttpHeaderParseException, ParseException {
 		StringBuffer buf = new StringBuffer();
 		Map<String, String> headers = new HashMap<String, String>();
-		String contentType;
 		HttpHeader contentTypeHeader;
 		String bodyCharset;
-		byte[] bodyBytes;
-		String body;
 
 		buf.append(request.getMethod() + " " + request.getRequestURI() + " " + request.getProtocol() + "\r\n");
 		for (@SuppressWarnings("unchecked")
@@ -110,7 +105,6 @@ public class SimServlet extends HttpServlet {
 			throw new IOException("Content-Type header not found");
 		contentTypeHeader = new HttpHeader("content-type: " + ctype);
 		bodyCharset = contentTypeHeader.getParam("charset");
-		contentType = contentTypeHeader.getValue();
 
 		if (bodyCharset == null || bodyCharset.equals(""))
 			bodyCharset = "UTF-8";
@@ -123,17 +117,18 @@ public class SimServlet extends HttpServlet {
 		db.putRequestBodyFile(Io.getBytesFromInputStream(request.getInputStream()));
 
 	}
-
-//	void sendSoapFault(HttpServletResponse response, String message) {
-//		try {
-//			SoapFault sf = new SoapFault(SoapFault.FaultCodes.Sender, message);
-//			SimCommon c = new SimCommon(response);
-//			OMElement faultEle = sf.getXML();
-//			OMElement soapEnv = c.wrapResponseInSoapEnvelope(faultEle);
-//			c.sendHttpResponse(soapEnv, SimCommon.getUnconnectedErrorRecorder(), false);
-//		} catch (Exception e) {
-//			logger.error(ExceptionUtil.exception_details(e));
-//		}
-//	}
+	
+	void sendSoapFault(SoapEnvironment soapEnv, FaultCode faultCode, String reason) {
+		try {
+			new SoapFault(soapEnv,
+					new SoapFaultException(
+							null,      // No error recorder established to allow capture to logs
+							faultCode,
+							new ErrorContext(reason))).
+							send();
+		} catch (Exception ex) {
+			logger.error("Error sending SOAPFault", ex);
+		}
+	}
 
 }

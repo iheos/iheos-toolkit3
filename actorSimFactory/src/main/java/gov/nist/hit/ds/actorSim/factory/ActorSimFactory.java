@@ -1,5 +1,8 @@
 package gov.nist.hit.ds.actorSim.factory;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.soapSupport.core.FaultCode;
+import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.string.StringUtil;
 
 import java.io.IOException;
@@ -18,8 +21,10 @@ import org.apache.log4j.Logger;
  * of this property file looks like:
 <pre>
 sim1.class=full_class_name_of_sim_factory
+sim1.at=actor_code^trans^code
 sim1.name=name_of_sim_to_put_in_displays
 sim2.class=full_class_name_of_sim_factory
+sim2.at=actor_code^trans^code
 sim2.name=name_of_sim_to_put_in_displays
 </pre>
  * This config file is located in the classpath at configuredSims.properties.
@@ -34,7 +39,7 @@ public class ActorSimFactory {
 	static Properties simConfig = new Properties();
 	static final Logger logger = Logger.getLogger(ActorSimFactory.class);
 
-	static final Map<String /* ActorType.name */, ActorFactory> factories = new HashMap<String, ActorFactory>();
+	static final Map<String /* actor^trans code */, ActorFactory> factories = new HashMap<String, ActorFactory>();
 	
 	static {
 		try {
@@ -54,8 +59,17 @@ public class ActorSimFactory {
 			if (!propName.endsWith("class"))
 				continue;
 			String className = simConfig.getProperty(propName);
-			String simId = StringUtil.removePrefixEndingWith(propName, ".");
-			String simName = simConfig.getProperty(simId + ".name");
+			String itemName = StringUtil.removePrefixEndingWith(propName, ".");
+			String simName = simConfig.getProperty(itemName + ".name");
+			String actorTransCode = simConfig.getProperty(itemName + "at");
+			if (actorTransCode == null || actorTransCode.equals("")) {
+				logger.error("Parsing configuredSims.properties: item <" + itemName + "> has no <at> property - simulator not loaded");
+				continue;
+			}
+			if (!isValidActorTransactionCode(actorTransCode)) {
+				logger.error("Parsing configuredSims.properties: item <" + itemName + "> has an invalid <at> property <" + actorTransCode +"> - simulator not loaded");
+				continue;
+			}
 			if (simName == null || simName.equals(""))
 				simName = StringUtil.lastPiece(className, "\\.");
 			Class<?> clazz = factory.getClass().getClassLoader().loadClass(className);
@@ -75,8 +89,64 @@ public class ActorSimFactory {
 				continue;
 			}
 			ActorFactory instance = (ActorFactory) clazz.newInstance();
-			factories.put(simName, instance);
+			factories.put(actorTransCode, instance);
 		}
+	}
+	
+	public void run(String actorTransCode) throws SoapFaultException {
+		String actorCode = actorCode(actorTransCode);
+		String transCode = transactionCode(actorTransCode);
+		if (actorCode == null) {
+			throw new SoapFaultException(
+					null,
+					FaultCode.EndpointUnavailable,
+					new ErrorContext("Invalid Actor code in endpoint <" + actorCode + ">")
+					);
+		}
+		if (transCode == null) {
+			throw new SoapFaultException(
+					null,
+					FaultCode.EndpointUnavailable,
+					new ErrorContext("Invalid Transaction code in endpoint <" + transCode + ">")
+					);
+		}
+			
+		
+		ActorFactory factory = factories.get(actorTransCode); 
+		if (factory == null) {
+			String msg = "Do not have a Simulator for Actor Code <" + actorCode + "> and Transaction Code <" + transCode;
+			logger.error(msg);
+			throw new SoapFaultException(
+					null,
+					FaultCode.EndpointUnavailable,
+					new ErrorContext(msg)
+					);
+		}
+		
+		factory.run();
+	}
+	
+	static String actorCode(String atCode) {
+		if (!isValidActorTransactionCode(atCode)) 
+			return null;
+		return atCode.split("^")[0];
+	}
+	
+	static String transactionCode(String atCode) {
+		if (!isValidActorTransactionCode(atCode)) 
+			return null;
+		return atCode.split("^")[1];
+	}
+	
+	static boolean isValidActorTransactionCode(String atCode) {
+		if (atCode == null) return false;
+		if (atCode.equals("")) return false;
+		String[] parts = atCode.split("^");
+		if (parts == null) return false;
+		if (parts.length != 2) return false;
+		if (parts[0].length() == 0) return false;
+		if (parts[1].length() == 0) return false;
+		return true;
 	}
 
 }

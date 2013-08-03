@@ -3,9 +3,7 @@ package gov.nist.hit.ds.registrySim.actor;
 import gov.nist.hit.ds.actorSim.factory.ActorFactory;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.httpSoapValidator.Launcher;
-import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.soapSupport.core.FaultCodes;
+import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
 import org.apache.log4j.Logger;
@@ -15,18 +13,18 @@ import org.apache.log4j.Logger;
  * @author bmajur
  *
  */
-public class DocumentRegistryActorRegisterTransactionFactory extends SimComponentBase implements ActorFactory  {
+public class DocumentRegistryActorRegisterTransactionFactory implements ActorFactory  {
 	static final Logger logger = Logger.getLogger(DocumentRegistryActorRegisterTransactionFactory.class);
 
 	@Override
-	public void run(MessageValidatorEngine mve) throws SoapFaultException {
+	public void run() throws SoapFaultException {
 		try {
 			new Launcher().launch("xdsRegistryRegisterSim.properties");
 		} catch (Exception e) {
 			logger.error("Error launching SimChain for Document Registry Actor, Register Transaction",  e);
 			throw new SoapFaultException(
-					er,
-					FaultCodes.Receiver,
+					null,
+					FaultCode.Receiver,
 					new ErrorContext(e.getMessage())
 					);
 		} 
