@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.simSupport.config;
+package gov.nist.hit.ds.simSupport.client;
 
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class SimulatorConfig implements IsSerializable {
 	 * Globally unique id for this simulator
 	 */
 	String id;
-	String type;
+//	String type;
 	Date expires;
 	boolean isExpired = false;
 	List<SimulatorConfigElement> elements  = new ArrayList<SimulatorConfigElement>();
@@ -26,7 +26,7 @@ public class SimulatorConfig implements IsSerializable {
 	
 	
 	public boolean isExpired() { return isExpired; }
-	public void isExpired(boolean is) { isExpired = is; }
+	public void setExpired(boolean is) { isExpired = is; }
 	
 	public boolean checkExpiration() {
 		Date now = new Date();
@@ -37,20 +37,12 @@ public class SimulatorConfig implements IsSerializable {
 		return isExpired;
 	}
 	
-	// not sure what to do with the other attributes, leave alone for now
-	public void add(SimulatorConfig asc) {
-		for (SimulatorConfigElement ele : asc.elements) {
-			if (getFixedByName(ele.name) == null)
-				elements.add(ele);
-		}
-	}
-			
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		
 		buf.append("ActorSimulatorConfig:");
 		buf.append(" id=").append(id);
-		buf.append(" type=").append(type);
+//		buf.append(" type=").append(type);
 		buf.append("\n\telements=[");
 		for (SimulatorConfigElement asce : elements) {
 			buf.append("\n\t\t").append(asce);
@@ -63,15 +55,11 @@ public class SimulatorConfig implements IsSerializable {
 		
 	}
 	
-	public SimulatorConfig(String id, String type, Date expiration) {
-		this.id = id;
-		this.type = type;
-		expires = expiration;
-	}
-	
-	public List<SimulatorConfigElement> elements() {
-		return elements;
-	}
+//	public SimulatorConfig(String id, String type, Date expiration) {
+//		this.id = id;
+//		this.type = type;
+//		expires = expiration;
+//	}
 	
 	public void add(List<SimulatorConfigElement> elementList) {
 		elements.addAll(elementList);
@@ -90,9 +78,9 @@ public class SimulatorConfig implements IsSerializable {
 		return fixed;
 	}
 	
-	public List<SimulatorConfigElement> getElements() { return elements; }
+	public List<SimulatorConfigElement> getAll() { return elements; }
 	
-	public List<SimulatorConfigElement> getUser() {
+	public List<SimulatorConfigElement> getEditable() {
 		List<SimulatorConfigElement> user = new ArrayList<SimulatorConfigElement>();
 		for (SimulatorConfigElement ele : elements) {
 			if (ele.isEditable())
@@ -101,7 +89,7 @@ public class SimulatorConfig implements IsSerializable {
 		return user;
 	}
 	
-	public SimulatorConfigElement	getUserByName(String name) {
+	public SimulatorConfigElement getByName(String name) {
 		if (name == null)
 			return null;
 		
@@ -112,48 +100,22 @@ public class SimulatorConfig implements IsSerializable {
 		return null;
 	}
 	
-	public SimulatorConfigElement	getFixedByName(String name) {
-		if (name == null)
-			return null;
-		
-		for (SimulatorConfigElement ele : elements) {
-			if (name.equals(ele.name))
-				return ele;
-		}
-		return null;
-	}
-	
-	public void deleteFixedByName(String name) {
-		SimulatorConfigElement ele = getFixedByName(name);
+	public void deleteByName(String name) {
+		SimulatorConfigElement ele = getByName(name);
 		if (ele != null)
 			elements.remove(ele);
-	}
-	
-	public void deleteUserByName(String name) {
-		SimulatorConfigElement ele = getUserByName(name);
-		if (ele != null)
-			elements.remove(ele);
-	}
-	
+	}	
 	
 	public String getId() {
 		return id;
 	}
 	
-	public String getType() {
-		return type;
-	}
+//	public String getType() {
+//		return type;
+//	}
 	
-	public SimulatorConfigElement get(String name) {
-		for (SimulatorConfigElement ele : elements) {
-			if (ele.name.equals(name))
-				return ele;
-		}
-		return null;
-	}
-		
-	public String getDefaultName() {
-		return get("Name").asString() + "." + getType();
-	}
+//	public String getDefaultName() {
+//		return getByName("Name").asString() + "." + getType();
+//	}
 	
 }

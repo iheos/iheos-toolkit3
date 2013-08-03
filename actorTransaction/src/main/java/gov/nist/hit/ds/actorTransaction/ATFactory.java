@@ -40,18 +40,6 @@ public class ATFactory implements IsSerializable, Serializable {
 			ActorType.ONDEMAND_DOCUMENT_SOURCE,
 			ActorType.ISR);
 	
-	public enum ParamType implements IsSerializable, Serializable {
-		OID,
-		ENDPOINT,
-		TEXT,
-		BOOLEAN,
-		TIME,
-		SELECTION;
-		
-		ParamType() {} // for GWT
-	}
-		
-	
 	static List<TransactionType> gatewayTransactions = new ArrayList<TransactionType>();
 	
 	static {
