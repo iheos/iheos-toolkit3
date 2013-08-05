@@ -7,8 +7,16 @@
 	<packaging>pom</packaging>
   <repositories>
     <repository>
-      <id>internal-nist-repo</id>
+      <id>internal-nist-repo-releases</id>
 	  <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
+    </repository>
+    <repository>
+      <id>internal-nist-repo-third-party</id>
+	  <url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>
+    </repository>
+    <repository>
+      <id>internal-nist-repo-snapshots</id>
+	  <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
     </repository>
 	<repository>
 		<id>codehaus</id>
@@ -94,6 +102,7 @@
   	<module>actorSimFactory</module>
   	<module>repository</module>
   	<module>xdstools3</module>
+  	<module>environment</module>
   </modules>
   <build>
   <plugins>
