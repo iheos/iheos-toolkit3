@@ -42,4 +42,14 @@ public class Simulator  implements Serializable, IsSerializable  {
 			ids.add(c.id);
 		return ids;
 	}
+	
+	public String toString() {
+		StringBuffer buf = new StringBuffer();
+		
+		for (SimulatorConfig config : configs) {
+			buf.append(config.toString());
+		}
+		
+		return buf.toString();
+	}
 }
