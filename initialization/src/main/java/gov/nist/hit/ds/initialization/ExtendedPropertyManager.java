@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.simSupport.sim;
+package gov.nist.hit.ds.initialization;
 
 import java.io.File;
 import java.io.FileInputStream;
