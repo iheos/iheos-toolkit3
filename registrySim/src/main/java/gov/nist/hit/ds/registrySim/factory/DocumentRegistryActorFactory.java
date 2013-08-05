@@ -16,8 +16,13 @@ import java.util.Arrays;
 import java.util.List;
 
 
+/**
+ * Build an instance of the Document Registry Actor.
+ * @author bmajur
+ *
+ */
 public class DocumentRegistryActorFactory {
-	public static final String update_metadata_option = "Update_Metadata_Option";
+	static final String update_metadata_option = "Update_Metadata_Option";
 
 	static final List<TransactionType> incomingTransactions = 
 			Arrays.asList(

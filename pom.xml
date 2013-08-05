@@ -88,12 +88,12 @@
   	<module>registrySim</module>
   	<module>docRef</module>
   	<module>registryMsgFormats</module>
-  	<module>soap</module>
   	<module>http</module>
   	<module>httpSoapValidator</module>
   	<module>simSupport</module>
   	<module>initialization</module>
   	<module>tk</module>
+  	<module>soapSupport</module>
   	<module>registryMetadataValidator</module>
   	<module>actorTransaction</module>
   	<module>dsValidator</module>
