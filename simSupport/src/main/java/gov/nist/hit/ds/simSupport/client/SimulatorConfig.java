@@ -17,14 +17,20 @@ public class SimulatorConfig implements IsSerializable {
 	/**
 	 * Globally unique id for this simulator
 	 */
-	String id;
-//	String type;
+	SimId id;
 	Date expires;
 	boolean isExpired = false;
 	List<SimulatorConfigElement> elements  = new ArrayList<SimulatorConfigElement>();
 	
 	
-	
+	public SimulatorConfig setExpiration(Date expires) {
+		this.expires = expires;
+		return this;
+	}
+	public SimulatorConfig setId(SimId id) {
+		this.id = id;
+		return this;
+	}
 	public boolean isExpired() { return isExpired; }
 	public void setExpired(boolean is) { isExpired = is; }
 	
@@ -42,7 +48,6 @@ public class SimulatorConfig implements IsSerializable {
 		
 		buf.append("ActorSimulatorConfig:");
 		buf.append(" id=").append(id);
-//		buf.append(" type=").append(type);
 		buf.append("\n\telements=[");
 		for (SimulatorConfigElement asce : elements) {
 			buf.append("\n\t\t").append(asce);
@@ -55,16 +60,16 @@ public class SimulatorConfig implements IsSerializable {
 		
 	}
 	
-//	public SimulatorConfig(String id, String type, Date expiration) {
-//		this.id = id;
-//		this.type = type;
-//		expires = expiration;
-//	}
-	
-	public void add(List<SimulatorConfigElement> elementList) {
+	public SimulatorConfig add(List<SimulatorConfigElement> elementList) {
 		elements.addAll(elementList);
+		return this;
 	}
-	
+
+	public SimulatorConfig add(SimulatorConfigElement confElement) {
+		elements.add(confElement);
+		return this;
+	}
+
 	public Date getExpiration() {
 		return expires;
 	}
@@ -106,16 +111,8 @@ public class SimulatorConfig implements IsSerializable {
 			elements.remove(ele);
 	}	
 	
-	public String getId() {
+	public SimId getId() {
 		return id;
 	}
-	
-//	public String getType() {
-//		return type;
-//	}
-	
-//	public String getDefaultName() {
-//		return getByName("Name").asString() + "." + getType();
-//	}
 	
 }

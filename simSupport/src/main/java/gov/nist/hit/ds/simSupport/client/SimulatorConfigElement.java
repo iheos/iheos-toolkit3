@@ -13,11 +13,23 @@ public class SimulatorConfigElement implements IsSerializable {
 	 * Parameter type
 	 */
 	ParamType type;
-
 	String  value = null;
 	boolean editable = false;
-	
+
 	public SimulatorConfigElement() {   }
+
+	public SimulatorConfigElement setType(ParamType type) {
+		this.type = type;
+		return this;
+	}
+	public SimulatorConfigElement setValue(String value) {
+		this.value = value;
+		return this;
+	}
+	public SimulatorConfigElement setName(String name) {
+		this.name = name;
+		return this;
+	}
 
 	public SimulatorConfigElement(String name, ParamType type, Boolean value) {
 		this.name = name;
@@ -54,7 +66,9 @@ public class SimulatorConfigElement implements IsSerializable {
 		return buf.toString();
 	}
 
-	public void setValue(Boolean o) { value = o.toString(); }
-	public void setValue(String o) { value = o; }
+	public SimulatorConfigElement setValue(Boolean o) { 
+		value = o.toString();
+		return this;
+	}
 
 }
