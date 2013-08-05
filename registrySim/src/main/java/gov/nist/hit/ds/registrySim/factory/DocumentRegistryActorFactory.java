@@ -5,6 +5,8 @@ import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.environment.Environment;
+import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.factory.GenericSimulatorBuilder;
@@ -12,6 +14,7 @@ import gov.nist.hit.ds.simSupport.factory.GenericSimulatorBuilder;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+
 
 public class DocumentRegistryActorFactory {
 	public static final String update_metadata_option = "Update_Metadata_Option";
@@ -39,7 +42,18 @@ public class DocumentRegistryActorFactory {
 		}
 		builder.addConfig(update_metadata_option, true);
 		builder.addConfig(ATConfigLabels.extraMetadataSupported, true);
-		File codesFile = EnvSetting.getEnvSetting(simm.sessionId).getCodesFile();
+		
+		/**
+		 * Install codes file for default environment. This is the best we can do this deep in the code
+		 * since this package does not depend on the Session package which has information regarding
+		 * the current selected environment.  Better selection will have to come from the user
+		 * interface.
+		 */
+		String defaultEnvironmentName = Installation.installation().getPropertyManager().getDefaultEnvironmentName();
+		Environment defaultEnvironment = new Environment(Installation.installation().environmentFile());
+		File codesFile = defaultEnvironment.getCodesFile(defaultEnvironmentName);
+				
+				
 		builder.addConfig(ATConfigLabels.codesEnvironment, codesFile.toString());
 
 		return new Simulator(builder.get());

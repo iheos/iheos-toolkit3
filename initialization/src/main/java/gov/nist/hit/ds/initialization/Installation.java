@@ -37,6 +37,10 @@ public class Installation {
 
 	private Installation() {   }
 	
+	public PropertyManager getPropertyManager() {
+		return new PropertyManager(warHome + File.separator + "WEB-INF" + File.separator + "toolkit.properties");
+	}
+	
 	public File warHome() { 
 		return warHome; 
 		}
