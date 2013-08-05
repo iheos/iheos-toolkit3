@@ -7,6 +7,11 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+/**
+ * TODO: Need different shortName for async so endpoint is different.  Affects GenericSimulatorFactory.
+ * @author bill
+ *
+ */
 public enum TransactionType  implements IsSerializable, Serializable {
 	PROVIDE_AND_REGISTER      ("ITI-41", "Provide and Register",              "prb",    "pr.b",  "pr.as",    false),
 	XDR_PROVIDE_AND_REGISTER  ("ITI-41", "XDR Provide and Register",          "xdrpr",  "xdrpr", "xdrpr.as", false),
@@ -42,7 +47,7 @@ public enum TransactionType  implements IsSerializable, Serializable {
 		this.asyncCode = asyncCode;
 		this.needsRepUid = needsRepUid;
 	}
-	
+		
 	public String getId() {
 		return id;
 	}
