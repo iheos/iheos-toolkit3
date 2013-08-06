@@ -41,7 +41,7 @@ public class GenericSimulatorBuilder {
 				new SimulatorConfigElement().
 				setName(ATConfigLabels.name).
 				setType(ParamType.TEXT).
-				setValue("Private"));
+				setValue("Private").setEditable(true));
 	}
 	
 	public SimulatorConfig get() { return sConfig; }
@@ -50,7 +50,6 @@ public class GenericSimulatorBuilder {
 		String id = UuidAllocator.allocate();
 		String[] parts = id.split(":");
 		id = parts[2];
-		//		id = id.replaceAll("-", "_");
 		return new SimId(id);
 	}
 
@@ -74,9 +73,9 @@ public class GenericSimulatorBuilder {
 				+ transType.getCode();
 		sConfig.add(
 				new SimulatorConfigElement().
-				setName(new EndpointLabel(transType).get(tls, async)).
+				setName(new EndpointLabel(transType,tls, async).get()).
 				setType(ParamType.ENDPOINT).
-				setValue(endpoint)
+				setValue(endpoint).setEditable(true)
 				);
 		return this;
 	}
@@ -86,7 +85,7 @@ public class GenericSimulatorBuilder {
 				new SimulatorConfigElement().
 				setName(confName).
 				setValue(value).
-				setType(ParamType.BOOLEAN));
+				setType(ParamType.BOOLEAN).setEditable(true));
 		return this;
 	}
 
@@ -95,7 +94,7 @@ public class GenericSimulatorBuilder {
 				new SimulatorConfigElement().
 				setName(confName).
 				setValue(value).
-				setType(ParamType.TEXT));
+				setType(ParamType.TEXT).setEditable(true));
 		return this;
 	}
 	

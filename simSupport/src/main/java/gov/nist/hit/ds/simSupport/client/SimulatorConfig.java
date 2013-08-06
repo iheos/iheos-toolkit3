@@ -1,6 +1,11 @@
 package gov.nist.hit.ds.simSupport.client;
 
 
+import gov.nist.hit.ds.actorTransaction.AsyncType;
+import gov.nist.hit.ds.actorTransaction.EndpointLabel;
+import gov.nist.hit.ds.actorTransaction.TlsType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +39,7 @@ public class SimulatorConfig implements IsSerializable {
 	public boolean isExpired() { return isExpired; }
 	public void setExpired(boolean is) { isExpired = is; }
 	
-	public boolean checkExpiration() {
+	public boolean hasExpired() {
 		Date now = new Date();
 		if (now.after(expires))
 			isExpired = true;
@@ -103,6 +108,59 @@ public class SimulatorConfig implements IsSerializable {
 				return ele;
 		}
 		return null;
+	}
+	
+	public List<SimulatorConfigElement> findConfigs(TransactionType[] transTypes, TlsType[] tlsTypes, AsyncType[] asyncTypes) {
+		List<SimulatorConfigElement> simEles = new ArrayList<SimulatorConfigElement>();
+		
+		class Tls {
+			TlsType[] tlsTypes;
+			Tls(TlsType[] types) { tlsTypes = types; }
+			boolean has(TlsType type) {
+				if (tlsTypes == null) return false;
+				for (int i=0; i<tlsTypes.length; i++)
+					if (type == tlsTypes[i]) return true;
+				return false;
+			}
+		}
+		
+		class Async {
+			AsyncType[] asyncTypes;
+			Async(AsyncType[] types) { asyncTypes = types; }
+			boolean has(AsyncType type) {
+				if (asyncTypes == null) return false;
+				for (int i=0; i<asyncTypes.length; i++)
+					if (type == asyncTypes[i]) return true;
+				return false;
+			}
+		}
+		
+		class Type {
+			TransactionType[] transTypes;
+			Type(TransactionType[] types) { transTypes = types; }
+			boolean has(TransactionType type) {
+				if (transTypes == null) return false;
+				for (int i=0; i<transTypes.length; i++) 
+					if (type == transTypes[i]) return true;
+				return false;
+			}
+		}
+		
+		Type types = new Type(transTypes);
+		Tls tls = new Tls(tlsTypes);
+		Async async = new Async(asyncTypes);
+		
+		for (SimulatorConfigElement ele : getAll()) {
+			if (ele.getType() != ParamType.ENDPOINT) continue;
+			String value = ele.getValue();
+			EndpointLabel elabel = new EndpointLabel(value);
+			if (!types.has(elabel.getTransType())) continue;
+			if (!tls.has(elabel.getTlsType())) continue;
+			if (!async.has(elabel.getAsyncType())) continue;
+			simEles.add(ele);
+		}
+		
+		return simEles;
 	}
 	
 	public void deleteByName(String name) {
