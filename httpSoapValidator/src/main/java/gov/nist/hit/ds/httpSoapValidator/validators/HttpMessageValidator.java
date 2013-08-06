@@ -9,7 +9,7 @@ import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.soapSupport.core.FaultCodes;
+import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.html.HttpMessageContent;
 import gov.nist.hit.ds.utilities.string.StringUtil;
