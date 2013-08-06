@@ -17,7 +17,9 @@ import org.apache.log4j.Logger;
 
 /**
  * This is the Document Registry actor simulator.  It must be configured in 
- * the SimChain before the relevant transaction SimComponent
+ * the SimChain before the relevant transaction SimComponent. Its job
+ * is to offer context to the transaction that is configured after it in the
+ * SimChain.
  * @author bmajur
  *
  */
