@@ -6,8 +6,6 @@ import gov.nist.hit.ds.tk.client.TkProps;
 
 import java.io.File;
 
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 
 public class Installation {
@@ -28,6 +26,10 @@ public class Installation {
 	}	
 	
 	private Installation() {   }
+
+  public PropertyManager getPropertyManager() {
+                return new PropertyManager(warHome + File.separator + "WEB-INF" + File.separator + "toolkit.properties");
+        }
 	
 	public File getWarHome() { 
 		return warHome; 

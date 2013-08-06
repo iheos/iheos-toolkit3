@@ -1,16 +1,10 @@
 package gov.nist.hit.ds.simSupport.client;
 
-import gov.nist.hit.ds.actorTransaction.ATFactory.ParamType;
-import gov.nist.hit.ds.actorTransaction.TransactionType;
-
-import java.io.Serializable;
-import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SimulatorConfigElement implements Serializable,IsSerializable {
+public class SimulatorConfigElement implements IsSerializable {
 
-	private static final long serialVersionUID = 1L;
 	/**
 	 * Parameter name
 	 */
@@ -18,19 +12,24 @@ public class SimulatorConfigElement implements Serializable,IsSerializable {
 	/**
 	 * Parameter type
 	 */
-	public ParamType type;
-	public TransactionType transType = null;
-
-	// cannot use Object class - will not serialize so tricks are necessary
-	enum ValueType implements IsSerializable { BOOLEAN, STRING };
-	ValueType valueType = ValueType.STRING;
-	boolean booleanValue = false;
-	String  stringValue = "";
-
-	public List<String> values = null;
+	ParamType type;
+	String  value = null;
 	boolean editable = false;
-	
+
 	public SimulatorConfigElement() {   }
+
+	public SimulatorConfigElement setType(ParamType type) {
+		this.type = type;
+		return this;
+	}
+	public SimulatorConfigElement setValue(String value) {
+		this.value = value;
+		return this;
+	}
+	public SimulatorConfigElement setName(String name) {
+		this.name = name;
+		return this;
+	}
 
 	public SimulatorConfigElement(String name, ParamType type, Boolean value) {
 		this.name = name;
@@ -45,54 +44,34 @@ public class SimulatorConfigElement implements Serializable,IsSerializable {
 	}
 
 	public boolean isEditable() { return editable; }
-	public void setEditable(boolean v) { editable = v; }
+	public SimulatorConfigElement setEditable(boolean v) { editable = v; return this; }
 
 	public String asString() {
-		if (valueType == ValueType.STRING)
-			return stringValue;
-		return Boolean.toString(false);
+		return value;
 	}
+	
+	public ParamType getType() { return type; }
+	public String getValue() { return value; }
 
 	public Boolean asBoolean() { 
-		if (valueType == ValueType.STRING) {
-			String v = stringValue;
-			v = v.toLowerCase();
-			if (v.startsWith("t")) {
-				booleanValue = Boolean.TRUE;
-				valueType = ValueType.BOOLEAN;
-			}
-			else if (v.startsWith("f")) {
-				booleanValue = Boolean.FALSE;
-				valueType = ValueType.BOOLEAN;
-			}
-		}
-		if (valueType == ValueType.BOOLEAN) return booleanValue;
-
-		return false;
+		return Boolean.valueOf(value);
 	}
-
-	public boolean isBoolean() { return valueType == ValueType.BOOLEAN;  }
-	public boolean isString() { return valueType == ValueType.STRING;  }
 
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 
 		buf.append("name=").append(name);
 		buf.append(" type=").append(type);
-		buf.append(" transType=").append(transType);
-		if (valueType == ValueType.BOOLEAN)
-			buf.append(" value=").append(booleanValue);
-		else
-			buf.append(" value=").append(stringValue);
-
-		buf.append(" values=").append(values);
+		buf.append(" value=").append(value);
 
 		buf.append(" editable=").append(isEditable());
 
 		return buf.toString();
 	}
 
-	public void setValue(Boolean o) { booleanValue = o; valueType = ValueType.BOOLEAN; }
-	public void setValue(String o) { stringValue = o; valueType = ValueType.STRING; }
+	public SimulatorConfigElement setValue(Boolean o) { 
+		value = o.toString();
+		return this;
+	}
 
 }

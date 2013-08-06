@@ -7,7 +7,7 @@ import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.soapSupport.core.FaultCodes;
+import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
@@ -67,7 +67,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 		if (!expectedAction.equals(soapEnvironment.getRequestAction()))
 			throw new SoapFaultException(
 					er,
-					FaultCodes.ActionNotSupported,
+					FaultCode.ActionNotSupported,
 					new ErrorContext("Expected WS-Action >" + expectedAction + "> not equal to WS-Action found in message <" + soapEnvironment.getRequestAction() + ">"));
 		er.detail("WS-Action is <" + soapEnvironment.getRequestAction() + ">");
 	}
@@ -177,7 +177,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 				String msg = "Value of " + ele.getLocalName() + " must be http endpoint - found instead " + value; 
 				throw new SoapFaultException(
 						er,
-						FaultCodes.EndpointUnavailable, 
+						FaultCode.EndpointUnavailable, 
 						new ErrorContext(msg, wsaddressingRef).toString());
 			}
 		}
@@ -194,13 +194,13 @@ public class SoapHeaderValidator extends SimComponentBase {
 			OMElement first = ele.getFirstElement();
 			if (first == null) {
 				String msg = "Validating contents of " + ele.getLocalName() + ": " + "not HTTP style endpoint"; 
-				throw new SoapFaultException(er, FaultCodes.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef));
+				throw new SoapFaultException(er, FaultCode.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef));
 
 			} else {
 				String valError = validateEndpoint(first, anyURIOk);
 				if (valError != null) {
 					String msg = "Validating contents of " + ele.getLocalName() + ": " + valError; 
-					throw new SoapFaultException(er, FaultCodes.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef));
+					throw new SoapFaultException(er, FaultCode.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef));
 				}
 			}
 		}
@@ -230,7 +230,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 			if (!namespace.equals(nsuri)) {
 				String msg = "Namespace on element " + ele.getLocalName() + " must be " +
 						namespace + " - found instead " + nsuri;
-				throw new SoapFaultException(er, FaultCodes.Sender, new ErrorContext(msg, wsaddressingRef).toString());
+				throw new SoapFaultException(er, FaultCode.Sender, new ErrorContext(msg, wsaddressingRef).toString());
 			}
 		}
 	}
@@ -238,7 +238,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 	void invalidAddressingHeader(String msg, String ref) throws SoapFaultException {
 		throw new SoapFaultException(
 				er,
-				FaultCodes.InvalidAddressingHeader,
+				FaultCode.InvalidAddressingHeader,
 				new ErrorContext(msg, ref)
 				);
 	}
@@ -246,7 +246,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 	void mustUnderstandError(String msg, String ref) throws SoapFaultException {
 		throw new SoapFaultException(
 				er,
-				FaultCodes.MustUnderstand,
+				FaultCode.MustUnderstand,
 				new ErrorContext(msg, ref)
 				);
 	}
@@ -265,7 +265,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 			if (!"urn:direct:addressing".equals(metadataLevelEle.getNamespace().getNamespaceURI()))
 				throw new SoapFaultException(
 						er,
-						FaultCodes.Sender, 
+						FaultCode.Sender, 
 						new ErrorContext(
 								"Namespace on metadata-level header element must be " + "urn:direct:addressing", 
 								"http://wiki.directproject.org/file/view/2011-03-09%20PDF%20-%20XDR%20and%20XDM%20for%20Direct%20Messaging%20Specification_FINAL.pdf:6.1.1 SOAP Headers"));
@@ -277,7 +277,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 			else
 				throw new SoapFaultException(
 						er,
-						FaultCodes.Sender, 
+						FaultCode.Sender, 
 						new ErrorContext(
 								"metadata-level must be <minimal> or <XDS>.", 
 								"http://wiki.directproject.org/file/view/2011-03-09%20PDF%20-%20XDR%20and%20XDM%20for%20Direct%20Messaging%20Specification_FINAL.pdf:6.1.1 SOAP Headers"));

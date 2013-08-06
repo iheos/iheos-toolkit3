@@ -10,7 +10,7 @@ import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.transaction.ValidationContext;
-import gov.nist.hit.ds.soapSupport.core.FaultCodes;
+import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.string.StringUtil;
 import gov.nist.hit.ds.utilities.xml.XmlText;
@@ -40,7 +40,7 @@ public class SimpleSoapEnvironmentValidator extends SimComponentBase {
 		if (hparser.isMultipart())
 			throw new SoapFaultException(
 					er,
-					FaultCodes.Sender,
+					FaultCode.Sender,
 					new ErrorContext("Expecting SIMPLE SOAP - multipart format indicates MTOM instead"));
 		bodyBytes = hparser.getBody();
 		String contentTypeString = hparser.getHttpMessage().getHeader("content-type");
@@ -50,7 +50,7 @@ public class SimpleSoapEnvironmentValidator extends SimComponentBase {
 		} catch (ParseException e) {
 			throw new SoapFaultException(
 					er,
-					FaultCodes.Sender,
+					FaultCode.Sender,
 					new ErrorContext(
 							"Error parsing content-type header - <" + contentTypeString + ">"));
 		}
@@ -59,7 +59,7 @@ public class SimpleSoapEnvironmentValidator extends SimComponentBase {
 		if (!"application/soap+xml".equals(contentTypeValue.toLowerCase()))
 			throw new SoapFaultException(
 					er,
-					FaultCodes.Sender,
+					FaultCode.Sender,
 					new ErrorContext(
 							"Content-Type header must have value application/soap+xml - found instead " + contentTypeValue,
 							"http://www.w3.org/TR/soap12-part0 - Section 4.1.2"));
