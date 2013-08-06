@@ -44,11 +44,14 @@ public class SimulatorConfigElement implements IsSerializable {
 	}
 
 	public boolean isEditable() { return editable; }
-	public void setEditable(boolean v) { editable = v; }
+	public SimulatorConfigElement setEditable(boolean v) { editable = v; return this; }
 
 	public String asString() {
 		return value;
 	}
+	
+	public ParamType getType() { return type; }
+	public String getValue() { return value; }
 
 	public Boolean asBoolean() { 
 		return Boolean.valueOf(value);
