@@ -14,21 +14,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SimpleRepositoryTest {
-	static File RootOfAllRepositories = new File("/temp/repositories");
+
 	static Id repId = null;
 	
-	// Create temp folder to be the External Cache
-//	@Rule
-//	public TemporaryFolder tempFolder = new TemporaryFolder()
 	
 	@BeforeClass
 	static public void initialize() throws RepositoryException {
-		// skb fix later with EasyMock
-		// ToDO
-		//Installation.installation()
-		//System.out.println (Installation.installation().tkProps.get("toolkit.servlet.context", "xdstools2"));
 		
-		new Configuration(RootOfAllRepositories);
 		Repository rep = new RepositoryFactory().createRepository(
 				"This is my repository",
 				"Description",

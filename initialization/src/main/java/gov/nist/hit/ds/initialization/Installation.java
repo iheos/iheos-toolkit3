@@ -25,24 +25,16 @@ public class Installation {
 		if (me == null)
 			me = new Installation();
 		return me;
-	}
+	}	
 	
-	static public Installation installation(ServletContext servletContext) {
-		if (me == null)
-			me = new Installation();
-		if (me.warHome == null)
-			me.warHome = new File(servletContext.getRealPath("/"));
-		return me;
-	}
-
 	private Installation() {   }
 	
-	public File warHome() { 
+	public File getWarHome() { 
 		return warHome; 
-		}
-	public void warHome(File warHome) { 
+	}
+	public void setWarHome(File warHome) { 
 		this.warHome = warHome; 
-		}
+	}
 	public File externalCache() { return externalCache; }
 	public File getExternalCache() { return externalCache; }
 	public void setExternalCache(File externalCache) { externalCache(externalCache); }
@@ -74,7 +66,7 @@ public class Installation {
 	}
 	
 	public File toolkitxFile() {
-		return new File(Installation.installation().warHome() + sep + "toolkitx");
+		return new File(Installation.installation().getWarHome() + sep + "toolkitx");
 	}
 	
 	public File environmentFile(String envName) {

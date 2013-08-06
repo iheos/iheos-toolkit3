@@ -1,1 +1,0 @@
-Derby will automatically create the database in the "db" folder under the EC_Dir.

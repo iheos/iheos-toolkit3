@@ -55,7 +55,8 @@ public class DbConnection implements IndexDataSource {
 
 			String ecDir = null; 
 			try {
-				ecDir = Installation.installation().propertyServiceManager().getToolkitProperties().get("External_Cache");
+				// ecDir = Installation.installation().propertyServiceManager().getToolkitProperties().get("External_Cache");
+				ecDir = Installation.installation().getExternalCache().toString();
 				
 			} catch (Exception e) {
 				e.printStackTrace();

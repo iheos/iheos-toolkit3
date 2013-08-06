@@ -22,37 +22,11 @@ public class SimpleNamedRepositoryTest {
 
 	static Id repId = null;
 	static Repository repos;
-	/*
-	 * Important: The following system path variables need to verified manually before running the test.
-	 * 
-	 */
 
-	static String RootPath = "/e/artrep_test_resources/"; 		// Root Path or the Test resources folder
-	public static String RepositoriesPath;  					// Repositories folder
-	static String InstallationPath = RootPath+"installation";	// Path containing the WEB-INF folder (for External_Cache)
-	
-	public static File RootOfAllRepositories; 
-	static Installation inst = null;
-	
 	@BeforeClass
 	static public void initialize() throws RepositoryException {
 		
-		// The MockServletContext is used for testing purposes only
-		
-		ServletContext sc = MockServletContext.getServletContext(InstallationPath); 
-		
-		Installation.installation(sc);
-		
-		String externalCache = Installation.installation().propertyServiceManager()
-									.getToolkitProperties().get("External_Cache");
-		System.out.println(externalCache);
-		Installation.installation().setExternalCache(new File(sc.getRealPath(externalCache)));
-		inst = Installation.installation();
-		
-		RepositoriesPath = externalCache + "/repositories";
-		RootOfAllRepositories = new File(RepositoriesPath);
-		
-		new Configuration(RootOfAllRepositories);
+
 
 		repos = new RepositoryFactory().createNamedRepository(
 				"This is my repository",
