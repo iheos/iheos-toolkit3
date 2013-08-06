@@ -18,6 +18,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringEscapeUtils;
+
 public class SearchServlet extends HttpServlet {
 
 	/**
@@ -103,7 +106,7 @@ public class SearchServlet extends HttpServlet {
 			RepositoryFactory fact = new RepositoryFactory();		
 			Repository repos1 = fact.getRepository(new SimpleId(reposId)); 
 			
-			AssetIterator iter = new SearchResultIterator(new Repository[]{repos1}, criteria );
+			AssetIterator iter = new SearchResultIterator(new Repository[]{repos1}, criteria, "displayOrder");
 			
 			if (iter.hasNextAsset()) {
 				reportBeginHeader(topLevel, level, sb); // ul
@@ -196,14 +199,20 @@ public class SearchServlet extends HttpServlet {
 			
 			
 			sb.append("<li title='"); 
-			
+			try {
+				sb.append(FileUtils.readFileToString(a.getPropFile()));
+			} catch (IOException e) {
+				sb.append("Error: Properties file could not be loaded. file=" + a.getPropFile());
+				// e.printStackTrace();
+			}
+			/*
 			sb.append(  
 					 "Type: " + a.getAssetType().getKeyword() 
 					+ ((a.getCreatedDate()!=null)?"&nbsp;Created Date: "+a.getCreatedDate():"")
 					+((a.getExpirationDate()!=null)?"&nbsp;Expiration Date: "+a.getExpirationDate():"")					 
 					+((a.getMimeType()!=null)?"&nbsp;Mime Type: " +a.getMimeType():"")
 					);
-			
+			*/
 			sb.append("'>");
 		}
 	}
@@ -233,9 +242,15 @@ public class SearchServlet extends HttpServlet {
 				+"</tr>"
 				);
 		} else {
-			sb.append( a.getId().toString() + " - " + a.getDescription());
+			sb.append( a.getDescription()); // a.getId().toString() + " - " +
 			if (a.getMimeType()!=null) {
-				sb.append("&nbsp;<font family='arial,verdana,sans-serif' size='2'><sup><a href='" + this.getServletContext().getContextPath() + "downloadAsset?reposId=" + a.getRepository().getIdString() + "&assetId=" + a.getId().getIdString() + "'>" 
+				sb.append("&nbsp;<font ");
+				
+				if ("text/*".equalsIgnoreCase(a.getMimeType())) {
+					sb.append("title='" + StringEscapeUtils.escapeHtml(new String(a.getContent())) + "' ");
+				}
+				
+				sb.append("family='arial,verdana,sans-serif' size='2'><sup><a href='" + this.getServletContext().getContextPath() + "downloadAsset?reposId=" + a.getRepository().getIdString() + "&assetId=" + a.getId().getIdString() + "'>" 
 				+ a.getMimeType()
 				+ "</a></sup></font>");
 			}
@@ -259,6 +274,12 @@ public class SearchServlet extends HttpServlet {
 		
 	}
 	
+	private void print(String s) {
+		System.out.println(s);
+		
+//		System.out.println("found asset: " +  a.getId().toString() + ", of type: "+ a.getAssetType().getKeyword() +", in repos:" + a.getRepository().getIdString() );
+//		System.out.println("life: " + a.getAssetType().getLifetime());
 
+	}
 
 }
