@@ -21,10 +21,10 @@ import org.apache.log4j.Logger;
  * of this property file looks like:
 <pre>
 sim1.class=full_class_name_of_sim_factory
-sim1.at=actor_code^trans^code
+sim1.at=actor_code^trans_code
 sim1.name=name_of_sim_to_put_in_displays
 sim2.class=full_class_name_of_sim_factory
-sim2.at=actor_code^trans^code
+sim2.at=actor_code^trans_code
 sim2.name=name_of_sim_to_put_in_displays
 </pre>
  * This config file is located in the classpath at configuredSims.properties.
@@ -47,6 +47,39 @@ public class ActorSimFactory {
 		} catch (Exception e) {
 			logger.error("Error loading Simulator definitions", e);
 		} 
+	}
+	
+	public void run(String actorTransCode) throws SoapFaultException {
+		String actorCode = actorCode(actorTransCode);
+		String transCode = transactionCode(actorTransCode);
+		if (actorCode == null) {
+			throw new SoapFaultException(
+					null,
+					FaultCode.EndpointUnavailable,
+					new ErrorContext("Invalid Actor code in endpoint <" + actorCode + ">")
+					);
+		}
+		if (transCode == null) {
+			throw new SoapFaultException(
+					null,
+					FaultCode.EndpointUnavailable,
+					new ErrorContext("Invalid Transaction code in endpoint <" + transCode + ">")
+					);
+		}
+			
+		
+		ActorFactory factory = factories.get(actorTransCode); 
+		if (factory == null) {
+			String msg = "Do not have a Simulator for Actor Code <" + actorCode + "> and Transaction Code <" + transCode;
+			logger.error(msg);
+			throw new SoapFaultException(
+					null,
+					FaultCode.EndpointUnavailable,
+					new ErrorContext(msg)
+					);
+		}
+		
+		factory.run();
 	}
 
 	static void loadSims() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -91,39 +124,6 @@ public class ActorSimFactory {
 			ActorFactory instance = (ActorFactory) clazz.newInstance();
 			factories.put(actorTransCode, instance);
 		}
-	}
-	
-	public void run(String actorTransCode) throws SoapFaultException {
-		String actorCode = actorCode(actorTransCode);
-		String transCode = transactionCode(actorTransCode);
-		if (actorCode == null) {
-			throw new SoapFaultException(
-					null,
-					FaultCode.EndpointUnavailable,
-					new ErrorContext("Invalid Actor code in endpoint <" + actorCode + ">")
-					);
-		}
-		if (transCode == null) {
-			throw new SoapFaultException(
-					null,
-					FaultCode.EndpointUnavailable,
-					new ErrorContext("Invalid Transaction code in endpoint <" + transCode + ">")
-					);
-		}
-			
-		
-		ActorFactory factory = factories.get(actorTransCode); 
-		if (factory == null) {
-			String msg = "Do not have a Simulator for Actor Code <" + actorCode + "> and Transaction Code <" + transCode;
-			logger.error(msg);
-			throw new SoapFaultException(
-					null,
-					FaultCode.EndpointUnavailable,
-					new ErrorContext(msg)
-					);
-		}
-		
-		factory.run();
 	}
 	
 	static String actorCode(String atCode) {

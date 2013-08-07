@@ -2,6 +2,8 @@ package gov.nist.hit.ds.simSupport.transaction;
 
 import static org.junit.Assert.assertTrue;
 
+import gov.nist.hit.ds.simSupport.loader.ValidatorDefLoader;
+
 import java.io.IOException;
 
 import org.junit.Test;

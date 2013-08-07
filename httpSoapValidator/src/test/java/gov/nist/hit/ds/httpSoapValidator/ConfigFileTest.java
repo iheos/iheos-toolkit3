@@ -3,7 +3,7 @@ package gov.nist.hit.ds.httpSoapValidator;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import gov.nist.hit.ds.http.parser.HttpEnvironment;
+import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoader;

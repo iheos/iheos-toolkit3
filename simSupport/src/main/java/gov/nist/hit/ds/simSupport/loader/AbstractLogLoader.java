@@ -1,43 +1,21 @@
-package gov.nist.hit.ds.simSupport.transaction;
+package gov.nist.hit.ds.simSupport.loader;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import java.io.File;
+import java.io.IOException;
+
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.hit.ds.simSupport.engine.SimComponent;
+import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.utilities.html.HttpMessageContent;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.xml.XmlText;
 
-import java.io.File;
-import java.io.IOException;
-
-/**
- * Load HTTP event from log format - 2 files
- * 	- test file with header - request_hdr.txt
- *  - byte array file with body  - request_body.bin
- * @author bmajur
- *
- */
-public class LogLoader implements SimComponent {
+public abstract class AbstractLogLoader extends SimComponentBase {
 	File dir;
 	String header = null;
 	byte[] body = null;
-	ErrorRecorder er;
 
-	public LogLoader() {
-	}
-	
-	public LogLoader setSource(File dir) {
-		this.dir = dir;
-		return this;
-	}
-
-	public LogLoader setSource(String dir) {
-		this.dir = new File(dir);
-		return this;
-	}
-
-	LogLoader load()   {
+	void load()   {
 		er.detail("Loading from <" + dir + ">");
 		try {
 			header = Io.stringFromFile(new File(dir, "request_hdr.txt"));
@@ -48,7 +26,6 @@ public class LogLoader implements SimComponent {
 		} catch (IOException e) {
 			er.err(Code.NoCode, e);
 		}
-		return this;
 	}
 
 	public HttpMessageContent getMessageContent() {
@@ -68,34 +45,9 @@ public class LogLoader implements SimComponent {
 	}
 
 	@Override
-	public void setErrorRecorder(ErrorRecorder er) {
-		this.er = er;
-	}
-
-	@Override
-	public String getName() {
-		return this.getClass().getSimpleName();
-	}
-
-	@Override
 	public void run(MessageValidatorEngine mve) {
 		load();
 	}
 
-	@Override
-	public String getDescription() {
-		return "Load a pre-existing log file as input to the simulator";
-	}
 
-	@Override
-	public void setName(String name) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setDescription(String description) {
-		// TODO Auto-generated method stub
-		
-	}
 }

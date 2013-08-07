@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import gov.nist.hit.ds.http.parser.HttpEnvironment;
+import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoader;

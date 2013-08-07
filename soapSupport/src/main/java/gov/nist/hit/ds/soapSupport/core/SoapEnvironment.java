@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.soapSupport.core;
 
-import gov.nist.hit.ds.http.parser.HttpEnvironment;
+import gov.nist.hit.ds.http.environment.HttpEnvironment;
 
 import java.io.OutputStream;
 

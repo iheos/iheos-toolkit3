@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.simSupport.transaction;
+package gov.nist.hit.ds.simSupport.loader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ public class ValidatorDefLoader {
 		this.propertiesPath = propertiesPath;
 	}
 
-	void load() throws IOException {
+	public void load() throws IOException {
 		props = new Properties();
 		InputStream in = getClass().getClassLoader().getResourceAsStream(propertiesPath);
 		if (in == null)

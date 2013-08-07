@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.simSupport.engine;
 
-import gov.nist.hit.ds.simSupport.transaction.ValidatorDefLoader;
+import gov.nist.hit.ds.simSupport.loader.ValidatorDefLoader;
 import gov.nist.hit.ds.valSupport.engine.MessageValidatorEngine;
 
 import java.io.IOException;
