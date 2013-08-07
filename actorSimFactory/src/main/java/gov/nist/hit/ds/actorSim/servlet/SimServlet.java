@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.actorSim.servlet;
 
+import gov.nist.hit.ds.actorSim.factory.ActorSimFactory;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.http.parser.HttpEnvironment;
+import gov.nist.hit.ds.http.environment.EventLog;
+import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
@@ -30,6 +32,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Servlet to service simulator input transactions.
+ * @author bill
+ *
+ */
 public class SimServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static Logger logger = Logger.getLogger(SimServlet.class);
@@ -41,6 +48,8 @@ public class SimServlet extends HttpServlet {
 		super.init(config);
 		this.config = config;
 
+		// This assumes that the toolkit has been configured before this Servlet
+		// is initialized.
 		warHome = new File(config.getServletContext().getRealPath("/"));
 		simDbDir = Installation.installation().propertyServiceManager().getSimDbDir();
 	}
@@ -52,14 +61,21 @@ public class SimServlet extends HttpServlet {
 		HttpEnvironment httpEnv = new HttpEnvironment().setResponse(response);
 		SoapEnvironment soapEnv = new SoapEnvironment(httpEnv);
 
+		// Parse endpoint to discover what simulator is the target of the request.
 		SimEndPoint endpoint;
 		try {
 			endpoint = new SimEndpointParser().parse(uri);
 		} catch (Exception e) {
-			sendSoapFault(soapEnv, FaultCode.EndpointUnavailable, "Cannot parse endpoint <" + uri + ">");
+			sendSoapFault(soapEnv, FaultCode.EndpointUnavailable, "Cannot parse endpoint <" + uri + "> " + e.getMessage());
 			return;
 		}
 
+		handleSimulatorInputTransaction(request, httpEnv, soapEnv, endpoint);
+	}
+
+	void handleSimulatorInputTransaction(HttpServletRequest request,
+			HttpEnvironment httpEnv, SoapEnvironment soapEnv,
+			SimEndPoint endpoint) {
 		// DB space for this simulator - needed here so the request message can be logged
 		//    also made available through a request attribute
 		// TODO: the SimDb instance should be moved to the HttpEnvironment
@@ -68,21 +84,44 @@ public class SimServlet extends HttpServlet {
 			db = new SimDb(endpoint.getSimId(), endpoint.getActor(), endpoint.getTransaction());
 		} catch (Exception e) {
 			logger.error("Internal error initializing simulator environment", e);
-			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment");
+			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment: " + e.getMessage());
 			return;
 		} 
 		request.setAttribute("SimDb", db);
 
+		// This makes the input message available to the SimChain
 		try {
-			logRequest(request, db, endpoint.getActor(), endpoint.getTransaction());
+			EventLog eventLog = logRequest(request, db, endpoint.getActor(), endpoint.getTransaction());
+			httpEnv.setEventLog(eventLog);
 		} catch (Exception e) {
 			logger.error("Internal error logging request message", e);
-			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error logging request message");
+			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error logging request message: " + e.getMessage());
 			return;
 		} 
+		
+		// Find the correct SimChain and run it.  The SimChain selected by a combination of
+		// Actor and Transaction codes.  These codes came from the endpoint used to contact this 
+		// Servlet.
+		try {
+			new ActorSimFactory().run(endpoint.getActor() + "^" + endpoint.getTransaction());
+		} catch (SoapFaultException sfe) {
+			sendSoapFault(soapEnv, sfe);
+		}
 	}
 
-	void logRequest(HttpServletRequest request, SimDb db, String actor, String transaction)
+	/**
+	 * Log the incoming request in the SimDb.
+	 * @param request - HttpRequest
+	 * @param db - SimDb section created for this event
+	 * @param actor - actor parsed from endpoint
+	 * @param transaction - transaction parsed from endpoint
+	 * @return reference to this event in SimDb
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws HttpHeaderParseException
+	 * @throws ParseException
+	 */
+	EventLog logRequest(HttpServletRequest request, SimDb db, String actor, String transaction)
 			throws FileNotFoundException, IOException, HttpHeaderParseException, ParseException {
 		StringBuffer buf = new StringBuffer();
 		Map<String, String> headers = new HashMap<String, String>();
@@ -111,22 +150,28 @@ public class SimServlet extends HttpServlet {
 
 		buf.append("\r\n");
 
-
+		// Log the request header and body in the SimDb
 		db.putRequestHeaderFile(buf.toString().getBytes());
 
 		db.putRequestBodyFile(Io.getBytesFromInputStream(request.getInputStream()));
 
+		// return a reference to this event in the SimDb
+		return new EventLog(db.getEventDir());
 	}
-	
+
 	void sendSoapFault(SoapEnvironment soapEnv, FaultCode faultCode, String reason) {
+		sendSoapFault(
+				soapEnv, 					
+				new SoapFaultException(
+						null,      // No error recorder established to allow capture to logs
+						faultCode,
+						new ErrorContext(reason)));
+	}
+
+	void sendSoapFault(SoapEnvironment soapEnv, SoapFaultException sfe) {
 		try {
-			new SoapFault(soapEnv,
-					new SoapFaultException(
-							null,      // No error recorder established to allow capture to logs
-							faultCode,
-							new ErrorContext(reason))).
-							send();
-		} catch (Exception ex) {
+			new SoapFault(soapEnv, sfe).send();
+		}  catch (Exception ex) {
 			logger.error("Error sending SOAPFault", ex);
 		}
 	}

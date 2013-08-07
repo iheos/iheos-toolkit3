@@ -103,6 +103,7 @@
   	<module>repository</module>
   	<module>xdstools3</module>
   	<module>environment</module>
+  	<module>simulatorIntegrationTest</module>
   </modules>
   <build>
   <plugins>

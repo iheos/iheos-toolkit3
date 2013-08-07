@@ -2,6 +2,7 @@ package gov.nist.hit.ds.simSupport.sim;
 
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.http.environment.EventLog;
 import gov.nist.hit.ds.initialization.ExtendedPropertyManager;
 import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.simSupport.client.NoSimException;
@@ -327,6 +328,10 @@ public class SimDb {
 		return f;
 	}
 
+	public File getEventDir() {
+		return getDBFilePrefix(event);
+	}
+	
 	public File getResponseBodyFile() {
 		return new File(getDBFilePrefix(event) + File.separator + "response_body.txt");
 	}
@@ -336,11 +341,13 @@ public class SimDb {
 	}
 
 	public File getRequestMsgHdrFile(String filenamebase) {
-		return new File(getDBFilePrefix(filenamebase) + File.separator + "request_hdr.txt");
+		return new EventLog(getDBFilePrefix(filenamebase)).getHeaderFile();
+//		return new File(getDBFilePrefix(filenamebase) + File.separator + "request_hdr.txt");
 	}
 
 	public File getRequestMsgBodyFile(String filenamebase) {
-		return new File(getDBFilePrefix(filenamebase) + File.separator + "request_body.bin");
+		return new EventLog(getDBFilePrefix(filenamebase)).getBodyFile();
+//		return new File(getDBFilePrefix(filenamebase) + File.separator + "request_body.bin");
 	}
 
 	public File getResponseMsgHdrFile(String filenamebase) {
