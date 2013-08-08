@@ -8,6 +8,15 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+/**
+ * Holder of a simulator definition.  Simulators are identified by their
+ * SimId.  But, since sometimes it is necessary to create combimed simulators, a
+ * combined Repository/Registry for example, this class does not have an assigned
+ * SimId.  Instead, the individual simulator configurations, represented by instances
+ * of the class SimulatorConfig, each have SimIds.
+ * @author bill
+ *
+ */
 public class Simulator  implements Serializable, IsSerializable  {
 	/**
 	 * 

@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.datatypes.client;
 
 import static org.junit.Assert.*;
+import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.EndpointLabel;
 import gov.nist.hit.ds.actorTransaction.TlsType;
@@ -17,7 +18,7 @@ public class SimulatorConfigTest {
 
 	@Test
 	public void findTest() {
-		SimulatorConfig sConfig = new SimulatorConfig().
+		SimulatorConfig sConfig = new SimulatorConfig(ActorType.REGISTRY).
 				add(new SimulatorConfigElement(
 						TransactionType.REGISTER.getName(),
 						ParamType.ENDPOINT,
@@ -38,7 +39,7 @@ public class SimulatorConfigTest {
 
 	@Test
 	public void findTest2() {
-		SimulatorConfig sConfig = new SimulatorConfig().
+		SimulatorConfig sConfig = new SimulatorConfig(ActorType.REGISTRY).
 				add(new SimulatorConfigElement(
 						TransactionType.REGISTER.getName(),
 						ParamType.ENDPOINT,

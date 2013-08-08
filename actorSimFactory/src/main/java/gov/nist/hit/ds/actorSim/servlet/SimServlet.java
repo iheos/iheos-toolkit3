@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.actorSim.servlet;
 
 import gov.nist.hit.ds.actorSim.factory.ActorSimFactory;
+import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.http.environment.EventLog;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
@@ -81,7 +82,7 @@ public class SimServlet extends HttpServlet {
 		// TODO: the SimDb instance should be moved to the HttpEnvironment
 		SimDb db;
 		try {
-			db = new SimDb(endpoint.getSimId(), endpoint.getActor(), endpoint.getTransaction());
+			db = new SimDb(endpoint.getSimId(), ActorType.findActor(endpoint.getActor()), endpoint.getTransaction());
 		} catch (Exception e) {
 			logger.error("Internal error initializing simulator environment", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment: " + e.getMessage());

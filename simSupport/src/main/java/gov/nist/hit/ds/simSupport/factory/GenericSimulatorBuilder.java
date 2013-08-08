@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.factory;
 
 import gov.nist.hit.ds.actorTransaction.ATConfigLabels;
+import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.EndpointLabel;
 import gov.nist.hit.ds.actorTransaction.TlsType;
@@ -10,22 +11,26 @@ import gov.nist.hit.ds.simSupport.client.ParamType;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.SimulatorConfig;
 import gov.nist.hit.ds.simSupport.client.SimulatorConfigElement;
+import gov.nist.hit.ds.simSupport.serializer.SimulatorSerializer;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.utilities.other.UuidAllocator;
 
+import java.io.IOException;
 import java.util.Date;
 
 public class GenericSimulatorBuilder {
 	SimulatorConfig sConfig;
+	ActorType actorType;
 
-	public GenericSimulatorBuilder buildGenericConfiguration() {
-		return buildGenericConfiguration(null);
+	public GenericSimulatorBuilder buildGenericConfiguration(ActorType actorType) {
+		return buildGenericConfiguration((SimId)null, actorType);
 	}
 
-	public GenericSimulatorBuilder buildGenericConfiguration(SimId newId) {
+	public GenericSimulatorBuilder buildGenericConfiguration(SimId newId, ActorType actorType) {
+		this.actorType = actorType;
 		if (newId == null)
 			newId = getNewId();
-		sConfig = new SimulatorConfig().setId(newId).setExpiration(SimDb.getNewExpiration(SimulatorConfig.class));
+		sConfig = new SimulatorConfig(actorType).setId(newId).setExpiration(SimDb.getNewExpiration(SimulatorConfig.class));
 		configureBaseElements();
 		return this;
 	}	
@@ -44,7 +49,9 @@ public class GenericSimulatorBuilder {
 				setValue("Private").setEditable(true));
 	}
 	
-	public SimulatorConfig get() { return sConfig; }
+	public SimulatorConfig save() throws IOException {
+		return new SimulatorSerializer().save(sConfig);
+	}
 
 	SimId getNewId() {
 		String id = UuidAllocator.allocate();

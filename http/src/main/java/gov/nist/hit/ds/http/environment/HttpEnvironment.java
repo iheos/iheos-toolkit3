@@ -2,10 +2,18 @@ package gov.nist.hit.ds.http.environment;
 
 import java.io.OutputStream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Internal to simulator operation, an instance of this class represents the 
+ * request message and the environment for generating a response message.
+ * @author bill
+ *
+ */
 public class HttpEnvironment {
-	private HttpServletResponse response = null;
+//	HttpServletRequest request = null;   // This is only used in test support
+	HttpServletResponse response = null;
 	OutputStream os = null;
 	EventLog eventLog;
 	
@@ -16,6 +24,15 @@ public class HttpEnvironment {
 		this.response = response;
 		return this;
 	}
+	
+//	public HttpServletRequest getRequest() {
+//		return request;
+//	}
+//	
+//	public HttpEnvironment setRequest(HttpServletRequest request) {
+//		this.request = request;
+//		return this;
+//	}
 	
 	public OutputStream getOutputStream() throws Exception {
 		if (os == null) {

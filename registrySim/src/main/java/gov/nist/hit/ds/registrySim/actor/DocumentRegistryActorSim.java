@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.registrySim.actor;
 
+import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.registrySim.datatypes.RegistrySimTransactionType;
 import gov.nist.hit.ds.simSupport.client.NoSimException;
@@ -42,7 +43,7 @@ public class DocumentRegistryActorSim extends SimComponentBase {
 		er.challenge("Document Registry Sim running");
 		
 		try {
-			db = new SimDb(simEndPoint.getSimId(), simEndPoint.getActor(), simEndPoint.getTransaction());
+			db = new SimDb(simEndPoint.getSimId(), ActorType.findActor(simEndPoint.getActor()), simEndPoint.getTransaction());
 		} catch (IOException e) {
 			throw new SoapFaultException(
 					er,

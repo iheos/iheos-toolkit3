@@ -1,11 +1,13 @@
 package gov.nist.hit.ds.simSupport.client;
 
 
+import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.EndpointLabel;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,12 +19,13 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author bill
  *
  */
-public class SimulatorConfig implements IsSerializable {
+public class SimulatorConfig implements IsSerializable, Serializable {
 
 	/**
 	 * Globally unique id for this simulator
 	 */
 	SimId id;
+	ActorType actorType;
 	Date expires;
 	boolean isExpired = false;
 	List<SimulatorConfigElement> elements  = new ArrayList<SimulatorConfigElement>();
@@ -61,8 +64,8 @@ public class SimulatorConfig implements IsSerializable {
 		return buf.toString();
 	}
 	
-	public SimulatorConfig() {
-		
+	public SimulatorConfig(ActorType actorType) {
+		this.actorType = actorType;
 	}
 	
 	public SimulatorConfig add(List<SimulatorConfigElement> elementList) {
@@ -171,6 +174,10 @@ public class SimulatorConfig implements IsSerializable {
 	
 	public SimId getId() {
 		return id;
+	}
+	
+	public ActorType getActorType() {
+		return actorType;
 	}
 	
 }
