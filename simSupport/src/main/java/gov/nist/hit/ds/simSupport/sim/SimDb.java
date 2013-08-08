@@ -31,22 +31,27 @@ public class SimDb {
 	File dbRoot = null;  // base of the simulator db
 	String event = null;
 	File simDir = null;   // directory within simdb that represents this event
-	String actor = null;
+	ActorType actorType = null;
 	String transaction = null;
 	File transactionDir = null;  
 	static Logger logger = Logger.getLogger(SimDb.class);
 
 
-	static public SimDb mkSim(SimId simid, String actor) throws IOException, NoSimException {
+	static public SimDb mkSim(SimId simid, ActorType actorType) throws IOException {
 
-		File simActorDir = new File(getDbRoot().getAbsolutePath() + File.separatorChar + simid + File.separatorChar + actor);
+		File simActorDir = new File(getDbRoot().getAbsolutePath() + File.separatorChar + simid + File.separatorChar + actorType.getShortName());
 		simActorDir.mkdirs();
 		if (!simActorDir.exists()) {
-			logger.error("Simulator " + simid + ", " + actor + " cannot be created");
-			throw new IOException("Simulator " + simid + ", " + actor + " cannot be created");
+			logger.error("Simulator " + simid + ", " + actorType + " cannot be created");
+			throw new IOException("Simulator " + simid + ", " + actorType + " cannot be created");
 		}
 		
-		return new SimDb(simid, actor, null);
+		try {
+			return new SimDb(simid, actorType, null);
+		} catch (NoSimException e) {
+			throw new IOException("Internal Error: cannot create Simulator <" + simid + ">");
+		}
+		
 
 	}
 	
@@ -54,15 +59,26 @@ public class SimDb {
 
 	}
 	
-	public SimDb(SimId simulatorId) throws IOException, NoSimException {
-		this(simulatorId, null, null);
-	}
+//	public SimDb(SimId simulatorId) throws IOException, NoSimException {
+//		this(simulatorId, null, null);
+//	}
 
 
-	// ipAddr aka simid
-	public SimDb(SimId simId, String actor, String transaction) throws IOException, NoSimException {
+	/**
+	 * Load the simulator defined by simId.  The simulator must already exist. The actor and transaction informtion
+	 * withing the simulator need not exist ahead of time. It will be created as
+	 * part of this call if necessary. As a result of this call, a new simulator event
+	 * will be created. So after successful completion of this call, content can
+	 * be added to the simulator state.
+	 * @param simId - simulator id
+	 * @param actor - short name for Actor
+	 * @param transaction - short name for Transaction
+	 * @throws IOException
+	 * @throws NoSimException - Simulator does not exist.
+	 */
+	public SimDb(SimId simId, ActorType actorType, String transaction) throws IOException, NoSimException {
 		this.simId = simId;
-		this.actor = actor;
+		this.actorType = actorType;
 		this.transaction = transaction;
 		this.dbRoot = getDbRoot();
 
@@ -80,8 +96,8 @@ public class SimDb {
 		if (!simDir.isDirectory())
 			throw new IOException("Cannot create content in Simulator database, creation of " + simDir.toString() + " failed");
 
-		if (actor != null && transaction != null) {
-			String transdir = simDir + File.separator + actor + File.separator + transaction;
+		if (actorType != null && transaction != null) {
+			String transdir = simDir + File.separator + actorType.getShortName() + File.separator + transaction;
 			transactionDir = new File(transdir);
 			transactionDir.mkdirs();
 			if (!transactionDir.isDirectory())
@@ -153,7 +169,7 @@ public class SimDb {
 	public File getTransactionDir(TransactionType tt) {
 		String trans = getTransactionDirName(tt);
 		return new File(simDir 
-				+ File.separator + actor
+				+ File.separator + actorType.getShortName()
 				+ File.separator + trans
 		);
 	}
@@ -189,13 +205,13 @@ public class SimDb {
 	
 
 	public File getRegistryIndexFile() {
-		File regDir = new File(simDir.toString() + File.separator + actor);
+		File regDir = new File(simDir.toString() + File.separator + actorType.getShortName());
 		regDir.mkdirs();
 		return new File(regDir.toString() + File.separator + "reg_db.ser");
 	}
 
 	public File getRepositoryIndexFile() {
-		File regDir = new File(simDir.toString() + File.separator + actor);
+		File regDir = new File(simDir.toString() + File.separator + actorType.getShortName());
 		regDir.mkdirs();
 		return new File(regDir.toString() + File.separator + "rep_db.ser");
 	}
@@ -320,7 +336,7 @@ public class SimDb {
 
 	File getDBFilePrefix(String event) {
 		File f = new File(simDir 
-				+ File.separator + actor
+				+ File.separator + actorType.getShortName()
 				+ File.separator + transaction
 				+ File.separator + event
 		);

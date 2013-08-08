@@ -12,6 +12,7 @@ import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.factory.GenericSimulatorBuilder;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,8 +32,8 @@ public class DocumentRegistryActorFactory {
 					TransactionType.UPDATE
 					);
 
-	public Simulator buildNewSimulator(SimId simId, TlsType[] tlsTypes, AsyncType[] asyncTypes) {
-		GenericSimulatorBuilder builder = new GenericSimulatorBuilder().buildGenericConfiguration(simId);
+	public Simulator buildNewSimulator(SimId simId, TlsType[] tlsTypes, AsyncType[] asyncTypes) throws IOException {
+		GenericSimulatorBuilder builder = new GenericSimulatorBuilder().buildGenericConfiguration(simId, ActorType.REGISTRY);
 		for (int i=0; i<asyncTypes.length; i++) {
 			AsyncType async = asyncTypes[i];
 			for (int j = 0; j<tlsTypes.length; j++) {
@@ -60,8 +61,9 @@ public class DocumentRegistryActorFactory {
 				
 				
 		builder.addConfig(ATConfigLabels.codesEnvironment, codesFile.toString());
+		
 
-		return new Simulator(builder.get());
+		return new Simulator(builder.save());
 	}
 
 }

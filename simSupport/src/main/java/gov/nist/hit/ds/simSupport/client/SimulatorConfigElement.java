@@ -1,9 +1,11 @@
 package gov.nist.hit.ds.simSupport.client;
 
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SimulatorConfigElement implements IsSerializable {
+public class SimulatorConfigElement implements IsSerializable, Serializable {
 
 	/**
 	 * Parameter name

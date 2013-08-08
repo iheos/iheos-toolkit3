@@ -9,6 +9,7 @@ import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.Test;
 
@@ -20,9 +21,15 @@ public class FactoryTest {
 		Installation.installation().setWarHome(new File("src/test/resources/registry"));
 		String simId = "123";
 		DocumentRegistryActorFactory fact = new DocumentRegistryActorFactory();
-		Simulator sim = fact.buildNewSimulator(new SimId(simId), 
-				new TlsType[]  { TlsType.NOTLS }, 
-				new AsyncType[] { AsyncType.SYNC });
+		Simulator sim = null;
+		try {
+			sim = fact.buildNewSimulator(new SimId(simId), 
+					new TlsType[]  { TlsType.NOTLS }, 
+					new AsyncType[] { AsyncType.SYNC });
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
 		System.out.println(sim);
 		
 		assertFalse(sim.getConfig(0).hasExpired());
@@ -40,9 +47,15 @@ public class FactoryTest {
 		Installation.installation().setWarHome(new File("src/test/resources/registry"));
 		String simId = "123";
 		DocumentRegistryActorFactory fact = new DocumentRegistryActorFactory();
-		Simulator sim = fact.buildNewSimulator(new SimId(simId), 
-				new TlsType[]  { TlsType.TLS, TlsType.NOTLS }, 
-				new AsyncType[] { AsyncType.SYNC });
+		Simulator sim = null;
+		try {
+			sim = fact.buildNewSimulator(new SimId(simId), 
+					new TlsType[]  { TlsType.TLS, TlsType.NOTLS }, 
+					new AsyncType[] { AsyncType.SYNC });
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
 		System.out.println(sim);
 		
 		assertFalse(sim.getConfig(0).hasExpired());
@@ -59,9 +72,15 @@ public class FactoryTest {
 		Installation.installation().setWarHome(new File("src/test/resources/registry"));
 		String simId = "123";
 		DocumentRegistryActorFactory fact = new DocumentRegistryActorFactory();
-		Simulator sim = fact.buildNewSimulator(new SimId(simId), 
-				new TlsType[]  { TlsType.TLS, TlsType.NOTLS }, 
-				new AsyncType[] { AsyncType.ASYNC, AsyncType.SYNC });
+		Simulator sim = null;
+		try {
+			sim = fact.buildNewSimulator(new SimId(simId), 
+					new TlsType[]  { TlsType.TLS, TlsType.NOTLS }, 
+					new AsyncType[] { AsyncType.ASYNC, AsyncType.SYNC });
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
 		System.out.println(sim);
 		
 		assertFalse(sim.getConfig(0).hasExpired());
