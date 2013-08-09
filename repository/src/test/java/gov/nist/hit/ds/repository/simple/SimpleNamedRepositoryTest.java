@@ -31,7 +31,7 @@ public class SimpleNamedRepositoryTest {
 		repos = new RepositoryFactory().createNamedRepository(
 				"This is my repository",
 				"Description",
-				new SimpleType("simple", ""),
+				new SimpleType("simple", "no description"),
 				"sites");
 		repId = repos.getId();
 	}

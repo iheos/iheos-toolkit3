@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 public class SearchServlet extends HttpServlet {
 
@@ -247,7 +247,7 @@ public class SearchServlet extends HttpServlet {
 				sb.append("&nbsp;<font ");
 				
 				if ("text/*".equalsIgnoreCase(a.getMimeType())) {
-					sb.append("title='" + StringEscapeUtils.escapeHtml(new String(a.getContent())) + "' ");
+					sb.append("title='" + StringEscapeUtils.escapeHtml4(new String(a.getContent())) + "' ");
 				}
 				
 				sb.append("family='arial,verdana,sans-serif' size='2'><sup><a href='" + this.getServletContext().getContextPath() + "downloadAsset?reposId=" + a.getRepository().getIdString() + "&assetId=" + a.getId().getIdString() + "'>" 
