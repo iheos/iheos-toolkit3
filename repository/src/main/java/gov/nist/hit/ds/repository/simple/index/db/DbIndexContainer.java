@@ -19,6 +19,7 @@ import gov.nist.hit.ds.utilities.io.Hash;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -589,7 +590,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 			if (isAssetSynced(a.getId().getIdString(), hash)) {
 				Properties assetProps = new Properties();
 				try {
-					assetProps.load(new FileInputStream(a.getPropFile()));
+					FileReader fr = new FileReader(a.getPropFile());
+					assetProps.load(fr);
+					fr.close();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

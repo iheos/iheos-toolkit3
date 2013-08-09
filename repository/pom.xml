@@ -26,18 +26,31 @@
 		    <artifactId>initialization</artifactId>
 		    <version>0.0.1-SNAPSHOT</version>
   		</dependency>
+		
+		<!-- 3rd party -->
+		
   		<dependency>
 		    <groupId>org.apache.commons.io</groupId>
-		    <artifactId>commons</artifactId>
+		    <artifactId>commons-io</artifactId>
 		    <version>2.4</version>
   		</dependency>
-  		 <dependency>
-		    <groupId>org.apache.commons.lang</groupId>
-		    <artifactId>apache-lang</artifactId>
-		    <version>2.6</version>
-  		</dependency>
+		<dependency>
+  			<groupId>org.apache.commons</groupId>
+  			<artifactId>commons-lang3</artifactId>
+  			<version>3.1</version>
+		</dependency>
+		<dependency>
+  			<groupId>org.apache.derby</groupId>
+  			<artifactId>derby</artifactId>
+  			<version>10.4.2.0</version>
+		</dependency>
+		<dependency>
+  			<groupId>org.apache.derby</groupId>
+  			<artifactId>derbyclient</artifactId>
+  			<version>10.4.2.0</version>
+		</dependency>
   		<dependency>
-		    <groupId>org.apache.tomcat.jdbc</groupId>
+		    <groupId>org.apache.tomcat</groupId>
 		    <artifactId>tomcat-jdbc</artifactId>
 		    <version>7.0.40</version>
   		</dependency>
@@ -46,16 +59,6 @@
 		    <artifactId>tomcat-juli</artifactId>
 		    <version>7.0.40</version>
   		</dependency>
-  		<dependency>
-		    <groupId>org.apache.derby</groupId>
-		    <artifactId>derby</artifactId>
-		    <version>10.4</version>
-  		</dependency>
-  		<dependency>
-		    <groupId>org.apache.derby</groupId>
-		    <artifactId>derbyclient</artifactId>
-		    <version>10.4</version>
-  		</dependency>  		  		
   </dependencies>
   
   <!-- The following test configuration executes tests in sequential order -->

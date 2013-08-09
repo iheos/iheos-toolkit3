@@ -1,17 +1,21 @@
 package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.index.CreateContainerTest;
 import gov.nist.hit.ds.repository.simple.index.ExpandContainerTest;
 import gov.nist.hit.ds.repository.simple.index.IndexableRepositoryTest;
 import gov.nist.hit.ds.repository.simple.search.SearchTest;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.ClassRule;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import static org.junit.Assert.fail;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({		
@@ -68,6 +72,9 @@ public class SimpleTestSuite {
 
 			
 			try {
+				//
+				// Assets stored in temporary repositories will be cleaned up after test run
+				// 
 				setInstallationPath(SimpleTestSuite.class.getClassLoader().getResource("Installation/").getFile());
 				System.out.println(getInstallationPath());
 				
@@ -78,15 +85,15 @@ public class SimpleTestSuite {
 			Installation.installation();
 			Installation.installation().setWarHome(new File(getInstallationPath())); // This would be the WAR installation directory
 			
+			String externalCache = InstallationPath + "Testing/Test_environment";
 			
+//			String externalCache = Installation.installation().propertyServiceManager()
+//										.getToolkitProperties().get("External_Cache");
+//			
+//			// Incorporate relative path for testing, this can be skipped for non-development environments
+//			externalCache = InstallationPath + externalCache;
 			
-			String externalCache = Installation.installation().propertyServiceManager()
-										.getToolkitProperties().get("External_Cache");
-			
-			// Incorporate relative path for testing, this can be skipped for non-development environments
-			externalCache = InstallationPath + externalCache;
-			
-			System.out.println(externalCache);
+//			System.out.println(externalCache);
 			
 			Installation.installation().setExternalCache(new File(externalCache)); // Prefix only if externalCache is not expected to be absolute path, which in this case the EC_Dir is relative. 
 			
@@ -99,8 +106,18 @@ public class SimpleTestSuite {
 		
 		@Override
 		protected void after() {
-			
+			System.out.println("Clearing temp data...");
+			try {
+
+				 FileUtils.cleanDirectory(Configuration.getRepositoryDataDir());
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (RepositoryException e) {
+				e.printStackTrace();
+			}
+		 
 		}
+		
 
 	};
 
