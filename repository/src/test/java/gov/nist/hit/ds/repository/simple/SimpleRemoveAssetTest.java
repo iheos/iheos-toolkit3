@@ -15,17 +15,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SimpleRemoveAssetTest {
-	static File RootOfAllRepositories = new File("/temp/repositories");
+
 	static Repository repos;
 	static Asset a;
 
-	// Create temp folder to be the External Cache
-	//	@Rule
-	//	public TemporaryFolder tempFolder = new TemporaryFolder()
 
 	@BeforeClass
 	static public void initialize() throws RepositoryException {
-		new Configuration(RootOfAllRepositories);
 
 		RepositoryFactory fact = new RepositoryFactory();
 		repos = fact.createRepository(

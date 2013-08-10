@@ -84,7 +84,9 @@ public class SimpleTypeIterator implements TypeIterator, FilenameFilter {
 	Properties loadProperties(File propFile) throws RepositoryException {
 		Properties properties = new Properties();
 		try {
-			properties.load(new FileReader(propFile));
+			FileReader fr = new FileReader(propFile);
+			properties.load(fr);
+			fr.close();
 		} catch (IOException e) {
 			throw new RepositoryException(RepositoryException.IO_ERROR + " : " +
 					"Cannot load repository type description from [" + propFile + "]");

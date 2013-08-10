@@ -1,8 +1,11 @@
 package gov.nist.hit.ds.registrySim;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
+import gov.nist.hit.ds.initialization.ExtendedPropertyManager;
 import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.registrySim.factory.DocumentRegistryActorFactory;
 import gov.nist.hit.ds.simSupport.client.SimId;
@@ -12,14 +15,22 @@ import gov.nist.hit.ds.xdsException.XdsInternalException;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class FactoryTest {
 
+	@Before
+	public void init() {
+		Installation.installation().setExternalCache(new File("src/test/resources/external_cache"));
+		
+		File warHome = new File("src/test/resources/registry");
+		Installation.installation().setWarHome(warHome);
+		ExtendedPropertyManager.load(warHome);
+	}
+	
 	@Test
 	public void notlsSyncTest() {
-		Installation.installation().setExternalCache(new File("src/test/resources/external_cache"));
-		Installation.installation().setWarHome(new File("src/test/resources/registry"));
 		String simId = "123";
 		DocumentRegistryActorFactory fact = new DocumentRegistryActorFactory();
 		Simulator sim = null;
@@ -47,8 +58,6 @@ public class FactoryTest {
 
 	@Test
 	public void tlsNotlsSyncTest() {
-		Installation.installation().setExternalCache(new File("src/test/resources/external_cache"));
-		Installation.installation().setWarHome(new File("src/test/resources/registry"));
 		String simId = "123";
 		DocumentRegistryActorFactory fact = new DocumentRegistryActorFactory();
 		Simulator sim = null;
@@ -75,8 +84,6 @@ public class FactoryTest {
 
 	@Test
 	public void tlsNotlsSyncNoSyncTest() {
-		Installation.installation().setExternalCache(new File("src/test/resources/external_cache"));
-		Installation.installation().setWarHome(new File("src/test/resources/registry"));
 		String simId = "123";
 		DocumentRegistryActorFactory fact = new DocumentRegistryActorFactory();
 		Simulator sim = null;

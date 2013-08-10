@@ -19,6 +19,7 @@ import gov.nist.hit.ds.utilities.io.Hash;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -37,12 +38,14 @@ import com.sun.rowset.CachedRowSetImpl;
  */
 public class DbIndexContainer implements IndexContainer, Index {
 
+
 	
 	private static final String repContainerLabel = "repositoryIndex";		
 	private static final int syncedStatus = 1001; 
 	private static final String assetId = "\"id\"";
 	private static final String assetType = "\"type\"";
 	private static final String repId = "\"repository\"";
+	private static final String displayOrder = "\"displayOrder\"";
 
 	/* Use an upgrade script to update existing tables in case a newer version of TTT (new ArtRep API) runs against an older copy of the repositoryIndex table in the database */
 	private static final String repContainerDefinition = 
@@ -52,6 +55,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	+"parentAssetId varchar(64),"									/* The parent asset Id. A null-value indicates top-level asset and no children */
 	+ assetType + " varchar(32) not null," 							/* Asset type - usually same as the keyword property */
 	+"hash varchar(40),"											/* (Internal use) The hash of the property file */
+	+displayOrder + " int,"         						    /* This is a reserved keyword for sorting purpose */
 	+"repoSession varchar(64))";									/* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */				
 			
 
@@ -573,7 +577,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			iter = new SimpleAssetIterator(repos.getId(), new SimpleType(assetType));	
 		}
 		 
-		String repoSession = new IdFactory().getNewId().getIdString();
+		String repoSession = new IdFactory().getNewId().getIdString();		
 		
 		while (iter.hasNextAsset()) {				
 			Asset a = iter.nextAsset();
@@ -586,7 +590,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 			if (isAssetSynced(a.getId().getIdString(), hash)) {
 				Properties assetProps = new Properties();
 				try {
-					assetProps.load(new FileInputStream(a.getPropFile()));
+					FileReader fr = new FileReader(a.getPropFile());
+					assetProps.load(fr);
+					fr.close();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -619,11 +625,6 @@ public class DbIndexContainer implements IndexContainer, Index {
 		// A search would result in ghost assets when stale assets were not removed from the index
 		
 		removeIndex(reposId,repoSession);
-		
-		
-		
-		
-		
 		
 		return totalAssetsIndexed;
 	}
@@ -701,6 +702,17 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @return
 	 */
 	public CachedRowSet getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria) {
+		return getAssetsBySearch(repositories, searchCriteria, "");
+	}
+	
+	/**
+	 * 
+	 * @param repositories
+	 * @param searchCriteria
+	 * @param orderBy
+	 * @return
+	 */
+	public CachedRowSet getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) {
 		
 		try {
 				// Make sure properties exist
@@ -712,7 +724,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			dbc.internalCmd("drop table session.SearchResults");
-			dbc.internalCmd("create table session.SearchResults(repId varchar(64),assetId varchar(64), reposOrder int)");
+			dbc.internalCmd("create table session.SearchResults(repId varchar(64),assetId varchar(64), reposOrder int, displayOrder int)");
 			
 			
 			for (Repository rep : repositories) {				
@@ -723,7 +735,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 			// This needs to be independent from the syncRep call because there columns might not have fully expanded 
 			int orderBy=0;
 			for (Repository rep : repositories) {
-				String sqlString = "insert into session.SearchResults(repId,assetId,reposOrder)"+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + "," + (orderBy++) +  " from " + repContainerLabel + " where " + repId + " = '"+  rep.getId().getIdString() +"' and( "+ searchCriteriaWhere + ")";
+				String sqlString = "insert into session.SearchResults(repId,assetId,reposOrder,displayOrder)"
+						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + "," + (orderBy++) + "," + displayOrder + " from " + repContainerLabel 
+						+ " where " + repId + " = '"+  rep.getId().getIdString() +"' and( "+ searchCriteriaWhere + ")" ; 
 				try {
 					dbc.internalCmd(sqlString);
 				} catch (SQLException e) {
@@ -731,8 +745,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 				}
 			}
 					
-			ResultSet rs = dbc.executeQuery("select * from session.SearchResults order by reposOrder");
-			String out = "";
+			ResultSet rs = dbc.executeQuery("select repId,assetId from session.SearchResults order by reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?","+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
 			
 			CachedRowSet crs = new CachedRowSetImpl();
     		crs.populate(rs);
@@ -787,4 +800,5 @@ public class DbIndexContainer implements IndexContainer, Index {
 		
 	}
 	*/
+
 }
