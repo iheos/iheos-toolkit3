@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.httpSoapValidator.testSupport;
 
-import gov.nist.hit.ds.http.environment.EventLog;
+import gov.nist.hit.ds.http.environment.Event;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,9 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public class HttpServletRequestMock implements HttpServletRequest {
-	EventLog eventLog;
+	Event eventLog;
 	
-	public void setEventLog(EventLog eventLog) {
+	public void setEventLog(Event eventLog) {
 		this.eventLog = eventLog;
 	}
 	

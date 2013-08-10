@@ -2,7 +2,6 @@ package gov.nist.hit.ds.http.environment;
 
 import java.io.OutputStream;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -15,7 +14,7 @@ public class HttpEnvironment {
 //	HttpServletRequest request = null;   // This is only used in test support
 	HttpServletResponse response = null;
 	OutputStream os = null;
-	EventLog eventLog;
+	Event eventLog;
 	
 	public HttpServletResponse getResponse() {
 		return response;
@@ -43,8 +42,8 @@ public class HttpEnvironment {
 		return os;
 	}
 
-	public EventLog getEventLog() { return eventLog; }
+	public Event getEventLog() { return eventLog; }
 	
-	public HttpEnvironment setEventLog(EventLog eventLog) { this.eventLog = eventLog; return this; }
+	public HttpEnvironment setEventLog(Event eventLog) { this.eventLog = eventLog; return this; }
 
 }

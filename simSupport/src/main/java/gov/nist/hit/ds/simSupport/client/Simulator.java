@@ -1,7 +1,5 @@
 package gov.nist.hit.ds.simSupport.client;
 
-import gov.nist.hit.ds.simSupport.client.SimulatorConfig;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,43 +20,58 @@ public class Simulator  implements Serializable, IsSerializable  {
 	 * 
 	 */
 	private static final long serialVersionUID = 8914156242225793229L;
-	List<SimulatorConfig> configs;
-	
+	List<ActorSimConfig> configs = new ArrayList<ActorSimConfig>();
+	SimId simId;
+ 
+	/**
+	 * Should only be called by the factory class.
+	 */
 	public Simulator() {
-		configs = new ArrayList<SimulatorConfig>();
+		this.simId = new SimId() ;
 	}
-	
-	public Simulator(List<SimulatorConfig> configs) {
-		this.configs = configs;
+
+	/**
+	 * Should only be called by the factory class.
+	 */
+	public Simulator(SimId simId) {
+		if (simId == null)
+			this.simId = new SimId();
+		else
+			this.simId = simId;
 	}
-	
-	public Simulator(SimulatorConfig config) {
-		configs = new ArrayList<SimulatorConfig>();
+
+	public Simulator add(ActorSimConfig config) {
 		configs.add(config);
+		return this;
 	}
-	
-	public List<SimulatorConfig> getConfigs() {
+
+	public Simulator addAll(List<ActorSimConfig> configs) {
+		this.configs.addAll(configs);
+		return this;
+	}
+
+	public List<ActorSimConfig> getConfigs() {
 		return configs;
 	}
-	
-	public int size() { return configs.size(); }
-	
-	public SimulatorConfig getConfig(int i) { return configs.get(i); }
-	
-	public List<SimId> getIds() {
-		List<SimId> ids = new ArrayList<SimId>();
-		for (SimulatorConfig c : configs)
-			ids.add(c.id);
-		return ids;
+
+	public SimId getId() {
+		return simId;
 	}
-	
+
+	public int size() { return configs.size(); }
+
+	public ActorSimConfig getConfig(int i) { return configs.get(i); }
+
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
-		
-		for (SimulatorConfig config : configs) {
+
+		for (ActorSimConfig config : configs) {
 			buf.append(config.toString());
 		}
-		
+
 		return buf.toString();
 	}
+
+
+
 }

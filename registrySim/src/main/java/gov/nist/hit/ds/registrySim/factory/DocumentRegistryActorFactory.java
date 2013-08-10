@@ -9,7 +9,9 @@ import gov.nist.hit.ds.environment.Environment;
 import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
-import gov.nist.hit.ds.simSupport.factory.GenericSimulatorBuilder;
+import gov.nist.hit.ds.simSupport.factory.GenericActorSimBuilder;
+import gov.nist.hit.ds.simSupport.factory.SimulatorFactory;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,20 +34,11 @@ public class DocumentRegistryActorFactory {
 					TransactionType.UPDATE
 					);
 
-	public Simulator buildNewSimulator(SimId simId, TlsType[] tlsTypes, AsyncType[] asyncTypes) throws IOException {
-		GenericSimulatorBuilder builder = new GenericSimulatorBuilder().buildGenericConfiguration(simId, ActorType.REGISTRY);
-		for (int i=0; i<asyncTypes.length; i++) {
-			AsyncType async = asyncTypes[i];
-			for (int j = 0; j<tlsTypes.length; j++) {
-				TlsType tls = tlsTypes[j];
-				for (TransactionType transType : incomingTransactions) {
-					builder.addEndpoint(ActorType.REGISTRY.getShortName(), 
-							transType, 
-							tls, 
-							async);
-				}
-			}
-		}
+	public Simulator buildNewSimulator(SimId simId, TlsType[] tlsTypes, AsyncType[] asyncTypes) throws IOException, XdsInternalException {
+		SimulatorFactory factory = new SimulatorFactory();
+		factory.buildSimulator(simId);
+		
+		GenericActorSimBuilder builder = factory.addActorSim(ActorType.REGISTRY, incomingTransactions, tlsTypes, asyncTypes);
 		builder.addConfig(update_metadata_option, true);
 		builder.addConfig(ATConfigLabels.extraMetadataSupported, true);
 		
@@ -58,12 +51,11 @@ public class DocumentRegistryActorFactory {
 		String defaultEnvironmentName = Installation.installation().getPropertyManager().getDefaultEnvironmentName();
 		Environment defaultEnvironment = new Environment(Installation.installation().environmentFile());
 		File codesFile = defaultEnvironment.getCodesFile(defaultEnvironmentName);
-				
-				
 		builder.addConfig(ATConfigLabels.codesEnvironment, codesFile.toString());
 		
+		factory.save();
 
-		return new Simulator(builder.save());
+		return factory.getSimulator();
 	}
 
 }

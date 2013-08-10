@@ -7,8 +7,8 @@ import gov.nist.hit.ds.actorTransaction.EndpointLabel;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.simSupport.client.ParamType;
-import gov.nist.hit.ds.simSupport.client.SimulatorConfig;
-import gov.nist.hit.ds.simSupport.client.SimulatorConfigElement;
+import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
+import gov.nist.hit.ds.simSupport.client.ActorSimConfigElement;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ public class SimulatorConfigTest {
 
 	@Test
 	public void findTest() {
-		SimulatorConfig sConfig = new SimulatorConfig(ActorType.REGISTRY).
-				add(new SimulatorConfigElement(
+		ActorSimConfig sConfig = new ActorSimConfig(ActorType.REGISTRY).
+				add(new ActorSimConfigElement(
 						TransactionType.REGISTER.getName(),
 						ParamType.ENDPOINT,
 						new EndpointLabel(
@@ -28,7 +28,7 @@ public class SimulatorConfigTest {
 								AsyncType.ASYNC
 								).get())
 						);
-		List<SimulatorConfigElement> cEles = sConfig.findConfigs(
+		List<ActorSimConfigElement> cEles = sConfig.findConfigs(
 				new TransactionType[] { TransactionType.REGISTER }, 
 				new TlsType[] { TlsType.TLS }, 
 				new AsyncType[] { AsyncType.ASYNC});
@@ -39,8 +39,8 @@ public class SimulatorConfigTest {
 
 	@Test
 	public void findTest2() {
-		SimulatorConfig sConfig = new SimulatorConfig(ActorType.REGISTRY).
-				add(new SimulatorConfigElement(
+		ActorSimConfig sConfig = new ActorSimConfig(ActorType.REGISTRY).
+				add(new ActorSimConfigElement(
 						TransactionType.REGISTER.getName(),
 						ParamType.ENDPOINT,
 						new EndpointLabel(
@@ -48,7 +48,7 @@ public class SimulatorConfigTest {
 								TlsType.NOTLS,
 								AsyncType.ASYNC
 								).get())
-						).add(new SimulatorConfigElement(
+						).add(new ActorSimConfigElement(
 								TransactionType.REGISTER.getName(),
 								ParamType.ENDPOINT,
 								new EndpointLabel(
@@ -57,7 +57,7 @@ public class SimulatorConfigTest {
 										AsyncType.ASYNC
 										).get())
 						);
-		List<SimulatorConfigElement> cEles = sConfig.findConfigs(
+		List<ActorSimConfigElement> cEles = sConfig.findConfigs(
 				new TransactionType[] { TransactionType.REGISTER }, 
 				new TlsType[] { TlsType.TLS }, 
 				new AsyncType[] { AsyncType.ASYNC});

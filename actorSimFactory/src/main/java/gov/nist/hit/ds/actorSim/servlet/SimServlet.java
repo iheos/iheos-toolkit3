@@ -3,7 +3,7 @@ package gov.nist.hit.ds.actorSim.servlet;
 import gov.nist.hit.ds.actorSim.factory.ActorSimFactory;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.http.environment.EventLog;
+import gov.nist.hit.ds.http.environment.Event;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
@@ -81,19 +81,21 @@ public class SimServlet extends HttpServlet {
 		//    also made available through a request attribute
 		// TODO: the SimDb instance should be moved to the HttpEnvironment
 		SimDb db;
+		Event event;
 		try {
-			db = new SimDb(endpoint.getSimId(), ActorType.findActor(endpoint.getActor()), endpoint.getTransaction());
+			db = new SimDb(endpoint.getSimId());
+			event = db.createEvent(ActorType.findActor(endpoint.getActor()), endpoint.getTransaction());
 		} catch (Exception e) {
 			logger.error("Internal error initializing simulator environment", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment: " + e.getMessage());
 			return;
 		} 
-		request.setAttribute("SimDb", db);
+		httpEnv.setEventLog(event);
+		request.setAttribute("Event", event); // SimServletFilter needs this to log response as it goes out on the wire
 
 		// This makes the input message available to the SimChain
 		try {
-			EventLog eventLog = logRequest(request, db, endpoint.getActor(), endpoint.getTransaction());
-			httpEnv.setEventLog(eventLog);
+			logRequest(request, event, endpoint.getActor(), endpoint.getTransaction());
 		} catch (Exception e) {
 			logger.error("Internal error logging request message", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error logging request message: " + e.getMessage());
@@ -122,7 +124,7 @@ public class SimServlet extends HttpServlet {
 	 * @throws HttpHeaderParseException
 	 * @throws ParseException
 	 */
-	EventLog logRequest(HttpServletRequest request, SimDb db, String actor, String transaction)
+	void logRequest(HttpServletRequest request, Event event, String actor, String transaction)
 			throws FileNotFoundException, IOException, HttpHeaderParseException, ParseException {
 		StringBuffer buf = new StringBuffer();
 		Map<String, String> headers = new HashMap<String, String>();
@@ -151,13 +153,9 @@ public class SimServlet extends HttpServlet {
 
 		buf.append("\r\n");
 
-		// Log the request header and body in the SimDb
-		db.putRequestHeaderFile(buf.toString().getBytes());
-
-		db.putRequestBodyFile(Io.getBytesFromInputStream(request.getInputStream()));
-
-		// return a reference to this event in the SimDb
-		return new EventLog(db.getEventDir());
+		// Log the request header and body in the SimDb event
+		event.putRequestHeader(buf.toString());
+		event.putRequestBody(Io.getBytesFromInputStream(request.getInputStream()));
 	}
 
 	void sendSoapFault(SoapEnvironment soapEnv, FaultCode faultCode, String reason) {

@@ -7,6 +7,7 @@ import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.registrySim.factory.DocumentRegistryActorFactory;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,9 @@ public class FactoryTest {
 					new TlsType[]  { TlsType.NOTLS }, 
 					new AsyncType[] { AsyncType.SYNC });
 		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		} catch (XdsInternalException e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -55,6 +59,9 @@ public class FactoryTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
+		} catch (XdsInternalException e) {
+			e.printStackTrace();
+			fail();
 		}
 		System.out.println(sim);
 		
@@ -78,6 +85,9 @@ public class FactoryTest {
 					new TlsType[]  { TlsType.TLS, TlsType.NOTLS }, 
 					new AsyncType[] { AsyncType.ASYNC, AsyncType.SYNC });
 		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		} catch (XdsInternalException e) {
 			e.printStackTrace();
 			fail();
 		}
