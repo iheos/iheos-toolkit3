@@ -15,8 +15,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SimpleAssetIteratorTest {
-	static File RootOfAllRepositories = new File("/e/artrep_test_resources/repositories"); 
-										// new File("/Users/bmajur/tmp/repositories");	
 	static Repository repos;
 	
 	// Create temp folder to be the External Cache
@@ -25,7 +23,6 @@ public class SimpleAssetIteratorTest {
 	
 	@BeforeClass
 	static public void initialize() throws RepositoryException {
-		new Configuration(RootOfAllRepositories);
 		
 		RepositoryFactory fact = new RepositoryFactory();
 		repos = fact.createRepository(

@@ -65,7 +65,12 @@ public class PresentationData implements IsSerializable, Serializable  {
 		Repository[] reposList = new Repository[reposCt];
 		
 		for (int cx=0; cx<reposCt; cx++) {
-			reposList[cx] = fact.getRepository(new SimpleId(repos[cx]));
+			try {
+				reposList[cx] = fact.getRepository(new SimpleId(repos[cx]));
+			} catch (RepositoryException e) {
+				e.printStackTrace();
+				; // incorrect or missing data repository config file 
+			}
 		}
 
 		AssetIterator iter = null;

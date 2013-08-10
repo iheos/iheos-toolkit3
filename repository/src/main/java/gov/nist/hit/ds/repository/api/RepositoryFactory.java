@@ -35,9 +35,11 @@ public class RepositoryFactory implements RepositoryManager {
 		
 		/*
 		 * Determine if this repository type is indexable
-		 */
+		 
 		boolean isIndexable = DbIndexContainer.isRepositoryIndexable(repositoryType);
-		
+		*/
+		boolean isIndexable = false; // Repository level indexing is not used 
+				
 		if (isIndexable) {
 			/*
 			 * This is an indexable version of the Simple Repository (interchangeable)  

@@ -31,6 +31,7 @@ public class SearchResultIterator implements AssetIterator  {
 	int totalRecords = -1;
 	int fetchedRecords = 0;
 	
+
 	/**
 	 * Retrieves a comprehensive search result of all indexed and non-indexed assets. 
 	 * Search results are provided in the same order as specified by the repository parameter, grouped by assetType.
@@ -43,14 +44,31 @@ public class SearchResultIterator implements AssetIterator  {
 	 */
 	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
 
-		DbIndexContainer dbc = new DbIndexContainer();
-		
-		crs = dbc.getAssetsBySearch(repositories, searchCriteria);
-		totalRecords = crs.size();
-		// System.out.println("total records in buffer: " + totalRecords);
+		init(repositories,searchCriteria,"");
+	}
+	/**
+	 * 
+	 * @param repositories
+	 * @param searchCriteria
+	 * @param orderBy
+	 * @throws RepositoryException
+	 */
+	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, String orderBy) throws RepositoryException {
 
+		init(repositories,searchCriteria,orderBy);
 	}
 	
+	private void init(Repository[] repositories, SearchCriteria searchCriteria,
+			String orderBy) {
+		DbIndexContainer dbc = new DbIndexContainer();
+		
+		crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy);
+		totalRecords = crs.size();
+		// System.out.println("total records in buffer: " + totalRecords);
+		
+		
+	}
+
 		
 	@Override
 	public boolean hasNextAsset() throws RepositoryException {

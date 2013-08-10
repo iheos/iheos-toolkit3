@@ -6,8 +6,6 @@ import gov.nist.hit.ds.tk.client.TkProps;
 
 import java.io.File;
 
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 
 public class Installation {
@@ -25,34 +23,24 @@ public class Installation {
 		if (me == null)
 			me = new Installation();
 		return me;
-	}
+	}	
 	
-	static public Installation installation(ServletContext servletContext) {
-		if (me == null)
-			me = new Installation();
-		if (me.warHome == null)
-			me.warHome = new File(servletContext.getRealPath("/"));
-		return me;
-	}
-
 	private Installation() {   }
-	
-	public PropertyManager getPropertyManager() {
-		return new PropertyManager(warHome + File.separator + "WEB-INF" + File.separator + "toolkit.properties");
-	}
+
+  public PropertyManager getPropertyManager() {
+                return new PropertyManager(warHome + File.separator + "WEB-INF" + File.separator + "toolkit.properties");
+        }
 	
 	public File getWarHome() { 
 		return warHome; 
-		}
-	
+	}
 	public void setWarHome(File warHome) { 
 		this.warHome = warHome; 
-		ExtendedPropertyManager.load(warHome);
-		}
-	
+	}
+	public File externalCache() { return externalCache; }
 	public File getExternalCache() { return externalCache; }
-	
-	public void setExternalCache(File externalCache) { 
+	public void setExternalCache(File externalCache) { externalCache(externalCache); }
+	public void externalCache(File externalCache) { 
 		this.externalCache = externalCache;
 		try {
 			tkProps = TkLoader.tkProps(installation().getTkPropsFile()); //TkLoader.tkProps(new File(Installation.installation().externalCache() + File.separator + "tk_props.txt"));
@@ -60,10 +48,11 @@ public class Installation {
 			logger.warn("Cannot load tk_props.txt file from External Cache");
 			tkProps = new TkProps();
 		}
+
 	}
-		
+	
 	public File getTkPropsFile() {
-		return new File(getExternalCache() + File.separator + "tk_props.txt");
+		return new File(Installation.installation().externalCache() + File.separator + "tk_props.txt");
 	}
 	
 	public boolean initialized() { return warHome != null && externalCache != null; }

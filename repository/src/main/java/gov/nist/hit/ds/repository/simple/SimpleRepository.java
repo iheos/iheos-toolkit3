@@ -133,6 +133,7 @@ public class SimpleRepository extends RepositoryImpl implements Flushable {
 			root.mkdirs();
 			FileWriter writer = new FileWriter(propFile);
 			properties.store(writer, "");
+			writer.close();
 		} catch (IOException e) {
 			throw new RepositoryException(RepositoryException.IO_ERROR, e);
 		}
