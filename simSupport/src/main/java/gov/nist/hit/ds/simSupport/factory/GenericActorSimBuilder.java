@@ -7,60 +7,55 @@ import gov.nist.hit.ds.actorTransaction.EndpointLabel;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
+import gov.nist.hit.ds.simSupport.client.ActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.ParamType;
-import gov.nist.hit.ds.simSupport.client.SimId;
-import gov.nist.hit.ds.simSupport.client.SimulatorConfig;
-import gov.nist.hit.ds.simSupport.client.SimulatorConfigElement;
-import gov.nist.hit.ds.simSupport.serializer.SimulatorSerializer;
+import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
-import gov.nist.hit.ds.utilities.other.UuidAllocator;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
-import java.io.IOException;
 import java.util.Date;
 
-public class GenericSimulatorBuilder {
-	SimulatorConfig sConfig;
+public class GenericActorSimBuilder {
+	ActorSimConfig sConfig;
 	ActorType actorType;
-
-	public GenericSimulatorBuilder buildGenericConfiguration(ActorType actorType) {
-		return buildGenericConfiguration((SimId)null, actorType);
+	Simulator sim;
+	
+	public GenericActorSimBuilder(Simulator sim) {
+		this.sim = sim;
 	}
-
-	public GenericSimulatorBuilder buildGenericConfiguration(SimId newId, ActorType actorType) {
+	
+	/**
+	 * Build a new ActorSim of type actorType.  The SimId belongs to the Simulator
+	 * that this ActorSim will be part of.
+	 * @param newId
+	 * @param actorType
+	 * @return
+	 * @throws XdsInternalException 
+	 */
+	public GenericActorSimBuilder buildGenericConfiguration(ActorType actorType)  {
 		this.actorType = actorType;
-		if (newId == null)
-			newId = getNewId();
-		sConfig = new SimulatorConfig(actorType).setId(newId).setExpiration(SimDb.getNewExpiration(SimulatorConfig.class));
+		sConfig = new ActorSimConfig(actorType).setExpiration(SimDb.getNewExpiration(ActorSimConfig.class));
 		configureBaseElements();
+		sim.add(sConfig);
 		return this;
 	}	
 
 	void configureBaseElements() {
 		sConfig.add(
-				new SimulatorConfigElement().
+				new ActorSimConfigElement().
 				setName(ATConfigLabels.creationTime).
 				setType(ParamType.TIME).
 				setValue(new Date().toString())
 				);
 		sConfig.add(
-				new SimulatorConfigElement().
+				new ActorSimConfigElement().
 				setName(ATConfigLabels.name).
 				setType(ParamType.TEXT).
 				setValue("Private").setEditable(true));
 	}
 	
-	public SimulatorConfig save() throws IOException {
-		return new SimulatorSerializer().save(sConfig);
-	}
-
-	SimId getNewId() {
-		String id = UuidAllocator.allocate();
-		String[] parts = id.split(":");
-		id = parts[2];
-		return new SimId(id);
-	}
-
-	public GenericSimulatorBuilder addEndpoint(String actorShortName, TransactionType transType, TlsType tls, AsyncType async) {
+	public GenericActorSimBuilder addEndpoint(String actorShortName, TransactionType transType, TlsType tls, AsyncType async) {
 
 		String contextName = Installation.installation().tkProps.get("toolkit.servlet.context", "xdstools3");
 
@@ -73,13 +68,13 @@ public class GenericSimulatorBuilder {
 				+ "/"  
 				+ contextName  
 				+ "/sim/" 
-				+ sConfig.getId() 
+				+ sim.getId() 
 				+ "/" +
 				actorShortName    
 				+ "/" 
 				+ transType.getCode();
 		sConfig.add(
-				new SimulatorConfigElement().
+				new ActorSimConfigElement().
 				setName(new EndpointLabel(transType,tls, async).get()).
 				setType(ParamType.ENDPOINT).
 				setValue(endpoint).setEditable(true)
@@ -87,18 +82,18 @@ public class GenericSimulatorBuilder {
 		return this;
 	}
 	
-	public GenericSimulatorBuilder addConfig(String confName, boolean value) {
+	public GenericActorSimBuilder addConfig(String confName, boolean value) {
 		sConfig.add(
-				new SimulatorConfigElement().
+				new ActorSimConfigElement().
 				setName(confName).
 				setValue(value).
 				setType(ParamType.BOOLEAN).setEditable(true));
 		return this;
 	}
 
-	public GenericSimulatorBuilder addConfig(String confName, String value) {
+	public GenericActorSimBuilder addConfig(String confName, String value) {
 		sConfig.add(
-				new SimulatorConfigElement().
+				new ActorSimConfigElement().
 				setName(confName).
 				setValue(value).
 				setType(ParamType.TEXT).setEditable(true));

@@ -2,9 +2,9 @@ package gov.nist.hit.ds.actorSim.servlet;
 
 
 
+import gov.nist.hit.ds.http.environment.Event;
 import gov.nist.hit.ds.http.parser.HttpMessage;
 import gov.nist.hit.ds.http.parser.HttpParseException;
-import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
@@ -36,9 +36,9 @@ public class SimServletFilter implements Filter {
 		
 		logger.debug("in doFilter");
 		
-		SimDb db = (SimDb) request.getAttribute("SimDb");
-		if (db == null) {
-			logger.error("SimServletFilter - request.getAttribute(\"SimDb\") failed");
+		Event event = (Event) request.getAttribute("Event");
+		if (event == null) {
+			logger.error("SimServletFilter - request.getAttribute(\"Event\") failed");
 			return;
 		}
 		
@@ -51,7 +51,7 @@ public class SimServletFilter implements Filter {
 		try {
 			messageHeader = hmsg.asMessage();
 		} catch (HttpParseException e) {
-			Io.stringToFile(db.getResponseHdrFile(), ExceptionUtil.exception_details(e));
+			Io.stringToFile(event.getResponseHeaderFile(), ExceptionUtil.exception_details(e));
 			return;
 		}
 		
@@ -62,7 +62,7 @@ public class SimServletFilter implements Filter {
 				messageHeader = messageHeader + "Content-Type: " + contentType + "\r\n\r\n";
 		}
 		
-		Io.stringToFile(db.getResponseHdrFile(), messageHeader);
+		Io.stringToFile(event.getResponseHeaderFile(), messageHeader);
 	}
 
 	public void init(FilterConfig arg0) throws ServletException {

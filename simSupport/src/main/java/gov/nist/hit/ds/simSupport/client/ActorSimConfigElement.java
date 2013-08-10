@@ -5,8 +5,9 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SimulatorConfigElement implements IsSerializable, Serializable {
+public class ActorSimConfigElement implements IsSerializable, Serializable {
 
+	private static final long serialVersionUID = -5290538505675778269L;
 	/**
 	 * Parameter name
 	 */
@@ -18,35 +19,35 @@ public class SimulatorConfigElement implements IsSerializable, Serializable {
 	String  value = null;
 	boolean editable = false;
 
-	public SimulatorConfigElement() {   }
+	public ActorSimConfigElement() {   }
 
-	public SimulatorConfigElement setType(ParamType type) {
+	public ActorSimConfigElement setType(ParamType type) {
 		this.type = type;
 		return this;
 	}
-	public SimulatorConfigElement setValue(String value) {
+	public ActorSimConfigElement setValue(String value) {
 		this.value = value;
 		return this;
 	}
-	public SimulatorConfigElement setName(String name) {
+	public ActorSimConfigElement setName(String name) {
 		this.name = name;
 		return this;
 	}
 
-	public SimulatorConfigElement(String name, ParamType type, Boolean value) {
+	public ActorSimConfigElement(String name, ParamType type, Boolean value) {
 		this.name = name;
 		this.type = type;
 		setValue(value);
 	}
 
-	public SimulatorConfigElement(String name, ParamType type, String value) {
+	public ActorSimConfigElement(String name, ParamType type, String value) {
 		this.name = name;
 		this.type = type;
 		setValue(value);
 	}
 
 	public boolean isEditable() { return editable; }
-	public SimulatorConfigElement setEditable(boolean v) { editable = v; return this; }
+	public ActorSimConfigElement setEditable(boolean v) { editable = v; return this; }
 
 	public String asString() {
 		return value;
@@ -71,7 +72,7 @@ public class SimulatorConfigElement implements IsSerializable, Serializable {
 		return buf.toString();
 	}
 
-	public SimulatorConfigElement setValue(Boolean o) { 
+	public ActorSimConfigElement setValue(Boolean o) { 
 		value = o.toString();
 		return this;
 	}
