@@ -3,8 +3,10 @@ package gov.nist.hit.ds.actorSim.factory;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.string.StringUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -35,20 +37,17 @@ sim2.name=name_of_sim_to_put_in_displays
  *
  */
 public class ActorSimFactory {
-	static final String configuredSimsFileName = "configuredSims.properties";
+	static String configuredSimsFileName = "configuredSims.properties";
+	static File configuredSimsFile = null;  // only used during testing
 	static Properties simConfig = new Properties();
 	static final Logger logger = Logger.getLogger(ActorSimFactory.class);
 
 	static final Map<String /* actor^trans code */, ActorFactory> factories = new HashMap<String, ActorFactory>();
-	
-	static {
-		try {
-			loadSims();
-		} catch (Exception e) {
-			logger.error("Error loading Simulator definitions", e);
-		} 
+
+	public void  setConfiguredSimsFile(File file) {
+		configuredSimsFile = file;
 	}
-	
+
 	public void run(String actorTransCode) throws SoapFaultException {
 		String actorCode = actorCode(actorTransCode);
 		String transCode = transactionCode(actorTransCode);
@@ -66,11 +65,11 @@ public class ActorSimFactory {
 					new ErrorContext("Invalid Transaction code in endpoint <" + transCode + ">")
 					);
 		}
-			
-		
+
+
 		ActorFactory factory = factories.get(actorTransCode); 
 		if (factory == null) {
-			String msg = "Do not have a Simulator for Actor Code <" + actorCode + "> and Transaction Code <" + transCode;
+			String msg = "Do not have a Simulator for Actor Code <" + actorCode + "> and Transaction Code <" + transCode + ">";
 			logger.error(msg);
 			throw new SoapFaultException(
 					null,
@@ -78,12 +77,22 @@ public class ActorSimFactory {
 					new ErrorContext(msg)
 					);
 		}
-		
+
 		factory.run();
 	}
 
-	static void loadSims() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		simConfig.load(new ActorSimFactory().getClass().getResourceAsStream(configuredSimsFileName));
+	/**
+	 * Initialize Simulator environment by loading the simulator definitions.
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	public void loadSims() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		if (configuredSimsFile != null)
+			simConfig.load(Io.getInputStreamFromFile(configuredSimsFile));
+		else
+			simConfig.load(new ActorSimFactory().getClass().getResourceAsStream(configuredSimsFileName));
 
 		Enumeration<?> pnames = simConfig.propertyNames();
 		ActorSimFactory factory = new ActorSimFactory();
@@ -92,9 +101,9 @@ public class ActorSimFactory {
 			if (!propName.endsWith("class"))
 				continue;
 			String className = simConfig.getProperty(propName);
-			String itemName = StringUtil.removePrefixEndingWith(propName, ".");
+			String itemName = StringUtil.firstPiece(propName, ".");
 			String simName = simConfig.getProperty(itemName + ".name");
-			String actorTransCode = simConfig.getProperty(itemName + "at");
+			String actorTransCode = simConfig.getProperty(itemName + ".at");
 			if (actorTransCode == null || actorTransCode.equals("")) {
 				logger.error("Parsing configuredSims.properties: item <" + itemName + "> has no <at> property - simulator not loaded");
 				continue;
@@ -125,23 +134,23 @@ public class ActorSimFactory {
 			factories.put(actorTransCode, instance);
 		}
 	}
-	
-	static String actorCode(String atCode) {
+
+	String actorCode(String atCode) {
 		if (!isValidActorTransactionCode(atCode)) 
 			return null;
-		return atCode.split("^")[0];
+		return atCode.split("\\^")[0];
 	}
-	
-	static String transactionCode(String atCode) {
+
+	String transactionCode(String atCode) {
 		if (!isValidActorTransactionCode(atCode)) 
 			return null;
-		return atCode.split("^")[1];
+		return atCode.split("\\^")[1];
 	}
-	
-	static boolean isValidActorTransactionCode(String atCode) {
+
+	boolean isValidActorTransactionCode(String atCode) {
 		if (atCode == null) return false;
 		if (atCode.equals("")) return false;
-		String[] parts = atCode.split("^");
+		String[] parts = atCode.split("\\^");
 		if (parts == null) return false;
 		if (parts.length != 2) return false;
 		if (parts[0].length() == 0) return false;

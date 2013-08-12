@@ -55,6 +55,7 @@ public class ActorSimConfigElement implements IsSerializable, Serializable {
 	
 	public ParamType getType() { return type; }
 	public String getValue() { return value; }
+	public String getName() { return name; }
 
 	public Boolean asBoolean() { 
 		return Boolean.valueOf(value);

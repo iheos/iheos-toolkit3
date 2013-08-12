@@ -3,7 +3,7 @@ package gov.nist.hit.ds.simSupport.validators;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
-import gov.nist.hit.ds.simSupport.datatypes.SimEndPoint;
+import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
@@ -11,7 +11,7 @@ import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
 public class SimEndPointParserSim extends SimComponentBase {
-	SimEndPoint simEndPoint;
+	SimEndpoint simEndPoint;
 	HttpParserBa httpParser;
 
 	@Inject
@@ -19,7 +19,7 @@ public class SimEndPointParserSim extends SimComponentBase {
 		this.httpParser = httpParser;
 	}
 
-	public SimEndPoint getEndPoint() {
+	public SimEndpoint getEndPoint() {
 		return simEndPoint;
 	}
 

@@ -2,8 +2,6 @@ package gov.nist.hit.ds.simSupport.engine;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -33,9 +31,15 @@ public class SimComponentLoader {
 		this.className = className;
 		this.parmMap = parmMap;
 	}
-	
-	void mkInstance() throws ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException {
-		clazz = getClass().getClassLoader().loadClass(className);
+
+	void mkInstance() throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimEngineClassLoaderException {
+		try {
+			clazz = getClass().getClassLoader().loadClass(className);
+		} catch (ClassNotFoundException e) {
+			throw new SimEngineClassLoaderException("SimComponentLoader: Cannot load SimComponent <" + className + ">");
+		} catch (NoClassDefFoundError e) {
+			throw new SimEngineClassLoaderException("SimComponentLoader: Cannot load SimComponent <" + className + ">");
+		}
 		Constructor<?> cons = clazz.getConstructor((Class<?>[]) null);
 		Object instance = cons.newInstance((Object[]) null);
 		if (instance instanceof SimComponent)
@@ -43,12 +47,12 @@ public class SimComponentLoader {
 		else
 			throw new SimEngineSubscriptionException("Component <" + className + "> does not implement the SimComponent interface");
 	}
-	
+
 	void injectParameters(Properties parmeterMap) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		new Injector(component, parmeterMap).run();
 	}
-	
-	public SimComponent load() throws SecurityException, IllegalArgumentException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException {
+
+	public SimComponent load() throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimEngineClassLoaderException {
 		mkInstance();
 		if (parmMap != null)
 			injectParameters(parmMap);

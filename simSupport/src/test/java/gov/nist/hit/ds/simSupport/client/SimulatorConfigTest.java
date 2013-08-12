@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.simSupport.datatypes.client;
+package gov.nist.hit.ds.simSupport.client;
 
 import static org.junit.Assert.*;
 import gov.nist.hit.ds.actorTransaction.ActorType;

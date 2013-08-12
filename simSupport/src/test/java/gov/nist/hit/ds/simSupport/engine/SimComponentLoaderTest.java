@@ -29,9 +29,6 @@ public class SimComponentLoaderTest {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			fail();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			fail();
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			fail();
@@ -45,6 +42,9 @@ public class SimComponentLoaderTest {
 			e.printStackTrace();
 			fail();
 		} catch (SimEngineSubscriptionException e) {
+			e.printStackTrace();
+			fail();
+		} catch (SimEngineClassLoaderException e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -69,9 +69,6 @@ public class SimComponentLoaderTest {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			fail();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			fail();
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			fail();
@@ -85,6 +82,9 @@ public class SimComponentLoaderTest {
 			e.printStackTrace();
 			fail();
 		} catch (SimEngineSubscriptionException e) {
+			e.printStackTrace();
+			fail();
+		} catch (SimEngineClassLoaderException e) {
 			e.printStackTrace();
 			fail();
 		}

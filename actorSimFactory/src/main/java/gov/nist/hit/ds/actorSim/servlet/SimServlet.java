@@ -9,7 +9,7 @@ import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.initialization.Installation;
-import gov.nist.hit.ds.simSupport.datatypes.SimEndPoint;
+import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.simSupport.validators.SimEndpointParser;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
@@ -44,6 +44,7 @@ public class SimServlet extends HttpServlet {
 	ServletConfig config;
 	File warHome;
 	File simDbDir;
+	String faultSent = null;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -53,6 +54,19 @@ public class SimServlet extends HttpServlet {
 		// is initialized.
 		warHome = new File(config.getServletContext().getRealPath("/"));
 		simDbDir = Installation.installation().propertyServiceManager().getSimDbDir();
+		try {
+			initSimEnvironment();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServletException("Error initializing Simulator Environment.", e);
+		} 
+	}
+	
+	/*
+	 * Initialize the simulator environment.  
+	 */
+	public void initSimEnvironment() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		new ActorSimFactory().loadSims();
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) {
@@ -63,7 +77,7 @@ public class SimServlet extends HttpServlet {
 		SoapEnvironment soapEnv = new SoapEnvironment(httpEnv);
 
 		// Parse endpoint to discover what simulator is the target of the request.
-		SimEndPoint endpoint;
+		SimEndpoint endpoint;
 		try {
 			endpoint = new SimEndpointParser().parse(uri);
 		} catch (Exception e) {
@@ -71,12 +85,11 @@ public class SimServlet extends HttpServlet {
 			return;
 		}
 
-		handleSimulatorInputTransaction(request, httpEnv, soapEnv, endpoint);
+		handleSimulatorInputTransaction(request, soapEnv, endpoint);
 	}
 
-	void handleSimulatorInputTransaction(HttpServletRequest request,
-			HttpEnvironment httpEnv, SoapEnvironment soapEnv,
-			SimEndPoint endpoint) {
+	public void handleSimulatorInputTransaction(HttpServletRequest request,
+			SoapEnvironment soapEnv, SimEndpoint endpoint) {
 		// DB space for this simulator - needed here so the request message can be logged
 		//    also made available through a request attribute
 		// TODO: the SimDb instance should be moved to the HttpEnvironment
@@ -90,7 +103,7 @@ public class SimServlet extends HttpServlet {
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment: " + e.getMessage());
 			return;
 		} 
-		httpEnv.setEventLog(event);
+		soapEnv.getHttpEnvironment().setEventLog(event);
 		request.setAttribute("Event", event); // SimServletFilter needs this to log response as it goes out on the wire
 
 		// This makes the input message available to the SimChain
@@ -145,7 +158,7 @@ public class SimServlet extends HttpServlet {
 		String ctype = headers.get("content-type");
 		if (ctype == null || ctype.equals(""))
 			throw new IOException("Content-Type header not found");
-		contentTypeHeader = new HttpHeader("content-type: " + ctype);
+		contentTypeHeader = new HttpHeader(ctype);
 		bodyCharset = contentTypeHeader.getParam("charset");
 
 		if (bodyCharset == null || bodyCharset.equals(""))
@@ -169,10 +182,12 @@ public class SimServlet extends HttpServlet {
 
 	void sendSoapFault(SoapEnvironment soapEnv, SoapFaultException sfe) {
 		try {
-			new SoapFault(soapEnv, sfe).send();
+			faultSent = new SoapFault(soapEnv, sfe).send();
 		}  catch (Exception ex) {
 			logger.error("Error sending SOAPFault", ex);
 		}
 	}
+	
+	public String getFaultSent() { return faultSent; }
 
 }

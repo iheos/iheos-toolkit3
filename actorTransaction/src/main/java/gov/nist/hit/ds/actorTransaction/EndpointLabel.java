@@ -17,6 +17,10 @@ public class EndpointLabel {
 		this.async = asyncType == AsyncType.ASYNC;
 	}
 	
+	/**
+	 * Parse a display lqbel for an endpoint.
+	 * @param label
+	 */
 	public EndpointLabel(String label) {
 		String[] parts = label.split("_");
 		try {
