@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
  *
  */
 public class HttpEnvironment {
-//	HttpServletRequest request = null;   // This is only used in test support
 	HttpServletResponse response = null;
 	OutputStream os = null;
 	Event eventLog;
@@ -23,15 +22,6 @@ public class HttpEnvironment {
 		this.response = response;
 		return this;
 	}
-	
-//	public HttpServletRequest getRequest() {
-//		return request;
-//	}
-//	
-//	public HttpEnvironment setRequest(HttpServletRequest request) {
-//		this.request = request;
-//		return this;
-//	}
 	
 	public OutputStream getOutputStream() throws Exception {
 		if (os == null) {

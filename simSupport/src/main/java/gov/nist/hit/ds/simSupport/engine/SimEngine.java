@@ -35,7 +35,7 @@ public class SimEngine implements MessageValidatorEngine {
 	SoapEnvironment soapEnvironment;
 	
 	
-	public SimEngine(String simChainResource) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException {
+	public SimEngine(String simChainResource) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SecurityException, IllegalArgumentException, SimEngineClassLoaderException {
 		this(new SimChainLoader(simChainResource).load());
 	}
 	

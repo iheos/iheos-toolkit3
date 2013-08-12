@@ -1,10 +1,17 @@
 package gov.nist.hit.ds.simSupport.validators;
 
-import gov.nist.hit.ds.simSupport.datatypes.SimEndPoint;
+import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
+import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
+import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
+import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
-public class SimEndpointParser {
+import org.apache.log4j.Logger;
 
-	public SimEndPoint parse(String endpoint) throws Exception {
+public class SimEndpointParser extends SimComponentBase {
+	static Logger logger = Logger.getLogger(SimEndpointParser.class);
+	SimEndpoint simEndpoint = null;
+	
+	public SimEndpoint parse(String endpoint) throws Exception {
 		String simid;
 		String actor;
 		String transaction;
@@ -21,10 +28,19 @@ public class SimEndpointParser {
 		simid = uriParts[simIndex + 1];
 		actor = uriParts[simIndex + 2];
 		transaction = uriParts[simIndex + 3];
-		return  new SimEndPoint().
+		simEndpoint = new SimEndpoint().
 				setSimId(simid).
 				setActor(actor).
 				setTransaction(transaction);
+		return simEndpoint;
+	}
+	
+	public SimEndpoint getSimEndpoint() {
+		return simEndpoint;
+	}
 
+	@Override
+	public void run(MessageValidatorEngine mve) throws SoapFaultException {
+		logger.trace("Run");
 	}
 }

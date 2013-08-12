@@ -6,6 +6,8 @@ import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.EndpointLabel;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
+import gov.nist.hit.ds.simSupport.validators.SimEndpointParser;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -108,7 +110,14 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		return null;
 	}
 	
-	public List<ActorSimConfigElement> findConfigs(TransactionType[] transTypes, TlsType[] tlsTypes, AsyncType[] asyncTypes) {
+	public String getEndpoint(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
+		List<ActorSimConfigElement> configs = findConfigs(new TransactionType[] { transType }, new TlsType[] { tlsType }, new AsyncType[] { asyncType });
+		if (configs.isEmpty())
+			return null;
+		return configs.get(0).getValue();
+	}
+	
+	public List<ActorSimConfigElement> findConfigs(TransactionType[] transTypes, TlsType[] tlsTypes, AsyncType[] asyncTypes)  {
 		List<ActorSimConfigElement> simEles = new ArrayList<ActorSimConfigElement>();
 		
 		class Tls {
@@ -133,9 +142,9 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 			}
 		}
 		
-		class Type {
+		class TTypes {
 			TransactionType[] transTypes;
-			Type(TransactionType[] types) { transTypes = types; }
+			TTypes(TransactionType[] types) { transTypes = types; }
 			boolean has(TransactionType type) {
 				if (transTypes == null) return false;
 				for (int i=0; i<transTypes.length; i++) 
@@ -144,15 +153,15 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 			}
 		}
 		
-		Type types = new Type(transTypes);
+		TTypes tTypes = new TTypes(transTypes);
 		Tls tls = new Tls(tlsTypes);
 		Async async = new Async(asyncTypes);
 		
 		for (ActorSimConfigElement ele : getAll()) {
 			if (ele.getType() != ParamType.ENDPOINT) continue;
-			String value = ele.getValue();
-			EndpointLabel elabel = new EndpointLabel(value);
-			if (!types.has(elabel.getTransType())) continue;
+			String name = ele.getName();
+			EndpointLabel elabel = new EndpointLabel(name);
+			if (!tTypes.has(elabel.getTransType())) continue;
 			if (!tls.has(elabel.getTlsType())) continue;
 			if (!async.has(elabel.getAsyncType())) continue;
 			simEles.add(ele);

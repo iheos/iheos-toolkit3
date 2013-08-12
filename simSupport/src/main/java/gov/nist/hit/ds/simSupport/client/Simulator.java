@@ -1,5 +1,9 @@
 package gov.nist.hit.ds.simSupport.client;
 
+import gov.nist.hit.ds.actorTransaction.AsyncType;
+import gov.nist.hit.ds.actorTransaction.TlsType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +65,17 @@ public class Simulator  implements Serializable, IsSerializable  {
 	public int size() { return configs.size(); }
 
 	public ActorSimConfig getConfig(int i) { return configs.get(i); }
+	
+	public String getEndpoint(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
+		for (ActorSimConfig config : configs) {
+			String endpoint = config.getEndpoint(transType, tlsType, asyncType);
+			if (endpoint != null)
+				return endpoint;
+		}
+		return null;
+	}
+	
+	
 
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
