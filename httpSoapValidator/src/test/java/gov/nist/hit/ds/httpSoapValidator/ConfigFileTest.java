@@ -8,7 +8,7 @@ import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoader;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
-import gov.nist.hit.ds.simSupport.engine.SimEngineClassLoaderException;
+import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
 import gov.nist.hit.ds.simSupport.engine.SimStep;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
@@ -70,7 +70,7 @@ public class ConfigFileTest {
 		} catch (SimEngineSubscriptionException e) {
 			e.printStackTrace();
 			fail();
-		} catch (SimEngineClassLoaderException e) {
+		} catch (SimChainLoaderException e) {
 			e.printStackTrace();
 			fail();
 		}

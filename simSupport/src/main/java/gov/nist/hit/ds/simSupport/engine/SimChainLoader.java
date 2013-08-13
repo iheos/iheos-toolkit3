@@ -18,7 +18,7 @@ public class SimChainLoader {
 	public SimChain load() throws IOException,
 	NoSuchMethodException,
 	InstantiationException, IllegalAccessException,
-	InvocationTargetException, SimEngineSubscriptionException, SecurityException, IllegalArgumentException, SimEngineClassLoaderException {
+	InvocationTargetException, SimEngineSubscriptionException, SecurityException, IllegalArgumentException, SimChainLoaderException {
 		List<SimStep> simSteps = new ArrayList<SimStep>();		
 
 		ValidatorDefLoader vloader = new ValidatorDefLoader(chainDefResource);
@@ -29,8 +29,8 @@ public class SimChainLoader {
 			SimComponent component = null;
 			try {
 				component = loader.load();
-			} catch (SimEngineClassLoaderException e) {
-				throw new SimEngineClassLoaderException("While loading SimChain <" + chainDefResource + "> ...\n" + e.getMessage());
+			} catch (SimChainLoaderException e) {
+				throw new SimChainLoaderException("While loading SimChain <" + chainDefResource + "> ...\n" + e.getMessage());
 			}
 
 			SimStep step = new SimStep().

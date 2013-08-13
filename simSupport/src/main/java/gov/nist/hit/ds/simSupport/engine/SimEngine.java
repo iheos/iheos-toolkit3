@@ -35,7 +35,7 @@ public class SimEngine implements MessageValidatorEngine {
 	SoapEnvironment soapEnvironment;
 	
 	
-	public SimEngine(String simChainResource) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SecurityException, IllegalArgumentException, SimEngineClassLoaderException {
+	public SimEngine(String simChainResource) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SecurityException, IllegalArgumentException, SimChainLoaderException {
 		this(new SimChainLoader(simChainResource).load());
 	}
 	
@@ -212,7 +212,7 @@ public class SimEngine implements MessageValidatorEngine {
 	 */
 	void matchPubSub(SimComponent subscriptionObject) throws SimEngineSubscriptionException {
 		Class<?> valClass = subscriptionObject.getClass();
-		System.out.println("Subscriber <" + valClass.getName() + ">");
+		System.out.println(valClass.getName());
 		Method[] valMethods = valClass.getMethods();
 		// For all setters in this subscriptionObject
 		for (int subMethI=0; subMethI<valMethods.length; subMethI++) {

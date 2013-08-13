@@ -10,8 +10,11 @@ import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
+import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
+import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.simSupport.validators.SimEndpointParser;
+import gov.nist.hit.ds.soapSupport.core.Endpoint;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.core.SoapFault;
@@ -21,6 +24,7 @@ import gov.nist.hit.ds.utilities.io.Io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +69,7 @@ public class SimServlet extends HttpServlet {
 	/*
 	 * Initialize the simulator environment.  
 	 */
-	public void initSimEnvironment() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public void initSimEnvironment() throws FileNotFoundException, SecurityException, IllegalArgumentException, IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimChainLoaderException {
 		new ActorSimFactory().loadSims();
 	}
 
@@ -77,38 +81,39 @@ public class SimServlet extends HttpServlet {
 		SoapEnvironment soapEnv = new SoapEnvironment(httpEnv);
 
 		// Parse endpoint to discover what simulator is the target of the request.
-		SimEndpoint endpoint;
+		SimEndpoint simEndpoint;
 		try {
-			endpoint = new SimEndpointParser().parse(uri);
+			simEndpoint = new SimEndpointParser().parse(uri);
 		} catch (Exception e) {
 			sendSoapFault(soapEnv, FaultCode.EndpointUnavailable, "Cannot parse endpoint <" + uri + "> " + e.getMessage());
 			return;
 		}
 
-		handleSimulatorInputTransaction(request, soapEnv, endpoint);
+		handleSimulatorInputTransaction(request, soapEnv, simEndpoint, new Endpoint().setEndpoint(uri));
 	}
 
 	public void handleSimulatorInputTransaction(HttpServletRequest request,
-			SoapEnvironment soapEnv, SimEndpoint endpoint) {
+			SoapEnvironment soapEnv, SimEndpoint simEndpoint, Endpoint endpoint) {
 		// DB space for this simulator - needed here so the request message can be logged
 		//    also made available through a request attribute
 		// TODO: the SimDb instance should be moved to the HttpEnvironment
 		SimDb db;
 		Event event;
 		try {
-			db = new SimDb(endpoint.getSimId());
-			event = db.createEvent(ActorType.findActor(endpoint.getActor()), endpoint.getTransaction());
+			db = new SimDb(simEndpoint.getSimId());
+			event = db.createEvent(ActorType.findActor(simEndpoint.getActor()), simEndpoint.getTransaction());
 		} catch (Exception e) {
 			logger.error("Internal error initializing simulator environment", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment: " + e.getMessage());
 			return;
 		} 
 		soapEnv.getHttpEnvironment().setEventLog(event);
+		soapEnv.setEndpoint(endpoint);
 		request.setAttribute("Event", event); // SimServletFilter needs this to log response as it goes out on the wire
 
 		// This makes the input message available to the SimChain
 		try {
-			logRequest(request, event, endpoint.getActor(), endpoint.getTransaction());
+			logRequest(request, event, simEndpoint.getActor(), simEndpoint.getTransaction());
 		} catch (Exception e) {
 			logger.error("Internal error logging request message", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error logging request message: " + e.getMessage());
@@ -119,9 +124,20 @@ public class SimServlet extends HttpServlet {
 		// Actor and Transaction codes.  These codes came from the endpoint used to contact this 
 		// Servlet.
 		try {
-			new ActorSimFactory().run(endpoint.getActor() + "^" + endpoint.getTransaction());
+			new ActorSimFactory().run(simEndpoint.getActor() + "^" + simEndpoint.getTransaction(), soapEnv);
 		} catch (SoapFaultException sfe) {
 			sendSoapFault(soapEnv, sfe);
+		} catch (SimEngineSubscriptionException e) {
+			sendSoapFault(
+					soapEnv,
+					new SoapFaultException(
+							null,
+							FaultCode.Receiver,
+							"Problem with SimChain definition for Actor <" + simEndpoint.getActor() 
+							+ "> and Transaction <" + simEndpoint.getTransaction() + "> " +
+									e.getMessage()
+							)
+					);
 		}
 	}
 
@@ -152,7 +168,7 @@ public class SimServlet extends HttpServlet {
 			if (name.equals("Transfer-Encoding"))
 				continue;  // log will not include transfer encoding so don't include this
 			headers.put(name.toLowerCase(), value);
-			buf.append(name).append(": ").append(value).append("\r\n");
+			buf.append(value).append("\r\n");
 		}
 		//		bodyCharset = request.getCharacterEncoding();
 		String ctype = headers.get("content-type");

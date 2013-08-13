@@ -32,13 +32,13 @@ public class SimComponentLoader {
 		this.parmMap = parmMap;
 	}
 
-	void mkInstance() throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimEngineClassLoaderException {
+	void mkInstance() throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimChainLoaderException {
 		try {
 			clazz = getClass().getClassLoader().loadClass(className);
 		} catch (ClassNotFoundException e) {
-			throw new SimEngineClassLoaderException("SimComponentLoader: Cannot load SimComponent <" + className + ">");
+			throw new SimChainLoaderException("SimComponentLoader: Cannot load SimComponent <" + className + ">");
 		} catch (NoClassDefFoundError e) {
-			throw new SimEngineClassLoaderException("SimComponentLoader: Cannot load SimComponent <" + className + ">");
+			throw new SimChainLoaderException("SimComponentLoader: Cannot load SimComponent <" + className + ">");
 		}
 		Constructor<?> cons = clazz.getConstructor((Class<?>[]) null);
 		Object instance = cons.newInstance((Object[]) null);
@@ -52,7 +52,7 @@ public class SimComponentLoader {
 		new Injector(component, parmeterMap).run();
 	}
 
-	public SimComponent load() throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimEngineClassLoaderException {
+	public SimComponent load() throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimChainLoaderException {
 		mkInstance();
 		if (parmMap != null)
 			injectParameters(parmMap);

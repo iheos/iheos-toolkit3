@@ -31,6 +31,8 @@ public abstract class AbstractLogLoader extends SimComponentBase {
 	
 	void load()   {
 		logger.trace("Loading from <" + dir + ">");
+		if (header != null && body != null)
+			return;
 		try {
 			header = Io.stringFromFile(new File(dir, "request_hdr.txt"));
 			if (new File(dir, "request_body.txt").exists())
