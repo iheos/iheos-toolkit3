@@ -18,7 +18,7 @@ public class DocumentRegistryActorRegisterTransactionFactory implements ActorFac
 
 	@Override
 	public void run() throws SoapFaultException {
-		logger.trace("Run");
+		logger.trace("DocumentRegistryActorRegisterTransactionFactory");
 		try {
 			new Launcher().launch("xdsRegistryRegisterSim.properties");
 		} catch (Exception e) {

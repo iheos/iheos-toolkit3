@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.soapSupport.core;
 
+import gov.nist.hit.ds.http.environment.Event;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 
 import java.io.OutputStream;
@@ -20,6 +21,16 @@ public class SoapEnvironment {
 	String responseAction = null;
 	String messageId = null;
 	HttpEnvironment httpEnv;
+	Endpoint endpoint;
+	
+	public SoapEnvironment setEndpoint(Endpoint endpoint) {
+		this.endpoint = endpoint;
+		return this;
+	}
+	
+	public Endpoint getEndpoint() {
+		return endpoint;
+	}
 	
 	public SoapEnvironment(HttpEnvironment httpEnv) {
 		this.httpEnv = httpEnv;
@@ -61,5 +72,11 @@ public class SoapEnvironment {
 	}
 	public OutputStream getOutputStream() throws Exception {
 		return httpEnv.getOutputStream();
+	}
+	
+	public Event getEvent() {
+		if (httpEnv == null)
+			return null;
+		return httpEnv.getEventLog();
 	}
 }

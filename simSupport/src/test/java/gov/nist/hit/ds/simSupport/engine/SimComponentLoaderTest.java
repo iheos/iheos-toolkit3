@@ -44,7 +44,7 @@ public class SimComponentLoaderTest {
 		} catch (SimEngineSubscriptionException e) {
 			e.printStackTrace();
 			fail();
-		} catch (SimEngineClassLoaderException e) {
+		} catch (SimChainLoaderException e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -84,7 +84,7 @@ public class SimComponentLoaderTest {
 		} catch (SimEngineSubscriptionException e) {
 			e.printStackTrace();
 			fail();
-		} catch (SimEngineClassLoaderException e) {
+		} catch (SimChainLoaderException e) {
 			e.printStackTrace();
 			fail();
 		}

@@ -10,7 +10,7 @@ import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoader;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
-import gov.nist.hit.ds.simSupport.engine.SimEngineClassLoaderException;
+import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 
@@ -28,11 +28,11 @@ public class Launcher {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 * @throws SimEngineSubscriptionException
-	 * @throws SimEngineClassLoaderException 
+	 * @throws SimChainLoaderException 
 	 * @throws IllegalArgumentException 
 	 * @throws SecurityException 
 	 */
-	public Launcher launch(String chainDef) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SecurityException, IllegalArgumentException, SimEngineClassLoaderException {
+	public Launcher launch(String chainDef) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SecurityException, IllegalArgumentException, SimChainLoaderException {
 		SimChain simChain = new SimChainLoader(chainDef).load();
 		
 		simChain.setBase(new SoapEnvironment(new HttpEnvironment().setResponse(new HttpServletResponseMock())));

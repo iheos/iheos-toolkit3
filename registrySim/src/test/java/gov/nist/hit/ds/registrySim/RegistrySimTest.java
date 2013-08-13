@@ -18,13 +18,17 @@ import gov.nist.hit.ds.registrySim.factory.DocumentRegistryActorFactory;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
+import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
+import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
 import gov.nist.hit.ds.simSupport.loader.ByConstructorLogLoader;
 import gov.nist.hit.ds.simSupport.validators.SimEndpointParser;
+import gov.nist.hit.ds.soapSupport.core.Endpoint;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -42,20 +46,35 @@ public class RegistrySimTest {
 		File warHome = new File("src/test/resources/registry");
 		Installation.installation().setWarHome(warHome);
 		ExtendedPropertyManager.load(warHome);
-		new ActorSimFactory().setConfiguredSimsFile(new File("src/test/resources/configuredSims.properties"));
+		new ActorSimFactory().setConfiguredSimsFile(new File("src/test/resources/configuredActorSims.properties"));
 		servlet = new SimServlet();
 		try {
-			servlet.initSimEnvironment();
+			servlet.initSimEnvironment(); 
 		} catch (IOException e) {
-			e.printStackTrace();
-			fail();
-		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			fail();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 			fail();
 		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			fail();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+			fail();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			fail();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+			fail();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+			fail();
+		} catch (SimEngineSubscriptionException e) {
+			e.printStackTrace();
+			fail();
+		} catch (SimChainLoaderException e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -77,11 +96,12 @@ public class RegistrySimTest {
 			String endpointString = sim.getEndpoint(TransactionType.REGISTER, TlsType.NOTLS, AsyncType.SYNC);
 			assertFalse(endpointString == null);
 			SimEndpoint simEndpoint = new SimEndpointParser().parse(endpointString);
-
+			Endpoint endpoint = new Endpoint().setEndpoint(endpointString);
 			HttpEnvironment httpEnv = new HttpEnvironment().setResponse(new HttpServletResponseMock());
 			SoapEnvironment soapEnv = new SoapEnvironment(httpEnv);
+			soapEnv.setEndpoint(endpoint);
 
-			servlet.handleSimulatorInputTransaction(request, soapEnv, simEndpoint);
+			servlet.handleSimulatorInputTransaction(request, soapEnv, simEndpoint, endpoint);
 			assertTrue(servlet.getFaultSent() == null);
 		} catch (HttpParseException e) {
 			e.printStackTrace();

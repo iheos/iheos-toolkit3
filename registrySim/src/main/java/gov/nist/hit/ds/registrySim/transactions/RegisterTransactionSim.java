@@ -35,7 +35,7 @@ public class RegisterTransactionSim extends SimComponentBase {
 	}
 	
 	void validateEndpoint() throws SoapFaultException {
-		if (!"rb".equals(simEndPoint.getTransaction()))
+		if (!"r.b".equals(simEndPoint.getTransaction()))
 				throw new SoapFaultException(
 						er,
 						FaultCode.Receiver,
@@ -45,7 +45,7 @@ public class RegisterTransactionSim extends SimComponentBase {
 
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
-		logger.trace("Run");
+		logger.trace("Run RegisterTransactionSim");
 		validateEndpoint();
 	}
 
