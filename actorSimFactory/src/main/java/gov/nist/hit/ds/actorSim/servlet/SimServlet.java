@@ -66,8 +66,8 @@ public class SimServlet extends HttpServlet {
 		} 
 	}
 	
-	/*
-	 * Initialize the simulator environment.  
+	/**
+	 * Initialize the simulator environment. Called by init() and unit tests.  
 	 */
 	public void initSimEnvironment() throws FileNotFoundException, SecurityException, IllegalArgumentException, IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimChainLoaderException {
 		new ActorSimFactory().loadSims();

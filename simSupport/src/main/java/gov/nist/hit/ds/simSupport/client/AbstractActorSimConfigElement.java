@@ -5,49 +5,24 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class ActorSimConfigElement implements IsSerializable, Serializable {
+abstract public class AbstractActorSimConfigElement implements IsSerializable, Serializable {
 
 	private static final long serialVersionUID = -5290538505675778269L;
-	/**
-	 * Parameter name
-	 */
-	public String name = null;
-	/**
-	 * Parameter type
-	 */
+
+	String name = null;
 	ParamType type;
 	String  value = null;
 	boolean editable = false;
 
-	public ActorSimConfigElement() {   }
+	public AbstractActorSimConfigElement() {   }
 
-	public ActorSimConfigElement setType(ParamType type) {
+	public AbstractActorSimConfigElement setType(ParamType type) {
 		this.type = type;
 		return this;
-	}
-	public ActorSimConfigElement setValue(String value) {
-		this.value = value;
-		return this;
-	}
-	public ActorSimConfigElement setName(String name) {
-		this.name = name;
-		return this;
-	}
-
-	public ActorSimConfigElement(String name, ParamType type, Boolean value) {
-		this.name = name;
-		this.type = type;
-		setValue(value);
-	}
-
-	public ActorSimConfigElement(String name, ParamType type, String value) {
-		this.name = name;
-		this.type = type;
-		setValue(value);
 	}
 
 	public boolean isEditable() { return editable; }
-	public ActorSimConfigElement setEditable(boolean v) { editable = v; return this; }
+	public AbstractActorSimConfigElement setEditable(boolean v) { editable = v; return this; }
 
 	public String asString() {
 		return value;
@@ -73,7 +48,12 @@ public class ActorSimConfigElement implements IsSerializable, Serializable {
 		return buf.toString();
 	}
 
-	public ActorSimConfigElement setValue(Boolean o) { 
+	public AbstractActorSimConfigElement setValue(String value) {
+		this.value = value;
+		return this;
+	}
+
+	public AbstractActorSimConfigElement setValue(Boolean o) { 
 		value = o.toString();
 		return this;
 	}

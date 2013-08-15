@@ -8,9 +8,11 @@ import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
-import gov.nist.hit.ds.simSupport.client.ActorSimConfigElement;
-import gov.nist.hit.ds.simSupport.client.ParamType;
+import gov.nist.hit.ds.simSupport.client.BooleanActorSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.EndpointActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.Simulator;
+import gov.nist.hit.ds.simSupport.client.TextActorSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.TimeActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 
@@ -43,16 +45,11 @@ public class GenericActorSimBuilder {
 
 	void configureBaseElements() {
 		sConfig.add(
-				new ActorSimConfigElement().
-				setName(ATConfigLabels.creationTime).
-				setType(ParamType.TIME).
-				setValue(new Date().toString())
+				new TimeActorSimConfigElement(ATConfigLabels.creationTime, new Date())
 				);
 		sConfig.add(
-				new ActorSimConfigElement().
-				setName(ATConfigLabels.name).
-				setType(ParamType.TEXT).
-				setValue("Private").setEditable(true));
+				new TextActorSimConfigElement(ATConfigLabels.name, "Private").setEditable(true)
+				);
 	}
 	
 	public GenericActorSimBuilder addEndpoint(String actorShortName, TransactionType transType, TlsType tls, AsyncType async) {
@@ -74,29 +71,20 @@ public class GenericActorSimBuilder {
 				+ "/" 
 				+ transType.getCode();
 		sConfig.add(
-				new ActorSimConfigElement().
-				setName(new EndpointLabel(transType,tls, async).get()).
-				setType(ParamType.ENDPOINT).
-				setValue(endpoint).setEditable(true)
+				new EndpointActorSimConfigElement(new EndpointLabel(transType,tls, async), endpoint).setEditable(true)
 				);
 		return this;
 	}
 	
 	public GenericActorSimBuilder addConfig(String confName, boolean value) {
 		sConfig.add(
-				new ActorSimConfigElement().
-				setName(confName).
-				setValue(value).
-				setType(ParamType.BOOLEAN).setEditable(true));
+				new BooleanActorSimConfigElement(confName, value).setEditable(true));
 		return this;
 	}
 
 	public GenericActorSimBuilder addConfig(String confName, String value) {
 		sConfig.add(
-				new ActorSimConfigElement().
-				setName(confName).
-				setValue(value).
-				setType(ParamType.TEXT).setEditable(true));
+				new TextActorSimConfigElement(confName, value).setEditable(true));
 		return this;
 	}
 	
