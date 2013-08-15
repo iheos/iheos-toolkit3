@@ -30,7 +30,7 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	ActorType actorType;
 	Date expires;
 	boolean isExpired = false;
-	List<ActorSimConfigElement> elements  = new ArrayList<ActorSimConfigElement>();
+	List<AbstractActorSimConfigElement> elements  = new ArrayList<AbstractActorSimConfigElement>();
 	
 	
 	public ActorSimConfig setExpiration(Date expires) {
@@ -54,7 +54,7 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		
 		buf.append("ActorSimulatorConfig:");
 		buf.append("\n\telements=[");
-		for (ActorSimConfigElement asce : elements) {
+		for (AbstractActorSimConfigElement asce : elements) {
 			buf.append("\n\t\t").append(asce);
 		}
 		
@@ -65,12 +65,12 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		this.actorType = actorType;
 	}
 	
-	public ActorSimConfig add(List<ActorSimConfigElement> elementList) {
+	public ActorSimConfig add(List<AbstractActorSimConfigElement> elementList) {
 		elements.addAll(elementList);
 		return this;
 	}
 
-	public ActorSimConfig add(ActorSimConfigElement confElement) {
+	public ActorSimConfig add(AbstractActorSimConfigElement confElement) {
 		elements.add(confElement);
 		return this;
 	}
@@ -79,31 +79,31 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		return expires;
 	}
 	
-	public List<ActorSimConfigElement> getFixed() {
-		List<ActorSimConfigElement> fixed = new ArrayList<ActorSimConfigElement>();
-		for (ActorSimConfigElement ele : elements) {
+	public List<AbstractActorSimConfigElement> getFixed() {
+		List<AbstractActorSimConfigElement> fixed = new ArrayList<AbstractActorSimConfigElement>();
+		for (AbstractActorSimConfigElement ele : elements) {
 			if (!ele.isEditable())
 				fixed.add(ele);
 		}
 		return fixed;
 	}
 	
-	public List<ActorSimConfigElement> getAll() { return elements; }
+	public List<AbstractActorSimConfigElement> getAll() { return elements; }
 	
-	public List<ActorSimConfigElement> getEditable() {
-		List<ActorSimConfigElement> user = new ArrayList<ActorSimConfigElement>();
-		for (ActorSimConfigElement ele : elements) {
+	public List<AbstractActorSimConfigElement> getEditable() {
+		List<AbstractActorSimConfigElement> user = new ArrayList<AbstractActorSimConfigElement>();
+		for (AbstractActorSimConfigElement ele : elements) {
 			if (ele.isEditable())
 				user.add(ele);
 		}
 		return user;
 	}
 	
-	public ActorSimConfigElement getByName(String name) {
+	public AbstractActorSimConfigElement getByName(String name) {
 		if (name == null)
 			return null;
 		
-		for (ActorSimConfigElement ele : elements) {
+		for (AbstractActorSimConfigElement ele : elements) {
 			if (name.equals(ele.name))
 				return ele;
 		}
@@ -111,14 +111,14 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	}
 	
 	public String getEndpoint(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
-		List<ActorSimConfigElement> configs = findConfigs(new TransactionType[] { transType }, new TlsType[] { tlsType }, new AsyncType[] { asyncType });
+		List<AbstractActorSimConfigElement> configs = findConfigs(new TransactionType[] { transType }, new TlsType[] { tlsType }, new AsyncType[] { asyncType });
 		if (configs.isEmpty())
 			return null;
 		return configs.get(0).getValue();
 	}
 	
-	public List<ActorSimConfigElement> findConfigs(TransactionType[] transTypes, TlsType[] tlsTypes, AsyncType[] asyncTypes)  {
-		List<ActorSimConfigElement> simEles = new ArrayList<ActorSimConfigElement>();
+	public List<AbstractActorSimConfigElement> findConfigs(TransactionType[] transTypes, TlsType[] tlsTypes, AsyncType[] asyncTypes)  {
+		List<AbstractActorSimConfigElement> simEles = new ArrayList<AbstractActorSimConfigElement>();
 		
 		class Tls {
 			TlsType[] tlsTypes;
@@ -157,7 +157,7 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		Tls tls = new Tls(tlsTypes);
 		Async async = new Async(asyncTypes);
 		
-		for (ActorSimConfigElement ele : getAll()) {
+		for (AbstractActorSimConfigElement ele : getAll()) {
 			if (ele.getType() != ParamType.ENDPOINT) continue;
 			String name = ele.getName();
 			EndpointLabel elabel = new EndpointLabel(name);
@@ -171,7 +171,7 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	}
 	
 	public void deleteByName(String name) {
-		ActorSimConfigElement ele = getByName(name);
+		AbstractActorSimConfigElement ele = getByName(name);
 		if (ele != null)
 			elements.remove(ele);
 	}	

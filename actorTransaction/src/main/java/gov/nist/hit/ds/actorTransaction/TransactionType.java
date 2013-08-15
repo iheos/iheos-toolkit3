@@ -72,10 +72,10 @@ public enum TransactionType  implements IsSerializable, Serializable {
 	static public TransactionType find(String s) {
 		if (s == null) return null;
 		for (TransactionType t : values()) {
-			if (s.equals(t.name)) return t;
-			if (s.equals(t.shortName)) return t;
-			if (s.equals(t.code)) return t;
-			if (s.equals(t.asyncCode)) return t;
+			if (s.equalsIgnoreCase(t.name)) return t;
+			if (s.equalsIgnoreCase(t.shortName)) return t;
+			if (s.equalsIgnoreCase(t.code)) return t;
+			if (s.equalsIgnoreCase(t.asyncCode)) return t;
 		}
 		return null;
 	}

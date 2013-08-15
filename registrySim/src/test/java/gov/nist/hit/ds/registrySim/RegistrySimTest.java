@@ -118,10 +118,6 @@ public class RegistrySimTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
-		} catch (Throwable e) {
-			e.printStackTrace();
-			fail();
-		}
-
+		} 
 	}
 }
