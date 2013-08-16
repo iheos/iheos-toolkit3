@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.actorSim.factory;
+package gov.nist.hit.ds.actorSimFactory.factory;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.simSupport.engine.SimChain;

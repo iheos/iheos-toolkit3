@@ -163,6 +163,10 @@ public class SimDb {
 		return new File(simDir.toString() + File.separatorChar + "simctl.ser");
 	}
 
+	public File getSimulatorJsonControlFile() {
+		return new File(simDir.toString() + File.separatorChar + "simctl.json");
+	}
+
 	public static String getTransactionDirName(TransactionType tt)  {
 		return tt.getShortName();
 	}

@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.actorSim.servlet;
+package gov.nist.hit.ds.actorSimFactory.servlet;
 
 import java.util.HashMap;
 import java.util.Map;
