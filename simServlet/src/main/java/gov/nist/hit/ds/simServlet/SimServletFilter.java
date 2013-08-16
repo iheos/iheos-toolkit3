@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.actorSimFactory.servlet;
+package gov.nist.hit.ds.simServlet;
 
 
 

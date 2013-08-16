@@ -115,6 +115,7 @@
   	<module>environment</module>
   	<module>simulatorIntegrationTest</module>
         <module>logBrowser</module>
+        <module>simServlet</module>
   </modules>
   <build>
   <plugins>
