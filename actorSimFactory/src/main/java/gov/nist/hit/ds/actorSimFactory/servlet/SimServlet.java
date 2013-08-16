@@ -1,6 +1,6 @@
-package gov.nist.hit.ds.actorSim.servlet;
+package gov.nist.hit.ds.actorSimFactory.servlet;
 
-import gov.nist.hit.ds.actorSim.factory.ActorSimFactory;
+import gov.nist.hit.ds.actorSimFactory.factory.ActorSimFactory;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.http.environment.Event;

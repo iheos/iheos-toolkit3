@@ -22,10 +22,35 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+	<classpathentry exported="true" kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="target/classes"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/actorSimFactory"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/actorTransaction"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/docRef"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dsValidator"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/environment"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/errorRecording"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/http"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/httpSoapValidator"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/initialization"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/logBrowser"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/registryMetadata"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/registryMetadataValidator"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/registryMsgFormats"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/registrySim"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/registrySupport"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/repository"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/simSupport"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/simulatorIntegrationTest"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/siteManagement"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/soapSupport"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tk"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/utilities"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/valSupport"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/xdsException"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/xmlValidator"/>
+	<classpathentry kind="output" path="src/main/webapp/WEB-INF/classes"/>
 </classpath>
