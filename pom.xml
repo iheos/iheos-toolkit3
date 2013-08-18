@@ -111,7 +111,6 @@
   	<module>actorSimFactory</module>
   	<module>repository</module>
   	<module>xdstools3</module>
-  	<module>environment</module>
   	<module>simulatorIntegrationTest</module>
         <module>logBrowser</module>
         <module>simServlet</module>
