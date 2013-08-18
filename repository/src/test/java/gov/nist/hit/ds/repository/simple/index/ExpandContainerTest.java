@@ -2,7 +2,7 @@ package gov.nist.hit.ds.repository.simple.index;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;

@@ -5,8 +5,9 @@ import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.environment.Environment;
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.initialization.environment.Environment;
+import gov.nist.hit.ds.initialization.installation.ExternalCacheManager;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.factory.GenericActorSimBuilder;
@@ -48,10 +49,8 @@ public class DocumentRegistryActorFactory {
 		 * the current selected environment.  Better selection will have to come from the user
 		 * interface.
 		 */
-		String defaultEnvironmentName = Installation.installation().getPropertyManager().getDefaultEnvironmentName();
-		Environment defaultEnvironment = new Environment(Installation.installation().environmentFile());
-		File codesFile = defaultEnvironment.getCodesFile(defaultEnvironmentName);
-		builder.addConfig(ATConfigLabels.codesEnvironment, codesFile.toString());
+		builder.addConfig(ATConfigLabels.codesEnvironment, 
+				Installation.installation().getDefaultCodesFile().toString());
 		
 		factory.save();
 

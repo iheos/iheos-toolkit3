@@ -5,8 +5,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
-import gov.nist.hit.ds.initialization.ExtendedPropertyManager;
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.initialization.installation.ExtendedPropertyManager;
+import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.registrySim.factory.DocumentRegistryActorFactory;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
@@ -21,7 +22,7 @@ import org.junit.Test;
 public class FactoryTest {
 
 	@Before
-	public void init() {
+	public void init() throws InitializationFailedException {
 		Installation.installation().setExternalCache(new File("src/test/resources/external_cache"));
 		
 		File warHome = new File("src/test/resources/registry");

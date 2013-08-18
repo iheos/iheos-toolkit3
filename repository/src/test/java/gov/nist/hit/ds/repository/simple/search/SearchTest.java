@@ -2,7 +2,7 @@ package gov.nist.hit.ds.repository.simple.search;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Repository;

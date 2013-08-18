@@ -102,7 +102,6 @@
   	<module>httpSoapValidator</module>
   	<module>simSupport</module>
   	<module>initialization</module>
-  	<module>tk</module>
   	<module>soapSupport</module>
   	<module>registryMetadataValidator</module>
   	<module>actorTransaction</module>
@@ -116,6 +115,7 @@
   	<module>simulatorIntegrationTest</module>
         <module>logBrowser</module>
         <module>simServlet</module>
+        <module>eventLog</module>
   </modules>
   <build>
   <plugins>

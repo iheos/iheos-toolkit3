@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.soapSupport.core;
 
-import gov.nist.hit.ds.http.environment.Event;
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 
 import java.io.OutputStream;
@@ -77,6 +77,6 @@ public class SoapEnvironment {
 	public Event getEvent() {
 		if (httpEnv == null)
 			return null;
-		return httpEnv.getEventLog();
+		return (Event) httpEnv.getEventLog();
 	}
 }

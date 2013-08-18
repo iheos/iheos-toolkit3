@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.httpSoapValidator.testSupport;
 
-import gov.nist.hit.ds.http.environment.Event;
+import gov.nist.hit.ds.eventLog.Event;
 
 import java.io.BufferedReader;
 import java.io.IOException;
