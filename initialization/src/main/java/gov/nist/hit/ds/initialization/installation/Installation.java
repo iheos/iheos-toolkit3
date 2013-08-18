@@ -90,6 +90,10 @@ public class Installation {
 	void initializeActors(ExternalCacheManager ecMgr) {
 
 	}
+	
+	public File getRepositoryRoot() {
+		return getExternalCacheManager().getRepositoryFile();
+	}
 
 	static public Installation installation() {
 		if (me == null)

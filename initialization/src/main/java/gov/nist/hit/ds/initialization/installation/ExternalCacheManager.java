@@ -10,7 +10,7 @@ public class ExternalCacheManager {
 	}
 	
 	public File getRepositoryFile() {
-		return new File(externalCache, "repository");
+		return new File(externalCache, "repositories");
 	}
 	
 	public File getTkPropsFile() {
