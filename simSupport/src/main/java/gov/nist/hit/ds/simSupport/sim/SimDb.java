@@ -95,7 +95,7 @@ public class SimDb {
 		simDir.mkdirs();
 
 		if (!simDir.isDirectory())
-			throw new IOException("Cannot create content in Simulator database, creation of " + simDir.toString() + " failed");
+			throw new IOException("Cannot create content in Simulator database, creation of <" + simDir.toString() + "> failed");
 
 		// TODO: creating these directories is not a concern that should be handled here.  This is the only reason
 		// ActorType and transaction are passed in as arguments.

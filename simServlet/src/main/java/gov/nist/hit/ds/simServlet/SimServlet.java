@@ -9,6 +9,8 @@ import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
@@ -20,6 +22,7 @@ import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.core.SoapFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.io.Io;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,6 +55,7 @@ public class SimServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		this.config = config;
+		logger.info("SimServlet initialized");
 		
 		// This assumes that the toolkit has been configured before this Servlet
 		// is initialized.
@@ -61,9 +65,15 @@ public class SimServlet extends HttpServlet {
 		try {
 			initSimEnvironment();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.fatal("Error initializing Simulator Environment.\n" + ExceptionUtil.exception_details(e));
 			throw new ServletException("Error initializing Simulator Environment.", e);
 		} 
+		try {
+			initRepositoryEnvironment();
+		} catch (RepositoryException e) {
+			logger.fatal("Error initializing Repository Environment.\n" + ExceptionUtil.exception_details(e));
+			throw new ServletException("Error initializing Repository Environment.", e);
+		}
 	}
 	
 	/**
@@ -71,6 +81,10 @@ public class SimServlet extends HttpServlet {
 	 */
 	public void initSimEnvironment() throws FileNotFoundException, SecurityException, IllegalArgumentException, IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimChainLoaderException {
 		new ActorSimFactory().loadSims();
+	}
+	
+	public void initRepositoryEnvironment() throws RepositoryException {
+			new Configuration(Installation.installation().getRepositoryRoot());
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) {
