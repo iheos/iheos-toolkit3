@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 public class HttpEnvironment {
 	HttpServletResponse response = null;
 	OutputStream os = null;
-	Event eventLog;
+	Object eventLog;
 	
 	public HttpServletResponse getResponse() {
 		return response;
@@ -32,8 +32,8 @@ public class HttpEnvironment {
 		return os;
 	}
 
-	public Event getEventLog() { return eventLog; }
+	public Object getEventLog() { return eventLog; }
 	
-	public HttpEnvironment setEventLog(Event eventLog) { this.eventLog = eventLog; return this; }
+	public HttpEnvironment setEventLog(Object eventLog) { this.eventLog = eventLog; return this; }
 
 }

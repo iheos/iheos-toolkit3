@@ -3,12 +3,12 @@ package gov.nist.hit.ds.simServlet;
 import gov.nist.hit.ds.actorSimFactory.ActorSimFactory;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.http.environment.Event;
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
@@ -46,17 +46,17 @@ public class SimServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static Logger logger = Logger.getLogger(SimServlet.class);
 	ServletConfig config;
-	File warHome;
 	File simDbDir;
 	String faultSent = null;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		this.config = config;
-
+		
 		// This assumes that the toolkit has been configured before this Servlet
 		// is initialized.
-		warHome = new File(config.getServletContext().getRealPath("/"));
+		File warHome = new File(config.getServletContext().getRealPath("/"));
+		Installation.installation().setWarHome(warHome);
 		simDbDir = Installation.installation().propertyServiceManager().getSimDbDir();
 		try {
 			initSimEnvironment();
@@ -101,7 +101,7 @@ public class SimServlet extends HttpServlet {
 		Event event;
 		try {
 			db = new SimDb(simEndpoint.getSimId());
-			event = db.createEvent(ActorType.findActor(simEndpoint.getActor()), simEndpoint.getTransaction());
+			event = (Event) db.createEvent(ActorType.findActor(simEndpoint.getActor()), simEndpoint.getTransaction());
 		} catch (Exception e) {
 			logger.error("Internal error initializing simulator environment", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment: " + e.getMessage());
@@ -183,8 +183,8 @@ public class SimServlet extends HttpServlet {
 		buf.append("\r\n");
 
 		// Log the request header and body in the SimDb event
-		event.putRequestHeader(buf.toString());
-		event.putRequestBody(Io.getBytesFromInputStream(request.getInputStream()));
+		event.getInOutMessages().putRequestHeader(buf.toString());
+		event.getInOutMessages().putRequestBody(Io.getBytesFromInputStream(request.getInputStream()));
 	}
 
 	void sendSoapFault(SoapEnvironment soapEnv, FaultCode faultCode, String reason) {

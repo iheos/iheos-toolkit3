@@ -6,7 +6,7 @@ import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.EndpointLabel;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
 import gov.nist.hit.ds.simSupport.client.BooleanActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.EndpointActorSimConfigElement;

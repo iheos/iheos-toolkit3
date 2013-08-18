@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.repository.simple;
 
 import static org.junit.Assert.assertTrue;
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;

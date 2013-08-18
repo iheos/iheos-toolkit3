@@ -2,9 +2,9 @@ package gov.nist.hit.ds.simSupport.sim;
 
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.http.environment.Event;
-import gov.nist.hit.ds.initialization.ExtendedPropertyManager;
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.initialization.installation.ExtendedPropertyManager;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.simSupport.client.NoSimException;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.utilities.io.Io;
@@ -97,6 +97,8 @@ public class SimDb {
 		if (!simDir.isDirectory())
 			throw new IOException("Cannot create content in Simulator database, creation of " + simDir.toString() + " failed");
 
+		// TODO: creating these directories is not a concern that should be handled here.  This is the only reason
+		// ActorType and transaction are passed in as arguments.
 		if (actorType != null && transaction != null) {
 			String transdir = simDir + File.separator + actorType.getShortName() + File.separator + transaction;
 			transactionDir = new File(transdir);
@@ -188,7 +190,7 @@ public class SimDb {
 		// version of uuid that could be used as filename
 		String x = id.substring(9).replaceAll("-", "_");
 
-		File registryDir = new File(getDBFilePrefix(event) + File.separator + "Registry");
+		File registryDir = new File(getEventFile(event) + File.separator + "Registry");
 		registryDir.mkdirs();
 
 		return new File(registryDir.toString() + File.separator + x + ".xml");
@@ -257,12 +259,12 @@ public class SimDb {
 
 	// huh? nothing is creating this file
 	public String getSimulatorType() throws IOException {
-		File simType = new File(getDBFilePrefix(event) + File.separator + "sim_type.txt");
+		File simType = new File(getEventFile(event) + File.separator + "sim_type.txt");
 		return Io.stringFromFile(simType).trim();
 	}
 
 	public File getRepositoryDocumentFile(String documentId) {
-		File repDirFile = new File(getDBFilePrefix(event) + File.separator + "Repository");
+		File repDirFile = new File(getEventFile(event) + File.separator + "Repository");
 		repDirFile.mkdirs();
 		File repDocFile = new File(repDirFile.toString() + File.separator + oidToFilename(documentId) + ".bin");
 		return repDocFile;
@@ -339,7 +341,7 @@ public class SimDb {
 		return files;
 	}
 
-	File getDBFilePrefix(String event) {
+	File getEventFile(String event) {
 		File f = new File(simDir 
 				+ File.separator + actorType.getShortName()
 				+ File.separator + transaction
@@ -350,30 +352,39 @@ public class SimDb {
 	}
 
 	public File getEventDir() {
-		return getDBFilePrefix(event);
+		return getEventFile(event);
 	}
 
 	public File getLogFile() {
-		return new File(getDBFilePrefix(event) + File.separator + "log.txt");
+		return new File(getEventFile(event) + File.separator + "log.txt");
 	}
 
 	public void getMessageLogZip(OutputStream os, String event) throws IOException {
-		new ZipDir().toOutputStream(getDBFilePrefix(event).toString(), os);
+		new ZipDir().toOutputStream(getEventFile(event).toString(), os);
 	}
 
+	/**
+	 * Not sure what this is supposed to delete.
+	 * @param fileNameBase
+	 * @throws IOException
+	 */
 	public void delete(String fileNameBase) throws IOException {
-		File f = getDBFilePrefix(fileNameBase);
+		File f = getEventFile(fileNameBase);
 		delete(f);
 	}
 
+	/**
+	 * Recursive delete.
+	 * @param f
+	 */
 	public void delete(File f) {
 		Io.delete(f);
 	}
 
 	public void rename(String fileNameBase, String newFileNameBase) throws IOException {
 
-		File from = getDBFilePrefix(fileNameBase);
-		File to = getDBFilePrefix(newFileNameBase);
+		File from = getEventFile(fileNameBase);
+		File to = getEventFile(newFileNameBase);
 		boolean stat = from.renameTo(to);
 
 		if (!stat)

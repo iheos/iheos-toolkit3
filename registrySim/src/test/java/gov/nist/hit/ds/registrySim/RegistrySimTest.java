@@ -7,12 +7,14 @@ import gov.nist.hit.ds.actorSimFactory.ActorSimFactory;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.eventLog.testSupport.TestEnvironmentSetup;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
-import gov.nist.hit.ds.initialization.ExtendedPropertyManager;
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.initialization.installation.ExtendedPropertyManager;
+import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.registrySim.factory.DocumentRegistryActorFactory;
 import gov.nist.hit.ds.simServlet.SimServlet;
 import gov.nist.hit.ds.simSupport.client.SimId;
@@ -42,10 +44,13 @@ public class RegistrySimTest {
 	/**
 	 * Perform initializations that would normally be done the the toolkit during startup.
 	 * In production, the src/java versions would be used instead of the src/test versions.
+	 * @throws InitializationFailedException 
 	 */
 	@Before
-	public void init() {
-		Installation.installation().setExternalCache(new File("src/test/resources/external_cache"));
+	public void init() throws InitializationFailedException {
+		new TestEnvironmentSetup().setup();
+		
+//		Installation.installation().setExternalCache(new File("src/test/resources/external_cache"));
 
 		File warHome = new File("src/test/resources/registry");
 		Installation.installation().setWarHome(warHome);
