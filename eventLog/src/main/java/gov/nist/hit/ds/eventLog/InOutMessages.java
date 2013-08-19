@@ -1,5 +1,9 @@
 package gov.nist.hit.ds.eventLog;
 
+import gov.nist.hit.ds.repository.api.Asset;
+import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.utilities.io.Io;
 
 import java.io.File;
@@ -8,66 +12,54 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class InOutMessages {
-	File inOutDir;
+	Asset inOutAsset;
 	
-	InOutMessages(File inOutDir) {
-		this.inOutDir = inOutDir;
+	Asset init(Asset parent) throws RepositoryException {
+		inOutAsset = AssetHelper.createChildAsset(parent, "Input/Output Messages", null, new SimpleType("simInOut"));
+		return inOutAsset;
 	}
 
-	public File getResponseBodyFile() {
-		return new File(inOutDir, "response_body.txt");
+	public void putRequestHeader(String hdr) throws RepositoryException {
+		Asset a = AssetHelper.createChildAsset(inOutAsset, "Request Header", null, new SimpleType("simpleType"));
+		AssetHelper.setOrder(a, 1);
+		a.updateContent(hdr, "text/plain");
+	}
+	
+	public String getRequestHeader() throws RepositoryException {
+		return null;
 	}
 
-	public File getResponseHeaderFile() {
-		return new File(inOutDir, "response_hdr.txt");
+	public void putRequestBody(byte[] bytes) throws RepositoryException {
+		Asset a = AssetHelper.createChildAsset(inOutAsset, "Request Body", null, new SimpleType("simpleType"));
+		AssetHelper.setOrder(a, 2);
+		a.updateContent(bytes);
+		AssetHelper.setMimeType(a, "application/octet-stream");
 	}
-
-	public File getRequestBodyFile() {
-		return new File(inOutDir, "request_body.txt");
+	
+	public byte[] getRequestBody()  throws RepositoryException {
+		return null;
 	}
-
-	public File getRequestHeaderFile() {
-		return new File(inOutDir, "request_hdr.txt");
-	}
-
-	public String getRequestHeader() throws IOException {
-		return Io.stringFromFile(getRequestHeaderFile());
+	
+	public void putResponseHeader(String hdr) throws RepositoryException {
+		Asset a = AssetHelper.createChildAsset(inOutAsset, "Response Header", null, new SimpleType("simpleType"));
+		AssetHelper.setOrder(a, 3);
+		a.updateContent(hdr, "text/plain");
 	}
 
 	public String getResponseHeader() throws IOException {
-		return Io.stringFromFile(getResponseHeaderFile());
+		return null;
 	}
 
-	public byte[] getRequestBody() throws IOException {
-		File f = getRequestBodyFile();
-		return Io.bytesFromFile(f);
+	public void putResponsetBody(byte[] bytes) throws RepositoryException {
+		Asset a = AssetHelper.createChildAsset(inOutAsset, "Response Body", null, new SimpleType("simpleType"));
+		AssetHelper.setOrder(a, 4);
+		a.updateContent(bytes);
+		AssetHelper.setMimeType(a, "application/octet-stream");
+	}
+	
+
+	public byte[] getResponseBody()  throws RepositoryException {
+		return null;
 	}
 
-	public byte[] getResponseBody() throws IOException {
-		File f = getResponseBodyFile();
-		return Io.bytesFromFile(f);
-	}
-
-	public void putRequestHeader(String hdr) throws IOException {
-		File f = getRequestHeaderFile();
-		OutputStream out = null;
-		try {
-			out = new FileOutputStream(f);
-			out.write(hdr.getBytes());
-		} finally {
-			if (out != null)
-				out.close();
-		}
-	}
-
-	public void putRequestBody(byte[] bytes) throws IOException {
-		OutputStream out = null;
-		try {
-			out = new FileOutputStream(getRequestBodyFile());
-			out.write(bytes);
-		} finally {
-			if (out != null)
-				out.close();
-		}
-	}
 }

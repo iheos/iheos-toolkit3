@@ -1,5 +1,8 @@
 package gov.nist.hit.ds.eventLog;
 
+import gov.nist.hit.ds.repository.api.Asset;
+import gov.nist.hit.ds.repository.api.RepositoryException;
+
 import java.io.File;
 
 /**
@@ -9,20 +12,29 @@ import java.io.File;
  *
  */
 public class Event {
+	Asset event;
 	File eventDir;
 	InOutMessages inOut;
 	Artifacts artifacts;
 	Assertions assertions;
-
-	public Event(File eventDir) {
-		this.eventDir = eventDir;
-		inOut = new InOutMessages(new File(eventDir, "inout"));
-		artifacts = new Artifacts(new File(eventDir, "artifacts"));
-		assertions = new Assertions(new File(eventDir, "assertions"));
+	
+	public Event(Asset event) {
+		this.event = event;
 	}
+	
+	void init() throws RepositoryException {
+		Asset a;
+		inOut = new InOutMessages();
+		a = inOut.init(event);
+		AssetHelper.setOrder(a, 1);
 
-	public File getEventDir() {
-		return eventDir;
+		artifacts = new Artifacts();
+		a = artifacts.init(event);
+		AssetHelper.setOrder(a, 2);
+
+		assertions = new Assertions();
+		a = assertions.init(event);
+		AssetHelper.setOrder(a, 3);
 	}
 
 	public InOutMessages getInOutMessages() {

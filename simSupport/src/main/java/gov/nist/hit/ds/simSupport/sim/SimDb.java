@@ -78,38 +78,38 @@ public class SimDb {
 	 * @throws IOException
 	 * @throws NoSimException - Simulator does not exist.
 	 */
-	public Event createEvent(ActorType actorType, String transaction) throws IOException, NoSimException {
-		this.actorType = actorType;
-		this.transaction = transaction;
-		this.dbRoot = getDbRoot();
-
-		if (!dbRoot.canWrite() || !dbRoot.isDirectory())
-			throw new IOException("Simulator database location, " + dbRoot.toString() + " is not a directory or cannot be written to");
-
-		simDir = getSimIdRoot(simId); 
-		if (!simDir.exists()) {
-			logger.error("Simulator " + simId + " does not exist");
-			throw new NoSimException("Simulator " + simId + " does not exist");
-		}
-
-		simDir.mkdirs();
-
-		if (!simDir.isDirectory())
-			throw new IOException("Cannot create content in Simulator database, creation of <" + simDir.toString() + "> failed");
-
-		// TODO: creating these directories is not a concern that should be handled here.  This is the only reason
-		// ActorType and transaction are passed in as arguments.
-		if (actorType != null && transaction != null) {
-			String transdir = simDir + File.separator + actorType.getShortName() + File.separator + transaction;
-			transactionDir = new File(transdir);
-			transactionDir.mkdirs();
-			if (!transactionDir.isDirectory())
-				throw new IOException("Cannot create content in Simulator database, creation of " + transactionDir + " failed");
-		}
-
-		event = nowAsFilenameBase();
-		return new Event(getEventDir());
-	}
+//	public Event createEvent(ActorType actorType, String transaction) throws IOException, NoSimException {
+//		this.actorType = actorType;
+//		this.transaction = transaction;
+//		this.dbRoot = getDbRoot();
+//
+//		if (!dbRoot.canWrite() || !dbRoot.isDirectory())
+//			throw new IOException("Simulator database location, " + dbRoot.toString() + " is not a directory or cannot be written to");
+//
+//		simDir = getSimIdRoot(simId); 
+//		if (!simDir.exists()) {
+//			logger.error("Simulator " + simId + " does not exist");
+//			throw new NoSimException("Simulator " + simId + " does not exist");
+//		}
+//
+//		simDir.mkdirs();
+//
+//		if (!simDir.isDirectory())
+//			throw new IOException("Cannot create content in Simulator database, creation of <" + simDir.toString() + "> failed");
+//
+//		// TODO: creating these directories is not a concern that should be handled here.  This is the only reason
+//		// ActorType and transaction are passed in as arguments.
+//		if (actorType != null && transaction != null) {
+//			String transdir = simDir + File.separator + actorType.getShortName() + File.separator + transaction;
+//			transactionDir = new File(transdir);
+//			transactionDir.mkdirs();
+//			if (!transactionDir.isDirectory())
+//				throw new IOException("Cannot create content in Simulator database, creation of " + transactionDir + " failed");
+//		}
+//
+//		event = nowAsFilenameBase();
+//		return new Event(getEventDir());
+//	}
 
 	File getSimIdRoot(SimId id) {
 		return new File(getDbRoot().toString()  /*.getAbsolutePath()*/ + File.separatorChar + id);
