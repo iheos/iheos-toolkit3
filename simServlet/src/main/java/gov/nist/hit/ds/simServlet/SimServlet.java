@@ -9,8 +9,13 @@ import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.repository.api.Asset;
+import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.simple.SimpleType;
+import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
@@ -108,19 +113,28 @@ public class SimServlet extends HttpServlet {
 
 	public void handleSimulatorInputTransaction(HttpServletRequest request,
 			SoapEnvironment soapEnv, SimEndpoint simEndpoint, Endpoint endpoint) {
-		// DB space for this simulator - needed here so the request message can be logged
-		//    also made available through a request attribute
-		// TODO: the SimDb instance should be moved to the HttpEnvironment
-		SimDb db;
 		Event event;
 		try {
-			db = new SimDb(simEndpoint.getSimId());
-			event = (Event) db.createEvent(ActorType.findActor(simEndpoint.getActor()), simEndpoint.getTransaction());
-		} catch (Exception e) {
+			SimDb db = new SimDb(simEndpoint.getSimId());
+			SimId simId = simEndpoint.getSimId();
+			RepositoryFactory fact = new RepositoryFactory();
+			Repository repos = fact.createNamedRepository(
+					"Event_Repository", 
+					"Event Repository", 
+					new SimpleType("simEventRepository"),               // repository type
+					ActorType.findActor(simEndpoint.getActor()) + "_" + simId    // repository name
+					);
+			Asset eventAsset = repos.createAsset(
+					db.nowAsFilenameBase(), 
+					simEndpoint.getTransaction() + " Event", 
+					new SimpleType("simEvent"));
+			event = new Event(eventAsset);
+		} catch (RepositoryException e) {
 			logger.error("Internal error initializing simulator environment", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment: " + e.getMessage());
 			return;
 		} 
+
 		soapEnv.getHttpEnvironment().setEventLog(event);
 		soapEnv.setEndpoint(endpoint);
 		request.setAttribute("Event", event); // SimServletFilter needs this to log response as it goes out on the wire
@@ -166,9 +180,10 @@ public class SimServlet extends HttpServlet {
 	 * @throws IOException
 	 * @throws HttpHeaderParseException
 	 * @throws ParseException
+	 * @throws RepositoryException 
 	 */
 	void logRequest(HttpServletRequest request, Event event, String actor, String transaction)
-			throws FileNotFoundException, IOException, HttpHeaderParseException, ParseException {
+			throws FileNotFoundException, IOException, HttpHeaderParseException, ParseException, RepositoryException {
 		StringBuffer buf = new StringBuffer();
 		Map<String, String> headers = new HashMap<String, String>();
 		HttpHeader contentTypeHeader;
@@ -218,6 +233,10 @@ public class SimServlet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * This is only used by unit tests to determine if a soap fault was returned.
+	 * @return
+	 */
 	public String getFaultSent() { return faultSent; }
 
 }

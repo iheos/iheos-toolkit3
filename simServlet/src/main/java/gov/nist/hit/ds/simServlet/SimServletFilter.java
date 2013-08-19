@@ -5,6 +5,7 @@ package gov.nist.hit.ds.simServlet;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.http.parser.HttpMessage;
 import gov.nist.hit.ds.http.parser.HttpParseException;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
@@ -51,7 +52,12 @@ public class SimServletFilter implements Filter {
 		try {
 			messageHeader = hmsg.asMessage();
 		} catch (HttpParseException e) {
-			Io.stringToFile(event.getInOutMessages().getResponseHeaderFile(), ExceptionUtil.exception_details(e));
+			try {
+				event.getInOutMessages().putResponseHeader(ExceptionUtil.exception_details(e));
+			} catch (RepositoryException e1) {
+				logger.error("SimServletFilter: " + e.getMessage());
+				throw new ServletException("", e);
+			}
 			return;
 		}
 		
@@ -62,7 +68,12 @@ public class SimServletFilter implements Filter {
 				messageHeader = messageHeader + "Content-Type: " + contentType + "\r\n\r\n";
 		}
 		
-		Io.stringToFile(event.getInOutMessages().getResponseHeaderFile(), messageHeader);
+		try {
+			event.getInOutMessages().putResponseHeader(messageHeader);
+		} catch (RepositoryException e) {
+			logger.error("SimServletFilter: " + e.getMessage());
+			throw new ServletException("", e);
+		}
 	}
 
 	public void init(FilterConfig arg0) throws ServletException {

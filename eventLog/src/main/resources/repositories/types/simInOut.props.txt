@@ -1,0 +1,5 @@
+# Simulator input and output messages
+
+keyword=simInOut
+domain=asset
+description=Simulator input and output messages

@@ -27,4 +27,15 @@ public class CSVTable {
 		}
 		return "";
 	}
+	
+	public String toString() {
+		StringBuffer buf = new StringBuffer();
+		
+		for (CSVEntry entry : entries) {
+			buf.append(entry.toString());
+			buf.append("\n");
+		}
+		
+		return buf.toString();
+	}
 }
