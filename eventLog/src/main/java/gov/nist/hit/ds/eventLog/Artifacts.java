@@ -9,12 +9,12 @@ public class Artifacts {
 	int counter = 1;
 
 	Asset init(Asset parent) throws RepositoryException {
-		artifactsAsset = AssetHelper.createChildAsset(parent, "Artifacts", null, new SimpleType("simArtifacts"));
+		artifactsAsset = AssetHelper.createChildAsset(parent, "Artifacts", "", new SimpleType("simArtifacts"));
 		return artifactsAsset;
 	}
 	
 	public void add(String name, String value) throws RepositoryException {
-		Asset a = AssetHelper.createChildAsset(artifactsAsset, name, null, new SimpleType("simpleType"));
+		Asset a = AssetHelper.createChildAsset(artifactsAsset, name, "", new SimpleType("simpleType"));
 		AssetHelper.setOrder(a, counter++);
 		a.updateContent(value, "text/plain");
 	}

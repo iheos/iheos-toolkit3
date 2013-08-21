@@ -144,4 +144,8 @@ public class Installation {
 		return new File(env, "codes.xml");
 	}
 
+	public File getExternalCache() {
+		return externalCache;
+	}
+
 }
