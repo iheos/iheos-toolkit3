@@ -112,7 +112,7 @@
   	<module>repository</module>
   	<module>xdstools3</module>
   	<module>simulatorIntegrationTest</module>
-        <module>logBrowser</module>
+<!--         <module>logBrowser</module>   -->
         <module>simServlet</module>
         <module>eventLog</module>
   </modules>
@@ -139,11 +139,11 @@
         </executions>
         <configuration>
           <runTarget>index.html</runTarget>
-        </configuration>
+      </configuration>
       </plugin>
    </plugins>
    </build>
-  <reporting>
+<reporting>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

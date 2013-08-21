@@ -10,6 +10,14 @@
   <artifactId>xdstools3</artifactId>
   <packaging>war</packaging>
   <name>xdstools3 Maven Webapp</name>
+   <properties>
+    <!-- Convenience property to set the GWT version -->
+    <gwtVersion>2.5.1</gwtVersion>
+    <!-- GWT needs at least java 1.5 -->
+    <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+ 
   <url>http://maven.apache.org</url>
   <dependencies>
 	  	<dependency>
@@ -32,6 +40,131 @@
       <artifactId>gwt-servlet</artifactId>
       <scope>runtime</scope>
     </dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>registryMetadata</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>valSupport</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>xdsException</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>registryMsgFormats</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>simSupport</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>registryMetadataValidator</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>actorSimFactory</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>actorTransaction</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>docRef</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>dsValidator</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>errorRecording</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>eventLog</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>http</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>httpSoapValidator</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>initialization</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>registryMsgFormats</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>registrySim</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>registrySupport</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>repository</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>simServlet</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>siteManagement</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>soapSupport</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>utilities</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>valSupport</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>xmlValidator</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
   <build>
     <finalName>xdstools3</finalName>
