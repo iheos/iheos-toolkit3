@@ -18,8 +18,9 @@ public class Event {
 	Artifacts artifacts;
 	Assertions assertions;
 	
-	public Event(Asset event) {
+	public Event(Asset event) throws RepositoryException {
 		this.event = event;
+		init();
 	}
 	
 	void init() throws RepositoryException {

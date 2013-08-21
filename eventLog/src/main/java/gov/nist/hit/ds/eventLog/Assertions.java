@@ -10,12 +10,12 @@ public class Assertions {
 	int counter = 1;
 	
 	public Asset init(Asset parent) throws RepositoryException {
-		assertionsAsset = AssetHelper.createChildAsset(parent, "Assertions", null, new SimpleType("simAssertions"));
+		assertionsAsset = AssetHelper.createChildAsset(parent, "Assertions", "", new SimpleType("simAssertions"));
 		return assertionsAsset;
 	}
 	
 	public void add(String validatorName, CSVTable assertionTable) throws RepositoryException {
-		Asset a = AssetHelper.createChildAsset(assertionsAsset, validatorName, null, new SimpleType("simpleType"));
+		Asset a = AssetHelper.createChildAsset(assertionsAsset, validatorName, "", new SimpleType("simpleType"));
 		AssetHelper.setOrder(a, counter++);
 		a.updateContent(assertionTable.toString(), "text/csv");
 
