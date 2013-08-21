@@ -141,6 +141,11 @@
           <runTarget>index.html</runTarget>
       </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.4.1</version>
+      </plugin>
    </plugins>
    </build>
 <reporting>
@@ -152,4 +157,7 @@
       </plugin>
     </plugins>
   </reporting>
+  <scm>
+    <developerConnection>scm:hg:/Users/bmajur/v3workspace/toolkit3</developerConnection>
+  </scm>
   </project>
