@@ -5,7 +5,8 @@
     <artifactId>toolkit3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>registryMetadataValidator</artifactId>
+	<version>3.0.0-SNAPSHOT</version>
+	<artifactId>registryMetadataValidator</artifactId>
   <dependencies>
     <dependency>
 	    <groupId>org.apache.ws.commons.axiom</groupId>
@@ -18,22 +19,22 @@
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
   		<artifactId>errorRecording</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
+  		<version>3.0.0-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
   		<artifactId>registryMetadata</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
+  		<version>3.0.0-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
   		<artifactId>registryMsgFormats</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
+  		<version>3.0.0-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
   		<artifactId>valSupport</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
+  		<version>3.0.0-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 </project>
