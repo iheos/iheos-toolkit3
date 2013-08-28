@@ -29,16 +29,15 @@ import org.apache.log4j.Logger;
  * Instead, a property format configuration file is use to control the configuration. The format
  * of this property file looks like:
 <pre>
-sim1.class=full_class_name_of_sim_factory
-sim1.at=actor_code^trans_code
+sim1.simChain=full_class_name_of_sim_chain
+sim1.actor=actor abbreviation
+sim1.transaction = transaction abbreviation
 sim1.name=name_of_sim_to_put_in_displays
-sim2.class=full_class_name_of_sim_factory
-sim2.at=actor_code^trans_code
-sim2.name=name_of_sim_to_put_in_displays
 </pre>
- * This config file is located in the classpath at configuredSims.properties.
+ * which is repeated for other simulators (sim2, sim3).
+ * This config file is located in the classpath at configuredActorSims.properties.
  * It is loaded at start-up time via the classloader.
- * To be valid, a simulator factory must implement the interface gov.nist.hit.ds.actorSimFactory.ActorFactory
+ * The referenced SimChains are loaded by the class SimChainLoader.
  * 
  * @author bmajur
  *
@@ -118,11 +117,11 @@ public class ActorSimFactory {
 				continue;
 			String simChainPath = simConfig.getProperty(propName);
 			String itemName = StringUtil.firstPiece(propName, ".");
-			String simName = simConfig.getProperty(itemName + ".name");
+//			String simName = simConfig.getProperty(itemName + ".name");
 			String actorCode = simConfig.getProperty(itemName + ".actor");
 			String transCode = simConfig.getProperty(itemName + ".transaction");
 			if (actorCode == null || actorCode.equals("") || transCode == null || transCode.equals("")) {
-				logger.error("Parsing configuredSims.properties: item <" + itemName + "> has no <at> property - simulator not loaded");
+				logger.error("Parsing configuredSims.properties: item <" + itemName + "> must have an actor and a transaction property to be valid - simulator not loaded");
 				continue;
 			}
 			SimChain simChain = new SimChainLoader(simChainPath).load();

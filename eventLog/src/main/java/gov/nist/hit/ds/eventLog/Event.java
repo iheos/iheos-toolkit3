@@ -8,6 +8,7 @@ import java.io.File;
 /**
  * Holds references to input header and body of the HTTP message.  Here the term
  * event corresponds to a transaction, an input to an actor.
+ * There are no I/O methods included since Assets are capable of storing themselves.
  * @author bill
  *
  */
