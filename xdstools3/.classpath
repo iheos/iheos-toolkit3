@@ -31,12 +31,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/actorTransaction"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/docRef"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/dsValidator"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/environment"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/errorRecording"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/http"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/httpSoapValidator"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/initialization"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/logBrowser"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/registryMetadata"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/registryMetadataValidator"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/registryMsgFormats"/>
@@ -47,7 +45,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/simulatorIntegrationTest"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/siteManagement"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/soapSupport"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tk"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/utilities"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/valSupport"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/xdsException"/>

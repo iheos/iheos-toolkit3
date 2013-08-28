@@ -1,7 +1,6 @@
 package gov.nist.hit.ds.initialization.installation;
 
 
-import gov.nist.hit.ds.initialization.environment.Environment;
 import gov.nist.hit.ds.initialization.tkProps.TkLoader;
 import gov.nist.hit.ds.initialization.tkProps.client.TkProps;
 
@@ -37,7 +36,7 @@ public class Installation {
 	public void initialize() throws InitializationFailedException {
 		if (warHome == null) {
 			logger.fatal("WAR home direcotry is not initialized");
-			throw new InitializationFailedException("WAR home direcotry is not initialized");
+			throw new InitializationFailedException("WAR home directory is not initialized");
 		}
 		propertyServiceMgr = new PropertyServiceManager(warHome);
 		initializeExternalCache(new File(propertyServiceMgr.getToolkitProperties().get(PropertyServiceManager.EXTERNAL_CACHE)));

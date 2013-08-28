@@ -8,6 +8,7 @@ import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
+import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
@@ -43,6 +44,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 /**
@@ -56,29 +58,43 @@ public class SimServlet extends HttpServlet {
 	ServletConfig config;
 	File simDbDir;
 	String faultSent = null;
+	boolean initialized = false;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		this.config = config;
-		logger.info("SimServlet initialized");
+		BasicConfigurator.configure();
+		logger.info("SimServlet initializing");
 		
+		// This should do all the primary initialization in case it was not done elsewhere
+		try {
+			File warHome = new File(config.getServletContext().getRealPath("/"));
+			Installation.installation().setWarHome(warHome);
+			Installation.installation().initialize();
+			logger.info("External Cache is found at <" + Installation.installation().getExternalCache().toString());
+		} catch (Exception e) {
+			logger.fatal("Error initializing the toolkit.\n" + ExceptionUtil.exception_details(e));
+			return;
+//			throw new ServletException("Error initializing the toolkit.", e);
+		}
 		// This assumes that the toolkit has been configured before this Servlet
 		// is initialized.
-		File warHome = new File(config.getServletContext().getRealPath("/"));
-		Installation.installation().setWarHome(warHome);
 		simDbDir = Installation.installation().propertyServiceManager().getSimDbDir();
 		try {
 			initSimEnvironment();
 		} catch (Exception e) {
 			logger.fatal("Error initializing Simulator Environment.\n" + ExceptionUtil.exception_details(e));
-			throw new ServletException("Error initializing Simulator Environment.", e);
+			return;
+//			throw new ServletException("Error initializing Simulator Environment.", e);
 		} 
 		try {
 			initRepositoryEnvironment();
-		} catch (RepositoryException e) {
+		} catch (Exception e) {
 			logger.fatal("Error initializing Repository Environment.\n" + ExceptionUtil.exception_details(e));
-			throw new ServletException("Error initializing Repository Environment.", e);
+			return;
+//			throw new ServletException("Error initializing Repository Environment.", e);
 		}
+		initialized = true;
 	}
 	
 	/**
@@ -98,6 +114,11 @@ public class SimServlet extends HttpServlet {
 		// This is being set up early in case we need to generate a SOAPFault
 		HttpEnvironment httpEnv = new HttpEnvironment().setResponse(response);
 		SoapEnvironment soapEnv = new SoapEnvironment(httpEnv);
+		
+		if (!initialized) {
+			sendSoapFault(soapEnv, FaultCode.Receiver, "Toolkit service did not initialize correctly. Check the log files for details.");
+			return;
+		}
 
 		// Parse endpoint to discover what simulator is the target of the request.
 		SimEndpoint simEndpoint;
