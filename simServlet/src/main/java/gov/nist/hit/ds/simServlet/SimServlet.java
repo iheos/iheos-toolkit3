@@ -8,7 +8,6 @@ import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
-import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
@@ -79,8 +78,8 @@ public class SimServlet extends HttpServlet {
 		}
 		// This assumes that the toolkit has been configured before this Servlet
 		// is initialized.
-		simDbDir = Installation.installation().propertyServiceManager().getSimDbDir();
 		try {
+			simDbDir = Installation.installation().propertyServiceManager().getSimDbDir();
 			initSimEnvironment();
 		} catch (Exception e) {
 			logger.fatal("Error initializing Simulator Environment.\n" + ExceptionUtil.exception_details(e));
@@ -150,7 +149,7 @@ public class SimServlet extends HttpServlet {
 					simEndpoint.getTransaction() + " Event", 
 					new SimpleType("simEvent"));
 			event = new Event(eventAsset);
-		} catch (RepositoryException e) {
+		} catch (Exception e) {
 			logger.error("Internal error initializing simulator environment", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment: " + e.getMessage());
 			return;
@@ -176,7 +175,7 @@ public class SimServlet extends HttpServlet {
 			new ActorSimFactory().run(simEndpoint.getActor() + "^" + simEndpoint.getTransaction(), soapEnv);
 		} catch (SoapFaultException sfe) {
 			sendSoapFault(soapEnv, sfe);
-		} catch (SimEngineSubscriptionException e) {
+		} catch (Exception e) {
 			sendSoapFault(
 					soapEnv,
 					new SoapFaultException(

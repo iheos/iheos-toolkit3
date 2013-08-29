@@ -3,8 +3,6 @@ package gov.nist.hit.ds.initialization.installation;
 import gov.nist.hit.ds.utilities.io.Io;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,13 +15,9 @@ public class PropertyManager {
 
 	static Logger logger = Logger.getLogger(PropertyManager.class);
 
-	String propFile;
+	//	String propFile;
 	Properties toolkitProperties = null;
-	
-	public PropertyManager(String propFile) {
-		this.propFile = propFile;
-	}
-	
+
 	public void update(Map<String, String> props) throws Exception {
 		if (toolkitProperties == null)
 			toolkitProperties = new Properties();
@@ -34,7 +28,7 @@ public class PropertyManager {
 			save(props);
 		}
 	}
-	
+
 	void validateProperty(String name, String value) throws Exception {
 		if (name == null)
 			throw new Exception("Property with name null not allowed");
@@ -67,59 +61,59 @@ public class PropertyManager {
 				throw new Exception("Cannot create Message_database_directory " + value);
 		}
 	}
-	
+
 	public String getPassword() {
 		loadProperties();
 		return (String) toolkitProperties.get("Admin_password");
 	}
-	
+
 	public String getToolkitHost() {
 		loadProperties();
 		return (String) toolkitProperties.get("Toolkit_Host");
 	}
-	
+
 	public String getToolkitPort() {
 		loadProperties();
 		return (String) toolkitProperties.get("Toolkit_Port");
 	}
-	
-	public String getToolkitTlsPort() {
+
+	public String getToolkitTlsPort()  {
 		loadProperties();
 		return (String) toolkitProperties.get("Toolkit_TLS_Port");
 	}
-	
-	public String getToolkitGazelleConfigURL() {
+
+	public String getToolkitGazelleConfigURL()  {
 		loadProperties();
 		return (String) toolkitProperties.get("Gazelle_Config_URL");
 	}
-	
-	public String getExternalCache() {
+
+	public String getExternalCache()  {
 		loadProperties();
 		String cache = (String) toolkitProperties.get("External_Cache");
 		System.setProperty("External_Cache", cache);
 		return cache;
 	}
-	
-	public boolean isUseActorsFile() {
+
+	public boolean isUseActorsFile()  {
 		loadProperties();
 		String use = (String) toolkitProperties.get("Use_Actors_File");
 		if (use == null)
 			return true;
 		return "true".compareToIgnoreCase(use) == 0;
 	}
-	
-	public String getDefaultAssigningAuthority() {
+
+	public String getDefaultAssigningAuthority()  {
 		loadProperties();
 		return (String) toolkitProperties.get("PatientID_Assigning_Authority");
 	}
-	
-	public String getDefaultEnvironmentName() {
+
+	public String getDefaultEnvironmentName()  {
 		loadProperties();
 		return (String) toolkitProperties.get("Default_Environment");
 	}
 
 	@Deprecated
-	public String getCurrentEnvironmentName() {
+	public String getCurrentEnvironmentName()  {
 		String cache = getExternalCache();
 		File currentFile = new File(cache + File.separator + "environment" + File.separator + "current");
 		String currentName = null;
@@ -128,56 +122,53 @@ public class PropertyManager {
 		} catch (IOException e) {}
 		return currentName;
 	}
-	
+
 	@Deprecated
-	public void setCurrentEnvironmentName(String name) throws IOException {
+	public void setCurrentEnvironmentName(String name) throws IOException  {
 		String cache = getExternalCache();
-		
+
 		File currentFile = new File(cache + File.separator + "environment" + File.separator + "current");
 		Io.stringToFile(currentFile, name);
 	}
-	
-	public String getToolkitEnableAllCiphers() {
+
+	public String getToolkitEnableAllCiphers()  {
 		loadProperties();
 		return (String) toolkitProperties.getProperty("Enable_all_ciphers");
 	}
-		
-	public void save(Map<String, String> props) throws Exception {
+
+	public void save(Map<String, String> props) throws IOException  {
 		saveProperties();
 	}
-	
-	public void loadProperties() {
+
+	public void loadProperties()  {
 		if (toolkitProperties != null)
 			return;
 		toolkitProperties = new Properties();
 		try {
-			toolkitProperties.load(new FileInputStream(propFile));
+			toolkitProperties.load(Installation.installation().getToolkitProperties());
+		} catch (IOException e) {
+			logger.fatal("Could not load toolkit properties.");
+			throw new RuntimeException("Could not load toolkit properties.");
+		}
+	}
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void saveProperties() throws IOException {
+		saveProperties(toolkitProperties, Installation.installation().getToolkitPropertiesFile());
 	}
-	
-	public void saveProperties() {
+
+	public void saveProperties(Properties props, File file) throws IOException {
+		FileOutputStream fos = null;
 		try {
-			FileOutputStream fos = new FileOutputStream(propFile);
-			toolkitProperties.store(fos, "");
+			fos = new FileOutputStream(file);
+			props.store(fos, "");
 			fos.flush();
+		} 
+		finally {
 			fos.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
-	
-	public Map<String, String> getPropertyMap() {
+
+	public Map<String, String> getPropertyMap()  {
 		loadProperties();
 		Map<String, String> props = new HashMap<String, String>();
 		for (Object keyObj : toolkitProperties.keySet()) {
@@ -187,6 +178,6 @@ public class PropertyManager {
 		}
 		return props;
 	}
-	
+
 
 }
