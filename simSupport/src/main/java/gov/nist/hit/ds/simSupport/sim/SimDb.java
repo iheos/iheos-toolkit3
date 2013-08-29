@@ -2,7 +2,6 @@ package gov.nist.hit.ds.simSupport.sim;
 
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.initialization.installation.ExtendedPropertyManager;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.simSupport.client.NoSimException;

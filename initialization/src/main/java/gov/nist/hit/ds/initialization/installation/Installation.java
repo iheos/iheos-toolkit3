@@ -6,6 +6,8 @@ import gov.nist.hit.ds.initialization.tkProps.client.TkProps;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import org.apache.log4j.Logger;
 
@@ -22,6 +24,7 @@ public class Installation {
 	static Logger logger = Logger.getLogger(Installation.class);
 	static Installation me = null;
 	File externalCache;
+	String buildNumber;
 
 	/**
 	 * Initialize the installation.  This is called by a servlet initializiation
@@ -32,14 +35,44 @@ public class Installation {
 	 * It must be called 
 	 * after toolkit.properties is altered to force the reload.
 	 * @throws InitializationFailedException 
+	 * @throws IOException 
 	 */
-	public void initialize() throws InitializationFailedException {
+	public void initialize() throws InitializationFailedException, IOException {
 		if (warHome == null) {
 			logger.fatal("WAR home direcotry is not initialized");
 			throw new InitializationFailedException("WAR home directory is not initialized");
 		}
-		propertyServiceMgr = new PropertyServiceManager(warHome);
+		propertyServiceMgr = new PropertyServiceManager();
+		
+		loadBuildNumber();
+		
 		initializeExternalCache(new File(propertyServiceMgr.getToolkitProperties().get(PropertyServiceManager.EXTERNAL_CACHE)));
+	}
+	
+	public InputStream getToolkitProperties() { 
+		return getClass().getClassLoader().getResourceAsStream("toolkit.properties"); 
+		}
+	
+	public File getToolkitPropertiesFile() {
+		URL url = getClass().getClassLoader().getResource("toolkit.properties");
+		return new File(url.getFile());
+	}
+	
+	public String getBuildNumber() { return buildNumber; }
+
+	private void loadBuildNumber() {
+		InputStream is = getClass().getClassLoader().getResourceAsStream("build.num");
+		try {
+			byte[] ba = new byte[200];
+			int count;
+			count = is.read(ba);
+			if (count < 1)
+				buildNumber = "Unknown";
+			else 
+				buildNumber = new String(ba);
+		} catch (IOException e) {
+			buildNumber = "Unknown";
+		}
 	}
 
 	void initializeExternalCache(File externalCache) throws InitializationFailedException {
@@ -103,7 +136,7 @@ public class Installation {
 	private Installation() {   }
 
 	public PropertyManager getPropertyManager() {
-		return new PropertyManager(warHome + File.separator + "WEB-INF" + File.separator + "toolkit.properties");
+		return new PropertyManager();
 	}
 
 	public File getWarHome() { 
@@ -120,11 +153,11 @@ public class Installation {
 
 	public PropertyServiceManager propertyServiceManager() {
 		if (propertyServiceMgr == null)
-			propertyServiceMgr = new PropertyServiceManager(warHome);
+			propertyServiceMgr = new PropertyServiceManager();
 		return propertyServiceMgr;
 	}
 
-	public File simDbFile() {
+	public File simDbFile()  {
 		return propertyServiceManager().getSimDbDir();
 	}
 
@@ -136,7 +169,7 @@ public class Installation {
 		return new ExternalCacheManager(externalCache);
 	}
 
-	public File getDefaultCodesFile() {
+	public File getDefaultCodesFile() throws IOException {
 		File envFile =  getExternalCacheManager().getEnvironmentFile();
 		String defaultEnvName = getPropertyManager().getPropertyMap().get(PropertyServiceManager.DEFAULT_ENVIRONMENT);
 		File env = new File(envFile,defaultEnvName);
