@@ -61,17 +61,20 @@ public class Installation {
 	public String getBuildNumber() { return buildNumber; }
 
 	private void loadBuildNumber() {
+		buildNumber = "Unknown";
 		InputStream is = getClass().getClassLoader().getResourceAsStream("build.num");
-		try {
-			byte[] ba = new byte[200];
-			int count;
-			count = is.read(ba);
-			if (count < 1)
-				buildNumber = "Unknown";
-			else 
-				buildNumber = new String(ba);
-		} catch (IOException e) {
-			buildNumber = "Unknown";
+		if (is!=null) {
+			try {
+				byte[] ba = new byte[200];
+				int count;
+				count = is.read(ba);
+				if (count >= 1) {
+					buildNumber = new String(ba);
+				}
+			} catch (IOException e) {
+				logger.warn(e.toString());
+			}
+			
 		}
 	}
 
