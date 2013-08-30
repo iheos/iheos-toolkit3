@@ -85,6 +85,7 @@ public class SimpleTestSuite {
 			Installation.installation();
 			Installation.installation().setWarHome(new File(getInstallationPath())); // This would be the WAR installation directory
 			
+			
 			String externalCache = InstallationPath + "Testing/Test_environment";
 			
 //			String externalCache = Installation.installation().propertyServiceManager()
@@ -95,7 +96,9 @@ public class SimpleTestSuite {
 			
 //			System.out.println(externalCache);
 			
-			Installation.installation().setExternalCache(new File(externalCache)); // Prefix only if externalCache is not expected to be absolute path, which in this case the EC_Dir is relative. 
+			Installation.installation().setExternalCache(new File(externalCache)); // Prefix only if externalCache is not expected to be absolute path, which in this case the EC_Dir is relative.
+			
+			// Installation.installation().initialize();
 			
 			setRepositoriesPath(externalCache + "/repositories");
 			setRepositoryRoot(new File(RepositoriesPath));
