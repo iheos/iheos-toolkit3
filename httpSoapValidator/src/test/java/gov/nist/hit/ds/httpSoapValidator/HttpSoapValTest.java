@@ -10,10 +10,9 @@ import gov.nist.hit.ds.httpSoapValidator.validators.HttpMessageValidator;
 import gov.nist.hit.ds.httpSoapValidator.validators.SoapHeaderValidator;
 import gov.nist.hit.ds.httpSoapValidator.validators.SoapParser;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
-import gov.nist.hit.ds.simSupport.engine.SimChainLoader;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
-import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
+import gov.nist.hit.ds.simSupport.engine.SimEngineException;
 import gov.nist.hit.ds.simSupport.engine.SimStep;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.loader.ByParamLogLoader;
@@ -23,8 +22,6 @@ import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.xmlValidator.XmlParser;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,7 +137,7 @@ public class HttpSoapValTest {
 		System.out.println(engine.getDescription(simChain));
 		try {
 			engine.run();
-		} catch (SimEngineSubscriptionException e) {
+		} catch (SimEngineException e) {
 			System.out.flush();
 			e.printStackTrace();
 			fail();

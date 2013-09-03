@@ -2,15 +2,7 @@ package gov.nist.hit.ds.simServlet;
 
 
 
-import gov.nist.hit.ds.eventLog.Event;
-import gov.nist.hit.ds.http.parser.HttpMessage;
-import gov.nist.hit.ds.http.parser.HttpParseException;
-import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.utilities.io.Io;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-
 import java.io.IOException;
-import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -18,7 +10,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
@@ -27,58 +18,40 @@ public class SimServletFilter implements Filter {
 
 	public void destroy() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-		SimServletResponseWrapper wrapper = new SimServletResponseWrapper((HttpServletResponse) response);
-		chain.doFilter(request,wrapper);
+
+//		PrintWriter out = response.getWriter();
+//		CharResponseWrapper responseWrapper = new CharResponseWrapper(
+//				(HttpServletResponse) response);
 		
-		logger.debug("in doFilter");
-		
-		Event event = (Event) request.getAttribute("Event");
-		if (event == null) {
-			logger.error("SimServletFilter - request.getAttribute(\"Event\") failed");
-			return;
-		}
-		
-		Map<String, String> hdrs = wrapper.headers;
-		String contentType = wrapper.contentType;
-		
-		HttpMessage hmsg = new HttpMessage();
-		hmsg.setHeaderMap(hdrs);
-		String messageHeader;
-		try {
-			messageHeader = hmsg.asMessage();
-		} catch (HttpParseException e) {
-			try {
-				event.getInOutMessages().putResponseHeader(ExceptionUtil.exception_details(e));
-			} catch (RepositoryException e1) {
-				logger.error("SimServletFilter: " + e.getMessage());
-				throw new ServletException("", e);
-			}
-			return;
-		}
-		
-		if (contentType != null) {
-			if (messageHeader == null || messageHeader.equals(""))
-				messageHeader = "Content-Type: " + contentType + "\r\n\r\n";
-			else 
-				messageHeader = messageHeader + "Content-Type: " + contentType + "\r\n\r\n";
-		}
-		
-		try {
-			event.getInOutMessages().putResponseHeader(messageHeader);
-		} catch (RepositoryException e) {
-			logger.error("SimServletFilter: " + e.getMessage());
-			throw new ServletException("", e);
-		}
+
+		chain.doFilter(request,response);
+
+//		String responseString = responseWrapper.toString();
+//		
+//	    out.write(responseString); 
+//		
+//		Event event = (Event) request.getAttribute("Event");
+//		if (event == null) {
+//			logger.error("SimServletFilter - request.getAttribute(\"Event\") failed");
+//			return;
+//		}
+//
+//		try {
+//			event.getInOutMessages().putResponse(responseString);
+//		} catch (RepositoryException e) {
+//			logger.error("SimServletFilter: " + e.getMessage());
+//			throw new ServletException("", e);
+//		}
 	}
 
 	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

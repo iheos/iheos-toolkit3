@@ -21,7 +21,7 @@ import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
-import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
+import gov.nist.hit.ds.simSupport.engine.SimEngineException;
 import gov.nist.hit.ds.simSupport.loader.ByConstructorLogLoader;
 import gov.nist.hit.ds.simSupport.validators.SimEndpointParser;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
@@ -82,7 +82,7 @@ public class RegistrySimTest {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 			fail();
-		} catch (SimEngineSubscriptionException e) {
+		} catch (SimEngineException e) {
 			e.printStackTrace();
 			fail();
 		} catch (SimChainLoaderException e) {

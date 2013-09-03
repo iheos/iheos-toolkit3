@@ -28,11 +28,21 @@ public abstract class AbstractLogLoader extends SimComponentBase {
 	String header = null;
 	byte[] body = null;
 	static Logger logger = Logger.getLogger(AbstractLogLoader.class);
-	
+
+	@Override
+	public void run(MessageValidatorEngine mve) {
+		if (header == null && body == null)
+			load();
+	}
+
 	void load()   {
-		logger.trace("Loading from <" + dir + ">");
+		logger.info("header = " + header + " body = " + body);
 		if (header != null && body != null)
 			return;
+		if (dir == null)
+			logger.error("Loading from <" + dir + ">");
+		else
+			logger.info("Loading from <" + dir + ">");
 		try {
 			header = Io.stringFromFile(new File(dir, "request_hdr.txt"));
 			if (new File(dir, "request_body.txt").exists())
@@ -49,11 +59,11 @@ public abstract class AbstractLogLoader extends SimComponentBase {
 				setBody(body).
 				setHeader(header);
 	}
-	
+
 	public HttpServletRequest getServletRequest() throws HttpParseException, ParseException, IOException {
 		return new HttpParserBa(getMessageContent().getBytes()).getHttpMessage();
 	}
-	
+
 	/**
 	 * No guarantee the body is XML.  But since this loader
 	 * is use for testing, let the using code throw the 
@@ -63,11 +73,4 @@ public abstract class AbstractLogLoader extends SimComponentBase {
 	public XmlText getXmlText() {
 		return new XmlText().setXml(body);
 	}
-
-	@Override
-	public void run(MessageValidatorEngine mve) {
-		load();
-	}
-
-
 }

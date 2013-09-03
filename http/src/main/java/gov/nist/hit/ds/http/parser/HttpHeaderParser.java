@@ -70,7 +70,7 @@ public class HttpHeaderParser {
 
 		token = tokenizer.getNextToken();   // colon
 		if (!token.equals(HeaderToken.COLON))
-			throw new ParseException("Expected pattern - HeaderName: Value - found " + name + " " + token + " in " + line);
+			throw new ParseException("Expected pattern [HeaderName: Value] - instead found [" + name + " " + token + "] in " + line);
 
 		// value or <value>
 		// if <value> then return as string(<value>)

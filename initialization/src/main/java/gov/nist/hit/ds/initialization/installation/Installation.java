@@ -43,43 +43,49 @@ public class Installation {
 			throw new InitializationFailedException("WAR home directory is not initialized");
 		}
 		propertyServiceMgr = new PropertyServiceManager();
-		
+
 		loadBuildNumber();
-		
+
 		initializeExternalCache(new File(propertyServiceMgr.getToolkitProperties().get(PropertyServiceManager.EXTERNAL_CACHE)));
 	}
-	
+
 	public InputStream getToolkitProperties() { 
-		return getClass().getClassLoader().getResourceAsStream("toolkit.properties"); 
+		InputStream is = getClass().getClassLoader().getResourceAsStream("toolkit.properties");
+		if (is == null) {
+			throw new RuntimeException("Could not load toolkit.properties");
 		}
-	
+		return is;
+	}
+
 	public File getToolkitPropertiesFile() {
 		URL url = getClass().getClassLoader().getResource("toolkit.properties");
 		return new File(url.getFile());
 	}
-	
+
 	public String getBuildNumber() { return buildNumber; }
 
 	private void loadBuildNumber() {
-		buildNumber = "Unknown";
 		InputStream is = getClass().getClassLoader().getResourceAsStream("build.num");
-		if (is!=null) {
-			try {
-				byte[] ba = new byte[200];
-				int count;
-				count = is.read(ba);
-				if (count >= 1) {
-					buildNumber = new String(ba);
-				}
-			} catch (IOException e) {
-				logger.warn(e.toString());
-			}
-			
+		if (is == null) {
+			buildNumber = "Unknown";
+			return;
+		}
+		try {
+			byte[] ba = new byte[200];
+			int count;
+			count = is.read(ba);
+			if (count < 1)
+				buildNumber = "Unknown";
+			else 
+				buildNumber = new String(ba);
+		} catch (IOException e) {
+			buildNumber = "Unknown";
 		}
 	}
 
 	void initializeExternalCache(File externalCache) throws InitializationFailedException {
 		this.externalCache = externalCache;
+		logger.info("Initializing external cache at <" + externalCache + "> ");
 		try {
 			File f = externalCache; 
 			if (f.exists()) {
@@ -125,7 +131,7 @@ public class Installation {
 	void initializeActors(ExternalCacheManager ecMgr) {
 
 	}
-	
+
 	public File getRepositoryRoot() {
 		return getExternalCacheManager().getRepositoryFile();
 	}

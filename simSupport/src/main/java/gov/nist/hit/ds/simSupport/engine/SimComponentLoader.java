@@ -32,7 +32,7 @@ public class SimComponentLoader {
 		this.parmMap = parmMap;
 	}
 
-	void mkInstance() throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimChainLoaderException {
+	void mkInstance() throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineException, SimChainLoaderException {
 		try {
 			clazz = getClass().getClassLoader().loadClass(className);
 		} catch (ClassNotFoundException e) {
@@ -52,7 +52,7 @@ public class SimComponentLoader {
 		new Injector(component, parmeterMap).run();
 	}
 
-	public SimComponent load() throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimChainLoaderException {
+	public SimComponent load() throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineException, SimChainLoaderException {
 		mkInstance();
 		if (parmMap != null)
 			injectParameters(parmMap);

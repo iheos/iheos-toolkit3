@@ -182,4 +182,16 @@
   <scm>
     <developerConnection>scm:hg:/Users/bmajur/v3workspace/toolkit3</developerConnection>
   </scm>
+  <properties>
+    <skip.repository.module.tests>false</skip.repository.module.tests>
+</properties>
+
+<profiles>
+    <profile>
+        <id>SKIP_REPOSITORY_MODULE_TESTS</id>
+        <properties>
+            <skip.repository.module.tests>true</skip.repository.module.tests>
+        </properties>
+    </profile>
+</profiles>
   </project>
