@@ -2,10 +2,10 @@ package gov.nist.hit.ds.simServlet;
 
 import gov.nist.hit.ds.actorSimFactory.ActorSimFactory;
 import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
-import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.initialization.installation.Installation;
@@ -18,15 +18,17 @@ import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
-import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
+import gov.nist.hit.ds.simSupport.engine.SimEngineException;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.simSupport.validators.SimEndpointParser;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.core.SoapFault;
+import gov.nist.hit.ds.soapSupport.core.SoapResponseGenerator;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.io.Io;
+import gov.nist.hit.ds.utilities.xml.Parse;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.io.File;
@@ -64,17 +66,17 @@ public class SimServlet extends HttpServlet {
 		this.config = config;
 		BasicConfigurator.configure();
 		logger.info("SimServlet initializing");
-		
+
 		// This should do all the primary initialization in case it was not done elsewhere
 		try {
 			File warHome = new File(config.getServletContext().getRealPath("/"));
 			Installation.installation().setWarHome(warHome);
 			Installation.installation().initialize();
-			logger.info("External Cache is found at <" + Installation.installation().getExternalCache().toString());
+			logger.info("External Cache is found at <" + Installation.installation().getExternalCache().toString() + ">");
 		} catch (Exception e) {
 			logger.fatal("Error initializing the toolkit.\n" + ExceptionUtil.exception_details(e));
 			return;
-//			throw new ServletException("Error initializing the toolkit.", e);
+			//			throw new ServletException("Error initializing the toolkit.", e);
 		}
 		// This assumes that the toolkit has been configured before this Servlet
 		// is initialized.
@@ -84,27 +86,28 @@ public class SimServlet extends HttpServlet {
 		} catch (Exception e) {
 			logger.fatal("Error initializing Simulator Environment.\n" + ExceptionUtil.exception_details(e));
 			return;
-//			throw new ServletException("Error initializing Simulator Environment.", e);
+			//			throw new ServletException("Error initializing Simulator Environment.", e);
 		} 
 		try {
 			initRepositoryEnvironment();
 		} catch (Exception e) {
 			logger.fatal("Error initializing Repository Environment.\n" + ExceptionUtil.exception_details(e));
 			return;
-//			throw new ServletException("Error initializing Repository Environment.", e);
+			//			throw new ServletException("Error initializing Repository Environment.", e);
 		}
 		initialized = true;
 	}
-	
+
 	/**
 	 * Initialize the simulator environment. Called by init() and unit tests.  
+	 * @throws SimEngineException 
 	 */
-	public void initSimEnvironment() throws FileNotFoundException, SecurityException, IllegalArgumentException, IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimChainLoaderException {
+	public void initSimEnvironment() throws FileNotFoundException, SecurityException, IllegalArgumentException, IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimChainLoaderException, SimEngineException {
 		new ActorSimFactory().loadSims();
 	}
-	
+
 	public void initRepositoryEnvironment() throws RepositoryException {
-			new Configuration(Installation.installation().getRepositoryRoot());
+		new Configuration(Installation.installation().getRepositoryRoot());
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) {
@@ -113,27 +116,116 @@ public class SimServlet extends HttpServlet {
 		// This is being set up early in case we need to generate a SOAPFault
 		HttpEnvironment httpEnv = new HttpEnvironment().setResponse(response);
 		SoapEnvironment soapEnv = new SoapEnvironment(httpEnv);
-		
+
 		if (!initialized) {
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Toolkit service did not initialize correctly. Check the log files for details.");
 			return;
 		}
 
 		// Parse endpoint to discover what simulator is the target of the request.
+		SimEndpoint simEndpoint = parseEndpoint(uri, soapEnv);
+		if (simEndpoint == null)
+			return;
+		
+		TransactionType transType = TransactionType.find(simEndpoint.getTransaction());
+		if (transType == null) {
+			sendSoapFault(soapEnv, FaultCode.Sender, "Unknown transaction code [" + simEndpoint.getTransaction() + "]");
+			return;
+		}
+		soapEnv.setExpectedRequestAction(transType.getRequestAction());
+		soapEnv.setResponseAction(transType.getResponseAction());
+		
+		handleSimulatorInputTransaction(request, soapEnv, simEndpoint, new Endpoint().setEndpoint(uri));
+		
+		returnEventResponse(httpEnv, soapEnv); 
+	}
+
+	SimEndpoint parseEndpoint(String uri, SoapEnvironment soapEnv) {
 		SimEndpoint simEndpoint;
 		try {
 			simEndpoint = new SimEndpointParser().parse(uri);
 		} catch (Exception e) {
 			sendSoapFault(soapEnv, FaultCode.EndpointUnavailable, "Cannot parse endpoint <" + uri + "> " + e.getMessage());
-			return;
+			simEndpoint = null;
 		}
+		return simEndpoint;
+	}
 
-		handleSimulatorInputTransaction(request, soapEnv, simEndpoint, new Endpoint().setEndpoint(uri));
+	void returnEventResponse(HttpEnvironment httpEnv,
+			SoapEnvironment soapEnv) {
+		try {
+			Event event = (Event)httpEnv.getEventLog();
+			String responseBodyString = event.getInOutMessages().getResponse();
+			SoapResponseGenerator soapGen = new SoapResponseGenerator(soapEnv, Parse.parse_xml_string(responseBodyString));
+			String responseString = soapGen.send();
+			event.getInOutMessages().putResponse(responseString);
+		} catch (Exception e) {
+			logger.error("Error generating response: \n" + ExceptionUtil.exception_details(e));
+			sendSoapFault(
+					soapEnv, 
+					FaultCode.Receiver,
+					"Error generating response: \n" + ExceptionUtil.exception_details(e));
+		}
 	}
 
 	public void handleSimulatorInputTransaction(HttpServletRequest request,
 			SoapEnvironment soapEnv, SimEndpoint simEndpoint, Endpoint endpoint) {
-		Event event;
+		Event event = null;
+		event = buildEvent(soapEnv, simEndpoint, event);
+		
+		if (event == null)
+			return;
+
+		soapEnv.getHttpEnvironment().setEventLog(event);
+		soapEnv.setEndpoint(endpoint);
+		request.setAttribute("Event", event); // SimServletFilter needs this to log response as it goes out on the wire
+
+		// Make the input message available to the SimChain
+		try {
+			logRequest(request, event, simEndpoint.getActor(), simEndpoint.getTransaction());
+		} catch (Exception e) {
+			logger.error("Internal error logging request message", e);
+			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error logging request message: " + e.getMessage());
+			return;
+		} 
+
+		// Find the correct SimChain and run it.  The SimChain selected by a combination of
+		// Actor and Transaction codes.  These codes came from the endpoint used to contact this 
+		// Servlet.
+		try {
+			new ActorSimFactory().run(simEndpoint.getActor() + "^" + simEndpoint.getTransaction(), soapEnv);
+		} catch (SoapFaultException sfe) {
+			logger.info("SOAPFault: " + sfe.getMessage());
+			sendSoapFault(soapEnv, sfe);
+		} catch (Exception e) {
+			logger.error("SOAPFault: " + ExceptionUtil.exception_details(e));
+			sendSoapFault(
+					soapEnv,
+					new SoapFaultException(
+							null,
+							FaultCode.Receiver,
+							"Problem with SimChain definition for Actor (" + simEndpoint.getActor() 
+							+ ") and Transaction (" + simEndpoint.getTransaction() + ") " +
+							ExceptionUtil.exception_details(e)
+							)
+					);
+		} catch (Throwable e) {
+			logger.error("SOAPFault: " + ExceptionUtil.exception_details(e));
+			sendSoapFault(
+					soapEnv,
+					new SoapFaultException(
+							null,
+							FaultCode.Receiver,
+							"Problem with SimChain definition for Actor (" + simEndpoint.getActor() 
+							+ ") and Transaction (" + simEndpoint.getTransaction() + ") " +
+							ExceptionUtil.exception_details(e)
+							)
+					);
+		}
+	}
+
+	private Event buildEvent(SoapEnvironment soapEnv, SimEndpoint simEndpoint,
+			Event event) {
 		try {
 			SimDb db = new SimDb(simEndpoint.getSimId());
 			SimId simId = simEndpoint.getSimId();
@@ -142,7 +234,7 @@ public class SimServlet extends HttpServlet {
 					"Event_Repository", 
 					"Event Repository", 
 					new SimpleType("simEventRepository"),               // repository type
-					ActorType.findActor(simEndpoint.getActor()) + "_" + simId    // repository name
+					ActorType.findActor(simEndpoint.getActor()).getShortName() + "-" + simId    // repository name
 					);
 			Asset eventAsset = repos.createAsset(
 					db.nowAsFilenameBase(), 
@@ -152,41 +244,8 @@ public class SimServlet extends HttpServlet {
 		} catch (Exception e) {
 			logger.error("Internal error initializing simulator environment", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment: " + e.getMessage());
-			return;
-		} 
-
-		soapEnv.getHttpEnvironment().setEventLog(event);
-		soapEnv.setEndpoint(endpoint);
-		request.setAttribute("Event", event); // SimServletFilter needs this to log response as it goes out on the wire
-
-		// This makes the input message available to the SimChain
-		try {
-			logRequest(request, event, simEndpoint.getActor(), simEndpoint.getTransaction());
-		} catch (Exception e) {
-			logger.error("Internal error logging request message", e);
-			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error logging request message: " + e.getMessage());
-			return;
-		} 
-		
-		// Find the correct SimChain and run it.  The SimChain selected by a combination of
-		// Actor and Transaction codes.  These codes came from the endpoint used to contact this 
-		// Servlet.
-		try {
-			new ActorSimFactory().run(simEndpoint.getActor() + "^" + simEndpoint.getTransaction(), soapEnv);
-		} catch (SoapFaultException sfe) {
-			sendSoapFault(soapEnv, sfe);
-		} catch (Exception e) {
-			sendSoapFault(
-					soapEnv,
-					new SoapFaultException(
-							null,
-							FaultCode.Receiver,
-							"Problem with SimChain definition for Actor <" + simEndpoint.getActor() 
-							+ "> and Transaction <" + simEndpoint.getTransaction() + "> " +
-									e.getMessage()
-							)
-					);
 		}
+		return event;
 	}
 
 	/**
@@ -206,8 +265,6 @@ public class SimServlet extends HttpServlet {
 			throws FileNotFoundException, IOException, HttpHeaderParseException, ParseException, RepositoryException {
 		StringBuffer buf = new StringBuffer();
 		Map<String, String> headers = new HashMap<String, String>();
-		HttpHeader contentTypeHeader;
-		String bodyCharset;
 
 		buf.append(request.getMethod() + " " + request.getRequestURI() + " " + request.getProtocol() + "\r\n");
 		for (@SuppressWarnings("unchecked")
@@ -217,17 +274,16 @@ public class SimServlet extends HttpServlet {
 			if (name.equals("Transfer-Encoding"))
 				continue;  // log will not include transfer encoding so don't include this
 			headers.put(name.toLowerCase(), value);
-			buf.append(value).append("\r\n");
+			buf.append(name).append(": ").append(value).append("\r\n");
 		}
-		//		bodyCharset = request.getCharacterEncoding();
-		String ctype = headers.get("content-type");
-		if (ctype == null || ctype.equals(""))
-			throw new IOException("Content-Type header not found");
-		contentTypeHeader = new HttpHeader(ctype);
-		bodyCharset = contentTypeHeader.getParam("charset");
-
-		if (bodyCharset == null || bodyCharset.equals(""))
-			bodyCharset = "UTF-8";
+		//		String ctype = headers.get("content-type");
+		//		if (ctype == null || ctype.equals(""))
+		//			throw new IOException("Content-Type header not found");
+		//		HttpHeader contentTypeHeader = new HttpHeader(ctype);
+		//		String bodyCharset = contentTypeHeader.getParam("charset");
+		//
+		//		if (bodyCharset == null || bodyCharset.equals(""))
+		//			bodyCharset = "UTF-8";
 
 		buf.append("\r\n");
 
@@ -252,7 +308,7 @@ public class SimServlet extends HttpServlet {
 			logger.error("Error sending SOAPFault", ex);
 		}
 	}
-	
+
 	/**
 	 * This is only used by unit tests to determine if a soap fault was returned.
 	 * @return

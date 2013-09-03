@@ -5,6 +5,7 @@ import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoader;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
+import gov.nist.hit.ds.simSupport.engine.SimEngineException;
 import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
@@ -14,6 +15,7 @@ import gov.nist.hit.ds.utilities.string.StringUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -43,7 +45,7 @@ sim1.name=name_of_sim_to_put_in_displays
  *
  */
 public class ActorSimFactory {
-	static String configuredSimsFileName = "configuredActorSims.properties";
+	static String configuredSimsFileName = "/configuredActorSims.properties";
 	static File configuredSimsFile = null;  // only used during testing
 	static Properties simConfig = new Properties();
 	static final Logger logger = Logger.getLogger(ActorSimFactory.class);
@@ -54,7 +56,7 @@ public class ActorSimFactory {
 		configuredSimsFile = file;
 	}
 
-	public void run(String actorTransCode, Object base) throws SoapFaultException, SimEngineSubscriptionException {
+	public void run(String actorTransCode, Object base) throws SoapFaultException, SimEngineException {
 		String actorCode = actorCode(actorTransCode);
 		String transCode = transactionCode(actorTransCode);
 		if (actorCode == null) {
@@ -75,7 +77,8 @@ public class ActorSimFactory {
 
 		SimChain simChain = factories.get(actorTransCode); 
 		if (simChain == null) {
-			String msg = "Do not have a Simulator for Actor Code <" + actorCode + "> and Transaction Code <" + transCode + ">";
+			String msg = "Do not have a Simulator for Actor Code <" + actorCode + "> and Transaction Code <" + transCode + ">. " +
+		" Codes exist for " + factories.keySet();
 			logger.error(msg);
 			throw new SoapFaultException(
 					null,
@@ -86,9 +89,9 @@ public class ActorSimFactory {
 
 		simChain.setBase(base);
 		SimEngine engine = new SimEngine(simChain);
-		System.out.println(engine.getDescription(simChain).toString());
+		logger.info(engine.getDescription(simChain).toString());
 		engine.run();
-		System.out.println(simChain.getLog());
+		logger.info(simChain.getLog());
 	}
 
 	/**
@@ -101,14 +104,19 @@ public class ActorSimFactory {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
-	 * @throws SimEngineSubscriptionException
 	 * @throws SimChainLoaderException
+	 * @throws SimEngineException 
 	 */
-	public void loadSims() throws FileNotFoundException, IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SimChainLoaderException  {
+	public void loadSims() throws FileNotFoundException, IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimChainLoaderException, SimEngineException  {
 		if (configuredSimsFile != null)
 			simConfig.load(Io.getInputStreamFromFile(configuredSimsFile));
-		else
-			simConfig.load(new ActorSimFactory().getClass().getResourceAsStream(configuredSimsFileName));
+		else {
+			InputStream is = getClass().getResourceAsStream(configuredSimsFileName); 
+			if (is == null)
+				throw new FileNotFoundException("Could not load <" + configuredSimsFileName + ">");
+			logger.info("Loading Simulator configurations from <" + configuredSimsFileName + ">");
+			simConfig.load(is);
+		}
 
 		Enumeration<?> pnames = simConfig.propertyNames();
 		while (pnames.hasMoreElements()) {
@@ -124,9 +132,14 @@ public class ActorSimFactory {
 				logger.error("Parsing configuredSims.properties: item <" + itemName + "> must have an actor and a transaction property to be valid - simulator not loaded");
 				continue;
 			}
+			String actorTransCode = actorTransactionCode(actorCode, transCode);
 			SimChain simChain = new SimChainLoader(simChainPath).load();
-			factories.put(actorCode + "^" + transCode, simChain);			
+			factories.put(actorTransCode, simChain);			
 		}
+	}
+	
+	String actorTransactionCode(String actorCode, String transCode) {
+		return actorCode + "^" + transCode;
 	}
 
 	String actorCode(String atCode) {

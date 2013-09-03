@@ -7,6 +7,7 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.core.SoapFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 
 /**
@@ -33,9 +36,9 @@ public class SimEngine implements MessageValidatorEngine {
 	List<PubSubMatch> pubSubMatches = new ArrayList<PubSubMatch>();
 	int simsRun = 0;
 	SoapEnvironment soapEnvironment;
+	static Logger logger = Logger.getLogger(SimEngine.class);
 	
-	
-	public SimEngine(String simChainResource) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SecurityException, IllegalArgumentException, SimChainLoaderException {
+	public SimEngine(String simChainResource) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SecurityException, IllegalArgumentException, SimChainLoaderException, SimEngineException {
 		this(new SimChainLoader(simChainResource).load());
 	}
 	
@@ -67,11 +70,12 @@ public class SimEngine implements MessageValidatorEngine {
 	 * outer loop (while(!isComplete()) will catch the added SimSteps. 
 	 * @throws SimEngineSubscriptionException
 	 */
-	public void run() throws SimEngineSubscriptionException {
+	public void run() throws SimEngineException {
 		if (simChain.getBase() != null && (simChain.getBase() instanceof SoapEnvironment))
 			soapEnvironment = (SoapEnvironment) simChain.getBase();
 		
-		System.out.println("---------------------------------------------------------------\nRun");
+		logger.info("---------------------------------------------------------------");
+		logger.info("Run");
 		boolean errorsFound = false;
 		SystemErrorRecorderBuilder erBuilder = new SystemErrorRecorderBuilder();
 		while(!errorsFound && !isComplete()) {
@@ -100,13 +104,12 @@ public class SimEngine implements MessageValidatorEngine {
 						simStep.getErrorRecorder().err(Code.SoapFault, e);
 						soapFault.send();
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						logger.error(ExceptionUtil.exception_details(e1));
 					}
 					return;
 				}
 				if (simChain.hasErrors()) {
-					System.out.println("Engine Error: " + simChain.getError());
+					logger.error("Engine Error: " + simChain.getError());
 					errorsFound = true;
 				}
 				break;  // this gets around concurrent modification errors to SimChain
@@ -114,7 +117,7 @@ public class SimEngine implements MessageValidatorEngine {
 				// schedules the next.
 			}
 		}
-		System.out.println("Engine: " + simsRun + " sims run");
+		logger.info("Engine: " + simsRun + " sims run");
 	}
 
 	/**
@@ -134,7 +137,7 @@ public class SimEngine implements MessageValidatorEngine {
 
 	public StringBuffer getDescription(SimChain simChain) {
 		StringBuffer buf = new StringBuffer();
-		buf.append("---------------------------------------------------------------\nSimChain Analyis\n");
+		logger.info("---------------------------------------------------------------\nSimChain Analyis\n");
 
 		describe(simChain.getBase(), buf);
 		for(Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
@@ -210,7 +213,7 @@ public class SimEngine implements MessageValidatorEngine {
 	 * @return
 	 * @throws SimEngineSubscriptionException 
 	 */
-	void matchPubSub(SimComponent subscriptionObject) throws SimEngineSubscriptionException {
+	void matchPubSub(SimComponent subscriptionObject) throws SimEngineException {
 		Class<?> valClass = subscriptionObject.getClass();
 		System.out.println(valClass.getName());
 		Method[] valMethods = valClass.getMethods();
@@ -334,8 +337,9 @@ public class SimEngine implements MessageValidatorEngine {
 	 * Execute getter/setters to initialize the current ValSim with information
 	 * produced by an earlier step.
 	 * @param match
+	 * @throws SimEngineExecutionException 
 	 */
-	void executePubSub(PubSubMatch match) {
+	void executePubSub(PubSubMatch match) throws SimEngineExecutionException  {
 		try {
 			Object o = match.pubMethod.invoke(match.pubObject, (Object[]) null);
 			if (o == null)
@@ -344,14 +348,11 @@ public class SimEngine implements MessageValidatorEngine {
 			args[0] = o;
 			match.subMethod.invoke(match.subObject, args);
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new SimEngineExecutionException(e);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new SimEngineExecutionException(e);
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new SimEngineExecutionException(e);
 		}
 	}
 

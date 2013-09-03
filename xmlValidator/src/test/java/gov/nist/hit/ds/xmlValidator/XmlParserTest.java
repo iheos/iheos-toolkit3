@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
-import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
+import gov.nist.hit.ds.simSupport.engine.SimEngineException;
 import gov.nist.hit.ds.simSupport.engine.SimStep;
 import gov.nist.hit.ds.simSupport.loader.ByParamLogLoader;
 import gov.nist.hit.ds.simSupport.loader.ValidationContext;
@@ -74,7 +74,7 @@ public class XmlParserTest {
 		System.out.println(engine.getDescription(simChain));
 		try {
 			engine.run();
-		} catch (SimEngineSubscriptionException e) {
+		} catch (SimEngineException e) {
 			System.out.flush();
 			e.printStackTrace();
 			fail();

@@ -40,5 +40,15 @@
 	    	<artifactId>registryMetadata</artifactId>
 	    	<version>3.0.0-SNAPSHOT</version>
 	    </dependency>
+	    <dependency>
+	    	<groupId>gov.nist.hit.ds</groupId>
+	    	<artifactId>simSupport</artifactId>
+	    	<version>3.0.0-SNAPSHOT</version>
+	    </dependency>
+	    <dependency>
+	    	<groupId>gov.nist.hit.ds</groupId>
+	    	<artifactId>utilities</artifactId>
+	    	<version>3.0.0-SNAPSHOT</version>
+	    </dependency>
   	</dependencies>
 </project>

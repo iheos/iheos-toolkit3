@@ -42,6 +42,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 	@Inject
 	public SoapHeaderValidator setSoapEnvironment(SoapEnvironment soapEnvironment) {
 		this.soapEnvironment = soapEnvironment;
+		expectedAction = soapEnvironment.getExpectedRequestAction();
 		return this;
 	}
 	

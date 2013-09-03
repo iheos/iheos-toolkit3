@@ -14,7 +14,7 @@ import org.junit.Test;
 public class SimComponentLoaderTest {
 	
 	@Test
-	public void loaderWithParmsTest() {
+	public void loaderWithParmsTest() throws SimEngineException {
 		Properties parmMap = new Properties();
 		parmMap.put("myStuff", "Stuff it");
 		parmMap.put("name", "My Component");
@@ -57,7 +57,7 @@ public class SimComponentLoaderTest {
 	}
 
 	@Test
-	public void loaderWithNoParmsTest() {
+	public void loaderWithNoParmsTest() throws SimEngineException {
 		Properties parmMap = new Properties();
 		SimComponentLoader loader = new SimComponentLoader(MyComponent.class.getName(), parmMap);
 		SimComponent component = null;

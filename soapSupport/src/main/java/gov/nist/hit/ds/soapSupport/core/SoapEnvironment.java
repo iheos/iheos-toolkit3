@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SoapEnvironment {
 	boolean multipart = false;
+	String expectedRequestAction = null;
 	String requestAction = null;
 	String responseAction = null;
 	String messageId = null;
@@ -30,6 +31,15 @@ public class SoapEnvironment {
 	
 	public Endpoint getEndpoint() {
 		return endpoint;
+	}
+	
+	public SoapEnvironment setExpectedRequestAction(String action) {
+		this.expectedRequestAction = action;
+		return this;
+	}
+	
+	public String getExpectedRequestAction() {
+		return expectedRequestAction;
 	}
 	
 	public SoapEnvironment(HttpEnvironment httpEnv) {

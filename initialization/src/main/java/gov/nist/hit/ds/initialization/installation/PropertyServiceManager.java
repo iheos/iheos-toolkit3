@@ -48,49 +48,40 @@ public class PropertyServiceManager {
 	}
 
 	public String getAdminPassword()  {
-		logger.debug(": " + "getAdminPassword");
 		return getPropertyManager().getPassword();
 	}
 
 	public String getToolkitHost()  {
-		logger.debug(": " + "getToolkitHost");
 		return getPropertyManager().getToolkitHost();
 	}
 
 	public String getToolkitPort()  {
-		logger.debug(": " + "getToolkitPort");
 		return getPropertyManager().getToolkitPort();
 	}
 
 	public String getToolkitTlsPort()  {
-		logger.debug(": " + "getToolkitTlsPort");
 		return getPropertyManager().getToolkitTlsPort();
 	}
 
 	public String getToolkitEnableAllCiphers()  {
-		logger.debug(": " + "getToolkitEnableAllCiphers");
 		return getPropertyManager().getToolkitEnableAllCiphers();
 	}
 
 	public File getActorsFileName()  {
-		logger.debug(": " + "getActorsFileName");
 		return new File(getPropertyManager().getExternalCache() + File.separator + "actors.xml");
 	}
 
 	public File getSimDbDir()  {
-		logger.debug(": " + "getSimDbDir");
 		File f = new File(getPropertyManager().getExternalCache() + File.separator + "simdb");
 		f.mkdirs();
 		return f;
 	}
 
 	public String getDefaultEnvironmentName()  {
-		logger.debug(": " + "getDefaultEnvironmentName");
 		return getPropertyManager().getDefaultEnvironmentName();
 	}
 
 	public String getDefaultAssigningAuthority()  {
-		logger.debug(": " + "getDefaultAssigningAuthority");
 		return getPropertyManager().getDefaultAssigningAuthority();
 	}
 
@@ -166,15 +157,10 @@ public class PropertyServiceManager {
 	}
 
 	public Map<String, String> getToolkitProperties()  {
-		logger.debug(": " + "getToolkitProperties");
 		return getPropertyManager().getPropertyMap();
 	}
 
-
-
-
 	public boolean reloadPropertyFile() {
-		logger.debug(": " + "reloadPropertyFile");
 		propertyManager = null;
 		getPropertyManager();
 		return true;
@@ -188,7 +174,6 @@ public class PropertyServiceManager {
 	}
 
 	public String getImplementationVersion() {
-		logger.debug(": " + "getImplementationVersion");
 		return Installation.installation().getBuildNumber();
 	}
 
@@ -223,7 +208,6 @@ public class PropertyServiceManager {
 	//	}
 
 	public String getDefaultEnvironment()  {
-		logger.debug(": " + "getDefaultEnvironment()");
 		return getPropertyManager().getDefaultEnvironmentName();
 	}
 

@@ -81,12 +81,12 @@ public class SimEngineTest {
 		
 	}
 
-	void run(SimChain simChain) {
+	void run(SimChain simChain)  {
 		SimEngine engine = new SimEngine(simChain);
 		System.out.println(engine.getDescription(simChain));
 		try {
 			engine.run();
-		} catch (SimEngineSubscriptionException e) {
+		} catch (SimEngineException e) {
 			System.out.flush();
 			e.printStackTrace();
 			fail();

@@ -1,20 +1,22 @@
 package gov.nist.hit.ds.httpSoapValidator;
 
 import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoader;
-import gov.nist.hit.ds.simSupport.engine.SimEngine;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
-import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
+import gov.nist.hit.ds.simSupport.engine.SimEngine;
+import gov.nist.hit.ds.simSupport.engine.SimEngineException;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.log4j.Logger;
+
 public class Launcher {
+	static Logger logger = Logger.getLogger(Launcher.class);
 
 	/**
 	 * 
@@ -27,12 +29,12 @@ public class Launcher {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
-	 * @throws SimEngineSubscriptionException
 	 * @throws SimChainLoaderException 
 	 * @throws IllegalArgumentException 
 	 * @throws SecurityException 
+	 * @throws SimEngineException 
 	 */
-	public Launcher launch(String chainDef) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineSubscriptionException, SecurityException, IllegalArgumentException, SimChainLoaderException {
+	public Launcher launch(String chainDef) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SecurityException, IllegalArgumentException, SimChainLoaderException, SimEngineException {
 		SimChain simChain = new SimChainLoader(chainDef).load();
 		
 		simChain.setBase(new SoapEnvironment(new HttpEnvironment().setResponse(new HttpServletResponseMock())));
@@ -41,11 +43,11 @@ public class Launcher {
 
 		SimEngine engine = new SimEngine(simChain);
 		
-		System.out.println(engine.getDescription(simChain));
+		logger.info(engine.getDescription(simChain));
 
 		engine.run();
 
-		System.out.println(simChain.getLog());
+		logger.info(simChain.getLog());
 		
 		return this;
 

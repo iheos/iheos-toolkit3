@@ -57,7 +57,7 @@ public class SimChainLoaderTest {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 			fail();
-		} catch (SimEngineSubscriptionException e) {
+		} catch (SimEngineException e) {
 			e.printStackTrace();
 			fail();
 		} catch (SimChainLoaderException e) {
@@ -110,7 +110,7 @@ public class SimChainLoaderTest {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 			fail();
-		} catch (SimEngineSubscriptionException e) {
+		} catch (SimEngineException e) {
 			e.printStackTrace();
 			fail();
 		} catch (SimChainLoaderException e) {

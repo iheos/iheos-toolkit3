@@ -1,17 +1,15 @@
 package gov.nist.hit.ds.httpSoapValidator;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoader;
-import gov.nist.hit.ds.simSupport.engine.SimEngine;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
-import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
+import gov.nist.hit.ds.simSupport.engine.SimEngine;
+import gov.nist.hit.ds.simSupport.engine.SimEngineException;
 import gov.nist.hit.ds.simSupport.engine.SimStep;
-import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 
 import java.io.IOException;
@@ -67,7 +65,7 @@ public class ConfigFileTest {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 			fail();
-		} catch (SimEngineSubscriptionException e) {
+		} catch (SimEngineException e) {
 			e.printStackTrace();
 			fail();
 		} catch (SimChainLoaderException e) {
