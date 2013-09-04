@@ -52,6 +52,8 @@ public class Installation {
 		initializeExternalCache(new File(propertyServiceMgr.getToolkitProperties().get(PropertyServiceManager.EXTERNAL_CACHE)));
 	}
 	
+	static public void reset() { me = null; }
+	
 	public Installation setToolkitPropertiesFile(File propsFile) {
 		this.toolkitPropertiesFile = propsFile;
 		return this;
@@ -60,16 +62,22 @@ public class Installation {
 	public InputStream getToolkitProperties() { 
 		logger.debug("Installation#getToolkitProperties");
 		InputStream is = null;
+		String from = null;
 		if (toolkitPropertiesFile != null) {
 			logger.debug("loading from file designator: " + toolkitPropertiesFile.toString());
+			from = toolkitPropertiesFile.toString();
 			try {
 				is = Io.getInputStreamFromFile(toolkitPropertiesFile);
 			} catch (FileNotFoundException e) {
-				throw new RuntimeException("Could not load toolkit.properties");
+				throw new RuntimeException("Could not load toolkit.properties from <" + toolkitPropertiesFile + ">");
 			}
 		} else {
 			logger.debug("Using class loader");
-			is = getClass().getClassLoader().getResourceAsStream("toolkit.properties");
+			ClassLoader cl = getClass().getClassLoader();
+			URL url = cl.getResource("toolkit.properties");
+			from = url.toExternalForm();
+			logger.debug("loading toolkit.properties from <" + url.toString());
+			is = cl.getResourceAsStream("toolkit.properties");
 		}
 		if (is == null) {
 			logger.debug("InputStream is null");
