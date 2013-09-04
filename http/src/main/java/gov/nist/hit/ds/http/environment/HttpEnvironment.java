@@ -32,8 +32,18 @@ public class HttpEnvironment {
 		return os;
 	}
 
+	
+	/**
+	 * This is managed as type Object to avoid type dependency loops.
+	 * @return
+	 */
 	public Object getEventLog() { return eventLog; }
 	
+	/**
+	 * This is managed as type Object to avoid type dependency loops.
+	 * @param eventLog
+	 * @return
+	 */
 	public HttpEnvironment setEventLog(Object eventLog) { this.eventLog = eventLog; return this; }
 
 }

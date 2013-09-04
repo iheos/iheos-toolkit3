@@ -32,7 +32,7 @@ public class SoapEnvironment {
 	public Endpoint getEndpoint() {
 		return endpoint;
 	}
-	
+		
 	public SoapEnvironment setExpectedRequestAction(String action) {
 		this.expectedRequestAction = action;
 		return this;

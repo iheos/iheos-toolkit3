@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.eventLog;
 
+import gov.nist.hit.ds.eventLog.assertion.Assertions;
+import gov.nist.hit.ds.eventLog.assertion.Fault;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 
@@ -18,6 +20,7 @@ public class Event {
 	InOutMessages inOut;
 	Artifacts artifacts;
 	Assertions assertions;
+	Fault fault;
 	
 	public Event(Asset event) throws RepositoryException {
 		this.event = event;
@@ -37,10 +40,18 @@ public class Event {
 		assertions = new Assertions();
 		a = assertions.init(event);
 		AssetHelper.setOrder(a, 3);
+
+		// Created only if needed
+		fault = new Fault();
+		fault.init(event, 4);
 	}
 
 	public InOutMessages getInOutMessages() {
 		return inOut;
+	}
+	
+	public Fault getFault() {
+		return fault;
 	}
 	
 	public Artifacts getArtifacts() {

@@ -1,9 +1,9 @@
-package gov.nist.hit.ds.eventLog;
+package gov.nist.hit.ds.eventLog.assertion;
 
+import gov.nist.hit.ds.eventLog.AssetHelper;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.utilities.csv.CSVTable;
 
 public class Assertions {
 	Asset assertionsAsset;
@@ -14,10 +14,11 @@ public class Assertions {
 		return assertionsAsset;
 	}
 	
-	public void add(String validatorName, CSVTable assertionTable) throws RepositoryException {
+	public void add(String validatorName, AssertionGroup ag) throws RepositoryException {
 		Asset a = AssetHelper.createChildAsset(assertionsAsset, validatorName, "", new SimpleType("simpleType"));
 		AssetHelper.setOrder(a, counter++);
-		a.updateContent(assertionTable.toString(), "text/csv");
+		a.setProperty("status", ag.getMaxStatus().name());
+		a.updateContent(ag.getTable().toString(), "text/csv");
 
 	}
 }
