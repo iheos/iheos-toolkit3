@@ -23,6 +23,7 @@ public class FactoryTest {
 
 	@Before
 	public void init() throws InitializationFailedException {
+		Installation.reset();
 		Installation.installation().setExternalCache(new File("src/test/resources/external_cache"));
 		
 		File warHome = new File("src/test/resources/registry");

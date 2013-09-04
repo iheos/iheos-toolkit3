@@ -48,6 +48,7 @@ public class RegistrySimTest {
 	 */
 	@Before
 	public void init() throws InitializationFailedException {
+		Installation.reset();
 		new TestEnvironmentSetup().setup();
 		
 		File warHome = new File("src/test/resources/registry");
