@@ -27,6 +27,7 @@ public class FactoryTest {
 		
 		File warHome = new File("src/test/resources/registry");
 		Installation.installation().setWarHome(warHome);
+		Installation.installation().setToolkitPropertiesFile(new File(warHome,"WEB-INF/toolkit.properties"));
 		ExtendedPropertyManager.load(warHome);
 	}
 	

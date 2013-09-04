@@ -50,11 +50,12 @@ public class RegistrySimTest {
 	public void init() throws InitializationFailedException {
 		new TestEnvironmentSetup().setup();
 		
-//		Installation.installation().setExternalCache(new File("src/test/resources/external_cache"));
-
 		File warHome = new File("src/test/resources/registry");
 		Installation.installation().setWarHome(warHome);
+		Installation.installation().setToolkitPropertiesFile(new File(warHome,"WEB-INF/toolkit.properties"));
 		ExtendedPropertyManager.load(warHome);
+		
+		
 		new ActorSimFactory().setConfiguredSimsFile(new File("src/test/resources/configuredActorSims.properties"));
 		
 		// Initialize servlet - includes loading simulator definitions

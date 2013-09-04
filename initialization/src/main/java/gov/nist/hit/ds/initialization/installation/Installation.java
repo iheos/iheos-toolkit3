@@ -3,8 +3,10 @@ package gov.nist.hit.ds.initialization.installation;
 
 import gov.nist.hit.ds.initialization.tkProps.TkLoader;
 import gov.nist.hit.ds.initialization.tkProps.client.TkProps;
+import gov.nist.hit.ds.utilities.io.Io;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -25,6 +27,7 @@ public class Installation {
 	static Installation me = null;
 	File externalCache;
 	String buildNumber;
+	File toolkitPropertiesFile = null;
 
 	/**
 	 * Initialize the installation.  This is called by a servlet initializiation
@@ -48,12 +51,31 @@ public class Installation {
 
 		initializeExternalCache(new File(propertyServiceMgr.getToolkitProperties().get(PropertyServiceManager.EXTERNAL_CACHE)));
 	}
+	
+	public Installation setToolkitPropertiesFile(File propsFile) {
+		this.toolkitPropertiesFile = propsFile;
+		return this;
+	}
 
 	public InputStream getToolkitProperties() { 
-		InputStream is = getClass().getClassLoader().getResourceAsStream("toolkit.properties");
-		if (is == null) {
-			throw new RuntimeException("Could not load toolkit.properties");
+		logger.debug("Installation#getToolkitProperties");
+		InputStream is = null;
+		if (toolkitPropertiesFile != null) {
+			logger.debug("loading from file designator: " + toolkitPropertiesFile.toString());
+			try {
+				is = Io.getInputStreamFromFile(toolkitPropertiesFile);
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException("Could not load toolkit.properties");
+			}
+		} else {
+			logger.debug("Using class loader");
+			is = getClass().getClassLoader().getResourceAsStream("toolkit.properties");
 		}
+		if (is == null) {
+			logger.debug("InputStream is null");
+			throw new RuntimeException("Could not load toolkit.properties");
+		} 
+		logger.debug("InputStream is not null");
 		return is;
 	}
 
@@ -85,7 +107,7 @@ public class Installation {
 
 	void initializeExternalCache(File externalCache) throws InitializationFailedException {
 		this.externalCache = externalCache;
-		logger.info("Initializing external cache at <" + externalCache + "> ");
+		logger.info("Initializing external cache to <" + externalCache + "> ");
 		try {
 			File f = externalCache; 
 			if (f.exists()) {
