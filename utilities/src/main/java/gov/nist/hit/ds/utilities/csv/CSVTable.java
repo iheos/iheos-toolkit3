@@ -11,6 +11,11 @@ public class CSVTable {
 		return entries;
 	}
 	
+	public CSVTable add(CSVEntry entry) {
+		entries.add(entry);
+		return this;
+	}
+	
 	public int size() {
 		return entries.size();
 	}

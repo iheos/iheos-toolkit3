@@ -60,6 +60,7 @@ public class SimServlet extends HttpServlet {
 	File simDbDir;
 	String faultSent = null;
 	boolean initialized = false;
+	Event event = null;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -126,7 +127,11 @@ public class SimServlet extends HttpServlet {
 		SimEndpoint simEndpoint = parseEndpoint(uri, soapEnv);
 		if (simEndpoint == null)
 			return;
-		
+
+		event = buildEvent(soapEnv, simEndpoint);
+		if (event == null)
+			return;
+
 		TransactionType transType = TransactionType.find(simEndpoint.getTransaction());
 		if (transType == null) {
 			sendSoapFault(soapEnv, FaultCode.Sender, "Unknown transaction code [" + simEndpoint.getTransaction() + "]");
@@ -134,9 +139,9 @@ public class SimServlet extends HttpServlet {
 		}
 		soapEnv.setExpectedRequestAction(transType.getRequestAction());
 		soapEnv.setResponseAction(transType.getResponseAction());
-		
-		handleSimulatorInputTransaction(request, soapEnv, simEndpoint, new Endpoint().setEndpoint(uri));
-		
+
+		handleSimulatorInputTransaction(request, soapEnv, simEndpoint, new Endpoint().setEndpoint(uri), event);
+
 		returnEventResponse(httpEnv, soapEnv); 
 	}
 
@@ -169,12 +174,7 @@ public class SimServlet extends HttpServlet {
 	}
 
 	public void handleSimulatorInputTransaction(HttpServletRequest request,
-			SoapEnvironment soapEnv, SimEndpoint simEndpoint, Endpoint endpoint) {
-		Event event = null;
-		event = buildEvent(soapEnv, simEndpoint, event);
-		
-		if (event == null)
-			return;
+			SoapEnvironment soapEnv, SimEndpoint simEndpoint, Endpoint endpoint, Event event) {
 
 		soapEnv.getHttpEnvironment().setEventLog(event);
 		soapEnv.setEndpoint(endpoint);
@@ -224,8 +224,8 @@ public class SimServlet extends HttpServlet {
 		}
 	}
 
-	private Event buildEvent(SoapEnvironment soapEnv, SimEndpoint simEndpoint,
-			Event event) {
+	private Event buildEvent(SoapEnvironment soapEnv, SimEndpoint simEndpoint) {
+		Event event = null;
 		try {
 			SimDb db = new SimDb(simEndpoint.getSimId());
 			SimId simId = simEndpoint.getSimId();
@@ -276,14 +276,6 @@ public class SimServlet extends HttpServlet {
 			headers.put(name.toLowerCase(), value);
 			buf.append(name).append(": ").append(value).append("\r\n");
 		}
-		//		String ctype = headers.get("content-type");
-		//		if (ctype == null || ctype.equals(""))
-		//			throw new IOException("Content-Type header not found");
-		//		HttpHeader contentTypeHeader = new HttpHeader(ctype);
-		//		String bodyCharset = contentTypeHeader.getParam("charset");
-		//
-		//		if (bodyCharset == null || bodyCharset.equals(""))
-		//			bodyCharset = "UTF-8";
 
 		buf.append("\r\n");
 
@@ -299,9 +291,16 @@ public class SimServlet extends HttpServlet {
 						null,      // No error recorder established to allow capture to logs
 						faultCode,
 						new ErrorContext(reason)));
+		try {
+			if (event != null)
+				event.getFault().add(getFaultSent());
+		} catch (RepositoryException e) {
+			logger.error(e);
+		}
 	}
 
 	void sendSoapFault(SoapEnvironment soapEnv, SoapFaultException sfe) {
+
 		try {
 			faultSent = new SoapFault(soapEnv, sfe).send();
 		}  catch (Exception ex) {
