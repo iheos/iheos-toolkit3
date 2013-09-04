@@ -141,8 +141,12 @@ public class PropertyManager {
 	}
 
 	public void loadProperties()  {
-		if (toolkitProperties != null)
+		logger.info("PropertyManager#loadProperties");
+		if (toolkitProperties != null) {
+			logger.info("toolkitProperties already loaded");
 			return;
+		}
+		logger.info("loading toolkitProperties");
 		toolkitProperties = new Properties();
 		try {
 			toolkitProperties.load(Installation.installation().getToolkitProperties());
