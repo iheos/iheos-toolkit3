@@ -1,7 +1,6 @@
 package gov.nist.hit.ds.repository.simple;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;

@@ -5,10 +5,10 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
-import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
+import gov.nist.hit.ds.simSupport.engine.SimEngineException;
 import gov.nist.hit.ds.simSupport.engine.SimStep;
-import gov.nist.hit.ds.simSupport.transaction.LogLoader;
-import gov.nist.hit.ds.simSupport.transaction.ValidationContext;
+import gov.nist.hit.ds.simSupport.loader.ByParamLogLoader;
+import gov.nist.hit.ds.simSupport.loader.ValidationContext;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class XmlParserTest {
 
 	@Test
 	public void goodXml() {
-		LogLoader loader = new LogLoader().setSource("src/test/resources/good");
+		ByParamLogLoader loader = new ByParamLogLoader().setSource("src/test/resources/good");
 		ValidationContext vc = new ValidationContext();
 		vc.hasHttp = true;
 		vc.hasSoap = true;
@@ -46,7 +46,7 @@ public class XmlParserTest {
 
 	@Test
 	public void badXml() {
-		LogLoader loader = new LogLoader().setSource(new File("src/test/resources/bad"));
+		ByParamLogLoader loader = new ByParamLogLoader().setSource(new File("src/test/resources/bad"));
 		ValidationContext vc = new ValidationContext();
 		vc.hasHttp = true;
 		vc.hasSoap = true;
@@ -74,7 +74,7 @@ public class XmlParserTest {
 		System.out.println(engine.getDescription(simChain));
 		try {
 			engine.run();
-		} catch (SimEngineSubscriptionException e) {
+		} catch (SimEngineException e) {
 			System.out.flush();
 			e.printStackTrace();
 			fail();

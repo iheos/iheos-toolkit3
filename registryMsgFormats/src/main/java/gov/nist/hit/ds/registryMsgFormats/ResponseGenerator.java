@@ -5,6 +5,8 @@ import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.ValidationStepResult;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
+import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
+import gov.nist.hit.ds.utilities.xml.OMFormatter;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 
-public abstract class ResponseGenerator {
+public abstract class ResponseGenerator extends SimComponentBase {
 	boolean isXCA = false;
 	protected OMNamespace ebRSns =  MetadataSupport.ebRSns3;
 	protected OMNamespace ebRIMns = MetadataSupport.ebRIMns3;
@@ -109,10 +111,11 @@ public abstract class ResponseGenerator {
 		}
 
 		return getRoot();
-
-
-
 		//		return response;
+	}
+	
+	public String getResponseAsString() {
+		return new OMFormatter(getResponse()).toString();
 	}
 
 	public void add_error(String code, ErrorContext errorContext, String location) {

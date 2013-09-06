@@ -250,8 +250,6 @@ public class MetadataSupport {
 		return "";
 	}
 	
-	public static String SQ_action = "urn:ihe:iti:2007:RegistryStoredQuery";
-	public static String MPQ_action = "urn:ihe:iti:2009:MultiPatientStoredQuery";
 	
 	// multi-patient stored query ids
 	public static String SQ_FindDocumentsForMultiplePatients = "urn:uuid:3d1bdb10-39a2-11de-89c2-2f44d94eaa9f";
@@ -352,8 +350,6 @@ public class MetadataSupport {
 	
 	public static String dsub_ns_uri = "urn:ihe:iti:dsub:2009";
 	public static OMNamespace dsub_ns =  XmlUtil.om_factory.createOMNamespace(dsub_ns_uri, "dsub");
-	public static String dsub_subscribe_action = "http://docs.oasis-open.org/wsn/bw-2/NotificationProducer/SubscribeRequest";
-	public static String dsub_subscribe_response_action = "http://docs.oasis-open.org/wsn/bw-2/NotificationProducer/SubscribeResponse";
 
 	public static String associationTypeWithNamespace(String type) {
 		if (type.startsWith("urn"))

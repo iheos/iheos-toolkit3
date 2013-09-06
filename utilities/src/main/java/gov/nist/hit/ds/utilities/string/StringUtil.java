@@ -41,6 +41,13 @@ public class StringUtil {
 		return parts[parts.length - 1];
 	}
 	
+	static public String firstPiece(String string, String separator) {
+		int index = string.indexOf(separator);
+		if (index == -1)
+			return string;
+		return string.substring(0, index);
+	}
+	
 	static public boolean asBoolean(String value) {
 		if ("false".equalsIgnoreCase(value)) return false;
 		if ("no".equalsIgnoreCase(value)) return false;

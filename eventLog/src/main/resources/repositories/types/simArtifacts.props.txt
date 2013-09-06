@@ -1,0 +1,5 @@
+# Simulator Artifacts
+
+keyword=simArtifacts
+domain=asset
+description=Simulator Artifacts

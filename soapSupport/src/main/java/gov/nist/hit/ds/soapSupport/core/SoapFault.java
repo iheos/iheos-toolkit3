@@ -46,25 +46,13 @@ public class SoapFault {
 		text.setText(e.getFaultCode() + ": " + e.getFaultString());
 		reason.addChild(text);
 		root.addChild(reason);
-
-//		if (details.size() > 0) {
-//			OMElement detail = MetadataSupport.om_factory.createOMElement(MetadataSupport.fault_detail_qnamens);
-//			
-//			for (String d : details) {
-//				OMElement r = MetadataSupport.om_factory.createOMElement("Nit", null);
-//				r.setText(d);
-//				detail.addChild(r);
-//			}
-//			
-//			root.addChild(detail);
-//		}
 		
 		return root;
 	}
 	
-	public void send() throws Exception {
+	public String send() throws Exception {
 		SoapResponseGenerator gen = new SoapResponseGenerator(soapEnv, getXML());
-		gen.send();
+		return gen.send();
 	}
 
 

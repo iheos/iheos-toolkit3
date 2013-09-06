@@ -17,16 +17,24 @@ public class EndpointLabel {
 		this.async = asyncType == AsyncType.ASYNC;
 	}
 	
+	/**
+	 * Parse a display lqbel for an endpoint.
+	 * @param label
+	 */
 	public EndpointLabel(String label) {
 		String[] parts = label.split("_");
-		try {
-			transType = TransactionType.find(parts[0]);
-			tls = "TLS".equals(parts[1]);
-			if (tls) 
-				async = "ASYNC".equals(parts[2]);
-			else
-				async = "ASYNC".equals(parts[1]);
-		} catch (ArrayIndexOutOfBoundsException e ) {};
+		tls = false;
+		async = false;
+		if (parts == null || parts.length <= 1)  {
+			transType = TransactionType.find(label);
+			return;
+		}
+		transType = TransactionType.find(parts[0]);
+		
+		int i=1;
+		tls = i < parts.length && "TLS".equalsIgnoreCase(parts[i]);
+		if (tls) i++;
+		async = i < parts.length && "ASYNC".equalsIgnoreCase(parts[i]);
 	}
 	
 	public String get() {

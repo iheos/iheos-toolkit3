@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.repository.simple;
 
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
@@ -46,10 +46,16 @@ public class Configuration {
 		return me;
 	}	
 	
-	private Configuration() throws RepositoryException {   		
-		
-		File f = new File(getClass().getClassLoader().getResource("WEB-INF/" + REPOSITORY_SOURCE_DIRNAME).getFile());
-		addSource(f,Access.RO_RESIDENT);
+	private Configuration() throws RepositoryException {
+		File f = null;
+		try {
+			
+			f = new File(getClass().getClassLoader().getResource("WEB-INF/" + REPOSITORY_SOURCE_DIRNAME).getFile());
+			addSource(f,Access.RO_RESIDENT);
+			
+		} catch (NullPointerException npe) {
+			logger.info("No resident repository source found.");
+		}
 				
 		String ecDir = Installation.installation().getExternalCache().toString();
 		
@@ -352,7 +358,7 @@ public class Configuration {
 				return rs;
 			}
 		}
-		throw new RepositoryException(RepositoryException.UNKNOWN_REPOSITORY + ": cannot find repository source by access type " + access.toString());
+		throw new RepositoryException(RepositoryException.UNKNOWN_REPOSITORY + ": Cannot find repository source by access type " + access.toString());
 	}
 
 	
