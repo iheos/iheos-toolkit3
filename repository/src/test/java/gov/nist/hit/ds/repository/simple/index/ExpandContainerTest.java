@@ -2,17 +2,13 @@ package gov.nist.hit.ds.repository.simple.index;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import javax.servlet.ServletContext;
-
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ExpandContainerTest {
@@ -20,9 +16,14 @@ public class ExpandContainerTest {
 	
 	
 	@Test
-	public void retrieveIndexPropertyTest() {		
-		for (String s : DbIndexContainer.getIndexableProperties()) {
-			System.out.println (s);
+	public void retrieveIndexPropertyTest() {
+		
+		try {
+			for (String s : DbIndexContainer.getIndexableProperties(Configuration.getRepositorySrc(Access.RW_EXTERNAL))) {
+				System.out.println (s);
+			}
+		} catch (RepositoryException e) {			
+			fail(e.toString());
 		}
 		
 	}
@@ -33,7 +34,7 @@ public class ExpandContainerTest {
 		
 
 		try {
-			ArrayList<String> iap = DbIndexContainer.getIndexableProperties();
+			ArrayList<String> iap = DbIndexContainer.getIndexableProperties(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 			dbc.expandContainer(iap.toArray(new String[iap.size()]));
 		
 			for (String s : iap) {
@@ -41,8 +42,7 @@ public class ExpandContainerTest {
 			}
 			
 		} catch (Exception e) {
-			fail("test expand failed!");
-						
+			fail("test expand failed!" + e.toString());						
 		}
 
 	}

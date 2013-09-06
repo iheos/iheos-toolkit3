@@ -1,6 +1,6 @@
-package gov.nist.hit.ds.client.client;
+package gov.nist.hit.ds.logBrowser.client;
 
-import gov.nist.hit.ds.client.shared.FieldVerifier;
+import gov.nist.hit.ds.logBrowser.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

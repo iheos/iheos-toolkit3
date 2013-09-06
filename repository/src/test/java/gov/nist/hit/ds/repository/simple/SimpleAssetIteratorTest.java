@@ -5,11 +5,9 @@ import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.Type;
-import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
 import gov.nist.hit.ds.repository.simple.SimpleType;
-
-import java.io.File;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,7 +22,7 @@ public class SimpleAssetIteratorTest {
 	@BeforeClass
 	static public void initialize() throws RepositoryException {
 		
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		repos = fact.createRepository(
 				"This is my repository",
 				"Description",
@@ -44,7 +42,10 @@ public class SimpleAssetIteratorTest {
 	
 	int assetCount(Type type) throws RepositoryException {
 		int count = 0;
-		SimpleAssetIterator it = new SimpleAssetIterator(repos.getId(), type);
+		
+		
+		
+		SimpleAssetIterator it = new SimpleAssetIterator(repos, type);
 		
 		while (it.hasNextAsset()) {
 			count++;

@@ -107,9 +107,6 @@
   	<module>repository</module>
   	<module>xdstools3</module>
   	<module>environment</module>
-<!--
-	<module>logBrowser</module>
--->
     <module>logBrowser</module>
   </modules>
   <build>

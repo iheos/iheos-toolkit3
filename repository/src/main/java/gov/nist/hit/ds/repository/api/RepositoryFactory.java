@@ -1,14 +1,14 @@
 package gov.nist.hit.ds.repository.api;
 
+
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.SimpleRepositoryIterator;
 import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
-import gov.nist.hit.ds.repository.simple.index.IndexableRepository;
-import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 
-import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -28,41 +28,40 @@ public class RepositoryFactory implements RepositoryManager {
 	 * 
 	 */
 	private static final long serialVersionUID = -4491794003213633389L;
+	private RepositorySource source;
+
+	
+	/**
+	 * 
+	 * @param src
+	 */
+	// Keep RepositorySource as a constructor param because it makes Junit testing more meaningful by avoiding a dependency on the instantiation/setup of Configuration    
+	public RepositoryFactory(RepositorySource src) { 
+		super();
+		
+		setSource(src);
+	}
+
 
 	@Override
 	public Repository createRepository(String displayName, String description,
 			Type repositoryType) throws RepositoryException {
 		
-		/*
-		 * Determine if this repository type is indexable
-		 
-		boolean isIndexable = DbIndexContainer.isRepositoryIndexable(repositoryType);
-		*/
-		boolean isIndexable = false; // Repository level indexing is not used 
-				
-		if (isIndexable) {
-			/*
-			 * This is an indexable version of the Simple Repository (interchangeable)  
-			 */						
-			IndexableRepository rep = new IndexableRepository();
-			rep.setAutoFlush(false);
-			rep.setType(repositoryType);
-			rep.setDescription(description);
-			rep.setDisplayName(displayName);
-			rep.flush();
-			return rep;
-		} else {
-			/*
-			 * This is the standard Simple Repository (without any indexing features)
-			 */			
-			SimpleRepository rep = new SimpleRepository();
-			rep.setAutoFlush(false);
-			rep.setType(repositoryType);
-			rep.setDescription(description);
-			rep.setDisplayName(displayName);
-			rep.flush();
-			return rep;
+		if (! (this.getSource()!=null && Access.RW_EXTERNAL.equals(this.getSource().getAccess()))) {
+			throw new RepositoryException(RepositoryException.PERMISSION_DENIED + ": Cannot update non read-write repository source.");
 		}
+		
+		
+	
+		SimpleRepository rep = new SimpleRepository();
+		rep.setSource(getSource());
+		rep.setAutoFlush(false);
+		rep.setType(repositoryType);
+		rep.setDescription(description);
+		rep.setDisplayName(displayName);
+		rep.flush();
+		return rep;
+	
 		
 	}
 	
@@ -72,6 +71,7 @@ public class RepositoryFactory implements RepositoryManager {
 			String description, Type repositoryType, String repositoryName)
 			throws RepositoryException {
 		SimpleRepository rep = new SimpleRepository(repositoryName);
+		rep.setSource(getSource());
 		rep.setAutoFlush(false);
 		rep.setType(repositoryType);
 		rep.setDescription(description);
@@ -80,9 +80,6 @@ public class RepositoryFactory implements RepositoryManager {
 		return rep;
 	}	
 
-	File getRepositoryRoot(Id id) throws RepositoryException {
-		return new File(Configuration.getRootOfAllRepositories().toString() + File.separator + id);
-	}
 
 	@Override
 	public OsidContext getOsidContext() throws RepositoryException {
@@ -111,30 +108,32 @@ public class RepositoryFactory implements RepositoryManager {
 
 	@Override
 	public void deleteRepository(Id repositoryId) throws RepositoryException {
-		if (Configuration.repositoryExists(repositoryId))
+		if (Configuration.repositoryExists(getSource(), repositoryId))
 			return;
 		SimpleRepository repos = new SimpleRepository(repositoryId);
+		repos.setSource(getSource());
 		repos.delete();
 	}
-
+	
 	@Override
 	public RepositoryIterator getRepositories() throws RepositoryException {
-		return new SimpleRepositoryIterator();
+		return new SimpleRepositoryIterator(getSource().getLocation());
 	}
 
 	@Override
 	public RepositoryIterator getRepositoriesByType(Type repositoryType)
 			throws RepositoryException {
-		return new SimpleRepositoryIterator(repositoryType);
-	}
+		return new SimpleRepositoryIterator(getSource().getLocation(), repositoryType);
+	}		
 
 	@Override
 	public Repository getRepository(Id id) throws RepositoryException {
 		SimpleRepository repos = new SimpleRepository(id);
+		repos.setSource(getSource());
 		repos.load();
 		return repos;
 	}
-
+	
 	@Override
 	public Asset getAsset(Id assetId) throws RepositoryException {
 		// TODO Auto-generated method stub
@@ -173,8 +172,30 @@ public class RepositoryFactory implements RepositoryManager {
 
 	@Override
 	public TypeIterator getRepositoryTypes() throws RepositoryException {
-		return new SimpleTypeIterator();
+		return new SimpleTypeIterator(getSource().getLocation());
 	}
+
+	public TypeIterator getRepositoryTypes(RepositorySource rs) throws RepositoryException {
+		ArrayList<RepositorySource> rss = new ArrayList<RepositorySource>();
+		rss.add(rs);
+		return new SimpleTypeIterator(rss,null);
+	}
+	
+	public RepositorySource getSource() throws RepositoryException {
+		if (source==null) {
+			throw new RepositoryException(RepositoryException.NULL_ARGUMENT + ": source cannot be null");
+		}
+		return source;
+	}
+
+
+	public void setSource(RepositorySource source) {
+		this.source = source;
+	}
+
+
+
+
 
 
 }

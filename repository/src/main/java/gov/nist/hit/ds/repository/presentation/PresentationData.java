@@ -5,7 +5,11 @@ import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositoryIterator;
+import gov.nist.hit.ds.repository.api.RepositorySource;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleId;
+import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
 import gov.nist.hit.ds.repository.simple.search.client.Asset;
@@ -35,38 +39,55 @@ public class PresentationData implements IsSerializable, Serializable  {
 		RepositoryIterator it;
 		try {
 			
-			it = new RepositoryFactory().getRepositories();
+			
+			for (Access acs : RepositorySource.Access.values()) {
+				it = new RepositoryFactory(Configuration.getRepositorySrc(acs)).getRepositories();
 
-			Repository r =  null;
-			while (it.hasNextRepository()) {
-				r = it.nextRepository();
-				m.put(r.getId().getIdString(), r.getDisplayName());
+				Repository r =  null;
+				while (it.hasNextRepository()) {
+					r = it.nextRepository();
+					m.put(r.getId().getIdString(), r.getDisplayName());
+					
+				}
 				
 			}
+			
 		} catch (RepositoryException e) {
 			return null;
 		}
+		
+		// Apply sorting on display tags here if necessary
+		
 		return m;
 		
 	}
 	
 	public static List<String> getIndexablePropertyNames() {
-		return DbIndexContainer.getIndexableProperties();
+		List<String> indexProps = new ArrayList<String>(); 
+		for (Access acs : RepositorySource.Access.values()) {
+			try {
+				indexProps.addAll(DbIndexContainer.getIndexableProperties(Configuration.getRepositorySrc(acs)));
+			} catch (RepositoryException e) {
+				e.printStackTrace();
+			}
+		}
+		return indexProps;
 	}
 	
-	public static List<Asset> search(String[] repos, SearchCriteria sc) {
+	public static List<Asset> search(String[][] repos, SearchCriteria sc) {
 		
 		ArrayList<Asset> result = new ArrayList<Asset>();
 		
 		try {
-		RepositoryFactory fact = new RepositoryFactory();		
 		
 		int reposCt = repos.length;
 		Repository[] reposList = new Repository[reposCt];
 		
 		for (int cx=0; cx<reposCt; cx++) {
 			try {
-				reposList[cx] = fact.getRepository(new SimpleId(repos[cx]));
+				reposList[cx] = new SimpleRepository(new SimpleId(repos[cx][0]));
+				reposList[cx].setSource(Configuration.getRepositorySrc(Access.valueOf(repos[cx][1])));
+				
 			} catch (RepositoryException e) {
 				e.printStackTrace();
 				; // incorrect or missing data repository config file 

@@ -1,14 +1,14 @@
 package gov.nist.hit.ds.repository.simple;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositoryIterator;
 import gov.nist.hit.ds.repository.api.Type;
-
-import java.io.File;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class SimpleRepositoryTest {
 	@BeforeClass
 	static public void initialize() throws RepositoryException {
 		
-		Repository rep = new RepositoryFactory().createRepository(
+		Repository rep = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createRepository(
 				"This is my repository",
 				"Description",
 				new SimpleType("simple", ""));
@@ -30,13 +30,13 @@ public class SimpleRepositoryTest {
 	
 	@Test
 	public void loadRepositoryTest() throws RepositoryException {
-		RepositoryFactory repFact = new RepositoryFactory();
+		RepositoryFactory repFact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		repFact.getRepository(repId);
 	}
 	
 	@Test
 	public void repositoryIteratorTest1() throws RepositoryException {
-		SimpleRepositoryIterator it = new SimpleRepositoryIterator();
+		SimpleRepositoryIterator it = new SimpleRepositoryIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		
 		assertTrue (it.size() > 0);
 		assertTrue (it.size() == it.remaining());
@@ -47,7 +47,7 @@ public class SimpleRepositoryTest {
 		
 	@Test 
 	public void repositoryIteratorTest2() throws RepositoryException {
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Type simpleType = new SimpleType("simple", "");
 		Repository repos1 = fact.createRepository(
 				"This is my repository",
@@ -90,8 +90,36 @@ public class SimpleRepositoryTest {
 		assertTrue("repId2 not found", found);
 	}
 	
+	@Test
+	public void invalidReposTypeTest() throws RepositoryException {
+		
+		try {
+			new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL))
+			.createRepository(
+					"This is my repository",
+					"Description",
+					new SimpleType("XXX", "") // This is bad
+					);
+			
+			fail("An exception should be thrown");
+			
+		} catch (RepositoryException re) {
+			// This is good			
+			;
+		}
+		
+		
+		
+	}	
+	public void residentTest() throws RepositoryException {
+		
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+		
+		fact.createRepository("new repository", "test", new SimpleType("simple", ""));
+	}
+	
 	boolean findRepo(Type type, Id repIdToFind) throws RepositoryException {
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		for (RepositoryIterator ri=fact.getRepositoriesByType(type); ri.hasNextRepository();) {
 			Repository r = ri.nextRepository();
 			if (repIdToFind.isEqual(r.getId())) {

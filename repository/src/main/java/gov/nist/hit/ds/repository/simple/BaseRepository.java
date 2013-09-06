@@ -7,6 +7,7 @@ import gov.nist.hit.ds.repository.api.LongValueIterator;
 import gov.nist.hit.ds.repository.api.PropertiesIterator;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
 
@@ -15,7 +16,7 @@ import java.io.FileReader;
 import java.io.Serializable;
 import java.util.Properties;
 
-public abstract class RepositoryImpl implements Repository {
+public abstract class BaseRepository implements Repository {
 	private static final long serialVersionUID = 7947876287785415118L;
 	static final String REPOSITORY_PROPERTY_FILE = "repository.props.txt";
 
@@ -24,6 +25,9 @@ public abstract class RepositoryImpl implements Repository {
 	boolean loaded = false;
 	Properties properties = new Properties();
 	boolean isNew;
+	
+	private RepositorySource source;
+	private Id reposId;
 
 	public File getRoot() {
 		return root;
@@ -58,32 +62,29 @@ public abstract class RepositoryImpl implements Repository {
 	 * @param root - filesystem directory that holds the repository contents
 	 * @throws RepositoryException
 	 */
-	public RepositoryImpl(Id id) throws RepositoryException {
-		root = Configuration.getRepositoryLocation(id);
+	public BaseRepository(Id id) throws RepositoryException {
+		setReposId(id);
 		isNew = false;
-		load();
 	}
-
+	
 	/**
 	 * Create new Repository.
 	 * @throws RepositoryException
 	 */
-	public RepositoryImpl() throws RepositoryException {
+	public BaseRepository() throws RepositoryException {
 		isNew = true;
-		Id id = new IdFactory().getNewId();
-		properties.setProperty("id", id.getIdString());
-		root = Configuration.getRepositoryLocation(id);
+		setReposId(new IdFactory().getNewId());
+		properties.setProperty("id", getReposId().getIdString());
 	}
 	
 	/**
 	 * Create new named Repository.
 	 * @throws RepositoryException
 	 */
-	public RepositoryImpl(String name) throws RepositoryException {
+	public BaseRepository(String name) throws RepositoryException {
 		isNew = true;
-		Id id = new SimpleId(name);
-		properties.setProperty("id", id.getIdString());
-		root = Configuration.getRepositoryLocation(id);
+		setReposId(new SimpleId(name));
+		properties.setProperty("id", getReposId().getIdString());
 	}
 
 	public void load() throws RepositoryException {
@@ -127,13 +128,20 @@ public abstract class RepositoryImpl implements Repository {
 	@Override
 	public Id getId() throws RepositoryException {
 //		load();
-		String idString = properties.getProperty("id", "");
-		if (idString.equals("")) {
-			throw new RepositoryException(RepositoryException.UNKNOWN_ID + 
-					" - loading repository but Repository.id is empty");
-		}
-		Id id = new SimpleId(idString);
-		return id;
+		
+		if (!loaded) {
+			return getReposId();
+		} else {
+			String idString = properties.getProperty("id", "");
+			if (idString.equals("")) {
+				throw new RepositoryException(RepositoryException.UNKNOWN_ID + 
+						" - loading repository but Repository.id is empty");
+			}
+			Id id = new SimpleId(idString);
+			return id;
+			
+		}			
+		
 	}
 
 	@Override
@@ -146,19 +154,23 @@ public abstract class RepositoryImpl implements Repository {
 	@Override
 	public Asset getAsset(Id assetId) throws RepositoryException {
 //		load();
-		File reposDir = Configuration.getRepositoryLocation(getId());
+		File reposDir =  new File(Configuration.getRepositoriesDataDir(getSource()).toString()  + File.separator + getId().getIdString());
 		if (!reposDir.exists() || !reposDir.isDirectory())
 			throw new RepositoryException(RepositoryException.UNKNOWN_REPOSITORY + " : " +
 					"directory for repositoryId [" + getId() + "] does not exist");
 		File assetBaseFile = new File(reposDir.toString() + File.separator + assetId.getIdString());
-		SimpleAsset a = new SimpleAsset().load(assetId, assetBaseFile, getId());		
+		SimpleAsset a = new SimpleAsset(getSource()).load(assetId, assetBaseFile);
+		
 		return a;
 	}
 
 	@Override
 	public AssetIterator getAssets() throws RepositoryException {
 //		load();
-		return new SimpleAssetIterator(getId());
+		
+		SimpleRepository repos = new SimpleRepository(getId());
+		repos.setSource(getSource());
+		return new SimpleAssetIterator(repos);
 	}
 
 	@Override
@@ -277,6 +289,7 @@ public abstract class RepositoryImpl implements Repository {
 
 	protected File getRepositoryPropFile() throws RepositoryException {
 //		load();
+		//return new File (Configuration.getRepositoriesDataDir(getSource()) + File.separator + getId() + File.separator + REPOSITORY_PROPERTY_FILE); 
 		return new File(root.toString() + File.separator + REPOSITORY_PROPERTY_FILE);
 	}
 
@@ -310,5 +323,36 @@ public abstract class RepositoryImpl implements Repository {
 //		load();
 		return properties.getProperty(name);
 	}
+
+	@Override
+	public RepositorySource getSource() throws RepositoryException {
+		
+		return source;
+	}
+
+	@Override
+	public void setSource(RepositorySource source) throws RepositoryException {
+		if (source==null) {
+			throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + ": source cannot be null.");
+		}
+		
+		this.source = source;		
+		
+		root = new File(Configuration.getRepositoriesDataDir(getSource()) + File.separator + getId());
+		
+		
+		load();
+	}
+
+	
+	private Id getReposId() {
+		return reposId;
+	}
+
+	private void setReposId(Id reposId) {
+		this.reposId = reposId;
+	}
+
+
 
 }
