@@ -69,15 +69,15 @@ public class SimpleTestSuite {
 		@Override
 		protected void after() {
 			
-//			try {
-//				System.out.println("Clearing test data folder...");
-//				 FileUtils.cleanDirectory(Configuration.getRepositoriesDataDir(Configuration.getRepositorySrc(Access.RW_EXTERNAL)));
-//				 System.out.println("done.");
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			} catch (RepositoryException e) {
-//				e.printStackTrace();
-//			}
+			try {
+				System.out.println("Clearing test data folder...");
+				 FileUtils.cleanDirectory(Configuration.getRepositoriesDataDir(Configuration.getRepositorySrc(Access.RW_EXTERNAL)));
+				 System.out.println("done.");
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (RepositoryException e) {
+				e.printStackTrace();
+			}
 		 
 		}
 		
