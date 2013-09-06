@@ -5,12 +5,13 @@ syntax:glob
 xdstools2/.gwt
 xdstools2/gwt-unitCache/
 .gwt-tmp
+gwt-unitCache-*
 
 #MAC
 .DS_Store
 
 
-*\target\*
+
 target/
 build.out
 sunil's stuff/

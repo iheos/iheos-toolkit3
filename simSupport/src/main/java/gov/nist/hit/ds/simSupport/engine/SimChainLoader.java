@@ -1,7 +1,6 @@
 package gov.nist.hit.ds.simSupport.engine;
 
-import gov.nist.hit.ds.simSupport.transaction.ValidatorDefLoader;
-import gov.nist.hit.ds.valSupport.engine.MessageValidatorEngine;
+import gov.nist.hit.ds.simSupport.loader.ValidatorDefLoader;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -17,17 +16,22 @@ public class SimChainLoader {
 	}
 
 	public SimChain load() throws IOException,
-	ClassNotFoundException, NoSuchMethodException,
+	NoSuchMethodException,
 	InstantiationException, IllegalAccessException,
-	InvocationTargetException, SimEngineSubscriptionException {
+	InvocationTargetException,  SecurityException, IllegalArgumentException, SimChainLoaderException, SimEngineException {
 		List<SimStep> simSteps = new ArrayList<SimStep>();		
-		
+
 		ValidatorDefLoader vloader = new ValidatorDefLoader(chainDefResource);
 		Properties data = vloader.getProperties();
 		SimComponentParser parser = new SimComponentParser(data);
 		for (Properties parmMap : parser.getComponentProperties()) {
 			SimComponentLoader loader = new SimComponentLoader(parmMap.getProperty("class"), parmMap);
-			SimComponent component = loader.load();
+			SimComponent component = null;
+			try {
+				component = loader.load();
+			} catch (SimChainLoaderException e) {
+				throw new SimChainLoaderException("While loading SimChain <" + chainDefResource + "> ...\n" + e.getMessage());
+			}
 
 			SimStep step = new SimStep().
 					setName(component.getName()).

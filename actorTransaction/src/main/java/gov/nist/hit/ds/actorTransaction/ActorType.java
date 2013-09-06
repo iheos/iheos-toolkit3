@@ -81,15 +81,7 @@ public enum ActorType implements IsSerializable, Serializable {
 				Arrays.asList(TransactionType.IG_QUERY, TransactionType.IG_RETRIEVE),
 				true,
 				null
-				),
-		DIRECT_SERVER (
-				"Direct Server",  
-				Arrays.asList("DIRECT_SERVER"),
-				"direct", 
-				Arrays.asList(TransactionType.DIRECT),
-				true,
-				null
-				); 
+				);
 		
 		private static final long serialVersionUID = 1L;
 		String name;   

@@ -11,6 +11,11 @@ public class CSVTable {
 		return entries;
 	}
 	
+	public CSVTable add(CSVEntry entry) {
+		entries.add(entry);
+		return this;
+	}
+	
 	public int size() {
 		return entries.size();
 	}
@@ -26,5 +31,16 @@ public class CSVTable {
 			
 		}
 		return "";
+	}
+	
+	public String toString() {
+		StringBuffer buf = new StringBuffer();
+		
+		for (CSVEntry entry : entries) {
+			buf.append(entry.toString());
+			buf.append("\n");
+		}
+		
+		return buf.toString();
 	}
 }

@@ -4,27 +4,24 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
-import gov.nist.hit.ds.http.parser.HttpEnvironment;
+import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
 import gov.nist.hit.ds.httpSoapValidator.validators.HttpMessageValidator;
 import gov.nist.hit.ds.httpSoapValidator.validators.SoapHeaderValidator;
 import gov.nist.hit.ds.httpSoapValidator.validators.SoapParser;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
-import gov.nist.hit.ds.simSupport.engine.SimChainLoader;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
-import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
+import gov.nist.hit.ds.simSupport.engine.SimEngineException;
 import gov.nist.hit.ds.simSupport.engine.SimStep;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.simSupport.transaction.LogLoader;
-import gov.nist.hit.ds.simSupport.transaction.ValidationContext;
+import gov.nist.hit.ds.simSupport.loader.ByParamLogLoader;
+import gov.nist.hit.ds.simSupport.loader.ValidationContext;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.xmlValidator.XmlParser;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +32,7 @@ public class HttpSoapValTest {
 
 	@Test
 	public void httpSoapTest() {		
-		LogLoader loader = new LogLoader().setSource(new File("src/test/resources/simple"));
+		ByParamLogLoader loader = new ByParamLogLoader().setSource(new File("src/test/resources/simple"));
 
 		SimChain simChain = new SimChain();
 
@@ -70,7 +67,7 @@ public class HttpSoapValTest {
 
 	@Test
 	public void mustUnderstandFaultTest() {		
-		LogLoader loader = new LogLoader().setSource(new File("src/test/resources/fault"));
+		ByParamLogLoader loader = new ByParamLogLoader().setSource(new File("src/test/resources/fault"));
 
 		SimChain simChain = new SimChain();
 
@@ -83,7 +80,7 @@ public class HttpSoapValTest {
 
 	@Test
 	public void noHeaderFaultTest() {		
-		LogLoader loader = new LogLoader().setSource(new File("src/test/resources/noHeaderFault"));
+		ByParamLogLoader loader = new ByParamLogLoader().setSource(new File("src/test/resources/noHeaderFault"));
 
 		SimChain simChain = new SimChain();
 
@@ -98,7 +95,7 @@ public class HttpSoapValTest {
 	ValidationContext vc = new ValidationContext();
 	SimEngine engine;
 	
-	SimEngine setup(LogLoader loader, SimChain simChain) {
+	SimEngine setup(ByParamLogLoader loader, SimChain simChain) {
 		vc.hasHttp = true;
 		vc.hasSoap = true;
 		vc.isR = true;
@@ -140,7 +137,7 @@ public class HttpSoapValTest {
 		System.out.println(engine.getDescription(simChain));
 		try {
 			engine.run();
-		} catch (SimEngineSubscriptionException e) {
+		} catch (SimEngineException e) {
 			System.out.flush();
 			e.printStackTrace();
 			fail();

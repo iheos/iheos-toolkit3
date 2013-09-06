@@ -11,6 +11,16 @@ public class CSVEntry implements IEntryFactory {
 	public List<String> getItems() {
 		return items;
 	}
+	
+	public CSVEntry(int size) {
+		for (int i=0; i<size; i++) 
+			items.add(null);
+	}
+	
+	public CSVEntry set(int index, String value) {
+		items.set(index, value);
+		return this;
+	}
 		
 	public CSVEntry(String line) {
 		this.line = line;

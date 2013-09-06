@@ -45,9 +45,6 @@ public class SimChainLoaderTest {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			fail();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			fail();
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			fail();
@@ -60,7 +57,10 @@ public class SimChainLoaderTest {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 			fail();
-		} catch (SimEngineSubscriptionException e) {
+		} catch (SimEngineException e) {
+			e.printStackTrace();
+			fail();
+		} catch (SimChainLoaderException e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -98,9 +98,6 @@ public class SimChainLoaderTest {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			fail();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			fail();
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			fail();
@@ -113,7 +110,10 @@ public class SimChainLoaderTest {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 			fail();
-		} catch (SimEngineSubscriptionException e) {
+		} catch (SimEngineException e) {
+			e.printStackTrace();
+			fail();
+		} catch (SimChainLoaderException e) {
 			e.printStackTrace();
 			fail();
 		}

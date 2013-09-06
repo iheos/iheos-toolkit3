@@ -16,14 +16,13 @@ public class PubSubMatch {
 	Object subObject;
 	
 	public String toString() {
+		Class[] ptypes = subMethod.getParameterTypes();
+		String ptype = (ptypes != null && ptypes.length > 0) ? ptypes[0].getSimpleName() : "??";
 		return new StringBuffer()
-//				.append("Subscriber <")
-				.append("..")
-//				.append(subObject.getClass().getName())
-				.append("<#")
-				.append(subMethod.getName())
-//				.append("> with parm type <")
-//				.append(subMethod.getParameterTypes()[0])
+				.append("..takes ")
+				.append("<")
+//				.append(subMethod.getName())
+				.append(ptype)
 				.append("> ")
 				.append("from <")
 				.append(pubObject.getClass().getName())

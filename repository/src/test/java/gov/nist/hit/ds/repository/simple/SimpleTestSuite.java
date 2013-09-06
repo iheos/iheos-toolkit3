@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.repository.simple;
 
 
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.index.CreateContainerTest;
@@ -55,12 +55,8 @@ public class SimpleTestSuite {
 			
 			// Test assets created will be automatically removed after the test
 			File externalCache = new File(warHome.toString() + "/Testing/Test_environment");
-			
-			
+						
 			Installation.installation().setExternalCache(externalCache); // Use a prefix here when externalCache is not expected to be absolute path, which in this case the EC_Dir is relative. 
-					
-			
-			
 			
 			Configuration.configuration();
 						

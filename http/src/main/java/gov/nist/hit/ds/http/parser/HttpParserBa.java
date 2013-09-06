@@ -18,7 +18,7 @@ public class HttpParserBa {
 	boolean parsed = false;
 	ErrorRecorder er = null;
 	String charset = null;
-	HttpMessageBa message = new HttpMessageBa();
+	HttpMessageBa message = new HttpMessageBa();  // Holds the parsed message
 	MultipartParserBa multiparser;
 	boolean appendixV = true;
 
@@ -89,7 +89,8 @@ public class HttpParserBa {
 	}
 
 	public void init(HttpServletRequest request) throws IOException, HttpParseException {
-		for (Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements(); ) {
+		for (@SuppressWarnings("unchecked")
+		Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements(); ) {
 			String name = e.nextElement();
 			String value = request.getHeader(name);
 			message.addHeader(name, value);
