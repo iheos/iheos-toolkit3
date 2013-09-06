@@ -8,7 +8,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>greetServlet</servlet-name>
-    <servlet-class>gov.nist.hit.ds.client.server.GreetingServiceImpl</servlet-class>
+    <servlet-class>gov.nist.hit.ds.logBrowser.server.GreetingServiceImpl</servlet-class>
   </servlet>
 
   <servlet-mapping>

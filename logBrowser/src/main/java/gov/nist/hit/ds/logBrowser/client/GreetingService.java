@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.client.client;
+package gov.nist.hit.ds.logBrowser.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

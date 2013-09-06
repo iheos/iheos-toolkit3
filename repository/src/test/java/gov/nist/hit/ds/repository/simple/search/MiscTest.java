@@ -1,7 +1,5 @@
 package gov.nist.hit.ds.repository.simple.search;
 
-import java.util.ArrayList;
-
 import org.junit.Test;
 
 public class MiscTest {
@@ -28,11 +26,14 @@ public class MiscTest {
 		
 		
 		
-		ArrayList<String> l = new ArrayList<String>();
-		String x ="test";
+		String[][][] repos = new String[1][1][];
 		
-		l.add(x);
 		
-		System.out.println("" + l.contains("test"));
+		repos[0][0] = (new String[]{"file1","file2"});
+		
+		System.out.println("---- " + repos[0][0][0]);
+		
+		assert(false); // If asserts are checked explicitly, this should fail at runtime 
+		
 	}
 }

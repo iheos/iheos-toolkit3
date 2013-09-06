@@ -1,10 +1,11 @@
 package gov.nist.hit.ds.repository.simple.search;
 
 import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleId;
+import gov.nist.hit.ds.repository.simple.SimpleRepository;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,24 +15,43 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * @author Sunil.Bhaskarla 
+ */
 public class DownloadAssetServlet extends HttpServlet {
 
-	/**
-	 * @author Sunil.Bhaskarla 
-	 */
+	private static final String USAGE_STR = "Usage: ?reposSrc=<Resident|External>&reposId=value&assetId=value";
+
 	private static final long serialVersionUID = -2233759886953787817L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException  {
 		
+		String reposSrc = request.getParameter("reposSrc");
 		String reposId = request.getParameter("reposId");
 		String assetId = request.getParameter("assetId");
+		Access acs = null; 
+		
+		SimpleRepository repos = null;
+		try {
+			repos = new SimpleRepository(new SimpleId(reposId));
+			if (reposSrc==null) {
+				throw new ServletException("Missing required reposSrc. " +USAGE_STR);
+			} else {
+				acs = getAccessType(reposSrc);
+				if (acs==null) {
+					throw new ServletException("Invalid reposSrc. " + USAGE_STR);
+				}
+			}			
+			repos.setSource(Configuration.getRepositorySrc(acs));			
+		} catch (RepositoryException e) {			
+			throw new ServletException(e.toString());
+		}
 
+		
 		if (assetId!=null && reposId!=null) {
 			try {
-				RepositoryFactory fact = new RepositoryFactory();		
-				Repository repos = fact.getRepository(new SimpleId(reposId));
 				
 				Asset a = repos.getAsset(new SimpleId(assetId));
 				if (a!=null) {
@@ -67,9 +87,19 @@ public class DownloadAssetServlet extends HttpServlet {
 			
 		
 		} else {
-			throw new ServletException("Usage: ?reposId=value&assetId=value");			
+			throw new ServletException(USAGE_STR);			
 		}
 	}
+	
+	private Access getAccessType(String reposSrc) throws RepositoryException {
+		for (Access a : Access.values()) {
+			if (a.toString().toLowerCase().contains((reposSrc.toLowerCase()))) {
+				return a;
+			}
+		}
+		throw new RepositoryException("Access type "+ reposSrc +" not found");
+	}
+
 	
 	
 }

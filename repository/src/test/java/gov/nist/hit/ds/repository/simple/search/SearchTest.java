@@ -2,37 +2,30 @@ package gov.nist.hit.ds.repository.simple.search;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleId;
+import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
-import gov.nist.hit.ds.repository.simple.index.MockServletContext;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.servlet.ServletContext;
-import javax.validation.constraints.AssertFalse;
-
-import org.apache.commons.io.FileUtils;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 
@@ -266,11 +259,20 @@ public class SearchTest {
 		
 		
 		try {
-			RepositoryFactory fact = new RepositoryFactory();		
-			Repository repos1 = fact.getRepository(new SimpleId("46182094-bc5a-4fb6-a26d-a9c38a00a333")); // Local repository ids
-			Repository repos2 = fact.getRepository(new SimpleId("8e4465aa-17ce-490f-9377-ff85b4d48daa"));
-			Repository repos3 = fact.getRepository(new SimpleId("993dc7b8-867b-44e8-9859-dfd643734876"));
-			Repository repos4 = fact.getRepository(new SimpleId("9678578a-593e-489b-a747-ab87a63f00cf"));
+			
+			
+			
+			Repository repos1 = new SimpleRepository(new SimpleId("46182094-bc5a-4fb6-a26d-a9c38a00a333")); // Local repository ids
+			Repository repos2 = new SimpleRepository(new SimpleId("8e4465aa-17ce-490f-9377-ff85b4d48daa"));
+			Repository repos3 = new SimpleRepository(new SimpleId("993dc7b8-867b-44e8-9859-dfd643734876"));
+			Repository repos4 = new SimpleRepository(new SimpleId("9678578a-593e-489b-a747-ab87a63f00cf"));
+			
+			RepositorySource rs = Configuration.getRepositorySrc(Access.RW_EXTERNAL);
+			repos1.setSource(rs);
+			repos2.setSource(rs);
+			repos3.setSource(rs);
+			repos4.setSource(rs);
+
 			
 			AssetIterator iter = new SearchResultIterator(new Repository[]{repos1,repos2,repos3,repos4}, criteria );
 			
@@ -301,7 +303,7 @@ public class SearchTest {
 			if (t != null) {			
 				TypeIterator it;
 				try {
-					it = new SimpleTypeIterator(t);
+					it = new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 					if (it.hasNextType()) {				
 						Type assetType = it.nextType();
 						String lifetime = assetType.getLifetime();
@@ -327,12 +329,12 @@ public class SearchTest {
 						
 					}
 				} catch (RepositoryException e) {
-					
+					fail(e.toString());
 				}
 			}
 			
 		} catch (Exception e) {
-			
+			fail(e.toString());
 		}
 
 	}

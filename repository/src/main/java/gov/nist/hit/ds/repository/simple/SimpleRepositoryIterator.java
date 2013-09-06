@@ -3,6 +3,7 @@ package gov.nist.hit.ds.repository.simple;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryIterator;
+import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleId;
@@ -11,8 +12,9 @@ import gov.nist.hit.ds.repository.simple.SimpleType;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 
-public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFilter {
+public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFilter {	
 
 	/**
 	 * 
@@ -22,27 +24,96 @@ public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFil
 	String[] reposDirNames;
 	int reposDirsIndex;
 	Type type = null;
+	File repositorySource=null;
 
 	/**
-	 * Iterate across all repositories.
+	 * Iterate across repositories.
 	 * @throws RepositoryException
 	 */
-	public SimpleRepositoryIterator() throws RepositoryException {
-		reposDir = Configuration.getRepositoryDataDir();
-		reposDirNames = reposDir.list(this);
-		reposDirsIndex = 0;
+	public SimpleRepositoryIterator(File repositoriesPath) throws RepositoryException {
+		setupRepositoryIterator(null, repositoriesPath, null);
+	}
+	
+	public SimpleRepositoryIterator(RepositorySource rs) throws RepositoryException {
+		setupRepositoryIterator(null, rs.getLocation(), null);
 	}
 
 	/**
-	 * Iterate across all repositories of specified type.
+	 * Iterate across repositories of specified type.
+	 * @param type
+	 * @throws RepositoryException
+	 */
+	public SimpleRepositoryIterator(File repositoriesPath, Type type) throws RepositoryException {		
+		setupRepositoryIterator(null, repositoriesPath, type);
+	}
+	
+
+	/**
+	 * Iterate across all repository sources by given type.
 	 * @param type
 	 * @throws RepositoryException
 	 */
 	public SimpleRepositoryIterator(Type type) throws RepositoryException {
-		reposDir = Configuration.getRepositoryDataDir();
-		reposDirNames = reposDir.list(this);
+		setupRepositoryIterator(null, null, type);
+	}
+	
+	/**
+	 * Iterate across all provided repository sources and all types.
+	 * @param type
+	 * @throws RepositoryException
+	 */
+	public SimpleRepositoryIterator(ArrayList<RepositorySource> rss) throws RepositoryException {
+		setupRepositoryIterator(rss, null, null);
+	}
+	
+	/** 
+	 * Iterate across all provided repository sources and specified type.
+	 * @param type
+	 * @throws RepositoryException
+	 */
+	public SimpleRepositoryIterator(ArrayList<RepositorySource> rss, Type t) throws RepositoryException {
+		setupRepositoryIterator(rss, null, t);
+	}
+
+	private void setupRepositoryIterator(ArrayList<RepositorySource> rss, File repositorySource, Type t) throws RepositoryException {
+		this.type = t;
+		
+		if (repositorySource!=null) {
+			this.repositorySource = repositorySource;
+			reposDir = Configuration.getRepositoriesDataDir(repositorySource);
+			reposDirNames = reposDir.list(this);
+		} else if (rss!=null) {
+			String[] mergedRepos = getMergedItems(rss);
+		
+			reposDirNames = mergedRepos;
+		}
+		
+		
+
 		reposDirsIndex = 0;
-		this.type = type;
+	}
+
+	private String[] getMergedItems(ArrayList<RepositorySource> rss)
+			throws RepositoryException {
+		int numRs = rss.size();
+		int listCt = 0;
+		
+		String[][][] allRepos = new String[1][numRs][];
+		int cx=0;
+		for (RepositorySource rs : rss) {				
+			 allRepos[0][cx] = Configuration.getRepositoriesDataDir(rs.getLocation()).list(this);
+			 listCt += allRepos[0][cx].length; 
+			 cx++;
+		}
+		
+		String[] mergedRepos = new String[listCt];
+		int elementCtr = 0;
+		for (int i = 0; i < numRs; i++ ) {
+			for (int j = 0; j < allRepos[0][i].length; j++) {
+				mergedRepos[elementCtr++] = allRepos[0][i][j];
+			}
+		}
+		return mergedRepos;
 	}
 	
 	public int size() {
@@ -64,8 +135,7 @@ public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFil
 		if (!hasNextRepository())
 			throw new RepositoryException(RepositoryException.NO_MORE_ITERATOR_ELEMENTS);
 		SimpleId id = new SimpleId(reposDirNames[reposDirsIndex++]);
-		// skb
-		// return new SimpleRepository(id).load();
+
 		return new SimpleRepository(id);
 
 	}
@@ -74,8 +144,9 @@ public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFil
 	public boolean accept(File dir, String name) {
 		String repId = basename(name);
 		try {
-			SimpleRepository sRep = new SimpleRepository(new SimpleId(repId));
-			String typeStr = sRep.getProperty("repositoryType");
+			SimpleRepository repos = new SimpleRepository(new SimpleId(repId));
+			repos.setSource(new RepositorySource(this.repositorySource));
+			String typeStr = repos.getProperty("repositoryType");
 			Type t = new SimpleType(typeStr);
 			if (type == null || type.isEqual(t)) 
 				return true;

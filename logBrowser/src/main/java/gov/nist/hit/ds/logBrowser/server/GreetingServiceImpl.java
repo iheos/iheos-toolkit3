@@ -1,7 +1,7 @@
-package gov.nist.hit.ds.client.server;
+package gov.nist.hit.ds.logBrowser.server;
 
-import gov.nist.hit.ds.client.client.GreetingService;
-import gov.nist.hit.ds.client.shared.FieldVerifier;
+import gov.nist.hit.ds.logBrowser.client.GreetingService;
+import gov.nist.hit.ds.logBrowser.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**

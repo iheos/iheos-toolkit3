@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.client.shared;
+package gov.nist.hit.ds.logBrowser.shared;
 
 /**
  * <p>

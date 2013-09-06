@@ -1,6 +1,6 @@
-package gov.nist.hit.ds.client.client;
+package gov.nist.hit.ds.logBrowser.client;
 
-import gov.nist.hit.ds.client.shared.FieldVerifier;
+import gov.nist.hit.ds.logBrowser.shared.FieldVerifier;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -22,7 +22,7 @@ public class GwtTestlogBrowser extends GWTTestCase {
    * Must refer to a valid module that sources this class.
    */
   public String getModuleName() {
-    return "gov.nist.hit.ds.client.logBrowserJUnit";
+    return "gov.nist.hit.ds.logBrowser.logBrowserJUnit";
   }
 
   /**

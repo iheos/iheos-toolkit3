@@ -16,8 +16,9 @@ public class FactoryTest {
 
 	@Test
 	public void notlsSyncTest() {
-		Installation.installation().setExternalCache(new File("src/test/resources/external_cache"));
-		Installation.installation().setWarHome(new File("src/test/resources/registry"));
+		
+		Installation.installation().setExternalCache(new File(FactoryTest.class.getClassLoader().getResource("external_cache/").getFile()));
+		Installation.installation().setWarHome(new File(FactoryTest.class.getClassLoader().getResource("registry/").getFile()));
 		String simId = "123";
 		DocumentRegistryActorFactory fact = new DocumentRegistryActorFactory();
 		Simulator sim = fact.buildNewSimulator(new SimId(simId), 
@@ -36,8 +37,9 @@ public class FactoryTest {
 
 	@Test
 	public void tlsNotlsSyncTest() {
-		Installation.installation().setExternalCache(new File("src/test/resources/external_cache"));
-		Installation.installation().setWarHome(new File("src/test/resources/registry"));
+		Installation.installation().setExternalCache(new File(FactoryTest.class.getClassLoader().getResource("external_cache/").getFile()));
+		Installation.installation().setWarHome(new File(FactoryTest.class.getClassLoader().getResource("registry/").getFile()));
+
 		String simId = "123";
 		DocumentRegistryActorFactory fact = new DocumentRegistryActorFactory();
 		Simulator sim = fact.buildNewSimulator(new SimId(simId), 
