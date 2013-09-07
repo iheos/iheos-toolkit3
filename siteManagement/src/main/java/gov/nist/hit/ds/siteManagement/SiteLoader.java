@@ -6,6 +6,7 @@ import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean;
 import gov.nist.hit.ds.siteManagement.client.TransactionCollection;
+import gov.nist.hit.ds.utilities.xml.Parse;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 
@@ -17,10 +18,15 @@ import javax.xml.namespace.QName;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 
-public abstract class SiteLoader {
+public class SiteLoader {
 	
 	protected HashMap<String, Site> siteMap = new HashMap<String, Site>();
 
+	public Site parseSite(String siteXml) throws Exception {
+		OMElement xml = Parse.parse_xml_string(siteXml);
+		return parseSite(xml);
+	}
+	
 	public Site parseSite(OMElement ele) throws Exception {
 		String site_name = ele.getAttributeValue(new QName("name"));
 		if (site_name == null || site_name.equals(""))
