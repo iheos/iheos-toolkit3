@@ -3,13 +3,14 @@ package gov.nist.hit.ds.repository.simple;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.api.Type;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class SimpleRepository extends RepositoryImpl implements Flushable {
+public class SimpleRepository extends BaseRepository implements Flushable {
 	private static final long serialVersionUID = 7941866267155906518L;
 
 	boolean autoFlush = true;
@@ -17,7 +18,7 @@ public class SimpleRepository extends RepositoryImpl implements Flushable {
 
 	/**
 	 * Open an existing repository.
-	 * @param root - filesystem directory thaw holds the repository contents
+	 * @param root - filesystem directory that holds the repository contents
 	 * @return 
 	 * @throws RepositoryException
 	 */
@@ -72,16 +73,23 @@ public class SimpleRepository extends RepositoryImpl implements Flushable {
 	public void setDescription(String description)
 			throws RepositoryException {
 //		load();
-		properties.setProperty("description", description);
-		if (autoFlush)
-			flush();
+		if (description!=null && !"".equals(description)) {
+			properties.setProperty("description", description);
+			if (autoFlush)
+				flush();
+		}
 	}
 
 //	@Override
 	public Asset createAsset(String displayName, String description,
 			Type assetType) throws RepositoryException {
 //		load();
-		SimpleAsset a = new SimpleAsset();
+		
+		if (! (this.getSource()!=null && Access.RW_EXTERNAL.equals(this.getSource().getAccess()))) {
+			throw new RepositoryException(RepositoryException.PERMISSION_DENIED + ": Cannot update non read-write repository source.");
+		}
+		
+		SimpleAsset a = new SimpleAsset(getSource());
 		a.setAutoFlush(false);
 		a.setRepository(getId());
 		a.setType(assetType);
@@ -100,7 +108,7 @@ public class SimpleRepository extends RepositoryImpl implements Flushable {
 		if (name.equals(Configuration.REPOSITORY_PROP_FILE_BASENAME))
 			throw new RepositoryException(Configuration.REPOSITORY_PROP_FILE_BASENAME + " is an illegal Asset name");
 //		load();
-		SimpleAsset a = new SimpleAsset();
+		SimpleAsset a = new SimpleAsset(getSource());	
 		a.setAutoFlush(false);
 		a.setRepository(getId());
 		a.setType(assetType);
@@ -126,7 +134,6 @@ public class SimpleRepository extends RepositoryImpl implements Flushable {
 	}
 
 	public void flush() throws RepositoryException {
-		assert(root != null);
 		autoFlush = true;
 		try {
 			File propFile = getRepositoryPropFile();

@@ -3,20 +3,13 @@ package gov.nist.hit.ds.repository.simple;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
-import gov.nist.hit.ds.repository.simple.index.MockServletContext;
-
-import java.io.File;
-
-import javax.servlet.ServletContext;
-
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SimpleTypeIteratorTest {
@@ -25,9 +18,9 @@ public class SimpleTypeIteratorTest {
 	@Test
 	public void simpleTypeIteratorTest() throws RepositoryException {
 		
-		System.out.println(" types path: " + Configuration.getRepositoryTypesDir().getPath());
+		System.out.println(" types path: " + Configuration.getRepositoryTypesDir(Configuration.getRepositorySrc(Access.RW_EXTERNAL)));
 		
-		TypeIterator it = new SimpleTypeIterator();
+		TypeIterator it = new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		assertTrue("initially the iterator should have hasNextType() return true", it.hasNextType());
 		
 		Type nextType = it.nextType();
@@ -41,7 +34,7 @@ public class SimpleTypeIteratorTest {
 	 
 	@Test
 	public void managerIteratorTest() throws RepositoryException {
-		TypeIterator ti = new RepositoryFactory().getRepositoryTypes();
+		TypeIterator ti = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).getRepositoryTypes();
 		assertTrue("initially the iterator should have hasNextType() return true", ti.hasNextType());
 		
 		Type nextType = ti.nextType();

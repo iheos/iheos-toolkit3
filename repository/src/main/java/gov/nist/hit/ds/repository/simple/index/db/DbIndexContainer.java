@@ -4,6 +4,7 @@ package gov.nist.hit.ds.repository.simple.index.db;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
 import gov.nist.hit.ds.repository.simple.IdFactory;
@@ -18,7 +19,6 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.utilities.io.Hash;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -261,8 +261,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * This method will extend the container to allow for new indexable properties.
 	 */
 	public synchronized void expandContainer(String[] column, String assetType) throws RepositoryException {
-		try {
-			String[] newCol = new String[column.length];
+		try {			
 			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			String sqlStr = "";
@@ -379,7 +378,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * 
 	 * @param columnName
 	 * @return
-	 */
+	
 	private String getDbColumnSuffix(String columnName) {
 		if (!PnIdentifier.uniquePropertyColumn) {
 			return columnName; 
@@ -394,43 +393,46 @@ public class DbIndexContainer implements IndexContainer, Index {
 			
 		}
 	}
+	*/ 
 	
 	/**
 	 * 
 	 * @return
-	 */
-	static public ArrayList<String> getIndexableAssets() {
-		return getIndexableProperties(true,false);
+	*/ 
+	static public ArrayList<String> getIndexableAssets(RepositorySource rs) {
+		return getIndexableProperties(rs,true,false);
 	}
+	
 	
 	/**
 	 * Returns full unique column headers including prefix and suffix, ex. "assetTyp_property" 
 	 * @return
-	 */
-	static public ArrayList<String> getIndexableDbProperties() {
-		return getIndexableProperties(false,false);		
+	*/ 
+	static public ArrayList<String> getIndexableDbProperties(RepositorySource rs) {
+		return getIndexableProperties(rs,false,false);		
 	}
+	
 	
 	/**
 	 * Returns quoted identifiers if uniquePropertyColumn is not specified, and suffixes only 
 	 * @return
 	 */
-	static public ArrayList<String> getIndexableProperties() {
-		return getIndexableProperties(false,true);		
+	static public ArrayList<String> getIndexableProperties(RepositorySource rs) {
+		return getIndexableProperties(rs,false,true);		
 	}
 	
 	/**
 	 * ToDo: this needs to be cached
 	 * Returns false to indicate indexing feature is not available
 	 */
-	static public boolean isRepositoryIndexable(Type rep) {
+	static public boolean isRepositoryIndexable(RepositorySource rs, Type rep) {
 		
 		if (rep==null)
 			return false;
 		
 		TypeIterator it;
 		try {
-			it = new SimpleTypeIterator(rep);
+			it = new SimpleTypeIterator(rs, rep);
 			while (it.hasNextType()) {				
 				Type t = it.nextType();
 				
@@ -449,6 +451,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 		
 	}
 	
+	
 	/**
 	 * 
 	 * Note: The repository Configuration must already be setup prior to this call.
@@ -456,23 +459,21 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * 
 	 * @return
 	 */
-	static private ArrayList<String> getIndexableProperties(boolean assetOnly, boolean suffixOnly) {
+	static private ArrayList<String> getIndexableProperties(RepositorySource rs, boolean assetOnly, boolean suffixOnly) {
 		TypeIterator it;
 		ArrayList<String> indexableAssetProperties = null;
 		try {
 			indexableAssetProperties = new ArrayList<String>();
 			
-			it = new SimpleTypeIterator();
+			it = new SimpleTypeIterator(rs);
 			while (it.hasNextType()) {
 				Type t = it.nextType();
 				if (t.getDomain()!=null && t.getDomain().equals(SimpleType.Asset)) {
 				 
-				/*
-				System.out.println ("desc:" + t.getDescription());
-				System.out.println ("domain:" + t.getDomain());
-				System.out.println ("indexes:" + t.getIndexes());
-				*/
-				
+//				System.out.println ("desc:" + t.getDescription());
+//				System.out.println ("domain:" + t.getDomain());
+//				System.out.println ("indexes:" + t.getIndexes());
+//				
 				if (t.getIndex()!=null) {
 					
 					String[] indexableProperties = t.getIndex().split(",");
@@ -512,15 +513,14 @@ public class DbIndexContainer implements IndexContainer, Index {
 				}
 			}
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			DbContext.log(e.toString());
 		}
 		return indexableAssetProperties;
 	}
 	
 	/**
 	 * This method reindexes all indexable asset properties within all repositories.
-	 */
+	 
 	public void reIndex() throws Exception {
 		int totalAssetsIndexed = 0;
 		int totalRepositoriesInvolved = 0;
@@ -551,7 +551,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 						+  "==================\n"
 						+  "Total Assets Indexed: " + totalAssetsIndexed + "\nRepositories: " + totalRepositoriesInvolved + "\nIndexes up to date.");
 	}
-	
+	*/
 	private int syncRep(Repository repos, ArrayList<String> properties) throws RepositoryException {
 
 		
@@ -572,9 +572,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 		String reposId = repos.getId().getIdString();
 		
 		if (null==assetType) {
-			iter = new SimpleAssetIterator(repos.getId());
+			iter = new SimpleAssetIterator(repos);
 		} else if (!"".equals(assetType)) {
-			iter = new SimpleAssetIterator(repos.getId(), new SimpleType(assetType));	
+			iter = new SimpleAssetIterator(repos, new SimpleType(assetType));	
 		}
 		 
 		String repoSession = new IdFactory().getNewId().getIdString();		
@@ -715,7 +715,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	public CachedRowSet getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) {
 		
 		try {
-				// Make sure properties exist
+			// Make sure properties exist
 			ArrayList<String> searchProperties = searchCriteria.getProperties();
 			String searchCriteriaWhere = searchCriteria.toString();
 			DbContext.log(searchCriteriaWhere);
@@ -724,7 +724,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			dbc.internalCmd("drop table session.SearchResults");
-			dbc.internalCmd("create table session.SearchResults(repId varchar(64),assetId varchar(64), reposOrder int, displayOrder int)");
+			dbc.internalCmd("create table session.SearchResults(repId varchar(64),assetId varchar(64), reposLocation varchar(255), reposOrder int, displayOrder int)");
 			
 			
 			for (Repository rep : repositories) {				
@@ -735,8 +735,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 			// This needs to be independent from the syncRep call because there columns might not have fully expanded 
 			int orderBy=0;
 			for (Repository rep : repositories) {
-				String sqlString = "insert into session.SearchResults(repId,assetId,reposOrder,displayOrder)"
-						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + "," + (orderBy++) + "," + displayOrder + " from " + repContainerLabel 
+				String sqlString = "insert into session.SearchResults(repId,assetId,reposLocation,reposOrder,displayOrder)"
+						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposLocation," + (orderBy++) + "," + displayOrder + " from " + repContainerLabel 
 						+ " where " + repId + " = '"+  rep.getId().getIdString() +"' and( "+ searchCriteriaWhere + ")" ; 
 				try {
 					dbc.internalCmd(sqlString);
@@ -745,7 +745,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 				}
 			}
 					
-			ResultSet rs = dbc.executeQuery("select repId,assetId from session.SearchResults order by reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?","+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
+			ResultSet rs = dbc.executeQuery("select repId,assetId,reposLocation from session.SearchResults order by reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?","+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
 			
 			CachedRowSet crs = new CachedRowSetImpl();
     		crs.populate(rs);

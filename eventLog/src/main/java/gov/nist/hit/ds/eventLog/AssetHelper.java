@@ -3,6 +3,8 @@ package gov.nist.hit.ds.eventLog;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 
 import org.apache.log4j.Logger;
@@ -12,7 +14,7 @@ public class AssetHelper {
 	
 	static public Asset createChildAsset(Asset parent, String displayName, String description, SimpleType assetType) throws RepositoryException {
 		logger.info("Creating <" + displayName + ">,  child of <" + parent.getId() + "> in repo <" + parent.getRepository() +">");
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Asset a = fact.getRepository(parent.getRepository()).createAsset(displayName, description, assetType);
 		logger.info("Created <" + a.getId() + ">");
 		a.setProperty("parent", parent.getId().getIdString());

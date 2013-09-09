@@ -8,6 +8,8 @@ import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 
 import org.junit.Before;
@@ -22,7 +24,7 @@ public class CreateEventTest {
 	
 	@Test
 	public void openSameRepository() throws RepositoryException {
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createNamedRepository("foo", "my foo", new SimpleType("eventLog"), "BillFoo"); 
 		Repository repos2 = fact.createNamedRepository("foo", "my foo", new SimpleType("eventLog"), "BillFoo");
 		assertEquals("Must return same repository", repos.getId().getIdString(), repos2.getId().getIdString());
@@ -34,7 +36,7 @@ public class CreateEventTest {
 	public void createTest() throws RepositoryException {
 		Repository repos;
 		
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		
 		repos = fact.createRepository(
 				"This is a simple repository",

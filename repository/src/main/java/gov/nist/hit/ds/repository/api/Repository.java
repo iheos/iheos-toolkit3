@@ -765,6 +765,7 @@ public interface Repository extends java.io.Serializable {
      *         UNIMPLEMENTED}
      */
     boolean supportsUpdate() throws gov.nist.hit.ds.repository.api.RepositoryException;
+    
 
     /**
      * <p>
@@ -873,4 +874,7 @@ public interface Repository extends java.io.Serializable {
      * to obtain such a     license before exporting this Work.
      * </p>
      */
+    
+    public RepositorySource getSource() throws RepositoryException;
+    public void setSource(RepositorySource source) throws RepositoryException;
 }

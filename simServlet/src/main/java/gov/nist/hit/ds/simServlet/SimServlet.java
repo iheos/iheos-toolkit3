@@ -13,6 +13,7 @@ import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.simSupport.client.SimId;
@@ -108,7 +109,7 @@ public class SimServlet extends HttpServlet {
 	}
 
 	public void initRepositoryEnvironment() throws RepositoryException {
-		new Configuration(Installation.installation().getRepositoryRoot());
+		Configuration.configuration();
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) {
@@ -229,7 +230,7 @@ public class SimServlet extends HttpServlet {
 		try {
 			SimDb db = new SimDb(simEndpoint.getSimId());
 			SimId simId = simEndpoint.getSimId();
-			RepositoryFactory fact = new RepositoryFactory();
+			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 			Repository repos = fact.createNamedRepository(
 					"Event_Repository", 
 					"Event Repository", 
@@ -280,8 +281,10 @@ public class SimServlet extends HttpServlet {
 		buf.append("\r\n");
 
 		// Log the request header and body in the SimDb event
-		event.getInOutMessages().putRequestHeader(buf.toString());
-		event.getInOutMessages().putRequestBody(Io.getBytesFromInputStream(request.getInputStream()));
+		if (event!=null) {
+			event.getInOutMessages().putRequestHeader(buf.toString());
+			event.getInOutMessages().putRequestBody(Io.getBytesFromInputStream(request.getInputStream()));
+		}
 	}
 
 	void sendSoapFault(SoapEnvironment soapEnv, FaultCode faultCode, String reason) {

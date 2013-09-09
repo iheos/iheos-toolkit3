@@ -1,0 +1,10 @@
+# repository type simpleRepos
+
+# must match filename
+keyword=simpleRepos
+
+# repository|asset
+domain=repository 
+   
+description=The most basic repository type
+
