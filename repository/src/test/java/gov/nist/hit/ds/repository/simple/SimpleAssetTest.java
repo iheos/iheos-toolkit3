@@ -4,22 +4,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
-import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.repository.simple.index.MockServletContext;
-
-import java.io.File;
-
-import javax.servlet.ServletContext;
-
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SimpleAssetTest {
@@ -27,7 +19,7 @@ public class SimpleAssetTest {
 
 	@Test
 	public void createAssetTest() throws RepositoryException {
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
 				"This is my repository",
 				"Description",
@@ -42,10 +34,24 @@ public class SimpleAssetTest {
 		
 		assertTrue("created and retrieved asset id should be the same", assetId.isEqual(assetId2));
 	}
+	
+	@Test
+	public void assetPropertyTest() throws RepositoryException {
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+		Repository repos = fact.createRepository(
+				"This is my repository",
+				"Description",
+				new SimpleType("site"));
+		
+		Asset a = repos.createAsset("My Site", null, new SimpleType("site"));
+		Id assetId = a.getId();		
+
+		assertNotNull(a);
+	}
 
 	@Test
 	public void contentTest() throws RepositoryException {
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
 				"This is my repository",
 				"Description",
@@ -72,7 +78,7 @@ public class SimpleAssetTest {
 	
 	@Test
 	public void parentAssetTest() throws RepositoryException {
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
 				"This is my repository",
 				"Description",
@@ -93,7 +99,7 @@ public class SimpleAssetTest {
 	
 	@Test
 	public void getAssetTest() throws RepositoryException {
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
 				"This is my repository",
 				"Description",
@@ -113,7 +119,7 @@ public class SimpleAssetTest {
 
 	@Test
 	public void assetIteratorTest() throws RepositoryException {
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
 				"This is my repository",
 				"Description",

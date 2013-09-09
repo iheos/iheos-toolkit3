@@ -30,7 +30,7 @@ public class TestEnvironmentSetup {
 		setRepositoryRoot(RepositoriesPath);
 
 		try {
-			new Configuration(getRepositoryRoot());
+			Configuration.configuration();
 		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

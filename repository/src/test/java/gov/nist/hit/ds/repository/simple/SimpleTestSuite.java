@@ -1,10 +1,11 @@
 package gov.nist.hit.ds.repository.simple;
 
+
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.index.CreateContainerTest;
 import gov.nist.hit.ds.repository.simple.index.ExpandContainerTest;
-import gov.nist.hit.ds.repository.simple.index.IndexableRepositoryTest;
 import gov.nist.hit.ds.repository.simple.search.SearchTest;
 
 import java.io.File;
@@ -15,13 +16,17 @@ import org.junit.ClassRule;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import static org.junit.Assert.fail;
+
+/**
+ * 
+ * @author Sunil.Bhaskarla
+ *
+ */
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({		
 		CreateContainerTest.class
 		,ExpandContainerTest.class
-		,IndexableRepositoryTest.class
 		,SimpleCreateAssetTest.class
 		,SimpleAssetIteratorTest.class
 		,SimpleAssetTest.class
@@ -34,85 +39,36 @@ import static org.junit.Assert.fail;
 		} )
 public class SimpleTestSuite {
 	
-
-	
-	
 	@ClassRule
 	static public ExternalResource classRule = new ExternalResource()	{
-		  String RepositoriesPath;  					// Repositories folder
-		  public String getRepositoriesPath() {
-			return RepositoriesPath;
-		}
 
-		public void setRepositoriesPath(String repositoriesPath) {
-			RepositoriesPath = repositoriesPath;
-		}
 
-		public String getInstallationPath() {
-			return InstallationPath;
-		}
-
-		public void setInstallationPath(String installationPath) {
-			InstallationPath = installationPath;
-		}
-
-		public File getRepositoryRoot() {
-			return RepositoryRoot;
-		}
-
-		public void setRepositoryRoot(File repositoryRoot) {
-			RepositoryRoot = repositoryRoot;
-		}
-
-		String InstallationPath;						// Path containing the WEB-INF folder (for External_Cache)		
-		  File RepositoryRoot; 
 		
 		@Override
 		protected void before() throws Throwable {
-
 			
-			try {
-				//
-				// Assets stored in temporary repositories will be cleaned up after test run
-				// 
-				setInstallationPath(SimpleTestSuite.class.getClassLoader().getResource("Installation/").getFile());
-				System.out.println(getInstallationPath());
-				
-			} catch (NullPointerException e) {
-				throw new Exception("The resource folder path configuration seems to be incorrect!");
-			}
+			File warHome = new File(getClass().getClassLoader().getResource(SimpleTestSuite.class.getSimpleName()).getFile());
 			
 			Installation.installation();
-			Installation.installation().setWarHome(new File(getInstallationPath())); // This would be the WAR installation directory
+			Installation.installation().setWarHome(warHome); // This would be the WAR installation directory
 			
 			
-			String externalCache = InstallationPath + "Testing/Test_environment";
+			// Test assets created will be automatically removed after the test
+			File externalCache = new File(warHome.toString() + "/Testing/Test_environment");
+						
+			Installation.installation().setExternalCache(externalCache); // Use a prefix here when externalCache is not expected to be absolute path, which in this case the EC_Dir is relative. 
 			
-//			String externalCache = Installation.installation().propertyServiceManager()
-//										.getToolkitProperties().get("External_Cache");
-//			
-//			// Incorporate relative path for testing, this can be skipped for non-development environments
-//			externalCache = InstallationPath + externalCache;
-			
-//			System.out.println(externalCache);
-			
-			Installation.installation().setExternalCache(new File(externalCache)); // Prefix only if externalCache is not expected to be absolute path, which in this case the EC_Dir is relative.
-			
-			// Installation.installation().initialize();
-			
-			setRepositoriesPath(externalCache + "/repositories");
-			setRepositoryRoot(new File(RepositoriesPath));
-			
-			new Configuration(getRepositoryRoot());			
-			
+			Configuration.configuration();
+						
 		}
 		
 		@Override
 		protected void after() {
-			System.out.println("Clearing temp data...");
+			
 			try {
-
-				 FileUtils.cleanDirectory(Configuration.getRepositoryDataDir());
+				System.out.println("Clearing test data folder...");
+				 FileUtils.cleanDirectory(Configuration.getRepositoriesDataDir(Configuration.getRepositorySrc(Access.RW_EXTERNAL)));
+				 System.out.println("done.");
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (RepositoryException e) {

@@ -178,6 +178,8 @@ public interface RepositoryManager extends gov.nist.hit.ds.repository.api.OsidMa
         gov.nist.hit.ds.repository.api.Type repositoryType)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
+    
+
     /**
      * Get the Repository with the specified unique Id.
      *

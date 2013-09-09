@@ -1,20 +1,13 @@
 package gov.nist.hit.ds.repository.simple;
 
 import static org.junit.Assert.assertTrue;
-import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
-import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.repository.simple.index.MockServletContext;
-
-import java.io.File;
-
-import javax.servlet.ServletContext;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -28,7 +21,7 @@ public class SimpleNamedRepositoryTest {
 		
 
 
-		repos = new RepositoryFactory().createNamedRepository(
+		repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
 				"This is my repository",
 				"Description",
 				new SimpleType("simple", "no description"),
@@ -40,7 +33,7 @@ public class SimpleNamedRepositoryTest {
 	
 	@Test
 	public void loadRepositoryTest() throws RepositoryException {
-		RepositoryFactory repFact = new RepositoryFactory();
+		RepositoryFactory repFact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		repFact.getRepository(repId);
 	}
 	

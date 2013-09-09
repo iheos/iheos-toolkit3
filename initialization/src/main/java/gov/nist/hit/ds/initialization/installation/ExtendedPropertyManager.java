@@ -27,9 +27,14 @@ public class ExtendedPropertyManager {
 	
 	static public String getProperty(String propName)  {
 		if (properties == null) {
-			RuntimeException e = new RuntimeException("Extended properties not loaded");
-			logger.error("Extended Properties not loaded", e);
-			throw e;
+			
+			load(Installation.installation().getWarHome());
+			
+			if (properties==null) {			
+				RuntimeException e = new RuntimeException("Extended properties not loaded");
+				logger.error("Extended Properties queried before they are loaded", e);
+				throw e;
+			}
 		}
 		return properties.getProperty(propName);
 	}

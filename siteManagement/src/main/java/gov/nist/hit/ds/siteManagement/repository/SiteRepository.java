@@ -1,13 +1,17 @@
 package gov.nist.hit.ds.siteManagement.repository;
 
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.siteManagement.SiteLoader;
 import gov.nist.hit.ds.siteManagement.Sites;
+
+import java.io.File;
 
 
 public class SiteRepository {
@@ -17,7 +21,10 @@ public class SiteRepository {
 	static final String siteAssetType = "siteAsset";
 	
 	Sites getSites(String repoId, String assetType) throws Exception {
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(
+				new RepositorySource(
+						new File(Installation.installation().getExternalCache(), "repositories")
+				,RepositorySource.Access.RW_EXTERNAL));
 		Repository repo = fact.getRepository(new SimpleId(repoId));
 		
 		Sites sites = new Sites();
