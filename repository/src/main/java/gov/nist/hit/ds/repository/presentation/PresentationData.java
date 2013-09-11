@@ -115,7 +115,6 @@ public class PresentationData implements IsSerializable, Serializable  {
 			}
 
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

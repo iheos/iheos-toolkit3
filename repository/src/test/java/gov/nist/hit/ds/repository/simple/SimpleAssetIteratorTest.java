@@ -26,16 +26,16 @@ public class SimpleAssetIteratorTest {
 		repos = fact.createRepository(
 				"This is my repository",
 				"Description",
-				new SimpleType("simple"));
+				new SimpleType("simpleRepos"));
 		
-		repos.createAsset("My Site", "This is my site", new SimpleType("site"));
+		repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
 
 		repos.createAsset("My Site", "This is my simple", new SimpleType("simple"));
 	}
 
 	@Test
 	public void allAssetsTest() throws RepositoryException {
-		assertEquals(1, assetCount(new SimpleType("site")));
+		assertEquals(1, assetCount(new SimpleType("siteAsset")));
 		assertEquals(1, assetCount(new SimpleType("simple")));
 		assertEquals(2, assetCount(null));
 	}
@@ -52,5 +52,17 @@ public class SimpleAssetIteratorTest {
 			it.nextAsset();
 		}
 		return count;
+	}
+	
+	@Test
+	public void residentAssetIteratorTest() throws RepositoryException {
+
+		SimpleRepository repos = new SimpleRepository(new SimpleId("testkit"));
+		repos.setSource(Configuration.getRepositorySrc(Access.RO_RESIDENT));
+		
+		
+		SimpleAssetIterator it = new SimpleAssetIterator(repos);
+		
+		assertTrue(it.hasNextAsset());
 	}
 }

@@ -396,7 +396,7 @@ public class SimpleAsset implements Asset, Flushable {
 								if (lifetime!=null) {
 										Integer days = Integer.parseInt(lifetime.substring(0,lifetime.indexOf(" days")));
 										if (days!=null) {
-											System.out.println("lf: " + days);
+											System.out.println("lifetime: " + days);
 											if (getExpirationDate()==null) {
 												c.add(Calendar.DATE, days);
 												Date expr = c.getTime();

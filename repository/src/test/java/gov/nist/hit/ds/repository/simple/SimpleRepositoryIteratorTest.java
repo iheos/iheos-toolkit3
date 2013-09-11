@@ -18,7 +18,7 @@ public class SimpleRepositoryIteratorTest {
 		new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createRepository(
 				"This is my repository",
 				"Description",
-				new SimpleType("simple", ""));
+				new SimpleType("simpleRepos", ""));
 		
 		SimpleRepositoryIterator it = new SimpleRepositoryIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		
@@ -29,5 +29,17 @@ public class SimpleRepositoryIteratorTest {
 		assertTrue(it.size() == it.remaining() + 1);
 	}
 		
-
+	@Test
+	public void residentReposIteratorTest() throws RepositoryException {
+		
+	SimpleRepositoryIterator it = new SimpleRepositoryIterator(Configuration.getRepositorySrc(Access.RO_RESIDENT));
+		
+		assertTrue (it.size() > 0);
+		assertTrue (it.size() == it.remaining());
+		assertTrue(it.hasNextRepository());
+		it.nextRepository();
+		assertTrue(it.size() == it.remaining() + 1);
+	
+	}
+	
 }

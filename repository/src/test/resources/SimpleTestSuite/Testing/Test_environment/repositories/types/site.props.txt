@@ -1,0 +1,10 @@
+# repository type siteRepos
+
+# must match filename
+keyword=site 
+
+# repository|asset
+domain=repository 
+   
+description=The most basic repository type
+
