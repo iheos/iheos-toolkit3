@@ -1,10 +1,11 @@
-# repository type simpleRepos
+# repository type siteRepos
 
 # must match filename
-keyword=simpleRepos
+keyword=Resident
 
 # repository|asset
-domain=repository 
+domain=repository
    
 description=The most basic repository type
+
 

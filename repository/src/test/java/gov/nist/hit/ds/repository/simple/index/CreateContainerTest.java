@@ -23,7 +23,6 @@ public class CreateContainerTest  {
 			if (dbc.doesIndexContainerExist())
 				dbc.removeIndexContainer();
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("removeContainer failed!");
 		
@@ -40,7 +39,6 @@ public class CreateContainerTest  {
 				System.out.println("New index container created.");
 			}
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Index Container test Failed");
 						
@@ -61,7 +59,6 @@ public class CreateContainerTest  {
 			}
 		
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("purge failed");
 						
@@ -104,7 +101,6 @@ public class CreateContainerTest  {
 
 			
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("add index failed");
 		}

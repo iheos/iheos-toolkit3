@@ -35,6 +35,9 @@ public class RepositoryException extends Exception  {
     /** Null argument */
     public static final String NULL_ARGUMENT = "Null argument";
 
+    /** Illegal argument */
+    public static final String INVALID_ARGUMENT = "Invalid argument";
+    
     /** IO Error */
     public static final String IO_ERROR = "IO Error";
     
@@ -115,6 +118,9 @@ public class RepositoryException extends Exception  {
 
     /** Repository already exists */
     public static final String REPOSITORY_ALREADY_EXISTS = "Repository cannot be created, it already exists";
+    
+    /** Repository already exists */
+    public static final String REPOSITORY_API_REQUIREMENT_FAIL = "Error";
     
     public RepositoryException() {}
     

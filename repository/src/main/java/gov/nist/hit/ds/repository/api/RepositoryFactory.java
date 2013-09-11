@@ -5,6 +5,7 @@ import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.SimpleRepositoryIterator;
+import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
 
 import java.io.Serializable;
@@ -14,11 +15,7 @@ import java.util.Properties;
 /**
  * RepositoryManager
  * ToDo
- * 	- Create Abstract Repository and refactor simple (in prep for derby based repository)
  *  - Introduce other data types (xml, txt, serialized objects) instead of just byte[]
- *  - Introduce use of type element domain to indicate a type is a repository vs others :
- *      domain=repository
- *  - The DisplayName property should be displayName (repository.props)
  * @author bmajur
  *
  */
@@ -47,12 +44,9 @@ public class RepositoryFactory implements RepositoryManager {
 	public Repository createRepository(String displayName, String description,
 			Type repositoryType) throws RepositoryException {
 		
-		if (! (this.getSource()!=null && Access.RW_EXTERNAL.equals(this.getSource().getAccess()))) {
-			throw new RepositoryException(RepositoryException.PERMISSION_DENIED + ": Cannot update non read-write repository source.");
-		}
+		assertAccess(Access.RW_EXTERNAL);
+		assertType(repositoryType);	
 		
-		
-	
 		SimpleRepository rep = new SimpleRepository();
 		rep.setSource(getSource());
 		rep.setAutoFlush(false);
@@ -64,12 +58,18 @@ public class RepositoryFactory implements RepositoryManager {
 	
 		
 	}
+
+
 	
 
 	@Override
 	public Repository createNamedRepository(String displayName,
 			String description, Type repositoryType, String repositoryName)
-			throws RepositoryException {
+			throws RepositoryException {		
+
+		assertAccess(Access.RW_EXTERNAL);
+		assertType(repositoryType);
+		
 		SimpleRepository rep = new SimpleRepository(repositoryName);
 		rep.setSource(getSource());
 		rep.setAutoFlush(false);
@@ -78,7 +78,39 @@ public class RepositoryFactory implements RepositoryManager {
 		rep.setDisplayName(displayName);
 		rep.flush();
 		return rep;
-	}	
+	}
+	
+	/**
+	 * @param repositoryType
+	 * @throws RepositoryException
+	 */
+	private void assertType(Type repositoryType)
+			throws RepositoryException {
+		Parameter p = new Parameter();
+		
+		p.setDescription("repositoryType");
+		p.assertNotNull(repositoryType);
+		
+		// There are two things to look for with type
+		// 1. is it a valid type
+		//  a. is it of a repository domain
+		
+		if (!Parameter.isNullish(repositoryType.getDomain())) {
+			p.setDescription("domain: " + repositoryType.getDomain());
+			p.assertEquals(repositoryType.getDomain(), SimpleType.REPOSITORY);
+		}
+		
+		p.setDescription("repository type keyword: " + repositoryType.getKeyword());
+		p.assertEquals(
+				new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL),repositoryType,SimpleType.REPOSITORY).hasNextType()
+				,new Boolean(true));
+	}
+
+	private void assertAccess(Access acs) throws RepositoryException {
+		Parameter p = new Parameter("access: " + acs.toString());
+		p.assertEquals(acs, getSource().getAccess());				
+	}
+
 
 
 	@Override
@@ -108,6 +140,10 @@ public class RepositoryFactory implements RepositoryManager {
 
 	@Override
 	public void deleteRepository(Id repositoryId) throws RepositoryException {
+
+		Parameter req = new Parameter();
+		req.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
+		
 		if (Configuration.repositoryExists(getSource(), repositoryId))
 			return;
 		SimpleRepository repos = new SimpleRepository(repositoryId);
@@ -166,6 +202,11 @@ public class RepositoryFactory implements RepositoryManager {
 	@Override
 	public Id copyAsset(Repository repository, Id assetId)
 			throws RepositoryException {
+		
+
+		Parameter req = new Parameter();
+		req.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
+		
 		// TODO Auto-generated method stub
 		return null;
 	}
