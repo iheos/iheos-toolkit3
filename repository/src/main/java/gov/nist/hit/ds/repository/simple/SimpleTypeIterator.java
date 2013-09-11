@@ -146,21 +146,24 @@ public class SimpleTypeIterator implements TypeIterator, FilenameFilter {
 		if (!"".equals(getTypeFilter())) { // Apply type specific filter here
 			filter = getTypeFilter() + "." + filter;
 		}
-		
-		if (getDomain()!=null) {
-			System.out.print(getDomain());
-			//TODO: get back to this after merge.
-			
-//			try {
-//				// Properties typeProps = loadProperties(new File(typesDir + File.separator + file));
-//				
-//			} catch (RepositoryException re) {
-//				
-//			}
-			
-		}
-		
+				
 		boolean val = arg1.endsWith(filter);
+
+		if (val) {
+			if (getDomain()!=null && !"".equals(getDomain())) {
+				if (!filter.equals(Configuration.PROPERTIES_FILE_EXT)) {
+					try {
+						Properties typeProps = loadProperties(new File(typesDir + File.separator + filter));
+						return getDomain().equalsIgnoreCase(typeProps.getProperty("domain").trim());
+						
+					} catch (Exception e) {				
+						return false;
+					}	
+				}
+				
+			}			
+		}
+
 				
 		return val;
 	}
@@ -196,13 +199,13 @@ public class SimpleTypeIterator implements TypeIterator, FilenameFilter {
 	 * @param typeFilter the typeFilter to set
 	 */
 	public void setTypeFilter(String typeFilter) {
-		this.typeFilter = typeFilter;
+		this.typeFilter = typeFilter.trim();
 	}
 	public String getDomain() {
 		return domain;
 	}
 	public void setDomain(String domain) {
-		this.domain = domain;
+		this.domain = domain.trim();
 	}
 
 }

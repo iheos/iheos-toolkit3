@@ -26,7 +26,7 @@ public class SimpleRemoveAssetTest {
 		repos = fact.createRepository(
 				"This is my repository",
 				"Description",
-				new SimpleType("simple"));
+				new SimpleType("simpleRepos"));
 
 		a = repos.createAsset("My Deletable Site", "This is my site", new SimpleType("site"));
 		a.updateContent("My Content".getBytes());

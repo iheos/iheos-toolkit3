@@ -4,9 +4,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.actorSimFactory.ActorSimFactory;
+import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.testSupport.TestEnvironmentSetup;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpParseException;
@@ -16,6 +18,12 @@ import gov.nist.hit.ds.initialization.installation.ExtendedPropertyManager;
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.registrySim.factory.DocumentRegistryActorFactory;
+import gov.nist.hit.ds.repository.api.Asset;
+import gov.nist.hit.ds.repository.api.Repository;
+import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.simServlet.SimServlet;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
@@ -23,9 +31,12 @@ import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.engine.SimEngineException;
 import gov.nist.hit.ds.simSupport.loader.ByConstructorLogLoader;
+import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.simSupport.validators.SimEndpointParser;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
+import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
+import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
@@ -34,6 +45,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -129,7 +141,7 @@ public class RegistrySimTest {
 			request = logLoader.getServletRequest();
 			
 			// initiate Register transaction through SimServlet
-			servlet.handleSimulatorInputTransaction(request, soapEnv, simEndpoint, endpoint);
+			servlet.handleSimulatorInputTransaction(request, soapEnv, simEndpoint, endpoint, new EventBuilder().buildEvent(soapEnv, simEndpoint));
 			
 			assertTrue(servlet.getFaultSent() == null);
 		} catch (HttpParseException e) {
@@ -148,5 +160,35 @@ public class RegistrySimTest {
 			e.printStackTrace();
 			fail();
 		} 
+	}
+	
+	class EventBuilder {
+
+		public Event buildEvent(SoapEnvironment soapEnv, SimEndpoint simEndpoint) throws SoapFaultException {
+			Event event = null;
+			try {
+				SimDb db = new SimDb(simEndpoint.getSimId());
+				SimId simId = simEndpoint.getSimId();
+				RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+				Repository repos = fact.createNamedRepository(
+						"Event_Repository", 
+						"Event Repository", 
+						new SimpleType("simEventRepository"),               // repository type
+						ActorType.findActor(simEndpoint.getActor()).getShortName() + "-" + simId    // repository name
+						);
+				Asset eventAsset = repos.createAsset(
+						db.nowAsFilenameBase(), 
+						simEndpoint.getTransaction() + " Event", 
+						new SimpleType("simEvent"));
+				event = new Event(eventAsset);
+			} catch (Exception e) {
+				throw new SoapFaultException(
+						null,
+						FaultCode.Receiver, 
+						"Internal error initializing simulator environment: " + e.getMessage());
+			}
+			return event;
+		}
+
 	}
 }
