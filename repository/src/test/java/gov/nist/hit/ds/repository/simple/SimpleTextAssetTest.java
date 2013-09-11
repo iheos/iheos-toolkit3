@@ -7,6 +7,7 @@ import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ public class SimpleTextAssetTest {
 	
 	@Test
 	public void contentTest() throws RepositoryException {
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
 				"This is my repository",
 				"Description",
@@ -22,7 +23,7 @@ public class SimpleTextAssetTest {
 		
 		String myContent = "My Content";
 		
-		Asset a = repos.createAsset("My Site", "This is my site", new SimpleType("site"));
+		Asset a = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
 		a.updateContent(myContent, "text/plain");
 		Id assetId = a.getId();
 		

@@ -11,6 +11,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 public class HttpServletResponseMock implements HttpServletResponse {
+	String contentType;
 	
 	class UnimplementedException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
@@ -99,8 +100,8 @@ public class HttpServletResponseMock implements HttpServletResponse {
 	}
 
 	@Override
-	public void setContentType(String arg0) {
-		throw new UnimplementedException();
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 	@Override

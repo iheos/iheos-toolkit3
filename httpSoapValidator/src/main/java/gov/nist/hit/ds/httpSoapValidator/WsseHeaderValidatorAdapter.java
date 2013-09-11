@@ -4,7 +4,7 @@ import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.httpSoapValidator.wsseToolkitAdapter.log4jToErrorRecorder.AppenderForErrorRecorder;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.simSupport.transaction.ValidationContext;
+import gov.nist.hit.ds.simSupport.loader.ValidationContext;
 import gov.nist.toolkit.wsseTool.api.WsseHeaderValidator;
 import gov.nist.toolkit.wsseTool.api.config.SecurityContext;
 import gov.nist.toolkit.wsseTool.api.config.SecurityContextFactory;

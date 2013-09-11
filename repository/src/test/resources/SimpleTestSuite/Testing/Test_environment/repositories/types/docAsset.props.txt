@@ -1,0 +1,10 @@
+# asset type site
+keyword=docAsset
+domain=asset
+indexes=patientId, location, parentId
+description=Document Asset
+
+
+## specify lifetime in 'n' days, where 'n' is an integer
+
+lifetime=30 days

@@ -3,7 +3,69 @@
     <wb-module deploy-name="xdstools3">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <dependent-module archiveName="registryMetadata-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/registryMetadata/registryMetadata">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="valSupport-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/valSupport/valSupport">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="xdsException-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/xdsException/xdsException">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="registryMsgFormats-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/registryMsgFormats/registryMsgFormats">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="simSupport-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/simSupport/simSupport">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="registryMetadataValidator-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/registryMetadataValidator/registryMetadataValidator">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="actorSimFactory-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/actorSimFactory/actorSimFactory">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="actorTransaction-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/actorTransaction/actorTransaction">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="docRef-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/docRef/docRef">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dsValidator-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/dsValidator/dsValidator">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="errorRecording-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/errorRecording/errorRecording">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="http-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/http/http">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="httpSoapValidator-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/httpSoapValidator/httpSoapValidator">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="initialization-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/initialization/initialization">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="registrySim-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/registrySim/registrySim">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="registrySupport-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/registrySupport/registrySupport">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="repository-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/repository/repository">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="siteManagement-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/siteManagement/siteManagement">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="soapSupport-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/soapSupport/soapSupport">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="utilities-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/utilities/utilities">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="xmlValidator-3.0.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/xmlValidator/xmlValidator">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="xdstools3"/>
         <property name="java-output-path" value="/xdstools3/target/classes"/>
     </wb-module>

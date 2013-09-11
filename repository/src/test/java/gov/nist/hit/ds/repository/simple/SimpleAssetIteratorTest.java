@@ -5,18 +5,14 @@ import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.Type;
-import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
 import gov.nist.hit.ds.repository.simple.SimpleType;
-
-import java.io.File;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SimpleAssetIteratorTest {
-	static File RootOfAllRepositories = new File("/e/artrep_test_resources/repositories"); 
-										// new File("/Users/bmajur/tmp/repositories");	
 	static Repository repos;
 	
 	// Create temp folder to be the External Cache
@@ -25,34 +21,48 @@ public class SimpleAssetIteratorTest {
 	
 	@BeforeClass
 	static public void initialize() throws RepositoryException {
-		new Configuration(RootOfAllRepositories);
 		
-		RepositoryFactory fact = new RepositoryFactory();
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		repos = fact.createRepository(
 				"This is my repository",
 				"Description",
-				new SimpleType("simple"));
+				new SimpleType("simpleRepos"));
 		
-		repos.createAsset("My Site", "This is my site", new SimpleType("site"));
+		repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
 
 		repos.createAsset("My Site", "This is my simple", new SimpleType("simple"));
 	}
 
 	@Test
 	public void allAssetsTest() throws RepositoryException {
-		assertEquals(1, assetCount(new SimpleType("site")));
+		assertEquals(1, assetCount(new SimpleType("siteAsset")));
 		assertEquals(1, assetCount(new SimpleType("simple")));
 		assertEquals(2, assetCount(null));
 	}
 	
 	int assetCount(Type type) throws RepositoryException {
 		int count = 0;
-		SimpleAssetIterator it = new SimpleAssetIterator(repos.getId(), type);
+		
+		
+		
+		SimpleAssetIterator it = new SimpleAssetIterator(repos, type);
 		
 		while (it.hasNextAsset()) {
 			count++;
 			it.nextAsset();
 		}
 		return count;
+	}
+	
+	@Test
+	public void residentAssetIteratorTest() throws RepositoryException {
+
+		SimpleRepository repos = new SimpleRepository(new SimpleId("testkit"));
+		repos.setSource(Configuration.getRepositorySrc(Access.RO_RESIDENT));
+		
+		
+		SimpleAssetIterator it = new SimpleAssetIterator(repos);
+		
+		assertTrue(it.hasNextAsset());
 	}
 }

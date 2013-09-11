@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.simSupport.client;
 
+import gov.nist.hit.ds.utilities.other.UuidAllocator;
+
 import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -11,7 +13,9 @@ public class SimId implements IsSerializable, Serializable {
 	private static final long serialVersionUID = -5119201016599189870L;
 	String id;
 	
-	public SimId() { }
+	public SimId() { 
+		setId(getNewId());
+	}
 	
 	public SimId(String id) {
 		setId(id);
@@ -36,4 +40,14 @@ public class SimId implements IsSerializable, Serializable {
 	public boolean equals(SimId otherId) {
 		return otherId != null && otherId.id != null && otherId.id.equals(id);
 	}
+	
+	String getNewId() {
+		String id = UuidAllocator.allocate();
+		String[] parts = id.split(":");
+		id = parts[2];
+		//		id = id.replaceAll("-", "_");
+
+		return id;
+	}
+
 }

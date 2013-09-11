@@ -14,7 +14,7 @@ import org.junit.Test;
 public class SimComponentLoaderTest {
 	
 	@Test
-	public void loaderWithParmsTest() {
+	public void loaderWithParmsTest() throws SimEngineException {
 		Properties parmMap = new Properties();
 		parmMap.put("myStuff", "Stuff it");
 		parmMap.put("name", "My Component");
@@ -29,9 +29,6 @@ public class SimComponentLoaderTest {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			fail();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			fail();
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			fail();
@@ -45,6 +42,9 @@ public class SimComponentLoaderTest {
 			e.printStackTrace();
 			fail();
 		} catch (SimEngineSubscriptionException e) {
+			e.printStackTrace();
+			fail();
+		} catch (SimChainLoaderException e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -57,7 +57,7 @@ public class SimComponentLoaderTest {
 	}
 
 	@Test
-	public void loaderWithNoParmsTest() {
+	public void loaderWithNoParmsTest() throws SimEngineException {
 		Properties parmMap = new Properties();
 		SimComponentLoader loader = new SimComponentLoader(MyComponent.class.getName(), parmMap);
 		SimComponent component = null;
@@ -67,9 +67,6 @@ public class SimComponentLoaderTest {
 			e.printStackTrace();
 			fail();
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			fail();
-		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			fail();
 		} catch (NoSuchMethodException e) {
@@ -85,6 +82,9 @@ public class SimComponentLoaderTest {
 			e.printStackTrace();
 			fail();
 		} catch (SimEngineSubscriptionException e) {
+			e.printStackTrace();
+			fail();
+		} catch (SimChainLoaderException e) {
 			e.printStackTrace();
 			fail();
 		}

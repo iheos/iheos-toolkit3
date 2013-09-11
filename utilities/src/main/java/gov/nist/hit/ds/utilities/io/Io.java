@@ -70,7 +70,6 @@ public class Io {
 		byte[] by = new byte[allocation];
 		int read_size = allocation;
 
-		int current_size = allocation;
 		int offset = 0;
 
 		count = in.read(by, offset, read_size);
@@ -81,37 +80,13 @@ public class Io {
 				by = resize(by, offset+count, offset+count+allocation);
 				offset = offset+count;
 				read_size = by.length - offset; 
-				current_size = by.length;
 			} else {
 				offset = offset+count;
 				read_size = by.length - offset; 
-				current_size = by.length;
 			}
 			count = in.read(by, offset, read_size);
 		}
 	}
-
-	//	static public byte[] getBytesFromInputStream(InputStream in) throws java.io.IOException {
-	//	int count;
-	//	int allocation = 4096;
-	//	byte[] by = new byte[allocation];
-	//	int read_size = allocation;
-
-	//	int current_size = allocation;
-	//	int offset = 0;
-
-	//	count = in.read(by, offset, read_size);
-	//	while ( true ) {
-	//	if (count < read_size)
-	//	return resize(by, offset + count, offset+count);
-	//	by = resize(by, count, current_size * 2);
-
-	//	offset = current_size;
-	//	read_size = by.length - offset; 
-	//	current_size = by.length;
-	//	count = in.read(by, offset, read_size);
-	//	}
-	//	}
 
 	/**
 	 * Given a File, return the contents as a String.
@@ -122,11 +97,17 @@ public class Io {
 	static public String stringFromFile(File file) throws IOException {
 		if ( !file.exists())
 			throw new FileNotFoundException(file + " cannot be read");
-		FileInputStream is = new FileInputStream(file);
-		return getStringFromInputStream(is);
+		FileInputStream is = null; 
+		try {
+			is = new FileInputStream(file);
+			return getStringFromInputStream(is);
+		} finally {
+			if (is != null)
+				is.close();
+		}
 
 	}
-	
+
 	static public InputStream getInputStreamFromFile(File file) throws FileNotFoundException {
 		if ( !file.exists())
 			throw new FileNotFoundException(file + " cannot be read");
@@ -137,8 +118,14 @@ public class Io {
 	static public byte[] bytesFromFile(File file) throws IOException {
 		if ( !file.exists())
 			throw new FileNotFoundException(file + " cannot be read");
-		FileInputStream is = new FileInputStream(file);
-		return getBytesFromInputStream(is);
+		FileInputStream is = null;
+		try {
+			is = new FileInputStream(file);
+			return getBytesFromInputStream(is);
+		} finally {
+			if (is != null)
+				is.close();
+		}
 
 	}
 
@@ -174,11 +161,16 @@ public class Io {
 	}
 
 	static public void stringToFile(File file, String string) throws IOException {
-		BufferedWriter out = new BufferedWriter(new FileWriter(file));
-		out.write(string);
-		out.close();	
+		BufferedWriter out = null;
+		try {
+			out = new BufferedWriter(new FileWriter(file));
+			out.write(string);
+		} finally {
+			if (out != null)
+				out.close();
+		}
 	}
-	
+
 	static public void xmlToFile(File file, OMElement xml) throws IOException {
 		stringToFile(file, new OMFormatter(xml).toString());
 	}
@@ -188,7 +180,7 @@ public class Io {
 		out.write(content);
 		out.close();	
 	}
-	
+
 	static public InputStream bytesToInputStream(byte[] in) {
 		return new ByteArrayInputStream(in);
 	}
@@ -196,7 +188,7 @@ public class Io {
 	static public InputStream stringToInputStream(String in) {
 		return new ByteArrayInputStream(in.getBytes()); 
 	}
-	
+
 	/**
 	 * Delete file, recursively if file represents a directory.
 	 * @param f

@@ -3,13 +3,15 @@ package gov.nist.hit.ds.repository.simple;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.Parameter;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.api.Type;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class SimpleRepository extends RepositoryImpl implements Flushable {
+public class SimpleRepository extends BaseRepository implements Flushable {
 	private static final long serialVersionUID = 7941866267155906518L;
 
 	boolean autoFlush = true;
@@ -17,7 +19,7 @@ public class SimpleRepository extends RepositoryImpl implements Flushable {
 
 	/**
 	 * Open an existing repository.
-	 * @param root - filesystem directory thaw holds the repository contents
+	 * @param root - filesystem directory that holds the repository contents
 	 * @return 
 	 * @throws RepositoryException
 	 */
@@ -72,16 +74,30 @@ public class SimpleRepository extends RepositoryImpl implements Flushable {
 	public void setDescription(String description)
 			throws RepositoryException {
 //		load();
-		properties.setProperty("description", description);
-		if (autoFlush)
-			flush();
+		if (description!=null && !"".equals(description)) {
+			properties.setProperty("description", description);
+			if (autoFlush)
+				flush();
+		}
 	}
 
 //	@Override
 	public Asset createAsset(String displayName, String description,
 			Type assetType) throws RepositoryException {
-//		load();
-		SimpleAsset a = new SimpleAsset();
+
+		Parameter p = new Parameter();
+		p.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
+		
+		p.setDescription("type");
+		p.assertNotNull(assetType);
+		
+		p.setDescription("type keyword: " + assetType.getKeyword());
+		p.assertEquals(
+				new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL),assetType,SimpleType.ASSET).hasNextType()
+				,new Boolean(true));
+
+		
+		SimpleAsset a = new SimpleAsset(getSource());
 		a.setAutoFlush(false);
 		a.setRepository(getId());
 		a.setType(assetType);
@@ -95,12 +111,23 @@ public class SimpleRepository extends RepositoryImpl implements Flushable {
 	@Override
 	public Asset createNamedAsset(String displayName, String description,
 			Type assetType, String name) throws RepositoryException {
-		if (name == null)
-			throw new RepositoryException("null is not a name for an Asset");
-		if (name.equals(Configuration.REPOSITORY_PROP_FILE_BASENAME))
-			throw new RepositoryException(Configuration.REPOSITORY_PROP_FILE_BASENAME + " is an illegal Asset name");
-//		load();
-		SimpleAsset a = new SimpleAsset();
+
+		Parameter p = new Parameter();
+		p.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
+		p.assertParam(name);
+		p.assertEquals(name.equals(Configuration.REPOSITORY_PROP_FILE_BASENAME), new Boolean(false));
+		
+		p.setDescription("type");
+		p.assertNotNull(assetType);
+		
+		p.setDescription("type keyword: " + assetType.getKeyword());
+		p.assertEquals(
+				new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL),assetType,SimpleType.ASSET).hasNextType()
+				,new Boolean(true));
+
+
+
+		SimpleAsset a = new SimpleAsset(getSource());	
 		a.setAutoFlush(false);
 		a.setRepository(getId());
 		a.setType(assetType);
@@ -113,6 +140,13 @@ public class SimpleRepository extends RepositoryImpl implements Flushable {
 	
 	@Override
 	public void deleteAsset(Id assetId) throws RepositoryException {
+		
+
+		Parameter p = new Parameter("delete Id");
+		p.assertNotNull(assetId);
+		p.setDescription("delete external Id:" + assetId.getIdString());
+		p.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
+		
 //		load();
 //		try {
 		SimpleAsset a = (SimpleAsset) getAsset(assetId);
@@ -126,17 +160,23 @@ public class SimpleRepository extends RepositoryImpl implements Flushable {
 	}
 
 	public void flush() throws RepositoryException {
-		assert(root != null);
+		
+
+		Parameter req = new Parameter();
+		req.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
+		
 		autoFlush = true;
 		try {
 			File propFile = getRepositoryPropFile();
 			root.mkdirs();
 			FileWriter writer = new FileWriter(propFile);
 			properties.store(writer, "");
+			writer.close();
 		} catch (IOException e) {
 			throw new RepositoryException(RepositoryException.IO_ERROR, e);
 		}
 		isNew = false;
 	}
+
 
 }

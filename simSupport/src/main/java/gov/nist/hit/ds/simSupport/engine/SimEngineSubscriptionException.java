@@ -5,7 +5,7 @@ package gov.nist.hit.ds.simSupport.engine;
  * @author bmajur
  *
  */
-public class SimEngineSubscriptionException extends Exception {
+public class SimEngineSubscriptionException extends SimEngineException {
 
 	/**
 	 * 

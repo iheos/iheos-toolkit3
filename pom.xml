@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>gov.nist.hit.ds</groupId>
 	<artifactId>toolkit3</artifactId>
@@ -18,10 +18,14 @@
       <id>internal-nist-repo-snapshots</id>
 	  <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
     </repository>
-	<repository>
-		<id>codehaus</id>
-		<url>http://repository.codehaus.org/org/codehaus</url>
-	</repository>
+    <repository>
+	<id>internal-nist-repo-maven-central</id>
+	<url>http://vm-070.nist.gov:8081/nexus/content/repositories/central/</url>
+     </repository>
+     <repository>
+	<id>codehaus</id>
+	<url>http://repository.codehaus.org/org/codehaus</url>
+      </repository>
   </repositories>
   <dependencyManagement>
   	<dependencies>
@@ -56,6 +60,12 @@
 			<artifactId>gwt-user</artifactId>
 			<version>2.5.1</version>
 		</dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-servlet</artifactId>
+			<version>2.5.1</version>
+      <scope>runtime</scope>
+    </dependency>
 	  	<dependency>
 	  		<groupId>xerces</groupId>
 	  		<artifactId>xercesImpl</artifactId>
@@ -92,7 +102,6 @@
   	<module>httpSoapValidator</module>
   	<module>simSupport</module>
   	<module>initialization</module>
-  	<module>tk</module>
   	<module>soapSupport</module>
   	<module>registryMetadataValidator</module>
   	<module>actorTransaction</module>
@@ -100,29 +109,91 @@
   	<module>xmlValidator</module>
   	<module>siteManagement</module>
   	<module>actorSimFactory</module>
-  	<module>wsseTool</module>
-  	
- <!--  	<module>repository</module> -->
+  	  	<module>repository</module>
+  	  	<module>wsseTool</module>
+  	<module>xdstools3</module>
+  	<module>simulatorIntegrationTest</module>
+<!--         <module>logBrowser</module>   -->
+        <module>simServlet</module>
+        <module>eventLog</module>
+        <module>metadataModel</module>
   </modules>
+    <distributionManagement>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>nexus</name>
+      <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
   <build>
   <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>2.5.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <runTarget>index.html</runTarget>
+      </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.4.1</version>
+      </plugin>
    </plugins>
    </build>
-  <reporting>
+<reporting>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.9.1</version>
       </plugin>
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>versions-maven-plugin</artifactId>
+      <version>2.1</version>
+      <reportSets>
+        <reportSet>
+          <reports>
+            <report>dependency-updates-report</report>
+            <report>plugin-updates-report</report>
+            <report>property-updates-report</report>
+          </reports>
+        </reportSet>
+      </reportSets>
+    </plugin>
     </plugins>
   </reporting>
+  <scm>
+    <developerConnection>scm:hg:/Users/bmajur/v3workspace/toolkit3</developerConnection>
+  </scm>
+  <properties>
+    <skip.repository.module.tests>false</skip.repository.module.tests>
+</properties>
+
+<profiles>
+    <profile>
+        <id>SKIP_REPOSITORY_MODULE_TESTS</id>
+        <properties>
+            <skip.repository.module.tests>true</skip.repository.module.tests>
+        </properties>
+    </profile>
+</profiles>
   </project>

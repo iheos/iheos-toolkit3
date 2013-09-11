@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.repository.simple.index.db;
 
-import gov.nist.hit.ds.initialization.Installation;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.index.IndexDataSource;
 
@@ -55,7 +55,8 @@ public class DbConnection implements IndexDataSource {
 
 			String ecDir = null; 
 			try {
-				ecDir = Installation.installation().propertyServiceManager().getToolkitProperties().get("External_Cache");
+				// ecDir = Installation.installation().propertyServiceManager().getToolkitProperties().get("External_Cache");
+				ecDir = Installation.installation().getExternalCache().toString();
 				
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -4,12 +4,15 @@ import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleId;
+import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
+
 
 import java.io.IOException;
 
@@ -18,14 +21,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+
+/**
+ * @author Sunil.Bhaskarla
+ * 
+ * Simple Asset Report
+ * 	Supports multiple levels of hierarchy
+ */
 public class SearchServlet extends HttpServlet {
 
-	/**
-	 * @author Sunil.Bhaskarla
-	 * 
-	 * Simple Asset Report
-	 * 	Supports multiple levels of hierarchy
-	 */
+	private static final String USAGE_STR = "Usage: ?reposSrc=<Resident|External>&reposId=value&assetId=value&[level=<1,2,3>]&[reportType=<1,2>]";
+
 	
 	// TODO: setup Installation in case Gwt onLoad hasn't started yet
 	//
@@ -38,15 +46,34 @@ public class SearchServlet extends HttpServlet {
 
 		 /*		
 		  * 
-		http://127.0.0.1:8888/repository/search?reposId=ee332a45-4c5f-4762-a62d-c6f7e217e93a&assetId=172-7ce2-4c5b-b994-a0123&level=2
+		http://127.0.0.1:8888/repository/search?reposSrc=?&reposId=ee332a45-4c5f-4762-a62d-c6f7e217e93a&assetId=172-7ce2-4c5b-b994-a0123&level=2
 		  *
 		  */
 		 
+		String reposSrc = request.getParameter("reposSrc");
 		String reposId = request.getParameter("reposId");
 		String assetId = request.getParameter("assetId");
 		String levelStr = request.getParameter("level"); // 1, 2, or 3
 		String reportTypeStr = request.getParameter("reportType"); // 1 or 2
+		Access acs = null; 
 		
+
+		SimpleRepository repos = null; 
+		try {
+			repos = new SimpleRepository(new SimpleId(reposId));
+			if (reposSrc==null) {
+				throw new ServletException("Missing required reposSrc. " +USAGE_STR);
+			} else {
+				acs = getAccessType(reposSrc);
+				if (acs==null) {
+					throw new ServletException("Invalid reposSrc. " + USAGE_STR);
+				}
+			}			
+			repos.setSource(Configuration.getRepositorySrc(acs));			
+		} catch (RepositoryException e) {			
+			throw new ServletException(e.toString());
+		}
+				
 		if (reportTypeStr!=null) {
 			int rpValue = Integer.parseInt(reportTypeStr);
 			if (rpValue>0 && rpValue <3) {
@@ -76,13 +103,22 @@ public class SearchServlet extends HttpServlet {
 					level = 0;
 			}
 
-			String result = getAsset(reposId, assetId, level, level);
+			String result = getAsset(repos, assetId, level, level);
 			response.getWriter().write(printReport(result));
 		 
 		} else {
-			throw new ServletException("Usage: ?reposId=value&assetId=value&[level=<1,2,3>]&[reportType=<1,2>]");			
+			throw new ServletException(USAGE_STR);			
 		}
 		
+	}
+
+	private Access getAccessType(String reposSrc) throws RepositoryException {
+		for (Access a : Access.values()) {
+			if (a.toString().toLowerCase().contains((reposSrc.toLowerCase()))) {
+				return a;
+			}
+		}
+		throw new RepositoryException("Access type "+ reposSrc +" not found");
 	}
 	
 	private String printReport(String rpt) {
@@ -91,7 +127,7 @@ public class SearchServlet extends HttpServlet {
 		return "<html><body style='font-family:arial,verdana,sans-serif;'>" + rpt + "</body></html>";
 	}
 
-	private String getAsset(String reposId, String assetId, int topLevel, int level) {
+	private String getAsset(Repository repos, String assetId, int topLevel, int level) {
 		StringBuffer sb = new StringBuffer();
 		
 		try {
@@ -100,10 +136,8 @@ public class SearchServlet extends HttpServlet {
 			String nest = (topLevel==level)?"id":"parentId";
 			criteria.append(new SearchTerm(nest,Operator.EQUALTO,assetId));
 			
-			RepositoryFactory fact = new RepositoryFactory();		
-			Repository repos1 = fact.getRepository(new SimpleId(reposId)); 
 			
-			AssetIterator iter = new SearchResultIterator(new Repository[]{repos1}, criteria );
+			AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, "displayOrder");
 			
 			if (iter.hasNextAsset()) {
 				reportBeginHeader(topLevel, level, sb); // ul
@@ -122,7 +156,7 @@ public class SearchServlet extends HttpServlet {
 				rowCt = reportAddDetail(sb, rowCt, a);
 				
 				while (--levelCt>0) {
-					String child = getAsset(reposId,a.getId().getIdString(),topLevel,levelCt);		// ul
+					String child = getAsset(repos,a.getId().getIdString(),topLevel,levelCt);		// ul
 					
 					if (child!=null && !"".equals(child)) {
 						reportAddChild(sb, child);
@@ -196,14 +230,20 @@ public class SearchServlet extends HttpServlet {
 			
 			
 			sb.append("<li title='"); 
-			
+			try {
+				sb.append(FileUtils.readFileToString(a.getPropFile()));
+			} catch (IOException e) {
+				sb.append("Error: Properties file could not be loaded. file=" + a.getPropFile());
+				// e.printStackTrace();
+			}
+			/*
 			sb.append(  
 					 "Type: " + a.getAssetType().getKeyword() 
 					+ ((a.getCreatedDate()!=null)?"&nbsp;Created Date: "+a.getCreatedDate():"")
 					+((a.getExpirationDate()!=null)?"&nbsp;Expiration Date: "+a.getExpirationDate():"")					 
 					+((a.getMimeType()!=null)?"&nbsp;Mime Type: " +a.getMimeType():"")
 					);
-			
+			*/
 			sb.append("'>");
 		}
 	}
@@ -233,9 +273,15 @@ public class SearchServlet extends HttpServlet {
 				+"</tr>"
 				);
 		} else {
-			sb.append( a.getId().toString() + " - " + a.getDescription());
+			sb.append( a.getDescription()); // a.getId().toString() + " - " +
 			if (a.getMimeType()!=null) {
-				sb.append("&nbsp;<font family='arial,verdana,sans-serif' size='2'><sup><a href='" + this.getServletContext().getContextPath() + "downloadAsset?reposId=" + a.getRepository().getIdString() + "&assetId=" + a.getId().getIdString() + "'>" 
+				sb.append("&nbsp;<font ");
+				
+				if ("text/*".equalsIgnoreCase(a.getMimeType())) {
+					sb.append("title='" + StringEscapeUtils.escapeHtml4(new String(a.getContent())) + "' ");
+				}
+				
+				sb.append("family='arial,verdana,sans-serif' size='2'><sup><a href='" + this.getServletContext().getContextPath() + "downloadAsset?reposId=" + a.getRepository().getIdString() + "&assetId=" + a.getId().getIdString() + "'>" 
 				+ a.getMimeType()
 				+ "</a></sup></font>");
 			}
@@ -259,6 +305,12 @@ public class SearchServlet extends HttpServlet {
 		
 	}
 	
-
+//	private void print(String s) {
+//		System.out.println(s);
+//		
+////		System.out.println("found asset: " +  a.getId().toString() + ", of type: "+ a.getAssetType().getKeyword() +", in repos:" + a.getRepository().getIdString() );
+////		System.out.println("life: " + a.getAssetType().getLifetime());
+//
+//	}
 
 }

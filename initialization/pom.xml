@@ -5,12 +5,17 @@
     <artifactId>toolkit3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
+  <version>3.0.0-SNAPSHOT</version>
   <artifactId>initialization</artifactId>
   <dependencies>
 	  	<dependency>
-	  		<groupId>gov.nist.hit.ds</groupId>
-	  		<artifactId>tk</artifactId>
-	  		<version>0.0.1-SNAPSHOT</version>
+	  		<groupId>log4j</groupId>
+	  		<artifactId>log4j</artifactId>
 	  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>utilities</artifactId>
+  		<version>3.0.0-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
 </project>

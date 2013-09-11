@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.registrySim.actor;
 
-import gov.nist.hit.ds.actorSim.factory.ActorFactory;
+import gov.nist.hit.ds.actorSimFactory.ActorFactory;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.httpSoapValidator.Launcher;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
@@ -18,6 +18,7 @@ public class DocumentRegistryActorRegisterTransactionFactory implements ActorFac
 
 	@Override
 	public void run() throws SoapFaultException {
+		logger.trace("DocumentRegistryActorRegisterTransactionFactory");
 		try {
 			new Launcher().launch("xdsRegistryRegisterSim.properties");
 		} catch (Exception e) {

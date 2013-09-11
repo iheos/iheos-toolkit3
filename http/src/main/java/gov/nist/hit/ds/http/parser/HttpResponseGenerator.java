@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.http.parser;
 
+import gov.nist.hit.ds.http.environment.HttpEnvironment;
+
 
 
 /**
