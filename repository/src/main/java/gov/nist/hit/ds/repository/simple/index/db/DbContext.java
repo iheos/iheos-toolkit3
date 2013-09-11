@@ -145,8 +145,7 @@ public class DbContext {
 			rs.close();
 			this.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log(e.toString());
 		}
 		
 	}

@@ -23,13 +23,13 @@ public class SimpleCreateAssetTest {
 		repos = fact.createRepository(
 				"This is my repository",
 				"Description",
-				new SimpleType("simple"));
+				new SimpleType("simpleRepos"));
 	}
 
 	@Test
 	public void createUniqueIdsTest() {
 		try {
-			Asset a = repos.createAsset("My Deletable Site", "This is my site", new SimpleType("site"));
+			Asset a = repos.createAsset("My Deletable Site", "This is my site", new SimpleType("siteAsset"));
 			assertFalse(repos.getId().isEqual(a.getId()));
 		} catch (RepositoryException e) {
 			fail(ExceptionUtil.exception_details(e));
@@ -40,7 +40,7 @@ public class SimpleCreateAssetTest {
 	public void createNamedAssetTest() {
 		String name = "mine";
 		try {
-			Asset a = repos.createNamedAsset("My Deletable Site", "This is my site", new SimpleType("site"), name);
+			Asset a = repos.createNamedAsset("My Deletable Site", "This is my site", new SimpleType("siteAsset"), name);
 			assertFalse(repos.getId().isEqual(a.getId()));
 		} catch (RepositoryException e) {
 			fail(ExceptionUtil.exception_details(e));

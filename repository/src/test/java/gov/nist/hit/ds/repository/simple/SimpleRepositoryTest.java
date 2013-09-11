@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.repository.simple;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -23,7 +24,7 @@ public class SimpleRepositoryTest {
 		Repository rep = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createRepository(
 				"This is my repository",
 				"Description",
-				new SimpleType("simple", ""));
+				new SimpleType("simpleRepos", ""));
 		repId = rep.getId();
 	}
 	
@@ -47,7 +48,7 @@ public class SimpleRepositoryTest {
 	@Test 
 	public void repositoryIteratorTest2() throws RepositoryException {
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-		Type simpleType = new SimpleType("simple", "");
+		Type simpleType = new SimpleType("simpleRepos", "");
 		Repository repos1 = fact.createRepository(
 				"This is my repository",
 				"Description",
@@ -90,32 +91,45 @@ public class SimpleRepositoryTest {
 	}
 	
 	@Test
-	public void invalidReposTypeTest() throws RepositoryException {
+	public void residentCreateReposTest() throws RepositoryException {
 		
 		try {
-			new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL))
-			.createRepository(
+			new RepositoryFactory(Configuration.getRepositorySrc(Access.RO_RESIDENT))
+			.createRepository(                           // Create on resident is bad
 					"This is my repository",
 					"Description",
-					new SimpleType("XXX", "") // This is bad
+					new SimpleType("simpleRepos", "no desc") 
 					);
-			//TODO: return to this after the merge
 			
-			//fail("An exception should be thrown");
+			
+			fail("An exception should be thrown");
 			
 		} catch (RepositoryException re) {
-			// This is good			
+			// This is expected
 			;
 		}
 		
+	}
+	
+	
+	@Test
+	public void badReposTypeTest() {
+		try {
+			new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL))
+			.createRepository(                           
+					"This is my repository",
+					"Description",
+					new SimpleType("XXX- BAD TYPE", "no desc")  // Type is bad
+					);
+			
+			
+			fail("An exception should be thrown");
+			
+		} catch (RepositoryException re) {
+			// This is expected
+			;
+		}
 		
-		
-	}	
-	public void residentTest() throws RepositoryException {
-		
-		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-		
-		fact.createRepository("new repository", "test", new SimpleType("simple", ""));
 	}
 	
 	boolean findRepo(Type type, Id repIdToFind) throws RepositoryException {

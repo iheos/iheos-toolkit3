@@ -1,7 +1,7 @@
-# repository type simpleRepos
+# repository type documentRepos
 
 # must match filename
-keyword=simpleRepos
+keyword=document
 
 # repository|asset
 domain=repository 
