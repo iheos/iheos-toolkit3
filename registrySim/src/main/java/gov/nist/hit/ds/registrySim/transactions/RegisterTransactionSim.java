@@ -1,13 +1,15 @@
 package gov.nist.hit.ds.registrySim.transactions;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.simSupport.datatypes.SimEndPoint;
+import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+
+import org.apache.log4j.Logger;
 
 /**
  * Simulator for the Register Transaction. The containing Actor simulator is expected to be
@@ -18,11 +20,12 @@ import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
  *
  */
 public class RegisterTransactionSim extends SimComponentBase {
-	SimEndPoint simEndPoint;
+	SimEndpoint simEndPoint;
 	SimDb db;
+	static Logger logger = Logger.getLogger(RegisterTransactionSim.class);
 
 	@Inject
-	public void setSimEndPoint(SimEndPoint simEndPoint) {
+	public void setSimEndPoint(SimEndpoint simEndPoint) {
 		this.simEndPoint = simEndPoint;
 	}
 	
@@ -36,14 +39,14 @@ public class RegisterTransactionSim extends SimComponentBase {
 				throw new SoapFaultException(
 						er,
 						FaultCode.Receiver,
-						new ErrorContext("Configuration error, Register Transaction (transaction rb) was expect: found <" + simEndPoint.getTransaction() + "> instead" )
+						new ErrorContext("Configuration error, Register Transaction (rb) was expect: found (" + simEndPoint.getTransaction() + ") instead" )
 						);
 	}
 
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
+		logger.trace("Run RegisterTransactionSim");
 		validateEndpoint();
-		er.challenge("Register Transaction Sim Component running");
 	}
 
 }

@@ -6,8 +6,10 @@ import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.simple.SimpleId;
+import gov.nist.hit.ds.repository.simple.index.db.DbContext;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 
@@ -21,7 +23,6 @@ public class SearchResultIterator implements AssetIterator  {
 	 * 
 	 */
 	private static final long serialVersionUID = -719485351032161998L;
-	File reposDir = null;
 	String[] assetFileNames;
 	int assetFileNamesIndex = 0;
 	Id repositoryId = null;
@@ -31,6 +32,7 @@ public class SearchResultIterator implements AssetIterator  {
 	int totalRecords = -1;
 	int fetchedRecords = 0;
 	
+
 	/**
 	 * Retrieves a comprehensive search result of all indexed and non-indexed assets. 
 	 * Search results are provided in the same order as specified by the repository parameter, grouped by assetType.
@@ -43,14 +45,31 @@ public class SearchResultIterator implements AssetIterator  {
 	 */
 	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
 
-		DbIndexContainer dbc = new DbIndexContainer();
-		
-		crs = dbc.getAssetsBySearch(repositories, searchCriteria);
-		totalRecords = crs.size();
-		// System.out.println("total records in buffer: " + totalRecords);
+		init(repositories,searchCriteria,"");
+	}
+	/**
+	 * 
+	 * @param repositories
+	 * @param searchCriteria
+	 * @param orderBy
+	 * @throws RepositoryException
+	 */
+	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, String orderBy) throws RepositoryException {
 
+		init(repositories,searchCriteria,orderBy);
 	}
 	
+	private void init(Repository[] repositories, SearchCriteria searchCriteria,
+			String orderBy) {
+		DbIndexContainer dbc = new DbIndexContainer();
+		
+		crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy);
+		totalRecords = crs.size();
+		// System.out.println("total records in buffer: " + totalRecords);
+		
+		
+	}
+
 		
 	@Override
 	public boolean hasNextAsset() throws RepositoryException {
@@ -68,6 +87,7 @@ public class SearchResultIterator implements AssetIterator  {
 			throw new RepositoryException(RepositoryException.NO_MORE_ITERATOR_ELEMENTS);
 		SimpleId repId = null;
 		SimpleId assetId = null;
+		File reposLocation = null;
 		
 		try {
 			
@@ -75,16 +95,24 @@ public class SearchResultIterator implements AssetIterator  {
 				fetchedRecords++;
 				repId = new SimpleId(crs.getString(1));
 				assetId = new SimpleId(crs.getString(2));
+				String reposLocStr = crs.getString(3);
+				if (reposLocStr!=null) {
+					reposLocation = new File(reposLocStr);
+				} else {
+					DbContext.log("null location for " + repId);
+				}
+				
 				
 			}			
 			// System.out.println(assetId.getIdString());
 			
-			Repository repos = new RepositoryFactory().getRepository(repId);
+			
+			
+			Repository repos = new RepositoryFactory(new RepositorySource(reposLocation)).getRepository(repId);
 			return repos.getAsset(assetId);
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			DbContext.log(e.toString());
 		}
 		
 		return null;

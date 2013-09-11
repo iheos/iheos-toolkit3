@@ -10,7 +10,6 @@ import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleAsset;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
-import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
@@ -31,17 +30,20 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	Id repositoryId = null;
 	boolean[] selections = null;
 	Type type = null;
+	private Repository repository;
 	
-	public SimpleAssetIterator(Id repositoryId) throws gov.nist.hit.ds.repository.api.RepositoryException {
-		this.repositoryId = repositoryId;
-		reposDir = Configuration.getRepositoryLocation(repositoryId);
+	public SimpleAssetIterator(Repository repos) throws gov.nist.hit.ds.repository.api.RepositoryException {
+		setRepository(repos);
+		this.repositoryId = repos.getId();
+		reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());		
 		assetFileNames = reposDir.list(this);
 	}
 	
-	public SimpleAssetIterator(Id repositoryId, Type type) throws RepositoryException {
-		this.repositoryId = repositoryId;
+	public SimpleAssetIterator(Repository repos, Type type) throws RepositoryException {
+		setRepository(repos);
+		this.repositoryId = repos.getId();
 		this.type = type;
-		reposDir = Configuration.getRepositoryLocation(repositoryId);
+		reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());
 		assetFileNames = reposDir.list(this);
 	}
 	
@@ -59,7 +61,7 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 			throw new RepositoryException(RepositoryException.NO_MORE_ITERATOR_ELEMENTS);
 		String filename = assetFileNames[assetFileNamesIndex++];
 		Id assetId = Configuration.getAssetIdFromFilename(filename);
-		Repository repos = new RepositoryFactory().getRepository(repositoryId);
+		Repository repos = new RepositoryFactory(getRepository().getSource()).getRepository(repositoryId);
 		return repos.getAsset(assetId);
 	}
 	
@@ -80,7 +82,7 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	}
 
 	public SimpleAssetIterator getAssetIteratorFromSelections() throws RepositoryException {
-		SimpleAssetIterator it = new SimpleAssetIterator(repositoryId);
+		SimpleAssetIterator it = new SimpleAssetIterator(getRepository());
 		it.repositoryId = repositoryId;
 		it.assetFileNames = (String[]) getSelectedFileNames().toArray();
 		return it;
@@ -103,9 +105,8 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		if (type == null) return true;    // no type restriction
 		Id assetId = Configuration.getAssetIdFromFilename(arg1);
 		
-		try {
-			SimpleRepository repos = new SimpleRepository(repositoryId);
-			SimpleAsset a =  (SimpleAsset) repos.getAsset(assetId);
+		try {			
+			SimpleAsset a =  (SimpleAsset) getRepository().getAsset(assetId);
 			String aTypeStr = a.getProperty("type");
 			Type aType = new SimpleType(aTypeStr);
 			return type.isEqual(aType);
@@ -114,5 +115,14 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		}
 		return false;
 	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
+
 
 }

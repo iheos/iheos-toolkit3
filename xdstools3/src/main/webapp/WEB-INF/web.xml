@@ -8,12 +8,12 @@
 <!--  The filter is necessary so the simulator response headers can be captured for the message log -->
 	<filter>
 		<filter-name>response-header-log</filter-name>
-		<filter-class>gov.nist.hit.ds.actorSim.servlet.SimServletFilter</filter-class>
+		<filter-class>gov.nist.hit.ds.simServlet.SimServletFilter</filter-class>
 	</filter>
 	
 	<filter>
 		<filter-name>response-header-log2</filter-name>
-		<filter-class>gov.nist.hit.ds.actorSim.servlet.SimServletFilter</filter-class>
+		<filter-class>gov.nist.hit.ds.simServlet.SimServletFilter</filter-class>
 	</filter>
 	
 	<filter-mapping>
@@ -37,12 +37,12 @@
  -->
 	<servlet>
 		<servlet-name>simulatorServlet</servlet-name>
-		<servlet-class>gov.nist.hit.ds.actorSim.servlet.SimServlet</servlet-class>
+		<servlet-class>gov.nist.hit.ds.simServlet.SimServlet</servlet-class>
 	</servlet>
 	
 	<servlet>
 		<servlet-name>simulatorServlet2</servlet-name>
-		<servlet-class>gov.nist.hit.ds.actorSim.servlet.SimServlet</servlet-class>
+		<servlet-class>gov.nist.hit.ds.simServlet.SimServlet</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
@@ -55,4 +55,8 @@
 		<url-pattern>/xdstools3/sim/*</url-pattern>
 	</servlet-mapping>
 
+    <!-- Default page to serve -->
+    <welcome-file-list>
+        <welcome-file>Xdstools3.html</welcome-file>
+    </welcome-file-list>
 </web-app>

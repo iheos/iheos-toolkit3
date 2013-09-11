@@ -3,58 +3,17 @@ package gov.nist.hit.ds.repository.simple.index;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import gov.nist.hit.ds.initialization.Installation;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.IdFactory;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 
-import java.io.File;
-
-import javax.servlet.ServletContext;
-
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CreateContainerTest  {
 	
-	/*
-	 * Important: The following system path variables need to verified manually before running the test.
-	 * 
-	 */
 
-	static String RootPath = "/e/artrep_test_resources/"; 		// Root Path or the Test resources folder
-	public static String RepositoriesPath;  					// Repositories folder
-	static String InstallationPath = RootPath+"installation";	// Path containing the WEB-INF folder (for External_Cache)
-	
-	public static File RootOfAllRepositories; 
-	static Installation inst = null;
-	
-	@BeforeClass
-	static public void initialize() throws RepositoryException {
-		
-		// The MockServletContext is used for testing purposes only
-		
-		ServletContext sc = MockServletContext.getServletContext(InstallationPath); 
-		
-		Installation.installation(sc);
-		
-		String externalCache = Installation.installation().propertyServiceManager()
-									.getToolkitProperties().get("External_Cache");
-		System.out.println(externalCache);
-		Installation.installation().setExternalCache(new File(sc.getRealPath(externalCache)));
-		inst = Installation.installation();
-		
-		RepositoriesPath = externalCache + "/repositories";
-		RootOfAllRepositories = new File(RepositoriesPath);
-		
-		new Configuration(RootOfAllRepositories);
-
-	}
-
-	
 	
 	@Test
 	public void removeContainerTest() {
@@ -64,7 +23,6 @@ public class CreateContainerTest  {
 			if (dbc.doesIndexContainerExist())
 				dbc.removeIndexContainer();
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("removeContainer failed!");
 		
@@ -81,7 +39,6 @@ public class CreateContainerTest  {
 				System.out.println("New index container created.");
 			}
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Index Container test Failed");
 						
@@ -102,7 +59,6 @@ public class CreateContainerTest  {
 			}
 		
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("purge failed");
 						
@@ -145,7 +101,6 @@ public class CreateContainerTest  {
 
 			
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("add index failed");
 		}

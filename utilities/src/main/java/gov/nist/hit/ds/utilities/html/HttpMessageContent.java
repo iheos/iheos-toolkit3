@@ -1,5 +1,8 @@
 package gov.nist.hit.ds.utilities.html;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 public class HttpMessageContent {
 	String header;
 	byte[] body;
@@ -19,5 +22,11 @@ public class HttpMessageContent {
 		return this;
 	}
 	
+	public byte[] getBytes() throws IOException {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		os.write(header.getBytes());
+		os.write(body);
+		return os.toByteArray();
+	}
 	
 }

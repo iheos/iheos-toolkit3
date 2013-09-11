@@ -1,0 +1,5 @@
+# Simple Asset type
+
+keyword=simpleType
+domain=asset
+description=A simple/generic type
