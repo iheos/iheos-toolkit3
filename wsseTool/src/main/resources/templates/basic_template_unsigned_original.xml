@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsse:Security
+	xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+	xmlns:S="http://www.w3.org/2003/05/soap-envelope"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	S:mustUnderstand="true">
+	<wsu:Timestamp wsu:Id="timestamp1">
+		<wsu:Created>2008-10-07T13:00:34Z</wsu:Created>
+		<wsu:Expires>2008-10-07T13:05:34Z</wsu:Expires>
+	</wsu:Timestamp>
+	<saml2:Assertion xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"
+		xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" ID="a956b920-4956-47c6-8a05-8a3a56e418a0"
+		IssueInstant="2011-02-22T16:35:43.734Z" Version="2.0">
+		<saml2:Issuer
+			Format="urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">CN=SAMLUser,OU=SU,O=SAML User,L=LosAngeles,ST=CA,C=US
+		</saml2:Issuer>
+		<saml2:Subject>
+			<saml2:NameID
+				Format="urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">CN=SAMLUser,OU=SU,O=SAML User,L=LosAngeles,ST=CA,C=US
+			</saml2:NameID>
+			<saml2:SubjectConfirmation
+				Method="urn:oasis:names:tc:SAML:2.0:cm:holder-of-key">
+				<saml2:SubjectConfirmationData>
+				</saml2:SubjectConfirmationData>
+			</saml2:SubjectConfirmation>
+		</saml2:Subject>
+		<saml2:AuthnStatement AuthnInstant="2011-02-22T16:35:43.000Z"
+			SessionIndex="123456">
+			<saml2:SubjectLocality />
+			<saml2:AuthnContext>
+				<saml2:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509
+				</saml2:AuthnContextClassRef>
+			</saml2:AuthnContext>
+		</saml2:AuthnStatement>
+		<saml2:AttributeStatement>
+			<saml2:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:subject-id">
+				<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xmlns:xs="http://www.w3.org/2001/XMLSchema" xs:type="xsi:string">Interop IT
+					Testcase
+				</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:organization">
+				<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xmlns:xs="http://www.w3.org/2001/XMLSchema" xs:type="xsi:string">2.16.840.1.113883.3.717
+				</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute
+				Name="urn:oasis:names:tc:xspa:1.0:subject:organization-id">
+				<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xmlns:xs="http://www.w3.org/2001/XMLSchema" xs:type="xsi:string">urn:oid:2.16.840.1.113883.3.717
+				</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute Name="urn:nhin:names:saml:homeCommunityId">
+				<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xmlns:xs="http://www.w3.org/2001/XMLSchema" xs:type="xsi:string">urn:oid:2.16.840.1.113883.3.717
+				</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute Name="urn:oasis:names:tc:xacml:2.0:subject:role">
+				<saml2:AttributeValue>
+					<hl7:Role xmlns:hl7="urn:hl7-org:v3"
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" code="46255001"
+						codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED_CT"
+						displayName="Pharmacist" xsi:type="hl7:CE" />
+				</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse">
+				<saml2:AttributeValue>
+					<hl7:PurposeForUse xmlns:hl7="urn:hl7-org:v3"
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" code="TREATMENT"
+						codeSystem="2.16.840.1.113883.3.18.7.1" codeSystemName="nhin-purpose"
+						displayName="Treatment" xsi:type="hl7:CE" />
+				</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute Name="urn:oasis:names:tc:xacml:2.0:resource:resource-id">
+				<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xmlns:xs="http://www.w3.org/2001/XMLSchema" xs:type="xsi:string">RI2.102.00008^^^&amp;2.16.840.1.113883.3.717&amp;ISO
+				</saml2:AttributeValue>
+			</saml2:Attribute>
+		</saml2:AttributeStatement>
+		<saml2:AuthzDecisionStatement Decision="Permit"
+			Resource="http://endpoint1.hostname1.nist.gov">
+			<saml2:Action Namespace="urn:oasis:names:tc:SAML:1.0:action:rwedc">Execute</saml2:Action>
+			<saml2:Evidence>
+				<saml2:Assertion ID="_3e0d08ce-a126-45e8-b602-ac0c7ea075ce"
+					IssueInstant="2011-02-22T16:35:43.000Z" Version="2.0">
+					<saml2:Issuer
+						Format="urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">CN=SAML User,OU=SU,O=SAML User,L=Los Angeles,ST=CA,C=US
+					</saml2:Issuer>
+					<saml2:Subject>
+						<saml2:NameID
+							Format="urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">CN=SAMLUser,OU=SU,O=SAML User,L=LosAngeles,ST=CA,C=US
+						</saml2:NameID>
+					</saml2:Subject>
+					<saml2:Conditions NotBefore="2011-02-22T16:35:43.000Z"
+						NotOnOrAfter="2011-02-22T16:35:43.000Z" />
+					<saml2:AttributeStatement>
+						<saml2:Attribute Name="AccessConsentPolicy"
+							NameFormat="http://www.hhs.gov/healthit/nhin">
+							<saml2:AttributeValue>urn:oid:1.2.3.4</saml2:AttributeValue>
+						</saml2:Attribute>
+						<saml2:Attribute Name="InstanceAccessConsentPolicy"
+							NameFormat="http://www.hhs.gov/healthit/nhin">
+							<saml2:AttributeValue>urn:oid:1.2.3.4.123456789
+							</saml2:AttributeValue>
+						</saml2:Attribute>
+					</saml2:AttributeStatement>
+				</saml2:Assertion>
+			</saml2:Evidence>
+		</saml2:AuthzDecisionStatement>
+	</saml2:Assertion>
+
+</wsse:Security>
