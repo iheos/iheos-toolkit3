@@ -116,6 +116,7 @@
         <module>simServlet</module>
         <module>eventLog</module>
         <module>metadataModel</module>
+        <module>repositoryDirectory</module>
   </modules>
     <distributionManagement>
     <snapshotRepository>

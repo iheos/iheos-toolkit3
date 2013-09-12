@@ -10,6 +10,7 @@ package gov.nist.hit.ds.actorTransaction;
 public class ATConfigLabels {
 	public static final String                    codesEnvironment = "Codes_Environment";
 	public static final String              extraMetadataSupported = "Extra_Metadata_Supported";
+	public static final String update_metadata_option = "Update_Metadata_Option";
 
 
 	public static final String creationTime = "Creation Time";

@@ -1,12 +1,11 @@
 package gov.nist.hit.ds.actorTransaction;
 
-import java.util.List;
 
 public enum TlsType {
 	NOTLS, TLS;
 	
 	public boolean isTls() {
-		return TLS.equals(this.name());
+		return TLS.equals(this);
 	}
 	
 	public TlsType[] getAll() {

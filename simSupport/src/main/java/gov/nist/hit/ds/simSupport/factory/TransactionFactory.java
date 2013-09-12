@@ -1,8 +1,8 @@
-package gov.nist.hit.ds.actorSimFactory;
+package gov.nist.hit.ds.simSupport.factory;
 
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
 
-public interface ActorFactory {
+public interface TransactionFactory {
 	void run() throws SoapFaultException;
 }
