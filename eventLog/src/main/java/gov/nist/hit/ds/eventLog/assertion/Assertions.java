@@ -8,6 +8,7 @@ import gov.nist.hit.ds.repository.simple.SimpleType;
 public class Assertions {
 	Asset assertionsAsset;
 	int counter = 1;
+	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
 	
 	public Asset init(Asset parent) throws RepositoryException {
 		assertionsAsset = AssetHelper.createChildAsset(parent, "Assertions", "", new SimpleType("simAssertions"));

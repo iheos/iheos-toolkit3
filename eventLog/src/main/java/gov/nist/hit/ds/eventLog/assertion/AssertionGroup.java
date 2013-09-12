@@ -20,21 +20,6 @@ public class AssertionGroup {
 	
 	public AssertionStatus getMaxStatus() { return maxStatus; }
 	
-	public AssertionGroup addAssertion(Assertion asser) {
-		if (asser.getStatus().ordinal() > maxStatus.ordinal())
-			maxStatus = asser.getStatus();
-			
-		List<String> values = new ArrayList<String>();
-		values.add(asser.getName());
-		values.add(asser.getId());
-		values.add(asser.getStatus().name());
-		values.add(asser.getExpected());
-		values.add(asser.getFound());
-		values.add(asser.getReference());
-		addRow(values);
-		return this;
-	}
-	
 	public AssertionGroup addAssertion(String name, AssertionId id, AssertionStatus status, String expected, String found, AssertionReference ref) {
 		if (status.ordinal() > maxStatus.ordinal())
 			maxStatus = status;
@@ -49,6 +34,21 @@ public class AssertionGroup {
 		return this;
 	}
 	
+	public AssertionGroup addAssertion(Assertion asser) {
+		if (asser.getStatus().ordinal() > maxStatus.ordinal())
+			maxStatus = asser.getStatus();
+			
+		List<String> values = new ArrayList<String>();
+		values.add(asser.getName());
+		values.add(asser.getId());
+		values.add(asser.getStatus().name());
+		values.add(asser.getExpected());
+		values.add(asser.getFound());
+		values.add(asser.getReference());
+		addRow(values);
+		return this;
+	}
+
 	void addRow(List<String> values) {
 		CSVEntry entry = new CSVEntry(values.size());
 		for (int i=0; i<values.size(); i++) {
