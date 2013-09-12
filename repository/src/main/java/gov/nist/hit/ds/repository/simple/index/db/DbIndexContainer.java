@@ -436,7 +436,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			while (it.hasNextType()) {				
 				Type t = it.nextType();
 				
-				if (t.getDomain()!=null && t.getDomain().equals(SimpleType.Repository)) {
+				if (t.getDomain()!=null && t.getDomain().equals(SimpleType.REPOSITORY)) {
 					if (rep.getKeyword()!=null && rep.getKeyword().equals(t.getKeyword())) {
 						return "on".equalsIgnoreCase(t.getIndex());					
 					}
@@ -468,7 +468,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			it = new SimpleTypeIterator(rs);
 			while (it.hasNextType()) {
 				Type t = it.nextType();
-				if (t.getDomain()!=null && t.getDomain().equals(SimpleType.Asset)) {
+				if (t.getDomain()!=null && t.getDomain().equals(SimpleType.ASSET)) {
 				 
 //				System.out.println ("desc:" + t.getDescription());
 //				System.out.println ("domain:" + t.getDomain());

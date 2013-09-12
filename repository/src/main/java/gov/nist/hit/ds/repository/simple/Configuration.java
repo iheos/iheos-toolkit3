@@ -59,7 +59,7 @@ public class Configuration {
 				
 		String ecDir = Installation.installation().getExternalCache().toString();
 		
-		f = new File( ecDir + "/" + REPOSITORY_SOURCE_DIRNAME); 
+		f = new File( ecDir + File.separator + REPOSITORY_SOURCE_DIRNAME); 
 		addSource(f,Access.RW_EXTERNAL);		
 	}
 		

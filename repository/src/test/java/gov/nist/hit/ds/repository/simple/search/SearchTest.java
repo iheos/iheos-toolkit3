@@ -310,7 +310,7 @@ public class SearchTest {
 						if (lifetime!=null) {
 								Integer days = Integer.parseInt(lifetime.substring(0,lifetime.indexOf(" days")));
 								if (days!=null)
-									System.out.println("lf: " + days);
+									System.out.println("lifetime: " + days);
 								SimpleDateFormat sdf = new SimpleDateFormat(Hl7Date.parseFmt);
 								// Date dt=sdf.parse("20020911091200");
 								

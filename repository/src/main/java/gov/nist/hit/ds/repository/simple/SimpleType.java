@@ -16,8 +16,8 @@ public class SimpleType extends Type {
 	 */
 	private static final long serialVersionUID = 5856958238533928287L;
 	// Create Domain enum here
-	public static final String Asset = "asset";
-	public static final String Repository = "repository";
+	public static final String ASSET = "asset";
+	public static final String REPOSITORY = "repository";
 
 	public SimpleType(String keyword, String description) throws RepositoryException {
 		super("", "", keyword, description);
