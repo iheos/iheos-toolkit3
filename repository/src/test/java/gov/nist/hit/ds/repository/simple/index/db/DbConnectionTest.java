@@ -49,7 +49,7 @@ public class DbConnectionTest {
 		try {
 			System.out.println (ic.doesIndexContainerExist());
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			fail("Index Container test Failed");
 		}

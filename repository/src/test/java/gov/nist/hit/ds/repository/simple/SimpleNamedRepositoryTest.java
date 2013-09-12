@@ -24,7 +24,7 @@ public class SimpleNamedRepositoryTest {
 		repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
 				"This is my repository",
 				"Description",
-				new SimpleType("simple", "no description"),
+				new SimpleType("simpleRepos", "no description"),
 				"sites");
 		repId = repos.getId();
 	}
@@ -39,7 +39,7 @@ public class SimpleNamedRepositoryTest {
 	
 	@Test
 	public void assetTest() throws RepositoryException {
-		Asset a = repos.createNamedAsset("My Site", "This is my site", new SimpleType("site"), "mysite");
+		Asset a = repos.createNamedAsset("My Site", "This is my site", new SimpleType("siteAsset"), "mysite");
 		Id assetId = a.getId();
 		
 		Asset a2 = repos.getAsset(assetId);
