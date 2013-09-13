@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.eventLog;
 
+
 import gov.nist.hit.ds.eventLog.assertion.Assertions;
 import gov.nist.hit.ds.eventLog.assertion.Fault;
+import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 

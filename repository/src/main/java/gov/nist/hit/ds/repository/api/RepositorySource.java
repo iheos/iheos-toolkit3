@@ -5,6 +5,7 @@ import java.io.File;
 public class RepositorySource {
 	private File location;
 	private Access access = null;
+	private boolean isValid = false;
 
 	public RepositorySource(File location) {
 		super();
@@ -35,6 +36,14 @@ public class RepositorySource {
 
 	public void setAccess(Access access) {
 		this.access = access;
+	}
+
+	public boolean isValid() {
+		return isValid;
+	}
+
+	public void setValid(boolean isValid) {
+		this.isValid = isValid;
 	}
 
 

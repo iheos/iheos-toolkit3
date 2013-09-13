@@ -100,6 +100,9 @@ public class RepositoryException extends Exception  {
 
     /** Unknown Repository */
     public static final String UNKNOWN_REPOSITORY = "Unknown Repository ";
+    
+    /** Src not found */
+    public static final String REPOSITORY_SRC_NOT_FOUND = "Repository source not found";
 
     /** Manager not found */
     public static final String MANAGER_NOT_FOUND = "Manager not found ";

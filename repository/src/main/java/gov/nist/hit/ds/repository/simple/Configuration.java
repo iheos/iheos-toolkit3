@@ -54,7 +54,7 @@ public class Configuration {
 			addSource(f,Access.RO_RESIDENT);
 			
 		} catch (NullPointerException npe) {
-			logger.info("No resident repository source found.");
+			logger.info("No resident repository source found in WEB-INF/" + REPOSITORY_SOURCE_DIRNAME);
 		}
 				
 		String ecDir = Installation.installation().getExternalCache().toString();
@@ -66,6 +66,7 @@ public class Configuration {
 	private void addSource(File f, Access access) throws RepositoryException {
 		if (f.exists()) {
 			RepositorySource rs = new RepositorySource(f,access);
+			rs.setValid(true);
 
 			getRepositorySources().add(rs);
 		} else {
@@ -237,7 +238,7 @@ public class Configuration {
 		}
 				
 		throw new RepositoryException(
-				RepositoryException.UNKNOWN_REPOSITORY + " : " +
+				RepositoryException.REPOSITORY_SRC_NOT_FOUND + " : " +
 						"Repository source host not found. Please check to see if the repositoryId <" + reposId.getIdString() + "> exists within the repository source parameters.");
 		
 	}
@@ -358,7 +359,13 @@ public class Configuration {
 				return rs;
 			}
 		}
-		throw new RepositoryException(RepositoryException.UNKNOWN_REPOSITORY + ": Cannot find repository source by access type " + access.toString());
+		String errorHeader = RepositoryException.REPOSITORY_SRC_NOT_FOUND + ": The ("+ access.toString() +") " + REPOSITORY_SOURCE_DIRNAME ;
+		if (Access.RO_RESIDENT.equals(access)) {
+			throw new RepositoryException(errorHeader + " folder is missing in WEB-INF.");	
+		} else {
+			throw new RepositoryException(errorHeader + " folder is missing in External Cache.");
+		}
+		
 	}
 
 	

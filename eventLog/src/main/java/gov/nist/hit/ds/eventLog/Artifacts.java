@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.eventLog;
 
+import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.SimpleType;
