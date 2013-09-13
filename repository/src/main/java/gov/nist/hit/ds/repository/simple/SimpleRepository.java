@@ -88,10 +88,10 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 		Parameter p = new Parameter();
 		p.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
 		
-		p.setDescription("type");
+		p.setDescription("type parameter cannot be null");
 		p.assertNotNull(assetType);
 		
-		p.setDescription("type keyword: " + assetType.getKeyword());
+		p.setDescription("Cannot find type <" + assetType.getKeyword() + ">");
 		p.assertEquals(
 				new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL),assetType,SimpleType.ASSET).hasNextType()
 				,new Boolean(true));
@@ -117,10 +117,10 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 		p.assertParam(name);
 		p.assertEquals(name.equals(Configuration.REPOSITORY_PROP_FILE_BASENAME), new Boolean(false));
 		
-		p.setDescription("type");
+		p.setDescription("type cannot be null");
 		p.assertNotNull(assetType);
 		
-		p.setDescription("type keyword: " + assetType.getKeyword());
+		p.setDescription("Cannot find type <" + assetType.getKeyword() +">");
 		p.assertEquals(
 				new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL),assetType,SimpleType.ASSET).hasNextType()
 				,new Boolean(true));

@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.repository.simple.search.client;
 
+import gov.nist.hit.ds.repository.api.PropertyKey;
+
 /**
  * 
  * This class is used for property name identifier conventions
@@ -13,6 +15,10 @@ public class PnIdentifier {
 
 	
 	public static final boolean uniquePropertyColumn = false; 	/* Use this to create unique property columns. Quoted identifiers must be used if FALSE to avoid SQL reserved name collisions. */
+	
+	static public String getQuotedIdentifer(PropertyKey key) {	
+		return getQuotedIdentifer(key.toString());
+	}
 	
 	static public String getQuotedIdentifer(String id) {	
 		return "\"" + id + "\"";

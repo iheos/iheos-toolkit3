@@ -1,16 +1,21 @@
 package gov.nist.hit.ds.repository.simple.search;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
+import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
 import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.SimpleType;
@@ -20,6 +25,7 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -338,6 +344,67 @@ public class SearchTest {
 		}
 
 	}
+	
+	@Test
+	public void assetParentChildrenTest() {
+		
+		try {
+			
+			final Access acs = Access.RW_EXTERNAL;
+			
+			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(acs));
+			Repository repos = fact.createNamedRepository(
+					"This is my repository with children assets",
+					"Description",
+					new SimpleType("simpleRepos"),
+					"repository to test child assets"
+					);
+
+			Asset a = repos.createAsset("parent 1", "This is my parent site", new SimpleType("siteAsset"));
+			a.setOrder(1);
+			
+			Asset parent = a;
+			Id parentId = a.getId();
+			
+			a = repos.createAsset("child 1", "This is my first site", new SimpleType("siteAsset"));
+			a.setOrder(1);			
+			a.setParentId(parentId);
+			
+			a = repos.createAsset("child 2", "This is my second site", new SimpleType("siteAsset"));
+			a.setOrder(2);			
+			a.setParentId(parentId);
+						
+			SimpleAssetIterator it = new SimpleAssetIterator(repos, new SimpleType("siteAsset"));
+			
+			int count=0;
+			
+			while (it.hasNextAsset()) {
+				count++;
+				it.nextAsset();
+			}
+			assertTrue(count==3);
+			
+			count = 0;
+
+			AssetIterator childIter =  AssetHelper.getChildren(parent);
+
+			while (childIter.hasNextAsset()) {
+				count++;
+				childIter.nextAsset();
+			}
+			assertTrue(count==2);
+			
+
+			
+		} catch (RepositoryException e) {
+			fail(ExceptionUtil.exception_details(e));
+		}
+
+
+	}
+		
+	
+	
 }
 
 	

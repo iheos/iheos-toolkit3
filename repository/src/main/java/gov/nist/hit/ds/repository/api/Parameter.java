@@ -12,6 +12,7 @@ import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 public class Parameter {
 
 	private String description = "";
+	private String diagnostic = "";
 	
 	public Parameter() {
 		super();
@@ -59,7 +60,7 @@ public class Parameter {
 				boolean val = ((Boolean)value).booleanValue();
 				if (new Boolean(param.toString()).booleanValue()!=val) {
 					throw new RepositoryException(getDiagnostic(RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL 
-							+ ": "+ RepositoryException.INVALID_ARGUMENT));
+							+ ": "));
 				}
 			}
 		} else {
@@ -91,7 +92,7 @@ public class Parameter {
 	
 	private String getDiagnostic(String msg) {
 		if (getDescription()!=null && getDescription().length()>0)
-			return msg + ". Parameter description: " + getDescription();
+			return msg + " " + getDescription() + " " + getDiagnostic();
 		else 
 			return msg;
 	}
@@ -102,6 +103,12 @@ public class Parameter {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getDiagnostic() {
+		return diagnostic;
+	}
+	public void setDiagnostic(String diagnostic) {
+		this.diagnostic = diagnostic;
 	}
 
 	
