@@ -39,6 +39,12 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		assetFileNames = reposDir.list(this);
 	}
 	
+	/**
+	 * Filter a repository by asset type
+	 * @param repos
+	 * @param type (AssetType)
+	 * @throws RepositoryException
+	 */
 	public SimpleAssetIterator(Repository repos, Type type) throws RepositoryException {
 		setRepository(repos);
 		this.repositoryId = repos.getId();
@@ -116,13 +122,33 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Repository getRepository() {
 		return repository;
 	}
 
+	/**
+	 * 
+	 * @param repository
+	 */
 	public void setRepository(Repository repository) {
 		this.repository = repository;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public int getSize() {	
+		if (assetFileNames!=null) {
+			return assetFileNames.length;	
+		}
+		else
+			return -1;
+	}
+	
 
 }

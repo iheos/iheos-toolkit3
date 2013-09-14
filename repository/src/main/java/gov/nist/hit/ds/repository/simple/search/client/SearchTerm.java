@@ -1,6 +1,8 @@
 package gov.nist.hit.ds.repository.simple.search.client;
 
 
+import gov.nist.hit.ds.repository.api.PropertyKey;
+
 import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -78,6 +80,21 @@ public class SearchTerm implements IsSerializable, Serializable {
     
     
 	public SearchTerm() {}
+	
+	public SearchTerm(PropertyKey key, Operator op, String[] values) {
+		super();
+		setPropName(key.toString());
+		this.operator = op;
+		this.values = values;
+
+	}
+	
+	public SearchTerm(PropertyKey key, Operator op, String value) {
+		super();
+		setPropName(key.toString());
+		this.operator = op;
+		this.values = new String[]{value};
+	}	
 	
 	public SearchTerm(String propName, Operator op, String[] values) {
 		super();
