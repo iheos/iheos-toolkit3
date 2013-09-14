@@ -552,9 +552,27 @@ public interface Asset {
 	
     public String getProperty(String key)
             throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+    public String getProperty(PropertyKey key)
+            throws gov.nist.hit.ds.repository.api.RepositoryException;
     
     public void setProperty(String key, String value)
             throws gov.nist.hit.ds.repository.api.RepositoryException;
+    
+    public void setProperty(PropertyKey key, String value)
+            throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+    public void setOrder(int order) throws RepositoryException;
+    
+    public String getOrder() throws RepositoryException;
+    
+    public void setMimeType(String mimeType) throws RepositoryException;
+    
+    public void setParentId(Id id) throws RepositoryException;
+    
+    public RepositorySource getSource();
+    
+    public void setSource(RepositorySource source);
 
     /**
      * Create a new Asset Record of the specified RecordStructure.   The

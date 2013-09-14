@@ -100,14 +100,15 @@ public class RepositoryFactory implements RepositoryManager {
 			p.assertEquals(repositoryType.getDomain(), SimpleType.REPOSITORY);
 		}
 		
-		p.setDescription("repository type keyword: " + repositoryType.getKeyword());
+		p.setDescription("Cannot find repository type <" + repositoryType.getKeyword() + "> "
+				+ " in " + Configuration.getRepositorySrc(Access.RW_EXTERNAL).getLocation().toString());
 		p.assertEquals(
 				new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL),repositoryType,SimpleType.REPOSITORY).hasNextType()
 				,new Boolean(true));
 	}
 
 	private void assertAccess(Access acs) throws RepositoryException {
-		Parameter p = new Parameter("access: " + acs.toString());
+		Parameter p = new Parameter();
 		p.assertEquals(acs, getSource().getAccess());				
 	}
 

@@ -105,6 +105,7 @@ public class SimpleRepositoryTest {
 			fail("An exception should be thrown");
 			
 		} catch (RepositoryException re) {
+			re.hashCode();
 			// This is expected
 			;
 		}
@@ -126,6 +127,7 @@ public class SimpleRepositoryTest {
 			fail("An exception should be thrown");
 			
 		} catch (RepositoryException re) {
+			re.hashCode();
 			// This is expected
 			;
 		}

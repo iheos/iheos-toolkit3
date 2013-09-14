@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.repository.simple.search;
 
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Repository;
@@ -35,8 +36,6 @@ public class SearchServlet extends HttpServlet {
 	private static final String USAGE_STR = "Usage: ?reposSrc=<Resident|External>&reposId=value&assetId=value&[level=<1,2,3>]&[reportType=<1,2>]";
 
 	
-	// TODO: setup Installation in case Gwt onLoad hasn't started yet
-	//
 	private static final long serialVersionUID = 8326366092753151300L;
 	private static int reportType = 2; 
 	
@@ -47,6 +46,8 @@ public class SearchServlet extends HttpServlet {
 		 /*		
 		  * 
 		http://127.0.0.1:8888/repository/search?reposSrc=?&reposId=ee332a45-4c5f-4762-a62d-c6f7e217e93a&assetId=172-7ce2-4c5b-b994-a0123&level=2
+		
+		http://localhost:8080/xdstools3/repository/search?reposSrc=RW_EXTERNAL&reposId=ee332a45-4c5f-4762-a62d-c6f7e217e93a&assetId=172-7ce2-4c5b-b994-a0123&level=2
 		  *
 		  */
 		 
@@ -60,6 +61,9 @@ public class SearchServlet extends HttpServlet {
 
 		SimpleRepository repos = null; 
 		try {
+			Installation.installation();
+			Configuration.configuration();
+			
 			repos = new SimpleRepository(new SimpleId(reposId));
 			if (reposSrc==null) {
 				throw new ServletException("Missing required reposSrc. " +USAGE_STR);

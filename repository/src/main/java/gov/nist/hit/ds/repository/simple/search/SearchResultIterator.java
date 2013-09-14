@@ -3,11 +3,13 @@ package gov.nist.hit.ds.repository.simple.search;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
+import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.index.db.DbContext;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
@@ -59,6 +61,11 @@ public class SearchResultIterator implements AssetIterator  {
 		init(repositories,searchCriteria,orderBy);
 	}
 	
+	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, PropertyKey key) throws RepositoryException {
+
+		init(repositories,searchCriteria,key.toString());
+	}
+	
 	private void init(Repository[] repositories, SearchCriteria searchCriteria,
 			String orderBy) {
 		DbIndexContainer dbc = new DbIndexContainer();
@@ -95,9 +102,9 @@ public class SearchResultIterator implements AssetIterator  {
 				fetchedRecords++;
 				repId = new SimpleId(crs.getString(1));
 				assetId = new SimpleId(crs.getString(2));
-				String reposLocStr = crs.getString(3);
-				if (reposLocStr!=null) {
-					reposLocation = new File(reposLocStr);
+				String reposSrcAcs = crs.getString(3);
+				if (reposSrcAcs!=null) {
+					reposLocation = Configuration.getRepositorySrc(RepositorySource.Access.valueOf(reposSrcAcs)).getLocation();
 				} else {
 					DbContext.log("null location for " + repId);
 				}

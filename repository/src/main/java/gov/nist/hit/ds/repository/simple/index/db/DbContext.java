@@ -131,6 +131,22 @@ public class DbContext {
 		throw new SQLException("No connection.");
 	}
 	
+	public ResultSet executeQuery(String sqlStr, String[] params) throws SQLException {
+
+		log("IndexContainer SQL: " +sqlStr);
+		if (connection!=null) {
+			PreparedStatement statement = connection.prepareStatement(sqlStr);
+			int parameterIndex=1;
+			for (String p : params) {
+				log("Setting param: "+parameterIndex + " to <" + p + ">");			
+
+				statement.setString(parameterIndex++, p);
+			}
+			return statement.executeQuery();
+		}
+		throw new SQLException("No connection.");
+	}
+
 	public ResultSet executeQuery(String sqlStr) throws SQLException {
 
 		log("IndexContainer SQL: "+sqlStr);

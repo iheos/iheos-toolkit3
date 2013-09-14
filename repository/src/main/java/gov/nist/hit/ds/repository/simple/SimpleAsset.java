@@ -3,6 +3,7 @@ package gov.nist.hit.ds.repository.simple;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -10,13 +11,6 @@ import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.Flushable;
-import gov.nist.hit.ds.repository.simple.SimpleAsset;
-import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
-import gov.nist.hit.ds.repository.simple.SimpleId;
-import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
 import gov.nist.hit.ds.utilities.io.Io;
 
 import java.io.File;
@@ -40,7 +34,7 @@ public class SimpleAsset implements Asset, Flushable {
 	boolean autoFlush = true;
 	transient boolean indexable = false;
 	transient RepositorySource source; 	
-
+	
 	public SimpleAsset(RepositorySource source) throws RepositoryException {
 		super();
 		setCreatedDate(new Hl7Date().now());
@@ -48,20 +42,36 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
 	public void setRepository(Id repositoryId) throws RepositoryException {
-		properties.setProperty("repository", repositoryId.getIdString());
-		if (autoFlush) flush();
+		setProperty(PropertyKey.REPOSITORY_ID, repositoryId.getIdString());
 	}
 
 	public void setType(Type type) throws RepositoryException {
-		properties.setProperty("type", type.getKeyword());
-		if (autoFlush) flush();
+		setProperty(PropertyKey.ASSET_TYPE, type.getKeyword());
 	}
 
 	public void setId(Id id) throws RepositoryException {
-		properties.setProperty("id", id.getIdString());
-		if (autoFlush) flush();
+		setProperty(PropertyKey.ASSET_ID, id.getIdString());
 	}
 
+	/**
+	 * Temporary update. This method does not flush contents immediately.
+	 * @param key
+	 * @param value
+	 * @throws RepositoryException
+	 */
+	private void setPropertyTemp(PropertyKey key, String value) throws RepositoryException {
+		properties.setProperty(key.toString(), value);
+	}
+	
+	@Override
+	public void setProperty(PropertyKey key, String value) throws RepositoryException {
+		setProperty(key.toString(), value);
+	}
+
+	/**
+	 * An alternative to {@link SimpleAsset#setProperty(PropertyKey,String)} 
+	 * in cases where PropertyKeyLabel is not yet defined
+	 */
 	public void setProperty(String key, String value) throws RepositoryException {
 		properties.setProperty(key, value);
 		if (autoFlush) flush();
@@ -70,6 +80,11 @@ public class SimpleAsset implements Asset, Flushable {
 	public String getProperty(String key) {
 		return properties.getProperty(key);
 	}
+	
+	@Override
+	public String getProperty(PropertyKey key) {
+		return properties.getProperty(key.toString());
+	}
 
 	File getAssetBaseFile(Id assetId) throws RepositoryException {
 		
@@ -77,8 +92,6 @@ public class SimpleAsset implements Asset, Flushable {
 		// two cases 
 		// 1) set on new repos.createasset
 		// 2) get asset
-		
-
 		
 		return new File(Configuration.getRepositoriesDataDir(getSource()) + File.separator + getRepository() + File.separator + assetId.getIdString());
 	}
@@ -94,36 +107,34 @@ public class SimpleAsset implements Asset, Flushable {
 	@Override
 	public void updateDisplayName(String displayName)
 			throws RepositoryException {
-		properties.setProperty("displayName", displayName);
-		if (autoFlush) flush();
+		setProperty(PropertyKey.DISPLAY_NAME,displayName);
 	}
 
 
 	@Override
 	public void updateExpirationDate(String expirationDate)
 			throws RepositoryException {
-		properties.setProperty("expirationDate", expirationDate);
-		if (autoFlush) flush();
+		setProperty(PropertyKey.EXPIRATION_DATE,expirationDate);
 	}
 
 	@Override
 	public String getDisplayName() throws RepositoryException {
-		return properties.getProperty("displayName");
+		return getProperty(PropertyKey.DISPLAY_NAME);		
 	}
 
 	@Override
 	public String getDescription() throws RepositoryException {
-		return properties.getProperty("description");
+		return getProperty(PropertyKey.DESCRIPTION);		
 	}
 
 	@Override
-	public Id getId() throws RepositoryException {
-		return new SimpleId(properties.getProperty("id"));
+	public Id getId() throws RepositoryException {		
+		return new SimpleId(getProperty(PropertyKey.ASSET_ID));
 	}
 
 	@Override
-	public Type getAssetType() throws RepositoryException {
-		String type = properties.getProperty("type");
+	public Type getAssetType() throws RepositoryException {		
+		String type = getProperty(PropertyKey.ASSET_TYPE);
 		if (type != null) {
 			return new SimpleType(type);
 		} else
@@ -132,40 +143,61 @@ public class SimpleAsset implements Asset, Flushable {
 
 
 	@Override
-	public String getExpirationDate() throws RepositoryException {
-		return properties.getProperty("expirationDate");
+	public String getExpirationDate() throws RepositoryException {		
+		return getProperty(PropertyKey.EXPIRATION_DATE);
 	}
 
 	@Override
-	public String getMimeType() throws RepositoryException {
-		return properties.getProperty("mimeType");
+	public String getMimeType() throws RepositoryException {		
+		return getProperty(PropertyKey.MIME_TYPE);
 	}
 
 
 	@Override
 	public void setCreatedDate(String createdDate)
 			throws RepositoryException {
-		properties.setProperty("createdDate", createdDate);		
-		
+		// Without flush
+		setPropertyTemp(PropertyKey.CREATED_DATE, createdDate);
+						
 	}
 
 	@Override
 	public String getCreatedDate() throws RepositoryException {
-		return properties.getProperty("createdDate");
+		return getProperty(PropertyKey.CREATED_DATE);		
 	}
+	
+	@Override
+	public void setOrder(int order) throws RepositoryException {
+		setProperty(PropertyKey.DISPLAY_ORDER,Integer.toString(order));
+	}
+
+	@Override
+	public void setMimeType(String mimeType) throws RepositoryException {
+		setProperty(PropertyKey.MIME_TYPE, mimeType);
+	}
+	
+	@Override
+	public String getOrder() throws RepositoryException {
+		return getProperty(PropertyKey.DISPLAY_ORDER);
+	}
+
+	@Override
+	public void setParentId(Id id) throws RepositoryException {
+		setProperty(PropertyKey.PARENT_ID, id.getIdString());
+	}
+
 
 	@Override
 	public void updateDescription(String description)
 			throws RepositoryException {
 		if (description!=null && !"".equals(description)) {
-			properties.setProperty("description", description);
-			if (autoFlush) flush();
+			setProperty(PropertyKey.DESCRIPTION,description);
 		}
 	}
 
 	@Override
 	public Id getRepository() throws RepositoryException {
-		return new SimpleId(properties.getProperty("repository"));
+		return new SimpleId(getProperty(PropertyKey.REPOSITORY_ID));
 	}
 
 	@Override
@@ -186,9 +218,8 @@ public class SimpleAsset implements Asset, Flushable {
 
 	@Override
 	public void updateContent(String content, String mimeType) throws RepositoryException {
-		properties.setProperty("mimeType", mimeType);		
 		this.content = content.getBytes();
-		if (autoFlush) flush();
+		setProperty(PropertyKey.MIME_TYPE,mimeType);		
 	}
 
 	@Override
@@ -200,7 +231,7 @@ public class SimpleAsset implements Asset, Flushable {
 			throw new RepositoryException(RepositoryException.CIRCULAR_OPERATION + " : " +
 					"trying to create parent relationship between asset [" + assetId.getIdString() + 
 					"] and itself (repository [" + repositoryId.getIdString() + "]");
-		asset.setProperty("parent", getId().getIdString());
+		asset.setProperty(PropertyKey.PARENT_ID, getId().getIdString());
 		if (autoFlush) flush();
 	}
 
@@ -334,7 +365,7 @@ public class SimpleAsset implements Asset, Flushable {
 	@Override
 	public String[] getContentExtension() {
 		String[] sPart = new String[]{"","",""};
-		String mimeType = properties.getProperty("mimeType");	
+		String mimeType = getProperty(PropertyKey.MIME_TYPE);	
 		if (mimeType != null && mimeType.startsWith("text/")) {
 			sPart[0] = "text";
 			sPart[1] = partTwo(mimeType, "\\/");
@@ -353,8 +384,8 @@ public class SimpleAsset implements Asset, Flushable {
 	@Override
 	public void flush() throws RepositoryException {
 		autoFlush = true;
-		try {
-			properties.setProperty("modifiedDate", new Hl7Date().now());			
+		try {			
+			setPropertyTemp(PropertyKey.MODIFIED_DATE, new Hl7Date().now());	
 			setExipration();		
 			
 			FileWriter writer = new FileWriter(getPropFile());
@@ -400,8 +431,7 @@ public class SimpleAsset implements Asset, Flushable {
 											if (getExpirationDate()==null) {
 												c.add(Calendar.DATE, days);
 												Date expr = c.getTime();
-												properties.setProperty("expirationDate", sdf.format(expr));
-
+												setPropertyTemp(PropertyKey.EXPIRATION_DATE, sdf.format(expr));												
 											}
 										}
 											
@@ -413,7 +443,7 @@ public class SimpleAsset implements Asset, Flushable {
 		
 			}
 		} catch (Exception e) {
-			// Non-critical: Ignore expiration date issues
+			// This is a non-blocking method
 		}
 	}
 
@@ -456,13 +486,15 @@ public class SimpleAsset implements Asset, Flushable {
 		return (mimeType!=null && mimeType.startsWith("text/"));
 	}
 
+	@Override
 	public RepositorySource getSource() {
 		return source;
 	}
 
+	@Override
 	public void setSource(RepositorySource source) {
 		this.source = source;
 	}
-
+	
 	
 }
