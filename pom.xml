@@ -109,13 +109,15 @@
   	<module>xmlValidator</module>
   	<module>siteManagement</module>
   	<module>actorSimFactory</module>
-  	<module>repository</module>
+  	  	<module>repository</module>
+  	  	<module>wsseTool</module>
   	<module>xdstools3</module>
   	<module>simulatorIntegrationTest</module>
 <!--         <module>logBrowser</module>   -->
         <module>simServlet</module>
         <module>eventLog</module>
         <module>metadataModel</module>
+        <module>repositoryDirectory</module>
   </modules>
     <distributionManagement>
     <snapshotRepository>

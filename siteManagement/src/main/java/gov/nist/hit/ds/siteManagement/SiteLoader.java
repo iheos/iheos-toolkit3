@@ -22,6 +22,10 @@ public class SiteLoader {
 	
 	protected HashMap<String, Site> siteMap = new HashMap<String, Site>();
 
+	public HashMap<String, Site> getSiteMap() {
+		return siteMap;
+	}
+	
 	public Site parseSite(String siteXml) throws Exception {
 		OMElement xml = Parse.parse_xml_string(siteXml);
 		return parseSite(xml);

@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.registrySim.actor;
 
-import gov.nist.hit.ds.actorSimFactory.ActorFactory;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.httpSoapValidator.Launcher;
+import gov.nist.hit.ds.simSupport.factory.TransactionFactory;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
  * @author bmajur
  *
  */
-public class DocumentRegistryActorRegisterTransactionFactory implements ActorFactory  {
+public class DocumentRegistryActorRegisterTransactionFactory implements TransactionFactory  {
 	static final Logger logger = Logger.getLogger(DocumentRegistryActorRegisterTransactionFactory.class);
 
 	@Override

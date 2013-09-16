@@ -43,16 +43,21 @@ public class SimDb {
 	 * @return
 	 * @throws IOException
 	 */
-	static public SimDb createActorSim(SimId simid, ActorType actorType) throws IOException {
-
-		File simActorDir = new File(getDbRoot().getAbsolutePath() + File.separatorChar + simid + File.separatorChar + actorType.getShortName());
+	static public SimDb createActorSim(SimId simid) throws IOException {
+		File simActorDir = new File(getDbRoot().getAbsolutePath() + File.separatorChar + simid);
 		simActorDir.mkdirs();
 		if (!simActorDir.exists()) {
-			logger.error("Simulator " + simid + ", " + actorType + " cannot be created");
-			throw new IOException("Simulator " + simid + ", " + actorType + " cannot be created");
+			logger.error("Simulator " + simid + " cannot be created");
+			throw new IOException("Simulator " + simid + " cannot be created");
 		}
-
 		return new SimDb(simid);
+//		File simActorDir = new File(getDbRoot().getAbsolutePath() + File.separatorChar + simid + File.separatorChar + actorType.getShortName());
+//		simActorDir.mkdirs();
+//		if (!simActorDir.exists()) {
+//			logger.error("Simulator " + simid + ", " + actorType + " cannot be created");
+//			throw new IOException("Simulator " + simid + ", " + actorType + " cannot be created");
+//		}
+//		return new SimDb(simid);
 	}
 
 	public SimDb() {

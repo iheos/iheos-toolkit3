@@ -6,8 +6,6 @@ import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.EndpointLabel;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
-import gov.nist.hit.ds.simSupport.validators.SimEndpointParser;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,7 +15,9 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * Definition for an actor simulator.
+ * Definition for an actor simulator. This focuses on a single
+ * actor.  The class Simulator is a collection of ActorSimConfig 
+ * objects since a simulator can contain multiple actors.
  * @author bill
  *
  */
