@@ -33,15 +33,15 @@ public class Event {
 		Asset a;
 		inOut = new InOutMessages();
 		a = inOut.init(event);
-		AssetHelper.setOrder(a, 1);
+		a.setOrder(1);
 
 		artifacts = new Artifacts();
 		a = artifacts.init(event);
-		AssetHelper.setOrder(a, 2);
+		a.setOrder(2);
 
 		assertions = new Assertions();
 		a = assertions.init(event);
-		AssetHelper.setOrder(a, 3);
+		a.setOrder(3);
 
 		// Created only if needed
 		fault = new Fault();

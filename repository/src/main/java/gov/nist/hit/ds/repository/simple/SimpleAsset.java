@@ -185,7 +185,7 @@ public class SimpleAsset implements Asset, Flushable {
 	public void setParentId(Id id) throws RepositoryException {
 		setProperty(PropertyKey.PARENT_ID, id.getIdString());
 	}
-
+	
 
 	@Override
 	public void updateDescription(String description)

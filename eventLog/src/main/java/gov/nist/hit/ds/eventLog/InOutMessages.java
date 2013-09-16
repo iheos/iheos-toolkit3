@@ -19,7 +19,7 @@ public class InOutMessages {
 
 	public void putRequestHeader(String hdr) throws RepositoryException {
 		Asset a = AssetHelper.createChildAsset(inOutAsset, "Request Header", "", new SimpleType(reqHdrType));
-		AssetHelper.setOrder(a, 1);
+		a.setOrder(1);
 		a.updateContent(hdr, "text/plain");
 	}
 	
@@ -32,9 +32,9 @@ public class InOutMessages {
 
 	public void putRequestBody(byte[] bytes) throws RepositoryException {
 		Asset a = AssetHelper.createChildAsset(inOutAsset, "Request Body", "", new SimpleType(reqBodyType));
-		AssetHelper.setOrder(a, 2);
+		a.setOrder(2);
 		a.updateContent(bytes);
-		AssetHelper.setMimeType(a, "application/octet-stream");
+		a.setMimeType("application/octet-stream");
 	}
 	
 	public byte[] getRequestBody()  throws RepositoryException {
@@ -46,7 +46,7 @@ public class InOutMessages {
 	
 	public void putResponse(String response) throws RepositoryException {
 		Asset a = AssetHelper.createChildAsset(inOutAsset, "Response", "", new SimpleType(resType));
-		AssetHelper.setOrder(a, 3);
+		a.setOrder(3);
 		a.updateContent(response, "text/plain");
 	}
 
