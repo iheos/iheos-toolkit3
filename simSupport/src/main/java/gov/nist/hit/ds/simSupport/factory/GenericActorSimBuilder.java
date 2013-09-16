@@ -10,7 +10,7 @@ import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
 import gov.nist.hit.ds.simSupport.client.BooleanActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.EndpointActorSimConfigElement;
-import gov.nist.hit.ds.simSupport.client.Simulator;
+import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.TextActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.TimeActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
@@ -20,11 +20,10 @@ import java.util.Date;
 
 public class GenericActorSimBuilder {
 	ActorSimConfig sConfig;
-	ActorType actorType;
-	Simulator sim;
+	SimId simId;
 	
-	public GenericActorSimBuilder(Simulator sim) {
-		this.sim = sim;
+	public GenericActorSimBuilder(SimId simId) {
+		this.simId = simId;
 	}
 	
 	/**
@@ -36,10 +35,8 @@ public class GenericActorSimBuilder {
 	 * @throws XdsInternalException 
 	 */
 	public GenericActorSimBuilder buildGenericConfiguration(ActorType actorType)  {
-		this.actorType = actorType;
 		sConfig = new ActorSimConfig(actorType).setExpiration(SimDb.getNewExpiration(ActorSimConfig.class));
 		configureBaseElements();
-		sim.add(sConfig);
 		return this;
 	}	
 
@@ -50,6 +47,10 @@ public class GenericActorSimBuilder {
 		sConfig.add(
 				new TextActorSimConfigElement(ATConfigLabels.name, "Private").setEditable(true)
 				);
+	}
+	
+	public ActorSimConfig getActorSimConfig() {
+		return sConfig;
 	}
 	
 	public GenericActorSimBuilder addEndpoint(String actorShortName, TransactionType transType, TlsType tls, AsyncType async) {
@@ -65,7 +66,7 @@ public class GenericActorSimBuilder {
 				+ "/"  
 				+ contextName  
 				+ "/sim/" 
-				+ sim.getId() 
+				+ simId 
 				+ "/" +
 				actorShortName    
 				+ "/" 

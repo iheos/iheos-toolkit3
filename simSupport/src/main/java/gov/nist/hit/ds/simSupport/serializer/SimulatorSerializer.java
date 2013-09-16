@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.simSupport.serializer;
 
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
@@ -16,20 +15,24 @@ import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.ObjectMapper;
 
+/**
+ * TODO: All ActorSimConfigs in the Simulator should be saved to the same 
+ * actor.xml file.
+ * @author bmajur
+ *
+ */
 public class SimulatorSerializer {
-	boolean useJson = true;
+	static final boolean useJson = true;
 
 	public Simulator save(Simulator sim) throws IOException, XdsInternalException {
+		
 		SimDb simdb = null;  // storage reference for a single ActorSim
 
 		// Build space for all ActorSims in this Simulator
 		// The resultant simdb var will only be used as a reference
 		// to the Simulator, not the individual ActorSim.
-		for (ActorSimConfig config : sim.getConfigs()) 
-			simdb = SimDb.createActorSim(sim.getId(), config.getActorType());
-		if (simdb == null)
-			throw new XdsInternalException("Cannot save empty Simulator (no ActorSims defined)");
-		
+		simdb = SimDb.createActorSim(sim.getId());
+
 		if (useJson)
 			return jsonSave(simdb, sim);
 		else
@@ -85,13 +88,13 @@ public class SimulatorSerializer {
 
 		return sim;
 	}
-	
+
 	Simulator jsonLoad(File filename) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
 		FileInputStream fis = null;
 		fis = new FileInputStream(filename);
-		 
+
 		// read from file, convert it to user class
 		Simulator sim = mapper.readValue(fis, Simulator.class);
 		return sim;

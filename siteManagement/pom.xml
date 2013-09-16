@@ -40,5 +40,10 @@
   		<artifactId>repository</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>repositoryDirectory</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
 </project>

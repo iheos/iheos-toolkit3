@@ -10,8 +10,6 @@ gwt-unitCache-*
 #MAC
 .DS_Store
 
-
-
 target/
 build.out
 sunil's stuff/
@@ -20,3 +18,4 @@ sunil's stuff/
 artrep_test_resources.lnk
 *.orig
 *.prefs
+
