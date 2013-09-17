@@ -1,0 +1,6 @@
+#
+#Tue Sep 17 16:04:31 EDT 2013
+DisplayName=This is my repository
+description=Description
+repositoryType=simpleRepos
+id=c60012ea-01c9-413a-8934-851e429f004c

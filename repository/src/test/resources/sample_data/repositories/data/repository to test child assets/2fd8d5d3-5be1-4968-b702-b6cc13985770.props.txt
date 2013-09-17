@@ -1,0 +1,11 @@
+#
+#Tue Sep 17 16:04:31 EDT 2013
+displayOrder=2
+id=2fd8d5d3-5be1-4968-b702-b6cc13985770
+modifiedDate=20130917160431
+parentId=0be97b5d-0d35-41b2-b3b1-eb399fd1d61f
+repositoryId=repository to test child assets
+type=siteAsset
+displayName=child 2
+description=This is my second site
+createdDate=20130917160431
