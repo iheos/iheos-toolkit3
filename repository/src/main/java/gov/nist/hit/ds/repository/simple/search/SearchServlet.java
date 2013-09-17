@@ -1,8 +1,10 @@
 package gov.nist.hit.ds.repository.simple.search;
 
+import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
+import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
@@ -15,6 +17,7 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -61,7 +64,21 @@ public class SearchServlet extends HttpServlet {
 
 		SimpleRepository repos = null; 
 		try {
-			Installation.installation();
+			File warHome = new File(getServletContext().getRealPath(""));
+			try {
+				Installation.installation();
+				
+				if (Installation.installation().getExternalCache()==null) {
+					Installation.installation().setWarHome(warHome); // This would be the WAR installation directory 
+					
+					Installation.installation().setToolkitPropertiesFile(new File(warHome + File.separator +  "WEB-INF" + File.separator + "toolkit.properties"));										
+					Installation.installation().initialize();					
+				}				
+				
+			} catch (InitializationFailedException ife) {
+				throw new ServletException(ife);
+			}
+						
 			Configuration.configuration();
 			
 			repos = new SimpleRepository(new SimpleId(reposId));
@@ -137,11 +154,11 @@ public class SearchServlet extends HttpServlet {
 		try {
 			SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 			
-			String nest = (topLevel==level)?"id":"parentId";
+			PropertyKey nest = (topLevel==level)? PropertyKey.ASSET_ID : PropertyKey.PARENT_ID;
 			criteria.append(new SearchTerm(nest,Operator.EQUALTO,assetId));
 			
 			
-			AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, "displayOrder");
+			AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
 			
 			if (iter.hasNextAsset()) {
 				reportBeginHeader(topLevel, level, sb); // ul
