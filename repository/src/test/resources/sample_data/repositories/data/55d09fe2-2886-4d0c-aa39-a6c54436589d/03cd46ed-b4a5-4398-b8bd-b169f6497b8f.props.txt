@@ -1,0 +1,9 @@
+#
+#Tue Sep 17 16:04:31 EDT 2013
+displayName=My Site
+createdDate=20130917160431
+modifiedDate=20130917160431
+type=simple
+description=This is my simple
+repositoryId=55d09fe2-2886-4d0c-aa39-a6c54436589d
+id=03cd46ed-b4a5-4398-b8bd-b169f6497b8f
