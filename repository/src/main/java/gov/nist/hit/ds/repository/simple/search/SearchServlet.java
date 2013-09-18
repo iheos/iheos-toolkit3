@@ -302,7 +302,7 @@ public class SearchServlet extends HttpServlet {
 					sb.append("title='" + StringEscapeUtils.escapeHtml4(new String(a.getContent())) + "' ");
 				}
 				
-				sb.append("family='arial,verdana,sans-serif' size='2'><sup><a href='" + this.getServletContext().getContextPath() + "downloadAsset?reposId=" + a.getRepository().getIdString() + "&assetId=" + a.getId().getIdString() + "'>" 
+				sb.append("family='arial,verdana,sans-serif' size='2'><sup><a href='" + this.getServletContext().getContextPath() + "/repository/downloadAsset?reposSrc="+ a.getSource().getAccess().name() +"&reposId=" + a.getRepository().getIdString() + "&assetId=" + a.getId().getIdString() + "'>" 
 				+ a.getMimeType()
 				+ "</a></sup></font>");
 			}

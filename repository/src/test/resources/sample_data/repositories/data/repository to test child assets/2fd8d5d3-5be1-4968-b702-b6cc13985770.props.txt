@@ -9,3 +9,4 @@ type=siteAsset
 displayName=child 2
 description=This is my second site
 createdDate=20130917160431
+mimeType=application/pdf

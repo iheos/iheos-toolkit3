@@ -8,3 +8,4 @@ description=This is my parent site
 displayOrder=1
 repositoryId=repository to test child assets
 id=0be97b5d-0d35-41b2-b3b1-eb399fd1d61f
+mimeType=text/*
