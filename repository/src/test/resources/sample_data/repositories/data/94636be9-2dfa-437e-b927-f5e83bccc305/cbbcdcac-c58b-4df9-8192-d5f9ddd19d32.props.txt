@@ -1,8 +1,0 @@
-#
-#Tue Sep 17 16:04:31 EDT 2013
-displayName=My Site
-createdDate=20130917160431
-modifiedDate=20130917160431
-type=siteAsset
-repositoryId=94636be9-2dfa-437e-b927-f5e83bccc305
-id=cbbcdcac-c58b-4df9-8192-d5f9ddd19d32
