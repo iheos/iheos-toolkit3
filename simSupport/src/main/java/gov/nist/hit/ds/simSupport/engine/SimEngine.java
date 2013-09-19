@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.simSupport.engine;
 
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.hit.ds.errorRecording.factories.SystemErrorRecorderBuilder;
+import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
@@ -27,8 +29,6 @@ import org.apache.log4j.Logger;
  *
  */
 public class SimEngine implements MessageValidatorEngine {
-	//	List<Object> inputs = new ArrayList<Object>();
-	//	List<ValSim> valChain;
 	SimChain simChain;
 	// This is of Object instead of ValSim since it includes the base type
 	// which may not be of type of ValSim.
@@ -36,18 +36,20 @@ public class SimEngine implements MessageValidatorEngine {
 	List<PubSubMatch> pubSubMatches = new ArrayList<PubSubMatch>();
 	int simsRun = 0;
 	SoapEnvironment soapEnvironment;
+	Event event;
 	static Logger logger = Logger.getLogger(SimEngine.class);
 	
-	public SimEngine(String simChainResource) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SecurityException, IllegalArgumentException, SimChainLoaderException, SimEngineException {
-		this(new SimChainLoader(simChainResource).load());
+	public SimEngine(String simChainResource, Event event) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SecurityException, IllegalArgumentException, SimChainLoaderException, SimEngineException, RepositoryException {
+		this(new SimChainLoader(simChainResource).load(), event);
 	}
 	
 	/**
 	 * 
 	 * @param valChain - list of validator instances
 	 */
-	public SimEngine(SimChain simChain) {
+	public SimEngine(SimChain simChain, Event event) {
 		this.simChain = simChain;
+		this.event = event;
 	}
 
 	public SimEngine() {
@@ -68,16 +70,17 @@ public class SimEngine implements MessageValidatorEngine {
 	 * during its execution.
 	 * If new SimSteps are added to the Chain after execution starts then the
 	 * outer loop (while(!isComplete()) will catch the added SimSteps. 
+	 * @throws RepositoryException 
 	 * @throws SimEngineSubscriptionException
 	 */
-	public void run() throws SimEngineException {
+	public void run() throws SimEngineException, RepositoryException {
 		if (simChain.getBase() != null && (simChain.getBase() instanceof SoapEnvironment))
 			soapEnvironment = (SoapEnvironment) simChain.getBase();
 		
 		logger.info("---------------------------------------------------------------");
 		logger.info("Run");
 		boolean errorsFound = false;
-		SystemErrorRecorderBuilder erBuilder = new SystemErrorRecorderBuilder();
+//		SystemErrorRecorderBuilder erBuilder = new SystemErrorRecorderBuilder();
 		while(!errorsFound && !isComplete()) {
 			buildCombinedInputs();
 			for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
@@ -85,15 +88,18 @@ public class SimEngine implements MessageValidatorEngine {
 				if (simStep.hasRan())
 					continue;
 				simStep.hasRan(true);
-				if (simStep.getErrorRecorder() == null)
-					simStep.setErrorRecorder(erBuilder.buildNewErrorRecorder());
 				SimComponent simComponent = simStep.getSimComponent();
-				if (simComponent.getName() == null)
-					simStep.getErrorRecorder().sectionHeading("Validator");
-				else
-					simStep.getErrorRecorder().sectionHeading(simComponent.getName());
-				if (simComponent.getDescription() != null) 
-					simStep.getErrorRecorder().sectionHeading(simComponent.getDescription());
+				if (simStep.getAssertionGroup() == null) {
+					AssertionGroup ag = new AssertionGroup().setValidatorName(simComponent.getClass().getSimpleName());
+					event.addAssertionGroup(ag);
+					simStep.setAssertionGroup(ag);
+				}
+//				if (simComponent.getName() == null)
+//					simStep.getAssertionGroup().sectionHeading("Validator");
+//				else
+//					simStep.getAssertionGroup().sectionHeading(simComponent.getName());
+//				if (simComponent.getDescription() != null) 
+//					simStep.getAssertionGroup().sectionHeading(simComponent.getDescription());
 				matchPubSub(simComponent);
 				simsRun++;
 				try {
@@ -101,7 +107,7 @@ public class SimEngine implements MessageValidatorEngine {
 				} catch (SoapFaultException e) {
 					SoapFault soapFault = new SoapFault(soapEnvironment, e);
 					try {
-						simStep.getErrorRecorder().err(Code.SoapFault, e);
+						simStep.getAssertionGroup().err(Code.SoapFault, e);
 						soapFault.send();
 					} catch (Exception e1) {
 						logger.error(ExceptionUtil.exception_details(e1));
@@ -109,7 +115,7 @@ public class SimEngine implements MessageValidatorEngine {
 					return;
 				}
 				if (simChain.hasErrors()) {
-					logger.error("Engine Error: " + simChain.getError());
+					logger.error("Engine Error: " + simChain.getErrors());
 					errorsFound = true;
 				}
 				break;  // this gets around concurrent modification errors to SimChain

@@ -27,8 +27,6 @@ public class StructureTest extends TestSupport {
 	
 
 	public void test_is_v3() {
-		compile();
-		assertFalse(m.isVersion2());
 	}
 
 	public void test_empty() {
@@ -101,7 +99,7 @@ public class StructureTest extends TestSupport {
 	}
 
 	public void test_ss_assoc_has_ss_status() {
-		OMElement ss = add_ss("ss");
+		add_ss("ss");
 		add_object("ExtrinsicObject", "doc");
 		OMElement assoc = add_assoc("ss", "HasMember", "doc");
 		add_slot("SubmissionSetStatus", "Original", assoc);
@@ -138,7 +136,7 @@ public class StructureTest extends TestSupport {
 //	}
 	
 	public void test_by_value_in_submission() throws MetadataException, MetadataValidationException {
-		OMElement ss = add_ss("ss");
+		add_ss("ss");
 		add_object("ExtrinsicObject", "doc");
 		OMElement assoc = add_assoc("ss", "HasMember", "doc");
 		add_slot("SubmissionSetStatus", "Original", assoc);
@@ -148,7 +146,7 @@ public class StructureTest extends TestSupport {
 	}
 	
 	public void test_by_reference_in_submission()  throws MetadataException, MetadataValidationException {
-		OMElement ss = add_ss("ss");
+		add_ss("ss");
 		add_object("ExtrinsicObject", "doc");
 		OMElement assoc = add_assoc("ss", "HasMember", "doc");
 		add_slot("SubmissionSetStatus", "Reference", assoc);
@@ -159,7 +157,7 @@ public class StructureTest extends TestSupport {
 	}
 
 	public void test_by_value_out_of_submission() throws MetadataException, MetadataValidationException {
-		OMElement ss = add_ss("ss");
+		add_ss("ss");
 		add_object("ExtrinsicObject", "doc");
 		OMElement assoc = add_assoc("ss", "HasMember", "urn:uuid:xxx");  
 		add_slot("SubmissionSetStatus", "Original", assoc);
@@ -169,7 +167,7 @@ public class StructureTest extends TestSupport {
 	}
 	
 	public void test_by_value_in_submission_with_uuid() throws MetadataException, MetadataValidationException {
-		OMElement ss = add_ss("ss");
+		add_ss("ss");
 		add_object("ExtrinsicObject", "urn:uuid:xxx");
 		OMElement assoc = add_assoc("ss", "HasMember", "urn:uuid:xxx");  // not reliable - could be early uuid assignment
 		add_slot("SubmissionSetStatus", "Original", assoc);
@@ -179,7 +177,7 @@ public class StructureTest extends TestSupport {
 	}
 	
 	public void test_by_reference_out_of_submission()  throws MetadataException, MetadataValidationException {
-		OMElement ss = add_ss("ss");
+		add_ss("ss");
 		add_object("ExtrinsicObject", "doc");
 		OMElement assoc = add_assoc("ss", "HasMember", "urn:uuid:xxx");
 		add_slot("SubmissionSetStatus", "Reference", assoc);
@@ -190,7 +188,7 @@ public class StructureTest extends TestSupport {
 	}
 
 	public void test_ss_status_multiple_values()  throws MetadataException, MetadataValidationException {
-		OMElement ss = add_ss("ss");
+		add_ss("ss");
 		add_object("ExtrinsicObject", "doc");
 		OMElement assoc = add_assoc("ss", "HasMember", "urn:uuid:xxx");
 		add_slot("SubmissionSetStatus", "Reference", "Extra", assoc);

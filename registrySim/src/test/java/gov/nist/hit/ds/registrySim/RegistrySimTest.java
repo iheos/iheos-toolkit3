@@ -16,6 +16,7 @@ import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
@@ -40,7 +41,6 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
-import org.junit.Test;
 
 
 public class RegistrySimTest {
@@ -50,13 +50,15 @@ public class RegistrySimTest {
 	 * Perform initializations that would normally be done the the toolkit during startup.
 	 * In production, the src/java versions would be used instead of the src/test versions.
 	 * @throws InitializationFailedException 
+	 * @throws IOException 
+	 * @throws RepositoryException 
 	 */
 	@Before
-	public void init() throws InitializationFailedException {
+	public void init() throws InitializationFailedException, IOException, RepositoryException {
 		// Reuse the basic system initialization
 		new FactoryTest().init();
 		
-		new ActorSimFactory().setConfiguredSimsFile(new File("src/test/resources/configuredActorSims.properties"));
+		new ActorSimFactory().setConfiguredSimsFile(new File("configuredActorSims.properties"));
 		
 		// Initialize servlet - includes loading simulator definitions
 		servlet = new SimServlet();
