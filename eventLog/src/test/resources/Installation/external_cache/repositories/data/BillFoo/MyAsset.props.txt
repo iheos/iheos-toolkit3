@@ -1,0 +1,9 @@
+#
+#Wed Sep 18 22:11:49 EDT 2013
+displayName=myasset
+createdDate=20130918221149
+modifiedDate=20130918221149
+type=event
+description=fo
+repositoryId=BillFoo
+id=MyAsset

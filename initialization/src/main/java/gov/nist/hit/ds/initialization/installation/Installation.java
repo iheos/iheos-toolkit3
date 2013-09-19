@@ -4,6 +4,7 @@ package gov.nist.hit.ds.initialization.installation;
 import gov.nist.hit.ds.initialization.tkProps.TkLoader;
 import gov.nist.hit.ds.initialization.tkProps.client.TkProps;
 import gov.nist.hit.ds.utilities.io.Io;
+import gov.nist.hit.ds.utilities.string.StringUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +20,6 @@ import org.apache.log4j.Logger;
  *
  */
 public class Installation {
-	File warHome = null;
 	String sep = File.separator;
 	public TkProps tkProps;
 	PropertyServiceManager propertyServiceMgr = null;
@@ -28,6 +28,7 @@ public class Installation {
 	File externalCache;
 	String buildNumber;
 	File toolkitPropertiesFile = null;
+	boolean initialized = false;
 
 	/**
 	 * Initialize the installation.  This is called by a servlet initializiation
@@ -41,23 +42,75 @@ public class Installation {
 	 * @throws IOException 
 	 */
 	public void initialize() throws InitializationFailedException, IOException {
-		if (warHome == null) {
-			logger.fatal("WAR home direcotry is not initialized");
-			throw new InitializationFailedException("WAR home directory is not initialized");
-		}
+		if (initialized == true)
+			return;
+
 		propertyServiceMgr = new PropertyServiceManager();
 
 		loadBuildNumber();
 
-		initializeExternalCache(new File(propertyServiceMgr.getToolkitProperties().get(PropertyServiceManager.EXTERNAL_CACHE)));
+		if (externalCache == null) {
+			String externalCacheString = propertyServiceMgr.getToolkitProperties().get(PropertyServiceManager.EXTERNAL_CACHE);
+			if (externalCacheString == null || externalCacheString.equals(""))
+				throw new InitializationFailedException("externalCache location not configured or empty in toolkit.properties");
+			if (!externalCacheString.startsWith("/")) {
+				// relative path - probably means a unit test is running - use class loader to locate
+				// The class loader will not find directories!! So we must find a fixed file in the external_cache.
+				// That file is tk_props.txt
+				// This means any external_cache that is located via class loaded must be initialized with a tk_props.txt file.
+				// The file can be empty.
+				ClassLoader cl = getClass().getClassLoader();
+				URL url = cl.getResource(externalCacheString + File.separator + "tk_props.txt");
+				if (url == null) {
+					String msg = "External Cache not present. Configured location is <" + externalCacheString + ">";
+					logger.fatal(msg);
+					throw new InitializationFailedException(msg);
+				}
+				String ecString = StringUtil.removePrefix(url.toString(), "file:");
+				logger.info("Loading external cache from <" + ecString + ">");
+				externalCache = new File(ecString);
+				externalCache = externalCache.getParentFile();  // remove tk_props.txt from path
+			} else {
+				externalCache = new File(externalCacheString);
+			}
+		}
+
+		initializeExternalCache(externalCache);
+
+		initialized = true;
 	}
 	
+	void initializeExternalCache(File externalCache) throws InitializationFailedException {
+		this.externalCache = externalCache;
+		logger.info("Initializing external cache to <" + externalCache.getAbsolutePath() + "> ");
+		try {
+			File f = externalCache; 
+			if (f.exists()) {
+				if (!f.isDirectory()) throw new InitializationFailedException("External Cache location <" + f + "> is not a directory");
+				if (!f.canWrite()) throw new InitializationFailedException("External Cache location <" + f + "> is not writable");
+			} else {
+				throw new InitializationFailedException("External Cache directory <" + externalCache + "> does not exist");
+			}
+			ExternalCacheManager ecMgr = new ExternalCacheManager(f);
+			initializeRepository(ecMgr);
+			initializeTkProps(ecMgr);
+			initializeEnvironments(ecMgr);
+			initializeSimDb(ecMgr);
+			initializeActors(ecMgr);
+		} catch (IOException e) {
+			throw new InitializationFailedException("",e);
+		}
+	}
+
+
+
 	static public void reset() { me = null; }
-	
-	public Installation setToolkitPropertiesFile(File propsFile) {
-		this.toolkitPropertiesFile = propsFile;
-		return this;
-	}
+
+	// should always use default location - root of class loader
+	//	public Installation setToolkitPropertiesFile(File propsFile) {
+	//		this.toolkitPropertiesFile = propsFile;
+	//		return this;
+	//	}
 
 	public InputStream getToolkitProperties() { 
 		logger.debug("Installation#getToolkitProperties");
@@ -75,6 +128,9 @@ public class Installation {
 			logger.debug("Using class loader");
 			ClassLoader cl = getClass().getClassLoader();
 			URL url = cl.getResource("toolkit.properties");
+			if (url == null) {
+				throw new RuntimeException("Could not load toolkit.properties file via the class loader");
+			}
 			from = url.toExternalForm();
 			logger.debug("loading toolkit.properties from <" + url.toString());
 			is = cl.getResourceAsStream("toolkit.properties");
@@ -89,6 +145,18 @@ public class Installation {
 
 	public File getToolkitPropertiesFile() {
 		URL url = getClass().getClassLoader().getResource("toolkit.properties");
+		return new File(url.getFile());
+	}
+
+	public File getExtendedPropertiesFile() {
+		URL url = getClass().getClassLoader().getResource("extended.properties");
+		if (url == null)
+			return null;
+		return new File(url.getFile());
+	}
+
+	public File getToolkitxFile() {
+		URL url = getClass().getClassLoader().getResource("toolkitx");
 		return new File(url.getFile());
 	}
 
@@ -110,29 +178,6 @@ public class Installation {
 				buildNumber = new String(ba);
 		} catch (IOException e) {
 			buildNumber = "Unknown";
-		}
-	}
-
-	void initializeExternalCache(File externalCache) throws InitializationFailedException {
-		this.externalCache = externalCache;
-		logger.info("Initializing external cache to <" + externalCache + "> ");
-		try {
-			File f = externalCache; 
-			if (f.exists()) {
-				if (!f.isDirectory()) throw new InitializationFailedException("External Cache location <" + f + "> is not a directory");
-				if (!f.canWrite()) throw new InitializationFailedException("External Cache location <" + f + "> is not writable");
-			} else {
-				f.mkdir();
-				if (!f.exists()) throw new InitializationFailedException("Cannot create External Cache at <" + f + ">");
-			}
-			ExternalCacheManager ecMgr = new ExternalCacheManager(f);
-			initializeRepository(ecMgr);
-			initializeTkProps(ecMgr);
-			initializeEnvironments(ecMgr);
-			initializeSimDb(ecMgr);
-			initializeActors(ecMgr);
-		} catch (IOException e) {
-			throw new InitializationFailedException("",e);
 		}
 	}
 
@@ -178,14 +223,6 @@ public class Installation {
 		return new PropertyManager();
 	}
 
-	public File getWarHome() { 
-		return warHome; 
-	}
-
-	public void setWarHome(File warHome) { 
-		this.warHome = warHome; 
-	}
-
 	public void setExternalCache(File externalCache) throws InitializationFailedException {
 		initializeExternalCache(externalCache);
 	}
@@ -198,10 +235,6 @@ public class Installation {
 
 	public File simDbFile()  {
 		return propertyServiceManager().getSimDbDir();
-	}
-
-	public File toolkitxFile() {
-		return new File(Installation.installation().getWarHome() + sep + "toolkitx");
 	}
 
 	ExternalCacheManager getExternalCacheManager() {

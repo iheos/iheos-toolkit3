@@ -20,7 +20,7 @@ public class TestEnvironmentSetup {
 		System.out.println(getInstallationPath());
 
 
-		Installation.installation().setWarHome(getInstallationPath()); // This would be the WAR installation directory
+//		Installation.installation().setWarHome(getInstallationPath()); // This would be the WAR installation directory
 
 		File externalCache = new File(InstallationPath, "external_cache");
 

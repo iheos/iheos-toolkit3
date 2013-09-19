@@ -17,11 +17,15 @@ public class StringUtil {
 	static public String removePrefix(String string, String prefix) {
 		if (string == null || prefix == null)
 			return null;
-		if (!prefix.endsWith("."))
-			prefix = prefix + ".";
 		if (!string.startsWith(prefix))
 			return string;
 		return string.substring(prefix.length());
+	}
+	
+	static public String mustEndWith(String string, String suffix) {
+		if (string.endsWith(suffix))
+			return string;
+		return string + suffix;
 	}
 	
 	static public String removePrefixEndingWith(String string, String ending) {
