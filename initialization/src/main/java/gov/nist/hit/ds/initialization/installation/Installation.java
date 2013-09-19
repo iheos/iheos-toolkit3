@@ -211,7 +211,7 @@ public class Installation {
 		return getExternalCacheManager().getRepositoryFile();
 	}
 
-	static public Installation installation() {
+	static public Installation installation()   {
 		if (me == null)
 			me = new Installation();
 		return me;
