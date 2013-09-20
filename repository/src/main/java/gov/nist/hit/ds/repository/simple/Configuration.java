@@ -178,14 +178,15 @@ public class Configuration {
 		
 		// Validate source root sub-directory pair
 			File typesDir = getRepositoryTypesDir(reposSourceDir);
-			if (!(typesDir.exists() && typesDir.isDirectory())) 
+			if (!(typesDir.exists() && typesDir.isDirectory())) { 
 				throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR +
-						Configuration.REPOSITORY_TYPES_DIR + " folder ["+ typesDir.toString() +"] does not exist.");
+						": " + Configuration.REPOSITORY_TYPES_DIR + " folder ["+ typesDir.toString() +"] does not exist.");
+			}
 			File dataDir = getRepositoriesDataDir(reposSourceDir);
-			if (!(dataDir.exists() && dataDir.isDirectory())) 
-				throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR +
-						Configuration.REPOSITORY_DATA_DIR + " folder ["+ dataDir.toString() +"] does not exist.");
-			
+			if (!(dataDir.exists() && dataDir.isDirectory())) {
+				logger.info("Notice" +
+						": " + Configuration.REPOSITORY_DATA_DIR + " folder ["+ dataDir.toString() +"] does not yet exist.");
+			}
 		
 		return true;
 	}
@@ -356,6 +357,7 @@ public class Configuration {
 		
 		for (RepositorySource rs : getRepositorySources()) {
 			if (rs.getAccess().equals(access)) {
+				isConfigured(rs.getLocation());
 				return rs;
 			}
 		}

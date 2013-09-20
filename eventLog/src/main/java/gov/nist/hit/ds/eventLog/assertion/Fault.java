@@ -17,7 +17,7 @@ public class Fault {
 	
 	public void add(String reportString) throws RepositoryException {
 		Asset a = AssetHelper.createChildAsset(parent, "SoapFault", "", new SimpleType("simpleType"));
-		AssetHelper.setOrder(a, order);
+		a.setOrder(order);
 		a.updateContent(reportString, "text/plain");
 	}
 }

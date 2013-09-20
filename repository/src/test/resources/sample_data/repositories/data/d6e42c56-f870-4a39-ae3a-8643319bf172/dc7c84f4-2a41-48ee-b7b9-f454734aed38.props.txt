@@ -1,0 +1,9 @@
+#
+#Tue Sep 17 16:04:31 EDT 2013
+displayName=My Deletable Site
+createdDate=20130917160431
+modifiedDate=20130917160431
+type=siteAsset
+description=This is my site
+repositoryId=d6e42c56-f870-4a39-ae3a-8643319bf172
+id=dc7c84f4-2a41-48ee-b7b9-f454734aed38
