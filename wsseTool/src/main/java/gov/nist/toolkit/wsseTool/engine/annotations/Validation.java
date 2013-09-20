@@ -1,4 +1,4 @@
-package gov.nist.toolkit.wsseTool.validation;
+package gov.nist.toolkit.wsseTool.engine.annotations;
 
 import gov.nist.toolkit.wsseTool.api.ValConfig;
 

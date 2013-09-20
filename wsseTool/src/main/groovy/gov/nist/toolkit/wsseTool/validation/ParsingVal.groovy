@@ -6,11 +6,11 @@ import org.w3c.dom.Document
 import org.w3c.dom.Element
 
 import gov.nist.toolkit.wsseTool.util.MyXmlUtils
-import gov.nist.toolkit.wsseTool.validation.Validation
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.NodeChild
 
 import gov.nist.toolkit.wsseTool.context.SecurityContextImpl
+import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
 import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlFacade
 import gov.nist.toolkit.wsseTool.namespace.dom.NhwinNamespaceContextFactory
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader

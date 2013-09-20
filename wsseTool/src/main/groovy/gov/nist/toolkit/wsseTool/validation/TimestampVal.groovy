@@ -1,7 +1,7 @@
 package gov.nist.toolkit.wsseTool.validation
 
-import gov.nist.toolkit.wsseTool.validation.Validation
 import gov.nist.toolkit.wsseTool.context.SecurityContextImpl;
+import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader;
 import gov.nist.toolkit.wsseTool.time.TimeUtil
 import groovy.util.slurpersupport.GPathResult

@@ -2,6 +2,8 @@ package gov.nist.toolkit.wsseTool.validation
 
 import gov.nist.toolkit.wsseTool.api.ValConfig
 import gov.nist.toolkit.wsseTool.context.SecurityContextImpl
+import gov.nist.toolkit.wsseTool.engine.TestData
+import gov.nist.toolkit.wsseTool.engine.annotations.*;
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
 import gov.nist.toolkit.wsseTool.time.TimeUtil
 import gov.nist.toolkit.wsseTool.validation.data.IssuerFormat
@@ -10,25 +12,35 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 import org.joda.time.DateTime
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class AssertionVal {
+class AssertionVal extends BaseVal {
+	
+	@Rule
+	public TestName name = new TestName();
 
-	private static final Logger log = LoggerFactory.getLogger(AssertionVal.class)
-
-	private GroovyHeader header
-	private SecurityContextImpl context
-
-	public AssertionVal(SecurityContextImpl context){
-		this.context = context
-		this.header = context.groovyHeader
+	/*
+	 * Test initialization
+	 */
+	@Before
+	public final void start() {
+		System.out.println("------------ Test start : " + name.getMethodName()
+				+ " -------------------");
 	}
 
+	@After
+	public final void end() {
+		System.out.println("------------ Test end : " + name.getMethodName()
+				+ " -------------------");
+	}
 
 	@Validation(id="1025", rtm=["66", "157"])
-	public void version() {
-
+	public void version() {		
 		if("2.0" != header.map.assertion.@Version.text()) log.error("invalid version : {} expected : 2.0", header.map.assertion.@Version.text())
 		assert "2.0" == header.map.assertion.@Version.text()
 	}
@@ -214,8 +226,6 @@ class AssertionVal {
 			if(nooa.isBefore(creationTime)){log.error("conditions@NotOnOrAfter {} should be later than wsu:Timestamp/wsu:Created {}", nooa ,creationTime)}
 		}
 	}
-
-
 
 
 }

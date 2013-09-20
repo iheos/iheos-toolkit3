@@ -1,7 +1,7 @@
 package gov.nist.toolkit.wsseTool.validation
 
+import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
-import gov.nist.toolkit.wsseTool.validation.Validation
 
 import org.apache.commons.validator.routines.EmailValidator
 import org.slf4j.Logger

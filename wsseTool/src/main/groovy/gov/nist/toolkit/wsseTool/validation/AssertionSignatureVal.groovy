@@ -1,11 +1,11 @@
 package gov.nist.toolkit.wsseTool.validation
 
-import gov.nist.toolkit.wsseTool.validation.Validation;
 import groovy.util.slurpersupport.GPathResult
 import java.lang.reflect.Method
 
 import gov.nist.toolkit.wsseTool.validation.data.IssuerFormat
 import gov.nist.toolkit.wsseTool.context.SecurityContextImpl;
+import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
 import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlFacade;
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader;
 import gov.nist.toolkit.wsseTool.parsing.opensaml.OpenSamlSecurityHeader;
@@ -16,19 +16,31 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 import org.joda.time.DateTime
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class AssertionSignatureVal {
+class AssertionSignatureVal extends BaseVal {
 
-	private static final Logger log = LoggerFactory.getLogger(AssertionSignatureVal.class);
+	@Rule
+	public TestName name = new TestName();
 
-	private GroovyHeader header
-	private SecurityContextImpl context
+	/*
+	 * Test initialization
+	 */
+	@Before
+	public final void start() {
+		System.out.println("------------ Test start : " + name.getMethodName()
+				+ " -------------------");
+	}
 
-	public AssertionSignatureVal(SecurityContextImpl context){
-		this.context = context
-		this.header = context.groovyHeader
+	@After
+	public final void end() {
+		System.out.println("------------ Test end : " + name.getMethodName()
+				+ " -------------------");
 	}
 	
 	@Validation(id="1036", rtm=["59"])

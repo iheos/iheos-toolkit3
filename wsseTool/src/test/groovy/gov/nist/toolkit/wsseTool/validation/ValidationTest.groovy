@@ -41,7 +41,7 @@ class ValidationTest extends BaseTest {
 	@Test void runBatch(){
 		Document xml = new OpenSamlWsseSecurityGenerator().generateWsseHeader(context);
 		WsseHeaderValidator val = new WsseHeaderValidator();
-		val.validate(xml.getDocumentElement(),context);
+		val.validateWithJUnitRunner(xml.getDocumentElement(),context);
 		}
 	
 

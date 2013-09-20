@@ -5,9 +5,9 @@ import groovy.util.slurpersupport.GPathResult
 import groovy.xml.StreamingMarkupBuilder
 import java.lang.reflect.Method
 
-import gov.nist.toolkit.wsseTool.validation.Validation
 import gov.nist.toolkit.wsseTool.validation.data.IssuerFormat
 import gov.nist.toolkit.wsseTool.context.SecurityContextImpl;
+import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
 import gov.nist.toolkit.wsseTool.time.TimeUtil
 

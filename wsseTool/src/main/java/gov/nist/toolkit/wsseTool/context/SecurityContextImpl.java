@@ -2,6 +2,7 @@ package gov.nist.toolkit.wsseTool.context;
 
 import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
 import gov.nist.toolkit.wsseTool.api.config.SecurityContext;
+import gov.nist.toolkit.wsseTool.engine.TestData;
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader;
 import gov.nist.toolkit.wsseTool.parsing.opensaml.OpenSamlSecurityHeader;
 
@@ -10,17 +11,17 @@ import java.util.Map;
 
 import org.w3c.dom.Element;
 
-public class SecurityContextImpl implements SecurityContext {
+public class SecurityContextImpl implements SecurityContext, TestData {
 
-	private Map<String,Object> params = new HashMap<String,Object>();
+	protected Map<String,Object> params = new HashMap<String,Object>();
 	
-	private KeystoreAccess keystore;
+	protected KeystoreAccess keystore;
 
-	private GroovyHeader groovyHeader;
+	protected GroovyHeader groovyHeader;
 
-	private Element domHeader;
+	protected Element domHeader;
 	
-	private OpenSamlSecurityHeader opensamlHeader;
+	protected OpenSamlSecurityHeader opensamlHeader;
 
 	@Override
 	public Map<String,Object> getParams() {

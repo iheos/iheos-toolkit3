@@ -5,9 +5,9 @@ import groovy.xml.StreamingMarkupBuilder
 import java.lang.reflect.Method
 
 import gov.nist.toolkit.wsseTool.api.*;
-import gov.nist.toolkit.wsseTool.validation.Validation
 import gov.nist.toolkit.wsseTool.validation.data.IssuerFormat
 import gov.nist.toolkit.wsseTool.context.SecurityContextImpl
+import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
 import gov.nist.toolkit.wsseTool.time.TimeUtil
 
@@ -16,6 +16,8 @@ import java.util.regex.Matcher
 
 import org.apache.commons.validator.routines.EmailValidator
 import org.joda.time.DateTime
+import org.junit.After;
+import org.junit.Before;
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -29,6 +31,21 @@ class AttributeStatementVal {
 
 	private static final Logger log = LoggerFactory.getLogger(AttributeStatementVal.class)
 
+	/*
+	 * Test initialization
+	 */
+	@Before
+	public final void start() {
+		System.out.println("------------ Test start : " + name.getMethodName()
+				+ " -------------------");
+	}
+
+	@After
+	public final void end() {
+		System.out.println("------------ Test end : " + name.getMethodName()
+				+ " -------------------");
+	}
+	
 	private GPathResult attrs
 	private GroovyHeader header
 	private SecurityContextImpl context

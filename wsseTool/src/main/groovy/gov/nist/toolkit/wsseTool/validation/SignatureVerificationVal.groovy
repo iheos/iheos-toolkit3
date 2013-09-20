@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory
 import org.w3c.dom.Element
 
 import gov.nist.toolkit.wsseTool.context.SecurityContextImpl
+import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
 import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlFacade
 import gov.nist.toolkit.wsseTool.parsing.opensaml.OpenSamlSecurityHeader
 import gov.nist.toolkit.wsseTool.signature.api.Verifier
-import  gov.nist.toolkit.wsseTool.validation.Validation
 
 class SignatureVerificationVal {
 
