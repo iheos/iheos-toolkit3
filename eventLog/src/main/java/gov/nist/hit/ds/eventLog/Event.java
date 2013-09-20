@@ -1,11 +1,12 @@
 package gov.nist.hit.ds.eventLog;
 
 
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.assertion.Assertions;
 import gov.nist.hit.ds.eventLog.assertion.Fault;
-import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.simple.SimpleAsset;
 
 import java.io.File;
 
@@ -23,12 +24,12 @@ public class Event {
 	Artifacts artifacts;
 	Assertions assertions;
 	Fault fault;
-	
+
 	public Event(Asset event) throws RepositoryException {
 		this.event = event;
 		init();
 	}
-	
+
 	void init() throws RepositoryException {
 		Asset a;
 		inOut = new InOutMessages();
@@ -51,16 +52,21 @@ public class Event {
 	public InOutMessages getInOutMessages() {
 		return inOut;
 	}
-	
+
 	public Fault getFault() {
 		return fault;
 	}
-	
+
 	public Artifacts getArtifacts() {
 		return artifacts;
 	}
-	
+
 	public Assertions getAssertions() {
 		return assertions;
+	}
+
+	public Event addAssertionGroup(AssertionGroup ag) throws RepositoryException {
+		assertions.add(ag);
+		return this;
 	}
 }

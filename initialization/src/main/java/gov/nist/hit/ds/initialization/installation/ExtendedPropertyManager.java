@@ -12,12 +12,16 @@ public class ExtendedPropertyManager {
 	static Properties properties = null;
 	
 	
-	static public void load(File warHome) {
+	static public void load() {
 		if (properties != null) 
 			return;
-
-		File propFile = new File(warHome + File.separator + "WEB-INF" + File.separator + "extended.properties");
 		properties = new Properties();
+
+		File propFile = Installation.installation().getExtendedPropertiesFile();
+		if (propFile == null || !propFile.exists()) {
+			logger.warn("Extended properties file not found");
+			return;
+		}
 		try {
 			properties.load(new FileInputStream(propFile));
 		} catch (Exception e) {
@@ -28,8 +32,9 @@ public class ExtendedPropertyManager {
 	static public String getProperty(String propName)  {
 		if (properties == null) {
 			
-			load(Installation.installation().getWarHome());
+			load();
 			
+			// This is obsolete 
 			if (properties==null) {			
 				RuntimeException e = new RuntimeException("Extended properties not loaded");
 				logger.error("Extended Properties queried before they are loaded", e);

@@ -914,8 +914,6 @@ public class SubmissionStructure {
 	}
 
 	String assoc_type(String type) {
-		if (m.isVersion2()) 
-			return type;
 		if (type.equals("HasMember"))
 			return "urn:oasis:names:tc:ebxml-regrep:AssociationType:" + type;
 		if (type.equals("RPLC") ||

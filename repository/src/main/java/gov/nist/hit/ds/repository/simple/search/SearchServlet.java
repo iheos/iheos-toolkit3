@@ -2,6 +2,7 @@ package gov.nist.hit.ds.repository.simple.search;
 
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.initialization.installation.PropertyServiceManager;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -18,7 +19,9 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -64,19 +67,31 @@ public class SearchServlet extends HttpServlet {
 
 		SimpleRepository repos = null; 
 		try {
-			File warHome = new File(getServletContext().getRealPath(""));
+			
 			try {
 				Installation.installation();
 				
 				if (Installation.installation().getExternalCache()==null) {
-					Installation.installation().setWarHome(warHome); // This would be the WAR installation directory 
+					File tpPath = new File(getServletContext().getRealPath("WEB-INF/"+ Installation.TOOLKIT_PROPERTIES));
 					
-					Installation.installation().setToolkitPropertiesFile(new File(warHome + File.separator +  "WEB-INF" + File.separator + "toolkit.properties"));										
+					Properties props = new Properties();
+					
+					FileReader fr = new FileReader(tpPath);
+					props.load(fr);
+					fr.close();
+					String ecDir = props.getProperty(PropertyServiceManager.EXTERNAL_CACHE);
+					
+					if (ecDir!=null) {
+						Installation.installation().setExternalCache(new File(ecDir));
+					} else {
+						throw new ServletException("Undefined "+PropertyServiceManager.EXTERNAL_CACHE + " property in " + Installation.TOOLKIT_PROPERTIES);
+					}
+										
 					Installation.installation().initialize();					
 				}				
 				
-			} catch (InitializationFailedException ife) {
-				throw new ServletException(ife);
+			} catch (Exception ex) {
+				throw new ServletException("Request could not be completed." + ex.toString());
 			}
 						
 			Configuration.configuration();

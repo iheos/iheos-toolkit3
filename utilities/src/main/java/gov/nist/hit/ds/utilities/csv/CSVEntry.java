@@ -82,8 +82,9 @@ public class CSVEntry implements IEntryFactory {
 		return items.get(i);
 	}
 
-	void add(String item) {
+	public CSVEntry add(String item) {
 		items.add(item);
+		return this;
 	}
 	
 	public CSVEntry() {}
