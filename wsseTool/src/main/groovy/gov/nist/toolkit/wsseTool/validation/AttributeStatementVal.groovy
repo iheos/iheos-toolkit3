@@ -18,6 +18,8 @@ import org.apache.commons.validator.routines.EmailValidator
 import org.joda.time.DateTime
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -27,10 +29,13 @@ import javax.xml.validation.SchemaFactory
 
 import gov.nist.toolkit.wsseTool.validation.data.*
 
-class AttributeStatementVal {
+class AttributeStatementVal extends BaseVal {
 
 	private static final Logger log = LoggerFactory.getLogger(AttributeStatementVal.class)
 
+	@Rule
+	public TestName name = new TestName();
+	
 	/*
 	 * Test initialization
 	 */
@@ -46,15 +51,15 @@ class AttributeStatementVal {
 				+ " -------------------");
 	}
 	
-	private GPathResult attrs
-	private GroovyHeader header
-	private SecurityContextImpl context
-
-	public AttributeStatementVal(SecurityContextImpl context){
-		this.context = context
-		this.header = context.groovyHeader
-		this.attrs = header.map.attributeStatement.children().findAll{it.name() == 'Attribute'}
+	/*
+	 * Test initialization
+	 */
+	@Before
+	public final void attributesSetup2() {
+			this.attrs = header.map.attributeStatement.children().findAll{it.name() == 'Attribute'}
 	}
+	
+	private GPathResult attrs
 
 	@Validation(id="1081", rtm=["64", "86", "166", "167"])
 	public void uniqueAttributeNames(){

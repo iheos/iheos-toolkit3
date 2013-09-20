@@ -12,19 +12,31 @@ import groovy.util.slurpersupport.GPathResult
 import org.apache.commons.validator.routines.DomainValidator
 import org.apache.commons.validator.routines.InetAddressValidator
 import org.joda.time.DateTime
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class AuthnStatementVal {
+class AuthnStatementVal extends BaseVal {
 
-	private static final Logger log = LoggerFactory.getLogger(AuthnStatementVal.class)
+	@Rule
+	public TestName name = new TestName();
 
-	private GroovyHeader header
-	private SecurityContextImpl context
+	/*
+	 * Test initialization
+	 */
+	@Before
+	public final void start() {
+		System.out.println("------------ Test start : " + name.getMethodName()
+				+ " -------------------");
+	}
 
-	public AuthnStatementVal(SecurityContextImpl context){
-		this.context = context
-		this.header = context.groovyHeader
+	@After
+	public final void end() {
+		System.out.println("------------ Test end : " + name.getMethodName()
+				+ " -------------------");
 	}
 
 	@Validation(id="1075", rtm=["63"])

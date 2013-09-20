@@ -13,6 +13,7 @@ import gov.nist.toolkit.wsseTool.engine.annotations.Validation
 import gov.nist.toolkit.wsseTool.parsing.Parser
 import gov.nist.toolkit.wsseTool.util.MyXmlUtils
 import gov.nist.toolkit.wsseTool.validation.AssertionVal
+import gov.nist.toolkit.wsseTool.validation.Parsing
 import gov.nist.toolkit.wsseTool.validation.ParsingVal
 
 import java.lang.reflect.Method
@@ -74,8 +75,7 @@ public class UnitWsseHeaderValidator {
 		//run validations by category
 
 		try{
-			ParsingVal pVal = new ParsingVal(_context)
-			runValidation(pVal,config)
+			Parsing pVal = new Parsing(_context).parse();
 			
 			RunnerBuilder builder = new MyRunnerBuilder(_context);
 			Runner runner = new MySuite(ATestSuite.class, builder);

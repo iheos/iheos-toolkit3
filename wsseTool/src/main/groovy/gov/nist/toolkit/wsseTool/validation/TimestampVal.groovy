@@ -11,17 +11,7 @@ import org.slf4j.LoggerFactory
 
 
 
-class TimestampVal {
-
-	private static final Logger log = LoggerFactory.getLogger(TimestampVal.class)
-	
-	private GroovyHeader header
-	private SecurityContextImpl context
-
-	public TimestampVal(SecurityContextImpl context){
-		this.context = context
-		this.header = context.groovyHeader
-	}
+class TimestampVal extends BaseVal {
 
 	@Validation(id="1020", rtm=["45","50","53"])
 	public void ordering() {

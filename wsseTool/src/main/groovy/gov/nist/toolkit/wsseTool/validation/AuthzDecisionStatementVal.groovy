@@ -16,6 +16,10 @@ import java.util.regex.Matcher
 
 import org.apache.commons.validator.routines.EmailValidator
 import org.joda.time.DateTime
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -25,16 +29,24 @@ import javax.xml.validation.SchemaFactory
 
 import gov.nist.toolkit.wsseTool.validation.data.*
 
-class AuthzDecisionStatementVal {
+class AuthzDecisionStatementVal extends BaseVal {
+	
+	@Rule
+	public TestName name = new TestName();
 
-	private static final Logger log = LoggerFactory.getLogger(AuthzDecisionStatementVal.class)
+	/*
+	 * Test initialization
+	 */
+	@Before
+	public final void start() {
+		System.out.println("------------ Test start : " + name.getMethodName()
+				+ " -------------------");
+	}
 
-	private GroovyHeader header
-	private SecurityContextImpl context
-
-	public AuthzDecisionStatementVal(SecurityContextImpl context){
-		this.context = context
-		this.header = context.groovyHeader
+	@After
+	public final void end() {
+		System.out.println("------------ Test end : " + name.getMethodName()
+				+ " -------------------");
 	}
 
 	@Validation(id="1090", rtm=["65"], category="optional")
