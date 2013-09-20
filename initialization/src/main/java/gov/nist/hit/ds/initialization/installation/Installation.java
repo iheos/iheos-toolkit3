@@ -20,6 +20,8 @@ import org.apache.log4j.Logger;
  *
  */
 public class Installation {
+	static public final String TOOLKIT_PROPERTIES = "toolkit.properties";
+	
 	String sep = File.separator;
 	public TkProps tkProps;
 	PropertyServiceManager propertyServiceMgr = null;
@@ -60,7 +62,7 @@ public class Installation {
 				// This means any external_cache that is located via class loaded must be initialized with a tk_props.txt file.
 				// The file can be empty.
 				ClassLoader cl = getClass().getClassLoader();
-				URL url = cl.getResource(externalCacheString + File.separator + "tk_props.txt");
+				URL url = cl.getResource(externalCacheString + "/" + "tk_props.txt"); // Use of a standard backslash in URL works best. A File.separator mixed with URL causes a problem for Windows.
 				if (url == null) {
 					String msg = "External Cache not present. Configured location is <" + externalCacheString + ">";
 					logger.fatal(msg);
@@ -122,14 +124,14 @@ public class Installation {
 			try {
 				is = Io.getInputStreamFromFile(toolkitPropertiesFile);
 			} catch (FileNotFoundException e) {
-				throw new RuntimeException("Could not load toolkit.properties from <" + toolkitPropertiesFile + ">");
+				throw new RuntimeException("Could not load " + TOOLKIT_PROPERTIES + " from <" + toolkitPropertiesFile + ">");
 			}
 		} else {
 			logger.debug("Using class loader");
 			ClassLoader cl = getClass().getClassLoader();
-			URL url = cl.getResource("toolkit.properties");
+			URL url = cl.getResource(TOOLKIT_PROPERTIES);
 			if (url == null) {
-				throw new RuntimeException("Could not load toolkit.properties file via the class loader");
+				throw new RuntimeException("Could not load " + TOOLKIT_PROPERTIES + " file via the class loader");
 			}
 			from = url.toExternalForm();
 			logger.debug("loading toolkit.properties from <" + url.toString());

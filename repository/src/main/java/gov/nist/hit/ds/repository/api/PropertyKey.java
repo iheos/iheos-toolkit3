@@ -76,6 +76,12 @@ public enum PropertyKey {
            public String toString() {
                return "repositoryId";
            }
+       },
+       STATUS(){
+           @Override
+           public String toString() {
+               return "status";
+           }
        };
 
    }

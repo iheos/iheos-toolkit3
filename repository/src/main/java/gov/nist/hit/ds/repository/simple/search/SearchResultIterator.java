@@ -94,7 +94,7 @@ public class SearchResultIterator implements AssetIterator  {
 			throw new RepositoryException(RepositoryException.NO_MORE_ITERATOR_ELEMENTS);
 		SimpleId repId = null;
 		SimpleId assetId = null;
-		File reposLocation = null;
+		RepositorySource reposSrc = null;
 		
 		try {
 			
@@ -104,18 +104,14 @@ public class SearchResultIterator implements AssetIterator  {
 				assetId = new SimpleId(crs.getString(2));
 				String reposSrcAcs = crs.getString(3);
 				if (reposSrcAcs!=null) {
-					reposLocation = Configuration.getRepositorySrc(RepositorySource.Access.valueOf(reposSrcAcs)).getLocation();
+					reposSrc = Configuration.getRepositorySrc(RepositorySource.Access.valueOf(reposSrcAcs));
 				} else {
-					DbContext.log("null location for " + repId);
-				}
-				
-				
+					DbContext.log("No [null] access indexed for " + repId);
+				}				
 			}			
 			// System.out.println(assetId.getIdString());
 			
-			
-			
-			Repository repos = new RepositoryFactory(new RepositorySource(reposLocation)).getRepository(repId);
+			Repository repos = new RepositoryFactory(reposSrc).getRepository(repId);
 			return repos.getAsset(assetId);
 			
 		} catch (Exception e) {

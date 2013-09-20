@@ -45,11 +45,18 @@
 		<servlet-class>gov.nist.hit.ds.simServlet.SimServlet</servlet-class>
 	</servlet>
 	
+	<!--  begin repository tools -->
 	<servlet>
 		<servlet-name>searchServlet</servlet-name>
 		<servlet-class>gov.nist.hit.ds.repository.simple.search.SearchServlet</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>downloadAssetServlet</servlet-name>
+		<servlet-class>gov.nist.hit.ds.repository.simple.search.DownloadAssetServlet</servlet-class>
+	</servlet>
+	<!--  end repository tools -->
+			
 	<servlet-mapping>
 		<servlet-name>simulatorServlet</servlet-name>
 		<url-pattern>/sim/*</url-pattern>
@@ -59,12 +66,18 @@
 		<servlet-name>simulatorServlet</servlet-name>
 		<url-pattern>/xdstools3/sim/*</url-pattern>
 	</servlet-mapping>
-	
+
+	<!--  begin repository tools -->	
 	<servlet-mapping>
 		<servlet-name>searchServlet</servlet-name>
 		<url-pattern>/repository/search</url-pattern>
 	</servlet-mapping>
 	
+	<servlet-mapping>
+		<servlet-name>downloadAssetServlet</servlet-name>
+		<url-pattern>/repository/downloadAsset</url-pattern>
+	</servlet-mapping>
+	<!--  end repository tools -->	
 
     <!-- Default page to serve -->
     <welcome-file-list>

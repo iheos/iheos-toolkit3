@@ -159,7 +159,7 @@ public abstract class BaseRepository implements Repository {
 					"directory for repositoryId [" + getId() + "] does not exist");
 		File assetBaseFile = new File(reposDir.toString() + File.separator + assetId.getIdString());
 		SimpleAsset a = new SimpleAsset(getSource()).load(assetId, assetBaseFile);
-		
+		a.setSource(getSource());
 		return a;
 	}
 

@@ -28,31 +28,13 @@ public class AssetHelper {
 		logger.info("Created <" + a.getId() + ">");
 		a.setProperty("parent", parent.getId().getIdString());
 		return a;
-	}
-	
-	/**
-	 * @deprecated  Replaced by {@link Asset#setOrder(int)}
-	 */
-	@Deprecated
-	static public Asset setOrder(Asset a, int order) throws RepositoryException {
-		a.setProperty("order", Integer.toString(order));
-		return a;
-	}
+	}	
 
 	/**
-	 * @deprecated  Replaced by {@link Asset#setMimeType(String)}
-	 */
-	@Deprecated
-	static public Asset setMimeType(Asset a, String mimeType) throws RepositoryException {
-		a.setProperty("mimeType", mimeType);
-		return a;
-	}
-
-	/**
-	 * Returns an iterator for immediate children 
+	 * Returns an iterator for an asset's immediate children 
 	 * @return
 	 */
-	static public AssetIterator getChildren(Asset a) throws RepositoryException {
+	static public AssetIterator getChildren(final Asset a) throws RepositoryException {
 		
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTO,a.getId().getIdString()));
