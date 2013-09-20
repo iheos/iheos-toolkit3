@@ -5,7 +5,6 @@ import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.utilities.IntUtil;
 import gov.nist.hit.ds.utilities.string.StringUtil;
 import gov.nist.hit.ds.utilities.xml.Parse;
 import gov.nist.hit.ds.utilities.xml.XmlText;

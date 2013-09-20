@@ -16,8 +16,8 @@ public class Assertions {
 		return assertionsAsset;
 	}
 	
-	public void add(String validatorName, AssertionGroup ag) throws RepositoryException {
-		Asset a = AssetHelper.createChildAsset(assertionsAsset, validatorName, "", new SimpleType("simpleType"));
+	public void add(AssertionGroup ag) throws RepositoryException {
+		Asset a = AssetHelper.createChildAsset(assertionsAsset, ag.getValidatorName(), "", new SimpleType("simpleType"));
 		a.setOrder(counter++);
 		a.setProperty(PropertyKey.STATUS, ag.getMaxStatus().name());
 		a.updateContent(ag.getTable().toString(), "text/csv");

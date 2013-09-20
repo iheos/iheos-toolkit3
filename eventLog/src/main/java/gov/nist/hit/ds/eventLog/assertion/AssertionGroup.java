@@ -1,51 +1,43 @@
 package gov.nist.hit.ds.eventLog.assertion;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVTable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 
-public class AssertionGroup {
-	String[] columnNames = new String[] { "Name", "ID", "STATUS", "EXPECTED", "FOUND", "REFERENCE" };
+public class AssertionGroup implements ErrorRecorder, Enumeration<Assertion> {
 	CSVTable assertionTable = new CSVTable();
 	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
-	
+	String validatorName;
+
 	public AssertionGroup() {
-		addRow(Arrays.asList(columnNames));
+		addRow(Arrays.asList(Assertion.columnNames));
 	}
-	
-	public CSVTable getTable() { return assertionTable; }
-	
-	public AssertionStatus getMaxStatus() { return maxStatus; }
-	
-	public AssertionGroup addAssertion(String name, AssertionId id, AssertionStatus status, String expected, String found, AssertionReference ref) {
-		if (status.ordinal() > maxStatus.ordinal())
-			maxStatus = status;
-		List<String> values = new ArrayList<String>();
-		values.add(name);
-		values.add(id.getId());
-		values.add(status.name());
-		values.add(expected);
-		values.add(found);
-		values.add(ref.getReference());
-		addRow(values);
+
+	public String getValidatorName() {
+		return validatorName;
+	}
+
+	public AssertionGroup setValidatorName(String name) {
+		this.validatorName = name;
 		return this;
 	}
-	
+
+	public CSVTable getTable() { return assertionTable; }
+
+	public AssertionStatus getMaxStatus() { return maxStatus; }
+
 	public AssertionGroup addAssertion(Assertion asser) {
 		if (asser.getStatus().ordinal() > maxStatus.ordinal())
 			maxStatus = asser.getStatus();
-			
-		List<String> values = new ArrayList<String>();
-		values.add(asser.getName());
-		values.add(asser.getId());
-		values.add(asser.getStatus().name());
-		values.add(asser.getExpected());
-		values.add(asser.getFound());
-		values.add(asser.getReference());
-		addRow(values);
+		assertionTable.add(asser.getEntry());
 		return this;
 	}
 
@@ -56,5 +48,226 @@ public class AssertionGroup {
 		}
 		assertionTable.add(entry);
 	}
-	
+
+	/************************************************************
+	 * 
+	 * Enumeration implementation
+	 * 
+	 *************************************************************/
+	int tableIndex = 1;  // 1 because first row is column headers
+
+	public void resetEnumeration() {
+		tableIndex = 1;
+	}
+
+	@Override
+	public boolean hasMoreElements() {
+		return tableIndex < assertionTable.size();
+	}
+
+	@Override
+	public Assertion nextElement() {
+		tableIndex++;
+		return new Assertion().setEntry(assertionTable.get(tableIndex - 1));
+	}
+
+
+	/*************************************************************
+	 * 
+	 * Implementation of ErrorRecorder for backwards compatibility.
+	 * 
+	 * ***********************************************************/
+
+	boolean hasErrors = false;
+
+	@Override
+	public void err(Code code, ErrorContext context, Object location) {
+		Assertion as = new Assertion();
+
+		as.setId("").
+		setName("").
+		setStatus(AssertionStatus.ERROR).
+		setFound("").
+		setExpected("").
+		setReference(context.getResource()).
+		setMsg(context.getMsg()).
+		setCode(code.name()).
+		setLocation((location == null) ? "" : location.getClass().getName());
+
+		addAssertion(as);
+		hasErrors = true;
+	}
+
+	@Override
+	public void err(Code code, Exception e) {
+		Assertion as = new Assertion();
+
+		as.setId("").
+		setName("").
+		setStatus(AssertionStatus.ERROR).
+		setFound("").
+		setExpected("").
+		setReference("").
+		setMsg(e.getMessage()).
+		setCode(code.name());
+
+		addAssertion(as);
+		hasErrors = true;
+	}
+
+	@Override
+	public void warning(String code, ErrorContext context, String location) {
+		Assertion as = new Assertion();
+
+		as.setId("").
+		setName("").
+		setStatus(AssertionStatus.WARNING).
+		setFound("").
+		setExpected("").
+		setReference(context.getResource()).
+		setMsg(context.getMsg()).
+		setCode(code).
+		setLocation((location == null) ? "" : location.getClass().getName());
+
+		addAssertion(as);
+	}
+
+	@Override
+	public void warning(Code code, ErrorContext context, String location) {
+		Assertion as = new Assertion();
+
+		as.setId("").
+		setName("").
+		setStatus(AssertionStatus.WARNING).
+		setFound("").
+		setExpected("").
+		setReference(context.getResource()).
+		setMsg(context.getMsg()).
+		setCode(code.name()).
+		setLocation((location == null) ? "" : location.getClass().getName());
+
+		addAssertion(as);
+	}
+
+	@Override
+	public void sectionHeading(String msg) {
+		Assertion as = new Assertion();
+
+		as.setId("").
+		setName(msg).
+		setStatus(AssertionStatus.NONE).
+		setFound("").
+		setMsg(msg).
+		setExpected("");
+
+		addAssertion(as);
+	}
+
+	@Override
+	public void challenge(String msg) {
+		Assertion as = new Assertion();
+
+		as.setId("").
+		setName("").
+		setStatus(AssertionStatus.NONE).
+		setFound("").
+		setExpected("").
+		setMsg(msg);
+
+		addAssertion(as);
+	}
+
+	@Override
+	public void externalChallenge(String msg) {
+		challenge(msg);
+	}
+
+	@Override
+	public void detail(String msg) {
+		challenge(msg);
+	}
+
+	@Override
+	public void success(String dts, String name, String found, String expected,
+			String RFC) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void error(String dts, String name, String found, String expected,
+			String RFC) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void warning(String dts, String name, String found, String expected,
+			String RFC) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void info(String dts, String name, String found, String expected,
+			String RFC) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void summary(String msg, boolean success, boolean part) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void showErrorInfo() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean hasErrors() {
+		return hasErrors;
+	}
+
+	@Override
+	public int getNbErrors() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void concat(ErrorRecorder er) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<ValidatorErrorItem> getErrMsgs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ErrorRecorder buildNewErrorRecorder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ErrorRecorderBuilder getErrorRecorderBuilder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
 }

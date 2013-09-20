@@ -34,7 +34,7 @@ import org.junit.runners.Suite;
 		,SimpleRepositoryIteratorTest.class
 		,SimpleRepositoryTest.class
 		,SimpleTextAssetTest.class
-		,SimpleTypeIteratorTest.class
+		,SimpleTypeIteratorTest.class 
 		,SearchTest.class
 		} )
 public class SimpleTestSuite {
@@ -47,17 +47,16 @@ public class SimpleTestSuite {
 		@Override
 		protected void before() throws Throwable {
 			
-			File warHome = new File(getClass().getClassLoader().getResource(SimpleTestSuite.class.getSimpleName()).getFile());
 			
-			Installation.installation();
-			Installation.installation().setWarHome(warHome); // This would be the WAR installation directory
-			
-			
-			// Test assets created will be automatically removed after the test
-			File externalCache = new File(warHome.toString() + "/Testing/Test_environment");
-						
-			Installation.installation().setExternalCache(externalCache); // Use a prefix here when externalCache is not expected to be absolute path, which in this case the EC_Dir is relative. 
-			
+ 			
+
+			Installation.reset();
+			Installation.installation().initialize();
+ 			
+ 			
+ 			// Test assets created will be automatically removed after the test
+ 						
+ 			
 			Configuration.configuration();
 						
 		}
