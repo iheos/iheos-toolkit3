@@ -6,13 +6,15 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 
 import java.io.File;
+import java.io.IOException;
 
 public class TestEnvironmentSetup {
 	File RepositoriesPath;  					// Repositories folder
 	File InstallationPath;						// Path containing the WEB-INF folder (for External_Cache)		
 	File RepositoryRoot; 
 	
-	public TestEnvironmentSetup setup() throws InitializationFailedException {
+	public TestEnvironmentSetup setup() throws InitializationFailedException, IOException, RepositoryException {
+		new FactoryTest().init();
 		//
 		// Assets stored in temporary repositories will be cleaned up after test run
 		// 
@@ -22,7 +24,7 @@ public class TestEnvironmentSetup {
 
 //		Installation.installation().setWarHome(getInstallationPath()); // This would be the WAR installation directory
 
-		File externalCache = new File(InstallationPath, "external_cache");
+		File externalCache = new File("/Users/bill/tmp/external_cache");
 
 		Installation.installation().setExternalCache(externalCache); // Prefix only if externalCache is not expected to be absolute path, which in this case the EC_Dir is relative. 
 

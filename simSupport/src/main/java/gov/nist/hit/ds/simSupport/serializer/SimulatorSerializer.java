@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -23,6 +24,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class SimulatorSerializer {
 	static final boolean useJson = true;
+	static Logger logger = Logger.getLogger(SimulatorSerializer.class);
 
 	public Simulator save(Simulator sim) throws IOException, XdsInternalException {
 		
@@ -57,8 +59,10 @@ public class SimulatorSerializer {
 		mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
 
 		FileOutputStream fos = null;
+		File outFile = simdb.getSimulatorJsonControlFile();
+		logger.info("Write sim file to <" + outFile + ">");
 		try {
-			fos = new FileOutputStream(simdb.getSimulatorJsonControlFile());
+			fos = new FileOutputStream(outFile);
 
 			// convert user object to json string, and save to a file
 			mapper.writeValue(fos, sim);

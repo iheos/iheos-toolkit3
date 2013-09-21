@@ -16,7 +16,7 @@ public class PropertyManager {
 	static Logger logger = Logger.getLogger(PropertyManager.class);
 
 	//	String propFile;
-	Properties toolkitProperties = null;
+	static Properties toolkitProperties = null;
 
 	public void update(Map<String, String> props) throws Exception {
 		if (toolkitProperties == null)
@@ -92,6 +92,12 @@ public class PropertyManager {
 		String cache = (String) toolkitProperties.get("External_Cache");
 		System.setProperty("External_Cache", cache);
 		return cache;
+	}
+
+	public void setExternalCache(String path) {
+			loadProperties();
+		toolkitProperties.put("External_Cache", path);
+		System.setProperty("External_Cache", path);
 	}
 
 	public boolean isUseActorsFile()  {

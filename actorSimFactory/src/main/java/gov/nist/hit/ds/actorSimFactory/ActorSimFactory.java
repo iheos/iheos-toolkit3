@@ -90,9 +90,9 @@ public class ActorSimFactory {
 
 		simChain.setBase(base);
 		SimEngine engine = new SimEngine(simChain, event);
-		logger.info(engine.getDescription(simChain).toString());
+		logger.debug("\n" + engine.getDescription(simChain).toString());
 		engine.run();
-		logger.info(simChain.getLog());
+		logger.debug("\n" + simChain.getLog());
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class ActorSimFactory {
 			InputStream is = getClass().getResourceAsStream(configuredSimsFileName); 
 			if (is == null)
 				throw new FileNotFoundException("Could not load <" + configuredSimsFileName + ">");
-			logger.info("Loading Simulator configurations from <" + configuredSimsFileName + ">");
+			logger.debug("Loading Simulator configurations from <" + configuredSimsFileName + ">");
 			simConfig.load(is);
 		}
 

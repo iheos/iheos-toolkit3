@@ -55,7 +55,7 @@ public class SimServlet extends HttpServlet {
 	File simDbDir;
 	String faultSent = null;
 	boolean initialized = false;
-	Event event = null;
+	Event event = null  ;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -126,6 +126,7 @@ public class SimServlet extends HttpServlet {
 		event = buildEvent(soapEnv, simEndpoint);
 		if (event == null)
 			return;
+		
 
 		TransactionType transType = TransactionType.find(simEndpoint.getTransaction());
 		if (transType == null) {
@@ -284,6 +285,7 @@ public class SimServlet extends HttpServlet {
 	}
 
 	void sendSoapFault(SoapEnvironment soapEnv, FaultCode faultCode, String reason) {
+		reason = reason.replace('<', '(').replace('>', ')');
 		sendSoapFault(
 				soapEnv, 					
 				new SoapFaultException(

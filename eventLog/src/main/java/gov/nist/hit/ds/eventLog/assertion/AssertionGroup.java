@@ -5,6 +5,7 @@ import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.eventLog.InOutMessages;
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVTable;
 
@@ -12,10 +13,13 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 public class AssertionGroup implements ErrorRecorder, Enumeration<Assertion> {
 	CSVTable assertionTable = new CSVTable();
 	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
 	String validatorName;
+	static Logger logger = Logger.getLogger(AssertionGroup.class);
 
 	public AssertionGroup() {
 		addRow(Arrays.asList(Assertion.columnNames));
@@ -35,6 +39,7 @@ public class AssertionGroup implements ErrorRecorder, Enumeration<Assertion> {
 	public AssertionStatus getMaxStatus() { return maxStatus; }
 
 	public AssertionGroup addAssertion(Assertion asser) {
+		logger.debug(asser);
 		if (asser.getStatus().ordinal() > maxStatus.ordinal())
 			maxStatus = asser.getStatus();
 		assertionTable.add(asser.getEntry());
@@ -155,7 +160,7 @@ public class AssertionGroup implements ErrorRecorder, Enumeration<Assertion> {
 
 		as.setId("").
 		setName(msg).
-		setStatus(AssertionStatus.NONE).
+		setStatus(AssertionStatus.INFO).
 		setFound("").
 		setMsg(msg).
 		setExpected("");
@@ -169,7 +174,7 @@ public class AssertionGroup implements ErrorRecorder, Enumeration<Assertion> {
 
 		as.setId("").
 		setName("").
-		setStatus(AssertionStatus.NONE).
+		setStatus(AssertionStatus.INFO).
 		setFound("").
 		setExpected("").
 		setMsg(msg);

@@ -77,8 +77,8 @@ public class SimEngine implements MessageValidatorEngine {
 		if (simChain.getBase() != null && (simChain.getBase() instanceof SoapEnvironment))
 			soapEnvironment = (SoapEnvironment) simChain.getBase();
 		
-		logger.info("---------------------------------------------------------------");
-		logger.info("Run");
+		logger.debug("---------------------------------------------------------------");
+		logger.debug("Run");
 		boolean errorsFound = false;
 //		SystemErrorRecorderBuilder erBuilder = new SystemErrorRecorderBuilder();
 		while(!errorsFound && !isComplete()) {
@@ -123,7 +123,7 @@ public class SimEngine implements MessageValidatorEngine {
 				// schedules the next.
 			}
 		}
-		logger.info("Engine: " + simsRun + " sims run");
+		logger.debug("Engine: " + simsRun + " sims run");
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class SimEngine implements MessageValidatorEngine {
 
 	public StringBuffer getDescription(SimChain simChain) {
 		StringBuffer buf = new StringBuffer();
-		logger.info("---------------------------------------------------------------\nSimChain Analyis\n");
+		logger.debug("---------------------------------------------------------------\nSimChain Analyis\n");
 
 		describe(simChain.getBase(), buf);
 		for(Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {

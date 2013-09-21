@@ -72,6 +72,10 @@
 		<servlet-name>searchServlet</servlet-name>
 		<url-pattern>/repository/search</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>searchServlet</servlet-name>
+		<url-pattern>/xdstools3/repository/search</url-pattern>
+	</servlet-mapping>
 	
 	<servlet-mapping>
 		<servlet-name>downloadAssetServlet</servlet-name>
