@@ -14,7 +14,7 @@ public class ByInjectionLogLoader extends AbstractLogLoader {
 
 	@Inject
 	public void setSimDb(Event event) throws SoapFaultException {
-		logger.info("ByInjectionLogLoader: set Event");
+		logger.debug("ByInjectionLogLoader: set Event");
 		try {
 			header = event.getInOutMessages().getRequestHeader();
 			body = event.getInOutMessages().getRequestBody();

@@ -45,6 +45,10 @@ public class Assertion {
 		return this;
 	}
 	
+	public String toString() {
+		return getEntry().toString();
+	}
+	
 	public String[] getColumnNames() {
 		return columnNames;
 	}

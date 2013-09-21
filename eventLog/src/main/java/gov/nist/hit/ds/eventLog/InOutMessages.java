@@ -6,18 +6,22 @@ import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 
+import org.apache.log4j.Logger;
+
 public class InOutMessages {
 	Asset inOutAsset;
 	final static String reqHdrType = "reqHdrType";
 	final static String reqBodyType = "reqBodyType";
 	final static String resType = "resType";
-	
+	static Logger logger = Logger.getLogger(InOutMessages.class);
+
 	Asset init(Asset parent) throws RepositoryException {
 		inOutAsset = AssetHelper.createChildAsset(parent, "Input/Output Messages", "", new SimpleType("simInOut"));
 		return inOutAsset;
 	}
 
 	public void putRequestHeader(String hdr) throws RepositoryException {
+		logger.debug("Header\n" + hdr);
 		Asset a = AssetHelper.createChildAsset(inOutAsset, "Request Header", "", new SimpleType(reqHdrType));
 		a.setOrder(1);
 		a.updateContent(hdr, "text/plain");
@@ -31,6 +35,7 @@ public class InOutMessages {
 	}
 
 	public void putRequestBody(byte[] bytes) throws RepositoryException {
+		logger.debug("Body\n" + new String(bytes));
 		Asset a = AssetHelper.createChildAsset(inOutAsset, "Request Body", "", new SimpleType(reqBodyType));
 		a.setOrder(2);
 		a.updateContent(bytes);
@@ -45,6 +50,7 @@ public class InOutMessages {
 	}
 	
 	public void putResponse(String response) throws RepositoryException {
+		logger.debug("Response\n" + response);
 		Asset a = AssetHelper.createChildAsset(inOutAsset, "Response", "", new SimpleType(resType));
 		a.setOrder(3);
 		a.updateContent(response, "text/plain");

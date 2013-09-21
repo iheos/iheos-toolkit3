@@ -6,6 +6,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/actorSimFactory"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/actorTransaction"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/docRef"/>

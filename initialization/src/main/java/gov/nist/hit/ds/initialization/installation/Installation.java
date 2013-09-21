@@ -121,6 +121,7 @@ public class Installation {
 		if (toolkitPropertiesFile != null) {
 			logger.debug("loading from file designator: " + toolkitPropertiesFile.toString());
 			from = toolkitPropertiesFile.toString();
+			logger.info("toolkit.properties loaded from <" + from + ">");
 			try {
 				is = Io.getInputStreamFromFile(toolkitPropertiesFile);
 			} catch (FileNotFoundException e) {
@@ -130,6 +131,7 @@ public class Installation {
 			logger.debug("Using class loader");
 			ClassLoader cl = getClass().getClassLoader();
 			URL url = cl.getResource(TOOLKIT_PROPERTIES);
+			logger.info("toolkit.properties loaded from <" + url + ">");
 			if (url == null) {
 				throw new RuntimeException("Could not load " + TOOLKIT_PROPERTIES + " file via the class loader");
 			}
@@ -147,6 +149,7 @@ public class Installation {
 
 	public File getToolkitPropertiesFile() {
 		URL url = getClass().getClassLoader().getResource("toolkit.properties");
+		logger.info("toolkit.properties loaded from <" + url + ">");
 		return new File(url.getFile());
 	}
 
@@ -226,6 +229,7 @@ public class Installation {
 	}
 
 	public void setExternalCache(File externalCache) throws InitializationFailedException {
+		propertyServiceManager().getPropertyManager().setExternalCache(externalCache.toString());
 		initializeExternalCache(externalCache);
 	}
 
