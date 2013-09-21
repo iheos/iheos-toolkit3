@@ -110,8 +110,8 @@
   	<module>siteManagement</module>
   	<module>actorSimFactory</module>
   	  	<module>repository</module>
-  	  	<module>wsseTool</module>
-  	<module>xdstools3</module>
+  	  <module>xdstools3</module>	
+<!--  	<module>wsseTool</module>  -->
   	<module>simulatorIntegrationTest</module>
 <!--         <module>logBrowser</module>   -->
         <module>simServlet</module>
