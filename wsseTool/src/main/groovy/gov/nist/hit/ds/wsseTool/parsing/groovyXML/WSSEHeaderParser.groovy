@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.wsseTool.parsing.groovyXML
 
+import gov.nist.hit.ds.wsseTool.parsing.Message
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -8,7 +9,10 @@ public class WSSEHeaderParser {
 
 	private static final Logger log = LoggerFactory.getLogger(WSSEHeaderParser.class)
 	
-	public WSSEHeaderParser(){
+	GroovyHeader header;
+	
+	public WSSEHeaderParser(Message message){
+		header = message.getGroovyHeader();
 	}
 	public void parse(){
 		wsseStructure();
