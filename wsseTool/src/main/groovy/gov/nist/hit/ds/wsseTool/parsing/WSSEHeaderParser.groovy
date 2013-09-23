@@ -1,6 +1,7 @@
-package gov.nist.hit.ds.wsseTool.parsing.groovyXML
+package gov.nist.hit.ds.wsseTool.parsing
 
-import gov.nist.hit.ds.wsseTool.parsing.Message
+import gov.nist.hit.ds.wsseTool.parsing.groovyXML.GroovyHeader;
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

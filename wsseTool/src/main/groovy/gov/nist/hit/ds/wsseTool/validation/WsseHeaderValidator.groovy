@@ -8,7 +8,7 @@ import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException
 import gov.nist.hit.ds.wsseTool.api.exceptions.ValidationException
 import gov.nist.hit.ds.wsseTool.parsing.Message
 import gov.nist.hit.ds.wsseTool.parsing.MessageFactory
-import gov.nist.hit.ds.wsseTool.parsing.groovyXML.WSSEHeaderParser
+import gov.nist.hit.ds.wsseTool.parsing.WSSEHeaderParser;
 import gov.nist.hit.ds.wsseTool.validation.engine.MyRunnerBuilder
 import gov.nist.hit.ds.wsseTool.validation.engine.MySuite
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation
