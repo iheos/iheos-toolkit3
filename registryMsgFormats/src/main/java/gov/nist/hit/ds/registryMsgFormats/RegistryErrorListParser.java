@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMsgFormats;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
@@ -66,13 +66,13 @@ public class RegistryErrorListParser {
 		return false;
 	}
 	
-	public void validate(ErrorRecorder er, ValidationContext vc) {
+	public void validate(IAssertionGroup er, ValidationContext vc) {
 		for (RegistryError re : errors) {
 			validate(re, er, vc);
 		}
 	}
 
-	public void validate(RegistryError re, ErrorRecorder er, ValidationContext vc) {
+	public void validate(RegistryError re, IAssertionGroup er, ValidationContext vc) {
 		if (re.getCodeContext() == null)
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("CodeContext attribute is required", "ebRS 3.0 Section 2.1.6"), this);
 		if (re.errorCode == null)

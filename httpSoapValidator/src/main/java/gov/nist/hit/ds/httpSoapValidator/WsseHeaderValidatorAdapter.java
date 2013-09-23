@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.httpSoapValidator;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.httpSoapValidator.wsseToolkitAdapter.log4jToErrorRecorder.AppenderForErrorRecorder;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
@@ -72,7 +72,7 @@ public class WsseHeaderValidatorAdapter extends MessageValidator {
 	}
 
 	@Override
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 
 		try {
 			// We use a special appender to record message coming from the wsse

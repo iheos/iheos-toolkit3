@@ -1,11 +1,10 @@
 package gov.nist.hit.ds.eventLog.assertion;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
-import gov.nist.hit.ds.eventLog.InOutMessages;
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVTable;
 
@@ -15,7 +14,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class AssertionGroup implements ErrorRecorder, Enumeration<Assertion> {
+public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	CSVTable assertionTable = new CSVTable();
 	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
 	String validatorName;
@@ -54,6 +53,34 @@ public class AssertionGroup implements ErrorRecorder, Enumeration<Assertion> {
 		assertionTable.add(entry);
 	}
 
+	/************************************************************
+	 * 
+	 * Assertions
+	 * 
+	 *************************************************************/
+	
+	public AssertionGroup assertEquals(String expected, String found, String msg) {
+		Assertion as = new Assertion();
+		if (expected.equals(found)) {
+			as.setExpected(expected).setFound(found).setMsg(msg).setStatus(AssertionStatus.SUCCESS);
+		} else {
+			as.setExpected(expected).setFound(found).setMsg(msg).setStatus(AssertionStatus.ERROR);
+		}
+		addAssertion(as);
+		return this;
+	}
+	
+	public Assertion assertEquals(int expected, int found, String msg) {
+		Assertion as = new Assertion();
+		if (expected == found) {
+			as.setExpected(expected).setFound(found).setMsg(msg).setStatus(AssertionStatus.SUCCESS);			
+		} else {
+			as.setExpected(expected).setFound(found).setMsg(msg).setStatus(AssertionStatus.ERROR);
+		}
+		addAssertion(as);
+		return as;
+	}
+	
 	/************************************************************
 	 * 
 	 * Enumeration implementation
@@ -250,19 +277,13 @@ public class AssertionGroup implements ErrorRecorder, Enumeration<Assertion> {
 	}
 
 	@Override
-	public void concat(ErrorRecorder er) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public List<ValidatorErrorItem> getErrMsgs() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ErrorRecorder buildNewErrorRecorder() {
+	public AssertionGroup buildNewErrorRecorder() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -271,6 +292,12 @@ public class AssertionGroup implements ErrorRecorder, Enumeration<Assertion> {
 	public ErrorRecorderBuilder getErrorRecorderBuilder() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void concat(IAssertionGroup er) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

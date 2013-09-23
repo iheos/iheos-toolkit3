@@ -1,14 +1,14 @@
 package gov.nist.hit.ds.registrySim.sq.generic.support;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.registrysupport.logging.LoggerException;
 
 import java.util.ArrayList;
 
 public class StoredQuerySupport {
-	public ErrorRecorder er;
+	public IAssertionGroup er;
 	public SqParams params;
 	public StringBuffer query;
 	public QueryReturnType returnType;
@@ -28,7 +28,7 @@ public class StoredQuerySupport {
 	 * @param log_message
 	 * @throws LoggerException 
 	 */
-	public StoredQuerySupport(ErrorRecorder response)  {
+	public StoredQuerySupport(IAssertionGroup response)  {
 		this.er = response;
 		init();
 	}
@@ -41,7 +41,7 @@ public class StoredQuerySupport {
 	 * @param log_message (Message)
 	 * @param is_secure
 	 */
-	public StoredQuerySupport(SqParams params, QueryReturnType return_objects, ErrorRecorder response, boolean is_secure) {
+	public StoredQuerySupport(SqParams params, QueryReturnType return_objects, IAssertionGroup response, boolean is_secure) {
 		this.er = response;
 		this.params = params;
 		this.is_secure = is_secure;

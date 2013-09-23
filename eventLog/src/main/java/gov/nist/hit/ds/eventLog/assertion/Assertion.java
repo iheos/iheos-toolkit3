@@ -108,11 +108,21 @@ public class Assertion {
 		this.found = found;
 		return this;
 	}
+	
+	public Assertion setFound(int found) {
+		this.found = Integer.toString(found);
+		return this;
+	}
+	
 	public String getExpected() {
 		return expected;
 	}
 	public Assertion setExpected(String expected) {
 		this.expected = expected;
+		return this;
+	}
+	public Assertion setExpected(int expected) {
+		this.expected = Integer.toString(expected);
 		return this;
 	}
 	public String getReference() {

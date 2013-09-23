@@ -20,7 +20,7 @@ public class ByInjectionLogLoader extends AbstractLogLoader {
 			body = event.getInOutMessages().getRequestBody();
 		} catch (RepositoryException e) {
 			throw new SoapFaultException(
-					er,
+					ag,
 					FaultCode.Receiver,
 					new ErrorContext("Internal Error: cannot load request message: " + e.getMessage())
 					);

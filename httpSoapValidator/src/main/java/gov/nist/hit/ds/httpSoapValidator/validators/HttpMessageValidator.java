@@ -2,7 +2,7 @@ package gov.nist.hit.ds.httpSoapValidator.validators;
 
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.http.parser.ParseException;
@@ -76,7 +76,7 @@ public class HttpMessageValidator extends SimComponentBase {
 //		}
 	}
 
-	void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 //		this.er = er;
 //		
 //		try {

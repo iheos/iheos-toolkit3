@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMsgFormats;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.ValidationStepResult;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
@@ -35,7 +35,7 @@ public abstract class ResponseGenerator extends SimComponentBase {
 	OMElement content = null;
 	public RegistryErrorListGenerator registryErrorList;
 
-	public ErrorRecorder getErrorRecorder() { return registryErrorList; }
+	public IAssertionGroup getErrorRecorder() { return registryErrorList; }
 
 	public RegistryErrorListGenerator getRegistryErrorList() { return registryErrorList; }
 

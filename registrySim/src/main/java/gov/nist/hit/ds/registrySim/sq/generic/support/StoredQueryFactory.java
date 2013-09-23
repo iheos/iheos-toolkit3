@@ -3,7 +3,7 @@ package gov.nist.hit.ds.registrySim.sq.generic.support;
 import gov.nist.hit.ds.docRef.EbRS;
 import gov.nist.hit.ds.docRef.SqDocRef;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registryMsgFormats.AdhocQueryResponse;
@@ -49,7 +49,7 @@ abstract public class StoredQueryFactory {
 	String service_name;
 	boolean is_secure = false;
 	protected AdhocQueryResponse response = null;
-	protected ErrorRecorder er = null;
+	protected IAssertionGroup er = null;
 	String homeCommunityId = null;
 
 	public void setIsSecure(boolean is) { is_secure = is; }
@@ -70,7 +70,7 @@ abstract public class StoredQueryFactory {
 		this(null, ahqr, new RegistryErrorListGenerator());
 	}
 
-	public StoredQueryFactory(OMElement ahqr, ErrorRecorder er) throws XdsException {
+	public StoredQueryFactory(OMElement ahqr, IAssertionGroup er) throws XdsException {
 		this(null, ahqr, er);
 	}
 
@@ -82,7 +82,7 @@ abstract public class StoredQueryFactory {
 		this(params, null, new RegistryErrorListGenerator());
 	}
 	
-	public StoredQueryFactory(SqParams params, OMElement ahqr, ErrorRecorder er) throws XdsException {
+	public StoredQueryFactory(SqParams params, OMElement ahqr, IAssertionGroup er) throws XdsException {
 		this.ahqr = ahqr;
 		this.params = params;
 		this.er = er;

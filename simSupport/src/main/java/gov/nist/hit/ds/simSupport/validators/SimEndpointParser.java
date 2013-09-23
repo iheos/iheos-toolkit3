@@ -55,7 +55,7 @@ public class SimEndpointParser extends SimComponentBase {
 			parse(endpoint);
 		} catch (Exception e) {
 			throw new SoapFaultException(
-					er,
+					ag,
 					FaultCode.Receiver,
 					e.getMessage());
 		}

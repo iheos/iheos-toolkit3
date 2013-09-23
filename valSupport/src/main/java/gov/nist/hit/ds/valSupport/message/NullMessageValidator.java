@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.valSupport.message;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
 import gov.nist.hit.ds.valSupport.engine.MessageValidatorEngine;
 
@@ -12,7 +12,7 @@ import gov.nist.hit.ds.valSupport.engine.MessageValidatorEngine;
  */
 public class NullMessageValidator extends AbstractMessageValidator {
 	
-	public NullMessageValidator(ValidationContext vc, ErrorRecorder er) {
+	public NullMessageValidator(ValidationContext vc, IAssertionGroup er) {
 		super(vc, er);
 	}
 

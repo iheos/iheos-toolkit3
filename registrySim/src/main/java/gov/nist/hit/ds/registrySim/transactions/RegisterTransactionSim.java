@@ -37,7 +37,7 @@ public class RegisterTransactionSim extends SimComponentBase {
 	void validateEndpoint() throws SoapFaultException {
 		if (!"rb".equals(simEndPoint.getTransaction()))
 				throw new SoapFaultException(
-						er,
+						ag,
 						FaultCode.Receiver,
 						new ErrorContext("Configuration error, Register Transaction (rb) was expect: found (" + simEndPoint.getTransaction() + ") instead" )
 						);

@@ -92,6 +92,7 @@ public class SimEngine implements MessageValidatorEngine {
 				if (simStep.getAssertionGroup() == null) {
 					AssertionGroup ag = new AssertionGroup().setValidatorName(simComponent.getClass().getSimpleName());
 					event.addAssertionGroup(ag);
+					simStep.setEvent(event);
 					simStep.setAssertionGroup(ag);
 				}
 //				if (simComponent.getName() == null)
@@ -221,7 +222,11 @@ public class SimEngine implements MessageValidatorEngine {
 	 */
 	void matchPubSub(SimComponent subscriptionObject) throws SimEngineException {
 		Class<?> valClass = subscriptionObject.getClass();
-		System.out.println(valClass.getName());
+		String className = valClass.getName();
+		if (className.startsWith("gov.nist.hit.ds.simSupport"))
+			logger.debug(className);
+		else
+			logger.debug("======================= " + className + "  ==========================");
 		Method[] valMethods = valClass.getMethods();
 		// For all setters in this subscriptionObject
 		for (int subMethI=0; subMethI<valMethods.length; subMethI++) {
@@ -243,8 +248,7 @@ public class SimEngine implements MessageValidatorEngine {
 				throw new SimEngineSubscriptionException("Illegal subscription type: java.*: <" + subClass.getClass().getName() + "> " + "<#" + subMethName + ">");
 			PubSubMatch match = findMatch(subscriptionObject, subClass, subMethod);
 			pubSubMatches.add(match);
-			System.out.println(match);
-			System.out.flush();
+			logger.debug(match);
 			executePubSub(match);
 		}
 	}

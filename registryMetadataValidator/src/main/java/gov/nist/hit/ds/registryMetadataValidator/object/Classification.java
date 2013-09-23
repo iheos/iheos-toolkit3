@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMetadataValidator.object;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
@@ -109,7 +109,7 @@ public class Classification extends AbstractRegistryObject {
 		return parent.getAttributeValue(MetadataSupport.id_qname);
 	}
 
-	public void validateStructure(ErrorRecorder er, ValidationContext vc) {
+	public void validateStructure(IAssertionGroup er, ValidationContext vc) {
 		validateId(er, vc, "entryUUID", id, "ITI TF-3: 4.1.12.2");
 		OMElement parentEle = (OMElement) ro.getParent();
 		String parentEleId =  ((parentEle == null) ? "null" :
@@ -140,15 +140,15 @@ public class Classification extends AbstractRegistryObject {
 		return toXml(null);
 	}
 
-	public void validateRequiredSlotsPresent(ErrorRecorder er,
+	public void validateRequiredSlotsPresent(IAssertionGroup er,
 			ValidationContext vc) {		
 	}
 
-	public void validateSlotsCodedCorrectly(ErrorRecorder er,
+	public void validateSlotsCodedCorrectly(IAssertionGroup er,
 			ValidationContext vc) {
 	}
 
-	public void validateSlotsLegal(ErrorRecorder er) {
+	public void validateSlotsLegal(IAssertionGroup er) {
 	}
 
 

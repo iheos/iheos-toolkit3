@@ -1,12 +1,12 @@
 package gov.nist.hit.ds.http.parser;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 
 public class PartParserBa extends HttpParserBa {
-	ErrorRecorder er = null;
+	IAssertionGroup er = null;
 	PartBa part = new PartBa();
 	
 	public PartParserBa(byte[] msg) throws HttpParseException, HttpHeaderParseException, ParseException {
@@ -14,7 +14,7 @@ public class PartParserBa extends HttpParserBa {
 		initPart();
 	}
 	
-	public PartParserBa(byte[] msg, ErrorRecorder er, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException {
+	public PartParserBa(byte[] msg, IAssertionGroup er, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException {
 		this.appendixV = appendixV;
 		init(msg, part);
 		initPart();

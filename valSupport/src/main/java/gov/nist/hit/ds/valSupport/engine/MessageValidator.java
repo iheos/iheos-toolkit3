@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.valSupport.engine;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
 
 import org.apache.axiom.om.OMElement;
@@ -14,16 +14,16 @@ import org.apache.axiom.om.OMElement;
  */
 abstract public class MessageValidator {
 	protected ValidationContext vc; 
-	public ErrorRecorder er;
+	public IAssertionGroup er;
 	
 	
-	abstract public void run(ErrorRecorder er, MessageValidatorEngine mvc);
+	abstract public void run(IAssertionGroup er, MessageValidatorEngine mvc);
 
 	public MessageValidator(ValidationContext vc) {
 		this.vc = vc;
 	}
 	
-	public ErrorRecorder getErrorRecorder() {
+	public IAssertionGroup getErrorRecorder() {
 		return er;
 	}
 

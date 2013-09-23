@@ -36,7 +36,6 @@ public abstract class AbstractLogLoader extends SimComponentBase {
 	}
 
 	void load()   {
-		logger.info("header = " + header + " body = " + body);
 		if (header != null && body != null)
 			return;
 		if (dir == null)
@@ -50,7 +49,7 @@ public abstract class AbstractLogLoader extends SimComponentBase {
 			else
 				body = Io.bytesFromFile(new File(dir, "request_body.bin"));
 		} catch (IOException e) {
-			er.err(Code.NoCode, e);
+			ag.err(Code.NoCode, e);
 		}
 	}
 

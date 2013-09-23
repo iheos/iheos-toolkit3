@@ -1,15 +1,15 @@
 package gov.nist.hit.ds.valSupport.fields;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 
 public class UuidValidator {
-	ErrorRecorder er;
+	IAssertionGroup er;
 	String rawMsgPrefix = "Validating UUID format of "; 
 	String msgPrefix;
 	
-	public UuidValidator(ErrorRecorder er, String errorMsgPrefix) {
+	public UuidValidator(IAssertionGroup er, String errorMsgPrefix) {
 		this.er = er;
 		if (errorMsgPrefix != null) 
 			rawMsgPrefix = errorMsgPrefix;

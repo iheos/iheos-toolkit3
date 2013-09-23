@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.httpSoapValidator.wsseToolkitAdapter.log4jToErrorRecorder;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.loader.ValidationContext;
@@ -12,10 +12,10 @@ import org.apache.log4j.spi.LoggingEvent;
 public/* static */class AppenderForErrorRecorder extends AppenderSkeleton {
 	
 	private ValidationContext vc;
-	private ErrorRecorder er;
+	private IAssertionGroup er;
 	private MessageValidatorEngine mvc;
 
-	public AppenderForErrorRecorder(ValidationContext vc, ErrorRecorder er, MessageValidatorEngine mvc){
+	public AppenderForErrorRecorder(ValidationContext vc, IAssertionGroup er, MessageValidatorEngine mvc){
 		this.vc = vc;
 		this.er = er;
 		this.mvc = mvc;

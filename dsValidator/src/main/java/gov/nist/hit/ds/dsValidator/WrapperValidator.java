@@ -1,8 +1,9 @@
 package gov.nist.hit.ds.dsValidator;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
@@ -40,7 +41,7 @@ public class WrapperValidator extends MessageValidator {
 		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msg,ref), this);
 	}
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		String transaction = vc.getTransactionName();
 		List<String> expectedWrappers = wrapperList.get(transaction);
@@ -231,6 +232,12 @@ public class WrapperValidator extends MessageValidator {
 
 	@Override
 	public void setDescription(String description) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setEvent(Event event) {
 		// TODO Auto-generated method stub
 		
 	}

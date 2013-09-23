@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.valSupport.message;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
 import gov.nist.hit.ds.valSupport.engine.MessageValidatorEngine;
@@ -15,12 +15,12 @@ import gov.nist.hit.ds.valSupport.engine.MessageValidatorEngine;
  */
 abstract public class AbstractMessageValidator {
 	protected ValidationContext vc; 
-	public ErrorRecorder er;
+	public IAssertionGroup er;
 	
 	
 	abstract public void run(MessageValidatorEngine mvc);
 
-	public AbstractMessageValidator(ValidationContext vc, ErrorRecorder er) {
+	public AbstractMessageValidator(ValidationContext vc, IAssertionGroup er) {
 		this.vc = vc;
 		this.er = er;
 	}
@@ -30,7 +30,7 @@ abstract public class AbstractMessageValidator {
 		this.er = erBuilder.buildNewErrorRecorder();
 	}
 	
-	public ErrorRecorder getErrorRecorder() {
+	public IAssertionGroup getErrorRecorder() {
 		return er;
 	}
 	

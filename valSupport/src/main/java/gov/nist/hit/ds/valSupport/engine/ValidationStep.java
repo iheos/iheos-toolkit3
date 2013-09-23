@@ -1,16 +1,16 @@
 package gov.nist.hit.ds.valSupport.engine;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.valSupport.message.AbstractMessageValidator;
 
 public class ValidationStep {
 	String stepName;
 	AbstractMessageValidator validator;
-	ErrorRecorder er;
+	IAssertionGroup er;
 	boolean ran = false;
 
 	public String getStepName() { return stepName; }
-	public ErrorRecorder getErrorRecorder() { return er; }
+	public IAssertionGroup getErrorRecorder() { return er; }
 	public boolean hasErrors() { return er.hasErrors(); }
 
 	public String toString() {

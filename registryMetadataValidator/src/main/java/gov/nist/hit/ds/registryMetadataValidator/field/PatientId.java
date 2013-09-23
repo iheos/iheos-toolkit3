@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMetadataValidator.field;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
@@ -12,11 +12,11 @@ import java.util.List;
 
 public class PatientId {
 	List<String> patient_ids;
-	ErrorRecorder er;
+	IAssertionGroup er;
 	Metadata m;
 
 
-	public PatientId( Metadata m, ErrorRecorder er) {
+	public PatientId( Metadata m, IAssertionGroup er) {
 		this.er = er;
 		this.m = m;
 		patient_ids = new ArrayList<String>();
