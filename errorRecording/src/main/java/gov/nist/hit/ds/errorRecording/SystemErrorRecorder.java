@@ -13,7 +13,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 
-public class SystemErrorRecorder implements IAssertionGroup  {
+public class SystemErrorRecorder implements ErrorRecorder  {
 	
 	ErrorRecorderBuilder errorRecorderBuilder;
 	List<ValidatorErrorItem> summary = new ArrayList<ValidatorErrorItem>();
@@ -240,7 +240,7 @@ public class SystemErrorRecorder implements IAssertionGroup  {
 	}
 
 	@Override
-	public IAssertionGroup buildNewErrorRecorder() {
+	public ErrorRecorder buildNewErrorRecorder() {
 		return this;
 	}
 
@@ -255,7 +255,7 @@ public class SystemErrorRecorder implements IAssertionGroup  {
 	}
 
 	@Override
-	public void concat(IAssertionGroup er) {
+	public void concat(ErrorRecorder er) {
 		this.errMsgs.addAll(er.getErrMsgs());
 	}
 	
@@ -378,7 +378,6 @@ public class SystemErrorRecorder implements IAssertionGroup  {
 		// TODO Auto-generated method stub
 		
 	}
-
 
 
 }

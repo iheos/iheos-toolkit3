@@ -9,7 +9,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextErrorRecorder implements IAssertionGroup {
+public class TextErrorRecorder implements ErrorRecorder {
 
 	class ErrorInfo {
 		int indent = 0;
@@ -79,7 +79,7 @@ public class TextErrorRecorder implements IAssertionGroup {
 			return;
 		}
 		
-		ErrorInfo last = errMsgs.get(errMsgs.size() - 1);
+//		ErrorInfo last = errMsgs.get(errMsgs.size() - 1);
 //		if (last.indent == 1)
 //			last.msg = last.msg + " - ok";
 	}
@@ -201,7 +201,7 @@ public class TextErrorRecorder implements IAssertionGroup {
 		emessage + "\n" + new String(baos.toByteArray()));
 	}
 
-	public IAssertionGroup buildNewErrorRecorder() {
+	public ErrorRecorder buildNewErrorRecorder() {
 		return this;
 	}
 
@@ -209,7 +209,7 @@ public class TextErrorRecorder implements IAssertionGroup {
 		return errMsgs.size();
 	}
 
-	public void concat(IAssertionGroup er) {
+	public void concat(ErrorRecorder er) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -270,6 +270,5 @@ public class TextErrorRecorder implements IAssertionGroup {
 		// TODO Auto-generated method stub
 		
 	}
-	
 
 }

@@ -33,7 +33,13 @@ public interface IAssertionGroup extends ErrorRecorderBuilder {
 	public void concat(IAssertionGroup er);
 	public List<ValidatorErrorItem> getErrMsgs();
 	
-	public IAssertionGroup buildNewErrorRecorder();  // some code only accepts ErrorRecorder.  This gets around this
 	public ErrorRecorderBuilder getErrorRecorderBuilder();
+
+	/*
+	 * ErrorRecorderBuilder implementation
+	 * 
+	 */
+	
+	public ErrorRecorder buildNewErrorRecorder();  // some code only accepts ErrorRecorder.  This gets around this
 
 }

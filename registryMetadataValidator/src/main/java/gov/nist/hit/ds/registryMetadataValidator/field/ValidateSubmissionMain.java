@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.registryMetadataValidator.field;
 
 import gov.nist.hit.ds.errorRecording.IAssertionGroup;
-import gov.nist.hit.ds.errorRecording.TextErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registryMetadata.MetadataParser;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
@@ -16,7 +16,7 @@ public class ValidateSubmissionMain  {
 		ValidateSubmissionMain main = new ValidateSubmissionMain();
 		String sampleDir = "/Users/bill/dev/sampleSubmissions/";
 		
-		IAssertionGroup er = new TextErrorRecorder();
+		IAssertionGroup er = new AssertionGroup();
 
 		try {
 			m = MetadataParser.parseNonSubmission(new File(sampleDir + args[0]));

@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.registryMsgFormats;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
@@ -255,8 +256,8 @@ public class RegistryErrorListGenerator implements IAssertionGroup {
 		// TODO Auto-generated method stub
 	}
 
-	public IAssertionGroup buildNewErrorRecorder() {
-		return this;
+	public ErrorRecorder buildNewErrorRecorder() {
+		return null;
 	}
 
 	public int getNbErrors() {
