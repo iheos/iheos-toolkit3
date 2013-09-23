@@ -1,7 +1,8 @@
 package gov.nist.toolkit.wsseTool.util;
 import static org.junit.Assert.*;
+import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
+import gov.nist.hit.ds.wsseTool.util.MyXmlUtils;
 import gov.nist.toolkit.wsseTool.BaseTest;
-import gov.nist.toolkit.wsseTool.api.exceptions.GenerationException;
 
 import java.io.IOException;
 

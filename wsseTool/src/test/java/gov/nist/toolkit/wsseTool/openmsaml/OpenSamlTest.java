@@ -1,7 +1,7 @@
 package gov.nist.toolkit.wsseTool.openmsaml;
 
+import gov.nist.hit.ds.wsseTool.util.MyXmlUtils;
 import gov.nist.toolkit.wsseTool.BaseTest;
-import gov.nist.toolkit.wsseTool.util.MyXmlUtils;
 
 import java.io.InputStream;
 

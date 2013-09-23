@@ -1,13 +1,13 @@
 package gov.nist.toolkit.wsseTool.validation;
 
 import static org.junit.Assert.*
-import gov.nist.toolkit.wsseTool.BaseTest;
-import gov.nist.toolkit.wsseTool.api.WsseHeaderValidator
-import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
-import gov.nist.toolkit.wsseTool.api.config.Context;
-import gov.nist.toolkit.wsseTool.api.config.ContextFactory;
-import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
-import gov.nist.toolkit.wsseTool.util.MyXmlUtils
+import gov.nist.hit.ds.wsseTool.api.WsseHeaderValidator
+import gov.nist.hit.ds.wsseTool.api.config.Context
+import gov.nist.hit.ds.wsseTool.api.config.ContextFactory
+import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess
+import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator
+import gov.nist.hit.ds.wsseTool.util.MyXmlUtils
+import gov.nist.toolkit.wsseTool.BaseTest
 
 import java.security.KeyStoreException
 
@@ -15,8 +15,7 @@ import org.junit.Before
 import org.junit.Test
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.w3c.dom.Document;
-import org.w3c.dom.Element
+import org.w3c.dom.Document
 
 
 class ValidationTest extends BaseTest {
@@ -41,7 +40,7 @@ class ValidationTest extends BaseTest {
 	@Test void runBatch(){
 		Document xml = new OpenSamlWsseSecurityGenerator().generateWsseHeader(context);
 		WsseHeaderValidator val = new WsseHeaderValidator();
-		val.validateWithJUnitRunner(xml.getDocumentElement(),context);
+		val.validate(xml.getDocumentElement(),context);
 		}
 	
 

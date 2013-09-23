@@ -1,7 +1,7 @@
 package gov.nist.toolkit.wsseTool.util;
 
+import gov.nist.hit.ds.wsseTool.util.NamespaceContextMap;
 import gov.nist.toolkit.wsseTool.BaseTest;
-import gov.nist.toolkit.wsseTool.util.NamespaceContextMap;
 
 import java.util.HashMap;
 import java.util.Iterator;

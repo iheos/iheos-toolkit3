@@ -3,16 +3,16 @@ package gov.nist.toolkit.wsseTool.signature;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import gov.nist.hit.ds.wsseTool.api.config.Context;
+import gov.nist.hit.ds.wsseTool.api.config.ContextFactory;
+import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
+import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
+import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlFacade;
+import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
+import gov.nist.hit.ds.wsseTool.parsing.opensaml.OpenSamlSecurityHeader;
+import gov.nist.hit.ds.wsseTool.signature.api.Verifier;
+import gov.nist.hit.ds.wsseTool.util.MyXmlUtils;
 import gov.nist.toolkit.wsseTool.BaseTest;
-import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
-import gov.nist.toolkit.wsseTool.api.config.Context;
-import gov.nist.toolkit.wsseTool.api.config.ContextFactory;
-import gov.nist.toolkit.wsseTool.api.exceptions.GenerationException;
-import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlFacade;
-import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
-import gov.nist.toolkit.wsseTool.parsing.opensaml.OpenSamlSecurityHeader;
-import gov.nist.toolkit.wsseTool.signature.api.Verifier;
-import gov.nist.toolkit.wsseTool.util.MyXmlUtils;
 
 import java.io.IOException;
 import java.security.KeyException;

@@ -1,9 +1,9 @@
 package gov.nist.toolkit.wsseTool.validation;
 
 import static org.junit.Assert.*
+import gov.nist.hit.ds.wsseTool.time.TimeUtil
+import gov.nist.hit.ds.wsseTool.validation.tests.CommonVal
 import gov.nist.toolkit.wsseTool.BaseTest
-import gov.nist.toolkit.wsseTool.time.TimeUtil
-import gov.nist.toolkit.wsseTool.validation.tests.CommonVal
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
