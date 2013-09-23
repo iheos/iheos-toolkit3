@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.eventLog.assertion;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
@@ -283,7 +284,7 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	}
 
 	@Override
-	public AssertionGroup buildNewErrorRecorder() {
+	public ErrorRecorder buildNewErrorRecorder() {
 		// TODO Auto-generated method stub
 		return null;
 	}

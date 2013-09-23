@@ -2,11 +2,11 @@ package gov.nist.hit.ds.httpParserTest;
 
 import static org.junit.Assert.assertTrue;
 import gov.nist.hit.ds.errorRecording.IAssertionGroup;
-import gov.nist.hit.ds.errorRecording.TextErrorRecorder;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
+import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParser;
 import gov.nist.hit.ds.http.parser.ParseException;
-import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.utilities.io.Io;
 
 import java.io.File;
@@ -38,7 +38,7 @@ public class HttpParserTest {
 			System.arraycopy(hdr, 0, msg, 0, hdr.length);
 			System.arraycopy(body, 0, msg, hdr.length, body.length);
 
-			IAssertionGroup er = new TextErrorRecorder();
+			IAssertionGroup er = new AssertionGroup();
 			new HttpParser(msg, er);
 			System.out.println(er.toString());
 		} catch (IOException e) {

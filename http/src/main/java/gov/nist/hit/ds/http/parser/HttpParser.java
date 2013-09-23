@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.http.parser;
 
 import gov.nist.hit.ds.errorRecording.IAssertionGroup;
-import gov.nist.hit.ds.errorRecording.TextErrorRecorder;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
@@ -124,7 +124,8 @@ public class HttpParser {
 	}
 
 	public void init(HttpServletRequest request) throws IOException, HttpParseException {
-		for (Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements(); ) {
+		for (@SuppressWarnings("unchecked")
+		Enumeration<String> e = (Enumeration<String>)request.getHeaderNames(); e.hasMoreElements(); ) {
 			String name = e.nextElement();
 			String value = request.getHeader(name);
 			message.addHeader(name, value);
@@ -132,7 +133,7 @@ public class HttpParser {
 		
 		if (er == null) {
 			// caller must not be interested in the ErrorRecorder results
-			er = new TextErrorRecorder();
+			er = new AssertionGroup();
 		}
 
 		message.bodyBytes = Io.getBytesFromInputStream(request.getInputStream());

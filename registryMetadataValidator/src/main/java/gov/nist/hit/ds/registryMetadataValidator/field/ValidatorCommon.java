@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.registryMetadataValidator.field;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
@@ -308,10 +309,6 @@ public class ValidatorCommon implements IAssertionGroup {
 		
 	}
 
-	public IAssertionGroup buildNewErrorRecorder() {
-		return this;
-	}
-
 	public int getNbErrors() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -382,6 +379,12 @@ public class ValidatorCommon implements IAssertionGroup {
 	public void warning(Code code, ErrorContext context, String location) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public ErrorRecorder buildNewErrorRecorder() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

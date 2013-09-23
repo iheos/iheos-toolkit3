@@ -2,6 +2,7 @@ package gov.nist.hit.ds.valSupport.message;
 
 import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
 import gov.nist.hit.ds.valSupport.engine.MessageValidatorEngine;
 
@@ -27,7 +28,7 @@ abstract public class AbstractMessageValidator {
 	
 	public AbstractMessageValidator(ValidationContext vc, ErrorRecorderBuilder erBuilder) {
 		this.vc = vc;
-		this.er = erBuilder.buildNewErrorRecorder();
+		this.er = new AssertionGroup();
 	}
 	
 	public IAssertionGroup getErrorRecorder() {
