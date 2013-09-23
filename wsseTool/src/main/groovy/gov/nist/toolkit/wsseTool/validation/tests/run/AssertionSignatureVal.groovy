@@ -1,7 +1,9 @@
-package gov.nist.toolkit.wsseTool.validation
+package gov.nist.toolkit.wsseTool.validation.tests.run
 
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
 import gov.nist.toolkit.wsseTool.validation.engine.annotations.Validation
+import gov.nist.toolkit.wsseTool.validation.tests.BaseVal;
+import gov.nist.toolkit.wsseTool.validation.tests.CommonVal;
 
 import org.junit.After
 import org.junit.Before

@@ -1,16 +1,15 @@
 package gov.nist.toolkit.wsseTool.validation;
 
 import static org.junit.Assert.*
-import gov.nist.toolkit.wsseTool.BaseTest;
-import gov.nist.toolkit.wsseTool.time.TimeUtil;
-import gov.nist.toolkit.wsseTool.validation.CommonVal
+import gov.nist.toolkit.wsseTool.BaseTest
+import gov.nist.toolkit.wsseTool.time.TimeUtil
+import gov.nist.toolkit.wsseTool.validation.tests.CommonVal
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-import org.joda.time.*;
-import org.joda.time.format.*;
-
+import org.joda.time.*
+import org.joda.time.format.*
 import org.junit.Test
 
 class ValidationHelperMethodsTest extends BaseTest  {
@@ -26,7 +25,7 @@ class ValidationHelperMethodsTest extends BaseTest  {
 	@Test void test1026positive(){
 		String id = "aasdas12" //standard alphanumeric
 		String id2 = "_12aasdas" //common escape character
-		String id3 = "Žaasdas" //special character
+		String id3 = "ï¿½aasdas" //special character
 		
 		// '^\\D*$' means should start with a non digit!		
 		Pattern pattern = Pattern.compile('^\\D', Pattern.UNICODE_CASE);

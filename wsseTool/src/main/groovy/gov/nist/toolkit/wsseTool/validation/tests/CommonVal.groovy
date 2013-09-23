@@ -1,17 +1,15 @@
-package gov.nist.toolkit.wsseTool.validation
+package gov.nist.toolkit.wsseTool.validation.tests
 
-import gov.nist.toolkit.wsseTool.validation.engine.annotations.Validation;
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
+
+import java.util.regex.Pattern
+
+import javax.naming.InvalidNameException
+import javax.naming.ldap.LdapName
 
 import org.apache.commons.validator.routines.EmailValidator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-
-import java.util.regex.Pattern
-import java.util.regex.Matcher
-import javax.naming.ldap.LdapName
-import javax.naming.InvalidNameException
 
 
 class CommonVal {

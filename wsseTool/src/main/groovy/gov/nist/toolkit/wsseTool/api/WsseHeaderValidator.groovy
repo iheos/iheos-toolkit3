@@ -1,28 +1,31 @@
 package gov.nist.toolkit.wsseTool.api
 
-import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess
 import gov.nist.toolkit.wsseTool.api.config.Context
 import gov.nist.toolkit.wsseTool.api.config.ContextFactory
-import gov.nist.toolkit.wsseTool.api.config.ValConfig;
+import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess
+import gov.nist.toolkit.wsseTool.api.config.ValConfig
 import gov.nist.toolkit.wsseTool.api.exceptions.GenerationException
 import gov.nist.toolkit.wsseTool.api.exceptions.ValidationException
+import gov.nist.toolkit.wsseTool.parsing.Message
+import gov.nist.toolkit.wsseTool.parsing.MessageFactory
+import gov.nist.toolkit.wsseTool.parsing.groovyXML.WSSEHeaderParser
+import gov.nist.toolkit.wsseTool.validation.ATestSuite;
+import gov.nist.toolkit.wsseTool.validation.engine.MyRunnerBuilder
+import gov.nist.toolkit.wsseTool.validation.engine.MySuite
 import gov.nist.toolkit.wsseTool.validation.engine.annotations.Validation
-import gov.nist.toolkit.wsseTool.parsing.Message;
-import gov.nist.toolkit.wsseTool.parsing.MessageParser
-import gov.nist.toolkit.wsseTool.util.MyXmlUtils
-import gov.nist.toolkit.wsseTool.validation.AssertionSignatureVal
-import gov.nist.toolkit.wsseTool.validation.AssertionVal
-import gov.nist.toolkit.wsseTool.validation.AttributeStatementVal
-import gov.nist.toolkit.wsseTool.validation.AuthnStatementVal
-import gov.nist.toolkit.wsseTool.validation.AuthzDecisionStatementVal
-import gov.nist.toolkit.wsseTool.validation.ParsingVal
-import gov.nist.toolkit.wsseTool.validation.SignatureVerificationVal
-import gov.nist.toolkit.wsseTool.validation.TimestampVal
 
 import java.lang.reflect.Method
 import java.security.KeyStoreException
 
+import org.junit.*
+import org.junit.runner.Description
 import org.junit.runner.JUnitCore
+import org.junit.runner.Request
+import org.junit.runner.Result
+import org.junit.runner.Runner
+import org.junit.runner.notification.Failure
+import org.junit.runner.notification.RunListener
+import org.junit.runners.model.RunnerBuilder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
@@ -39,8 +42,6 @@ public class WsseHeaderValidator {
 
 	private static final Logger log = LoggerFactory.getLogger(WsseHeaderValidator.class)
 
-	private int testCount = 0
-
 	public static void main(String[] args) throws GenerationException, KeyStoreException {
 		String store = "src/test/resources/keystore/keystore"
 		String sPass = "changeit"
@@ -55,16 +56,6 @@ public class WsseHeaderValidator {
 
 	public WsseHeaderValidator(){
 	}
-	
-	public void validateWithJUnitRunner(Element wsseHeader, Context context) throws ValidationException {
-		ValConfig config = new ValConfig("2.0")
-		Message _context = parseInput(wsseHeader, config, context)
-		JUnitCore facade = new JUnitCore();
-		facade.addListener(new SimpleListener());
-		ParsingValJUnit.prepare(_context);
-		facade.run(ParsingValJUnit.class);
-		facade.run(ParsingValJUnit.class);
-	}
 
 	public void validate(Element wsseHeader, Context context) throws ValidationException {
 		ValConfig config = new ValConfig("2.0")
@@ -72,107 +63,72 @@ public class WsseHeaderValidator {
 	}
 
 	public void validate(Element wsseHeader, ValConfig config, Context context) throws ValidationException {
-
-		Message _context = parseInput(wsseHeader, config, context)
-
-		//run validations by category
-
-		try{
-			ParsingVal pVal = new ParsingVal(_context)
-			runValidation(pVal,config)
-
-			SignatureVerificationVal svVal = new SignatureVerificationVal(_context)
-
-			runValidation(svVal,config)
-
-			AssertionVal aVal = new AssertionVal(_context)
-			runValidation(aVal,config)
-
-			TimestampVal tVal = new TimestampVal(_context)
-			runValidation(tVal,config)
-
-			AssertionSignatureVal asVal = new AssertionSignatureVal(_context)
-			runValidation(asVal, config)
-
-			AuthnStatementVal authnVal = new AuthnStatementVal(_context)
-			runValidation(authnVal, config)
-
-			AuthzDecisionStatementVal authzVal = new AuthzDecisionStatementVal(_context)
-			runValidation(authzVal, config)
-
-			AttributeStatementVal attrsVal = new AttributeStatementVal(_context)
-			runValidation(attrsVal, config)
-
-		}
-		catch(Exception e){
-			throw new ValidationException("an error occured during validation.", e)
-		}
-		finally{
-			log.info("Total tests run : " + testCount)
-		}
-	}
-
-	public Message parseInput(Element wsseHeader, ValConfig config, Context context){
-		log.info("\n =============================" +
-				"\n validation of the wsse header" +
-				"\n =============================")
-		String header = MyXmlUtils.DomToString(wsseHeader)
-		log.debug("header to validate : {}", header)
-
-		Message _context = validateContext(context)
-
-		testCount = 0
+		//create the message representation.
+		Message message = MessageFactory.getMessage(wsseHeader,context);
+		//parse the header.
+		WSSEHeaderParser pVal = new WSSEHeaderParser(message).parse();
 
 		try{
-			//add dom, gpath and opensaml representation to the context
-			_context.setDomHeader(wsseHeader)
-			_context.setGroovyHeader(MessageParser.parseToGPath(wsseHeader))
-			_context.setOpensamlHeader(MessageParser.parseToOpenSaml(wsseHeader))
-		}
-		catch(Exception e){
-			throw new ValidationException("an error occured during validation.", e)
-		}
+			
+			RunnerBuilder builder = new MyRunnerBuilder(message);
+			Runner runner = new MySuite(ATestSuite.class, builder);
+			Request request = Request.runner(runner)
+			JUnitCore facade = new JUnitCore()
+			TestsListener listener1 = new TestsListener()
 
-		return _context
-	}
+			facade.addListener(listener1)
+			Result result = facade.run(request)
+			long time = result.getRunTime()
+			int runs = result.getRunCount()
+			int fails = result.getFailureCount()
+			List<Failure> failures = result.getFailures()
 
-	private Message validateContext(Context context){
+			System.out.println(runs + " tests runs in " + time + " milliseconds , "
+					+ fails + " have failed, " + result.getIgnoreCount()
+					+ " ignored")
 
-		Message _context = null
-
-		try{
-			if(context == null) throw new ValidationException("No context found.")
-			_context = (Message) context
-			if(context.getParams().get("homeCommunityId") == null){ log.warn("no homeCommunityId found in context. Some validations will not be performed.")}
-			if(context.getParams().get("To") == null){ log.warn("no ws-addressing \"To\" info found in context. Some validations will not be performed.")}
-		}
-		catch(Exception e) {
-			throw new ValidationException("problem occured while trying to understand context. Validation must terminate.", e)
-		}
-
-		return _context
-	}
-
-	private runValidation(Object valInstance, ValConfig config){
-		Method[] methods = valInstance.getClass().getMethods()
-		for (Method method : methods) {
-			Validation annos = method.getAnnotation(Validation.class)
-			if (annos != null) {
-				try {
-					String status = getStatus(annos)
-					log.info(" {} - {} run validation with -id : {}{} -name : {} \n requirements checked are: {}", getCategory(annos), status, annos.prefixId(), annos.id() , method.getName(), annos.rtm())
-					method.invoke(valInstance)
-					testCount ++
-				} catch (Exception e) {
-					log.debug(e.printStackTrace())
-				}
+			System.out.println("\n Names of tests run:")
+			for (String s : listener1.testsDescriptions) {
+				System.out.println(s)
 			}
+
+			System.out.println("\n Failures recorded:")
+			for (Failure f : failures) {
+				System.out.println(f.getTestHeader())
+				System.out.println(f.getMessage())
+				System.out
+						.println("from spec: "
+						+ f.getDescription()
+						.getAnnotation(Validation.class).spec())
+			}
+
+
+		}
+		catch(Exception e){
+			throw new ValidationException("an error occured during validation.", e)
 		}
 	}
-
-	private String getCategory(Validation annos){
-		return annos.category().toUpperCase()
-	}
+	
+	private class TestsListener extends RunListener {
+		
+				public List<String> testsDescriptions = new ArrayList<String>();
+		
+				@Override
+				public void testRunStarted(Description description) throws Exception {
+					System.out.println("listener says : tests started");
+				}
+		
+				@Override
+				public void testRunFinished(Result result) throws Exception {
+					System.out.println("listener says : tests stopped");
+				}
+		
+				@Override
+				public void testStarted(Description description) throws Exception {
+					testsDescriptions.add(description.getDisplayName());
+				}
+		
+			}
 
 
 	private String getStatus(Validation annos){

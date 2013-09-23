@@ -1,4 +1,4 @@
-package gov.nist.toolkit.wsseTool.validation;
+package gov.nist.toolkit.wsseTool.validation.tests;
 
 import gov.nist.toolkit.wsseTool.parsing.Message
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader

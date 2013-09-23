@@ -1,4 +1,4 @@
-package gov.nist.toolkit.wsseTool.validation;
+package gov.nist.toolkit.wsseTool.validation.tests;
 
 public class ValDescriptor {
 

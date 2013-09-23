@@ -1,10 +1,13 @@
-package gov.nist.toolkit.wsseTool.validation
+package gov.nist.toolkit.wsseTool.validation.tests.run
 
 import gov.nist.toolkit.wsseTool.api.config.ValConfig;
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
 import gov.nist.toolkit.wsseTool.time.TimeUtil
 import gov.nist.toolkit.wsseTool.validation.data.IssuerFormat
 import gov.nist.toolkit.wsseTool.validation.engine.annotations.*
+import gov.nist.toolkit.wsseTool.validation.tests.BaseVal;
+import gov.nist.toolkit.wsseTool.validation.tests.CommonVal;
+import gov.nist.toolkit.wsseTool.validation.tests.ValDescriptor;
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern

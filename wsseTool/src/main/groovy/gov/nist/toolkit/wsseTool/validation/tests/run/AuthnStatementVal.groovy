@@ -1,4 +1,4 @@
-package gov.nist.toolkit.wsseTool.validation
+package gov.nist.toolkit.wsseTool.validation.tests.run
 
 
 import gov.nist.toolkit.wsseTool.api.*
@@ -7,6 +7,7 @@ import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
 import gov.nist.toolkit.wsseTool.time.TimeUtil
 import gov.nist.toolkit.wsseTool.validation.data.*
 import gov.nist.toolkit.wsseTool.validation.engine.annotations.Validation
+import gov.nist.toolkit.wsseTool.validation.tests.BaseVal;
 import groovy.util.slurpersupport.GPathResult
 
 import org.apache.commons.validator.routines.DomainValidator

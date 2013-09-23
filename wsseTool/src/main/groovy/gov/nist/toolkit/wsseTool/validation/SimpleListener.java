@@ -1,4 +1,4 @@
-package gov.nist.toolkit.wsseTool.api;
+package gov.nist.toolkit.wsseTool.validation;
 
 import org.junit.runner.Description;
 import org.junit.runner.Result;
