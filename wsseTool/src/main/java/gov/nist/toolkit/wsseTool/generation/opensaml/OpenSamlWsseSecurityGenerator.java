@@ -1,7 +1,7 @@
 package gov.nist.toolkit.wsseTool.generation.opensaml;
 
 import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContext;
+import gov.nist.toolkit.wsseTool.api.config.Context;
 import gov.nist.toolkit.wsseTool.api.exceptions.GenerationException;
 import gov.nist.toolkit.wsseTool.namespace.dom.NhwinNamespaceContextFactory;
 import gov.nist.toolkit.wsseTool.parsing.opensaml.OpenSamlSecurityHeader;
@@ -47,9 +47,9 @@ public class OpenSamlWsseSecurityGenerator {
 	private static NamespaceContext namespaces = NhwinNamespaceContextFactory
 			.getDefaultContext();
 
-	private SecurityContext context;
+	private Context context;
 
-	public Document generateWsseHeader(SecurityContext context)
+	public Document generateWsseHeader(Context context)
 			throws GenerationException {
 
 		Document securityHeader; // the DOM document we build

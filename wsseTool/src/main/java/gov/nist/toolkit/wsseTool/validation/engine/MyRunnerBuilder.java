@@ -1,4 +1,4 @@
-package gov.nist.toolkit.wsseTool.engine;
+package gov.nist.toolkit.wsseTool.validation.engine;
 
 import org.junit.runner.Runner;
 import org.junit.runners.model.RunnerBuilder;

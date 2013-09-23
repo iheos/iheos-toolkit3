@@ -1,27 +1,12 @@
 package gov.nist.toolkit.wsseTool.validation
 
-import groovy.util.slurpersupport.GPathResult
-import java.lang.reflect.Method
+import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
+import gov.nist.toolkit.wsseTool.validation.engine.annotations.Validation
 
-import gov.nist.toolkit.wsseTool.validation.data.IssuerFormat
-import gov.nist.toolkit.wsseTool.context.SecurityContextImpl;
-import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
-import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlFacade;
-import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader;
-import gov.nist.toolkit.wsseTool.parsing.opensaml.OpenSamlSecurityHeader;
-import gov.nist.toolkit.wsseTool.signature.api.Verifier;
-import gov.nist.toolkit.wsseTool.time.TimeUtil;
-
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
-import org.joda.time.DateTime
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TestName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.rules.TestName
 
 class AssertionSignatureVal extends BaseVal {
 

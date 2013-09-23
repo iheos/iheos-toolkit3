@@ -1,4 +1,4 @@
-package gov.nist.toolkit.wsseTool.engine;
+package gov.nist.toolkit.wsseTool.validation.engine;
 
 import org.junit.runners.Suite;
 import org.junit.runners.model.InitializationError;

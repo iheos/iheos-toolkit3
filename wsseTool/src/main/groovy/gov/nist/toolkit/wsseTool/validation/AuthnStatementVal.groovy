@@ -1,23 +1,22 @@
 package gov.nist.toolkit.wsseTool.validation
 
 
-import gov.nist.toolkit.wsseTool.api.*;
-import gov.nist.toolkit.wsseTool.context.SecurityContextImpl;
-import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
+import gov.nist.toolkit.wsseTool.api.*
+import gov.nist.toolkit.wsseTool.api.config.ValConfig
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
 import gov.nist.toolkit.wsseTool.time.TimeUtil
 import gov.nist.toolkit.wsseTool.validation.data.*
+import gov.nist.toolkit.wsseTool.validation.engine.annotations.Validation
 import groovy.util.slurpersupport.GPathResult
 
 import org.apache.commons.validator.routines.DomainValidator
 import org.apache.commons.validator.routines.InetAddressValidator
 import org.joda.time.DateTime
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TestName;
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.rules.TestName
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class AuthnStatementVal extends BaseVal {
 

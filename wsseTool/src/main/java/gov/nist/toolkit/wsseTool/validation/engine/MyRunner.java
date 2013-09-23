@@ -1,7 +1,7 @@
-package gov.nist.toolkit.wsseTool.engine;
+package gov.nist.toolkit.wsseTool.validation.engine;
 
-import gov.nist.toolkit.wsseTool.engine.annotations.Data;
-import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
+import gov.nist.toolkit.wsseTool.validation.engine.annotations.Data;
+import gov.nist.toolkit.wsseTool.validation.engine.annotations.Validation;
 
 import java.lang.reflect.Field;
 import java.util.List;

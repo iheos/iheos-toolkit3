@@ -1,34 +1,19 @@
 package gov.nist.toolkit.wsseTool.validation
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.w3c.dom.Document
-import org.w3c.dom.Element
-
-import gov.nist.toolkit.wsseTool.util.MyXmlUtils
-import groovy.util.slurpersupport.GPathResult
-import groovy.util.slurpersupport.NodeChild
-
-import gov.nist.toolkit.wsseTool.context.SecurityContextImpl
-import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
-import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlFacade
-import gov.nist.toolkit.wsseTool.namespace.dom.NhwinNamespaceContextFactory
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
-import javax.xml.namespace.NamespaceContext
+import gov.nist.toolkit.wsseTool.validation.engine.annotations.Validation
+import groovy.util.slurpersupport.GPathResult
+
+import org.slf4j.Logger
 
 
 public class ParsingVal extends BaseVal {
 
 	@Validation(id="1019", rtm=["60", "175", "50", "55"])
 	public void wsseStructure() {
-		header.map.timestamp = header.map.wsse.Timestamp[0]; 
-		header.map.assertion = header.map.wsse.Assertion[0]
-		header.map.t_signature = header.map.wsse.Signature[0]; 
-
 		if(header.map.timestamp == null) log.error("security header must have a timestamp")
 		if(header.map.assertion == null) log.error("assertion must have an assertion")
-		if(header.map.t_signature == null) log.error("assertion must have a signature")
-		
+		if(header.map.t_signature == null) log.error("assertion must have a signature")	
 	}
 
 	@Validation(id="1024", rtm=["45","48","60","157","165"])
@@ -49,16 +34,6 @@ public class ParsingVal extends BaseVal {
 		if(attributeStatements.size() != 1) log.error("assertion must have a unique attribute statement but found {}",attributeStatements.size())
 		if(authnStatements.size() != 1) log.error("assertion must have a unique authorization statement but found {}",authnStatements.size())
 		if(authzDecisionStatements.size() > 1) log.error("assertion must have a unique authorization decision statement but found {}", authnStatements.size())
-
-		//store in the symbol table
-		header.map.issuer= issuers[0]
-		header.map.a_signature = a_signatures[0]
-		header.map.subject = subjects[0]
-		header.map.attributeStatement = attributeStatements[0]
-		header.map.authnStatement = authnStatements[0]
-		header.map.authzDecisionStatements = authzDecisionStatements //TODO fix only one possible
-		header.map.conditions = conditions
-		header.map.advices = advices
 
 		log.info("check required assertion elements ordering")
 		GPathResult children = header.map.assertion.children()
@@ -81,10 +56,6 @@ public class ParsingVal extends BaseVal {
 		if(as_signedInfo.size() != 1) log.error("assertion signature must have a unique signedInfo but found {}",as_signedInfo.size())
 		if(as_signatureValue.size() != 1) log.error("assertion signature must have a unique signatureValue but found {}",as_signatureValue.size())
 		if(as_keyInfo.size() != 1) log.error("assertion signature must have a unique keyInfo but found {}",as_keyInfo.size())
-
-		header.map.as_signedInfo = as_signedInfo[0]
-		header.map.as_signatureValue = as_signatureValue[0]
-		header.map.as_keyInfo = as_keyInfo[0]
 
 		log.info("check assertion elements ordering")
 		GPathResult children = header.map.a_signature.children()

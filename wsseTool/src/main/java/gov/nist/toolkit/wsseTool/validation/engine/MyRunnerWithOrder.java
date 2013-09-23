@@ -1,6 +1,6 @@
-package gov.nist.toolkit.wsseTool.engine;
+package gov.nist.toolkit.wsseTool.validation.engine;
 
-import gov.nist.toolkit.wsseTool.engine.annotations.Order;
+import gov.nist.toolkit.wsseTool.validation.engine.annotations.Order;
 
 import java.util.ArrayList;
 import java.util.Collections;

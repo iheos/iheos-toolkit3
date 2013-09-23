@@ -1,21 +1,17 @@
-package gov.nist.toolkit.wsseTool.context;
+package gov.nist.toolkit.wsseTool.parsing;
 
+import gov.nist.toolkit.wsseTool.api.config.Context;
+import gov.nist.toolkit.wsseTool.api.config.GenContext;
 import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContext;
-import gov.nist.toolkit.wsseTool.engine.TestData;
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader;
 import gov.nist.toolkit.wsseTool.parsing.opensaml.OpenSamlSecurityHeader;
+import gov.nist.toolkit.wsseTool.validation.engine.TestData;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.w3c.dom.Element;
 
-public class SecurityContextImpl implements SecurityContext, TestData {
-
-	protected Map<String,Object> params = new HashMap<String,Object>();
-	
-	protected KeystoreAccess keystore;
+public class Message implements Context, TestData {
 
 	protected GroovyHeader groovyHeader;
 
@@ -23,24 +19,32 @@ public class SecurityContextImpl implements SecurityContext, TestData {
 	
 	protected OpenSamlSecurityHeader opensamlHeader;
 
+	protected Context context;
+
+	public Message(Element domHeader, Context context){
+		this.domHeader = domHeader;
+		this.context = (context != null) ? context : new GenContext();
+	}
+	
+	
 	@Override
 	public Map<String,Object> getParams() {
-		return params;
+		return context.getParams();
 	}
 
 	@Override
 	public KeystoreAccess getKeystore() {
-		return keystore;
+		return context.getKeystore();
 	}
 
 	@Override
 	public void setKeystore(KeystoreAccess keystore) {
-		this.keystore = keystore;
+		context.setKeystore(keystore);
 	}
 
 	@Override
 	public void setParam(String key, Object value) {
-		params.put(key, value);
+		context.setParam(key, value);
 	}
 	
 	public GroovyHeader getGroovyHeader() {

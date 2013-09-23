@@ -1,6 +1,6 @@
 package gov.nist.toolkit.wsseTool.validation
 
-import gov.nist.toolkit.wsseTool.engine.annotations.Validation
+import gov.nist.toolkit.wsseTool.validation.engine.annotations.Validation
 import gov.nist.toolkit.wsseTool.parsing.opensaml.OpenSamlSecurityHeader
 import gov.nist.toolkit.wsseTool.signature.api.Verifier
 

@@ -1,4 +1,4 @@
-package gov.nist.toolkit.wsseTool.engine.annotations;
+package gov.nist.toolkit.wsseTool.validation.engine.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

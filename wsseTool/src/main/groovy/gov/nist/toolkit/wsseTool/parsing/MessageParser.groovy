@@ -13,7 +13,7 @@ import javax.xml.namespace.NamespaceContext
 
 import org.w3c.dom.Element
 
-class Parser {
+class MessageParser {
 
 	public static OpenSamlSecurityHeader parseToOpenSaml(Element element){
 		OpenSamlFacade saml = new OpenSamlFacade()

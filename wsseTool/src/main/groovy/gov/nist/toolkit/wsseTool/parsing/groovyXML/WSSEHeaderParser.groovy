@@ -1,32 +1,14 @@
-package gov.nist.toolkit.wsseTool.validation
+package gov.nist.toolkit.wsseTool.parsing.groovyXML
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.w3c.dom.Document
-import org.w3c.dom.Element
-
-import gov.nist.toolkit.wsseTool.util.MyXmlUtils
-import groovy.util.slurpersupport.GPathResult
-import groovy.util.slurpersupport.NodeChild
-
-import gov.nist.toolkit.wsseTool.context.SecurityContextImpl
-import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
-import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlFacade
-import gov.nist.toolkit.wsseTool.namespace.dom.NhwinNamespaceContextFactory
-import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
-import javax.xml.namespace.NamespaceContext
 
 
-public class Parsing {
+public class WSSEHeaderParser {
 
-	private static final Logger log = LoggerFactory.getLogger(Parsing.class)
+	private static final Logger log = LoggerFactory.getLogger(WSSEHeaderParser.class)
 	
-	private SecurityContextImpl context
-	private GroovyHeader header
-	
-	public Parsing(SecurityContextImpl context){
-		this.context = context
-		this.header = context.groovyHeader
+	public WSSEHeaderParser(){
 	}
 	public void parse(){
 		wsseStructure();

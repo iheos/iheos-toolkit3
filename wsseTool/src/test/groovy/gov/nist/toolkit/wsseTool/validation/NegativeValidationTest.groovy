@@ -4,8 +4,8 @@ import static org.junit.Assert.*
 import gov.nist.toolkit.wsseTool.BaseTest;
 import gov.nist.toolkit.wsseTool.api.WsseHeaderValidator
 import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess
-import gov.nist.toolkit.wsseTool.api.config.SecurityContext
-import gov.nist.toolkit.wsseTool.api.config.SecurityContextFactory
+import gov.nist.toolkit.wsseTool.api.config.Context
+import gov.nist.toolkit.wsseTool.api.config.ContextFactory
 import gov.nist.toolkit.wsseTool.api.exceptions.ValidationException
 import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator
 import gov.nist.toolkit.wsseTool.util.MyXmlUtils
@@ -24,7 +24,7 @@ class NegativeValidationTest extends BaseTest {
 
 	private static final Logger log = LoggerFactory.getLogger(NegativeValidationTest.class);
 
-	SecurityContext context;
+	Context context;
 
 	@Before
 	public void loadKeystore() throws KeyStoreException {
@@ -32,7 +32,7 @@ class NegativeValidationTest extends BaseTest {
 		String sPass = "changeit";
 		String alias = "hit-testing.nist.gov";
 		String kPass = "changeit";
-		context = SecurityContextFactory.getInstance();
+		context = ContextFactory.getInstance();
 		context.setKeystore(new KeystoreAccess(store,sPass,alias,kPass));
 		context.setParam('homeCommunityId', "1.1");
 		context.setParam('To', "http://endpoint1.hostname1.nist.gov");
@@ -60,7 +60,7 @@ class NegativeValidationTest extends BaseTest {
 	@Test void gracefullyWarnForProblemInContext(){
 		Document xml = new OpenSamlWsseSecurityGenerator().generateWsseHeader(context);
 		WsseHeaderValidator val = new WsseHeaderValidator();
-		SecurityContext context = SecurityContextFactory.getInstance(); //no info inside
+		Context context = ContextFactory.getInstance(); //no info inside
 		val.validate(xml.getDocumentElement(),context);
 		
 	}

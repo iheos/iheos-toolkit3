@@ -1,9 +1,9 @@
 package gov.nist.toolkit.wsseTool.validation;
 
-import gov.nist.toolkit.wsseTool.context.SecurityContextImpl
-import gov.nist.toolkit.wsseTool.engine.TestData
-import gov.nist.toolkit.wsseTool.engine.annotations.Data
+import gov.nist.toolkit.wsseTool.parsing.Message
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
+import gov.nist.toolkit.wsseTool.validation.engine.TestData
+import gov.nist.toolkit.wsseTool.validation.engine.annotations.Data
 
 import org.junit.Before
 import org.slf4j.Logger
@@ -14,7 +14,7 @@ public class BaseVal {
 	@Data
 	public TestData data;
 
-	SecurityContextImpl context;
+	Message context;
 	GroovyHeader header;
 	
 	/*
@@ -22,7 +22,7 @@ public class BaseVal {
 	 */
 	@Before
 	public final void attributesSetup() {
-			context = (SecurityContextImpl)data;
+			context = (Message)data;
 			header = context.groovyHeader
 	}
 	

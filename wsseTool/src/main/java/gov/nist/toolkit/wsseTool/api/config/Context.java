@@ -3,7 +3,7 @@ package gov.nist.toolkit.wsseTool.api.config;
 
 import java.util.Map;
 
-public interface SecurityContext {
+public interface Context {
 
 	public void setParam(String key, Object value);
 

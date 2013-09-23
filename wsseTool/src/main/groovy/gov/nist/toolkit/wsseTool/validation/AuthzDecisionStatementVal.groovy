@@ -1,33 +1,21 @@
 package gov.nist.toolkit.wsseTool.validation
 
-import gov.nist.toolkit.wsseTool.api.ValConfig
-import groovy.util.slurpersupport.GPathResult
-import groovy.xml.StreamingMarkupBuilder
-import java.lang.reflect.Method
-
-import gov.nist.toolkit.wsseTool.validation.data.IssuerFormat
-import gov.nist.toolkit.wsseTool.context.SecurityContextImpl;
-import gov.nist.toolkit.wsseTool.engine.annotations.Validation;
+import gov.nist.toolkit.wsseTool.api.config.ValConfig;
 import gov.nist.toolkit.wsseTool.parsing.groovyXML.GroovyHeader
 import gov.nist.toolkit.wsseTool.time.TimeUtil
-
-import java.util.regex.Pattern
-import java.util.regex.Matcher
-
-import org.apache.commons.validator.routines.EmailValidator
-import org.joda.time.DateTime
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TestName;
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-import javax.xml.XMLConstants
-import javax.xml.transform.stream.StreamSource
-import javax.xml.validation.SchemaFactory
-
 import gov.nist.toolkit.wsseTool.validation.data.*
+import gov.nist.toolkit.wsseTool.validation.engine.annotations.Validation
+import groovy.util.slurpersupport.GPathResult
+
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+import org.joda.time.DateTime
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.rules.TestName
+import org.slf4j.Logger
 
 class AuthzDecisionStatementVal extends BaseVal {
 	

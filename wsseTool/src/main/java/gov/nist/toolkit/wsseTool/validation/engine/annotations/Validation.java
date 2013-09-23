@@ -1,6 +1,6 @@
-package gov.nist.toolkit.wsseTool.engine.annotations;
+package gov.nist.toolkit.wsseTool.validation.engine.annotations;
 
-import gov.nist.toolkit.wsseTool.api.ValConfig;
+import gov.nist.toolkit.wsseTool.api.config.ValConfig;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

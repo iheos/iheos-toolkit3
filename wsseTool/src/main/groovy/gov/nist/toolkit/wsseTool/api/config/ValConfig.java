@@ -1,4 +1,4 @@
-package gov.nist.toolkit.wsseTool.api;
+package gov.nist.toolkit.wsseTool.api.config;
 
 public class ValConfig {
 	

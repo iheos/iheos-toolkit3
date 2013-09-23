@@ -4,8 +4,8 @@ import static org.junit.Assert.*
 import gov.nist.toolkit.wsseTool.BaseTest;
 import gov.nist.toolkit.wsseTool.api.WsseHeaderValidator
 import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContext;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContextFactory;
+import gov.nist.toolkit.wsseTool.api.config.Context;
+import gov.nist.toolkit.wsseTool.api.config.ContextFactory;
 import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
 import gov.nist.toolkit.wsseTool.util.MyXmlUtils
 
@@ -23,7 +23,7 @@ class ValidationTest extends BaseTest {
 
 	private static final Logger log = LoggerFactory.getLogger(ValidationTest.class);
 
-	SecurityContext context;
+	Context context;
 
 	@Before
 	public void loadKeystore() throws KeyStoreException {
@@ -31,7 +31,7 @@ class ValidationTest extends BaseTest {
 		String sPass = "changeit";
 		String alias = "hit-testing.nist.gov";
 		String kPass = "changeit";
-		context = SecurityContextFactory.getInstance();
+		context = ContextFactory.getInstance();
 		context.setKeystore(new KeystoreAccess(store,sPass,alias,kPass));
 		context.getParams().put("patientId", "D123401^^^&1.1&ISO");
 		context.setParam('homeCommunityId', "urn:oid:1.1");

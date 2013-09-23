@@ -1,13 +1,14 @@
 package gov.nist.toolkit.wsseTool.api
 
 import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess
-import gov.nist.toolkit.wsseTool.api.config.SecurityContext
-import gov.nist.toolkit.wsseTool.api.config.SecurityContextFactory
+import gov.nist.toolkit.wsseTool.api.config.Context
+import gov.nist.toolkit.wsseTool.api.config.ContextFactory
+import gov.nist.toolkit.wsseTool.api.config.ValConfig;
 import gov.nist.toolkit.wsseTool.api.exceptions.GenerationException
 import gov.nist.toolkit.wsseTool.api.exceptions.ValidationException
-import gov.nist.toolkit.wsseTool.context.SecurityContextImpl
-import gov.nist.toolkit.wsseTool.engine.annotations.Validation
-import gov.nist.toolkit.wsseTool.parsing.Parser
+import gov.nist.toolkit.wsseTool.validation.engine.annotations.Validation
+import gov.nist.toolkit.wsseTool.parsing.Message;
+import gov.nist.toolkit.wsseTool.parsing.MessageParser
 import gov.nist.toolkit.wsseTool.util.MyXmlUtils
 import gov.nist.toolkit.wsseTool.validation.AssertionSignatureVal
 import gov.nist.toolkit.wsseTool.validation.AssertionVal
@@ -45,7 +46,7 @@ public class WsseHeaderValidator {
 		String sPass = "changeit"
 		String kPass = "changeit"
 		String alias = "hit-testing.nist.gov"
-		SecurityContext context = SecurityContextFactory.getInstance()
+		Context context = ContextFactory.getInstance()
 		context.setKeystore(new KeystoreAccess(store,sPass,alias,kPass))
 		context.getParams().put("patientId", "D123401^^^&1.1&ISO")
 		Document doc = new WsseHeaderGenerator().generateWsseHeader(context)
@@ -55,9 +56,9 @@ public class WsseHeaderValidator {
 	public WsseHeaderValidator(){
 	}
 	
-	public void validateWithJUnitRunner(Element wsseHeader, SecurityContext context) throws ValidationException {
+	public void validateWithJUnitRunner(Element wsseHeader, Context context) throws ValidationException {
 		ValConfig config = new ValConfig("2.0")
-		SecurityContextImpl _context = parseInput(wsseHeader, config, context)
+		Message _context = parseInput(wsseHeader, config, context)
 		JUnitCore facade = new JUnitCore();
 		facade.addListener(new SimpleListener());
 		ParsingValJUnit.prepare(_context);
@@ -65,14 +66,14 @@ public class WsseHeaderValidator {
 		facade.run(ParsingValJUnit.class);
 	}
 
-	public void validate(Element wsseHeader, SecurityContext context) throws ValidationException {
+	public void validate(Element wsseHeader, Context context) throws ValidationException {
 		ValConfig config = new ValConfig("2.0")
 		validate(wsseHeader, config, context)
 	}
 
-	public void validate(Element wsseHeader, ValConfig config, SecurityContext context) throws ValidationException {
+	public void validate(Element wsseHeader, ValConfig config, Context context) throws ValidationException {
 
-		SecurityContextImpl _context = parseInput(wsseHeader, config, context)
+		Message _context = parseInput(wsseHeader, config, context)
 
 		//run validations by category
 
@@ -111,22 +112,22 @@ public class WsseHeaderValidator {
 		}
 	}
 
-	public SecurityContextImpl parseInput(Element wsseHeader, ValConfig config, SecurityContext context){
+	public Message parseInput(Element wsseHeader, ValConfig config, Context context){
 		log.info("\n =============================" +
 				"\n validation of the wsse header" +
 				"\n =============================")
 		String header = MyXmlUtils.DomToString(wsseHeader)
 		log.debug("header to validate : {}", header)
 
-		SecurityContextImpl _context = validateContext(context)
+		Message _context = validateContext(context)
 
 		testCount = 0
 
 		try{
 			//add dom, gpath and opensaml representation to the context
 			_context.setDomHeader(wsseHeader)
-			_context.setGroovyHeader(Parser.parseToGPath(wsseHeader))
-			_context.setOpensamlHeader(Parser.parseToOpenSaml(wsseHeader))
+			_context.setGroovyHeader(MessageParser.parseToGPath(wsseHeader))
+			_context.setOpensamlHeader(MessageParser.parseToOpenSaml(wsseHeader))
 		}
 		catch(Exception e){
 			throw new ValidationException("an error occured during validation.", e)
@@ -135,13 +136,13 @@ public class WsseHeaderValidator {
 		return _context
 	}
 
-	private SecurityContextImpl validateContext(SecurityContext context){
+	private Message validateContext(Context context){
 
-		SecurityContextImpl _context = null
+		Message _context = null
 
 		try{
 			if(context == null) throw new ValidationException("No context found.")
-			_context = (SecurityContextImpl) context
+			_context = (Message) context
 			if(context.getParams().get("homeCommunityId") == null){ log.warn("no homeCommunityId found in context. Some validations will not be performed.")}
 			if(context.getParams().get("To") == null){ log.warn("no ws-addressing \"To\" info found in context. Some validations will not be performed.")}
 		}

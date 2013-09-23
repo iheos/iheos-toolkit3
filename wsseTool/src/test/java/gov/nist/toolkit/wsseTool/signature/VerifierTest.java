@@ -5,8 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import gov.nist.toolkit.wsseTool.BaseTest;
 import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContext;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContextFactory;
+import gov.nist.toolkit.wsseTool.api.config.Context;
+import gov.nist.toolkit.wsseTool.api.config.ContextFactory;
 import gov.nist.toolkit.wsseTool.api.exceptions.GenerationException;
 import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlFacade;
 import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
 
 public class VerifierTest extends BaseTest {
 	
-		SecurityContext context;
+		Context context;
 		
 		private static Logger log = LoggerFactory.getLogger("");
 
@@ -41,7 +41,7 @@ public class VerifierTest extends BaseTest {
 			String sPass = "changeit";
 			String alias = "hit-testing.nist.gov";
 			String kPass = "changeit";
-			context = SecurityContextFactory.getInstance();
+			context = ContextFactory.getInstance();
 			context.setKeystore(new KeystoreAccess(store,sPass,alias,kPass));
 			context.getParams().put("patientId", "D123401^^^&1.1&ISO");
 		}
