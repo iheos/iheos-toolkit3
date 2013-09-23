@@ -1,15 +1,12 @@
 package gov.nist.hit.ds.wsseTool.api;
 
-import gov.nist.hit.ds.wsseTool.api.WsseHeaderGenerator;
 import gov.nist.hit.ds.wsseTool.api.config.Context;
 import gov.nist.hit.ds.wsseTool.api.config.ContextFactory;
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
 import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
 import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
-import gov.nist.hit.ds.wsseTool.util.LogOutputStream;
 import gov.nist.hit.ds.wsseTool.util.MyXmlUtils;
 
-import java.io.StringWriter;
 import java.security.KeyStoreException;
 
 import org.slf4j.Logger;

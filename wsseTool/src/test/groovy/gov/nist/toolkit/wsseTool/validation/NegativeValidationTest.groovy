@@ -1,12 +1,12 @@
 package gov.nist.toolkit.wsseTool.validation;
 
 import static org.junit.Assert.*
-import gov.nist.hit.ds.wsseTool.api.WsseHeaderValidator
 import gov.nist.hit.ds.wsseTool.api.config.Context
 import gov.nist.hit.ds.wsseTool.api.config.ContextFactory
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess
 import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator
 import gov.nist.hit.ds.wsseTool.util.MyXmlUtils
+import gov.nist.hit.ds.wsseTool.validation.WsseHeaderValidator;
 import gov.nist.toolkit.wsseTool.BaseTest
 
 import java.security.KeyStoreException

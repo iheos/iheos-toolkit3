@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.wsseTool.api
+package gov.nist.hit.ds.wsseTool.validation
 
 import gov.nist.hit.ds.wsseTool.api.config.Context
 import gov.nist.hit.ds.wsseTool.api.config.ContextFactory
@@ -9,10 +9,11 @@ import gov.nist.hit.ds.wsseTool.api.exceptions.ValidationException
 import gov.nist.hit.ds.wsseTool.parsing.Message
 import gov.nist.hit.ds.wsseTool.parsing.MessageFactory
 import gov.nist.hit.ds.wsseTool.parsing.groovyXML.WSSEHeaderParser
-import gov.nist.hit.ds.wsseTool.validation.ATestSuite
 import gov.nist.hit.ds.wsseTool.validation.engine.MyRunnerBuilder
 import gov.nist.hit.ds.wsseTool.validation.engine.MySuite
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation
+import gov.nist.hit.ds.wsseTool.api.Validator
+import gov.nist.hit.ds.wsseTool.api.WsseHeaderGenerator;
 
 import java.security.KeyStoreException
 
@@ -31,13 +32,15 @@ import org.w3c.dom.Document
 import org.w3c.dom.Element
 
 
+
+
 /**
  * API of the validation module.
  *
  * @author gerardin
  *
  */
-public class WsseHeaderValidator {
+public class WsseHeaderValidator implements Validator {
 
 	private static final Logger log = LoggerFactory.getLogger(WsseHeaderValidator.class)
 
