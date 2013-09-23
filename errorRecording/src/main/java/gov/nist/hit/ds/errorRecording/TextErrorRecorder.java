@@ -9,7 +9,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextErrorRecorder implements ErrorRecorder {
+public class TextErrorRecorder implements IAssertionGroup {
 
 	class ErrorInfo {
 		int indent = 0;
@@ -201,7 +201,7 @@ public class TextErrorRecorder implements ErrorRecorder {
 		emessage + "\n" + new String(baos.toByteArray()));
 	}
 
-	public ErrorRecorder buildNewErrorRecorder() {
+	public IAssertionGroup buildNewErrorRecorder() {
 		return this;
 	}
 
@@ -209,7 +209,7 @@ public class TextErrorRecorder implements ErrorRecorder {
 		return errMsgs.size();
 	}
 
-	public void concat(ErrorRecorder er) {
+	public void concat(IAssertionGroup er) {
 		// TODO Auto-generated method stub
 		
 	}

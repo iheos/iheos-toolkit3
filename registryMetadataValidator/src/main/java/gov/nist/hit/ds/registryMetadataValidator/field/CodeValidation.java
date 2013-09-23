@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.registryMetadataValidator.field;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 
@@ -8,11 +8,11 @@ import gov.nist.hit.ds.xdsException.XdsInternalException;
 //this gets invoked from both Validator.java and directly from Repository.  Should optimize the implementation so that codes.xml
 //gets cached in memory.
 public class CodeValidation extends CodeValidationBase {
-	ErrorRecorder er;
+	IAssertionGroup er;
 	boolean is_submit;
 	boolean xds_b;
 
-	public CodeValidation(Metadata m, boolean is_submit, boolean xds_b, ErrorRecorder er) throws XdsInternalException {
+	public CodeValidation(Metadata m, boolean is_submit, boolean xds_b, IAssertionGroup er) throws XdsInternalException {
 		super(1);
 
 		this.m = m;

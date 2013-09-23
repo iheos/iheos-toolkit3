@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registrySim.store;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.registryMetadata.Metadata;
@@ -18,11 +18,11 @@ import org.apache.log4j.Logger;
 
 public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 	static Logger log = Logger.getLogger(ProcessMetadataForRegister.class);
-	ErrorRecorder er;
+	IAssertionGroup er;
 	MetadataCollection mc;
 	MetadataCollection delta;
 
-	public ProcessMetadataForRegister(ErrorRecorder er, MetadataCollection mc, MetadataCollection delta) {
+	public ProcessMetadataForRegister(IAssertionGroup er, MetadataCollection mc, MetadataCollection delta) {
 		this.er = er;
 		this.mc = mc;
 		this.delta = delta;

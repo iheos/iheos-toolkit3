@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.eventLog.assertion;
 
 public enum AssertionStatus {
-	INFO, SUCCESS, WARNING, ERROR, FAULT;
+	NONE, INFO, SUCCESS, WARNING, ERROR, FAULT;
 	
 	public AssertionStatus getMax(AssertionStatus as) {
 		if (as.ordinal() > ordinal())

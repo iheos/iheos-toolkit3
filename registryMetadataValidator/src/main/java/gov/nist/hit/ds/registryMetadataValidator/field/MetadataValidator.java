@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMetadataValidator.field;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registryMetadataValidator.object.Association;
@@ -29,13 +29,13 @@ public class MetadataValidator {
 		this.rvi = rvi;
 	}
 	
-	public void run(ErrorRecorder er) {
+	public void run(IAssertionGroup er) {
 		runObjectStructureValidation(er);
 		runCodeValidation(er);
 		runSubmissionStructureValidation(er);
 	}
 	
-	public void runCodeValidation(ErrorRecorder er)   {
+	public void runCodeValidation(IAssertionGroup er)   {
 		CodeValidation cv = new CodeValidation(m);
 		try {
 			cv.setValidationContext(vc);
@@ -46,7 +46,7 @@ public class MetadataValidator {
 		cv.run(er);
 	}
 
-	public void runObjectStructureValidation(ErrorRecorder er)   {
+	public void runObjectStructureValidation(IAssertionGroup er)   {
 		
 		if (vc.skipInternalStructure)
 			return;
@@ -115,7 +115,7 @@ public class MetadataValidator {
 		}
 	}
 
-	public void runSubmissionStructureValidation(ErrorRecorder er) {
+	public void runSubmissionStructureValidation(IAssertionGroup er) {
 		new SubmissionStructure(m, rvi).run(er, vc);
 	}
 	

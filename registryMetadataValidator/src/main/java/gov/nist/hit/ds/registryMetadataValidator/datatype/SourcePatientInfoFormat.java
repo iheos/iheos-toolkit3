@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.registryMetadataValidator.datatype;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.registryMetadataValidator.field.ValidatorCommon;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 
@@ -8,7 +8,7 @@ import org.apache.axiom.om.OMElement;
 
 public class SourcePatientInfoFormat extends FormatValidator{
 
-	public SourcePatientInfoFormat(ErrorRecorder er, String context,
+	public SourcePatientInfoFormat(IAssertionGroup er, String context,
 			String resource) {
 		super(er, context, resource);
 	}

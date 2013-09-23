@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.httpParserTest;
 
 import static org.junit.Assert.assertTrue;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.TextErrorRecorder;
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParser;
@@ -38,7 +38,7 @@ public class HttpParserTest {
 			System.arraycopy(hdr, 0, msg, 0, hdr.length);
 			System.arraycopy(body, 0, msg, hdr.length, body.length);
 
-			ErrorRecorder er = new TextErrorRecorder();
+			IAssertionGroup er = new TextErrorRecorder();
 			new HttpParser(msg, er);
 			System.out.println(er.toString());
 		} catch (IOException e) {

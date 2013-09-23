@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.errorRecording.factories;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 
 /**
  * Interface for classes that are factories that build ErrorRecorders
@@ -9,5 +9,5 @@ import gov.nist.hit.ds.errorRecording.ErrorRecorder;
  */
 public interface ErrorRecorderBuilder {
 
-	public ErrorRecorder buildNewErrorRecorder();
+	public IAssertionGroup buildNewErrorRecorder();
 }

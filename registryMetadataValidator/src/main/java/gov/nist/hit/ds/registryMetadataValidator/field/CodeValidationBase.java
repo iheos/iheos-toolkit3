@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMetadataValidator.field;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registryMetadataValidator.object.Classification;
@@ -200,7 +200,7 @@ public class CodeValidationBase {
 		return objectType + "(" + m.getId(ele) + ")";
 	}
 	
-	String getObjectTypeById(ErrorRecorder er, String id) {
+	String getObjectTypeById(IAssertionGroup er, String id) {
 		try {
 			return m.getObjectTypeById(id);
 		} catch (MetadataException e) {
@@ -209,7 +209,7 @@ public class CodeValidationBase {
 		}
 	}
 	
-	OMElement getObjectById(ErrorRecorder er, String id) {
+	OMElement getObjectById(IAssertionGroup er, String id) {
 		try {
 			return m.getObjectById(id);
 		} catch (MetadataException e) {
@@ -218,7 +218,7 @@ public class CodeValidationBase {
 		}
 	}
 	
-	String getSimpleAssocType(ErrorRecorder er, OMElement assoc) {
+	String getSimpleAssocType(IAssertionGroup er, OMElement assoc) {
 		try {
 			return m.getSimpleAssocType(assoc);
 		} catch (MetadataException e) {
@@ -227,11 +227,11 @@ public class CodeValidationBase {
 		}
 	}
 
-	void cannotValidate(ErrorRecorder er, Classification c) {
+	void cannotValidate(IAssertionGroup er, Classification c) {
 		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(c.identifyingString() + ": cannot validate code - error parsing Classification", "ebRIM section 4.3"), this);
 	}
 
-	public void run(ErrorRecorder er) {
+	public void run(IAssertionGroup er) {
 		if (startUpError != null) {
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, startUpError);
 			return;
@@ -281,7 +281,7 @@ public class CodeValidationBase {
 
 	// if classified object is an Association, only some types of Associations can
 	// accept an associationDocumenation classification
-	void validateAssocClassifications(ErrorRecorder er, Classification cl) {
+	void validateAssocClassifications(IAssertionGroup er, Classification cl) {
 
 		String classification_type = cl.getClassificationScheme();
 
@@ -311,7 +311,7 @@ public class CodeValidationBase {
 		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(objectDescription(assoc_ele) + ": Association Type " + assoc_type + " cannot have an associationDocumentation classification", "ITI TF-3: 4.1.6.1"), this);
 	}
 	
-	void validate(ErrorRecorder er, Classification cl) {
+	void validate(IAssertionGroup er, Classification cl) {
 		String classification_scheme = cl.getClassificationScheme();
 
 		if (classification_scheme == null) {

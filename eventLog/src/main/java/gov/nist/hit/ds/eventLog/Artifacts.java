@@ -18,7 +18,7 @@ public class Artifacts {
 	}
 	
 	public void add(String name, String value) throws RepositoryException {
-		logger.debug("Artifact\n" + name + " = " + value);
+		logger.debug("Artifact: " + name + " = " + value);
 		Asset a = AssetHelper.createChildAsset(artifactsAsset, name, "", new SimpleType("simpleType"));
 		a.setOrder(counter++);
 		a.updateContent(value, "text/plain");

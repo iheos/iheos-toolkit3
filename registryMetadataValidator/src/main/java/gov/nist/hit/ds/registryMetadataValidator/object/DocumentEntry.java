@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMetadataValidator.object;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.registryMetadata.Metadata;
@@ -243,7 +243,7 @@ public class DocumentEntry extends AbstractRegistryObject implements TopLevelObj
 		return isClassifiedAs(MetadataSupport.XDSDocumentEntry_limitedMetadata_uuid);
 	}
 
-	public void validate(ErrorRecorder er, ValidationContext vc, Set<String> knownIds) {
+	public void validate(IAssertionGroup er, ValidationContext vc, Set<String> knownIds) {
 		if (vc.skipInternalStructure)
 			return;
 		
@@ -277,7 +277,7 @@ public class DocumentEntry extends AbstractRegistryObject implements TopLevelObj
 	// this takes in two circumstances:
 	//	Slots always required
 	//  Optional Slots required by this transaction
-	public void validateRequiredSlotsPresent(ErrorRecorder er, ValidationContext vc) {
+	public void validateRequiredSlotsPresent(IAssertionGroup er, ValidationContext vc) {
 		// Slots always required
 		
 		if (vc.isXDRMinimal) {
@@ -312,7 +312,7 @@ public class DocumentEntry extends AbstractRegistryObject implements TopLevelObj
 	 * Validate all slots present are legal for DocumentEntry
 	 * @param er
 	 */
-	public void validateSlotsLegal(ErrorRecorder er)  {
+	public void validateSlotsLegal(IAssertionGroup er)  {
 		verifySlotsUnique(er);
 		for (Slot slot : getSlots()) {
 			if ( ! legal_slot_name(slot.getName()))
@@ -327,7 +327,7 @@ public class DocumentEntry extends AbstractRegistryObject implements TopLevelObj
 		return definedSlots.contains(name);
 	}
 
-	public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
+	public void validateSlotsCodedCorrectly(IAssertionGroup er, ValidationContext vc)  {
 
 		//                    name				   multi	format                                                  resource
 		validateSlot(er, 	"creationTime", 	   false, 	new DtmFormat(er, "Slot creationTime",      table415),  table415);
@@ -372,7 +372,7 @@ public class DocumentEntry extends AbstractRegistryObject implements TopLevelObj
 		}
 	}
 
-	public void validateTopAtts(ErrorRecorder er, ValidationContext vc) {
+	public void validateTopAtts(IAssertionGroup er, ValidationContext vc) {
 		if (!MetadataSupport.XDSDocumentEntry_objectType_uuid.equals(objectType))
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": objectType must be " + MetadataSupport.XDSDocumentEntry_objectType_uuid + " (found " + objectType + ")", table415), this);
 

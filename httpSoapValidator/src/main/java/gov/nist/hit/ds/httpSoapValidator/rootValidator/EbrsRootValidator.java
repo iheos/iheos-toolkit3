@@ -1,8 +1,9 @@
 package gov.nist.hit.ds.httpSoapValidator.rootValidator;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapBody;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
@@ -10,7 +11,7 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 
 abstract public class EbrsRootValidator implements SimComponent {
 	String expectedRootName;
-	ErrorRecorder er;
+	IAssertionGroup er;
 	SoapBody soapBody;
 	
 	abstract String getExpectedRootName();
@@ -26,7 +27,7 @@ abstract public class EbrsRootValidator implements SimComponent {
 	}
 
 	@Override
-	public void setErrorRecorder(ErrorRecorder er) {
+	public void setAssertionGroup(AssertionGroup er) {
 		this.er = er;
 	}
 

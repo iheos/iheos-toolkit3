@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.xmlValidator;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
+import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
@@ -13,8 +15,9 @@ import org.apache.axiom.om.OMElement;
 
 public class XmlParser implements SimComponent, XmlMessage {
 	OMElement xml;
-	ErrorRecorder er;
+	AssertionGroup ag;
 	XmlText xmlText;
+	Event event;
 		
 	public XmlMessage getXmlMessage() {
 		return this;
@@ -31,8 +34,8 @@ public class XmlParser implements SimComponent, XmlMessage {
 	}
 
 	@Override
-	public void setErrorRecorder(ErrorRecorder er) {
-		this.er = er;
+	public void setAssertionGroup(AssertionGroup er) {
+		this.ag = er;
 	}
 
 	@Override
@@ -41,13 +44,12 @@ public class XmlParser implements SimComponent, XmlMessage {
 	}
 
 	@Override
-	public void run(MessageValidatorEngine mve) {
-		er.challenge("XML starts with...");
-		er.detail("<" + StringUtil.firstNChars(xmlText.getXml(), 200) + ">");
+	public void run(MessageValidatorEngine mve) throws RepositoryException {
+		event.addArtifact("XML Starts", StringUtil.firstNChars(xmlText.getXml(), 200));
 		try {
 			xml = Parse.parse_xml_string(xmlText.getXml());
 		} catch (Exception e) {
-			er.err(Code.NoCode, e);
+			ag.err(Code.NoCode, e);
 		}
 	}
 
@@ -71,6 +73,11 @@ public class XmlParser implements SimComponent, XmlMessage {
 	public void setDescription(String description) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 }

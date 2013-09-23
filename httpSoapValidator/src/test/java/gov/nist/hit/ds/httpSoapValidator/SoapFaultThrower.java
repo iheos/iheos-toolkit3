@@ -1,16 +1,19 @@
 package gov.nist.hit.ds.httpSoapValidator;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
 public class SoapFaultThrower implements SimComponent {
-	ErrorRecorder er;
+	IAssertionGroup er;
+	Event event;
 	
 	@Override
-	public void setErrorRecorder(ErrorRecorder er) {
+	public void setAssertionGroup(AssertionGroup er) {
 		this.er = er;
 	}
 
@@ -39,6 +42,11 @@ public class SoapFaultThrower implements SimComponent {
 	public void setDescription(String description) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 }

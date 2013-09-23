@@ -59,7 +59,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 
 	void validateWSAction() throws SoapFaultException {
 		if (expectedAction == null) {
-			er.warning(
+			ag.warning(
 					Code.NoCode, 
 					new ErrorContext("WS-Action not validated - no expected value is configured"), 
 					this.getClass().getName());
@@ -67,16 +67,16 @@ public class SoapHeaderValidator extends SimComponentBase {
 		} 
 		if (!expectedAction.equals(soapEnvironment.getRequestAction()))
 			throw new SoapFaultException(
-					er,
+					ag,
 					FaultCode.ActionNotSupported,
 					new ErrorContext("Expected WS-Action >" + expectedAction + "> not equal to WS-Action found in message <" + soapEnvironment.getRequestAction() + ">"));
-		er.detail("WS-Action is <" + soapEnvironment.getRequestAction() + ">");
+		ag.detail("WS-Action is <" + soapEnvironment.getRequestAction() + ">");
 	}
 
 	void validateWSAddressing() throws SoapFaultException {
 		if (header == null)
 			return;
-		er.challenge("WS-Addressing");
+		ag.challenge("WS-Addressing");
 		List<OMElement> messageId = XmlUtil.childrenWithLocalName(header, "MessageID");
 		List<OMElement> relatesTo = XmlUtil.childrenWithLocalName(header, "RelatesTo");
 		List<OMElement> to = XmlUtil.childrenWithLocalName(header, "To");
@@ -135,9 +135,9 @@ public class SoapHeaderValidator extends SimComponentBase {
 		if (!mufound) {
 			String msg = "At least one WS-Addressing SOAP header element must have a soapenv:mustUnderstand attribute soapenv:mustUnderstand with value of logical true";
 			String ref = "http://www.w3.org/TR/soap12-part0/#L4697"; 
-			er.detail("Taken from the above reference:");
-			er.detail("In the SOAP 1.2 infoset-based description, the env:mustUnderstand attribute in header elements takes the (logical) value \"true\" or \"false\", whereas in SOAP 1.1 they are the literal value \"1\" or \"0\" respectively.");
-			er.detail("This validation accepts 1 or 0 or any capitalization of true or false");
+			ag.detail("Taken from the above reference:");
+			ag.detail("In the SOAP 1.2 infoset-based description, the env:mustUnderstand attribute in header elements takes the (logical) value \"true\" or \"false\", whereas in SOAP 1.1 they are the literal value \"1\" or \"0\" respectively.");
+			ag.detail("This validation accepts 1 or 0 or any capitalization of true or false");
 			mustUnderstandError(msg, ref);
 		}
 
@@ -177,7 +177,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 			if (!value.startsWith("http")) {
 				String msg = "Value of " + ele.getLocalName() + " must be http endpoint - found instead " + value; 
 				throw new SoapFaultException(
-						er,
+						ag,
 						FaultCode.EndpointUnavailable, 
 						new ErrorContext(msg, wsaddressingRef).toString());
 			}
@@ -195,13 +195,13 @@ public class SoapHeaderValidator extends SimComponentBase {
 			OMElement first = ele.getFirstElement();
 			if (first == null) {
 				String msg = "Validating contents of " + ele.getLocalName() + ": " + "not HTTP style endpoint"; 
-				throw new SoapFaultException(er, FaultCode.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef));
+				throw new SoapFaultException(ag, FaultCode.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef));
 
 			} else {
 				String valError = validateEndpoint(first, anyURIOk);
 				if (valError != null) {
 					String msg = "Validating contents of " + ele.getLocalName() + ": " + valError; 
-					throw new SoapFaultException(er, FaultCode.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef));
+					throw new SoapFaultException(ag, FaultCode.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef));
 				}
 			}
 		}
@@ -231,14 +231,14 @@ public class SoapHeaderValidator extends SimComponentBase {
 			if (!namespace.equals(nsuri)) {
 				String msg = "Namespace on element " + ele.getLocalName() + " must be " +
 						namespace + " - found instead " + nsuri;
-				throw new SoapFaultException(er, FaultCode.Sender, new ErrorContext(msg, wsaddressingRef).toString());
+				throw new SoapFaultException(ag, FaultCode.Sender, new ErrorContext(msg, wsaddressingRef).toString());
 			}
 		}
 	}
 
 	void invalidAddressingHeader(String msg, String ref) throws SoapFaultException {
 		throw new SoapFaultException(
-				er,
+				ag,
 				FaultCode.InvalidAddressingHeader,
 				new ErrorContext(msg, ref)
 				);
@@ -246,7 +246,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 
 	void mustUnderstandError(String msg, String ref) throws SoapFaultException {
 		throw new SoapFaultException(
-				er,
+				ag,
 				FaultCode.MustUnderstand,
 				new ErrorContext(msg, ref)
 				);
@@ -265,7 +265,7 @@ public class SoapHeaderValidator extends SimComponentBase {
 		if (metadataLevelEle != null) { 
 			if (!"urn:direct:addressing".equals(metadataLevelEle.getNamespace().getNamespaceURI()))
 				throw new SoapFaultException(
-						er,
+						ag,
 						FaultCode.Sender, 
 						new ErrorContext(
 								"Namespace on metadata-level header element must be " + "urn:direct:addressing", 
@@ -277,14 +277,14 @@ public class SoapHeaderValidator extends SimComponentBase {
 				level = MetadataLevel.XDS;
 			else
 				throw new SoapFaultException(
-						er,
+						ag,
 						FaultCode.Sender, 
 						new ErrorContext(
 								"metadata-level must be <minimal> or <XDS>.", 
 								"http://wiki.directproject.org/file/view/2011-03-09%20PDF%20-%20XDR%20and%20XDM%20for%20Direct%20Messaging%20Specification_FINAL.pdf:6.1.1 SOAP Headers"));
 		}
-		er.challenge("Direct");
-		er.detail("metadata-level set to <" + level + ">");
+		ag.challenge("Direct");
+		ag.detail("metadata-level set to <" + level + ">");
 	}
 
 }

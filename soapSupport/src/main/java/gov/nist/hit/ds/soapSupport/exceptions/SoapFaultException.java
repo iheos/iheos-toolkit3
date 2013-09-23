@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.soapSupport.exceptions;
 
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 
@@ -31,7 +31,13 @@ public class SoapFaultException extends Exception {
 		return faultDetail;
 	}
 
-	public SoapFaultException(ErrorRecorder er, FaultCode faultCode, String faultString, String faultActor, String faultDetail) {
+	/***************************************************
+	 *
+	 * AssertionGroup
+	 * 
+	 ***************************************************/
+	
+	public SoapFaultException(IAssertionGroup er, FaultCode faultCode, String faultString, String faultActor, String faultDetail) {
 		super(faultCode.toString() + ": " + faultString);
 		this.faultCode = faultCode;
 		this.faultString = faultString;
@@ -41,14 +47,14 @@ public class SoapFaultException extends Exception {
 			er.err(Code.SoapFault, this);
 	}
 
-	public SoapFaultException(ErrorRecorder er, FaultCode faultCode, String faultString) {
+	public SoapFaultException(IAssertionGroup er, FaultCode faultCode, String faultString) {
 		this(er, faultCode, faultString, null, null);
 	}
 	
-	public SoapFaultException(ErrorRecorder er, FaultCode faultCode, ErrorContext errorContext) {
+	public SoapFaultException(IAssertionGroup er, FaultCode faultCode, ErrorContext errorContext) {
 		this(er, faultCode, errorContext.toString(), null, null);
 	}
-	
+		
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		

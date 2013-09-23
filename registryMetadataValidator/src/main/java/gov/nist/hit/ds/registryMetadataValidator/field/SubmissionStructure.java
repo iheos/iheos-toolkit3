@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMetadataValidator.field;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registryMetadataValidator.object.RegistryValidationInterface;
@@ -25,13 +25,13 @@ public class SubmissionStructure {
 		this.rvi = rvi;
 	}
 
-	public void run(ErrorRecorder er, ValidationContext vc)   {
+	public void run(IAssertionGroup er, ValidationContext vc)   {
 		submission_structure(er, vc);
 
 	}
 
 
-	void submission_structure(ErrorRecorder er, ValidationContext vc)   {
+	void submission_structure(IAssertionGroup er, ValidationContext vc)   {
 		if (vc.isSubmit() && vc.isRequest) 
 			er.sectionHeading("Submission Structure");
 		ss_doc_fol_must_have_ids(er, vc);
@@ -114,7 +114,7 @@ public class SubmissionStructure {
 		return getObjectById(id) != null;
 	}
 
-	void validateFolderHasMemberAssoc(ErrorRecorder er, String assocId) {
+	void validateFolderHasMemberAssoc(IAssertionGroup er, String assocId) {
 		OMElement assoc = getObjectById(assocId);
 		if (simpleAssocType(m.getAssocType(assoc)).equals("HasMember")) {
 			// must relate folder to docentry
@@ -155,7 +155,7 @@ public class SubmissionStructure {
 		return haveAssoc("HasMember", ssid, id);
 	}
 	
-	void log_hasmember_usage(ErrorRecorder er) {
+	void log_hasmember_usage(IAssertionGroup er) {
 		
 		er.detail("A HasMember association can be used to do the following:");
 		er.detail("  Link the SubmissionSet to a DocumentEntry in the submission (if it has SubmissionSetStatus value of Original)");
@@ -375,7 +375,7 @@ public class SubmissionStructure {
 	
 	String assocsRef = "ITI Tf-3: 4.1";
 
-	void evalHasMember(ErrorRecorder er, OMElement assoc) {
+	void evalHasMember(IAssertionGroup er, OMElement assoc) {
 		String source = m.getAssocSource(assoc);
 		String target = m.getAssocTarget(assoc);
 		String type = m.getAssocType(assoc);
@@ -401,7 +401,7 @@ public class SubmissionStructure {
 		}
 	}
 
-	void evalRelationship(ErrorRecorder er, OMElement assoc) {
+	void evalRelationship(IAssertionGroup er, OMElement assoc) {
 		String source = m.getAssocSource(assoc);
 		String target = m.getAssocTarget(assoc);
 		String type = m.getAssocType(assoc);
@@ -421,7 +421,7 @@ public class SubmissionStructure {
 		}
 	}
 
-	void evalSigns(ErrorRecorder er, OMElement assoc) {
+	void evalSigns(IAssertionGroup er, OMElement assoc) {
 
 	}
 
@@ -434,7 +434,7 @@ public class SubmissionStructure {
 				"APND"
 		);
 
-	void eval_assocs(ErrorRecorder er) {
+	void eval_assocs(IAssertionGroup er) {
 		for (OMElement assoc : m.getAssociations()) {
 			String type = m.getAssocType(assoc);
 			if (type == null)
@@ -464,11 +464,11 @@ public class SubmissionStructure {
 		}
 	}
 
-	void cannotValidate(ErrorRecorder er, String context) {
+	void cannotValidate(IAssertionGroup er, String context) {
 		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(context + ": cannot validate - error parsing", "ebRIM"), this);
 	}
 
-	void has_single_ss(ErrorRecorder er, ValidationContext vc) {
+	void has_single_ss(IAssertionGroup er, ValidationContext vc) {
 		List<OMElement> ssEles = m.getSubmissionSets();
 		if (ssEles.size() == 0) {
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("Submission does not contain a SubmissionSet", "ITI TF-3: 4.1.4"), this);
@@ -482,7 +482,7 @@ public class SubmissionStructure {
 			er.detail(ssDescription(ssEles.get(0)) + ": SubmissionSet found");
 	}
 	
-	void symbolic_refs_not_in_submission(ErrorRecorder er) {
+	void symbolic_refs_not_in_submission(IAssertionGroup er) {
 		List<OMElement> assocs = m.getAssociations();
 
 		for (int i=0; i<assocs.size(); i++) {
@@ -506,7 +506,7 @@ public class SubmissionStructure {
 
 
 
-	void sss_relates_to_ss(ErrorRecorder er, ValidationContext vc) {
+	void sss_relates_to_ss(IAssertionGroup er, ValidationContext vc) {
 		String ss_id = m.getSubmissionSetId();
 		List<OMElement> assocs = m.getAssociations();
 
@@ -559,7 +559,7 @@ public class SubmissionStructure {
 		}
 	}
 
-	void ss_doc_fol_must_have_ids(ErrorRecorder er, ValidationContext vc) {
+	void ss_doc_fol_must_have_ids(IAssertionGroup er, ValidationContext vc) {
 		List<OMElement> docs = m.getExtrinsicObjects();
 		List<OMElement> rps = m.getRegistryPackages();
 
@@ -585,7 +585,7 @@ public class SubmissionStructure {
 		}
 	}
 
-	void by_value_assoc_in_submission(ErrorRecorder er, ValidationContext vc)  {
+	void by_value_assoc_in_submission(IAssertionGroup er, ValidationContext vc)  {
 		List<OMElement> assocs = m.getAssociations();
 		String ss_id = m.getSubmissionSetId();
 
@@ -645,7 +645,7 @@ public class SubmissionStructure {
 //		return !containsObject(id) && isUUID(id);
 //	}
 
-	void ss_status_single_value(ErrorRecorder er, ValidationContext vc) {
+	void ss_status_single_value(IAssertionGroup er, ValidationContext vc) {
 		List<OMElement> assocs = m.getAssociations();
 		String ss_id = m.getSubmissionSetId();
 
@@ -684,7 +684,7 @@ public class SubmissionStructure {
 	}
 
 	// Folder Assocs must be linked to SS by a secondary Assoc
-	void folder_assocs(ErrorRecorder er, ValidationContext vc)  {
+	void folder_assocs(IAssertionGroup er, ValidationContext vc)  {
 		String ssId = m.getSubmissionSetId();
 		List<OMElement> non_ss_assocs = null;
 		for (OMElement a : m.getAssociations()) {
@@ -736,7 +736,7 @@ public class SubmissionStructure {
 		}
 	}
 
-	void all_docs_linked_to_ss(ErrorRecorder er, ValidationContext vc) {
+	void all_docs_linked_to_ss(IAssertionGroup er, ValidationContext vc) {
 		List<OMElement> docs = m.getExtrinsicObjects();
 
 		for (int i=0; i<docs.size(); i++) {
@@ -768,7 +768,7 @@ public class SubmissionStructure {
 		}
 	}
 
-	void all_fols_linked_to_ss(ErrorRecorder er, ValidationContext vc) {
+	void all_fols_linked_to_ss(IAssertionGroup er, ValidationContext vc) {
 		List<OMElement> fols = m.getFolders();
 
 		for (int i=0; i<fols.size(); i++) {
@@ -811,7 +811,7 @@ public class SubmissionStructure {
 	//		}
 	//	}
 
-	void rplced_doc_not_in_submission(ErrorRecorder er, ValidationContext vc)  {
+	void rplced_doc_not_in_submission(IAssertionGroup er, ValidationContext vc)  {
 		List<OMElement> assocs = m.getAssociations();
 
 		for (int i=0; i<assocs.size(); i++) {

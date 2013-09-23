@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.simSupport.engine;
 
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 
 /**
@@ -11,6 +12,7 @@ import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 public class SimStep {
 	String name = null;
 	AssertionGroup ag = null;  // set by engine
+	Event event = null;        // set by engine	
 	SimComponent simComponent = null;
 	boolean ran = false;
 	
@@ -23,20 +25,30 @@ public class SimStep {
 		return this;
 	}
 	
+	public Event getEvent() {
+		return event;
+	}
+
+	public SimStep setEvent(Event event) {
+		this.event = event;
+		simComponent.setEvent(event);
+		return this;
+	}
+
 	public AssertionGroup getAssertionGroup() {
 		return ag;
 	}
 	
 	public SimStep setAssertionGroup(AssertionGroup er) {
 		this.ag = er;
-		simComponent.setErrorRecorder(er);
+		simComponent.setAssertionGroup(er);
 		return this;
 	}
 	
 	public SimComponent getSimComponent() {
 		// link to ErrorRecorder here since we
 		// don't know the ordering of setter calls
-		simComponent.setErrorRecorder(ag);
+		simComponent.setAssertionGroup(ag);
 		return simComponent;
 	}
 	

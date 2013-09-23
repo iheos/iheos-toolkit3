@@ -69,4 +69,10 @@ public class Event {
 		assertions.add(ag);
 		return this;
 	}
+	
+	public Event addArtifact(String name, String value) throws RepositoryException {
+		artifacts.add(name, value);
+		return this;
+	}
+	
 }

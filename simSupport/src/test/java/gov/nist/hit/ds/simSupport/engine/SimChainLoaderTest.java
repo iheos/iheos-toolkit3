@@ -22,9 +22,9 @@ public class SimChainLoaderTest {
 
 	@Before
 	public void before() throws InitializationFailedException, IOException, RepositoryException {
-		BasicConfigurator.configure();
 		Installation.reset();
 		Installation.installation().initialize();
+		BasicConfigurator.configure();
 		Configuration.configuration();
 	}
 

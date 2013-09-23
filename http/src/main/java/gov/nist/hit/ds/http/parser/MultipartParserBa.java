@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.http.parser;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 
@@ -10,7 +10,7 @@ import java.util.List;
 public class MultipartParserBa {
 		HttpParserBa hp;
 		HttpHeader contentTypeHeader;
-		ErrorRecorder er = null;
+		IAssertionGroup er = null;
 		boolean appendixV = true;
 		MultipartMessageBa message = new MultipartMessageBa();
 
@@ -19,7 +19,7 @@ public class MultipartParserBa {
 			parse();
 		}
 
-		public MultipartParserBa(HttpParserBa hp, ErrorRecorder er, boolean appendixV) throws ParseException, HttpHeaderParseException, HttpParseException {
+		public MultipartParserBa(HttpParserBa hp, IAssertionGroup er, boolean appendixV) throws ParseException, HttpHeaderParseException, HttpParseException {
 			this.hp = hp;
 			this.er = er;
 			this.appendixV = appendixV;

@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.simSupport.engine;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.SystemErrorRecorder;
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
@@ -54,7 +54,7 @@ public class SimChain  {
 
 	public boolean hasErrors() {
 		for (SimStep step : steps) {
-			ErrorRecorder er = step.getAssertionGroup(); 
+			IAssertionGroup er = step.getAssertionGroup(); 
 			if (er != null && er.hasErrors())
 				return true;
 		}
@@ -86,7 +86,7 @@ public class SimChain  {
 		StringBuffer buf = new StringBuffer();
 		buf.append("---------------------------------------------------------------\n");
 		for (SimStep step : steps) {
-			ErrorRecorder er = step.getAssertionGroup();
+			IAssertionGroup er = step.getAssertionGroup();
 			if (er == null) {
 				buf.append("FATAL ERROR: Step <" + step.getName() + "> does not have an ErrorRecorder\n");
 				continue;

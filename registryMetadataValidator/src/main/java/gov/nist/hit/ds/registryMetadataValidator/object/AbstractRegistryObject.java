@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMetadataValidator.object;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registryMetadata.MetadataParser;
@@ -26,9 +26,9 @@ public abstract class AbstractRegistryObject {
 
 	abstract public String identifyingString();
 	abstract public OMElement toXml() throws XdsInternalException;
-	abstract public void validateSlotsLegal(ErrorRecorder er);
-	abstract public void validateRequiredSlotsPresent(ErrorRecorder er, ValidationContext vc);
-	abstract public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc);
+	abstract public void validateSlotsLegal(IAssertionGroup er);
+	abstract public void validateRequiredSlotsPresent(IAssertionGroup er, ValidationContext vc);
+	abstract public void validateSlotsCodedCorrectly(IAssertionGroup er, ValidationContext vc);
 
 	OMElement ro;
 	List<Slot> slots = new ArrayList<Slot>();
@@ -355,7 +355,7 @@ public abstract class AbstractRegistryObject {
 		return eis;
 	}
 
-	public void validateSlot(ErrorRecorder er, String slotName, boolean multivalue, FormatValidator validator, String resource) {
+	public void validateSlot(IAssertionGroup er, String slotName, boolean multivalue, FormatValidator validator, String resource) {
 		Slot slot = getSlot(slotName);
 		if (slot == null) {
 			return;
@@ -364,7 +364,7 @@ public abstract class AbstractRegistryObject {
 		slot.validate(er, multivalue, validator, resource);
 	}
 
-	public boolean verifySlotsUnique(ErrorRecorder er) {
+	public boolean verifySlotsUnique(IAssertionGroup er) {
 		boolean ok = true;
 		List<String> names = new ArrayList<String>();
 		for (Slot slot : slots) {
@@ -379,7 +379,7 @@ public abstract class AbstractRegistryObject {
 		return ok;
 	}
 	
-	public void validateTopAtts(ErrorRecorder er, ValidationContext vc, String tableRef, List<String> statusValues) {
+	public void validateTopAtts(IAssertionGroup er, ValidationContext vc, String tableRef, List<String> statusValues) {
 		validateId(er, vc, "entryUUID", id, null);
 		
 		if (vc.isSQ && vc.isResponse) {
@@ -405,7 +405,7 @@ public abstract class AbstractRegistryObject {
 		}
 	}
 
-	public void validateId(ErrorRecorder er, ValidationContext vc, String attName, String attValue, String resource) {
+	public void validateId(IAssertionGroup er, ValidationContext vc, String attName, String attValue, String resource) {
 		String defaultResource = "ITI TF-3: 4.1.12.3";
 		if (attValue == null || attValue.equals("")) {
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": " + attName + " attribute empty or missing", (resource!=null) ? resource : defaultResource), this);
@@ -428,7 +428,7 @@ public abstract class AbstractRegistryObject {
 		
 	}
 	
-	public void verifyIdsUnique(ErrorRecorder er, Set<String> knownIds) {
+	public void verifyIdsUnique(IAssertionGroup er, Set<String> knownIds) {
 		if (id != null) {
 			if (knownIds.contains(id))
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": entryUUID " + id + "  identifies multiple objects", "ITI TF-3: 4.1.12.3 and ebRS 5.1.2"), this);
@@ -446,7 +446,7 @@ public abstract class AbstractRegistryObject {
 		
 		
 	}
-	public void validateHome(ErrorRecorder er, String resource) {
+	public void validateHome(IAssertionGroup er, String resource) {
 		if (home == null) 
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": homeCommunityId attribute must be present", resource), this);
 		else {
@@ -469,7 +469,7 @@ public abstract class AbstractRegistryObject {
 		return i;
 	}
 	
-	public void validateClassificationsLegal(ErrorRecorder er, ClassAndIdDescription desc, String resource) {
+	public void validateClassificationsLegal(IAssertionGroup er, ClassAndIdDescription desc, String resource) {
 		List<String> cSchemes = new ArrayList<String>();
 
 		for (Classification c : getClassifications()) {
@@ -497,7 +497,7 @@ public abstract class AbstractRegistryObject {
 		return "ExternalIdentifier(" + eiScheme + ")(" + desc.names.get(eiScheme) + ")";
 	}
 
-	public void validateRequiredClassificationsPresent(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
+	public void validateRequiredClassificationsPresent(IAssertionGroup er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
 		if (!(vc.isXDM || vc.isXDRLimited)) {
 			for (String cScheme : desc.requiredSchemes) {
 				List<Classification> cs = getClassificationsByClassificationScheme(cScheme);
@@ -507,7 +507,7 @@ public abstract class AbstractRegistryObject {
 		}
 	}
 
-	public void validateClassificationsCodedCorrectly(ErrorRecorder er, ValidationContext vc) {
+	public void validateClassificationsCodedCorrectly(IAssertionGroup er, ValidationContext vc) {
 		for (Classification c : getClassifications()) 
 			c.validateStructure(er, vc);
 
@@ -515,7 +515,7 @@ public abstract class AbstractRegistryObject {
 			a.validateStructure(er, vc);
 	}
 
-	public void validateClassifications(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
+	public void validateClassifications(IAssertionGroup er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
 		er.challenge("Validating Classifications present are legal");
 		validateClassificationsLegal(er, desc, resource);
 		er.challenge("Validating Required Classifications present");
@@ -524,7 +524,7 @@ public abstract class AbstractRegistryObject {
 		validateClassificationsCodedCorrectly(er, vc);
 	}
 
-	public void validateExternalIdentifiers(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
+	public void validateExternalIdentifiers(IAssertionGroup er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
 		er.challenge("Validating ExternalIdentifiers present are legal");
 		validateExternalIdentifiersLegal(er, desc, resource);
 		er.challenge("Validating Required ExternalIdentifiers present");
@@ -533,7 +533,7 @@ public abstract class AbstractRegistryObject {
 		validateExternalIdentifiersCodedCorrectly(er, vc, desc, resource);
 	}
 	
-	public void validateExternalIdentifiersCodedCorrectly(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
+	public void validateExternalIdentifiersCodedCorrectly(IAssertionGroup er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
 		for (ExternalIdentifier ei : getExternalIdentifiers()) {
 			ei.validateStructure(er, vc);
 			if (MetadataSupport.XDSDocumentEntry_uniqueid_uuid.equals(ei.getIdentificationScheme())) {
@@ -555,7 +555,7 @@ public abstract class AbstractRegistryObject {
 
 
 	
-	public void validateRequiredExternalIdentifiersPresent(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
+	public void validateRequiredExternalIdentifiersPresent(IAssertionGroup er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
 		for (String idScheme : desc.requiredSchemes) {
 			List<ExternalIdentifier> eis = getExternalIdentifiers(idScheme);
 			if (eis.size() == 0)
@@ -566,7 +566,7 @@ public abstract class AbstractRegistryObject {
 	}
 
 
-	public void validateExternalIdentifiersLegal(ErrorRecorder er, ClassAndIdDescription desc, String resource) {
+	public void validateExternalIdentifiersLegal(IAssertionGroup er, ClassAndIdDescription desc, String resource) {
 		for (ExternalIdentifier ei : getExternalIdentifiers()) {
 			String idScheme = ei.getIdentificationScheme();
 			if (idScheme == null || idScheme.equals("") || !desc.definedSchemes.contains(idScheme)) 
@@ -574,7 +574,7 @@ public abstract class AbstractRegistryObject {
 		}
 	}
 
-	public void validateSlots(ErrorRecorder er, ValidationContext vc) {
+	public void validateSlots(IAssertionGroup er, ValidationContext vc) {
 		er.challenge("Validating that Slots present are legal");
 		validateSlotsLegal(er);
 		er.challenge("Validating required Slots present");

@@ -5,8 +5,9 @@ import gov.nist.hit.ds.utilities.string.StringUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Properties;
+
+import org.apache.log4j.Logger;
 
 /**
  * Inject String type parameters into object. This is used by the
@@ -18,6 +19,7 @@ import java.util.Properties;
 public class Injector {
 	Object object;
 	Properties paramMap;
+	static Logger logger = Logger.getLogger(Injector.class);
 
 	/**
 	 * Create an Injector
@@ -35,13 +37,16 @@ public class Injector {
 	}
 
 	public void run() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		logger.debug("Injecting on class <" + object.getClass().getName() + ">");
 		for (Enumeration<?> it = paramMap.propertyNames(); it.hasMoreElements(); ) {
 			String paramName = (String) it.nextElement();
 			if ("class".equals(paramName))
 				continue;
 			String paramValue = paramMap.getProperty(paramName);
+//			logger.debug("Parm name = <" + paramName + "> value = <" + paramValue + ">");
 			Object[] params = new String[] { paramValue };
 			Method setter = getSetter(paramName);
+			logger.debug("Method is: <" + setter + "> Parm is: <" + paramValue + ">");
 			setter.invoke(object, params);
 		}
 	}

@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.engine;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
@@ -8,6 +9,7 @@ public class MyComponent implements SimComponent {
 	String name;
 	String description;
 	String myStuff;
+	Event event;
 
 	public String getMyStuff() {
 		return myStuff;
@@ -18,7 +20,7 @@ public class MyComponent implements SimComponent {
 	}
 
 	@Override
-	public void setErrorRecorder(ErrorRecorder er) {
+	public void setAssertionGroup(AssertionGroup er) {
 		// TODO Auto-generated method stub
 	}
 
@@ -46,6 +48,11 @@ public class MyComponent implements SimComponent {
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 	
 }

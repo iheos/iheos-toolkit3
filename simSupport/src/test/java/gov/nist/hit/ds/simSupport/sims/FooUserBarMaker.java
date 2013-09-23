@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.sims;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.datatypes.Bar;
 import gov.nist.hit.ds.simSupport.datatypes.Foo;
 import gov.nist.hit.ds.simSupport.engine.Inject;
@@ -9,6 +10,7 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 
 public class FooUserBarMaker implements SimComponent {
 	Foo foo;
+	Event event;
 	
 	@Inject
 	public void setFoo(Foo f) {
@@ -21,7 +23,7 @@ public class FooUserBarMaker implements SimComponent {
 	}
 
 	@Override
-	public void setErrorRecorder(ErrorRecorder er) {
+	public void setAssertionGroup(AssertionGroup er) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -52,6 +54,11 @@ public class FooUserBarMaker implements SimComponent {
 	public void setDescription(String description) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 }

@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.simSupport.event;
 
-import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
@@ -25,7 +24,7 @@ public class EventBuilder {
 					"Event_Repository", 
 					"Event Repository", 
 					new SimpleType("simEventRepos"),               // repository type
-					ActorType.findActor(actorShortName).getShortName() + "-" + simId    // repository name
+					actorShortName + "-" + simId    // repository name
 					);
 			Asset eventAsset = repos.createAsset(
 					db.nowAsFilenameBase(), 

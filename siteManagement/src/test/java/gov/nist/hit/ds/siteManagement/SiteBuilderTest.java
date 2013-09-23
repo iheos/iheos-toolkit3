@@ -36,7 +36,7 @@ public class SiteBuilderTest {
 
 	@Test
 	public void testSimpleSiteConstruction() {
-		String transName = "sq.b";
+		String transName = "sqb";
 		String endpoint = "http://foo.bar";
 		boolean isSecure = true;
 		boolean isAsync = false;

@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.simSupport.validators;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.Inject;
@@ -26,16 +26,16 @@ public class SimEndPointParserSim extends SimComponentBase {
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
 		String endpoint = httpParser.getEndpoint();
-		er.externalChallenge("Endpoint is <" + endpoint + ">");
+		ag.externalChallenge("Endpoint is <" + endpoint + ">");
 		try {
 			simEndPoint = new SimEndpointParser().parse(endpoint);
 		} catch (Exception e1) {
 			throw new SoapFaultException(
-					er,
+					ag,
 					FaultCode.EndpointUnavailable, 
 					new ErrorContext("Endpoint <" + endpoint + "> does not parse as a simulator endpoint"));
 		}
-		er.detail("simId=<" + simEndPoint.getSimId() + "> actor=<" + simEndPoint.getActor() + "> transaction=<" + simEndPoint.getTransaction() + ">");
+		ag.detail("simId=<" + simEndPoint.getSimId() + "> actor=<" + simEndPoint.getActor() + "> transaction=<" + simEndPoint.getTransaction() + ">");
 	}
 
 }

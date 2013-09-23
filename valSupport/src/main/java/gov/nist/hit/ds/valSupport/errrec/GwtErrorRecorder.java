@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.valSupport.errrec;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem.ReportingCompletionType;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem.ReportingLevel;
@@ -15,7 +15,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 
-public class GwtErrorRecorder implements ErrorRecorder  {
+public class GwtErrorRecorder implements IAssertionGroup  {
 	
 	ErrorRecorderBuilder errorRecorderBuilder;
 	List<ValidatorErrorItem> summary = new ArrayList<ValidatorErrorItem>();
@@ -246,7 +246,7 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 		
 	}
 
-	public ErrorRecorder buildNewErrorRecorder() {
+	public IAssertionGroup buildNewErrorRecorder() {
 		return this;
 	}
 
@@ -259,7 +259,7 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 		return nbErrors;
 	}
 
-	public void concat(ErrorRecorder er) {
+	public void concat(IAssertionGroup er) {
 		this.errMsgs.addAll(er.getErrMsgs());
 	}
 	

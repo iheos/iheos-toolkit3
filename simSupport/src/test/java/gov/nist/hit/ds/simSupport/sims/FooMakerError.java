@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.simSupport.sims;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
+import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.datatypes.Foo;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
@@ -9,7 +11,8 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 public class FooMakerError implements SimComponent{
 
 	Foo foo;
-	ErrorRecorder er;
+	IAssertionGroup er;
+	Event event;
 
 	public Foo getFoo() {
 		return foo;
@@ -23,7 +26,7 @@ public class FooMakerError implements SimComponent{
 
 
 	@Override
-	public void setErrorRecorder(ErrorRecorder er) {
+	public void setAssertionGroup(AssertionGroup er) {
 		this.er = er;
 	}
 
@@ -56,6 +59,12 @@ public class FooMakerError implements SimComponent{
 	public void setDescription(String description) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 }

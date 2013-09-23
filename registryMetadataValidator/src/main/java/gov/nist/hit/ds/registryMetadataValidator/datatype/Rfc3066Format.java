@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMetadataValidator.datatype;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 
 /**
@@ -19,7 +19,7 @@ import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
  */
 public class Rfc3066Format extends FormatValidator {
 
-	public Rfc3066Format(ErrorRecorder er, String context, String resource) {
+	public Rfc3066Format(IAssertionGroup er, String context, String resource) {
 		super(er, context, resource);
 	}
 	
