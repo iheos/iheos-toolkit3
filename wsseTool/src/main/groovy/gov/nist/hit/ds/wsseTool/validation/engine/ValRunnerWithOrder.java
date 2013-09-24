@@ -11,6 +11,10 @@ import org.junit.runners.model.FrameworkMethod;
 
 public class ValRunnerWithOrder extends ValRunner {
 
+	public ValRunnerWithOrder(Class<?> klass) throws Throwable {
+		super(klass);
+	}
+	
 	public ValRunnerWithOrder(Class<?> klass, TestData testdata)
 			throws Throwable {
 		super(klass, testdata);

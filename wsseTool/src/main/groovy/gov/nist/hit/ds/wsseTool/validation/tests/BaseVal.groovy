@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.wsseTool.validation.tests;
 
 import gov.nist.hit.ds.wsseTool.parsing.Message
+import gov.nist.hit.ds.wsseTool.parsing.MessageFactory;
 import gov.nist.hit.ds.wsseTool.parsing.groovyXML.GroovyHeader
 import gov.nist.hit.ds.wsseTool.validation.engine.*
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.*
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory
 public class BaseVal {
 
 	@Data
-	public TestData data;
+	public TestData data = MessageFactory.getTestMessage();
 
 	Message context;
 	GroovyHeader header;

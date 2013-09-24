@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.wsseTool.validation.tests.run
 
 import gov.nist.hit.ds.wsseTool.api.config.ValConfig
+import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerWithOrder;
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation
 import gov.nist.hit.ds.wsseTool.validation.tests.BaseVal
 import gov.nist.hit.ds.wsseTool.validation.tests.CommonVal
@@ -12,9 +13,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.TestName
+import org.junit.runner.RunWith;
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+
+@RunWith(ValRunnerWithOrder.class)
 class AttributeStatementVal extends BaseVal {
 
 	private static final Logger log = LoggerFactory.getLogger(AttributeStatementVal.class)

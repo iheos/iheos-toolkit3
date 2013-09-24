@@ -7,7 +7,8 @@ import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation
 import gov.nist.hit.ds.wsseTool.validation.tests.BaseVal
 import gov.nist.hit.ds.wsseTool.validation.tests.CommonVal
 import gov.nist.hit.ds.wsseTool.validation.tests.ValDescriptor
-import gov.nist.toolkit.wsseTool.validation.engine.annotations.*
+import gov.nist.hit.ds.wsseTool.validation.engine.annotations.*
+import gov.nist.hit.ds.wsseTool.validation.engine.*
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -17,7 +18,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.TestName
+import org.junit.runner.RunWith
 
+@RunWith(ValRunnerWithOrder.class)
 class AssertionVal extends BaseVal {
 	
 	@Rule

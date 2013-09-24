@@ -66,15 +66,18 @@ public class WsseHeaderValidator implements Validator {
 	}
 
 	public void validate(Element wsseHeader, ValConfig config, Context context) throws ValidationException {
-		//create the message representation.
-		Message message = MessageFactory.getMessage(wsseHeader,context)
 
-		Result parseResult = null;
-		//parse the header.
+		Message message = null;
+		Result parseResult = null
+		
 		try{
-			new WSSEHeaderParser(message).parse()
-		} catch(ParseException e){
-			log.error(e.getMessage()) //for info
+		//create the message representation.
+			message = MessageFactory.getMessage(wsseHeader,context)
+		}
+		catch(ParseException e){
+			log.error(e);
+			log.warn("problem during parsing but validation will continue so we can report errors properly.");
+			
 		}
 		finally{
 			//in any case we run the parsing validation for proper reporting
@@ -82,36 +85,36 @@ public class WsseHeaderValidator implements Validator {
 			Request request = Request.runner(runner)
 			parseResult = run(request)
 		}
-
-		if(parseResult.getFailureCount() != 0){ //we do not want to go forward if parsing failed
-			log.error("parsing failed. Validation will stop.") 
-			return;
-		}
 		
+		if(parseResult.getFailureCount() != 0){ //we do not want to go forward if parsing validation failed
+			log.error("parsing validation failed. Validation will stop.")
+			return
+		}
+
 		// parsing succeeded, we run all the other validations.
 		RunnerBuilder builder = new ValRunnerBuilder(message)
 		Runner runner = new ValSuite(CompleteTestSuite.class, builder)
-		Request request = Request.runner(runner)	
+		Request request = Request.runner(runner)
 		run(request)
 	}
 
 	private Result run(Request request) throws ValidationException {
-		
-		Result result = null;
-		
+
+		Result result = null
+
 		try{
 			JUnitCore facade = new JUnitCore()
 			TestsListener listener1 = new TestsListener()
 			facade.addListener(listener1)
 			result = facade.run(request)
-			report(result, listener1);
-			return result;
+			report(result, listener1)
+			return result
 		}
 		catch(Exception e){
 			throw new ValidationException("an error occured during validation.", e)
 		}
 	}
-	
+
 	private void report(Result result, TestsListener listener1){
 		long time = result.getRunTime()
 		int runs = result.getRunCount()
@@ -130,21 +133,21 @@ public class WsseHeaderValidator implements Validator {
 		System.out.println("\n Failures recorded:")
 		for (Failure f : failures) {
 			System.out.println(f.getTestHeader())
-			System.out.println(f.getMessage())	
+			System.out.println(f.getMessage())
 		}
 	}
 
 	private class TestsListener extends RunListener {
 
 		private static final Logger log = LoggerFactory.getLogger(TestsListener.class)
-		
+
 		public List<String> testsDescriptions = new ArrayList<String>()
 
 		@Override
 		public void testRunStarted(Description description) throws Exception {
 			log.info("listener says : tests started")
 		}
-		
+
 		public void testFailure(Failure failure) throws Exception {
 			log.info("listener says : tests failed : " + failure.getMessage())
 		}

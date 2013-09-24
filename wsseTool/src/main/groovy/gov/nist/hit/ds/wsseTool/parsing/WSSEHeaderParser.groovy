@@ -15,7 +15,7 @@ public class WSSEHeaderParser {
 	public WSSEHeaderParser(Message message){
 		header = message.getGroovyHeader()
 	}
-	public void parse(){
+	public void parse() throws ParseException {
 		try{
 			wsseStructure()
 			assertionStructure()

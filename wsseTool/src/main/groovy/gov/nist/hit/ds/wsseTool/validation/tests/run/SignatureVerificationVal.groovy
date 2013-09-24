@@ -2,10 +2,12 @@ package gov.nist.hit.ds.wsseTool.validation.tests.run
 
 import gov.nist.hit.ds.wsseTool.parsing.opensaml.OpenSamlSecurityHeader
 import gov.nist.hit.ds.wsseTool.signature.api.Verifier
+import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerWithOrder;
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation
 import gov.nist.hit.ds.wsseTool.validation.tests.BaseVal
 
 import org.junit.Before
+import org.junit.runner.RunWith;
 import org.opensaml.saml2.core.SubjectConfirmationData
 import org.opensaml.xml.XMLObject
 import org.opensaml.xml.signature.KeyInfo
@@ -14,10 +16,11 @@ import org.opensaml.xml.validation.ValidationException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+@RunWith(ValRunnerWithOrder.class)
 class SignatureVerificationVal extends BaseVal {
 
 
-	private static final Logger log = LoggerFactory.getLogger(AuthzDecisionStatementVal.class)
+	private static final Logger log = LoggerFactory.getLogger(SignatureVerificationVal.class)
 
 	private OpenSamlSecurityHeader openSamlHeader;
 

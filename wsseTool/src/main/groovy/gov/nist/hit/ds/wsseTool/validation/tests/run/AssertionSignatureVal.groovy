@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.wsseTool.validation.tests.run
 
+import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerWithOrder;
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation
 import gov.nist.hit.ds.wsseTool.validation.tests.BaseVal
 import gov.nist.hit.ds.wsseTool.validation.tests.CommonVal
@@ -8,7 +9,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.TestName
+import org.junit.runner.RunWith;
 
+@RunWith(ValRunnerWithOrder.class)
 class AssertionSignatureVal extends BaseVal {
 
 	@Rule

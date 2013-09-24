@@ -1,12 +1,16 @@
 package gov.nist.hit.ds.wsseTool.validation.tests.run
 
 import static org.junit.Assert.*
+import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerWithOrder;
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.*
 import gov.nist.hit.ds.wsseTool.validation.tests.BaseVal
 import groovy.util.slurpersupport.GPathResult
 
 import java.text.MessageFormat
 
+import org.junit.runner.RunWith;
+
+@RunWith(ValRunnerWithOrder.class)
 public class ParsingVal extends BaseVal {
 
 	@Order(order=1)
