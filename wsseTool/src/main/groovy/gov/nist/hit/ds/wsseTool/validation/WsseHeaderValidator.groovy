@@ -12,9 +12,9 @@ import gov.nist.hit.ds.wsseTool.parsing.Message
 import gov.nist.hit.ds.wsseTool.parsing.MessageFactory
 import gov.nist.hit.ds.wsseTool.parsing.ParseException
 import gov.nist.hit.ds.wsseTool.parsing.WSSEHeaderParser
-import gov.nist.hit.ds.wsseTool.validation.engine.MyRunnerBuilder
-import gov.nist.hit.ds.wsseTool.validation.engine.MyRunnerWithOrder
-import gov.nist.hit.ds.wsseTool.validation.engine.MySuite
+import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerBuilder
+import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerWithOrder
+import gov.nist.hit.ds.wsseTool.validation.engine.ValSuite
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation
 import gov.nist.hit.ds.wsseTool.validation.tests.run.ParsingVal
 
@@ -78,7 +78,7 @@ public class WsseHeaderValidator implements Validator {
 		}
 		finally{
 			//in any case we run the parsing validation for proper reporting
-			Runner runner = new MyRunnerWithOrder(ParsingVal.class,message)
+			Runner runner = new ValRunnerWithOrder(ParsingVal.class,message)
 			Request request = Request.runner(runner)
 			parseResult = run(request)
 		}
@@ -89,8 +89,8 @@ public class WsseHeaderValidator implements Validator {
 		}
 		
 		// parsing succeeded, we run all the other validations.
-		RunnerBuilder builder = new MyRunnerBuilder(message)
-		Runner runner = new MySuite(ATestSuite.class, builder)
+		RunnerBuilder builder = new ValRunnerBuilder(message)
+		Runner runner = new ValSuite(CompleteTestSuite.class, builder)
 		Request request = Request.runner(runner)	
 		run(request)
 	}

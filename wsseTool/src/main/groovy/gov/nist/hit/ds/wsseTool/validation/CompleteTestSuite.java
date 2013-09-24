@@ -5,7 +5,6 @@ import gov.nist.hit.ds.wsseTool.validation.tests.run.AssertionVal;
 import gov.nist.hit.ds.wsseTool.validation.tests.run.AttributeStatementVal;
 import gov.nist.hit.ds.wsseTool.validation.tests.run.AuthnStatementVal;
 import gov.nist.hit.ds.wsseTool.validation.tests.run.AuthzDecisionStatementVal;
-import gov.nist.hit.ds.wsseTool.validation.tests.run.ParsingVal;
 import gov.nist.hit.ds.wsseTool.validation.tests.run.SignatureVerificationVal;
 import gov.nist.hit.ds.wsseTool.validation.tests.run.TimestampVal;
 
@@ -22,5 +21,5 @@ import org.junit.runners.Suite;
         SignatureVerificationVal.class,
         TimestampVal.class
 })
-public class ATestSuite {
+public class CompleteTestSuite {
 }

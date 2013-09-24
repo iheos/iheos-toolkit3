@@ -12,7 +12,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
-public class MyRunner extends BlockJUnit4ClassRunner {
+public class ValRunner extends BlockJUnit4ClassRunner {
 
 	protected Field dataField;
 	protected TestData data;
@@ -28,12 +28,12 @@ public class MyRunner extends BlockJUnit4ClassRunner {
 	 *             if the runner cannot find a public static TestData data field
 	 *             in the test class.
 	 */
-	public MyRunner(Class<?> klass) throws Throwable {
+	public ValRunner(Class<?> klass) throws Throwable {
 		super(klass);
 		dataField = getTestClassDataField();
 	}
 
-	public MyRunner(Class<?> klass, TestData testdata) throws Throwable {
+	public ValRunner(Class<?> klass, TestData testdata) throws Throwable {
 		super(klass);
 		dataField = getTestClassDataField();
 		this.data = testdata;
@@ -70,7 +70,7 @@ public class MyRunner extends BlockJUnit4ClassRunner {
 			}
 		}
 
-		return new MyStatement(method, test);
+		return new ValStatement(method, test);
 	}
 
 	/*

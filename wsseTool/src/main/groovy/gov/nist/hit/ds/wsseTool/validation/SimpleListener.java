@@ -25,6 +25,7 @@ public class SimpleListener extends RunListener {
 				+ " failed : " + result.getFailureCount());
 	}
 
+	@Override
 	public void testFailure(Failure failure) throws Exception {
 		System.out.println("failed " + failure.getDescription().getMethodName()
 				+ ": " + failure.getMessage());

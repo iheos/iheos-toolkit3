@@ -4,7 +4,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerBuilder;
 
-public class MySuite extends Suite {
+public class ValSuite extends Suite {
 	
     /**
      * Called reflectively on classes annotated with <code>@RunWith(Suite.class)</code>
@@ -12,7 +12,7 @@ public class MySuite extends Suite {
      * @param klass the root class
      * @param builder builds runners for classes in the suite
      */
-    public MySuite(Class<?> klass, RunnerBuilder builder) throws InitializationError {
+    public ValSuite(Class<?> klass, RunnerBuilder builder) throws InitializationError {
         super(builder, klass, getAnnotatedClasses(klass));
     }
 

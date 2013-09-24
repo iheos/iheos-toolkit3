@@ -9,9 +9,9 @@ import java.util.List;
 
 import org.junit.runners.model.FrameworkMethod;
 
-public class MyRunnerWithOrder extends MyRunner {
+public class ValRunnerWithOrder extends ValRunner {
 
-	public MyRunnerWithOrder(Class<?> klass, TestData testdata)
+	public ValRunnerWithOrder(Class<?> klass, TestData testdata)
 			throws Throwable {
 		super(klass, testdata);
 		// TODO Auto-generated constructor stub
