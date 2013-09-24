@@ -469,7 +469,7 @@ public class SimpleAsset implements Asset, Flushable {
 		try {
 			name = getDisplayName();
 			if (name!=null && !"".equals(name)) {
-				return name;
+				return name + "(" + getId().getIdString() + ")";
 			} else {
 				name = getId().getIdString();
 			}

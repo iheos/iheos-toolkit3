@@ -1,11 +1,14 @@
 package gov.nist.hit.ds.simulatorIntegrationTest.soapParser;
 
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertNull;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.httpSoapValidator.validators.SoapParser;
+import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
@@ -16,22 +19,26 @@ import gov.nist.hit.ds.utilities.xml.Util;
 import gov.nist.hit.ds.xmlValidator.XmlMessage;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.axiom.om.OMElement;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GoodTest implements XmlMessage {
-	File xmlInputFile = new File("src/test/resources/testdata/good.xml");
+public class GoodIT implements XmlMessage {
+	File xmlInputFile;
 	OMElement ele = null;
 	Event event = null;
 	
 	@Before
+	public void before() throws InitializationFailedException, IOException, RepositoryException {
+		Installation.reset();
+		Installation.installation().initialize();
+		Configuration.configuration();
+	}
+	
 	public void loadXml()   {
 		try {
-			Installation.reset();
-			Installation.installation().initialize();
-			Configuration.configuration();
 			ele = Util.parse_xml(xmlInputFile);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,16 +73,27 @@ public class GoodTest implements XmlMessage {
 	@Test
 	public void runTest() {
 		try {
-			SoapParser soapParser = new SoapParser();
-			soapParser.setEvent(event);
-			AssertionGroup ag = new AssertionGroup();
-			event.addAssertionGroup(ag);
-			soapParser.setXML(this);
-			soapParser.run(null);
+			AssertionGroup ag = run(new File("src/test/resources/testdata/good.xml"));
+			Assertion a = ag.getFirstFailedAssertion();
+			assertNull(a);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
+	}
+	
+	AssertionGroup run(File xmlInputFile) throws RepositoryException, SoapFaultException {
+		this.xmlInputFile = xmlInputFile;
+		loadXml();
+		SoapParser soapParser = new SoapParser();
+		soapParser.setEvent(event);
+		AssertionGroup ag = new AssertionGroup();
+		event.addAssertionGroup(ag);
+		soapParser.setAssertionGroup(ag);
+		soapParser.setEvent(event);
+		soapParser.setXML(this);
+		soapParser.run(null);
+		return ag;
 	}
 	
 }

@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	CSVTable assertionTable = new CSVTable();
 	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
-	String validatorName;
+	String validatorName = "AssertionGroup";
 	static Logger logger = Logger.getLogger(AssertionGroup.class);
 
 	public AssertionGroup() {
@@ -32,6 +32,10 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	public AssertionGroup setValidatorName(String name) {
 		this.validatorName = name;
 		return this;
+	}
+	
+	public String toString() {
+		return "AssertionGroup(" + maxStatus + ")";
 	}
 
 	public CSVTable getTable() { return assertionTable; }
@@ -52,6 +56,20 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 			entry.set(i, values.get(i));
 		}
 		assertionTable.add(entry);
+	}
+	
+	public Assertion getFirstFailedAssertion() {
+		boolean first = true;
+		for (CSVEntry entry : assertionTable.entries()) {
+			if (first) {
+				first = false;
+				continue;
+			}
+			Assertion a = new Assertion(entry);
+			if (a.failed())
+				return a;
+		}
+		return null;
 	}
 
 	/************************************************************

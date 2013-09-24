@@ -14,6 +14,18 @@ public class Assertion {
 	String code = "";
 	String location = "";
 	
+	public Assertion() {
+		
+	}
+	
+	public Assertion(CSVEntry entry) {
+		setEntry(entry);
+	}
+	
+	public boolean failed() {
+		return status.isError();
+	}
+	
 	public CSVEntry getEntry() {
 		CSVEntry entry = new CSVEntry();
 		
