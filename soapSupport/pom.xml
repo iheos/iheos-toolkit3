@@ -44,5 +44,10 @@
   		<artifactId>actorTransaction</artifactId>
   		<version>3.0.0-SNAPSHOT</version>
   	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>errorRecording</artifactId>
+  		<version>3.0.0-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
 </project>

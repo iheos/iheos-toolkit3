@@ -185,7 +185,7 @@ public class SimpleAsset implements Asset, Flushable {
 	public void setParentId(Id id) throws RepositoryException {
 		setProperty(PropertyKey.PARENT_ID, id.getIdString());
 	}
-
+	
 
 	@Override
 	public void updateDescription(String description)
@@ -469,7 +469,7 @@ public class SimpleAsset implements Asset, Flushable {
 		try {
 			name = getDisplayName();
 			if (name!=null && !"".equals(name)) {
-				return name;
+				return name + "(" + getId().getIdString() + ")";
 			} else {
 				name = getId().getIdString();
 			}

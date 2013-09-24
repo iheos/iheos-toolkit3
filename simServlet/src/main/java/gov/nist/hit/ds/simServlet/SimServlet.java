@@ -9,18 +9,12 @@ import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.initialization.installation.Installation;
-import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.api.RepositoryFactory;
-import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.engine.SimEngineException;
-import gov.nist.hit.ds.simSupport.sim.SimDb;
+import gov.nist.hit.ds.simSupport.event.EventBuilder;
 import gov.nist.hit.ds.simSupport.validators.SimEndpointParser;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
@@ -61,7 +55,7 @@ public class SimServlet extends HttpServlet {
 	File simDbDir;
 	String faultSent = null;
 	boolean initialized = false;
-	Event event = null;
+	Event event = null  ;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -71,8 +65,8 @@ public class SimServlet extends HttpServlet {
 
 		// This should do all the primary initialization in case it was not done elsewhere
 		try {
-			File warHome = new File(config.getServletContext().getRealPath("/"));
-			Installation.installation().setWarHome(warHome);
+//			File warHome = new File(config.getServletContext().getRealPath("/"));
+//			Installation.installation().setWarHome(warHome);
 			Installation.installation().initialize();
 			logger.info("External Cache is found at <" + Installation.installation().getExternalCache().toString() + ">");
 		} catch (Exception e) {
@@ -132,6 +126,7 @@ public class SimServlet extends HttpServlet {
 		event = buildEvent(soapEnv, simEndpoint);
 		if (event == null)
 			return;
+		
 
 		TransactionType transType = TransactionType.find(simEndpoint.getTransaction());
 		if (transType == null) {
@@ -194,7 +189,7 @@ public class SimServlet extends HttpServlet {
 		// Actor and Transaction codes.  These codes came from the endpoint used to contact this 
 		// Servlet.
 		try {
-			new ActorSimFactory().run(simEndpoint.getActor() + "^" + simEndpoint.getTransaction(), soapEnv);
+			new ActorSimFactory().run(simEndpoint.getActor() + "^" + simEndpoint.getTransaction(), soapEnv, event);
 		} catch (SoapFaultException sfe) {
 			logger.info("SOAPFault: " + sfe.getMessage());
 			sendSoapFault(soapEnv, sfe);
@@ -228,26 +223,28 @@ public class SimServlet extends HttpServlet {
 	private Event buildEvent(SoapEnvironment soapEnv, SimEndpoint simEndpoint) {
 		Event event = null;
 		try {
-			SimDb db = new SimDb(simEndpoint.getSimId());
-			SimId simId = simEndpoint.getSimId();
-			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-			Repository repos = fact.createNamedRepository(
-					"Event_Repository", 
-					"Event Repository", 
-					new SimpleType("simEventRepository"),               // repository type
-					ActorType.findActor(simEndpoint.getActor()).getShortName() + "-" + simId    // repository name
-					);
-			Asset eventAsset = repos.createAsset(
-					db.nowAsFilenameBase(), 
-					simEndpoint.getTransaction() + " Event", 
-					new SimpleType("simEvent"));
-			event = new Event(eventAsset);
+			event = new EventBuilder().buildEvent(simEndpoint.getSimId(), ActorType.findActor(simEndpoint.getActor()).getShortName(), simEndpoint.getTransaction());
+//			SimDb db = new SimDb(simEndpoint.getSimId());
+//			SimId simId = simEndpoint.getSimId();
+//			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+//			Repository repos = fact.createNamedRepository(
+//					"Event_Repository", 
+//					"Event Repository", 
+//					new SimpleType("simEventRepository"),               // repository type
+//					ActorType.findActor(simEndpoint.getActor()).getShortName() + "-" + simId    // repository name
+//					);
+//			Asset eventAsset = repos.createAsset(
+//					db.nowAsFilenameBase(), 
+//					simEndpoint.getTransaction() + " Event", 
+//					new SimpleType("simEvent"));
+//			event = new Event(eventAsset);
 		} catch (Exception e) {
 			logger.error("Internal error initializing simulator environment", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment: " + e.getMessage());
 		}
 		return event;
 	}
+	
 
 	/**
 	 * Log the incoming request in the SimDb.
@@ -288,6 +285,7 @@ public class SimServlet extends HttpServlet {
 	}
 
 	void sendSoapFault(SoapEnvironment soapEnv, FaultCode faultCode, String reason) {
+		reason = reason.replace('<', '(').replace('>', ')');
 		sendSoapFault(
 				soapEnv, 					
 				new SoapFaultException(

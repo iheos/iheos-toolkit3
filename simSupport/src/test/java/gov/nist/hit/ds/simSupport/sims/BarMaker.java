@@ -1,13 +1,15 @@
 package gov.nist.hit.ds.simSupport.sims;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.datatypes.Bar;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 
 public class BarMaker implements SimComponent {
 	Bar bar;
-	
+	Event event;
+
 	public Bar getBar() {
 		return bar;
 	}
@@ -18,9 +20,9 @@ public class BarMaker implements SimComponent {
 	}
 
 	@Override
-	public void setErrorRecorder(ErrorRecorder er) {
+	public void setAssertionGroup(AssertionGroup er) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -37,12 +39,17 @@ public class BarMaker implements SimComponent {
 	@Override
 	public void setName(String name) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setDescription(String description) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void setEvent(Event event) {
+		this.event = event;	
 	}
 }

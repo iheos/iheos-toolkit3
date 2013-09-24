@@ -22,37 +22,19 @@ public class AssetHelper {
 	static Logger logger = Logger.getLogger(AssetHelper.class);
 	
 	static public Asset createChildAsset(Asset parent, String displayName, String description, SimpleType assetType) throws RepositoryException {
-		logger.info("Creating <" + displayName + ">,  child of <" + parent.getId() + "> in repo <" + parent.getRepository() +">");
+		logger.debug("Creating <" + displayName + ">,  child of <" + parent.toString() + "> in repo <" + parent.getRepository() +">");
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Asset a = fact.getRepository(parent.getRepository()).createAsset(displayName, description, assetType);
-		logger.info("Created <" + a.getId() + ">");
+		logger.debug("Created <" + a.toString() + ">");
 		a.setProperty("parent", parent.getId().getIdString());
 		return a;
-	}
-	
-	/**
-	 * @deprecated  Replaced by {@link Asset#setOrder(int)}
-	 */
-	@Deprecated
-	static public Asset setOrder(Asset a, int order) throws RepositoryException {
-		a.setProperty("order", Integer.toString(order));
-		return a;
-	}
+	}	
 
 	/**
-	 * @deprecated  Replaced by {@link Asset#setMimeType(String)}
-	 */
-	@Deprecated
-	static public Asset setMimeType(Asset a, String mimeType) throws RepositoryException {
-		a.setProperty("mimeType", mimeType);
-		return a;
-	}
-
-	/**
-	 * Returns an iterator for immediate children 
+	 * Returns an iterator for an asset's immediate children 
 	 * @return
 	 */
-	static public AssetIterator getChildren(Asset a) throws RepositoryException {
+	static public AssetIterator getChildren(final Asset a) throws RepositoryException {
 		
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTO,a.getId().getIdString()));

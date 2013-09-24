@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.registryMetadataValidator.object;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
@@ -27,21 +27,21 @@ public class RegistryObject extends AbstractRegistryObject {
 	}
 
 	@Override
-	public void validateRequiredSlotsPresent(ErrorRecorder er,
+	public void validateRequiredSlotsPresent(IAssertionGroup er,
 			ValidationContext vc) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void validateSlotsCodedCorrectly(ErrorRecorder er,
+	public void validateSlotsCodedCorrectly(IAssertionGroup er,
 			ValidationContext vc) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void validateSlotsLegal(ErrorRecorder er) {
+	public void validateSlotsLegal(IAssertionGroup er) {
 		// TODO Auto-generated method stub
 
 	}

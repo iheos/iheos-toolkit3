@@ -1,17 +1,17 @@
 package gov.nist.hit.ds.registryMetadataValidator.datatype;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 
 import org.apache.axiom.om.OMElement;
 
 public abstract class FormatValidator {
-	ErrorRecorder er;
+	IAssertionGroup er;
 	String context;
 	String resource;
 	
-	public FormatValidator(ErrorRecorder er, String context, String resource) {
+	public FormatValidator(IAssertionGroup er, String context, String resource) {
 		this.er = er;
 		this.context = context;
 		this.resource = resource;

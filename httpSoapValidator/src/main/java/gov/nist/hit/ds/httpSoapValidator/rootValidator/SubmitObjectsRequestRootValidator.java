@@ -1,7 +1,10 @@
 package gov.nist.hit.ds.httpSoapValidator.rootValidator;
 
-public class SubmitObjectsRequestRootValidator extends EbrsRootValidator {
+import gov.nist.hit.ds.eventLog.Event;
 
+public class SubmitObjectsRequestRootValidator extends EbrsRootValidator {
+	Event event;
+	
 	@Override
 	String getExpectedRootName() {
 		return "SubmitObjectsRequest";
@@ -17,6 +20,11 @@ public class SubmitObjectsRequestRootValidator extends EbrsRootValidator {
 	public void setDescription(String description) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 }

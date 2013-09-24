@@ -14,13 +14,13 @@ public class ByInjectionLogLoader extends AbstractLogLoader {
 
 	@Inject
 	public void setSimDb(Event event) throws SoapFaultException {
-		logger.info("ByInjectionLogLoader: set Event");
+		logger.debug("ByInjectionLogLoader: set Event");
 		try {
 			header = event.getInOutMessages().getRequestHeader();
 			body = event.getInOutMessages().getRequestBody();
 		} catch (RepositoryException e) {
 			throw new SoapFaultException(
-					er,
+					ag,
 					FaultCode.Receiver,
 					new ErrorContext("Internal Error: cannot load request message: " + e.getMessage())
 					);

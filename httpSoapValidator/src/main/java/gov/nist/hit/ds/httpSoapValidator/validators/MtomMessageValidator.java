@@ -2,8 +2,9 @@ package gov.nist.hit.ds.httpSoapValidator.validators;
 
 import gov.nist.hit.ds.docRef.Mtom;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.http.parser.MultipartParserBa;
@@ -21,6 +22,7 @@ public class MtomMessageValidator extends MessageValidator {
 	MessageValidatorEngine mvc;
 //	RegistryValidationInterface rvi;
 	byte[] bodyBytes;
+	Event event;
 
 	public MtomMessageValidator(ValidationContext vc, HttpParserBa headers, byte[] body, MessageValidatorEngine mvc) {
 		super(vc);
@@ -30,7 +32,7 @@ public class MtomMessageValidator extends MessageValidator {
 	}
 
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		headers.setErrorRecorder(er);
 		try {
@@ -98,6 +100,12 @@ public class MtomMessageValidator extends MessageValidator {
 	public void setDescription(String description) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 }

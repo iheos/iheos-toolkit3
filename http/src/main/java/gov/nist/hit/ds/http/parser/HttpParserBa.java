@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.http.parser;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
@@ -16,7 +16,7 @@ public class HttpParserBa {
 	int from;
 	int to = 0;
 	boolean parsed = false;
-	ErrorRecorder er = null;
+	IAssertionGroup er = null;
 	String charset = null;
 	HttpMessageBa message = new HttpMessageBa();  // Holds the parsed message
 	MultipartParserBa multiparser;
@@ -66,7 +66,7 @@ public class HttpParserBa {
 		return message.multipart;
 	} 
 
-	public void setErrorRecorder(ErrorRecorder er) {
+	public void setErrorRecorder(IAssertionGroup er) {
 		this.er = er;
 	}
 
@@ -83,7 +83,7 @@ public class HttpParserBa {
 		init(request);
 	}
 
-	public HttpParserBa(HttpServletRequest request, ErrorRecorder er) throws IOException, HttpParseException {
+	public HttpParserBa(HttpServletRequest request, IAssertionGroup er) throws IOException, HttpParseException {
 		this.er = er;
 		init(request);
 	}
@@ -106,7 +106,7 @@ public class HttpParserBa {
 		init(msg, null);
 	}
 
-	public HttpParserBa(byte[] msg, ErrorRecorder er) throws HttpParseException, ParseException   {
+	public HttpParserBa(byte[] msg, IAssertionGroup er) throws HttpParseException, ParseException   {
 		this.er = er;
 		init(msg, null);
 	}

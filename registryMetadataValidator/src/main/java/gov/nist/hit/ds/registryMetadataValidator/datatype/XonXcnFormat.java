@@ -1,10 +1,10 @@
 package gov.nist.hit.ds.registryMetadataValidator.datatype;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 
 public class XonXcnFormat extends FormatValidator {
 
-	public XonXcnFormat(ErrorRecorder er, String context, String resource) {
+	public XonXcnFormat(IAssertionGroup er, String context, String resource) {
 		super(er, context, resource);
 	}
 

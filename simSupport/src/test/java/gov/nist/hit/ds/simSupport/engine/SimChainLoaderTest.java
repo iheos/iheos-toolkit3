@@ -3,34 +3,53 @@ package gov.nist.hit.ds.simSupport.engine;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
+import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.simSupport.client.SimId;
+import gov.nist.hit.ds.simSupport.event.EventBuilder;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.log4j.BasicConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SimChainLoaderTest {
+
+	@Before
+	public void before() throws InitializationFailedException, IOException, RepositoryException {
+		Installation.reset();
+		Installation.installation().initialize();
+		BasicConfigurator.configure();
+		Configuration.configuration();
+	}
 
 	@Test 
 	public void isCompleteTest() {		
 
 		try {
+			
+			Event event = new EventBuilder().buildEvent(new SimId("123"), "Foo", "foo");
 
-			String chainDef = "gov/nist/hit/ds/simSupport/engine/FooMaker.properties";
+			String chainDef = "FooMaker.properties";
 
 			SimChain simChain = new SimChainLoader(chainDef).load();
 
-			SimEngine engine = new SimEngine(simChain);
-			
-			
+			SimEngine engine = new SimEngine(simChain, event);
+
+
 			for (SimStep step : simChain.getSteps()) 
 				assertFalse(step.hasRan());
 			assertFalse(engine.isComplete());
-			
-			
+
+
 			engine.run();
-			
-			
+
+
 			for (SimStep step : simChain.getSteps()) 
 				assertTrue(step.hasRan());
 			assertTrue(engine.isComplete());
@@ -61,6 +80,9 @@ public class SimChainLoaderTest {
 			e.printStackTrace();
 			fail();
 		} catch (SimChainLoaderException e) {
+			e.printStackTrace();
+			fail();
+		} catch (RepositoryException e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -71,19 +93,21 @@ public class SimChainLoaderTest {
 
 		try {
 
-			String chainDef = "gov/nist/hit/ds/simSupport/engine/FooMaker.properties";
+			String chainDef = "FooMaker.properties";
 
-			SimEngine engine = new SimEngine(chainDef);
-			
-			
+			Event event = new EventBuilder().buildEvent(new SimId("IsCompleteTest2"), "Foo", "foo");
+
+			SimEngine engine = new SimEngine(chainDef, event);
+
+
 			for (SimStep step : engine.getSimChain().getSteps()) 
 				assertFalse(step.hasRan());
 			assertFalse(engine.isComplete());
-			
-			
+
+
 			engine.run();
-			
-			
+
+
 			for (SimStep step : engine.getSimChain().getSteps()) 
 				assertTrue(step.hasRan());
 			assertTrue(engine.isComplete());
@@ -114,6 +138,9 @@ public class SimChainLoaderTest {
 			e.printStackTrace();
 			fail();
 		} catch (SimChainLoaderException e) {
+			e.printStackTrace();
+			fail();
+		} catch (RepositoryException e) {
 			e.printStackTrace();
 			fail();
 		}

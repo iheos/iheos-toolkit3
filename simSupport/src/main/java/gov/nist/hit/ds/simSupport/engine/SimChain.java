@@ -1,8 +1,9 @@
 package gov.nist.hit.ds.simSupport.engine;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.SystemErrorRecorder;
-import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
+import gov.nist.hit.ds.eventLog.assertion.Assertion;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -53,30 +54,39 @@ public class SimChain  {
 
 	public boolean hasErrors() {
 		for (SimStep step : steps) {
-			ErrorRecorder er = step.getErrorRecorder(); 
+			IAssertionGroup er = step.getAssertionGroup(); 
 			if (er != null && er.hasErrors())
 				return true;
 		}
 		return false;
 	}
 
-	public String getError() {
+	/**
+	 * Get an informal list of errors - to support logging, not reporting
+	 * @return
+	 */
+	public String getErrors() {
+		StringBuffer buf = new StringBuffer();
 		for (SimStep step : steps) {
-			ErrorRecorder er = step.getErrorRecorder(); 
-			if (er != null && er.hasErrors()) {
-				List<ValidatorErrorItem> ei = er.getErrMsgs();
-				if (ei.size() > 0)
-					return ei.get(0).msg;
+			AssertionGroup ag = step.getAssertionGroup(); 
+			if (ag != null && ag.hasErrors()) {
+				ag.resetEnumeration();
+				while (ag.hasMoreElements()) {
+					Assertion as = ag.nextElement();
+					if (as.getStatus().isError()) {
+						buf.append(as.getStatus()).append(" : ").append(as.getMsg()).append("\n");
+					}
+				}
 			}
-		}
-		return null;
+    	}
+		return buf.toString();
 	}
 
 	public String getLog() {
 		StringBuffer buf = new StringBuffer();
 		buf.append("---------------------------------------------------------------\n");
 		for (SimStep step : steps) {
-			ErrorRecorder er = step.getErrorRecorder();
+			IAssertionGroup er = step.getAssertionGroup();
 			if (er == null) {
 				buf.append("FATAL ERROR: Step <" + step.getName() + "> does not have an ErrorRecorder\n");
 				continue;

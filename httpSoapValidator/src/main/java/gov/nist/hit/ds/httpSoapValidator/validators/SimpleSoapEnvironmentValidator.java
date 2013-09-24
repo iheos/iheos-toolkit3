@@ -1,18 +1,18 @@
 package gov.nist.hit.ds.httpSoapValidator.validators;
 
+
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
-import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.eventLog.assertion.Assertion;
+import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
 import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.http.parser.ParseException;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.simSupport.loader.ValidationContext;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
-import gov.nist.hit.ds.utilities.string.StringUtil;
 import gov.nist.hit.ds.utilities.xml.XmlText;
 
 /**
@@ -36,10 +36,10 @@ public class SimpleSoapEnvironmentValidator extends SimComponentBase {
 	}
 
 	@Override
-	public void run(MessageValidatorEngine mve) throws SoapFaultException {
+	public void run(MessageValidatorEngine mve) throws SoapFaultException, RepositoryException {
 		if (hparser.isMultipart())
 			throw new SoapFaultException(
-					er,
+					ag,
 					FaultCode.Sender,
 					new ErrorContext("Expecting SIMPLE SOAP - multipart format indicates MTOM instead"));
 		bodyBytes = hparser.getBody();
@@ -49,7 +49,7 @@ public class SimpleSoapEnvironmentValidator extends SimComponentBase {
 			contentTypeHeader = new HttpHeader(contentTypeString);
 		} catch (ParseException e) {
 			throw new SoapFaultException(
-					er,
+					ag,
 					FaultCode.Sender,
 					new ErrorContext(
 							"Error parsing content-type header - <" + contentTypeString + ">"));
@@ -58,19 +58,23 @@ public class SimpleSoapEnvironmentValidator extends SimComponentBase {
 		if (contentTypeValue == null) contentTypeValue = "";
 		if (!"application/soap+xml".equals(contentTypeValue.toLowerCase()))
 			throw new SoapFaultException(
-					er,
+					ag,
 					FaultCode.Sender,
 					new ErrorContext(
 							"Content-Type header must have value application/soap+xml - found instead " + contentTypeValue,
 							"http://www.w3.org/TR/soap12-part0 - Section 4.1.2"));
-		er.detail("Content-Type is " + contentTypeValue);
+		
+		
+		event.addArtifact("Content-Type", contentTypeValue);
 
 		charset = contentTypeHeader.getParam("charset");
 		if (charset == null || charset.equals("")) {
 			charset = "UTF-8";
-			er.detail("No message CharSet found in Content-Type header, assuming " + charset);
+			ag.addAssertion(new Assertion().setStatus(AssertionStatus.INFO).setExpected("-").setFound("-").setMsg("No message CharSet found in Content-Type header, assuming " + charset));
+//			ag.detail("No message CharSet found in Content-Type header, assuming " + charset);
 		} else {
-			er.detail("Message CharSet is " + charset);
+			ag.addAssertion(new Assertion().setStatus(AssertionStatus.INFO).setExpected("-").setFound(charset).setMsg("Message CharSet"));
+//			ag.detail("Message CharSet is " + charset);
 		}
 
 	}

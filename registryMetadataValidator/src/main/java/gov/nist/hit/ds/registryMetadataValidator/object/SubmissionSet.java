@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMetadataValidator.object;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registryMetadataValidator.datatype.DtmFormat;
@@ -215,7 +215,7 @@ public class SubmissionSet extends AbstractRegistryObject implements TopLevelObj
 	}
 
 
-	public void validate(ErrorRecorder er, ValidationContext vc,
+	public void validate(IAssertionGroup er, ValidationContext vc,
 			Set<String> knownIds) {
 
 		if (vc.skipInternalStructure)
@@ -251,7 +251,7 @@ public class SubmissionSet extends AbstractRegistryObject implements TopLevelObj
 		verifyIdsUnique(er, knownIds);
 	}
 
-	public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
+	public void validateSlotsCodedCorrectly(IAssertionGroup er, ValidationContext vc)  {
 		if (vc.isXDRMinimal) { 
 			validateDirectSlotsCodedCorrectly(er, vc);
 		} else {
@@ -261,14 +261,14 @@ public class SubmissionSet extends AbstractRegistryObject implements TopLevelObj
 		}
 	}
 
-	public void validateDirectSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
+	public void validateDirectSlotsCodedCorrectly(IAssertionGroup er, ValidationContext vc)  {
 
 		//                    name				   multi	format                                                  resource
 		validateSlot(er, 	"submissionTime", 	   false, 	new DtmFormat(er, "Slot submissionTime",            table416),  table416);
 		validateSlot(er, 	"intendedRecipient",   true, 	new XonXcnXtnFormat(er, "Slot intendedRecipient",     table416),  table416);
 	}
 
-	public void validateRequiredSlotsPresent(ErrorRecorder er, ValidationContext vc) {
+	public void validateRequiredSlotsPresent(IAssertionGroup er, ValidationContext vc) {
 		// Slots always required
 		if (vc.isXDRMinimal) {
 			for (String slotName : requiredSlotsMinimal) {
@@ -283,7 +283,7 @@ public class SubmissionSet extends AbstractRegistryObject implements TopLevelObj
 		}
 	}
 
-	public void validateSlotsLegal(ErrorRecorder er)  {
+	public void validateSlotsLegal(IAssertionGroup er)  {
 		verifySlotsUnique(er);
 		for (Slot slot : getSlots()) {
 			if ( ! legal_slot_name(slot.getName()))
@@ -298,7 +298,7 @@ public class SubmissionSet extends AbstractRegistryObject implements TopLevelObj
 		return definedSlots.contains(name);
 	}
 
-	public void validateTopAtts(ErrorRecorder er, ValidationContext vc) {
+	public void validateTopAtts(IAssertionGroup er, ValidationContext vc) {
 		validateTopAtts(er, vc, table416, statusValues);
 	}
 

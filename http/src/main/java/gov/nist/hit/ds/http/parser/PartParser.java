@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.http.parser;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 
@@ -19,7 +19,7 @@ public class PartParser extends HttpParser {
 		initPart();
 	}
 	
-	public PartParser(byte[] msg, ErrorRecorder er, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException {
+	public PartParser(byte[] msg, IAssertionGroup er, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException {
 //		super(msg,er);
 		logger.debug("new PartParser(" + this.toString() + ")");
 		this.er = er;

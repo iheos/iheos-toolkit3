@@ -2,6 +2,7 @@ package gov.nist.hit.ds.registryMetadataValidator.field;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
@@ -18,7 +19,7 @@ import java.util.List;
 import org.apache.axiom.om.OMElement;
 
 
-public class ValidatorCommon implements ErrorRecorder {
+public class ValidatorCommon implements IAssertionGroup {
 	Metadata m;
 	RegistryErrorListGenerator rel;
 	ValidationContext valCtx = new ValidationContext();
@@ -191,7 +192,7 @@ public class ValidatorCommon implements ErrorRecorder {
 			err(type + " " + id + " : Classification of type " + classification_scheme + " ( " + class_name + " ) is duplicated");
 	}
 
-	static public void validate_CX_datatype(ErrorRecorder er, String attName, String pid, String resource) {
+	static public void validate_CX_datatype(IAssertionGroup er, String attName, String pid, String resource) {
 		String err = validate_CX_datatype(pid);
 		if (err != null)
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(attName + ": " + err), "ValidatorCommon");
@@ -308,16 +309,12 @@ public class ValidatorCommon implements ErrorRecorder {
 		
 	}
 
-	public ErrorRecorder buildNewErrorRecorder() {
-		return this;
-	}
-
 	public int getNbErrors() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public void concat(ErrorRecorder er) {
+	public void concat(IAssertionGroup er) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -382,6 +379,12 @@ public class ValidatorCommon implements ErrorRecorder {
 	public void warning(Code code, ErrorContext context, String location) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public ErrorRecorder buildNewErrorRecorder() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

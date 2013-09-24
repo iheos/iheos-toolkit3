@@ -36,7 +36,7 @@ public class SiteToXMLTest {
 		CombinedSiteLoader loader = new CombinedSiteLoader();
 		Sites sites1 = new Sites();
 		Site site = new Site("bjar");
-		site.addTransaction("sq.b", "http://bjar", true, false);
+		site.addTransaction("sqb", "http://bjar", true, false);
 		sites1.add(site);
 		OMElement sitesX = loader.toXML(sites1);
 		try {
@@ -73,7 +73,7 @@ public class SiteToXMLTest {
 		sites1.add(site);
 		
 		Site sitea = new Site("bjar");
-		sitea.addTransaction("sq.b", "http://bjarx", false, false);
+		sitea.addTransaction("sqb", "http://bjarx", false, false);
 		sites1.add(sitea);		
 
 		OMElement sitesX = loader.toXML(sites1);

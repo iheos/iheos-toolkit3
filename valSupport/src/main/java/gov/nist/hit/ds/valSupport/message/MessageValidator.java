@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.valSupport.message;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 
 /**
  * A message validator is the basic interface for both validators
@@ -9,7 +9,7 @@ import gov.nist.hit.ds.errorRecording.ErrorRecorder;
  *
  */
 public interface MessageValidator {
-	void setErrorRecorder(ErrorRecorder er);
-	ErrorRecorder getErrorRecorder();
+	void setErrorRecorder(IAssertionGroup er);
+	IAssertionGroup getErrorRecorder();
 	void run();
 }

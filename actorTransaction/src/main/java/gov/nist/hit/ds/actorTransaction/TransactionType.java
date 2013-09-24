@@ -18,16 +18,16 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  */
 public enum TransactionType  implements IsSerializable, Serializable {
-	PROVIDE_AND_REGISTER      ("ITI-41", "Provide and Register",              "prb",    "pr.b",  "pr.as",    "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b", "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse", false),
+	PROVIDE_AND_REGISTER      ("ITI-41", "Provide and Register",              "prb",    "prb",  "pr.as",    "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b", "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse", false),
 	XDR_PROVIDE_AND_REGISTER  ("ITI-41", "XDR Provide and Register",          "xdrpr",  "xdrpr", "xdrpr.as", "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b", "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse", false),
-	REGISTER                  ("ITI-42", "Register",                          "rb",     "r.b",   "r.as",     "urn:ihe:iti:2007:RegisterDocumentSet-b", "urn:ihe:iti:2007:RegisterDocumentSet-bResponse", false),
-	RETRIEVE                  ("ITI-43", "Retrieve",                          "ret",    "ret.b", "ret.as",   "urn:ihe:iti:2007:RetrieveDocumentSet", "urn:ihe:iti:2007:RetrieveDocumentSetResponse", true),
+	REGISTER                  ("ITI-42", "Register",                          "rb",     "rb",   "r.as",     "urn:ihe:iti:2007:RegisterDocumentSet-b", "urn:ihe:iti:2007:RegisterDocumentSet-bResponse", false),
+	RETRIEVE                  ("ITI-43", "Retrieve",                          "ret",    "retb", "ret.as",   "urn:ihe:iti:2007:RetrieveDocumentSet", "urn:ihe:iti:2007:RetrieveDocumentSetResponse", true),
 	IG_RETRIEVE               ("ITI-43", "Initiating Gateway Retrieve",       "igr",    "igr",   "igr.as",   "urn:ihe:iti:2007:RetrieveDocumentSet", "urn:ihe:iti:2007:RetrieveDocumentSetResponse", false),
 	ODDS_RETRIEVE             ("ITI-43", "On-Demand Document Source Retrieve","odds",   "odds",  "odds.as",  "urn:ihe:iti:2007:RetrieveDocumentSet", "urn:ihe:iti:2007:RetrieveDocumentSetResponse", false),
 	ISR_RETRIEVE              ("ITI-43", "Integrated Source/Repository Retrieve","isr",   "isr",  "isr.as",  "urn:ihe:iti:2007:RetrieveDocumentSet", "urn:ihe:iti:2007:RetrieveDocumentSetResponse", false),
-	STORED_QUERY              ("ITI-18", "Stored Query",                      "sq",     "sq.b",  "sq.as",    "urn:ihe:iti:2007:RegistryStoredQuery", "urn:ihe:iti:2007:RegistryStoredQueryResponse", false),
+	STORED_QUERY              ("ITI-18", "Stored Query",                      "sq",     "sqb",  "sq.as",    "urn:ihe:iti:2007:RegistryStoredQuery", "urn:ihe:iti:2007:RegistryStoredQueryResponse", false),
 	IG_QUERY                  ("ITI-18", "Initiating Gateway Query",          "igq",    "igq",   "igq.as",   "urn:ihe:iti:2007:RegistryStoredQuery", "urn:ihe:iti:2007:RegistryStoredQueryResponse", false),
-	UPDATE                    ("ITI-57", "Update",                            "update", "update.b", "update.b.as", "urn:ihe:iti:2010:UpdateDocumentSet", "urn:ihe:iti:2010:UpdateDocumentSetResponse", false),
+	UPDATE                    ("ITI-57", "Update",                            "update", "updateb", "update.b.as", "urn:ihe:iti:2010:UpdateDocumentSet", "urn:ihe:iti:2010:UpdateDocumentSetResponse", false),
 	XC_QUERY                  ("ITI-38", "Cross-Community Query",             "xcq",    "xcq",   "xcq.as",   "urn:ihe:iti:2007:CrossGatewayQuery", "urn:ihe:iti:2007:CrossGatewayQueryResponse", false),
 	XC_RETRIEVE               ("ITI-39", "Cross-Community Retrieve",          "xcr",    "xcr",   "xcr.as",   "urn:ihe:iti:2007:CrossGatewayRetrieve", "urn:ihe:iti:2007:CrossGatewayRetrieveResponse", false),
 	MPQ                       ("ITI-51", "Multi-Patient Query",               "mpq",    "mpq",   "mpq.as",   "urn:ihe:iti:2009:MultiPatientStoredQuery", "urn:ihe:iti:2009:MultiPatientStoredQueryResponse", false),

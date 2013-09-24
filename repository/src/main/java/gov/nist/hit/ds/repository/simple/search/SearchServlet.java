@@ -1,8 +1,11 @@
 package gov.nist.hit.ds.repository.simple.search;
 
+import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.initialization.installation.PropertyServiceManager;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
+import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
@@ -15,7 +18,10 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -61,7 +67,33 @@ public class SearchServlet extends HttpServlet {
 
 		SimpleRepository repos = null; 
 		try {
-			Installation.installation();
+			
+			try {
+				Installation.installation();
+				
+				if (Installation.installation().getExternalCache()==null) {
+					File tpPath = new File(getServletContext().getRealPath("WEB-INF/"+ Installation.TOOLKIT_PROPERTIES));
+					
+					Properties props = new Properties();
+					
+					FileReader fr = new FileReader(tpPath);
+					props.load(fr);
+					fr.close();
+					String ecDir = props.getProperty(PropertyServiceManager.EXTERNAL_CACHE);
+					
+					if (ecDir!=null) {
+						Installation.installation().setExternalCache(new File(ecDir));
+					} else {
+						throw new ServletException("Undefined "+PropertyServiceManager.EXTERNAL_CACHE + " property in " + Installation.TOOLKIT_PROPERTIES);
+					}
+										
+					Installation.installation().initialize();					
+				}				
+				
+			} catch (Exception ex) {
+				throw new ServletException("Request could not be completed." + ex.toString());
+			}
+						
 			Configuration.configuration();
 			
 			repos = new SimpleRepository(new SimpleId(reposId));
@@ -137,11 +169,11 @@ public class SearchServlet extends HttpServlet {
 		try {
 			SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 			
-			String nest = (topLevel==level)?"id":"parentId";
+			PropertyKey nest = (topLevel==level)? PropertyKey.ASSET_ID : PropertyKey.PARENT_ID;
 			criteria.append(new SearchTerm(nest,Operator.EQUALTO,assetId));
 			
 			
-			AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, "displayOrder");
+			AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
 			
 			if (iter.hasNextAsset()) {
 				reportBeginHeader(topLevel, level, sb); // ul
@@ -285,7 +317,7 @@ public class SearchServlet extends HttpServlet {
 					sb.append("title='" + StringEscapeUtils.escapeHtml4(new String(a.getContent())) + "' ");
 				}
 				
-				sb.append("family='arial,verdana,sans-serif' size='2'><sup><a href='" + this.getServletContext().getContextPath() + "downloadAsset?reposId=" + a.getRepository().getIdString() + "&assetId=" + a.getId().getIdString() + "'>" 
+				sb.append("family='arial,verdana,sans-serif' size='2'><sup><a href='" + this.getServletContext().getContextPath() + "/repository/downloadAsset?reposSrc="+ a.getSource().getAccess().name() +"&reposId=" + a.getRepository().getIdString() + "&assetId=" + a.getId().getIdString() + "'>" 
 				+ a.getMimeType()
 				+ "</a></sup></font>");
 			}

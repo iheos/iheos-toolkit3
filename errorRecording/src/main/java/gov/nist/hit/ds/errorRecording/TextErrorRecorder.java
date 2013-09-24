@@ -79,7 +79,7 @@ public class TextErrorRecorder implements ErrorRecorder {
 			return;
 		}
 		
-		ErrorInfo last = errMsgs.get(errMsgs.size() - 1);
+//		ErrorInfo last = errMsgs.get(errMsgs.size() - 1);
 //		if (last.indent == 1)
 //			last.msg = last.msg + " - ok";
 	}
@@ -270,6 +270,5 @@ public class TextErrorRecorder implements ErrorRecorder {
 		// TODO Auto-generated method stub
 		
 	}
-	
 
 }

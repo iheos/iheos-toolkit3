@@ -1,12 +1,13 @@
 package gov.nist.hit.ds.actorSimFactory;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoader;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
 import gov.nist.hit.ds.simSupport.engine.SimEngineException;
-import gov.nist.hit.ds.simSupport.engine.SimEngineSubscriptionException;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.io.Io;
@@ -56,7 +57,7 @@ public class ActorSimFactory {
 		configuredSimsFile = file;
 	}
 
-	public void run(String actorTransCode, Object base) throws SoapFaultException, SimEngineException {
+	public void run(String actorTransCode, Object base, Event event) throws SoapFaultException, SimEngineException, RepositoryException {
 		String actorCode = actorCode(actorTransCode);
 		String transCode = transactionCode(actorTransCode);
 		if (actorCode == null) {
@@ -88,10 +89,10 @@ public class ActorSimFactory {
 		}
 
 		simChain.setBase(base);
-		SimEngine engine = new SimEngine(simChain);
-		logger.info(engine.getDescription(simChain).toString());
+		SimEngine engine = new SimEngine(simChain, event);
+		logger.debug("\n" + engine.getDescription(simChain).toString());
 		engine.run();
-		logger.info(simChain.getLog());
+		logger.debug("\n" + simChain.getLog());
 	}
 
 	/**
@@ -114,7 +115,7 @@ public class ActorSimFactory {
 			InputStream is = getClass().getResourceAsStream(configuredSimsFileName); 
 			if (is == null)
 				throw new FileNotFoundException("Could not load <" + configuredSimsFileName + ">");
-			logger.info("Loading Simulator configurations from <" + configuredSimsFileName + ">");
+			logger.debug("Loading Simulator configurations from <" + configuredSimsFileName + ">");
 			simConfig.load(is);
 		}
 

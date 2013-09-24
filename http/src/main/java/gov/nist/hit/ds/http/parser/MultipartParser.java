@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.http.parser;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 
@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 public class MultipartParser {
 	HttpParser hp;
 	HttpHeader contentTypeHeader;
-	ErrorRecorder er = null;
+	IAssertionGroup er = null;
 	boolean appendixV = true;
 	MultipartMessage message = new MultipartMessage();
 	static final Logger logger = Logger.getLogger(HttpParser.class);
@@ -23,7 +23,7 @@ public class MultipartParser {
 		parse();
 	}
 
-	public MultipartParser(HttpParser hp, ErrorRecorder er, boolean appendixV) throws ParseException, HttpHeaderParseException, HttpParseException {
+	public MultipartParser(HttpParser hp, IAssertionGroup er, boolean appendixV) throws ParseException, HttpHeaderParseException, HttpParseException {
 		logger.debug("new MultipartParser(" + this.toString() + ")");
 		this.hp = hp;
 		this.er = er;

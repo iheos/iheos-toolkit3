@@ -1,6 +1,8 @@
 package gov.nist.hit.ds.simSupport.engine.v2compatibility;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.loader.ValidationContext;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
@@ -14,10 +16,11 @@ import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
  */
 abstract public class MessageValidator implements SimComponent {
 	public ValidationContext vc;
-	public ErrorRecorder er;
+	public IAssertionGroup er;
 	String name;  // a descriptive name for debugging displays
+	Event event;
 	
-	abstract public void run(ErrorRecorder er, MessageValidatorEngine mve) throws SoapFaultException;
+	abstract public void run(IAssertionGroup er, MessageValidatorEngine mve) throws SoapFaultException;
 
 	public MessageValidator(ValidationContext vc) {
 		this.vc = vc;
@@ -27,12 +30,12 @@ abstract public class MessageValidator implements SimComponent {
 		
 	}
 	
-	public ErrorRecorder getErrorRecorder() {
+	public IAssertionGroup getErrorRecorder() {
 		return er;
 	}
 
 	@Override
-	public void setErrorRecorder(ErrorRecorder er) {
+	public void setAssertionGroup(AssertionGroup er) {
 		this.er = er;
 	}
 
@@ -52,6 +55,10 @@ abstract public class MessageValidator implements SimComponent {
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
 		run(er, mve);
+	}
+	
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 }

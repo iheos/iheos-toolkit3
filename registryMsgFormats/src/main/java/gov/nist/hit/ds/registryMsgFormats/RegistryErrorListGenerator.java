@@ -2,6 +2,7 @@ package gov.nist.hit.ds.registryMsgFormats;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
@@ -29,7 +30,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.log4j.Logger;
 
-public class RegistryErrorListGenerator implements ErrorRecorder {
+public class RegistryErrorListGenerator implements IAssertionGroup {
 	boolean has_errors = false;
 	boolean has_warnings = false;
 	OMElement rel = null;
@@ -256,7 +257,7 @@ public class RegistryErrorListGenerator implements ErrorRecorder {
 	}
 
 	public ErrorRecorder buildNewErrorRecorder() {
-		return this;
+		return null;
 	}
 
 	public int getNbErrors() {
@@ -264,7 +265,7 @@ public class RegistryErrorListGenerator implements ErrorRecorder {
 		return 0;
 	}
 
-	public void concat(ErrorRecorder er) {
+	public void concat(IAssertionGroup er) {
 		// TODO Auto-generated method stub
 
 	}

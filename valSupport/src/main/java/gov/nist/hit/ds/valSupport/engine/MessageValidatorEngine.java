@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.valSupport.engine;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
 import gov.nist.hit.ds.valSupport.message.AbstractMessageValidator;
 import gov.nist.hit.ds.valSupport.message.NullMessageValidator;
@@ -112,7 +112,7 @@ public class MessageValidatorEngine {
 	 * @param er its private ErrorRecorder
 	 * @return the ValidationStep structure which is used internally to the engine
 	 */
-	public ValidationStep addMessageValidator(String stepName, AbstractMessageValidator v, ErrorRecorder er) {
+	public ValidationStep addMessageValidator(String stepName, AbstractMessageValidator v, IAssertionGroup er) {
 		ValidationStep step = new ValidationStep();
 		step.stepName = stepName;
 		step.validator = v;
@@ -137,7 +137,7 @@ public class MessageValidatorEngine {
 	 * @param stepName name of the validation step
 	 * @param er its private ErrorRecorder
 	 */
-	public void addErrorRecorder(String stepName, ErrorRecorder er) {
+	public void addErrorRecorder(String stepName, IAssertionGroup er) {
 		ValidationStep step = addMessageValidator(stepName, new NullMessageValidator(new ValidationContext(), er), er);
 		step.ran = true;
 	}

@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.http.parser;
 
-import gov.nist.hit.ds.errorRecording.ErrorRecorder;
-import gov.nist.hit.ds.errorRecording.TextErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
@@ -17,7 +17,7 @@ public class HttpParser {
 	byte[] input;
 	int from;
 	int to = 0;
-	ErrorRecorder er = null;
+	IAssertionGroup er = null;
 	String charset = null;
 	HttpMessage message = new HttpMessage();
 	MultipartParser multiparser;
@@ -97,7 +97,7 @@ public class HttpParser {
 		return message.multipart;
 	} 
 
-	public void setErrorRecorder(ErrorRecorder er) {
+	public void setErrorRecorder(IAssertionGroup er) {
 		this.er = er;
 	}
 
@@ -117,14 +117,15 @@ public class HttpParser {
 		init(request);
 	}
 
-	public HttpParser(HttpServletRequest request, ErrorRecorder er) throws IOException, HttpParseException {
+	public HttpParser(HttpServletRequest request, IAssertionGroup er) throws IOException, HttpParseException {
 		logger.debug("new HttpParser(" + this.toString() + ")");
 		this.er = er;
 		init(request);
 	}
 
 	public void init(HttpServletRequest request) throws IOException, HttpParseException {
-		for (Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements(); ) {
+		for (@SuppressWarnings("unchecked")
+		Enumeration<String> e = (Enumeration<String>)request.getHeaderNames(); e.hasMoreElements(); ) {
 			String name = e.nextElement();
 			String value = request.getHeader(name);
 			message.addHeader(name, value);
@@ -132,7 +133,7 @@ public class HttpParser {
 		
 		if (er == null) {
 			// caller must not be interested in the ErrorRecorder results
-			er = new TextErrorRecorder();
+			er = new AssertionGroup();
 		}
 
 		message.bodyBytes = Io.getBytesFromInputStream(request.getInputStream());
@@ -148,20 +149,20 @@ public class HttpParser {
 		init(msg, null, er);
 	}
 
-	public HttpParser(byte[] msg, ErrorRecorder er) throws HttpParseException, HttpHeaderParseException, ParseException  {
+	public HttpParser(byte[] msg, IAssertionGroup er) throws HttpParseException, HttpHeaderParseException, ParseException  {
 		logger.debug("new HttpParser(" + this.toString() + ")");
 		this.er = er;
 		init(msg, null, er);
 	}
 	
-	public HttpParser(byte[] msg, ErrorRecorder er, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException  {
+	public HttpParser(byte[] msg, IAssertionGroup er, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException  {
 		logger.debug("new HttpParser(" + this.toString() + ")");
 		this.er = er;
 		this.appendixV = appendixV;
 		init(msg, null, er);
 	}
 	
-	public void init(byte[] msg, HttpMessage hmessage, ErrorRecorder er) throws ParseException, HttpParseException  {
+	public void init(byte[] msg, HttpMessage hmessage, IAssertionGroup er) throws ParseException, HttpParseException  {
 		input = msg;
 		if (hmessage != null)
 			message = hmessage;
