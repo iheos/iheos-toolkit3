@@ -3,8 +3,8 @@ package gov.nist.toolkit.wsseTool.signature;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import gov.nist.hit.ds.wsseTool.api.config.Context;
 import gov.nist.hit.ds.wsseTool.api.config.ContextFactory;
+import gov.nist.hit.ds.wsseTool.api.config.GenContext;
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
 import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
 import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlFacade;
@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
 
 public class VerifierTest extends BaseTest {
 	
-		Context context;
+		GenContext context;
 		
 		private static Logger log = LoggerFactory.getLogger("");
 

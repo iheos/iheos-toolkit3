@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.wsseTool.parsing;
 
-import gov.nist.hit.ds.wsseTool.api.config.Context;
 import gov.nist.hit.ds.wsseTool.api.config.GenContext;
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
 import gov.nist.hit.ds.wsseTool.parsing.groovyXML.GroovyHeader;
@@ -11,7 +10,7 @@ import java.util.Map;
 
 import org.w3c.dom.Element;
 
-public class Message implements Context, TestData {
+public class Message extends GenContext implements TestData {
 
 	protected GroovyHeader groovyHeader;
 
@@ -19,9 +18,9 @@ public class Message implements Context, TestData {
 	
 	protected OpenSamlSecurityHeader opensamlHeader;
 
-	protected Context context;
+	protected GenContext context;
 
-	public Message(Element domHeader, Context context){
+	public Message(Element domHeader, GenContext context){
 		this.domHeader = domHeader;
 		this.context = (context != null) ? context : new GenContext();
 	}

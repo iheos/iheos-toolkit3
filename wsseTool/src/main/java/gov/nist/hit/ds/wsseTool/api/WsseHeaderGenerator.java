@@ -2,6 +2,7 @@ package gov.nist.hit.ds.wsseTool.api;
 
 import gov.nist.hit.ds.wsseTool.api.config.Context;
 import gov.nist.hit.ds.wsseTool.api.config.ContextFactory;
+import gov.nist.hit.ds.wsseTool.api.config.GenContext;
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
 import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
 import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
@@ -29,7 +30,7 @@ public class WsseHeaderGenerator {
 		String sPass = "changeit";
 		String kPass = "changeit";
 		String alias = "hit-testing.nist.gov";
-		Context context = ContextFactory.getInstance();
+		GenContext context = ContextFactory.getInstance();
 		context.setKeystore(new KeystoreAccess(store,sPass,alias,kPass));
 		context.setParam("patientId", "D1234");
 		new WsseHeaderGenerator().generateWsseHeader(context);
@@ -47,7 +48,7 @@ public class WsseHeaderGenerator {
 	 * @return a generated standard-compliant wsseHeader
 	 * @throws GenerationException 
 	 */
-	public Document generateWsseHeader(Context context) throws GenerationException {
+	public Document generateWsseHeader(GenContext context) throws GenerationException {
 		
 		log.info("\n =============================" +
 				 "\n generation of the wsse header" +

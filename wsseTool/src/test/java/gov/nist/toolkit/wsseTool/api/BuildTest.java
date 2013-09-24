@@ -1,13 +1,12 @@
 package gov.nist.toolkit.wsseTool.api;
 
-import gov.nist.hit.ds.wsseTool.api.config.Context;
 import gov.nist.hit.ds.wsseTool.api.config.ContextFactory;
+import gov.nist.hit.ds.wsseTool.api.config.GenContext;
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
 import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
 import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
 import gov.nist.hit.ds.wsseTool.util.MyXmlUtils;
 import gov.nist.toolkit.wsseTool.BaseTest;
-import gov.nist.toolkit.wsseTool.api.BuildTest;
 
 import java.security.KeyStoreException;
 
@@ -21,7 +20,7 @@ public class BuildTest extends BaseTest {
 
 	private static final Logger log = LoggerFactory.getLogger(BuildTest.class);
 	
-	Context context;
+	GenContext context;
 
 	@Before
 	public void loadKeystore() throws KeyStoreException {

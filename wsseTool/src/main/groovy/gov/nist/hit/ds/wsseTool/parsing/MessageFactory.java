@@ -5,6 +5,7 @@ import java.security.KeyStoreException;
 import gov.nist.hit.ds.wsseTool.api.WsseHeaderGenerator;
 import gov.nist.hit.ds.wsseTool.api.config.Context;
 import gov.nist.hit.ds.wsseTool.api.config.ContextFactory;
+import gov.nist.hit.ds.wsseTool.api.config.GenContext;
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
 import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
 
@@ -36,7 +37,7 @@ public class MessageFactory {
 		}
 	}
 
-	public static Message getMessage(Element wsseHeader, Context context)
+	public static Message getMessage(Element wsseHeader, GenContext context)
 			throws ParseException {
 		validateContext(context);
 		Message message = buildMessage(wsseHeader, context);
@@ -57,7 +58,7 @@ public class MessageFactory {
 		}
 	}
 
-	private static Message buildMessage(Element wsseHeader, Context context)
+	private static Message buildMessage(Element wsseHeader, GenContext context)
 			throws ParseException {
 		Message message = new Message(wsseHeader, context);
 
@@ -83,7 +84,7 @@ public class MessageFactory {
 		String sPass = "changeit";
 		String kPass = "changeit";
 		String alias = "hit-testing.nist.gov";
-		Context context = ContextFactory.getInstance();
+		GenContext context = ContextFactory.getInstance();
 		try {
 			context.setKeystore(new KeystoreAccess(store, sPass, alias, kPass));
 		} catch (KeyStoreException e) {

@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.wsseTool.generation.opensaml;
 
 import gov.nist.hit.ds.wsseTool.api.config.Context;
+import gov.nist.hit.ds.wsseTool.api.config.GenContext;
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
 import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
 import gov.nist.hit.ds.wsseTool.namespace.dom.NhwinNamespaceContextFactory;
@@ -49,7 +50,7 @@ public class OpenSamlWsseSecurityGenerator {
 
 	private Context context;
 
-	public Document generateWsseHeader(Context context)
+	public Document generateWsseHeader(GenContext context)
 			throws GenerationException {
 
 		Document securityHeader; // the DOM document we build

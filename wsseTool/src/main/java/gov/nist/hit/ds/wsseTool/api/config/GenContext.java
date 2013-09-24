@@ -16,12 +16,10 @@ public class GenContext implements Context, TestData {
 		return params;
 	}
 
-	@Override
 	public KeystoreAccess getKeystore() {
 		return keystore;
 	}
 
-	@Override
 	public void setKeystore(KeystoreAccess keystore) {
 		this.keystore = keystore;
 	}
@@ -29,5 +27,10 @@ public class GenContext implements Context, TestData {
 	@Override
 	public void setParam(String key, Object value) {
 		params.put(key, value);
+	}
+
+	@Override
+	public Object getParam(String param) {
+		return params.get(param);
 	}
 }
