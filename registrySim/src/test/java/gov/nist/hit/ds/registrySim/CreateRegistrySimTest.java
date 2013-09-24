@@ -26,12 +26,11 @@ public class CreateRegistrySimTest {
 
 	@Test
 	public void setupTest() throws Exception  {
-		BasicConfigurator.configure();
 		Installation.reset();
 
-		File externalCache = new File("/Users/bill/tmp/external_cache");
-		Installation.installation().setExternalCache(externalCache); 
-
+//		File externalCache = new File("/Users/bill/tmp/external_cache");
+//		Installation.installation().setExternalCache(externalCache); 
+//
 		Installation.installation().initialize();
 		Configuration.configuration();
 
