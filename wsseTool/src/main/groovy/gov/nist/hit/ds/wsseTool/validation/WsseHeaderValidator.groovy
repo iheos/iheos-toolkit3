@@ -140,7 +140,7 @@ public class WsseHeaderValidator implements Validator {
 		int fails = result.getFailureCount()
 		List<Failure> failures = result.getFailures()
 
-		System.out.println(runs + " tests runs in " + time + " milliseconds , "
+		System.out.println("\n Summary: \n"+ runs + " tests runs in " + time + " milliseconds , "
 				+ fails + " have failed, " + result.getIgnoreCount()
 				+ " ignored")
 
