@@ -15,8 +15,8 @@ import gov.nist.hit.ds.wsseTool.parsing.WSSEHeaderParser
 import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerBuilder
 import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerWithOrder
 import gov.nist.hit.ds.wsseTool.validation.engine.ValSuite
-import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation
-import gov.nist.hit.ds.wsseTool.validation.tests.run.ParsingVal
+import gov.nist.hit.ds.wsseTool.validation.tests.run.*
+import gov.nist.hit.ds.wsseTool.validation.engine.annotations.*
 
 import java.security.KeyStoreException
 
@@ -26,6 +26,7 @@ import org.junit.runner.JUnitCore
 import org.junit.runner.Request
 import org.junit.runner.Result
 import org.junit.runner.Runner
+import org.junit.runner.manipulation.Filter
 import org.junit.runner.notification.Failure
 import org.junit.runner.notification.RunListener
 import org.junit.runners.model.RunnerBuilder
@@ -83,7 +84,7 @@ public class WsseHeaderValidator implements Validator {
 			//in any case we run the parsing validation for proper reporting
 			Runner runner = new ValRunnerWithOrder(ParsingVal.class,message)
 			Request request = Request.runner(runner)
-			parseResult = run(request)
+			parseResult = run(request, config)
 		}
 		
 		if(parseResult.getFailureCount() != 0){ //we do not want to go forward if parsing validation failed
@@ -95,24 +96,42 @@ public class WsseHeaderValidator implements Validator {
 		RunnerBuilder builder = new ValRunnerBuilder(message)
 		Runner runner = new ValSuite(CompleteTestSuite.class, builder)
 		Request request = Request.runner(runner)
-		run(request)
+		run(request, config)
 	}
 
-	private Result run(Request request) throws ValidationException {
+	private Result run(Request request, ValConfig config) throws ValidationException {
 
+		Request filteredRequest = applyFilters(request, config);
+		
 		Result result = null
 
 		try{
 			JUnitCore facade = new JUnitCore()
 			TestsListener listener1 = new TestsListener()
 			facade.addListener(listener1)
-			result = facade.run(request)
+			result = facade.run(filteredRequest)
 			report(result, listener1)
 			return result
 		}
 		catch(Exception e){
 			throw new ValidationException("an error occured during validation.", e)
 		}
+	}
+	
+	
+	private Request applyFilters(Request request, ValConfig config){
+		List<Filter> filters = createFilters(config);
+		for(Filter filter : filters){
+			request = request.filterWith(filter);
+		}
+		
+		return request;
+	}
+	
+	
+	//TODO to modify once we know how we will handle config
+	private List<Filter> createFilters(ValConfig config){
+		return Collections.singletonList(optionalFilter);
 	}
 
 	private void report(Result result, TestsListener listener1){
@@ -176,4 +195,19 @@ public class WsseHeaderValidator implements Validator {
 
 		return status
 	}
+	
+	Filter optionalFilter = new Filter() {
+		
+				@Override
+				public boolean shouldRun(Description description) {
+					boolean shouldRun = description.getAnnotation(Optional.class) == null;
+					return shouldRun;
+				}
+		
+				@Override
+				public String describe() {
+					return "optional filter : filtered out all tests marked with @Optional annotation";
+				}
+		
+			};
 }

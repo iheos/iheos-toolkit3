@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory
 
 
 @RunWith(ValRunnerWithOrder.class)
-class AttributeStatementVal extends BaseVal {
+public class AttributeStatementVal extends BaseVal {
 	
 	/*
 	 * Test initialization

@@ -16,8 +16,9 @@ import org.opensaml.xml.validation.ValidationException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+
 @RunWith(ValRunnerWithOrder.class)
-class SignatureVerificationVal extends BaseVal {
+public class SignatureVerificationVal extends BaseVal {
 
 	private OpenSamlSecurityHeader openSamlHeader;
 

@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 
 
 @RunWith(ValRunnerWithOrder.class)
-class AuthnStatementVal extends BaseVal {
+public class AuthnStatementVal extends BaseVal {
 
 	@Validation(id="1075", rtm=["63"])
 	public void authnStatementParsing(){

@@ -12,7 +12,7 @@ import org.junit.rules.TestName
 import org.junit.runner.RunWith;
 
 @RunWith(ValRunnerWithOrder.class)
-class AssertionSignatureVal extends BaseVal {
+public class AssertionSignatureVal extends BaseVal {
 	
 	@Validation(id="1036", rtm=["59"])
 	public void uniqueId(){

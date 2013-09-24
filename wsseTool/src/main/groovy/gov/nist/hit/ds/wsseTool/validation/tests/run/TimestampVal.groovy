@@ -9,8 +9,10 @@ import gov.nist.hit.ds.wsseTool.validation.tests.BaseVal
 import gov.nist.hit.ds.wsseTool.validation.tests.CommonVal
 import gov.nist.hit.ds.wsseTool.validation.tests.ValDescriptor
 
+
+
 @RunWith(ValRunnerWithOrder.class)
-class TimestampVal extends BaseVal {
+public class TimestampVal extends BaseVal {
 
 	@Validation(id="1020", rtm=["45","50","53"])
 	public void ordering() {

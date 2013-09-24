@@ -20,8 +20,10 @@ import org.junit.Rule
 import org.junit.rules.TestName
 import org.junit.runner.RunWith
 
+
+
 @RunWith(ValRunnerWithOrder.class)
-class AssertionVal extends BaseVal {
+public class AssertionVal extends BaseVal {
 
 	@Validation(id="1025", rtm=["66", "157"])
 	public void version() {		
@@ -143,18 +145,22 @@ class AssertionVal extends BaseVal {
 		assert method == "urn:oasis:names:tc:SAML:2.0:cm:holder-of-key"
 	}
 
-	@Validation(id="1064", rtm=["34"], category="optional", status=ValConfig.Status.not_implemented)
+	@Optional
+	@Validation(id="1064", rtm=["34"], status=ValConfig.Status.not_implemented)
 	public void subjectConfirmationBaseID(){
 	}
 
-	@Validation(id="1065", rtm=["34"], category="optional", status=ValConfig.Status.not_implemented)
+	@Optional
+	@Validation(id="1065", rtm=["34"], status=ValConfig.Status.not_implemented)
 	public void subjectConfirmationNameID(){
 	}
 
-	@Validation(id="1066", rtm=["34"], category="optional", status=ValConfig.Status.not_implemented)
+	@Optional
+	@Validation(id="1066", rtm=["34"], status=ValConfig.Status.not_implemented)
 	public void subjectConfirmationEncryptedID(){
 	}
 
+	@Optional
 	@Validation(id="1067", rtm=["35","36","211"])
 	public void subjectConfirmationDataRequired(){
 		if(header.map.subject.SubjectConfirmation[0].SubjectConfirmationData[0] == null) log.error("subject confirmation data is required")

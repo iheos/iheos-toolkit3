@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 
 
 @RunWith(ValRunnerWithOrder.class)
-class AuthzDecisionStatementVal extends BaseVal {
+public class AuthzDecisionStatementVal extends BaseVal {
 
 	@Validation(id="1090", rtm=["65"], category="optional")
 	public void authnStatementParsing(){
