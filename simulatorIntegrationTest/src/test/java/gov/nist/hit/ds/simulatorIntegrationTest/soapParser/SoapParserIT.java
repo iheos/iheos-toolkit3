@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.simulatorIntegrationTest.soapParser;
 
-import static org.junit.Assert.fail;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.eventLog.Event;
@@ -25,7 +25,7 @@ import org.apache.axiom.om.OMElement;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GoodIT implements XmlMessage {
+public class SoapParserIT implements XmlMessage {
 	File xmlInputFile;
 	OMElement ele = null;
 	Event event = null;
@@ -71,11 +71,23 @@ public class GoodIT implements XmlMessage {
 	
 	
 	@Test
-	public void runTest() {
+	public void goodTest() {
 		try {
-			AssertionGroup ag = run(new File("src/test/resources/testdata/good.xml"));
+			AssertionGroup ag = run(new File("src/test/resources/soapParser_testdata/good.xml"));
 			Assertion a = ag.getFirstFailedAssertion();
 			assertNull(a);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void missingHeaderTest() {
+		try {
+			AssertionGroup ag = run(new File("src/test/resources/soapParser_testdata/missingHeader.xml"));
+			Assertion a = ag.getFirstFailedAssertion();
+			assertNotNull(a);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
