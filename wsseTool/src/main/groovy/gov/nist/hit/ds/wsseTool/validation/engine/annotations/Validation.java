@@ -18,6 +18,7 @@ public @interface Validation {
 	String[] rtm() default {"none"}; // from RTM : Transport and Security Specification.pdf
 	String category() default "required";
 	int status() default ValConfig.Status.implemented;
+	String description() default "";
 
 	
 } 

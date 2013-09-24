@@ -25,7 +25,7 @@ class ValidationHelperMethodsTest extends BaseTest  {
 	@Test void test1026positive(){
 		String id = "aasdas12" //standard alphanumeric
 		String id2 = "_12aasdas" //common escape character
-		String id3 = "�aasdas" //special character
+		String id3 = "#aasdas" //special character
 		
 		// '^\\D*$' means should start with a non digit!		
 		Pattern pattern = Pattern.compile('^\\D', Pattern.UNICODE_CASE);

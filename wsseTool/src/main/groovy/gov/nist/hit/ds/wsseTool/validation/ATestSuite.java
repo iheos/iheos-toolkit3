@@ -14,7 +14,6 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		ParsingVal.class,
         AssertionVal.class,
         AssertionSignatureVal.class,
         AttributeStatementVal.class,
