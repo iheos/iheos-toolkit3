@@ -66,6 +66,7 @@ public class WsseHeaderValidator implements Validator {
 		validate(wsseHeader, config, context)
 	}
 
+	//TODO Rather than fixing behavior, having a flag like fail on parse, or fail on first test.
 	public void validate(Element wsseHeader, ValConfig config, Context context) throws ValidationException {
 
 		Message message = null;
@@ -131,7 +132,8 @@ public class WsseHeaderValidator implements Validator {
 	
 	//TODO to modify once we know how we will handle config
 	private List<Filter> createFilters(ValConfig config){
-		return Collections.singletonList(optionalFilter);
+	//	return Collections.singletonList(optionalFilter);
+		return Collections.emptyList();
 	}
 
 	private void report(Result result, TestsListener listener1){

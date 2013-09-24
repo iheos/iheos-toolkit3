@@ -51,9 +51,7 @@ public class AssertionVal extends BaseVal {
 	@Validation(id="1029", rtm=["70"])
 	public void issuerAllowedFormat() {
 		String format = header.map.issuer.@Format.text().trim()
-
-		if(!(format in IssuerFormat.values)) log.error("issuer format not allowed found : {}, but expected one of : {}", format, IssuerFormat.values)
-		assert format in IssuerFormat.values
+		assertTrue( MessageFormat.format("issuer format not allowed found : {0}, but expected one of : {1}", format, IssuerFormat.values.toString()), format in IssuerFormat.values)
 	}
 
 	@Validation(id="1030", rtm=["69","70"])
@@ -64,9 +62,8 @@ public class AssertionVal extends BaseVal {
 			log.info("test conditional if @format : urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress")
 			return
 		}
-
-		if(! CommonVal.validEmail(format) ) log.error("invalid email address : {}", format)
-		assert CommonVal.validEmail(format)
+		
+		assertTrue( MessageFormat.format("invalid email address : {0}", format), CommonVal.validEmail(format))
 	}
 
 	@Validation(id="1031", rtm=["69","70"])
@@ -78,15 +75,15 @@ public class AssertionVal extends BaseVal {
 		}
 
 		String name = header.map.issuer.text().trim()
-		if(! CommonVal.validDistinguishedName(name) ){
-			log.error("NameID is not a valid distinguishedName, found : {}", name)
-		}
+		
+		assertTrue( MessageFormat.format("NameID is not a valid distinguishedName, found : {0}", name), CommonVal.validDistinguishedName(name))
 	}
 
 	@Validation(id="1057", rtm=["62","71"])
 	public void subjectRequired(){
-		if(header.map.subject == null) log.error("subject is required")
-		assert header.map.subject != null
+		
+		assertTrue( "subject is required", header.map.subject != null)
+		
 	}
 
 	@Validation(id="1058", rtm=["72"], status=ValConfig.Status.not_implementable)
@@ -98,9 +95,10 @@ public class AssertionVal extends BaseVal {
 	@Validation(id="1059", rtm=["72","73"])
 	public void subjectNameIDformat(){
 		String format = header.map.subject.NameID[0].@Format.text()
-		if(format != "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress" &&
-		format != "urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName")
-			log.error(ValDescriptor.MA1059)
+		
+		assertTrue( ValDescriptor.MA1059 , format == "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress" ||
+		format == "urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName")
+	
 	}
 
 	@Validation(id="1060", rtm=["72","73"], category="conditional")
@@ -112,8 +110,8 @@ public class AssertionVal extends BaseVal {
 			return
 		}
 
-		if(! CommonVal.validEmail(format) ) log.error("invalid email address : {}", format)
-		assert CommonVal.validEmail(format)
+		assertTrue( MessageFormat.format("invalid email address : {0}", format) , CommonVal.validEmail(format))
+		
 	}
 
 	@Validation(id="1061", rtm=["72","73"], category="conditional")
@@ -125,16 +123,14 @@ public class AssertionVal extends BaseVal {
 		}
 
 		String name = header.map.subject.NameID[0].text().trim()
-		if(! CommonVal.validDistinguishedName(name) ){
-			log.error("NameID is not a valid distinguishedName, found {}",name)
-		}
+		
+		assertTrue( MessageFormat.format("NameID is not a valid distinguishedName, found {0}", name) , CommonVal.validDistinguishedName(name))
 	}
 
 	@Validation(id="1063", rtm=["31","33","36","168"])
 	public void subjectConfirmationMethod(){
 		String method = header.map.subject.SubjectConfirmation[0].@Method.text()
-		if(method != "urn:oasis:names:tc:SAML:2.0:cm:holder-of-key") log.error("@Method should be urn:oasis:names:tc:SAML:2.0:cm:holder-of-key")
-		assert method == "urn:oasis:names:tc:SAML:2.0:cm:holder-of-key"
+		assertTrue("@Method should be urn:oasis:names:tc:SAML:2.0:cm:holder-of-key", method == "urn:oasis:names:tc:SAML:2.0:cm:holder-of-key");
 	}
 
 	@Optional
@@ -155,8 +151,7 @@ public class AssertionVal extends BaseVal {
 	@Optional
 	@Validation(id="1067", rtm=["35","36","211"])
 	public void subjectConfirmationDataRequired(){
-		if(header.map.subject.SubjectConfirmation[0].SubjectConfirmationData[0] == null) log.error("subject confirmation data is required")
-		assert header.map.subject.SubjectConfirmation[0].SubjectConfirmationData[0] != null
+		assertTrue("subject confirmation data is required", header.map.subject.SubjectConfirmation[0].SubjectConfirmationData[0] != null)
 	}
 
 	//TODO need to be check only if 1063 holds => this kind of pattern should be easy to code.Think about it and revisit
@@ -165,11 +160,11 @@ public class AssertionVal extends BaseVal {
 	public void subjectConfirmationDataType(){
 		String type = header.map.subject.SubjectConfirmation[0].SubjectConfirmationData[0].@type
 		if(!type.isEmpty()){
-			if(type != "saml:KeyInfoConfirmationDataType") log.error("@type should be saml:KeyInfoConfirmationDataType")
-			assert type == "saml:KeyInfoConfirmationDataType"
+			assertTrue("@type should be saml:KeyInfoConfirmationDataType", type == "saml:KeyInfoConfirmationDataType")
 		}
 	}
 
+	//TODO verify
 	@Optional
 	@Validation(id="1073", rtm=["211"])
 	public void subjectConfirmationDataNotBefore(){
@@ -182,15 +177,17 @@ public class AssertionVal extends BaseVal {
 
 		if(!notBefore.isEmpty()){
 			DateTime nb = TimeUtil.parseDateString(notBefore)
-			if(nb.isAfter(creationTime)){log.error("subjectConfirmationData@NotBefore {} should be earlier than wsu:Timestamp/wsu:Created {}", nb ,creationTime)}
+			assertFalse(MessageFormat.format("subjectConfirmationData@NotBefore {0} should be earlier than wsu:Timestamp/wsu:Created {1}", nb ,creationTime), nb.isAfter(creationTime))
+		
 		}
 
 		if(!notOnOrAfter.isEmpty()){
 			DateTime nooa = TimeUtil.parseDateString(notOnOrAfter)
-			if(nooa.isBefore(creationTime)){log.error("subjectConfirmationData@NotOnOrAfter {} should be later than wsu:Timestamp/wsu:Created {}", nooa ,creationTime)}
+			assertFalse(MessageFormat.format("subjectConfirmationData@NotOnOrAfter {0} should be later than wsu:Timestamp/wsu:Created {1}", nooa ,creationTime), nooa.isBefore(creationTime))
 		}
 	}
 	
+	//TODO verify
 	@Optional
 	@Validation(id="1074", rtm=["157"])
 	public void conditionsNotBefore(){
@@ -203,11 +200,13 @@ public class AssertionVal extends BaseVal {
 
 		if(!notBefore.isEmpty()){
 			DateTime nb = TimeUtil.parseDateString(notBefore)
+			assertFalse(MessageFormat.format("conditions@NotBefore {0} should be earlier than wsu:Timestamp/wsu:Created {1}", nb ,creationTime), nb.isAfter(creationTime))
 			if(nb.isAfter(creationTime)){log.error("conditions@NotBefore {} should be earlier than wsu:Timestamp/wsu:Created {}", nb ,creationTime)}
 		}
 
 		if(!notOnOrAfter.isEmpty()){
 			DateTime nooa = TimeUtil.parseDateString(notOnOrAfter)
+			assertFalse(MessageFormat.format("conditions@NotOnOrAfter {} should be later than wsu:Timestamp/wsu:Created {}", nooa ,creationTime), nooa.isBefore(creationTime))
 			if(nooa.isBefore(creationTime)){log.error("conditions@NotOnOrAfter {} should be later than wsu:Timestamp/wsu:Created {}", nooa ,creationTime)}
 		}
 	}
