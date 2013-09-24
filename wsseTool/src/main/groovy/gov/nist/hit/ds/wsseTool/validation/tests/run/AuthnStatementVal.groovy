@@ -22,24 +22,6 @@ import org.junit.runner.RunWith;
 @RunWith(ValRunnerWithOrder.class)
 class AuthnStatementVal extends BaseVal {
 
-	@Rule
-	public TestName name = new TestName();
-
-	/*
-	 * Test initialization
-	 */
-	@Before
-	public final void start() {
-		System.out.println("------------ Test start : " + name.getMethodName()
-				+ " -------------------");
-	}
-
-	@After
-	public final void end() {
-		System.out.println("------------ Test end : " + name.getMethodName()
-				+ " -------------------");
-	}
-
 	@Validation(id="1075", rtm=["63"])
 	public void authnStatementParsing(){
 		GPathResult children = header.map.authnStatement.children()

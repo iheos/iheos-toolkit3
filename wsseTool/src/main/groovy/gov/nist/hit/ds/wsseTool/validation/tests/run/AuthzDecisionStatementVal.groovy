@@ -22,24 +22,6 @@ import org.junit.runner.RunWith;
 
 @RunWith(ValRunnerWithOrder.class)
 class AuthzDecisionStatementVal extends BaseVal {
-	
-	@Rule
-	public TestName name = new TestName();
-
-	/*
-	 * Test initialization
-	 */
-	@Before
-	public final void start() {
-		System.out.println("------------ Test start : " + name.getMethodName()
-				+ " -------------------");
-	}
-
-	@After
-	public final void end() {
-		System.out.println("------------ Test end : " + name.getMethodName()
-				+ " -------------------");
-	}
 
 	@Validation(id="1090", rtm=["65"], category="optional")
 	public void authnStatementParsing(){

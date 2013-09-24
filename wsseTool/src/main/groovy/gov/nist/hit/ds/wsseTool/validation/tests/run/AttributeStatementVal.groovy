@@ -20,32 +20,12 @@ import org.slf4j.LoggerFactory
 
 @RunWith(ValRunnerWithOrder.class)
 class AttributeStatementVal extends BaseVal {
-
-	private static final Logger log = LoggerFactory.getLogger(AttributeStatementVal.class)
-
-	@Rule
-	public TestName name = new TestName();
 	
 	/*
 	 * Test initialization
 	 */
 	@Before
-	public final void start() {
-		System.out.println("------------ Test start : " + name.getMethodName()
-				+ " -------------------");
-	}
-
-	@After
-	public final void end() {
-		System.out.println("------------ Test end : " + name.getMethodName()
-				+ " -------------------");
-	}
-	
-	/*
-	 * Test initialization
-	 */
-	@Before
-	public final void attributesSetup2() {
+	public final void getAttributesList() {
 			this.attrs = header.map.attributeStatement.children().findAll{it.name() == 'Attribute'}
 	}
 	

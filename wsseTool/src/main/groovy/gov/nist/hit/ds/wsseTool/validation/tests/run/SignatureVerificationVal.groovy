@@ -19,9 +19,6 @@ import org.slf4j.LoggerFactory
 @RunWith(ValRunnerWithOrder.class)
 class SignatureVerificationVal extends BaseVal {
 
-
-	private static final Logger log = LoggerFactory.getLogger(SignatureVerificationVal.class)
-
 	private OpenSamlSecurityHeader openSamlHeader;
 
 	@Before
