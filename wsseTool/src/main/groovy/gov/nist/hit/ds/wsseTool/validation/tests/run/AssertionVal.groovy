@@ -1,23 +1,20 @@
 package gov.nist.hit.ds.wsseTool.validation.tests.run
 
-import gov.nist.hit.ds.wsseTool.api.config.ValConfig
+import static org.junit.Assert.*
 import gov.nist.hit.ds.wsseTool.time.TimeUtil
 import gov.nist.hit.ds.wsseTool.validation.data.IssuerFormat
-import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation
+import gov.nist.hit.ds.wsseTool.validation.engine.*
+import gov.nist.hit.ds.wsseTool.api.config.*
+import gov.nist.hit.ds.wsseTool.validation.engine.annotations.*
 import gov.nist.hit.ds.wsseTool.validation.tests.BaseVal
 import gov.nist.hit.ds.wsseTool.validation.tests.CommonVal
 import gov.nist.hit.ds.wsseTool.validation.tests.ValDescriptor
-import gov.nist.hit.ds.wsseTool.validation.engine.annotations.*
-import gov.nist.hit.ds.wsseTool.validation.engine.*
 
+import java.text.MessageFormat
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 import org.joda.time.DateTime
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.rules.TestName
 import org.junit.runner.RunWith
 
 
@@ -26,9 +23,8 @@ import org.junit.runner.RunWith
 public class AssertionVal extends BaseVal {
 
 	@Validation(id="1025", rtm=["66", "157"])
-	public void version() {		
-		if("2.0" != header.map.assertion.@Version.text()) log.error("invalid version : {} expected : 2.0", header.map.assertion.@Version.text())
-		assert "2.0" == header.map.assertion.@Version.text()
+	public void version() {	
+		assertEquals( "invalid version", "2.0" , header.map.assertion.@Version.text())
 	}
 
 	@Validation(id="1026", rtm=["67"])
@@ -37,18 +33,14 @@ public class AssertionVal extends BaseVal {
 		// '^\\D*$' means should start with a non digit!
 		Pattern pattern = Pattern.compile('^\\D', Pattern.UNICODE_CASE)
 		Matcher m = pattern.matcher(id)
-
-		if(!m.find()){
-			log.error("ID shall not start with a digit, but {} starts with {}", id , id.charAt(0) )
-		}
+		
+		assertTrue( MessageFormat.format("ID shall not start with a digit, but {0} starts with {1}", id , id.charAt(0) ), m.find());
 	}
 
 	@Validation(id="1027", rtm=["68"])
 	public void issueInstant(){
 		String d = header.map.assertion.@IssueInstant.text()
-
-		if(! TimeUtil.isDateInUTCorTimeZoneFormat(d)) log.error("invalid time format for issueInstant : {}", d)
-		assert TimeUtil.isDateInUTCorTimeZoneFormat(d)
+		assertTrue( MessageFormat.format("invalid time format for issueInstant : {0}"), TimeUtil.isDateInUTCorTimeZoneFormat(d) );
 	}
 
 	@Validation(id="1028" , rtm=["69"], status=ValConfig.Status.not_implementable)
@@ -168,7 +160,8 @@ public class AssertionVal extends BaseVal {
 	}
 
 	//TODO need to be check only if 1063 holds => this kind of pattern should be easy to code.Think about it and revisit
-	@Validation(id="1068", rtm=["36"], category="optional")
+	@Optional
+	@Validation(id="1068", rtm=["36"])
 	public void subjectConfirmationDataType(){
 		String type = header.map.subject.SubjectConfirmation[0].SubjectConfirmationData[0].@type
 		if(!type.isEmpty()){
@@ -177,7 +170,8 @@ public class AssertionVal extends BaseVal {
 		}
 	}
 
-	@Validation(id="1073", rtm=["211"], category="optional")
+	@Optional
+	@Validation(id="1073", rtm=["211"])
 	public void subjectConfirmationDataNotBefore(){
 		String creationDate = header.map.timestamp.Created[0].text().trim()
 		DateTime creationTime = TimeUtil.parseDateString(creationDate)
@@ -197,7 +191,8 @@ public class AssertionVal extends BaseVal {
 		}
 	}
 	
-	@Validation(id="1074", rtm=["157"], category="optional")
+	@Optional
+	@Validation(id="1074", rtm=["157"])
 	public void conditionsNotBefore(){
 		String creationDate = header.map.timestamp.Created[0].text().trim()
 		DateTime creationTime = TimeUtil.parseDateString(creationDate)

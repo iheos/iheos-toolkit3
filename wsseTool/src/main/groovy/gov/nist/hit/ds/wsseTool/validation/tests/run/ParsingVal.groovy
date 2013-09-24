@@ -37,12 +37,12 @@ public class ParsingVal extends BaseVal {
 		def conditions = header.map.assertion.children().findAll{it.name() == 'Conditions'} //optional
 		def advices = header.map.assertion.children().findAll{it.name() == 'Advice'} //optional
 
-		assertTrue( MessageFormat.format("assertion must have a unique issuer but found {0}", issuers.size()) , issuers.size() == 1)
-		assertTrue( MessageFormat.format("assertion must have a unique signature but found {0}", a_signatures.size()),  a_signatures.size() == 1)
-		assertTrue( MessageFormat.format("assertion must have a unique subject but found {0}", subjects.size()), subjects.size() == 1)
-		assertTrue( MessageFormat.format("assertion must have a unique attribute statement but found {0}", attributeStatements.size()), attributeStatements.size() == 1)
-		assertTrue( MessageFormat.format("assertion must have a unique authorization statement but found {0}",authnStatements.size()),authnStatements.size() == 1)
-		assertTrue( MessageFormat.format("assertion must have a unique authorization decision statement but found {0}", authnStatements.size()), authzDecisionStatements.size() == 1)
+		assertEquals( "assertion must have a unique issuer", 1 , issuers.size())
+		assertEquals( "assertion must have a unique signature", 1, a_signatures.size())
+		assertEquals( "assertion must have a unique subject", 1, subjects.size())
+		assertEquals( "assertion must have a unique attribute statement", 1, attributeStatements.size())
+		assertEquals( "assertion must have a unique authorization statement",1, authnStatements.size())
+		assertEquals( "assertion must have a unique authorization decision statement", 1, authzDecisionStatements.size())
 
 		GPathResult children = header.map.assertion.children()
 
