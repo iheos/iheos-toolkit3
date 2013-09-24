@@ -20,7 +20,7 @@ public class Assertions {
 	}
 	
 	public void add(AssertionGroup ag) throws RepositoryException {
-		logger.debug("AssertionGroup\n" + ag.toString());
+		logger.debug("AssertionGroup " + ag.toString());
 		Asset a = AssetHelper.createChildAsset(assertionsAsset, ag.getValidatorName(), "", new SimpleType("simpleType"));
 		a.setOrder(counter++);
 		a.setProperty(PropertyKey.STATUS, ag.getMaxStatus().name());
