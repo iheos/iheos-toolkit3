@@ -152,7 +152,7 @@ public class AttributeStatementVal extends BaseVal {
 	public void npi(){
 		GPathResult npi = attrs.findAll{ it.@Name == "urn:oasis:names:tc:xspa:2.0:subject:npi"}
 
-		assertTrue("npi not present but is optional", npi.size() != 0)
+		assertTrue("npi not present", npi.size() != 0)
 		assertTrue("npi attribute value missing", npi[0].AttributeValue[0] != null)
 
 		log.info("validation not fully implemented")
