@@ -28,8 +28,8 @@ public class AuthnStatementVal extends BaseVal {
 
 		if(children.size() == 2){
 			//order enforce only if the optional subjectLocality is present
-			if(children[0].name() != "SubjectLocality") log.error("authn statement first child must be a subject locality but was ", children[0])
-			if(children[1].name() != "AuthnContext") log.error("authn statement second child must be an authn context but was ", children[1])
+			assertEquals("authn statement first child must be a subject locality", "SubjectLocality", children[0].name())
+			assertEquals("authn statement second child must be an authn context ", "AuthnContext" , children[1].name() )
 
 			assertEquals("authn statement first child must be a subject locality", "SubjectLocality", children[0].name())
 			assertEquals( "authn statement second child must be an authn context", "AuthnContext", children[1].name())
@@ -75,7 +75,6 @@ public class AuthnStatementVal extends BaseVal {
 		DomainValidator dnsVal = DomainValidator.getInstance()
 		boolean validDNSName = dnsVal.isValid(loc.@DNSName.text())
 
-		if(!validDNSName) log.error("invalid DNSName. Found : {} ",loc.@DNSName.text() )
 		assertTrue( MessageFormat.format("invalid DNSName. Found : {0} ",loc.@DNSName.text()),  validDNSName)
 
 		InetAddressValidator ipVal = InetAddressValidator.getInstance()
@@ -96,7 +95,6 @@ public class AuthnStatementVal extends BaseVal {
 	public void authnContextClassRef() {
 		String authnContextClassRef = header.map.authnStatement.AuthnContext[0].AuthnContextClassRef[0].text().trim()
 
-		if(!(authnContextClassRef in AuthnContextClassRef.values)) log.error()
 		assertTrue (MessageFormat.format("authnContextClassRef not allowed found : {0}, but expected one of : {1}", authnContextClassRef, AuthnContextClassRef.values.toString()),  authnContextClassRef in AuthnContextClassRef.values)
 	}
 }

@@ -201,13 +201,11 @@ public class AssertionVal extends BaseVal {
 		if(!notBefore.isEmpty()){
 			DateTime nb = TimeUtil.parseDateString(notBefore)
 			assertFalse(MessageFormat.format("conditions@NotBefore {0} should be earlier than wsu:Timestamp/wsu:Created {1}", nb ,creationTime), nb.isAfter(creationTime))
-			if(nb.isAfter(creationTime)){log.error("conditions@NotBefore {} should be earlier than wsu:Timestamp/wsu:Created {}", nb ,creationTime)}
 		}
 
 		if(!notOnOrAfter.isEmpty()){
 			DateTime nooa = TimeUtil.parseDateString(notOnOrAfter)
 			assertFalse(MessageFormat.format("conditions@NotOnOrAfter {} should be later than wsu:Timestamp/wsu:Created {}", nooa ,creationTime), nooa.isBefore(creationTime))
-			if(nooa.isBefore(creationTime)){log.error("conditions@NotOnOrAfter {} should be later than wsu:Timestamp/wsu:Created {}", nooa ,creationTime)}
 		}
 	}
 

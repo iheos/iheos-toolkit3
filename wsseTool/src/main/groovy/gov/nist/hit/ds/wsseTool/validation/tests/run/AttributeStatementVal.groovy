@@ -60,8 +60,8 @@ public class AttributeStatementVal extends BaseVal {
 	public void organizationId(){
 		GPathResult organizationId = attrs.findAll{ it.@Name == "urn:oasis:names:tc:xspa:1.0:subject:organization-id"}
 
-		if(organizationId[0] == null) log.error("organization-id missing")
-		if(organizationId[0].AttributeValue[0] == null) log.error("organization-id attribute value missing")
+		assertFalse("organization-id missing", organizationId[0] == null)
+		assertFalse("organization-id attribute value missing", organizationId[0].AttributeValue[0] == null)
 
 		String oid = organizationId[0].AttributeValue[0].text().trim()
 		
@@ -72,8 +72,8 @@ public class AttributeStatementVal extends BaseVal {
 	public void homeCommunityId(){
 		GPathResult homeCommunityId = attrs.findAll{ it.@Name == "urn:nhin:names:saml:homeCommunityId"}
 
-		if(homeCommunityId[0] == null) log.error("homeCommunityId missing")
-		if(homeCommunityId[0].AttributeValue[0] == null) log.error("homeCommunityId attribute value missing")
+		assertFalse("homeCommunityId missing", homeCommunityId[0] == null)
+		assertFalse("homeCommunityId attribute value missing", homeCommunityId[0].AttributeValue[0] == null)
 
 		String hcid = homeCommunityId[0].AttributeValue[0].text().trim()
 
@@ -85,8 +85,8 @@ public class AttributeStatementVal extends BaseVal {
 	public void role(){
 		GPathResult role = attrs.findAll{ it.@Name == "urn:oasis:names:tc:xacml:2.0:subject:role"}
 
-		if(role[0] == null) log.error("role missing")
-		if(role[0].AttributeValue[0] == null) log.error("role attribute value missing")
+		assertFalse("role missing", role[0] == null) 
+		assertFalse("role attribute value missing", role[0].AttributeValue[0] == null)
 
 		GPathResult attr = role[0].AttributeValue[0]
 		GPathResult r =  role[0].AttributeValue[0].Role[0]

@@ -15,6 +15,7 @@ import org.opensaml.xml.signature.KeyValue
 import org.opensaml.xml.validation.ValidationException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import static org.junit.Assert.*
 
 
 @RunWith(ValRunnerWithOrder.class)
@@ -31,13 +32,13 @@ public class SignatureVerificationVal extends BaseVal {
 	public void verifySamlAssertionSignature(){
 		Boolean isValid = new Verifier().verifySamlAssertionSignature(openSamlHeader)
 		
-		if(!isValid) log.error("cannot verify saml assertion signature.")
+		assertTrue("cannot verify saml assertion signature.", isValid) 
 	}
 
 	@Validation(id="1104-1024", rtm=["11","12","13","14","15","16","17","18","19","20","21","22","23","24","29","56","57","58","207","208","210","217"])
 	public void verifyTimestampSignature(){
 		Boolean isValid = new Verifier().verifyTimestampSignature(openSamlHeader)
-		if(!isValid) log.error("cannot verify timestamp signature.")
+		assertTrue("cannot verify timestamp signature.", isValid)
 	}
 
 	@Validation(id="1069-1070")
@@ -60,15 +61,13 @@ public class SignatureVerificationVal extends BaseVal {
 			publicKeyPresent = true
 		}
 		
-		if(! publicKeyPresent) {
-			log.error("The public key MUST be represented in one of the following formats: ds:KeyValue/ds:DSAKeyValue, ds:KeyValue/ds:RSAKeyValue, ds:RetrievalMethod, ds:X509Data, ds:PGPDatads:SPKIData")
-		}
+		assertTrue("The public key MUST be represented in one of the following formats: ds:KeyValue/ds:DSAKeyValue, ds:KeyValue/ds:RSAKeyValue, ds:RetrievalMethod, ds:X509Data, ds:PGPDatads:SPKIData",publicKeyPresent)
 
 		try{
 			subConfData.validate(true)
 		}
 		catch(ValidationException e){
-			log.error(e.getMessage())
+			fail(e.getMessage())
 		}
 	}
 	
