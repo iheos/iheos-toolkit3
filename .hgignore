@@ -19,3 +19,6 @@ artrep_test_resources.lnk
 *.orig
 *.prefs
 
+# Eclipse metadata
+.classpath
+.profile
