@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simulatorIntegrationTest.soapParser;
 
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
@@ -85,10 +86,37 @@ public class SoapParserIT implements XmlMessage {
 	@Test
 	public void missingHeaderTest() {
 		try {
-			AssertionGroup ag = run(new File("src/test/resources/soapParser_testdata/missingHeader.xml"));
-			Assertion a = ag.getFirstFailedAssertion();
-			assertNotNull(a);
-		} catch (Exception e) {
+			run(new File("src/test/resources/soapParser_testdata/missingHeader.xml"));
+			fail();
+		} catch (SoapFaultException e) {
+			assertTrue(e.getFaultString().startsWith("Envelope must have 2 childern"));
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void badBodyNamespaceTest() {
+		try {
+			run(new File("src/test/resources/soapParser_testdata/badBodyNamespace.xml"));
+			fail();
+		} catch (SoapFaultException e) {
+			assertTrue(e.getFaultString().startsWith("Body Namespace"));
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void extraPartTest() {
+		try {
+			run(new File("src/test/resources/soapParser_testdata/extraPart.xml"));
+			fail();
+		} catch (SoapFaultException e) {
+			assertTrue(e.getFaultString().startsWith("Envelope must have 2 childern"));
+		} catch (RepositoryException e) {
 			e.printStackTrace();
 			fail();
 		}

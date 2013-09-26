@@ -9,7 +9,7 @@ public class Assertion {
 	AssertionStatus status = AssertionStatus.SUCCESS;
 	String found = "";
 	String expected = "";
-	String reference = "";
+	String[] reference = {};
 	String msg = "";
 	String code = "";
 	String location = "";
@@ -38,7 +38,7 @@ public class Assertion {
 		add(msg).
 		add(code).
 		add(location).
-		add(reference);
+		add(buildSemiDivided(reference));
 		
 		return entry;
 	}
@@ -52,9 +52,30 @@ public class Assertion {
 		msg = entry.get(5);
 		code = entry.get(6);
 		location = entry.get(7);
-		reference = entry.get(8);
+		reference = parseSemiDivided(entry.get(8));
 		
 		return this;
+	}
+	
+	static public String buildSemiDivided(String[] values) {
+		StringBuffer buf = new StringBuffer();
+		
+		if (values.length > 0)
+			buf.append(values[0]);
+		for (int i=1; i<values.length; i++) {
+			buf.append(";").append(values[i]);
+		}
+		
+		return buf.toString();
+	}
+	
+	static public String[] parseSemiDivided(String in) {
+		String[] values = in.split(";");
+		if (values == null) {
+			String[] val = { in } ;
+			return  val;
+		}
+		return values;
 	}
 	
 	public String toString() {
@@ -137,10 +158,10 @@ public class Assertion {
 		this.expected = Integer.toString(expected);
 		return this;
 	}
-	public String getReference() {
+	public String[] getReference() {
 		return reference;
 	}
-	public Assertion setReference(String reference) {
+	public Assertion setReference(String[] reference) {
 		this.reference = reference;
 		return this;
 	}

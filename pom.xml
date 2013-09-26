@@ -112,7 +112,7 @@
   	  	<module>repository</module>
   	  <module>xdstools3</module>	
 <!--  	<module>wsseTool</module>  -->
-<!--  	<module>simulatorIntegrationTest</module>   --> 
+  	<module>simulatorIntegrationTest</module>   
 <!--         <module>logBrowser</module>   -->
         <module>simServlet</module>
         <module>eventLog</module>

@@ -4,8 +4,8 @@ import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.datatypes.Bar;
 import gov.nist.hit.ds.simSupport.datatypes.Foo;
-import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
+import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 
 public class FooUserBarMaker implements SimComponent {

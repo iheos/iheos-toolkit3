@@ -2,7 +2,7 @@ package gov.nist.hit.ds.registryMsgFormats;
 
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.simSupport.engine.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
