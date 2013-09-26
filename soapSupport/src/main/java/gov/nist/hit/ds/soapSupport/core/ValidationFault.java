@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.soapSupport.core;
 
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,10 +12,10 @@ import java.lang.annotation.Target;
 
 public @interface ValidationFault {
 	String version() default "ITI 2013";
-	String prefixId() default "NA";
+	RequiredOptional required() default RequiredOptional.R;
 	String id();
 	String msg();
 	String[] ref() default {"none"}; 
 	FaultCode faultCode();
-	String dependsOn() default "none";
+	String[] dependsOn() default {"none"};
 }

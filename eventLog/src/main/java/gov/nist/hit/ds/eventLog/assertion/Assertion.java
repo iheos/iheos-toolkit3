@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.eventLog.assertion;
 
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional;
 
 public class Assertion {
 	static final String[] columnNames = new String[] { "Name", "ID", "STATUS", "EXPECTED", "FOUND", "MSG", "CODE", "LOCATION", "REFERENCE" };
@@ -13,7 +14,17 @@ public class Assertion {
 	String msg = "";
 	String code = "";
 	String location = "";
+	RequiredOptional requiredOptional = RequiredOptional.R;
 	
+	public RequiredOptional getRequiredOptional() {
+		return requiredOptional;
+	}
+
+	public Assertion setRequiredOptional(RequiredOptional requiredOptional) {
+		this.requiredOptional = requiredOptional;
+		return this;
+	}
+
 	public Assertion() {
 		
 	}
@@ -33,6 +44,7 @@ public class Assertion {
 		add(name).
 		add(id).
 		add(status.name()).
+		add(requiredOptional.name()).
 		add(expected).
 		add(found).
 		add(msg).
@@ -47,12 +59,13 @@ public class Assertion {
 		name = entry.get(0);
 		id = entry.get(1);
 		status = AssertionStatus.valueOf(entry.get(2));
-		expected = entry.get(3);
-		found = entry.get(4);
-		msg = entry.get(5);
-		code = entry.get(6);
-		location = entry.get(7);
-		reference = parseSemiDivided(entry.get(8));
+		requiredOptional = RequiredOptional.valueOf(entry.get(3));
+		expected = entry.get(4);
+		found = entry.get(5);
+		msg = entry.get(6);
+		code = entry.get(7);
+		location = entry.get(8);
+		reference = parseSemiDivided(entry.get(9));
 		
 		return this;
 	}

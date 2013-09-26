@@ -40,16 +40,13 @@ public class SoapParser extends SimComponentBase {
 			assertEquals("Envelope", root.getLocalName());
 	}
 
-	@ValidationFault(id="SOAP002", msg="Envelope Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	@ValidationFault(id="SOAP002", dependsOn="SOAP001", msg="Envelope Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateSOAPEnvelopeNamespace() throws SoapFaultException {
-		boolean ok = assertNotNull(root);
-		if (ok) {
-			OMNamespace ns = root.getNamespace();
-			if (ns != null)
-				assertEquals(soapNamespaceName, ns.getNamespaceURI());
-			else
-				fail(soapNamespaceName);
-		}
+		OMNamespace ns = root.getNamespace();
+		if (ns != null)
+			assertEquals(soapNamespaceName, ns.getNamespaceURI());
+		else
+			fail(soapNamespaceName);
 	}
 
 	@ValidationFault(id="SOAP003", msg="Envelope must have 2 childern", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
