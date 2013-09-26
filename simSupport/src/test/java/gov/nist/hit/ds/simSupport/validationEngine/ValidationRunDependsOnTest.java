@@ -33,12 +33,12 @@ public class ValidationRunDependsOnTest   extends SimComponentBase {
 		event.addAssertionGroup(ag);
 	}
 	
-	@Validation(id="VAL1", msg="A Validation", ref="First Grade", dependsOn="VAL2")
+	@Validation(id="VAL1", msg="A Validation", ref="First Grade", dependsOn={"VAL2"})
 	public void validation1Test() throws SoapFaultException {
 		assertEquals(1,1);
 	}
 
-	@Validation(id="VAL2", msg="A Validation", ref="First Grade", dependsOn="VAL3")
+	@Validation(id="VAL2", msg="A Validation", ref="First Grade", dependsOn={"VAL3"})
 	public void validation2Test() throws SoapFaultException {
 		assertEquals(1,1);
 	}

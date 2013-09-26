@@ -11,10 +11,10 @@ public class Runable {
 	Validation validationAnnotation;
 	RunType type;
 	boolean ran;
-	String dependsOnId;
+	String[] dependsOnId;
 	String id;
 
-	Runable(Method method, RunType type, String dependsOnId, ValidationFault validationFaultAnnotation) {
+	Runable(Method method, RunType type, String[] dependsOnId, ValidationFault validationFaultAnnotation) {
 		this.id = validationFaultAnnotation.id();
 		this.method = method;
 		this.type = type;
@@ -23,7 +23,7 @@ public class Runable {
 		this.validationAnnotation = null;
 	}
 
-	Runable(Method method, RunType type, String dependsOnId, Validation validationAnnotation) {
+	Runable(Method method, RunType type, String[] dependsOnId, Validation validationAnnotation) {
 		this.id = validationAnnotation.id();
 		this.method = method;
 		this.type = type;

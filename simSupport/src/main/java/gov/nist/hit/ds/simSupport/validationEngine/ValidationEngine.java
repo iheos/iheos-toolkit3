@@ -44,6 +44,14 @@ public class ValidationEngine {
 	List<Runable> runables = new ArrayList<Runable>();
 	int validationsRan = 0;
 	
+	boolean allRun() {
+		for (Runable r : runables) {
+			if (!r.ran)
+				return false;
+		}
+		return true;
+	}
+	
 	public void reset() {
 		runables = new ArrayList<Runable>();
 		validationsRan = 0;
@@ -70,7 +78,7 @@ public class ValidationEngine {
 			if (subParamTypes != null && subParamTypes.length > 0) 
 				throw new Exception("Validation <" + targetClass.getName() + "#" + method.getName() + "> : a validation method accepts no parameters");
 			RunType type = RunType.FAULT;
-			String dependsOnId = validationFaultAnnotation.dependsOn();
+			String[] dependsOnId = validationFaultAnnotation.dependsOn();
 			logger.debug("    depends on " + dependsOnId);
 				runables.add(new Runable(method, type, dependsOnId, validationFaultAnnotation));
 		} else if (validationAnnotation != null) {
@@ -79,7 +87,7 @@ public class ValidationEngine {
 			if (subParamTypes != null && subParamTypes.length > 0) 
 				throw new Exception("Validation <" + targetClass.getName() + "#" + method.getName() + "> : a validation method accepts no parameters");
 			RunType type = RunType.ERROR;
-			String dependsOnId = validationAnnotation.dependsOn();
+			String dependsOnId[] = validationAnnotation.dependsOn();
 			logger.debug("    depends on " + dependsOnId);
 			runables.add(new Runable(method, type, dependsOnId, validationAnnotation));
 		} else {
@@ -87,16 +95,22 @@ public class ValidationEngine {
 		}
 		logger.debug("    have " + runables.size() + " runables");
 	}
-	public Runable getNextRunable() {
+	
+	boolean dependenciesSatisfied(String[] dependsOnIds) {
+		for (int i=0; dependsOnIds != null && i<dependsOnIds.length; i++) {
+			String dependsOnId = dependsOnIds[i];
+			if ("none".equals(dependsOnId))
+				continue;
+			Runable dependsOn = getRunableById(dependsOnId);
+			if (!dependsOn.ran)
+				return false;
+		}
+		return true;
+	}
+	
+	public Runable getNextRunable() throws ValidationEngineException {
 		for (Runable r : runables) {
-			if (r.runable()) {
-				String dependsOnId = r.dependsOnId;
-				Runable dependsOn = null;
-				if (dependsOnId != null && !dependsOnId.equals("none"))
-					dependsOn = getRunableById(dependsOnId);
-				if (dependsOn != null) 
-					if (!dependsOn.ran)
-						continue;
+			if (r.runable() && dependenciesSatisfied(r.dependsOnId)) {
 				this.validationAnnotation = r.validationAnnotation;
 				this.validationFaultAnnotation = r.validationFaultAnnotation;
 				validationsRan++;
@@ -104,6 +118,8 @@ public class ValidationEngine {
 				return r;
 			}
 		}
+		if (!allRun()) 
+			throw new ValidationEngineException("Validator " + targetClass.getName() + " has circular dependencies");
 		return null;
 	}
 
@@ -113,7 +129,7 @@ public class ValidationEngine {
 	}
 
 	public void runner() throws IllegalAccessException,
-			InvocationTargetException, SoapFaultException {
+			InvocationTargetException, SoapFaultException, ValidationEngineException {
 		Runable runable = getNextRunable();
 		while(runable != null) {
 			Method meth = runable.method;
