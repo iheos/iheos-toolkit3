@@ -2,8 +2,8 @@ package gov.nist.hit.ds.registrySim.transactions;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
-import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
+import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;

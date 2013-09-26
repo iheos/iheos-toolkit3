@@ -5,6 +5,8 @@ import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
+import gov.nist.hit.ds.eventLog.assertion.annotations.Validation;
+import gov.nist.hit.ds.simSupport.validationEngine.ValidationEngine;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
@@ -56,17 +58,44 @@ public abstract class SimComponentBase implements SimComponent {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public void assertEquals(String expected, String found, String msg) {
-		ag.assertEquals(expected, found, msg);
+	
+	/******************************************
+	 * 
+	 * Cooperate with ValidationEngine
+	 * @throws SoapFaultException 
+	 * 
+	 */
+	
+	public boolean fail(String expected) throws SoapFaultException {
+		Assertion a = ag.fail(expected);
+		recordAssertion(a);
+		return !a.failed();
 	}
 
-	public void assertEquals(int expected, int found, String msg) throws SoapFaultException {
-		Assertion a = ag.assertEquals(expected, found, msg);
-		if (validationEngine.valFault != null) {
-			ValidationFault vf = validationEngine.valFault;
+	public boolean assertEquals(String expected, String found) throws SoapFaultException {
+		Assertion a = ag.assertEquals(expected, found);
+		recordAssertion(a);
+		return !a.failed();
+	}
+
+	public boolean assertEquals(int expected, int found) throws SoapFaultException {
+		Assertion a = ag.assertEquals(expected, found);
+		recordAssertion(a);
+		return !a.failed();
+	}
+	
+	public boolean assertNotNull(Object value) throws SoapFaultException {
+		Assertion a = ag.assertNotNull(value);
+		recordAssertion(a);
+		return !a.failed();
+	}
+
+	void recordAssertion(Assertion a) throws SoapFaultException {
+		if (validationEngine.validationFaultAnnotation != null) {
+			ValidationFault vf = validationEngine.validationFaultAnnotation;
 			a.
 			setId(vf.id()).
+			setMsg(vf.msg()).
 			setReference(vf.ref()).
 			setCode(vf.faultCode().toString());
 			if (a.getStatus() == AssertionStatus.ERROR) {
@@ -74,11 +103,18 @@ public abstract class SimComponentBase implements SimComponent {
 				throw new SoapFaultException(
 						ag,
 						vf.faultCode(),
-						new ErrorContext(a.getMsg(), vf.ref())
+						new ErrorContext(a.getMsg(), Assertion.buildSemiDivided(vf.ref()))
 						);
 			}
 		}
+		if (validationEngine.validationAnnotation != null) {
+			Validation vf = validationEngine.validationAnnotation;
+			String id = vf.id();
+			a.
+			setId(id).
+			setMsg(vf.msg()).
+			setReference(vf.ref());
+		}
 	}
-
 
 }

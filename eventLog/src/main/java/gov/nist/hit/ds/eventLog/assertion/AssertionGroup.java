@@ -9,6 +9,7 @@ import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVTable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
@@ -16,13 +17,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
-	CSVTable assertionTable = new CSVTable();
+	List<Assertion> assertionList = new ArrayList<Assertion>();
 	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
 	String validatorName = "AssertionGroup";
 	static Logger logger = Logger.getLogger(AssertionGroup.class);
 
 	public AssertionGroup() {
-		addRow(Arrays.asList(Assertion.columnNames));
 	}
 
 	public String getValidatorName() {
@@ -33,42 +33,51 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 		this.validatorName = name;
 		return this;
 	}
-	
+
 	public String toString() {
 		return "AssertionGroup(" + maxStatus + ")";
 	}
 
-	public CSVTable getTable() { return assertionTable; }
+	public CSVTable getTable() { 
+		CSVTable assertionTable = new CSVTable();
+		addRow(assertionTable, Arrays.asList(Assertion.columnNames));
+		for (Assertion a : assertionList) {
+			assertionTable.add(a.getEntry());
+		}
+		return assertionTable; 
+	}
 
 	public AssertionStatus getMaxStatus() { return maxStatus; }
+
+	public int size() { return assertionList.size(); }
 
 	public AssertionGroup addAssertion(Assertion asser) {
 		logger.debug(asser);
 		if (asser.getStatus().ordinal() > maxStatus.ordinal())
 			maxStatus = asser.getStatus();
-		assertionTable.add(asser.getEntry());
+		assertionList.add(asser);
 		return this;
 	}
 
-	void addRow(List<String> values) {
+	void addRow(CSVTable assertionTable, List<String> values) {
 		CSVEntry entry = new CSVEntry(values.size());
 		for (int i=0; i<values.size(); i++) {
 			entry.set(i, values.get(i));
 		}
 		assertionTable.add(entry);
 	}
-	
+
 	public Assertion getFirstFailedAssertion() {
-		boolean first = true;
-		for (CSVEntry entry : assertionTable.entries()) {
-			if (first) {
-				first = false;
-				continue;
-			}
-			Assertion a = new Assertion(entry);
+		for (Assertion a : assertionList) {
 			if (a.failed())
 				return a;
 		}
+		return null;
+	}
+
+	public Assertion getAssertion(int n) {
+		if (n < assertionList.size()) 
+			return assertionList.get(n);
 		return null;
 	}
 
@@ -77,49 +86,70 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	 * Assertions
 	 * 
 	 *************************************************************/
-	
-	public AssertionGroup assertEquals(String expected, String found, String msg) {
+
+	public Assertion fail(String expected) {
 		Assertion as = new Assertion();
-		if (expected.equals(found)) {
-			as.setExpected(expected).setFound(found).setMsg(msg).setStatus(AssertionStatus.SUCCESS);
-		} else {
-			as.setExpected(expected).setFound(found).setMsg(msg).setStatus(AssertionStatus.ERROR);
-		}
+		as.setExpected(expected).setFound("").setStatus(AssertionStatus.ERROR);
 		addAssertion(as);
-		return this;
+		return as;
 	}
-	
-	public Assertion assertEquals(int expected, int found, String msg) {
+
+	public Assertion assertEquals(String expected, String found) {
 		Assertion as = new Assertion();
-		if (expected == found) {
-			as.setExpected(expected).setFound(found).setMsg(msg).setStatus(AssertionStatus.SUCCESS);			
+		if (expected == null) {
+			as.setStatus(AssertionStatus.INTERNALERROR);
+			return as;
+		}
+		if (expected.equals(found)) {
+			as.setExpected(expected).setFound(found).setStatus(AssertionStatus.SUCCESS);
 		} else {
-			as.setExpected(expected).setFound(found).setMsg(msg).setStatus(AssertionStatus.ERROR);
+			as.setExpected(expected).setFound(found).setStatus(AssertionStatus.ERROR);
 		}
 		addAssertion(as);
 		return as;
 	}
-	
+
+	public Assertion assertEquals(int expected, int found) {
+		Assertion as = new Assertion();
+		if (expected == found) {
+			as.setExpected(expected).setFound(found).setStatus(AssertionStatus.SUCCESS);			
+		} else {
+			as.setExpected(expected).setFound(found).setStatus(AssertionStatus.ERROR);
+		}
+		addAssertion(as);
+		return as;
+	}
+
+	public Assertion assertNotNull(Object value) {
+		Assertion as = new Assertion();
+		if (value == null) 
+			as.setExpected("Present").setFound("Missing").setStatus(AssertionStatus.ERROR);
+		else
+			as.setExpected("Present").setFound("Found").setStatus(AssertionStatus.SUCCESS);
+		addAssertion(as);
+		return as;
+	}
+
 	/************************************************************
 	 * 
 	 * Enumeration implementation
 	 * 
 	 *************************************************************/
-	int tableIndex = 1;  // 1 because first row is column headers
+	int tableIndex = 0; 
 
 	public void resetEnumeration() {
-		tableIndex = 1;
+		tableIndex = 0;
 	}
 
 	@Override
 	public boolean hasMoreElements() {
-		return tableIndex < assertionTable.size();
+		return tableIndex < assertionList.size();
 	}
 
 	@Override
 	public Assertion nextElement() {
 		tableIndex++;
-		return new Assertion().setEntry(assertionTable.get(tableIndex - 1));
+		return assertionList.get(tableIndex - 1);
 	}
 
 
@@ -140,7 +170,7 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 		setStatus(AssertionStatus.ERROR).
 		setFound("").
 		setExpected("").
-		setReference(context.getResource()).
+		setReference(Assertion.parseSemiDivided(context.getResource())).
 		setMsg(context.getMsg()).
 		setCode(code.name()).
 		setLocation((location == null) ? "" : location.getClass().getName());
@@ -152,13 +182,14 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	@Override
 	public void err(Code code, Exception e) {
 		Assertion as = new Assertion();
+		String[] empty = { "" };
 
 		as.setId("").
 		setName("").
 		setStatus(AssertionStatus.ERROR).
 		setFound("").
 		setExpected("").
-		setReference("").
+		setReference(empty).
 		setMsg(e.getMessage()).
 		setCode(code.name());
 
@@ -175,7 +206,7 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 		setStatus(AssertionStatus.WARNING).
 		setFound("").
 		setExpected("").
-		setReference(context.getResource()).
+		setReference(Assertion.parseSemiDivided(context.getResource())).
 		setMsg(context.getMsg()).
 		setCode(code).
 		setLocation((location == null) ? "" : location.getClass().getName());
@@ -192,7 +223,7 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 		setStatus(AssertionStatus.WARNING).
 		setFound("").
 		setExpected("").
-		setReference(context.getResource()).
+		setReference(Assertion.parseSemiDivided(context.getResource())).
 		setMsg(context.getMsg()).
 		setCode(code.name()).
 		setLocation((location == null) ? "" : location.getClass().getName());
@@ -316,7 +347,7 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	@Override
 	public void concat(IAssertionGroup er) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 

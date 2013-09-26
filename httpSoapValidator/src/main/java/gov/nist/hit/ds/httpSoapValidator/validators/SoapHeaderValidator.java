@@ -2,10 +2,10 @@ package gov.nist.hit.ds.httpSoapValidator.validators;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.hit.ds.httpSoapValidator.datatypes.MetadataLevel;
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
-import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
+import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.ValidatorParameter;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
@@ -13,7 +13,6 @@ import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -21,19 +20,19 @@ import javax.xml.namespace.QName;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 
-public class SoapHeaderValidator extends SimComponentBase {
+public class SoapHeaderValidator   extends SimComponentBase {
 	OMElement header;
-	MetadataLevel level = MetadataLevel.XDS;  // default
 	static final String wsaddresingNamespace = "http://www.w3.org/2005/08/addressing";
 	static final String wsaddressingRef = "http://www.w3.org/TR/ws-addr-core/";
 	SoapEnvironment soapEnvironment;
-	String expectedAction;
+	String expectedAction = null;
 
+	@ValidatorParameter
 	public SoapHeaderValidator setExpectedWsAction(String expectedAction) {
 		this.expectedAction = expectedAction;
 		return this;
 	}
-
+	
 	@Inject
 	public void setSoapMessage(SoapMessage soapMessage) {
 		this.header = soapMessage.getHeader();
@@ -46,15 +45,11 @@ public class SoapHeaderValidator extends SimComponentBase {
 		return this;
 	}
 	
-	public MetadataLevel getMetadataLevel() {
-		return level;
-	}
-
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
-		validateMetadataLevel();
 		validateWSAddressing();
 		validateWSAction();
+		
 	}
 
 	void validateWSAction() throws SoapFaultException {
@@ -252,39 +247,5 @@ public class SoapHeaderValidator extends SimComponentBase {
 				);
 	}
 
-	void validateMetadataLevel() throws SoapFaultException {
-		Iterator<?> children = header.getChildElements();
-		OMElement metadataLevelEle = null;
-		while (children.hasNext()) {
-			OMElement child = (OMElement) children.next();
-			if ("metadata-level".equals(child.getLocalName())) {
-				metadataLevelEle = child;
-				break;
-			}
-		}
-		if (metadataLevelEle != null) { 
-			if (!"urn:direct:addressing".equals(metadataLevelEle.getNamespace().getNamespaceURI()))
-				throw new SoapFaultException(
-						ag,
-						FaultCode.Sender, 
-						new ErrorContext(
-								"Namespace on metadata-level header element must be " + "urn:direct:addressing", 
-								"http://wiki.directproject.org/file/view/2011-03-09%20PDF%20-%20XDR%20and%20XDM%20for%20Direct%20Messaging%20Specification_FINAL.pdf:6.1.1 SOAP Headers"));
-			String levelTxt = metadataLevelEle.getText();
-			if ("minimal".equals(levelTxt))
-				level = MetadataLevel.MINIMAL;
-			else if ("XDS".equals(levelTxt))
-				level = MetadataLevel.XDS;
-			else
-				throw new SoapFaultException(
-						ag,
-						FaultCode.Sender, 
-						new ErrorContext(
-								"metadata-level must be <minimal> or <XDS>.", 
-								"http://wiki.directproject.org/file/view/2011-03-09%20PDF%20-%20XDR%20and%20XDM%20for%20Direct%20Messaging%20Specification_FINAL.pdf:6.1.1 SOAP Headers"));
-		}
-		ag.challenge("Direct");
-		ag.detail("metadata-level set to <" + level + ">");
-	}
 
 }

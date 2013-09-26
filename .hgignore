@@ -18,7 +18,14 @@ sunil's stuff/
 artrep_test_resources.lnk
 *.orig
 *.prefs
+derby.log
 
 # Eclipse metadata
 .classpath
 .project
+.class
+.settings/*
+bin/*
+
+# Maven generated
+MANIFEST.MF
