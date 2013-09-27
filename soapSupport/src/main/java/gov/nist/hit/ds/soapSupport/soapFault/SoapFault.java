@@ -1,5 +1,8 @@
-package gov.nist.hit.ds.soapSupport.core;
+package gov.nist.hit.ds.soapSupport.soapFault;
 
+import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
+import gov.nist.hit.ds.soapSupport.core.SoapResponseGenerator;
+import gov.nist.hit.ds.soapSupport.core.SoapUtil;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 

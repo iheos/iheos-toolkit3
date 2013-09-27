@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.soapSupport.core;
 
+import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import gov.nist.hit.ds.utilities.datatypes.RequiredOptional;
 
 import java.lang.annotation.ElementType;

@@ -66,8 +66,26 @@ public abstract class SimComponentBase implements SimComponent {
 	 * 
 	 */
 	
+	public boolean infoFound(boolean found) throws SoapFaultException {
+		Assertion a = ag.infoFound(found);
+		recordAssertion(a);
+		return true;
+	}
+		
+	public boolean infoFound(String found) throws SoapFaultException {
+		Assertion a = ag.infoFound(found);
+		recordAssertion(a);
+		return true;
+	}
+	
 	public boolean fail(String expected) throws SoapFaultException {
 		Assertion a = ag.fail(expected);
+		recordAssertion(a);
+		return !a.failed();
+	}
+	
+	public boolean assertIn(String[] expecteds, String value) throws SoapFaultException {
+		Assertion a = ag.assertIn(expecteds, value);
 		recordAssertion(a);
 		return !a.failed();
 	}
