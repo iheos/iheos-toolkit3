@@ -3,9 +3,9 @@ package gov.nist.hit.ds.simSupport.validationEngine;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.eventLog.assertion.annotations.Validation;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.lang.reflect.InvocationTargetException;

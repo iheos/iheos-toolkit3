@@ -21,6 +21,7 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
 	String validatorName = "AssertionGroup";
 	static Logger logger = Logger.getLogger(AssertionGroup.class);
+	final static String dashes = "---";
 
 	public AssertionGroup() {
 	}
@@ -87,6 +88,21 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	 * 
 	 *************************************************************/
 
+	public Assertion assertIn(String[] expecteds, String value) {
+		Assertion as = new Assertion();
+		as.setExpected(expecteds.toString()).setFound(value);
+		addAssertion(as);
+		for (int i=0; i<expecteds.length; i++) {
+			String exp = expecteds[i];
+			if (exp.equals(value)) {
+				as.setStatus(AssertionStatus.SUCCESS);
+				return as;
+			}
+		}
+		as.setStatus(AssertionStatus.ERROR);
+		return as;
+	}
+
 	public Assertion fail(String expected) {
 		Assertion as = new Assertion();
 		as.setExpected(expected).setFound("").setStatus(AssertionStatus.ERROR);
@@ -126,6 +142,23 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 			as.setExpected("Present").setFound("Missing").setStatus(AssertionStatus.ERROR);
 		else
 			as.setExpected("Present").setFound("Found").setStatus(AssertionStatus.SUCCESS);
+		addAssertion(as);
+		return as;
+	}
+
+	public Assertion infoFound(boolean found) {
+		Assertion as = new Assertion();
+		if (found) 
+			as.setExpected(dashes).setFound("Present").setStatus(AssertionStatus.INFO);
+		else
+			as.setExpected(dashes).setFound("Not Present").setStatus(AssertionStatus.INFO);
+		addAssertion(as);
+		return as;
+	}
+
+	public Assertion infoFound(String found) {
+		Assertion as = new Assertion();
+			as.setExpected(dashes).setFound(found).setStatus(AssertionStatus.INFO);
 		addAssertion(as);
 		return as;
 	}
@@ -349,7 +382,4 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 		// TODO Auto-generated method stub
 
 	}
-
-
-
 }
