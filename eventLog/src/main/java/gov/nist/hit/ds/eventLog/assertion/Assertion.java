@@ -83,6 +83,8 @@ public class Assertion {
 	}
 	
 	static public String[] parseSemiDivided(String in) {
+		if (in == null)
+			return new String[] { };
 		String[] values = in.split(";");
 		if (values == null) {
 			String[] val = { in } ;
