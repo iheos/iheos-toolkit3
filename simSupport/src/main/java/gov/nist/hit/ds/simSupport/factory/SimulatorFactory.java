@@ -11,6 +11,7 @@ import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.serializer.SimulatorSerializer;
+import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.repository.SiteRepository;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
@@ -137,7 +138,7 @@ public class SimulatorFactory {
 	 * @throws RepositoryException
 	 * @throws Exception
 	 */
-	public SimulatorFactory save() throws RepositoryException, Exception {
+	public SimDb save() throws RepositoryException, Exception {
 		
 		if (actorSimsAdded == 0) {
 			logger.error("Cannot save Simulator - no actor sims installed.");
@@ -145,7 +146,7 @@ public class SimulatorFactory {
 		}
 		
 		// Save raw simulator state
-		new SimulatorSerializer().save(sim);
+		SimDb simDb = new SimulatorSerializer().save(sim);
 		
 		// Save generated Site (actor) files
 		// These are needed because the rest of toolkit expects them
@@ -155,7 +156,7 @@ public class SimulatorFactory {
 		SiteRepository siteRepo = new SiteRepository();
 		siteRepo.save(new Directory().getExternalSimSiteRepository(), site);
 		
-		return this;
+		return simDb;
 	}
 
 	public Simulator getSimulator() {

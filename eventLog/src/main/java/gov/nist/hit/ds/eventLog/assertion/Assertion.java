@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.eventLog.assertion;
 
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional;
 
 public class Assertion {
 	static final String[] columnNames = new String[] { "Name", "ID", "STATUS", "EXPECTED", "FOUND", "MSG", "CODE", "LOCATION", "REFERENCE" };
@@ -9,10 +10,32 @@ public class Assertion {
 	AssertionStatus status = AssertionStatus.SUCCESS;
 	String found = "";
 	String expected = "";
-	String reference = "";
+	String[] reference = {};
 	String msg = "";
 	String code = "";
 	String location = "";
+	RequiredOptional requiredOptional = RequiredOptional.R;
+	
+	public RequiredOptional getRequiredOptional() {
+		return requiredOptional;
+	}
+
+	public Assertion setRequiredOptional(RequiredOptional requiredOptional) {
+		this.requiredOptional = requiredOptional;
+		return this;
+	}
+
+	public Assertion() {
+		
+	}
+	
+	public Assertion(CSVEntry entry) {
+		setEntry(entry);
+	}
+	
+	public boolean failed() {
+		return status.isError();
+	}
 	
 	public CSVEntry getEntry() {
 		CSVEntry entry = new CSVEntry();
@@ -21,12 +44,13 @@ public class Assertion {
 		add(name).
 		add(id).
 		add(status.name()).
+		add(requiredOptional.name()).
 		add(expected).
 		add(found).
 		add(msg).
 		add(code).
 		add(location).
-		add(reference);
+		add(buildSemiDivided(reference));
 		
 		return entry;
 	}
@@ -35,14 +59,38 @@ public class Assertion {
 		name = entry.get(0);
 		id = entry.get(1);
 		status = AssertionStatus.valueOf(entry.get(2));
-		expected = entry.get(3);
-		found = entry.get(4);
-		msg = entry.get(5);
-		code = entry.get(6);
-		location = entry.get(7);
-		reference = entry.get(8);
+		requiredOptional = RequiredOptional.valueOf(entry.get(3));
+		expected = entry.get(4);
+		found = entry.get(5);
+		msg = entry.get(6);
+		code = entry.get(7);
+		location = entry.get(8);
+		reference = parseSemiDivided(entry.get(9));
 		
 		return this;
+	}
+	
+	static public String buildSemiDivided(String[] values) {
+		StringBuffer buf = new StringBuffer();
+		
+		if (values.length > 0)
+			buf.append(values[0]);
+		for (int i=1; i<values.length; i++) {
+			buf.append(";").append(values[i]);
+		}
+		
+		return buf.toString();
+	}
+	
+	static public String[] parseSemiDivided(String in) {
+		if (in == null)
+			return new String[] { };
+		String[] values = in.split(";");
+		if (values == null) {
+			String[] val = { in } ;
+			return  val;
+		}
+		return values;
 	}
 	
 	public String toString() {
@@ -125,10 +173,10 @@ public class Assertion {
 		this.expected = Integer.toString(expected);
 		return this;
 	}
-	public String getReference() {
+	public String[] getReference() {
 		return reference;
 	}
-	public Assertion setReference(String reference) {
+	public Assertion setReference(String[] reference) {
 		this.reference = reference;
 		return this;
 	}

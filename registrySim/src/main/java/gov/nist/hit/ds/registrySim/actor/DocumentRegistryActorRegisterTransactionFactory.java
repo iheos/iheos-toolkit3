@@ -3,8 +3,8 @@ package gov.nist.hit.ds.registrySim.actor;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.httpSoapValidator.Launcher;
 import gov.nist.hit.ds.simSupport.factory.TransactionFactory;
-import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 
 import org.apache.log4j.Logger;
 

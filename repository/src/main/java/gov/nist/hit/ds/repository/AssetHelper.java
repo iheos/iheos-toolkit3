@@ -22,10 +22,10 @@ public class AssetHelper {
 	static Logger logger = Logger.getLogger(AssetHelper.class);
 	
 	static public Asset createChildAsset(Asset parent, String displayName, String description, SimpleType assetType) throws RepositoryException {
-		logger.debug("Creating <" + displayName + ">,  child of <" + parent.getId() + "> in repo <" + parent.getRepository() +">");
+		logger.debug("Creating <" + displayName + ">,  child of <" + parent.toString() + "> in repo <" + parent.getRepository() +">");
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Asset a = fact.getRepository(parent.getRepository()).createAsset(displayName, description, assetType);
-		logger.debug("Created <" + a.getId() + ">");
+		logger.debug("Created <" + a.toString() + ">");
 		a.setProperty("parent", parent.getId().getIdString());
 		return a;
 	}	
