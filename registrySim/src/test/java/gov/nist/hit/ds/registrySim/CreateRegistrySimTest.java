@@ -9,10 +9,8 @@ import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.factory.SimulatorFactory;
+import gov.nist.hit.ds.simSupport.sim.SimDb;
 
-import java.io.File;
-
-import org.apache.log4j.BasicConfigurator;
 import org.junit.Test;
 
 /**
@@ -26,28 +24,34 @@ public class CreateRegistrySimTest {
 
 	@Test
 	public void setupTest() throws Exception  {
-		BasicConfigurator.configure();
-		Installation.reset();
+		SimDb simDb = null;
+		try {
+			Installation.reset();
 
-		File externalCache = new File("/Users/bill/tmp/external_cache");
-		Installation.installation().setExternalCache(externalCache); 
+			//		File externalCache = new File("/Users/bill/tmp/external_cache");
+			//		Installation.installation().setExternalCache(externalCache); 
+			//
+			Installation.installation().initialize();
+			Configuration.configuration();
 
-		Installation.installation().initialize();
-		Configuration.configuration();
+			// Create a new Registry simulator with non-TLS and sync inputs only
+			String simIdString = "123";
+			SimId simId = new SimId(simIdString);
+			Simulator sim = null;
+			SimulatorFactory simFactory = new SimulatorFactory().buildSimulator(simId);
+			simFactory.addActorSim(ActorType.REGISTRY);
+			simDb = simFactory.save();
+			sim = simFactory.getSimulator();
 
-		// Create a new Registry simulator with non-TLS and sync inputs only
-		String simIdString = "123";
-		SimId simId = new SimId(simIdString);
-		Simulator sim = null;
-		SimulatorFactory simFactory = new SimulatorFactory().buildSimulator(simId);
-		simFactory.addActorSim(ActorType.REGISTRY);
-		simFactory.save();
-		sim = simFactory.getSimulator();
-
-		// verify endpoint was created
-		String endpointString = sim.getEndpoint(TransactionType.REGISTER, TlsType.NOTLS, AsyncType.SYNC);
-		System.out.println("Register endpoint is " + endpointString);
-
+			// verify endpoint was created
+			String endpointString = sim.getEndpoint(TransactionType.REGISTER, TlsType.NOTLS, AsyncType.SYNC);
+			System.out.println("Register endpoint is " + endpointString);
+		} finally {
+			if (simDb != null) {
+				simDb.delete();
+				simDb = null;
+			}
+		}
 	}
 
 }

@@ -26,7 +26,7 @@ public class SimulatorSerializer {
 	static final boolean useJson = true;
 	static Logger logger = Logger.getLogger(SimulatorSerializer.class);
 
-	public Simulator save(Simulator sim) throws IOException, XdsInternalException {
+	public SimDb save(Simulator sim) throws IOException, XdsInternalException {
 		
 		SimDb simdb = null;  // storage reference for a single ActorSim
 
@@ -36,9 +36,10 @@ public class SimulatorSerializer {
 		simdb = SimDb.createActorSim(sim.getId());
 
 		if (useJson)
-			return jsonSave(simdb, sim);
+			jsonSave(simdb, sim);
 		else
-			return javaSave(simdb, sim);
+			javaSave(simdb, sim);
+		return simdb;
 	}
 
 	Simulator javaSave(SimDb simdb, Simulator sim) throws IOException {

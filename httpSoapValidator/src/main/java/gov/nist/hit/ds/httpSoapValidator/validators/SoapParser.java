@@ -1,17 +1,18 @@
 package gov.nist.hit.ds.httpSoapValidator.validators;
 
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
-import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
+import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import gov.nist.hit.ds.xmlValidator.XmlMessage;
 
 import java.util.Iterator;
 
 import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMNamespace;
 
 public class SoapParser extends SimComponentBase {
 	OMElement xml;
@@ -32,30 +33,63 @@ public class SoapParser extends SimComponentBase {
 		return new SoapMessage().setHeader(header).setBody(body);
 	}
 
-	@ValidationFault(faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
-	public void validatePartCount() throws SoapFaultException {
-		assertEquals(2, partCount, "SOAPEnvelope must have 2 childern, " + partCount + " found");
+	@ValidationFault(id="SOAP001", msg="Top element must be Envelope", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateSOAPEnvelopePresent() throws SoapFaultException {
+		boolean ok = assertNotNull(root);
+		if (ok)
+			assertEquals("Envelope", root.getLocalName());
 	}
 
-	@ValidationFault(faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
-	public void validateSoapStructure() throws SoapFaultException {
-		assertEquals("Envelope", root.getLocalName(), "Top SOAP XML element must be <Envelope>");
-//		if (!"Envelope".equals(root.getLocalName()))
-//			throw new SoapFaultException(
-//					ag,
-//					FaultCode.Sender,
-//					new ErrorContext("Top SOAP XML element must be <Envelope>", 
-//							"http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv"));
+	@ValidationFault(id="SOAP002", dependsOn="SOAP001", msg="Envelope Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateSOAPEnvelopeNamespace() throws SoapFaultException {
+		OMNamespace ns = root.getNamespace();
+		if (ns != null)
+			assertEquals(soapNamespaceName, ns.getNamespaceURI());
+		else
+			fail(soapNamespaceName);
+	}
 
-		assertEquals(soapNamespaceName, root.getNamespace().getNamespaceURI(), "SOAP Envelope namespace must be <" + soapNamespaceName + "> found <" + root.getNamespace().getNamespaceURI()  + "> instead");
-//		if (!soapNamespaceName.equals(root.getNamespace().getNamespaceURI()))
-//			throw new SoapFaultException(
-//					ag, 
-//					FaultCode.DataEncodingUnknown,
-//					new ErrorContext(
-//							"SOAP Envelope namespace must be <" + soapNamespaceName + "> found <" + root.getNamespace().getNamespaceURI()  + "> instead", 
-//							"http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenvelope"));
+	@ValidationFault(id="SOAP003", msg="Envelope must have 2 childern", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validatePartCount() throws SoapFaultException {
+		assertEquals(2, partCount);
+	}
 
+	@ValidationFault(id="SOAP004", msg="Header must be present, must be first child of Envelope", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateHeaderPresent() throws SoapFaultException {
+		boolean ok = assertNotNull(header);
+		if (ok)
+			assertEquals("Header", header.getLocalName());
+	}
+
+	@ValidationFault(id="SOAP005", msg="Header Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateSOAPHeaderNamespace() throws SoapFaultException {
+		boolean ok = assertNotNull(root);
+		if (ok) {
+			OMNamespace ns = header.getNamespace();
+			if (ns != null)
+				assertEquals(soapNamespaceName, ns.getNamespaceURI());
+			else
+				fail(soapNamespaceName);
+		}
+	}
+
+	@ValidationFault(id="SOAP006", msg="Body must be present, must be second child of Envelope", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateBodyPresent() throws SoapFaultException {
+		boolean ok = assertNotNull(body);
+		if (ok)
+			assertEquals("Body", body.getLocalName());
+	}
+
+	@ValidationFault(id="SOAP007", msg="Body Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateSOAPBodyNamespace() throws SoapFaultException {
+		boolean ok = assertNotNull(root);
+		if (ok) {
+			OMNamespace ns = body.getNamespace();
+			if (ns != null)
+				assertEquals(soapNamespaceName, ns.getNamespaceURI());
+			else
+				fail(soapNamespaceName);
+		}
 	}
 
 	int countParts(Iterator<?> it) {
@@ -70,78 +104,23 @@ public class SoapParser extends SimComponentBase {
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
 		root = xmlMessage.getXml();
-		Iterator<?> partsIterator = root.getChildElements();
+		if (root != null) {
+			Iterator<?> partsIterator = root.getChildElements();
 
-		partCount = 0;
-		if (partsIterator.hasNext()) { 
-			partCount++;
-			header = (OMElement) partsIterator.next();
-			if (partsIterator.hasNext()) {
+			partCount = 0;
+			if (partsIterator.hasNext()) { 
 				partCount++;
-				body = (OMElement) partsIterator.next();
-				partCount += countParts(partsIterator);
+				header = (OMElement) partsIterator.next();
+				if (partsIterator.hasNext()) {
+					partCount++;
+					body = (OMElement) partsIterator.next();
+					partCount += countParts(partsIterator);
+				}
 			}
 		}
 
 		validationEngine.run();
 
-//		Iterator<?> children = root.getChildElements();
-//		while (children.hasNext()) {
-//			OMElement ele = (OMElement) children.next();
-//
-//			if ("Header".equals(ele.getLocalName())) {
-//				if (header != null)
-//					throw new SoapFaultException(
-//							ag,
-//							FaultCode.Sender,
-//							new ErrorContext(
-//									"SOAP Envelope contains multiple <Header> elements.", 
-//									"http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenvelope"));
-//				header = ele;
-//				if (!soapNamespaceName.equals(header.getNamespace().getNamespaceURI()))
-//					throw new SoapFaultException(
-//							ag, 
-//							FaultCode.DataEncodingUnknown,
-//							new ErrorContext(
-//									"SOAP Header namespace must be <" + soapNamespaceName + "> found <" + header.getNamespace().getNamespaceURI()  + "> instead", 
-//									"http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenvelope"));
-//			}
-//
-//
-//			if ("Body".equals(ele.getLocalName())) {
-//				if (body != null)
-//					throw new SoapFaultException(
-//							ag,
-//							FaultCode.Sender,
-//							new ErrorContext(
-//									"SOAP Envelope contains multiple <Body> elements.", 
-//									"http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenvelope"));
-//				body = ele;
-//				if (!soapNamespaceName.equals(body.getNamespace().getNamespaceURI()))
-//					throw new SoapFaultException(
-//							ag, 
-//							FaultCode.DataEncodingUnknown,
-//							new ErrorContext(
-//									"SOAP Body namespace must be <" + soapNamespaceName + "> found <" + body.getNamespace().getNamespaceURI()  + "> instead", 
-//									"http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenvelope"));
-//			}
-//
-//
-//		}
-//		if (header == null)
-//			throw new SoapFaultException(
-//					ag,
-//					FaultCode.Sender,
-//					new ErrorContext(
-//							"SOAP Header is required - not found.", 
-//							"ITI-TF3x:V3.2.2"));
-//		if (body == null)
-//			throw new SoapFaultException(
-//					ag,
-//					FaultCode.Sender,
-//					new ErrorContext(
-//							"SOAP Body is required - not found.", 
-//							"http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenvelope"));			
 	}
 
 }

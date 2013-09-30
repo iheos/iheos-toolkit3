@@ -3,7 +3,7 @@ package gov.nist.hit.ds.soapSupport.exceptions;
 import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
-import gov.nist.hit.ds.soapSupport.core.FaultCode;
+import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 
 public class SoapFaultException extends Exception {
 	/**

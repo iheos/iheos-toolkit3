@@ -30,9 +30,9 @@ import gov.nist.hit.ds.simSupport.loader.ByConstructorLogLoader;
 import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.simSupport.validators.SimEndpointParser;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
-import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
@@ -41,6 +41,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
+import org.junit.Test;
 
 
 public class RegistrySimTest {
@@ -70,9 +71,12 @@ public class RegistrySimTest {
 		} 
 	}
 
+	/**
+	 * TODO: Re-enable this test.
+	 */
 	public void registerTest() {
 		
-		
+		SimDb simDb = null;
 		try {
 			
 			// Create a new Registry simulator with non-TLS and sync inputs only
@@ -82,10 +86,14 @@ public class RegistrySimTest {
 			try {
 				SimulatorFactory simFactory = new SimulatorFactory().buildSimulator(simId);
 				simFactory.addActorSim(ActorType.REGISTRY);
-				simFactory.save();
+				simDb = simFactory.save();
 				sim = simFactory.getSimulator();
 			} catch (Exception e) {
 				e.printStackTrace();
+				if (simDb != null) {
+					simDb.delete();
+					simDb = null;
+				}
 				fail();
 			} 
 			
@@ -130,7 +138,12 @@ public class RegistrySimTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
-		} 
+		} finally {
+			if (simDb != null) {
+				simDb.delete();
+				simDb = null;
+			}
+		}
 	}
 	
 	class EventBuilder {

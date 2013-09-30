@@ -1,12 +1,12 @@
 package gov.nist.hit.ds.simSupport.validators;
 
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
-import gov.nist.hit.ds.simSupport.engine.Inject;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
+import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
-import gov.nist.hit.ds.soapSupport.core.FaultCode;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 
 import org.apache.log4j.Logger;
 
