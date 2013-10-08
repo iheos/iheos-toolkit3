@@ -8,6 +8,7 @@ import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
 import gov.nist.hit.ds.simSupport.engine.annotations.ValidatorParameter;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
+import gov.nist.hit.ds.soapSupport.core.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
@@ -26,13 +27,20 @@ public class SoapHeaderValidator   extends SimComponentBase {
 	static final String wsaddressingRef = "http://www.w3.org/TR/ws-addr-core/";
 	SoapEnvironment soapEnvironment;
 	String expectedAction = null;
+	List<OMElement> messageId;
+	List<OMElement> relatesTo;
+	List<OMElement> to;
+	List<OMElement> action;
+	List<OMElement> from;
+	List<OMElement> replyTo;
+	List<OMElement> faultTo;
 
 	@ValidatorParameter
 	public SoapHeaderValidator setExpectedWsAction(String expectedAction) {
 		this.expectedAction = expectedAction;
 		return this;
 	}
-	
+
 	@Inject
 	public void setSoapMessage(SoapMessage soapMessage) {
 		this.header = soapMessage.getHeader();
@@ -44,12 +52,11 @@ public class SoapHeaderValidator   extends SimComponentBase {
 		expectedAction = soapEnvironment.getExpectedRequestAction();
 		return this;
 	}
-	
+
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
 		validateWSAddressing();
 		validateWSAction();
-		
 	}
 
 	void validateWSAction() throws SoapFaultException {
@@ -68,44 +75,127 @@ public class SoapHeaderValidator   extends SimComponentBase {
 		ag.detail("WS-Action is <" + soapEnvironment.getRequestAction() + ">");
 	}
 
-	void validateWSAddressing() throws SoapFaultException {
-		if (header == null)
+	@ValidationFault(id="WSAparse", msg="Parsing WSA header fields", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void parseWSAddressingFields() throws SoapFaultException {
+		assertNotNull(header);
+		messageId = XmlUtil.childrenWithLocalName(header, "MessageID");
+		relatesTo = XmlUtil.childrenWithLocalName(header, "RelatesTo");
+		to = XmlUtil.childrenWithLocalName(header, "To");
+		action = XmlUtil.childrenWithLocalName(header, "Action");
+		from = XmlUtil.childrenWithLocalName(header, "From");
+		replyTo = XmlUtil.childrenWithLocalName(header, "ReplyTo");
+		faultTo = XmlUtil.childrenWithLocalName(header, "FaultTo");
+	}
+
+	@ValidationFault(id="WSA001", dependsOn="WSAparse", msg="Validate MessageId Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateMessageIdNamespace() throws SoapFaultException {
+		if (messageId.size() == 0)
 			return;
-		ag.challenge("WS-Addressing");
-		List<OMElement> messageId = XmlUtil.childrenWithLocalName(header, "MessageID");
-		List<OMElement> relatesTo = XmlUtil.childrenWithLocalName(header, "RelatesTo");
-		List<OMElement> to = XmlUtil.childrenWithLocalName(header, "To");
-		List<OMElement> action = XmlUtil.childrenWithLocalName(header, "Action");
-		List<OMElement> from = XmlUtil.childrenWithLocalName(header, "From");
-		List<OMElement> replyTo = XmlUtil.childrenWithLocalName(header, "ReplyTo");
-		List<OMElement> faultTo = XmlUtil.childrenWithLocalName(header, "FaultTo");
+		assertEquals(1, messageId.size());
+		OMElement ele = messageId.get(0);
+		OMNamespace omns = ele.getNamespace();
+		String nsuri = omns.getNamespaceURI();
+		assertEquals(wsaddresingNamespace, nsuri);
+	}
 
-		// check for namespace
-		validateNamespace(messageId, wsaddresingNamespace);
-		validateNamespace(relatesTo, wsaddresingNamespace);
-		validateNamespace(to,        wsaddresingNamespace);
-		validateNamespace(action,    wsaddresingNamespace);
-		validateNamespace(from,      wsaddresingNamespace);
-		validateNamespace(replyTo,   wsaddresingNamespace);
-		validateNamespace(faultTo,   wsaddresingNamespace);
+	@ValidationFault(id="WSA002", dependsOn="WSAparse", msg="Validate RelatesTo Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateRelatesToNamespace() throws SoapFaultException {
+		if (relatesTo.size() == 0)
+			return;
+		assertEquals(1, relatesTo.size());
+		OMElement ele = relatesTo.get(0);
+		OMNamespace omns = ele.getNamespace();
+		String nsuri = omns.getNamespaceURI();
+		assertEquals(wsaddresingNamespace, nsuri);
+	}
 
-		// check for repeating and required elements
-		// this does not take async into consideration
-		if (to.size() > 1)
-			invalidAddressingHeader("Multiple WS-Addressing To headers are not allowed",wsaddressingRef + "#msgaddrpropsinfoset");
-		if (from.size() > 1)
-			invalidAddressingHeader("Multiple WS-Addressing From headers are not allowed",wsaddressingRef + "#msgaddrpropsinfoset");
-		if (replyTo.size() > 1)
-			invalidAddressingHeader("Multiple WS-Addressing ReplyTo headers are not allowed",wsaddressingRef + "#msgaddrpropsinfoset");
-		if (faultTo.size() > 1)
-			invalidAddressingHeader("Multiple WS-Addressing FaultTo headers are not allowed",wsaddressingRef + "#msgaddrpropsinfoset");
+	@ValidationFault(id="WSA003", dependsOn="WSAparse", msg="Validate To Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateToNamespace() throws SoapFaultException {
+		if (to.size() == 0)
+			return;
+		assertEquals(1, to.size());
+		OMElement ele = to.get(0);
+		OMNamespace omns = ele.getNamespace();
+		String nsuri = omns.getNamespaceURI();
+		assertEquals(wsaddresingNamespace, nsuri);
+	}
+
+	@ValidationFault(id="WSA004", dependsOn="WSAparse", msg="Validate Action Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateActionNamespace() throws SoapFaultException {
 		if (action.size() == 0)
-			invalidAddressingHeader("WS-Addressing Action header is required",wsaddressingRef + "#msgaddrpropsinfoset");
-		if (action.size() > 1)
-			invalidAddressingHeader("Multiple WS-Addressing Action headers are not allowed",wsaddressingRef + "#msgaddrpropsinfoset");
-		if (messageId.size() > 	1) 
-			invalidAddressingHeader("Multiple WS-Addressing MessageID headers are not allowed",wsaddressingRef + "#msgaddrpropsinfoset");
+			return;
+		assertEquals(1, action.size());
+		OMElement ele = action.get(0);
+		OMNamespace omns = ele.getNamespace();
+		String nsuri = omns.getNamespaceURI();
+		assertEquals(wsaddresingNamespace, nsuri);
+	}
 
+	@ValidationFault(id="WSA005", dependsOn="WSAparse", msg="Validate From Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateFromNamespace() throws SoapFaultException {
+		if (from.size() == 0)
+			return;
+		assertEquals(1, from.size());
+		OMElement ele = from.get(0);
+		OMNamespace omns = ele.getNamespace();
+		String nsuri = omns.getNamespaceURI();
+		assertEquals(wsaddresingNamespace, nsuri);
+	}
+
+	@ValidationFault(id="WSA006", dependsOn="WSAparse", msg="Validate ReplyTo Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateReplyToNamespace() throws SoapFaultException {
+		if (replyTo.size() == 0)
+			return;
+		assertEquals(1, replyTo.size());
+		OMElement ele = replyTo.get(0);
+		OMNamespace omns = ele.getNamespace();
+		String nsuri = omns.getNamespaceURI();
+		assertEquals(wsaddresingNamespace, nsuri);
+	}
+
+	@ValidationFault(id="WSA007", dependsOn="WSAparse", msg="Validate FaultTo Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateFaultToNamespace() throws SoapFaultException {
+		if (faultTo.size() == 0)
+			return;
+		assertEquals(1, faultTo.size());
+		OMElement ele = faultTo.get(0);
+		OMNamespace omns = ele.getNamespace();
+		String nsuri = omns.getNamespaceURI();
+		assertEquals(wsaddresingNamespace, nsuri);
+	}
+
+	@ValidationFault(id="WSA008", dependsOn="WSAparse", msg="Multiple WS-Addressing To headers are not allowed", faultCode=FaultCode.InvalidAddressingHeader, ref=wsaddressingRef + "#msgaddrpropsinfoset")
+	public void validateToRequired() throws SoapFaultException {
+		assertFalse(to.size() > 1);
+	}
+	
+	@ValidationFault(id="WSA009", dependsOn="WSAparse", msg="Multiple WS-Addressing From headers are not allowed", faultCode=FaultCode.InvalidAddressingHeader, ref=wsaddressingRef + "#msgaddrpropsinfoset")
+	public void validateFromRequired() throws SoapFaultException {
+		assertFalse(from.size() > 1);
+	}
+	
+	@ValidationFault(id="WSA010", dependsOn="WSAparse", msg="Multiple WS-Addressing ReplyTo headers are not allowed", faultCode=FaultCode.InvalidAddressingHeader, ref=wsaddressingRef + "#msgaddrpropsinfoset")
+	public void validateReplyToRequired() throws SoapFaultException {
+		assertFalse(replyTo.size() > 1);
+	}
+	
+	@ValidationFault(id="WSA011", dependsOn="WSAparse", msg="Multiple WS-Addressing FaultTo headers are not allowed", faultCode=FaultCode.InvalidAddressingHeader, ref=wsaddressingRef + "#msgaddrpropsinfoset")
+	public void validateFaultToRequired() throws SoapFaultException {
+		assertFalse(faultTo.size() > 1);
+	}
+	
+	@ValidationFault(id="WSA012", dependsOn="WSAparse", msg="A Single WS-Addressing Action header is required", faultCode=FaultCode.InvalidAddressingHeader, ref=wsaddressingRef + "#msgaddrpropsinfoset")
+	public void validateSingleActionRequired() throws SoapFaultException {
+		assertEquals(1, action.size());
+	}
+	
+	@ValidationFault(id="WSA013", dependsOn="WSAparse", msg="Multiple WS-Addressing MessageId headers are not allowed", faultCode=FaultCode.InvalidAddressingHeader, ref=wsaddressingRef + "#msgaddrpropsinfoset")
+	public void validateMessageIdRequired() throws SoapFaultException {
+		assertFalse(messageId.size() > 1);
+	}
+	
+	@ValidationFault(id="WSA014", dependsOn="WSAparse", msg="At least one WS-Addressing SOAP header element must have a soapenv:mustUnderstand=\"true\"", faultCode=FaultCode.MustUnderstand, ref="http://www.w3.org/TR/soap12-part0/#L4697")
+	public void validateMustUnderstand() throws SoapFaultException {
 		List<OMElement> hdrs = new ArrayList<OMElement> ();
 		hdrs.addAll(messageId);
 		hdrs.addAll(relatesTo);
@@ -125,31 +215,162 @@ public class SoapHeaderValidator   extends SimComponentBase {
 				mufound = true;
 				break;
 			}
-			//			er.detail("The WS-Addressing SOAP header " + hdr.getLocalName() + " has value other than \"1\""/*,"ITI TF-2x: V.3.2.2"*/);
 		}
-		if (!mufound) {
-			String msg = "At least one WS-Addressing SOAP header element must have a soapenv:mustUnderstand attribute soapenv:mustUnderstand with value of logical true";
-			String ref = "http://www.w3.org/TR/soap12-part0/#L4697"; 
-			ag.detail("Taken from the above reference:");
-			ag.detail("In the SOAP 1.2 infoset-based description, the env:mustUnderstand attribute in header elements takes the (logical) value \"true\" or \"false\", whereas in SOAP 1.1 they are the literal value \"1\" or \"0\" respectively.");
-			ag.detail("This validation accepts 1 or 0 or any capitalization of true or false");
-			mustUnderstandError(msg, ref);
-		}
+		assertTrue(mufound);
+	}
+	
+	@ValidationFault(id="WSA015", dependsOn="WSAparse", msg="Validate ReplyTo is HTTP style endpoint", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateReplyToHttpStyle() throws SoapFaultException {
+		endpointCheckHttpStyle(replyTo);
+	}
+	
+	@ValidationFault(id="WSA016", dependsOn="WSAparse", msg="Validate From is HTTP style endpoint", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateFromHttpStyle() throws SoapFaultException {
+		endpointCheckHttpStyle(from);
+	}
+	
+	@ValidationFault(id="WSA017", dependsOn="WSAparse", msg="Validate FaultTo is HTTP style endpoint", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateFaultToHttpStyle() throws SoapFaultException {
+		endpointCheckHttpStyle(faultTo);
+	}
+	
+	/**********************************
+	 * From Endpoint
+	 **********************************/
+	OMElement fromEndpoint = null;
+	String fromEndpointValue = null;
+	
+	@ValidationFault(id="FromEndpointParse", dependsOn="WSAparse", msg="Parse From endpoint", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void parseFromEndpoint() throws SoapFaultException {
+		fromEndpoint = getFirst(from);
+		if (fromEndpoint != null)
+			fromEndpointValue = fromEndpoint.getText();
+	}
 
-		//		if (action.size() > 0) {
-		//			OMElement a = action.get(0);
-		//			String mu = a.getAttributeValue(MetadataSupport.must_understand_qname);
-		//			if (!"1".equals(mu))
-		//				er.err("The WS-Action SOAP header element must have attribute wsa:mustUnderstand=\"1\"","ITI TF-2x: V.3.2.2");
-		//		}
+	@ValidationFault(id="WSA018", dependsOn="FromEndpointParse", msg="From endpoint element name must be Address", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateFromElementIsAddress() throws SoapFaultException {
+		if (fromEndpoint == null)
+			return;
+		assertEquals("Address", fromEndpoint.getLocalName());
+	}
 
-		// check for endpoint format
-		endpointCheck(replyTo, false);
-		endpointCheck(from, true);
-		endpointCheck(faultTo, false);
+	@ValidationFault(id="WSA019", dependsOn="FromEndpointParse", msg="From endpoint element namespace", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateFromElementNamespace() throws SoapFaultException {
+		if (fromEndpoint == null)
+			return;
+		assertEquals(wsaddresingNamespace, fromEndpoint.getNamespace().getNamespaceURI());
+	}
 
-		// check for simple http style endpoint
-		httpCheck(to);
+	@ValidationFault(id="WSA020", dependsOn="FromEndpointParse", msg="From endpoint must have http prefix", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateFromValuePrefix() throws SoapFaultException {
+		if (fromEndpointValue == null)
+			return;
+		if (fromEndpointValue.startsWith("urn:"))
+			return;
+		assertTrue(fromEndpointValue.startsWith("http"));
+	}
+
+	/**********************************
+	 * ReplyTo Endpoint
+	 **********************************/
+	OMElement replyToEndpoint = null;
+	String replyToEndpointValue = null;
+	
+	@ValidationFault(id="ReplyToEndpointParse", dependsOn="WSAparse", msg="Parse ReplyTo endpoint", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void parseReplyToEndpoint() throws SoapFaultException {
+		replyToEndpoint = getFirst(replyTo);
+		if (replyToEndpoint != null)
+			replyToEndpointValue = replyToEndpoint.getText();
+	}
+
+	@ValidationFault(id="WSA021", dependsOn="ReplyToEndpointParse", msg="ReplyTo endpoint element name must be Address", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateReplyToElementIsAddress() throws SoapFaultException {
+		if (replyToEndpoint == null)
+			return;
+		assertEquals("Address", replyToEndpoint.getLocalName());
+	}
+
+	@ValidationFault(id="WSA022", dependsOn="ReplyToEndpointParse", msg="ReplyTo endpoint element namespace", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateReplyToElementNamespace() throws SoapFaultException {
+		if (replyToEndpoint == null)
+			return;
+		assertEquals(wsaddresingNamespace, replyToEndpoint.getNamespace().getNamespaceURI());
+	}
+
+	@ValidationFault(id="WSA023", dependsOn="ReplyToEndpointParse", msg="ReplyTo endpoint value prefix", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateReplyToValuePrefix() throws SoapFaultException {
+		if (replyToEndpointValue == null)
+			return;
+		assertTrue(replyToEndpointValue.startsWith("http"));
+	}
+
+	/**********************************
+	 * FaultTo Endpoint
+	 **********************************/
+	OMElement faultToEndpoint = null;
+	String faultToEndpointValue = null;
+	
+	@ValidationFault(id="FaultToEndpointParse", dependsOn="WSAparse", msg="Parse FaultTo endpoint", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void parseFaultToEndpoint() throws SoapFaultException {
+		faultToEndpoint = getFirst(faultTo);
+		if (faultToEndpoint != null)
+			faultToEndpointValue = faultToEndpoint.getText();
+	}
+
+	@ValidationFault(id="WSA024", dependsOn="FaultToEndpointParse", msg="FaultTo endpoint element name must be Address", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateFaultToElementIsAddress() throws SoapFaultException {
+		if (faultToEndpoint == null)
+			return;
+		assertEquals("Address", faultToEndpoint.getLocalName());
+	}
+
+	@ValidationFault(id="WSA025", dependsOn="FaultToEndpointParse", msg="FaultTo endpoint element namespace", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateFaultToElementNamespace() throws SoapFaultException {
+		if (faultToEndpoint == null)
+			return;
+		assertEquals(wsaddresingNamespace, faultToEndpoint.getNamespace().getNamespaceURI());
+	}
+
+	@ValidationFault(id="WSA026", dependsOn="FaultToEndpointParse", msg="FaultTo endpoint value prefix", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateFaultToValuePrefix() throws SoapFaultException {
+		if (faultToEndpointValue == null)
+			return;
+		assertTrue(faultToEndpointValue.startsWith("http"));
+	}
+
+	/**********************************
+	 * To Endpoint
+	 **********************************/
+	OMElement toEndpoint = null;
+	String toEndpointValue = null;
+	
+	@ValidationFault(id="ToEndpointParse", dependsOn="WSAparse", msg="Parse To endpoint", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void parseToEndpoint() throws SoapFaultException {
+		toEndpoint = getFirst(to);
+		if (toEndpoint != null)
+			toEndpointValue = toEndpoint.getText();
+	}
+
+	@ValidationFault(id="WSA027", dependsOn="ToEndpointParse", msg="To endpoint value prefix", faultCode=FaultCode.EndpointUnavailable, ref=wsaddressingRef)
+	public void validateToValuePrefix() throws SoapFaultException {
+		if (toEndpointValue == null)
+			return;
+		assertTrue(toEndpointValue.startsWith("http"));
+	}
+	
+	/**********************************************/
+
+	OMElement getFirst(List<OMElement> eles) {
+		for (OMElement ele : eles) {
+			OMElement first = ele.getFirstElement();
+			return first;
+		}		
+		return null;
+	}
+	
+	void validateWSAddressing() throws SoapFaultException {
+		if (header == null)
+			return;
 
 		// return WSAction
 		soapEnvironment.setRequestAction(null);
@@ -163,20 +384,6 @@ public class SoapHeaderValidator   extends SimComponentBase {
 			OMElement mid = messageId.get(0);
 			soapEnvironment.setMessageId(mid.getText());
 		}
-
-	}
-
-	void httpCheck(List<OMElement> eles) throws SoapFaultException {
-		for (OMElement ele : eles) {
-			String value = ele.getText();
-			if (!value.startsWith("http")) {
-				String msg = "Value of " + ele.getLocalName() + " must be http endpoint - found instead " + value; 
-				throw new SoapFaultException(
-						ag,
-						FaultCode.EndpointUnavailable, 
-						new ErrorContext(msg, wsaddressingRef).toString());
-			}
-		}
 	}
 
 	boolean mustUnderstandValueOk(String value) {
@@ -185,67 +392,10 @@ public class SoapHeaderValidator   extends SimComponentBase {
 		return false;
 	}
 
-	void endpointCheck(List<OMElement> eles, boolean anyURIOk) throws SoapFaultException {
+	void endpointCheckHttpStyle(List<OMElement> eles) throws SoapFaultException {
 		for (OMElement ele : eles) {
 			OMElement first = ele.getFirstElement();
-			if (first == null) {
-				String msg = "Validating contents of " + ele.getLocalName() + ": " + "not HTTP style endpoint"; 
-				throw new SoapFaultException(ag, FaultCode.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef));
-
-			} else {
-				String valError = validateEndpoint(first, anyURIOk);
-				if (valError != null) {
-					String msg = "Validating contents of " + ele.getLocalName() + ": " + valError; 
-					throw new SoapFaultException(ag, FaultCode.EndpointUnavailable, new ErrorContext(msg, wsaddressingRef));
-				}
-			}
+			assertNotNull(first);
 		}
 	}
-
-	String validateEndpoint(OMElement endpoint, boolean anyURIOk) {
-		if (endpoint == null)
-			return "null value";
-		if (!endpoint.getLocalName().equals("Address"))
-			return "found " + endpoint.getLocalName() + " but expected Address";
-		if (!endpoint.getNamespace().getNamespaceURI().equals(wsaddresingNamespace))
-			return "found namespace" + endpoint.getNamespace().getNamespaceURI() + " but expected " + wsaddresingNamespace;
-		String value = endpoint.getText();
-
-		if (anyURIOk && value.startsWith("urn:"))
-			return null;
-
-		if (!value.startsWith("http"))
-			return "not HTTP style endpoint";
-		return null;
-	}
-
-	void validateNamespace(List<OMElement> eles, String namespace) throws SoapFaultException {
-		for (OMElement ele : eles) {
-			OMNamespace omns = ele.getNamespace();
-			String nsuri = omns.getNamespaceURI();
-			if (!namespace.equals(nsuri)) {
-				String msg = "Namespace on element " + ele.getLocalName() + " must be " +
-						namespace + " - found instead " + nsuri;
-				throw new SoapFaultException(ag, FaultCode.Sender, new ErrorContext(msg, wsaddressingRef).toString());
-			}
-		}
-	}
-
-	void invalidAddressingHeader(String msg, String ref) throws SoapFaultException {
-		throw new SoapFaultException(
-				ag,
-				FaultCode.InvalidAddressingHeader,
-				new ErrorContext(msg, ref)
-				);
-	}
-
-	void mustUnderstandError(String msg, String ref) throws SoapFaultException {
-		throw new SoapFaultException(
-				ag,
-				FaultCode.MustUnderstand,
-				new ErrorContext(msg, ref)
-				);
-	}
-
-
 }

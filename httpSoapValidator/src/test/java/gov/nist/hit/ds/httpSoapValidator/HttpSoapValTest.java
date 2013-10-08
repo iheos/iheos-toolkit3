@@ -10,7 +10,7 @@ import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
 import gov.nist.hit.ds.httpSoapValidator.validators.HttpMessageValidator;
 import gov.nist.hit.ds.httpSoapValidator.validators.SoapHeaderValidator;
-import gov.nist.hit.ds.httpSoapValidator.validators.SoapParser;
+import gov.nist.hit.ds.httpSoapValidator.validators.SoapMessageParser;
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -146,7 +146,7 @@ public class HttpSoapValTest {
 				setSimComponent(new XmlParser()));
 		simSteps.add(new SimStep().
 				setName("SOAP Parser").
-				setSimComponent(new SoapParser()));
+				setSimComponent(new SoapMessageParser()));
 		simSteps.add(new SimStep().
 				setName("SoapMessageValidator").
 				setSimComponent(new SoapHeaderValidator().setExpectedWsAction("urn:ihe:iti:2007:RegisterDocumentSet-b")));

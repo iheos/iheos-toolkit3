@@ -102,6 +102,18 @@ public abstract class SimComponentBase implements SimComponent {
 		return !a.failed();
 	}
 	
+	public boolean assertTrue(boolean value) throws SoapFaultException {
+		Assertion a = ag.assertTrue(value);
+		recordAssertion(a);
+		return !a.failed();
+	}
+
+	public boolean assertFalse(boolean value) throws SoapFaultException {
+		Assertion a = ag.assertTrue(!value);
+		recordAssertion(a);
+		return !a.failed();
+	}
+
 	public boolean assertNotNull(Object value) throws SoapFaultException {
 		Assertion a = ag.assertNotNull(value);
 		recordAssertion(a);

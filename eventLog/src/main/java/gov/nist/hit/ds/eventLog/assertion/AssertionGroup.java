@@ -136,6 +136,17 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 		return as;
 	}
 
+	public Assertion assertTrue(boolean value) {
+		Assertion as = new Assertion();
+		if (value) {
+			as.setExpected("True").setFound("True").setStatus(AssertionStatus.SUCCESS);			
+		} else {
+			as.setExpected("True").setFound("False").setStatus(AssertionStatus.ERROR);
+		}
+		addAssertion(as);
+		return as;
+	}
+
 	public Assertion assertNotNull(Object value) {
 		Assertion as = new Assertion();
 		if (value == null) 

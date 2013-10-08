@@ -1,8 +1,16 @@
-package gov.nist.hit.ds.simulatorIntegrationTest.soapParser;
+package gov.nist.hit.ds.simulatorIntegrationTest.soapHeaderValidator;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.axiom.om.OMElement;
+import org.junit.Before;
+import org.junit.Test;
+
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.eventLog.Event;
@@ -19,14 +27,7 @@ import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.xml.Util;
 import gov.nist.hit.ds.xmlValidator.XmlMessage;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.axiom.om.OMElement;
-import org.junit.Before;
-import org.junit.Test;
-
-public class SoapParserIT implements XmlMessage {
+public class SoapHeaderValidatorIT implements XmlMessage {
 	File xmlInputFile;
 	OMElement ele = null;
 	Event event = null;
@@ -69,8 +70,6 @@ public class SoapParserIT implements XmlMessage {
 		return ele;
 	}
 	
-	
-	
 	@Test
 	public void goodTest() {
 		try {
@@ -96,32 +95,6 @@ public class SoapParserIT implements XmlMessage {
 		}
 	}
 	
-	@Test
-	public void badBodyNamespaceTest() {
-		try {
-			run(new File("src/test/resources/soapParser_testdata/badBodyNamespace.xml"));
-			fail();
-		} catch (SoapFaultException e) {
-			assertTrue(e.getFaultString().startsWith("Body Namespace"));
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-	
-	@Test
-	public void extraPartTest() {
-		try {
-			run(new File("src/test/resources/soapParser_testdata/extraPart.xml"));
-			fail();
-		} catch (SoapFaultException e) {
-			assertTrue(e.getFaultString().startsWith("Envelope must have 2 childern"));
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-	
 	AssertionGroup run(File xmlInputFile) throws RepositoryException, SoapFaultException {
 		this.xmlInputFile = xmlInputFile;
 		loadXml();
@@ -135,5 +108,5 @@ public class SoapParserIT implements XmlMessage {
 		soapParser.run(null);
 		return ag;
 	}
-	
+
 }

@@ -5,6 +5,7 @@ import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.LongValueIterator;
 import gov.nist.hit.ds.repository.api.PropertiesIterator;
+import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
@@ -73,7 +74,7 @@ public abstract class BaseRepository implements Repository {
 	public BaseRepository() throws RepositoryException {
 		isNew = true;
 		setReposId(new IdFactory().getNewId());
-		properties.setProperty("id", getReposId().getIdString());
+		properties.setProperty(PropertyKey.ASSET_ID.name(), getReposId().getIdString());
 	}
 	
 	/**
@@ -83,7 +84,7 @@ public abstract class BaseRepository implements Repository {
 	public BaseRepository(String name) throws RepositoryException {
 		isNew = true;
 		setReposId(new SimpleId(name));
-		properties.setProperty("id", getReposId().getIdString());
+		properties.setProperty(PropertyKey.ASSET_ID.name(), getReposId().getIdString());
 	}
 
 	public void load() throws RepositoryException {

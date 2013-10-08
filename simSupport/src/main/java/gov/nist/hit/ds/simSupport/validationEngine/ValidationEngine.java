@@ -19,10 +19,12 @@ public class ValidationEngine {
 	SimComponentBase validationObject;
 	public ValidationFault validationFaultAnnotation;
 	public Validation validationAnnotation;
+	Class<?> targetClass;
 	static Logger logger = Logger.getLogger(ValidationEngine.class);
 
 	public ValidationEngine(SimComponentBase validationObject) {
 		this.validationObject = validationObject;
+		this.targetClass = validationObject.getClass();
 	}
 
 	public void run() throws SoapFaultException {
@@ -40,7 +42,6 @@ public class ValidationEngine {
 		}
 	}
 
-	Class<?> targetClass;
 	List<Runable> runables = new ArrayList<Runable>();
 	int validationsRan = 0;
 	
@@ -67,34 +68,6 @@ public class ValidationEngine {
 		return null;
 	}
 	
-	// Any method can be passed in.  If no appropriate annotation then nothing will be scheduled.
-	void addRunable(Method method) throws Exception {
-		logger.debug("Evaluating method " + method.getName());
-		ValidationFault validationFaultAnnotation = method.getAnnotation(ValidationFault.class);
-		Validation validationAnnotation = method.getAnnotation(Validation.class);
-		if (validationFaultAnnotation != null) {
-			logger.debug("    Has fault validation annotation ");
-			Class<?>[] subParamTypes = method.getParameterTypes();
-			if (subParamTypes != null && subParamTypes.length > 0) 
-				throw new Exception("Validation <" + targetClass.getName() + "#" + method.getName() + "> : a validation method accepts no parameters");
-			RunType type = RunType.FAULT;
-			String[] dependsOnId = validationFaultAnnotation.dependsOn();
-			logger.debug("    depends on " + dependsOnId);
-				runables.add(new Runable(method, type, dependsOnId, validationFaultAnnotation));
-		} else if (validationAnnotation != null) {
-			logger.debug("    Has validation annotation ");
-			Class<?>[] subParamTypes = method.getParameterTypes();
-			if (subParamTypes != null && subParamTypes.length > 0) 
-				throw new Exception("Validation <" + targetClass.getName() + "#" + method.getName() + "> : a validation method accepts no parameters");
-			RunType type = RunType.ERROR;
-			String dependsOnId[] = validationAnnotation.dependsOn();
-			logger.debug("    depends on " + dependsOnId);
-			runables.add(new Runable(method, type, dependsOnId, validationAnnotation));
-		} else {
-			// oops - not one we are interested in.
-		}
-		logger.debug("    have " + runables.size() + " runables");
-	}
 	
 	boolean dependenciesSatisfied(String[] dependsOnIds) {
 		for (int i=0; dependsOnIds != null && i<dependsOnIds.length; i++) {
@@ -127,13 +100,17 @@ public class ValidationEngine {
 		scheduler();
 		runner();
 	}
+	
+	public void scheduler() throws Exception {
+		new Scheduler(targetClass, runables).run();
+	}
 
 	public void runner() throws IllegalAccessException,
 			InvocationTargetException, SoapFaultException, ValidationEngineException {
 		Runable runable = getNextRunable();
 		while(runable != null) {
 			Method meth = runable.method;
-			logger.debug("Calling " + meth.getName());
+			logger.debug("Validation " + meth.getName());
 
 			try {
 				meth.invoke(validationObject);
@@ -152,15 +129,5 @@ public class ValidationEngine {
 		}
 	}
 
-	public void scheduler() throws Exception {
-		targetClass = validationObject.getClass();
-		logger.debug("Running ValidationEngine on " + targetClass.getName());
-		Method[] valMethods = targetClass.getMethods();
-		// Organize all validations
-		for (int methI=0; methI<valMethods.length; methI++) {
-			Method meth = valMethods[methI];
-			addRunable(meth);
-		}
-	}
 
 }
