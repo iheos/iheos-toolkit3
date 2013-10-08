@@ -7,30 +7,23 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
-import gov.nist.hit.ds.xmlValidator.XmlMessage;
-
-import java.util.Iterator;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 
-public class SoapParser extends SimComponentBase {
-	OMElement xml;
-	XmlMessage xmlMessage;
+public class SoapMessageValidator extends SimComponentBase{
 	String soapNamespaceName = "http://www.w3.org/2003/05/soap-envelope";
+	OMElement root = null;
 	OMElement header = null;
 	OMElement body = null;
-	OMElement root;
 	int partCount;
 
 	@Inject
-	public SoapParser setXML(XmlMessage xmlMessage) {
-		this.xmlMessage = xmlMessage;
-		return this;
-	}
-
-	public SoapMessage getSoapMessage() {
-		return new SoapMessage().setHeader(header).setBody(body);
+	public void setSoapMessage(SoapMessage message) {
+		this.header = message.getHeader();
+		this.body = message.getBody();
+		this.root = message.getRoot();
+		this.partCount = message.getPartCount();
 	}
 
 	@ValidationFault(id="SOAP001", msg="Top element must be Envelope", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
@@ -92,35 +85,10 @@ public class SoapParser extends SimComponentBase {
 		}
 	}
 
-	int countParts(Iterator<?> it) {
-		int cnt = 0;
-		while (it.hasNext()) {
-			it.next();
-			cnt++;
-		}
-		return cnt;
-	}
-
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
-		root = xmlMessage.getXml();
-		if (root != null) {
-			Iterator<?> partsIterator = root.getChildElements();
-
-			partCount = 0;
-			if (partsIterator.hasNext()) { 
-				partCount++;
-				header = (OMElement) partsIterator.next();
-				if (partsIterator.hasNext()) {
-					partCount++;
-					body = (OMElement) partsIterator.next();
-					partCount += countParts(partsIterator);
-				}
-			}
-		}
-
 		validationEngine.run();
-
 	}
+
 
 }
