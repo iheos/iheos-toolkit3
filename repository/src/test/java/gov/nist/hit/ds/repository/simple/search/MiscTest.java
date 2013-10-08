@@ -1,9 +1,6 @@
 package gov.nist.hit.ds.repository.simple.search;
 
 import static org.junit.Assert.assertTrue;
-
-import javax.validation.constraints.AssertTrue;
-
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 

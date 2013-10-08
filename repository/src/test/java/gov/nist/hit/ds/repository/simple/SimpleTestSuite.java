@@ -8,7 +8,6 @@ import gov.nist.hit.ds.repository.simple.index.CreateContainerTest;
 import gov.nist.hit.ds.repository.simple.index.ExpandContainerTest;
 import gov.nist.hit.ds.repository.simple.search.SearchTest;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
