@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.httpSoapValidator.validators;
 
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
 import gov.nist.hit.ds.simSupport.engine.annotations.ParserOutput;
@@ -36,7 +37,7 @@ public class SoapMessageParser extends SimComponentBase {
 	}
 
 	@Override
-	public void run(MessageValidatorEngine mve) throws SoapFaultException {
+	public void run(MessageValidatorEngine mve) throws SoapFaultException, RepositoryException {
 		root = xmlMessage.getXml();
 		if (root != null) {
 			Iterator<?> partsIterator = root.getChildElements();
@@ -53,7 +54,7 @@ public class SoapMessageParser extends SimComponentBase {
 			}
 		}
 
-		validationEngine.run();
+		runValidationEngine();
 	}
 
 	int countParts(Iterator<?> it) {

@@ -32,6 +32,7 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 
 	public AssertionGroup setValidatorName(String name) {
 		this.validatorName = name;
+		logger.debug("New AssertionGroup: " + name);
 		return this;
 	}
 
@@ -39,12 +40,16 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 		return "AssertionGroup(" + maxStatus + ")";
 	}
 
+	// Doesn't get called until the end to flush out
 	public CSVTable getTable() { 
 		CSVTable assertionTable = new CSVTable();
 		addRow(assertionTable, Arrays.asList(Assertion.columnNames));
+		int cnt = 0;
 		for (Assertion a : assertionList) {
 			assertionTable.add(a.getEntry());
+			cnt++;
 		}
+		logger.debug("AssertionGroup table contains " + cnt + " entries");
 		return assertionTable; 
 	}
 
@@ -53,7 +58,7 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	public int size() { return assertionList.size(); }
 
 	public AssertionGroup addAssertion(Assertion asser) {
-		logger.debug(asser);
+		logger.debug("Add Assertion to AssertionGroup: " + asser);
 		if (asser.getStatus().ordinal() > maxStatus.ordinal())
 			maxStatus = asser.getStatus();
 		assertionList.add(asser);

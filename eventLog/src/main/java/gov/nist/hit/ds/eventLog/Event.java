@@ -75,4 +75,8 @@ public class Event {
 		return this;
 	}
 	
+	public void flush() throws RepositoryException {
+		assertions.flush();
+	}
+	
 }

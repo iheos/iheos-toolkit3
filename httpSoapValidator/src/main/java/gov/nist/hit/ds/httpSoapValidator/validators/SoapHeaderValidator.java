@@ -3,6 +3,7 @@ package gov.nist.hit.ds.httpSoapValidator.validators;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
 import gov.nist.hit.ds.simSupport.engine.annotations.ValidatorParameter;
@@ -54,26 +55,35 @@ public class SoapHeaderValidator   extends SimComponentBase {
 	}
 
 	@Override
-	public void run(MessageValidatorEngine mve) throws SoapFaultException {
-		validateWSAddressing();
-		validateWSAction();
+	public void run(MessageValidatorEngine mve) throws SoapFaultException, RepositoryException {
+		runValidationEngine();
+		
+		if (action != null && action.size() > 0) {
+			OMElement aEle = action.get(0);
+			soapEnvironment.setRequestAction(aEle.getText());
+		}
+
+		if (messageId != null && messageId.size() > 0) {
+			OMElement mid = messageId.get(0);
+			soapEnvironment.setMessageId(mid.getText());
+		}
 	}
 
-	void validateWSAction() throws SoapFaultException {
-		if (expectedAction == null) {
-			ag.warning(
-					Code.NoCode, 
-					new ErrorContext("WS-Action not validated - no expected value is configured"), 
-					this.getClass().getName());
-			return;
-		} 
-		if (!expectedAction.equals(soapEnvironment.getRequestAction()))
-			throw new SoapFaultException(
-					ag,
-					FaultCode.ActionNotSupported,
-					new ErrorContext("Expected WS-Action >" + expectedAction + "> not equal to WS-Action found in message <" + soapEnvironment.getRequestAction() + ">"));
-		ag.detail("WS-Action is <" + soapEnvironment.getRequestAction() + ">");
-	}
+//	void validateWSAction() throws SoapFaultException {
+//		if (expectedAction == null) {
+//			ag.warning(
+//					Code.NoCode, 
+//					new ErrorContext("WS-Action not validated - no expected value is configured"), 
+//					this.getClass().getName());
+//			return;
+//		} 
+//		if (!expectedAction.equals(soapEnvironment.getRequestAction()))
+//			throw new SoapFaultException(
+//					ag,
+//					FaultCode.ActionNotSupported,
+//					new ErrorContext("Expected WS-Action >" + expectedAction + "> not equal to WS-Action found in message <" + soapEnvironment.getRequestAction() + ">"));
+//		ag.detail("WS-Action is <" + soapEnvironment.getRequestAction() + ">");
+//	}
 
 	@ValidationFault(id="WSAparse", msg="Parsing WSA header fields", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void parseWSAddressingFields() throws SoapFaultException {
@@ -379,23 +389,6 @@ public class SoapHeaderValidator   extends SimComponentBase {
 		return null;
 	}
 	
-	void validateWSAddressing() throws SoapFaultException {
-		if (header == null)
-			return;
-
-		validationEngine.run();
-		
-		if (action != null && action.size() > 0) {
-			OMElement aEle = action.get(0);
-			soapEnvironment.setRequestAction(aEle.getText());
-		}
-
-		if (messageId != null && messageId.size() > 0) {
-			OMElement mid = messageId.get(0);
-			soapEnvironment.setMessageId(mid.getText());
-		}
-	}
-
 	boolean mustUnderstandValueOk(String value) {
 		if ("1".equals(value)) return true;
 		if ("true".equalsIgnoreCase("true")) return true;

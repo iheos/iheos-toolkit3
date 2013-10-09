@@ -6,6 +6,7 @@ import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
 import gov.nist.hit.ds.eventLog.assertion.annotations.Validation;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.validationEngine.ValidationEngine;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
@@ -23,7 +24,7 @@ public abstract class SimComponentBase implements SimComponent {
 	public Event event;
 	String name;
 	String description;
-	public ValidationEngine validationEngine;
+	ValidationEngine validationEngine;
 
 	public SimComponentBase() {
 		validationEngine = new ValidationEngine(this);
@@ -37,6 +38,10 @@ public abstract class SimComponentBase implements SimComponent {
 	@Override
 	public void setAssertionGroup(AssertionGroup er) {
 		this.ag = er;
+	}
+	
+	public void flushEvent() throws RepositoryException {
+//		event.flush();
 	}
 
 	@Override
@@ -57,6 +62,15 @@ public abstract class SimComponentBase implements SimComponent {
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public void runValidationEngine() throws SoapFaultException, RepositoryException {
+		validationEngine.run();
+		flushEvent();
+	}
+	
+	public ValidationEngine getValidationEngine() {
+		return validationEngine;
 	}
 	
 	/******************************************

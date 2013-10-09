@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.httpSoapValidator.validators;
 
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
@@ -86,8 +87,8 @@ public class SoapMessageValidator extends SimComponentBase{
 	}
 
 	@Override
-	public void run(MessageValidatorEngine mve) throws SoapFaultException {
-		validationEngine.run();
+	public void run(MessageValidatorEngine mve) throws SoapFaultException, RepositoryException {
+		runValidationEngine();
 	}
 
 

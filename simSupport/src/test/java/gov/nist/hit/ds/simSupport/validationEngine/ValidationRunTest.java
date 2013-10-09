@@ -43,7 +43,7 @@ public class ValidationRunTest  extends SimComponentBase {
 	@Test
 	public void runTest() {
 		try {
-			validationEngine.run();
+			runValidationEngine();
 			Assert.assertTrue(ran);
 		} catch (Exception e) {
 			e.printStackTrace();

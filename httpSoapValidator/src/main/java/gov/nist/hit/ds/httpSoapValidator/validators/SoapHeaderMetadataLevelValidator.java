@@ -85,7 +85,7 @@ public class SoapHeaderMetadataLevelValidator extends SimComponentBase {
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException,
 	RepositoryException {
-		validationEngine.run();
+		runValidationEngine();
 	}
 
 }

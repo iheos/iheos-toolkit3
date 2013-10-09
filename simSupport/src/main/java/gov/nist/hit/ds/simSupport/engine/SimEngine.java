@@ -125,8 +125,10 @@ public class SimEngine implements MessageValidatorEngine {
 					} catch (Exception e1) {
 						logger.error(ExceptionUtil.exception_details(e1));
 					}
+					event.flush();
 					return;
 				}
+				event.flush();
 				if (simChain.hasErrors()) {
 					logger.error("Engine Error: " + simChain.getErrors());
 					errorsFound = true;
