@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.repository.simple.search;
 
-import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.initialization.installation.PropertyServiceManager;
 import gov.nist.hit.ds.repository.api.Asset;
@@ -16,7 +15,6 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
-
 
 import java.io.File;
 import java.io.FileReader;
@@ -60,7 +58,7 @@ public class SearchServlet extends HttpServlet {
 		String reposSrc = request.getParameter("reposSrc");
 		String reposId = request.getParameter("reposId");
 		String assetId = request.getParameter("assetId");
-		String levelStr = request.getParameter("level"); // 1, 2, or 3
+		String levelStr = request.getParameter("level"); // 1 (top level only) or 2 (multiple depth)
 		String reportTypeStr = request.getParameter("reportType"); // 1 or 2
 		Access acs = null; 
 		
@@ -123,8 +121,8 @@ public class SearchServlet extends HttpServlet {
 
 		which indicates the depth of the display.  
 		levels=1 would show the asset requested.  
-		levels=2 would show the the asset requested and its immediate children.  
-		levels=3 would include the grandchildren.  The default value should be levels=1.  if levels=0 is given, interpret it as levels=1
+		levels=2 would show the the asset requested and its immediate children (and grandchildren) (updated from original desc).
+		The default value should be levels=1.  if levels=0 is given, interpret it as levels=1
 
 		(Bill)
 
@@ -135,8 +133,11 @@ public class SearchServlet extends HttpServlet {
 			int level = 0;
 			if (levelStr!=null && !"".equals(levelStr)) {
 				level = Integer.parseInt(levelStr);
-				if (level<0 || level>3)
+				if (level<2) {
 					level = 0;
+				} else {
+					level = 2;
+				}
 			}
 
 			String result = getAsset(repos, assetId, level, level);
@@ -309,7 +310,7 @@ public class SearchServlet extends HttpServlet {
 				+"</tr>"
 				);
 		} else {
-			sb.append( a.getDescription()); // a.getId().toString() + " - " +
+			sb.append( a.getDisplayName()); // a.getId().toString() + " - " +
 			if (a.getMimeType()!=null) {
 				sb.append("&nbsp;<font ");
 				

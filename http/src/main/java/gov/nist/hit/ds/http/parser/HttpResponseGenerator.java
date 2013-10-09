@@ -21,9 +21,10 @@ public class HttpResponseGenerator {
 	public void sendResponse(String body) throws Exception {
 		try {
 			httpEnv.getOutputStream().write(body.getBytes());
+//			httpEnv.getResponse().flushBuffer();
 		} 
 		finally {
-			httpEnv.getOutputStream().close();  // only one response to a customer
+//			httpEnv.getOutputStream().close();  // only one response to a customer
 		}
 	}
 }

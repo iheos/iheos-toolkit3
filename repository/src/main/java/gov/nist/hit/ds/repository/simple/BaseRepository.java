@@ -74,7 +74,7 @@ public abstract class BaseRepository implements Repository {
 	public BaseRepository() throws RepositoryException {
 		isNew = true;
 		setReposId(new IdFactory().getNewId());
-		properties.setProperty(PropertyKey.ASSET_ID.name(), getReposId().getIdString());
+		properties.setProperty(PropertyKey.ASSET_ID.toString(), getReposId().getIdString());
 	}
 	
 	/**
@@ -84,7 +84,7 @@ public abstract class BaseRepository implements Repository {
 	public BaseRepository(String name) throws RepositoryException {
 		isNew = true;
 		setReposId(new SimpleId(name));
-		properties.setProperty(PropertyKey.ASSET_ID.name(), getReposId().getIdString());
+		properties.setProperty(PropertyKey.ASSET_ID.toString(), getReposId().getIdString());
 	}
 
 	public void load() throws RepositoryException {

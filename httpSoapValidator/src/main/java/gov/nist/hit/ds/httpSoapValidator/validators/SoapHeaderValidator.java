@@ -120,6 +120,17 @@ public class SoapHeaderValidator   extends SimComponentBase {
 		assertEquals(wsaddresingNamespace, nsuri);
 	}
 
+	@ValidationFault(id="WSA028", dependsOn="WSAparse", msg="Validate Action Present", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateActionPresent() throws SoapFaultException {
+		assertNotNull(action);
+		assertEquals(1, action.size());
+	}
+
+	@ValidationFault(id="WSA029", dependsOn="WSA028", msg="Validate Action Value", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	public void validateActionValue() throws SoapFaultException {
+		assertEquals(expectedAction, action.get(0).getText());
+	}
+
 	@ValidationFault(id="WSA004", dependsOn="WSAparse", msg="Validate Action Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateActionNamespace() throws SoapFaultException {
 		if (action.size() == 0)
@@ -372,15 +383,14 @@ public class SoapHeaderValidator   extends SimComponentBase {
 		if (header == null)
 			return;
 
-		// return WSAction
-		soapEnvironment.setRequestAction(null);
-
-		if (action.size() > 0) {
+		validationEngine.run();
+		
+		if (action != null && action.size() > 0) {
 			OMElement aEle = action.get(0);
 			soapEnvironment.setRequestAction(aEle.getText());
 		}
 
-		if (messageId.size() > 0) {
+		if (messageId != null && messageId.size() > 0) {
 			OMElement mid = messageId.get(0);
 			soapEnvironment.setMessageId(mid.getText());
 		}
