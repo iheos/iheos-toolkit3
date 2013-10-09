@@ -5,9 +5,7 @@ import gov.nist.hit.ds.httpSoapValidator.wsseToolkitAdapter.log4jToErrorRecorder
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.loader.ValidationContext;
-import gov.nist.toolkit.wsseTool.api.WsseHeaderValidator;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContext;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContextFactory;
+import gov.nist.hit.ds.wsseTool.validation.WsseHeaderValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +34,8 @@ import org.w3c.dom.Element;
  * 
  */
 
-public class WsseHeaderValidatorAdapter extends MessageValidator {
+public class WsseHeaderValidatorAdapter {
+ // public class WsseHeaderValidatorAdapter extends MessageValidator {
 
 	private static Logger log = LoggerFactory
 			.getLogger(WsseHeaderValidatorAdapter.class);
@@ -65,12 +64,15 @@ public class WsseHeaderValidatorAdapter extends MessageValidator {
 	private WsseHeaderValidator val;
 	private Element header;
 
+	/*
 	public WsseHeaderValidatorAdapter(ValidationContext vc, Element wsseHeader) {
 		super(vc);
 		val = new WsseHeaderValidator();
 		this.header = wsseHeader;
 	}
+	*/
 
+	/*
 	@Override
 	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 
@@ -105,7 +107,9 @@ public class WsseHeaderValidatorAdapter extends MessageValidator {
 				+ "================================================");
 		// er.showErrorInfo();
 	}
+	*/
 
+	/*
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
@@ -117,4 +121,5 @@ public class WsseHeaderValidatorAdapter extends MessageValidator {
 		// TODO Auto-generated method stub
 		
 	}
+	*/
 }

@@ -1,11 +1,5 @@
 package gov.nist.hit.ds.httpSoapValidator;
 
-import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContext;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContextFactory;
-import gov.nist.toolkit.wsseTool.api.exceptions.GenerationException;
-import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
@@ -24,7 +18,7 @@ import org.xml.sax.SAXException;
 
 public class WsseHeaderGeneratorAdapter {
 	
-	
+	/*
 	public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, GeneralSecurityException, MarshalException, XMLSignatureException, URISyntaxException, GenerationException {
 		String store = "/Users/gerardin/IHE-Testing/xdstools2_environment/environment/AEGIS_env/keystore/keystore";
 		String sPass = "changeit";
@@ -44,5 +38,7 @@ public class WsseHeaderGeneratorAdapter {
 		Document wsseHeader = new OpenSamlWsseSecurityGenerator().generateWsseHeader(context);
 		return wsseHeader.getDocumentElement();
 	}
+	
+	*/
 
 }
