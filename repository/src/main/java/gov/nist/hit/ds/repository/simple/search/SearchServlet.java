@@ -160,7 +160,12 @@ public class SearchServlet extends HttpServlet {
 	
 	private String printReport(String rpt) {
 		// Exclude this wrapper if snippet is requested 
-		
+		if (rpt==null || "".equals(rpt)) {
+			rpt = "No results found: <ol>" +
+					"<li>Has the repository folder been renamed? " +
+					"<ul><li>Assets within a repository have the " + PropertyKey.REPOSITORY_ID + " coded with the folder name. The folder name must match the property value at all times." +
+							"</li></ul></li></ol>";
+		}
 		return "<html><body style='font-family:arial,verdana,sans-serif;'>" + rpt + "</body></html>";
 	}
 
@@ -171,8 +176,7 @@ public class SearchServlet extends HttpServlet {
 			SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 			
 			PropertyKey nest = (topLevel==level)? PropertyKey.ASSET_ID : PropertyKey.PARENT_ID;
-			criteria.append(new SearchTerm(nest,Operator.EQUALTO,assetId));
-			
+			criteria.append(new SearchTerm(nest,Operator.EQUALTO,assetId));			
 			
 			AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
 			
@@ -314,7 +318,7 @@ public class SearchServlet extends HttpServlet {
 			if (a.getMimeType()!=null) {
 				sb.append("&nbsp;<font ");
 				
-				if ("text/*".equalsIgnoreCase(a.getMimeType())) {
+				if (a.getMimeType().toLowerCase().startsWith("text/")) {
 					sb.append("title='" + StringEscapeUtils.escapeHtml4(new String(a.getContent())) + "' ");
 				}
 				
