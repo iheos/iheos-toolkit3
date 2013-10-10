@@ -45,4 +45,9 @@ public class HttpMsgParser extends SimComponentBase {
 		} 
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
+
 }

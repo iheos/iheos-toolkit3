@@ -20,6 +20,16 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	List<Assertion> assertionList = new ArrayList<Assertion>();
 	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
 	String validatorName = "AssertionGroup";
+	boolean saveInLog = false;
+	
+	public boolean isSaveInLog() {
+		return saveInLog;
+	}
+
+	public void setSaveInLog(boolean saveInLog) {
+		this.saveInLog = saveInLog;
+	}
+
 	static Logger logger = Logger.getLogger(AssertionGroup.class);
 	final static String dashes = "---";
 

@@ -27,4 +27,9 @@ public class SubmitObjectsRequestRootValidator extends EbrsRootValidator {
 		this.event = event;
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
+
 }

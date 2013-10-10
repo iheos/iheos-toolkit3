@@ -60,7 +60,7 @@ public class DownloadAssetServlet extends HttpServlet {
 					  response.setHeader("Pragma", "no-cache");
 					  response.setDateHeader("Max-Age", 0);
 					  
-					  response.setHeader("Content-Disposition", "attachment;filename=\""+ a.getId().getIdString() + "." + a.getContentExtension()[2] + "\"");
+					  response.setHeader("Content-Disposition", "inline;filename=\""+ a.getId().getIdString() + "." + a.getContentExtension()[2] + "\"");
 					  if (a.getMimeType()!=null) {
 						  response.setContentType(a.getMimeType());
 					  } else {
@@ -76,7 +76,7 @@ public class DownloadAssetServlet extends HttpServlet {
 					  OutputStream os = response.getOutputStream();
 
 					  os.write(content);
-					  
+					  os.flush();
 					  os.close();
 
 				}				

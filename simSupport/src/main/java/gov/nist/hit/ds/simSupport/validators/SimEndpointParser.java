@@ -60,4 +60,9 @@ public class SimEndpointParser extends SimComponentBase {
 					e.getMessage());
 		}
 	}
+
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
 }

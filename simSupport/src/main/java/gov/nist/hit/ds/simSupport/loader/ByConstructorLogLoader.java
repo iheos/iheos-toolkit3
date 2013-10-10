@@ -12,4 +12,9 @@ public class ByConstructorLogLoader extends AbstractLogLoader {
 		this.dir = dir;
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
+
 }

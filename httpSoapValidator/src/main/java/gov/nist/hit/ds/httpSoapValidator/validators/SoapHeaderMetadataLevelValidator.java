@@ -11,6 +11,7 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional;
 
 import java.util.Iterator;
 
@@ -40,7 +41,7 @@ public class SoapHeaderMetadataLevelValidator extends SimComponentBase {
 		return level;
 	}
 
-	@ValidationFault(id="MetaLevel001", msg="Find metadata-level header in SOAP Header", faultCode=FaultCode.Sender, ref="MU2")
+	@ValidationFault(id="MetaLevel001", required=RequiredOptional.O, msg="Find metadata-level header in SOAP Header", faultCode=FaultCode.Sender, ref="MU2")
 	public void findMetadataLevel() throws SoapFaultException {
 		Iterator<?> children = header.getChildElements();
 		while (children != null && children.hasNext()) {
@@ -86,6 +87,11 @@ public class SoapHeaderMetadataLevelValidator extends SimComponentBase {
 	public void run(MessageValidatorEngine mve) throws SoapFaultException,
 	RepositoryException {
 		runValidationEngine();
+	}
+
+	@Override
+	public boolean showOutputInLogs() {
+		return true;
 	}
 
 }

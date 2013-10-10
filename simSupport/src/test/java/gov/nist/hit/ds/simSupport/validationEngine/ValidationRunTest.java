@@ -61,4 +61,9 @@ public class ValidationRunTest  extends SimComponentBase {
 
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
+
 }

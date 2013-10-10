@@ -49,4 +49,9 @@ public class RegisterTransactionSim extends SimComponentBase {
 		validateEndpoint();
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return true;
+	}
+
 }

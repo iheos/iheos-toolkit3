@@ -219,6 +219,11 @@ public class HttpSoapValTest {
 		public void setEvent(Event event) {
 			this.event = event;
 		}
+
+		@Override
+		public boolean showOutputInLogs() {
+			return false;
+		}
 	}
 
 

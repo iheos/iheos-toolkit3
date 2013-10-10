@@ -10,6 +10,10 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.validationEngine.ValidationEngine;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -134,9 +138,29 @@ public abstract class SimComponentBase implements SimComponent {
 		return !a.failed();
 	}
 
+	List<String> idsAsserted = new ArrayList<String>();
+	
 	void recordAssertion(Assertion a) throws SoapFaultException {
 		if (validationEngine.validationFaultAnnotation != null) {
 			ValidationFault vf = validationEngine.validationFaultAnnotation;
+			if (idsAsserted.contains(vf.id())) {
+				a.
+				setId(vf.id()).
+				setMsg("Validator contains multiple assertions with this id").
+				setReference(new String[] {}).
+				setExpected("").
+				setFound("").
+				setCode(FaultCode.Receiver.toString()).
+				setStatus(AssertionStatus.INTERNALERROR)
+				;
+				throw new SoapFaultException(
+						ag,
+						FaultCode.Receiver,
+						new ErrorContext("Validator contains multiple assertions with this id", "")
+						);
+			}
+			idsAsserted.add(vf.id());
+			
 			a.
 			setId(vf.id()).
 			setMsg(vf.msg()).
@@ -153,6 +177,24 @@ public abstract class SimComponentBase implements SimComponent {
 		}
 		if (validationEngine.validationAnnotation != null) {
 			Validation vf = validationEngine.validationAnnotation;
+			if (idsAsserted.contains(vf.id())) {
+				a.
+				setId(vf.id()).
+				setMsg("Validator contains multiple assertions with this id").
+				setReference(new String[] {}).
+				setExpected("").
+				setFound("").
+				setCode(FaultCode.Receiver.toString()).
+				setStatus(AssertionStatus.INTERNALERROR)
+				;
+				throw new SoapFaultException(
+						ag,
+						FaultCode.Receiver,
+						new ErrorContext("Validator contains multiple assertions with this id", "")
+						);
+			}
+			idsAsserted.add(vf.id());
+
 			String id = vf.id();
 			a.
 			setId(id).

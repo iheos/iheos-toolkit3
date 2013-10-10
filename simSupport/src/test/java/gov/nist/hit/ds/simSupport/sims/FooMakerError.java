@@ -67,4 +67,10 @@ public class FooMakerError implements SimComponent{
 		this.event = event;
 	}
 
+
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
+
 }

@@ -5,7 +5,6 @@ import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.utilities.csv.CSVTable;
 
 import org.apache.log4j.Logger;
 
@@ -17,7 +16,7 @@ public class Assertions {
 	static Logger logger = Logger.getLogger(Assertions.class);
 
 	public Asset init(Asset parent) throws RepositoryException {
-		assertionsAsset = AssetHelper.createChildAsset(parent, "Assertions", "", new SimpleType("simAssertions"));
+		assertionsAsset = AssetHelper.createChildAsset(parent, "Validators", "", new SimpleType("simAssertions"));
 		return assertionsAsset;
 	}
 	
@@ -27,6 +26,8 @@ public class Assertions {
 	
 	public void flush() throws RepositoryException {
 		logger.debug("AssertionGroup " + ag.toString());
+		if (!ag.isSaveInLog())
+			return;
 		Asset a = AssetHelper.createChildAsset(assertionsAsset, ag.getValidatorName(), "", new SimpleType("simpleType"));
 		a.setOrder(counter++);
 		a.setProperty(PropertyKey.STATUS, ag.getMaxStatus().name());

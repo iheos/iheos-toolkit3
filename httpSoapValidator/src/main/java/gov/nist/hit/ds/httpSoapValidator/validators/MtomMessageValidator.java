@@ -108,4 +108,10 @@ public class MtomMessageValidator extends MessageValidator {
 		this.event = event;
 	}
 
+
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
+
 }

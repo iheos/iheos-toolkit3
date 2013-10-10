@@ -80,4 +80,9 @@ public class XmlParser implements SimComponent, XmlMessage {
 		this.event = event;
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return true;
+	}
+
 }

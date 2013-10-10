@@ -66,4 +66,9 @@ public class SoapMessageParser extends SimComponentBase {
 		return cnt;
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return true;
+	}
+
 }

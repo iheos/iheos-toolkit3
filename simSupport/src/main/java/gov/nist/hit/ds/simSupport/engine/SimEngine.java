@@ -103,10 +103,11 @@ public class SimEngine implements MessageValidatorEngine {
 				SimComponent simComponent = simStep.getSimComponent();
 				if (simStep.getAssertionGroup() == null) {
 					AssertionGroup ag = new AssertionGroup().setValidatorName(simComponent.getClass().getSimpleName());
-					event.addAssertionGroup(ag);
 					simStep.setEvent(event);
 					simStep.setAssertionGroup(ag);
+					event.addAssertionGroup(ag);
 				}
+				simStep.getAssertionGroup().setSaveInLog(simComponent.showOutputInLogs());
 //				if (simComponent.getName() == null)
 //					simStep.getAssertionGroup().sectionHeading("Validator");
 //				else

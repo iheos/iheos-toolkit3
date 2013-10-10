@@ -42,4 +42,9 @@ public class RunableTest extends SimComponentBase {
 			RepositoryException {
 
 	}
+
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
 }

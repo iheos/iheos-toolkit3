@@ -57,4 +57,9 @@ public class FaultRunTest  extends SimComponentBase {
 
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
+
 }

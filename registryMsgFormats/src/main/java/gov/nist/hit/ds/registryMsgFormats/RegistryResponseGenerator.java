@@ -47,4 +47,9 @@ public class RegistryResponseGenerator extends ResponseGenerator {
 		}
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return true;
+	}
+
 }
