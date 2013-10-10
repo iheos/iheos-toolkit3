@@ -38,7 +38,13 @@ public class SoapMessageParser extends SimComponentBase {
 
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException, RepositoryException {
-		root = xmlMessage.getXml();
+		parse(xmlMessage.getXml());
+
+		runValidationEngine();
+	}
+
+	public void parse(OMElement xml) {
+		root = xml;
 		if (root != null) {
 			Iterator<?> partsIterator = root.getChildElements();
 
@@ -53,8 +59,6 @@ public class SoapMessageParser extends SimComponentBase {
 				}
 			}
 		}
-
-		runValidationEngine();
 	}
 
 	int countParts(Iterator<?> it) {
@@ -68,7 +72,7 @@ public class SoapMessageParser extends SimComponentBase {
 
 	@Override
 	public boolean showOutputInLogs() {
-		return true;
+		return false;
 	}
 
 }

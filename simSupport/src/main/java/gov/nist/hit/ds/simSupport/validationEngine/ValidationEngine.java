@@ -1,6 +1,9 @@
 package gov.nist.hit.ds.simSupport.validationEngine;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.eventLog.assertion.Assertion;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
+import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
 import gov.nist.hit.ds.eventLog.assertion.annotations.Validation;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
@@ -13,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 public class ValidationEngine {
@@ -116,18 +120,24 @@ public class ValidationEngine {
 				meth.invoke(validationObject);
 			} catch (InvocationTargetException e) {
 				Throwable t = e.getCause();
-				if (t == null)
-					throw e;
-				if (t.getClass().equals(NullPointerException.class))
+				
+				// Force a log entry under validators even if this validator would not normally generate one
+				AssertionGroup ag = validationObject.ag;
+				Assertion a = new Assertion();
+				a.setLocation(ExceptionUtils.getStackTrace(t)).setMsg(t.getMessage()).setStatus(AssertionStatus.INTERNALERROR);
+				ag.addAssertion(a);
+				ag.setSaveInLog(true);
+				
+				if (t.getClass().equals(NullPointerException.class)) {
 					throw (NullPointerException) t;
-				if (t.getClass().equals(SoapFaultException.class)) 
+				}
+				if (t.getClass().equals(SoapFaultException.class)) { 
 					throw (SoapFaultException) t;
+				}
 				throw e;
 			}
 
 			runable = getNextRunable();
 		}
 	}
-
-
 }
