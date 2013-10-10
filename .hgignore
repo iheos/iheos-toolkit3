@@ -27,5 +27,8 @@ derby.log
 .settings/*
 bin/*
 
+#to ignore artifacts produced by the event log
+/eventLog/src/test/resources/Installation/external_cache/repositories/data
+
 # Maven generated
 MANIFEST.MF
