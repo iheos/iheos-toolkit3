@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
@@ -22,7 +24,8 @@ import org.w3c.dom.NodeList;
 public class XmlUtil {
 	static public OMFactory om_factory = OMAbstractFactory.getOMFactory();
 	static public OMNamespace xml_namespace =   XmlUtil.om_factory.createOMNamespace("http://www.w3.org/XML/1998/namespace", "xml");
-
+	public static QName id_qname = new QName("id");
+	
 	public static OMElement firstChildWithLocalName(OMElement ele, String localName) {
 		for (Iterator<?> it=ele.getChildElements(); it.hasNext(); ) {
 			OMElement child = (OMElement) it.next();
@@ -154,5 +157,24 @@ public class XmlUtil {
         }
         
         return sb.toString();
+    }
+    
+    /**
+     * Get child of ele with matching name and id attribute.
+     * @param ele
+     * @param localName
+     * @param id
+     * @return
+     */
+    public static OMElement getChild(OMElement ele, String localName, String id) {
+            for (Iterator<?> it=ele.getChildElements(); it.hasNext(); ) {
+                    OMElement child = (OMElement) it.next();
+                    if (child.getLocalName().equals(localName)) {
+                            String idAttVal = child.getAttributeValue(id_qname);
+                            if (idAttVal != null && idAttVal.equals(id))
+                                    return child;
+                    }
+            }
+            return null;
     }
 }
