@@ -5,16 +5,16 @@ import gov.nist.hit.ds.soap.wsseToolkitAdapter.WsseHeaderGeneratorAdapter;
 import gov.nist.hit.ds.utilities.xml.OMFormatter;
 import gov.nist.hit.ds.utilities.xml.Util;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
+import gov.nist.hit.ds.wsseTool.api.config.Context;
+import gov.nist.hit.ds.wsseTool.api.config.ContextFactory;
+import gov.nist.hit.ds.wsseTool.api.config.GenContext;
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
-import gov.nist.hit.ds.wsseTool.api.config.SecurityContext;
-import gov.nist.hit.ds.wsseTool.api.config.SecurityContextFactory;
 import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.hit.ds.xdsException.LoadKeystoreException;
 import gov.nist.hit.ds.xdsException.XdsFormatException;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -57,7 +57,7 @@ import org.apache.log4j.Logger;
 
 public class Soap implements SoapInterface {
 
-	static Logger logger = Logger.getLogger(Soap.class);
+	static Logger log = Logger.getLogger(Soap.class);
 
 	ServiceClient serviceClient = null;
 	OperationClient operationClient = null;
@@ -233,7 +233,7 @@ public class Soap implements SoapInterface {
 
 				KeystoreAccess keystore = new KeystoreAccess(store, sPass,
 						alias, kPass);
-				SecurityContext context = SecurityContextFactory.getInstance();
+				GenContext context = ContextFactory.getInstance();
 				context.setKeystore(keystore);
 
 				String pid = this.params.get("$patientid$");
@@ -257,7 +257,7 @@ public class Soap implements SoapInterface {
 		return envelope;
 	}
 
-	private void parsePid(String pid, SecurityContext context) {
+	private void parsePid(String pid, Context context) {
 		
 			try {
 				if(pid == null || pid.equals("")){
@@ -270,13 +270,13 @@ public class Soap implements SoapInterface {
 					throw new Exception("cannot parse patient_id to retrieve home_community_id");
 				}
 				
-				logger.info("param patientId" + pid + " passed to the saml header generator");
-				logger.info("homeCommunityId" + hid + " passed to the saml header generator");
+				log.info("param patientId" + pid + " passed to the saml header generator");
+				log.info("homeCommunityId" + hid + " passed to the saml header generator");
 				context.getParams().put("patientId", pid);
 				context.getParams().put("homeCommunityId", "urn:oid:"+ hid);
 				
 			} catch (Exception e) {
-				logger.error(e.getMessage());
+				log.error(e.getMessage());
 			}
 		
 	}

@@ -1,17 +1,19 @@
 package gov.nist.hit.ds.soap.wsseToolkitAdapter;
 
 import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.TextErrorRecorder;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.soap.wsseToolkitAdapter.log4jToErrorRecorder.AppenderForErrorRecorder;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
 import gov.nist.hit.ds.valSupport.engine.MessageValidator;
 import gov.nist.hit.ds.valSupport.engine.MessageValidatorEngine;
+import gov.nist.hit.ds.wsseTool.api.config.ContextFactory;
+import gov.nist.hit.ds.wsseTool.api.config.GenContext;
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
-import gov.nist.hit.ds.wsseTool.api.config.SecurityContext;
-import gov.nist.hit.ds.wsseTool.api.config.SecurityContextFactory;
 import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
-import gov.nist.toolkit.wsseTool.api.WsseHeaderValidator;
+import gov.nist.hit.ds.wsseTool.validation.WsseHeaderValidator;
 
 import java.security.KeyStoreException;
 import java.util.List;
@@ -58,27 +60,27 @@ public class WsseHeaderValidatorAdapter extends MessageValidator {
 		String kPass = "changeit";
 		String alias = "hit-testing.nist.gov";
 		KeystoreAccess keystore = new KeystoreAccess(store, sPass, alias, kPass);
-		SecurityContext context = SecurityContextFactory.getInstance();
+		GenContext context = ContextFactory.getInstance();
 		context.setKeystore(keystore);
 		context.setParam("To", "http://endpoint1.hostname1.nist.gov" );
 		Element wsseHeader = WsseHeaderGeneratorAdapter.buildHeader(context);
 
 		WsseHeaderValidatorAdapter validator = new WsseHeaderValidatorAdapter(
 				new ValidationContext(), wsseHeader);
-		ErrorRecorder er = new TextErrorRecorder();
+		AssertionGroup er = new AssertionGroup();
 		MessageValidatorEngine mvc = new MessageValidatorEngine();
 		validator.run(er, mvc);
 	}
 
 	private WsseHeaderValidator val;
 	private Element header;
-	private SecurityContext context;
+	private GenContext context;
 
 	public WsseHeaderValidatorAdapter(ValidationContext vc, Element wsseHeader) {
 		super(vc);
 		val = new WsseHeaderValidator();
 		this.header = wsseHeader;
-		this.context = SecurityContextFactory.getInstance();
+		this.context = ContextFactory.getInstance();
 		// TODO need to check how to get information to put in the context!!
 		// patientId, homeCommunityId, endpoint url..
 	}
@@ -94,13 +96,12 @@ public class WsseHeaderValidatorAdapter extends MessageValidator {
 	}
 
 	@Override
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 
 		try {
 			// We use a special appender to record message coming from the wsse
 			// module in the error recorder framework
-			AppenderForErrorRecorder wsseLogApp = new AppenderForErrorRecorder(
-					vc, er, mvc);
+			AppenderForErrorRecorder wsseLogApp = new AppenderForErrorRecorder(vc, er.buildNewErrorRecorder(), mvc);
 
 			// those are the logs we are interested in
 			org.apache.log4j.Logger logMainVal = org.apache.log4j.Logger
