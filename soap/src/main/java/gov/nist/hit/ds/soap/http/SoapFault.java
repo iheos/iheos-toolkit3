@@ -41,27 +41,27 @@ public class SoapFault {
 	}
 
 	public OMElement getXML() {
-		OMElement root = XmlUtil.om_factory.createOMElement(XmlUtil.fault_qnamens);
+		OMElement root = XmlUtil.om_factory.createOMElement(MetadataSupport.fault_qnamens);
 
-		OMElement code = XmlUtil.om_factory.createOMElement(XmlUtil.fault_code_qnamens);
+		OMElement code = XmlUtil.om_factory.createOMElement(MetadataSupport.fault_code_qnamens);
 
-		OMElement code_value = XmlUtil.om_factory.createOMElement(XmlUtil.fault_value_qnamens);
-		code_value.setText(XmlUtil.fault_pre + ":" + faultCode);
+		OMElement code_value = XmlUtil.om_factory.createOMElement(MetadataSupport.fault_value_qnamens);
+		code_value.setText(MetadataSupport.fault_pre + ":" + faultCode);
 		code.addChild(code_value);
 		root.addChild(code);
 
-		OMElement reason = XmlUtil.om_factory.createOMElement(XmlUtil.fault_reason_qnamens);
-		OMElement text = XmlUtil.om_factory.createOMElement(XmlUtil.fault_text_qnamens);
-		text.addAttribute("lang", "en", XmlUtil.xml_namespace);
+		OMElement reason = XmlUtil.om_factory.createOMElement(MetadataSupport.fault_reason_qnamens);
+		OMElement text = XmlUtil.om_factory.createOMElement(MetadataSupport.fault_text_qnamens);
+		text.addAttribute("lang", "en", MetadataSupport.xml_namespace);
 		text.setText(faultReason + details);
 		reason.addChild(text);
 		root.addChild(reason);
 
 //		if (details.size() > 0) {
-//			OMElement detail = XmlUtil.om_factory.createOMElement(MetadataSupport.fault_detail_qnamens);
+//			OMElement detail = MetadataSupport.om_factory.createOMElement(MetadataSupport.fault_detail_qnamens);
 //			
 //			for (String d : details) {
-//				OMElement r = XmlUtil.om_factory.createOMElement("Nit", null);
+//				OMElement r = MetadataSupport.om_factory.createOMElement("Nit", null);
 //				r.setText(d);
 //				detail.addChild(r);
 //			}

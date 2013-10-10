@@ -77,6 +77,7 @@ public class EchoV3Transaction extends BasicTransaction {
 
 
 		Options options = new Options();
+		
 		options.setTo(new EndpointReference(s_ctx.getRegistryEndpoint())); // this sets the location of MyService service
 		try {
 			ServiceClient serviceClient = new ServiceClient();
