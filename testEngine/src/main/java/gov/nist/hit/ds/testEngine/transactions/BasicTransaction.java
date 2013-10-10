@@ -1189,7 +1189,8 @@ public abstract class BasicTransaction  {
 					useAddressing,  // WS-Addressing
 					soap_1_2,  // SOAP 1.2
 					getRequestAction(),
-					getResponseAction(), this.planContext
+					getResponseAction(),
+					this.planContext.getExtraLinkage().get("$patientid$") //TODO review : quick fix for v3. We pass the param we need.
 			);
 		}
 		catch (AxisFault e) {

@@ -77,7 +77,7 @@ public class Soap implements SoapInterface {
 	String action;
 	OMElement body = null;
 
-	private Map<String, String> params;
+	private String patientId;
 
 	String repositoryLocation = null; // this is axis2 repository - used only
 										// with useSaml / Seems used to store
@@ -236,8 +236,7 @@ public class Soap implements SoapInterface {
 				GenContext context = ContextFactory.getInstance();
 				context.setKeystore(keystore);
 
-				String pid = this.params.get("$patientid$");
-				parsePid(pid, context);
+				parsePid(patientId, context);
 				context.getParams().put("endpoint", this.endpoint);
 
 				org.w3c.dom.Element header = WsseHeaderGeneratorAdapter
@@ -758,7 +757,7 @@ public class Soap implements SoapInterface {
 
 	public OMElement soapCall(OMElement body, String endpoint, boolean mtom,
 			boolean addressing, boolean soap12, String action,
-			String expected_return_action, PlanContext planContext)
+			String expected_return_action, String patientId)
 			throws XdsInternalException, AxisFault, XdsFormatException,
 			EnvironmentNotSelectedException, LoadKeystoreException {
 
@@ -769,9 +768,8 @@ public class Soap implements SoapInterface {
 		this.endpoint = endpoint;
 		this.action = action;
 		this.body = body;
-		this.params = planContext.getExtraLinkage();
-		log.info("params in soap : " + params.toString());
-		log.info("pid in soap :" + params.get("$patientid$"));
+		this.patientId = patientId;
+		log.info("pid in soap :" + patientId);
 
 		return soapCall();
 	}
