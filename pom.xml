@@ -121,6 +121,7 @@
         <module>eventLog</module>
         <module>metadataModel</module>
         <module>repositoryDirectory</module>
+        <module>testEngine</module>
   </modules>
     <distributionManagement>
     <snapshotRepository>
