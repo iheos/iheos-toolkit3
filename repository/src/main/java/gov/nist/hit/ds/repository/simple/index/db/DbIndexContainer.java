@@ -46,7 +46,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 	private static final String repId = PnIdentifier.getQuotedIdentifer(PropertyKey.REPOSITORY_ID);
 	private static final String displayOrder = PnIdentifier.getQuotedIdentifer(PropertyKey.DISPLAY_ORDER); 
 	private static final String parentId = PnIdentifier.getQuotedIdentifer(PropertyKey.PARENT_ID);
-
+	private static final String createdDate =  PnIdentifier.getQuotedIdentifer(PropertyKey.CREATED_DATE);
+	
 	/* Use an upgrade script to update existing tables in case a newer version of TTT (new ArtRep API) runs against an older copy of the repositoryIndex table in the database */
 	private static final String repContainerDefinition = 
 	"(repositoryIndexId integer not null  generated always as identity," 	/* (Internal use) This is the primary key */
@@ -56,7 +57,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	+ assetType + " varchar(32) not null," 							/* Asset type - usually same as the keyword property */
 	+"hash varchar(40),"											/* (Internal use) The hash of the property file */
 	+"reposAcs varchar(40),"											/* (Internal use) src enum string */	
-	+displayOrder + " int,"         						    /* This is a reserved keyword for sorting purpose */
+	+ displayOrder + " int,"         						    /* This is a reserved keyword for sorting purpose */
 	+"repoSession varchar(64))";									/* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */				
 			
 
@@ -747,7 +748,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	}
 	
 	/**
-	 * 
+	 * An Order by property is only limited to what is available as per the session container not per columns available in the index container.
 	 * @param repositories
 	 * @param searchCriteria
 	 * @param orderBy
@@ -779,7 +780,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			} catch (SQLException e) {
 				; // Ignore if it does not exist
 			}
-			dbc.internalCmd("create table "+searchSession+"(repId varchar(64),assetId varchar(64), reposAcs varchar(40), reposOrder int, displayOrder int)");
+			dbc.internalCmd("create table "+searchSession+"(repId varchar(64),assetId varchar(64), reposAcs varchar(40), reposOrder int, displayOrder int, createdDate varchar(64))");
 			
 			
 			for (Repository rep : repositories) {				
@@ -797,8 +798,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 						+ " where " + repId + " = '"+  rep.getId().getIdString() +"' and( "+ searchCriteriaWhere + ")" ;
 				*/
 				
-				String sqlStr = "insert into "+searchSession+"(repId,assetId,reposAcs,reposOrder,displayOrder)"
-						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (orderBy++) + "," + displayOrder + " from " + repContainerLabel 
+				String sqlStr = "insert into "+searchSession+"(repId,assetId,reposAcs,reposOrder,displayOrder,createdDate)"
+						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (orderBy++) + "," + displayOrder + "," + createdDate + " from " + repContainerLabel 
 						+ " where " + repId + " = ? and( "+ searchCriteriaWhere + ")" ;
 				
 				try {					

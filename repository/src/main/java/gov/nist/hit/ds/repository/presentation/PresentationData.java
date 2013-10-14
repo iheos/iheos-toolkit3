@@ -12,7 +12,7 @@ import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
-import gov.nist.hit.ds.repository.simple.search.client.Asset;
+import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 
 import java.io.Serializable;
@@ -74,9 +74,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 		return indexProps;
 	}
 	
-	public static List<Asset> search(String[][] repos, SearchCriteria sc) {
+	public static List<AssetNode> search(String[][] repos, SearchCriteria sc) {
 		
-		ArrayList<Asset> result = new ArrayList<Asset>();
+		ArrayList<AssetNode> result = new ArrayList<AssetNode>();
 		
 		try {
 		
@@ -103,7 +103,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 				while (iter.hasNextAsset()) {
 					gov.nist.hit.ds.repository.api.Asset aSrc = iter.nextAsset();
 					
-					Asset aDst = new Asset();
+					AssetNode aDst = new AssetNode();
 			
 					aDst.setRepId(aSrc.getRepository().getIdString());
 					aDst.setAssetId(aSrc.getId().getIdString());

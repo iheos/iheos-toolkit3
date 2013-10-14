@@ -6,6 +6,7 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.index.CreateContainerTest;
 import gov.nist.hit.ds.repository.simple.index.ExpandContainerTest;
+import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilderTest;
 import gov.nist.hit.ds.repository.simple.search.SearchTest;
 
 import java.io.IOException;
@@ -35,6 +36,7 @@ import org.junit.runners.Suite;
 		,SimpleTextAssetTest.class
 		,SimpleTypeIteratorTest.class 
 		,SearchTest.class
+		,AssetNodeBuilderTest.class
 		} )
 public class SimpleTestSuite {
 	

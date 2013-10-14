@@ -1,13 +1,15 @@
 package gov.nist.hit.ds.repository.simple.search.client;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class Asset implements IsSerializable, Serializable {
+public class AssetNode implements IsSerializable, Serializable {
 
 	/**
-	 * 
+	 * @author Sunil.Bhaskarla
 	 */
 	private static final long serialVersionUID = -46123676112710466L;
 	
@@ -16,6 +18,37 @@ public class Asset implements IsSerializable, Serializable {
 	private String type;
 	private String displayName;
 	private String description;
+	private List<AssetNode> children = new ArrayList<AssetNode>();
+	
+	public AssetNode() {
+		
+	}
+	
+	/**
+	 * @param repId
+	 * @param assetId
+	 * @param type
+	 * @param displayName
+	 * @param description
+	 */
+	public AssetNode(String repId, String assetId, String type,
+			String displayName, String description) {
+		super();
+		this.repId = repId;
+		this.assetId = assetId;
+		this.type = type;
+		this.displayName = displayName;
+		this.description = description;
+	}
+
+	public List<AssetNode> getChildren() {
+		return children;
+	}
+	
+	public void addChild(AssetNode a) {
+		children.add(a);
+	}
+	
 	public String getRepId() {
 		return repId;
 	}

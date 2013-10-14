@@ -44,7 +44,7 @@ public class SimpleAssetTest {
 				new SimpleType("site"));
 		
 		Asset a = repos.createAsset("My Site", null, new SimpleType("siteAsset"));
-		Id assetId = a.getId();		
+		// Id assetId = a.getId();		
 
 		assertNotNull(a);
 	}
