@@ -125,6 +125,12 @@ public abstract class SimComponentBase implements SimComponent {
 		recordAssertion(a);
 		return !a.failed();
 	}
+	
+	public boolean assertTrueNoLog(boolean value) throws SoapFaultException {
+		if (!value)
+			return assertTrue(value);
+		return true;
+	}
 
 	public boolean assertFalse(boolean value) throws SoapFaultException {
 		Assertion a = ag.assertTrue(!value);
@@ -136,6 +142,12 @@ public abstract class SimComponentBase implements SimComponent {
 		Assertion a = ag.assertNotNull(value);
 		recordAssertion(a);
 		return !a.failed();
+	}
+
+	public boolean assertNotNullNoLog(Object value) throws SoapFaultException {
+		if (value == null)
+			return assertNotNull(value);
+		return true;
 	}
 
 	List<String> idsAsserted = new ArrayList<String>();
@@ -166,7 +178,7 @@ public abstract class SimComponentBase implements SimComponent {
 			setMsg(vf.msg()).
 			setReference(vf.ref()).
 			setCode(vf.faultCode().toString());
-			if (a.getStatus() == AssertionStatus.ERROR) {
+			if (a.getStatus().isError()) {
 				a.setStatus(AssertionStatus.FAULT);
 				throw new SoapFaultException(
 						ag,
