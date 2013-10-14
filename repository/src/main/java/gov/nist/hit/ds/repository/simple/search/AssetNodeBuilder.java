@@ -28,6 +28,10 @@ public class AssetNodeBuilder {
 		super();
 	}
 	
+	public List<AssetNode> build(Repository repos, PropertyKey key) throws RepositoryException {
+		return build(repos,key.toString());
+	}
+	
 	public List<AssetNode> build(Repository repos, String orderBy) throws RepositoryException {
 		
 		List<AssetNode> topLevelAssets = new ArrayList<AssetNode>();

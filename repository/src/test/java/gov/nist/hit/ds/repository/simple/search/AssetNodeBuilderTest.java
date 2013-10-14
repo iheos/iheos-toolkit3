@@ -57,7 +57,7 @@ public class AssetNodeBuilderTest {
 
 		try {
 			AssetNodeBuilder anb = new AssetNodeBuilder();
-			List<AssetNode> tree = anb.build(repos, PropertyKey.CREATED_DATE.toString());
+			List<AssetNode> tree = anb.build(repos, PropertyKey.CREATED_DATE);
 			System.out.print(tree.toString());
 			
 		} catch (Exception ex) {
