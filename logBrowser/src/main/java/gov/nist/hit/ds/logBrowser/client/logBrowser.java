@@ -1,149 +1,143 @@
 package gov.nist.hit.ds.logBrowser.client;
 
-import gov.nist.hit.ds.logBrowser.shared.FieldVerifier;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+import gov.nist.hit.ds.logBrowser.client.widgets.CwOptionalTextBox;
+import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
+
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
-public class logBrowser implements EntryPoint {
-  /**
-   * The message displayed to the user when the server cannot be reached or
-   * returns an error.
-   */
-  private static final String SERVER_ERROR = "An error occurred while "
-      + "attempting to contact the server. Please check your network "
-      + "connection and try again.";
 
-  /**
-   * Create a remote service proxy to talk to the server-side Greeting service.
-   */
-  private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 
-  private final Messages messages = GWT.create(Messages.class);
+public class LogBrowser implements EntryPoint {
 
-  /**
-   * This is the entry point method.
-   */
-  public void onModuleLoad() {
-    final Button sendButton = new Button( messages.sendButton() );
-    final TextBox nameField = new TextBox();
-    nameField.setText( messages.nameField() );
-    final Label errorLabel = new Label();
+	TabPanel topPanel;
+	VerticalPanel ht = null;
 
-    // We can add style names to widgets
-    sendButton.addStyleName("sendButton");
+	final public RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
+    protected ArrayList<String> propNames = new ArrayList<String>();
+    
+	public LogBrowser() {}
+	
+	/**
+	 * This is the entry point method.
+	 */	
 
-    // Add the nameField and sendButton to the RootPanel
-    // Use RootPanel.get() to get the entire body element
-    RootPanel.get("nameFieldContainer").add(nameField);
-    RootPanel.get("sendButtonContainer").add(sendButton);
-    RootPanel.get("errorLabelContainer").add(errorLabel);
+	  public void onModuleLoad() {
+//	    Button b = new Button("Test Ajax", new ClickHandler() {
+//	      public void onClick(ClickEvent event) {
+//	        Window.alert("Ajax");
+//	      }
+//	    });
+//
+//	    RootPanel.get().add(b);
+	 
+		  VerticalPanel panel = new VerticalPanel();
+		  FlexTable grid = new FlexTable();
 
-    // Focus the cursor on the name field when the app loads
-    nameField.setFocus(true);
-    nameField.selectAll();
+			panel.add(new HTML("<h3>Test area</h3>"));
+			panel.add(new HTML("  " ));
 
-    // Create the popup dialog box
-    final DialogBox dialogBox = new DialogBox();
-    dialogBox.setText("Remote Procedure Call");
-    dialogBox.setAnimationEnabled(true);
-    final Button closeButton = new Button("Close");
-    // We can set the id of a widget by accessing its Element
-    closeButton.getElement().setId("closeButton");
-    final Label textToServerLabel = new Label();
-    final HTML serverResponseLabel = new HTML();
-    VerticalPanel dialogVPanel = new VerticalPanel();
-    dialogVPanel.addStyleName("dialogVPanel");
-    dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
-    dialogVPanel.add(textToServerLabel);
-    dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
-    dialogVPanel.add(serverResponseLabel);
-    dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-    dialogVPanel.add(closeButton);
-    dialogBox.setWidget(dialogVPanel);
+			panel.add(grid);
 
-    // Add a handler to close the DialogBox
-    closeButton.addClickHandler(new ClickHandler() {
-      public void onClick(ClickEvent event) {
-        dialogBox.hide();
-        sendButton.setEnabled(true);
-        sendButton.setFocus(true);
-      }
-    });
+			int row = 0;
+			int col = 0;
+			HTML h;
+			
+		    CwOptionalTextBox otb = new CwOptionalTextBox("Enable text input");
+			
+			
+			grid.setWidget(row, col, otb);
+			
+			
+			HTMLTable.CellFormatter formatter = grid.getCellFormatter();
+			 formatter.setHorizontalAlignment(row, col, HasHorizontalAlignment.ALIGN_CENTER);
+			 formatter.setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_MIDDLE);
+			 
+			
+			
+			// Element e = DOM.getElementById("demoTable");
+			
+			panel.setWidth(	"800px");
+	    
+	    RootPanel.get().add(panel);
+	    
+	    Tree tree = new Tree();
+	    List<AssetNode> assetNodes = null;
 
-    // Create a handler for the sendButton and nameField
-    class MyHandler implements ClickHandler, KeyUpHandler {
-      /**
-       * Fired when the user clicks on the sendButton.
-       */
-      public void onClick(ClickEvent event) {
-        sendNameToServer();
-      }
 
-      /**
-       * Fired when the user types in the nameField.
-       */
-      public void onKeyUp(KeyUpEvent event) {
-        if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-          sendNameToServer();
-        }
-      }
+	    
+	    try {
+			reposService.setRepositoryConfig(new AsyncCallback<Boolean>(){
+				public void onSuccess(Boolean a){
+					AsyncCallback<List<String>> propsSetup = new AsyncCallback<List<String>> () {
 
-      /**
-       * Send the name from the nameField to the server and wait for a response.
-       */
-      private void sendNameToServer() {
-        // First, we validate the input.
-        errorLabel.setText("");
-        String textToServer = nameField.getText();
-        if (!FieldVerifier.isValidName(textToServer)) {
-          errorLabel.setText("Please enter at least four characters");
-          return;
-        }
+						public void onFailure(Throwable a) {
+							Window.alert("No indexeable properties found: It is possible Asset Type's are not configured. propNames could not be loaded: " + a.getMessage());
+						}
 
-        // Then, we send the input to the server.
-        sendButton.setEnabled(false);
-        textToServerLabel.setText(textToServer);
-        serverResponseLabel.setText("");
-        greetingService.greetServer(textToServer, new AsyncCallback<String>() {
-          public void onFailure(Throwable caught) {
-            // Show the RPC error message to the user
-            dialogBox.setText("Remote Procedure Call - Failure");
-            serverResponseLabel.addStyleName("serverResponseLabelError");
-            serverResponseLabel.setHTML(SERVER_ERROR);
-            dialogBox.center();
-            closeButton.setFocus(true);
-          }
+						public void onSuccess(List<String> props) {
+							if (props!=null) {
+								propNames.addAll(props);
 
-          public void onSuccess(String result) {
-            dialogBox.setText("Remote Procedure Call");
-            serverResponseLabel.removeStyleName("serverResponseLabelError");
-            serverResponseLabel.setHTML(result);
-            dialogBox.center();
-            closeButton.setFocus(true);
-          }
-        });
-      }
-    }
+								String hOut = "";
+								for (String s : propNames) {
+									hOut += s;
+								}
+								RootPanel.get().add(new HTML(hOut));
+							}
+							
 
-    // Add a handler to send the name to the server
-    MyHandler handler = new MyHandler();
-    sendButton.addClickHandler(handler);
-    nameField.addKeyUpHandler(handler);
-  }
+							
+						}
+					};
+					reposService.getIndexablePropertyNames(propsSetup);
+				}
+				public void onFailure(Throwable t) {Window.alert("Repository config failed: "+t.getMessage());}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
+	    
+	    
+	  }
+
+
+	private void setup() {
+		HTML title = new HTML();
+		title.setHTML("<h2>Composite widget prototype</h2>");
+		topPanel.add(title);
+		
+		RootPanel.get().add(topPanel);
+	}
+
+
+
+
+
 }

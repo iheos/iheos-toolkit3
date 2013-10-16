@@ -59,9 +59,9 @@ public class AssetNodeBuilderTest {
 			AssetNodeBuilder anb = new AssetNodeBuilder();
 			List<AssetNode> tree = anb.build(repos, PropertyKey.CREATED_DATE);
 			System.out.print(tree.toString());
-			
+			// Inspect the tree here though it was manually checked few times
 		} catch (Exception ex) {
-			fail("biulder test failed.");
+			fail("builder test failed.");
 		}
 	}
 }

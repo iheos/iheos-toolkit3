@@ -6,16 +6,27 @@
 <web-app>
 
   <!-- Servlets -->
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>gov.nist.hit.ds.logBrowser.server.GreetingServiceImpl</servlet-class>
-  </servlet>
 
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/logBrowser/greet</url-pattern>
-  </servlet-mapping>
+	<servlet>
+		<servlet-name>repositoryServlet</servlet-name>
+		<servlet-class>gov.nist.hit.ds.repository.simple.search.server.RepositoryServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+  <servlet-name>jUnitHostImpl</servlet-name>
+  	<servlet-class>com.google.gwt.junit.server.JUnitHostImpl</servlet-class>
+	</servlet>
 
+<!--  mapping -->
+
+	<servlet-mapping>
+		<servlet-name>repositoryServlet</servlet-name>
+		<url-pattern>/logBrowser/repository</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+	  <servlet-name>jUnitHostImpl</servlet-name>
+	  <url-pattern>/logBrowser/junithost/*</url-pattern>
+	</servlet-mapping>
+	
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>logBrowser.html</welcome-file>

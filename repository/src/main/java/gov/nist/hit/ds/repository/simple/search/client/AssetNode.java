@@ -9,6 +9,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class AssetNode implements IsSerializable, Serializable {
 
 	/**
+	 * AssetNode is essentially a light-weight DTO that carries out key asset information from the Asset type object
+	 * 
 	 * @author Sunil.Bhaskarla
 	 */
 	private static final long serialVersionUID = -46123676112710466L;

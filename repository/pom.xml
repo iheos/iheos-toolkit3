@@ -76,7 +76,20 @@
             </configuration>
         </plugin>
         -->
-	  <plugin>
+        <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-source-plugin</artifactId>
+    <executions>
+      <execution>
+        <id>attach-sources</id>
+        <phase>package</phase>
+        <goals>
+          <goal>jar</goal>
+        </goals>
+      </execution>
+    </executions>
+  </plugin>
+	  <plugin>	  
 	<!-- The following test configuration executes tests in sequential order -->
   	<!-- This test configuration is required to support our stand-alone mode of the Derby configuration -->	      
 	  <groupId>org.apache.maven.plugins</groupId>
