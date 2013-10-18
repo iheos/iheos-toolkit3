@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.repository.simple.search.client;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,9 @@ public class AssetNode implements IsSerializable, Serializable {
 	private String type;
 	private String displayName;
 	private String description;
+	private String mimeType;
+	private String reposSrc;
+	
 	private List<AssetNode> children = new ArrayList<AssetNode>();
 	
 	public AssetNode() {
@@ -34,13 +38,15 @@ public class AssetNode implements IsSerializable, Serializable {
 	 * @param description
 	 */
 	public AssetNode(String repId, String assetId, String type,
-			String displayName, String description) {
+			String displayName, String description, String mimeType, String src) {
 		super();
 		this.repId = repId;
 		this.assetId = assetId;
 		this.type = type;
 		this.displayName = displayName;
 		this.description = description;
+		this.mimeType = mimeType;
+		this.reposSrc = src;
 	}
 
 	public List<AssetNode> getChildren() {
@@ -81,7 +87,22 @@ public class AssetNode implements IsSerializable, Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
+	public String getReposSrc() {
+		return reposSrc;
+	}
+
+	public void setReposSrc(String reposSrc) {
+		this.reposSrc = reposSrc;
+	}
+
 	
 }

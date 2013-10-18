@@ -1,10 +1,5 @@
 package gov.nist.hit.ds.repository.simple.search.server;
 
-import java.util.List;
-import java.util.Map;
-
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.presentation.PresentationData;
 import gov.nist.hit.ds.repository.simple.Configuration;
@@ -14,6 +9,11 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.exception.NoServletSessionException;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 
+import java.util.List;
+import java.util.Map;
+
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
 
 @SuppressWarnings("serial")
 public class RepositoryServiceImpl extends RemoteServiceServlet implements
@@ -21,7 +21,7 @@ RepositoryService {
 
 
 	@Override
-	public Map<String, String> getRepositoryDisplayTags()
+	public Map<String, String[]> getRepositoryDisplayTags()
 			throws NoServletSessionException {
 		return new PresentationData().getRepositoryDisplayTags();
 	}
@@ -50,8 +50,26 @@ RepositoryService {
 	}
 
 	@Override
-	public List<AssetNode> search(String[][] repos, SearchCriteria sc) {
-		return PresentationData.search(repos, sc);
+	public List<AssetNode> search(String[][] reposData, SearchCriteria sc) {
+		return PresentationData.search(reposData, sc);
+	}
+
+	@Override
+	public List<AssetNode> getAssetTree(String[][] reposData)
+			throws RepositoryConfigException {
+		return PresentationData.getTree(reposData);
+	}
+
+	
+	@Override
+	public String getAssetTxtContent(AssetNode an)
+			throws RepositoryConfigException {
+		try {
+			return PresentationData.getTextContent(an);	
+		} catch (Exception re) {
+			throw new RepositoryConfigException(re.toString());
+		}
+		
 	}
 
 

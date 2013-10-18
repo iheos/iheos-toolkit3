@@ -24,7 +24,7 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
  */
 public class AssetNodeBuilder {
 
-	AssetNodeBuilder() {
+	public AssetNodeBuilder() {
 		super();
 	}
 	
@@ -49,7 +49,9 @@ public class AssetNodeBuilder {
 					,a.getId().getIdString()
 					,a.getAssetType().toString()
 					,a.getDisplayName()
-					,a.getDescription());
+					,a.getDescription()
+					,a.getMimeType()
+					,a.getSource().getAccess().name());
 			getChildren(repos,parent);
 			topLevelAssets.add(parent);
 		}
@@ -73,7 +75,10 @@ public class AssetNodeBuilder {
 						,a.getId().getIdString()
 						,a.getAssetType().toString()
 						,a.getDisplayName()
-						,a.getDescription());
+						,a.getDescription()
+						,a.getMimeType()
+						,a.getSource().getAccess().name());
+				
 				parent.addChild(child);
 				getChildren(repos,child);
 			}
