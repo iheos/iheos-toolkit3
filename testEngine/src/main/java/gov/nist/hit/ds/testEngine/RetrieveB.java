@@ -12,6 +12,7 @@ import gov.nist.hit.ds.testEngine.transactions.BasicTransaction;
 import gov.nist.hit.ds.testEngine.transupport.Mtom;
 import gov.nist.hit.ds.testEngine.utility.RegistryUtility;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
+import gov.nist.hit.ds.valRegMsg.service.SoapActionFactory;
 import gov.nist.hit.ds.valSupport.client.MetadataTypes;
 import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
 import gov.nist.hit.ds.xdsException.MetadataException;
@@ -29,10 +30,10 @@ import java.util.HashMap;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.FactoryConfigurationError;
-import javax.xml.ws.EndpointReference;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;
+import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
 

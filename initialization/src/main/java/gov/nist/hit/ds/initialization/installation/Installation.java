@@ -258,4 +258,9 @@ public class Installation {
 		return externalCache;
 	}
 
+	public File testLogFile() {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("not implemented");
+	}
+
 }

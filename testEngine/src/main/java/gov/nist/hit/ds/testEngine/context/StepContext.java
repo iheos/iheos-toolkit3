@@ -4,7 +4,7 @@ import gov.nist.hit.ds.testEngine.ids.PatientIdAllocator;
 import gov.nist.hit.ds.testEngine.logging.ErrorReportingInterface;
 import gov.nist.hit.ds.testEngine.mgmt.TestConfig;
 import gov.nist.hit.ds.testEngine.transactions.BasicTransaction;
-import gov.nist.hit.ds.testEngine.transactions.DirectTransaction;
+ // import gov.nist.hit.ds.testEngine.transactions.DirectTransaction; 
 import gov.nist.hit.ds.testEngine.transactions.EchoV2Transaction;
 import gov.nist.hit.ds.testEngine.transactions.EchoV3Transaction;
 import gov.nist.hit.ds.testEngine.transactions.GenericSoap11Transaction;
@@ -322,7 +322,10 @@ public class StepContext extends BasicContext implements ErrorReportingInterface
 				} 
 				else if (instruction_name.equals("DirectTransaction")) 
 				{
-					transaction = new DirectTransaction(this, instruction, instruction_output);
+					/*
+					 * TODO DirectTransaction has not been pulled in yet.
+					 */
+			//		transaction = new DirectTransaction(this, instruction, instruction_output);
 				} 
 				else 
 				{

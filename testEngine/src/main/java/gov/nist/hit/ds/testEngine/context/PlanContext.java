@@ -27,7 +27,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
 
 public class PlanContext extends BasicContext {
-	OMElement results_document = null;
+	public OMElement results_document = null;
 	String defaultRegistryEndpoint = null;
 	Map<String, String> externalLinkage = null;
 	Map<String, Object> externalLinkage2 = null;  // for binary stuff like certificates
@@ -164,7 +164,7 @@ public class PlanContext extends BasicContext {
 		}
 	}
 
-	boolean run(File testplanFile)  throws Exception {
+	public boolean run(File testplanFile)  throws Exception {
 		if (testConfig.verbose)
 			System.out.println("Run section " + testplanFile);
 		try {

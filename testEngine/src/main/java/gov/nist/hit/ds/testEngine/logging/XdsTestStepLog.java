@@ -1,8 +1,7 @@
 package gov.nist.hit.ds.testEngine.logging;
 
+import gov.nist.hit.ds.testEngine.errorMgr.ErrorManager;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-
-import java.util.logging.ErrorManager;
 
 import org.apache.axiom.om.OMElement;
 
@@ -97,7 +96,7 @@ public class XdsTestStepLog {
 	}
 
 	/**
-	 * Get errors
+	 * Get errors	
 	 * 
 	 * @return
 	 */

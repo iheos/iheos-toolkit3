@@ -11,6 +11,7 @@ import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.toolkit.common.coder.Base64Coder;
 
 import java.io.File;
 import java.util.ArrayList;

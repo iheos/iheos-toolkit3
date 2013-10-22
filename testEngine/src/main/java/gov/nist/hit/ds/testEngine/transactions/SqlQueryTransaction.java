@@ -11,11 +11,10 @@ import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 
-import javax.xml.ws.EndpointReference;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axis2.AxisFault;
+import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
 

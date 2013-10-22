@@ -57,7 +57,7 @@ public class RegistryErrorListGenerator implements IAssertionGroup {
 		return "Success";
 	}
 
-	OMElement getRegistryErrorList() {
+	public OMElement getRegistryErrorList() {
 		if (rel == null)
 			rel = XmlUtil.om_factory.createOMElement("RegistryErrorList", ebRSns);
 		return rel;

@@ -4,6 +4,8 @@ import gov.nist.hit.ds.testEngine.context.StepContext;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.toolkit.valregmsg.validation.schematron.ReportProcessor;
+import gov.nist.toolkit.valregmsg.validation.schematron.schematronValidation;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.Iterator;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.xpath.AXIOMXPath;
+import org.apache.xmlbeans.XmlObject;
 import org.jaxen.JaxenException;
 
 
