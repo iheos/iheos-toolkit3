@@ -206,7 +206,6 @@ public class SimpleAsset implements Asset, Flushable {
 		if (!loadContentAttempted) {
 			this.load(this.getId(), getAssetBaseFile(this.getId()));
 		}
-
 		return content;
 	}
 
@@ -341,6 +340,14 @@ public class SimpleAsset implements Asset, Flushable {
 					+ "]", e);
 		}
 
+		loadContent(assetContentFile);
+		return this;
+	}
+
+	/**
+	 * @param assetContentFile
+	 */
+	private void loadContent(File assetContentFile) {
 		String[] ext = getContentExtension();
 		if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {
 			try {
@@ -359,7 +366,6 @@ public class SimpleAsset implements Asset, Flushable {
 				// content may not exist
 			} 
 		}
-		return this;
 	}
 	
 	@Override

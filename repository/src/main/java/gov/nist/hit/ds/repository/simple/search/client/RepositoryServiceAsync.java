@@ -12,6 +12,6 @@ public interface RepositoryServiceAsync {
 	void setRepositoryConfig(AsyncCallback<Boolean> callback) throws Exception;
 	void search(String[][] repos, SearchCriteria sc, AsyncCallback<List<AssetNode>> callback);
 	void getAssetTree(String[][] repos, AsyncCallback<List<AssetNode>> callback);
-	void getAssetTxtContent(AssetNode an, AsyncCallback<String> callback);
+	void getAssetTxtContent(AssetNode an, AsyncCallback<AssetNode> callback);
 
 }

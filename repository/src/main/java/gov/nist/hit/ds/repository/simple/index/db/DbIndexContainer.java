@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
 
@@ -590,7 +591,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			while (iter.hasNextAsset()) {				
 				Asset a = iter.nextAsset();
 				//System.out.println("found indexable asset property: " + a.getDescription());
-				
+							
 				String hash ="";
 				try {
 					hash = getHash(a.getPropFile());
@@ -613,6 +614,19 @@ public class DbIndexContainer implements IndexContainer, Index {
 						FileReader fr = new FileReader(a.getPropFile());
 						assetProps.load(fr);
 						fr.close();
+						
+						/*
+						String codedRepId = a.getProperty(PropertyKey.REPOSITORY_ID);
+						String path[] = a.getPropFile().toString().split(Pattern.quote(File.separator));
+						if (path!=null && path.length>1) {
+							String fsFolderName = path[path.length-2];
+						
+							if (!reposId.equals(fsFolderName)) {
+								System.out.println("Potential duplicate data warning: Asset's repository id does not match the filesystem folder! Found: " + fsFolderName + " expected: "  + codedRepId + " <assetId: " + a.getId().getIdString() +">");
+								break;
+							}
+						}
+						*/
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -646,23 +660,31 @@ public class DbIndexContainer implements IndexContainer, Index {
 			
 			// removeIndex(reposId,repoSession);
 			
-			try {
-				DbContext dbc = new DbContext();
-				dbc.setConnection(DbConnection.getInstance().getConnection());
-	 
-				String sqlStr = "delete from " + repContainerLabel 
-						+ " where " + repId + "=? and " + assetId + " not in(" + sbParam.toString() + ")";
-				int rowsAffected = dbc.executePrepared(sqlStr, paramValues);
-				DbContext.log("rows affected: " + rowsAffected);
-
-			} catch (Exception ex) {
-				DbContext.log("error in stale index cleanup. " + ex.toString());
-			}
+			refreshIndex(sbParam, paramValues);
 			
 		}
 		
 		
 		return totalAssetsIndexed;
+	}
+
+	/**
+	 * @param sbParam
+	 * @param paramValues
+	 */
+	private void refreshIndex(StringBuffer sbParam, String[] paramValues) {
+		try {
+			DbContext dbc = new DbContext();
+			dbc.setConnection(DbConnection.getInstance().getConnection());
+ 
+			String sqlStr = "delete from " + repContainerLabel 
+					+ " where " + repId + "=? and " + assetId + " not in(" + sbParam.toString() + ")";
+			int rowsAffected = dbc.executePrepared(sqlStr, paramValues);
+			DbContext.log("rows affected: " + rowsAffected);
+
+		} catch (Exception ex) {
+			DbContext.log("error in stale index cleanup. " + ex.toString());
+		}
 	}
 	
 	private boolean isAssetSynced(String repId, String id, String hash) throws RepositoryException {

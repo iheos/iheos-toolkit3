@@ -24,6 +24,10 @@ public class AssetNode implements IsSerializable, Serializable {
 	private String mimeType;
 	private String reposSrc;
 	
+	private String txtContent;
+	private String props;
+	private String[][] csv;
+	
 	private List<AssetNode> children = new ArrayList<AssetNode>();
 	
 	public AssetNode() {
@@ -102,6 +106,30 @@ public class AssetNode implements IsSerializable, Serializable {
 
 	public void setReposSrc(String reposSrc) {
 		this.reposSrc = reposSrc;
+	}
+
+	public String getTxtContent() {
+		return txtContent;
+	}
+
+	public void setTxtContent(String txtContent) {
+		this.txtContent = txtContent;
+	}
+
+	public String getProps() {
+		return props;
+	}
+
+	public void setProps(String props) {
+		this.props = props;
+	}
+
+	public String[][] getCsv() {
+		return csv;
+	}
+
+	public void setCsv(String[][] csv) {
+		this.csv = csv;
 	}
 
 	
