@@ -3,6 +3,7 @@ package gov.nist.hit.ds.repository.simple.search;
 import static org.junit.Assert.assertTrue;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 
 import org.junit.Test;
 
@@ -67,5 +68,14 @@ public class MiscTest {
 		
 		assertTrue( new Boolean(xObj.toString()).booleanValue()==xTrue);
 		
+	}
+	
+	@Test
+	public void xmlFmtTest() {
+		System.out.print(XmlFormatter.normalize("<html><head><title>Title</title></head><body><h1>Header</h1></body></html>"));
+		
+		System.out.print(XmlFormatter.htmlize("<html><head><title>Title</title></head><body><h1>Header</h1></body></html>"));
+        
+
 	}
 }
