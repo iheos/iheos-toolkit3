@@ -91,7 +91,7 @@ public class DbConnection implements IndexDataSource {
 	          p.setRemoveAbandonedTimeout(60);
 	          p.setMinEvictableIdleTimeMillis(30000);
 	          p.setMinIdle(20);
-	          p.setLogAbandoned(true);
+	          p.setLogAbandoned(false);
 	          p.setRemoveAbandoned(true);
 //	          p.setJdbcInterceptors(
 //	            "org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"+
