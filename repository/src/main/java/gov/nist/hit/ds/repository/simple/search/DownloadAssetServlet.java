@@ -31,6 +31,11 @@ public class DownloadAssetServlet extends HttpServlet {
 		String reposSrc = request.getParameter("reposSrc");
 		String reposId = request.getParameter("reposId");
 		String assetId = request.getParameter("assetId");
+		String contentDisp = "inline"; // default
+		
+		if ("attachment".equals(request.getParameter("contentDisp"))) {
+			contentDisp = "attachment"; // override streamType
+		}
 		Access acs = null; 
 		
 		SimpleRepository repos = null;
@@ -60,7 +65,7 @@ public class DownloadAssetServlet extends HttpServlet {
 					  response.setHeader("Pragma", "no-cache");
 					  response.setDateHeader("Max-Age", 0);
 					  
-					  response.setHeader("Content-Disposition", "inline;filename=\""+ a.getId().getIdString() + "." + a.getContentExtension()[2] + "\"");
+					  response.setHeader("Content-Disposition", contentDisp+ ";filename=\""+ a.getId().getIdString() + "." + a.getContentExtension()[2] + "\"");
 					  if (a.getMimeType()!=null) {
 						  response.setContentType(a.getMimeType());
 					  } else {

@@ -62,7 +62,7 @@ RepositoryService {
 
 	
 	@Override
-	public String getAssetTxtContent(AssetNode an)
+	public AssetNode getAssetTxtContent(AssetNode an)
 			throws RepositoryConfigException {
 		try {
 			return PresentationData.getTextContent(an);	

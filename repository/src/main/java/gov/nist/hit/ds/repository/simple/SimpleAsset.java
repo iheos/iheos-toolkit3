@@ -23,10 +23,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 
-public class SimpleAsset implements Asset, Flushable {	
+public class SimpleAsset implements Asset, Flushable {
+	private static Logger logger = Logger.getLogger(SimpleAsset.class.getName());
 	String classNameForSerializable;
 	Properties properties = new Properties();
 	byte[] content = null;
@@ -100,10 +102,6 @@ public class SimpleAsset implements Asset, Flushable {
 		return new File(getAssetBaseFile(this.getId()).toString() + "." + Configuration.PROPERTIES_FILE_EXT);
 	}
 		
-	File getContentFile() throws RepositoryException {
-		return new File(getAssetBaseFile(this.getId()).toString() + "." + Configuration.CONTENT_FILE_EXT);
-	}
-
 	@Override
 	public void updateDisplayName(String displayName)
 			throws RepositoryException {
@@ -199,13 +197,50 @@ public class SimpleAsset implements Asset, Flushable {
 	public Id getRepository() throws RepositoryException {
 		return new SimpleId(getProperty(PropertyKey.REPOSITORY_ID));
 	}
+	@Override	
+	public File getContentFile() throws RepositoryException {
+		
+		File assetContentFile = new File(getAssetBaseFile(this.getId()).toString() + "." + Configuration.CONTENT_FILE_EXT);
+		
+		String[] ext = getContentExtension();
+		if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {
+			try {
+				return getContentFile(ext[2]);
+			} catch (RepositoryException e) {
+				// content may not exist
+			}
+		} else {
+			try {
+				return assetContentFile;
+			} catch (Exception e) {
+				// content may not exist
+			} 
+		}
+		
+		return null;
+		
+	}
+
+	@Override	
+	public boolean hasContent() throws RepositoryException {
+		File f = getContentFile();
+	
+		if (f!=null) {
+			return f.exists();
+		}
+		return false;
+	}
 
 	@Override
 	public byte[] getContent() throws RepositoryException {
 
-		if (!loadContentAttempted) {
-			this.load(this.getId(), getAssetBaseFile(this.getId()));
+		if (properties.size()==0) {
+			this.load(getId(), getAssetBaseFile(getId()));
 		}
+		if (!loadContentAttempted && hasContent()) {
+			loadContent(getContentFile());
+		}
+		
 		return content;
 	}
 
@@ -327,8 +362,8 @@ public class SimpleAsset implements Asset, Flushable {
 	 */
 	public SimpleAsset load(Id assetId, File assetBaseFile) throws RepositoryException {
 		File assetPropFile = new File(assetBaseFile.toString() + "." + Configuration.PROPERTIES_FILE_EXT);
-		File assetContentFile = new File(assetBaseFile.toString() + "." + Configuration.CONTENT_FILE_EXT);
-		properties = new Properties();
+
+		properties.clear();
 		try {
 			FileReader fr = new FileReader(assetPropFile);
 			properties.load(fr);
@@ -339,34 +374,24 @@ public class SimpleAsset implements Asset, Flushable {
 					assetBaseFile.toString()
 					+ "]", e);
 		}
-
-		loadContent(assetContentFile);
+		
 		return this;
 	}
+	
+	
 
 	/**
 	 * @param assetContentFile
 	 */
 	private void loadContent(File assetContentFile) {
-		String[] ext = getContentExtension();
-		if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {
-			try {
-				loadContentAttempted = true;
-				content = FileUtils.readFileToByteArray(getContentFile(ext[2]));
-			} catch (RepositoryException e) {
-				// content may not exist
-			} catch (IOException e) {
-				// content may not exist
-			}
-		} else {
-			try {
+			try {				
 				loadContentAttempted = true;
 				content = FileUtils.readFileToByteArray(assetContentFile);
 			} catch (Exception e) {
-				// content may not exist
-			} 
-		}
+				logger.info("Content load fail <" + assetContentFile.toString()  +">: " + e.toString());
+			} 		
 	}
+	
 	
 	@Override
 	public String[] getContentExtension() {

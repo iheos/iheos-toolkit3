@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 
@@ -39,7 +40,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 	 * 
 	 */
 	private static final long serialVersionUID = 4939311135239253727L;
-
+	private static Logger logger = Logger.getLogger(PresentationData.class.getName());
 	
 	public Map<String, String[]> getRepositoryDisplayTags() {
 		
@@ -186,18 +187,21 @@ public class PresentationData implements IsSerializable, Serializable  {
 		aDst.setMimeType(aSrc.getMimeType());
 		aDst.setReposSrc(aSrc.getSource().getAccess().name());
 
-		try {
-			String content = new String(aSrc.getContent());
-			if ("application/soap+xml".equalsIgnoreCase(aSrc.getMimeType())) {
-				aDst.setTxtContent(XmlFormatter.htmlize(content));			
-			} else if ("text/csv".equalsIgnoreCase(aSrc.getMimeType())) {
-				aDst.setCsv(processCsvContent(content));
-			} else {
-				content = SafeHtmlUtils.fromString(content).asString();
-				aDst.setTxtContent(content);
+		if (aSrc.getContent()!=null) {
+			try {
+				String content = new String(aSrc.getContent());
+				if ("text/xml".equals(aSrc.getMimeType()) || "application/soap+xml".equals(aSrc.getMimeType())) {
+					aDst.setTxtContent(XmlFormatter.htmlize(content));			
+				} else if ("text/csv".equals(aSrc.getMimeType())) {
+					aDst.setCsv(processCsvContent(content));
+				} else {
+					content = SafeHtmlUtils.fromString(content).asString();
+					aDst.setTxtContent(content);
+				}
+				aDst.setContentAvailable(true);
+			} catch (Exception e) {
+				logger.info("No content found for <"+ aDst.getAssetId() +">: May not have any content (which is okay for top-level assets): " + e.toString());
 			}			
-		} catch (Exception e) {
-			// may not have any content which is okay 
 		}
 
 		try {
@@ -215,14 +219,28 @@ public class PresentationData implements IsSerializable, Serializable  {
 	 */
 	private static String[][] processCsvContent(String content) {
 		CSVParser parser = new CSVParser(content);
-		if (parser.size()>0) {
-			String[][] records = new String[parser.size()][parser.get(0).getItems().size()];
+		int sz = parser.size(); 
+		
+		if (sz>0) {
+			int maxCol = 0;
+			// fix missing headers by finding the widest row
+			for (int cx=0; cx<sz; cx++) {
+				int rowItemSz = parser.get(cx).getItems().size();
+				maxCol = (maxCol>rowItemSz?maxCol:rowItemSz);
+			}
+			
+			// copy to array
+			String[][] records = new String[parser.size()][maxCol];
 			int rowIdx =0;
 			int colIdx =0;
 			for (CSVEntry e : parser.getTable().entries()) {
 				
 				for (String s : e.getItems()) {
 					records[rowIdx][colIdx++] = s; 
+				}
+				// fix row width
+				while (colIdx<maxCol) {
+					records[rowIdx][colIdx++] = "";
 				}
 				rowIdx++;
 				colIdx=0;

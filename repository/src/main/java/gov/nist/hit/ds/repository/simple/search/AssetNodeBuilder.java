@@ -52,6 +52,7 @@ public class AssetNodeBuilder {
 					,a.getDescription()
 					,a.getMimeType()
 					,a.getSource().getAccess().name());
+			parent.setContentAvailable(a.hasContent());
 			getChildren(repos,parent);
 			topLevelAssets.add(parent);
 		}
@@ -78,7 +79,7 @@ public class AssetNodeBuilder {
 						,a.getDescription()
 						,a.getMimeType()
 						,a.getSource().getAccess().name());
-				
+				child.setContentAvailable(a.hasContent());
 				parent.addChild(child);
 				getChildren(repos,child);
 			}

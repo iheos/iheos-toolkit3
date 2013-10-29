@@ -24,9 +24,11 @@ public class AssetNode implements IsSerializable, Serializable {
 	private String mimeType;
 	private String reposSrc;
 	
+	private boolean hasContent;
 	private String txtContent;
 	private String props;
 	private String[][] csv;
+	
 	
 	private List<AssetNode> children = new ArrayList<AssetNode>();
 	
@@ -130,6 +132,14 @@ public class AssetNode implements IsSerializable, Serializable {
 
 	public void setCsv(String[][] csv) {
 		this.csv = csv;
+	}
+
+	public boolean isContentAvailable() {
+		return hasContent;
+	}
+
+	public void setContentAvailable(boolean hasContent) {
+		this.hasContent = hasContent;
 	}
 
 	

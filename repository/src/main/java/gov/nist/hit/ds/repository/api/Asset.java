@@ -574,6 +574,10 @@ public interface Asset {
     
     public void setSource(RepositorySource source);
 
+	public File getContentFile() throws RepositoryException;
+
+	public boolean hasContent() throws RepositoryException;
+
     /**
      * Create a new Asset Record of the specified RecordStructure.   The
      * implementation of this method sets the Id for the new object.
