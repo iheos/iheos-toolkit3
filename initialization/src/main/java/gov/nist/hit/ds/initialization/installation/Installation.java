@@ -257,7 +257,9 @@ public class Installation {
 	public File getExternalCache() {
 		return externalCache;
 	}
-
+	/*
+	 * Needed for old v1 code
+	 */
 	public File testLogFile() {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("not implemented");
