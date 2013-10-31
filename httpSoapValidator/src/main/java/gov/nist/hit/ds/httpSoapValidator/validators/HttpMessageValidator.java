@@ -121,5 +121,10 @@ public class HttpMessageValidator extends SimComponentBase {
 
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return true;
+	}
+
 
 }

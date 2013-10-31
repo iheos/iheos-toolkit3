@@ -59,4 +59,10 @@ public class FooMaker implements SimComponent {
 	public void setEvent(Event event) {
 		this.event = event;
 	}
+
+
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
 }

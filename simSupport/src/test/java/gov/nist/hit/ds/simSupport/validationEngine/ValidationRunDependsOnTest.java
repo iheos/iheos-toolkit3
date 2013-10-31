@@ -51,7 +51,7 @@ public class ValidationRunDependsOnTest   extends SimComponentBase {
 	@Test
 	public void runTest() {
 		try {
-			validationEngine.run();
+			runValidationEngine();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -71,6 +71,11 @@ public class ValidationRunDependsOnTest   extends SimComponentBase {
 	public void run(MessageValidatorEngine mve) throws SoapFaultException,
 			RepositoryException {
 
+	}
+
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
 	}
 
 

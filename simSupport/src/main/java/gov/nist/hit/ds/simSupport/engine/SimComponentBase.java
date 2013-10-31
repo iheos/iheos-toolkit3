@@ -6,9 +6,14 @@ import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
 import gov.nist.hit.ds.eventLog.assertion.annotations.Validation;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.validationEngine.ValidationEngine;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -23,7 +28,7 @@ public abstract class SimComponentBase implements SimComponent {
 	public Event event;
 	String name;
 	String description;
-	public ValidationEngine validationEngine;
+	ValidationEngine validationEngine;
 
 	public SimComponentBase() {
 		validationEngine = new ValidationEngine(this);
@@ -37,6 +42,10 @@ public abstract class SimComponentBase implements SimComponent {
 	@Override
 	public void setAssertionGroup(AssertionGroup er) {
 		this.ag = er;
+	}
+	
+	public void flushEvent() throws RepositoryException {
+//		event.flush();
 	}
 
 	@Override
@@ -57,6 +66,15 @@ public abstract class SimComponentBase implements SimComponent {
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public void runValidationEngine() throws SoapFaultException, RepositoryException {
+		validationEngine.run();
+		flushEvent();
+	}
+	
+	public ValidationEngine getValidationEngine() {
+		return validationEngine;
 	}
 	
 	/******************************************
@@ -102,21 +120,65 @@ public abstract class SimComponentBase implements SimComponent {
 		return !a.failed();
 	}
 	
+	public boolean assertTrue(boolean value) throws SoapFaultException {
+		Assertion a = ag.assertTrue(value);
+		recordAssertion(a);
+		return !a.failed();
+	}
+	
+	public boolean assertTrueNoLog(boolean value) throws SoapFaultException {
+		if (!value)
+			return assertTrue(value);
+		return true;
+	}
+
+	public boolean assertFalse(boolean value) throws SoapFaultException {
+		Assertion a = ag.assertTrue(!value);
+		recordAssertion(a);
+		return !a.failed();
+	}
+
 	public boolean assertNotNull(Object value) throws SoapFaultException {
 		Assertion a = ag.assertNotNull(value);
 		recordAssertion(a);
 		return !a.failed();
 	}
 
+	public boolean assertNotNullNoLog(Object value) throws SoapFaultException {
+		if (value == null)
+			return assertNotNull(value);
+		return true;
+	}
+
+	List<String> idsAsserted = new ArrayList<String>();
+	
 	void recordAssertion(Assertion a) throws SoapFaultException {
 		if (validationEngine.validationFaultAnnotation != null) {
 			ValidationFault vf = validationEngine.validationFaultAnnotation;
+			if (idsAsserted.contains(vf.id())) {
+				a.
+				setId(vf.id()).
+				setMsg("Validator contains multiple assertions with this id").
+				setReference(new String[] {}).
+				setExpected("").
+				setFound("").
+				setCode(FaultCode.Receiver.toString()).
+				setStatus(AssertionStatus.INTERNALERROR)
+				;
+				throw new SoapFaultException(
+						ag,
+						FaultCode.Receiver,
+						new ErrorContext("Validator contains multiple assertions with this id", "")
+						);
+			}
+			idsAsserted.add(vf.id());
+			
 			a.
 			setId(vf.id()).
 			setMsg(vf.msg()).
 			setReference(vf.ref()).
 			setCode(vf.faultCode().toString());
-			if (a.getStatus() == AssertionStatus.ERROR) {
+			if (a.getStatus().isError()) {
 				a.setStatus(AssertionStatus.FAULT);
 				throw new SoapFaultException(
 						ag,
@@ -127,6 +189,24 @@ public abstract class SimComponentBase implements SimComponent {
 		}
 		if (validationEngine.validationAnnotation != null) {
 			Validation vf = validationEngine.validationAnnotation;
+			if (idsAsserted.contains(vf.id())) {
+				a.
+				setId(vf.id()).
+				setMsg("Validator contains multiple assertions with this id").
+				setReference(new String[] {}).
+				setExpected("").
+				setFound("").
+				setCode(FaultCode.Receiver.toString()).
+				setStatus(AssertionStatus.INTERNALERROR)
+				;
+				throw new SoapFaultException(
+						ag,
+						FaultCode.Receiver,
+						new ErrorContext("Validator contains multiple assertions with this id", "")
+						);
+			}
+			idsAsserted.add(vf.id());
+
 			String id = vf.id();
 			a.
 			setId(id).

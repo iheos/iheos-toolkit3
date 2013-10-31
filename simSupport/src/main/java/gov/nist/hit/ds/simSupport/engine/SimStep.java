@@ -14,7 +14,7 @@ public class SimStep {
 	AssertionGroup ag = null;  // set by engine
 	Event event = null;        // set by engine	
 	SimComponent simComponent = null;
-	boolean ran = false;
+//	boolean ran = false;
 	
 	public String getName() {
 		return name;
@@ -57,14 +57,14 @@ public class SimStep {
 		return this;
 	}
 	
-	public boolean hasRan() {
-		return ran;
-	}
+//	public boolean hasRan() {
+//		return ran;
+//	}
 	
-	public boolean hasRan(boolean hasRan) {
-		ran = hasRan;
-		return ran;
-	}
+//	public boolean hasRan(boolean hasRan) {
+//		ran = hasRan;
+//		return ran;
+//	}
 	
 	public String toString() {
 		if (name != null)

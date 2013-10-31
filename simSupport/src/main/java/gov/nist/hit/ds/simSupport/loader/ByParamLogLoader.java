@@ -24,4 +24,9 @@ public class ByParamLogLoader extends AbstractLogLoader {
 		return this;
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
+
 }

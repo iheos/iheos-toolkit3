@@ -83,4 +83,9 @@ public class SimpleSoapEnvironmentValidator extends SimComponentBase {
 		return new XmlText().setXml(new String(bodyBytes));
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return true;
+	}
+
 }

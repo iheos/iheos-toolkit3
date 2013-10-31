@@ -26,7 +26,7 @@ public class AssetHelper {
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Asset a = fact.getRepository(parent.getRepository()).createAsset(displayName, description, assetType);
 		logger.debug("Created <" + a.toString() + ">");
-		a.setProperty("parent", parent.getId().getIdString());
+		a.setProperty(PropertyKey.PARENT_ID, parent.getId().getIdString());
 		return a;
 	}	
 

@@ -242,6 +242,12 @@ public class WrapperValidator extends MessageValidator {
 		
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 
 
 }

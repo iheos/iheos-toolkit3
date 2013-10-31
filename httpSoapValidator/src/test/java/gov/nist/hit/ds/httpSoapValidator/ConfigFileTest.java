@@ -57,7 +57,7 @@ public class ConfigFileTest {
 			System.out.println(simChain.getLog());
 									
 			for (SimStep step : simChain.getSteps()) 
-				assertTrue(step.hasRan());
+				assertTrue(engine.isStepCompleted(step));
 			assertTrue(engine.isComplete());
 
 

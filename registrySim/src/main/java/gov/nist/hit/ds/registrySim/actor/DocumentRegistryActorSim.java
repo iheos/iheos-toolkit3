@@ -35,4 +35,9 @@ public class DocumentRegistryActorSim extends SimComponentBase {
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
 		logger.trace("Run DocumentRegistryActorSim");
 	}
+
+	@Override
+	public boolean showOutputInLogs() {
+		return true;
+	}
 }

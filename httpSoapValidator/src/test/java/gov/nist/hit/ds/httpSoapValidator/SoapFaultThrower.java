@@ -49,4 +49,9 @@ public class SoapFaultThrower implements SimComponent {
 		this.event = event;
 	}
 
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
+
 }

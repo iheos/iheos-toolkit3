@@ -8,7 +8,7 @@ import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
-import gov.nist.hit.ds.httpSoapValidator.validators.SoapParser;
+import gov.nist.hit.ds.httpSoapValidator.validators.SoapMessageParser;
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -125,7 +125,7 @@ public class SoapParserIT implements XmlMessage {
 	AssertionGroup run(File xmlInputFile) throws RepositoryException, SoapFaultException {
 		this.xmlInputFile = xmlInputFile;
 		loadXml();
-		SoapParser soapParser = new SoapParser();
+		SoapMessageParser soapParser = new SoapMessageParser();
 		soapParser.setEvent(event);
 		AssertionGroup ag = new AssertionGroup();
 		event.addAssertionGroup(ag);

@@ -26,4 +26,9 @@ public class ByInjectionLogLoader extends AbstractLogLoader {
 					);
 		}
 	}
+
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
+	}
 }

@@ -10,6 +10,7 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.utilities.string.StringUtil;
 import gov.nist.hit.ds.utilities.xml.Parse;
 import gov.nist.hit.ds.utilities.xml.XmlText;
+import gov.nist.hit.ds.xdsException.XMLParserException;
 
 import org.apache.axiom.om.OMElement;
 
@@ -47,10 +48,15 @@ public class XmlParser implements SimComponent, XmlMessage {
 	public void run(MessageValidatorEngine mve) throws RepositoryException {
 		event.addArtifact("XML Starts", StringUtil.firstNChars(xmlText.getXml(), 200));
 		try {
-			xml = Parse.parse_xml_string(xmlText.getXml());
+			parse();
 		} catch (Exception e) {
 			ag.err(Code.NoCode, e);
 		}
+	}
+
+	public OMElement parse() throws XMLParserException {
+		xml = Parse.parse_xml_string(xmlText.getXml());
+		return xml;
 	}
 
 	@Override
@@ -78,6 +84,11 @@ public class XmlParser implements SimComponent, XmlMessage {
 	@Override
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	@Override
+	public boolean showOutputInLogs() {
+		return true;
 	}
 
 }

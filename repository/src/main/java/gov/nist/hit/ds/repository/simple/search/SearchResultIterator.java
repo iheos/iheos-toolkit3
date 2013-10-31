@@ -15,8 +15,6 @@ import gov.nist.hit.ds.repository.simple.index.db.DbContext;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 
-import java.io.File;
-
 import javax.sql.rowset.CachedRowSet;
 
 public class SearchResultIterator implements AssetIterator  {

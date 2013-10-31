@@ -43,7 +43,7 @@ public class SimChainLoaderTest {
 
 
 			for (SimStep step : simChain.getSteps()) 
-				assertFalse(step.hasRan());
+				assertFalse(engine.isStepCompleted(step));
 			assertFalse(engine.isComplete());
 
 
@@ -51,7 +51,7 @@ public class SimChainLoaderTest {
 
 
 			for (SimStep step : simChain.getSteps()) 
-				assertTrue(step.hasRan());
+				assertTrue(engine.isStepCompleted(step));
 			assertTrue(engine.isComplete());
 
 
@@ -101,7 +101,7 @@ public class SimChainLoaderTest {
 
 
 			for (SimStep step : engine.getSimChain().getSteps()) 
-				assertFalse(step.hasRan());
+				assertFalse(engine.isStepCompleted(step));
 			assertFalse(engine.isComplete());
 
 
@@ -109,7 +109,7 @@ public class SimChainLoaderTest {
 
 
 			for (SimStep step : engine.getSimChain().getSteps()) 
-				assertTrue(step.hasRan());
+				assertTrue(engine.isStepCompleted(step));
 			assertTrue(engine.isComplete());
 
 

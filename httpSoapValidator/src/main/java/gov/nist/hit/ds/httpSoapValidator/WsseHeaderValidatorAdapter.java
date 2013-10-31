@@ -121,5 +121,14 @@ public class WsseHeaderValidatorAdapter {
 		// TODO Auto-generated method stub
 		
 	}
+<<<<<<< mine
 	*/
+=======
+
+	@Override
+	public boolean showOutputInLogs() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+>>>>>>> theirs
 }

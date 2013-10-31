@@ -12,19 +12,27 @@ public class Assertions {
 	Asset assertionsAsset;
 	int counter = 1;
 	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
+	AssertionGroup ag = null;
 	static Logger logger = Logger.getLogger(Assertions.class);
 
 	public Asset init(Asset parent) throws RepositoryException {
-		assertionsAsset = AssetHelper.createChildAsset(parent, "Assertions", "", new SimpleType("simAssertions"));
+		assertionsAsset = AssetHelper.createChildAsset(parent, "Validators", "", new SimpleType("simAssertions"));
 		return assertionsAsset;
 	}
 	
 	public void add(AssertionGroup ag) throws RepositoryException {
+		this.ag = ag;
+	}
+	
+	public void flush() throws RepositoryException {
 		logger.debug("AssertionGroup " + ag.toString());
+		if (!ag.isSaveInLog())
+			return;
 		Asset a = AssetHelper.createChildAsset(assertionsAsset, ag.getValidatorName(), "", new SimpleType("simpleType"));
 		a.setOrder(counter++);
 		a.setProperty(PropertyKey.STATUS, ag.getMaxStatus().name());
+		logger.debug("flushing CSVTable:");
+		logger.debug(ag.getTable().toString());
 		a.updateContent(ag.getTable().toString(), "text/csv");
-
 	}
 }

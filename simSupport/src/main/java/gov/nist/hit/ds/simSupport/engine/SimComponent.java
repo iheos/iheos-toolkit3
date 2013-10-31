@@ -19,4 +19,5 @@ public interface SimComponent {
 	String getDescription();
 	void setDescription(String description);
 	void run(MessageValidatorEngine mve) throws SoapFaultException, RepositoryException;
+	boolean showOutputInLogs();
 }

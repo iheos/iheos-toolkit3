@@ -26,7 +26,6 @@ import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.xml.Parse;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -52,10 +51,9 @@ public class SimServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static Logger logger = Logger.getLogger(SimServlet.class);
 	ServletConfig config;
-	File simDbDir;
+	//	File simDbDir;
 	String faultSent = null;
 	boolean initialized = false;
-	Event event = null  ;
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -65,8 +63,8 @@ public class SimServlet extends HttpServlet {
 
 		// This should do all the primary initialization in case it was not done elsewhere
 		try {
-//			File warHome = new File(config.getServletContext().getRealPath("/"));
-//			Installation.installation().setWarHome(warHome);
+			//			File warHome = new File(config.getServletContext().getRealPath("/"));
+			//			Installation.installation().setWarHome(warHome);
 			Installation.installation().initialize();
 			logger.info("External Cache is found at <" + Installation.installation().getExternalCache().toString() + ">");
 		} catch (Exception e) {
@@ -77,7 +75,7 @@ public class SimServlet extends HttpServlet {
 		// This assumes that the toolkit has been configured before this Servlet
 		// is initialized.
 		try {
-			simDbDir = Installation.installation().propertyServiceManager().getSimDbDir();
+			Installation.installation().propertyServiceManager().getSimDbDir();   // build necesary directories
 			initSimEnvironment();
 		} catch (Exception e) {
 			logger.fatal("Error initializing Simulator Environment.\n" + ExceptionUtil.exception_details(e));
@@ -123,10 +121,10 @@ public class SimServlet extends HttpServlet {
 		if (simEndpoint == null)
 			return;
 
-		event = buildEvent(soapEnv, simEndpoint);
+		Event event = buildEvent(soapEnv, simEndpoint);
 		if (event == null)
 			return;
-		
+
 
 		TransactionType transType = TransactionType.find(simEndpoint.getTransaction());
 		if (transType == null) {
@@ -136,9 +134,10 @@ public class SimServlet extends HttpServlet {
 		soapEnv.setExpectedRequestAction(transType.getRequestAction());
 		soapEnv.setResponseAction(transType.getResponseAction());
 
-		handleSimulatorInputTransaction(request, soapEnv, simEndpoint, new Endpoint().setEndpoint(uri), event);
+		boolean responseGenerated = handleSimulatorInputTransaction(request, soapEnv, simEndpoint, new Endpoint().setEndpoint(uri), event);
 
-		returnEventResponse(httpEnv, soapEnv); 
+		if (!responseGenerated)
+			returnEventResponse(httpEnv, soapEnv); 
 	}
 
 	SimEndpoint parseEndpoint(String uri, SoapEnvironment soapEnv) {
@@ -156,10 +155,16 @@ public class SimServlet extends HttpServlet {
 			SoapEnvironment soapEnv) {
 		try {
 			Event event = (Event)httpEnv.getEventLog();
-			String responseBodyString = event.getInOutMessages().getResponse();
+			String responseBodyString;
+			try {
+				responseBodyString = event.getInOutMessages().getResponse();
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+				responseBodyString = "<None/>";
+			}
 			SoapResponseGenerator soapGen = new SoapResponseGenerator(soapEnv, Parse.parse_xml_string(responseBodyString));
 			String responseString = soapGen.send();
-			event.getInOutMessages().putResponse(responseString);
+//			event.getInOutMessages().putResponse(responseString);
 		} catch (Exception e) {
 			logger.error("Error generating response: \n" + ExceptionUtil.exception_details(e));
 			sendSoapFault(
@@ -169,12 +174,17 @@ public class SimServlet extends HttpServlet {
 		}
 	}
 
-	public void handleSimulatorInputTransaction(HttpServletRequest request,
+	public boolean handleSimulatorInputTransaction(HttpServletRequest request,
 			SoapEnvironment soapEnv, SimEndpoint simEndpoint, Endpoint endpoint, Event event) {
 
 		soapEnv.getHttpEnvironment().setEventLog(event);
 		soapEnv.setEndpoint(endpoint);
 		request.setAttribute("Event", event); // SimServletFilter needs this to log response as it goes out on the wire
+
+//		logger.error("Debug time");
+//		sendSoapFault(soapEnv, FaultCode.Receiver, "DEBUG DEBUG DEBUG: " + "Hello World!");
+//		if (1 == 1)
+//			return true;
 
 		// Make the input message available to the SimChain
 		try {
@@ -182,8 +192,9 @@ public class SimServlet extends HttpServlet {
 		} catch (Exception e) {
 			logger.error("Internal error logging request message", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error logging request message: " + e.getMessage());
-			return;
+			return true;
 		} 
+
 
 		// Find the correct SimChain and run it.  The SimChain selected by a combination of
 		// Actor and Transaction codes.  These codes came from the endpoint used to contact this 
@@ -193,6 +204,7 @@ public class SimServlet extends HttpServlet {
 		} catch (SoapFaultException sfe) {
 			logger.info("SOAPFault: " + sfe.getMessage());
 			sendSoapFault(soapEnv, sfe);
+			return true;
 		} catch (Exception e) {
 			logger.error("SOAPFault: " + ExceptionUtil.exception_details(e));
 			sendSoapFault(
@@ -205,6 +217,7 @@ public class SimServlet extends HttpServlet {
 							ExceptionUtil.exception_details(e)
 							)
 					);
+			return true;
 		} catch (Throwable e) {
 			logger.error("SOAPFault: " + ExceptionUtil.exception_details(e));
 			sendSoapFault(
@@ -217,34 +230,36 @@ public class SimServlet extends HttpServlet {
 							ExceptionUtil.exception_details(e)
 							)
 					);
+			return true;
 		}
+		return false;
 	}
 
 	private Event buildEvent(SoapEnvironment soapEnv, SimEndpoint simEndpoint) {
 		Event event = null;
 		try {
 			event = new EventBuilder().buildEvent(simEndpoint.getSimId(), ActorType.findActor(simEndpoint.getActor()).getShortName(), simEndpoint.getTransaction());
-//			SimDb db = new SimDb(simEndpoint.getSimId());
-//			SimId simId = simEndpoint.getSimId();
-//			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-//			Repository repos = fact.createNamedRepository(
-//					"Event_Repository", 
-//					"Event Repository", 
-//					new SimpleType("simEventRepository"),               // repository type
-//					ActorType.findActor(simEndpoint.getActor()).getShortName() + "-" + simId    // repository name
-//					);
-//			Asset eventAsset = repos.createAsset(
-//					db.nowAsFilenameBase(), 
-//					simEndpoint.getTransaction() + " Event", 
-//					new SimpleType("simEvent"));
-//			event = new Event(eventAsset);
+			//			SimDb db = new SimDb(simEndpoint.getSimId());
+			//			SimId simId = simEndpoint.getSimId();
+			//			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+			//			Repository repos = fact.createNamedRepository(
+			//					"Event_Repository", 
+			//					"Event Repository", 
+			//					new SimpleType("simEventRepository"),               // repository type
+			//					ActorType.findActor(simEndpoint.getActor()).getShortName() + "-" + simId    // repository name
+			//					);
+			//			Asset eventAsset = repos.createAsset(
+			//					db.nowAsFilenameBase(), 
+			//					simEndpoint.getTransaction() + " Event", 
+			//					new SimpleType("simEvent"));
+			//			event = new Event(eventAsset);
 		} catch (Exception e) {
 			logger.error("Internal error initializing simulator environment", e);
 			sendSoapFault(soapEnv, FaultCode.Receiver, "Internal error initializing simulator environment: " + e.getMessage());
 		}
 		return event;
 	}
-	
+
 
 	/**
 	 * Log the incoming request in the SimDb.
@@ -285,6 +300,7 @@ public class SimServlet extends HttpServlet {
 	}
 
 	void sendSoapFault(SoapEnvironment soapEnv, FaultCode faultCode, String reason) {
+		Event event = (Event) soapEnv.getEvent();
 		reason = reason.replace('<', '(').replace('>', ')');
 		sendSoapFault(
 				soapEnv, 					
@@ -311,6 +327,8 @@ public class SimServlet extends HttpServlet {
 
 	/**
 	 * This is only used by unit tests to determine if a soap fault was returned.
+	 * It should never be used in production since the servlet is multi-threaded and 
+	 * this feature is not.
 	 * @return
 	 */
 	public String getFaultSent() { return faultSent; }

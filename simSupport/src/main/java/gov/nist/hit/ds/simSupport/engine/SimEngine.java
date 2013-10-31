@@ -36,6 +36,7 @@ public class SimEngine implements MessageValidatorEngine {
 	List<Object> combinedInputs;
 	List<PubSubMatch> pubSubMatches = new ArrayList<PubSubMatch>();
 	int simsRun = 0;
+	List<SimStep> stepsCompleted = new ArrayList<SimStep>();
 	SoapEnvironment soapEnvironment;
 	Event event;
 	static Logger logger = Logger.getLogger(SimEngine.class);
@@ -55,6 +56,16 @@ public class SimEngine implements MessageValidatorEngine {
 
 	public SimEngine() {
 		this.simChain = new SimChain();
+	}
+	
+	void simStepCompleted(SimStep step) {
+		if (stepsCompleted.contains(step))
+			return;
+		stepsCompleted.add(step);
+	}
+	
+	public boolean isStepCompleted(SimStep step) {
+		return stepsCompleted.contains(step);
 	}
 	
 	public SimChain getSimChain() {
@@ -86,16 +97,17 @@ public class SimEngine implements MessageValidatorEngine {
 			buildCombinedInputs();
 			for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 				SimStep simStep = it.next();
-				if (simStep.hasRan())
+				if (isStepCompleted(simStep))
 					continue;
-				simStep.hasRan(true);
+				simStepCompleted(simStep);
 				SimComponent simComponent = simStep.getSimComponent();
 				if (simStep.getAssertionGroup() == null) {
 					AssertionGroup ag = new AssertionGroup().setValidatorName(simComponent.getClass().getSimpleName());
-					event.addAssertionGroup(ag);
 					simStep.setEvent(event);
 					simStep.setAssertionGroup(ag);
+					event.addAssertionGroup(ag);
 				}
+				simStep.getAssertionGroup().setSaveInLog(simComponent.showOutputInLogs());
 //				if (simComponent.getName() == null)
 //					simStep.getAssertionGroup().sectionHeading("Validator");
 //				else
@@ -114,8 +126,10 @@ public class SimEngine implements MessageValidatorEngine {
 					} catch (Exception e1) {
 						logger.error(ExceptionUtil.exception_details(e1));
 					}
+					event.flush();
 					return;
 				}
+				event.flush();
 				if (simChain.hasErrors()) {
 					logger.error("Engine Error: " + simChain.getErrors());
 					errorsFound = true;
@@ -137,7 +151,7 @@ public class SimEngine implements MessageValidatorEngine {
 	public boolean isComplete() {
 		for (Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
 			SimStep simStep = it.next();
-			if (!simStep.hasRan())
+			if (!isStepCompleted(simStep))
 				return false;
 		}
 		return true;

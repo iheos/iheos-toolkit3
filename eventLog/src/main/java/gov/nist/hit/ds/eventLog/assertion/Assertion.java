@@ -4,7 +4,6 @@ import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.datatypes.RequiredOptional;
 
 public class Assertion {
-	static final String[] columnNames = new String[] { "Name", "ID", "STATUS", "EXPECTED", "FOUND", "MSG", "CODE", "LOCATION", "REFERENCE" };
 	String id = "";
 	String name = "";
 	AssertionStatus status = AssertionStatus.SUCCESS;
@@ -36,38 +35,50 @@ public class Assertion {
 	public boolean failed() {
 		return status.isError();
 	}
+
+	/**
+	 * The following elements are all sensitive to the order and identity of the fields defined.
+	 */
 	
+	static final String[] columnNames = new String[] { "ID", "STATUS", "R/O", "EXPECTED", "FOUND", "MSG", "CODE", "LOCATION", "REFERENCE" };
+
 	public CSVEntry getEntry() {
 		CSVEntry entry = new CSVEntry();
 		
 		entry.
-		add(name).
-		add(id).
-		add(status.name()).
-		add(requiredOptional.name()).
-		add(expected).
-		add(found).
-		add(msg).
-		add(code).
-		add(location).
-		add(buildSemiDivided(reference));
+		add(id).    					// 0
+		add(status.name()).				// 1
+		add(requiredOptional.name()).	// 2
+		add(nocomma(expected)).					// 3
+		add(nocomma(found)).						// 4
+		add(nocomma(msg)).						// 5
+		add(code).						// 6
+		add(location).					// 7
+		add(nocomma(buildSemiDivided(reference))); // 8
 		
 		return entry;
 	}
 	
 	Assertion setEntry(CSVEntry entry) {
-		name = entry.get(0);
-		id = entry.get(1);
-		status = AssertionStatus.valueOf(entry.get(2));
-		requiredOptional = RequiredOptional.valueOf(entry.get(3));
-		expected = entry.get(4);
-		found = entry.get(5);
-		msg = entry.get(6);
-		code = entry.get(7);
-		location = entry.get(8);
-		reference = parseSemiDivided(entry.get(9));
+		id = entry.get(0);
+		status = AssertionStatus.valueOf(entry.get(1));
+		requiredOptional = RequiredOptional.valueOf(entry.get(2));
+		expected = entry.get(3);
+		found = entry.get(4);
+		msg = entry.get(5);
+		code = entry.get(6);
+		location = entry.get(7);
+		reference = parseSemiDivided(entry.get(8));
 		
 		return this;
+	}
+	
+	/**
+	 * The above elements are all sensitive to the order and identity of the fields defined.
+	 */
+
+	String nocomma(String in) {
+		return in.replaceAll(",", ";");
 	}
 	
 	static public String buildSemiDivided(String[] values) {

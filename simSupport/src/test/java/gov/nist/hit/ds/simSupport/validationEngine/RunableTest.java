@@ -16,7 +16,7 @@ public class RunableTest extends SimComponentBase {
 	
 	@Before
 	public void init() {
-		validationEngine.reset();
+		getValidationEngine().reset();
 	}
 	
 	@ValidationFault(id="VAL1", msg="One must equal one", faultCode=FaultCode.Sender, ref="First Grade")
@@ -27,9 +27,9 @@ public class RunableTest extends SimComponentBase {
 	@Test
 	public void runTest() {
 		try {
-			validationEngine.scheduler();
-			Assert.assertEquals(1, validationEngine.getRunableCount());
-			Runable r = validationEngine.getNextRunable();
+			getValidationEngine().scheduler();
+			Assert.assertEquals(1, getValidationEngine().getRunableCount());
+			Runable r = getValidationEngine().getNextRunable();
 			Assert.assertNotNull(r);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,5 +41,10 @@ public class RunableTest extends SimComponentBase {
 	public void run(MessageValidatorEngine mve) throws SoapFaultException,
 			RepositoryException {
 
+	}
+
+	@Override
+	public boolean showOutputInLogs() {
+		return false;
 	}
 }
