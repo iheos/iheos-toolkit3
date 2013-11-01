@@ -22,7 +22,7 @@ public interface RepositoryService extends RemoteService  {
 
 	
 	/* Artifact Repository Services */
-	public Map<String, String[]> getRepositoryDisplayTags() throws NoServletSessionException;
+	public Map<String, String[]> getRepositoryDisplayTags() throws RepositoryConfigException;
 	public List<String> getIndexablePropertyNames() throws NoServletSessionException;
 	public Boolean setRepositoryConfig() throws RepositoryConfigException;
 	public List<AssetNode> search(String[][] repos, SearchCriteria sc) throws RepositoryConfigException;

@@ -12,8 +12,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 
 /**
 * Singleton that represents the repository configuration
@@ -33,7 +33,7 @@ public class Configuration {
     public static final String CONFIGURATION_WARNING = "Configuration warning";
 
 	private static ArrayList<RepositorySource> repositorySources = new ArrayList<RepositorySource>();
-	static final Logger logger = Logger.getLogger(Configuration.class);
+	static final Logger logger = Logger.getLogger(Configuration.class.getName());
 	private static final String REPOSITORY_SOURCE_DIRNAME = "repositories";
 
 	

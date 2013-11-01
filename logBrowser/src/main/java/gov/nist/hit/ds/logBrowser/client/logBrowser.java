@@ -88,8 +88,7 @@ public class LogBrowser implements EntryPoint {
 		  StyleInjector.inject(".gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger "
                   + "{ width: 5px !important; background: green; }");
 		  */
-
-	    
+		  
 	    try {
 			reposService.setRepositoryConfig(new AsyncCallback<Boolean>(){
 				public void onSuccess(Boolean a){
@@ -97,13 +96,10 @@ public class LogBrowser implements EntryPoint {
 					AsyncCallback<Map<String, String[]>> reposTags = new AsyncCallback<Map<String, String[]>>() {
 
 						public void onFailure(Throwable a) {
-							Window.alert(a.toString());
-							
+							Window.alert("No repositories found. Error: " + a.toString());							
 						}
 
-						public void onSuccess(Map<String, String[]> a) {
-							if (a==null) return;
-							
+						public void onSuccess(Map<String, String[]> a) {							
 							ListBox reposLbx = new ListBox();
 							
 							String[][] reposData = new String[a.size()][2];
@@ -142,9 +138,8 @@ public class LogBrowser implements EntryPoint {
 							splitPanel.addWest(westContent, 300); // 400  -- Math.round(.15 * Window.getClientWidth())
 							centerPanel.add(new HTML("<h2 style='color:maroon'>Recent Activity</h2><hr/>")); // Startup message
 							splitPanel.add(centerPanel);
-
+							
 							RootLayoutPanel.get().add(splitPanel);
-
 							
 							final AsyncCallback<List<AssetNode>> treeSetup = new AsyncCallback<List<AssetNode>>() {
 

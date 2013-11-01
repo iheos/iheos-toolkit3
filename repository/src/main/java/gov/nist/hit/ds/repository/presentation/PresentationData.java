@@ -19,6 +19,7 @@ import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder;
 import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
+import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 
 import java.io.IOException;
@@ -42,31 +43,34 @@ public class PresentationData implements IsSerializable, Serializable  {
 	private static final long serialVersionUID = 4939311135239253727L;
 	private static Logger logger = Logger.getLogger(PresentationData.class.getName());
 	
-	public Map<String, String[]> getRepositoryDisplayTags() {
+	public Map<String, String[]> getRepositoryDisplayTags() throws RepositoryConfigException {
 		
 		
 		Map<String, String[]> m = new HashMap<String,String[]>();
+		String reposDetail = "";
 		
 		RepositoryIterator it;
-		try {
-			
 			
 			for (Access acs : RepositorySource.Access.values()) {
-				it = new RepositoryFactory(Configuration.getRepositorySrc(acs)).getRepositories();
-
-				Repository r =  null;
-				while (it.hasNextRepository()) {
-					r = it.nextRepository();
-					m.put(r.getId().getIdString(), new String[]{r.getDisplayName(),acs.name()});
-					
+				reposDetail += "<" + acs.name() + ">";
+				try {					
+					it = new RepositoryFactory(Configuration.getRepositorySrc(acs)).getRepositories();
+					Repository r =  null;
+					while (it.hasNextRepository()) {
+						r = it.nextRepository();
+						m.put(r.getId().getIdString(), new String[]{r.getDisplayName(),acs.name()});
+						
+					}
+				} catch (RepositoryException e) {
+					reposDetail += " >>> " + e.toString();
 				}
 				
 			}
 			
-		} catch (RepositoryException e) {
-			return null;
+		if (m.size()==0 || m.isEmpty()) {
+			throw new RepositoryConfigException(reposDetail);
 		}
-		
+					
 		// Apply sorting on display tags here if necessary
 		
 		return m;

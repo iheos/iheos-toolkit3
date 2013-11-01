@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.repository;
 
+import java.util.logging.Logger;
+
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -16,10 +18,9 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 
-import org.apache.log4j.Logger;
 
 public class AssetHelper {
-	static Logger logger = Logger.getLogger(AssetHelper.class);
+	static Logger logger = Logger.getLogger(AssetHelper.class.getName());
 	
 	static public Asset createChildAsset(Asset parent, String displayName, String description, SimpleType assetType) throws RepositoryException {
 		logger.info("Creating <" + displayName + ">,  child of <" + parent.getId() + "> in repo <" + parent.getRepository() +">");

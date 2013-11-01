@@ -22,7 +22,7 @@ RepositoryService {
 
 	@Override
 	public Map<String, String[]> getRepositoryDisplayTags()
-			throws NoServletSessionException {
+			throws RepositoryConfigException {
 		return new PresentationData().getRepositoryDisplayTags();
 	}
 
