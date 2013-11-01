@@ -59,7 +59,7 @@ public enum PropertyKey {
                return "mimeType";
            }
        },
-       MODIFIED_DATE() {
+       UPDATED_DATE() {
        	@Override
            public String toString() {
                return "modifiedDate";

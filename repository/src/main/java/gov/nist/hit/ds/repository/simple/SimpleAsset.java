@@ -416,7 +416,7 @@ public class SimpleAsset implements Asset, Flushable {
 	public void flush() throws RepositoryException {
 		autoFlush = true;
 		try {			
-			setPropertyTemp(PropertyKey.MODIFIED_DATE, new Hl7Date().now());	
+			setPropertyTemp(PropertyKey.UPDATED_DATE, new Hl7Date().now());	
 			setExipration();		
 			
 			FileWriter writer = new FileWriter(getPropFile());
