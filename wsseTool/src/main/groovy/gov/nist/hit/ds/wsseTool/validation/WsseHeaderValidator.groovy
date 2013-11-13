@@ -71,23 +71,22 @@ public class WsseHeaderValidator implements Validator {
 
 		Message message = null;
 		Result parseResult = null
-		
+
 		try{
-		//create the message representation.
+			//create the message representation.
 			message = MessageFactory.getMessage(wsseHeader,context)
 		}
 		catch(ParseException e){
 			log.error(e);
 			log.warn("problem during parsing but validation will continue so we can report errors properly.");
-			
 		}
 		finally{
 			//in any case we run the parsing validation for proper reporting
-			Runner runner = new ValRunnerWithOrder(ParsingVal.class,message)
+			Runner runner = new ValRunnerWithOrder(ParsingVal.class, message)
 			Request request = Request.runner(runner)
 			parseResult = run(request, config)
 		}
-		
+
 		if(parseResult.getFailureCount() != 0){ //we do not want to go forward if parsing validation failed
 			log.error("parsing validation failed. Validation will stop.")
 			return
@@ -103,7 +102,7 @@ public class WsseHeaderValidator implements Validator {
 	private Result run(Request request, ValConfig config) throws ValidationException {
 
 		Request filteredRequest = applyFilters(request, config);
-		
+
 		Result result = null
 
 		try{
@@ -118,21 +117,21 @@ public class WsseHeaderValidator implements Validator {
 			throw new ValidationException("an error occured during validation.", e)
 		}
 	}
-	
-	
+
+
 	private Request applyFilters(Request request, ValConfig config){
 		List<Filter> filters = createFilters(config);
 		for(Filter filter : filters){
 			request = request.filterWith(filter);
 		}
-		
+
 		return request;
 	}
-	
-	
+
+
 	//TODO to modify once we know how we will handle config
 	private List<Filter> createFilters(ValConfig config){
-	//	return Collections.singletonList(optionalFilter);
+		//	return Collections.singletonList(optionalFilter);
 		return Collections.emptyList();
 	}
 
@@ -142,19 +141,24 @@ public class WsseHeaderValidator implements Validator {
 		int fails = result.getFailureCount()
 		List<Failure> failures = result.getFailures()
 
-		System.out.println("\n Summary: \n"+ runs + " tests runs in " + time + " milliseconds , "
+		log.info("\n Summary: \n"+ runs + " tests runs in " + time + " milliseconds , "
 				+ fails + " have failed, " + result.getIgnoreCount()
-				+ " ignored")
+				+ " ignored \n")
 
-		System.out.println("\n Names of tests run:")
+		StringBuilder sb = new StringBuilder("\n Names of tests run: \n");
 		for (String s : listener1.testsDescriptions) {
-			System.out.println(s)
+			sb.append(s +"\n");
 		}
+		log.info(sb.toString());
 
-		System.out.println("\n Failures recorded:")
-		for (Failure f : failures) {
-			System.out.println(f.getTestHeader())
-			System.out.println(f.getMessage())
+		if(fails != 0 ){
+
+			StringBuilder sb2 = new StringBuilder("\n Failures recorded: \n");
+			for (Failure f : failures) {
+				sb2.append(f.getTestHeader()).append(" : \n")
+				sb2.append(f.getMessage()).append("\n \n")
+			}
+			log.info(sb2.toString());
 		}
 	}
 
@@ -166,16 +170,16 @@ public class WsseHeaderValidator implements Validator {
 
 		@Override
 		public void testRunStarted(Description description) throws Exception {
-			log.info("listener says : tests started")
+			log.info("saml tests started.")
 		}
 
 		public void testFailure(Failure failure) throws Exception {
-			log.info("listener says : tests failed : " + failure.getMessage())
+			log.debug("saml test failed : " + failure.getMessage())
 		}
 
 		@Override
 		public void testRunFinished(Result result) throws Exception {
-			log.info("listener says : tests stopped")
+			log.info("saml tests terminated.")
 		}
 
 		@Override
@@ -197,19 +201,19 @@ public class WsseHeaderValidator implements Validator {
 
 		return status
 	}
-	
+
 	Filter optionalFilter = new Filter() {
-		
-				@Override
-				public boolean shouldRun(Description description) {
-					boolean shouldRun = description.getAnnotation(Optional.class) == null;
-					return shouldRun;
-				}
-		
-				@Override
-				public String describe() {
-					return "optional filter : filtered out all tests marked with @Optional annotation";
-				}
-		
-			};
+
+		@Override
+		public boolean shouldRun(Description description) {
+			boolean shouldRun = description.getAnnotation(Optional.class) == null;
+			return shouldRun;
+		}
+
+		@Override
+		public String describe() {
+			return "optional filter : filtered out all tests marked with @Optional annotation";
+		}
+
+	};
 }

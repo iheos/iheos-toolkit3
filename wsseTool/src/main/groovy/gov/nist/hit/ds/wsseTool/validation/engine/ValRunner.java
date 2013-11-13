@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.wsseTool.validation.engine;
 
+import gov.nist.hit.ds.wsseTool.parsing.MessageFactory;
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Data;
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation;
 
@@ -18,9 +19,8 @@ public class ValRunner extends BlockJUnit4ClassRunner {
 	protected TestData data;
 
 	/**
-	 * Used only by the eclipse runner to test validation in eclipse. It
-	 * supposed that the testing class as a public static TestData data field
-	 * containing the data to test against.
+	 * Used only by the eclipse runner to test validation within eclipse.
+	 * It will initialize the data field with a singleton containing default values.
 	 * 
 	 * @param klass
 	 *            the test class.
@@ -31,6 +31,7 @@ public class ValRunner extends BlockJUnit4ClassRunner {
 	public ValRunner(Class<?> klass) throws Throwable {
 		super(klass);
 		dataField = getTestClassDataField();
+		this.data = MessageFactory.getTestMessage();
 	}
 
 	public ValRunner(Class<?> klass, TestData testdata) throws Throwable {

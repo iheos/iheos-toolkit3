@@ -4,31 +4,35 @@ import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SimpleListener extends RunListener {
 
+	private static final Logger log = LoggerFactory.getLogger(SimpleListener.class);
+	
 	@Override
 	public void testRunStarted(Description description) throws Exception {
-		System.out.println("started ");
+		log.info("start saml tests.");
 	}
 
 	@Override
 	public void testStarted(Description description) throws Exception {
-		System.out.println("started " + description.getDisplayName() + " "
+		log.info("started " + description.getDisplayName() + " "
 				+ description.getMethodName());
 
 	}
 
 	@Override
 	public void testRunFinished(Result result) throws Exception {
-		System.out.println("number of tests run : " + result.getRunCount()
+		log.info("done running saml tests. \n Number of tests run : " + result.getRunCount()
 				+ " failed : " + result.getFailureCount());
 	}
 
 	@Override
 	public void testFailure(Failure failure) throws Exception {
-		System.out.println("failed " + failure.getDescription().getMethodName()
+		log.error("failed " + failure.getDescription().getMethodName()
 				+ ": " + failure.getMessage());
-		System.out.println(failure.getTrace());
+		log.debug(failure.getTrace());
 	}
 }

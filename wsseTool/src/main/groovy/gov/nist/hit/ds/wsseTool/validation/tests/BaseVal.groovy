@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory
 public class BaseVal {
 
 	@Data
-	public TestData data = MessageFactory.getTestMessage();
+	public TestData data;
 
 	Message context;
 	GroovyHeader header;
