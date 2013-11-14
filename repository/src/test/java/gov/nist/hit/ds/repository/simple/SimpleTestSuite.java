@@ -42,24 +42,18 @@ public class SimpleTestSuite {
 	
 	@ClassRule
 	static public ExternalResource classRule = new ExternalResource()	{
-
-
 		
 		@Override
 		protected void before() throws Throwable {
-			
-			
- 			
 
+			// Setup application wide singletons
+			
 			Installation.reset();
-			Installation.installation().initialize();
+			Installation.installation().initialize(); 			
  			
- 			
- 			// Test assets created will be automatically removed after the test
- 						
- 			
-			Configuration.configuration();
-						
+ 			// Test assets created will be automatically removed after the test suite
+ 						 			
+			Configuration.configuration();						
 		}
 		
 		@Override

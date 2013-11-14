@@ -21,6 +21,8 @@ import java.util.logging.Logger;
 */
 public class Configuration {
 	public static final String STD_PROPERTIES_FILE_EXT = "properties";
+	public static final String DOT_SEPARATOR = ".";
+	public static final String PARENT_TAG = "parent";
 	public static final String PROPERTIES_FILE_EXT = "props.txt";
 	public static final String CONTENT_FILE_EXT = "bytes";
 	public static final String CONTENT_TEXT_EXT = "text";
@@ -333,15 +335,11 @@ public class Configuration {
 	
 	
 
+	/**
+	 * @deprecated Use {@link FolderManager#getAssetIdFromFilename(String)} instead
+	 */
 	public static Id getAssetIdFromFilename(String filename) {
-		File fn = new File(filename);
-		String fullName = fn.getName();
-		// extract id from filename
-		String[] parts = fullName.split("\\.");
-		if (parts != null && parts.length > 0)
-			return new SimpleId(parts[0]);
-		else
-			return new SimpleId(fullName);
+		return FolderManager.getAssetIdFromFilename(filename);
 	}
 
 	public static ArrayList<RepositorySource> getRepositorySources() {

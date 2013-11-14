@@ -78,11 +78,15 @@ public class SimpleAssetTest {
 	
 	@Test
 	public void parentAssetTest() throws RepositoryException {
-		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-		Repository repos = fact.createRepository(
-				"This is my repository",
+		// RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+		
+
+		Repository repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
+				"parentAssetTest",
 				"Description",
-				new SimpleType("site"));
+				new SimpleType("site"),
+				"parentAssetTest"
+				);
 		
 		Asset a = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
 		a.updateContent("My Content".getBytes());
@@ -95,6 +99,15 @@ public class SimpleAssetTest {
 		a.addAsset(assetId2);  // make a the parent of a2
 		
 		assertFalse(assetId.isEqual(assetId2));
+		
+		Asset a3 = repos.createAsset("My Site", "This is my third site", new SimpleType("siteAsset"));
+		a3.updateContent("My Third Content".getBytes());
+		Id assetId3 = a3.getId();
+		
+		a2.addAsset(assetId3);  // make a the parent of a3
+		
+		assertFalse(assetId3.isEqual(assetId2));
+
 	}
 	
 	@Test

@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.repository.simple.search;
 
+import java.util.logging.Logger;
+
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Id;
@@ -10,6 +12,7 @@ import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.simple.SimpleAsset;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.index.db.DbContext;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
@@ -23,6 +26,7 @@ public class SearchResultIterator implements AssetIterator  {
 	 * 
 	 */
 	private static final long serialVersionUID = -719485351032161998L;
+	private static Logger logger = Logger.getLogger(SearchResultIterator.class.getName());
 	String[] assetFileNames;
 	int assetFileNamesIndex = 0;
 	Id repositoryId = null;
@@ -113,7 +117,7 @@ public class SearchResultIterator implements AssetIterator  {
 			return repos.getAsset(assetId);
 			
 		} catch (Exception e) {
-			DbContext.log(e.toString());
+			logger.warning(e.toString());
 		}
 		
 		return null;

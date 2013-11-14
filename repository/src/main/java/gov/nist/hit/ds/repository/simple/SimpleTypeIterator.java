@@ -205,7 +205,8 @@ public class SimpleTypeIterator implements TypeIterator, FilenameFilter {
 		return domain;
 	}
 	public void setDomain(String domain) {
-		this.domain = domain.trim();
+		if (domain!=null)
+			this.domain = domain.trim();
 	}
 
 }

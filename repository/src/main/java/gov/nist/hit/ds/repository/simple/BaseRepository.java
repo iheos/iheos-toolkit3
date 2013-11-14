@@ -11,7 +11,9 @@ import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
@@ -151,16 +153,34 @@ public abstract class BaseRepository implements Repository {
 
 
 	@Override
+	/**
+	 * This method returns an asset that is primarily used for read-only operations. To update an asset return by this method, setAutoFlush to true.
+	 */
 	public Asset getAsset(Id assetId) throws RepositoryException {
 //		load();
 		File reposDir =  new File(Configuration.getRepositoriesDataDir(getSource()).toString()  + File.separator + getId().getIdString());
 		if (!reposDir.exists() || !reposDir.isDirectory())
 			throw new RepositoryException(RepositoryException.UNKNOWN_REPOSITORY + " : " +
 					"directory for repositoryId [" + getId() + "] does not exist");
-		File assetBaseFile = new File(reposDir.toString() + File.separator + assetId.getIdString());
-		SimpleAsset a = new SimpleAsset(getSource()).load(assetId, assetBaseFile);
-		a.setSource(getSource());
+		// File assetBaseFile = new File(reposDir.toString() + File.separator + assetId.getIdString());
+		SimpleAsset a = new SimpleAsset(getSource());
+		a.setAutoFlush(false);
+		a.setRepository(getReposId());
+		a.setId(assetId);
+		a.load(assetId);
+		
 		return a;
+	}
+	
+	public Asset getAssetByPath(File assetPath) throws RepositoryException {
+		try {
+			SimpleAsset a = new SimpleAsset(getSource());
+			FolderManager.loadProps(a.getProperties(), assetPath);
+			return a;			
+		} catch (Exception ex) {
+			throw new RepositoryException(RepositoryException.ERROR_ASSIGNING_CONFIGURATION + ex.toString());
+		}
+
 	}
 
 	@Override
@@ -338,7 +358,6 @@ public abstract class BaseRepository implements Repository {
 		this.source = source;		
 		
 		root = new File(Configuration.getRepositoriesDataDir(getSource()) + File.separator + getId());
-		
 		
 		load();
 	}

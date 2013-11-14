@@ -547,7 +547,13 @@ public interface Asset {
     public AssetIterator getAssetsByType(gov.nist.hit.ds.repository.api.Type assetType)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
-	public File getPropFile() 
+    public File getPropFile()
+    		throws RepositoryException;
+    
+	public File getPropFile(Id id) 
+			throws RepositoryException;
+	
+	public java.util.Properties getProperties()
 			throws RepositoryException;
 	
     public String getProperty(String key)
@@ -577,7 +583,7 @@ public interface Asset {
 	public File getContentFile() throws RepositoryException;
 
 	public boolean hasContent() throws RepositoryException;
-
+	
     /**
      * Create a new Asset Record of the specified RecordStructure.   The
      * implementation of this method sets the Id for the new object.

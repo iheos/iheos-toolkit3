@@ -24,7 +24,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
 
@@ -167,8 +166,15 @@ public class DbIndexContainer implements IndexContainer, Index {
 		try {
 			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
-			String sqlStr = "insert into "+ repContainerLabel + "("+ repId +"," + DbIndexContainer.assetId + ","+ DbIndexContainer.assetType + ", " +  property +" ) values(?,?,?,?)";
-			dbc.executePrepared(sqlStr, new String[]{repositoryId,assetId,assetType,value});
+			String sqlStr = "insert into "+ repContainerLabel + "("+ repId +"," + DbIndexContainer.assetId + ","+ DbIndexContainer.assetType;
+			if (DbIndexContainer.assetId.equals(property)) {
+				sqlStr += ") values(?,?,?)";
+				dbc.executePrepared(sqlStr, new String[]{repositoryId,assetId,assetType});
+			} else {
+				sqlStr += "," +  property + ") values(?,?,?,?)";
+				dbc.executePrepared(sqlStr, new String[]{repositoryId,assetId,assetType,value});
+			}
+			 			
 			dbc.close();			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -602,18 +608,19 @@ public class DbIndexContainer implements IndexContainer, Index {
 				} catch (Exception ex) {
 					DbContext.log(ex.toString());
 				}
-				
-				
-				
+
 				// Marker flag 
 				// updateIndex(reposId, a.getId().getIdString(), a.getAssetType().getKeyword(), "repoSession", repoSession); 
 						
 				if (!isAssetSynced(a.getRepository().getIdString(), a.getId().getIdString(), hash)) {
-					Properties assetProps = new Properties();
-					try {
-						FileReader fr = new FileReader(a.getPropFile());
-						assetProps.load(fr);
-						fr.close();
+					Properties assetProps = a.getProperties();
+					try {						
+						if (assetProps==null) { // Properties should already be loaded by getAsset call by the Iterator
+							assetProps = new Properties();
+							FileReader fr = new FileReader(a.getPropFile());
+							assetProps.load(fr);
+							fr.close();							
+						}
 						
 						/*
 						String codedRepId = a.getProperty(PropertyKey.REPOSITORY_ID);

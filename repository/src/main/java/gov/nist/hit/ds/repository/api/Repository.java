@@ -4,6 +4,7 @@ import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Type;
 
+import java.io.File;
 import java.util.Properties;
 
 
@@ -617,6 +618,16 @@ public interface Repository extends java.io.Serializable {
      */
     public Asset getAssetByDate(gov.nist.hit.ds.repository.api.Id assetId, long date)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+    /**
+     * 
+     * @param assetId
+     * @param date
+     * @return
+     * @throws gov.nist.hit.ds.repository.api.RepositoryException
+     */
+    public Asset getAssetByPath(File assetPath)
+            throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
      * Get all the dates for the Asset with the specified unique Id.  These
