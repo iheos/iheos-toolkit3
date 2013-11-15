@@ -114,11 +114,14 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 			Type assetType, String name) throws RepositoryException {
 
 		Parameter param = new Parameter();
+		param.setDescription("External source");
 		param.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
+		
+		param.setDescription("Asset name conflicts with repository base name.");
 		param.assertParam(name);
 		param.assertEquals(name.equals(Configuration.REPOSITORY_PROP_FILE_BASENAME), new Boolean(false));
 		
-		param.setDescription("type cannot be null");
+		param.setDescription("Asset Type cannot be null");
 		param.assertNotNull(assetType);
 		
 		param.setDescription("Cannot find type <" + assetType.getKeyword() +">");

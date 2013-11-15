@@ -67,7 +67,8 @@ public class FolderManager {
 						props.getProperty(PropertyKey.DISPLAY_NAME.toString())
 						,props.getProperty(PropertyKey.DESCRIPTION.toString())
 						,props.getProperty(PropertyKey.ASSET_ID.toString())
-				});
+						,LOST_AND_FOUND
+				});				
 
 				File newParentFolder = new File(residingFolder + File.separator + folderName);
 				
@@ -101,7 +102,7 @@ public class FolderManager {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public File[] findById(File reposDir, String assetId) throws RepositoryException {
+	public File[] findById(File reposDir, String assetId, String[] names) throws RepositoryException {
 
 		Parameter param = new Parameter();
 
@@ -117,12 +118,29 @@ public class FolderManager {
 
 		File[] assetPath = getAssetPath(pff, reposDir, assetId);
 		
+		// Does it exist?
 		if (assetPath!=null && assetPath[0]!=null) {
 			return assetPath; 
-		} else {		
-			File assetFile = new File(reposDir + File.separator + assetId + "." + Configuration.PROPERTIES_FILE_EXT);
-			return new File[]{assetFile,null};
+		} else {// New file
+			String safeName = null;
+			try {
+				safeName = FolderManager.getSafeName(names);
+				safeName += "_";
+			} catch (RepositoryException re) {
+				if (assetId!=null && !"".equals(assetId)) {
+					safeName = ""; // no usable properties were available, just use id for now and update filename later when a property becomes available
+				} else { 
+					throw new RepositoryException(RepositoryException.NULL_ARGUMENT + ": " + re.toString());
+				}
+			}
+			String assetFile = reposDir + File.separator + safeName + assetId + Configuration.DOT_SEPARATOR;
+			return new File[]{new File(assetFile + Configuration.PROPERTIES_FILE_EXT),null};
 		}
+//		else {		
+//		File assetFile = new File(reposDir + File.separator + assetId + "." + Configuration.PROPERTIES_FILE_EXT);
+//		return new File[]{assetFile,null};
+//	}
+
 
 		
 	}
@@ -144,11 +162,12 @@ public class FolderManager {
 	}
 
 	/**
-	 * 
+	 * Provide at least one non-null value. The first non-null value will be returned as a safeName.
 	 * @param str
 	 * @return
+	 * @throws RepositoryException 
 	 */
-	private static String getSafeName(String[] str) {
+	public static String getSafeName(String[] str) throws RepositoryException {
 		if (str!=null) {
 			for (String s : str) {
 				if (s!=null) {
@@ -156,7 +175,7 @@ public class FolderManager {
 				}
 			}
 		}
-		return LOST_AND_FOUND;
+		throw new RepositoryException(RepositoryException.NULL_ARGUMENT + "Must provide at least one non-null value.");
 	}
 
 

@@ -51,7 +51,7 @@ public class SimpleTestSuite {
 			Installation.reset();
 			Installation.installation().initialize(); 			
  			
- 			// Test assets created will be automatically removed after the test suite
+ 			// Test assets created will be automatically removed after the test suite run is complete
  						 			
 			Configuration.configuration();						
 		}

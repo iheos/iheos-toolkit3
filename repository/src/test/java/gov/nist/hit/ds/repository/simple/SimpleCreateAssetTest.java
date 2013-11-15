@@ -51,10 +51,23 @@ public class SimpleCreateAssetTest {
 	public void createBadlyNamedAssetTest() {
 		String name = "repository";
 		try {
-			repos.createNamedAsset("My Deletable Site", "This is my site", new SimpleType("site"), name);
+			repos.createNamedAsset("My Deletable Site", "This is my site", new SimpleType("siteAsset"), name);
 			fail("Should have thrown exception");
 		} catch (RepositoryException e) {
 			// good!
 		}
 	}
+	
+	@Test
+	public void createDuplicateNamedAssetTest() {
+		String name = "My Deletable Site";
+		try {
+			repos.createNamedAsset("My Deletable Site", "This is my site", new SimpleType("siteAsset"), name);
+			fail("Should have thrown exception");
+		} catch (RepositoryException e) {
+			e.toString();
+			// good!
+		}
+	}
+
 }

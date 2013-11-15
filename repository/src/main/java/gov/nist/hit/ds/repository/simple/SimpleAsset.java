@@ -104,7 +104,7 @@ public class SimpleAsset implements Asset, Flushable {
 		File reposDir = getReposDir();
 		
 		try {			
-			File[] assetPath = new FolderManager().findById(reposDir, assetId.getIdString());
+			File[] assetPath = new FolderManager().findById(reposDir, assetId.getIdString(), null);
 			return assetPath[0].getParentFile();
 			
 		} catch (Exception ex) {
@@ -221,7 +221,7 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 	@Override	
 	public File getContentFile() throws RepositoryException {
-		
+	
 		File assetContentFile = new File(getAssetBaseFile(this.getId()).toString() + "." + Configuration.CONTENT_FILE_EXT);
 		
 		String[] ext = getContentExtension();
@@ -369,13 +369,13 @@ public class SimpleAsset implements Asset, Flushable {
 			throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
 					"source directory [" + getSource().getLocation().toString() + "] does not exist");		
 		
-		File[] assetPath = new FolderManager().findById(getReposDir(), id.getIdString());
-		// Does it exist?
-		if (assetPath!=null && assetPath[0]!=null)
-			return assetPath[0];
-		else // New file
-			return new File(getReposDir() + File.separator + id.getIdString() + Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT);
+		String names[] = new String[] {getDisplayName() ,getDescription()};
+		File[] assetPath = new FolderManager().findById(getReposDir(), id.getIdString(), names);
 
+		if (assetPath!=null && assetPath[0]!=null) {
+			return assetPath[0];
+		} 
+		throw new RepositoryException(RepositoryException.NULL_ARGUMENT);
 		// Not safe to assume the base dir residence anymore after the introduction of folder based storage
 		// return new File(getAssetBaseFile(id) + "." + Configuration.PROPERTIES_FILE_EXT);		
 	}
@@ -465,10 +465,9 @@ public class SimpleAsset implements Asset, Flushable {
 
 	@Override
 	public void flush(File propFile) throws RepositoryException {
-				
-		// TODO: Clarify with Bill on this: what should happen when repos.createNamedAsset uses a prexising name in the same repos.
-		// assertUniqueName(propFile);
-		// Answer: raise RepositoryException, use assetUniqueName
+						
+		if (getProperty(PropertyKey.UPDATED_DATE)==null)
+			assertUniqueName(propFile);
 				
 		try {			
 			setPropertyTemp(PropertyKey.UPDATED_DATE, new Hl7Date().now());	
@@ -500,7 +499,7 @@ public class SimpleAsset implements Asset, Flushable {
 		// Make sure the file name is not null and another file doesn't already exist with the same name in the case of a new asset only		
 		if (propFile!=null) {
 			if (propFile.exists()) 
-				throw new RepositoryException("A file already exists with the same name: " + propFile.toString());
+				throw new RepositoryException("An asset property file already exists with the same name: " + propFile.toString());
 		} else {
 			throw new RepositoryException("Naming convention error: propFile name is null. ");
 		}

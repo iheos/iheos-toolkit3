@@ -820,12 +820,6 @@ public class DbIndexContainer implements IndexContainer, Index {
 			// This needs to be independent from the syncRep call because there columns might not have fully expanded 
 			int orderBy=0;
 			for (Repository rep : repositories) {
-
-				/*
-				String sqlString = "insert into session.SearchResults(repId,assetId,reposAcs,reposOrder,displayOrder)"
-						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (orderBy++) + "," + displayOrder + " from " + repContainerLabel 
-						+ " where " + repId + " = '"+  rep.getId().getIdString() +"' and( "+ searchCriteriaWhere + ")" ;
-				*/
 				
 				String sqlStr = "insert into "+searchSession+"(repId,assetId,reposAcs,reposOrder,displayOrder,createdDate)"
 						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (orderBy++) + "," + displayOrder + "," + createdDate + " from " + repContainerLabel 
