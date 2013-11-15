@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 
 /**
@@ -15,7 +16,7 @@ import java.sql.Statement;
  *
  */
 public class DbContext {
-
+	private static Logger logger = Logger.getLogger(DbContext.class.getName());
 	private Connection connection = null;
 	private static boolean debugMode = !true;
 	
@@ -33,18 +34,7 @@ public class DbContext {
 
 	public void setConnection(Connection connection) {
 		this.connection = connection;
-	}
-
-	/**
-	 * A simple log without access level control
-	 * 
-	 * @param str
-	 */
-	public static void log(String str) {
-		if (debugMode) {
-			System.out.println(str);
-		}
-	}
+	}	
 	
 	public int getInt(String sqlStr) throws RepositoryException {
 		int intVal = 0;
@@ -61,7 +51,7 @@ public class DbContext {
 			throw new RepositoryException("Error, Sqlstate:" + e.getSQLState() , e);
 		}
 		
-		log("value: " + intVal);
+		logger.fine("value: " + intVal);
 		return intVal;
 		
 	}
@@ -81,7 +71,7 @@ public class DbContext {
 			throw new RepositoryException("Error, Sqlstate:" + e.getSQLState() , e);
 		}
 		
-		log("value: " + stringVal);
+		logger.fine("value: " + stringVal);
 		return stringVal;
 		
 	}
@@ -94,7 +84,7 @@ public class DbContext {
 	 */
 	public void internalCmd(String sqlStr) throws SQLException {
 		
-		log("IndexContainer SQL: " +sqlStr);
+		logger.fine("IndexContainer SQL: " +sqlStr);
 		
 		if (connection!=null) {
 			Statement statement = connection.createStatement();
@@ -117,12 +107,12 @@ public class DbContext {
 	 */
 	public int executePrepared(String sqlStr, String[] params) throws SQLException {
 
-		log("IndexContainer SQL: " +sqlStr);
+		logger.fine("IndexContainer SQL: " +sqlStr);
 		if (connection!=null) {
 			PreparedStatement statement = connection.prepareStatement(sqlStr);
 			int parameterIndex=1;
 			for (String p : params) {
-				log("Setting param: "+parameterIndex + " to <" + p + ">");			
+				logger.fine("Setting param: "+parameterIndex + " to <" + p + ">");			
 
 				statement.setString(parameterIndex++, p);
 			}
@@ -133,12 +123,12 @@ public class DbContext {
 	
 	public ResultSet executeQuery(String sqlStr, String[] params) throws SQLException {
 
-		log("IndexContainer SQL: " +sqlStr);
+		logger.fine("IndexContainer SQL: " +sqlStr);
 		if (connection!=null) {
 			PreparedStatement statement = connection.prepareStatement(sqlStr);
 			int parameterIndex=1;
 			for (String p : params) {
-				log("Setting param: "+parameterIndex + " to <" + p + ">");			
+				logger.fine("Setting param: "+parameterIndex + " to <" + p + ">");			
 
 				statement.setString(parameterIndex++, p);
 			}
@@ -149,7 +139,7 @@ public class DbContext {
 
 	public ResultSet executeQuery(String sqlStr) throws SQLException {
 
-		log("IndexContainer SQL: "+sqlStr);
+		logger.fine("IndexContainer SQL: "+sqlStr);
 		
 		PreparedStatement statement = connection.prepareStatement(sqlStr);
 		return  statement.executeQuery();
@@ -161,7 +151,7 @@ public class DbContext {
 			rs.close();
 			this.close();
 		} catch (SQLException e) {
-			log(e.toString());
+			logger.fine(e.toString());
 		}
 		
 	}

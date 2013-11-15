@@ -12,9 +12,7 @@ import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.SimpleAsset;
 import gov.nist.hit.ds.repository.simple.SimpleId;
-import gov.nist.hit.ds.repository.simple.index.db.DbContext;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 
@@ -25,8 +23,8 @@ public class SearchResultIterator implements AssetIterator  {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -719485351032161998L;
 	private static Logger logger = Logger.getLogger(SearchResultIterator.class.getName());
+	private static final long serialVersionUID = -719485351032161998L;
 	String[] assetFileNames;
 	int assetFileNamesIndex = 0;
 	Id repositoryId = null;
@@ -108,7 +106,7 @@ public class SearchResultIterator implements AssetIterator  {
 				if (reposSrcAcs!=null) {
 					reposSrc = Configuration.getRepositorySrc(RepositorySource.Access.valueOf(reposSrcAcs));
 				} else {
-					DbContext.log("No [null] access indexed for " + repId);
+					logger.fine("No [null] access indexed for " + repId);
 				}				
 			}			
 			// System.out.println(assetId.getIdString());

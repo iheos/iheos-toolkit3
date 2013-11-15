@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.sql.rowset.CachedRowSet;
 
@@ -39,7 +40,7 @@ import com.sun.rowset.CachedRowSetImpl;
 public class DbIndexContainer implements IndexContainer, Index {
 
 
-	
+	private static Logger logger = Logger.getLogger(DbIndexContainer.class.getName());
 	private static final String repContainerLabel = "repositoryIndex";		
 	private static final String assetId = PnIdentifier.getQuotedIdentifer(PropertyKey.ASSET_ID);
 	private static final String assetType = PnIdentifier.getQuotedIdentifer(PropertyKey.ASSET_TYPE);
@@ -67,7 +68,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 		String repContainerHead = 
 		"create table " + repContainerLabel;				/* This is the master container for all indexable asset properties */
 	
-		DbContext.log("using label " + repContainerLabel);
+		logger.fine("using label " + repContainerLabel);
 		
 		return repContainerHead + repContainerDefinition;
 		
@@ -127,7 +128,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 					dbc.internalCmd(index);
 					
 				} catch (SQLException e) {
-					DbContext.log("index probably exists.");
+					logger.fine("index probably exists.");
 				}
 
 				dbc.close();				
@@ -209,7 +210,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 						+"= ? and " + DbIndexContainer.assetType +  " = ?  and ("+propCol+" is null or "+propCol+" != ?)";
 				
 				int rowsAffected = dbc.executePrepared(sqlStr, new String[]{value, assetId, repositoryId, assetType, value });				
-				DbContext.log("rows affected: " + rowsAffected);
+				logger.fine("rows affected: " + rowsAffected);
 			}
 			dbc.close();
 		} catch (SQLException e) {
@@ -230,7 +231,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 
 				String sqlStr = "delete from "+ repContainerLabel + " where " + repId + " = ? and repoSession !=?";
 				int rowsAffected = dbc.executePrepared(sqlStr, new String[]{reposId,sessionId});
-				DbContext.log("rows affected: " + rowsAffected);
+				logger.fine("rows affected: " + rowsAffected);
 				
 				dbc.close();
 			} catch (SQLException e) {
@@ -293,7 +294,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 						sqlStr = "alter table "+ repContainerLabel + " add column " + dbCol + " varchar(64)";					
 						dbc.internalCmd(sqlStr);
 					} else {
-						DbContext.log("Column "+ c +" already exists " + ((assetType!=null)?"for assetType: "+assetType:""));
+						logger.fine("Column "+ c +" already exists " + ((assetType!=null)?"for assetType: "+assetType:""));
 					}
 					
 				}
@@ -305,7 +306,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 					dbc.internalCmd(index);					
 				}
 			} catch (SQLException e) {
-				DbContext.log("Index probably exists.");
+				logger.fine("Index probably exists.");
 			}
 			dbc.close();			
 		} catch (SQLException e) {
@@ -343,7 +344,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			ResultSet rs = dbc.executeQuery(sqlStr);
 			while (rs.next()) {
 		          records = rs.getInt("ct");
-		          DbContext.log("records: " + records);
+		          logger.fine("records: " + records);
 
 			}
 			dbc.close(rs);			
@@ -463,7 +464,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			e.printStackTrace();
 			return false;
 		}
-		DbContext.log("returning false");
+		logger.fine("returning false");
 		return false;
 		
 	}
@@ -530,7 +531,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 				}
 			}
 		} catch (RepositoryException e) {
-			DbContext.log(e.toString());
+			logger.fine(e.toString());
 		}
 		return indexableAssetProperties;
 	}
@@ -606,7 +607,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 					paramValues[cx++] = a.getId().getIdString();
 					
 				} catch (Exception ex) {
-					DbContext.log(ex.toString());
+					logger.fine(ex.toString());
 				}
 
 				// Marker flag 
@@ -646,7 +647,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 						try {					
 										
 							String propertyValue = a.getProperty(propertyName);
-							DbContext.log("prop-" + propertyName + " -- " + propertyValue);
+							logger.fine("prop-" + propertyName + " -- " + propertyValue);
 							if (propertyValue!=null && !"".equals(propertyValue)) {
 								updateIndex(reposId, a.getId().getIdString(), a.getAssetType().getKeyword(), getDbIndexedColumn(a.getAssetType().getKeyword(),propertyName), propertyValue);
 								totalAssetsIndexed++;
@@ -687,10 +688,10 @@ public class DbIndexContainer implements IndexContainer, Index {
 			String sqlStr = "delete from " + repContainerLabel 
 					+ " where " + repId + "=? and " + assetId + " not in(" + sbParam.toString() + ")";
 			int rowsAffected = dbc.executePrepared(sqlStr, paramValues);
-			DbContext.log("rows affected: " + rowsAffected);
+			logger.fine("rows affected: " + rowsAffected);
 
 		} catch (Exception ex) {
-			DbContext.log("error in stale index cleanup. " + ex.toString());
+			logger.fine("error in stale index cleanup. " + ex.toString());
 		}
 	}
 	
@@ -719,7 +720,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			byte[] propContent = FileUtils.readFileToByteArray(f);
 			return new Hash().compute_hash(propContent);
 		} catch (Exception e) {
-			DbContext.log("Hash compute error on " + f.toString() + " " + e.toString());
+			logger.fine("Hash compute error on " + f.toString() + " " + e.toString());
 		}
 		return "";
 	}
@@ -789,7 +790,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			// Make sure properties exist
 			ArrayList<String> searchProperties = searchCriteria.getProperties();
 			String searchCriteriaWhere = searchCriteria.toString();
-			DbContext.log(searchCriteriaWhere);
+			logger.fine(searchCriteriaWhere);
 			
 			
 			
@@ -829,9 +830,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 				//	 dbc.internalCmd(sqlString);
 					
 					int rowsAffected = dbc.executePrepared(sqlStr, new String[]{rep.getId().getIdString()});
-					DbContext.log("rows affected: " + rowsAffected);
+					logger.fine("rows affected: " + rowsAffected);
 				} catch (SQLException e) {
-					DbContext.log( "possible non-existent column in where clause? " + e.toString());
+					logger.fine("possible non-existent column in where clause? " + e.toString());
 				}
 			}
 					
