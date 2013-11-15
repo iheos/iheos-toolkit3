@@ -221,19 +221,14 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 	@Override	
 	public File getContentFile() throws RepositoryException {
-	
-		File assetContentFile = new File(getAssetBaseFile(this.getId()).toString() + "." + Configuration.CONTENT_FILE_EXT);
+		String assetContentFilePart = getAssetBaseFile(this.getId()).toString();
 		
 		String[] ext = getContentExtension();
-		if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {
-			try {
-				return getContentFile(ext[2]);
-			} catch (RepositoryException e) {
-				// content may not exist
-			}
+		if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {			
+				return new File(assetContentFilePart + Configuration.DOT_SEPARATOR + ext[2]);			
 		} else {
 			try {
-				return assetContentFile;
+				return new File(assetContentFilePart + Configuration.DOT_SEPARATOR + Configuration.CONTENT_FILE_EXT);
 			} catch (Exception e) {
 				// content may not exist
 			} 
@@ -380,17 +375,6 @@ public class SimpleAsset implements Asset, Flushable {
 		// return new File(getAssetBaseFile(id) + "." + Configuration.PROPERTIES_FILE_EXT);		
 	}
 	
-
-
-	File getContentFile(String ext) throws RepositoryException {
-		 				
-		if (!getSource().getLocation().exists())
-			throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
-					"source directory [" + getSource().getLocation().toString() + "] does not exist");
-
-		return new File(getAssetBaseFile(this.getId()).toString()  + "." + ext);
-	}
-
 	String partTwo(String in, String separater) {
 		String[] parts = in.split(separater);
 		if (parts == null || parts.length < 2) return in;
@@ -464,8 +448,11 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
 	@Override
-	public void flush(File propFile) throws RepositoryException {
-						
+	public void flush(File propFile) throws RepositoryException {					
+		if (!getSource().getLocation().exists())
+		throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
+				"source directory [" + getSource().getLocation().toString() + "] does not exist");
+
 		if (getProperty(PropertyKey.UPDATED_DATE)==null)
 			assertUniqueName(propFile);
 				
@@ -477,11 +464,12 @@ public class SimpleAsset implements Asset, Flushable {
 			properties.store(writer, "");
 			writer.close();
 			if (content != null) {
+				File contentFile = getContentFile();
 				String[] ext = getContentExtension();
 				if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {					
-					Io.stringToFile(getContentFile(ext[2]), new String(content));
+					Io.stringToFile(contentFile, new String(content));
 				} else {
-					OutputStream os = new FileOutputStream(getContentFile());
+					OutputStream os = new FileOutputStream(contentFile);
 					os.write(content);
 					os.close();
 				}
@@ -543,6 +531,7 @@ public class SimpleAsset implements Asset, Flushable {
 		
 			}
 		} catch (Exception e) {
+			logger.fine("Error while calculating expiration date: " + e.toString());
 			// This is a non-blocking method
 		}
 	}
