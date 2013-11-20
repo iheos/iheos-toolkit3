@@ -36,7 +36,7 @@ public class SearchResultIterator implements AssetIterator  {
 	
 
 	/**
-	 * Retrieves a comprehensive search result of all indexed and non-indexed assets. 
+	 * This iterator retrieves a comprehensive set of search results including both the indexed and the non-indexed assets. 
 	 * Search results are provided in the same order as specified by the repository parameter, grouped by assetType.
 	 * Search results are stored in a temporary table called Session.SearchResults, which is automatically cleaned-up when the db session is disconnected.
 	 * To avoid page overloading with numerous results, we use a paging method to retrieve a reasonable amount of records each time rather than the entire set.

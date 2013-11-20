@@ -1,7 +1,5 @@
 package gov.nist.hit.ds.repository.presentation;
 
-import gov.nist.hit.ds.utilities.csv.CSVEntry;
-import gov.nist.hit.ds.utilities.csv.CSVParser;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -20,6 +18,8 @@ import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.utilities.csv.CSVEntry;
+import gov.nist.hit.ds.utilities.csv.CSVParser;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 
 import java.io.IOException;
@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -198,6 +199,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 					aDst.setTxtContent(XmlFormatter.htmlize(content));			
 				} else if ("text/csv".equals(aSrc.getMimeType())) {
 					aDst.setCsv(processCsvContent(content));
+				} else if ("text/json".equals(aSrc.getMimeType())) {
+					aDst.setTxtContent(prettyJson(content));
 				} else {
 					content = SafeHtmlUtils.fromString(content).asString();
 					aDst.setTxtContent(content);
@@ -216,6 +219,36 @@ public class PresentationData implements IsSerializable, Serializable  {
 		
 		return aDst;
 	}
+	
+	/**
+	 * @param aDst
+	 * @param content
+	 */
+	private static String prettyJson(String content) {
+
+//	   JSONValue jsonValue = JSONParser.parseStrict(content);
+//
+//       if (jsonValue != null) {
+    	   try {
+    		   
+	    	   ObjectMapper mapper = new ObjectMapper();
+	    	   
+	    	   Object json = mapper.readValue(content, Object.class);
+	    	      	   
+	    	   String pretty = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+	    	   
+	    	   return pretty;
+    	   
+    	   } catch (Exception ex) {
+    		   return content;
+    	   }
+    	       	   
+//         } else {
+//           throw new RepositoryException(RepositoryException.IO_ERROR + "Could not parse JSON"); 
+//         }			
+//
+	}
+
 
 	/**
 	 * @param aDst

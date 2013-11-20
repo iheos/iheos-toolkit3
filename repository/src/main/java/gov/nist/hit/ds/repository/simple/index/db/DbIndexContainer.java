@@ -614,6 +614,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 				// updateIndex(reposId, a.getId().getIdString(), a.getAssetType().getKeyword(), "repoSession", repoSession); 
 						
 				if (!isAssetSynced(a.getRepository().getIdString(), a.getId().getIdString(), hash)) {
+					String typeKeyword = (a.getAssetType()==null?null:a.getAssetType().getKeyword());
 					Properties assetProps = a.getProperties();
 					try {						
 						if (assetProps==null) { // Properties should already be loaded by getAsset call by the Iterator
@@ -649,7 +650,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 							String propertyValue = a.getProperty(propertyName);
 							logger.fine("prop-" + propertyName + " -- " + propertyValue);
 							if (propertyValue!=null && !"".equals(propertyValue)) {
-								updateIndex(reposId, a.getId().getIdString(), a.getAssetType().getKeyword(), getDbIndexedColumn(a.getAssetType().getKeyword(),propertyName), propertyValue);
+								updateIndex(reposId, a.getId().getIdString(), typeKeyword , getDbIndexedColumn(a.getAssetType().getKeyword(),propertyName), propertyValue);
 								totalAssetsIndexed++;
 							}
 						} catch (Exception e)  {
@@ -658,8 +659,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 					
 					}
 	
-					updateIndex(reposId, a.getId().getIdString(), a.getAssetType().getKeyword(), "hash", hash); // Note the use of unquoted identifier vs. quoted identifiers for asset property references 								
-					updateIndex(reposId, a.getId().getIdString(), a.getAssetType().getKeyword(), "reposAcs", repos.getSource().getAccess().name()); // Note the use of unquoted identifier vs. quoted identifiers for asset property references
+					updateIndex(reposId, a.getId().getIdString(), typeKeyword, "hash", hash); // Note the use of unquoted identifier vs. quoted identifiers for asset property references 								
+					updateIndex(reposId, a.getId().getIdString(), typeKeyword, "reposAcs", repos.getSource().getAccess().name()); // Note the use of unquoted identifier vs. quoted identifiers for asset property references
 				}
 				
 			}		

@@ -1,16 +1,14 @@
 package gov.nist.hit.ds.repository.simple.search;
 
 import static org.junit.Assert.assertTrue;
+import gov.nist.hit.ds.repository.api.RepositorySource;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import gov.nist.hit.ds.repository.api.RepositorySource;
-import gov.nist.hit.ds.repository.api.RepositorySource.Access;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 
 import org.junit.Test;
 
@@ -58,8 +56,6 @@ public class MiscTest {
 			
 			x.equals("");
 			
-			
-			
 		} catch (Exception ex) {
 			;
 		}
@@ -84,6 +80,7 @@ public class MiscTest {
 		System.out.print(XmlFormatter.htmlize("<html><head><title>Title</title></head><body><h1>Header</h1></body></html>"));
         
 	}
+	
 	
 	@Test
 	public void listTest() {

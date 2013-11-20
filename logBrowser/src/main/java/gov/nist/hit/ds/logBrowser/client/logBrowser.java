@@ -304,7 +304,11 @@ public class LogBrowser implements EntryPoint {
 									String xmlStr = an.getTxtContent().replace("<br/>", "\r\n");
 									String shStr = SyntaxHighlighter.highlight(xmlStr, BrushFactory.newXmlBrush() , false);
 									centerPanel.add(new HTML(shStr));
-								} else {
+								} else if ("text/json".equals(an.getMimeType())) {
+									// centerPanel.add(new HTML("<pre>" + an.getTxtContent() + "</pre>"));
+									String shStr = SyntaxHighlighter.highlight(an.getTxtContent(), BrushFactory.newCssBrush() , false);
+									centerPanel.add(new HTML(shStr));
+								} else {								
 									centerPanel.add(new HTML(an.getTxtContent()));	
 								}								
 							} else {

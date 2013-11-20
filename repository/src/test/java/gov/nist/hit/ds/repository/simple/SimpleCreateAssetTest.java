@@ -69,5 +69,16 @@ public class SimpleCreateAssetTest {
 			// good!
 		}
 	}
+	
+	@Test
+	public void createSafeNamedAssetTest() {
+		String name = "My Deletable $ite!";
+		try {
+			repos.createNamedAsset(name, "This is my site", new SimpleType("siteAsset"), name);
+		} catch (RepositoryException e) {
+			e.toString();
+			fail("Should NOT have thrown exception becuase the name should be have been converted to a safe name");
+		}
+	}
 
 }

@@ -13,6 +13,8 @@
 
 	<!-- Extension for each wanted language to support -->
 	<script src="scripts/shBrushXml.js" />
+	<script src="scripts/shBrushCss.js" />
+	<script src="scripts/shBrushPlain.js" />
 	<!--  END JSNI: sh 3rd party -->
 	
 	<!-- Inherit the core Web Toolkit stuff. -->

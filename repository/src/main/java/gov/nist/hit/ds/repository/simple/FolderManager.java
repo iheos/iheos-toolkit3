@@ -171,7 +171,8 @@ public class FolderManager {
 		if (str!=null) {
 			for (String s : str) {
 				if (s!=null) {
-					return s.replaceAll("[^@A-Za-z0-9-_. ]+", "");
+					String safeName = s.replaceAll("[^@A-Za-z0-9-_. ]+", " ");
+					return safeName.trim();
 				}
 			}
 		}

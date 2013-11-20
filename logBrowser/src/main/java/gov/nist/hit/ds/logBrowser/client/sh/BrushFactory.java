@@ -17,5 +17,24 @@ public class BrushFactory extends JavaScriptObject {
 	
 	public static native JavaScriptObject newPlainBrush() /*-{
 		return new $wnd.SyntaxHighlighter.brushes.Plain();
-}-*/;
+	}-*/;
+	
+	public static native JavaScriptObject newCssBrush() /*-{
+		return new $wnd.SyntaxHighlighter.brushes.CSS();
+	}-*/;
+	
+	/**
+	 * 
+	 * Template:
+	 * 	public static native JavaScriptObject newCssBrush() C{
+		return new $wnd.SyntaxHighlighter.brushes.xxxx();
+	}C;
+	 * 
+	 * Look in the shBrushY.js file to get the brush id:
+	 * 
+	 * 	Brush.prototype	= new SyntaxHighlighter.Highlighter();
+	Brush.aliases	= ...
+
+	SyntaxHighlighter.brushes.[xxxx]
+	 */
 }

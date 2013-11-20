@@ -7,10 +7,6 @@ import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.Type;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.SimpleAsset;
-import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
-import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.io.File;

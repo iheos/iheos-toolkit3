@@ -124,10 +124,10 @@ public class SimpleRepositoryTest {
 					);
 			
 			
-			fail("An exception should be thrown");
+			fail("An exception should have been thrown");
 			
 		} catch (RepositoryException re) {
-			re.hashCode();
+			re.toString();
 			// This is expected
 			;
 		}
