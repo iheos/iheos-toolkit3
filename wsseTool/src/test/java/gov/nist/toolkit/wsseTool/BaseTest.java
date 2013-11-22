@@ -19,13 +19,13 @@ public class BaseTest {
 	 */
 	@Before
 	public final void start() {
-		log.info("------------ Test start : " + name.getMethodName()
+		log.debug("------------ Test start : " + name.getMethodName()
 				+ " -------------------");
 	}
 
 	@After
 	public final void end() {
-		log.info("------------ Test end : " + name.getMethodName()
+		log.debug("------------ Test end : " + name.getMethodName()
 				+ " -------------------");
 	}
 }

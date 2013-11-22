@@ -2,6 +2,7 @@ package gov.nist.hit.ds.wsseTool.validation.tests.run
 
 
 import static org.junit.Assert.*
+import static org.junit.Assume.*
 import gov.nist.hit.ds.wsseTool.api.config.*
 import gov.nist.hit.ds.wsseTool.time.TimeUtil
 import gov.nist.hit.ds.wsseTool.validation.data.AuthnContextClassRef
@@ -56,7 +57,10 @@ public class AuthnStatementVal extends BaseVal {
 	@Optional
 	@Validation(id="1077", rtm=["79"], status=ValConfig.Status.not_implemented)
 	public void SessionIndex(){
-		log.info("session index is optional")
+		GPathResult loc = header.map.authnStatement.children.findAll{ it.@Name == "SessionIndex"}
+		assumeTrue("session index not present but is optional.", !loc.isEmpty());
+		
+		//TODO check. No test is implemented : no constraints? @Antoine
 	}
 
 	@Optional
@@ -64,9 +68,7 @@ public class AuthnStatementVal extends BaseVal {
 	public void SubjectLocality(){
 		GPathResult loc = header.map.authnStatement.children.findAll{ it.@Name == "SubjectLocality"}
 
-		if(loc.isEmpty()){
-			log.info("subject locality not present but is optional."); return
-		}
+		assumeTrue("subject locality not present but is optional.", !loc.isEmpty());
 
 		assertTrue("DNSName should be present", loc.@DNSName != null)
 

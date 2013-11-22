@@ -10,7 +10,7 @@ import gov.nist.hit.ds.wsseTool.validation.tests.CommonVal
 import gov.nist.hit.ds.wsseTool.validation.tests.ValDescriptor
 
 import static org.junit.Assert.*
-
+import static org.junit.Assume.*
 
 @RunWith(ValRunnerWithOrder.class)
 public class TimestampVal extends BaseVal {
@@ -36,8 +36,13 @@ public class TimestampVal extends BaseVal {
 
 		assertTrue("timestamp expiration date not in UTC format: "+ d, TimeUtil.isDateInUTCFormat(d))
 
-		log.info(ValDescriptor.NOT_IMPLEMENTED)
-		log.info(ValDescriptor.LATER_THAN_CAPTURED_TIME)
+	}
+	
+	@Validation(id="1022" , rtm=["52", "54"])
+	public void expiresLaterThanCapturedTime() {
+		String d = header.map.timestamp.Expires[0].text()
+
+		assumeTrue(ValDescriptor.NOT_IMPLEMENTED + ValDescriptor.LATER_THAN_CAPTURED_TIME , false );
 	}
 
 	@Validation(id="1023", rtm=["168"])

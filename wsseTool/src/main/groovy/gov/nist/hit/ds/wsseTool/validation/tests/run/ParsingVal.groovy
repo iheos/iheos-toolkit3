@@ -43,8 +43,6 @@ public class ParsingVal extends BaseVal {
 		def subjects = header.map.assertion.children().findAll{it.name() == 'Subject'}
 		def attributeStatements = header.map.assertion.children().findAll{it.name() == 'AttributeStatement'}
 		def authnStatements = header.map.assertion.children().findAll{it.name() == 'AuthnStatement'}
-		def conditions = header.map.assertion.children().findAll{it.name() == 'Conditions'} //optional
-		def advices = header.map.assertion.children().findAll{it.name() == 'Advice'} //optional
 
 		assertEquals( "assertion must have a unique issuer", 1 , issuers.size())
 		assertEquals( "assertion must have a unique signature", 1, a_signatures.size())
@@ -55,7 +53,7 @@ public class ParsingVal extends BaseVal {
 		GPathResult children = header.map.assertion.children()
 
 		assertTrue ( MessageFormat.format("assertion first child must be an issuer but was {0}", children[0]), children[0] == header.map.issuer)
-		assertTrue ( MessageFormat.format("assertion second child must be a signature but was {0}", children[1]),children[1] == header.map.a_signature)
+		assertTrue ( MessageFormat.format("assertion second child must be a signature but was {0}", children[1]), children[1] == header.map.a_signature)
 		assertTrue ( MessageFormat.format("assertion third child must be a subject but was {0}", children[2]), children[2] == header.map.subject)
 
 	}

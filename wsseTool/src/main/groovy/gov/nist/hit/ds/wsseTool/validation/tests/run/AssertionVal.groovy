@@ -1,6 +1,9 @@
 package gov.nist.hit.ds.wsseTool.validation.tests.run
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*
+import static org.junit.Assume.*;
+
 import gov.nist.hit.ds.wsseTool.time.TimeUtil
 import gov.nist.hit.ds.wsseTool.validation.data.IssuerFormat
 import gov.nist.hit.ds.wsseTool.validation.engine.*
@@ -45,7 +48,7 @@ public class AssertionVal extends BaseVal {
 
 	@Validation(id="1028" , rtm=["69"], status=ValConfig.Status.not_implementable)
 	public void issuerIsSecurityOfficer() {
-		log.info(ValDescriptor.ISSUER_IS_SECURITY_OFFICER)
+		assumeTrue(ValDescriptor.NOT_IMPLEMENTABLE + ValDescriptor.ISSUER_IS_SECURITY_OFFICER , false)
 	}
 
 	@Validation(id="1029", rtm=["70"])
@@ -57,11 +60,8 @@ public class AssertionVal extends BaseVal {
 	@Validation(id="1030", rtm=["69","70"])
 	public void issuerEmailValid(){
 		String format = header.map.issuer.@Format.text()
-
-		if(format != "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"){
-			log.info("test conditional if @format : urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress")
-			return
-		}
+		
+		assumeThat("run only if issuer is an email address", format, is("urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"));
 		
 		assertTrue( MessageFormat.format("invalid email address : {0}", format), CommonVal.validEmail(format))
 	}
@@ -69,10 +69,8 @@ public class AssertionVal extends BaseVal {
 	@Validation(id="1031", rtm=["69","70"])
 	public void issuerDNValid(){
 		String format = header.map.issuer.@Format.text()
-		if(format != "urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName"){
-			log.info("test conditional if @format : urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName")
-			return
-		}
+		
+		assumeThat("run only if issuer is a X509SubjectName", format, is("urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName"));
 
 		String name = header.map.issuer.text().trim()
 		
@@ -81,15 +79,14 @@ public class AssertionVal extends BaseVal {
 
 	@Validation(id="1057", rtm=["62","71"])
 	public void subjectRequired(){
-		
-		assertTrue( "subject is required", header.map.subject != null)
+		String id = header.map.assertion.@ID.text()
+		assertTrue( MessageFormat.format("subject is required for assertion : {0}", id), header.map.subject != null)
 		
 	}
 
 	@Validation(id="1058", rtm=["72"], status=ValConfig.Status.not_implementable)
 	public void subjectNameID(){
-		log.info(ValDescriptor.NOT_IMPLEMENTABLE)
-		log.info(ValDescriptor.SUBJECT_NAMED_ID)
+		assumeTrue(ValDescriptor.NOT_IMPLEMENTABLE + ValDescriptor.SUBJECT_NAMED_ID, false)
 	}
 
 	@Validation(id="1059", rtm=["72","73"])
@@ -105,10 +102,7 @@ public class AssertionVal extends BaseVal {
 	public void subjectNameIDEmailValid(){
 		String format = header.map.subject.NameID[0].@Format.text()
 
-		if(format != "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"){
-			log.info("test conditional if @format : urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress")
-			return
-		}
+		assumeThat("optional test on @format ", format, is("urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"));
 
 		assertTrue( MessageFormat.format("invalid email address : {0}", format) , CommonVal.validEmail(format))
 		
@@ -117,10 +111,8 @@ public class AssertionVal extends BaseVal {
 	@Validation(id="1061", rtm=["72","73"], category="conditional")
 	public void nameIDX509SubjectNameValid(){
 		String format = header.map.subject.NameID[0].@Format.text()
-		if(format != "urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName"){
-			log.info("test conditional if @format : urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName")
-			return
-		}
+		
+		assumeThat("optional test on @format ", format, is("urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName"));
 
 		String name = header.map.subject.NameID[0].text().trim()
 		
@@ -171,7 +163,6 @@ public class AssertionVal extends BaseVal {
 		String creationDate = header.map.timestamp.Created[0].text().trim()
 		DateTime creationTime = TimeUtil.parseDateString(creationDate)
 
-
 		String notBefore = header.map.subject.SubjectConfirmation[0].SubjectConfirmationData[0].@NotBefore.text()
 		String notOnOrAfter = header.map.subject.SubjectConfirmation[0].SubjectConfirmationData[0].@NotOnOrAfter.text()
 
@@ -193,7 +184,6 @@ public class AssertionVal extends BaseVal {
 	public void conditionsNotBefore(){
 		String creationDate = header.map.timestamp.Created[0].text().trim()
 		DateTime creationTime = TimeUtil.parseDateString(creationDate)
-
 
 		String notBefore = header.map.conditions.@NotBefore.text()
 		String notOnOrAfter = header.map.conditions.@NotOnOrAfter.text()

@@ -42,13 +42,13 @@ public class BaseVal {
 	 */
 	@Before
 	public final void start2() {
-		System.out.println("------------ Test start : " + name.getMethodName()
+		log.trace("------------ Test start : " + name.getMethodName()
 				+ " -------------------");
 	}
 
 	@After
 	public final void end2() {
-		System.out.println("------------ Test end : " + name.getMethodName()
+		log.trace("------------ Test end : " + name.getMethodName()
 				+ " -------------------");
 	}
 }

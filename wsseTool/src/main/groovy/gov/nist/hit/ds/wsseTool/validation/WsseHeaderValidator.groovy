@@ -15,6 +15,9 @@ import gov.nist.hit.ds.wsseTool.parsing.WSSEHeaderParser
 import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerBuilder
 import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerWithOrder
 import gov.nist.hit.ds.wsseTool.validation.engine.ValSuite
+import gov.nist.hit.ds.wsseTool.validation.reporting.AdditionalResultInfoBuilder;
+import gov.nist.hit.ds.wsseTool.validation.reporting.TestListener;
+import gov.nist.hit.ds.wsseTool.validation.reporting.TestReporter;
 import gov.nist.hit.ds.wsseTool.validation.tests.run.*
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.*
 
@@ -107,10 +110,13 @@ public class WsseHeaderValidator implements Validator {
 
 		try{
 			JUnitCore facade = new JUnitCore()
-			TestsListener listener1 = new TestsListener()
+			TestListener listener1 = new TestListener()
+			AdditionalResultInfoBuilder moreResults = new AdditionalResultInfoBuilder();
 			facade.addListener(listener1)
+			facade.addListener(moreResults)
 			result = facade.run(filteredRequest)
-			report(result, listener1)
+			TestReporter reporter = new TestReporter();
+			reporter.report(result, moreResults)
 			return result
 		}
 		catch(Exception e){
@@ -121,11 +127,11 @@ public class WsseHeaderValidator implements Validator {
 
 	private Request applyFilters(Request request, ValConfig config){
 		List<Filter> filters = createFilters(config);
-		
+
 		//TODO quick fix to give us some time to reconsider how we handle optional tests.
-	//	filters.add(optionalFilter);
-	//	log.info("optional tests will not be run.");
-		
+		//	filters.add(optionalFilter);
+		//	log.info("optional tests will not be run.");
+
 		for(Filter filter : filters){
 			request = request.filterWith(filter);
 		}
@@ -138,65 +144,6 @@ public class WsseHeaderValidator implements Validator {
 	private List<Filter> createFilters(ValConfig config){
 		//	return Collections.singletonList(optionalFilter);
 		return new LinkedList<Filter>();
-	}
-
-	private void report(Result result, TestsListener listener1){
-		long time = result.getRunTime()
-		int runs = result.getRunCount()
-		int fails = result.getFailureCount()
-		List<Failure> failures = result.getFailures()
-
-		log.info("\n Summary: \n"+ runs + " tests runs in " + time + " milliseconds , "
-				+ fails + " have failed, " + result.getIgnoreCount()
-				+ " ignored \n")
-
-		StringBuilder sb = new StringBuilder("\n Names of tests run: \n");
-		for (String s : listener1.testsDescriptions) {
-			sb.append(s +"\n");
-		}
-		log.info(sb.toString());
-
-		if(fails != 0 ){
-
-			StringBuilder sb2 = new StringBuilder("\n Failures recorded: \n");
-			for (Failure f : failures) {
-				sb2.append(f.getTestHeader()).append(" : \n")
-				sb2.append(f.getMessage()).append("\n \n")
-			}
-			log.info(sb2.toString());
-		}
-	}
-
-	private class TestsListener extends RunListener {
-
-		private static final Logger log = LoggerFactory.getLogger(TestsListener.class)
-
-		public List<String> testsDescriptions = new ArrayList<String>()
-
-		@Override
-		public void testRunStarted(Description description) throws Exception {
-			log.info("saml tests started.")
-		}
-
-		public void testFailure(Failure failure) throws Exception {
-			log.debug("saml test failed : " + failure.getMessage())
-		}
-
-		@Override
-		public void testRunFinished(Result result) throws Exception {
-			log.info("saml tests terminated.")
-		}
-
-		@Override
-		public void testStarted(Description description) throws Exception {
-			testsDescriptions.add(description.getDisplayName())
-		}
-		
-		@Override
-		public void testAssumptionFailure(Failure failure) {
-			log.warn("optional test :" + failure.getDescription() +" : "+ failure.getMessage());
-		}
-
 	}
 
 

@@ -1,12 +1,14 @@
 package gov.nist.hit.ds.wsseTool.validation.tests.run
 
 import static org.junit.Assert.*
+import static org.junit.Assume.*
 import gov.nist.hit.ds.wsseTool.api.config.*
 import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerWithOrder
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Optional
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation
 import gov.nist.hit.ds.wsseTool.validation.tests.BaseVal
 import gov.nist.hit.ds.wsseTool.validation.tests.CommonVal
+import gov.nist.hit.ds.wsseTool.validation.tests.ValDescriptor;
 import gov.nist.toolkit.wsseTool.api.*
 import gov.nist.toolkit.wsseTool.validation.data.*
 import groovy.util.slurpersupport.GPathResult
@@ -141,9 +143,14 @@ public class AttributeStatementVal extends BaseVal {
 		GPathResult resourceId = attrs.findAll{ it.@Name == "urn:oasis:names:tc:xacml:2.0:resource:resource-id"}
 
 		assertTrue("resource-id not present", resourceId[0] != null);
-
-		log.info("validation not fully implemented")
-		log.info("resource id should match patient id from the requesting organization")
+		
+	}
+	
+	@Validation(id="1088", rtm=["93","122","123","124","125","126","127"], status=ValConfig.Status.review)
+	public void resourceIdMatchPatientId(){
+		GPathResult resourceId = attrs.findAll{ it.@Name == "urn:oasis:names:tc:xacml:2.0:resource:resource-id"}
+		
+		assumeTrue(ValDescriptor.NOT_IMPLEMENTED + "resource id should match patient id from the requesting organization",false);
 	}
 
 	//TODO check. Second assertion does not seem to work properly
