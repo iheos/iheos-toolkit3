@@ -121,6 +121,11 @@ public class WsseHeaderValidator implements Validator {
 
 	private Request applyFilters(Request request, ValConfig config){
 		List<Filter> filters = createFilters(config);
+		
+		//TODO quick fix to give us some time to reconsider how we handle optional tests.
+	//	filters.add(optionalFilter);
+	//	log.info("optional tests will not be run.");
+		
 		for(Filter filter : filters){
 			request = request.filterWith(filter);
 		}
@@ -132,7 +137,7 @@ public class WsseHeaderValidator implements Validator {
 	//TODO to modify once we know how we will handle config
 	private List<Filter> createFilters(ValConfig config){
 		//	return Collections.singletonList(optionalFilter);
-		return Collections.emptyList();
+		return new LinkedList<Filter>();
 	}
 
 	private void report(Result result, TestsListener listener1){

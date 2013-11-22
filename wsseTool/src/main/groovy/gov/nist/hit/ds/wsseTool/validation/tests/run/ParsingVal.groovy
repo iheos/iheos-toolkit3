@@ -24,7 +24,13 @@ public class ParsingVal extends BaseVal {
 	}
 
 	@Order(order=2)
-	@Validation(id="1024", rtm=["45", "48", "60", "157", "165"],
+	@Validation(id="1024", rtm=[
+		"45",
+		"48",
+		"60",
+		"157",
+		"165"
+	],
 	description="check required assertion signature elements are present with a valid cardinality. Check assertion elements ordering."
 	)
 	public void assertionStructure(){
@@ -33,7 +39,6 @@ public class ParsingVal extends BaseVal {
 		def subjects = header.map.assertion.children().findAll{it.name() == 'Subject'}
 		def attributeStatements = header.map.assertion.children().findAll{it.name() == 'AttributeStatement'}
 		def authnStatements = header.map.assertion.children().findAll{it.name() == 'AuthnStatement'}
-		def authzDecisionStatements = header.map.assertion.children().findAll{it.name() == 'AuthzDecisionStatement'} //optional
 		def conditions = header.map.assertion.children().findAll{it.name() == 'Conditions'} //optional
 		def advices = header.map.assertion.children().findAll{it.name() == 'Advice'} //optional
 
@@ -42,7 +47,6 @@ public class ParsingVal extends BaseVal {
 		assertEquals( "assertion must have a unique subject", 1, subjects.size())
 		assertEquals( "assertion must have a unique attribute statement", 1, attributeStatements.size())
 		assertEquals( "assertion must have a unique authorization statement",1, authnStatements.size())
-		assertEquals( "assertion must have a unique authorization decision statement", 1, authzDecisionStatements.size())
 
 		GPathResult children = header.map.assertion.children()
 
@@ -51,6 +55,33 @@ public class ParsingVal extends BaseVal {
 		assertTrue ( MessageFormat.format("assertion third child must be a subject but was {0}", children[2]), children[2] == header.map.subject)
 
 	}
+
+	@Optional
+	@Validation(id="1024", rtm=["65"],description="check presence of the optional authz decision statement")
+	public void authzDecisionStatementPresence(){
+		def authzDecisionStatements = header.map.assertion.children().findAll{it.name() == 'AuthzDecisionStatement'} //optional
+		assertTrue( MessageFormat.format("assertion may contain a unique authorization decision statement." +
+			 "Found {0} authorization decision statement" , authzDecisionStatements.size()), true );	 
+		 if(authzDecisionStatements.size() != 0 ){
+			 assertEquals( "if present, authorization decision statement must be unique", 1, authzDecisionStatements.size())
+		 }
+	}
+	
+	@Optional
+	@Validation(id="1024",description="check presence of optional conditions")
+	public void conditionsPresence(){
+		def conditions = header.map.assertion.children().findAll{it.name() == 'Conditions'} //optional	
+		assertTrue( MessageFormat.format("assertion may contain conditions. Found {0} conditions" , conditions.size()), true );
+	}
+	
+	@Optional
+	@Validation(id="1024", description="check presence of optional advices")
+	public void advicePresence(){
+		def advices = header.map.assertion.children().findAll{it.name() == 'Advice'} //optional
+		assertTrue( MessageFormat.format("assertion may contain advices. Found {0} advices" , advices.size()), true );
+	}
+	
+	
 
 	@Order(order=3)
 	@Validation(id="1035", rtm=["59"],

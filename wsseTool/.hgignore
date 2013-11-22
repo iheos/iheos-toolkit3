@@ -13,9 +13,9 @@ lib
 target
 
 #eclipse settings
-# .settings/
-# .project
-# .classpath
+.settings/
+.project
+.classpath
 
 #MAC
 .DS_Store

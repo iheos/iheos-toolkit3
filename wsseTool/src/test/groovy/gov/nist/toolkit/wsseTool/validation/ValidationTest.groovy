@@ -44,8 +44,14 @@ class ValidationTest extends BaseTest {
 		}
 	
 
-	@Test void runMessage1(){
+	@Test void runConnect4Message(){
 		def file = "sets/connect4RequestSecHeader.xml";
+		WsseHeaderValidator val = new WsseHeaderValidator();
+		val.validate(MyXmlUtils.getDocumentWithResourcePath(file).getDocumentElement(),context);
+		}
+	
+	@Test void runMessageWithoutAuthzDecisionStatement(){
+		def file = "sets/connect4RequestSecHeaderWithoutAuthzDecisionStatement.xml";
 		WsseHeaderValidator val = new WsseHeaderValidator();
 		val.validate(MyXmlUtils.getDocumentWithResourcePath(file).getDocumentElement(),context);
 		}

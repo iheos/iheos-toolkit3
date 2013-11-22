@@ -179,7 +179,8 @@ public class AuthzDecisionStatementVal extends BaseVal {
 		}
 	}
 
-	@Validation(id="1103", rtm=["140"], category="optional")
+	@Optional
+	@Validation(id="1103", rtm=["140"])
 	public void InstanceAccessConsentPolicy(){
 		for(GPathResult authz : header.map.authzDecisionStatements){
 			GPathResult attrStatement =  authz.Evidence[0].Assertion[0].AttributeStatement[0]
