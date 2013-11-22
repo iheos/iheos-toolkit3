@@ -22,6 +22,7 @@ import gov.nist.hit.ds.wsseTool.validation.tests.run.*
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.*
 
 import java.security.KeyStoreException
+import java.util.List;
 
 import org.junit.*
 import org.junit.runner.Description
@@ -123,7 +124,7 @@ public class WsseHeaderValidator implements Validator {
 			throw new ValidationException("an error occured during validation.", e)
 		}
 	}
-
+	
 
 	private Request applyFilters(Request request, ValConfig config){
 		List<Filter> filters = createFilters(config);
