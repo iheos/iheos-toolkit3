@@ -56,6 +56,12 @@ class ValidationTest extends BaseTest {
 		val.validate(MyXmlUtils.getDocumentWithResourcePath(file).getDocumentElement(),context);
 		}
 	
+	@Test void runMessageWith2AuthzDecisionStatements(){
+		def file = "sets/connect4RequestSecHeaderWith2AuthzDecisionStatements.xml";
+		WsseHeaderValidator val = new WsseHeaderValidator();
+		val.validate(MyXmlUtils.getDocumentWithResourcePath(file).getDocumentElement(),context);
+		}
+	
 	@Test void runUnparseableMessage(){
 		def file = "validation/unparseableMessage.xml";
 		WsseHeaderValidator val = new WsseHeaderValidator();

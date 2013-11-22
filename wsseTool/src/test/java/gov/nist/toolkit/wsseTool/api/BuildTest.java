@@ -8,6 +8,7 @@ import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerato
 import gov.nist.hit.ds.wsseTool.util.MyXmlUtils;
 import gov.nist.toolkit.wsseTool.BaseTest;
 
+import java.io.File;
 import java.security.KeyStoreException;
 
 import org.junit.Before;
@@ -15,6 +16,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+
+import static org.junit.Assume.*;
+import static org.hamcrest.CoreMatchers.is;
 
 public class BuildTest extends BaseTest {
 

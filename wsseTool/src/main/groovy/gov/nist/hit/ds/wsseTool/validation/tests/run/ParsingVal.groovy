@@ -1,14 +1,18 @@
 package gov.nist.hit.ds.wsseTool.validation.tests.run
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*
+import static org.junit.Assume.assumeThat;
 import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerWithOrder;
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.*
 import gov.nist.hit.ds.wsseTool.validation.tests.BaseVal
 import groovy.util.slurpersupport.GPathResult
 
+import java.io.File;
 import java.text.MessageFormat
 
 import org.junit.runner.RunWith;
+
 
 @RunWith(ValRunnerWithOrder.class)
 public class ParsingVal extends BaseVal {
@@ -60,28 +64,33 @@ public class ParsingVal extends BaseVal {
 	@Validation(id="1024", rtm=["65"],description="check presence of the optional authz decision statement")
 	public void authzDecisionStatementPresence(){
 		def authzDecisionStatements = header.map.assertion.children().findAll{it.name() == 'AuthzDecisionStatement'} //optional
-		assertTrue( MessageFormat.format("assertion may contain a unique authorization decision statement." +
-			 "Found {0} authorization decision statement" , authzDecisionStatements.size()), true );	 
-		 if(authzDecisionStatements.size() != 0 ){
-			 assertEquals( "if present, authorization decision statement must be unique", 1, authzDecisionStatements.size())
-		 }
+
+		assumeThat(MessageFormat.format("assertion may contain a authz decision statement. Found {0} authz decision statement" , authzDecisionStatements.size()),
+				authzDecisionStatements.size(), not(is(0)));
+
+		assertEquals( "if present, authorization decision statement must be unique", 1, authzDecisionStatements.size())
+
 	}
-	
+
 	@Optional
 	@Validation(id="1024",description="check presence of optional conditions")
 	public void conditionsPresence(){
-		def conditions = header.map.assertion.children().findAll{it.name() == 'Conditions'} //optional	
-		assertTrue( MessageFormat.format("assertion may contain conditions. Found {0} conditions" , conditions.size()), true );
+		def conditions = header.map.assertion.children().findAll{it.name() == 'Conditions'} //optional
+		
+		assumeThat(MessageFormat.format("assertion may contain advices. Found {0} advices" , conditions.size()),
+			conditions.size(), not(is(0)));
 	}
-	
+
 	@Optional
 	@Validation(id="1024", description="check presence of optional advices")
 	public void advicePresence(){
 		def advices = header.map.assertion.children().findAll{it.name() == 'Advice'} //optional
-		assertTrue( MessageFormat.format("assertion may contain advices. Found {0} advices" , advices.size()), true );
+		
+		assumeThat(MessageFormat.format("assertion may contain advices. Found {0} advices" , advices.size()),
+			advices.size(), not(is(0)));
 	}
-	
-	
+
+
 
 	@Order(order=3)
 	@Validation(id="1035", rtm=["59"],

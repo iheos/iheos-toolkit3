@@ -191,6 +191,11 @@ public class WsseHeaderValidator implements Validator {
 		public void testStarted(Description description) throws Exception {
 			testsDescriptions.add(description.getDisplayName())
 		}
+		
+		@Override
+		public void testAssumptionFailure(Failure failure) {
+			log.warn("optional test :" + failure.getDescription() +" : "+ failure.getMessage());
+		}
 
 	}
 
