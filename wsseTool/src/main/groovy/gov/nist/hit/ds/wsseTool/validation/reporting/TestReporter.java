@@ -39,21 +39,17 @@ public class TestReporter {
 		log.info(sb.toString());
 
 		if(optionalTestsNotRun.size() != 0 ){
-			StringBuilder sb3 = new StringBuilder("\n Optional tests not triggered: \n");
+			log.info("\n Optional tests not triggered: \n");
 			for (Failure f : optionalTestsNotRun) {
-				sb3.append(f.getTestHeader()).append(" : \n");
-				sb3.append(f.getMessage() +"\n");
+				log.warn(f.getTestHeader() + " : \n" + f.getMessage() +"\n");
 			}
-			log.warn(sb3.toString());
 		}
 
 		if(fails != 0 ){
-			StringBuilder sb2 = new StringBuilder("\n Failures recorded: \n");
+			log.info("\n Failures recorded: \n");
 			for (Failure f : failures) {
-				sb2.append(f.getTestHeader()).append(" : \n");
-				sb2.append(f.getMessage()).append("\n");
+				log.error(f.getTestHeader() + " : \n" + f.getMessage() + "\n");
 			}
-			log.error(sb2.toString());
 		}
 	}
 }
