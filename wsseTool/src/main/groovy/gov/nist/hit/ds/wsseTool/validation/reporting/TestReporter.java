@@ -32,11 +32,10 @@ public class TestReporter {
 				moreResultInfo.optionalTestsNotRun.size() + " optional tests not triggered, " +
 				result.getIgnoreCount() + " ignored \n");
 
-		StringBuilder sb = new StringBuilder("\n Tests run: \n");
+		log.info("\n Tests run: \n");
 		for (Description d : descriptions) {
-			sb.append(d.getDisplayName() +"\n");
+			log.info(d.getDisplayName() +"\n");
 		}
-		log.info(sb.toString());
 
 		if(optionalTestsNotRun.size() != 0 ){
 			log.info("\n Optional tests not triggered: \n");

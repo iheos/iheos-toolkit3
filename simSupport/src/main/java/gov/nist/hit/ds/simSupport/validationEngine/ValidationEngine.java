@@ -19,7 +19,6 @@ import java.util.List;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
-import com.google.gwt.core.client.Scheduler;
 
 public class ValidationEngine {
 	SimComponentBase validationObject;
