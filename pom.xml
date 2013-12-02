@@ -122,6 +122,7 @@
         <module>metadataModel</module>
         <module>repositoryDirectory</module>
         <module>testEngine</module>
+        <module>axis2SoapClientFacade</module>
   </modules>
     <distributionManagement>
     <snapshotRepository>
