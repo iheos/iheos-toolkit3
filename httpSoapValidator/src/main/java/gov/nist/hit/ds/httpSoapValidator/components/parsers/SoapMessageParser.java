@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.httpSoapValidator.validators;
+package gov.nist.hit.ds.httpSoapValidator.components.parsers;
 
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -13,6 +13,11 @@ import java.util.Iterator;
 
 import org.apache.axiom.om.OMElement;
 
+/**
+ * Parse SOAP message and make parts available through the SoapMessage object.
+ * @author bmajur
+ *
+ */
 public class SoapMessageParser extends SimComponentBase {
 	OMElement xml;
 	XmlMessage xmlMessage;

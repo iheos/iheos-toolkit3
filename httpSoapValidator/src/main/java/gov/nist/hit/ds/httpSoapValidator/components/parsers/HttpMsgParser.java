@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.httpSoapValidator.validators;
+package gov.nist.hit.ds.httpSoapValidator.components.parsers;
 
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParserBa;

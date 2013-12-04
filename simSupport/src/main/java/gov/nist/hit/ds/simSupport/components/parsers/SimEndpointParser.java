@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.simSupport.validators;
+package gov.nist.hit.ds.simSupport.components.parsers;
 
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;

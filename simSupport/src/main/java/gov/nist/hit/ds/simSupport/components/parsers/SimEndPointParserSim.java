@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.simSupport.validators;
+package gov.nist.hit.ds.simSupport.components.parsers;
 
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.IAssertionGroup;
@@ -10,6 +10,11 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 
+/**
+ * TODO: Why does this exist?  How is it different from SimEndpointParser?
+ * @author bmajur
+ *
+ */
 public class SimEndPointParserSim extends SimComponentBase {
 	SimEndpoint simEndPoint;
 	HttpParserBa httpParser;
