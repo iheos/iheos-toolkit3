@@ -3,6 +3,7 @@ package gov.nist.hit.ds.wsseTool.validation.tests.run
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*
 import static org.junit.Assume.assumeThat;
+import gov.nist.hit.ds.wsseTool.namespace.dom.NwhinNamespace;
 import gov.nist.hit.ds.wsseTool.validation.engine.ValRunnerWithOrder;
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.*
 import gov.nist.hit.ds.wsseTool.validation.tests.BaseVal
@@ -16,15 +17,35 @@ import org.junit.runner.RunWith;
 
 @RunWith(ValRunnerWithOrder.class)
 public class ParsingVal extends BaseVal {
-
+	
 	@Order(order=1)
 	@Validation(id="1019", rtm=["60", "175", "50", "55"],
 	description="Check header structure."
 	)
-	public void wsseStructure() {
+	public void timeStamp() {
 		assertTrue( "security header must have a timestamp" , !header.map.timestamp.isEmpty())
+		String wsu = header.map.timestamp[0].namespaceURI;
+		assertEquals( "timestamp has a wrong namespace" , NwhinNamespace.WSU.uri(), wsu)
+	}
+	
+	@Order(order=1)
+	@Validation(id="1019", rtm=["60", "175", "50", "55"],
+	description="Check header structure."
+	)
+	public void assertion() {
 		assertTrue( "assertion must have an assertion" , !header.map.assertion.isEmpty())
-		assertTrue( "assertion must have a signature" , !header.map.t_signature.isEmpty())
+		String saml = header.map.assertion[0].namespaceURI;
+		assertEquals( "assertion has a wrong namespace" , NwhinNamespace.SAML2.uri(), saml)
+	}
+	
+	@Order(order=1)
+	@Validation(id="1019", rtm=["60", "175", "50", "55"],
+	description="Check header structure."
+	)
+	public void timestampSignature() {
+		assertTrue( "security header must have a timestamp signature" , !header.map.t_signature.isEmpty())
+		String ds = header.map.t_signature[0].namespaceURI;
+		assertEquals( "timestamp signature has a wrong namespace" , NwhinNamespace.DS.uri(), ds)
 	}
 
 	@Order(order=2)

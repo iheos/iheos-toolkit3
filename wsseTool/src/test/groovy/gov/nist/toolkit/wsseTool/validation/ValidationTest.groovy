@@ -67,5 +67,11 @@ class ValidationTest extends BaseTest {
 		WsseHeaderValidator val = new WsseHeaderValidator();
 		val.validate(MyXmlUtils.getDocumentWithResourcePath(file).getDocumentElement(),context);
 		}
+	
+	@Test void runPurposeOfUseAndSignatureProblems(){
+		def file = "sets/debuggingSession/from_hmack101.xml";
+		WsseHeaderValidator val = new WsseHeaderValidator();
+		val.validate(MyXmlUtils.getDocumentWithResourcePath(file).getDocumentElement(),context);
+		}
 		
 }

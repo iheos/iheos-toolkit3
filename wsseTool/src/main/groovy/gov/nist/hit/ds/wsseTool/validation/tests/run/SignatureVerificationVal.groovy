@@ -30,6 +30,7 @@ public class SignatureVerificationVal extends BaseVal {
 
 	@Validation(id="1036-1056", rtm=["26","27","28","59","141","142","144","147","148","149","150","152","153","154","155","156","209","213"])
 	public void verifySamlAssertionSignature(){
+		
 		Boolean isValid = new Verifier().verifySamlAssertionSignature(openSamlHeader)
 		
 		assertTrue("cannot verify saml assertion signature.", isValid) 

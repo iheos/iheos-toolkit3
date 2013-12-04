@@ -87,15 +87,28 @@ public class AttributeStatementVal extends BaseVal {
 	public void role(){
 		GPathResult role = attrs.findAll{ it.@Name == "urn:oasis:names:tc:xacml:2.0:subject:role"}
 
-		assertFalse("role missing", role[0] == null) 
+		assertFalse("role missing", role[0] == null) 	
 		assertFalse("role attribute value missing", role[0].AttributeValue[0] == null)
 
 		GPathResult attr = role[0].AttributeValue[0]
 		GPathResult r =  role[0].AttributeValue[0].Role[0]
 
 		String prefix = header.namespaces.getPrefix("http://www.w3.org/2001/XMLSchema-instance")
-
-		assertEquals("wrong type", "hl7:CE", r.@"${prefix}:type".text())
+		
+		String type = r.@"${prefix}:type"
+		
+		assertTrue("no type", type != null)
+		
+		if(type == "CE"){
+			String anonymous = r.lookupNamespace("")
+			assertTrue("wrong type. If CE is used, xmlns=\"urn:hl7-org:v3\" must be present", anonymous == "urn:hl7-org:v3")
+		}
+		else {
+			String hl7 = header.namespaces.getPrefix("urn:hl7-org:v3")
+			assertTrue(MessageFormat.format("wrong type, got : {0}, expected : {1} with hl7 defining the following namespace : urn:hl7-org:v3", r.@"${prefix}:type" ,"hl7:CE") ,  r.@"${prefix}:type".text() == "hl7:CE")
+		}
+		
+		
 		assertEquals("wrong codeSystem", "2.16.840.1.113883.6.96", r.@codeSystem.text())
 		assertEquals("wrong codeSystemName", "SNOMED_CT", r.@codeSystemName.text())
 		
@@ -108,15 +121,16 @@ public class AttributeStatementVal extends BaseVal {
 		GPathResult purposeOfUse = attrs.findAll{ it.@Name == "urn:oasis:names:tc:xspa:1.0:subject:purposeofuse"}
 
 		assertTrue("purposeOfUse missing", purposeOfUse[0] != null)
+		
 		assertTrue("purposeOfUse attribute value missing", purposeOfUse[0].AttributeValue[0] != null)
 
 		GPathResult attr = purposeOfUse[0].AttributeValue[0]
 		GPathResult p =  purposeOfUse[0].AttributeValue[0].PurposeForUse[0]
-
+		
 		String prefix = header.namespaces.getPrefix("http://www.w3.org/2001/XMLSchema-instance")
 		
 		String type = p.@"${prefix}:type"
-		
+	
 		assertTrue("no type", type != null)
 		
 		if(type == "CE"){

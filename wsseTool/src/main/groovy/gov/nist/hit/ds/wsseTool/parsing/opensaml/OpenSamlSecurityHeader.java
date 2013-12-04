@@ -125,6 +125,11 @@ public class OpenSamlSecurityHeader {
 				// we have to blindly iterate until we find the good one!
 			}
 		}
+		
+		if(s != null){
+			log.error("open saml parser could find a timestamp signature in the wsseHeader");
+		}
+		
 		this.signature = s;
 		return signature;
 	}
@@ -142,6 +147,10 @@ public class OpenSamlSecurityHeader {
 			} catch (ClassCastException e) {
 				// we have to blindly iterate until we find the good one!
 			}
+		}
+		
+		if(timestamp != null){
+			log.error("open saml parser could find a timestamp in the wsseHeader");
 		}
 		
 		this.timestamp = t;
@@ -164,6 +173,11 @@ public class OpenSamlSecurityHeader {
 		}
 		
 		this.assertion = ass;
+		
+		if(assertion != null){
+			log.error("open saml parser could find an assertion in the wsseHeader");
+		}
+		
 		return assertion;
 	}
 
