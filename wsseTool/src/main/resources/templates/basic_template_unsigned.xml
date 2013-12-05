@@ -76,9 +76,12 @@
 					xmlns:xs="http://www.w3.org/2001/XMLSchema" xs:type="xsi:string">RI2.102.00008^^^&amp;2.16.840.1.113883.3.717&amp;ISO
 				</saml2:AttributeValue>
 			</saml2:Attribute>
+			<saml2:Attribute Name="urn:oasis:names:tc:xspa:2.0:subject:npi">
+				<saml2:AttributeValue>1234567890</saml2:AttributeValue>
+			</saml2:Attribute>
 		</saml2:AttributeStatement>
 		<saml2:AuthzDecisionStatement Decision="Permit"
-			Resource="http://endpoint1.hostname1.nist.gov">
+			Resource="">
 			<saml2:Action Namespace="urn:oasis:names:tc:SAML:1.0:action:rwedc">Execute</saml2:Action>
 			<saml2:Evidence>
 				<saml2:Assertion ID="_3e0d08ce-a126-45e8-b602-ac0c7ea075ce"

@@ -1,12 +1,12 @@
 package gov.nist.toolkit.wsseTool.signature;
 
+import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
+import gov.nist.hit.ds.wsseTool.namespace.dom.NwhinNamespace;
+import gov.nist.hit.ds.wsseTool.signature.generation.KeyInfoGenerator;
+import gov.nist.hit.ds.wsseTool.signature.generation.SignatureGenerator;
+import gov.nist.hit.ds.wsseTool.util.LogOutputStream;
+import gov.nist.hit.ds.wsseTool.util.MyXmlUtils;
 import gov.nist.toolkit.wsseTool.BaseTest;
-import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
-import gov.nist.toolkit.wsseTool.namespace.dom.NwhinNamespace;
-import gov.nist.toolkit.wsseTool.signature.generation.KeyInfoGenerator;
-import gov.nist.toolkit.wsseTool.signature.generation.SignatureGenerator;
-import gov.nist.toolkit.wsseTool.util.LogOutputStream;
-import gov.nist.toolkit.wsseTool.util.MyXmlUtils;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

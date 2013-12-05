@@ -2,8 +2,8 @@ package gov.nist.toolkit.wsseTool.keystore;
 
 import static org.junit.Assert.assertNotNull;
 
+import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
 import gov.nist.toolkit.wsseTool.BaseTest;
-import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
 
 import java.security.KeyStoreException;
 

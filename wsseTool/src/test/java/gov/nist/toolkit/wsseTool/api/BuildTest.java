@@ -1,12 +1,12 @@
 package gov.nist.toolkit.wsseTool.api;
 
+import gov.nist.hit.ds.wsseTool.api.config.ContextFactory;
+import gov.nist.hit.ds.wsseTool.api.config.GenContext;
+import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
+import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
+import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
+import gov.nist.hit.ds.wsseTool.util.MyXmlUtils;
 import gov.nist.toolkit.wsseTool.BaseTest;
-import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContext;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContextFactory;
-import gov.nist.toolkit.wsseTool.api.exceptions.GenerationException;
-import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
-import gov.nist.toolkit.wsseTool.util.MyXmlUtils;
 
 import java.security.KeyStoreException;
 
@@ -20,7 +20,7 @@ public class BuildTest extends BaseTest {
 
 	private static final Logger log = LoggerFactory.getLogger(BuildTest.class);
 	
-	SecurityContext context;
+	GenContext context;
 
 	@Before
 	public void loadKeystore() throws KeyStoreException {
@@ -28,7 +28,7 @@ public class BuildTest extends BaseTest {
 		String sPass = "changeit";
 		String alias = "hit-testing.nist.gov";
 		String kPass = "changeit";
-		context = SecurityContextFactory.getInstance();
+		context = ContextFactory.getInstance();
 		context.setKeystore(new KeystoreAccess(store,sPass,alias,kPass));
 		context.getParams().put("patientId", "D123401^^^&1.1&ISO");
 		context.getParams().put("homeCommunityId", "urn:oid:2.2");

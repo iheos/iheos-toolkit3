@@ -1,51 +1,65 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>gov.nist.hit.ds</groupId>
-    <artifactId>toolkit3</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-	<version>3.0.0-SNAPSHOT</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>gov.nist.toolkit</groupId>
 	<artifactId>http</artifactId>
-  <dependencies>
-	    <dependency>
-		    <groupId>org.apache.ws.commons.axiom</groupId>
-		    <artifactId>axiom-api</artifactId>
-	    </dependency>
-	  	<dependency>
-	  		<groupId>org.apache.ws.commons.axiom</groupId>
-	  		<artifactId>axiom-impl</artifactId>
-	  	</dependency>
-	  	<dependency>
-	  		<groupId>junit</groupId>
-	  		<artifactId>junit</artifactId>
-	  	</dependency>
-	  	<dependency>
-	  		<groupId>log4j</groupId>
-	  		<artifactId>log4j</artifactId>
-	  	</dependency>
-	    <dependency>
-		    <groupId>org.apache.ws.commons.axiom</groupId>
-		    <artifactId>axiom-api</artifactId>
-	    </dependency>
-	  	<dependency>
-	  		<groupId>org.apache.ws.commons.axiom</groupId>
-	  		<artifactId>axiom-impl</artifactId>
-	  	</dependency>
-	  	<dependency>
-	  		<groupId>gov.nist.hit.ds</groupId>
-	  		<artifactId>errorRecording</artifactId>
-	  		<version>3.0.0-SNAPSHOT</version>
-	  	</dependency>
-	  	<dependency>
-	  		<groupId>gov.nist.hit.ds</groupId>
-	  		<artifactId>utilities</artifactId>
-	  		<version>3.0.0-SNAPSHOT</version>
-	  	</dependency>
-	  	<dependency>
-	  		<groupId>gov.nist.hit.ds</groupId>
-	  		<artifactId>eventLog</artifactId>
-	  		<version>3.0.0-SNAPSHOT</version>
-	  	</dependency>
-  </dependencies>
+	<version>v2-maven-alpha</version>
+	<packaging>jar</packaging>
+
+	<name>http</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mailapi</artifactId>
+			<version>1.4.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.ws.commons.axiom</groupId>
+			<artifactId>axiom-dom</artifactId>
+			<version>1.2.10</version>
+		</dependency>
+		<dependency>
+			<groupId>soap</groupId>
+			<artifactId>soap</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>backport-util-concurrent</groupId>
+			<artifactId>backport-util-concurrent</artifactId>
+			<version>3.1</version>
+		</dependency>
+	</dependencies>
 </project>

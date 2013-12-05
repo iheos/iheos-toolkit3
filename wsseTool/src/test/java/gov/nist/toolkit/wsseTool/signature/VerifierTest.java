@@ -3,16 +3,16 @@ package gov.nist.toolkit.wsseTool.signature;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import gov.nist.hit.ds.wsseTool.api.config.ContextFactory;
+import gov.nist.hit.ds.wsseTool.api.config.GenContext;
+import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
+import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
+import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlFacade;
+import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
+import gov.nist.hit.ds.wsseTool.parsing.opensaml.OpenSamlSecurityHeader;
+import gov.nist.hit.ds.wsseTool.signature.api.Verifier;
+import gov.nist.hit.ds.wsseTool.util.MyXmlUtils;
 import gov.nist.toolkit.wsseTool.BaseTest;
-import gov.nist.toolkit.wsseTool.api.config.KeystoreAccess;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContext;
-import gov.nist.toolkit.wsseTool.api.config.SecurityContextFactory;
-import gov.nist.toolkit.wsseTool.api.exceptions.GenerationException;
-import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlFacade;
-import gov.nist.toolkit.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator;
-import gov.nist.toolkit.wsseTool.parsing.opensaml.OpenSamlSecurityHeader;
-import gov.nist.toolkit.wsseTool.signature.api.Verifier;
-import gov.nist.toolkit.wsseTool.util.MyXmlUtils;
 
 import java.io.IOException;
 import java.security.KeyException;
@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
 
 public class VerifierTest extends BaseTest {
 	
-		SecurityContext context;
+		GenContext context;
 		
 		private static Logger log = LoggerFactory.getLogger("");
 
@@ -41,7 +41,7 @@ public class VerifierTest extends BaseTest {
 			String sPass = "changeit";
 			String alias = "hit-testing.nist.gov";
 			String kPass = "changeit";
-			context = SecurityContextFactory.getInstance();
+			context = ContextFactory.getInstance();
 			context.setKeystore(new KeystoreAccess(store,sPass,alias,kPass));
 			context.getParams().put("patientId", "D123401^^^&1.1&ISO");
 		}
