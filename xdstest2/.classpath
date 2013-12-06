@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/registry-support"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/utilities"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/xds-exceptions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/testkit-utilities"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/registry-metadata"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/xdstest2-logging"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/http"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/actortransaction"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/validators-registry-message"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/validators-support"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/site-management"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/security-common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/installation"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/results"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/docref"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/registry-msg-formats"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/soap"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/common-datatypes"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/validators-registry-metadata"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/error-recording"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/actorfactory"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/direct"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/direct-support"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

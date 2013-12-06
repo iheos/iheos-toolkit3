@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/actorfactory"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/actortransaction"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/registry-metadata"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/results"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/xds-exceptions"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/direct"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dns"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/utilities"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/installation"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/site-management"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/registry-support"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/testkit-utilities"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tk"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/env-settings"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/security-common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/sim-common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/xdstest2"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/xdstest2-logging"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

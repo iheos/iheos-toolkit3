@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>gov.nist.toolkit</groupId>
+	<artifactId>common</artifactId>
+  <version>v2-maven-alpha</version>
+	<packaging>jar</packaging>
+	<name>common</name>
+	<url>http://maven.apache.org</url>
+
+	<repositories>
+		<repository>
+			<id>internal-nist-repo-releases</id>
+			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<repository>
+			<id>internal-nist-repo-third-party</id>
+			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>
+		</repository>
+		<repository>
+			<id>internal-nist-repo-snapshots</id>
+			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
+			<id>internal-nist-repo-maven-central</id>
+			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/central/</url>
+		</repository>
+		<repository>
+			<id>codehaus</id>
+			<url>http://repository.codehaus.org/org/codehaus</url>
+		</repository>
+	</repositories>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.berryworks</groupId>
+			<artifactId>edireader</artifactId>
+			<version>4.7.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.ws.commons.axiom</groupId>
+			<artifactId>axiom-dom</artifactId>
+			<version>1.2.10</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.ebxml</groupId>
+			<artifactId>ebxmlrr-common</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+</project>
