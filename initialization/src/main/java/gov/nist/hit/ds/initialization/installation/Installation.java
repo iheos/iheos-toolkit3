@@ -100,8 +100,9 @@ public class Installation {
 			initializeSimDb(ecMgr);
 			initializeActors(ecMgr);
 		} catch (IOException e) {
-			throw new InitializationFailedException("",e);
+			throw new InitializationFailedException("External Cache Failed",e);
 		}
+		logger.info("External Cache initialization complete");
 	}
 
 
@@ -189,6 +190,8 @@ public class Installation {
 	void initializeRepository(ExternalCacheManager ecMgr) {
 		File r = ecMgr.getRepositoryFile();
 		if (!r.exists()) r.mkdir();
+		File types = new File(r, "types");
+		if (!types.exists()) types.mkdir();
 	}
 
 	void initializeTkProps(ExternalCacheManager ecMgr) throws IOException, InitializationFailedException {

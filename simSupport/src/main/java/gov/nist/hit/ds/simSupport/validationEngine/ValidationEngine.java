@@ -22,8 +22,10 @@ import org.apache.log4j.Logger;
 
 public class ValidationEngine {
 	SimComponentBase validationObject;
+	// only one of these is non-null indicating what kind of assertation is being tested
 	public ValidationFault validationFaultAnnotation;
 	public Validation validationAnnotation;
+	
 	Class<?> targetClass;
 	static Logger logger = Logger.getLogger(ValidationEngine.class);
 
@@ -115,7 +117,7 @@ public class ValidationEngine {
 		Runable runable = getNextRunable();
 		while(runable != null) {
 			Method meth = runable.method;
-			logger.debug("Validation " + meth.getName());
+			logger.debug("Running Validation " + meth.getName() + " on " + validationObject.getClass().getName());
 
 			try {
 				meth.invoke(validationObject);

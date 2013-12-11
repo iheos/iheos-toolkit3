@@ -1,22 +1,70 @@
 package gov.nist.hit.ds.valSupport.fields;
 
-import gov.nist.hit.ds.errorRecording.ErrorContext;
-import gov.nist.hit.ds.errorRecording.IAssertionGroup;
-import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.valSupport.ValidationException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UuidValidator {
-	IAssertionGroup er;
 	String rawMsgPrefix = "Validating UUID format of "; 
 	String msgPrefix;
+	List<String> errs = new ArrayList<String>();
 	
-	public UuidValidator(IAssertionGroup er, String errorMsgPrefix) {
-		this.er = er;
+	public UuidValidator(String errorMsgPrefix) {
 		if (errorMsgPrefix != null) 
 			rawMsgPrefix = errorMsgPrefix;
 	}
 	
 	
-	boolean allHexDigits(String hex, String errorPrefix) {
+	// validate UUID format
+	public void validateUUID(String uuid) throws ValidationException {
+		msgPrefix = rawMsgPrefix + uuid;
+		
+		if (!uuid.startsWith("urn:uuid:")) {
+			errs.add(msgPrefix + " - does not have urn:uuid: prefix");
+			throw new ValidationException(errs);
+		}
+		
+		String content = uuid.substring(9);
+		String[] parts = content.split("-");
+		
+		if (parts.length != 5) {
+			errs.add(msgPrefix + " - does not have 5 hex-digit groups separated by the - character");
+			throw new ValidationException(errs);
+		}
+
+		String part;
+		
+		part = parts[0];
+		if (part.length() != 8)
+			errs.add(msgPrefix + " - first hex character group must have 8 digits");
+		allHexDigits(part, msgPrefix);
+		
+		part = parts[1];
+		if (part.length() != 4)
+			errs.add(msgPrefix + " - second hex character group must have 4 digits");
+		allHexDigits(part, msgPrefix);
+		
+		part = parts[2];
+		if (part.length() != 4)
+			errs.add(msgPrefix + " - third hex character group must have 4 digits");
+		allHexDigits(part, msgPrefix);
+		
+		part = parts[3];
+		if (part.length() != 4)
+			errs.add(msgPrefix + " - fourth hex character group must have 4 digits");
+		allHexDigits(part, msgPrefix);
+		
+		part = parts[4];
+		if (part.length() != 12)
+			errs.add(msgPrefix + " - fifth hex character group must have 12 digits");
+		allHexDigits(part, msgPrefix);
+		
+		if (errs.size() != 0)
+			throw new ValidationException(errs);
+	}
+	
+	private boolean allHexDigits(String hex, String errorPrefix) {
 		String d = "0123456789abcdef";
 		
 		for (int i=0; i<hex.length(); i++) {
@@ -24,61 +72,14 @@ public class UuidValidator {
 			if (d.indexOf(digit) > -1)
 				continue;
 			if (d.indexOf(String.valueOf(digit).toLowerCase()) > -1) {
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(errorPrefix + " - hex digits must be lower case, found - " + digit, null), this);
+				errs.add(errorPrefix + " - hex digits must be lower case, found - " + digit);
 				return false;
 			} else {
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(errorPrefix + " - non-hex digit found - " + digit, null), this);
+				errs.add(errorPrefix + " - non-hex digit found - " + digit);
 				return false;
 			}
 		}
 		return true;
 	}
-	
-	// validate UUID format
-	public void validateUUID(String uuid) {
-		msgPrefix = rawMsgPrefix + uuid;
-		
-		if (!uuid.startsWith("urn:uuid:")) {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - does not have urn:uuid: prefix", null), this);
-			return;
-		}
-		
-		String content = uuid.substring(9);
-		String[] parts = content.split("-");
-		
-		if (parts.length != 5) {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - does not have 5 hex-digit groups separated by the - character", null), this);
-			return;
-		}
-
-		String part;
-		
-		part = parts[0];
-		if (part.length() != 8)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - first hex character group must have 8 digits", null), this);
-		allHexDigits(part, msgPrefix);
-		
-		part = parts[1];
-		if (part.length() != 4)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - second hex character group must have 4 digits", null), this);
-		allHexDigits(part, msgPrefix);
-		
-		part = parts[2];
-		if (part.length() != 4)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - third hex character group must have 4 digits", null), this);
-		allHexDigits(part, msgPrefix);
-		
-		part = parts[3];
-		if (part.length() != 4)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - fourth hex character group must have 4 digits", null), this);
-		allHexDigits(part, msgPrefix);
-		
-		part = parts[4];
-		if (part.length() != 12)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - fifth hex character group must have 12 digits", null), this);
-		allHexDigits(part, msgPrefix);
-		
-	}
-	
 
 }

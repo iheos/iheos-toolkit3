@@ -16,6 +16,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Collection of Assertion outputs (execution status of assertion)
+ * that are managed together usually because they come from the
+ * same validator.
+ * @author bmajur
+ *
+ */
 public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	List<Assertion> assertionList = new ArrayList<Assertion>();
 	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
@@ -100,6 +107,11 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	/************************************************************
 	 * 
 	 * Assertions
+	 * 
+	 * Each assert method in SimComponentBase is backed by an
+	 * assert method below.   
+	 * 
+	 * TODO: These need to be split off as a separate class ... I think.
 	 * 
 	 *************************************************************/
 

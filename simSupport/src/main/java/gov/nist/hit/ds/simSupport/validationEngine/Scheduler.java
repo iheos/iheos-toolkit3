@@ -8,6 +8,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Analyze target class and the annotations on its methods and construct
+ * and execution order for the methods based on the annotations
+ * and the explicit dependencies coded in the annotations.
+ * @author bmajur
+ *
+ */
 public class Scheduler {
 	List<Runable> runables;
 	static Logger logger = Logger.getLogger(Scheduler.class);
@@ -19,7 +26,7 @@ public class Scheduler {
 	}
 
 	public void run() throws Exception {
-		logger.debug("Running ValidationEngine on " + targetClass.getName());
+		logger.debug("Building run queue for ValidationEngine on " + targetClass.getName());
 		Method[] valMethods = targetClass.getMethods();
 		// Organize all validations
 		for (int methI=0; methI<valMethods.length; methI++) {
@@ -31,7 +38,7 @@ public class Scheduler {
 
 	// Any method can be passed in.  If no appropriate annotation then nothing will be scheduled.
 	void addRunable(Method method, List<Runable> runables) throws Exception {
-		logger.debug("Evaluating method " + method.getName());
+		logger.debug("Scheduler: Evaluating method " + method.getName());
 		ValidationFault validationFaultAnnotation = method.getAnnotation(ValidationFault.class);
 		Validation validationAnnotation = method.getAnnotation(Validation.class);
 		if (validationFaultAnnotation != null) {
