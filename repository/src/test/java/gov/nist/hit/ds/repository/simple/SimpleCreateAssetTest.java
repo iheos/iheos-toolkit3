@@ -7,6 +7,7 @@ import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import org.junit.BeforeClass;
@@ -21,7 +22,7 @@ public class SimpleCreateAssetTest {
 		
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		repos = fact.createRepository(
-				"This is my repository",
+				"Repos "+ (int)(Math.random() * 10),
 				"Description",
 				new SimpleType("simpleRepos"));
 	}
@@ -59,14 +60,14 @@ public class SimpleCreateAssetTest {
 	}
 	
 	@Test
-	public void createDuplicateNamedAssetTest() {
-		String name = "My Deletable Site";
+	public void createNamedAssetTestDuplicate() {
+		String name = "mine";
 		try {
 			repos.createNamedAsset("My Deletable Site", "This is my site", new SimpleType("siteAsset"), name);
-			fail("Should have thrown exception");
+			//fail("Should have thrown exception");
 		} catch (RepositoryException e) {
 			e.toString();
-			// good!
+			fail("Should not have thrown exception because the of automatic name id increment");
 		}
 	}
 	

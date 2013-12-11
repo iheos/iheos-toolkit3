@@ -6,6 +6,8 @@ import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.SimpleRepositoryIterator;
 import gov.nist.hit.ds.repository.simple.SimpleType;
+import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
+
 import org.junit.Test;
 
 public class SimpleRepositoryIteratorTest {
@@ -16,7 +18,7 @@ public class SimpleRepositoryIteratorTest {
 	public void repositoryIteratorTest() throws RepositoryException {
 		
 		new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createRepository(
-				"This is my repository",
+				"Repos "+ Math.random(),
 				"Description",
 				new SimpleType("simpleRepos", ""));
 		

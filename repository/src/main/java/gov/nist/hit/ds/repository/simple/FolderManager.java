@@ -2,7 +2,6 @@ package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Parameter;
-import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 
 import java.io.File;
@@ -20,11 +19,17 @@ import java.util.logging.Logger;
  * 3) Folder names can easily be relocated.
  *
  */
+
+/**
+ * TODO
+ * Think about potential race conditions or synchronization issues arising with the same parent asset being by two different threads.  
+ *
+ */
 public class FolderManager {
 
 	private static final String PARENT_FILE_EXT = Configuration.PARENT_TAG + Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT;
 	// Use when folder name cannot be determined
-	private static final String LOST_AND_FOUND = "lost_and_found";
+	public static final String LOST_AND_FOUND = "lost_and_found";
 	private static Logger logger = Logger.getLogger(FolderManager.class.getName());
 	
 	/**
@@ -34,131 +39,167 @@ public class FolderManager {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public File makeFolder(File reposDir, String assetId) throws RepositoryException {
+	public File[] makeFolder(SimpleAsset sa, String folderName) throws RepositoryException {
 
 		Parameter param = new Parameter();
 
-		param.setDescription("reposDir");
-		param.assertNotNull(reposDir);
+		param.setDescription("asset");
+		param.assertNotNull(sa);
 		
-		param.setDescription("assetId");
-		param.assertNotNull(assetId);
+		File assetPath = sa.getPath();
+
+		File residingFolder = assetPath.getParentFile();
+
+		// FileFilter pff = new FileFilter();
+		// pff.setFileNamePart(getAssetIdFromFilename(assetPath.toString())); 
+
+		// File[] assetPaths = getAssetPath(pff, residingFolder);
 		
-		FileFilter pff = new FileFilter();
-		pff.setFileNamePart(assetId); 
+		File[] assetPaths = new File[] {sa.getPath(),sa.getContentFile(null)};
+		
+		if (assetPaths!=null && assetPaths[0]!=null) {			
 
-		File[] assetPath = getAssetPath(pff, reposDir, assetId);
-		if (assetPath!=null && assetPath[0]!=null) {
-
-			
-			File residingFolder = assetPath[0].getParentFile();
 			// Parent folder already exists, use it
-			if (assetPath[0].getName().endsWith(PARENT_FILE_EXT)) {
-				return residingFolder;
+			if (assetPath.getName().endsWith(PARENT_FILE_EXT)) {
+				return new File[]{residingFolder,assetPaths[1]};
 			}
-		
-			// Parent folder does not yet exist, create it
-			Properties props = new Properties();
 			
+			// Parent folder does not yet exist, create it
+		
 			try {
-				loadProps(props, assetPath[0]);
-				// Make a folder name out of the possible values whichever is non-null first
-				String folderName = getSafeName(new String[]{
-						props.getProperty(PropertyKey.DISPLAY_NAME.toString())
-						,props.getProperty(PropertyKey.DESCRIPTION.toString())
-						,props.getProperty(PropertyKey.ASSET_ID.toString())
-						,LOST_AND_FOUND
-				});				
-
 				File newParentFolder = new File(residingFolder + File.separator + folderName);
+				File newContentFile = null;
 				
 				if (!newParentFolder.exists()) {
 					if (newParentFolder.mkdir()) {
-						if (assetPath[0].exists())
-							assetPath[0].renameTo(new File(newParentFolder + File.separator 
-									+ assetPath[0].getName()
-									.replaceAll(Configuration.PROPERTIES_FILE_EXT + "$" // Last index
-											, PARENT_FILE_EXT)));									
-						if (assetPath[1]!=null && assetPath[1].exists())
-							assetPath[1].renameTo(new File(newParentFolder + File.separator + assetPath[1].getName()));
+						String baseNameWoExt = null;
+						if (assetPaths[0].exists()) {
+							baseNameWoExt = newParentFolder + File.separator 
+							+ assetPaths[0].getName()
+							.replaceAll(Configuration.PROPERTIES_FILE_EXT + "$" // Last index
+									,"");
+							File newLoc = new File(baseNameWoExt + PARENT_FILE_EXT);
+							if (assetPaths[0].renameTo(newLoc)) {
+								sa.setPath(newLoc);
+							}
+						}
+						if (assetPaths[1]!=null && assetPaths[1].exists()) {
+							newContentFile = new File(newParentFolder + File.separator + assetPaths[1].getName());
+							if (assetPaths[1].renameTo(newContentFile)) {
+								sa.setContentPath(newContentFile);
+							}								
+						}							
 					} else {
 						logger.warning("newParentFolder could not be created. " + newParentFolder);
 					}						
 				} 
 				
-				return newParentFolder;
+				return new File[]{newParentFolder,newContentFile};
 			} catch (Exception ex) {
-				logger.warning("makeFolder failed for assetId: <" + assetId + "> because: " + ex.toString());
+				logger.warning("makeFolder failed for assetPath: <" + assetPath + "> because: " + ex.toString());
 			}
 		}
  
-		return reposDir;
+		return new File[]{residingFolder,null};
+	}
+	
+	public File[] getFile(File dir, String[] names, boolean directLoad) throws RepositoryException {
+		String safeName = null;
+		try {
+			safeName = FolderManager.getSafeName(names);
+		} catch (RepositoryException re) {
+				throw new RepositoryException(RepositoryException.NULL_ARGUMENT + ": " + re.toString());				
+		}
+		
+		String assetBaseFile = dir + File.separator + safeName;
+		File assetPropFile = new File(assetBaseFile + Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT);
+
+		if (directLoad) {
+			return new File[]{assetPropFile // file w/ extension 			 			[0]
+					,new File(assetBaseFile) // Base name file part w/o extension 		[1]
+					,new File(safeName) // name-id only									[2]
+				};
+		}
+		
+		String newId = safeName;
+		// Append suffix to make a new file
+		int cx = 0;
+
+		while (assetPropFile.exists() && cx++ <50) { // safe loop limit
+			newId = safeName + "_" + (cx);
+			assetBaseFile = dir + File.separator + newId;
+			assetPropFile = new File(assetBaseFile +  Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT);  			
+		}
+		
+		
+		return new File[]{assetPropFile // file w/ extension 							 [0]
+			,new File(assetBaseFile) // Base name file part w/o extension				 [1]
+			,new File(newId) // name-id only											 [2]
+			,(cx>0)?assetPropFile:null // just a non-null flag  to indicate counter trip [3] 
+		};
+
 	}
 	
 	/**
 	 * 
-	 * @param reposDir
+	 * @param dir
 	 * @param assetId
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public File[] findById(File reposDir, String assetId, String[] names) throws RepositoryException {
+	public File[] findById(File dir, File assetPath, String[] names) throws RepositoryException {
 
 		Parameter param = new Parameter();
 
-		param.setDescription("reposDir");
-		param.assertNotNull(reposDir);
-		
-		param.setDescription("assetId");
-		param.assertNotNull(assetId);
-
-
-		FileFilter pff = new FileFilter();
-		pff.setFileNamePart(assetId); 
-
-		File[] assetPath = getAssetPath(pff, reposDir, assetId);
+		param.setDescription("dir");
+		param.assertNotNull(dir);		
 		
 		// Does it exist?
-		if (assetPath!=null && assetPath[0]!=null) {
-			return assetPath; 
-		} else {// New file
-			String safeName = null;
-			try {
-				safeName = FolderManager.getSafeName(names);
-				safeName += "_";
-			} catch (RepositoryException re) {
-				if (assetId!=null && !"".equals(assetId)) {
-					safeName = ""; // no usable properties were available, just use id for now and update filename later when a property becomes available
-				} else { 
-					throw new RepositoryException(RepositoryException.NULL_ARGUMENT + ": " + re.toString());
-				}
-			}
-			String assetFile = reposDir + File.separator + safeName + assetId + Configuration.DOT_SEPARATOR;
-			return new File[]{new File(assetFile + Configuration.PROPERTIES_FILE_EXT),null};
+		if (assetPath!=null) {
+			File residingFolder = assetPath.getParentFile();
+
+			File[] assetPaths = getAssetFileById(new SimpleId(getAssetIdFromFilename(assetPath.toString())),residingFolder);
+			
+			if (assetPaths!=null && assetPaths[0]!=null) {
+				return assetPaths; 
+			} 
+		} else { // New file
+			return getFile(dir, names, true);
 		}
-//		else {		
-//		File assetFile = new File(reposDir + File.separator + assetId + "." + Configuration.PROPERTIES_FILE_EXT);
-//		return new File[]{assetFile,null};
-//	}
 
+		return new File[]{dir,null};
+	}
+	
+	
+	public File[] getAssetFileById(Id id, File baseDir) throws RepositoryException {
+		FileFilter pff = new FileFilter();
+		pff.setFileNamePart(id.getIdString()); 
 
+		return getAssetPath(pff, baseDir);
 		
 	}
+	
 	
 	/**
 	 * 
 	 * @param filename
 	 * @return
 	 */
-	public static Id getAssetIdFromFilename(String filename) {
-		File fn = new File(filename);
-		String fullName = fn.getName();
-		// extract id from filename
-		String[] parts = fullName.split("\\.");
-		if (parts != null && parts.length > 0)
-			return new SimpleId(parts[0]);
-		else
-			return new SimpleId(fullName);
+	public static String getAssetIdFromFilename(String fn) throws RepositoryException {
+		Parameter param = new Parameter();
+		param.setDescription("fn");
+		param.assertNotNull(fn);
+
+		String fnPart = fn.replace("." + Configuration.PARENT_TAG + ".", Configuration.DOT_SEPARATOR);
+		fnPart = fnPart.replace(Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT, Configuration.DOT_SEPARATOR);
+		
+		int extIdx = fnPart.lastIndexOf(Configuration.DOT_SEPARATOR);
+		
+		if (extIdx>-1) {
+			return fnPart.substring(0, extIdx);
+		} 
+		
+		throw new RepositoryException(RepositoryException.OPERATION_FAILED + ": fn=" + fn);
 	}
 
 	/**
@@ -226,7 +267,7 @@ public class FolderManager {
 		
 	};
 
-	private static File[] getAssetPath(FileFilter pff, File dir, String parentId) throws RepositoryException {
+	private static File[] getAssetPath(FileFilter pff, File dir) throws RepositoryException {
 		
 		File[] assetFileNames = dir.listFiles(pff);
 		
@@ -234,7 +275,7 @@ public class FolderManager {
 			return pff.getDirectMatch();	
 		} else {
 			for (File f : assetFileNames) {
-				File[] nestedMatch = getAssetPath(pff, f, parentId);
+				File[] nestedMatch = getAssetPath(pff, f);
 				if (nestedMatch!=null && nestedMatch[0]!=null)
 					return nestedMatch;
 			}
@@ -266,7 +307,7 @@ public class FolderManager {
 	 * @param finalState
 	 * @throws RepositoryException
 	 */
-	public static File moveChildToParent(File[] src, File[] dst)
+	public static File[] moveChildToParent(File[] src, File[] dst)
 			throws RepositoryException {
 		
 		Parameter param = new Parameter();
@@ -284,14 +325,14 @@ public class FolderManager {
 
 		if (!src[0].renameTo(dst[0])) {
 				logger.warning("Child relocation failed after its parent was associated with a new folder from <" + src[0].toString() + "> to <" + dst[0].toString() + ">");
-				return src[0]; // Props
+				return new File[]{src[0],src[1]}; // no change to Props or Cont 
 		} 
 		if (src[1].exists()) {
 				if (!src[1].renameTo(dst[1])) {
 					logger.warning("Asset content relocation failed after its parent was associated with a new folder from <" + src[1].toString() + "> to <" + dst[1].toString() + ">");
 				}			
 		}
-		return dst[0]; // Props
+		return new File[]{dst[0],dst[1]}; // Props, Cont
 		
 
 	}

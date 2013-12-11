@@ -8,6 +8,8 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.SimpleType;
+import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -22,7 +24,7 @@ public class SimpleNamedRepositoryTest {
 
 
 		repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
-				"This is my repository",
+				"Repos " + (int)(Math.random() * 10),
 				"Description",
 				new SimpleType("simpleRepos", "no description"),
 				"sites");

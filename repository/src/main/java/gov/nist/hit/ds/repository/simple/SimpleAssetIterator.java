@@ -31,7 +31,8 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	public SimpleAssetIterator(Repository repos) throws gov.nist.hit.ds.repository.api.RepositoryException {
 		setRepository(repos);
 		this.repositoryId = repos.getId();
-		reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());
+		// reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());
+		reposDir = repos.getRoot();
 		List<File> fList = setupList(reposDir);
 		
 		assetFileNames = fList.toArray(new File[fList.size()]);		
@@ -47,7 +48,8 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		setRepository(repos);
 		this.repositoryId = repos.getId();
 		this.type = type;
-		reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());
+		// reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());
+		reposDir = repos.getRoot();
 		List<File> fList = setupList(reposDir);
 		
 		assetFileNames = fList.toArray(new File[fList.size()]);				

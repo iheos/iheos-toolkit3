@@ -3,10 +3,9 @@ package gov.nist.hit.ds.repository.simple;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.Parameter;
 import gov.nist.hit.ds.repository.api.PropertyKey;
-import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
@@ -33,9 +32,12 @@ public class SimpleAsset implements Asset, Flushable {
 	byte[] content = null;
 	boolean loadContentAttempted = false;
 	boolean autoFlush = true;
+	Id id = null;
 	
 	transient boolean indexable = false;
 	transient RepositorySource source;
+	private transient File path;
+	private transient File contentPath = null;
 	
 	public SimpleAsset(RepositorySource source) throws RepositoryException {
 		super();
@@ -51,8 +53,9 @@ public class SimpleAsset implements Asset, Flushable {
 		setProperty(PropertyKey.ASSET_TYPE, type.getKeyword());
 	}
 
-	public void setId(Id id) throws RepositoryException {
-		setProperty(PropertyKey.ASSET_ID, id.getIdString());
+	public void setId(Id id) throws RepositoryException {		
+		setPropertyTemp(PropertyKey.ASSET_ID, id.getIdString());
+		this.id = id;
 	}
 
 	/**
@@ -100,22 +103,28 @@ public class SimpleAsset implements Asset, Flushable {
 		return new File(getBasePath(assetId) + File.separator + assetId.getIdString());
 	}
 	
-	private File getBasePath(Id assetId) throws RepositoryException {				
-		File reposDir = getReposDir();
+	private File getBasePath(Id assetId) throws RepositoryException {
 		
-		try {			
-			File[] assetPath = new FolderManager().findById(reposDir, assetId.getIdString(), null);
-			return assetPath[0].getParentFile();
-			
-		} catch (Exception ex) {
-			return reposDir;
-		}
+		if (getPath()!=null) {
+			return getPath().getParentFile();
+		} else
+			return getReposDir();
+		
+//		File reposDir = getReposDir();
+//		
+//		try {			
+//			File[] assetPath = new FolderManager().findById(reposDir, assetId.getIdString(), null);
+//			return assetPath[0].getParentFile();
+//			
+//		} catch (Exception ex) {
+//			return reposDir;
+//		}
 			
 									
 	}
 		
 	private File getReposDir() throws RepositoryException {
-		return new File(Configuration.getRepositoriesDataDir(getSource()).toString()  + File.separator + getRepository().getIdString());
+		return new File(Configuration.getRepositoriesDataDir(getSource()).toString()  + File.separator + getRepository().getIdString());		
 	}
 
 	
@@ -148,8 +157,16 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
 	@Override
-	public Id getId() throws RepositoryException {		
-		return new SimpleId(getProperty(PropertyKey.ASSET_ID));
+	public Id getId() throws RepositoryException {
+		// return new SimpleId(getProperty(PropertyKey.ASSET_ID));
+		
+		if (id==null) {
+			id = new SimpleId(getProperty(PropertyKey.ASSET_ID));
+		} /* else if (!id.getIdString().equals(getProperty(PropertyKey.ASSET_ID))) {
+			id = new SimpleId(getProperty(PropertyKey.ASSET_ID));
+		} */
+
+		return id;
 	}
 
 	@Override
@@ -202,8 +219,8 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
 	@Override
-	public void setParentId(Id id) throws RepositoryException {
-		setProperty(PropertyKey.PARENT_ID, id.getIdString());
+	public void setParentId(String id) throws RepositoryException {
+		setProperty(PropertyKey.PARENT_ID, id);
 	}
 	
 
@@ -219,9 +236,26 @@ public class SimpleAsset implements Asset, Flushable {
 	public Id getRepository() throws RepositoryException {
 		return new SimpleId(getProperty(PropertyKey.REPOSITORY_ID));
 	}
-	@Override	
+	
+	@Override
 	public File getContentFile() throws RepositoryException {
-		String assetContentFilePart = getAssetBaseFile(this.getId()).toString();
+		return getContentFile(null);
+	}
+	
+	@Override	
+	public File getContentFile(File part) throws RepositoryException {
+		String assetContentFilePart = null;
+		
+		 if (part == null && getContentPath()!=null) {
+			 return getContentPath();
+		} else if (part!=null) {
+			assetContentFilePart = part.toString();
+		} else if (getPath()!=null) {
+			assetContentFilePart = getPath().getParent() + File.separator + FolderManager.getAssetIdFromFilename(getPath().getName());
+		} else {
+			String names[] = new String[] {getDisplayName() ,getDescription()};
+			assetContentFilePart = new FolderManager().getFile(getReposDir(), names, true)[1].toString();						
+		}
 		
 		String[] ext = getContentExtension();
 		if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {			
@@ -243,7 +277,12 @@ public class SimpleAsset implements Asset, Flushable {
 		File f = getContentFile();
 	
 		if (f!=null) {
-			return f.exists();
+			if (f.exists()) {
+				setContentPath(f);
+				return true;
+			} else {
+				logger.fine("Content file does not exist: " + f.toString());
+			}
 		}
 		return false;
 	}
@@ -251,9 +290,12 @@ public class SimpleAsset implements Asset, Flushable {
 	@Override
 	public byte[] getContent() throws RepositoryException {
 
+		/* Is this still needed?
 		if (properties.size()==0) {
 			this.load(getId()); // , getAssetBaseFile(getId())
 		}
+		*/
+		
 		if (!loadContentAttempted && hasContent()) {
 			loadContent(getContentFile());
 		}
@@ -264,7 +306,7 @@ public class SimpleAsset implements Asset, Flushable {
 	@Override
 	public void updateContent(byte[] content) throws RepositoryException {
 		this.content = content;
-		if (autoFlush) flush(getPropFile());
+		if (autoFlush) flush(getContentFile()); // getPropFile()
 	}
 
 	@Override
@@ -274,7 +316,42 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
 	@Override
-	public void addAsset(Id assetId) throws RepositoryException {
+	public Asset addAsset(Asset asset) throws RepositoryException {
+		
+		Parameter p = new Parameter();
+		p.setDescription("Asset");
+		p.assertNotNull(asset);
+				
+		String folderName = FolderManager.getSafeName(new String[]{
+				getProperty(PropertyKey.DISPLAY_NAME)
+				,getProperty(PropertyKey.DESCRIPTION)
+				,getProperty(PropertyKey.ASSET_ID)
+				,FolderManager.LOST_AND_FOUND
+		});				
+
+		File[] parentFolder = new FolderManager().makeFolder(this, folderName);
+		
+		
+		File srcPropFile = asset.getPropFile();
+		File srcConFile = asset.getContentFile();			
+
+		File[] txSrc = new File[]{srcPropFile, srcConFile};		
+
+		File dstPropFile = new File(parentFolder[0] + File.separator + asset.getPropFile().getName());
+		File dstConFile = new File(parentFolder[0] + File.separator + asset.getContentFile().getName());
+		File[] txDst = new File[]{dstPropFile, dstConFile};
+		
+		asset.setParentId(getPropFileRelativePart());
+		File[] loc = FolderManager.moveChildToParent(txSrc, txDst);
+		asset.setPath(loc[0]);
+		asset.setContentPath(loc[1]);
+	
+		return asset;
+	}
+	
+	/*
+	@Override
+	public Asset addAsset(Id assetId) throws RepositoryException {
 		Id repositoryId = getRepository();   // this does not support cross-repository linking
 		Repository repository = new RepositoryFactory(getSource()).getRepository(repositoryId);
 		SimpleAsset asset = (SimpleAsset) repository.getAsset(assetId);
@@ -283,23 +360,9 @@ public class SimpleAsset implements Asset, Flushable {
 					"trying to create parent relationship between asset [" + assetId.getIdString() + 
 					"] and itself (repository [" + repositoryId.getIdString() + "]");
 	
-
-		asset.setAutoFlush(true);
-		asset.setParentId(getId());
-		
-		File parentFolder = new FolderManager().makeFolder(getReposDir(), getId().getIdString());
-		
-		File srcPropFile = asset.getPropFile();
-		File srcConFile = asset.getContentFile();
-		File[] txSrc = new File[]{srcPropFile, srcConFile};		
-
-		File dstPropFile = new File(parentFolder + File.separator + asset.getPropFile().getName());
-		File dstConFile = new File(parentFolder + File.separator + asset.getContentFile().getName());
-		File[] txDst = new File[]{dstPropFile, dstConFile};
-		
-		FolderManager.moveChildToParent(txSrc, txDst);			
-		
+		return addAsset(asset);
 	}
+	*/
 	
 	@Override
 	public void removeAsset(Id assetId, boolean includeChildren)
@@ -353,6 +416,11 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 	
 	@Override
+	public String getPropFileRelativePart() throws RepositoryException {
+		return getPropFile(this.getId()).toString().replace(getReposDir().toString(), "").replace("\\", "/");
+	}
+	
+	@Override
 	public File getPropFile() throws RepositoryException {
 		return getPropFile(this.getId());
 	}
@@ -364,10 +432,22 @@ public class SimpleAsset implements Asset, Flushable {
 			throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
 					"source directory [" + getSource().getLocation().toString() + "] does not exist");		
 		
-		String names[] = new String[] {getDisplayName() ,getDescription()};
-		File[] assetPath = new FolderManager().findById(getReposDir(), id.getIdString(), names);
+		if (getPath()!=null) {
+			return getPath();
+		}				
+		
+		// New file
+		String firstPrefName = (getId()!=null && !getId().isAutoGenerated())?getId().getIdString():getDisplayName();
+		
+		String names[] = new String[] {firstPrefName, getDescription()};
+
+		File[] assetPath = new FolderManager().getFile(getReposDir(), names, false);
 
 		if (assetPath!=null && assetPath[0]!=null) {
+			setContentPath(getContentFile(assetPath[1])); // base path w/o extension
+			if (assetPath[3]!=null) { // incremented id due to duplicate file conflict
+				setId(new SimpleId(assetPath[2].toString()));
+			}
 			return assetPath[0];
 		} 
 		throw new RepositoryException(RepositoryException.NULL_ARGUMENT);
@@ -395,15 +475,28 @@ public class SimpleAsset implements Asset, Flushable {
 	 * @throws RepositoryException
 	 */
 	public SimpleAsset load(Id assetId) throws RepositoryException {
-		File assetPropFile =  getPropFile(assetId); // new File(assetBaseFile.toString() + "." + Configuration.PROPERTIES_FILE_EXT);
+		
+		
+		File[] assetPath = new FolderManager().getFile(getReposDir(), new String[] {assetId.getIdString()}, true);
+
+		
+		if (assetPath[0]!=null) {
+			setPath(assetPath[0]);
+			setContentPath(getContentFile(assetPath[1])); // w/o ext
+		} else {
+			throw new RepositoryException(RepositoryException.IO_ERROR + " : " + 
+					"File not found for assetId: [" +
+					assetId.getIdString()
+					+ "]");
+		}
 
 		properties.clear();
 		try {
-			FolderManager.loadProps(properties, assetPropFile);
+			FolderManager.loadProps(properties, assetPath[0]);
 		} catch (Exception e) {
 			throw new RepositoryException(RepositoryException.UNKNOWN_ID + " : " + 
 					"properties cannot be loaded: [" +
-					assetPropFile.toString()
+					assetPath[0].toString()
 					+ "]", e);
 		}
 		
@@ -444,7 +537,9 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 	
 	public void flush() throws RepositoryException {
-		flush(getPropFile());
+		File path = getPropFile();
+		setPath(path);
+		flush(path);
 	}
 
 	@Override
@@ -453,8 +548,9 @@ public class SimpleAsset implements Asset, Flushable {
 		throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
 				"source directory [" + getSource().getLocation().toString() + "] does not exist");
 
-		if (getProperty(PropertyKey.UPDATED_DATE)==null)
-			assertUniqueName(propFile);
+//		if (getProperty(PropertyKey.UPDATED_DATE)==null) {
+//			assertUniqueName(propFile);
+//		}
 				
 		try {			
 			setPropertyTemp(PropertyKey.UPDATED_DATE, new Hl7Date().now());	
@@ -483,6 +579,7 @@ public class SimpleAsset implements Asset, Flushable {
 	 * @param propFile
 	 * @throws RepositoryException
 	 */
+	/*
 	private void assertUniqueName(File propFile) throws RepositoryException {
 		// Make sure the file name is not null and another file doesn't already exist with the same name in the case of a new asset only		
 		if (propFile!=null) {
@@ -493,6 +590,7 @@ public class SimpleAsset implements Asset, Flushable {
 		}
 		return;
 	}
+	*/
 
 	/**
 	 * 
@@ -515,7 +613,7 @@ public class SimpleAsset implements Asset, Flushable {
 								if (lifetime!=null) {
 										Integer days = Integer.parseInt(lifetime.substring(0,lifetime.indexOf(" days")));
 										if (days!=null) {
-											logger.fine("asset " + getId().getIdString() +  " lifetime: " + days);
+											logger.fine("asset " + getPropFile() +  " lifetime: " + days);
 											if (getExpirationDate()==null) {
 												c.add(Calendar.DATE, days);
 												Date expr = c.getTime();
@@ -583,6 +681,23 @@ public class SimpleAsset implements Asset, Flushable {
 	@Override
 	public void setSource(RepositorySource source) {
 		this.source = source;
+	}
+
+	public File getPath() {
+		return path;
+	}
+
+	public void setPath(File path) {
+		this.path = path;
+	}
+
+	public File getContentPath() {
+		return contentPath;
+	}
+
+	@Override
+	public void setContentPath(File contentPath) {
+		this.contentPath = contentPath;
 	}
 	
 }

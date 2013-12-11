@@ -105,9 +105,37 @@ public class DbContext {
 	 * @return
 	 * @throws SQLException
 	 */
-	public int executePrepared(String sqlStr, String[] params) throws SQLException {
+	public int[] executePreparedId(String sqlStr, String[] params) throws SQLException {
 
 		logger.fine("IndexContainer SQL: " +sqlStr);
+		if (connection!=null) {
+			PreparedStatement statement = connection.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
+			int parameterIndex=1;
+			for (String p : params) {
+				logger.fine("Setting param: "+parameterIndex + " to <" + p + ">");			
+
+				statement.setString(parameterIndex++, p);
+			}
+			int records = statement.executeUpdate();
+			int idKey = -1;
+			ResultSet rs = statement.getGeneratedKeys();
+			
+			if (rs!=null) {
+				if (rs.next()) {
+					idKey = rs.getInt(1);
+				}
+			}
+			
+			return new int[]{records,idKey};
+			
+		}
+		throw new SQLException("No connection.");
+	}
+	
+
+	public int executePrepared(String sqlStr, String[] params) throws SQLException {
+
+		logger.fine("executePrepared IndexContainer SQL: " +sqlStr);
 		if (connection!=null) {
 			PreparedStatement statement = connection.prepareStatement(sqlStr);
 			int parameterIndex=1;
@@ -116,10 +144,13 @@ public class DbContext {
 
 				statement.setString(parameterIndex++, p);
 			}
-			return statement.executeUpdate();
+			int records = statement.executeUpdate();
+			return records;
+			
 		}
 		throw new SQLException("No connection.");
 	}
+	
 	
 	public ResultSet executeQuery(String sqlStr, String[] params) throws SQLException {
 

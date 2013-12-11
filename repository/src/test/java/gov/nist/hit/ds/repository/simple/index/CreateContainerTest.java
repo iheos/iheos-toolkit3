@@ -94,7 +94,7 @@ public class CreateContainerTest  {
 				id = new IdFactory().getNewId();
 				sid = new SimpleId(id.getIdString());
 
-				dbc.addIndex("test", sid.getIdString(), "siteAsset","a","myvalue" + cx);
+				dbc.addIndex("test", sid.getIdString(), "siteAsset", "/bogus", "a","myvalue" + cx);
 				
 			}
 			assertTrue(dbc.getIndexCount()==insertRecords);

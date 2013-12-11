@@ -89,7 +89,7 @@ public class DbConnection implements IndexDataSource {
 	          p.setInitialSize(10);
 	          p.setMaxWait(10000);
 	          p.setRemoveAbandonedTimeout(60);
-	          p.setMinEvictableIdleTimeMillis(30000);
+	          p.setMinEvictableIdleTimeMillis(35000);
 	          p.setMinIdle(20);
 	          p.setLogAbandoned(false);
 	          p.setRemoveAbandoned(true);

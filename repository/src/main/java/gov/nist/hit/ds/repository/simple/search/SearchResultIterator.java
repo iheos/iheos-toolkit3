@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.repository.simple.search;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 import gov.nist.hit.ds.repository.api.Asset;
@@ -67,8 +68,12 @@ public class SearchResultIterator implements AssetIterator  {
 	}
 	
 	private void init(Repository[] repositories, SearchCriteria searchCriteria,
-			String orderBy) {
+			String orderBy) throws RepositoryException {
 		DbIndexContainer dbc = new DbIndexContainer();
+		
+		for (Repository rep : repositories) {				
+			 dbc.indexRep(rep, null);
+		}
 		
 		crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy);
 		totalRecords = crs.size();
@@ -93,26 +98,48 @@ public class SearchResultIterator implements AssetIterator  {
 		if (!hasNextAsset())
 			throw new RepositoryException(RepositoryException.NO_MORE_ITERATOR_ELEMENTS);
 		SimpleId repId = null;
-		SimpleId assetId = null;
+		// SimpleId assetId = null;
 		RepositorySource reposSrc = null;
 		
 		try {
 			
 			if (crs.next()) {
 				fetchedRecords++;
-				repId = new SimpleId(crs.getString(1));
-				assetId = new SimpleId(crs.getString(2));
+				repId = new SimpleId(crs.getString(1));				
 				String reposSrcAcs = crs.getString(3);
+				
 				if (reposSrcAcs!=null) {
 					reposSrc = Configuration.getRepositorySrc(RepositorySource.Access.valueOf(reposSrcAcs));
 				} else {
 					logger.fine("No [null] access indexed for " + repId);
-				}				
+				}
+				
+				Repository repos = new RepositoryFactory(reposSrc).getRepository(repId);
+				
+				String propFileStr = crs.getString(4);
+				Asset a = null;
+				if (propFileStr!=null && !"".equals(propFileStr)) {
+					String fullPath = repos.getRoot() + File.separator + propFileStr;
+					logger.fine("Retrieving by path: " + fullPath);
+					File propFile = new File(fullPath);
+					a = repos.getAssetByPath(propFile);
+					a.setPath(propFile);
+				} 
+				
+				if (a==null) {
+					logger.warning("Asset prop load by path failed" + propFileStr);
+//					assetId = new SimpleId(crs.getString(2));
+//					if (assetId!=null) {
+//						logger.fine("Retrieving by path: " + assetId.getIdString());
+//						a = repos.getAsset(assetId);						
+//					}
+				} 
+				
+				return a;
+
 			}			
 			// System.out.println(assetId.getIdString());
 			
-			Repository repos = new RepositoryFactory(reposSrc).getRepository(repId);
-			return repos.getAsset(assetId);
 			
 		} catch (Exception e) {
 			logger.warning(e.toString());

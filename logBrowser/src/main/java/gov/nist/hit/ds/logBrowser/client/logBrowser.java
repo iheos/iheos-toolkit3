@@ -6,9 +6,11 @@ import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -58,6 +60,7 @@ public class LogBrowser implements EntryPoint {
 	SplitLayoutPanel splitPanel = new SplitLayoutPanel(5);
 	ScrollPanel centerPanel = new ScrollPanel();
 	SplitLayoutPanel westContent = new SplitLayoutPanel(2);
+	ListBox reposLbx = new ListBox();
 	
 	HTML propsWidget = new HTML();
     ScrollPanel navScroller;
@@ -65,6 +68,7 @@ public class LogBrowser implements EntryPoint {
     
 	final public RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
     protected ArrayList<String> propNames = new ArrayList<String>();
+    protected Map<String, String> reposProps = new HashMap<String,String>();
  
     		
     // private HandlerRegistration handlerRegistration;
@@ -93,28 +97,39 @@ public class LogBrowser implements EntryPoint {
 			reposService.setRepositoryConfig(new AsyncCallback<Boolean>(){
 				public void onSuccess(Boolean a){
 					
-					AsyncCallback<Map<String, String[]>> reposTags = new AsyncCallback<Map<String, String[]>>() {
+					AsyncCallback<List<RepositoryTag>> reposTags = new AsyncCallback<List<RepositoryTag>>() {
 
 						public void onFailure(Throwable a) {
 							Window.alert("No repositories found. Error: " + a.toString());							
 						}
 
-						public void onSuccess(Map<String, String[]> a) {							
-							ListBox reposLbx = new ListBox();
+						public void onSuccess(List<RepositoryTag> rtList) {
 							
-							String[][] reposData = new String[a.size()][2];
+							SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
+							propsWidget.setHTML(propsContent.toSafeHtml());
+														
+							String[][] reposData = new String[rtList.size()][2];
 							int cx=0;
-							for (String key : a.keySet()) {
-								reposData[cx][0] = key;
-								reposData[cx++][1] = a.get(key)[1];
+							for (RepositoryTag rt : rtList) {
+//								if (cx==0) {
+//									String propsTxt = a.get(key)[2];									
+//									propsContent.appendHtmlConstant("<div style='margin:3px;'>Repository Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
+//									propsContent.appendHtmlConstant("</div>");
+//									propsWidget.setHTML(propsContent.toSafeHtml());												
+//								}
+								reposData[cx][0] =  rt.getId(); //a.get(key)[0];
+								reposData[cx++][1] = rt.getSource(); // a.get(key)[1];
 								
-								reposLbx.addItem(key, a.get(key)[1]);
+								reposLbx.addItem(rt.getDisplayName(), rt.getCompositeId());
+								reposProps.put(rt.getCompositeId(), rt.getProperties());
+								
+								
 							}
 														
 							Label lblRepos = new Label("Repository:");
 							
 							// lblRepos.setWidth("25%");
-							reposLbx.setWidth("90px");
+							reposLbx.setWidth("125px"); // 90
 							FlexTable grid = new FlexTable();
 							grid.setCellPadding(1);
 							grid.setCellSpacing(2);
@@ -123,8 +138,7 @@ public class LogBrowser implements EntryPoint {
 							
 							treePanel.add(grid);
 
-							SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
-							propsWidget.setHTML(propsContent.toSafeHtml());
+
 							ScrollPanel spProps = new ScrollPanel(propsWidget);
 							westContent.addSouth(spProps, Math.round(0.2 * Window.getClientHeight()));
 							
@@ -136,7 +150,7 @@ public class LogBrowser implements EntryPoint {
 							westContent.add(sp); // added to north: Math.round(0.7 * Window.getClientHeight())
 																
 							splitPanel.addWest(westContent, 300); // 400  -- Math.round(.15 * Window.getClientWidth())
-							centerPanel.add(new HTML("<h2 style='color:maroon'>Recent Activity</h2><hr/>")); // Startup message
+							// centerPanel.add(new HTML("<h2 style='color:maroon'>Recent Activity</h2><hr/>")); // Startup message
 							splitPanel.add(centerPanel);
 							
 							RootLayoutPanel.get().add(splitPanel);
@@ -150,7 +164,20 @@ public class LogBrowser implements EntryPoint {
 								public void onSuccess(List<AssetNode> a) {
 									treeHolder.clear();
 									treeHolder.add(popTreeWidget(a));
-
+									
+									// populate repository props here
+									propsWidget.setHTML("");
+									SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
+									int idx = reposLbx.getSelectedIndex();
+									String propsTxt = reposProps.get(reposLbx.getValue(idx)); // use getItemText for display text 
+									if (propsTxt!=null) {
+										// margin-top:0px;margin-left:3px;
+										propsContent.appendHtmlConstant("<div style='margin:3px;'>Repository Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
+										propsContent.appendHtmlConstant("</div>");
+										// propsWidget.setWidth("250px");
+										propsWidget.setHTML(propsContent.toSafeHtml());											
+									}
+									
 								}
 								
 							};
@@ -163,12 +190,17 @@ public class LogBrowser implements EntryPoint {
 										treeHolder.clear();
 										treeHolder.add(new HTML("&nbsp;Loading..."));
 										centerPanel.clear();
-										propsWidget.setHTML("");
+
+										
 										
 										ListBox lbx = ((ListBox)event.getSource());
 										int idx = lbx.getSelectedIndex();
 										
-										reposService.getAssetTree(new String[][]{{lbx.getItemText(idx),lbx.getValue(idx)}}, treeSetup);		
+										// reposService.getAssetTree(new String[][]{{lbx.getItemText(idx),lbx.getValue(idx)}}, treeSetup);
+										String[] compositeKey = lbx.getValue(idx).split("\\^");
+										
+										reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, treeSetup);
+										
 									}
 								});
 							}
@@ -284,14 +316,22 @@ public class LogBrowser implements EntryPoint {
 							
 							// westContent.remove(propsWidget);
 							SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
-							propsContent.appendHtmlConstant("Asset Properties:<pre><span style='font-style:arial,verdana;font-size: 12px;color:maroon'>").appendEscaped(an.getProps()).appendHtmlConstant("</span></pre>");
+							String propsTxt = (an.getProps()!=null)?an.getProps().trim():"";
+							// margin-top:0px;margin-left:3px;
+							propsContent.appendHtmlConstant("<div style='margin:3px;'>Asset Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
+							if (an.getLocation()!=null) {
+								propsContent.appendHtmlConstant("<!-- <br/>Asset Location:<br/><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>" + an.getLocation()  + "</span>-->");
+							}
+							propsContent.appendHtmlConstant("</div>");
 							propsWidget.setWidth("250px");
 							propsWidget.setHTML(propsContent.toSafeHtml());
 							
+							/*
 							propsWidget.getElement().getStyle()
 					        .setProperty("borderTop", "1px dotted #e7e7e7"); // 1px solid #e7e7e7
 							propsWidget.getElement().getStyle()
 					        .setProperty("borderBottom", "1px dotted #e7e7e7"); // 1px solid #e7e7e7
+							*/
 							
 							// westContent.add(propsWidget, DockPanel.SOUTH);
 							

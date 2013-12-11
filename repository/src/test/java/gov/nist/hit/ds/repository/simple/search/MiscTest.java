@@ -3,10 +3,12 @@ package gov.nist.hit.ds.repository.simple.search;
 import static org.junit.Assert.assertTrue;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.presentation.PresentationData;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,12 +51,14 @@ public class MiscTest {
 	
 	@Test
 	public void npeTest() {
-		NullPointerException npe;
+		NullPointerException npe =  new NullPointerException();
 		
 		try {
-			String x = null;
+			// String x = null;
 			
-			x.equals("");
+			// x.equals("");
+			
+			throw npe;
 			
 		} catch (Exception ex) {
 			;
@@ -117,6 +121,23 @@ public class MiscTest {
 		}
 	}
 	
+	
+	@Test
+	public void sortMapTest() {
+		
+		Properties p = new Properties();
+		
+		p.setProperty("x", "1");
+		p.setProperty("a", "2");
+		p.setProperty("y", "3");
+		p.setProperty("l", "4");
+		
+		
+		System.out.println("******" + PresentationData.getSortedMapString(p));
+		
+	}
+	
+	
 	@Test
 	public void fnRegTest2() {
 		
@@ -133,6 +154,37 @@ public class MiscTest {
 		    System.out.println(replacedURLWithRegex);
 		}
 		*/
+	}
+	
+	@Test
+	public void stringComp() {
+		System.out.println("*** string comp");
+		System.out.println("a".compareTo("z") + "");
+		
+//
+//		List<String[]> unsortList = new ArrayList<String[]>();
+// 
+//		unsortList.add(new String[]{"CCC","x"});
+//		unsortList.add(new String[]{"111","x"});
+//		unsortList.add(new String[]{"AAA","x"});
+//		unsortList.add(new String[]{"BBB","x"});
+//		unsortList.add(new String[]{"222","x"});
+// 
+//		//before sort
+//		System.out.println("ArrayList is unsort");
+//		for(String[] temp: unsortList){
+//			System.out.println(temp[0]);
+//		}
+// 
+//		//sort the list
+//		Collections.sort(unsortList);
+// 
+//		//after sorted
+//		System.out.println("ArrayList is sorted");
+//		for(String[] temp: unsortList){
+//			System.out.println(temp[0]);
+//		}
+//	
 	}
 	
 }

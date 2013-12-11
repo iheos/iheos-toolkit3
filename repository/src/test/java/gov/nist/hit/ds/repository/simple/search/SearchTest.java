@@ -6,7 +6,6 @@ import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -102,8 +101,6 @@ public class SearchTest {
 		subCriteriaA.append(new SearchTerm("startDate",Operator.GREATERTHAN,"20070101"));
 		subCriteriaA.append(new SearchTerm("startDate",Operator.LESSTHANOREQUALTO,"20080101"));
 		
-
-		
 		
 		SearchCriteria subCriteriaB = new SearchCriteria(Criteria.AND);
 		subCriteriaB.append(new SearchTerm("patientId",Operator.EQUALTOANY,new String[]{"103","104","105"}));
@@ -112,9 +109,6 @@ public class SearchTest {
 		SearchCriteria criteria = new SearchCriteria(Criteria.OR);
 		criteria.append(subCriteriaA);
 		criteria.append(subCriteriaB);
-		
-		
-		
 		
 		System.out.println(criteria.toString());
 		
@@ -354,7 +348,7 @@ public class SearchTest {
 			
 			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(acs));
 			Repository repos = fact.createNamedRepository(
-					"This is my repository with children assets",
+					"Repository with child assets",
 					"Description",
 					new SimpleType("simpleRepos"),
 					"repository to test child assets"
@@ -364,17 +358,15 @@ public class SearchTest {
 			a.setOrder(1);
 			
 			Asset parent = a;
-			Id parentId = a.getId();
+			// Id parentId = a.getId();
 			
 			a = repos.createAsset("child 1", "This is my first site", new SimpleType("siteAsset"));
 			a.setOrder(1);			
-			a.setParentId(parentId);
-			parent.addAsset(a.getId());
+			parent.addAsset(a);
 			
 			a = repos.createAsset("child 2", "This is my second site", new SimpleType("siteAsset"));
 			a.setOrder(2);			
-			a.setParentId(parentId);
-			parent.addAsset(a.getId());
+			parent.addAsset(a);
 						
 			SimpleAssetIterator it = new SimpleAssetIterator(repos, new SimpleType("siteAsset"));
 			

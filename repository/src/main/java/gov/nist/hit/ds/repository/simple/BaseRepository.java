@@ -5,6 +5,7 @@ import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.LongValueIterator;
 import gov.nist.hit.ds.repository.api.PropertiesIterator;
+import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
@@ -28,7 +29,8 @@ public abstract class BaseRepository implements Repository {
 	private RepositorySource source;
 	private Id reposId;
 
-	public File getRoot() {
+	@Override
+	public File getRoot() throws RepositoryException {		
 		return root;
 	}
 
@@ -121,7 +123,7 @@ public abstract class BaseRepository implements Repository {
 	@Override
 	public String getDisplayName() throws RepositoryException {
 //		load();
-		return properties.getProperty("DisplayName");
+		return properties.getProperty(PropertyKey.DISPLAY_NAME.toString());
 	}
 
 	@Override
@@ -145,7 +147,6 @@ public abstract class BaseRepository implements Repository {
 
 	@Override
 	public String getDescription() throws RepositoryException {
-//		load();
 		return properties.getProperty("description");
 	}
 
@@ -155,8 +156,8 @@ public abstract class BaseRepository implements Repository {
 	 * This method returns an asset that is primarily used for read-only operations. To update an asset return by this method, setAutoFlush to true.
 	 */
 	public Asset getAsset(Id assetId) throws RepositoryException {
-//		load();
-		File reposDir =  new File(Configuration.getRepositoriesDataDir(getSource()).toString()  + File.separator + getId().getIdString());
+		// File reposDir =  new File(Configuration.getRepositoriesDataDir(getSource()).toString()  + File.separator + getId().getIdString());
+		File reposDir =  getRoot();
 		if (!reposDir.exists() || !reposDir.isDirectory())
 			throw new RepositoryException(RepositoryException.UNKNOWN_REPOSITORY + " : " +
 					"directory for repositoryId [" + getId() + "] does not exist");
@@ -170,10 +171,24 @@ public abstract class BaseRepository implements Repository {
 		return a;
 	}
 	
+	public Asset getAssetByRelativePath(File assetPath) throws RepositoryException {
+		try {
+			SimpleAsset a = new SimpleAsset(getSource());
+			File fullPath = new File(getRoot() + assetPath.toString());
+			FolderManager.loadProps(a.getProperties(), fullPath);
+			a.setPath(fullPath);
+			return a;			
+		} catch (Exception ex) {
+			throw new RepositoryException(RepositoryException.ERROR_ASSIGNING_CONFIGURATION + ex.toString());
+		}
+	
+	}
+	
 	public Asset getAssetByPath(File assetPath) throws RepositoryException {
 		try {
 			SimpleAsset a = new SimpleAsset(getSource());
 			FolderManager.loadProps(a.getProperties(), assetPath);
+			a.setPath(assetPath);
 			return a;			
 		} catch (Exception ex) {
 			throw new RepositoryException(RepositoryException.ERROR_ASSIGNING_CONFIGURATION + ex.toString());
@@ -183,7 +198,6 @@ public abstract class BaseRepository implements Repository {
 
 	@Override
 	public AssetIterator getAssets() throws RepositoryException {
-//		load();
 		
 		SimpleRepository repos = new SimpleRepository(getId());
 		repos.setSource(getSource());
@@ -229,9 +243,14 @@ public abstract class BaseRepository implements Repository {
 	}
 
 	@Override
-	public PropertiesIterator getProperties() throws RepositoryException {
+	public PropertiesIterator getPropertiesIterator() throws RepositoryException {
 //		load();
 		throw new RepositoryException(RepositoryException.UNIMPLEMENTED);
+	}
+	
+	@Override
+	public Properties getProperties() throws RepositoryException {
+		return properties;
 	}
 
 	@Override
@@ -355,7 +374,7 @@ public abstract class BaseRepository implements Repository {
 		
 		this.source = source;		
 		
-		root = new File(Configuration.getRepositoriesDataDir(getSource()) + File.separator + getId());
+		root = new File(Configuration.getRepositoriesDataDir(getSource()) + File.separator + getId().getIdString());
 		
 		load();
 	}

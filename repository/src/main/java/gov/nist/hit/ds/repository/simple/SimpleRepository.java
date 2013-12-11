@@ -2,6 +2,7 @@ package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.Parameter;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
@@ -65,7 +66,7 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 	public void setDisplayName(String displayName)
 			throws RepositoryException {
 //		load();
-		properties.setProperty("DisplayName", displayName);
+		properties.setProperty(PropertyKey.DISPLAY_NAME.toString(), displayName);
 		if (autoFlush)
 			flush();
 	}
@@ -95,13 +96,12 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 		param.assertEquals(
 				new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL),assetType,SimpleType.ASSET).hasNextType()
 				,new Boolean(true));
-
 		
 		SimpleAsset a = new SimpleAsset(getSource());
 		a.setAutoFlush(false);
 		a.setRepository(getId());
 		a.setType(assetType);
-		a.setId(new IdFactory().getNewId());
+		a.setId(new IdFactory().getNewId()); // before this happened here: Id was converted to a string so the Id properties were lost in the setId method call 
 		a.updateDisplayName(displayName);
 		a.updateDescription(description);
 		a.setAutoFlush(true);

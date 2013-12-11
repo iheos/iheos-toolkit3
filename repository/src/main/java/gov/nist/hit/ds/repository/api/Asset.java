@@ -155,6 +155,8 @@ public interface Asset {
     void setCreatedDate(String createdDate)
             throws gov.nist.hit.ds.repository.api.RepositoryException;
     
+    void setContentPath(File path) throws RepositoryException;
+    
     /**
      * Get the display name for this Asset.
      *
@@ -471,9 +473,19 @@ public interface Asset {
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID},
      *         {@link gov.nist.hit.ds.repository.api.RepositoryException#ALREADY_ADDED
      *         ALREADY_ADDED}
-     */
-    public void addAsset(gov.nist.hit.ds.repository.api.Id assetId)
+    
+    public Asset addAsset(gov.nist.hit.ds.repository.api.Id assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
+     */
+    
+    /**
+     * 
+     * @param asset
+     * @return
+     * @throws gov.nist.hit.ds.repository.api.RepositoryException
+     */
+    public Asset addAsset(Asset asset)
+            throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
      * Remove an Asset from this Asset.  This method does not delete the Asset
@@ -547,6 +559,9 @@ public interface Asset {
     public AssetIterator getAssetsByType(gov.nist.hit.ds.repository.api.Type assetType)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
+    public String getPropFileRelativePart()
+    		throws RepositoryException;
+    
     public File getPropFile()
     		throws RepositoryException;
     
@@ -574,13 +589,18 @@ public interface Asset {
     
     public void setMimeType(String mimeType) throws RepositoryException;
     
-    public void setParentId(Id id) throws RepositoryException;
+    public void setParentId(String id) throws RepositoryException;
     
     public RepositorySource getSource();
     
     public void setSource(RepositorySource source);
+    
+    public File getPath();
+    
+    public void setPath(File path);
 
-	public File getContentFile() throws RepositoryException;
+    public File getContentFile() throws RepositoryException;
+	public File getContentFile(File part) throws RepositoryException;
 
 	public boolean hasContent() throws RepositoryException;
 	

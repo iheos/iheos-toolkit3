@@ -29,7 +29,7 @@ public class AssetHelper {
 		logger.info("Created <" + a.getId() + ">");
 		a.setProperty(PropertyKey.PARENT_ID , parent.getId().getIdString());
 
-		parent.addAsset(a.getId());
+		parent.addAsset(a);
 		return a;
 	}
 	
@@ -53,7 +53,7 @@ public class AssetHelper {
 	static public AssetIterator getChildren(final Asset a) throws RepositoryException {
 		
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
-		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTO,a.getId().getIdString()));
+		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTO, a.getPropFileRelativePart())); // a.getId().getIdString()
 
 		SimpleRepository repos = new SimpleRepository(a.getRepository());
 		repos.setSource(a.getSource());		

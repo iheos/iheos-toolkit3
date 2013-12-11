@@ -9,6 +9,7 @@ import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositoryIterator;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class SimpleRepositoryTest {
 	static public void initialize() throws RepositoryException {
 		
 		Repository rep = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createRepository(
-				"This is my repository",
+				"Repos "+ Math.random(),
 				"Description",
 				new SimpleType("simpleRepos", ""));
 		repId = rep.getId();
@@ -50,7 +51,7 @@ public class SimpleRepositoryTest {
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Type simpleType = new SimpleType("simpleRepos", "");
 		Repository repos1 = fact.createRepository(
-				"This is my repository",
+				"Repos "+ new Hl7Date().now(),
 				"Description",
 				simpleType);
 		Id repId1 = repos1.getId();
@@ -60,7 +61,7 @@ public class SimpleRepositoryTest {
 		    repType1.getDomain() + "] instead.", simpleType.isEqual(repType1));
 		
 		Repository repos2 = fact.createRepository(
-				"This is my repository",
+				"Repos 2",
 				"Description",
 				simpleType);
 		Id repId2 = repos2.getId();
@@ -96,7 +97,7 @@ public class SimpleRepositoryTest {
 		try {
 			new RepositoryFactory(Configuration.getRepositorySrc(Access.RO_RESIDENT))
 			.createRepository(                           // Create on resident is bad
-					"This is my repository",
+					"Resident repos",
 					"Description",
 					new SimpleType("simpleRepos", "no desc") 
 					);

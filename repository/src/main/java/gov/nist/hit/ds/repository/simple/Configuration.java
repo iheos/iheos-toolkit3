@@ -333,15 +333,6 @@ public class Configuration {
 	}
 	*/
 	
-	
-
-	/**
-	 * @deprecated Use {@link FolderManager#getAssetIdFromFilename(String)} instead
-	 */
-	public static Id getAssetIdFromFilename(String filename) {
-		return FolderManager.getAssetIdFromFilename(filename);
-	}
-
 	public static ArrayList<RepositorySource> getRepositorySources() {
 		return repositorySources;
 	}

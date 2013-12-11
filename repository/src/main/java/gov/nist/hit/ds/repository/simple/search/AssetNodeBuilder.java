@@ -11,6 +11,7 @@ import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
@@ -34,6 +35,8 @@ public class AssetNodeBuilder {
 	
 	public List<AssetNode> build(Repository repos, String orderBy) throws RepositoryException {
 		
+		new DbIndexContainer().indexRep(repos, null);
+		
 		List<AssetNode> topLevelAssets = new ArrayList<AssetNode>();
 	
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
@@ -47,11 +50,15 @@ public class AssetNodeBuilder {
 			Asset a = iter.nextAsset();
 			AssetNode parent = new AssetNode(a.getRepository().getIdString()
 					,a.getId().getIdString()
-					,a.getAssetType().toString()
+					,(a.getAssetType()==null)?null:a.getAssetType().toString()
 					,a.getDisplayName()
 					,a.getDescription()
 					,a.getMimeType()
 					,a.getSource().getAccess().name());
+			if (a.getPath()!=null) {
+				// parent.setLocation(a.getPath().toString());
+				parent.setLocation(a.getPropFileRelativePart());
+			}
 			parent.setContentAvailable(a.hasContent());
 			getChildren(repos,parent);
 			topLevelAssets.add(parent);
@@ -62,10 +69,13 @@ public class AssetNodeBuilder {
 	}
 	
 	private void getChildren(Repository repos, AssetNode parent) {
+		if (parent.getAssetId()==null)
+			return;
+		
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 
-		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTO,parent.getAssetId()));			
-		
+		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTOANY, new String[]{parent.getLocation(), parent.getAssetId()})); // parent.getAssetId()
+		 		
 		AssetIterator iter;
 		try {
 			iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
@@ -73,12 +83,16 @@ public class AssetNodeBuilder {
 			while (iter.hasNextAsset()) {
 				Asset a = iter.nextAsset();
 				AssetNode child = new AssetNode(a.getRepository().getIdString()
-						,a.getId().getIdString()
-						,a.getAssetType().toString()
+						,(a.getId()!=null)?a.getId().getIdString():null
+						,(a.getAssetType()==null)?null:a.getAssetType().toString()
 						,a.getDisplayName()
 						,a.getDescription()
 						,a.getMimeType()
 						,a.getSource().getAccess().name());
+				if (a.getPath()!=null) {
+					// child.setLocation(a.getPath().toString());
+					child.setLocation(a.getPropFileRelativePart());
+				}
 				child.setContentAvailable(a.hasContent());
 				parent.addChild(child);
 				getChildren(repos,child);

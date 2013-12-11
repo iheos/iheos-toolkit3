@@ -23,6 +23,7 @@ public class AssetNode implements IsSerializable, Serializable {
 	private String description;
 	private String mimeType;
 	private String reposSrc;
+	private String location;
 	
 	private boolean hasContent;
 	private String txtContent;
@@ -140,6 +141,14 @@ public class AssetNode implements IsSerializable, Serializable {
 
 	public void setContentAvailable(boolean hasContent) {
 		this.hasContent = hasContent;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	

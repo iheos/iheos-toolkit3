@@ -319,7 +319,7 @@ public class SearchServlet extends HttpServlet {
 		if (reportType==1) {
 		sb.append(
 				"<tr bgcolor='" + ((rowCt%2 == 0)?"#E6E6FA":"")   + "'><td>"	+ a.getId().toString() + "</td>"
-				+ "<td>"	+ a.getAssetType().getKeyword() + "</td>"
+				+ "<td>"	+ ((a.getAssetType()!=null)?a.getAssetType().getKeyword():"") + "</td>"
 				+ "<td>"	+ ((a.getCreatedDate()!=null)?a.getCreatedDate():"") + "</td>"
 				+ "<td>"	+ ((a.getMimeType()!=null)?a.getMimeType():"") + "</td>"
 				+"</tr>"

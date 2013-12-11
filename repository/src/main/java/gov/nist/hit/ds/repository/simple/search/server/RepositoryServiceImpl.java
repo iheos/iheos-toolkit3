@@ -5,6 +5,7 @@ import gov.nist.hit.ds.repository.presentation.PresentationData;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.exception.NoServletSessionException;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
@@ -21,7 +22,7 @@ RepositoryService {
 
 
 	@Override
-	public Map<String, String[]> getRepositoryDisplayTags()
+	public List<RepositoryTag> getRepositoryDisplayTags()
 			throws RepositoryConfigException {
 		return new PresentationData().getRepositoryDisplayTags();
 	}

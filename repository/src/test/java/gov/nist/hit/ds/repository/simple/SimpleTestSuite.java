@@ -9,6 +9,7 @@ import gov.nist.hit.ds.repository.simple.index.ExpandContainerTest;
 import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilderTest;
 import gov.nist.hit.ds.repository.simple.search.SearchTest;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
@@ -45,7 +46,7 @@ public class SimpleTestSuite {
 		
 		@Override
 		protected void before() throws Throwable {
-
+			
 			// Setup application wide singletons
 			
 			Installation.reset();
@@ -53,14 +54,23 @@ public class SimpleTestSuite {
  			
  			// Test assets created will be automatically removed after the test suite run is complete
  						 			
-			Configuration.configuration();						
+			Configuration.configuration();
+			
+			
+			File dataDir = Configuration.getRepositoriesDataDir(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+			
+			if (dataDir.exists()) {
+			 System.out.println("Clearing before test data folder...");
+			 FileUtils.cleanDirectory(dataDir);
+			}
+
 		}
 		
 		@Override
 		protected void after() {
 			
 			try {
-				System.out.println("Clearing test data folder...");
+				System.out.println("Clearing after test data folder...");
 				 FileUtils.cleanDirectory(Configuration.getRepositoriesDataDir(Configuration.getRepositorySrc(Access.RW_EXTERNAL)));
 				 System.out.println("done.");
 			} catch (IOException e) {

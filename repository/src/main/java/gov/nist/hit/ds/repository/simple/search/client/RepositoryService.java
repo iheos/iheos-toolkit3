@@ -7,7 +7,6 @@ import gov.nist.hit.ds.repository.simple.search.client.exception.NoServletSessio
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -22,7 +21,7 @@ public interface RepositoryService extends RemoteService  {
 
 	
 	/* Artifact Repository Services */
-	public Map<String, String[]> getRepositoryDisplayTags() throws RepositoryConfigException;
+	public List<RepositoryTag> getRepositoryDisplayTags() throws RepositoryConfigException;
 	public List<String> getIndexablePropertyNames() throws NoServletSessionException;
 	public Boolean setRepositoryConfig() throws RepositoryConfigException;
 	public List<AssetNode> search(String[][] repos, SearchCriteria sc) throws RepositoryConfigException;

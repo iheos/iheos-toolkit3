@@ -16,21 +16,23 @@ import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder;
 import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVParser;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -44,38 +46,31 @@ public class PresentationData implements IsSerializable, Serializable  {
 	private static final long serialVersionUID = 4939311135239253727L;
 	private static Logger logger = Logger.getLogger(PresentationData.class.getName());
 	
-	public Map<String, String[]> getRepositoryDisplayTags() throws RepositoryConfigException {
+	public List<RepositoryTag> getRepositoryDisplayTags() throws RepositoryConfigException {
 		
-		
-		Map<String, String[]> m = new HashMap<String,String[]>();
-		String reposDetail = "";
+        List<RepositoryTag> rtList = new ArrayList<RepositoryTag>();
 		
 		RepositoryIterator it;
-			
+			 
 			for (Access acs : RepositorySource.Access.values()) {
-				reposDetail += "<" + acs.name() + ">";
 				try {					
 					it = new RepositoryFactory(Configuration.getRepositorySrc(acs)).getRepositories();
 					Repository r =  null;
 					while (it.hasNextRepository()) {
 						r = it.nextRepository();
-						m.put(r.getId().getIdString(), new String[]{r.getDisplayName(),acs.name()});
+						
+						rtList.add(new RepositoryTag(r.getId().getIdString(), acs.name(), r.getDisplayName(), getSortedMapString(r.getProperties())));
 						
 					}
-				} catch (RepositoryException e) {
-					reposDetail += " >>> " + e.toString();
-				}
-				
+				} catch (RepositoryException ex) {
+					logger.warning(ex.toString());
+				}			
 			}
-			
-		if (m.size()==0 || m.isEmpty()) {
-			throw new RepositoryConfigException(reposDetail);
-		}
-					
-		// Apply sorting on display tags here if necessary
-		
-		return m;
-		
+						
+	        Collections.sort(rtList);
+	        
+	        return rtList;
+	
 	}
 	
 	public static List<String> getIndexablePropertyNames() {
@@ -103,7 +98,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 			try {
 				tmp = anb.build(repos, PropertyKey.CREATED_DATE);
 				if (tmp!=null && !tmp.isEmpty()) {
-					result.add(tmp.get(0));
+					for (AssetNode an : tmp) {
+						result.add(an);	
+					}					
 				}
 			} catch (RepositoryException re) {
 				re.printStackTrace();
@@ -126,10 +123,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 		reposList = new Repository[reposCt];
 		
 			for (int cx=0; cx<reposCt; cx++) {
-				try {
-					
-					reposList[cx] = composeRepositoryObject(repos[cx][0], repos[cx][1]); 
-					
+				try {					
+					reposList[cx] = composeRepositoryObject(repos[cx][0], repos[cx][1]); 					
 				} catch (RepositoryException e) {
 					e.printStackTrace();
 					; // incorrect or missing data repository config file 
@@ -167,6 +162,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 					aDst.setDisplayName(aSrc.getDisplayName());
 					aDst.setMimeType(aSrc.getMimeType());
 					aDst.setReposSrc(aSrc.getSource().getAccess().name());
+					if (aSrc.getPath()!=null)
+						aDst.setLocation(aSrc.getPath().toString());
 					result.add(aDst);
 				}
 			}
@@ -181,7 +178,23 @@ public class PresentationData implements IsSerializable, Serializable  {
 
 	public static AssetNode getTextContent(AssetNode an) throws RepositoryException {
 		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
-		Asset aSrc = repos.getAsset(new SimpleId(an.getAssetId()));
+		
+		Asset aSrc = null;
+		if (an.getLocation()!=null) {
+			// aSrc = repos.getAssetByPath(new File(an.getLocation()));
+			aSrc = repos.getAssetByRelativePath(new File(an.getLocation()));
+			if (aSrc==null) {
+				throw new RepositoryException(RepositoryException.IO_ERROR + "Asset not found by relative location: " + an.getLocation());
+			}
+		}
+		
+		
+		/* this should not be required 
+		 * else if (an.getAssetId()!=null) {
+		 
+			aSrc = repos.getAsset(new SimpleId(an.getAssetId()));	
+		}
+		*/
 		
 		AssetNode aDst = new AssetNode();
 		
@@ -191,7 +204,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 		aDst.setDisplayName(aSrc.getDisplayName());
 		aDst.setMimeType(aSrc.getMimeType());
 		aDst.setReposSrc(aSrc.getSource().getAccess().name());
-
+		if (aSrc.getPath()!=null)
+			aDst.setLocation(aSrc.getPath().toString());
+		
 		if (aSrc.getContent()!=null) {
 			try {
 				String content = new String(aSrc.getContent());
@@ -200,7 +215,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 				} else if ("text/csv".equals(aSrc.getMimeType())) {
 					aDst.setCsv(processCsvContent(content));
 				} else if ("text/json".equals(aSrc.getMimeType())) {
-					aDst.setTxtContent(prettyJson(content));
+					aDst.setTxtContent(prettyPrintJson(content));
 				} else {
 					content = SafeHtmlUtils.fromString(content).asString();
 					aDst.setTxtContent(content);
@@ -212,19 +227,50 @@ public class PresentationData implements IsSerializable, Serializable  {
 		}
 
 		try {
-			aDst.setProps(FileUtils.readFileToString(aSrc.getPropFile()));
-		} catch (IOException e) {
+			// aDst.setProps(FileUtils.readFileToString(aSrc.getPropFile()));
+						 
+			 aDst.setProps(getSortedMapString(aSrc.getProperties()));
+			
+		} catch (Exception e) {
 			aDst.setProps(aSrc.getPropFile() + " could not be loaded.");
+			logger.warning(e.toString());
 		}
 		
 		return aDst;
 	}
 	
+	
+	/**
+	 * 
+	 * @param p
+	 * @return
+	 */
+	public static String getSortedMapString(java.util.Properties p) {
+		
+		if (p==null) return "";
+		
+		StringBuffer sb = new StringBuffer();
+		
+		 SortedMap<String, String> smap = new TreeMap<String,String>();
+		 
+		 for (String key : p.stringPropertyNames()) {
+			 smap.put(key, p.getProperty(key));
+		 }
+		 
+		 Iterator<String> iterator =  smap.keySet().iterator();
+			while (iterator.hasNext()) {
+				String propName = (String) iterator.next();
+				sb.append(propName + "=" + p.getProperty(propName) + System.getProperty("line.separator"));
+			}
+		return sb.toString();
+	}
+	
+	
 	/**
 	 * @param aDst
 	 * @param content
 	 */
-	private static String prettyJson(String content) {
+	private static String prettyPrintJson(String content) {
 
 //	   JSONValue jsonValue = JSONParser.parseStrict(content);
 //
@@ -292,6 +338,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 		SimpleRepository repos 
 							= new SimpleRepository(new SimpleId(id));
 		repos.setSource(Configuration.getRepositorySrc(Access.valueOf(src)));
+		
 		return repos;
 	}
 

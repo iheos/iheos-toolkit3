@@ -12,6 +12,8 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.SimpleType;
+import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
+
 import org.junit.Test;
 
 public class SimpleAssetTest {
@@ -21,25 +23,25 @@ public class SimpleAssetTest {
 	public void createAssetTest() throws RepositoryException {
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
-				"This is my repository",
+				"Repos " + (int)(Math.random() * 10) ,
 				"Description",
 				new SimpleType("site"));
 		
 		Asset a = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
-		Id assetId = a.getId();
 		
-		Asset a2 = repos.getAsset(assetId);
+		
+		Asset a2 = repos.getAssetByPath(a.getPropFile());
 		
 		Id assetId2 = a2.getId();
 		
-		assertTrue("created and retrieved asset id should be the same", assetId.isEqual(assetId2));
+		assertTrue("created and retrieved asset id should be the same", a.getId().isEqual(assetId2));
 	}
 	
 	@Test
 	public void assetPropertyTest() throws RepositoryException {
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
-				"This is my repository",
+				"Repos "+ (int)(Math.random() * 10),
 				"Description",
 				new SimpleType("site"));
 		
@@ -53,7 +55,8 @@ public class SimpleAssetTest {
 	public void contentTest() throws RepositoryException {
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
-				"This is my repository",
+				"Repos "+ 
+						(int)(Math.random() * 10),
 				"Description",
 				new SimpleType("site"));
 		
@@ -63,7 +66,7 @@ public class SimpleAssetTest {
 		a.updateContent(myContent.getBytes());
 		Id assetId = a.getId();
 		
-		Asset a2 = repos.getAsset(assetId);
+		Asset a2 = repos.getAssetByPath(a.getPropFile());
 		Id assetId2 = a2.getId();
 		byte[] contentBytes = a2.getContent();
 		
@@ -96,7 +99,7 @@ public class SimpleAssetTest {
 		a2.updateContent("My Content".getBytes());
 		Id assetId2 = a2.getId();
 		
-		a.addAsset(assetId2);  // make a the parent of a2
+		a.addAsset(a2);  // make a the parent of a2
 		
 		assertFalse(assetId.isEqual(assetId2));
 		
@@ -104,7 +107,7 @@ public class SimpleAssetTest {
 		a3.updateContent("My Third Content".getBytes());
 		Id assetId3 = a3.getId();
 		
-		a2.addAsset(assetId3);  // make a the parent of a3
+		a2.addAsset(a3);  // make a the parent of a3
 		
 		assertFalse(assetId3.isEqual(assetId2));
 
@@ -114,7 +117,8 @@ public class SimpleAssetTest {
 	public void getAssetTest() throws RepositoryException {
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
-				"This is my repository",
+				"Repos " 
+		+ (int)(Math.random() * 10),
 				"Description",
 				new SimpleType("site"));
 		
@@ -122,7 +126,7 @@ public class SimpleAssetTest {
 		a.updateContent("My Content".getBytes());
 		Id assetId = a.getId();
 
-		Asset a2 = repos.getAsset(assetId);
+		Asset a2 = repos.getAssetByPath(a.getPropFile());
 		
 		assertNotNull(a2);
 		
@@ -134,7 +138,7 @@ public class SimpleAssetTest {
 	public void assetIteratorTest() throws RepositoryException {
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
-				"This is my repository",
+				"Repos " + (int)(Math.random() * 10),
 				"Description",
 				new SimpleType("site"));
 		
