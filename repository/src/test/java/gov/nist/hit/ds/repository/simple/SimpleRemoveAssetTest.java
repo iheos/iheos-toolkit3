@@ -8,7 +8,6 @@ import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
-import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import org.junit.BeforeClass;

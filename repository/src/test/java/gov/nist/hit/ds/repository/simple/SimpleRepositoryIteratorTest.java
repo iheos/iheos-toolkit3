@@ -4,9 +4,6 @@ import static org.junit.Assert.assertTrue;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
-import gov.nist.hit.ds.repository.simple.SimpleRepositoryIterator;
-import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
 
 import org.junit.Test;
 
