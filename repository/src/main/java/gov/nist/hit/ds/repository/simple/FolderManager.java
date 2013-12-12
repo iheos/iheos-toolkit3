@@ -60,7 +60,7 @@ public class FolderManager {
 		if (assetPaths!=null && assetPaths[0]!=null) {			
 
 			// Parent folder already exists, use it
-			if (assetPath.getName().endsWith(PARENT_FILE_EXT)) {
+			if (assetPath.getName().endsWith(Configuration.DOT_SEPARATOR +  PARENT_FILE_EXT)) {
 				return new File[]{residingFolder,assetPaths[1]};
 			}
 			

@@ -36,6 +36,10 @@ import com.sun.rowset.CachedRowSetImpl;
  *
  */
 public class DbIndexContainer implements IndexContainer, Index {
+
+
+
+
 	private static enum IndexStatus {
 		NOT_INDEXED,
 		INDEXED,
@@ -50,6 +54,10 @@ public class DbIndexContainer implements IndexContainer, Index {
 	private static final String displayOrder = PnIdentifier.getQuotedIdentifer(PropertyKey.DISPLAY_ORDER); 
 	private static final String parentId = PnIdentifier.getQuotedIdentifer(PropertyKey.PARENT_ID);
 	private static final String createdDate =  PnIdentifier.getQuotedIdentifer(PropertyKey.CREATED_DATE);
+	
+	private static final String CONTAINER_VERSION = "2013-12-11";
+	private static final String CONTAINER_VERSION_ID = "VERSION";	
+	private static final String BYPASS_VERSION = "BYPASS";
 	
 	/* Use an upgrade script to update existing tables in case a newer version of TTT (new ArtRep API) runs against an older copy of the repositoryIndex table in the database */
 	private static final String repContainerDefinition = 
@@ -97,19 +105,57 @@ public class DbIndexContainer implements IndexContainer, Index {
 		DbContext dbc = new DbContext();
 		dbc.setConnection(DbConnection.getInstance().getConnection());
 		
-		return dbc.getInt(sqlStr);
+		int ct = dbc.getInt(sqlStr);
+		dbc.close();
+		
+		return ct;
 		
 	}
 
 	@Override
 	public boolean doesIndexContainerExist() throws RepositoryException {
+		DbContext dbc = new DbContext();
+		dbc.setConnection(DbConnection.getInstance().getConnection());
 
+		String sqlStr = "select hash from " + repContainerLabel 
+				+" where " + repId + "=? ";
+		
+		ResultSet rs = null;
 		try {
-			return (getIndexCount()>=0);
+			
+			rs = dbc.executeQuery(sqlStr, new String[]{CONTAINER_VERSION_ID});
+
+			if (rs.next()) { // exists
+				String versionStr = rs.getString(1);
+				
+				if (BYPASS_VERSION.equals(versionStr)) {
+					return true;
+				}
+				
+				if (!CONTAINER_VERSION.equals(versionStr)) { // is it up to date with the software being used?
+					logger.fine("Container definition is obsolete <"+ versionStr +">. Removing old container...");
+					removeIndexContainer();
+					return false;
+				} else
+					return true;
+				
+			} else {
+				int recordCt = getIndexCount();
+				logger.fine("Number of indexed items in obsolete container: " + recordCt);
+				logger.fine("Removing old container...");
+
+				removeIndexContainer();
+				return false;
+			}
+				
+			
 				
 		} catch (Exception e) {
-			return false;
+			logger.info(e.toString());
+		} finally {
+			dbc.close(rs);
 		}
+		return false;
 		
 	}
 	
@@ -117,10 +163,12 @@ public class DbIndexContainer implements IndexContainer, Index {
 
 	@Override
 	public void createIndexContainer() throws RepositoryException {
+		DbContext dbc = new DbContext();
 			try {
-				DbContext dbc = new DbContext();
+
 				dbc.setConnection(DbConnection.getInstance().getConnection());
 				dbc.internalCmd(getIndexContainerDefinition());
+				dbc.internalCmd("insert into " + repContainerLabel + "("+ repId +",hash) values('" + CONTAINER_VERSION_ID +"','"+ CONTAINER_VERSION + "')");
 				
 				try {
 					
@@ -133,10 +181,13 @@ public class DbIndexContainer implements IndexContainer, Index {
 					logger.fine("index probably exists.");
 				}
 
-				dbc.close();				
+				logger.info("New index container created.");
+								
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.warning(e.toString());
 				throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
+			} finally {
+				dbc.close();
 			}
 		
 	}
@@ -145,15 +196,17 @@ public class DbIndexContainer implements IndexContainer, Index {
 
 	@Override
 	public void removeIndexContainer() throws RepositoryException {
-		
+
+		DbContext dbc = new DbContext();
 		try {
-			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			dbc.internalCmd("drop table "+repContainerLabel);
-			dbc.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
+		} finally {
+			dbc.close();
 		}
 	}
 	
@@ -162,8 +215,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 	public int addIndex(String repositoryId, String assetId, String assetType, String locationStr, String property, String value)
 			throws RepositoryException {
 		int[] rsData = null;
+		DbContext dbc = new DbContext();
 		try {
-			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			String sqlStr = "insert into "+ repContainerLabel + "("+ repId +"," + DbIndexContainer.assetId + ","+ DbIndexContainer.assetType + "," + locationId;
 			if (DbIndexContainer.assetId.equals(property)
@@ -177,10 +230,12 @@ public class DbIndexContainer implements IndexContainer, Index {
 			}
 
 			logger.fine("rows affected:" + rsData[0]);
-			dbc.close();			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
+		} finally {
+			dbc.close();
 		}
 				
 		return rsData[1];
@@ -199,9 +254,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 */
 	public void updateIndex(Repository repos, String assetId, String assetType, String locationStr, String propCol, String value)
 			throws RepositoryException {
+		DbContext dbc = new DbContext();
 		try {				
 			String reposId = repos.getId().getIdString();
-			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			
 				
@@ -218,18 +273,20 @@ public class DbIndexContainer implements IndexContainer, Index {
 				int[] rsData = dbc.executePreparedId(sqlStr, new String[]{value, reposId, repos.getSource().getAccess().name(), locationStr, value });				
 				logger.fine("rows affected: " + rsData[0]);
 
-			dbc.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
+		} finally {
+			dbc.close();
 		}
 		
 	}
 
 	public void updateIndex(int idKey, String propCol, String value)
 			throws RepositoryException {
+		DbContext dbc = new DbContext();		
 		try {				
-			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 						
 				// Path based
@@ -239,18 +296,20 @@ public class DbIndexContainer implements IndexContainer, Index {
 				int[] rsData = dbc.executePreparedId(sqlStr, new String[]{value, value});				
 				logger.fine("rows affected: " + rsData[0]);
 
-			dbc.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
+		} finally {
+			dbc.close();
 		}
 		
 	}
 
 	public void updateIndexKeys(int idKey, String setFragment, String[] val)
 			throws RepositoryException {
+		DbContext dbc = new DbContext();		
 		try {				
-			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 						
 				// Path based
@@ -259,10 +318,12 @@ public class DbIndexContainer implements IndexContainer, Index {
 				int[] rsData = dbc.executePreparedId(sqlStr, val);				
 				logger.fine("rows affected: " + rsData[0]);
 
-			dbc.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
+		} finally {
+			dbc.close();
 		}
 		
 	}
@@ -271,19 +332,21 @@ public class DbIndexContainer implements IndexContainer, Index {
 	@Override
 	public void removeIndex(String reposId, String sessionId) throws RepositoryException {
 		if (reposId!=null && !"".equals(reposId)) {
-			
+			DbContext dbc = new DbContext();			
 			try {
-				DbContext dbc = new DbContext();
+
 				dbc.setConnection(DbConnection.getInstance().getConnection());
 	 
 				String sqlStr = "delete from "+ repContainerLabel + " where " + repId + " = ? and repoSession !=?";
 				int[] rsData = dbc.executePreparedId(sqlStr, new String[]{reposId,sessionId});
 				logger.fine("rows affected: " + rsData[0]);
 				
-				dbc.close();
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
+			} finally {
+				dbc.close();				
 			}
 		}
 		
@@ -295,17 +358,21 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @throws RepositoryException
 	 */
 	public void purge() throws RepositoryException {
+		logger.info("Purging index...");
+		DbContext dbc = new DbContext();
 		try {
-			DbContext dbc = new DbContext();
+
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			
 			// The TRUNCATE table feature is not implemented Derby 10.4 
 			String sqlStr = "delete from "+ repContainerLabel;
 			dbc.internalCmd(sqlStr);
-			dbc.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
+		} finally {
+			dbc.close();
 		}
 		
 	}
@@ -322,8 +389,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * This method will extend the container to allow for new indexable properties.
 	 */
 	public synchronized void expandContainer(String[] column, String assetType) throws RepositoryException {
+		DbContext dbc = new DbContext();
 		try {			
-			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			String sqlStr = "";
 			String index = "";
@@ -355,11 +422,13 @@ public class DbIndexContainer implements IndexContainer, Index {
 			} catch (SQLException e) {
 				logger.fine("Index probably exists.");
 			}
-			dbc.close();			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
-		}		
+		} finally {
+			dbc.close();
+		}
 		
 	}
 	
@@ -373,6 +442,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 */
 	public boolean isIndexed(String dbCol) throws RepositoryException {
 		int records=0;
+		DbContext dbc = new DbContext();		
 		try {
 			
 			if (!PnIdentifier.uniquePropertyColumn) { // Take care of quoted identifiers
@@ -383,23 +453,29 @@ public class DbIndexContainer implements IndexContainer, Index {
 				return true;
 			}
 			
-			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			String sqlStr = "select count(c.columnname)ct from sys.syscolumns c, sys.systables t "
 							+"where c.referenceid=t.tableid and t.tabletype='T' and lower(t.tablename)=lower('" + repContainerLabel 
 							+ "') and lower(c.columnname) = lower('" + dbCol + "')";
 			ResultSet rs = dbc.executeQuery(sqlStr);
-			while (rs.next()) {
-		          records = rs.getInt("ct");
-		          logger.fine("records: " + records);
+			
+			if (rs!=null) {
+				while (rs.next()) {
+			          records = rs.getInt("ct");
+			          logger.fine("records: " + records);
 
+				}
+				rs.close();
 			}
-			dbc.close(rs);			
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);			
+		} finally {
+			dbc.close();
 		}
+		
 		if (records==0) 
 			return false;
 		else
@@ -742,8 +818,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @param paramValues
 	 */
 	private void refreshIndex(StringBuffer sbParam, String[] paramValues) {
+		DbContext dbc = new DbContext();
 		try {
-			DbContext dbc = new DbContext();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			
 			/*
@@ -757,17 +833,19 @@ public class DbIndexContainer implements IndexContainer, Index {
 			int[] rsData = dbc.executePreparedId(sqlStr, paramValues);
 			
 			logger.fine("refresh rows affected: " + rsData[0]);
-			dbc.close();
 			
 		} catch (Exception ex) {
 			logger.warning("error in stale index cleanup. " + ex.toString());
+		} finally {
+			dbc.close();
 		}
 	}
 	
 	private List<Object> getIndexStatus(Repository repos, String assetId, String relatviePartStr, String hash) throws RepositoryException {
 		List<Object> rsData = new ArrayList<Object>();
+		DbContext dbc = new DbContext();
 		try {
-			DbContext dbc = new DbContext();
+
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 						
 			/*
@@ -782,27 +860,31 @@ public class DbIndexContainer implements IndexContainer, Index {
 					+" where " + DbIndexContainer.repId + "=? and reposAcs=? and " + DbIndexContainer.locationId +"=?";
 							
 			ResultSet rs = dbc.executeQuery(sqlStr, new String[]{repos.getId().getIdString(),repos.getSource().getAccess().name(), relatviePartStr});
-			
-			if (rs.next()) { // exists				
-				int id = rs.getInt(1);
-				String indexedHash = rs.getString(2);
-				dbc.close();
-				if (hash!=null && hash.equals(indexedHash)) {
-					rsData.add(IndexStatus.INDEXED);
-				} else {
-					rsData.add(IndexStatus.STALE);
+
+			if (rs!=null) {
+				if (rs.next()) { // exists				
+					int id = rs.getInt(1);
+					String indexedHash = rs.getString(2);
+					if (hash!=null && hash.equals(indexedHash)) {
+						rsData.add(IndexStatus.INDEXED);
+					} else {
+						rsData.add(IndexStatus.STALE);
+					}
+					rsData.add(new Integer(id));
+				} else {					
+					rsData.add(IndexStatus.NOT_INDEXED);				
 				}
-				rsData.add(new Integer(id));							
-				return rsData;
+				rs.close();					
 			} else {
-				dbc.close();
-				rsData.add(IndexStatus.NOT_INDEXED);	
-				return rsData;				
+				rsData.add(IndexStatus.NOT_INDEXED);
 			}
 			
-			
+			return rsData;
+						
 		} catch (Exception e) {
 			throw new RepositoryException("Error " + e.toString());
+		} finally {
+			dbc.close();
 		}
 						
 	}
@@ -877,14 +959,14 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @return
 	 */
 	public CachedRowSet getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) {
-		
+		DbContext dbc = new DbContext();		
 		try {
 			// Make sure properties exist
 			// ArrayList<String> searchProperties = searchCriteria.getProperties();
 			String searchCriteriaWhere = searchCriteria.toString();
 			logger.fine(searchCriteriaWhere);
 	
-			DbContext dbc = new DbContext();
+
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			
 			String searchSession = "session."+PnIdentifier.getQuotedIdentifer("SearchResults" + new IdFactory().getNewId().getIdString());
@@ -926,7 +1008,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			
 			CachedRowSet crs = new CachedRowSetImpl();
     		crs.populate(rs);
-			
+    		rs.close();			
 			dbc.close(rs);			
 			
 			return crs;

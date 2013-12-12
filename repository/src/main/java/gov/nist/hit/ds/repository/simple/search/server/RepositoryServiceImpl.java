@@ -11,7 +11,6 @@ import gov.nist.hit.ds.repository.simple.search.client.exception.NoServletSessio
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

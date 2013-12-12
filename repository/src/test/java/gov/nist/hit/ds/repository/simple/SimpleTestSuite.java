@@ -60,7 +60,7 @@ public class SimpleTestSuite {
 			File dataDir = Configuration.getRepositoriesDataDir(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 			
 			if (dataDir.exists()) {
-			 System.out.println("Clearing before test data folder...");
+			 System.out.println("Clearing TEST repository data before testing...");
 			 FileUtils.cleanDirectory(dataDir);
 			}
 

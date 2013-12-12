@@ -36,7 +36,6 @@ public class CreateContainerTest  {
 		try {
 			if (!dbc.doesIndexContainerExist()) {
 				dbc.createIndexContainer();
-				System.out.println("New index container created.");
 			}
 		} catch (RepositoryException e) {
 			e.printStackTrace();

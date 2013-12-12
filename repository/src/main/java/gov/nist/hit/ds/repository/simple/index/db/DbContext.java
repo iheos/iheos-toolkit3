@@ -77,7 +77,7 @@ public class DbContext {
 	}
 	
 	/**
-	 * This method should be used for DDL or internal container manipulations only WITHOUT any user-provided parameters
+	 * This method can be used for the following purposes 1) DDL or 2) Internal container manipulations WITHOUT any user-provided parameters
 	 * @param sqlStr
 	 * @return
 	 * @throws SQLException
@@ -88,7 +88,8 @@ public class DbContext {
 		
 		if (connection!=null) {
 			Statement statement = connection.createStatement();
-			statement.execute(sqlStr);			
+			statement.execute(sqlStr);
+			statement.close();
 		}  else {
 			throw new SQLException("No connection.");
 		}
@@ -124,8 +125,10 @@ public class DbContext {
 				if (rs.next()) {
 					idKey = rs.getInt(1);
 				}
+				statement.close();
+				rs.close();
 			}
-			
+
 			return new int[]{records,idKey};
 			
 		}
@@ -145,6 +148,7 @@ public class DbContext {
 				statement.setString(parameterIndex++, p);
 			}
 			int records = statement.executeUpdate();
+			statement.close();
 			return records;
 			
 		}
@@ -179,7 +183,8 @@ public class DbContext {
 	
 	public void close(ResultSet rs) {		
 		try {
-			rs.close();
+			if (rs!=null)
+				rs.close();
 			this.close();
 		} catch (SQLException e) {
 			logger.fine(e.toString());
