@@ -22,11 +22,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/error-recording"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/utilities"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/validators-registry-message"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/validators-support"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/message-validator-factory"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/direct"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

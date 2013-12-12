@@ -22,19 +22,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/actorfactory"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/installation"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/results"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/session"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/xds-exceptions"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/direct"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/message-dispatch"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/direct-support"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/email"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/simulators"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tk"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/utilities"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/validators-support"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/validators-registry-message"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

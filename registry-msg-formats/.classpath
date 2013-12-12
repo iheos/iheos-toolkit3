@@ -22,11 +22,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/registry-support"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/xds-exceptions"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/error-recording"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/registry-metadata"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/utilities"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/validators-support"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -22,9 +22,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/error-recording"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/common-datatypes"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/xds-exceptions"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/registry-metadata"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

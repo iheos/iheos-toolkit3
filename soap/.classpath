@@ -22,21 +22,10 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/docref"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/dsig"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/registry-support"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/security-common"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/xds-exceptions"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/validators-support"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/error-recording"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/utilities"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/site-management"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/installation"/>
 	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/wssetool"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
