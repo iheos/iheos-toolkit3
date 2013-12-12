@@ -1,0 +1,103 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>gov.nist.toolkit</groupId>
+	<artifactId>toolkit2</artifactId>
+	<version>v2-maven-alpha</version>
+	<packaging>pom</packaging>
+
+	<name>toolkit2</name>
+
+	<repositories>
+		<repository>
+			<id>internal-nist-repo-releases</id>
+			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<repository>
+			<id>internal-nist-repo-third-party</id>
+			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>
+		</repository>
+		<repository>
+			<id>internal-nist-repo-snapshots</id>
+			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
+			<id>internal-nist-repo-maven-central</id>
+			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/central/</url>
+		</repository>
+		<repository>
+			<id>codehaus</id>
+			<url>http://repository.codehaus.org/org/codehaus</url>
+		</repository>
+	</repositories>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<modules>
+		<module>actorfactory</module>
+		<module>actortransaction</module>
+		<module>common</module>
+		<module>common-datatypes</module>
+		<module>direct</module>
+		<module>direct-listener</module>
+		<module>direct-sim</module>
+		<module>direct-support</module>
+		<module>dns</module>
+		<module>docref</module>
+		<module>dsig</module>
+		<module>dst</module>
+		<module>email</module>
+		<module>env-settings</module>
+		<module>error-recording</module>
+		<module>http</module>
+		<module>installation</module>
+		<module>message-dispatch</module>
+		<module>message-validator-factory</module>
+		<module>registry-metadata</module>
+		<module>registry-msg-formats</module>
+		<module>registry-support</module>
+		<module>rest</module>
+		<module>results</module>
+		<module>security-common</module>
+		<module>session</module>
+		<module>sim-common</module>
+		<module>simulators</module>
+		<module>site-management</module>
+		<module>soap</module>
+		<module>testkit</module>
+		<module>testkit-utilities</module>
+		<module>timer</module>
+		<module>tk</module>
+		<module>utilities</module>
+		<module>validators-ccda</module>
+		<module>validators-direct-factory</module>
+		<module>validators-registry-message</module>
+		<module>validators-registry-metadata</module>
+		<module>validators-support</module>
+		<module>wssetool</module>
+		<module>xds-exceptions</module>
+		<module>xdstest-gui</module>
+		<module>xdstest2</module>
+		<module>xdstest2-logging</module>
+		<module>xdstools2</module>
+	</modules>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>nexus</name>
+			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,21 @@
+Potential improvements :
+
+We need to pass around a validation context, containing a lot more information :
+- both Opensaml and XmlSlurper representation of the message. (to switch information context)
+- other information coming from other layers : for example we need the addressing info from the soap envelope
+
+We need to be able to conditions tests on other.
+-> We might need Validation as first level object rather than just annotated methods.
+
+Actually this problem runs deeper: specifications can themselves branch the validations in different way.
+We might need a information model that allows to trace each requirement accross different spec.
+
+We need to improve the reporting. What do we log? How?
+
+We need to improve the way we qualify our validations so we can quickly extend to new behaviors
+
+Some tests can induce fatal error, some do not.
+
+We might want to prioritize, review the order in which the tests are performed. 
+
+We must be able to check code lists
