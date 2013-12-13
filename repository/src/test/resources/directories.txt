@@ -1,3 +1,0 @@
-sample_data: sample test data
-SimpleTestSuite: External folder for test purposes where the data folder is cleaned out after tests run
-WEB-INF: a folder that contains a sample resident repository

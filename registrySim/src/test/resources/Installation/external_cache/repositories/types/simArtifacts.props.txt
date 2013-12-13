@@ -1,5 +1,0 @@
-# simArtifacts
-
-keyword=simArtifacts
-domain=asset
-description=simArtifacts desc

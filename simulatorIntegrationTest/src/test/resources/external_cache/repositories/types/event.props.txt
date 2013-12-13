@@ -1,5 +1,0 @@
-# A loggable event
-
-keyword=event
-domain=asset
-description=Documents a Simulator event

@@ -1,6 +1,0 @@
-#
-#Tue Sep 17 16:04:31 EDT 2013
-DisplayName=This is my repository
-description=Description
-repositoryType=simpleRepos
-id=sites

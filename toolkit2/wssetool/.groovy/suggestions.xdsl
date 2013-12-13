@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<projectSuggestions>
-<declaringtype type="java.lang.Object">
-<property isActive="true" isStatic="false" name="children" type="groovy.util.slurpersupport.GPathResult">
-<doc/>
-</property>
-</declaringtype>
-</projectSuggestions>

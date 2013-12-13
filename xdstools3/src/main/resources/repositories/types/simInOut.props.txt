@@ -1,5 +1,0 @@
-# simInOut
-
-keyword=simInOut
-domain=asset
-description=simInOut desc

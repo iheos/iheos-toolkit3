@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module>
-  <!-- Inherit our applications main module.                      -->
-  <inherits name='gov.nist.hit.ds.logBrowser.logBrowser' />
-
-  <!-- Specify the path to any remote services.                   -->
-  <servlet path="/logBrowser/greet" class="gov.nist.hit.ds.logBrowser.server.GreetingServiceImpl" />
-
-</module>

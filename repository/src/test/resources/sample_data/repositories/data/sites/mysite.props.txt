@@ -1,9 +1,0 @@
-#
-#Tue Sep 17 16:04:31 EDT 2013
-displayName=My Site
-createdDate=20130917160431
-modifiedDate=20130917160431
-type=siteAsset
-description=This is my site
-repositoryId=sites
-id=mysite

@@ -1,5 +1,0 @@
-# reqHdrType
-
-keyword=reqHdrType
-domain=asset
-description=request header

@@ -1,5 +1,0 @@
-# Validator Assertions output
-
-keyword=simAssertions
-domain=asset
-description=Assertions output from a Validator

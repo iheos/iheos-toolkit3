@@ -1,5 +1,0 @@
-# asset type site
-keyword=testdef
-domain=asset
-description=Test definition 
-
