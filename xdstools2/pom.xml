@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>gov.nist.toolkit</groupId>
+		<artifactId>toolkit2</artifactId>
+		<version>v2-maven-alpha</version>
+	</parent>
+
+	<artifactId>xdstools2</artifactId>
+	<packaging>war</packaging>
+	<name>xdstools2 Maven Webapp</name>
+
+
+	<properties>
+		<!-- Convenience property to set the GWT version -->
+		<gwtVersion>2.5.1</gwtVersion>
+		<!-- GWT needs at least java 1.5 -->
+		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+			<classifier>sources</classifier>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>ihetools</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>simcommon</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>xdstestgui</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>xdstest2</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>sitemanagement</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>validatorsupport</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>registrymessageformats</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>errorrecording</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>registrymetadata</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>commondatatypes</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>actortransaction</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>directsim</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>tk</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>results</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>actorfactory</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>http</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>direct</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.ws.commons.axiom</groupId>
+			<artifactId>axiom-dom</artifactId>
+			<version>1.2.10</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.ebxml</groupId>
+			<artifactId>ebxmlrr-common</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<!-- Generate compiled stuff in the folder used for developing mode -->
+		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+
+		<!-- <resources> -->
+		<!-- <resource> -->
+		<!-- <directory>src/main/resources/gov/nist/hit/ds/xdstools2/private_resources</directory> -->
+		<!-- </resource> -->
+		<!-- </resources> -->
+
+		<plugins>
+
+			<!-- GWT Maven Plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<version>2.5.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<runTarget>Xdstools2.html</runTarget>
+					<modules>
+						<module>${project.groupId}.package.ModuleName</module>
+					</modules>
+					<copyWebapp>true</copyWebapp>
+				</configuration>
+			</plugin>
+
+			<!-- Maven WAR plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<webResources>
+						<resource>
+							<!-- this is relative to the pom.xml directory -->
+							<directory>src/main/resources/gov/nist/toolkit/xdstools2</directory>
+							<!-- the list has a default value of ** -->
+						</resource>
+					</webResources>
+					<webappDirectory>${webappDirectory}</webappDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>exploded</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.4.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+
+</project>
