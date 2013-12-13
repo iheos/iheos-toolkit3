@@ -1,0 +1,32 @@
+syntax:glob
+
+# folders created by gwt
+.gwt/**
+xdstools2/.gwt
+xdstools2/gwt-unitCache/
+.gwt-tmp
+.gwt-log
+gwt-unitCache-*
+
+#MAC
+.DS_Store
+
+target/
+build.out
+sunil's stuff/
+.settings\org.eclipse.jdt.groovy.core.prefs
+.settings\org.eclipse.wst.common.project.facet.core.xml
+artrep_test_resources.lnk
+*.orig
+*.prefs
+derby.log
+
+# Eclipse metadata
+.classpath
+.project
+.class
+.settings/*
+bin/*
+
+# Maven generated
+MANIFEST.MF
