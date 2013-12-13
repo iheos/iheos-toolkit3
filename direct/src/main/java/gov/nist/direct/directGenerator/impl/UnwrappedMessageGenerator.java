@@ -55,7 +55,7 @@ public class UnwrappedMessageGenerator implements DirectMessageGenerator {
 		// TODO Auto-generated constructor stub
 	}
 
-	 
+	@Override
 	public MimeMessage generateMessage(byte[] signingCert, String signingCertPw, String subject, 
 			String textMessage, File attachmentContentFile, String fromAddress, String toAddress, byte[] encryptionCertBA) throws Exception {
 		Security.addProvider(new BouncyCastleProvider());

@@ -1,6 +1,5 @@
 package gov.nist.toolkit.directsim;
 
-
 import gov.nist.direct.config.DirectConfigManager;
 import gov.nist.toolkit.directsim.client.ContactRegistrationData;
 import gov.nist.toolkit.directsim.client.DirectRegistrationData;

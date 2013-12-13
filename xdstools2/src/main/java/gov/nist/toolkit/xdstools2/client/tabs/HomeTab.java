@@ -91,7 +91,7 @@ public class HomeTab extends GenericQueryTab {
 
 	class MainGridLoader {
 
-		//  
+		//@Override
 		public void featuresLoadedCallback() {
 			String th = "";
 			
@@ -220,6 +220,11 @@ public class HomeTab extends GenericQueryTab {
 		topPanel.add(new HTML("<hr />"));
 
 		topPanel.add(new HTML("TTT Trust Anchor representing an invalid trust relationship can be displayed from <a href=\"pubcert/" + invtrustrelanchor + "\">here</a>.  " 
+				));
+
+		topPanel.add(new HTML("<hr />"));
+		
+		topPanel.add(new HTML("Human readable CDA/CCR data can be displayed from <a href=\"samples/samples.htm\">here</a>.  " 
 				));
 
 		topPanel.add(new HTML("<hr />"));
@@ -505,7 +510,7 @@ public class HomeTab extends GenericQueryTab {
 	}
 
 
-	  
+	@Override
 	public void onTabLoad(TabContainer container, boolean select,
 			String eventName) {
 		// TODO Auto-generated method stub

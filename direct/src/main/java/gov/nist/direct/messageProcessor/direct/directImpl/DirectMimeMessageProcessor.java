@@ -27,12 +27,13 @@ import gov.nist.direct.messageProcessor.direct.DirectMessageProcessorInterface;
 import gov.nist.direct.utils.Utils;
 import gov.nist.direct.utils.ValidationSummary;
 import gov.nist.direct.utils.ValidationSummary.Status;
+import gov.nist.toolkit.messagevalidatorfactory.MessageValidatorFactoryFactory;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
-import gov.nist.toolkit.messagevalidatorfactory.MessageValidatorFactoryFactory;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.valccda.CdaDetector;
 import gov.nist.toolkit.valregmsg.xdm.XDMException;
+import gov.nist.toolkit.valregmsg.xdm.XdmDecoder;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorder;
@@ -56,7 +57,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
-
 import javax.activation.CommandMap;
 import javax.activation.MailcapCommandMap;
 import javax.mail.Address;
@@ -87,6 +87,8 @@ import org.bouncycastle.mail.smime.SMIMEException;
 import org.bouncycastle.mail.smime.SMIMESigned;
 import org.bouncycastle.mail.smime.SMIMEUtil;
 import org.bouncycastle.util.Store;
+
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
 public class DirectMimeMessageProcessor implements DirectMessageProcessorInterface {
 

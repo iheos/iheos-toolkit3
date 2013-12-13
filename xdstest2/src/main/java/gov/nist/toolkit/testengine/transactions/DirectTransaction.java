@@ -65,7 +65,7 @@ public class DirectTransaction extends BasicTransaction {
 		// TODO Auto-generated constructor stub
 	}
 
-	 
+	@Override
 	protected void run(OMElement request) throws Exception {
 
 		verifyParameters();
@@ -287,7 +287,7 @@ public class DirectTransaction extends BasicTransaction {
 			throw new XdsInternalException(errors.toString());
 	}
 
-	 
+	@Override
 	protected void parseInstruction(OMElement part)
 			throws XdsInternalException, MetadataException {
 		String part_name = part.getLocalName();
@@ -369,13 +369,13 @@ public class DirectTransaction extends BasicTransaction {
 			parseBasicInstruction(part);
 	}
 
-	 
+	@Override
 	protected String getRequestAction() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	 
+	@Override
 	protected String getBasicTransactionName() {
 		return "Direct";
 	}

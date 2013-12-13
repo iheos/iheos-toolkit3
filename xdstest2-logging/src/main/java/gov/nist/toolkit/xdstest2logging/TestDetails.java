@@ -1,8 +1,5 @@
 package gov.nist.toolkit.xdstest2logging;
 
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
-import gov.nist.toolkit.xdstest2logging.SectionLogMap;
-import gov.nist.toolkit.xdstest2logging.SectionTestPlanFileMap;
 import gov.nist.toolkit.utilities.io.LinesOfFile;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 

@@ -31,7 +31,7 @@ import org.apache.mailet.base.mail.MimeMultipartReport;
 
 public class LoggerDispatch implements MessageLoggerInterface {
 
-	 
+	@Override
 	public void log(Object o, LogPathsSingleton ls, String transactionType, String messageType, String partType, String username, String messageId) {
 
 		if(!o.equals(null)){ 

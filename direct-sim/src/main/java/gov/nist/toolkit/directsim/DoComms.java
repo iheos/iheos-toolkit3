@@ -1,11 +1,10 @@
 package gov.nist.toolkit.directsim;
 
-
+import gov.nist.toolkit.messageDispatch.MessageDispatchUtils;
 import gov.nist.toolkit.actorfactory.DirectActorFactory;
 import gov.nist.toolkit.directsupport.SMTPException;
 import gov.nist.toolkit.email.Emailer;
 import gov.nist.toolkit.installation.Installation;
-import gov.nist.toolkit.messageDispatch.MessageDispatchUtils;
 import gov.nist.toolkit.simulators.support.ValidateMessageService;
 import gov.nist.toolkit.tk.TkLoader;
 import gov.nist.toolkit.tk.TkPropsServer;

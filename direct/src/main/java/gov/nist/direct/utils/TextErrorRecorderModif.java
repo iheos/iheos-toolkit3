@@ -40,7 +40,7 @@ public class TextErrorRecorderModif extends TextErrorRecorder implements ErrorRe
 		boolean isError = true;
 	}
 	
-	 
+	@Override
 	public void err(String code, String msg, String location, String resource, String logMessage) {
 		ErrorInfo ei = new ErrorInfo();
 		ei.indent = 2;
@@ -51,7 +51,7 @@ public class TextErrorRecorderModif extends TextErrorRecorder implements ErrorRe
 	}
 	
 	// used for labeling major validation sections
-	 
+	@Override
 	public void sectionHeading(String msg) {
 		ErrorInfo ei = new ErrorInfo();
 		ei.isError = false;
@@ -60,7 +60,7 @@ public class TextErrorRecorderModif extends TextErrorRecorder implements ErrorRe
 		errMsgs.add(ei);
 	}
 	
-	 
+	@Override
 	public void detail(String msg) {
 		ErrorInfo ei = new ErrorInfo();
 		ei.isError = false;
@@ -69,7 +69,7 @@ public class TextErrorRecorderModif extends TextErrorRecorder implements ErrorRe
 		errMsgs.add(ei);
 	}
 	
-	 
+	@Override
 	public void warning(String code, String msg, String location, String resource) {
 		ErrorInfo ei = new ErrorInfo();
 		ei.isError = false;

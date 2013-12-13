@@ -36,7 +36,7 @@ public class MessageLog  implements IsSerializable {
 	
 	public MessageLog() {}
 
-	 
+	@Override
 	public String toString(){
 		String str = "label" + " " + this.label + "\n" +
 	"messageId" + " " +  this.messageId + "\n" +
