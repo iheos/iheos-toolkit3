@@ -64,6 +64,10 @@ public class Event {
 	public Assertions getAssertions() {
 		return assertions;
 	}
+	
+	public boolean hasErrors() {
+		return assertions.hasErrors();
+	}
 
 	public Event addAssertionGroup(AssertionGroup ag) throws RepositoryException {
 		assertions.add(ag);

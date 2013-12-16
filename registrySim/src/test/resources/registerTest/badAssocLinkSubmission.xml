@@ -297,7 +297,7 @@
                         objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"/>
                     <rim:Association
                         associationType="urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember"
-                        sourceObject="SubmissionSet01" targetObject="Document01" id="ID_1216346_2"
+                        sourceObject="SubmissionSet01" targetObject="Document01a" id="ID_1216346_2"
                         objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Association">
                         <rim:Slot name="SubmissionSetStatus">
                             <rim:ValueList>

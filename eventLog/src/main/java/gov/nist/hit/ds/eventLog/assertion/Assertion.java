@@ -78,6 +78,7 @@ public class Assertion {
 	 */
 
 	String nocomma(String in) {
+		if (in == null) return "";
 		return in.replaceAll(",", ";");
 	}
 	

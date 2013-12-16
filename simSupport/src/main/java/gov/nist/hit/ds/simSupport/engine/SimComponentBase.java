@@ -12,9 +12,12 @@ import gov.nist.hit.ds.simSupport.validationEngine.ValidationEngine;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 
 /**
@@ -35,6 +38,7 @@ public abstract class SimComponentBase implements SimComponent {
 	String description;
 	ValidationEngine validationEngine;
 	boolean error = false;
+	static Logger logger = Logger.getLogger(SimComponentBase.class);
 
 	public SimComponentBase() {
 		validationEngine = new ValidationEngine(this);
@@ -271,7 +275,9 @@ public abstract class SimComponentBase implements SimComponent {
 
 	private void recordAssertion(Assertion a, ValidationRef vr) {
 		String id = vr.getId();
-		if (!"".equals(id)) {    // some internal checks do not have assertion ids
+		if ("".equals(id)) {
+			throw new RuntimeException(ExceptionUtil.here("Assertion has no id"));
+		} else {
 			if (idsAsserted.contains(id)) {
 				a.
 				setId(id).
@@ -296,6 +302,8 @@ public abstract class SimComponentBase implements SimComponent {
 
 		if (a.getStatus().isError())
 			error = true;
+		
+		logger.debug("Assertion: " + a);
 	}
 
 	private void recordAssertion(Assertion a, Validation vf)

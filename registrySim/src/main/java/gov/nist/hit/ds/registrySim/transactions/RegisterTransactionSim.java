@@ -18,16 +18,17 @@ import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import gov.nist.hit.ds.utilities.other.StringHashMapUtil;
 import gov.nist.hit.ds.valSupport.ValidationException;
 import gov.nist.hit.ds.valSupport.fields.UuidValidator;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +67,9 @@ public class RegisterTransactionSim extends SimComponentBase {
 	
 	@Inject
 	public void setSoapMessage(SoapMessage soapMessage) {
-		body = soapMessage.getBody();
+		body = soapMessage.getBody(); // this is <Body>
+		if (body != null)
+			body = body.getFirstElement();
 	}
 	
 //	@Inject
@@ -94,33 +97,40 @@ public class RegisterTransactionSim extends SimComponentBase {
 		validateEndpoint();
 		
 		// validate root elements
-		assertEquals("SubmitObjectsRequest", body.getLocalName(), 
+		assertEquals("ProvideAndRegisterDocumentSetRequest", body.getLocalName(), 
 				new ValidationRef("RegTrans01", 
 						Code.XDSRegistryError, 
-						"SubmitObjectsRequest expected as XML child of soap body, found <" + body.getLocalName() + "> instead", 
+						"<ProvideAndRegisterDocumentSetRequest> is the expected child of SOAP Body, found <" + body.getLocalName() + ">", 
 						new String[] {"ebRS 3.0 Section 5.1"}));
-		
-		OMElement registryObjectList = body.getFirstElement();
-		assertEquals("RegistryObjectList", registryObjectList.getLocalName(),
+
+		OMElement submitObjectsRequest = body.getFirstElement();
+		assertEquals("SubmitObjectsRequest", submitObjectsRequest.getLocalName(), 
 				new ValidationRef("RegTrans02", 
 						Code.XDSRegistryError, 
-						"RegistryObjectList expected as XML child of SubmitObjectsRequest, found <" + body.getLocalName() + "> instead", 
+						"<SubmitObjectsRequest> is the expected child of ProvideAndRegisterDocumentSetRequest, found <" + submitObjectsRequest.getLocalName() + ">", 
+						new String[] {"ebRS 3.0 Section 5.1"}));
+		
+		OMElement registryObjectList = submitObjectsRequest.getFirstElement();
+		assertEquals("RegistryObjectList", registryObjectList.getLocalName(),
+				new ValidationRef("RegTrans03", 
+						Code.XDSRegistryError, 
+						"<RegistryObjectList> expected as XML child of SubmitObjectsRequest, found <" + registryObjectList.getLocalName() + ">", 
 						new String[] {"ebRS 3.0 Section 5.1"}));
 		
 		// validate metadata
 		try {
 			m = MetadataParser.parse(registryObjectList);
 		} catch (Exception e) {
-			fail(new ValidationRef("RegTrans03", 
+			fail(new ValidationRef("RegTrans04", 
 							Code.XDSRegistryError, 
 							e.getMessage(), 
 							new String[] {"ebRIM 3.0", "ITI TF-3"}));
 		}
 		// unlikely this could happen...but
 		assertNotNull(m,
-				new ValidationRef("RegTrans04", 
+				new ValidationRef("RegTrans05", 
 						Code.XDSRegistryError, 
-						"Cannot find metadata in message", 
+						"Metadata present in message", 
 						new String[] {"ebRS 3.0 Section 5.1"}));
 		if (hasErrors())
 			return;
@@ -221,7 +231,8 @@ public class RegisterTransactionSim extends SimComponentBase {
 		try {
 			symbolicToUUID = ra.compileSymbolicNamesIntoUuids();
 		} catch (XdsInternalException e1) {
-			fail(new ValidationRef("RegTrans05", 
+			symbolicToUUID = new HashMap<String, String>();
+			fail(new ValidationRef("RegTrans06", 
 							Code.XDSRegistryError, 
 							e1.getMessage(), 
 							new String[] {""}));
@@ -255,7 +266,7 @@ public class RegisterTransactionSim extends SimComponentBase {
 				idsAlreadyPresent.add(id);
 		}
 		assertTrue(idsAlreadyPresent.size() == 0, 
-				new ValidationRef("RegTrans06", 
+				new ValidationRef("RegTrans07", 
 						Code.XDSRegistryMetadataError, 
 						"Submission includes pre-assigned ids " + idsAlreadyPresent + " which are already present in the Registry", 
 						new String[] {""}));
@@ -297,7 +308,7 @@ public class RegisterTransactionSim extends SimComponentBase {
 					}
 				}
 			} catch (Exception e) {
-				fail(Code.XDSRegistryError, e);
+				fail("RegTrans08", Code.XDSRegistryError, e);
 			}
 		}
 	}
@@ -306,7 +317,12 @@ public class RegisterTransactionSim extends SimComponentBase {
 		try {
 			delta.storeMetadata(m);
 		} catch (Exception e1) {
-			fail(Code.XDSRegistryError, e1);
+			fail("RegTrans09", Code.XDSRegistryError, "Failed to save metadata: " + e1.getMessage());
+			logger.debug("Error saving metadata: " + ExceptionUtil.exception_details(e1));
+			if (e1 instanceof RuntimeException) {
+				RuntimeException re = (RuntimeException) e1;
+				throw re;
+			}
 		}
 	}
 
@@ -318,7 +334,7 @@ public class RegisterTransactionSim extends SimComponentBase {
 			try {
 				validator.validateUUID(uuid);
 			} catch (ValidationException e) {
-				fail(Code.XDSRegistryMetadataError, e.getMessage());
+				fail("RegTrans10", Code.XDSRegistryMetadataError, e.getMessage());
 			}
 		}
 
@@ -329,7 +345,7 @@ public class RegisterTransactionSim extends SimComponentBase {
 			} catch (ValidationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				fail(Code.XDSRegistryMetadataError, e.getMessage());
+				fail("RegTrans11", Code.XDSRegistryMetadataError, e.getMessage());
 			}
 		}
 
@@ -339,21 +355,21 @@ public class RegisterTransactionSim extends SimComponentBase {
 		try {
 			RegistryFactory.buildMetadataIndex(m, delta);
 		} catch (MetadataException e) {
-			fail(Code.XDSRegistryMetadataError, e);
+			fail("RegTrans12", Code.XDSRegistryMetadataError, e);
 		}
 	}
 
-	private void fail(Code code, Exception e) {
-		fail(new ValidationRef("", code, e.getMessage(), new String[] {""}).setLocation(this.getClass()));
+	private void fail(String id, Code code, Exception e) {
+		fail(new ValidationRef(id, code, e.getMessage(), new String[] {""}).setLocation(this.getClass()));
 	}
 
-	public boolean fail(String msg) {
-		fail(new ValidationRef("", Code.XDSRegistryMetadataError, msg, new String[] {""}).setLocation(this.getClass()));
+	public boolean fail(String id, String msg) {
+		fail(new ValidationRef(id, Code.XDSRegistryMetadataError, msg, new String[] {""}).setLocation(this.getClass()));
 		return false;
 	}
 
-	private void fail(Code code, String msg) {
-		fail(new ValidationRef("", code, msg, new String[] {""}).setLocation(this.getClass()));
+	private void fail(String id, Code code, String msg) {
+		fail(new ValidationRef(id, code, msg, new String[] {""}).setLocation(this.getClass()));
 	}
 
 

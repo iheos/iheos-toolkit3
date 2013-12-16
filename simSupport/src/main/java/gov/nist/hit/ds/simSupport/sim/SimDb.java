@@ -185,6 +185,11 @@ public class SimDb {
 				);
 	}
 
+	/**
+	 * Generate File for storing RegistryObject with id.
+	 * @param id
+	 * @return
+	 */
 	public File getRegistryObjectFile(String id) {
 		if (id == null)
 			return null;

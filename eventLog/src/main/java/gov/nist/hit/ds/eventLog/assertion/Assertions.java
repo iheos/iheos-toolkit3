@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 public class Assertions {
 	Asset assertionsAsset;
 	int counter = 1;
-	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
 	AssertionGroup ag = null;
 	static Logger logger = Logger.getLogger(Assertions.class);
 
@@ -34,5 +33,15 @@ public class Assertions {
 		logger.debug("flushing CSVTable:");
 		logger.debug(ag.getTable().toString());
 		a.updateContent(ag.getTable().toString(), "text/csv");
+	}
+	
+	AssertionStatus getAssertionStatus() {
+		if (ag == null)
+			return AssertionStatus.SUCCESS;
+		return ag.getMaxStatus();
+	}
+	
+	public boolean hasErrors() {
+		return getAssertionStatus().isError();
 	}
 }

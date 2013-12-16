@@ -27,16 +27,16 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 		this.delta = delta;
 	}
 	
-	private void fail(Exception e) {
-		base.fail(new ValidationRef("", Code.XDSRegistryMetadataError, e.getMessage(), new String[] {""}).setLocation(this.getClass()));
+	private void fail(String id, Exception e) {
+		base.fail(new ValidationRef(id, Code.XDSRegistryMetadataError, e.getMessage(), new String[] {""}).setLocation(this.getClass()));
 	}
 
-	private void fail(String msg) {
-		base.fail(new ValidationRef("", Code.XDSRegistryMetadataError, msg, new String[] {""}).setLocation(this.getClass()));
+	private void fail(String id, String msg) {
+		base.fail(new ValidationRef(id, Code.XDSRegistryMetadataError, msg, new String[] {""}).setLocation(this.getClass()));
 	}
 
-	private void fail(Code code, String msg) {
-		base.fail(new ValidationRef("", code, msg, new String[] {""}).setLocation(this.getClass()));
+	private void fail(String id, Code code, String msg) {
+		base.fail(new ValidationRef(id, code, msg, new String[] {""}).setLocation(this.getClass()));
 	}
 
 	public void checkUidUniqueness(Metadata m) {
@@ -51,16 +51,16 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 			try {
 				uid = m.getUniqueIdValue(ele);
 			} catch (MetadataException e) {
-				fail(e);
+				fail("ProcessMetadataForRegister01", e);
 				continue;
 			}
 			if (uid == null) {
 				log.error("Processing metadata object " + m.getId(ele) + " - Unable to extract uniqueId from object");
-				fail("Unable to extract uniqueId from object " + m.getId(ele));
+				fail("ProcessMetadataForRegister02", "Unable to extract uniqueId from object " + m.getId(ele));
 				continue;
 			}
 			if (submittedUIDs.contains(uid)) 
-				fail("UniqueID " + uid + "  is assigned to more than one object within the submission");
+				fail("ProcessMetadataForRegister03", "UniqueID " + uid + "  is assigned to more than one object within the submission");
 			submittedUIDs.add(uid);
 			
 			// get object from registry
@@ -71,10 +71,10 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 					DocEntry de = (DocEntry) ro;
 					String hash = m.getSlotValue(ele, "hash", 0);
 					if (de.hash == null || !de.hash.equals(hash))
-						fail(Code.XDSNonIdenticalHash, "Registry contains DocumentEntry with UID " + uid + " and hash " + de.hash + 
+						fail("ProcessMetadataForRegister04", Code.XDSNonIdenticalHash, "Registry contains DocumentEntry with UID " + uid + " and hash " + de.hash + 
 								". This submission contains DocumentEntry with same UID and a different hash (" + hash + ")");
 				} else
-					fail(Code.XDSRegistryMetadataError, "Submission includes unique ID " + uid + " on object " +  m.getObjectDescription(ele)  + 
+					fail("ProcessMetadataForRegister05", Code.XDSRegistryMetadataError, "Submission includes unique ID " + uid + " on object " +  m.getObjectDescription(ele)  + 
 							". This UID is already present in the Registry as " + ro.getObjectDescription());
 			}
 		}
@@ -100,7 +100,7 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 		try {
 			m.setDefaultVersionOfUnversionedElements();
 		} catch (MetadataException e) {
-			fail(e);
+			fail("ProcessMetadataForRegister06", e);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 				fol.lastUpdateTime = new Hl7Date().now();
 			}
 		} catch (Exception e) {
-			fail(e);
+			fail("ProcessMetadataForRegister07", e);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 						Fol f = delta.folCollection.getById(sourceId);  // will look in delta and main table
 						delta.labelFolderUpdated(f, new Hl7Date().now());
 					} catch (Exception e) {
-						fail(Code.XDSRegistryError, "Internal Registry error - folder known to exist cannot be accesed");
+						fail("ProcessMetadataForRegister08", Code.XDSRegistryError, "Internal Registry error - folder known to exist cannot be accesed");
 					}
 				}
 			}
@@ -151,7 +151,7 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 			try {
 				type = m.getSimpleAssocType(assocEle);
 			} catch (MetadataException e) {
-				fail(Code.XDSRegistryError, "Error extracting associationType attribute from Association " + m.getId(assocEle));
+				fail("ProcessMetadataForRegister09", Code.XDSRegistryError, "Error extracting associationType attribute from Association " + m.getId(assocEle));
 				continue;
 			}
 			if (m.contains(source)) {
@@ -159,12 +159,12 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 			} else {
 				Ro ro = delta.getObjectById(source);
 				if (ro == null) {
-					fail(Code.XDSRegistryError, "Association " + 
+					fail("ProcessMetadataForRegister10", Code.XDSRegistryError, "Association " + 
 							type + "(" + m.getId(assocEle) + ")" +
 							" references an object with its sourceObject attribute that does not exist in submission or registry. " +
 							"Object is " + source);
 				} else if (ro.getAvailabilityStatus() == StatusValue.DEPRECATED) {
-					fail(Code.XDSRegistryError, "Association " + 
+					fail("ProcessMetadataForRegister11", Code.XDSRegistryError, "Association " + 
 							type + "(" + m.getId(assocEle) + ")" +
 							" references an object with its sourceObject attribute that has status Deprecated in the registry. " +
 							"Object is " + source);
@@ -176,12 +176,14 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 			} else {
 				Ro ro = delta.getObjectById(target);
 				if (ro == null) {
-					fail(Code.XDSRegistryError, "Association " + 
+					// TODO: need to report id as it appeared in the submission, it now reports assigned uuid
+					fail("ProcessMetadataForRegister12", Code.XDSRegistryError, "Association " + 
 							type + "(" + m.getId(assocEle) + ")" +
 							" references an object with its targetObject attribute that does not exist in submission or registry. " +
 							"Object is " + target);
 				} else if (ro.getAvailabilityStatus() == StatusValue.DEPRECATED) {
-					fail(Code.XDSRegistryError, "Association " + 
+					// TODO: need to report id as it appeared in the submission, it now reports assigned uuid
+					fail("ProcessMetadataForRegister013", Code.XDSRegistryError, "Association " + 
 							type + "(" + m.getId(assocEle) + ")" +
 							" references an object with its targetObject attribute that has status Deprecated in the registry. " +
 							"Object is " + target);
@@ -200,7 +202,7 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 				String targetId = m.getAssocTarget(assocEle);
 				Ro ro = mc.docEntryCollection.getRo(targetId);
 				if (ro == null) {
-					fail(Code.XDSRegistryError, "RPLC failed, replaced DocumentEntry [ " + targetId + "] does not exist in registry");
+					fail("ProcessMetadataForRegister14", Code.XDSRegistryError, "RPLC failed, replaced DocumentEntry [ " + targetId + "] does not exist in registry");
 				} else {
 					delta.changeAvailabilityStatus(targetId, ro.getAvailabilityStatus(), StatusValue.DEPRECATED);
 					delta.mkDirty();
@@ -227,7 +229,7 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 						delta.addAssoc(f.getId(), sourceId, AssocType.HASMEMBER);
 						delta.labelFolderUpdated(f, new Hl7Date().now());
 					} catch (Exception e) {
-						fail(Code.XDSRegistryError, e.getMessage());
+						fail("ProcessMetadataForRegister15", Code.XDSRegistryError, e.getMessage());
 					}
 				}
 			}

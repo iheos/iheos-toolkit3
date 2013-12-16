@@ -75,7 +75,7 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	public int size() { return assertionList.size(); }
 
 	public AssertionGroup addAssertion(Assertion asser) {
-		logger.debug("Add Assertion to AssertionGroup: " + asser);
+//		logger.debug("Add Assertion to AssertionGroup: " + asser);
 		if (asser.getStatus().ordinal() > maxStatus.ordinal())
 			maxStatus = asser.getStatus();
 		assertionList.add(asser);

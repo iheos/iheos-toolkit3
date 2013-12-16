@@ -38,7 +38,7 @@ public class Scheduler {
 
 	// Any method can be passed in.  If no appropriate annotation then nothing will be scheduled.
 	void addRunable(Method method, List<Runable> runables) throws Exception {
-		logger.debug("Scheduler: Evaluating method " + method.getName());
+//		logger.debug("Scheduler: Evaluating method " + method.getName());
 		ValidationFault validationFaultAnnotation = method.getAnnotation(ValidationFault.class);
 		Validation validationAnnotation = method.getAnnotation(Validation.class);
 		if (validationFaultAnnotation != null) {
