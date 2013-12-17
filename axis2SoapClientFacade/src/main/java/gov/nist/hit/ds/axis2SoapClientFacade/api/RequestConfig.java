@@ -4,7 +4,8 @@ package gov.nist.hit.ds.axis2SoapClientFacade.api;
  * This object holds request configuration parameters in java properties Here
  * are the properties supported so far :
  * 
- * MODE=async/sync : synchronous or async TO='the url endpoint to send to'
+ * MODE=async/sync : synchronous or async 
+ * TO='the url endpoint to send to'
  * ACTION='any string corresponding to the soap action'
  * 
  * OPTIONAL REQUEST_SPECIFIC_SSL_CREDENTIAL=true/false : set to true if we need
