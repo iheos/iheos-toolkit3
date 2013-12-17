@@ -21,6 +21,8 @@ artrep_test_resources.lnk
 *.prefs
 derby.log
 
+eventLog/*
+
 # Eclipse metadata
 .classpath
 .project
