@@ -1,0 +1,1 @@
+INDEX VERSION 1.126+D:\Workspace toolkit v2 maven\.metadata\.plugins\org.eclipse.jdt.core
