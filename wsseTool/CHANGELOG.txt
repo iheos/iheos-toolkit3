@@ -1,0 +1,13 @@
+CHANGELOG
+=========
+
+
+# MA_1086 :
+was checking xsi:type="hl7:CE"  , now checking xsi:type="CE". This is compliant with the example provided in the spec.
+
+# MA_1103 :
+fix this test which was not accurate.
+
+# Add mention of the category of each tests (required, optional)
+
+# Add mention of the status of each tests (implemented, to be reviewed, not implemented, not implementable) 

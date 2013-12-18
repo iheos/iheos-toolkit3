@@ -1,0 +1,230 @@
+<wsse:Security
+	xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	actor="" mustUnderstand="1">
+	<Timestamp wsu:Id="directcpsi694425610936timestamp">
+		<Created>2013-12-04T14:00:22Z</Created>
+		<Expires>2013-12-04T14:5:22Z</Expires>
+	</Timestamp>
+	<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+		<ds:SignedInfo>
+			<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+			<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+			<ds:Reference URI="#directcpsi694425610936assertion">
+				<ds:Transforms>
+					<ds:Transform
+						Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+					<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+				</ds:Transforms>
+				<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+				<ds:DigestValue>
+					U0hBMSgvdXNyMS9kaXJlY3QvY2VydGlmaWNhdGVzL2RpcmVjdGNwc2kvZGlyZWN0
+					Y3BzaS5rZXkpPSA2MDI5ZTNlMDI2ZTI4M2Y0ZTlkZTlhNWM0NzhhOGVhYmEyZmQw
+					YWMwCg==
+				</ds:DigestValue>
+			</ds:Reference>
+		</ds:SignedInfo>
+		<ds:SignatureValue>
+			K9tmLR5Mu5naMZug9H6nR2JpXosVCRG/py1gSpT+9IUK5IVtQsIe8t8UojiViFW1
+			6GWnpuz/JHbtpSftGwy1UFcmBv51kxHDWV5f3ei44z8AX4Vx84Cdotugkg06rYKt
+			FQEH4f6vMDuBd+M/7Mh94e/EaDr5IpwetY1JLYf39rEpt0ZCwGb5Hd/cRUoDUw/4
+			S9FxRdliXx9ivDbHgePg7svz8Xt6KIXH9GaD3HmSvCMP9lwhAr+VJeBe0Vn8D0FV
+			me42NyTx6b6gq6jLZbH8WHQgtgHOpeYpW2CEMR38NM5nKzsYIWTsYMW5jD5DMCQJ
+			BtFOUvBkiixJZnFHxjhVRU2rutM22FsJeMIt06ZUTKF5b52/OtKVx+VoMDRCZlX7
+			QUG7/mfw57wfjUBaN+OkHOnAaolx3abyBN62yystgQsmMox/RHjYakllcVwuJ9rD
+			jFABze0KR2lvgeOsDPd3iYiPdACSIw2OuU8+oYJ1EJK15NScOjZr3y/074M9IvJ/
+			I4mSdZxt2BTT1MYwVMGWW06m02pqqW/tqdBxNcIvdHHFfL6b8bXf6IqlBuGwpV6O
+			RHMN+66sCLg6TDutBmtraEkqU9CqAnAez8L5YcA+XhrdpTPM8OMt9JpIcHOZdiVz
+			OvhPY8bz6iLQAe5HmY27/svYLf2i+h+Ds6VdWG8D4tY=
+		</ds:SignatureValue>
+		<ds:KeyInfo>
+			<ds:KeyValue>
+				<ds:RSAKeyValue>
+					<ds:Modulus>
+						F9BDA334B373D097B98B50DB8F371087978B5A084C2AC64512FB954446B376C67FBD92D746D7A5F76D88E7E51AEE358724D0CE2B8DD1B349024F395F9026071E8D3178B22B3C1A5197D25545409E689269B829A8574A12FDBF1CE52523ACC5469B6078FC9BA6E49A93F3988DFD71AB070D81E65E6BD7D556B48C8AB0BF11AAAFABF98709DF5089D7D715033993E8FB899636B5C31BC79B699366EAA7900557EC343F50F54EED026C847F61032F400B28780FC663CBB444C67ED5FEC2E6FB0EE22A3510E0F54264C4A6511879481419DF60AE1AC0389C5EC5687CDE71CE9A0359A745427D35054F7A576EFE1298C89FC70B01FE9730DC7C8A3D9013D65D9678E18355CD4F2E6BFC3BDB04416FC7F1E0F2F5FC1C4C114319AFDD7012919D64C919BB5177B07E734A461C971578BA4DC73E70B8CC58DDAF64CBF5BFD0367B5FC9730CCB64739CE14EB7AA7BD595EE9D16C3D968A22A333411924FD853B5ABCC7BD6B3B4E03665E62D7844680A6EDD0D4431FF738AD5A596E5F79B89A507CB6906C6CC7174656C1494413C87E3DA12B05CA214B08F145E0ECEEA4289096C4129517916DE2CEB543ADC36431B7685BC74624B3DCFECB1EC95F8F679CAA046576899EC0F45048E03C6BB627A86518C689879C2B50C218106ECB63450B5BBDFD12951456C1487FDF356F55CD8049A41B213D6EFF570DE37BD7B627F92BB453E2EE99AB5
+					</ds:Modulus>
+					<ds:Exponent>AQAB</ds:Exponent>
+				</ds:RSAKeyValue>
+			</ds:KeyValue>
+		</ds:KeyInfo>
+	</ds:Signature>
+	<Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		ID="directcpsi694425610936" IssueInstant="2013-12-04T14:00:22Z"
+		Version="2.0">
+		<saml:Issuer Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">
+			C=US,ST=Alabama,L=Mobile,O=Computer Programs and Systems Inc.,OU=PDS,CN=directcpsi.com
+		</saml:Issuer>
+		<Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+			<SignedInfo>
+				<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+				<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+				<ds:Reference URI="#directcpsi694425610936">
+					<ds:Transforms>
+						<ds:Transform
+							Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+						<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+					</ds:Transforms>
+					<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+					<ds:DigestValue>
+						U0hBMSgvdXNyMS9kaXJlY3QvY2VydGlmaWNhdGVzL2RpcmVjdGNwc2kvZGlyZWN0
+						Y3BzaS5rZXkpPSA2MDI5ZTNlMDI2ZTI4M2Y0ZTlkZTlhNWM0NzhhOGVhYmEyZmQw
+						YWMwCg==
+					</ds:DigestValue>
+				</ds:Reference>
+			</SignedInfo>
+			<ds:SignatureValue>
+				K9tmLR5Mu5naMZug9H6nR2JpXosVCRG/py1gSpT+9IUK5IVtQsIe8t8UojiViFW1
+				6GWnpuz/JHbtpSftGwy1UFcmBv51kxHDWV5f3ei44z8AX4Vx84Cdotugkg06rYKt
+				FQEH4f6vMDuBd+M/7Mh94e/EaDr5IpwetY1JLYf39rEpt0ZCwGb5Hd/cRUoDUw/4
+				S9FxRdliXx9ivDbHgePg7svz8Xt6KIXH9GaD3HmSvCMP9lwhAr+VJeBe0Vn8D0FV
+				me42NyTx6b6gq6jLZbH8WHQgtgHOpeYpW2CEMR38NM5nKzsYIWTsYMW5jD5DMCQJ
+				BtFOUvBkiixJZnFHxjhVRU2rutM22FsJeMIt06ZUTKF5b52/OtKVx+VoMDRCZlX7
+				QUG7/mfw57wfjUBaN+OkHOnAaolx3abyBN62yystgQsmMox/RHjYakllcVwuJ9rD
+				jFABze0KR2lvgeOsDPd3iYiPdACSIw2OuU8+oYJ1EJK15NScOjZr3y/074M9IvJ/
+				I4mSdZxt2BTT1MYwVMGWW06m02pqqW/tqdBxNcIvdHHFfL6b8bXf6IqlBuGwpV6O
+				RHMN+66sCLg6TDutBmtraEkqU9CqAnAez8L5YcA+XhrdpTPM8OMt9JpIcHOZdiVz
+				OvhPY8bz6iLQAe5HmY27/svYLf2i+h+Ds6VdWG8D4tY=
+			</ds:SignatureValue>
+			<ds:KeyInfo>
+				<ds:X509Data>
+					<ds:X509Certificate>
+						MIIH0DCCBrigAwIBAgIQDGgZMUyJF8HiEt9thkNi9zANBgkqhkiG9w0BAQUFADBm
+						MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+						d3cuZGlnaWNlcnQuY29tMSUwIwYDVQQDExxEaWdpQ2VydCBIaWdoIEFzc3VyYW5j
+						ZSBDQS0zMB4XDTEzMDcyOTAwMDAwMFoXDTE2MDgwMjEyMDAwMFowgYUxCzAJBgNV
+						BAYTAlVTMRAwDgYDVQQIEwdBbGFiYW1hMQ8wDQYDVQQHEwZNb2JpbGUxLDAqBgNV
+						BAoTI0NvbXB1dGVyIFByb2dyYW1zIGFuZCBTeXN0ZW1zLCBJbmMuMQwwCgYDVQQL
+						EwNQRFMxFzAVBgNVBAMTDmRpcmVjdGNwc2kuY29tMIICIjANBgkqhkiG9w0BAQEF
+						AAOCAg8AMIICCgKCAgEA+b2jNLNz0Je5i1DbjzcQh5eLWghMKsZFEvuVREazdsZ/
+						vZLXRtel922I5+Ua7jWHJNDOK43Rs0kCTzlfkCYHHo0xeLIrPBpRl9JVRUCeaJJp
+						uCmoV0oS/b8c5SUjrMVGm2B4/Jum5JqT85iN/XGrBw2B5l5r19VWtIyKsL8Rqq+r
+						+YcJ31CJ19cVAzmT6PuJlja1wxvHm2mTZuqnkAVX7DQ/UPVO7QJshH9hAy9ACyh4
+						D8Zjy7RExn7V/sLm+w7iKjUQ4PVCZMSmURh5SBQZ32CuGsA4nF7FaHzecc6aA1mn
+						RUJ9NQVPeldu/hKYyJ/HCwH+lzDcfIo9kBPWXZZ44YNVzU8ua/w72wRBb8fx4PL1
+						/BxMEUMZr91wEpGdZMkZu1F3sH5zSkYclxV4uk3HPnC4zFjdr2TL9b/QNntfyXMM
+						y2RznOFOt6p71ZXunRbD2WiiKjM0EZJP2FO1q8x71rO04DZl5i14RGgKbt0NRDH/
+						c4rVpZbl95uJpQfLaQbGzHF0ZWwUlEE8h+PaErBcohSwjxReDs7qQokJbEEpUXkW
+						3izrVDrcNkMbdoW8dGJLPc/sseyV+PZ5yqBGV2iZ7A9FBI4DxrtieoZRjGiYecK1
+						DCGBBuy2NFC1u9/RKVFFbBSH/fNW9VzYBJpBshPW7/Vw3je9e2J/krtFPi7pmrUC
+						AwEAAaOCA1gwggNUMB8GA1UdIwQYMBaAFFDqc4nbKfsQj57lASDU3nmZSIP3MB0G
+						A1UdDgQWBBR7D5fUh5U7x4akFKcd29++duWYlTAtBgNVHREEJjAkgg5kaXJlY3Rj
+						cHNpLmNvbYISd3d3LmRpcmVjdGNwc2kuY29tMA4GA1UdDwEB/wQEAwIFoDAdBgNV
+						HSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwYQYDVR0fBFowWDAqoCigJoYkaHR0
+						cDovL2NybDMuZGlnaWNlcnQuY29tL2NhMy1nMjMuY3JsMCqgKKAmhiRodHRwOi8v
+						Y3JsNC5kaWdpY2VydC5jb20vY2EzLWcyMy5jcmwwggHEBgNVHSAEggG7MIIBtzCC
+						AbMGCWCGSAGG/WwBATCCAaQwOgYIKwYBBQUHAgEWLmh0dHA6Ly93d3cuZGlnaWNl
+						cnQuY29tL3NzbC1jcHMtcmVwb3NpdG9yeS5odG0wggFkBggrBgEFBQcCAjCCAVYe
+						ggFSAEEAbgB5ACAAdQBzAGUAIABvAGYAIAB0AGgAaQBzACAAQwBlAHIAdABpAGYA
+						aQBjAGEAdABlACAAYwBvAG4AcwB0AGkAdAB1AHQAZQBzACAAYQBjAGMAZQBwAHQA
+						YQBuAGMAZQAgAG8AZgAgAHQAaABlACAARABpAGcAaQBDAGUAcgB0ACAAQwBQAC8A
+						QwBQAFMAIABhAG4AZAAgAHQAaABlACAAUgBlAGwAeQBpAG4AZwAgAFAAYQByAHQA
+						eQAgAEEAZwByAGUAZQBtAGUAbgB0ACAAdwBoAGkAYwBoACAAbABpAG0AaQB0ACAA
+						bABpAGEAYgBpAGwAaQB0AHkAIABhAG4AZAAgAGEAcgBlACAAaQBuAGMAbwByAHAA
+						bwByAGEAdABlAGQAIABoAGUAcgBlAGkAbgAgAGIAeQAgAHIAZQBmAGUAcgBlAG4A
+						YwBlAC4wewYIKwYBBQUHAQEEbzBtMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5k
+						aWdpY2VydC5jb20wRQYIKwYBBQUHMAKGOWh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0
+						LmNvbS9EaWdpQ2VydEhpZ2hBc3N1cmFuY2VDQS0zLmNydDAMBgNVHRMBAf8EAjAA
+						MA0GCSqGSIb3DQEBBQUAA4IBAQBSdA7/5F1uC4F4nHjbgancWe3yFIEFRfApiFrW
+						XxeRBtHs0DxCI70f5LzGepq5DPX5Xmzm3Y03YzQWKiEE7W04DUeg0dfSH1dYrL43
+						6SP4sVtCcN80xFbwT+2KPyhCU4MsHbTcgcXKJs3evC9PV7JMjxOmend9tfT018MR
+						Ak/SVRCCFcztaeyUVibblwlNA+xVfOGVaJqCgNBr5S2OcQgDKB+oJTIwipdPZxSs
+						nZmcbvUgbnGXBIwzv1YMluyRgjQMt5dsM+L/EREQb2CKBq2pXxiTW5CX0rtqqLRu
+						zXsRLzNN0gtLcGgvx2IMqKk13V2tvm1XyI35+WfFo6b22qW9
+					</ds:X509Certificate>
+				</ds:X509Data>
+			</ds:KeyInfo>
+		</Signature>
+		<saml:Subject>
+			<saml:NameID
+				Format="urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">
+				C=US,ST=Alabama,L=Mobile,O=Computer Programs and Systems Inc.,OU=PDS,CN=directcpsi.com
+			</saml:NameID>
+			<saml:SubjectConfirmation
+				Method="urn:oasis:names:tc:SAML:2.0:cm:holder-of-key">
+				<saml:SubjectConfirmationData
+					xmlns:a="http://www.w3.org/2001/XMLSchema-instance" a:type="KeyInfoConfirmationDataType">
+					<saml:KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+						<saml:KeyValue>
+							<saml:RSAKeyValue>
+								<saml:Modulus>
+									F9BDA334B373D097B98B50DB8F371087978B5A084C2AC64512FB954446B376C67FBD92D746D7A5F76D88E7E51AEE358724D0CE2B8DD1B349024F395F9026071E8D3178B22B3C1A5197D25545409E689269B829A8574A12FDBF1CE52523ACC5469B6078FC9BA6E49A93F3988DFD71AB070D81E65E6BD7D556B48C8AB0BF11AAAFABF98709DF5089D7D715033993E8FB899636B5C31BC79B699366EAA7900557EC343F50F54EED026C847F61032F400B28780FC663CBB444C67ED5FEC2E6FB0EE22A3510E0F54264C4A6511879481419DF60AE1AC0389C5EC5687CDE71CE9A0359A745427D35054F7A576EFE1298C89FC70B01FE9730DC7C8A3D9013D65D9678E18355CD4F2E6BFC3BDB04416FC7F1E0F2F5FC1C4C114319AFDD7012919D64C919BB5177B07E734A461C971578BA4DC73E70B8CC58DDAF64CBF5BFD0367B5FC9730CCB64739CE14EB7AA7BD595EE9D16C3D968A22A333411924FD853B5ABCC7BD6B3B4E03665E62D7844680A6EDD0D4431FF738AD5A596E5F79B89A507CB6906C6CC7174656C1494413C87E3DA12B05CA214B08F145E0ECEEA4289096C4129517916DE2CEB543ADC36431B7685BC74624B3DCFECB1EC95F8F679CAA046576899EC0F45048E03C6BB627A86518C689879C2B50C218106ECB63450B5BBDFD12951456C1487FDF356F55CD8049A41B213D6EFF570DE37BD7B627F92BB453E2EE99AB5
+								</saml:Modulus>
+								<saml:Exponent>AQAB</saml:Exponent>
+							</saml:RSAKeyValue>
+						</saml:KeyValue>
+					</saml:KeyInfo>
+				</saml:SubjectConfirmationData>
+			</saml:SubjectConfirmation>
+		</saml:Subject>
+		<saml:AuthnStatement AuthnInstant="2013-12-04T14:00:22Z"
+			NameID="" SessionIndex="">
+			<saml:AuthnContext>
+				<saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:TLSClient
+				</saml:AuthnContextClassRef>
+			</saml:AuthnContext>
+		</saml:AuthnStatement>
+		<saml:AttributeStatement>
+			<saml:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:subject-id">
+				<saml:AttributeValue />
+			</saml:Attribute>
+			<saml:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:organization">
+				<saml:AttributeValue>urn:oid:directcpsi.com</saml:AttributeValue>
+			</saml:Attribute>
+			<saml:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:organization-id">
+				<saml:AttributeValue>urn:oid:directcpsi.com</saml:AttributeValue>
+			</saml:Attribute>
+			<saml:Attribute Name="urn:oasis:names:tc:xacml:2.0:resource:resource-id">
+				<saml:AttributeValue />
+			</saml:Attribute>
+			<saml:Attribute Name="urn:nhin:names:saml:homeCommunityId">
+				<saml:AttributeValue>urn:oid:1.2.840.114350.1.13.327.1.7.2.688879
+				</saml:AttributeValue>
+			</saml:Attribute>
+			<saml:Attribute Name="urn:oasis:names:tc:xacml:2.0:subject:role">
+				<saml:AttributeValue>
+					<saml:Role xmlns="urn:hl7-org:v3" code="46255001"
+						codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED_CT"
+						displayName="" xsi:type="hl7:CE" />
+				</saml:AttributeValue>
+			</saml:Attribute>
+			<saml:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse">
+				<saml:AttributeValue>
+					<saml:PurposeOfUse xmlns="urn:hl7-org:v3" code="OPERATIONS"
+						codeSystem="2.16.840.1.113883.3.18.7.1" codeSystemName="nhin-purpose"
+						displayName="Operations" xsi:type="hl7:CE" />
+				</saml:AttributeValue>
+			</saml:Attribute>
+			<saml:Attribute Name="urn:oasis:names:tc:xspa:2.0:subject:npi">
+				<saml:AttributeValue />
+			</saml:Attribute>
+		</saml:AttributeStatement>
+		<saml2:AuthzDecisionStatement
+			xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion" Decision="Permit"
+			Resource="">
+			<saml2:Action Namespace="urn:oasis:names:tc:SAML:1.0:action:rwedc">Execute</saml2:Action>
+			<Evidence>
+				<Assertion ID="directcpsi694425610936authzdecisionstatement"
+					IssueInstant="2013-12-04T14:00:22Z" Version="2.0">
+					<Issuer Format="rn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">
+						C=US,ST=Alabama,L=Mobile,O=Computer Programs and Systems Inc.,OU=PDS,CN=directcpsi.com
+					</Issuer>
+					<Conditions NotBefore="2013-12-04T14:00:22Z"
+						NotOnOrAfter="2013-12-04T14:5:22Z" />
+					<AttributeStatement>
+						<saml2:Attribute Name="AccessConsentPolicy"
+							NameFormat="http://www.hhs.gov/healthit/nhin">
+							<saml2:AttributeValue>urn:oid:1.2.3.4</saml2:AttributeValue>
+						</saml2:Attribute>
+						<saml2:Attribute Name="InstantAccessConsentPolicy"
+							NameFormat="http://www.hhs.gov/healthit/nhin">
+							<saml2:Attribute xmlns:ns6="http://www.w3.org/2001/XMLSchema-instance"
+								xmlns:ns7="http://www.w3.org/2001/XMLSchema" ns6:type="ns7:string">urn:oid:1.2.3.4.123456789
+							</saml2:Attribute>
+						</saml2:Attribute>
+					</AttributeStatement>
+				</Assertion>
+			</Evidence>
+		</saml2:AuthzDecisionStatement>
+	</Assertion>
+</wsse:Security>
