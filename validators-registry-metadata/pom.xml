@@ -67,5 +67,9 @@
 			<artifactId>xds-exceptions</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
+							<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+		</dependency>
   </dependencies>
 </project>

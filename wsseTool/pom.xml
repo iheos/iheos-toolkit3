@@ -75,13 +75,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-simple</artifactId> 
 			<version>1.7.5</version> <optional>true</optional> </dependency> -->
 
-		<dependency>
-			<groupId>org.opensaml</groupId>
-			<artifactId>opensaml</artifactId>
-			<classifier>tests</classifier>
-			<scope>test</scope>
-			<version>2.5.3</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.opensaml</groupId> -->
+<!-- 			<artifactId>opensaml</artifactId> -->
+<!-- 			<classifier>tests</classifier> -->
+<!-- 			<scope>test</scope> -->
+<!-- 			<version>2.5.3</version> -->
+<!-- 		</dependency> -->
 
 
 	</dependencies>

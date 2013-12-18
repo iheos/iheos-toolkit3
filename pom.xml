@@ -77,7 +77,7 @@
 		<module>validators-registry-message</module>
 		<module>validators-registry-metadata</module>
 		<module>validators-support</module>
-		<module>wssetool</module>
+		<module>wsseTool</module>
 		<module>xds-exceptions</module>
 		<module>xdstest-gui</module>
 		<module>xdstest2</module>
@@ -110,6 +110,11 @@
 				<artifactId>gwt-user</artifactId>
 				<version>2.5.1</version>
 			</dependency>
+					<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>2.1.8</version>
+		</dependency>
 		</dependencies>
 	</dependencyManagement>
 

@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-  <name>actorfactory</name>
-  <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
-  <projects>
-    <project>actortransaction</project>
-    <project>env-settings</project>
-    <project>installation</project>
-    <project>tk</project>
-    <project>utilities</project>
-    <project>common-datatypes</project>
-    <project>xds-exceptions</project>
-    <project>http</project>
-    <project>error-recording</project>
-    <project>registry-metadata</project>
-    <project>docref</project>
-    <project>registry-support</project>
-    <project>results</project>
-    <project>sim-common</project>
-    <project>site-management</project>
-    <project>validators-support</project>
-  </projects>
-  <buildSpec>
-    <buildCommand>
-      <name>org.eclipse.jdt.core.javabuilder</name>
-    </buildCommand>
-  </buildSpec>
-  <natures>
-    <nature>org.eclipse.jdt.core.javanature</nature>
-  </natures>
+	<name>actorfactory</name>
+	<comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+	<projects>
+		<project>actortransaction</project>
+		<project>env-settings</project>
+		<project>installation</project>
+		<project>tk</project>
+		<project>utilities</project>
+		<project>common-datatypes</project>
+		<project>xds-exceptions</project>
+		<project>http</project>
+		<project>error-recording</project>
+		<project>registry-metadata</project>
+		<project>docref</project>
+		<project>registry-support</project>
+		<project>results</project>
+		<project>sim-common</project>
+		<project>site-management</project>
+		<project>validators-support</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
 </projectDescription>

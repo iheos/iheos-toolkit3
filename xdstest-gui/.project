@@ -28,7 +28,7 @@
     <project>validators-registry-message</project>
     <project>registry-msg-formats</project>
     <project>soap</project>
-    <project>wssetool</project>
+    <project>wsseTool</project>
     <project>dsig</project>
     <project>security-common</project>
     <project>validators-registry-metadata</project>

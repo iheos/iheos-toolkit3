@@ -46,6 +46,7 @@
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/org/json/json/20090211/json-20090211.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/codehaus/groovy/groovy-all/2.1.8/groovy-all-2.1.8.jar"/>
   <classpathentry kind="src" path="/actortransaction"/>
   <classpathentry kind="src" path="/registry-support"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/ws/commons/axiom/axiom-common-impl/1.2.14/axiom-common-impl-1.2.14.jar"/>
