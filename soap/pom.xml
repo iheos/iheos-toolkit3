@@ -106,5 +106,11 @@
 			<artifactId>xds-exceptions</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
+
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>wsseTool</artifactId>
+			<version>3.0.0</version>
+		</dependency>
 	</dependencies>
 </project>
