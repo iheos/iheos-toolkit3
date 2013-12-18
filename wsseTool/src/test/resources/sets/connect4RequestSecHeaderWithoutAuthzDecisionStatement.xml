@@ -1,0 +1,150 @@
+<wsse:Security
+	xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	 xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
+	soap:mustUnderstand="true">
+	<saml2:Assertion xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema" ID="_009df197f05c40ddbbd98dc908c64e90"
+		IssueInstant="2013-08-26T16:13:15.214Z" Version="2.0">
+		<saml2:Issuer
+			Format="urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">CN=SAML User,OU=SU,O=SAML User,L=Los Angeles,ST=CA,C=US</saml2:Issuer>
+		<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+			<ds:SignedInfo>
+				<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+				<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+				<ds:Reference URI="#_009df197f05c40ddbbd98dc908c64e90">
+					<ds:Transforms>
+						<ds:Transform
+							Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+						<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+							<ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
+								PrefixList="xs" />
+						</ds:Transform>
+					</ds:Transforms>
+					<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+					<ds:DigestValue>5P1Q9KJwYgS9/ATuDL6kxXzUBvk=</ds:DigestValue>
+				</ds:Reference>
+			</ds:SignedInfo>
+			<ds:SignatureValue>WFvYrHEvlu1KglAVFEYbcAitZwjhc+LSKDiAojW006FPagstE/HnY8DcjOJ77Fwk+/cZsSfyoCrEyAydunEbiZVVxnLZ1D4I0G7xoyeM94i+KxJTrpjypegjzxwSyP6LVXQ7zAOSly95J2jRbN27OKAPoFz3KqiwTq4dLIUvJv9wKgqgPGMkcWh6atDWn+DGqegQZOznedcoeeKJFr2WmPJ21VbjG3D0O5ynUBdKsg6nyqED2I6TzMKHbWyydBojHvREj7P09FSJvwR1Gfefw7i9BDAbnZ2GO+DBskTlRGnO4mb0JFpwY0ibq5POOsVZPwUI4/ND23OKTIhpoX9amQ==</ds:SignatureValue>
+			<ds:KeyInfo>
+				<ds:KeyValue>
+					<ds:RSAKeyValue>
+						<ds:Modulus>k4CcN3koVVF3n/Mj/iTk21PQUywkIg23uKKX4s+eyRd5D+58Cosv0asRFd9lO8SGpM/yHYJutNgq
+							c7NaQDWgRBBB2PzCq7ni9ZAv5x160hUgdF8pDmqambRn2vfPpxK/je7UDuod5iylhuKKws4aQ5Pi
+							nR1MQ2t3tiDD1xa67+gy9AOOBTyqF7/WQHLKLkaGgtnJDedWfonyQi9Z6BRMZ5TKULeBu2eMFoPM
+							3+SrD4gigLGx/boNzvJR8wLhjRrtpP8Vtw86DL0Y9g8SFV1+tsF97foHEyP6wyNQlBRCNA+U+Q1p
+							RV7bVREaB4K8oDiAsPQOpQp7fTPbAv+zZhDtjw==</ds:Modulus>
+						<ds:Exponent>AQAB</ds:Exponent>
+					</ds:RSAKeyValue>
+				</ds:KeyValue>
+			</ds:KeyInfo>
+		</ds:Signature>
+		<saml2:Subject>
+			<saml2:NameID
+				Format="urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName">UID=kskagerb</saml2:NameID>
+			<saml2:SubjectConfirmation
+				Method="urn:oasis:names:tc:SAML:2.0:cm:holder-of-key">
+				<saml2:SubjectConfirmationData>
+					<ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+						<ds:KeyValue>
+							<ds:RSAKeyValue>
+								<ds:Modulus>k4CcN3koVVF3n/Mj/iTk21PQUywkIg23uKKX4s+eyRd5D+58Cosv0asRFd9lO8SGpM/yHYJutNgq
+									c7NaQDWgRBBB2PzCq7ni9ZAv5x160hUgdF8pDmqambRn2vfPpxK/je7UDuod5iylhuKKws4aQ5Pi
+									nR1MQ2t3tiDD1xa67+gy9AOOBTyqF7/WQHLKLkaGgtnJDedWfonyQi9Z6BRMZ5TKULeBu2eMFoPM
+									3+SrD4gigLGx/boNzvJR8wLhjRrtpP8Vtw86DL0Y9g8SFV1+tsF97foHEyP6wyNQlBRCNA+U+Q1p
+									RV7bVREaB4K8oDiAsPQOpQp7fTPbAv+zZhDtjw==</ds:Modulus>
+								<ds:Exponent>AQAB</ds:Exponent>
+							</ds:RSAKeyValue>
+						</ds:KeyValue>
+					</ds:KeyInfo>
+				</saml2:SubjectConfirmationData>
+			</saml2:SubjectConfirmation>
+		</saml2:Subject>
+		<saml2:AuthnStatement AuthnInstant="2009-04-16T13:15:39.000Z"
+			SessionIndex="987">
+			<saml2:SubjectLocality Address="158.147.185.168"
+				DNSName="158.147.185.168" />
+			<saml2:AuthnContext>
+				<saml2:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:X509</saml2:AuthnContextClassRef>
+			</saml2:AuthnContext>
+		</saml2:AuthnStatement>
+		<saml2:AttributeStatement>
+			<saml2:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:subject-id"
+				NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+				<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:type="xs:string">Karl S Skagerberg</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:organization"
+				NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+				<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:type="xs:string">InternalTest2</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute
+				Name="urn:oasis:names:tc:xspa:1.0:subject:organization-id"
+				NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+				<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:type="xs:string">2.2</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute Name="urn:nhin:names:saml:homeCommunityId"
+				NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+				<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:type="xs:string">1.1</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute Name="urn:oasis:names:tc:xacml:2.0:resource:resource-id"
+				NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+				<saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:type="xs:string">500000000^^^1.1ISO</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute Name="urn:oasis:names:tc:xacml:2.0:subject:role"
+				NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+				<saml2:AttributeValue>
+					<hl7:Role xmlns:hl7="urn:hl7-org:v3" code="307969004"
+						codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED_CT"
+						displayName="Public Health" type="hl7:CE" />
+				</saml2:AttributeValue>
+			</saml2:Attribute>
+			<saml2:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse"
+				NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+				<saml2:AttributeValue>
+					<hl7:PurposeOfUse xmlns:hl7="urn:hl7-org:v3" code="PUBLICHEALTHKIERAN"
+						codeSystem="2.16.840.1.113883.3.18.7.1" codeSystemName="nhin-purpose"
+						displayName="Use or disclosure of Psychotherapy Notes" />
+				</saml2:AttributeValue>
+			</saml2:Attribute>
+		</saml2:AttributeStatement>
+	</saml2:Assertion>
+	<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+		Id="SIG-76">
+		<ds:SignedInfo>
+			<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+				<ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
+					PrefixList="soap" />
+			</ds:CanonicalizationMethod>
+			<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+			<ds:Reference URI="#TS-75">
+				<ds:Transforms>
+					<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+						<ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
+							PrefixList="wsse soap" />
+					</ds:Transform>
+				</ds:Transforms>
+				<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+				<ds:DigestValue>oPGQiaPW2SojUGxwq6t0CpaMZBI=</ds:DigestValue>
+			</ds:Reference>
+		</ds:SignedInfo>
+		<ds:SignatureValue>ByTOW+VFW6ZWvO3sosI9ehNlTaKbnDS6CwCg3V21V9NFErQDFjr63r3S5UDrVZq9z/87B5UjudoLcr5Guvm5fDA7OeAWIaQkoKw0/3Hdksm4gjzR3K65beRu1PRg1MHKAh1EUhs/eNRd83hUPxQWMGcVudRxu7n807G6z1Xqq3Y/aEWJjE0/DvdcEbxQWeGyt0XkpKIfIHJhQmZ2st+L1MpOnXN+U/+OD476vp2VGPRXHfVQmKaPDSunW+Xkd/DjJmomp4aZw75Ja4jtn0MU35yT4LDF/OFfz+3e/Bh517NRf1aQHi9gzaD3mn3xz+ZR70YOU4DRjB52rbpunc1vbQ==</ds:SignatureValue>
+		<ds:KeyInfo Id="KeyId-5497BE26331F7C8C4B137753359527735">
+			<wsse:SecurityTokenReference
+				xmlns:wsse11="http://docs.oasis-open.org/wss/oasis-wss-wssecurity-secext-1.1.xsd"
+				wsse11:TokenType="http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV2.0"
+				wsu:Id="STRId-5497BE26331F7C8C4B137753359527736">
+				<wsse:KeyIdentifier
+					ValueType="http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLID">_009df197f05c40ddbbd98dc908c64e90</wsse:KeyIdentifier>
+			</wsse:SecurityTokenReference>
+		</ds:KeyInfo>
+	</ds:Signature>
+	<wsu:Timestamp wsu:Id="TS-75">
+		<wsu:Created>2013-08-26T16:13:15.211Z</wsu:Created>
+		<wsu:Expires>2013-08-26T17:13:15.211Z</wsu:Expires>
+	</wsu:Timestamp>
+</wsse:Security>
