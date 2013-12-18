@@ -58,11 +58,6 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>wssetool</artifactId>
-			<version>1.3.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>docref</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
