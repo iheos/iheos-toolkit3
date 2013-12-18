@@ -4,6 +4,7 @@ package gov.nist.hit.ds.repository.simple;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.simple.index.BulkLoadTest;
 import gov.nist.hit.ds.repository.simple.index.CreateContainerTest;
 import gov.nist.hit.ds.repository.simple.index.ExpandContainerTest;
 import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilderTest;
@@ -38,6 +39,7 @@ import org.junit.runners.Suite;
 		,SimpleTypeIteratorTest.class 
 		,SearchTest.class
 		,AssetNodeBuilderTest.class
+		,BulkLoadTest.class
 		} )
 public class SimpleTestSuite {
 	
@@ -47,7 +49,7 @@ public class SimpleTestSuite {
 		@Override
 		protected void before() throws Throwable {
 			
-			// Setup application wide singletons
+			// Setup application-wide singletons
 			
 			Installation.reset();
 			Installation.installation().initialize(); 			
@@ -60,7 +62,7 @@ public class SimpleTestSuite {
 			File dataDir = Configuration.getRepositoriesDataDir(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 			
 			if (dataDir.exists()) {
-			 System.out.println("Clearing TEST repository data before testing...");
+			 System.out.println("Clearing TEST data before testing...");
 			 FileUtils.cleanDirectory(dataDir);
 			}
 
@@ -70,7 +72,7 @@ public class SimpleTestSuite {
 		protected void after() {
 			
 			try {
-				System.out.println("Clearing after test data folder...");
+				System.out.println("Clearing TEST data folder after testing...");
 				 FileUtils.cleanDirectory(Configuration.getRepositoriesDataDir(Configuration.getRepositorySrc(Access.RW_EXTERNAL)));
 				 System.out.println("done.");
 			} catch (IOException e) {

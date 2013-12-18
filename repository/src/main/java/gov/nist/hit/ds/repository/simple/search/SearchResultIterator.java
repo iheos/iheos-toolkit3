@@ -71,10 +71,6 @@ public class SearchResultIterator implements AssetIterator  {
 			String orderBy) throws RepositoryException {
 		DbIndexContainer dbc = new DbIndexContainer();
 		
-		for (Repository rep : repositories) {				
-			 dbc.indexRep(rep, null);
-		}
-		
 		crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy);
 		totalRecords = crs.size();
 		// System.out.println("total records in buffer: " + totalRecords);

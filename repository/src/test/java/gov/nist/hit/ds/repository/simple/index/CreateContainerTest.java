@@ -3,6 +3,10 @@ package gov.nist.hit.ds.repository.simple.index;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.IdFactory;
@@ -69,9 +73,9 @@ public class CreateContainerTest  {
 		System.out.println("Running testExpandContainer...");
 		
 		DbIndexContainer dbc = new DbIndexContainer();
-		
+		Map<String,String> columnMap = new HashMap<String,String>();
 		try {
-			dbc.expandContainer(new String[] {"a","b","c"}, "siteAsset");
+			dbc.expandContainer(new String[] {"a","b","c"}, columnMap);
 		} catch (Exception e) {
 			fail("test expand failed!");
 
@@ -112,9 +116,9 @@ public class CreateContainerTest  {
 		System.out.println("Running testCol...");
 		
 		DbIndexContainer dbc = new DbIndexContainer();
-		
+		Map<String,String> columnMap = new HashMap<String,String>();
 		try {
-			dbc.expandContainer(new String[] {"x","b","z"}, "siteAsset");
+			dbc.expandContainer(new String[] {"x","b","z"},  columnMap);
 			System.out.println (dbc.isIndexed(dbc.getColumn("siteAsset", "a")));
 		} catch (Exception e) {
 			fail("test expand failed!");

@@ -327,7 +327,7 @@ public class SimpleAsset implements Asset, Flushable {
 				,getProperty(PropertyKey.DESCRIPTION)
 				,getProperty(PropertyKey.ASSET_ID)
 				,FolderManager.LOST_AND_FOUND
-		});				
+		});
 
 		File[] parentFolder = new FolderManager().makeFolder(this, folderName);
 		

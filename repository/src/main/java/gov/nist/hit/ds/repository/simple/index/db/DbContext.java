@@ -155,6 +155,34 @@ public class DbContext {
 		throw new SQLException("No connection.");
 	}
 	
+	public PreparedStatement prepareBulkUpdate(String sqlStr) throws SQLException {
+		logger.fine("executePrepared IndexContainer SQL: " +sqlStr);
+		if (connection!=null) {
+			return connection.prepareStatement(sqlStr);
+		}
+		throw new SQLException("No connection.");		
+	}
+	
+	public boolean setBulkParameters(PreparedStatement ps, String[] params) throws SQLException {
+		int parameterIndex=1;
+		for (String p : params) {
+			logger.fine("Setting param: "+parameterIndex + " to <" + p + ">");			
+
+			ps.setString(parameterIndex++, p);
+		}
+		ps.addBatch();
+		return true;
+
+	}
+	
+	public boolean updateBulk(PreparedStatement ps) throws SQLException {
+		if (connection!=null && ps!=null) {
+			ps.executeBatch();
+			return true;
+		}
+		
+		throw new SQLException("No connection or ps is null.");
+	}
 	
 	public ResultSet executeQuery(String sqlStr, String[] params) throws SQLException {
 

@@ -84,13 +84,13 @@ public class DbConnection implements IndexDataSource {
 //	          p.setValidationQuery("SELECT 1");
 //	          p.setTestOnReturn(false);
 //	          p.setValidationInterval(30000);
-	          p.setTimeBetweenEvictionRunsMillis(30000);
+	          p.setTimeBetweenEvictionRunsMillis(15000);
 	          p.setMaxActive(500);
 	          p.setInitialSize(10);
-	          p.setMaxWait(10000);
-	          p.setRemoveAbandonedTimeout(60);
+	          p.setMaxWait(35000);
+	          p.setRemoveAbandonedTimeout(180);
 	          p.setMinEvictableIdleTimeMillis(35000);
-	          p.setMinIdle(20);
+	          p.setMinIdle(25);
 	          p.setLogAbandoned(false);
 	          p.setRemoveAbandoned(true);
 //	          p.setJdbcInterceptors(
