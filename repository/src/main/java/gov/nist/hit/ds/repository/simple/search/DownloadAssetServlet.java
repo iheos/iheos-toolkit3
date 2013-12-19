@@ -14,6 +14,7 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -38,6 +39,7 @@ public class DownloadAssetServlet extends HttpServlet {
 		String reposSrc = request.getParameter("reposSrc");
 		String reposId = request.getParameter("reposId");
 		String assetId = request.getParameter("assetId");
+		String assetLoc = request.getParameter("asset");
 		String contentDisp = "inline"; // default
 		
 		if ("attachment".equals(request.getParameter("contentDisp"))) {
@@ -62,19 +64,24 @@ public class DownloadAssetServlet extends HttpServlet {
 		}
 
 		
-		if (assetId!=null && reposId!=null) {
+		
+		if (reposId!=null) {
 			try {
 
-				Asset a = null; // repos.getAsset(new SimpleId(assetId));
+				// Asset a = null; // repos.getAsset(new SimpleId(assetId));
 				
-				SearchCriteria criteria = new SearchCriteria(Criteria.AND);
-				criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO,assetId));			
+				// if (assetId!=null) {
+//				SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+//				criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO,assetId));			
+//				
+//				AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
+//				
+//				if (iter.hasNextAsset()) {
+//					a = iter.nextAsset();
+//				}
+			//  }
 				
-				AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
-				
-				if (iter.hasNextAsset()) {
-					a = iter.nextAsset();
-				}
+				Asset a = repos.getAssetByRelativePath(new File(assetLoc + Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT));
 
 				
 				if (a!=null) {
@@ -83,7 +90,7 @@ public class DownloadAssetServlet extends HttpServlet {
 					  response.setHeader("Pragma", "no-cache");
 					  response.setDateHeader("Max-Age", 0);
 					  
-					  response.setHeader("Content-Disposition", contentDisp+ ";filename=\""+ a.getId().getIdString() + "." + a.getContentExtension()[2] + "\"");
+					  response.setHeader("Content-Disposition", contentDisp+ ";filename=\""+ a.getContentFile().getName() + "\""); // + "." + a.getContentExtension()[2] 
 					  if (a.getMimeType()!=null) {
 						  response.setContentType(a.getMimeType());
 					  } else {

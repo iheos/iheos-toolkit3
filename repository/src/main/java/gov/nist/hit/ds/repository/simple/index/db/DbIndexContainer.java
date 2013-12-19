@@ -77,7 +77,6 @@ public class DbIndexContainer implements IndexContainer, Index {
 	+ displayOrder + " int,"         						    	/* This is a reserved keyword for sorting purpose */
 	+"indexSession varchar(64))";									/* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */				
 			
-	// private static int maxIndexFast = 512; // Maximum number of items that qualify for the faster version of the indexer but uses more resources
 	/**
 	 * This method uses two main logical data sets to identify assets that are to be indexed, refreshed, or marked as stale.  
 	 * Set A is the master reference of a repository as provided by its repository source. The SimpleAssetIterator provides an iterator for the set on the filesystem. 

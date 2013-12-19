@@ -3,6 +3,7 @@ package gov.nist.hit.ds.logBrowser.client;
 
 import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
 import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
+import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
@@ -335,7 +336,7 @@ public class LogBrowser implements EntryPoint {
 						
 						AssetNode an =  (AssetNode)((Tree)event.getSource()).getSelectedItem().getUserObject();
 						if (an.isContentAvailable()) {
-							menuItemPanel.add(new Anchor("Download content",GWT.getHostPageBaseURL() + "repository/downloadAsset?reposSrc="+ an.getReposSrc() +"&reposId=" + an.getRepId() + "&assetId=" + an.getAssetId() + "&contentDisp=attachment"));
+							menuItemPanel.add(new Anchor("Download content",GWT.getHostPageBaseURL() + "repository/downloadAsset?reposSrc="+ an.getReposSrc() +"&reposId=" + an.getRepId() + "&asset=" + an.getLocation().replace(Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT, "") + "&contentDisp=attachment"));
 						}
 					} catch (Exception ex) {
 						logger.log(Level.SEVERE,"Download link builder failed:" + ex.toString());
