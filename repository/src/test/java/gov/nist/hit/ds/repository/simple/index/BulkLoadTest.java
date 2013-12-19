@@ -27,6 +27,17 @@ public class BulkLoadTest {
 
 	static final int ASSETS_TO_TEST = 100;
 	
+	/*
+	 * Past performance:
+	 * 1. ~154 ms per asset based on 1000 assets for a total of 154 seconds on my system
+	 * 
+	 */
+	
+	/**
+	 * 
+	 * @throws RepositoryException
+	 */
+	
 	@BeforeClass
 	static public void initialize() throws RepositoryException {
 	

@@ -68,8 +68,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 	private static final String repContainerDefinition = 
 	"(repositoryIndexId integer not null  generated always as identity," 	/* (Internal use) This is the primary key */
 	+ repId + " varchar(64) not null,"								/* This is the repository Id as it appears on the filesystem */
-	+ assetId + " varchar(64)," /* */							/* This is the asset Id of the asset under the repository folder */
-	+ locationId + " varchar(512),"								/* This is the file path */
+	+ assetId + " varchar(64)," /* */								/* This is the asset Id of the asset under the repository folder */
+	+ locationId + " varchar(512),"									/* This is the file path */
 	+ parentId +  " varchar(64),"									/* The parent asset Id. A null-value indicates top-level asset and no children */
 	+ assetType + " varchar(32)," 									/* Asset type - usually same as the keyword property */ 
 	+"hash varchar(64),"											/* (Internal use) The hash of the property file */
@@ -78,6 +78,135 @@ public class DbIndexContainer implements IndexContainer, Index {
 	+"indexSession varchar(64))";									/* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */				
 			
 	// private static int maxIndexFast = 512; // Maximum number of items that qualify for the faster version of the indexer but uses more resources
+	/**
+	 * This method uses two main logical data sets to identify assets that are to be indexed, refreshed, or marked as stale.  
+	 * Set A is the master reference of a repository as provided by its repository source. The SimpleAssetIterator provides an iterator for the set on the filesystem. 
+	 * Set B is the indexed version of set A as it appears in the database. The repositoryIndex database table contains records by the repositoryId, source, and the location.
+	 * The following sets are the outcome of operations between the two main sets:
+	 * Set C is the union of both sets that identifies set of assets that exist both on the filesystem and the database. The hash value of both asset instances are compared to ensure byte-level consistency. 
+	 * Set D is the difference between set A - B. These are the new assets that belong to the unindexed asset category.
+	 * Set E is the difference between set B - A. These are the stale assets, a byproduct of assets that were once indexed but later removed from the filesystem. These assets will be removed from the database.
+	 *     
+	 * @param repos
+	 * @param iter
+	 * @return
+	 * @throws RepositoryException
+	 */
+	private int indexRepository(Repository repos, SimpleAssetIterator iter) throws RepositoryException {
+		int totalAssetsIndexed = 0;
+		String reposId = repos.getId().getIdString();
+		boolean repositorySynced = false;
+		Map<String, String> unIndexed = new HashMap<String,String>();
+		Map<String, Asset> unIndexedAsset = new HashMap<String,Asset>();
+
+		List<String> aList = new ArrayList<String>();
+		
+		if (iter!=null && iter.hasNextAsset()) {
+			
+			Map<String, Asset> assetMap = new HashMap<String,Asset>();
+			
+			// Db Index
+			try {
+
+				Map<String, String> reposFsIndex = new HashMap<String,String>();
+				String fullIndex = getFsHash(repos, iter, assetMap, reposFsIndex);								
+				
+				String[] reposData = getReposHash(repos);
+				if (fullIndex!=null && !"".equals(fullIndex)) {
+					if (reposData != null) {
+						if (fullIndex.equals(reposData[1])) {
+							repositorySynced = true; 	
+						} else {
+							repositorySynced = false; 
+							setReposHash(repos, fullIndex, true);							
+						}
+					} else {
+						repositorySynced = false; 
+						setReposHash(repos, fullIndex, false);
+					}					
+				}
+								
+				if (!repositorySynced) {
+					
+					Map<String, String> reposDbIndex = getIndexedHash(repos);
+					
+					if (reposDbIndex.size()==0) {
+						repositorySynced = false;
+						unIndexed = reposFsIndex;
+						unIndexedAsset.putAll(assetMap);
+						aList.addAll(unIndexed.keySet());
+						totalAssetsIndexed = reposFsIndex.size();
+					} else {
+						for (String key : reposFsIndex.keySet()) {
+							if ((reposDbIndex.get(key)==null) || !reposDbIndex.get(key).equals(reposFsIndex.get(key))) {							
+								unIndexed.put(key, reposFsIndex.get(key));
+								unIndexedAsset.put(key, assetMap.get(key));
+								aList.add(key);					
+								totalAssetsIndexed++;
+							} 
+						}					
+						
+						cleanupStaleItems(repos, reposFsIndex, reposDbIndex);
+						
+						if (unIndexed.size()>0) {
+							repositorySynced = false;
+						} else {
+							repositorySynced = true;
+						}
+
+					} 
+			
+				}
+				
+			} catch (Exception ex) {
+				logger.warning(ex.toString());
+			} 			
+		
+
+		}		
+
+		if (repositorySynced) {
+			logger.fine("Repos Id <" + reposId + "> is already synced.");
+		} else {
+			ExecutorService svc = Executors.newCachedThreadPool();
+			
+			final int batchSz = 27;
+			int sz = aList.size();
+			if (sz >batchSz) {
+				int start = 0;
+				int end = batchSz;
+
+				int cx = 0;
+				while (end <= sz) {
+					logger.fine("running indexer thread " + cx++);
+					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, end), unIndexed, unIndexedAsset)));					
+					start += batchSz;
+					end +=batchSz;
+				}
+				
+				if (end>sz) {
+					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, sz), unIndexed, unIndexedAsset)));
+				}
+					
+					
+			} else {
+				svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset)));
+			}
+			
+			svc.shutdown();
+			boolean svcStatus = false;
+			try {
+				svcStatus = svc.awaitTermination(15,TimeUnit.MINUTES);
+			} catch (InterruptedException e) {
+				logger.warning("svc termination failed!");
+			} 
+			
+			logger.info("indexer svc exit status: " + svcStatus);
+		}
+		
+		return totalAssetsIndexed;
+
+	}
 	
 	@Override
 	public String getIndexContainerDefinition() {
@@ -770,7 +899,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 		
 		int totalAssetsIndexed = -1;
 //		if (iter.getSize()<=maxIndexFast) {
-			totalAssetsIndexed = indexRepShort(repos, iter);
+			totalAssetsIndexed = indexRepository(repos, iter);
 //		} else {
 //			totalAssetsIndexed = indexRepLong(repos,iter);
 //		}
@@ -779,119 +908,6 @@ public class DbIndexContainer implements IndexContainer, Index {
 		return totalAssetsIndexed;
 	}
 	
-	private int indexRepShort(Repository repos, SimpleAssetIterator iter) throws RepositoryException {
-		int totalAssetsIndexed = 0;
-		String reposId = repos.getId().getIdString();
-		boolean repositorySynced = false;
-		Map<String, String> unIndexed = new HashMap<String,String>();
-		Map<String, Asset> unIndexedAsset = new HashMap<String,Asset>();
-
-		List<String> aList = new ArrayList<String>();
-		
-		if (iter!=null && iter.hasNextAsset()) {
-			
-			Map<String, Asset> assetMap = new HashMap<String,Asset>();
-			
-			// Db Index
-			try {
-
-				Map<String, String> reposFsIndex = new HashMap<String,String>();
-				String fullIndex = getFsHash(repos, iter, assetMap, reposFsIndex);								
-				
-				String[] reposData = getReposHash(repos);
-				if (fullIndex!=null && !"".equals(fullIndex)) {
-					if (reposData != null) {
-						if (fullIndex.equals(reposData[1])) {
-							repositorySynced = true; 	
-						} else {
-							repositorySynced = false; 
-							setReposHash(repos, fullIndex, true);							
-						}
-					} else {
-						repositorySynced = false; 
-						setReposHash(repos, fullIndex, false);
-					}					
-				}
-								
-				if (!repositorySynced) {
-					
-					Map<String, String> reposDbIndex = getIndexedHash(repos);
-					
-					if (reposDbIndex.size()==0) {
-						repositorySynced = false;
-						unIndexed = reposFsIndex;
-						unIndexedAsset.putAll(assetMap);
-						aList.addAll(unIndexed.keySet());
-					} else {
-						for (String key : reposFsIndex.keySet()) {
-							if ((reposDbIndex.get(key)==null) || !reposDbIndex.get(key).equals(reposFsIndex.get(key))) {							
-								unIndexed.put(key, reposFsIndex.get(key));
-								unIndexedAsset.put(key, assetMap.get(key));
-								aList.add(key);							
-							} 
-						}					
-						
-						cleanupStaleItems(reposId, reposFsIndex, reposDbIndex);
-						
-						if (unIndexed.size()>0) {
-							repositorySynced = false;
-						} else {
-							repositorySynced = true;
-						}
-
-					} 
-			
-				}
-				
-			} catch (Exception ex) {
-				logger.warning(ex.toString());
-			} 			
-		
-
-		}		
-
-		if (repositorySynced) {
-			logger.fine("Repos Id <" + reposId + "> is already synced.");
-		} else {
-			ExecutorService svc = Executors.newCachedThreadPool();
-			
-			final int batchSz = 27;
-			int sz = aList.size();
-			if (sz >batchSz) {
-				int start = 0;
-				int end = batchSz;
-
-				int cx = 0;
-				while (end <= sz) {
-					logger.fine("running indexer thread " + cx++);
-					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, end), unIndexed, unIndexedAsset)));					
-					start += batchSz;
-					end +=batchSz;
-				}
-				
-				if (end>sz) {
-					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, sz), unIndexed, unIndexedAsset)));
-				}
-					
-					
-			} else {
-				svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset)));
-			}
-			
-			svc.shutdown();
-			boolean svcStatus = false;
-			try {
-				svcStatus = svc.awaitTermination(15,TimeUnit.MINUTES);
-			} catch (InterruptedException e) {
-				logger.warning("svc termination failed!");
-			} 
-			
-			logger.info("indexer svc exit status: " + svcStatus);
-		}
-		
-		return totalAssetsIndexed;
-
-	}
 	
 	private String getFsHash(Repository repos, SimpleAssetIterator iter, Map<String, Asset> assetMap, Map<String, String> reposFsIndex) throws RepositoryException {
 			 
@@ -1009,21 +1025,23 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @param reposDbIndex
 	 * @throws SQLException
 	 */
-	private void cleanupStaleItems(String reposId,
+	private void cleanupStaleItems(Repository repos,
 			Map<String, String> reposFsIndex, Map<String, String> reposDbIndex)
 			throws SQLException {
 		// build a stale list
 		boolean staleItems = false;
 		DbContext dbc = new DbContext();
 		PreparedStatement ps = null;
+		
 		try {
+			String reposId = repos.getId().getIdString();
 			dbc.setConnection(DbConnection.getInstance().getConnection());
-			ps = dbc.prepareBulkUpdate("delete from " + repContainerLabel + " where " + repId + "=? and location=?");
+			ps = dbc.prepareBulkUpdate("delete from " + repContainerLabel + " where " + repId + "=? and reposAcs=? and location=?");
 			
 			for (String key : reposDbIndex.keySet()) {
 				if (!reposFsIndex.containsKey(key)) {
 					staleItems = true;
-					dbc.setBulkParameters(ps, new String[]{reposId,key});
+					dbc.setBulkParameters(ps, new String[]{reposId, repos.getSource().getAccess().name(), key});
 				}
 			}
 			
