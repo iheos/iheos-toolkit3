@@ -1,4 +1,0 @@
-# Module xdstools2
-# RPC service class, partial path of RPC policy file
-gov.nist.toolkit.xdstools2.client.ToolkitService, 1779DF9FD85B4C449D8E8806AF2821F6.gwt.rpc
-gov.nist.toolkit.xdstools2.client.PidAllocateService, 68D96C22621C1F6236615CA94087118B.gwt.rpc
