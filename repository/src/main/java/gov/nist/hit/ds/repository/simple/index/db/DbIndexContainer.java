@@ -1039,7 +1039,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			ps = dbc.prepareBulkUpdate("delete from " + repContainerLabel + " where " + repId + "=? and reposAcs=? and location=?");
 			
 			for (String key : reposDbIndex.keySet()) {
-				if (!reposFsIndex.containsKey(key)) {
+				if (!reposFsIndex.containsKey(key) || !reposDbIndex.get(key).equals(reposFsIndex.get(key))) {
 					staleItems = true;
 					dbc.setBulkParameters(ps, new String[]{reposId, repos.getSource().getAccess().name(), key});
 				}
@@ -1344,6 +1344,37 @@ public class DbIndexContainer implements IndexContainer, Index {
 		return getAssetsBySearch(repositories, searchCriteria, "");
 	}
 	
+	public int getHitCount(Repository repos, SearchCriteria searchCriteria, String orderByStr) throws RepositoryException {
+		int records=0;
+		String searchCriteriaWhere = searchCriteria.toString();		
+
+		String sqlStr = "select count(*)ct from " + repContainerLabel 
+		+ " where " + repId + " = ? and reposAcs=? and( "+ searchCriteriaWhere + ")" ;
+		logger.fine(sqlStr);
+		
+		DbContext dbc = new DbContext();
+		try {					
+				dbc.setConnection(DbConnection.getInstance().getConnection());
+				ResultSet rs = dbc.executeQuery(sqlStr, new String[]{repos.getId().getIdString(), repos.getSource().getAccess().name()});
+
+				if (rs!=null) {
+					if (rs.next()) {
+				          records = rs.getInt("ct");
+				          logger.fine("search hit records: " + records);
+
+					}
+					rs.close();
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+				logger.warning("possible non-existent column in where clause? " + e.toString());
+			} finally {
+				dbc.close();
+			}
+		return records;
+	}
+	
 	/**
 	 * An Order by property is only limited to what is available as per the session container not per columns available in the index container.
 	 * @param repositories
@@ -1381,7 +1412,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 				
 				String sqlStr = "insert into "+searchSession+"(repId,assetId,reposAcs,reposOrder,displayOrder,createdDate,propFile)"
 						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (orderBy++) + "," + displayOrder + "," + createdDate + "," + locationId + " from " + repContainerLabel 
-						+ " where " + repId + " = ? and( "+ searchCriteriaWhere + ")" ;
+						+ " where " + repId + " = ? and reposAcs=? and( "+ searchCriteriaWhere + ")" ;
 				
 				try {					
 				//	 dbc.internalCmd(sqlString);
@@ -1389,7 +1420,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 //					int[] rsData = dbc.executePreparedId(sqlStr, new String[]{rep.getId().getIdString()});
 //					logger.fine("rows affected: " + rsData[0]);
 					
-					int records = dbc.executePrepared(sqlStr, new String[]{rep.getId().getIdString()});
+					int records = dbc.executePrepared(sqlStr, new String[]{rep.getId().getIdString(), rep.getSource().getAccess().name() });
 					logger.fine("rows affected: " + records);
 					
 				} catch (SQLException e) {

@@ -66,7 +66,7 @@ public class SearchResultIterator implements AssetIterator  {
 
 		init(repositories,searchCriteria,key.toString());
 	}
-	
+		
 	private void init(Repository[] repositories, SearchCriteria searchCriteria,
 			String orderBy) throws RepositoryException {
 		DbIndexContainer dbc = new DbIndexContainer();

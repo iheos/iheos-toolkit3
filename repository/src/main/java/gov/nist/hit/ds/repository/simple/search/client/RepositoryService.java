@@ -27,4 +27,5 @@ public interface RepositoryService extends RemoteService  {
 	public List<AssetNode> search(String[][] repos, SearchCriteria sc) throws RepositoryConfigException;
 	public List<AssetNode> getAssetTree(String[][] repos) throws RepositoryConfigException;
 	public AssetNode getAssetTxtContent(AssetNode an) throws RepositoryConfigException;
+	public List<AssetNode> getImmediateChildren(AssetNode an) throws RepositoryConfigException;
 }
