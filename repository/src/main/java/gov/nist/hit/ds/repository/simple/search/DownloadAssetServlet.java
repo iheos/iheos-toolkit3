@@ -1,18 +1,11 @@
 package gov.nist.hit.ds.repository.simple.search;
 
 import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.PropertyKey;
-import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleRepository;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +31,7 @@ public class DownloadAssetServlet extends HttpServlet {
 		
 		String reposSrc = request.getParameter("reposSrc");
 		String reposId = request.getParameter("reposId");
-		String assetId = request.getParameter("assetId");
+		// String assetId = request.getParameter("assetId");
 		String assetLoc = request.getParameter("asset");
 		String contentDisp = "inline"; // default
 		
