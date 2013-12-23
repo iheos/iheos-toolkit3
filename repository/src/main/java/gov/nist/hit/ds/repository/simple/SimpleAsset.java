@@ -482,7 +482,6 @@ public class SimpleAsset implements Asset, Flushable {
 		
 		if (assetPath[0]!=null) {
 			setPath(assetPath[0]);
-			setContentPath(getContentFile(assetPath[1])); // w/o ext
 		} else {
 			throw new RepositoryException(RepositoryException.IO_ERROR + " : " + 
 					"File not found for assetId: [" +
@@ -493,6 +492,7 @@ public class SimpleAsset implements Asset, Flushable {
 		properties.clear();
 		try {
 			FolderManager.loadProps(properties, assetPath[0]);
+			setContentPath(getContentFile(assetPath[1])); // w/o ext, this needs to happen after prop load to get the mimeType
 		} catch (Exception e) {
 			throw new RepositoryException(RepositoryException.UNKNOWN_ID + " : " + 
 					"properties cannot be loaded: [" +
