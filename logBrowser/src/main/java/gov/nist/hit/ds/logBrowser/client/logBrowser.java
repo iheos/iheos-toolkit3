@@ -336,7 +336,12 @@ public class LogBrowser implements EntryPoint {
 						
 						AssetNode an =  (AssetNode)((Tree)event.getSource()).getSelectedItem().getUserObject();
 						if (an.isContentAvailable()) {
-							menuItemPanel.add(new Anchor("Download content",GWT.getHostPageBaseURL() + "repository/downloadAsset?reposSrc="+ an.getReposSrc() +"&reposId=" + an.getRepId() + "&asset=" + an.getLocation().replace(Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT, "") + "&contentDisp=attachment"));
+							menuItemPanel.add(new Anchor("Download content"
+									,GWT.getHostPageBaseURL() + "repository/downloadAsset?"
+									+ "reposSrc="+ an.getReposSrc() 
+									+"&reposId=" + an.getRepId() 
+									+ "&asset=" + an.getLocation().replace(Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT, "") 
+									+ "&contentDisp=attachment"));
 						}
 					} catch (Exception ex) {
 						logger.log(Level.SEVERE,"Download link builder failed:" + ex.toString());
