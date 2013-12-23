@@ -27,11 +27,6 @@ public class BulkLoadTest {
 
 	static final int ASSETS_TO_TEST = 100;
 	
-	/*
-	 * Past performance:
-	 * 1. ~154 ms per asset based on 1000 assets for a total of 154 seconds on my system
-	 * 
-	 */
 	
 	/**
 	 * 
@@ -42,10 +37,10 @@ public class BulkLoadTest {
 	static public void initialize() throws RepositoryException {
 	
 		repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
-				"Bulk load test  FLAT-" + ASSETS_TO_TEST,
+				"Bulk load test  FLAT" + ASSETS_TO_TEST,
 				"Description",
 				new SimpleType("simpleRepos"),
-				"Bulk-FLAT1000"
+				"Bulk-FLAT" + ASSETS_TO_TEST
 				);
 		repId = repos.getId();
 	}
@@ -72,7 +67,7 @@ public class BulkLoadTest {
 		try {
 			AssetNodeBuilder anb = new AssetNodeBuilder();
 			List<AssetNode> tree = anb.build(repos, PropertyKey.CREATED_DATE);
-			System.out.print(tree.toString());
+			System.out.println(tree.toString());
 			// Inspect the tree here 
 			
 			assertTrue(tree.size()==ASSETS_TO_TEST);
@@ -89,7 +84,7 @@ public class BulkLoadTest {
 		try {
 			AssetNodeBuilder anb = new AssetNodeBuilder();
 			List<AssetNode> tree = anb.build(repos, PropertyKey.CREATED_DATE);
-			System.out.print(tree.toString());
+			System.out.println(tree.toString());
 			// Inspect the tree here 
 			
 			assertTrue(tree.size()==ASSETS_TO_TEST);
@@ -99,4 +94,10 @@ public class BulkLoadTest {
 			fail("builder test failed.");
 		}
 	}
+	
+	/*
+	 * Past performance:
+	 * 1. In debug mode, it takes about 154 ms. per asset to index up to 1000 assets for a total of 154 seconds on my system
+	 * 
+	 */
 }

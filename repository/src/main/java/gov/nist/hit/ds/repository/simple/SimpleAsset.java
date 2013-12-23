@@ -245,10 +245,13 @@ public class SimpleAsset implements Asset, Flushable {
 	@Override	
 	public File getContentFile(File part) throws RepositoryException {
 		String assetContentFilePart = null;
+		File initialContentFile = null;
+		File finalContentFile = null;
 		
 		 if (part == null && getContentPath()!=null) {
-			 return getContentPath();
-		} else if (part!=null) {
+			 initialContentFile = getContentPath();
+		} 
+		if (part!=null) {
 			assetContentFilePart = part.toString();
 		} else if (getPath()!=null) {
 			assetContentFilePart = getPath().getParent() + File.separator + FolderManager.getAssetIdFromFilename(getPath().getName());
@@ -259,13 +262,24 @@ public class SimpleAsset implements Asset, Flushable {
 		
 		String[] ext = getContentExtension();
 		if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {			
-				return new File(assetContentFilePart + Configuration.DOT_SEPARATOR + ext[2]);			
+				finalContentFile = new File(assetContentFilePart + Configuration.DOT_SEPARATOR + ext[2]);			
 		} else {
 			try {
-				return new File(assetContentFilePart + Configuration.DOT_SEPARATOR + Configuration.CONTENT_FILE_EXT);
+				finalContentFile = new File(assetContentFilePart + Configuration.DOT_SEPARATOR + Configuration.CONTENT_FILE_EXT);
 			} catch (Exception e) {
 				// content may not exist
 			} 
+		}
+		
+		if (initialContentFile!=null && finalContentFile!=null) {
+			if (!initialContentFile.equals(finalContentFile)) {
+				return finalContentFile;
+			} else 
+				return initialContentFile;
+		} else if (initialContentFile!=null) {
+			return initialContentFile;
+		} else if (finalContentFile!=null) {
+			return finalContentFile;
 		}
 		
 		return null;
@@ -312,7 +326,7 @@ public class SimpleAsset implements Asset, Flushable {
 	@Override
 	public void updateContent(String content, String mimeType) throws RepositoryException {
 		this.content = content.getBytes();
-		setProperty(PropertyKey.MIME_TYPE,mimeType);		
+		setMimeType(mimeType);
 	}
 
 	@Override

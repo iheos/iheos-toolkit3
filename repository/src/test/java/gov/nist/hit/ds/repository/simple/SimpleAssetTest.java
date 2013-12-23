@@ -90,10 +90,12 @@ public class SimpleAssetTest {
 				);
 		
 		Asset a = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
+		a.setMimeType("text/plain");
 		a.updateContent("My Content".getBytes());
 		Id assetId = a.getId();
 		
 		Asset a2 = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
+		a2.setMimeType("text/plain");
 		a2.updateContent("My Content".getBytes());
 		Id assetId2 = a2.getId();
 		
@@ -102,6 +104,7 @@ public class SimpleAssetTest {
 		assertFalse(assetId.isEqual(assetId2));
 		
 		Asset a3 = repos.createAsset("My Site", "This is my third site", new SimpleType("siteAsset"));
+		a3.setMimeType("text/plain");
 		a3.updateContent("My Third Content".getBytes());
 		Id assetId3 = a3.getId();
 		

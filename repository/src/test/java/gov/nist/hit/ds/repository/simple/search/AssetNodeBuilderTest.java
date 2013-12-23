@@ -63,7 +63,7 @@ public class AssetNodeBuilderTest {
 		try {
 			AssetNodeBuilder anb = new AssetNodeBuilder();
 			List<AssetNode> tree = anb.build(repos, PropertyKey.CREATED_DATE);
-			System.out.print(tree.toString());
+			System.out.println(tree.toString());
 			// Inspect the tree here 
 			
 			assertTrue("parent".equals(tree.get(0).getDisplayName()));

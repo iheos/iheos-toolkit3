@@ -53,6 +53,12 @@ public enum PropertyKey {
                return "expirationDate";
            }
        },
+       LOCATION() {
+           @Override
+           public String toString() {
+               return "location";
+           }
+       },
        MIME_TYPE(){
            @Override
            public String toString() {
