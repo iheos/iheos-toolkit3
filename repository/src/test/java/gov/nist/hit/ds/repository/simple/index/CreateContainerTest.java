@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -73,7 +74,7 @@ public class CreateContainerTest  {
 		System.out.println("Running testExpandContainer...");
 		
 		DbIndexContainer dbc = new DbIndexContainer();
-		Map<String,String> columnMap = new HashMap<String,String>();
+		ConcurrentHashMap<String,String> columnMap = new ConcurrentHashMap<String,String>();
 		try {
 			dbc.expandContainer(new String[] {"a","b","c"}, columnMap);
 		} catch (Exception e) {
@@ -116,7 +117,7 @@ public class CreateContainerTest  {
 		System.out.println("Running testCol...");
 		
 		DbIndexContainer dbc = new DbIndexContainer();
-		Map<String,String> columnMap = new HashMap<String,String>();
+		ConcurrentHashMap<String,String> columnMap = new ConcurrentHashMap<String,String>();
 		try {
 			dbc.expandContainer(new String[] {"x","b","z"},  columnMap);
 			System.out.println (dbc.isIndexed(dbc.getColumn("siteAsset", "a")));

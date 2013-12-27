@@ -125,8 +125,21 @@ public class AssetNodeBuilder {
 
 		return children;
 		
-	}
+	}	
 	
+//	public List<String> getParentChain(Repository repos, String relativeLocation) {
+//		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+//		criteria.append(new SearchTerm(PropertyKey.LOCATION,Operator.EQUALTO, relativeLocation); 
+// 		
+//		AssetIterator iter;
+//		try {
+//			iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
+//			
+//			while (iter.hasNextAsset()) {
+//				Asset a = iter.nextAsset();
+//				// TODO use parent location
+//
+//	}
 
 	private boolean addChildIndicator(Repository repos, AssetNode potentialParent) throws RepositoryException {
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);

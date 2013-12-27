@@ -72,7 +72,10 @@ public class SearchResultIterator implements AssetIterator  {
 		DbIndexContainer dbc = new DbIndexContainer();
 		
 		crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy);
-		totalRecords = crs.size();
+		if (crs==null)
+			totalRecords = 0;
+		else
+			totalRecords = crs.size();
 		// System.out.println("total records in buffer: " + totalRecords);
 		
 		
@@ -82,8 +85,7 @@ public class SearchResultIterator implements AssetIterator  {
 	@Override
 	public boolean hasNextAsset() throws RepositoryException {
 		if (crs!=null) {
-				return fetchedRecords < totalRecords;
-			
+				return fetchedRecords < totalRecords;			
 		}
 		return false;
 	

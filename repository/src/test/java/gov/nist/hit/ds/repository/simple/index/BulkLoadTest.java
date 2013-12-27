@@ -43,12 +43,6 @@ public class BulkLoadTest {
 				"Bulk-FLAT" + ASSETS_TO_TEST
 				);
 		repId = repos.getId();
-	}
-	
-	
-	@Test
-	public void bulk1CreateTest() throws RepositoryException {
-		
 		
 		for (int cx=0; cx < ASSETS_TO_TEST; cx++) {
 			Asset a = repos.createAsset("asset-"+cx, "This is my site", new SimpleType("siteAsset"));
@@ -58,11 +52,11 @@ public class BulkLoadTest {
 			
 			assertNotNull(a.getId());
 						
-		}				
+		}	
 	}
 	
 	@Test
-	public void bulk2CountTest() {
+	public void bulk02CountTest() {
 
 		try {
 			AssetNodeBuilder anb = new AssetNodeBuilder();
@@ -78,26 +72,5 @@ public class BulkLoadTest {
 		}
 	}
 
-	@Test
-	public void bulk3CountTest() {
-
-		try {
-			AssetNodeBuilder anb = new AssetNodeBuilder();
-			List<AssetNode> tree = anb.build(repos, PropertyKey.CREATED_DATE);
-			System.out.println(tree.toString());
-			// Inspect the tree here 
-			
-			assertTrue(tree.size()==ASSETS_TO_TEST);
-			
-			
-		} catch (Exception ex) {
-			fail("builder test failed.");
-		}
-	}
-	
-	/*
-	 * Past performance:
-	 * 1. In debug mode, it takes about 154 ms. per asset to index up to 1000 assets for a total of 154 seconds on my system
-	 * 
-	 */
+		
 }

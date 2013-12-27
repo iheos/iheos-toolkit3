@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -60,7 +61,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	
 
 	private static final String CACHED_SESSION = "CACHED";
-	private static final String CONTAINER_VERSION = "2013-12-18";
+	private static final String CONTAINER_VERSION = "2013-12-26";
 	private static final String CONTAINER_VERSION_ID = "VERSION";	
 	private static final String BYPASS_VERSION = "BYPASS"; // an indicator to bypass container version and resuse existing container
 	
@@ -69,6 +70,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	"(repositoryIndexId integer not null  generated always as identity," 	/* (Internal use) This is the primary key */
 	+ repId + " varchar(64) not null,"								/* This is the repository Id as it appears on the filesystem */
 	+ assetId + " varchar(64)," /* */								/* This is the asset Id of the asset under the repository folder */
+	+ createdDate + " varchar(32)," 								/* Asset created date */
 	+ locationId + " varchar(512),"									/* This is the file path */
 	+ parentId +  " varchar(64),"									/* The parent asset Id. A null-value indicates top-level asset and no children */
 	+ assetType + " varchar(32)," 									/* Asset type - usually same as the keyword property */ 
@@ -168,9 +170,25 @@ public class DbIndexContainer implements IndexContainer, Index {
 			logger.fine("Repos Id <" + reposId + "> is already synced.");
 		} else {
 			ExecutorService svc = Executors.newCachedThreadPool();
+			final ConcurrentHashMap<String, String> columnMap = new ConcurrentHashMap<String, String>();
 			
-			final int batchSz = 27;
+			int batchSz = 27;
 			int sz = aList.size();
+			
+			if (sz>=1000) {
+				batchSz += new Double(aList.size() * .0055).intValue(); // Use a .55% Load index on top of the base size 	
+			} 
+			
+			if (batchSz>=150) { // Set upper limit on batch size 
+				batchSz = 150;				
+			}
+			
+			if (sz/batchSz>=100) { // Set upper limit if exceeds high range
+				batchSz = sz/100;
+			}
+			
+			logger.fine("**** batch size: " + batchSz);
+			
 			if (sz >batchSz) {
 				int start = 0;
 				int end = batchSz;
@@ -178,18 +196,18 @@ public class DbIndexContainer implements IndexContainer, Index {
 				int cx = 0;
 				while (end <= sz) {
 					logger.fine("running indexer thread " + cx++);
-					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, end), unIndexed, unIndexedAsset)));					
+					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, end), unIndexed, unIndexedAsset, columnMap)));					
 					start += batchSz;
 					end +=batchSz;
 				}
 				
 				if (end>sz) {
-					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, sz), unIndexed, unIndexedAsset)));
+					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, sz), unIndexed, unIndexedAsset, columnMap)));
 				}
 					
 					
 			} else {
-				svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset)));
+				svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset, columnMap)));
 			}
 			
 			svc.shutdown();
@@ -441,10 +459,13 @@ public class DbIndexContainer implements IndexContainer, Index {
 		
 	}
 
-	public void updateIndex(DbContext dbc, int idKey, String propCol, String value)
+	public void updateIndex(int idKey, String propCol, String value)
 			throws RepositoryException {
-				
+		
+		DbContext dbc = new DbContext();
 		try {													
+			dbc.setConnection(DbConnection.getInstance().getConnection());
+			
 				// Path based
 				String sqlStr = "update "+ repContainerLabel + " set "+propCol+"=? where repositoryIndexId="+idKey						   
 						+" and ("+propCol+" is null or "+propCol+" != ?)";
@@ -456,14 +477,18 @@ public class DbIndexContainer implements IndexContainer, Index {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
-		} 
+		} finally {
+			dbc.close();
+		}
 		
 	}
 
-	public void updateIndexKeys(DbContext dbc, int idKey, String setFragment, String[] val)
+	public void updateIndexKeys(int idKey, String setFragment, String[] val)
 			throws RepositoryException {
 		
-		try {				
+		DbContext dbc = new DbContext();			
+		try {
+			dbc.setConnection(DbConnection.getInstance().getConnection());				
 						
 				// Path based
 				String sqlStr = "update "+ repContainerLabel + " set " + setFragment + " where repositoryIndexId=" + idKey;
@@ -475,7 +500,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
-		} 
+		}  finally {
+			dbc.close();				
+		}
 		
 	}
 
@@ -485,7 +512,6 @@ public class DbIndexContainer implements IndexContainer, Index {
 		if (reposId!=null && !"".equals(reposId)) {
 			DbContext dbc = new DbContext();			
 			try {
-
 				dbc.setConnection(DbConnection.getInstance().getConnection());
 	 
 				String sqlStr = "delete from "+ repContainerLabel + " where " + repId + " = ? and indexSession != ?";
@@ -527,53 +553,58 @@ public class DbIndexContainer implements IndexContainer, Index {
 		
 	}
 	
-	public void expandContainer(String[] column, Map<String,String> columnMap) throws RepositoryException {
-		DbContext dbc = new DbContext();
-		try {
-			dbc.setConnection(DbConnection.getInstance().getConnection());
+//	public void expandContainer(String[] column, ConcurrentHashMap<String,String> columnMap) throws RepositoryException {
+//		DbContext dbc = new DbContext();
+//		try {
+//			dbc.setConnection(DbConnection.getInstance().getConnection());
 			
-			expandContainer(dbc, column, columnMap);				
-		} catch (Exception ex) {
-			logger.warning(ex.toString());
-		} finally {
-			dbc.close();
-		}
-	}
+//			expandContainer(column, columnMap);				
+//		} catch (Exception ex) {
+//			logger.warning(ex.toString());
+//		} finally {
+//			dbc.close();
+//		}
+//	}
 	
 	
 	/**
 	 * This method will extend the container to allow for new indexable properties.
 	 */
 	// 
-	public void expandContainer(DbContext dbc, String[] column, Map<String,String> columnMap) throws RepositoryException {
+	public void expandContainer(String[] column, ConcurrentHashMap<String,String> columnMap) throws RepositoryException {
+		DbContext dbc = new DbContext();
+		try {
+			dbc.setConnection(DbConnection.getInstance().getConnection());
 
 				
 			if (column!=null) {
 				String sqlStr = "";
-				String index = "";
+//				String index = "";
 
 				try {
 									
-					int cx=0; 
+//					int cx=0; 
 					for (String c : column) {
 						String dbCol = getDbIndexedColumn(assetType, c);
 						
 						if (!columnMap.containsKey(dbCol)) {
 							
 							if (!isIndexed(dbCol)) {
-								columnMap.put(dbCol, null);
-								if (cx++>0) index+=",";
-								index += dbCol;
+								logger.fine(dbCol + " is to-be-indexed");
+								columnMap.put(dbCol, "to-be-indexed");
+//								if (cx++>0) index+=",";
+//								index += dbCol;
 		
 								// Can only add one at a time
 								sqlStr = "alter table "+ repContainerLabel + " add column " + dbCol + " varchar(128)";					
 								dbc.internalCmd(sqlStr);								
 							} else {
-								columnMap.put(dbCol, null);
+								logger.fine(dbCol + " indexed");
+								columnMap.put(dbCol, "indexed");
 							}
 							
 						} else {
-							logger.fine("Column "+ c +" already exists " + ((assetType!=null)?"for assetType: "+assetType:""));
+							logger.fine("Column "+ c +" already exists ");
 						}
 						
 					}
@@ -583,6 +614,13 @@ public class DbIndexContainer implements IndexContainer, Index {
 					throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
 				} 
 			}
+			
+			} catch (Exception ex) {
+			logger.warning(ex.toString());
+		} finally {
+			dbc.close();
+		}
+
 			
 //			try {
 //				if (sqlStr!="") {
@@ -615,6 +653,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			}
 			
 			if (repContainerDefinition.contains(dbCol)) { // Quick check in definition
+				logger.fine("Quick check pass: " + dbCol);
 				return true;
 			}
 			
@@ -625,9 +664,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 			ResultSet rs = dbc.executeQuery(sqlStr);
 			
 			if (rs!=null) {
-				while (rs.next()) {
+				if (rs.next()) {
 			          records = rs.getInt("ct");
-			          logger.fine("records: " + records);
+			          logger.fine(dbCol + ": records: " + records);
 
 				}
 				rs.close();
@@ -941,79 +980,79 @@ public class DbIndexContainer implements IndexContainer, Index {
 	
 	private class IndexerThread implements Runnable {
 //		private int totalAssetsIndexed = -1;
-		private Map<String, String> unIndexed; // read-only
-		private Map<String, Asset> unIndexedAsset; // read-only
+		private final Map<String, String> unIndexed; // read-only
+		private final Map<String, Asset> unIndexedAsset; // read-only
 		private Repository repos;
 		private String reposId;
 		private List<String> aList;
+		private final ConcurrentHashMap<String, String> columnMap;
 		
-		public IndexerThread(Repository repos,List<String> aList, Map<String, String> unIndexed, Map<String, Asset> assetMap) throws RepositoryException {
+		public IndexerThread(Repository repos,List<String> aList, Map<String, String> unIndexed, Map<String, Asset> assetMap, ConcurrentHashMap<String, String> columnMap) throws RepositoryException {
 			this.unIndexed = unIndexed;
 			this.unIndexedAsset = assetMap;
 			this.repos = repos;
 			this.aList = aList;
 			this.reposId = repos.getId().getIdString();
+			this.columnMap = columnMap;
 			
 		}
 		
 		@Override
-		public void run() {
-			Map<String,String> columnMap = new HashMap<String,String>();
-			DbContext dbc = new DbContext();
-			dbc.setConnection(DbConnection.getInstance().getConnection());
+		public void run() {			
 
 			try {
 				for (String key : aList) {
-					Asset a = unIndexedAsset.get(key);
-					File propFile = a.getPropFile();
-					String relativePartStr = a.getPropFileRelativePart(); // Make paths relative to repository root 
-					IndexStatus idxStatus = IndexStatus.NOT_INDEXED;
-					
-					logger.fine("Found indexable asset property file: " + relativePartStr);
-					
-					String assetId = (a.getId()!=null)?a.getId().getIdString():null; 
-					if (assetId == null || "".equals(assetId)) {
-						logger.fine("Missing asset Id for " + propFile);
-					}
 
-					String typeKeyword = (a.getAssetType()==null?null:a.getAssetType().getKeyword());
-					// Properties should already be loaded by getAsset call by the Iterator
-					Properties assetProps = a.getProperties();
-								
-					String hash = unIndexed.get(key);
-					int idxId = -1;
+						Asset a = unIndexedAsset.get(key);
+						File propFile = a.getPropFile();
+						String relativePartStr = a.getPropFileRelativePart(); // Make paths relative to repository root 
+						IndexStatus idxStatus = IndexStatus.NOT_INDEXED;
 						
-						expandContainer(dbc, assetProps.stringPropertyNames().toArray(new String[assetProps.size()]), columnMap);
+						logger.fine("Found indexable asset property file: " + relativePartStr);
 						
-						for (String propertyName : assetProps.stringPropertyNames() ) { /* use properties for partial index */ 						
-							try {
-								String propertyValue = a.getProperty(propertyName);
-								logger.fine("prop-" + propertyName + " -- " + propertyValue);
-								if (propertyValue!=null && !"".equals(propertyValue)) {
-									
-									if (IndexStatus.NOT_INDEXED.equals(idxStatus)) {
-										idxId = addIndex(dbc,reposId,assetId,typeKeyword,relativePartStr,getDbIndexedColumn(typeKeyword,propertyName),propertyValue);
-										idxStatus = IndexStatus.STALE;
-									} else if (idxId!=-1) {
-										updateIndex(dbc, idxId, getDbIndexedColumn(typeKeyword,propertyName), propertyValue);									
-									}
-
-//									totalAssetsIndexed++;
-								}
-							} catch (Exception e)  {
-								; // Ignore if property doesn't exist
-							}					
+						String assetId = (a.getId()!=null)?a.getId().getIdString():null; 
+						if (assetId == null || "".equals(assetId)) {
+							logger.fine("Missing asset Id for " + propFile);
 						}
-
-						updateIndexKeys(dbc, idxId, "hash=?,reposAcs=?,location=?", new String[]{hash, repos.getSource().getAccess().name(), relativePartStr}); // Note the use of unquoted identifier vs. quoted identifiers for asset property references 				
+	
+						String typeKeyword = (a.getAssetType()==null?null:a.getAssetType().getKeyword());
+						// Properties should already be loaded by getAsset call by the Iterator
+						Properties assetProps = a.getProperties();
+									
+						String hash = unIndexed.get(key);
+						int idxId = -1;
+							
+							expandContainer(assetProps.stringPropertyNames().toArray(new String[assetProps.size()]), columnMap);
+							
+							for (String propertyName : assetProps.stringPropertyNames() ) { /* use properties for partial index */ 						
+								try {
+									String propertyValue = a.getProperty(propertyName);
+									logger.fine("prop-" + propertyName + " -- " + propertyValue);
+									if (propertyValue!=null && !"".equals(propertyValue)) {
+										
+										if (IndexStatus.NOT_INDEXED.equals(idxStatus)) {
+											idxId = addIndex(reposId,assetId,typeKeyword,relativePartStr,getDbIndexedColumn(typeKeyword,propertyName),propertyValue);
+											idxStatus = IndexStatus.STALE;
+										} else if (idxId!=-1) {
+											updateIndex(idxId, getDbIndexedColumn(typeKeyword,propertyName), propertyValue);									
+										}
+	
+	//									totalAssetsIndexed++;
+									}
+								} catch (Exception e)  {
+									; // Ignore if property doesn't exist
+								}					
+							}
+	
+							updateIndexKeys(idxId, "hash=?,reposAcs=?,location=?", new String[]{hash, repos.getSource().getAccess().name(), relativePartStr}); // Note the use of unquoted identifier vs. quoted identifiers for asset property references
+					
 			}
-				
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				logger.warning(ex.toString());
-			} finally {
-				dbc.close();
-			}
+			} 
+				
+
 	}
 	}
 
@@ -1190,7 +1229,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			ResultSet rs = dbc.executeQuery(sqlStr, new String[]{reposId,repos.getSource().getAccess().name()});
 
 			if (rs!=null) {
-				while (rs.next()) {
+				if (rs.next()) {
 					 queuedItems = rs.getInt(1);
 					 if (queuedItems>0) {
 						 logger.info("Repos <" + reposId + "> currently has " + queuedItems + " queued for indexing.");
@@ -1338,8 +1377,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @param repositories
 	 * @param searchCriteria
 	 * @return
+	 * @throws RepositoryException 
 	 */
-	public CachedRowSet getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria) {
+	public CachedRowSet getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
 		return getAssetsBySearch(repositories, searchCriteria, "");
 	}
 	
@@ -1380,21 +1420,34 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @param searchCriteria
 	 * @param orderBy
 	 * @return
+	 * @throws RepositoryException 
 	 */
-	public CachedRowSet getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) {
+	public CachedRowSet getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) throws RepositoryException {
+		Repository[] fRep = new Repository[repositories.length];
+		int cx=0;
+		for (Repository rep : repositories) {
+			if (getHitCount(rep, searchCriteria, orderByStr) > 0) {
+				fRep[cx++] = rep;
+				logger.fine("filtered repos:" + rep.getDisplayName());
+			}
+		}
+		
+		if (cx==0) {
+			logger.fine("No records to return in entire repos search list");			
+			return null;
+		}
+		
 		DbContext dbc = new DbContext();		
 		try {
 			// Make sure properties exist
 			// ArrayList<String> searchProperties = searchCriteria.getProperties();
 			String searchCriteriaWhere = searchCriteria.toString();
 			logger.fine(searchCriteriaWhere);
-	
 
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			
 			String searchSession = "session."+PnIdentifier.getQuotedIdentifer("SearchResults" + new IdFactory().getNewId().getIdString());
-			
-			
+						
 			try {
 				dbc.internalCmd("drop table "+searchSession);
 			} catch (SQLException e) {
@@ -1407,7 +1460,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			//  - to avoid searching for out-of-reach properties that do not apply to the repositories in question
 			// This needs to be independent from the syncRep call because there columns might not have fully expanded 
 			int orderBy=0;
-			for (Repository rep : repositories) {
+			for (Repository rep : fRep) {
 				
 				String sqlStr = "insert into "+searchSession+"(repId,assetId,reposAcs,reposOrder,displayOrder,createdDate,propFile)"
 						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (orderBy++) + "," + displayOrder + "," + createdDate + "," + locationId + " from " + repContainerLabel 
@@ -1420,7 +1473,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 //					logger.fine("rows affected: " + rsData[0]);
 					
 					int records = dbc.executePrepared(sqlStr, new String[]{rep.getId().getIdString(), rep.getSource().getAccess().name() });
-					logger.fine("rows affected: " + records);
+					logger.fine("rep: " + rep.getDisplayName() + " rows affected: " + records);
 					
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -1429,9 +1482,11 @@ public class DbIndexContainer implements IndexContainer, Index {
 			}
 					
 			ResultSet rs = dbc.executeQuery("select repId,assetId,reposAcs,propFile from "+searchSession+" order by reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?","+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
+						
 			
 			CachedRowSet crs = new CachedRowSetImpl();
     		crs.populate(rs);
+    		logger.fine("Cached row set size: " + crs.size());
     		rs.close();			
 			dbc.close(rs);			
 			

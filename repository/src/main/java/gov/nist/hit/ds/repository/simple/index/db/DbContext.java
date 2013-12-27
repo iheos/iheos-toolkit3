@@ -106,7 +106,7 @@ public class DbContext {
 	 * @return
 	 * @throws SQLException
 	 */
-	public int[] executePreparedId(String sqlStr, String[] params) throws SQLException {
+	public int[] executePreparedId(String sqlStr, String[] params) throws SQLException {	
 
 		logger.fine("IndexContainer SQL: " +sqlStr);
 		if (connection!=null) {
@@ -137,7 +137,7 @@ public class DbContext {
 	
 
 	public int executePrepared(String sqlStr, String[] params) throws SQLException {
-
+	
 		logger.fine("executePrepared IndexContainer SQL: " +sqlStr);
 		if (connection!=null) {
 			PreparedStatement statement = connection.prepareStatement(sqlStr);
