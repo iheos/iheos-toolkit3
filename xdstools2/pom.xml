@@ -179,7 +179,14 @@
 					<modules>
 						<module>${project.groupId}.xdstools2.Xdstools2</module>
 					</modules>
+					<!-- copyWebapp: Copies the contents of warSourceDirectory to hostedWebapp. -->
+					<!-- warSourceDirectory : Location of the web application static resources 
+						(same as maven-war-plugin parameter) Default value is: ${basedir}/src/main/webapp. -->
+					<!-- hostedWebapp: Location of the hosted-mode web application structure. 
+						Default: ${project.build.directory}/${project.build.finalName} -->
 					<copyWebapp>true</copyWebapp>
+					<!-- no optimization takes place. Good for development -->
+					<optimizationLevel>0</optimizationLevel>
 				</configuration>
 			</plugin>
 
@@ -189,19 +196,14 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
 				<configuration>
-					<webResources>
-						<resource>
-							<!-- this is relative to the pom.xml directory -->
-							<directory>src/main/resources/gov/nist/toolkit/xdstools2</directory>
-							<!-- the list has a default value of ** -->
-						</resource>
-					</webResources>
+					<!-- configured to be the same as for the gwt plugin -->
 					<webappDirectory>${webappDirectory}</webappDirectory>
 				</configuration>
 				<executions>
 					<execution>
 						<phase>compile</phase>
 						<goals>
+							<!-- create an exploded version of the war in webappDirectory. Ideal for development -->
 							<goal>exploded</goal>
 						</goals>
 					</execution>
