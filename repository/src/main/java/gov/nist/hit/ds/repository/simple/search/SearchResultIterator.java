@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.repository.simple.search;
 
 import java.io.File;
+import java.util.List;
 import java.util.logging.Logger;
 
 import gov.nist.hit.ds.repository.api.Asset;
@@ -15,9 +16,8 @@ import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
+import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-
-import javax.sql.rowset.CachedRowSet;
 
 public class SearchResultIterator implements AssetIterator  {
 
@@ -31,7 +31,7 @@ public class SearchResultIterator implements AssetIterator  {
 	Id repositoryId = null;
 	boolean[] selections = null;
 	Type type = null;
-	CachedRowSet crs = null;
+	List<AssetNode> crs = null;
 	int totalRecords = -1;
 	int fetchedRecords = 0;
 	
@@ -101,10 +101,10 @@ public class SearchResultIterator implements AssetIterator  {
 		
 		try {
 			
-			if (crs.next()) {
-				fetchedRecords++;
-				repId = new SimpleId(crs.getString(1));				
-				String reposSrcAcs = crs.getString(3);
+			if (crs!=null) {
+				AssetNode an = crs.get(fetchedRecords++);
+				repId = new SimpleId(an.getRepId());				
+				String reposSrcAcs = an.getReposSrc();
 				
 				if (reposSrcAcs!=null) {
 					reposSrc = Configuration.getRepositorySrc(RepositorySource.Access.valueOf(reposSrcAcs));
@@ -114,7 +114,7 @@ public class SearchResultIterator implements AssetIterator  {
 				
 				Repository repos = new RepositoryFactory(reposSrc).getRepository(repId);
 				
-				String propFileStr = crs.getString(4);
+				String propFileStr = an.getLocation();
 				Asset a = null;
 				if (propFileStr!=null && !"".equals(propFileStr)) {
 					String fullPath = repos.getRoot() + File.separator + propFileStr;

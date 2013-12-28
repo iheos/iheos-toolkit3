@@ -14,6 +14,7 @@ import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
 import gov.nist.hit.ds.repository.simple.index.Index;
 import gov.nist.hit.ds.repository.simple.index.IndexContainer;
+import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.utilities.io.Hash;
@@ -33,9 +34,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import javax.sql.rowset.CachedRowSet;
-
-import com.sun.rowset.CachedRowSetImpl;
 
 /**
  * 
@@ -1323,7 +1321,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	private List<Object> getIndexStatus(Repository repos, String assetId, String relatviePartStr, String hash) throws RepositoryException {
+	public List<Object> getIndexStatus(Repository repos, String assetId, String relatviePartStr, String hash) throws RepositoryException {
 		List<Object> rsData = new ArrayList<Object>();
 		DbContext dbc = new DbContext();
 		try {
@@ -1434,7 +1432,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @return
 	 * @throws RepositoryException 
 	 */
-	public CachedRowSet getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
+	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
 		return getAssetsBySearch(repositories, searchCriteria, "");
 	}
 	
@@ -1485,7 +1483,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @return
 	 * @throws RepositoryException 
 	 */
-	public CachedRowSet getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) throws RepositoryException {
+	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) throws RepositoryException {
 		Repository[] fRep = new Repository[repositories.length];
 		int cx=0;
 		for (Repository rep : repositories) {
@@ -1547,19 +1545,33 @@ public class DbIndexContainer implements IndexContainer, Index {
 			ResultSet rs = dbc.executeQuery("select repId,assetId,reposAcs,propFile from "+searchSession+" order by reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?","+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
 						
 			
-			CachedRowSet crs = new CachedRowSetImpl();
-    		crs.populate(rs);
-    		logger.fine("Cached row set size: " + crs.size());
+			
+    		List<AssetNode> assetList = popAssetNode(rs);
+    		logger.fine("Cached row set size: " + assetList.size());
     		rs.close();			
 			dbc.close(rs);			
 			
-			return crs;
+			return assetList;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 			
+	}
+	
+	private List<AssetNode> popAssetNode(ResultSet rs) throws SQLException {
+		List<AssetNode> assetList = new ArrayList<AssetNode>();
+		
+		if (rs!=null) {
+			while (rs.next()) {
+				AssetNode an = new AssetNode(rs.getString(1),rs.getString(2),"",rs.getString(3),"","",rs.getString(3));
+				an.setLocation(rs.getString(4));
+				assetList.add(an);
+			}
+		}
+		
+		return assetList;
 	}
 	
 	/**

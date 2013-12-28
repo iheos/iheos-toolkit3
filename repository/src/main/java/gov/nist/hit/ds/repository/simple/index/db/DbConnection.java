@@ -137,11 +137,11 @@ public class DbConnection implements IndexDataSource {
 	 * 
 	 */
 	public void printConnectionSummary() {
-		logger.fine("Active " + bds.getActive()
-		+ "Max active "+ bds.getMaxActive()
-		+ "Max idle "+ bds.getMaxIdle()
-		+ "Max wait "+ bds.getMaxWait()
-		+ "------");
+		logger.fine("----- Active " + bds.getActive()
+		+ " Max active "+ bds.getMaxActive()
+		+ " Max idle "+ bds.getMaxIdle()
+		+ " Max wait "+ bds.getMaxWait()
+		+ "-----");
 	}
 	
 }

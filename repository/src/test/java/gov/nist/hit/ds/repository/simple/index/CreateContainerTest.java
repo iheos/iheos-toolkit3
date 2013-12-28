@@ -3,16 +3,13 @@ package gov.nist.hit.ds.repository.simple.index;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.IdFactory;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Test;
 
