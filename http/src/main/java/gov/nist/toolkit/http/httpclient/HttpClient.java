@@ -43,8 +43,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.axiom.om.util.Base64;
 import org.apache.soap.util.mime.ByteArrayDataSource;
+import org.apache.xerces.impl.dv.util.Base64;
 import org.apache.xml.serialize.DOMSerializer;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XML11Serializer;

@@ -1,0 +1,10 @@
+* xdstool2 module :
+toolkitx/xdstest/ : review content. Especially use of rampart
+
+* http module : pom contains 
+		<dependency>
+			<groupId>soap</groupId>
+			<artifactId>soap</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+what is that for?
