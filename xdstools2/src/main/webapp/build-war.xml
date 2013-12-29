@@ -100,7 +100,9 @@
 
 		<!-- CHECK where we need to put rampart .mar file.
 		TODO : it should not be copied from shared-libs-->
-		<copy todir="${war.xdstest.dir}/rampart/client_repositories/modules" file="${shared.mar.dir}/addressing-1.5.4.mar" />
+
+<!-- no need for rampart, we copied it nonetheless -->
+<!-- 		<copy todir="${war.xdstest.dir}/rampart/client_repositories/modules" file="${shared.mar.dir}/addressing-1.5.4.mar" /> -->
 
 		<!-- required directories -->
 		<mkdir dir="${war.sessionCache.dir}" />
@@ -108,10 +110,12 @@
 		<mkdir dir="${war.mailer.dir}" />
 		<mkdir dir="${war.dir}/scripts"/>
 
+
+<!--MOVED INTO MAVEN -->
 		<!-- copy configuration files -->
-		<copy file="${config.dir}/actors.xml" tofile="${war.xdstest.dir}/actors.xml" />
+<!-- 		<copy file="${config.dir}/actors.xml" tofile="${war.xdstest.dir}/actors.xml" /> -->
 		<!-- TODO : CHECK. QUICK FIX FOR DEBUGGING. WE NEED TO AGREE ON A CONVENTION FOR RESOURCES COPYING-->
-		<copy file="${config.dir}/sourceid.txt" tofile="${war.xdstest.dir}/sourceid.txt" />
+<!-- 		<copy file="${config.dir}/sourceid.txt" tofile="${war.xdstest.dir}/sourceid.txt" /> -->
 		
 		<!-- copy scripts-->
 		<copy todir="war/scripts" overwrite="true">
@@ -140,12 +144,14 @@
 
 	<!-- copy resoures from testkit -->
 	<target name="assemble-from-testkit">
-		<mkdir dir="${war.toolkitx.dir}/admin" />
+
+<!-- Copied to maven -->
+<!-- 		<mkdir dir="${war.toolkitx.dir}/admin" />
 		<copy todir="${war.toolkitx.dir}/admin">
 			<fileset file="${testkit.dir}/admin/version">
 				<exclude name="**/.svn" />
 			</fileset>
-		</copy>
+		</copy> -->
 		<mkdir dir="${war.testkit.dir}/tests" />
 		<copy todir="${war.testkit.dir}/tests">
 			<fileset dir="${testkit.dir}/tests">
