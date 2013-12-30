@@ -27,11 +27,13 @@
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
 			<version>2.5.1</version>
+			<!-- <scope>runtime</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
 			<version>2.5.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -150,15 +152,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.ws.commons.axiom</groupId>
-			<artifactId>axiom-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ws.commons.axiom</groupId>
-			<artifactId>axiom-impl</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>com.sun.ebxml</groupId>
 			<artifactId>ebxmlrr-common</artifactId>
 			<version>1.0</version>
@@ -219,19 +212,17 @@
 					</execution>
 				</executions>
 			</plugin>
+
+
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+		<!-- 			<path>/xdstools2</path>
+					<warFile>${project.build.directory}/xdstools3-v2-maven-alpha.war</warFile>
+					<tomcatLoggingFile>${project.build.directory}/log.txt</tomcatLoggingFile> -->
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
