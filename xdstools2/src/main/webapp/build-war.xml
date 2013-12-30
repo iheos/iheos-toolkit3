@@ -118,27 +118,27 @@
 <!-- 		<copy file="${config.dir}/sourceid.txt" tofile="${war.xdstest.dir}/sourceid.txt" /> -->
 		
 		<!-- copy scripts-->
-		<copy todir="war/scripts" overwrite="true">
+<!-- 		<copy todir="war/scripts" overwrite="true">
 			<fileset dir="scripts"/>
-		</copy>
+		</copy> -->
 		
 		<!-- TODO check : why do we put them there ? -->
 		<copy file="${config.dir}/log4j.properties" todir="${war.classes.dir}" overwrite="yes" />
 		<copy file="${config.dir}/schematron.properties" todir="${war.classes.dir}" overwrite="yes" />
 
 		<!-- copy public resources that seems needed -->
-		<copy todir="${war.dir}" overwrite="yes">
+<!-- 		<copy todir="${war.dir}" overwrite="yes">
 			<fileset dir="${resources.dir}/public_resources/">
 				<exclude name="**/.svn" />
 			</fileset>
-		</copy>
+		</copy> -->
 
 		<!-- copy private resources -->
-		<copy todir="${war.dir}/WEB-INF" overwrite="yes">
+<!-- 		<copy todir="${war.dir}/WEB-INF" overwrite="yes">
 			<fileset dir="${resources.dir}/private_resources">
 				<exclude name="**/.svn" />
 			</fileset>
-		</copy>
+		</copy> -->
 
 	</target>
 
