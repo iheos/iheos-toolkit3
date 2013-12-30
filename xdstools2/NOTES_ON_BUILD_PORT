@@ -7,3 +7,5 @@ clean up toolkit resources.
 
 Create a conf directory that is committed and ignored so default config 
 can be copied the first time and vary independently afterwards.
+
+error with WEB-INF/extended properties hard to debug!
