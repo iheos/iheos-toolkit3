@@ -3,7 +3,7 @@ package gov.nist.hit.ds.repository.simple.index;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.IdFactory;
 import gov.nist.hit.ds.repository.simple.SimpleId;
@@ -87,7 +87,7 @@ public class CreateContainerTest  {
 		DbIndexContainer dbc = new DbIndexContainer();
 
 		try {
-			Id id = new IdFactory().getNewId();
+			ArtifactId id = new IdFactory().getNewId();
 			SimpleId sid = new SimpleId(id.getIdString());
 
 			int insertRecords = 5;

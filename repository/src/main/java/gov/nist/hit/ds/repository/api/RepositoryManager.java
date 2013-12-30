@@ -121,7 +121,7 @@ public interface RepositoryManager extends gov.nist.hit.ds.repository.api.OsidMa
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
      */
-    void deleteRepository(gov.nist.hit.ds.repository.api.Id repositoryId)
+    void deleteRepository(gov.nist.hit.ds.repository.api.ArtifactId repositoryId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -202,7 +202,7 @@ public interface RepositoryManager extends gov.nist.hit.ds.repository.api.OsidMa
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
      */
-    Repository getRepository(gov.nist.hit.ds.repository.api.Id repositoryId)
+    Repository getRepository(gov.nist.hit.ds.repository.api.ArtifactId repositoryId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -227,7 +227,7 @@ public interface RepositoryManager extends gov.nist.hit.ds.repository.api.OsidMa
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
      */
-    public Asset getAsset(gov.nist.hit.ds.repository.api.Id assetId)
+    public Asset getAsset(gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -257,7 +257,7 @@ public interface RepositoryManager extends gov.nist.hit.ds.repository.api.OsidMa
      *         gov.nist.hit.ds.repository.api.RepositoryException#NO_OBJECT_WITH_THIS_DATE
      *         NO_OBJECT_WITH_THIS_DATE}
      */
-    public Asset getAssetByDate(gov.nist.hit.ds.repository.api.Id assetId, long date)
+    public Asset getAssetByDate(gov.nist.hit.ds.repository.api.ArtifactId assetId, long date)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -281,7 +281,7 @@ public interface RepositoryManager extends gov.nist.hit.ds.repository.api.OsidMa
      *         NULL_ARGUMENT}
      */
     public gov.nist.hit.ds.repository.api.LongValueIterator getAssetDates(
-        gov.nist.hit.ds.repository.api.Id assetId)
+        gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -345,8 +345,8 @@ public interface RepositoryManager extends gov.nist.hit.ds.repository.api.OsidMa
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
      */
-    gov.nist.hit.ds.repository.api.Id copyAsset(Repository repository,
-        gov.nist.hit.ds.repository.api.Id assetId)
+    gov.nist.hit.ds.repository.api.ArtifactId copyAsset(Repository repository,
+        gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**

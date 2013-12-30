@@ -140,7 +140,7 @@ public class RepositoryFactory implements RepositoryManager {
 	}
 
 	@Override
-	public void deleteRepository(Id repositoryId) throws RepositoryException {
+	public void deleteRepository(ArtifactId repositoryId) throws RepositoryException {
 
 		Parameter req = new Parameter();
 		req.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
@@ -164,7 +164,7 @@ public class RepositoryFactory implements RepositoryManager {
 	}		
 
 	@Override
-	public Repository getRepository(Id id) throws RepositoryException {
+	public Repository getRepository(ArtifactId id) throws RepositoryException {
 		SimpleRepository repos = new SimpleRepository(id);
 		repos.setSource(getSource());
 		repos.load();
@@ -172,20 +172,20 @@ public class RepositoryFactory implements RepositoryManager {
 	}
 	
 	@Override
-	public Asset getAsset(Id assetId) throws RepositoryException {
+	public Asset getAsset(ArtifactId assetId) throws RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Asset getAssetByDate(Id assetId, long date)
+	public Asset getAssetByDate(ArtifactId assetId, long date)
 			throws RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public LongValueIterator getAssetDates(Id assetId)
+	public LongValueIterator getAssetDates(ArtifactId assetId)
 			throws RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
@@ -201,7 +201,7 @@ public class RepositoryFactory implements RepositoryManager {
 	}
 
 	@Override
-	public Id copyAsset(Repository repository, Id assetId)
+	public ArtifactId copyAsset(Repository repository, ArtifactId assetId)
 			throws RepositoryException {
 		
 

@@ -2,7 +2,7 @@ package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Parameter;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -32,7 +32,7 @@ public class SimpleAsset implements Asset, Flushable {
 	byte[] content = null;
 	boolean loadContentAttempted = false;
 	boolean autoFlush = true;
-	Id id = null;
+	ArtifactId id = null;
 	
 	transient boolean indexable = false;
 	transient RepositorySource source;
@@ -45,7 +45,7 @@ public class SimpleAsset implements Asset, Flushable {
 		setSource(source);
 	}
 
-	public void setRepository(Id repositoryId) throws RepositoryException {
+	public void setRepository(ArtifactId repositoryId) throws RepositoryException {
 		setProperty(PropertyKey.REPOSITORY_ID, repositoryId.getIdString());
 	}
 
@@ -53,7 +53,7 @@ public class SimpleAsset implements Asset, Flushable {
 		setProperty(PropertyKey.ASSET_TYPE, type.getKeyword());
 	}
 
-	public void setId(Id id) throws RepositoryException {		
+	public void setId(ArtifactId id) throws RepositoryException {		
 		setPropertyTemp(PropertyKey.ASSET_ID, id.getIdString());
 		this.id = id;
 	}
@@ -93,7 +93,7 @@ public class SimpleAsset implements Asset, Flushable {
 		return properties.getProperty(key.toString());
 	}
 
-	File getAssetBaseFile(Id assetId) throws RepositoryException {
+	File getAssetBaseFile(ArtifactId assetId) throws RepositoryException {
 		
 		// get repository source from property
 		// two cases 
@@ -103,7 +103,7 @@ public class SimpleAsset implements Asset, Flushable {
 		return new File(getBasePath(assetId) + File.separator + assetId.getIdString());
 	}
 	
-	private File getBasePath(Id assetId) throws RepositoryException {
+	private File getBasePath(ArtifactId assetId) throws RepositoryException {
 		
 		if (getPath()!=null) {
 			return getPath().getParentFile();
@@ -157,7 +157,7 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
 	@Override
-	public Id getId() throws RepositoryException {
+	public ArtifactId getId() throws RepositoryException {
 		// return new SimpleId(getProperty(PropertyKey.ASSET_ID));
 		
 		if (id==null) {
@@ -233,7 +233,7 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
 	@Override
-	public Id getRepository() throws RepositoryException {
+	public ArtifactId getRepository() throws RepositoryException {
 		return new SimpleId(getProperty(PropertyKey.REPOSITORY_ID));
 	}
 	
@@ -379,7 +379,7 @@ public class SimpleAsset implements Asset, Flushable {
 	*/
 	
 	@Override
-	public void removeAsset(Id assetId, boolean includeChildren)
+	public void removeAsset(ArtifactId assetId, boolean includeChildren)
 			throws RepositoryException {
 		throw new RepositoryException(RepositoryException.UNIMPLEMENTED);
 	}
@@ -440,7 +440,7 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 	
 	@Override
-	public File getPropFile(Id id) throws RepositoryException {
+	public File getPropFile(ArtifactId id) throws RepositoryException {
 		
 		if (!getSource().getLocation().exists())
 			throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
@@ -488,7 +488,7 @@ public class SimpleAsset implements Asset, Flushable {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public SimpleAsset load(Id assetId) throws RepositoryException {
+	public SimpleAsset load(ArtifactId assetId) throws RepositoryException {
 		
 		
 		File[] assetPath = new FolderManager().getFile(getReposDir(), new String[] {assetId.getIdString()}, true);

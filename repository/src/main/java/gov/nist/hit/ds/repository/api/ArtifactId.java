@@ -16,7 +16,7 @@ package gov.nist.hit.ds.repository.api;
  * O.K.I&#46; OSID Definition License}.
  * </p>
  */
-public interface Id extends java.io.Serializable {
+public interface ArtifactId extends java.io.Serializable {
     /**
      * Return the String representation of this unique Id.
      *
@@ -53,7 +53,7 @@ public interface Id extends java.io.Serializable {
      *         {@link org.osid.shared.SharedException#NULL_ARGUMENT
      *         NULL_ARGUMENT}
      */
-    boolean isEqual(gov.nist.hit.ds.repository.api.Id id)
+    boolean isEqual(gov.nist.hit.ds.repository.api.ArtifactId id)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**

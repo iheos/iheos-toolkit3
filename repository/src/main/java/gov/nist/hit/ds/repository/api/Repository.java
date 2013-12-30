@@ -91,7 +91,7 @@ public interface Repository extends java.io.Serializable {
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNIMPLEMENTED
      *         UNIMPLEMENTED}
      */
-    gov.nist.hit.ds.repository.api.Id getId() throws gov.nist.hit.ds.repository.api.RepositoryException;
+    gov.nist.hit.ds.repository.api.ArtifactId getId() throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
      * Get the RepositoryType of this Repository.
@@ -227,7 +227,7 @@ public interface Repository extends java.io.Serializable {
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
      */
-    void deleteAsset(gov.nist.hit.ds.repository.api.Id assetId)
+    void deleteAsset(gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -516,7 +516,7 @@ public interface Repository extends java.io.Serializable {
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
      */
-    gov.nist.hit.ds.repository.api.Type getStatus(gov.nist.hit.ds.repository.api.Id assetId)
+    gov.nist.hit.ds.repository.api.Type getStatus(gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -544,7 +544,7 @@ public interface Repository extends java.io.Serializable {
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
      */
-    public boolean validateAsset(gov.nist.hit.ds.repository.api.Id assetId)
+    public boolean validateAsset(gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -570,7 +570,7 @@ public interface Repository extends java.io.Serializable {
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
      */
-    public void invalidateAsset(gov.nist.hit.ds.repository.api.Id assetId)
+    public void invalidateAsset(gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -595,7 +595,7 @@ public interface Repository extends java.io.Serializable {
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
      */
-    public Asset getAsset(gov.nist.hit.ds.repository.api.Id assetId)
+    public Asset getAsset(gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -625,7 +625,7 @@ public interface Repository extends java.io.Serializable {
      *         gov.nist.hit.ds.repository.api.RepositoryException#NO_OBJECT_WITH_THIS_DATE
      *         NO_OBJECT_WITH_THIS_DATE}
      */
-    public Asset getAssetByDate(gov.nist.hit.ds.repository.api.Id assetId, long date)
+    public Asset getAssetByDate(gov.nist.hit.ds.repository.api.ArtifactId assetId, long date)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     
@@ -669,7 +669,7 @@ public interface Repository extends java.io.Serializable {
      *         NULL_ARGUMENT}
      */
     public gov.nist.hit.ds.repository.api.LongValueIterator getAssetDates(
-        gov.nist.hit.ds.repository.api.Id assetId)
+        gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -727,7 +727,7 @@ public interface Repository extends java.io.Serializable {
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
      */
-    gov.nist.hit.ds.repository.api.Id copyAsset(gov.nist.hit.ds.repository.api.Asset asset)
+    gov.nist.hit.ds.repository.api.ArtifactId copyAsset(gov.nist.hit.ds.repository.api.Asset asset)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**

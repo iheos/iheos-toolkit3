@@ -2,7 +2,7 @@ package gov.nist.hit.ds.repository.simple;
 
 import static org.junit.Assert.assertTrue;
 import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -13,7 +13,7 @@ import org.junit.Test;
 
 public class SimpleNamedRepositoryTest {
 
-	static Id repId = null;
+	static ArtifactId repId = null;
 	static Repository repos;
 
 	@BeforeClass
@@ -40,11 +40,11 @@ public class SimpleNamedRepositoryTest {
 	@Test
 	public void assetTest() throws RepositoryException {
 		Asset a = repos.createNamedAsset("My Site", "This is my site", new SimpleType("siteAsset"), "mysite");
-		Id assetId = a.getId();
+		ArtifactId assetId = a.getId();
 		
 		Asset a2 = repos.getAsset(assetId);
 		
-		Id assetId2 = a2.getId();
+		ArtifactId assetId2 = a2.getId();
 		
 		assertTrue("created and retrieved asset id should be the same", assetId.isEqual(assetId2));
 

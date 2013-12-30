@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.repository.simple;
 
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Parameter;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 
@@ -171,7 +171,7 @@ public class FolderManager {
 	}
 	
 	
-	public File[] getAssetFileById(Id id, File baseDir) throws RepositoryException {
+	public File[] getAssetFileById(ArtifactId id, File baseDir) throws RepositoryException {
 		FileFilter pff = new FileFilter();
 		pff.setFileNamePart(id.getIdString()); 
 

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -30,7 +30,7 @@ public class SimpleAssetTest {
 		
 		Asset a2 = repos.getAssetByPath(a.getPropFile());
 		
-		Id assetId2 = a2.getId();
+		ArtifactId assetId2 = a2.getId();
 		
 		assertTrue("created and retrieved asset id should be the same", a.getId().isEqual(assetId2));
 	}
@@ -62,10 +62,10 @@ public class SimpleAssetTest {
 		
 		Asset a = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
 		a.updateContent(myContent.getBytes());
-		Id assetId = a.getId();
+		ArtifactId assetId = a.getId();
 		
 		Asset a2 = repos.getAssetByPath(a.getPropFile());
-		Id assetId2 = a2.getId();
+		ArtifactId assetId2 = a2.getId();
 		byte[] contentBytes = a2.getContent();
 		
 		assertNotNull(contentBytes);
@@ -92,12 +92,12 @@ public class SimpleAssetTest {
 		Asset a = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
 		a.setMimeType("text/plain");
 		a.updateContent("My Content".getBytes());
-		Id assetId = a.getId();
+		ArtifactId assetId = a.getId();
 		
 		Asset a2 = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
 		a2.setMimeType("text/plain");
 		a2.updateContent("My Content".getBytes());
-		Id assetId2 = a2.getId();
+		ArtifactId assetId2 = a2.getId();
 		
 		a.addAsset(a2);  // make a the parent of a2
 		
@@ -106,7 +106,7 @@ public class SimpleAssetTest {
 		Asset a3 = repos.createAsset("My Site", "This is my third site", new SimpleType("siteAsset"));
 		a3.setMimeType("text/plain");
 		a3.updateContent("My Third Content".getBytes());
-		Id assetId3 = a3.getId();
+		ArtifactId assetId3 = a3.getId();
 		
 		a2.addAsset(a3);  // make a the parent of a3
 		
@@ -125,7 +125,7 @@ public class SimpleAssetTest {
 		
 		Asset a = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
 		a.updateContent("My Content".getBytes());
-		Id assetId = a.getId();
+		ArtifactId assetId = a.getId();
 
 		Asset a2 = repos.getAssetByPath(a.getPropFile());
 		

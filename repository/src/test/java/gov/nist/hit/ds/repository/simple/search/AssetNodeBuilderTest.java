@@ -3,7 +3,7 @@ package gov.nist.hit.ds.repository.simple.search;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -21,7 +21,7 @@ import static org.junit.Assert.fail;
 
 public class AssetNodeBuilderTest {
 
-	static Id repId = null;
+	static ArtifactId repId = null;
 	static Repository repos = null;
 	
 	@BeforeClass
@@ -44,13 +44,13 @@ public class AssetNodeBuilderTest {
 		a.setProperty(PropertyKey.DISPLAY_ORDER, "1");
 		a.setMimeType("text/plain");
 		a.updateContent("My Content".getBytes());
-		Id assetId = a.getId();
+		ArtifactId assetId = a.getId();
 		
 		Asset a2 = repos.createAsset("child", "This is my site", new SimpleType("siteAsset"));
 		a.setProperty(PropertyKey.DISPLAY_ORDER, "1");
 		a2.setMimeType("text/plain");		
 		a2.updateContent("My Content".getBytes());
-		Id assetId2 = a2.getId();
+		ArtifactId assetId2 = a2.getId();
 		
 		a.addAsset(a2);  // make a the parent of a2
 		

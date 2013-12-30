@@ -2,7 +2,7 @@ package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -23,7 +23,7 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	File reposDir = null;
 	File[] assetFileNames;
 	int assetFileNamesIndex = 0;
-	Id repositoryId = null;
+	ArtifactId repositoryId = null;
 	boolean[] selections = null;
 	Type type = null;
 	private Repository repository;

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -22,7 +22,7 @@ import org.junit.Test;
 
 public class BulkLoadTest {
 
-	static Id repId = null;
+	static ArtifactId repId = null;
 	static Repository repos = null;
 
 	static final int ASSETS_TO_TEST = 100;

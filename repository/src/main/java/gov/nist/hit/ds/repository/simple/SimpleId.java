@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.repository.simple;
 
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 
-public class SimpleId implements Id {
+public class SimpleId implements ArtifactId {
 	String guid;
 	/**
 	 * 
@@ -21,7 +21,7 @@ public class SimpleId implements Id {
 	}
 
 	@Override
-	public boolean isEqual(Id id) throws RepositoryException {
+	public boolean isEqual(ArtifactId id) throws RepositoryException {
 		return id != null && id.getIdString().equals(guid);
 	}
 

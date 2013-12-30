@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -28,7 +28,7 @@ public class SearchResultIterator implements AssetIterator  {
 	private static final long serialVersionUID = -719485351032161998L;
 	String[] assetFileNames;
 	int assetFileNamesIndex = 0;
-	Id repositoryId = null;
+	ArtifactId repositoryId = null;
 	boolean[] selections = null;
 	Type type = null;
 	List<AssetNode> crs = null;

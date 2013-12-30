@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.initialization.installation.Installation;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
@@ -207,7 +207,7 @@ public class Configuration {
 		return getRepositorySources();
 	}
 	
-	public File getRepositoryLocation(File repositoryLocation, Id id) throws RepositoryException {
+	public File getRepositoryLocation(File repositoryLocation, ArtifactId id) throws RepositoryException {
 		File hostLocation = new File(getRepositoriesDataDir(repositoryLocation) + File.separator + id.getIdString());
 		if (exists(hostLocation)) {
 			return hostLocation;
@@ -224,7 +224,7 @@ public class Configuration {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public RepositorySource getRepositorySource(Id reposId) throws RepositoryException {
+	public RepositorySource getRepositorySource(ArtifactId reposId) throws RepositoryException {
 		assert(reposId != null);
 		assert(getRepositorySources() != null);
 		
@@ -252,7 +252,7 @@ public class Configuration {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public File getNewRepositoryLocation(Id id) throws RepositoryException {  
+	public File getNewRepositoryLocation(ArtifactId id) throws RepositoryException {  
 		if (id==null) {
 			throw new RepositoryException(RepositoryException.UNKNOWN_ID + " : " +
 					"Repository Id may not be null.");
@@ -261,12 +261,12 @@ public class Configuration {
 				return  new File(getRepositoriesDataDir(getRepositorySrc(Access.RW_EXTERNAL).getLocation()) + File.separator + id.getIdString()); 		
 	}
 
-	public boolean repositoryExists(Id id) throws RepositoryException {
+	public boolean repositoryExists(ArtifactId id) throws RepositoryException {
 		RepositorySource rs = getRepositorySource(id);
 		return rs.getLocation().exists() && rs.getLocation().isDirectory();
 	}
 	
-	static public boolean repositoryExists(RepositorySource source, Id id) throws RepositoryException {
+	static public boolean repositoryExists(RepositorySource source, ArtifactId id) throws RepositoryException {
 		File repositoryRoot = 
 				new File(Configuration.getRepositoriesDataDir(source.getLocation()).toString()  + File.separator + id.getIdString());
 		return repositoryRoot.exists() && repositoryRoot.isDirectory();
