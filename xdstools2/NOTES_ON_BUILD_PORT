@@ -1,10 +1,9 @@
 * xdstool2 module :
 toolkitx/xdstest/ : review content. Especially use of rampart
 
-* http module : pom contains 
-		<dependency>
-			<groupId>soap</groupId>
-			<artifactId>soap</artifactId>
-			<version>2.3.1</version>
-		</dependency>
-what is that for?
+check how to copy certs for each install
+
+clean up toolkit resources. 
+
+Create a conf directory that is committed and ignored so default config 
+can be copied the first time and vary independently afterwards.
