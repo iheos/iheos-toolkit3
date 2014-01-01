@@ -16,7 +16,7 @@ import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.event.EventBuilder;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.xml.Util;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.File;
 import java.io.IOException;
@@ -373,7 +373,7 @@ public class SoapHeaderValidatorIT  {
 
 	SoapHeaderValidator val = null;
 	
-	AssertionGroup setup(File xmlInputFile) throws RepositoryException, SoapFaultException, XdsInternalException, FactoryConfigurationError {
+	AssertionGroup setup(File xmlInputFile) throws RepositoryException, SoapFaultException, ToolkitRuntimeException, FactoryConfigurationError {
 		init();
 		this.xmlInputFile = xmlInputFile;
 

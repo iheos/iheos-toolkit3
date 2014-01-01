@@ -5,7 +5,7 @@ import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import org.apache.axiom.om.OMElement;
 
@@ -35,7 +35,7 @@ public class InternalClassification extends AbstractRegistryObject {
 		return classificationNode;
 	}
 	
-	public InternalClassification(Metadata m, OMElement ro) throws XdsInternalException  {
+	public InternalClassification(Metadata m, OMElement ro) throws ToolkitRuntimeException  {
 		super(m, ro);
 		classifiedObjectId = ro.getAttributeValue(MetadataSupport.classified_object_qname);
 		classificationNode = ro.getAttributeValue(MetadataSupport.classificationnode_qname);
@@ -49,7 +49,7 @@ public class InternalClassification extends AbstractRegistryObject {
 		return "Classification(" + getId() + ")";
 	}
 
-	public OMElement toXml() throws XdsInternalException  {
+	public OMElement toXml() throws ToolkitRuntimeException  {
 		ro = XmlUtil.om_factory.createOMElement(MetadataSupport.classification_qnamens);
 		ro.addAttribute("id", id, null);
 		ro.addAttribute("classifiedObject", classifiedObjectId, null);

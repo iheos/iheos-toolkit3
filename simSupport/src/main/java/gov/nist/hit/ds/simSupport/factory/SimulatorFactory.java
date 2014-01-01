@@ -4,17 +4,21 @@ import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.IdFactory;
+import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repositoryDirectory.Directory;
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.serializer.SimulatorSerializer;
-import gov.nist.hit.ds.simSupport.sim.SimDb;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.repository.SiteRepository;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.List;
 
@@ -23,14 +27,15 @@ import org.apache.log4j.Logger;
 /**
  * Build a simulator.
  * 
+ * TODO: Needs IT tests
  * Typical calling sequence is:
 <pre>
 	// Create empty Simulator
 	SimulatorFactory sf = new SimulatorFactory();
 	// Set the simulator ID
-	sf.buildSimulator(SimId);
+	sf.initializeSimulator(SimId);
 	// Add an Actor Simulator to it
-	sf.addActorSim(ActorType.REGISTRY);
+	sf.addActorSim(ActorTypeFactory.find("registry");
 	// Persist it
 	sf.save();
 </pre>
@@ -41,7 +46,7 @@ public class SimulatorFactory {
 	static Logger logger = Logger.getLogger(SimulatorFactory.class);
 	Simulator sim;
 	SimId simId;
-//	List<ActorFactory> actorFactories = new ArrayList<ActorFactory>();
+	//	List<ActorFactory> actorFactories = new ArrayList<ActorFactory>();
 	Site site = new Site();
 	int actorSimsAdded = 0;
 
@@ -50,21 +55,22 @@ public class SimulatorFactory {
 	AsyncType[] asyncTypes = new AsyncType[] { AsyncType.SYNC, AsyncType.ASYNC }; 
 
 
-	public SimulatorFactory buildSimulator(SimId simId) {
+	public SimulatorFactory initializeSimulator(SimId simId) {
+		logger.info("Creating simulator <" + simId + ">");
 		this.simId = simId;
 		sim = new Simulator(simId);
 		return this;
 	}
-	
+
 	/**
 	 * Build Empty Simulator that actorSims can be added to.
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public SimulatorFactory buildSimulator() throws RepositoryException {
-		return buildSimulator(new SimId(new IdFactory().getNewId().getIdString()));
+	public SimulatorFactory initializeSimulator()  {
+		return initializeSimulator(new SimId(new IdFactory().getNewId().getIdString()));
 	}
-
+	
 	/**
 	 * Add an actorSim to a Simulator.
 	 * @param actorType
@@ -72,12 +78,12 @@ public class SimulatorFactory {
 	 * @throws RepositoryException
 	 * @throws Exception
 	 */
-	public SimulatorFactory addActorSim(ActorType actorType) throws RepositoryException, Exception {
+	public SimulatorFactory addActorSim(ActorType actorType)  {
 		// has its own asc field - shows up in printed output not but in actor def
 		GenericActorSimBuilder genericBuilder = new GenericActorSimBuilder(simId).buildGenericConfiguration(actorType);
 
 		// Sets asc field - this shows up in output
-		ActorFactory actorFactory = buildActorFactory(actorType);
+		ActorFactory actorFactory = lookupActorFactory(actorType);
 		// initialize actor simulator
 		actorFactory.initializeActorSim(
 				genericBuilder,
@@ -100,34 +106,13 @@ public class SimulatorFactory {
 				}
 			}
 		}
-		
+
 		ActorSimConfig asc = genericBuilder.getActorSimConfig();
 		sim.add(asc);
 		actorFactory.loadActorSite(asc, site);
-		
+
 		actorSimsAdded++;
 		return this;
-	}
-
-	/**
-	 * Create actor specific builder and call it.  This populates
-	 * the actor specific configuration entries.
-	 * @param actorType
-	 * @return
-	 * @throws RepositoryException
-	 * @throws Exception
-	 */
-	ActorFactory buildActorFactory(ActorType actorType)
-			throws RepositoryException, Exception {
-		String simFactoryClassName = actorType.getActorSimFactoryClassName();
-		if (simFactoryClassName == null) {
-			logger.fatal("Actor Type <" + actorType.getName() + "> has no Simulator Factory Class configured");
-			throw new XdsInternalException("Actor Type <" + actorType.getName() + "> has no Simulator Factory Class configured");
-		}
-
-		Class<?> clazz = getClass().getClassLoader().loadClass(simFactoryClassName);
-		ActorFactory actorFactory = (ActorFactory) clazz.newInstance();
-		return actorFactory;
 	}
 
 	/**
@@ -138,28 +123,86 @@ public class SimulatorFactory {
 	 * @throws RepositoryException
 	 * @throws Exception
 	 */
-	public SimDb save() throws RepositoryException, Exception {
+	public static void save(Simulator sim)  {
 		
-		if (actorSimsAdded == 0) {
-			logger.error("Cannot save Simulator - no actor sims installed.");
-			throw new XdsInternalException("Cannot save Simulator - no actor sims installed.");
-		}
-		
-		// Save raw simulator state
-		SimDb simDb = new SimulatorSerializer().save(sim);
-		
-		// Save generated Site (actor) files
-		// These are needed because the rest of toolkit expects them
-		// They are readonly - any updates are made to the simulator state
-		// which is then saved as an updated site definition.
+		try {
+			if (sim.size() == 0) {
+				logger.error("Cannot save Simulator - no actor sims installed.");
+				throw new ToolkitRuntimeException("Cannot save Simulator - no actor sims installed.");
+			}
 
+			Repository repos = getSimulatorRepository();
+
+			// Save raw simulator state
+			SimulatorSerializer simser = new SimulatorSerializer();
+			simser.setSimRepository(repos);
+			simser.save(sim);
+
+		} catch (RepositoryException e) {
+			throw new ToolkitRuntimeException("Cannot save Simulator <" + sim.getSimId() + "> state to repository", e);
+		}
+	}
+	
+	public static void save(Site site) {
 		SiteRepository siteRepo = new SiteRepository();
 		siteRepo.save(new Directory().getExternalSimSiteRepository(), site);
-		
-		return simDb;
+	}
+	
+	public Site getSite() {
+		return site;
 	}
 
 	public Simulator getSimulator() {
 		return sim;
 	}
+
+	/**
+	 * Lookup up the classname of the ActorFactory needed to construct a simulator of type actorType. 
+	 * These configurations are kept in ActorType, an emun holding the configurations.
+	 * @param actorType
+	 * @return instance of actor factory
+	 */
+	private static ActorFactory lookupActorFactory(ActorType actorType) 
+	{
+		String simFactoryClassName = actorType.getActorSimFactoryClassName();
+		if (simFactoryClassName == null) {
+			logger.fatal("Actor Type <" + actorType.getName() + "> has no Simulator Factory Class configured");
+			throw new ToolkitRuntimeException("Actor Type <" + actorType.getName() + "> has no Simulator Factory Class configured");
+		}
+
+		Class<?> clazz;
+		try {
+			clazz = SimulatorFactory.class.getClassLoader().loadClass(simFactoryClassName);
+		} catch (ClassNotFoundException e) {
+			throw new ToolkitRuntimeException("Factory class <" + simFactoryClassName + "> for ActorType <" + actorType + "> does not exist.", e);
+		}
+		try {
+			ActorFactory actorFactory = (ActorFactory) clazz.newInstance();
+			return actorFactory;
+		} catch (Exception e) {
+			throw new ToolkitRuntimeException("Cannot create an instance of <" + actorType + ">",e);
+		}
+	}
+
+	public static Simulator load(SimId simId)  {
+		try {
+			SimulatorSerializer simser = new SimulatorSerializer();
+			simser.setSimRepository(getSimulatorRepository());
+			return simser.load(simId);
+		} catch (RepositoryException e) {
+			throw new ToolkitRuntimeException("Cannot load Simulator <" + simId + ">", e);
+		}
+	}
+
+	private static Repository getSimulatorRepository() throws RepositoryException {
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+		Repository repos = fact.createNamedRepository(
+				"Simulators", 
+				"Simulators", 
+				new SimpleType("simulatorsRepos"),               // repository type
+				"simulators"    // repository name
+				);
+		return repos;
+	}
+
 }

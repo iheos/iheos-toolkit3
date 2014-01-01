@@ -13,7 +13,7 @@ import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
 import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,7 +25,7 @@ import org.apache.axiom.om.OMElement;
 public abstract class AbstractRegistryObject {
 
 	abstract public String identifyingString();
-	abstract public OMElement toXml() throws XdsInternalException;
+	abstract public OMElement toXml() throws ToolkitRuntimeException;
 	abstract public void validateSlotsLegal(IAssertionGroup er);
 	abstract public void validateRequiredSlotsPresent(IAssertionGroup er, ValidationContext vc);
 	abstract public void validateSlotsCodedCorrectly(IAssertionGroup er, ValidationContext vc);
@@ -62,7 +62,7 @@ public abstract class AbstractRegistryObject {
 		return false;
 	}
 
-	public void updateDone() throws XdsInternalException, MetadataException  {
+	public void updateDone() throws ToolkitRuntimeException, MetadataException  {
 		ro = toXml();
 		m = MetadataParser.parseObject(ro);
 	}
@@ -176,7 +176,7 @@ public abstract class AbstractRegistryObject {
 		}
 	}
 
-	public void addClassificationsXml(OMElement parent) throws XdsInternalException  {
+	public void addClassificationsXml(OMElement parent) throws ToolkitRuntimeException  {
 		for (Classification c : classifications) {
 			OMElement cl = c.toXml(parent);
 			parent.addChild(cl);
@@ -188,14 +188,14 @@ public abstract class AbstractRegistryObject {
 		}
 	}
 	
-	public void addAuthorsXml(OMElement parent) throws XdsInternalException  {
+	public void addAuthorsXml(OMElement parent) throws ToolkitRuntimeException  {
 		for (Author a : authors) {
 			OMElement ele = a.toXml(parent);
 			parent.addChild(ele);
 		}
 	}
 
-	public void addExternalIdentifiersXml(OMElement parent) throws XdsInternalException  {
+	public void addExternalIdentifiersXml(OMElement parent) throws ToolkitRuntimeException  {
 		for (ExternalIdentifier ei : externalIdentifiers) {
 			OMElement ele = ei.toXml(parent);
 			parent.addChild(ele);
@@ -207,12 +207,12 @@ public abstract class AbstractRegistryObject {
 		this.id = id;
 	}
 
-	public AbstractRegistryObject(Metadata m, OMElement ro) throws XdsInternalException  {
+	public AbstractRegistryObject(Metadata m, OMElement ro) throws ToolkitRuntimeException  {
 		this.m = m;
 		this.ro = ro;
 		
 		if (ro == null)
-			throw new XdsInternalException("Not a RegistryObject");
+			throw new ToolkitRuntimeException("Not a RegistryObject");
 
 		id = ro.getAttributeValue(MetadataSupport.id_qname);
 		if (id == null) id = "";

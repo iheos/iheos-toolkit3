@@ -39,6 +39,11 @@ public class SimChain  {
 		return this;
 	}
 
+	public SimChain add(int index, SimStep ss) {
+		((ArrayList<SimStep>)steps).add(index, ss);
+		return this;
+	}
+
 	public Object getBase() {
 		return base;
 	}

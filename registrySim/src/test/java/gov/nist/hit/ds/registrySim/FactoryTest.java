@@ -7,7 +7,7 @@ import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.factory.SimulatorFactory;
-import gov.nist.hit.ds.simSupport.sim.SimDb;
+import gov.nist.hit.ds.simSupport.simrepo.SimDb;
 
 import java.io.IOException;
 
@@ -33,7 +33,7 @@ public class FactoryTest {
 	public void buildTest() {
 		SimDb simDb = null;
 		try {
-			SimulatorFactory simFactory = new SimulatorFactory().buildSimulator();
+			SimulatorFactory simFactory = new SimulatorFactory().initializeSimulator();
 			simFactory.addActorSim(ActorType.REGISTRY);
 			simDb = simFactory.save();
 			simFactory.getSimulator();

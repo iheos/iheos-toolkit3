@@ -2,7 +2,7 @@ package gov.nist.hit.ds.registryMsgFormats;
 
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,12 +24,12 @@ public class RegistryResponseParser {
 		this.response_element = response_element;
 	}
 	
-	public RegistryResponse getRegistryResponse() throws XdsInternalException { 
+	public RegistryResponse getRegistryResponse() throws ToolkitRuntimeException { 
 		parse(); 
 		return response; 
 	}
 	
-	void parse() throws XdsInternalException {
+	void parse() throws ToolkitRuntimeException {
 		response = new RegistryResponse();
 		response.success = is_error();
 		response.topElement = response_element;
@@ -119,22 +119,22 @@ public class RegistryResponseParser {
 		return errorMessages.toString();
 	}
 
-	public String get_registry_response_status() throws XdsInternalException {
+	public String get_registry_response_status() throws ToolkitRuntimeException {
 		try {
 			AXIOMXPath xpathExpression = new AXIOMXPath ("@status");
 			@SuppressWarnings("unchecked")
 			List<OMNode> nodeList = xpathExpression.selectNodes(response_element); 
 			Iterator<OMNode> it = nodeList.iterator();
 			if (! it.hasNext())
-				throw new XdsInternalException("RegitryResponse:get_registry_response_status: Cannot retrieve /RegistryResponse/@status");
+				throw new ToolkitRuntimeException("RegitryResponse:get_registry_response_status: Cannot retrieve /RegistryResponse/@status");
 			OMAttribute att = (OMAttribute) it.next();
 			return att.getAttributeValue();
 		} catch (JaxenException e) {
-			throw new XdsInternalException("Jaxen Exception from get_registry_response_status: " + e.getMessage());
+			throw new ToolkitRuntimeException("Jaxen Exception from get_registry_response_status: " + e.getMessage());
 		}
 	}
 	
-	public boolean is_error() throws XdsInternalException {
+	public boolean is_error() throws ToolkitRuntimeException {
 		String status = get_registry_response_status();
 		return  ! status.endsWith("Success");
 	}

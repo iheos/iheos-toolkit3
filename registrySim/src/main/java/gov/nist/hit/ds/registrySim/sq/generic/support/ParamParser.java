@@ -5,7 +5,7 @@ import gov.nist.hit.ds.docRef.SqDocRef;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class ParamParser {
 		this.query = null;
 	}
 	
-	public ParamParser(OMElement query) throws MetadataValidationException, XdsInternalException {
+	public ParamParser(OMElement query) throws MetadataValidationException, ToolkitRuntimeException {
 		this.queryid = null;
 		this.query = query;
 		
@@ -46,7 +46,7 @@ public class ParamParser {
 		return MetadataSupport.isMPQId(queryid);
 	}
 
-	public SqParams parse(OMElement query)  throws MetadataValidationException, XdsInternalException {
+	public SqParams parse(OMElement query)  throws MetadataValidationException, ToolkitRuntimeException {
 		HashMap<String, Object> parms = new HashMap<String, Object>();
 
 		for (@SuppressWarnings("rawtypes")
@@ -73,7 +73,7 @@ public class ParamParser {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	void add_parm(HashMap<String, Object> parms, String name, Object value) throws XdsInternalException {
+	void add_parm(HashMap<String, Object> parms, String name, Object value) throws ToolkitRuntimeException {
 		Object existing_value = parms.get(name);
 		if (existing_value == null) {
 			parms.put(name, value);
@@ -89,7 +89,7 @@ public class ParamParser {
 			else
 				a.add(value);
 		} else {
-			throw new XdsInternalException("Stored Query parameter parser: add_parm: existing_value is of type " + existing_value.getClass().getName());
+			throw new ToolkitRuntimeException("Stored Query parameter parser: add_parm: existing_value is of type " + existing_value.getClass().getName());
 		}
 	}
 
@@ -118,7 +118,7 @@ public class ParamParser {
 	 *  
 	 *  This proves that Stored Query has gotten way too complicated!
 	 */
-	String parse_slot(OMElement slot, HashMap<String, Object> parms) throws MetadataValidationException, XdsInternalException {
+	String parse_slot(OMElement slot, HashMap<String, Object> parms) throws MetadataValidationException, ToolkitRuntimeException {
 		String name = slot.getAttributeValue(name_qname);
 		
 		SlotParse sp = parse_slot(slot);
@@ -134,7 +134,7 @@ public class ParamParser {
 		return name;
 	}
 	
-	public void addToParmMap(SlotParse sp, Map<String, Object> parms) throws MetadataValidationException, XdsInternalException {
+	public void addToParmMap(SlotParse sp, Map<String, Object> parms) throws MetadataValidationException, ToolkitRuntimeException {
 		if (SQCodedTerm.isCodeParameter(sp.name)) {
 			parse_code_param(sp.name, sp, parms);
 		} else {
@@ -142,7 +142,7 @@ public class ParamParser {
 		}
 	}
 	
-	void parse_code_param(String name, SlotParse sp, Map<String, Object> parms) throws MetadataValidationException, XdsInternalException {
+	void parse_code_param(String name, SlotParse sp, Map<String, Object> parms) throws MetadataValidationException, ToolkitRuntimeException {
 		// all values must be strings
 		for (Object o : sp.values) {
 			if (! (o instanceof String))

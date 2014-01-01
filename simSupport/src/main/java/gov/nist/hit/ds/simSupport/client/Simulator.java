@@ -1,8 +1,10 @@
 package gov.nist.hit.ds.simSupport.client;
 
+import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -58,8 +60,16 @@ public class Simulator  implements Serializable, IsSerializable  {
 		return configs;
 	}
 
-	public SimId getId() {
+	public SimId getSimId() {
 		return simId;
+	}
+	
+	public ActorSimConfig getActorSimConfig(ActorType actorType) {
+		for (ActorSimConfig config : configs) {
+			if (config.isActorType(actorType))
+				return config;
+		}
+		throw new ToolkitRuntimeException("ActorType <" + actorType + "> does not exist in Simulator <" + simId + ">");
 	}
 
 	public int size() { return configs.size(); }

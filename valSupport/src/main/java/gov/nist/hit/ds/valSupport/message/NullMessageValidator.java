@@ -18,7 +18,6 @@ public class NullMessageValidator extends AbstractMessageValidator {
 
 	@Override
 	public void run(MessageValidatorEngine mvc) {
-		// TODO Auto-generated method stub
 		
 	}
 

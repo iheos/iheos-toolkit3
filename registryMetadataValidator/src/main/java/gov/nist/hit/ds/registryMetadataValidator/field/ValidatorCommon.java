@@ -219,64 +219,52 @@ public class ValidatorCommon implements IAssertionGroup {
 	}
 
 	public void sectionHeading(String msg) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void challenge(String msg) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void finish() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void showErrorInfo() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void detail(String msg) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void externalChallenge(String msg) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(String code, String msg, String location, String resource,
 			Object logMessage) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(Code code, String msg, String location, String resource,
 			Object log_message) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(Code code, String msg, String resource) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(Code code, Exception e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(Code code, String msg, String location, String resource) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(Code code, String msg, Object location, String resource) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -288,105 +276,83 @@ public class ValidatorCommon implements IAssertionGroup {
 
 	public void err(String code, String msg, String location, String severity,
 			String resource) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(Code code, String msg, String location, String severity,
 			String resource) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void warning(String code, String msg, String location,
 			String resource) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void warning(Code code, String msg, String location, String resource) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public int getNbErrors() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public void concat(IAssertionGroup er) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public List<ValidatorErrorItem> getErrMsgs() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public ErrorRecorderBuilder getErrorRecorderBuilder() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void success(String dts, String name, String found, String expected, String RFC) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void error(String dts, String name, String found, String expected, String RFC) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void warning(String dts, String name, String found, String expected, String RFC) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void info(String dts, String name, String found, String expected, String RFC) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void summary(String msg, boolean success, boolean part) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(Code code, ErrorContext context, Object location) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(Code code, ErrorContext context, String location,
 			String severity) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(String code, ErrorContext context, String location,
 			String severity) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void warning(String code, ErrorContext context, String location) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void warning(Code code, ErrorContext context, String location) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public ErrorRecorder buildNewErrorRecorder() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
 }

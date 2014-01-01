@@ -2,6 +2,7 @@ package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.Parameter;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
@@ -63,7 +64,7 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 	public void setDisplayName(String displayName)
 			throws RepositoryException {
 //		load();
-		properties.setProperty("DisplayName", displayName);
+		properties.setProperty(PropertyKey.DISPLAY_NAME.toString(), displayName);
 		if (autoFlush)
 			flush();
 	}
@@ -83,25 +84,25 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 	public Asset createAsset(String displayName, String description,
 			Type assetType) throws RepositoryException {
 
-		Parameter p = new Parameter();
-		p.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
+		Parameter param = new Parameter();
+		param.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
 		
-		p.setDescription("type parameter cannot be null");
-		p.assertNotNull(assetType);
+		param.setDescription("type parameter cannot be null");
+		param.assertNotNull(assetType);
 		
-		p.setDescription("Cannot find type <" + assetType.getKeyword() + ">");
-		p.assertEquals(
+		param.setDescription("Cannot find type <" + assetType.getKeyword() + ">");
+		param.assertEquals(
 				new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL),assetType,SimpleType.ASSET).hasNextType()
 				,new Boolean(true));
-
 		
 		SimpleAsset a = new SimpleAsset(getSource());
 		a.setAutoFlush(false);
 		a.setRepository(getId());
 		a.setType(assetType);
-		a.setId(new IdFactory().getNewId());
+		a.setId(new IdFactory().getNewId()); // before this happened here: Id was converted to a string so the Id properties were lost in the setId method call 
 		a.updateDisplayName(displayName);
 		a.updateDescription(description);
+		a.setAutoFlush(true);
 		a.flush();
 		return a;
 	}
@@ -110,20 +111,21 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 	public Asset createNamedAsset(String displayName, String description,
 			Type assetType, String name) throws RepositoryException {
 
-		Parameter p = new Parameter();
-		p.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
-		p.assertParam(name);
-		p.assertEquals(name.equals(Configuration.REPOSITORY_PROP_FILE_BASENAME), new Boolean(false));
+		Parameter param = new Parameter();
+		param.setDescription("External source");
+		param.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
 		
-		p.setDescription("type cannot be null");
-		p.assertNotNull(assetType);
+		param.setDescription("Asset name conflicts with repository base name.");
+		param.assertParam(name);
+		param.assertEquals(name.equals(Configuration.REPOSITORY_PROP_FILE_BASENAME), new Boolean(false));
 		
-		p.setDescription("Cannot find type <" + assetType.getKeyword() +">");
-		p.assertEquals(
+		param.setDescription("Asset Type cannot be null");
+		param.assertNotNull(assetType);
+		
+		param.setDescription("Cannot find type <" + assetType.getKeyword() +">");
+		param.assertEquals(
 				new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL),assetType,SimpleType.ASSET).hasNextType()
 				,new Boolean(true));
-
-
 
 		SimpleAsset a = new SimpleAsset(getSource());	
 		a.setAutoFlush(false);
@@ -132,18 +134,19 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 		a.setId(new SimpleId(name));
 		a.updateDisplayName(displayName);
 		a.updateDescription(description);
+		a.setAutoFlush(true);		
 		a.flush();
+
 		return a;
 	}
 	
 	@Override
 	public void deleteAsset(Id assetId) throws RepositoryException {
-		
 
-		Parameter p = new Parameter("delete Id");
-		p.assertNotNull(assetId);
-		p.setDescription("delete external Id:" + assetId.getIdString());
-		p.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
+		Parameter param = new Parameter("delete Id");
+		param.assertNotNull(assetId);
+		param.setDescription("delete external Id:" + assetId.getIdString());
+		param.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
 		
 //		load();
 //		try {
@@ -156,16 +159,22 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 //
 //		}
 	}
-
+	
 	public void flush() throws RepositoryException {
-		
+		flush(getRepositoryPropFile());
+	}
 
-		Parameter req = new Parameter();
-		req.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
+	public void flush(File propFile) throws RepositoryException {
+
+		Parameter param = new Parameter();
+		param.setDescription("External access");
+		param.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
+		
+		param.setDescription("Repository propFile" + propFile);
+		param.assertNotNull(propFile);
 		
 		autoFlush = true;
 		try {
-			File propFile = getRepositoryPropFile();
 			root.mkdirs();
 			FileWriter writer = new FileWriter(propFile);
 			properties.store(writer, "");

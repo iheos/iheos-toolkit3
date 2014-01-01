@@ -10,7 +10,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.List;
 
@@ -72,13 +72,13 @@ abstract public class GetSubmissionSets extends StoredQuery {
 	
 	public List<String> uuids;
 
-	void parseParameters() throws XdsInternalException, XdsException, LoggerException {
+	void parseParameters() throws ToolkitRuntimeException, XdsException, LoggerException {
 		uuids = sqs.params.getListParm("$uuid");
 	}
 
 	/**
 	 * Implementation of Stored Query specific logic including parsing and validating parameters.
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws XdsException
 	 * @throws LoggerException
 	 * @throws XDSRegistryOutOfResourcesException
@@ -90,7 +90,7 @@ abstract public class GetSubmissionSets extends StoredQuery {
 
 		if ((uuids == null || uuids.size() == 0) 
 				) 
-			throw new XdsInternalException("GetSubmissionSets Stored Query: $uuid" 
+			throw new ToolkitRuntimeException("GetSubmissionSets Stored Query: $uuid" 
 					+ " must be specified");
 		return runImplementation();
 	}

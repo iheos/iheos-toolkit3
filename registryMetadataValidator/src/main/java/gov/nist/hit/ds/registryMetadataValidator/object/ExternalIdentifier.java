@@ -7,7 +7,7 @@ import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import org.apache.axiom.om.OMElement;
 
@@ -31,13 +31,13 @@ public class ExternalIdentifier extends AbstractRegistryObject {
 		this.value = value;
 	}
 	
-	public ExternalIdentifier(Metadata m, OMElement ei) throws XdsInternalException   {
+	public ExternalIdentifier(Metadata m, OMElement ei) throws ToolkitRuntimeException   {
 		super(m, ei);
 		identificationScheme = ei.getAttributeValue(MetadataSupport.identificationscheme_qname);
 		value = ro.getAttributeValue(MetadataSupport.value_att_qname);
 	}
 	
-	public OMElement toXml(OMElement owner) throws XdsInternalException  {
+	public OMElement toXml(OMElement owner) throws ToolkitRuntimeException  {
 		ro = XmlUtil.om_factory.createOMElement(MetadataSupport.externalidentifier_qnamens);
 		ro.addAttribute("id", id, null);
 		ro.addAttribute("identificationScheme", identificationScheme, null);
@@ -83,7 +83,7 @@ public class ExternalIdentifier extends AbstractRegistryObject {
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": display name (Name element) missing or empty", "ITI TF-3: 4.1.12.5"), this);
 	}
 
-	public OMElement toXml() throws XdsInternalException  {
+	public OMElement toXml() throws ToolkitRuntimeException  {
 		return toXml(null);
 	}
 

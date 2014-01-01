@@ -36,7 +36,6 @@ public class CreateContainerTest  {
 		try {
 			if (!dbc.doesIndexContainerExist()) {
 				dbc.createIndexContainer();
-				System.out.println("New index container created.");
 			}
 		} catch (RepositoryException e) {
 			e.printStackTrace();
@@ -94,7 +93,7 @@ public class CreateContainerTest  {
 				id = new IdFactory().getNewId();
 				sid = new SimpleId(id.getIdString());
 
-				dbc.addIndex("test", sid.getIdString(), "siteAsset","a","myvalue" + cx);
+				dbc.addIndex("test", sid.getIdString(), "siteAsset", "/bogus", "a","myvalue" + cx);
 				
 			}
 			assertTrue(dbc.getIndexCount()==insertRecords);

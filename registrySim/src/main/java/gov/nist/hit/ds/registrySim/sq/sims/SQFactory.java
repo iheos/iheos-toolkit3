@@ -3,16 +3,16 @@ package gov.nist.hit.ds.registrySim.sq.sims;
 import gov.nist.hit.ds.docRef.SqDocRef;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registryMsgFormats.RegistryErrorListGenerator;
+import gov.nist.hit.ds.registrySim.metadataModel.RegIndex;
 import gov.nist.hit.ds.registrySim.sq.generic.support.StoredQueryFactory;
 import gov.nist.hit.ds.registrySim.sq.generic.support.StoredQuerySupport;
-import gov.nist.hit.ds.registrySim.store.RegIndex;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.registrysupport.logging.LoggerException;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import org.apache.axiom.om.OMElement;
 
@@ -22,7 +22,7 @@ public class SQFactory extends StoredQueryFactory {
 	
 	// TODO: RegistryErrorListGenerator should not be referenced here, just a model
 	public SQFactory(OMElement ahqr, RegistryErrorListGenerator response)
-			throws XdsInternalException, MetadataException, XdsException,
+			throws ToolkitRuntimeException, MetadataException, XdsException,
 			LoggerException {
 		super(ahqr, response);
 	}
@@ -116,81 +116,69 @@ public class SQFactory extends StoredQueryFactory {
 	@Override
 	public Metadata FindDocuments(StoredQuerySupport sqs) throws XdsException,
 			XDSRegistryOutOfResourcesException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Metadata FindFolders(StoredQuerySupport sqs) throws XdsException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Metadata FindSubmissionSets(StoredQuerySupport sqs)
 			throws XdsException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Metadata GetAssociations(StoredQuerySupport sqs)
 			throws XdsException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Metadata GetDocuments(StoredQuerySupport sqs) throws XdsException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Metadata GetDocumentsAndAssociations(StoredQuerySupport sqs)
 			throws XdsException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Metadata GetFolderAndContents(StoredQuerySupport sqs)
 			throws XdsException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Metadata GetFolders(StoredQuerySupport sqs) throws XdsException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Metadata GetFoldersForDocument(StoredQuerySupport sqs)
 			throws XdsException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Metadata GetRelatedDocuments(StoredQuerySupport sqs)
 			throws XdsException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Metadata GetSubmissionSetAndContents(StoredQuerySupport sqs)
 			throws XdsException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Metadata GetSubmissionSets(StoredQuerySupport sqs)
 			throws XdsException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

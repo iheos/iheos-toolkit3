@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.siteManagement.client;
 
 import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
 
 import java.io.Serializable;
@@ -72,9 +74,9 @@ public class Site  implements IsSerializable, Serializable {
 				}
 			}
 		}
-		
+		ActorType repository = ActorTypeFactory.find("repository");
 		for (TransactionBean b : repositories.transactions) {
-			if (ActorType.REPOSITORY.equals(b.actorType))
+			if (repository.equals(b.actorType))
 			for (TransactionBean c : repositories.transactions) {
 				if (b == c)
 					continue;
@@ -110,7 +112,8 @@ public class Site  implements IsSerializable, Serializable {
 	}
 	
 	public void addTransaction(String transactionName, String endpoint, boolean isSecure, boolean isAsync) {
-		addTransaction(new TransactionBean(transactionName, RepositoryType.NONE, endpoint, isSecure, isAsync));
+		TransactionType ttype = TransactionTypeFactory.find(transactionName);
+		addTransaction(new TransactionBean(ttype, RepositoryType.NONE, endpoint, isSecure, isAsync));
 	}
 
 	public void addTransaction(TransactionBean transbean) {

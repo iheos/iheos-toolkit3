@@ -13,14 +13,20 @@ import gov.nist.hit.ds.simSupport.client.EndpointActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.TextActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.TimeActorSimConfigElement;
-import gov.nist.hit.ds.simSupport.sim.SimDb;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.simSupport.simrepo.SimDb;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.Date;
 
+/**
+ * Tools for building a collection of commonly used ConfigElements for
+ * Simulators. Holds configuration while other agents add content.
+ * @author bmajur
+ *
+ */  
 public class GenericActorSimBuilder {
-	ActorSimConfig sConfig;
-	SimId simId;
+	ActorSimConfig sConfig;   // elements being constructed
+	SimId simId;  // needed to build endpoints
 	
 	public GenericActorSimBuilder(SimId simId) {
 		this.simId = simId;
@@ -32,23 +38,25 @@ public class GenericActorSimBuilder {
 	 * @param newId
 	 * @param actorType
 	 * @return
-	 * @throws XdsInternalException 
+	 * @throws ToolkitRuntimeException 
 	 */
 	public GenericActorSimBuilder buildGenericConfiguration(ActorType actorType)  {
-		sConfig = new ActorSimConfig(actorType).setExpiration(SimDb.getNewExpiration(ActorSimConfig.class));
+		sConfig = new ActorSimConfig(actorType).
+				setExpiration(SimDb.getNewExpiration(ActorSimConfig.class));
 		configureBaseElements();
 		return this;
 	}	
 
 	void configureBaseElements() {
 		sConfig.add(
-				new TimeActorSimConfigElement(ATConfigLabels.creationTime, new Date())
+				new TimeActorSimConfigElement(ATConfigLabels.creationTime, new Date().toString())
 				);
 		sConfig.add(
-				new TextActorSimConfigElement(ATConfigLabels.name, "Private").setEditable(true)
+				new TextActorSimConfigElement(ATConfigLabels.name, simId.getId()).setEditable(true)
 				);
 	}
 	
+	// TODO: this should verify correctness of config - sConfig created, simid set
 	public ActorSimConfig getActorSimConfig() {
 		return sConfig;
 	}

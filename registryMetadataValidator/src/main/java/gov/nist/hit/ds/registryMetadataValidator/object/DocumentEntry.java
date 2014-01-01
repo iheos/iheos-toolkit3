@@ -18,7 +18,7 @@ import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
 import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -202,7 +202,7 @@ public class DocumentEntry extends AbstractRegistryObject implements TopLevelObj
 		this.objectType = MetadataSupport.XDSDocumentEntry_objectType_uuid;
 	}
 
-	public DocumentEntry(Metadata m, OMElement de) throws XdsInternalException  {
+	public DocumentEntry(Metadata m, OMElement de) throws ToolkitRuntimeException  {
 		super(m, de);
 		mimeType = de.getAttributeValue(MetadataSupport.mime_type_qname);
 		objectType = de.getAttributeValue(MetadataSupport.object_type_qname);
@@ -216,7 +216,7 @@ public class DocumentEntry extends AbstractRegistryObject implements TopLevelObj
 		return super.equals(d);
 	}
 
-	public OMElement toXml() throws XdsInternalException  {
+	public OMElement toXml() throws ToolkitRuntimeException  {
 		ro = XmlUtil.om_factory.createOMElement(MetadataSupport.extrinsicobject_qnamens);
 		ro.addAttribute("id", id, null);
 		ro.addAttribute("mimeType", mimeType, null);

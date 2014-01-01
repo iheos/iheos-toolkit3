@@ -43,7 +43,7 @@ public class Installation {
 	 * @throws InitializationFailedException 
 	 * @throws IOException 
 	 */
-	public void initialize() throws InitializationFailedException, IOException {
+	public void initialize() throws InitializationFailedException {
 		if (initialized == true)
 			return;
 
@@ -250,7 +250,7 @@ public class Installation {
 		return new ExternalCacheManager(externalCache);
 	}
 
-	public File getDefaultCodesFile() throws IOException {
+	public File getDefaultCodesFile()  {
 		File envFile =  getExternalCacheManager().getEnvironmentFile();
 		String defaultEnvName = getPropertyManager().getPropertyMap().get(PropertyServiceManager.DEFAULT_ENVIRONMENT);
 		File env = new File(envFile,defaultEnvName);

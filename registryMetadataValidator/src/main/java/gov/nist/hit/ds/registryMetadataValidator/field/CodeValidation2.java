@@ -2,7 +2,7 @@ package gov.nist.hit.ds.registryMetadataValidator.field;
 
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 
 //this gets invoked from both Validator.java and directly from Repository.  Should optimize the implementation so that codes.xml
@@ -17,13 +17,13 @@ public class CodeValidation2 extends CodeValidationBase {
 
 		try {
 			loadCodes();
-		} catch (XdsInternalException e) {
+		} catch (ToolkitRuntimeException e) {
 			startUpError = e;
 		}
 	}
 
 	// this is used for easy access to mime lookup
-	public CodeValidation2() throws XdsInternalException {
+	public CodeValidation2() throws ToolkitRuntimeException {
 		super(1);
 	}
 

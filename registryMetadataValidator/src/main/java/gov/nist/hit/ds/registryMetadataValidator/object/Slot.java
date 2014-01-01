@@ -7,7 +7,7 @@ import gov.nist.hit.ds.registryMetadataValidator.datatype.FormatValidator;
 import gov.nist.hit.ds.registryMetadataValidator.datatype.FormatValidatorCalledIncorrectlyException;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -76,9 +76,9 @@ public class Slot {
 	public String getName() { return name; }
 	public List<String> getValues() { return values; }
 	
-	public String getValue(int index) throws  XdsInternalException {
+	public String getValue(int index) throws  ToolkitRuntimeException {
 		if (values.size() <= index)
-			throw new XdsInternalException(ownerIdentifyingString() + ": Slot " + name + " does not have a " + index + "th value");
+			throw new ToolkitRuntimeException(ownerIdentifyingString() + ": Slot " + name + " does not have a " + index + "th value");
 		return values.get(index);
 	}
 	
@@ -113,7 +113,7 @@ public class Slot {
 				validator.validate(myElement);
 			} catch (FormatValidatorCalledIncorrectlyException e1) {
 				// hmmm - I guess we give up here
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new XdsInternalException("Slot#validate: the validator " + validator.getClass().getName() + " implements no validate methods"));
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ToolkitRuntimeException("Slot#validate: the validator " + validator.getClass().getName() + " implements no validate methods"));
 			}
 		}
 	}

@@ -7,7 +7,7 @@ import gov.nist.hit.ds.registrysupport.logging.LoggerException;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +20,13 @@ public class Structure {
 	boolean is_submit;
 
 
-	public Structure(Metadata m, boolean is_submit) throws XdsInternalException {
+	public Structure(Metadata m, boolean is_submit) throws ToolkitRuntimeException {
 		this.m = m;
 		this.rel = new RegistryErrorListGenerator();
 		this.is_submit = is_submit;
 	}
 
-	public Structure(Metadata m, boolean is_submit, RegistryErrorListGenerator rel) throws XdsInternalException {
+	public Structure(Metadata m, boolean is_submit, RegistryErrorListGenerator rel) throws ToolkitRuntimeException {
 		this.m = m;
 		this.is_submit = is_submit;
 		this.rel = rel;

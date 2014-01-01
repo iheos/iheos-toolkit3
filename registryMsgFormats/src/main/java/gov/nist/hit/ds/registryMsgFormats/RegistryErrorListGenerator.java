@@ -14,7 +14,7 @@ import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.hit.ds.xdsException.XDSMissingDocumentException;
 import gov.nist.hit.ds.xdsException.XDSRepositoryMetadataException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -96,17 +96,17 @@ public class RegistryErrorListGenerator implements IAssertionGroup {
 		return err;
 	}
 
-	public void addRegistryErrorsFromResponse(OMElement registryResponse) throws XdsInternalException {
+	public void addRegistryErrorsFromResponse(OMElement registryResponse) throws ToolkitRuntimeException {
 		OMElement rel = XmlUtil.firstChildWithLocalName(registryResponse, "RegistryErrorList");
 		if (rel != null)
 			addRegistryErrorList(rel);
 	}
 
-	public void addRegistryErrorList(OMElement rel) throws XdsInternalException {
+	public void addRegistryErrorList(OMElement rel) throws ToolkitRuntimeException {
 		addRegistryErrorList(rel, new ArrayList<String>());
 	}
 
-	void addRegistryErrorList(OMElement rel, List<String> errorCodesToFilter) throws XdsInternalException {
+	void addRegistryErrorList(OMElement rel, List<String> errorCodesToFilter) throws ToolkitRuntimeException {
 		for (@SuppressWarnings("unchecked")
 		Iterator<OMElement> it=rel.getChildElements(); it.hasNext(); ) {
 			OMElement registry_error = (OMElement) it.next();
@@ -208,12 +208,10 @@ public class RegistryErrorListGenerator implements IAssertionGroup {
 	}
 
 	public void detail(String msg) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void externalChallenge(String msg) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -253,7 +251,6 @@ public class RegistryErrorListGenerator implements IAssertionGroup {
 	}
 
 	public void warning(Code code, ErrorContext errorContext, String location) {
-		// TODO Auto-generated method stub
 	}
 
 	public ErrorRecorder buildNewErrorRecorder() {
@@ -261,52 +258,42 @@ public class RegistryErrorListGenerator implements IAssertionGroup {
 	}
 
 	public int getNbErrors() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public void concat(IAssertionGroup er) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public List<ValidatorErrorItem> getErrMsgs() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public ErrorRecorderBuilder getErrorRecorderBuilder() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void success(String dts, String name, String found, String expected, String RFC) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void error(String dts, String name, String found, String expected, String RFC) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void warning(String dts, String name, String found, String expected, String RFC) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void info(String dts, String name, String found, String expected, String RFC) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void summary(String msg, boolean success, boolean part) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void warning(String code, ErrorContext context, String location) {
-		// TODO Auto-generated method stub
 		
 	}
 }

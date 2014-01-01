@@ -21,7 +21,6 @@ public class MyComponent implements SimComponent {
 
 	@Override
 	public void setAssertionGroup(AssertionGroup er) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -31,7 +30,6 @@ public class MyComponent implements SimComponent {
 
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
-		// TODO Auto-generated method stub
 		
 	}
 

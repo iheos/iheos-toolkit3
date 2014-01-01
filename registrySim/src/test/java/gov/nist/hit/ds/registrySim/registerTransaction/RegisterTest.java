@@ -9,14 +9,14 @@ import gov.nist.hit.ds.httpSoapValidator.components.parsers.SoapMessageParser;
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
-import gov.nist.hit.ds.registrySim.store.RegIndex;
+import gov.nist.hit.ds.registrySim.metadataModel.RegIndex;
 import gov.nist.hit.ds.registrySim.transactions.RegisterTransactionSim;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.event.EventBuilder;
-import gov.nist.hit.ds.simSupport.sim.SimDb;
+import gov.nist.hit.ds.simSupport.simrepo.SimDb;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.xml.Parse;
 import gov.nist.hit.ds.xdsException.XMLParserException;
@@ -78,6 +78,7 @@ public class RegisterTest {
 		registerTransactionSim.run(null);
 		if (!event.hasErrors())
 			fail("Has Errors");
+		event.flush();
 	}
 	
 	@Test
@@ -86,6 +87,7 @@ public class RegisterTest {
 		registerTransactionSim.run(null);
 		if (event.hasErrors())
 			fail("Has Errors");
+		event.flush();
 	}
 	
 	@Test
@@ -94,6 +96,7 @@ public class RegisterTest {
 		registerTransactionSim.run(null);
 		if (!event.hasErrors())
 			fail("Has no Errors");
+		event.flush();
 	}
 	
 	class XmlHolder implements XmlMessage {
@@ -101,7 +104,6 @@ public class RegisterTest {
 		
 		@Override
 		public OMElement getXml() {
-			// TODO Auto-generated method stub
 			return xml;
 		}
 		

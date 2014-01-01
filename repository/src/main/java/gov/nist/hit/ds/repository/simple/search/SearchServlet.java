@@ -141,7 +141,7 @@ public class SearchServlet extends HttpServlet {
 			}
 
 			String result = getAsset(repos, assetId, level, level);
-			response.getWriter().write(printReport(result));
+			response.getWriter().write(printReport(result,acs));
 		 
 		} else {
 			throw new ServletException(USAGE_STR);			
@@ -158,13 +158,24 @@ public class SearchServlet extends HttpServlet {
 		throw new RepositoryException("Access type "+ reposSrc +" not found");
 	}
 	
-	private String printReport(String rpt) {
+	private String printReport(String rpt, Access acs)  {
+		
+		
+		String pathStr;
+		try {
+			pathStr = Configuration.getRepositorySrc(acs).getLocation().toString();
+		} catch (RepositoryException e) {
+			pathStr = e.toString();
+		}
+		
 		// Exclude this wrapper if snippet is requested 
 		if (rpt==null || "".equals(rpt)) {
-			rpt = "No results found: <ol>" +
+			rpt = "<ul><li>No results found: <ol>" +
 					"<li>Has the repository folder been renamed? " +
-					"<ul><li>Assets within a repository have the " + PropertyKey.REPOSITORY_ID + " coded with the folder name. The folder name must match the property value at all times." +
-							"</li></ul></li></ol>";
+					"<ul><li>Assets within a repository should have the " + PropertyKey.REPOSITORY_ID + " coded within the properties file. A corresponding folder name on the filesystem must match the specified property value at all times." +
+							"</li></ul></li></ol></li></ul><ul>" +
+							"<li>Configuration:<ul>" +  acs.name() +  " source:"+ pathStr  +"</ul></li></ul>";					
+			
 		}
 		return "<html><body style='font-family:arial,verdana,sans-serif;'>" + rpt + "</body></html>";
 	}
@@ -308,7 +319,7 @@ public class SearchServlet extends HttpServlet {
 		if (reportType==1) {
 		sb.append(
 				"<tr bgcolor='" + ((rowCt%2 == 0)?"#E6E6FA":"")   + "'><td>"	+ a.getId().toString() + "</td>"
-				+ "<td>"	+ a.getAssetType().getKeyword() + "</td>"
+				+ "<td>"	+ ((a.getAssetType()!=null)?a.getAssetType().getKeyword():"") + "</td>"
 				+ "<td>"	+ ((a.getCreatedDate()!=null)?a.getCreatedDate():"") + "</td>"
 				+ "<td>"	+ ((a.getMimeType()!=null)?a.getMimeType():"") + "</td>"
 				+"</tr>"

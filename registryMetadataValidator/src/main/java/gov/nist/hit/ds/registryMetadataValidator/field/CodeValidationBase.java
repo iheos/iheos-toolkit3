@@ -11,7 +11,7 @@ import gov.nist.hit.ds.utilities.xml.Util;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
 import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,16 +42,16 @@ public class CodeValidationBase {
 
 	CodeValidationBase() {}
 	
-	CodeValidationBase(int ignore) throws XdsInternalException {
+	CodeValidationBase(int ignore) throws ToolkitRuntimeException {
 		loadCodes();
 	}
 	
-	public void setValidationContext(ValidationContext vc) throws XdsInternalException {
+	public void setValidationContext(ValidationContext vc) throws ToolkitRuntimeException {
 		this.vc = vc;
 		loadCodes();
 	}
 	
-	void loadCodes() throws XdsInternalException {
+	void loadCodes() throws ToolkitRuntimeException {
 		if (codes != null)
 			return;
 		System.out.println("Loading Codes");
@@ -76,7 +76,7 @@ public class CodeValidationBase {
 				from = fileCodesLocation;
 			}
 			catch (Exception e) {
-				throw new XdsInternalException("codes.xml file cannot be loaded from " + fileCodesLocation, e);
+				throw new ToolkitRuntimeException("codes.xml file cannot be loaded from " + fileCodesLocation, e);
 			}
 		}
 //		else {
@@ -98,15 +98,15 @@ public class CodeValidationBase {
 //			}
 //		}
 		if (codes_string == null) 
-			throw new XdsInternalException("CodeValidation.init(): GET codes.xml returned NULL from " + from);
+			throw new ToolkitRuntimeException("CodeValidation.init(): GET codes.xml returned NULL from " + from);
 		if (codes_string.equals("")) 
-			throw new XdsInternalException("CodeValidation.init(): GET codes.xml returned enpty from " + from);
+			throw new ToolkitRuntimeException("CodeValidation.init(): GET codes.xml returned enpty from " + from);
 
 		logger.info("Codes loaded from " + from);
 		
 		codes = Util.parse_xml(codes_string);
 		if (codes == null)
-			throw new XdsInternalException("CodeValidation: cannot parse code configuration file from " + from);
+			throw new ToolkitRuntimeException("CodeValidation: cannot parse code configuration file from " + from);
 
 		assigning_authorities = new ArrayList<String>();
 		for (OMElement aa_ele : XmlUtil.childrenWithLocalName(codes, "AssigningAuthority")) 
@@ -117,7 +117,7 @@ public class CodeValidationBase {
 		build_mime_map();
 	}
 
-	void build_mime_map() throws XdsInternalException {
+	void build_mime_map() throws ToolkitRuntimeException {
 		QName name_att_qname = new QName("name");
 		QName code_att_qname = new QName("code");
 		QName ext_att_qname = new QName("ext");
@@ -130,7 +130,7 @@ public class CodeValidationBase {
 				break;
 			}
 		}
-		if (mime_type_section == null) throw new XdsInternalException("CodeValidation2.java: Configuration Error: Cannot find mime type table");
+		if (mime_type_section == null) throw new ToolkitRuntimeException("CodeValidation2.java: Configuration Error: Cannot find mime type table");
 
 		mime_map = new HashMap<String, String>();
 		ext_map = new HashMap<String, String>();
@@ -257,7 +257,7 @@ public class CodeValidationBase {
 				Classification cl = null;
 				try {
 					cl = new Classification(m, cl_ele);
-				} catch (XdsInternalException e) {
+				} catch (ToolkitRuntimeException e) {
 					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
 					continue;
 				}

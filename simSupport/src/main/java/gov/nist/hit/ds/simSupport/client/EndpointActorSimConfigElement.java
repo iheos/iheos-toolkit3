@@ -11,6 +11,8 @@ public class EndpointActorSimConfigElement extends
 
 	private static final long serialVersionUID = 532031604752465534L;
 
+	public EndpointActorSimConfigElement() { }
+	
 	public EndpointActorSimConfigElement(EndpointLabel label, String endpoint) {
 		this.name = label.get();
 		this.type = ParamType.ENDPOINT;

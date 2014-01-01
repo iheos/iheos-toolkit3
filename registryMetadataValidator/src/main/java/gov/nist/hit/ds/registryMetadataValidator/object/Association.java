@@ -7,7 +7,7 @@ import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +51,7 @@ public class Association extends AbstractRegistryObject implements TopLevelObjec
 	}
 
 
-	public Association(Metadata m, OMElement ro, ValidationContext vc) throws XdsInternalException  {
+	public Association(Metadata m, OMElement ro, ValidationContext vc) throws ToolkitRuntimeException  {
 		super(m, ro);
 		source = ro.getAttributeValue(MetadataSupport.source_object_qname);
 		target = ro.getAttributeValue(MetadataSupport.target_object_qname);
@@ -91,7 +91,7 @@ public class Association extends AbstractRegistryObject implements TopLevelObjec
 
 	}
 
-	public OMElement toXml() throws XdsInternalException  {
+	public OMElement toXml() throws ToolkitRuntimeException  {
 		ro = XmlUtil.om_factory.createOMElement(MetadataSupport.association_qnamens);
 		ro.addAttribute("id", id, null);
 		ro.addAttribute("sourceObject", source, null);

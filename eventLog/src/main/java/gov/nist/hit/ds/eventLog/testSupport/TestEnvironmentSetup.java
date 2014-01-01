@@ -32,7 +32,6 @@ public class TestEnvironmentSetup {
 		try {
 			Configuration.configuration();
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 		return this;

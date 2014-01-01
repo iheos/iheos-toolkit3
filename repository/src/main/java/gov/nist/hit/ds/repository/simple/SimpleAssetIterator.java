@@ -7,10 +7,6 @@ import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.Type;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.SimpleAsset;
-import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
-import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.io.File;
@@ -25,7 +21,7 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	 */
 	private static final long serialVersionUID = -679485554932669997L;
 	File reposDir = null;
-	String[] assetFileNames;
+	File[] assetFileNames;
 	int assetFileNamesIndex = 0;
 	Id repositoryId = null;
 	boolean[] selections = null;
@@ -35,8 +31,11 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	public SimpleAssetIterator(Repository repos) throws gov.nist.hit.ds.repository.api.RepositoryException {
 		setRepository(repos);
 		this.repositoryId = repos.getId();
-		reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());		
-		assetFileNames = reposDir.list(this);
+		// reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());
+		reposDir = repos.getRoot();
+		List<File> fList = setupList(reposDir);
+		
+		assetFileNames = fList.toArray(new File[fList.size()]);		
 	}
 	
 	/**
@@ -49,8 +48,27 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		setRepository(repos);
 		this.repositoryId = repos.getId();
 		this.type = type;
-		reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());
-		assetFileNames = reposDir.list(this);
+		// reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());
+		reposDir = repos.getRoot();
+		List<File> fList = setupList(reposDir);
+		
+		assetFileNames = fList.toArray(new File[fList.size()]);				
+	}
+	
+	private List<File> setupList(File dir) {		
+ 		ArrayList<File> af = new ArrayList<File>();
+		File[] assetFiles = dir.listFiles(this);
+				
+		for (File f : assetFiles) {
+			if (f.isDirectory()) {
+				af.addAll(setupList(f));
+			} else {
+				af.add(f);				
+			}
+		}
+		
+		return af;
+		// assetFileNames = reposDir.list(this);
 	}
 	
 	@Override
@@ -65,10 +83,15 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	public Asset nextAsset() throws RepositoryException {
 		if (!hasNextAsset())
 			throw new RepositoryException(RepositoryException.NO_MORE_ITERATOR_ELEMENTS);
-		String filename = assetFileNames[assetFileNamesIndex++];
-		Id assetId = Configuration.getAssetIdFromFilename(filename);
+		File filename = assetFileNames[assetFileNamesIndex++];
+
 		Repository repos = new RepositoryFactory(getRepository().getSource()).getRepository(repositoryId);
-		return repos.getAsset(assetId);
+		
+		return repos.getAssetByPath(filename);
+		
+		// This should not be required because the filename is already available for direct loading purposes
+		// Id assetId = Configuration.getAssetIdFromFilename(filename.getName());
+		// return repos.getAsset(assetId);
 	}
 	
 	/**
@@ -90,12 +113,12 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	public SimpleAssetIterator getAssetIteratorFromSelections() throws RepositoryException {
 		SimpleAssetIterator it = new SimpleAssetIterator(getRepository());
 		it.repositoryId = repositoryId;
-		it.assetFileNames = (String[]) getSelectedFileNames().toArray();
+		it.assetFileNames = (File[]) getSelectedFileNames().toArray();
 		return it;
 	}
 	
-	List<String> getSelectedFileNames() {
-		List<String> selectedNames = new ArrayList<String>();
+	List<File> getSelectedFileNames() {
+		List<File> selectedNames = new ArrayList<File>();
 		for (int i=0; i<assetFileNames.length; i++) {
 			if (selections[i])
 				selectedNames.add(assetFileNames[i]);
@@ -104,15 +127,21 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	}
 
 	@Override
-	public boolean accept(File arg0, String arg1) {
-		if (arg1.startsWith("repository")) return false;  // not an asset
-		if (!arg1.endsWith(Configuration.PROPERTIES_FILE_EXT)) return false;  // not an asset property file
+	public boolean accept(File dir, String name) {
+		if (name.equals("repository." + Configuration.PROPERTIES_FILE_EXT)) return false;  // not an asset
+		File f = new File(dir + File.separator + name);
+		if (f.isDirectory()) return true; // Look for child assets
+		if (f.isFile() && !name.endsWith(Configuration.PROPERTIES_FILE_EXT)) return false;  // not an asset property file
 		// parent restriction?
 		if (type == null) return true;    // no type restriction
-		Id assetId = Configuration.getAssetIdFromFilename(arg1);
+		// Id assetId = Configuration.getAssetIdFromFilename(name);
 		
 		try {			
-			SimpleAsset a =  (SimpleAsset) getRepository().getAsset(assetId);
+			// This should not be required because the filename is already available for direct loading purposes
+			// SimpleAsset a =  (SimpleAsset) getRepository().getAsset(assetId);
+			
+			Asset a =  getRepository().getAssetByPath(new File(dir + File.separator + name));
+			
 			String aTypeStr = a.getProperty("type");
 			Type aType = new SimpleType(aTypeStr);
 			return type.isEqual(aType);

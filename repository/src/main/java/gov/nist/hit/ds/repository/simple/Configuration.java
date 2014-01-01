@@ -12,8 +12,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 
 /**
 * Singleton that represents the repository configuration
@@ -21,6 +21,8 @@ import org.apache.log4j.Logger;
 */
 public class Configuration {
 	public static final String STD_PROPERTIES_FILE_EXT = "properties";
+	public static final String DOT_SEPARATOR = ".";
+	public static final String PARENT_TAG = "parent";
 	public static final String PROPERTIES_FILE_EXT = "props.txt";
 	public static final String CONTENT_FILE_EXT = "bytes";
 	public static final String CONTENT_TEXT_EXT = "text";
@@ -33,7 +35,7 @@ public class Configuration {
     public static final String CONFIGURATION_WARNING = "Configuration warning";
 
 	private static ArrayList<RepositorySource> repositorySources = new ArrayList<RepositorySource>();
-	static final Logger logger = Logger.getLogger(Configuration.class);
+	static final Logger logger = Logger.getLogger(Configuration.class.getName());
 	private static final String REPOSITORY_SOURCE_DIRNAME = "repositories";
 
 	
@@ -331,19 +333,6 @@ public class Configuration {
 	}
 	*/
 	
-	
-
-	public static Id getAssetIdFromFilename(String filename) {
-		File fn = new File(filename);
-		String fullName = fn.getName();
-		// extract id from filename
-		String[] parts = fullName.split("\\.");
-		if (parts != null && parts.length > 0)
-			return new SimpleId(parts[0]);
-		else
-			return new SimpleId(fullName);
-	}
-
 	public static ArrayList<RepositorySource> getRepositorySources() {
 		return repositorySources;
 	}

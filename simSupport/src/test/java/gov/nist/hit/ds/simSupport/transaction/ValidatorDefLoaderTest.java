@@ -28,20 +28,17 @@ public class ValidatorDefLoaderTest {
 		try {
 			l.load();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			l.getProperties().toString();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		try {
 			assertTrue("b".equals(l.getProperties().getProperty("a")));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

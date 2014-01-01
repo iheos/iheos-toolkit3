@@ -2,7 +2,7 @@ package gov.nist.hit.ds.registrySim.sq.generic.support;
 
 import gov.nist.hit.ds.docRef.SqDocRef;
 import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -93,7 +93,7 @@ public class SqParams {
 			throw new MetadataException("Parameter " + name + " - expecting a number but got " + o.getClass().getName() + " instead", SqDocRef.Request_parms);
 	}
 
-	public List<String> getListParm(String name) throws XdsInternalException, MetadataException {
+	public List<String> getListParm(String name) throws ToolkitRuntimeException, MetadataException {
 		Object o = params.get(name);
 		if (o == null)
 			return null;
@@ -104,10 +104,10 @@ public class SqParams {
 				throw new MetadataException("Parameter " + name + " is an empty list", SqDocRef.Request_parms);
 			return a;
 		}
-		throw new XdsInternalException("get_arraylist_parm(): bad type = " + o.getClass().getName());
+		throw new ToolkitRuntimeException("get_arraylist_parm(): bad type = " + o.getClass().getName());
 	}
 
-	public List<Object> getAndorParm(String name) throws XdsInternalException, MetadataException {
+	public List<Object> getAndorParm(String name) throws ToolkitRuntimeException, MetadataException {
 		Object o = params.get(name);
 		if (o == null)
 			return null;
@@ -118,10 +118,10 @@ public class SqParams {
 				throw new MetadataException("Parameter " + name + " is an empty list", SqDocRef.Request_parms);
 			return a;
 		}
-		throw new XdsInternalException("get_arraylist_parm(): bad type = " + o.getClass().getName());
+		throw new ToolkitRuntimeException("get_arraylist_parm(): bad type = " + o.getClass().getName());
 	}
 	
-	public SQCodedTerm getCodedParm(String name) throws MetadataException, XdsInternalException {
+	public SQCodedTerm getCodedParm(String name) throws MetadataException, ToolkitRuntimeException {
 		Object o = params.get(name);
 		if (o == null)
 			return null;
@@ -132,7 +132,7 @@ public class SqParams {
 			return term;
 		}
 			
-		throw new XdsInternalException("getCodedParm(): bad type = " + o.getClass().getName());
+		throw new ToolkitRuntimeException("getCodedParm(): bad type = " + o.getClass().getName());
 	}
 
 	public boolean isAnd(Object values) {

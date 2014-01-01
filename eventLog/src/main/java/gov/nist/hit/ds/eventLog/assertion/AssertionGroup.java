@@ -27,7 +27,7 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	List<Assertion> assertionList = new ArrayList<Assertion>();
 	AssertionStatus maxStatus = AssertionStatus.SUCCESS;
 	String validatorName = "AssertionGroup";
-	boolean saveInLog = false;
+	boolean saveInLog = true;
 	
 	public boolean isSaveInLog() {
 		return saveInLog;
@@ -111,7 +111,6 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	 * Each assert method in SimComponentBase is backed by an
 	 * assert method below.   
 	 * 
-	 * TODO: These need to be split off as a separate class ... I think.
 	 * 
 	 *************************************************************/
 
@@ -343,46 +342,39 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 	@Override
 	public void success(String dts, String name, String found, String expected,
 			String RFC) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void error(String dts, String name, String found, String expected,
 			String RFC) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void warning(String dts, String name, String found, String expected,
 			String RFC) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void info(String dts, String name, String found, String expected,
 			String RFC) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void summary(String msg, boolean success, boolean part) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void finish() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void showErrorInfo() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -393,31 +385,26 @@ public class AssertionGroup implements IAssertionGroup, Enumeration<Assertion> {
 
 	@Override
 	public int getNbErrors() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public List<ValidatorErrorItem> getErrMsgs() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public ErrorRecorder buildNewErrorRecorder() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public ErrorRecorderBuilder getErrorRecorderBuilder() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void concat(IAssertionGroup er) {
-		// TODO Auto-generated method stub
 
 	}
 }

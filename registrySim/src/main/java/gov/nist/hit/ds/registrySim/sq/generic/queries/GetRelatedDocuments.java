@@ -9,7 +9,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.List;
 
@@ -56,7 +56,7 @@ abstract public class GetRelatedDocuments extends StoredQuery {
 	protected String uuid;
 	protected List<String> assoc_types;
 
-	void parseParameters() throws XdsInternalException, XdsException, LoggerException {
+	void parseParameters() throws ToolkitRuntimeException, XdsException, LoggerException {
 		uid 			= sqs.params.getStringParm("$XDSDocumentEntryUniqueId");
 		uuid 		    = sqs.params.getStringParm("$XDSDocumentEntryEntryUUID");
 		assoc_types 	= sqs.params.getListParm("$AssociationTypes");
@@ -64,7 +64,7 @@ abstract public class GetRelatedDocuments extends StoredQuery {
 
 	/**
 	 * Implementation of Stored Query specific logic including parsing and validating parameters.
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws XdsException
 	 * @throws LoggerException
 	 * @throws XDSRegistryOutOfResourcesException
@@ -75,7 +75,7 @@ abstract public class GetRelatedDocuments extends StoredQuery {
 		parseParameters();
 
 		if (uuid == null && uid == null) 
-			throw new XdsInternalException("GetRelatedDocuments Stored Query");
+			throw new ToolkitRuntimeException("GetRelatedDocuments Stored Query");
 		return runImplementation();
 	}
 

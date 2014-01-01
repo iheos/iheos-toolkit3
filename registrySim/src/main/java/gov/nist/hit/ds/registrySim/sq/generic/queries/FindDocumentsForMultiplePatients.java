@@ -13,7 +13,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,12 +49,12 @@ abstract public class FindDocumentsForMultiplePatients extends StoredQuery {
 
 	/**
 	 * Implementation of Stored Query specific logic including parsing and validating parameters.
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws XdsException
 	 * @throws LoggerException
 	 * @throws XDSRegistryOutOfResourcesException
 	 */
-	public Metadata runSpecific() throws XdsInternalException, XdsException, LoggerException, XDSRegistryOutOfResourcesException {
+	public Metadata runSpecific() throws ToolkitRuntimeException, XdsException, LoggerException, XDSRegistryOutOfResourcesException {
 
 		validateParameters();
 
@@ -125,7 +125,7 @@ abstract public class FindDocumentsForMultiplePatients extends StoredQuery {
 	protected List<String> status;
 	protected List<String> author_person;
 
-	void parseParameters() throws XdsInternalException, XdsException, LoggerException {
+	void parseParameters() throws ToolkitRuntimeException, XdsException, LoggerException {
 
 		patient_id                        = sqs.params.getListParm   ("$XDSDocumentEntryPatientId");
 

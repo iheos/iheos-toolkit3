@@ -8,7 +8,7 @@ import gov.nist.hit.ds.registryMetadataValidator.datatype.DtmFormat;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -107,7 +107,7 @@ public class Folder extends AbstractRegistryObject implements TopLevelObject {
 	}
 
 
-	public Folder(Metadata m, OMElement ro) throws XdsInternalException  {
+	public Folder(Metadata m, OMElement ro) throws ToolkitRuntimeException  {
 		super(m, ro);
 	}
 	
@@ -126,7 +126,7 @@ public class Folder extends AbstractRegistryObject implements TopLevelObject {
 		return "Folder(" + getId() + ")";	
 	}
 
-	public OMElement toXml() throws XdsInternalException  {
+	public OMElement toXml() throws ToolkitRuntimeException  {
 		ro = XmlUtil.om_factory.createOMElement(MetadataSupport.registrypackage_qnamens);
 		ro.addAttribute("id", id, null);
 		if (status != null)

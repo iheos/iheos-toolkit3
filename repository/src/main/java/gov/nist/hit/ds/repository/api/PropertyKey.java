@@ -60,10 +60,10 @@ public enum PropertyKey {
            }
        },
        MODIFIED_DATE() {
-       	@Override
-           public String toString() {
-               return "modifiedDate";
-           }
+          	@Override
+              public String toString() {
+                  return "modifiedDate";
+              }
        },
        PARENT_ID(){
            @Override
@@ -82,6 +82,12 @@ public enum PropertyKey {
            public String toString() {
                return "status";
            }
-       };
+       },
+       UPDATED_DATE() {
+          	@Override
+            public String toString() {
+                return "updatedDate";
+            }
+        };
 
    }

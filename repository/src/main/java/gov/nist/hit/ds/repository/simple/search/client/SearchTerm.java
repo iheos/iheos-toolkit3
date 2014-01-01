@@ -94,7 +94,7 @@ public class SearchTerm implements IsSerializable, Serializable {
 		setPropName(key.toString());
 		this.operator = op;
 		this.values = new String[]{value};
-	}	
+	}
 	
 	public SearchTerm(String propName, Operator op, String[] values) {
 		super();
@@ -159,7 +159,13 @@ public class SearchTerm implements IsSerializable, Serializable {
 		if (Operator.EQUALTOANY.equals(getOperator())) {
 			return getDbPropName() + getOperator().toString() + getValueAsCsv();
 		}
-		return getDbPropName() + getOperator().toString() + "'" + values[0] + "' ";
+		
+		String propName = getDbPropName();
+		if (null == values[0]) {
+			return propName + "is null ";
+		} else {
+			return propName + getOperator().toString() + "'" + values[0] + "' "; 
+		}		
 	}
 	
 	private String getValueAsCsv() {

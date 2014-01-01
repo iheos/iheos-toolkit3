@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.repository.simple;
 
 import static org.junit.Assert.*;
+import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -24,13 +25,15 @@ public class SimpleAssetIteratorTest {
 		
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		repos = fact.createRepository(
-				"This is my repository",
+				"Site repository",
 				"Description",
 				new SimpleType("simpleRepos"));
 		
-		repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
+		Asset a1 = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
+		assertNotNull(a1);
 
-		repos.createAsset("My Site", "This is my simple", new SimpleType("simple"));
+		Asset a2 = repos.createAsset("My Site", "This is my simple", new SimpleType("simple"));
+		assertNotNull(a2);
 	}
 
 	@Test
@@ -42,9 +45,6 @@ public class SimpleAssetIteratorTest {
 	
 	int assetCount(Type type) throws RepositoryException {
 		int count = 0;
-		
-		
-		
 		SimpleAssetIterator it = new SimpleAssetIterator(repos, type);
 		
 		while (it.hasNextAsset()) {

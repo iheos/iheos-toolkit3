@@ -387,7 +387,7 @@ public class SimEngine implements MessageValidatorEngine {
 	 * is parsed - a dynamic model.
 	 */
 	@Override
-	public void addMessageValidator(String stepName, MessageValidator v) {
+	public void appendMessageValidator(String stepName, MessageValidator v) {
 		v.setName(stepName);
 		SimComponent vs = v;
 		SimStep ss = new SimStep();

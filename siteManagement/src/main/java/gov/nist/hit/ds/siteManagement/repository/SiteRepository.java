@@ -15,7 +15,7 @@ import gov.nist.hit.ds.siteManagement.Sites;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.utilities.xml.OMFormatter;
 import gov.nist.hit.ds.utilities.xml.Parse;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.File;
 
@@ -85,20 +85,24 @@ public class SiteRepository {
 		return sites;
 	}
 	
-	public void save(Repository repos, Site site) throws Exception {
-		String assetName = site.getName();
-		if (assetName == null || assetName.equals(""))
-			throw new XdsInternalException("Cannot save site that does not have a name.");
-		Directory reposDirectory = new Directory();
-		Asset asset = repos.createNamedAsset(assetName, "", reposDirectory.getActorAssetType(), assetName);
-		
-		StringBuffer errs = new StringBuffer();
-		site.validate(errs);
-		if (errs.length() != 0)
-			throw new Exception("Validation Errors: " + errs.toString());
-		
-		OMElement xml = new SiteLoader().siteToXML(site);
-		asset.updateContent(new OMFormatter(xml).toString(), "text/xml");
+	public void save(Repository repos, Site site) throws ToolkitRuntimeException {
+		try {
+			String assetName = site.getName();
+			if (assetName == null || assetName.equals(""))
+				throw new ToolkitRuntimeException("Cannot save site that does not have a name.");
+			Directory reposDirectory = new Directory();
+			Asset asset = repos.createNamedAsset(assetName, "", reposDirectory.getActorAssetType(), assetName);
+			
+			StringBuffer errs = new StringBuffer();
+			site.validate(errs);
+			if (errs.length() != 0)
+				throw new ToolkitRuntimeException("Validation Errors: " + errs.toString());
+			
+			OMElement xml = new SiteLoader().siteToXML(site);
+			asset.updateContent(new OMFormatter(xml).toString(), "text/xml");
+		} catch (RepositoryException e) {
+			throw new ToolkitRuntimeException("Cannot save site <" + site.getName() + "> to repository", e);
+		}
 		
 	}
 	

@@ -9,7 +9,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ abstract public class GetDocuments extends StoredQuery {
 	protected List<String> lids;
 	protected String metadataLevel;
 	
-	void parseParameters() throws XdsInternalException, XdsException, LoggerException {
+	void parseParameters() throws ToolkitRuntimeException, XdsException, LoggerException {
 		uids = sqs.params.getListParm("$XDSDocumentEntryUniqueId");
 		uuids = sqs.params.getListParm("$XDSDocumentEntryEntryUUID");
 		lids = sqs.params.getListParm("$XDSDocumentEntryLogicalID");
@@ -69,7 +69,7 @@ abstract public class GetDocuments extends StoredQuery {
 	
 	/**
 	 * Implementation of Stored Query specific logic including parsing and validating parameters.
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws XdsException
 	 * @throws LoggerException
 	 * @throws XDSRegistryOutOfResourcesException
@@ -80,7 +80,7 @@ abstract public class GetDocuments extends StoredQuery {
 		parseParameters();
 		
 		if (uids == null && uuids == null && lids == null)
-			throw new XdsInternalException("GetDocuments Stored Query: Internal Error : GetDocuments.java#runSpecific : uuid not found, uid not found, and lids not found");
+			throw new ToolkitRuntimeException("GetDocuments Stored Query: Internal Error : GetDocuments.java#runSpecific : uuid not found, uid not found, and lids not found");
 
 		return runImplementation();
 	}

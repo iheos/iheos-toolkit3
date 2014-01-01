@@ -38,7 +38,9 @@ public class SimId implements IsSerializable, Serializable {
 	}
 	
 	public boolean equals(SimId otherId) {
-		return otherId != null && otherId.id != null && otherId.id.equals(id);
+		if (otherId == null) return false;
+		if (id == null && otherId.id == null) return true;
+		return otherId.id.equals(id);
 	}
 	
 	String getNewId() {

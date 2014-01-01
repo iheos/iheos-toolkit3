@@ -1,31 +1,30 @@
 package gov.nist.hit.ds.registrySim.transactions;
 
-import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.eventLog.assertion.ValidationRef;
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
 import gov.nist.hit.ds.registryMetadata.IdParser;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registryMetadata.MetadataParser;
-import gov.nist.hit.ds.registrySim.store.MetadataCollection;
-import gov.nist.hit.ds.registrySim.store.ProcessMetadataForRegister;
-import gov.nist.hit.ds.registrySim.store.ProcessMetadataInterface;
-import gov.nist.hit.ds.registrySim.store.RegIndex;
-import gov.nist.hit.ds.registrySim.store.RegistryFactory;
+import gov.nist.hit.ds.registrySim.metadataModel.MetadataCollection;
+import gov.nist.hit.ds.registrySim.metadataModel.ProcessMetadataForRegister;
+import gov.nist.hit.ds.registrySim.metadataModel.ProcessMetadataInterface;
+import gov.nist.hit.ds.registrySim.metadataModel.RegIndex;
+import gov.nist.hit.ds.registrySim.metadataModel.RegistryFactory;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
-import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import gov.nist.hit.ds.utilities.other.StringHashMapUtil;
 import gov.nist.hit.ds.valSupport.ValidationException;
 import gov.nist.hit.ds.valSupport.fields.UuidValidator;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +51,7 @@ public class RegisterTransactionSim extends SimComponentBase {
 	RegIndex regIndex;
 	MetadataCollection delta;
 	MetadataCollection mc;
+	ActorSimConfig actorSimConfig;
 	static Logger logger = Logger.getLogger(RegisterTransactionSim.class);
 	
 	// keep track of ids during processing
@@ -71,30 +71,25 @@ public class RegisterTransactionSim extends SimComponentBase {
 		if (body != null)
 			body = body.getFirstElement();
 	}
-	
-//	@Inject
-//	public void setSimDb(SimDb db) {
-//		this.db = db;
-//	}
-	
-	@Inject
-	public void setRegIndex(RegIndex regIndex) {
-		this.regIndex = regIndex;
-	}
-	
-	private void validateEndpoint() throws SoapFaultException {
-		if (!"rb".equals(simEndPoint.getTransaction()))
-				throw new SoapFaultException(
-						ag,
-						FaultCode.Receiver,
-						new ErrorContext("Configuration error, Register Transaction (rb) was expect: found (" + simEndPoint.getTransaction() + ") instead" )
-						);
-	}
 
+	@Inject
+	public void setActorSimConfig(ActorSimConfig actorSimConfig) {
+		this.actorSimConfig = actorSimConfig;
+	}
+	
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
 		logger.trace("Run RegisterTransactionSim");
-		validateEndpoint();
+		
+		Object x = actorSimConfig.getActorState();
+		if (x == null)
+			regIndex = new RegIndex();
+		else if (x instanceof RegIndex) 
+			regIndex = (RegIndex) x;
+		else
+			throw new ToolkitRuntimeException("RegisterTransactionSim: actor state of type <" + x.getClass().getName() + "> - must be <" + RegIndex.class.getName() + ">");
+		
+		regIndex.getMetadataCollection().setRegIndex(regIndex);
 		
 		// validate root elements
 		assertEquals("ProvideAndRegisterDocumentSetRequest", body.getLocalName(), 
@@ -230,7 +225,7 @@ public class RegisterTransactionSim extends SimComponentBase {
 		IdParser ra = new IdParser(m);
 		try {
 			symbolicToUUID = ra.compileSymbolicNamesIntoUuids();
-		} catch (XdsInternalException e1) {
+		} catch (ToolkitRuntimeException e1) {
 			symbolicToUUID = new HashMap<String, String>();
 			fail(new ValidationRef("RegTrans06", 
 							Code.XDSRegistryError, 
@@ -319,10 +314,10 @@ public class RegisterTransactionSim extends SimComponentBase {
 		} catch (Exception e1) {
 			fail("RegTrans09", Code.XDSRegistryError, "Failed to save metadata: " + e1.getMessage());
 			logger.debug("Error saving metadata: " + ExceptionUtil.exception_details(e1));
-			if (e1 instanceof RuntimeException) {
-				RuntimeException re = (RuntimeException) e1;
-				throw re;
-			}
+//			if (e1 instanceof RuntimeException) {
+//				RuntimeException re = (RuntimeException) e1;
+//				throw re;
+//			}
 		}
 	}
 
@@ -343,7 +338,6 @@ public class RegisterTransactionSim extends SimComponentBase {
 			try {
 				validator.validateUUID(uuid);
 			} catch (ValidationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				fail("RegTrans11", Code.XDSRegistryMetadataError, e.getMessage());
 			}

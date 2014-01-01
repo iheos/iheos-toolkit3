@@ -9,7 +9,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.List;
 
@@ -54,14 +54,14 @@ abstract public class GetDocumentsAndAssociations extends StoredQuery {
 	protected List<String> uids;
 	protected List<String> uuids;
 
-	void parseParameters() throws XdsInternalException, XdsException, LoggerException {
+	void parseParameters() throws ToolkitRuntimeException, XdsException, LoggerException {
 		uids = sqs.params.getListParm("$XDSDocumentEntryUniqueId");
 		uuids = sqs.params.getListParm("$XDSDocumentEntryEntryUUID");
 	}
 	
 	/**
 	 * Implementation of Stored Query specific logic including parsing and validating parameters.
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws XdsException
 	 * @throws LoggerException
 	 * @throws XDSRegistryOutOfResourcesException
@@ -72,7 +72,7 @@ abstract public class GetDocumentsAndAssociations extends StoredQuery {
 		parseParameters();
 
 		if (uuids == null && uids == null) 
-			throw new XdsInternalException("GetDocumentsAndAssociations Stored Query: $uuid not found as a multi-value parameter");
+			throw new ToolkitRuntimeException("GetDocumentsAndAssociations Stored Query: $uuid not found as a multi-value parameter");
 
 		return runImplementation();
 	}

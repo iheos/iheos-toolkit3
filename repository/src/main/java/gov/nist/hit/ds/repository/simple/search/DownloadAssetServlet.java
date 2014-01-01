@@ -1,11 +1,18 @@
 package gov.nist.hit.ds.repository.simple.search;
 
 import gov.nist.hit.ds.repository.api.Asset;
+import gov.nist.hit.ds.repository.api.AssetIterator;
+import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleRepository;
+import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
+import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
+import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
+import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,6 +38,11 @@ public class DownloadAssetServlet extends HttpServlet {
 		String reposSrc = request.getParameter("reposSrc");
 		String reposId = request.getParameter("reposId");
 		String assetId = request.getParameter("assetId");
+		String contentDisp = "inline"; // default
+		
+		if ("attachment".equals(request.getParameter("contentDisp"))) {
+			contentDisp = "attachment"; // override streamType
+		}
 		Access acs = null; 
 		
 		SimpleRepository repos = null;
@@ -52,15 +64,26 @@ public class DownloadAssetServlet extends HttpServlet {
 		
 		if (assetId!=null && reposId!=null) {
 			try {
+
+				Asset a = null; // repos.getAsset(new SimpleId(assetId));
 				
-				Asset a = repos.getAsset(new SimpleId(assetId));
+				SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+				criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO,assetId));			
+				
+				AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
+				
+				if (iter.hasNextAsset()) {
+					a = iter.nextAsset();
+				}
+
+				
 				if (a!=null) {
 					  response.setHeader("Cache-Control", "no-cache");
 					  response.setDateHeader("Expires", 0);
 					  response.setHeader("Pragma", "no-cache");
 					  response.setDateHeader("Max-Age", 0);
 					  
-					  response.setHeader("Content-Disposition", "inline;filename=\""+ a.getId().getIdString() + "." + a.getContentExtension()[2] + "\"");
+					  response.setHeader("Content-Disposition", contentDisp+ ";filename=\""+ a.getId().getIdString() + "." + a.getContentExtension()[2] + "\"");
 					  if (a.getMimeType()!=null) {
 						  response.setContentType(a.getMimeType());
 					  } else {

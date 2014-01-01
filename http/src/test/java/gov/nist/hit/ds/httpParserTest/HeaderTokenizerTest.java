@@ -163,7 +163,6 @@ public class HeaderTokenizerTest {
 			for (int i=0; i< al.size(); i++)
 				assertTrue(al.get(i).equals(tokens.get(i)));
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}

@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.registryMetadata;
 
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +11,10 @@ import org.apache.axiom.om.OMNamespace;
 
 abstract public class Translate extends MetadataSupport {
 
-	abstract public OMElement translate(OMElement ro2, boolean must_dup) throws XdsInternalException;
+	abstract public OMElement translate(OMElement ro2, boolean must_dup) throws ToolkitRuntimeException;
 	abstract OMElement deep_copy(OMElement from, OMNamespace new_namespace);
 
-	public List<OMElement> translate(List<OMElement> in, boolean must_dup) throws XdsInternalException {
+	public List<OMElement> translate(List<OMElement> in, boolean must_dup) throws ToolkitRuntimeException {
 		List<OMElement> out = new ArrayList<OMElement>();
 		for (int i=0; i<in.size(); i++) {
 			OMElement e = (OMElement) in.get(i);

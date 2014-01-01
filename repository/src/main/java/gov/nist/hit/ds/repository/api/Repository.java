@@ -4,6 +4,7 @@ import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Type;
 
+import java.io.File;
 import java.util.Properties;
 
 
@@ -360,8 +361,17 @@ public interface Repository extends java.io.Serializable {
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNIMPLEMENTED
      *         UNIMPLEMENTED}
      */
-    gov.nist.hit.ds.repository.api.PropertiesIterator getProperties()
+    gov.nist.hit.ds.repository.api.PropertiesIterator getPropertiesIterator()
         throws gov.nist.hit.ds.repository.api.RepositoryException;
+    
+    /**
+     * 
+     * @return Properties
+     * @throws RepositoryException
+     */
+	public java.util.Properties getProperties()
+			throws RepositoryException;
+
 
     /**
      * Get all the RecordStructures in this Repository.  RecordStructures are
@@ -617,6 +627,23 @@ public interface Repository extends java.io.Serializable {
      */
     public Asset getAssetByDate(gov.nist.hit.ds.repository.api.Id assetId, long date)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+    
+    /**
+     * 
+     */
+    public Asset getAssetByRelativePath(File assetPath)
+            throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+    /**
+     * 
+     * @param assetId
+     * @param date
+     * @return
+     * @throws gov.nist.hit.ds.repository.api.RepositoryException
+     */
+    public Asset getAssetByPath(File assetPath)
+            throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
      * Get all the dates for the Asset with the specified unique Id.  These
@@ -877,4 +904,5 @@ public interface Repository extends java.io.Serializable {
     
     public RepositorySource getSource() throws RepositoryException;
     public void setSource(RepositorySource source) throws RepositoryException;
+    public File getRoot() throws RepositoryException;
 }

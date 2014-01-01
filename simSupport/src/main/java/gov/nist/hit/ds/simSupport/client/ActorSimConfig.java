@@ -24,20 +24,25 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class ActorSimConfig implements IsSerializable, Serializable {
 
 	private static final long serialVersionUID = -736965164284950123L;
-	/**
-	 * Globally unique id for this simulator
-	 */
 	ActorType actorType;
 	Date expires;
 	boolean isExpired = false;
 	List<AbstractActorSimConfigElement> elements  = new ArrayList<AbstractActorSimConfigElement>();
+	Object actorState = null;
 	
+	public ActorSimConfig() { }
 	
+	/**
+	 * Set expiration date
+	 * @param expires
+	 * @return
+	 */
 	public ActorSimConfig setExpiration(Date expires) {
 		this.expires = expires;
 		return this;
 	}
 	public boolean isExpired() { return isExpired; }
+	
 	public void setExpired(boolean is) { isExpired = is; }
 	
 	public boolean hasExpired() {
@@ -61,15 +66,29 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		return buf.toString();
 	}
 	
+	/**
+	 * Build an ActorSimConfig based on the ActorType
+	 * @param actorType
+	 */
 	public ActorSimConfig(ActorType actorType) {
 		this.actorType = actorType;
 	}
 	
+	/**
+	 * Add a collection of config elements
+	 * @param elementList
+	 * @return
+	 */
 	public ActorSimConfig add(List<AbstractActorSimConfigElement> elementList) {
 		elements.addAll(elementList);
 		return this;
 	}
 
+	/**
+	 * Add a config element.
+	 * @param confElement
+	 * @return
+	 */
 	public ActorSimConfig add(AbstractActorSimConfigElement confElement) {
 		elements.add(confElement);
 		return this;
@@ -79,6 +98,10 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		return expires;
 	}
 	
+	/**
+	 * Return all the fixed (not editable in the UI) config elements.
+	 * @return
+	 */
 	public List<AbstractActorSimConfigElement> getFixed() {
 		List<AbstractActorSimConfigElement> fixed = new ArrayList<AbstractActorSimConfigElement>();
 		for (AbstractActorSimConfigElement ele : elements) {
@@ -88,8 +111,16 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		return fixed;
 	}
 	
+	/**
+	 * Return all config elements.
+	 * @return
+	 */
 	public List<AbstractActorSimConfigElement> getAll() { return elements; }
 	
+	/**
+	 * Return all the config elements that can be edited in the UI.
+	 * @return
+	 */
 	public List<AbstractActorSimConfigElement> getEditable() {
 		List<AbstractActorSimConfigElement> user = new ArrayList<AbstractActorSimConfigElement>();
 		for (AbstractActorSimConfigElement ele : elements) {
@@ -99,6 +130,11 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		return user;
 	}
 	
+	/**
+	 * Get the config element based on its name. 
+	 * @param name
+	 * @return config element or null if not defined.
+	 */
 	public AbstractActorSimConfigElement getByName(String name) {
 		if (name == null)
 			return null;
@@ -110,6 +146,13 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		return null;
 	}
 	
+	/**
+	 * Get endpoint given the type information. 
+	 * @param transType
+	 * @param tlsType
+	 * @param asyncType
+	 * @return endpoint or null if no endpoint matches the type information.
+	 */
 	public String getEndpoint(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
 		List<AbstractActorSimConfigElement> configs = findConfigs(new TransactionType[] { transType }, new TlsType[] { tlsType }, new AsyncType[] { asyncType });
 		if (configs.isEmpty())
@@ -117,6 +160,13 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		return configs.get(0).getValue();
 	}
 	
+	/**
+	 * Get config elements that match all the parameters.
+	 * @param transTypes
+	 * @param tlsTypes
+	 * @param asyncTypes
+	 * @return
+	 */
 	public List<AbstractActorSimConfigElement> findConfigs(TransactionType[] transTypes, TlsType[] tlsTypes, AsyncType[] asyncTypes)  {
 		List<AbstractActorSimConfigElement> simEles = new ArrayList<AbstractActorSimConfigElement>();
 		
@@ -170,6 +220,10 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		return simEles;
 	}
 	
+	/**
+	 * Delete the config element based on its name.
+	 * @param name
+	 */
 	public void deleteByName(String name) {
 		AbstractActorSimConfigElement ele = getByName(name);
 		if (ele != null)
@@ -179,5 +233,12 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	public ActorType getActorType() {
 		return actorType;
 	}
+
+	public boolean isActorType(ActorType actorType2) {
+		return actorType.equals(actorType2);
+	}
 	
+	public Object getActorState() {
+		return actorState;
+	}
 }

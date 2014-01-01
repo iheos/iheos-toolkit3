@@ -9,7 +9,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.List;
 
@@ -55,14 +55,14 @@ abstract public class GetFolders extends StoredQuery {
 	protected List<String> fol_uuid;
 	protected List<String> fol_uid;
 
-	void parseParameters() throws XdsInternalException, XdsException, LoggerException {
+	void parseParameters() throws ToolkitRuntimeException, XdsException, LoggerException {
 		fol_uuid = sqs.params.getListParm("$XDSFolderEntryUUID");
 		fol_uid = sqs.params.getListParm("$XDSFolderUniqueId");
 	}
 
 	/**
 	 * Implementation of Stored Query specific logic including parsing and validating parameters.
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws XdsException
 	 * @throws LoggerException
 	 * @throws XDSRegistryOutOfResourcesException
@@ -73,7 +73,7 @@ abstract public class GetFolders extends StoredQuery {
 		parseParameters();
 
 		if (fol_uuid == null && fol_uid == null) 
-			throw new XdsInternalException("GetFolders Stored Query");
+			throw new ToolkitRuntimeException("GetFolders Stored Query");
 		return runImplementation();
 	}
 

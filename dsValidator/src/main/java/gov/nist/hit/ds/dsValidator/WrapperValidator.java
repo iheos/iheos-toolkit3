@@ -9,7 +9,7 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.loader.ValidationContext;
 import gov.nist.hit.ds.valSupport.message.SchemaValidation;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -170,13 +170,13 @@ public class WrapperValidator extends MessageValidator {
 		return (OMElement) n; 
 	}
 
-	String schema_validate(OMElement ahqr, int metadata_type) throws XdsInternalException {
+	String schema_validate(OMElement ahqr, int metadata_type) throws ToolkitRuntimeException {
 		String schema_messages = null;
 		try {
 			schema_messages = SchemaValidation.validate(ahqr, metadata_type);
 			return schema_messages;
 		} catch (Exception e) {
-			throw new XdsInternalException("Schema Validation threw internal error: " + e.getMessage());
+			throw new ToolkitRuntimeException("Schema Validation threw internal error: " + e.getMessage());
 		}
 	}
 
@@ -232,19 +232,16 @@ public class WrapperValidator extends MessageValidator {
 
 	@Override
 	public void setDescription(String description) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void setEvent(Event event) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public boolean showOutputInLogs() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

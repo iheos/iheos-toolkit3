@@ -3,8 +3,10 @@ package gov.nist.hit.ds.simSupport.client;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
 abstract public class AbstractActorSimConfigElement implements IsSerializable, Serializable {
 
 	private static final long serialVersionUID = -5290538505675778269L;
@@ -53,9 +55,9 @@ abstract public class AbstractActorSimConfigElement implements IsSerializable, S
 		return this;
 	}
 
-	public AbstractActorSimConfigElement setValue(Boolean o) { 
-		value = o.toString();
-		return this;
-	}
+//	public AbstractActorSimConfigElement setValue(Boolean o) { 
+//		value = o.toString();
+//		return this;
+//	}
 
 }

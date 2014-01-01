@@ -8,7 +8,7 @@ import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import org.apache.axiom.om.OMElement;
 
@@ -24,7 +24,7 @@ public class RegistryResponseGenerator extends ResponseGenerator {
 		response = XmlUtil.om_factory.createOMElement("RegistryResponse", ebRSns);
 	}
 
-	public RegistryResponseGenerator(RegistryErrorListGenerator rel) throws XdsInternalException {
+	public RegistryResponseGenerator(RegistryErrorListGenerator rel) throws ToolkitRuntimeException {
 		super(rel);
 		response = XmlUtil.om_factory.createOMElement("RegistryResponse", ebRSns);
 	}

@@ -14,7 +14,6 @@ public abstract class NameValue implements IsSerializable, ModelElement {
 	
 	@Override
 	public AssertionGroup validate() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

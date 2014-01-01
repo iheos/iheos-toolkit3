@@ -8,7 +8,7 @@ import gov.nist.hit.ds.registryMsgFormats.RegistryError;
 import gov.nist.hit.ds.registryMsgFormats.RegistryResponse;
 import gov.nist.hit.ds.registryMsgFormats.RegistryResponseGenerator;
 import gov.nist.hit.ds.registryMsgFormats.RegistryResponseParser;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import org.apache.axiom.om.OMElement;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class RegistryResponseTest {
 		RegistryResponseParser respParser = new RegistryResponseParser(respMsg);
 		try {
 			assertFalse(respParser.is_error());
-		} catch (XdsInternalException e) {
+		} catch (ToolkitRuntimeException e) {
 			fail(e.getMessage());
 		}
 	}
@@ -44,7 +44,7 @@ public class RegistryResponseTest {
 		RegistryResponseParser respParser = new RegistryResponseParser(respMsg);
 		try {
 			assertTrue(respParser.is_error());
-		} catch (XdsInternalException e) {
+		} catch (ToolkitRuntimeException e) {
 			fail(e.getMessage());
 		}
 		try {
@@ -55,8 +55,7 @@ public class RegistryResponseTest {
 			assertTrue("msg".equals(err.getCodeContext().getMsg()));
 			assertTrue("resource".equals(err.getCodeContext().getResource()));
 			assertTrue("home".equals(err.getLocation()));
-		} catch (XdsInternalException e) {
-			// TODO Auto-generated catch block
+		} catch (ToolkitRuntimeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
@@ -76,7 +75,7 @@ public class RegistryResponseTest {
 		RegistryResponseParser respParser = new RegistryResponseParser(respMsg);
 		try {
 			assertTrue(respParser.is_error());
-		} catch (XdsInternalException e) {
+		} catch (ToolkitRuntimeException e) {
 			fail(e.getMessage());
 		}
 		try {
@@ -93,8 +92,7 @@ public class RegistryResponseTest {
 			assertTrue("warning msg".equals(err.getCodeContext().getMsg()));
 			assertTrue("warning resource".equals(err.getCodeContext().getResource()));
 			assertTrue("warning home".equals(err.getLocation()));
-		} catch (XdsInternalException e) {
-			// TODO Auto-generated catch block
+		} catch (ToolkitRuntimeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}

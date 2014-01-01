@@ -3,7 +3,7 @@ package gov.nist.hit.ds.registryMetadata;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.other.UuidAllocator;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -135,7 +135,7 @@ public class IdParser {
 	/*
 	 * Symbol Compiler
 	 */
-	public Map<String, String> compileSymbolicNamesIntoUuids () throws XdsInternalException {
+	public Map<String, String> compileSymbolicNamesIntoUuids () throws ToolkitRuntimeException {
 
 		// make list of all symbolic names used in metadata
 		// allocate UUID for these names
@@ -166,7 +166,7 @@ public class IdParser {
 				continue;
 			int idIndex = symbolicNames.indexOf(symbolicName);
 			if (idIndex == -1)
-				throw new XdsInternalException("Metadata:compileSymbolicNamesIntoUuids(): cannot find symbolic name " + symbolicName + " in tables");
+				throw new ToolkitRuntimeException("Metadata:compileSymbolicNamesIntoUuids(): cannot find symbolic name " + symbolicName + " in tables");
 			String uuid = (String) uuids.get(idIndex);
 			att.setAttributeValue(uuid);
 		}

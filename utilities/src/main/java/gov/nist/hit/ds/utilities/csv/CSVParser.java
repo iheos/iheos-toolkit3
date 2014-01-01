@@ -77,7 +77,6 @@ public class CSVParser {
 //			gConfigs = (GazelleConfigs) new CSVParser(new File("/Users/bill/tmp/toolkit/actors/all.csv")).getTable();
 //			
 //		} catch (IOException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //			System.exit(-1);
 //		}
@@ -97,7 +96,6 @@ public class CSVParser {
 //			new ConfigToXml(gConfigs, oConfigs, new File("/Users/bill/tmp/toolkit/actors")).run();
 //			
 //		} catch (IOException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //		

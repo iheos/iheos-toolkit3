@@ -1,17 +1,21 @@
 package gov.nist.hit.ds.siteManagement.client;
 
-import gov.nist.hit.ds.actorTransaction.ATFactory;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+/**
+ * Used with Site to define all the transaction a site can accept.
+ * @author bmajur
+ *
+ */
 public class TransactionCollection implements IsSerializable, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -102,20 +106,16 @@ public class TransactionCollection implements IsSerializable, Serializable {
 	}
 	
 	static TransactionType getTransactionFromCode(String transactionCode) {
-		return ATFactory.getTransactionFromCode(transactionCode);
+		return TransactionTypeFactory.find(transactionCode);
 	}
 	
 	static public String getTransactionName(String transactionCode) {
-		TransactionType tt = ATFactory.getTransactionFromCode(transactionCode);
+		TransactionType tt = getTransactionFromCode(transactionCode);
 		if (tt == null)
 			return "";
 		return tt.getName();
 	}
 
-	static public List<ActorType> getActorTypes() {
-		return Arrays.asList(ActorType.values());
-	}
-	
 	static List<String> asList(String[] arry) {
 		List<String> l = new ArrayList<String>();
 		
@@ -222,7 +222,7 @@ public class TransactionCollection implements IsSerializable, Serializable {
 //			throw new Exception("Actors.xml configuration problem: site " + collectionName + 
 //					" defines transaction " + t.toString() + " multiple times\n Relevant part of Site definition is:\n" + toString());
 		transactions.add(new TransactionBean(
-				transactionName, 	
+				TransactionTypeFactory.find(transactionName),
 				isRepositories ? RepositoryType.REPOSITORY : RepositoryType.NONE, 
 				endpoint, 
 				isSecure, 

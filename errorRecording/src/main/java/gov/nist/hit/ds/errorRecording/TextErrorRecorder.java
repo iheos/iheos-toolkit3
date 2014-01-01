@@ -160,7 +160,6 @@ public class TextErrorRecorder implements ErrorRecorder {
 
 	public void err(String code, String msg, String location, String severity,
 			String resource) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -210,12 +209,10 @@ public class TextErrorRecorder implements ErrorRecorder {
 	}
 
 	public void concat(ErrorRecorder er) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public List<ValidatorErrorItem> getErrMsgs() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -240,34 +237,28 @@ public class TextErrorRecorder implements ErrorRecorder {
 	}
 
 	public void summary(String msg, boolean success, boolean part) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(Code code, ErrorContext context, Object location) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(Code code, ErrorContext context, String location,
 			String severity) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void err(String code, ErrorContext context, String location,
 			String severity) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void warning(String code, ErrorContext context, String location) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void warning(Code code, ErrorContext context, String location) {
-		// TODO Auto-generated method stub
 		
 	}
 

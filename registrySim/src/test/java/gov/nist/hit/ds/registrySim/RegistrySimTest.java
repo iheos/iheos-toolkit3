@@ -28,12 +28,12 @@ import gov.nist.hit.ds.simSupport.components.parsers.SimEndpointParser;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.factory.SimulatorFactory;
 import gov.nist.hit.ds.simSupport.loader.ByConstructorLogLoader;
-import gov.nist.hit.ds.simSupport.sim.SimDb;
+import gov.nist.hit.ds.simSupport.simrepo.SimDb;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,7 +84,7 @@ public class RegistrySimTest {
 			SimId simId = new SimId(simIdString);
 			Simulator sim = null;
 			try {
-				SimulatorFactory simFactory = new SimulatorFactory().buildSimulator(simId);
+				SimulatorFactory simFactory = new SimulatorFactory().initializeSimulator(simId);
 				simFactory.addActorSim(ActorType.REGISTRY);
 				simDb = simFactory.save();
 				sim = simFactory.getSimulator();
@@ -132,7 +132,7 @@ public class RegistrySimTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
-		} catch (XdsInternalException e) {
+		} catch (ToolkitRuntimeException e) {
 			e.printStackTrace();
 			fail();
 		} catch (Exception e) {

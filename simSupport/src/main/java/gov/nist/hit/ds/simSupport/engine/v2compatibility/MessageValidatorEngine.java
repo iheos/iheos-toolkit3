@@ -9,6 +9,6 @@ public interface MessageValidatorEngine {
 	 * @param v - MessageValidator from v2 - corresponds to ValSim in v3.
 	 * @param er
 	 */
-	void addMessageValidator(String stepName, MessageValidator v);
+	void appendMessageValidator(String stepName, MessageValidator v);
 
 }

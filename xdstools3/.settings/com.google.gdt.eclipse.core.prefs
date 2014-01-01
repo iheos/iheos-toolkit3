@@ -1,6 +1,4 @@
 eclipse.preferences.version=1
-jarsExcludedFromWebInfLib=
 lastWarOutDir=/Users/bmajur/workspace/v3toolkit/xdstools3/target/xdstools3-0.0.1-SNAPSHOT
-launchConfigExternalUrlPrefix=
 warSrcDir=src/main/webapp
 warSrcDirIsOutput=false

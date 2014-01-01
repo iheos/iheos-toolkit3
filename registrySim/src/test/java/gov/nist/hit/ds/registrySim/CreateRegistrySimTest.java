@@ -9,7 +9,7 @@ import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.factory.SimulatorFactory;
-import gov.nist.hit.ds.simSupport.sim.SimDb;
+import gov.nist.hit.ds.simSupport.simrepo.SimDb;
 
 import org.junit.Test;
 
@@ -38,7 +38,7 @@ public class CreateRegistrySimTest {
 			String simIdString = "123";
 			SimId simId = new SimId(simIdString);
 			Simulator sim = null;
-			SimulatorFactory simFactory = new SimulatorFactory().buildSimulator(simId);
+			SimulatorFactory simFactory = new SimulatorFactory().initializeSimulator(simId);
 			simFactory.addActorSim(ActorType.REGISTRY);
 			simDb = simFactory.save();
 			sim = simFactory.getSimulator();

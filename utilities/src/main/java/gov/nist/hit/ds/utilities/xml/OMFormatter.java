@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.utilities.xml;
 
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.File;
 import java.util.Iterator;
@@ -31,11 +31,11 @@ public class OMFormatter {
 		this.ele = ele;
 	}
 
-	public OMFormatter(String xml) throws XdsInternalException, FactoryConfigurationError {
+	public OMFormatter(String xml) throws ToolkitRuntimeException, FactoryConfigurationError {
 		ele = Util.parse_xml(xml);
 	}
 
-	public OMFormatter(File file) throws XdsInternalException, FactoryConfigurationError {
+	public OMFormatter(File file) throws ToolkitRuntimeException, FactoryConfigurationError {
 		ele = Util.parse_xml(file);
 	}
 

@@ -9,7 +9,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.List;
 
@@ -53,13 +53,13 @@ abstract public class GetAssociations extends StoredQuery {
 
 	protected List<String> uuids;
 
-	void parseParameters() throws XdsInternalException, XdsException, LoggerException {
+	void parseParameters() throws ToolkitRuntimeException, XdsException, LoggerException {
 		uuids = sqs.params.getListParm("$uuid");
 	}
 
 	/**
 	 * Implementation of Stored Query specific logic including parsing and validating parameters.
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws XdsException
 	 * @throws LoggerException
 	 * @throws XDSRegistryOutOfResourcesException
@@ -70,7 +70,7 @@ abstract public class GetAssociations extends StoredQuery {
 		parseParameters();
 
 		if (uuids == null) 
-			throw new XdsInternalException("GetAssociations Stored Query");
+			throw new ToolkitRuntimeException("GetAssociations Stored Query");
 		return runImplementation();
 	}
 

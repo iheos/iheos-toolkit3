@@ -8,6 +8,8 @@ public class TextActorSimConfigElement extends AbstractActorSimConfigElement imp
 
 	private static final long serialVersionUID = 3744552934075609429L;
 
+	public TextActorSimConfigElement() { }
+	
 	public TextActorSimConfigElement(String name, String value) {
 		this.name = name;
 		this.type = ParamType.TEXT;

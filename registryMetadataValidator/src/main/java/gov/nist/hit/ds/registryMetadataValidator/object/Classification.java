@@ -7,7 +7,7 @@ import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import org.apache.axiom.om.OMElement;
 
@@ -41,7 +41,7 @@ public class Classification extends AbstractRegistryObject {
 		return super.equals(c);
 	}
 
-	public OMElement toXml(OMElement parent) throws XdsInternalException  {
+	public OMElement toXml(OMElement parent) throws ToolkitRuntimeException  {
 		ro = XmlUtil.om_factory.createOMElement(MetadataSupport.classification_qnamens);
 		ro.addAttribute(MetadataSupport.id_qname.getLocalPart(), id, null);
 		ro.addAttribute(MetadataSupport.classificationscheme_qname.getLocalPart(), classification_scheme, null);
@@ -57,7 +57,7 @@ public class Classification extends AbstractRegistryObject {
 		return ro;
 	}
 
-	public Classification(Metadata m, OMElement cl) throws XdsInternalException  {
+	public Classification(Metadata m, OMElement cl) throws ToolkitRuntimeException  {
 		super(m, cl);
 		parse();
 	}
@@ -136,7 +136,7 @@ public class Classification extends AbstractRegistryObject {
 
 	}
 
-	public OMElement toXml() throws XdsInternalException  {
+	public OMElement toXml() throws ToolkitRuntimeException  {
 		return toXml(null);
 	}
 

@@ -3,7 +3,7 @@ package gov.nist.hit.ds.registryMetadata;
 import gov.nist.hit.ds.utilities.xml.Util;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.File;
 
@@ -20,7 +20,7 @@ public class MetadataParser {
 		return parseNonSubmission(e, false);
 	}
 
-	static public Metadata parseNonSubmission(String s) throws MetadataException, MetadataValidationException, XdsInternalException, FactoryConfigurationError {
+	static public Metadata parseNonSubmission(String s) throws MetadataException, MetadataValidationException, ToolkitRuntimeException, FactoryConfigurationError {
 		return parseNonSubmission(Util.parse_xml(s), false);
 	}
 
@@ -49,7 +49,7 @@ public class MetadataParser {
 	}
 
 
-	static public Metadata parseNonSubmission(File metadata_file) throws MetadataException, MetadataValidationException, XdsInternalException {
+	static public Metadata parseNonSubmission(File metadata_file) throws MetadataException, MetadataValidationException, ToolkitRuntimeException {
 
 		return parseNonSubmission(Util.parse_xml(metadata_file));
 
@@ -67,11 +67,11 @@ public class MetadataParser {
 		return m;
 	}
 
-	static public Metadata noParse(File metadata_file) throws MetadataException,XdsInternalException  {
+	static public Metadata noParse(File metadata_file) throws MetadataException,ToolkitRuntimeException  {
 		return noParse(Util.parse_xml(metadata_file));
 	}
 	
-	static public Metadata parse(OMElement e)  throws MetadataException,XdsInternalException, MetadataValidationException {
+	static public Metadata parse(OMElement e)  throws MetadataException,ToolkitRuntimeException, MetadataValidationException {
 		return new Metadata(e);
 	}
 }

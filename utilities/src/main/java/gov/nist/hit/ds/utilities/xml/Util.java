@@ -2,7 +2,7 @@ package gov.nist.hit.ds.utilities.xml;
 
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -30,17 +30,17 @@ import org.apache.axiom.om.util.XPathEvaluator;
 public class Util {
 
 
-	public static OMElement parse_xml(Object o) throws FactoryConfigurationError, XdsInternalException {
+	public static OMElement parse_xml(Object o) throws FactoryConfigurationError, ToolkitRuntimeException {
 		if (o instanceof String) 
 			return parse_xml((String) o);
 		if (o instanceof InputStream) 
 			return parse_xml((InputStream) o);
 		if (o instanceof File) 
 			return parse_xml((File) o);
-		throw new XdsInternalException("Util.parse_xml(): do not understand input format " + o.getClass().getName());
+		throw new ToolkitRuntimeException("Util.parse_xml(): do not understand input format " + o.getClass().getName());
 	}
 
-	public static OMElement parse_xml(InputStream is) throws FactoryConfigurationError, XdsInternalException {
+	public static OMElement parse_xml(InputStream is) throws FactoryConfigurationError, ToolkitRuntimeException {
 
 		//		create the parser
 		XMLStreamReader parser=null;
@@ -48,7 +48,7 @@ public class Util {
 		try {
 			parser = XMLInputFactory.newInstance().createXMLStreamReader(is);
 		} catch (XMLStreamException e) {
-			throw new XdsInternalException("Could not create XMLStreamReader from InputStream");
+			throw new ToolkitRuntimeException("Could not create XMLStreamReader from InputStream");
 		} 
 
 		//		create the builder
@@ -57,7 +57,7 @@ public class Util {
 		//		get the root element (in this case the envelope)
 		OMElement documentElement =  builder.getDocumentElement();	
 		if (documentElement == null)
-			throw new XdsInternalException("No document element");
+			throw new ToolkitRuntimeException("No document element");
 		return documentElement;
 	}
 	
@@ -65,7 +65,7 @@ public class Util {
 		Io.stringToFile(outfile, new OMFormatter(ele).toString());
 	}
 
-	public static OMElement parse_xml(File infile) throws FactoryConfigurationError, XdsInternalException {
+	public static OMElement parse_xml(File infile) throws FactoryConfigurationError, ToolkitRuntimeException {
 
 		//		create the parser
 		XMLStreamReader parser=null;
@@ -73,9 +73,9 @@ public class Util {
 		try {
 			parser = XMLInputFactory.newInstance().createXMLStreamReader(new FileInputStream(infile));
 		} catch (XMLStreamException e) {
-			throw new XdsInternalException("Could not create XMLStreamReader from " + infile.getName());
+			throw new ToolkitRuntimeException("Could not create XMLStreamReader from " + infile.getName());
 		} catch (FileNotFoundException e) {
-			throw new XdsInternalException("Could not find input file " + infile.getAbsolutePath());
+			throw new ToolkitRuntimeException("Could not find input file " + infile.getAbsolutePath());
 		}
 
 		//		create the builder
@@ -84,11 +84,11 @@ public class Util {
 		//		get the root element (in this case the envelope)
 		OMElement documentElement =  builder.getDocumentElement();	
 		if (documentElement == null)
-			throw new XdsInternalException("No document element");
+			throw new ToolkitRuntimeException("No document element");
 		return documentElement;
 	}
 
-	public static OMElement parse_xml(String input) throws FactoryConfigurationError, XdsInternalException {
+	public static OMElement parse_xml(String input) throws FactoryConfigurationError, ToolkitRuntimeException {
 
 		//		create the parser
 		XMLStreamReader parser=null;
@@ -96,7 +96,7 @@ public class Util {
 		try {
 			parser = XMLInputFactory.newInstance().createXMLStreamReader(new ByteArrayInputStream(input.getBytes()));
 		} catch (Exception e) {
-			throw new XdsInternalException("Could not create XMLStreamReader from string: " + input.substring(0, 100) + "...");
+			throw new ToolkitRuntimeException("Could not create XMLStreamReader from string: " + input.substring(0, 100) + "...");
 		} 
 
 		//		create the builder
@@ -104,7 +104,7 @@ public class Util {
 		try {
 			builder = new StAXOMBuilder(parser);
 		} catch (Exception e) {
-			throw new XdsInternalException("Util.parse_xml(): Could not create StAXOMBuilder from parser");
+			throw new ToolkitRuntimeException("Util.parse_xml(): Could not create StAXOMBuilder from parser");
 		} 
 
 		OMElement documentElement = null; 
@@ -112,9 +112,9 @@ public class Util {
 			//			get the root element (in this case the envelope)
 			documentElement =  builder.getDocumentElement();	
 			if (documentElement == null)
-				throw new XdsInternalException("No document element");
+				throw new ToolkitRuntimeException("No document element");
 		} catch (Exception e) {
-			throw new XdsInternalException("Could not create XMLStreamReader: " +  e.getMessage() + "  (in Util.parse_xml()) from string: " + 
+			throw new ToolkitRuntimeException("Could not create XMLStreamReader: " +  e.getMessage() + "  (in Util.parse_xml()) from string: " + 
 //					input.substring(0, (input.length() < 100) ? input.length() : 100) +
 					input.replaceAll("<", "&lt;") 
 //			"..."
@@ -146,7 +146,7 @@ public class Util {
 //		return parse_xml(buf.toString());
 //	}
 	
-	public static OMElement deep_copy(OMElement in) throws XdsInternalException {
+	public static OMElement deep_copy(OMElement in) throws ToolkitRuntimeException {
 		String str = new OMFormatter(in).toString();
 //		String str = in.toString();
 		return parse_xml(str);
@@ -167,7 +167,7 @@ public class Util {
 		}
 	}
 	
-	static void test1() throws XdsInternalException, FactoryConfigurationError {
+	static void test1() throws ToolkitRuntimeException, FactoryConfigurationError {
 		String x = "<foo/>";
 		OMElement x_ele = Util.parse_xml(x);
 		OMElement y_ele = Util.deep_copy(x_ele);
@@ -178,7 +178,7 @@ public class Util {
 		System.out.println("test1: " + z_ele.toString());
 	}
 	
-	static void test2() throws XdsInternalException, FactoryConfigurationError {
+	static void test2() throws ToolkitRuntimeException, FactoryConfigurationError {
 		String x = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <foo/>";
 		OMElement x_ele = Util.parse_xml(x);
 		OMElement y_ele = Util.deep_copy(x_ele);

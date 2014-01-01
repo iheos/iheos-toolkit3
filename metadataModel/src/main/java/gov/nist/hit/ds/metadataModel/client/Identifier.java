@@ -17,7 +17,6 @@ public abstract class Identifier implements IsSerializable, ModelElement {
 	
 	@Override
 	public AssertionGroup validate() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -11,7 +11,7 @@ import gov.nist.hit.ds.registrysupport.logging.LoggerException;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ abstract public class FindSubmissionSets extends StoredQuery {
 			throw new MetadataValidationException(QueryParmsErrorPresentErrMsg, SqDocRef.Individual_query_parms);
 	}
 
-	public Metadata runSpecific() throws XdsInternalException, XdsException, LoggerException {
+	public Metadata runSpecific() throws ToolkitRuntimeException, XdsException, LoggerException {
 				
 		validateParameters();
 
@@ -72,7 +72,7 @@ abstract public class FindSubmissionSets extends StoredQuery {
 	protected SQCodedTerm         content_type;
 	protected List<String>    status;
 
-	void parseParameters() throws XdsInternalException, XdsException, LoggerException {
+	void parseParameters() throws ToolkitRuntimeException, XdsException, LoggerException {
 		
 		patient_id                               = sqs.params.getStringParm   ("$XDSSubmissionSetPatientId");
 		source_id                                = sqs.params.getListParm("$XDSSubmissionSetSourceId");

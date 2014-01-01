@@ -35,7 +35,6 @@ public class SoapMessageParserTest {
 		
 		@Override
 		public OMElement getXml() {
-			// TODO Auto-generated method stub
 			return xml;
 		}
 		

@@ -6,7 +6,7 @@ package gov.nist.hit.ds.valSupport.message;
 
 import gov.nist.hit.ds.utilities.xml.MyErrorHandler;
 import gov.nist.hit.ds.valSupport.client.MetadataTypes;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -21,7 +21,7 @@ public class SchemaValidation extends MetadataTypes {
 	
 	static public String toolkitSchemaLocation = null;
 
-	public static String validate(OMElement ele, int metadataType)  throws XdsInternalException {
+	public static String validate(OMElement ele, int metadataType)  throws ToolkitRuntimeException {
 		return validate_local(ele, metadataType);
 	}
 
@@ -34,7 +34,7 @@ public class SchemaValidation extends MetadataTypes {
 	// off-machine go through the firewall where the port translation happens.
 
 	// even though this says validate_local, it is used by all requests
-	public static String validate_local(OMElement ele, int metadataType)  throws XdsInternalException {
+	public static String validate_local(OMElement ele, int metadataType)  throws ToolkitRuntimeException {
 		String msg;
 		
 		// This should cover all use cases except xdstest2 running on a users desktop
@@ -50,7 +50,7 @@ public class SchemaValidation extends MetadataTypes {
 
 
 	// empty string as result means no errors
-	static private String run(String metadata, int metadataType, String host, String portString) throws XdsInternalException {
+	static private String run(String metadata, int metadataType, String host, String portString) throws ToolkitRuntimeException {
 
 		MyErrorHandler errors = null;
 		DOMParser p = null;
@@ -150,7 +150,7 @@ public class SchemaValidation extends MetadataTypes {
 				localSchema + "/audit/healthcare-security-audit.xsd ");
 			break;
 		default:
-			throw new XdsInternalException("SchemaValidation: invalid metadata type = " + metadataType);
+			throw new ToolkitRuntimeException("SchemaValidation: invalid metadata type = " + metadataType);
 		}
 
 		if (noRim == false) {
@@ -184,7 +184,7 @@ public class SchemaValidation extends MetadataTypes {
 		try {
 			p=new DOMParser();
 		} catch (Exception e) {
-			throw new XdsInternalException("DOMParser failed: " + e.getMessage());
+			throw new ToolkitRuntimeException("DOMParser failed: " + e.getMessage());
 		}
 		try {        
 			p.setFeature( "http://xml.org/sax/features/validation", true );
@@ -195,7 +195,7 @@ public class SchemaValidation extends MetadataTypes {
 			errors.setSchemaFile(schemaLocation);
 			p.setErrorHandler( errors );
 		} catch (SAXException e) {
-			throw new XdsInternalException("SchemaValidation: error in setting up parser property: SAXException thrown with message: " 
+			throw new ToolkitRuntimeException("SchemaValidation: error in setting up parser property: SAXException thrown with message: " 
 					+ e.getMessage());             
 		}
 
@@ -206,7 +206,7 @@ public class SchemaValidation extends MetadataTypes {
 			InputSource is = new InputSource(new StringReader(metadata2));
 			p.parse(is);
 		} catch (Exception e) {
-			throw new XdsInternalException("SchemaValidation: XML parser/Schema validation error: " + 
+			throw new ToolkitRuntimeException("SchemaValidation: XML parser/Schema validation error: " + 
 					exception_details(e));
 		}
 		String errs = errors.getErrors();

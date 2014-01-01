@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.registrySim.sq.generic.support;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +12,10 @@ public class SQCodeOr extends SQCodedTerm {
 		public String scheme;
 		public String coded_term;
 		
-		public CodeLet(String value) throws XdsInternalException {
+		public CodeLet(String value) throws ToolkitRuntimeException {
 			String[] a = value.split("\\^");
 			if (a.length != 3 || a[0] == null || a[0].equals("") || a[2] == null || a[2].equals("") )
-				throw new XdsInternalException("CodeLet: code value " + value + "  is not in CE format (code^^scheme)");
+				throw new ToolkitRuntimeException("CodeLet: code value " + value + "  is not in CE format (code^^scheme)");
 			code = a[0];
 			scheme = a[2];
 			coded_term = value;
@@ -56,12 +56,12 @@ public class SQCodeOr extends SQCodedTerm {
 		index = i;
 	}
 	
-	public void addValue(String value) throws XdsInternalException {
+	public void addValue(String value) throws ToolkitRuntimeException {
 		values.add(new CodeLet(value));
 		coded_terms.add(value);
 	}
 	
-	public void addValues(List<String> values) throws XdsInternalException {
+	public void addValues(List<String> values) throws ToolkitRuntimeException {
 		for (String value : values) {
 			addValue(value);
 		}

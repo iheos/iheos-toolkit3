@@ -265,7 +265,6 @@ public class SystemErrorRecorder implements ErrorRecorder  {
 
 	@Override
 	public ErrorRecorderBuilder getErrorRecorderBuilder() {
-		// TODO Auto-generated method stub
 		return errorRecorderBuilder;
 	}
 
@@ -363,19 +362,16 @@ public class SystemErrorRecorder implements ErrorRecorder  {
 
 	@Override
 	public void err(Code code, ErrorContext context, Object location) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void warning(String code, ErrorContext context, String location) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void warning(Code code, ErrorContext context, String location) {
-		// TODO Auto-generated method stub
 		
 	}
 

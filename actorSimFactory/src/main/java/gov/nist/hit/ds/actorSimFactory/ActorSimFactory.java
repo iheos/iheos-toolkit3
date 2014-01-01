@@ -1,17 +1,24 @@
 package gov.nist.hit.ds.actorSimFactory;
 
+import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.simSupport.components.ActorSimEnvironment;
 import gov.nist.hit.ds.simSupport.engine.SimChain;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoader;
 import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.engine.SimEngine;
 import gov.nist.hit.ds.simSupport.engine.SimEngineException;
+import gov.nist.hit.ds.simSupport.engine.SimStep;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.string.StringUtil;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,9 +64,7 @@ public class ActorSimFactory {
 		configuredSimsFile = file;
 	}
 
-	public void run(String actorTransCode, Object base, Event event) throws SoapFaultException, SimEngineException, RepositoryException {
-		String actorCode = actorCode(actorTransCode);
-		String transCode = transactionCode(actorTransCode);
+	public void run(String actorCode, String transCode, String simId, Object base, Event event) throws SoapFaultException, SimEngineException, RepositoryException {
 		if (actorCode == null) {
 			throw new SoapFaultException(
 					null,
@@ -75,11 +80,31 @@ public class ActorSimFactory {
 					);
 		}
 
+		ActorType actorType;
+		try {
+			actorType = ActorTypeFactory.find(actorCode);
+		} catch (ToolkitRuntimeException e) {
+			throw new SoapFaultException(
+					null,
+					FaultCode.EndpointUnavailable,
+					new ErrorContext("Unknown Actor code in endpoint <" + actorCode + ">")
+					);
+		}
+		TransactionType transType;
+		try {
+			transType = TransactionTypeFactory.find(transCode);
+		} catch (ToolkitRuntimeException e) {
+			throw new SoapFaultException(
+					null,
+					FaultCode.EndpointUnavailable,
+					new ErrorContext("Unknown Transaction code in endpoint <" + transCode + ">")
+					);
+		}
 
-		SimChain simChain = factories.get(actorTransCode); 
+		SimChain simChain = factories.get(actorTransactionCode(actorCode, transCode)); 
 		if (simChain == null) {
 			String msg = "Do not have a Simulator for Actor Code <" + actorCode + "> and Transaction Code <" + transCode + ">. " +
-		" Codes exist for " + factories.keySet();
+					" Codes exist for " + factories.keySet();
 			logger.error(msg);
 			throw new SoapFaultException(
 					null,
@@ -89,6 +114,7 @@ public class ActorSimFactory {
 		}
 
 		simChain.setBase(base);
+		simChain.add(0, new SimStep().setSimComponent(new ActorSimEnvironment(actorCode, transCode, simId)));
 		SimEngine engine = new SimEngine(simChain, event);
 		logger.debug("\n" + engine.getDescription(simChain).toString());
 		engine.run();
@@ -126,7 +152,7 @@ public class ActorSimFactory {
 				continue;
 			String simChainPath = simConfig.getProperty(propName);
 			String itemName = StringUtil.firstPiece(propName, ".");
-//			String simName = simConfig.getProperty(itemName + ".name");
+			//			String simName = simConfig.getProperty(itemName + ".name");
 			String actorCode = simConfig.getProperty(itemName + ".actor");
 			String transCode = simConfig.getProperty(itemName + ".transaction");
 			if (actorCode == null || actorCode.equals("") || transCode == null || transCode.equals("")) {
@@ -138,7 +164,7 @@ public class ActorSimFactory {
 			factories.put(actorTransCode, simChain);			
 		}
 	}
-	
+
 	String actorTransactionCode(String actorCode, String transCode) {
 		return actorCode + "^" + transCode;
 	}

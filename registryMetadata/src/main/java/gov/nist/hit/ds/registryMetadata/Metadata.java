@@ -12,7 +12,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.NoMetadataException;
 import gov.nist.hit.ds.xdsException.NoSubmissionSetException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -154,7 +154,7 @@ public class Metadata {
 		return lc;
 	}
 
-	public Metadata mkClone() throws XdsInternalException, MetadataException,
+	public Metadata mkClone() throws ToolkitRuntimeException, MetadataException,
 	MetadataValidationException {
 		Metadata m = new Metadata();
 
@@ -383,14 +383,14 @@ public class Metadata {
 		runParser();
 	}
 
-	public Metadata(File metadata_file) throws XdsInternalException,
+	public Metadata(File metadata_file) throws ToolkitRuntimeException,
 	MetadataException, MetadataValidationException {
 		metadata = Util.parse_xml(metadata_file);
 		runParser();
 	}
 
 	public Metadata(File metadata_file, boolean parse)
-	throws XdsInternalException, MetadataException,
+	throws ToolkitRuntimeException, MetadataException,
 	MetadataValidationException {
 		metadata = Util.parse_xml(metadata_file);
 		wrapper = null;
@@ -410,7 +410,7 @@ public class Metadata {
 	}
 
 	public Metadata(File metadata_file, boolean parse, boolean find_wrapper)
-	throws XdsInternalException, MetadataException,
+	throws ToolkitRuntimeException, MetadataException,
 	MetadataValidationException {
 		metadata = Util.parse_xml(metadata_file);
 		wrapper = null;
@@ -431,7 +431,7 @@ public class Metadata {
 	}
 
 	public Metadata(OMElement metadata, boolean parse, boolean find_wrapper)
-	throws XdsInternalException, MetadataException,
+	throws ToolkitRuntimeException, MetadataException,
 	MetadataValidationException {
 		this.metadata = metadata;
 		wrapper = null;
@@ -529,12 +529,12 @@ public class Metadata {
 	 *            - a submission or a single metadata object. Will be wrapped
 	 *            internally (made into single XML document)
 	 * @param discard_duplicates
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws MetadataValidationException
 	 * @throws MetadataException
 	 */
 	public Metadata addToMetadata(OMElement metadata, boolean discard_duplicates)
-	throws XdsInternalException, MetadataException,
+	throws ToolkitRuntimeException, MetadataException,
 	MetadataValidationException {
 		boolean run_parse = true;
 		return addToMetadata(metadata, discard_duplicates, run_parse);
@@ -542,7 +542,7 @@ public class Metadata {
 
 	public Metadata addToMetadata(OMElement new_metadata,
 			boolean discard_duplicates, boolean run_parse)
-	throws XdsInternalException, MetadataException,
+	throws ToolkitRuntimeException, MetadataException,
 	MetadataValidationException {
 		boolean hasExistingData = false;
 
@@ -572,12 +572,12 @@ public class Metadata {
 	 *            - a collection of metadata objects. Will be wrapped internally
 	 *            (made into single XML document)
 	 * @param discard_duplicates
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws MetadataValidationException
 	 * @throws MetadataException
 	 */
 	public Metadata addToMetadata(List<OMElement> metadata,
-			boolean discard_duplicates) throws XdsInternalException,
+			boolean discard_duplicates) throws ToolkitRuntimeException,
 			MetadataException, MetadataValidationException {
 		for (OMElement ele : metadata) {
 			addToMetadata(ele, discard_duplicates, false);
@@ -676,7 +676,7 @@ public class Metadata {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void addObjectRefs(List<?> object_refs_or_ids) throws XdsInternalException {
+	public void addObjectRefs(List<?> object_refs_or_ids) throws ToolkitRuntimeException {
 		if (object_refs_or_ids.size() == 0)
 			return;
 		Object ele = object_refs_or_ids.get(0);
@@ -685,7 +685,7 @@ public class Metadata {
 		else if (ele instanceof String)
 			mkObjectRefs((List<String>) object_refs_or_ids);
 		else
-			throw new XdsInternalException("Don't understand format "
+			throw new ToolkitRuntimeException("Don't understand format "
 					+ ele.getClass().getName());
 	}
 
@@ -2896,7 +2896,7 @@ public class Metadata {
 	 * Dup
 	 */
 
-	public OMElement dup() throws XdsInternalException {
+	public OMElement dup() throws ToolkitRuntimeException {
 		// set metadata_dup to the new top element and wrapper_dup to the new
 		// wrapper element
 		dup_wrapper(); // ==> wrapper_dup, metadata_dup are set
@@ -2908,12 +2908,12 @@ public class Metadata {
 		return metadataDup;
 	}
 
-	void dup_wrapper() throws XdsInternalException {
+	void dup_wrapper() throws ToolkitRuntimeException {
 		String wrapper_name = wrapper.getLocalName();
 		wrapperDup = null;
 		metadataDup = dup_wrapper1(metadata);
 		if (wrapperDup == null)
-			throw new XdsInternalException(
+			throw new ToolkitRuntimeException(
 					"Metadata.dup_wrapper(): cannot find wrapper element "
 					+ wrapper_name);
 	}
@@ -2941,7 +2941,7 @@ public class Metadata {
 		return e_dup;
 	}
 
-	public List<OMElement> getOriginal() throws XdsInternalException {
+	public List<OMElement> getOriginal() throws ToolkitRuntimeException {
 		if (!mustDup)
 			return allObjects;
 
@@ -2954,7 +2954,7 @@ public class Metadata {
 
 	// return List of OMElements
 	// returns a copy of the original
-	public List<OMElement> getV2() throws XdsInternalException {
+	public List<OMElement> getV2() throws ToolkitRuntimeException {
 		List<OMElement> al;
 		IdParser ip = new IdParser(this);
 		List<String> undefinedIds = ip.getUndefinedIds();
@@ -2976,7 +2976,7 @@ public class Metadata {
 	}
 
 	// returns a copy of the original
-	public List<OMElement> getV3() throws XdsInternalException {
+	public List<OMElement> getV3() throws ToolkitRuntimeException {
 		List<OMElement> al;
 		if (version2) {
 			TranslateToV3 v = new TranslateToV3();
@@ -2988,7 +2988,7 @@ public class Metadata {
 		return al;
 	}
 	
-	public Metadata reOrder() throws MetadataValidationException, XdsInternalException, MetadataException {
+	public Metadata reOrder() throws MetadataValidationException, ToolkitRuntimeException, MetadataException {
 		return new Metadata().addToMetadata(getV3(), true);
 	}
 
@@ -3038,7 +3038,7 @@ public class Metadata {
 
 	// Problem here - ebxmlrr returns wrong namespaces. The following fixes
 	public OMElement fixSQLQueryResponse(String return_type)
-	throws XdsInternalException, MetadataException,
+	throws ToolkitRuntimeException, MetadataException,
 	MetadataValidationException {
 		OMElement s_q_r = find_element(getRoot(), "SQLQueryResult");
 		if (s_q_r != null) {
@@ -3077,7 +3077,7 @@ public class Metadata {
 		return getRoot();
 	}
 
-	public OMElement getV2SubmitObjectsRequest() throws XdsInternalException {
+	public OMElement getV2SubmitObjectsRequest() throws ToolkitRuntimeException {
 		OMNamespace rs = MetadataSupport.ebRSns2;
 		OMNamespace rim = MetadataSupport.ebRIMns2;
 		OMElement sor = om_factory().createOMElement(
@@ -3096,7 +3096,7 @@ public class Metadata {
 
 	}
 
-	public OMElement getV3SubmitObjectsRequest() throws XdsInternalException {
+	public OMElement getV3SubmitObjectsRequest() throws ToolkitRuntimeException {
 		OMNamespace lcm = MetadataSupport.ebLcm3;
 		OMNamespace rim = MetadataSupport.ebRIMns3;
 		OMElement sor = om_factory().createOMElement(

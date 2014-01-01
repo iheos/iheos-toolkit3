@@ -8,7 +8,7 @@ import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
 import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public class Author extends AbstractRegistryObject {
 		try {
 			if (!getClassificationScheme().equals(a.getClassificationScheme()))
 				return false;
-		} catch (XdsInternalException e) {
+		} catch (ToolkitRuntimeException e) {
 			return false;
 		}
 		return super.equals(a);
@@ -92,7 +92,7 @@ public class Author extends AbstractRegistryObject {
 		}
 	}
 
-	public Author(Metadata m, OMElement cl) throws XdsInternalException  {
+	public Author(Metadata m, OMElement cl) throws ToolkitRuntimeException  {
 		super(m, cl);
 
 		classificationScheme = cl.getAttributeValue(MetadataSupport.classificationscheme_qname);
@@ -114,7 +114,7 @@ public class Author extends AbstractRegistryObject {
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": does not have a value for the classificationScheme attribute", "ebRIM 3.0 section 4.3.1"), this);
 			else if (!getClassificationScheme().startsWith("urn:uuid:"))
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": classificationScheme attribute value is not have urn:uuid: prefix", "ITI TF-3: 4.3.1"), this);
-		} catch (XdsInternalException e) {
+		} catch (ToolkitRuntimeException e) {
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
 		}
 	}
@@ -144,11 +144,11 @@ public class Author extends AbstractRegistryObject {
 		return "Author (" + getPerson() + ")";
 	}
 
-	public String getClassificationScheme() throws XdsInternalException  {
+	public String getClassificationScheme() throws ToolkitRuntimeException  {
 		return getClassificationScheme(null);
 	}
 
-	public String getClassificationScheme(OMElement parent) throws XdsInternalException {
+	public String getClassificationScheme(OMElement parent) throws ToolkitRuntimeException {
 		if (parent != null) {
 			if ("ExtrinsicObject".equals(parent.getLocalName()))
 				return MetadataSupport.XDSDocumentEntry_author_uuid;
@@ -159,15 +159,15 @@ public class Author extends AbstractRegistryObject {
 		if (classificationScheme != null)
 			return classificationScheme;
 		if (owner == null)
-			throw new XdsInternalException("Cannot determine proper classificationScheme for Author, no owner specified to infer classificationScheme from");
+			throw new ToolkitRuntimeException("Cannot determine proper classificationScheme for Author, no owner specified to infer classificationScheme from");
 		if ("ExtrinsicObject".equals(owner.getLocalName()))
 			return MetadataSupport.XDSDocumentEntry_author_uuid;
 		if ("RegistryPackage".equals(owner.getLocalName()))
 			return MetadataSupport.XDSSubmissionSet_author_uuid;
-		throw new XdsInternalException("Cannot determine proper classificationScheme for Author, owner element type " + owner.getLocalName() + " is not understood");
+		throw new ToolkitRuntimeException("Cannot determine proper classificationScheme for Author, owner element type " + owner.getLocalName() + " is not understood");
 	}
 
-	public OMElement toXml(OMElement parent) throws XdsInternalException  {
+	public OMElement toXml(OMElement parent) throws ToolkitRuntimeException  {
 		ro = XmlUtil.om_factory.createOMElement(MetadataSupport.classification_qnamens);
 		ro.addAttribute(MetadataSupport.classificationscheme_qname.getLocalPart(), getClassificationScheme(parent), null);
 		ro.addAttribute(MetadataSupport.classified_object_qname.getLocalPart(), parent.getAttributeValue(MetadataSupport.id_qname), null);
@@ -182,7 +182,7 @@ public class Author extends AbstractRegistryObject {
 		return ro;
 	}
 
-	public OMElement toXml() throws XdsInternalException   {
+	public OMElement toXml() throws ToolkitRuntimeException   {
 		return toXml(owner);
 	}
 

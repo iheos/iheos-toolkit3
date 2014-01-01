@@ -11,7 +11,7 @@ import gov.nist.hit.ds.registryMetadataValidator.object.RegistryValidationInterf
 import gov.nist.hit.ds.registryMetadataValidator.object.SubmissionSet;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +39,7 @@ public class MetadataValidator {
 		CodeValidation cv = new CodeValidation(m);
 		try {
 			cv.setValidationContext(vc);
-		} catch (XdsInternalException e) {
+		} catch (ToolkitRuntimeException e) {
 			er.err(XdsErrorCode.Code.XDSRegistryError, e);
 			return;
 		}
@@ -60,7 +60,7 @@ public class MetadataValidator {
 			SubmissionSet s = null;
 			try {
 				s = new SubmissionSet(m, ssEle);
-			} catch (XdsInternalException e) {
+			} catch (ToolkitRuntimeException e) {
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
 				continue;
 			}
@@ -72,7 +72,7 @@ public class MetadataValidator {
 			DocumentEntry de = null;
 			try {
 				de = new DocumentEntry(m, deEle);
-			} catch (XdsInternalException e) {
+			} catch (ToolkitRuntimeException e) {
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
 				continue;
 			}
@@ -84,7 +84,7 @@ public class MetadataValidator {
 			Folder f = null;
 			try {
 				f = new Folder(m, fEle);
-			} catch (XdsInternalException e) {
+			} catch (ToolkitRuntimeException e) {
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
 				continue;
 			}
@@ -96,7 +96,7 @@ public class MetadataValidator {
 			Association a = null;
 			try {
 				a = new Association(m, aEle, vc);
-			} catch (XdsInternalException e) {
+			} catch (ToolkitRuntimeException e) {
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
 				continue;
 			}

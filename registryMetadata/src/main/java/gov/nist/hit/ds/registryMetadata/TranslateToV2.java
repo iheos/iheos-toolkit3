@@ -3,7 +3,7 @@ package gov.nist.hit.ds.registryMetadata;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.Util;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.Iterator;
 
@@ -13,7 +13,7 @@ import org.apache.axiom.om.OMNamespace;
 
 public class TranslateToV2 extends Translate {
 	
-	public OMElement translate(OMElement ro2, boolean must_dup) throws XdsInternalException {
+	public OMElement translate(OMElement ro2, boolean must_dup) throws ToolkitRuntimeException {
 		if (MetadataSupport.isV2Namespace(ro2.getNamespace()) && !must_dup) 
 			return Util.deep_copy(ro2);
 		return  deep_copy(ro2, MetadataSupport.ebRIMns2);

@@ -9,7 +9,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ abstract public class FindFoldersForMultiplePatients extends StoredQuery {
 
 	/**
 	 * Implementation of Stored Query specific logic including parsing and validating parameters.
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws XdsException
 	 * @throws LoggerException
 	 * @throws XDSRegistryOutOfResourcesException
@@ -73,7 +73,7 @@ abstract public class FindFoldersForMultiplePatients extends StoredQuery {
 	protected List<String> code_schemes;
 	protected List<String> status;
 
-	void parseParameters() throws XdsInternalException, MetadataException, XdsException, LoggerException {
+	void parseParameters() throws ToolkitRuntimeException, MetadataException, XdsException, LoggerException {
 		patient_id              = sqs.params.getListParm("$XDSFolderPatientId");
 		update_time_from        = sqs.params.getIntParm("$XDSFolderLastUpdateTimeFrom");
 		update_time_to          = sqs.params.getIntParm("$XDSFolderLastUpdateTimeTo");

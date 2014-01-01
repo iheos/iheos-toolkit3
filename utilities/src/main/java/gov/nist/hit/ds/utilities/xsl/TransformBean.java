@@ -7,7 +7,7 @@
 
 package gov.nist.hit.ds.utilities.xsl;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.File;
 
@@ -85,7 +85,7 @@ public class TransformBean {
 	 * @return Value of property output.
 	 * @throws java.lang.Exception Thrown if there is a problem accessing input or output locations.
 	 */
-	public String getOutput() throws XdsInternalException {
+	public String getOutput() throws ToolkitRuntimeException {
 		tform.run();
 		return tform.getOutputString();
 	}

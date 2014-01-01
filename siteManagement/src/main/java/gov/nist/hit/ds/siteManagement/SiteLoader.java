@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.siteManagement;
 
-import gov.nist.hit.ds.actorTransaction.ATFactory;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.Site;
@@ -8,7 +7,7 @@ import gov.nist.hit.ds.siteManagement.client.TransactionBean;
 import gov.nist.hit.ds.siteManagement.client.TransactionCollection;
 import gov.nist.hit.ds.utilities.xml.Parse;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,7 +46,7 @@ public class SiteLoader {
 	protected
 	void parseSite(Site s, OMElement conf) throws Exception {
 		if (!conf.getLocalName().equals("site"))
-			throw new XdsInternalException("Site parser: top element of site definition must be site, " + 
+			throw new ToolkitRuntimeException("Site parser: top element of site definition must be site, " + 
 					conf.getLocalName() + " found"	);
 		s.setName(conf.getAttributeValue(new QName("name")));
 
@@ -98,14 +97,14 @@ public class SiteLoader {
 				s.pifHost = host;
 				s.pifPort = port;
 			} else {
-				for (ActorType actorType : ATFactory.RetrieveActorTypes) {
-					String label = actorType.getActorsFileLabel();
-					if (label == null)
-						continue;
-					if (label.equals(ele_name)) {
-						;
-					}
-				}
+//				for (ActorType actorType : ATFactory.RetrieveActorTypes) {
+//					String label = actorType.getActorsFileLabel();
+//					if (label == null)
+//						continue;
+//					if (label.equals(ele_name)) {
+//						;
+//					}
+//				}
 			}
 		}
 	}

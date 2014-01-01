@@ -1,26 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='logBrowser'>
-  <!-- Inherit the core Web Toolkit stuff.                        -->
-  <inherits name='com.google.gwt.user.User' />
 
-  <!-- We need the JUnit module in the main module,               -->
-  <!-- otherwise eclipse complains (Google plugin bug?)           -->
-  <inherits name='com.google.gwt.junit.JUnit' />
+	<!--  BEGIN JSNI: sh 3rd party -->
+	<!-- Base CSS SyntaxHighlighter -->
+	<stylesheet src="styles/shCore.css" />
 
-  <!-- Inherit the default GWT style sheet.  You can change       -->
-  <!-- the theme of your GWT application by uncommenting          -->
-  <!-- any one of the following lines.                            -->
-  <inherits name='com.google.gwt.user.theme.standard.Standard' />
-  <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
-  <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+	<!-- Eclipse Syntax Theme -->
+	<stylesheet src="styles/shThemeEclipse.css" />
 
-  <!-- Other module inherits                                      -->
+	<!-- Base JS SyntaxHighlighter -->
+	<script src="scripts/shCore.js" />
 
-  <!-- Specify the app entry point class.                         -->
-  <entry-point class='gov.nist.hit.ds.logBrowser.client.logBrowser' />
+	<!-- Extension for each wanted language to support -->
+	<script src="scripts/shBrushXml.js" />
+	<script src="scripts/shBrushCss.js" />
+	<script src="scripts/shBrushPlain.js" />
+	<!--  END JSNI: sh 3rd party -->
+	
+	<!-- Inherit the core Web Toolkit stuff. -->
+	<inherits name='com.google.gwt.user.User' />
 
-  <!-- Specify the paths for translatable code                    -->
-  <source path='client' />
-  <source path='shared' />
+	<!-- We need the JUnit module in the main module, -->
+	<!-- otherwise eclipse complains (Google plugin bug?) -->
+	<inherits name='com.google.gwt.junit.JUnit' />
+
+	<!-- Inherit the default GWT style sheet. You can change -->
+	<!-- the theme of your GWT application by uncommenting -->
+	<!-- any one of the following lines. -->
+	<inherits name='com.google.gwt.user.theme.standard.Standard' />
+	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
+
+	<!-- Other module inherits -->
+	<!-- <inherits name="com.google.gwt.logging.Logging"/>  -->
+	<inherits name='gov.nist.hit.ds.repository.Repository' />
+
+	<!-- Specify the app entry point class. -->
+	<entry-point class='gov.nist.hit.ds.logBrowser.client.LogBrowser' />
+
+	<!-- Specify the paths for translatable code -->
+	<source path='client' />
+	<source path='shared' />
+
 
 </module>

@@ -6,7 +6,7 @@
 
 package gov.nist.hit.ds.utilities.xsl;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -188,7 +188,7 @@ public class Transform {
 	 * @throws java.lang.Exception Throws an exception if there is a problem using the input or output
 	 * sources.
 	 */
-	public void run() throws XdsInternalException {
+	public void run() throws ToolkitRuntimeException {
 		transformer.clearParameters();
 		if (parameters != null) {
 			System.out.println("Transform.java: Has parameters");
@@ -204,18 +204,18 @@ public class Transform {
 		try {
 			in = new StreamSource(inputStream);
 		} catch (Exception e) {
-			throw new XdsInternalException("XSL Transform: error creating input stream source: " + e.getMessage());
+			throw new ToolkitRuntimeException("XSL Transform: error creating input stream source: " + e.getMessage());
 		}
 		StreamResult out;
 		try {
 			out = new StreamResult(outputStream);
 		} catch (Exception e) {
-			throw new XdsInternalException("XSL Transform: error creating ouput stream source: " + e.getMessage());
+			throw new ToolkitRuntimeException("XSL Transform: error creating ouput stream source: " + e.getMessage());
 		}
 		try {
 			transformer.transform(in, out);
 		} catch (Exception e) {
-			throw new XdsInternalException("XSL Transform: error running transform: " + e.getMessage());
+			throw new ToolkitRuntimeException("XSL Transform: error running transform: " + e.getMessage());
 		}
 	}
 

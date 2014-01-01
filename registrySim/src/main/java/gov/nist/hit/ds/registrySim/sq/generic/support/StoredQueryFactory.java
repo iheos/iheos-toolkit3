@@ -15,7 +15,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import org.apache.axiom.om.OMElement;
 
@@ -78,7 +78,7 @@ abstract public class StoredQueryFactory {
 		this(null, ahqr, rel);
 	}
 
-	public StoredQueryFactory(SqParams params)  throws XdsInternalException, MetadataException, XdsException {
+	public StoredQueryFactory(SqParams params)  throws ToolkitRuntimeException, MetadataException, XdsException {
 		this(params, null, new RegistryErrorListGenerator());
 	}
 	
@@ -116,7 +116,7 @@ abstract public class StoredQueryFactory {
 
 		OMElement adhoc_query = XmlUtil.firstChildWithLocalName(ahqr, "AdhocQuery") ;
 		if (adhoc_query == null) {
-			throw new XdsInternalException("Cannot find /AdhocQueryRequest/AdhocQuery element");
+			throw new ToolkitRuntimeException("Cannot find /AdhocQueryRequest/AdhocQuery element");
 		}
 		
 		homeCommunityId = adhoc_query.getAttributeValue(MetadataSupport.home_qname);
@@ -141,7 +141,7 @@ abstract public class StoredQueryFactory {
 
 	public Metadata run() throws XDSRegistryOutOfResourcesException, XdsException, LoggerException {
 		if (storedQueryImpl == null)
-			throw new XdsInternalException("storedQueryImpl is null");
+			throw new ToolkitRuntimeException("storedQueryImpl is null");
 		return storedQueryImpl.run();
 	}
 

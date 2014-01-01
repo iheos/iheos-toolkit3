@@ -3,7 +3,6 @@ package gov.nist.hit.ds.repository.simple;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -17,7 +16,7 @@ public class SimpleTextAssetTest {
 	public void contentTest() throws RepositoryException {
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		Repository repos = fact.createRepository(
-				"This is my repository",
+				"Text content repository",
 				"Description",
 				new SimpleType("site"));
 		
@@ -25,12 +24,9 @@ public class SimpleTextAssetTest {
 		
 		Asset a = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
 		a.updateContent(myContent, "text/plain");
-		Id assetId = a.getId();
-		
-		Asset a2 = repos.getAsset(assetId);
-		// Id assetId2 = a2.getId();
-		byte[] contentBytes = a2.getContent();
-		String mimeType = a2.getMimeType();
+
+		byte[] contentBytes = a.getContent();
+		String mimeType = a.getMimeType();
 		if (mimeType != null && mimeType.startsWith("text")) {
 			String contentStr = new String(contentBytes);
 			assertTrue(myContent.equals(contentStr));

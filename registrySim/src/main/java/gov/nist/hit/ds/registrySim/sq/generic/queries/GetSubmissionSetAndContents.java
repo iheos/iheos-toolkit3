@@ -10,7 +10,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 /**
 Generic implementation of GetAssociations Stored Query. This class knows how to parse a 
@@ -59,7 +59,7 @@ abstract public class GetSubmissionSetAndContents extends StoredQuery {
 	protected SQCodedTerm format_code;
 	protected SQCodedTerm conf_code;
 	
-	void parseParameters() throws XdsInternalException, XdsException, LoggerException {
+	void parseParameters() throws ToolkitRuntimeException, XdsException, LoggerException {
 		ss_uuid = sqs.params.getStringParm("$XDSSubmissionSetEntryUUID");
 		ss_uid = sqs.params.getStringParm("$XDSSubmissionSetUniqueId");
 		format_code = sqs.params.getCodedParm("$XDSDocumentEntryFormatCode");
@@ -69,7 +69,7 @@ abstract public class GetSubmissionSetAndContents extends StoredQuery {
 
 	/**
 	 * Implementation of Stored Query specific logic including parsing and validating parameters.
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws XdsException
 	 * @throws LoggerException
 	 * @throws XDSRegistryOutOfResourcesException
@@ -80,7 +80,7 @@ abstract public class GetSubmissionSetAndContents extends StoredQuery {
 		parseParameters();
 
 		if (ss_uuid == null && ss_uid == null) 
-			throw new XdsInternalException("GetSubmissionSetAndContents Stored Query");
+			throw new ToolkitRuntimeException("GetSubmissionSetAndContents Stored Query");
 		return runImplementation();
 	}
 

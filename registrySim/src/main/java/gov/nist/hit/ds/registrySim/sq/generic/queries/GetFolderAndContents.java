@@ -10,7 +10,7 @@ import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 /**
 Generic implementation of GetAssociations Stored Query. This class knows how to parse a 
@@ -59,7 +59,7 @@ abstract public class GetFolderAndContents extends StoredQuery {
 	protected SQCodedTerm format_code;
 	protected SQCodedTerm conf_code;
 
-	void parseParameters() throws XdsInternalException, XdsException, LoggerException {
+	void parseParameters() throws ToolkitRuntimeException, XdsException, LoggerException {
 		fol_uuid = sqs.params.getStringParm("$XDSFolderEntryUUID");
 		fol_uid = sqs.params.getStringParm("$XDSFolderUniqueId");
 		format_code = sqs.params.getCodedParm("$XDSDocumentEntryFormatCode");
@@ -68,7 +68,7 @@ abstract public class GetFolderAndContents extends StoredQuery {
 
 	/**
 	 * Implementation of Stored Query specific logic including parsing and validating parameters.
-	 * @throws XdsInternalException
+	 * @throws ToolkitRuntimeException
 	 * @throws XdsException
 	 * @throws LoggerException
 	 * @throws XDSRegistryOutOfResourcesException
@@ -79,7 +79,7 @@ abstract public class GetFolderAndContents extends StoredQuery {
 		parseParameters();
 
 		if (fol_uuid == null && fol_uid == null) 
-			throw new XdsInternalException("GetFolderAndContents Stored Query");
+			throw new ToolkitRuntimeException("GetFolderAndContents Stored Query");
 	
 		return runImplementation();
 	}

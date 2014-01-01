@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.actorTransaction;
 
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+
 /**
  * Generate labels for endpoints for when they are stored in 
  * SimulatorConfig objects.
@@ -21,15 +23,15 @@ public class EndpointLabel {
 	 * Parse a display lqbel for an endpoint.
 	 * @param label
 	 */
-	public EndpointLabel(String label) {
+	public EndpointLabel(String label)  {
 		String[] parts = label.split("_");
 		tls = false;
 		async = false;
 		if (parts == null || parts.length <= 1)  {
-			transType = TransactionType.find(label);
+			transType = TransactionTypeFactory.find(label);
 			return;
 		}
-		transType = TransactionType.find(parts[0]);
+		transType = TransactionTypeFactory.find(parts[0]);
 		
 		int i=1;
 		tls = i < parts.length && "TLS".equalsIgnoreCase(parts[i]);

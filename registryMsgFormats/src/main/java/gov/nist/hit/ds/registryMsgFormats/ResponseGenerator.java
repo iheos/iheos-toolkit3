@@ -7,7 +7,7 @@ import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.utilities.xml.OMFormatter;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public abstract class ResponseGenerator extends SimComponentBase {
 	//boolean has_errors = false;
 
 	public abstract OMElement getRoot();
-	abstract public void addQueryResults(OMElement metadata) throws XdsInternalException;
+	abstract public void addQueryResults(OMElement metadata) throws ToolkitRuntimeException;
 
 	public OMElement response = null;
 
@@ -43,16 +43,16 @@ public abstract class ResponseGenerator extends SimComponentBase {
 		isXCA = true;
 	}
 
-	public String getStatus() throws XdsInternalException { 
+	public String getStatus() throws ToolkitRuntimeException { 
 		if (response != null) {
 			String status = response.getAttributeValue(MetadataSupport.status_qname);
 			if (status == null)
-				throw new XdsInternalException("status not yet set");
+				throw new ToolkitRuntimeException("status not yet set");
 			else
 				return status;
 		}
 		else
-			throw new XdsInternalException("Message not yet formed");
+			throw new ToolkitRuntimeException("Message not yet formed");
 	}
 
 	public String toString() {
@@ -69,11 +69,11 @@ public abstract class ResponseGenerator extends SimComponentBase {
 		registryErrorList = new RegistryErrorListGenerator();
 	} 
 
-	public ResponseGenerator(RegistryErrorListGenerator rel)  throws XdsInternalException {
+	public ResponseGenerator(RegistryErrorListGenerator rel)  throws ToolkitRuntimeException {
 		registryErrorList = rel;		
 	}
 
-	public void addErrors(List<ValidationStepResult> results) throws XdsInternalException {
+	public void addErrors(List<ValidationStepResult> results) throws ToolkitRuntimeException {
 
 		for (ValidationStepResult vsr : results) {
 			for (ValidatorErrorItem vei : vsr.er) {
@@ -122,11 +122,11 @@ public abstract class ResponseGenerator extends SimComponentBase {
 		registryErrorList.addError(code, errorContext, location);
 	}
 
-	public void addRegistryErrorList(OMElement rel) throws XdsInternalException {
+	public void addRegistryErrorList(OMElement rel) throws ToolkitRuntimeException {
 		registryErrorList.addRegistryErrorList(rel);
 	}
 
-	public void add(RegistryErrorListGenerator rel) throws XdsInternalException {
+	public void add(RegistryErrorListGenerator rel) throws ToolkitRuntimeException {
 		registryErrorList.addRegistryErrorList(rel.getRegistryErrorList());
 	}
 

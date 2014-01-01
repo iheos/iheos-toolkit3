@@ -3,7 +3,7 @@ package gov.nist.hit.ds.registryMetadata;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.Util;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.Iterator;
 
@@ -15,7 +15,7 @@ public class TranslateToV3 extends Translate {
 	int id_count = 1;
 	Metadata m;
 
-	public OMElement translate(OMElement ro2, boolean must_dup) throws XdsInternalException {
+	public OMElement translate(OMElement ro2, boolean must_dup) throws ToolkitRuntimeException {
 		if (MetadataSupport.isV3Namespace(ro2.getNamespace()) && !must_dup) 
 			return Util.deep_copy(ro2);
 		m = new Metadata();

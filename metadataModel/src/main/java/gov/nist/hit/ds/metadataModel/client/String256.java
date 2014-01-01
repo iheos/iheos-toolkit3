@@ -9,7 +9,6 @@ public class String256 implements ModelElement, IsSerializable {
 	
 	@Override
 	public AssertionGroup validate() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

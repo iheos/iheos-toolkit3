@@ -4,7 +4,7 @@ import gov.nist.hit.ds.registryMetadataValidator.object.ExternalIdentifier;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +65,7 @@ public class DocumentEntryValidator extends ValidatorCommon {
 				validate_ext_id_present("DocumentEntry", id, ext_ids, "XDSDocumentEntry.patientId", MetadataSupport.XDSDocumentEntry_patientid_uuid, false);
 				// the oid^ext format is tested in UniqueId.java?
 				validate_ext_id_present("DocumentEntry", id, ext_ids, "XDSDocumentEntry.uniqueId", MetadataSupport.XDSDocumentEntry_uniqueid_uuid,  false);
-			} catch (XdsInternalException e) {
+			} catch (ToolkitRuntimeException e) {
 				err(e);
 			} catch (MetadataException e) {
 				err(e);
