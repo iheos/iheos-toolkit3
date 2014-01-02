@@ -72,6 +72,16 @@ RepositoryService {
 		
 	}
 
+	@Override
+	public List<AssetNode> getImmediateChildren(AssetNode an)
+			throws RepositoryConfigException {
+		try {
+			return PresentationData.getImmediateChildren(an);	
+		} catch (Exception re) {
+			throw new RepositoryConfigException(re.toString());
+		}
+	}
+
 
 
 }

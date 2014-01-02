@@ -1,7 +1,8 @@
-package gov.nist.hit.ds.repository.simple.search;
+package gov.nist.hit.ds.repository.simple.index;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -11,54 +12,51 @@ import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleType;
+import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 
 import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.fail;
 
-public class AssetNodeBuilderTest {
+public class BulkLoadTest {
 
 	static Id repId = null;
 	static Repository repos = null;
+
+	static final int ASSETS_TO_TEST = 100;
+	
+	
+	/**
+	 * 
+	 * @throws RepositoryException
+	 */
 	
 	@BeforeClass
 	static public void initialize() throws RepositoryException {
-		
+	
 		repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
-				"Node builder test",
+				"Bulk load test  FLAT" + ASSETS_TO_TEST,
 				"Description",
 				new SimpleType("simpleRepos"),
-				"Node builder test"
+				"Bulk-FLAT" + ASSETS_TO_TEST
 				);
 		repId = repos.getId();
+		
+		for (int cx=0; cx < ASSETS_TO_TEST; cx++) {
+			Asset a = repos.createAsset("asset-"+cx, "This is my site", new SimpleType("siteAsset"));
+			a.setProperty(PropertyKey.DISPLAY_ORDER, ""+cx);
+			a.setMimeType("text/plain");
+			a.updateContent("My Content".getBytes());
+			
+			assertNotNull(a.getId());
+						
+		}	
 	}
 	
-
 	@Test
-	public void parentAssetTest() throws RepositoryException {
-		
-		Asset a = repos.createAsset("parent", "This is my site", new SimpleType("siteAsset"));
-		a.setProperty(PropertyKey.DISPLAY_ORDER, "1");
-		a.setMimeType("text/plain");
-		a.updateContent("My Content".getBytes());
-		Id assetId = a.getId();
-		
-		Asset a2 = repos.createAsset("child", "This is my site", new SimpleType("siteAsset"));
-		a.setProperty(PropertyKey.DISPLAY_ORDER, "1");
-		a2.setMimeType("text/plain");		
-		a2.updateContent("My Content".getBytes());
-		Id assetId2 = a2.getId();
-		
-		a.addAsset(a2);  // make a the parent of a2
-		
-		assertFalse(assetId.isEqual(assetId2));
-	}
-
-	@Test
-	public void builderTest() {
+	public void bulk02CountTest() {
 
 		try {
 			AssetNodeBuilder anb = new AssetNodeBuilder();
@@ -66,11 +64,13 @@ public class AssetNodeBuilderTest {
 			System.out.println(tree.toString());
 			// Inspect the tree here 
 			
-			assertTrue("parent".equals(tree.get(0).getDisplayName()));
-			assertTrue("child".equals(tree.get(0).getChildren().get(0).getDisplayName()));
+			assertTrue(tree.size()==ASSETS_TO_TEST);
+			
 			
 		} catch (Exception ex) {
 			fail("builder test failed.");
 		}
 	}
+
+		
 }

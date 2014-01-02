@@ -94,6 +94,15 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		// return repos.getAsset(assetId);
 	}
 	
+	public boolean reset() throws RepositoryException {
+		if (repositoryId == null)
+			throw new RepositoryException(RepositoryException.UNKNOWN_REPOSITORY + " : " +
+		"reset failed via API");
+		
+		assetFileNamesIndex = 0;		
+		return true;		
+	}
+	
 	/**
 	 * Marks the current selection
 	 * @throws RepositoryException 

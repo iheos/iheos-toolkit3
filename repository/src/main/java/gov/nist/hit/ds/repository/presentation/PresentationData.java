@@ -15,6 +15,7 @@ import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder;
 import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
+import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder.Depth;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
@@ -93,7 +94,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 		ArrayList<AssetNode> result = new ArrayList<AssetNode>();
 		List<AssetNode> tmp = null;
 		
-		AssetNodeBuilder anb = new AssetNodeBuilder();
+		AssetNodeBuilder anb = new AssetNodeBuilder(Depth.PARENT_ONLY);
 		for (Repository repos : reposList) {
 			try {
 				tmp = anb.build(repos, PropertyKey.CREATED_DATE);
@@ -104,13 +105,29 @@ public class PresentationData implements IsSerializable, Serializable  {
 				}
 			} catch (RepositoryException re) {
 				re.printStackTrace();
+				logger.warning(re.toString());
 			}
 				
 		}
 				
 		return result;
 	}
+	
 
+	public static List<AssetNode> getImmediateChildren(AssetNode an) throws RepositoryException {
+		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
+					
+		AssetNodeBuilder anb = new AssetNodeBuilder();
+		try {
+			return anb.getImmediateChildren(repos, an);
+		} catch (RepositoryException re) {
+			logger.warning(re.toString());
+		}
+		return null;
+				
+	}
+
+	
 	/**
 	 * @param repos
 	 */
@@ -150,7 +167,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 			iter = new SearchResultIterator(reposList, sc );
 		
 			int recordCt = 0;
-			if (iter!=null && recordCt++ < 50) {// hard limit for now
+			if (iter!=null && recordCt++ < 500) {// hard limit for now
 				while (iter.hasNextAsset()) {
 					gov.nist.hit.ds.repository.api.Asset aSrc = iter.nextAsset();
 					

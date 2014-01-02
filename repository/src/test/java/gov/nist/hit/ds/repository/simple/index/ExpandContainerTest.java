@@ -8,6 +8,9 @@ import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Test;
 
@@ -31,11 +34,11 @@ public class ExpandContainerTest {
 	//@Test
 	public void expandColumnsTest() {
 		DbIndexContainer dbc = new DbIndexContainer();
-		
+		ConcurrentHashMap<String,String> columnMap = new ConcurrentHashMap<String,String>();
 
 		try {
 			ArrayList<String> iap = DbIndexContainer.getIndexableProperties(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-			dbc.expandContainer(iap.toArray(new String[iap.size()]));
+			dbc.expandContainer(iap.toArray(new String[iap.size()]), columnMap);
 		
 			for (String s : iap) {
 				assertTrue(dbc.isIndexed(s));	

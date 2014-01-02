@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.repository.simple.search;
 
+import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.initialization.installation.PropertyServiceManager;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -14,8 +16,11 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -38,6 +43,7 @@ public class DownloadAssetServlet extends HttpServlet {
 		String reposSrc = request.getParameter("reposSrc");
 		String reposId = request.getParameter("reposId");
 		String assetId = request.getParameter("assetId");
+		String assetLoc = request.getParameter("asset");
 		String contentDisp = "inline"; // default
 		
 		if ("attachment".equals(request.getParameter("contentDisp"))) {
@@ -46,6 +52,42 @@ public class DownloadAssetServlet extends HttpServlet {
 		Access acs = null; 
 		
 		SimpleRepository repos = null;
+		
+		try {
+			
+			try {
+				Installation.installation();
+				
+				if (Installation.installation().getExternalCache()==null) {
+					File tpPath = new File(getServletContext().getRealPath("WEB-INF/"+ Installation.TOOLKIT_PROPERTIES));
+					
+					Properties props = new Properties();
+					
+					FileReader fr = new FileReader(tpPath);
+					props.load(fr);
+					fr.close();
+					String ecDir = props.getProperty(PropertyServiceManager.EXTERNAL_CACHE);
+					
+					if (ecDir!=null) {
+						Installation.installation().setExternalCache(new File(ecDir));
+					} else {
+						throw new ServletException("Undefined "+PropertyServiceManager.EXTERNAL_CACHE + " property in " + Installation.TOOLKIT_PROPERTIES);
+					}
+										
+					Installation.installation().initialize();					
+				}
+				
+			} catch (Exception ex) {
+				throw new ServletException("Request could not be completed." + ex.toString());
+			}
+
+			Configuration.configuration();
+					
+		} catch (RepositoryException e) {			
+			throw new ServletException(e.toString());
+		}
+		
+		
 		try {
 			repos = new SimpleRepository(new SimpleId(reposId));
 			if (reposSrc==null) {
@@ -61,21 +103,27 @@ public class DownloadAssetServlet extends HttpServlet {
 			throw new ServletException(e.toString());
 		}
 
-		
-		if (assetId!=null && reposId!=null) {
+		if (reposId!=null) {
 			try {
-
-				Asset a = null; // repos.getAsset(new SimpleId(assetId));
-				
-				SearchCriteria criteria = new SearchCriteria(Criteria.AND);
-				criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO,assetId));			
-				
-				AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
-				
-				if (iter.hasNextAsset()) {
-					a = iter.nextAsset();
-				}
-
+				Asset a = null;
+				 if (assetId!=null) {
+					 
+					a = repos.getAsset(new SimpleId(assetId));
+					
+					if (a==null) {
+						SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+						criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO,assetId));
+						
+						AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
+						
+						if (iter.hasNextAsset()) {
+							a = iter.nextAsset();
+						}						
+					}
+					 
+				} else if (assetLoc!=null && !"".equals(assetLoc)) {
+					a = repos.getAssetByRelativePath(new File(assetLoc + Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT));					
+				}			
 				
 				if (a!=null) {
 					  response.setHeader("Cache-Control", "no-cache");
@@ -83,7 +131,7 @@ public class DownloadAssetServlet extends HttpServlet {
 					  response.setHeader("Pragma", "no-cache");
 					  response.setDateHeader("Max-Age", 0);
 					  
-					  response.setHeader("Content-Disposition", contentDisp+ ";filename=\""+ a.getId().getIdString() + "." + a.getContentExtension()[2] + "\"");
+					  response.setHeader("Content-Disposition", contentDisp+ ";filename=\""+ a.getContentFile().getName() + "\""); // + "." + a.getContentExtension()[2] 
 					  if (a.getMimeType()!=null) {
 						  response.setContentType(a.getMimeType());
 					  } else {
@@ -104,7 +152,7 @@ public class DownloadAssetServlet extends HttpServlet {
 
 				}				
 			} catch (RepositoryException re) {
-				throw new ServletException("Error: " + re.toString());
+				throw new ServletException("Error: Asset could not be located: " + re.toString());
 			}
 			
 			

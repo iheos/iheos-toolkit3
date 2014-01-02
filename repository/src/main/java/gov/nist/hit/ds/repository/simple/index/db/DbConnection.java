@@ -6,6 +6,7 @@ import gov.nist.hit.ds.repository.simple.index.IndexDataSource;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
@@ -18,7 +19,8 @@ import org.apache.tomcat.jdbc.pool.PoolProperties;
  */
 public class DbConnection implements IndexDataSource {
 
-
+	private static Logger logger = Logger.getLogger(DbConnection.class.getName());
+	
 	// See this web page on why Tomcat's own JDBC pooling is preferred to DBCP
 	// http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.htm
 	
@@ -84,13 +86,13 @@ public class DbConnection implements IndexDataSource {
 //	          p.setValidationQuery("SELECT 1");
 //	          p.setTestOnReturn(false);
 //	          p.setValidationInterval(30000);
-	          p.setTimeBetweenEvictionRunsMillis(30000);
-	          p.setMaxActive(500);
+	          p.setTimeBetweenEvictionRunsMillis(15000);
+	          p.setMaxActive(777);
 	          p.setInitialSize(10);
-	          p.setMaxWait(10000);
-	          p.setRemoveAbandonedTimeout(60);
+	          p.setMaxWait(35000);
+	          p.setRemoveAbandonedTimeout(1200); // 20min
 	          p.setMinEvictableIdleTimeMillis(35000);
-	          p.setMinIdle(20);
+	          p.setMinIdle(25);
 	          p.setLogAbandoned(false);
 	          p.setRemoveAbandoned(true);
 //	          p.setJdbcInterceptors(
@@ -125,6 +127,9 @@ public class DbConnection implements IndexDataSource {
 			System.out.println("Connect failed");
 			e.printStackTrace();
 		}
+		
+		printConnectionSummary();
+		
 		return cnx;
 	}
 	
@@ -132,11 +137,11 @@ public class DbConnection implements IndexDataSource {
 	 * 
 	 */
 	public void printConnectionSummary() {
-		System.out.println("Active " + bds.getActive());
-		System.out.println("Max active "+ bds.getMaxActive());
-		System.out.println("Max idle "+ bds.getMaxIdle());
-		System.out.println("Max wait "+ bds.getMaxWait());
-		System.out.println("------");
+		logger.fine("Active " + bds.getActive()
+		+ "Max active "+ bds.getMaxActive()
+		+ "Max idle "+ bds.getMaxIdle()
+		+ "Max wait "+ bds.getMaxWait()
+		+ "------");
 	}
 	
 }

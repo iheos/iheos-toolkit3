@@ -3,10 +3,12 @@ package gov.nist.hit.ds.logBrowser.client;
 
 import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
 import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
+import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
+import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +29,8 @@ import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.logical.shared.OpenEvent;
+import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -249,6 +253,60 @@ public class LogBrowser implements EntryPoint {
 		    Tree tree = new Tree();
 		    final PopupPanel menu = new PopupPanel(true);
 		    
+		    // dynamic children pop
+		    tree.addOpenHandler(new OpenHandler<TreeItem>() {
+
+		        public void onOpen(OpenEvent<TreeItem> event) {		   
+
+		        	   final TreeItem item = event.getTarget();
+		               if (item.getChildCount() == 1 && "HASCHILDREN".equals(item.getChild(0).getText())) {
+		            	   
+		            	   AssetNode an =  (AssetNode)item.getUserObject();
+		            	   
+		                 // Close the item immediately
+		                 item.setState(false, false);
+
+		                 // Add a random number of children to the item
+//		                 String itemText = item.getText();
+//		                 int numChildren = 5;
+//		                 for (int i = 0; i < numChildren; i++) {
+//		                   TreeItem child = item.addTextItem(itemText + "." + i);
+//		                   child.addTextItem("");
+//		                 }
+		                 
+		                 final AsyncCallback<List<AssetNode>> addImmediateChildren = new AsyncCallback<List<AssetNode>>() {
+
+								public void onFailure(Throwable a) {
+									Window.alert(a.toString());									
+								}
+
+								public void onSuccess(List<AssetNode> a) {
+									for (AssetNode an : a) {
+								    	AssetTreeItem treeItem = createTreeItem(an);
+								    	item.addItem(treeItem);
+								    	item.setState(true); // Open node
+								    }									
+								}
+								
+							};
+ 
+		                 try {
+							reposService.getImmediateChildren(an, addImmediateChildren);
+						} catch (RepositoryConfigException e) {
+							e.printStackTrace();
+						}
+		                 
+
+		                 // Remove the temporary item when we finish loading
+		                 item.getChild(0).remove();
+
+		                 // Reopen the item
+		                 item.setState(true, false);
+		               }
+		        }
+  
+		      });
+		    
 		    // context menu
 		    tree.addDomHandler(new ContextMenuHandler() {
 				
@@ -278,7 +336,12 @@ public class LogBrowser implements EntryPoint {
 						
 						AssetNode an =  (AssetNode)((Tree)event.getSource()).getSelectedItem().getUserObject();
 						if (an.isContentAvailable()) {
-							menuItemPanel.add(new Anchor("Download content",GWT.getHostPageBaseURL() + "repository/downloadAsset?reposSrc="+ an.getReposSrc() +"&reposId=" + an.getRepId() + "&assetId=" + an.getAssetId() + "&contentDisp=attachment"));
+							menuItemPanel.add(new Anchor("Download content"
+									,GWT.getHostPageBaseURL() + "repository/downloadAsset?"
+									+ "reposSrc="+ an.getReposSrc() 
+									+"&reposId=" + an.getRepId() 
+									+ "&asset=" + an.getLocation().replace(Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT, "") 
+									+ "&contentDisp=attachment"));
 						}
 					} catch (Exception ex) {
 						logger.log(Level.SEVERE,"Download link builder failed:" + ex.toString());
@@ -400,7 +463,7 @@ public class LogBrowser implements EntryPoint {
 		    
 		    for (AssetNode an : a) {
 		    	AssetTreeItem treeItem = createTreeItem(an);
-		    	treeItem.setState(true);
+		    	// treeItem.setState(true); Open node
 		    	tree.addItem(treeItem);
 		    }
 		    
