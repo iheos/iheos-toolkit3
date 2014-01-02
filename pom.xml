@@ -39,6 +39,7 @@
 	<modules>
 		<module>actorfactory</module>
 		<module>actortransaction</module>
+		<module>axis2SoapClientFacade</module>
 		<module>common</module>
 		<module>common-datatypes</module>
 		<module>direct</module>
