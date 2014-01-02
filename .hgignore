@@ -29,3 +29,6 @@ bin/*
 
 # Maven generated
 MANIFEST.MF
+
+.idea
+*.iml

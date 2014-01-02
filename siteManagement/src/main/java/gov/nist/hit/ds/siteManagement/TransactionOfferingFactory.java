@@ -1,12 +1,15 @@
 package gov.nist.hit.ds.siteManagement;
 
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean;
 import gov.nist.hit.ds.siteManagement.client.TransactionOfferings;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static gov.nist.hit.ds.actorTransaction.TransactionTypeFactory.*;
 
 /**
  * For a given collection of Sites, build a transaction offering map. 
@@ -92,7 +95,7 @@ public class TransactionOfferingFactory {
 					continue;
 				TransactionType tt;
 				if (tb.isRetrieve()) {
-					tt = TransactionType.RETRIEVE;
+					tt = TransactionTypeFactory.find("retrieve");
 				} else 
 					tt = tb.getTransactionType();
 				

@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.simSupport.validationEngine;
 
 import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
 import gov.nist.hit.ds.eventLog.assertion.annotations.Validation;
@@ -29,7 +31,7 @@ public class ExceptionTest extends SimComponentBase {
 		Installation.reset();
 		Installation.installation().initialize();
 		Configuration.configuration();
-		event = new EventBuilder().buildEvent(new SimId("ST-reg-1"), ActorType.REGISTRY.getShortName(), TransactionType.REGISTER.getShortName());
+		event = new EventBuilder().buildEvent(new SimId("ST-reg-1"), ActorTypeFactory.find("registry").getShortName(), TransactionTypeFactory.find("register").getShortName());
 		ag = new AssertionGroup();
 		event.addAssertionGroup(ag);
 	}

@@ -2,7 +2,9 @@ package gov.nist.hit.ds.simServlet;
 
 import gov.nist.hit.ds.actorSimFactory.ActorSimFactory;
 import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
@@ -126,7 +128,7 @@ public class SimServlet extends HttpServlet {
 			return;
 
 
-		TransactionType transType = TransactionType.find(simEndpoint.getTransaction());
+		TransactionType transType = TransactionTypeFactory.find(simEndpoint.getTransaction());
 		if (transType == null) {
 			sendSoapFault(soapEnv, FaultCode.Sender, "Unknown transaction code [" + simEndpoint.getTransaction() + "]");
 			return;
@@ -200,7 +202,7 @@ public class SimServlet extends HttpServlet {
 		// Actor and Transaction codes.  These codes came from the endpoint used to contact this 
 		// Servlet.
 		try {
-			new ActorSimFactory().run(simEndpoint.getActor() + "^" + simEndpoint.getTransaction(), soapEnv, event);
+			new ActorSimFactory().run(simEndpoint.getActor(), simEndpoint.getTransaction(), simEndpoint.getSimId().getId(), soapEnv, event);
 		} catch (SoapFaultException sfe) {
 			logger.info("SOAPFault: " + sfe.getMessage());
 			sendSoapFault(soapEnv, sfe);
@@ -238,7 +240,7 @@ public class SimServlet extends HttpServlet {
 	private Event buildEvent(SoapEnvironment soapEnv, SimEndpoint simEndpoint) {
 		Event event = null;
 		try {
-			event = new EventBuilder().buildEvent(simEndpoint.getSimId(), ActorType.findActor(simEndpoint.getActor()).getShortName(), simEndpoint.getTransaction());
+			event = new EventBuilder().buildEvent(simEndpoint.getSimId(), ActorTypeFactory.find(simEndpoint.getActor()).getShortName(), simEndpoint.getTransaction());
 			//			SimDb db = new SimDb(simEndpoint.getSimId());
 			//			SimId simId = simEndpoint.getSimId();
 			//			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));

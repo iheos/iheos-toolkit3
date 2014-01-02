@@ -28,6 +28,7 @@ public class MetadataRepository {
 
 	// TODO need to set assetId to metadata element id - sent email to Sunil about this.
 	void saveObject(OMElement ele) {
+        // Code that retrieves this expects a wrapper that will not get returned with XML
 		OMElement wrapper = XmlUtil.createElement("LeafRegistryObjectList", MetadataSupport.ebRIMns3);
 		wrapper.addChild(ele);
 		String id = new Metadata().getId(ele);

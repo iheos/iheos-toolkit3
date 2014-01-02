@@ -2,7 +2,9 @@ package gov.nist.hit.ds.siteManagement;
 
 import static org.junit.Assert.*;
 import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
 
@@ -44,8 +46,8 @@ public class SiteBuilderTest {
 		site.addTransaction(transName, endpoint, isSecure, isAsync);
 		
 		assertTrue(site.size() == 1);
-		assertTrue(site.hasTransaction(TransactionType.STORED_QUERY));
-		assertTrue(site.hasActor(ActorType.REGISTRY));
+		assertTrue(site.hasTransaction(TransactionTypeFactory.find("storedQuery")));
+		assertTrue(site.hasActor(ActorTypeFactory.find("registry")));
 		assertTrue(site.validate());
 	}
 

@@ -2,6 +2,8 @@ package gov.nist.hit.ds.simSupport.validationEngine;
 
 import java.io.IOException;
 
+import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
+import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +30,7 @@ public class ValidationRunDependsOnTest   extends SimComponentBase {
 		Installation.reset();
 		Installation.installation().initialize();
 		Configuration.configuration();
-		event = new EventBuilder().buildEvent(new SimId("ST-reg-1"), ActorType.REGISTRY.getShortName(), TransactionType.REGISTER.getShortName());
+		event = new EventBuilder().buildEvent(new SimId("ST-reg-1"), ActorTypeFactory.find("registry").getShortName(), TransactionTypeFactory.find("register").getShortName());
 		ag = new AssertionGroup();
 		event.addAssertionGroup(ag);
 	}

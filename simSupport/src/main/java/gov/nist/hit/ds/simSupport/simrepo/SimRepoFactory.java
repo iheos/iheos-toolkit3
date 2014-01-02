@@ -27,9 +27,8 @@ public class SimRepoFactory {
 	/**
 	 * Init the sim db environment.
 	 */
-	public void init()  {
+	private void init()  {
 		try {
-			Installation.reset();
 			Installation.installation().initialize();
 			Configuration.configuration();   // Repository
 			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
