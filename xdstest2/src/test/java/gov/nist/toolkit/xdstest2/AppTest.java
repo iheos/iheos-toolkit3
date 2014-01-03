@@ -1,5 +1,6 @@
 package gov.nist.toolkit.xdstest2;
 
+import gov.nist.toolkit.xdstest2.AppTest;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

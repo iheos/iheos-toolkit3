@@ -9,3 +9,13 @@ Create a conf directory that is committed and ignored so default config
 can be copied the first time and vary independently afterwards.
 
 error with WEB-INF/extended properties hard to debug!
+
+review direct packaging to gov.nist.toolkit
+
+rename xdstest2 to testengine
+
+no gwt client code in xdstest2?
+
+no gwt client in registry-msg-formats
+
+check gwt-dev in direct

@@ -1,5 +1,6 @@
 package gov.nist.toolkit.direct;
 
+import gov.nist.toolkit.direct.AppTest;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
