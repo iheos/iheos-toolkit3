@@ -15,8 +15,8 @@ import gov.nist.toolkit.testengine.LogMap;
 import gov.nist.toolkit.testengine.LogMapItem;
 import gov.nist.toolkit.testengine.TransactionSettings;
 import gov.nist.toolkit.testengine.Xdstest2;
-import gov.nist.toolkit.testenginelogging.LogFileContent;
-import gov.nist.toolkit.testenginelogging.TestStepLogContent;
+import gov.nist.toolkit.xdstest2logging.LogFileContent;
+import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
 import gov.nist.toolkit.xdstools2.client.RegistryStatus;
 import gov.nist.toolkit.xdstools2.client.RepositoryStatus;
 
