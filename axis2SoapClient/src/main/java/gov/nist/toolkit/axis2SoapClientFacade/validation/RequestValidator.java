@@ -1,9 +1,9 @@
 package gov.nist.toolkit.axis2SoapClientFacade.validation;
 
+import gov.nist.toolkit.soapClientAPI.RequestConfig;
+
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import gov.nist.toolkit.axis2SoapClientFacade.api.RequestConfig;
 
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.addressing.EndpointReference;
