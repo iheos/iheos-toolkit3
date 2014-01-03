@@ -74,7 +74,8 @@ public class RegisterTransactionSim extends SimComponentBase {
 	public void setActorSimConfig(ActorSimConfig actorSimConfig) {
 		this.actorSimConfig = actorSimConfig;
 	}
-	
+
+    // TODO make sure schema is run
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
 		logger.trace("Run RegisterTransactionSim");

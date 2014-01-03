@@ -27,18 +27,6 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 		this.delta = delta;
 	}
 	
-	private void fail(String id, Exception e) {
-		base.fail(new ValidationRef(id, Code.XDSRegistryMetadataError, e.getMessage(), new String[] {""}).setLocation(this.getClass()));
-	}
-
-	private void fail(String id, String msg) {
-		base.fail(new ValidationRef(id, Code.XDSRegistryMetadataError, msg, new String[] {""}).setLocation(this.getClass()));
-	}
-
-	private void fail(String id, Code code, String msg) {
-		base.fail(new ValidationRef(id, code, msg, new String[] {""}).setLocation(this.getClass()));
-	}
-
 	public void checkUidUniqueness(Metadata m) {
 		List<String> submittedUIDs = new ArrayList<String>();
 		for (OMElement ele : m.getMajorObjects()) {
@@ -47,7 +35,7 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 				continue;
 
 			log.debug("Processing metadata object " + m.getId(ele));
-			String uid = null;
+			String uid;
 			try {
 				uid = m.getUniqueIdValue(ele);
 			} catch (MetadataException e) {
@@ -236,7 +224,15 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 		}
 	}
 
+    private void fail(String id, Exception e) {
+        base.fail(new ValidationRef(id, Code.XDSRegistryMetadataError, e.getMessage(), new String[] {""}).setLocation(this.getClass()));
+    }
 
+    private void fail(String id, String msg) {
+        base.fail(new ValidationRef(id, Code.XDSRegistryMetadataError, msg, new String[] {""}).setLocation(this.getClass()));
+    }
 
-
+    private void fail(String id, Code code, String msg) {
+        base.fail(new ValidationRef(id, code, msg, new String[] {""}).setLocation(this.getClass()));
+    }
 }
