@@ -4,10 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.actorSimFactory.ActorSimFactory;
-import gov.nist.hit.ds.actorTransaction.ActorType;
-import gov.nist.hit.ds.actorTransaction.AsyncType;
-import gov.nist.hit.ds.actorTransaction.TlsType;
-import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.actorTransaction.*;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpParseException;
@@ -29,6 +26,7 @@ import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.factory.SimulatorFactory;
 import gov.nist.hit.ds.simSupport.loader.ByConstructorLogLoader;
 import gov.nist.hit.ds.simSupport.simrepo.SimDb;
+import gov.nist.hit.ds.simSupport.simrepo.SimRepoFactory;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
@@ -76,7 +74,6 @@ public class RegistrySimTest {
 	 */
 	public void registerTest() {
 		
-		SimDb simDb = null;
 		try {
 			
 			// Create a new Registry simulator with non-TLS and sync inputs only
@@ -85,20 +82,17 @@ public class RegistrySimTest {
 			Simulator sim = null;
 			try {
 				SimulatorFactory simFactory = new SimulatorFactory().initializeSimulator(simId);
-				simFactory.addActorSim(ActorType.REGISTRY);
-				simDb = simFactory.save();
+				simFactory.addActorSim(ActorTypeFactory.find("registry"));
+                Simulator simulator = simFactory.getSimulator();
+                SimulatorFactory.save(simulator);
 				sim = simFactory.getSimulator();
 			} catch (Exception e) {
 				e.printStackTrace();
-				if (simDb != null) {
-					simDb.delete();
-					simDb = null;
-				}
 				fail();
 			} 
 			
 			// verify endpoint was created
-			String endpointString = sim.getEndpoint(TransactionType.REGISTER, TlsType.NOTLS, AsyncType.SYNC);
+			String endpointString = sim.getEndpoint(TransactionTypeFactory.find("register"), TlsType.NOTLS, AsyncType.SYNC);
 			assertFalse(endpointString == null);
 			
 			// Build mock servlet environment that allows test inputs to be injected
@@ -138,11 +132,6 @@ public class RegistrySimTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
-		} finally {
-			if (simDb != null) {
-				simDb.delete();
-				simDb = null;
-			}
 		}
 	}
 	
@@ -151,19 +140,18 @@ public class RegistrySimTest {
 		public Event buildEvent(SoapEnvironment soapEnv, SimEndpoint simEndpoint) throws SoapFaultException {
 			Event event = null;
 			try {
-				SimDb db = new SimDb(simEndpoint.getSimId());
 				SimId simId = simEndpoint.getSimId();
 				RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 				Repository repos = fact.createNamedRepository(
 						"Event_Repository", 
 						"Event Repository", 
 						new SimpleType("simEventRepository"),               // repository type
-						ActorType.findActor(simEndpoint.getActor()).getShortName() + "-" + simId    // repository name
+						ActorTypeFactory.find(simEndpoint.getActor()).getShortName() + "-" + simId    // repository name
 						);
 				Asset eventAsset = repos.createAsset(
-						db.nowAsFilenameBase(), 
-						simEndpoint.getTransaction() + " Event", 
-						new SimpleType("simEvent"));
+                        SimRepoFactory.nowAsFilenameBase(),
+                        simEndpoint.getTransaction() + " Event",
+                        new SimpleType("simEvent"));
 				event = new Event(eventAsset);
 			} catch (Exception e) {
 				throw new SoapFaultException(

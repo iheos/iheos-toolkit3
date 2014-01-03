@@ -31,7 +31,7 @@ public class SimulatorSerializer {
 		this.simRepository = simRepository;
 	}
 
-	public void save(Simulator sim)  {
+	public Asset save(Simulator sim)  {
 		if (sim == null)
 			throw new ToolkitRuntimeException("Cannot save empty Simulator");
 		if (sim.getSimId() == null)
@@ -39,20 +39,22 @@ public class SimulatorSerializer {
 		if (simRepository == null)
 			throw new ToolkitRuntimeException("Repository not set");
 
-		repositorySave(sim);
+		return repositorySave(sim);
 	}
 
-	private void repositorySave(Simulator sim)  {
+	private Asset repositorySave(Simulator sim)  {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
 		try {
 			// Find existing asset (must already exist)
 //			Asset asset = simRepository.getAsset(new SimpleId(sim.getId().getId()));
 			Asset asset = simRepository.createAsset(sim.getSimId().getId(), "Simulator", new SimpleType("simulator"));
+
 			// translate sim to JSON and save as asset document
 			asset.updateContent(mapper.writeValueAsBytes(sim));
 			// set the mime type on the asset
 			asset.setMimeType("text/json");
+            return asset;
 		} catch (Exception e) {
 			throw new ToolkitRuntimeException("Cannot serialize the Simulator", e);
 		}

@@ -5,7 +5,7 @@ import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.utilities.string.StringUtil;
 import gov.nist.hit.ds.utilities.xml.Parse;
@@ -28,7 +28,7 @@ public class XmlParser implements SimComponent, XmlMessage {
 		return xmlText;
 	}
 
-	@Inject
+	@SimComponentInject
 	public XmlParser setXmlText(XmlText xmlText) {
 		this.xmlText = xmlText;
 		return this;

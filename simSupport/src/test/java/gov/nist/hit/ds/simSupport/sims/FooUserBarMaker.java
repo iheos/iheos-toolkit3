@@ -5,14 +5,14 @@ import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.datatypes.Bar;
 import gov.nist.hit.ds.simSupport.datatypes.Foo;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 
 public class FooUserBarMaker implements SimComponent {
 	Foo foo;
 	Event event;
 	
-	@Inject
+	@SimComponentInject
 	public void setFoo(Foo f) {
 		this.foo = f;
 	}

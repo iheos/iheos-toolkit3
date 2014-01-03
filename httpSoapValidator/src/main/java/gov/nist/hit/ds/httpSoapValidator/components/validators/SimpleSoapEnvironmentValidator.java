@@ -9,7 +9,7 @@ import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
@@ -29,7 +29,7 @@ public class SimpleSoapEnvironmentValidator extends SimComponentBase {
 	byte[] bodyBytes;
 	String charset = null;
 
-	@Inject
+	@SimComponentInject
 	public SimpleSoapEnvironmentValidator setHttpParser(HttpParserBa parser) {
 		this.hparser = parser;
 		return this;

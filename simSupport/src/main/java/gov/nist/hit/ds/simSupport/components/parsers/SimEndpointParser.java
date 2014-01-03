@@ -2,7 +2,7 @@ package gov.nist.hit.ds.simSupport.components.parsers;
 
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
@@ -15,7 +15,7 @@ public class SimEndpointParser extends SimComponentBase {
 	SimEndpoint simEndpoint = null;
 	String endpoint;
 	
-	@Inject
+	@SimComponentInject
 	public void setEndpoint(Endpoint endpoint) {
 		this.endpoint = endpoint.getEndpoint();
 	}

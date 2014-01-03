@@ -34,7 +34,7 @@ public class RegIndex implements RegistryValidationInterface, Serializable {
 			mc.regIndex = this;
 			mc.dirty = false;
 		} catch (Exception e) {
-			// no existing database - initialize instead
+			// no existing database - installRepositoryLinkage instead
 			mc = new MetadataCollection();
 			mc.init();
 			mc.regIndex = this;

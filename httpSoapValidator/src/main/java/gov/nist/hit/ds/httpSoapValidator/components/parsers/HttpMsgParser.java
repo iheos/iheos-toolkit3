@@ -4,7 +4,7 @@ import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
@@ -16,7 +16,7 @@ public class HttpMsgParser extends SimComponentBase {
 	byte[] body;
 	HttpParserBa hparser = null;
 
-	@Inject
+	@SimComponentInject
 	public HttpMsgParser setMessageContent(HttpMessageContent content) {
 		this.header = content.getHeader();
 		this.body = content.getBody();

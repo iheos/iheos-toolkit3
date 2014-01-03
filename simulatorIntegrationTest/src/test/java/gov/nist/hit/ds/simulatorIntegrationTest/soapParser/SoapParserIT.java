@@ -4,7 +4,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
@@ -47,7 +49,7 @@ public class SoapParserIT implements XmlMessage {
 		}
 		
 		try {
-			event = new EventBuilder().buildEvent(new SimId("ST-reg-1"), ActorType.REGISTRY.getShortName(), TransactionType.REGISTER.getShortName());
+			event = new EventBuilder().buildEvent(new SimId("ST-reg-1"), ActorTypeFactory.find("registry").getShortName(), TransactionTypeFactory.find("register").getShortName());
 		} catch (RepositoryException e) {
 			e.printStackTrace();
 			fail();

@@ -4,8 +4,8 @@ import gov.nist.hit.ds.httpSoapValidator.datatypes.MetadataLevel;
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
-import gov.nist.hit.ds.simSupport.engine.annotations.ParserOutput;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentOutput;
 import gov.nist.hit.ds.simSupport.engine.annotations.ValidatorParameter;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
@@ -31,12 +31,12 @@ public class SoapHeaderMetadataLevelValidator extends SimComponentBase {
 		return this;
 	}
 
-	@Inject
+	@SimComponentInject
 	public void setSoapMessage(SoapMessage soapMessage) {
 		this.header = soapMessage.getHeader();
 	}
 
-	@ParserOutput
+	@SimComponentOutput
 	public MetadataLevel getMetadataLevel() {
 		return level;
 	}

@@ -40,7 +40,7 @@
  *  
  *  Components can have any collection of getters. But only special getters are considered inputs to be
  *  managed by the SimEngine. Specifically, managed inputs are getters that: are labeled with the custom Java 
- *  annotation @Inject, have a single parameter, and that parameter is not of type java.*.  Once 
+ *  annotation @SimComponentInject, have a single parameter, and that parameter is not of type java.*.  Once
  *  a managed input is discovered a supplier is sought.  A supplier is a component in the chain that:
  *  comes earlier in the chain, has a getter that returns the indicated data type.
  *  
@@ -88,8 +88,8 @@ element6.expectedWsAction=urn:ihe:iti:2007:RegisterDocumentSet-b
  *  properties. A SimComponent is created from this configuration by:
  *  <ol>
  *  <li>Create instance of indicated class
- *  <li>Inject name and description (setName(String) and setDescription(String))
- *  <li>Inject configured properties. Looking at element1 above, component.setSource("src/test/resources/simple")
+ *  <li>SimComponentInject name and description (setName(String) and setDescription(String))
+ *  <li>SimComponentInject configured properties. Looking at element1 above, component.setSource("src/test/resources/simple")
  *  is called. A runtime error is thrown if the setSource(String) method is not defined on the component.  
  *  Note that the SimComponent interface does not generate/require this method, it comes from the 
  *  implementation only.

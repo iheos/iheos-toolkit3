@@ -4,7 +4,7 @@ import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 
 /**
- * Define a single simulator step. Do not initialize
+ * Define a single simulator step. Do not installRepositoryLinkage
  * the ErrorRecorder, it is initialized by sim engine.
  * @author bmajur
  *

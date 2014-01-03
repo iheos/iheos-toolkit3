@@ -4,17 +4,20 @@ import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
+import gov.nist.hit.ds.repository.api.Asset;
+import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource;
+import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.components.ActorSimEnvironment;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
-import gov.nist.hit.ds.simSupport.engine.annotations.ParserOutput;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentOutput;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.factory.SimulatorFactory;
+import gov.nist.hit.ds.simSupport.simrepo.SimRepoFactory;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
-
 import org.apache.log4j.Logger;
 
 /**
@@ -27,48 +30,48 @@ import org.apache.log4j.Logger;
  */
 public class DocumentRegistryActorSim extends SimComponentBase {
 	private ActorSimEnvironment actorSimEnvironment;
-	private Simulator sim;
+	private Simulator simulator;
 	private ActorType actorType;
-	private TransactionType transactionType;
-	ActorSimConfig actorSimConfig;
+	private TransactionType transactionType = TransactionTypeFactory.find(actorSimEnvironment.getTransCode());
+    private RepositoryFactory repositoryFactory = new RepositoryFactory(Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL));
+    private Asset metadataDirectory = null;
 	static Logger logger = Logger.getLogger(DocumentRegistryActorSim.class);
 
-	@Inject
+    @SimComponentInject
 	public void setActorSimEnvironment(ActorSimEnvironment actorSimEnvironment) {
 		this.actorSimEnvironment = actorSimEnvironment;
 	}
 		
-	@ParserOutput
-	public DocumentRegistryActorSim getDocumentRegistryActorSim() {
-		return this;
-	}
+	@SimComponentOutput
+	public DocumentRegistryActorSim getDocumentRegistryActorSim() { return this; }
 	
-	@ParserOutput
+	@SimComponentOutput
 	public Simulator getSimulator() {
-		return sim;
+		return simulator;
 	}
 	
-	@ParserOutput
+	@SimComponentOutput
 	public ActorType getActorType() {
 		return actorType;
 	}
 	
-	@ParserOutput
+	@SimComponentOutput
 	public TransactionType getTransactionType() {
 		return transactionType;
 	}
+
+    @SimComponentOutput
+    public Asset getMetadataDirectory() { return metadataDirectory; }
 	
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
 		logger.trace("Run DocumentRegistryActorSim");
-		sim = SimulatorFactory.load(new SimId(actorSimEnvironment.getSimId()));
-		actorType = ActorTypeFactory.find(actorSimEnvironment.getActorCode());
-		transactionType = TransactionTypeFactory.find(actorSimEnvironment.getTransCode());
-		actorSimConfig = sim.getActorSimConfig(actorType);
-	}
+
+        actorType = ActorTypeFactory.find(actorSimEnvironment.getActorCode());
+		simulator = SimulatorFactory.load(new SimId(actorSimEnvironment.getSimId()));
+        new SimRepoFactory().installRepositoryLinkage(simulator);
+    }
 
 	@Override
-	public boolean showOutputInLogs() {
-		return true;
-	}
+	public boolean showOutputInLogs() { return true; }
 }

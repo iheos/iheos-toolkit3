@@ -14,7 +14,7 @@ import java.util.List;
  * a base object and a list of simulator steps.
  * The base object is like other components except that its
  * execution is beyond the scope of the SimEngine.  It is used
- * to initialize the chain with an outside object.  A good example
+ * to installRepositoryLinkage the chain with an outside object.  A good example
  * is a class that holds the parsed HTTP content from some external
  * package.
  * 

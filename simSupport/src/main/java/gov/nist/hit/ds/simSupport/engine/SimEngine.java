@@ -4,7 +4,7 @@ import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidator;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
@@ -179,7 +179,7 @@ public class SimEngine implements MessageValidatorEngine {
 		
 		for (int i=0; i<methods.length; i++) {
 			Method method = methods[i];
-			if (!method.isAnnotationPresent(Inject.class))
+			if (!method.isAnnotationPresent(SimComponentInject.class))
 				continue;
 			String name = method.getName();
 			if (name.startsWith("set") && !name.equals("setErrorRecorder") && !name.equals("setName")) {
@@ -246,7 +246,7 @@ public class SimEngine implements MessageValidatorEngine {
 		// For all setters in this subscriptionObject
 		for (int subMethI=0; subMethI<valMethods.length; subMethI++) {
 			Method subMethod = valMethods[subMethI];
-			if (!subMethod.isAnnotationPresent(Inject.class))
+			if (!subMethod.isAnnotationPresent(SimComponentInject.class))
 				continue;
 			String subMethName = subMethod.getName();
 			if (!subMethName.startsWith("set"))
@@ -359,7 +359,7 @@ public class SimEngine implements MessageValidatorEngine {
 	List<PubSubMatch> getPubSubMatches() { return pubSubMatches; }
 
 	/**
-	 * Execute getter/setters to initialize the current ValSim with information
+	 * Execute getter/setters to installRepositoryLinkage the current ValSim with information
 	 * produced by an earlier step.
 	 * @param match
 	 * @throws SimEngineExecutionException 

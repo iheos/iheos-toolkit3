@@ -2,7 +2,7 @@ package gov.nist.hit.ds.registryMsgFormats;
 
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
@@ -15,7 +15,7 @@ import org.apache.axiom.om.OMElement;
 public class RegistryResponseGenerator extends ResponseGenerator {
 	Event event;
 
-	@Inject
+	@SimComponentInject
 	public void setEvent(Event event) {
 		this.event = event;
 	}

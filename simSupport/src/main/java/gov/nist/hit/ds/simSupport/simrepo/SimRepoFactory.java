@@ -1,10 +1,7 @@
 package gov.nist.hit.ds.simSupport.simrepo;
 
 import gov.nist.hit.ds.initialization.installation.Installation;
-import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.Repository;
-import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.*;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleType;
@@ -13,6 +10,7 @@ import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
 import java.util.Calendar;
 import java.util.Date;
 
+import gov.nist.hit.ds.simSupport.client.Simulator;
 import org.apache.log4j.Logger;
 
 /**
@@ -21,45 +19,13 @@ import org.apache.log4j.Logger;
  *
  */
 public class SimRepoFactory {
-	static Logger logger = Logger.getLogger(SimRepoFactory.class);
-	Repository repos = null;
-	
-	/**
-	 * Init the sim db environment.
-	 */
-	private void init()  {
-		try {
-			Installation.installation().initialize();
-			Configuration.configuration();   // Repository
-			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-			repos = fact.createNamedRepository(
-					"SimState", 
-					"SimState", 
-					new SimpleType("simStateRepos"),               // repository type
-					"SimState"    // repository name
-					);
-		} catch (Exception e) {
-			throw new RuntimeException("SimRepoFactory initialization failed: ", e);
-		}
-	}
-	
-	public Asset createSimAsset()  {
-		if (repos == null)
-			init();
-		try {
-			return repos.createAsset(
-					SimRepoFactory.nowAsFilenameBase(), 
-					"Simulator", 
-					new SimpleType("simAsset"));
-		} catch (RepositoryException e) {
-			throw new RuntimeException("Create simAsset failed", e);
-		}
-	}
-	
-	public void add(ActorSimConfig actorSimConfig) {
-		
-	}
-	
+//	static Logger logger = Logger.getLogger(SimRepoFactory.class);
+
+    public void installRepositoryLinkage(Simulator simulator) {
+        Id repositoryId = simulator.getSimAsset().getRepository();
+        simulator.setRepositoryId(repositoryId);
+    }
+
 	public static String nowAsFilenameBase() {
 		Date date = new Date();
 

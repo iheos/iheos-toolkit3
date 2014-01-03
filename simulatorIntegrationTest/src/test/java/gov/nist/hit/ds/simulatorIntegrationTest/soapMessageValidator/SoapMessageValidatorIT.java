@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.simulatorIntegrationTest.soapMessageValidator;
 
 import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
@@ -41,7 +43,7 @@ public class SoapMessageValidatorIT {
 	}
 
 	void init() throws RepositoryException   {		
-		event = new EventBuilder().buildEvent(new SimId("ST-reg-1"), ActorType.REGISTRY.getShortName(), TransactionType.REGISTER.getShortName());
+		event = new EventBuilder().buildEvent(new SimId("ST-reg-1"), ActorTypeFactory.find("registry").getShortName(), TransactionTypeFactory.find("register").getShortName());
 	}
 
 	/**************************/

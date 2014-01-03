@@ -1,64 +1,67 @@
 package gov.nist.hit.ds.registrySim.store.repository;
 
-import gov.nist.hit.ds.registryMetadata.Metadata;
-import gov.nist.hit.ds.registrysupport.MetadataSupport;
-import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.Repository;
-import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.api.RepositoryFactory;
-import gov.nist.hit.ds.repository.api.RepositorySource.Access;
-import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.registrySim.exception.MetadataCannotBeOverwrittenException;
+import gov.nist.hit.ds.repository.api.*;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.simSupport.client.SimId;
-import gov.nist.hit.ds.utilities.xml.OMFormatter;
-import gov.nist.hit.ds.utilities.xml.XmlUtil;
+import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
-import org.apache.axiom.om.OMElement;
-
+/**
+ * Generate/reference the repository where metadata is stored.  This is used by
+ * actor simulators that manage metadata.
+ */
 public class MetadataRepository {
-	SimId simId;
+    private Simulator simulator;
+    private Asset metadataDirectory;
 
-	public MetadataRepository(SimId simId) {
-		this.simId = simId;
-		if (simId == null)
-			throw new ToolkitRuntimeException("MetadataRepository: SimId is null");
-	}
+    public MetadataRepository(Simulator simulator) {
+        this.simulator = simulator;
+        if (simulator == null)
+            throw new ToolkitRuntimeException("MetadataRepository: SimId is null");
+        initialize();
+    }
 
-	// TODO need to set assetId to metadata element id - sent email to Sunil about this.
-	void saveObject(OMElement ele) {
-        // Code that retrieves this expects a wrapper that will not get returned with XML
-		OMElement wrapper = XmlUtil.createElement("LeafRegistryObjectList", MetadataSupport.ebRIMns3);
-		wrapper.addChild(ele);
-		String id = new Metadata().getId(ele);
-		byte[] data = new OMFormatter(wrapper).toString().getBytes();
-		Repository repository = getRepository();
-		Asset asset;
-		try {
-			asset = repository.getAsset(new SimpleId(id));
-		} catch (RepositoryException e) {
-			try {
-				// need metadata element id here
-				asset = repository.createAsset(id, "Simulator", new SimpleType("metadataObject"));
-				asset.updateContent(data);
-				asset.setMimeType("text/xml");
-			} catch (Exception e1) {
-				throw new ToolkitRuntimeException("MetadataRepository: cannot persist metadata object <" + id + ">", e1);
-			}
-		}
-	}
+    private void initialize() {
+        try {
+            // by default this asset is not auto-flushed
+            metadataDirectory = simulator.repository().getAsset(new SimpleId("metadata"));
+        } catch (RepositoryException e) {
+            try {
+                metadataDirectory = simulator.repository().createNamedAsset("metadata", "Metadata Repository", new SimpleType("metadataAsset"), "metadata");
+            } catch (Exception e1) {
+                throw new ToolkitRuntimeException("MetadataRepository: cannot load/create metadata directory", e1);
+            }
+        }
+    }
 
-	private Repository getRepository()  {
-		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-		Repository repos = fact.createNamedRepository(
-				"Metadata Store", 
-				"Metadata Store", 
-				new SimpleType("metadataRepos"),  // repository type
-				simId.getId() + "-metadata"    // repository name
-				);
-		return repos;
-	}
+    public Asset saveObject(byte[] data, String id) throws MetadataCannotBeOverwrittenException {
+        Id assetId = new SimpleId(id);
+        // metadata cannot be overwritten
+        if (assetExists(assetId)) throw new MetadataCannotBeOverwrittenException("MetadataRepository: attempt to overwrite <" + id + ">");
 
+        try {
+            Asset registryObjectAsset;
+            registryObjectAsset = simulator.repository().createNamedAsset(id, "Simulator", new SimpleType("metadataObject"), id);
+            registryObjectAsset.updateContent(data);
+            registryObjectAsset.setMimeType("text/xml");
+            metadataDirectory.addAsset(registryObjectAsset);
+            return registryObjectAsset;
+        } catch (Exception e1) {
+            throw new ToolkitRuntimeException("MetadataRepository: cannot persist metadata object <" + id + ">", e1);
+        }
+    }
 
+    // does asset exist as child of metadataDirectory?
+    private boolean assetExists(Id assetId) {
+
+// TODO replace this with real repository code - not sure this is the best approach
+        try {
+            Asset registryObjectAsset;
+            registryObjectAsset = simulator.repository().getAsset(assetId);
+            return registryObjectAsset != null;
+        } catch (RepositoryException e) {
+            return false;
+        }
+    }
 }

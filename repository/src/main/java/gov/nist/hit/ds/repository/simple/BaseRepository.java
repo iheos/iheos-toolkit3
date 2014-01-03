@@ -150,8 +150,12 @@ public abstract class BaseRepository implements Repository {
 		return properties.getProperty("description");
 	}
 
+    @Override
+    public Asset createAsset(String displayName, String description, Type assetType) throws RepositoryException {
+        return null;
+    }
 
-	@Override
+    @Override
 	/**
 	 * This method returns an asset that is primarily used for read-only operations. To update an asset return by this method, setAutoFlush to true.
 	 */

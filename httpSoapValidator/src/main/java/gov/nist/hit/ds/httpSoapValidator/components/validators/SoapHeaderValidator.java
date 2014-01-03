@@ -3,7 +3,7 @@ package gov.nist.hit.ds.httpSoapValidator.components.validators;
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.annotations.ValidatorParameter;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
@@ -41,12 +41,12 @@ public class SoapHeaderValidator   extends SimComponentBase {
 		return this;
 	}
 
-	@Inject
+	@SimComponentInject
 	public void setSoapMessage(SoapMessage soapMessage) {
 		this.header = soapMessage.getHeader();
 	}
 
-	@Inject
+	@SimComponentInject
 	public SoapHeaderValidator setSoapEnvironment(SoapEnvironment soapEnvironment) {
 		this.soapEnvironment = soapEnvironment;
 		expectedAction = soapEnvironment.getExpectedRequestAction();

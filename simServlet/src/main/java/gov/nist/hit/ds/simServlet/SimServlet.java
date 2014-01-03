@@ -114,7 +114,7 @@ public class SimServlet extends HttpServlet {
 		SoapEnvironment soapEnv = new SoapEnvironment(httpEnv);
 
 		if (!initialized) {
-			sendSoapFault(soapEnv, FaultCode.Receiver, "Toolkit service did not initialize correctly. Check the log files for details.");
+			sendSoapFault(soapEnv, FaultCode.Receiver, "Toolkit service did not installRepositoryLinkage correctly. Check the log files for details.");
 			return;
 		}
 

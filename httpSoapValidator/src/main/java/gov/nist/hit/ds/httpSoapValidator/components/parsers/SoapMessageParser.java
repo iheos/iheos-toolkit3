@@ -3,8 +3,8 @@ package gov.nist.hit.ds.httpSoapValidator.components.parsers;
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
-import gov.nist.hit.ds.simSupport.engine.annotations.ParserOutput;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentOutput;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.xmlValidator.XmlMessage;
@@ -26,13 +26,13 @@ public class SoapMessageParser extends SimComponentBase {
 	OMElement root;
 	int partCount;
 
-	@Inject
+	@SimComponentInject
 	public SoapMessageParser setXML(XmlMessage xmlMessage) {
 		this.xmlMessage = xmlMessage;
 		return this;
 	}
 
-	@ParserOutput
+	@SimComponentOutput
 	public SoapMessage getSoapMessage() {
 		return new SoapMessage().
 				setHeader(header).

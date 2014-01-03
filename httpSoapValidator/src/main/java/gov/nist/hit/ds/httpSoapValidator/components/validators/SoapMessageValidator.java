@@ -3,7 +3,7 @@ package gov.nist.hit.ds.httpSoapValidator.components.validators;
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
@@ -19,7 +19,7 @@ public class SoapMessageValidator extends SimComponentBase{
 	OMElement body = null;
 	int partCount;
 
-	@Inject
+	@SimComponentInject
 	public void setSoapMessage(SoapMessage message) {
 		this.header = message.getHeader();
 		this.body = message.getBody();

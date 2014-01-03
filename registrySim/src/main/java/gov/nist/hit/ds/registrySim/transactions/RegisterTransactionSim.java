@@ -14,9 +14,10 @@ import gov.nist.hit.ds.registrySim.metadataModel.RegistryFactory;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
+import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.engine.annotations.Inject;
+import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.other.StringHashMapUtil;
@@ -26,6 +27,7 @@ import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,42 +39,38 @@ import org.apache.log4j.Logger;
 
 /**
  * Simulator for the Register Transaction. The containing Actor simulator is expected to be
- * found earlier on the SimChain.  This is enforced by the the @Inject of type SimDb. If this
+ * found earlier on the SimChain.  This is enforced by the the @SimComponentInject of type SimDb. If this
  * data type is not available from an earlier SimComponent then the SimEngine will throw
  * the appropriate error.
  * @author bmajur
  *
  */
 public class RegisterTransactionSim extends SimComponentBase {
-	SimEndpoint simEndPoint;
-//	SimDb db;
-	OMElement body;
-	Metadata m;
-	RegIndex regIndex;
-	MetadataCollection delta;
-	MetadataCollection mc;
-	ActorSimConfig actorSimConfig;
+    private OMElement body;
+    private Metadata m;
+    private RegIndex regIndex;
+    public MetadataCollection delta;
+    private MetadataCollection mc;
+    private ActorSimConfig actorSimConfig;
+    private Simulator simulator;
 	static Logger logger = Logger.getLogger(RegisterTransactionSim.class);
 	
 	// keep track of ids during processing
-	public Map<String, String> UUIDToSymbolic = null;
-	Map<String, String> symbolicToUUID = null; 
-	List<String> submittedUUIDs;
+    private Map<String, String> UUIDToSymbolic = null;
+    private Map<String, String> symbolicToUUID = null;
+    private List<String> submittedUUIDs;
 
+    @SimComponentInject
+    public void setSimulator(Simulator simulator) { this.simulator = simulator; }
 
-	@Inject
-	public void setSimEndPoint(SimEndpoint simEndPoint) {
-		this.simEndPoint = simEndPoint;
-	}
-	
-	@Inject
+	@SimComponentInject
 	public void setSoapMessage(SoapMessage soapMessage) {
 		body = soapMessage.getBody(); // this is <Body>
 		if (body != null)
 			body = body.getFirstElement();
 	}
 
-	@Inject
+	@SimComponentInject
 	public void setActorSimConfig(ActorSimConfig actorSimConfig) {
 		this.actorSimConfig = actorSimConfig;
 	}
@@ -80,6 +78,10 @@ public class RegisterTransactionSim extends SimComponentBase {
 	@Override
 	public void run(MessageValidatorEngine mve) throws SoapFaultException {
 		logger.trace("Run RegisterTransactionSim");
+
+        if (simulator == null) throw new ToolkitRuntimeException("simulator not set");
+        if (body == null) throw new ToolkitRuntimeException("SoapMessage not set");
+        if (actorSimConfig == null) throw new ToolkitRuntimeException("ActorSimConfig not set");
 		
 		Object x = actorSimConfig.getActorState();
 		if (x == null)
@@ -153,9 +155,11 @@ public class RegisterTransactionSim extends SimComponentBase {
 	private void setup() {
 
 		mc = regIndex.mc;
+        mc.setSimulator(simulator);
 
 		// this will hold our updates - transaction style
 		delta = mc.mkDelta();
+        delta.setSimulator(simulator);
 
 		// allocate uuids for symbolic ids
 		allocateUUIDs(m);

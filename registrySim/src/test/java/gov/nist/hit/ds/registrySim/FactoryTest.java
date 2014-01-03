@@ -2,10 +2,12 @@ package gov.nist.hit.ds.registrySim;
 
 import static org.junit.Assert.fail;
 import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.factory.SimulatorFactory;
 import gov.nist.hit.ds.simSupport.simrepo.SimDb;
 
@@ -31,20 +33,15 @@ public class FactoryTest {
 
 	@Test
 	public void buildTest() {
-		SimDb simDb = null;
 		try {
 			SimulatorFactory simFactory = new SimulatorFactory().initializeSimulator();
-			simFactory.addActorSim(ActorType.REGISTRY);
-			simDb = simFactory.save();
+			simFactory.addActorSim(ActorTypeFactory.find("registry"));
+            Simulator simulator = simFactory.getSimulator();
+			SimulatorFactory.save(simulator);
 			simFactory.getSimulator();
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
-		} finally {
-			if (simDb != null) {
-				simDb.delete();
-				simDb = null;
-			}
 		}
 	}
 

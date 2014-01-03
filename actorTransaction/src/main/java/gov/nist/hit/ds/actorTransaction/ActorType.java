@@ -65,14 +65,14 @@ public class ActorType implements IsSerializable, Serializable {
 //			return names;
 //		}
 		
-		/**
-		 * Within toolkit, each TransactionType maps to a unique ActorType
-		 * (as receiver of the transaction). To make this work, transaction
-		 * names are customized to make this mapping unique.  This goes 
-		 * beyond the definition in the TF.
-		 * @param tt
-		 * @return
-		 */
+//		/**
+//		 * Within toolkit, each TransactionType maps to a unique ActorType
+//		 * (as receiver of the transaction). To make this work, transaction
+//		 * names are customized to make this mapping unique.  This goes
+//		 * beyond the definition in the TF.
+//		 * @param tt
+//		 * @return
+//		 */
 		// now ActorTypeFactory.getActorType(TransactionType tt);
 //		static public ActorType getActorType(TransactionType tt) {
 //			if (tt == null)
