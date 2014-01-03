@@ -1,8 +1,5 @@
 package gov.nist.toolkit.tk.client;
 
-import gov.nist.toolkit.tk.Ps;
-import gov.nist.toolkit.tk.TkPropsServer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
