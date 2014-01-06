@@ -2,6 +2,7 @@ package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Parameter;
+import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 
 import java.io.File;
@@ -11,6 +12,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
+
 
 /**
  * The purpose of this class is to facilitate folder management features that help to: 
@@ -103,7 +105,8 @@ public class FolderManager {
 		return new File[]{residingFolder,null};
 	}
 	
-	public File[] getFile(File dir, String[] names, boolean directLoad) throws RepositoryException {
+	public File[] getFile(File dir, String[] names, ArtifactId id) throws RepositoryException {
+	
 		String safeName = null;
 		try {
 			safeName = FolderManager.getSafeName(names);
@@ -113,13 +116,19 @@ public class FolderManager {
 		
 		String assetBaseFile = dir + File.separator + safeName;
 		File assetPropFile = new File(assetBaseFile + Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT);
+		
+		if (id!=null) {			
+			File[] f = findById(dir, id); // Exception when file does not exist
+			if (f!=null && f[0]!=null && f[0].exists()) {
+				File parentDir = f[0].getParentFile();
+				return new File[]{f[0] 									// file w/ extension 			 			[0]
+						,new File(parentDir + File.separator + safeName) // Base name file part w/o extension 		[1]
+						,new File(safeName) 						// name-id only									[2]
+					};
 
-		if (directLoad) {
-			return new File[]{assetPropFile // file w/ extension 			 			[0]
-					,new File(assetBaseFile) // Base name file part w/o extension 		[1]
-					,new File(safeName) // name-id only									[2]
-				};
-		}
+			} else 
+				throw new RepositoryException(RepositoryException.ASSET_NOT_FOUND + ": fn=" + assetPropFile);
+	}
 		
 		String newId = safeName;
 		// Append suffix to make a new file
@@ -147,34 +156,31 @@ public class FolderManager {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public File[] findById(File dir, File assetPath, String[] names) throws RepositoryException {
+	public File[] findById(File dir, ArtifactId id) throws RepositoryException {
 
 		Parameter param = new Parameter();
 
 		param.setDescription("dir");
 		param.assertNotNull(dir);		
 		
-		// Does it exist?
-		if (assetPath!=null) {
-			File residingFolder = assetPath.getParentFile();
-
-			File[] assetPaths = getAssetFileById(new SimpleId(getAssetIdFromFilename(assetPath.toString())),residingFolder);
-			
-			if (assetPaths!=null && assetPaths[0]!=null) {
-				return assetPaths; 
-			} 
-		} else { // New file
-			return getFile(dir, names, true);
+		File[] assetPaths = getAssetFileById(id,dir);
+		
+		if (assetPaths!=null && assetPaths[0]!=null) {
+			return assetPaths; 
+		} else if (assetPaths==null) {
+			throw new RepositoryException(RepositoryException.ASSET_NOT_FOUND + ": Id=" + id.getIdString());
 		}
 
 		return new File[]{dir,null};
+		
+		
 	}
 	
 	
 	public File[] getAssetFileById(ArtifactId id, File baseDir) throws RepositoryException {
 		FileFilter pff = new FileFilter();
 		pff.setFileNamePart(id.getIdString()); 
-
+	
 		return getAssetPath(pff, baseDir);
 		
 	}
@@ -229,23 +235,34 @@ public class FolderManager {
 	private class FileFilter implements FilenameFilter {
 		private String fileNamePart = "";
 		private File[] directMatch = new File[]{null,null};		
+		private boolean searchById = true; // Enable deepScan searchById by default
 
+		/**
+		 * Returns the first matching file with the specified fileNamePart or Id
+		 */
 		@Override
 		public boolean accept(File dir, String name) {
 			File f = new File(dir + File.separator + name);
-			if (name.contains(getFileNamePart())) {
+			if (name.contains(getFileNamePart())) { // File name is in GUID-string.props.txt format
 					if (name.endsWith(Configuration.PROPERTIES_FILE_EXT)) {
 						directMatch[0] = f;	// Props
 					} else 
 						directMatch[1] = f; // Content file ?					
 				return true;
-			} else {
+			} else { // File names uses displayName or some other property with nested properties
 				try {
 					if (f.isDirectory()) {
 						return true;
+					} else if (isSearchById()) { // Deep scan because files use a displayName convention and the Id is embedded in the property file
+						Properties props = new Properties();
+						loadProps(props, f);
+						String assetId = props.getProperty(PropertyKey.ASSET_ID.toString());
+						if (getFileNamePart().equals(assetId)) { // Id is case sensitive
+							return true;  
+						}						
 					}
 				} catch (Exception ex) {
-					
+					logger.warning(ex.toString());
 				}
 				 
 			}
@@ -264,6 +281,9 @@ public class FolderManager {
 			return directMatch;
 		}
 
+		public boolean isSearchById() {
+			return searchById;
+		}
 		
 	};
 
@@ -274,11 +294,19 @@ public class FolderManager {
 		if (pff.getDirectMatch()!=null && pff.getDirectMatch()[0]!=null) {
 			return pff.getDirectMatch();	
 		} else {
-			for (File f : assetFileNames) {
-				File[] nestedMatch = getAssetPath(pff, f);
-				if (nestedMatch!=null && nestedMatch[0]!=null)
-					return nestedMatch;
-			}
+			if (assetFileNames!=null && assetFileNames.length>0 && assetFileNames[0]!=null) {
+				
+				if (assetFileNames[0].isFile()) {
+					return new File[]{assetFileNames[0],null};	
+				} else if (assetFileNames[0].isDirectory()) {			
+					File[] nestedMatch = getAssetPath(pff, assetFileNames[0]);
+					if (nestedMatch!=null && nestedMatch.length>0 && nestedMatch[0]!=null)
+						return nestedMatch;						
+				}
+				
+			} 
+
+
 		}
 		
 		return null;

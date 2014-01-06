@@ -53,6 +53,11 @@ public class SimpleAsset implements Asset, Flushable {
 		setProperty(PropertyKey.ASSET_TYPE, type.getKeyword());
 	}
 
+	/**
+	 * ArtifactId is case sensitive
+	 * @param id
+	 * @throws RepositoryException
+	 */
 	public void setId(ArtifactId id) throws RepositoryException {		
 		setPropertyTemp(PropertyKey.ASSET_ID, id.getIdString());
 		this.id = id;
@@ -109,18 +114,7 @@ public class SimpleAsset implements Asset, Flushable {
 			return getPath().getParentFile();
 		} else
 			return getReposDir();
-		
-//		File reposDir = getReposDir();
-//		
-//		try {			
-//			File[] assetPath = new FolderManager().findById(reposDir, assetId.getIdString(), null);
-//			return assetPath[0].getParentFile();
-//			
-//		} catch (Exception ex) {
-//			return reposDir;
-//		}
 			
-									
 	}
 		
 	private File getReposDir() throws RepositoryException {
@@ -156,6 +150,9 @@ public class SimpleAsset implements Asset, Flushable {
 		return getProperty(PropertyKey.DESCRIPTION);		
 	}
 
+	/**
+	 * ArtifactId is case sensitive
+	 */
 	@Override
 	public ArtifactId getId() throws RepositoryException {
 		// return new SimpleId(getProperty(PropertyKey.ASSET_ID));
@@ -257,7 +254,7 @@ public class SimpleAsset implements Asset, Flushable {
 			assetContentFilePart = getPath().getParent() + File.separator + FolderManager.getAssetIdFromFilename(getPath().getName());
 		} else {
 			String names[] = new String[] {getDisplayName() ,getDescription()};
-			assetContentFilePart = new FolderManager().getFile(getReposDir(), names, true)[1].toString();						
+			assetContentFilePart = new FolderManager().getFile(getReposDir(), names, getId())[1].toString();						
 		}
 		
 		String[] ext = getContentExtension();
@@ -455,7 +452,7 @@ public class SimpleAsset implements Asset, Flushable {
 		
 		String names[] = new String[] {firstPrefName, getDescription()};
 
-		File[] assetPath = new FolderManager().getFile(getReposDir(), names, false);
+		File[] assetPath = new FolderManager().getFile(getReposDir(), names, null);
 
 		if (assetPath!=null && assetPath[0]!=null) {
 			setContentPath(getContentFile(assetPath[1])); // base path w/o extension
@@ -489,9 +486,11 @@ public class SimpleAsset implements Asset, Flushable {
 	 * @throws RepositoryException
 	 */
 	public SimpleAsset load(ArtifactId assetId) throws RepositoryException {
+		Parameter p = new Parameter();
+		p.setDescription("assetId");
+		p.assertNotNull(assetId);
 		
-		
-		File[] assetPath = new FolderManager().getFile(getReposDir(), new String[] {assetId.getIdString()}, true);
+		File[] assetPath = new FolderManager().getFile(getReposDir(), new String[] {assetId.getIdString()}, assetId);
 
 		
 		if (assetPath[0]!=null) {
