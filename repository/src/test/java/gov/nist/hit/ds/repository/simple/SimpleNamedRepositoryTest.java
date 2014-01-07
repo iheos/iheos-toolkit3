@@ -89,7 +89,7 @@ public class SimpleNamedRepositoryTest {
 				}
 			} catch (RepositoryException ex) {
 				// good
-				ex.printStackTrace();
+				assertTrue(ex.getMessage().startsWith((RepositoryException.ASSET_NOT_FOUND)));
 			}
 			  
 			

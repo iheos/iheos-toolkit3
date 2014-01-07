@@ -207,7 +207,25 @@ public class SimpleAsset implements Asset, Flushable {
 
 	@Override
 	public void setMimeType(String mimeType) throws RepositoryException {
-		setProperty(PropertyKey.MIME_TYPE, mimeType);
+		
+		// Cleanup any previous content file to avoid confusion from the old content file based on previous (or the lack of) mimeType value
+		File oldContentFile = getContentFile();
+		String oldMimeType = getMimeType();
+		
+		if (mimeType==null) {
+			
+			// Case 1. mimeType can be null			
+			setProperty(PropertyKey.MIME_TYPE, null);
+			
+		} else if (oldMimeType==null || !mimeType.equalsIgnoreCase(oldMimeType)) { 
+		
+			// Case 2. non-null mimeType
+			setProperty(PropertyKey.MIME_TYPE, mimeType.toLowerCase());			
+		}
+		
+		// Remove OLD content file in both cases
+		deleteContent(oldContentFile);
+
 	}
 	
 	@Override
@@ -382,20 +400,27 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
 	/**
-	 * Simple delete of this Asset - no recursion. Not part of the API. 
+	 * Simple delete of this Asset - no recursion. Not part of the API.
+	 * Removes both the property file and the content file from the repository directory.  
 	 * Supports SimpleRepository.deleteAsset(id)
 	 * @throws RepositoryException
 	 */
 	public void deleteAsset() throws RepositoryException {
 		File assetPropFile = getPropFile();
-		File assetContentFile = getContentFile();
-		if (assetPropFile.exists()) {
-			assetPropFile.delete();
-			if (assetContentFile.exists()) {
-				assetContentFile.delete();
-			}
-		}
 		
+		if (assetPropFile.exists()) {
+			logger.fine("Deleting property file:"+ assetPropFile.toString());
+			assetPropFile.delete();
+			deleteContent(getContentFile());
+		}
+	}
+	
+	private void deleteContent(File assetContentFile) throws RepositoryException {
+
+		if (assetContentFile!=null && assetContentFile.exists()) {
+			logger.fine("Deleting content file:"+ assetContentFile.toString());
+			assetContentFile.delete();
+		}		
 	}
 
 	@Override
