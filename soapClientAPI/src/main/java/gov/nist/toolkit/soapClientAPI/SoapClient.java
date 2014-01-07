@@ -3,10 +3,23 @@ package gov.nist.toolkit.soapClientAPI;
 import org.apache.axiom.soap.SOAPEnvelope;
 
 /**
- * It is interface for a generic soap transaction.
+ * This is an interface for a generic soap transaction.
  * 
- * Each request is configured through a RequestConfig which is a
- * java.util.Properties object.
+ * Each request is configured through
+ * 
+ * Each method defined in this interface must have 2 parameters : 
+ * <br> - a SOAPEnvelope (from the axiom library) : this contains the envelope of the message to be sent
+ * (headers + body).
+ * <br >- a RequestConfig which is a java.util.Properties object :
+ * this object allows to configure some aspects of the request/exchange pattern.
+ * 
+ * Note : the RequestConfig can be used to tell the implementation what header
+ * to generate. However, any header defined in the envelope should take
+ * precedence over RequestConfig params.
+ * For example, if a <ReplyTo> header is present in the envelope, the REPLY_TO param of the RequestConfig
+ * should be ignored.
+ * 
+ * See RequestConfig.java for details on the available options. 
  */
 
 public interface SoapClient {
