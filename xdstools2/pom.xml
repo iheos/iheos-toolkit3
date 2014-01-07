@@ -165,25 +165,28 @@
 				<version>2.5.1</version>
 				<executions>
 					<execution>
+						<id>compilation_profile</id>
 						<goals>
 							<goal>compile</goal>
 						</goals>
+						<configuration>
+							<!-- copyWebapp: Copies the contents of warSourceDirectory to hostedWebapp. -->
+							<!-- warSourceDirectory : Location of the web application static resources 
+								(same as maven-war-plugin parameter) Default value is: ${basedir}/src/main/webapp. -->
+							<!-- hostedWebapp: Location of the hosted-mode web application structure. 
+								Default: ${project.build.directory}/${project.build.finalName} -->
+							<copyWebapp>true</copyWebapp>
+							<!-- no optimization takes place. Good for development -->
+							<optimizationLevel>0</optimizationLevel>
+						</configuration>
 					</execution>
 				</executions>
+				
 				<configuration>
 					<runTarget>Xdstools2.html</runTarget>
-					<modules>
-						<module>${project.groupId}.xdstools2.Xdstools2</module>
-					</modules>
-					<!-- copyWebapp: Copies the contents of warSourceDirectory to hostedWebapp. -->
-					<!-- warSourceDirectory : Location of the web application static resources 
-						(same as maven-war-plugin parameter) Default value is: ${basedir}/src/main/webapp. -->
-					<!-- hostedWebapp: Location of the hosted-mode web application structure. 
-						Default: ${project.build.directory}/${project.build.finalName} -->
-					<copyWebapp>true</copyWebapp>
-					<!-- no optimization takes place. Good for development -->
-					<optimizationLevel>0</optimizationLevel>
+					<module>${project.groupId}.xdstools2.Xdstools2</module>
 				</configuration>
+
 			</plugin>
 
 			<!-- Maven WAR plugin -->
@@ -213,9 +216,8 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-		<!-- 			<path>/xdstools2</path>
-					<warFile>${project.build.directory}/xdstools3-v2-maven-alpha.war</warFile>
-					<tomcatLoggingFile>${project.build.directory}/log.txt</tomcatLoggingFile> -->
+					<!-- <path>/xdstools2</path> <warFile>${project.build.directory}/xdstools3-v2-maven-alpha.war</warFile> 
+						<tomcatLoggingFile>${project.build.directory}/log.txt</tomcatLoggingFile> -->
 				</configuration>
 			</plugin>
 		</plugins>
