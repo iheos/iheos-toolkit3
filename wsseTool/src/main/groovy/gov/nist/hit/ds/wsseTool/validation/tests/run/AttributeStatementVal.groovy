@@ -13,6 +13,7 @@ import gov.nist.hit.ds.wsseTool.validation.tests.ValDescriptor
 import gov.nist.toolkit.wsseTool.api.*
 import gov.nist.toolkit.wsseTool.validation.data.*
 import groovy.util.slurpersupport.GPathResult
+import groovy.util.slurpersupport.NoChildren
 
 import java.text.MessageFormat
 
@@ -151,17 +152,19 @@ public class AttributeStatementVal extends BaseVal {
 		assertTrue("purposeOfUse attribute value missing", purposeOfUse[0].AttributeValue[0] != null)
 
 		GPathResult attr = purposeOfUse[0].AttributeValue[0]
-		GPathResult p =  purposeOfUse[0].AttributeValue[0].PurposeForUse[0]
+		GPathResult p =  purposeOfUse[0].AttributeValue[0].PurposeOfUse[0]
+		
+		assertFalse("tag with @name='urn:oasis:names:tc:xspa:1.0:subject:purposeofuse' was not <PurposeOfUse>. <PurposeForUse> not supported since 2010 revision of the authorization framework.", p instanceof NoChildren);
+
+		
 
 		String prefix = header.namespaces.getPrefix("http://www.w3.org/2001/XMLSchema-instance")
 
 		String type = p.@"${prefix}:type"
 
 		assertTrue("no type", type != null)
-
-		if(! (type == "CE" || type == "hl7:CE")){
-			assertTrue(MessageFormat.format("wrong type value. expected : 'CE' or 'hl7:CE', got : {0}",type));
-		}
+		
+		assertTrue(MessageFormat.format("wrong type value. expected : 'CE' or 'hl7:CE', got : {0}",type), (type == "CE" || type == "hl7:CE"));
 
 		assertEquals("wrong codeSystem", "2.16.840.1.113883.3.18.7.1", p.@codeSystem.text() )
 		assertEquals("wrong codeSystemName", "nhin-purpose", p.@codeSystemName.text() )
@@ -173,21 +176,21 @@ public class AttributeStatementVal extends BaseVal {
 	@Validation(id="1036-1056")
 	public void verifyPurposeOfUse(){
 		// 1. Instantiate an XPathFactory.
-  javax.xml.xpath.XPathFactory factory = 
-                    javax.xml.xpath.XPathFactory.newInstance();
-  
-  // 2. Use the XPathFactory to create a new XPath object
-  javax.xml.xpath.XPath xpath = factory.newXPath();
-  
-  // 3. Compile an XPath string into an XPathExpression
-  javax.xml.xpath.XPathExpression expression = xpath.compile(".//Security");
-  
-  log.info("header to validate : \n {}", MyXmlUtils.DomToString(context.domHeader) );
-  
-  // 4. Evaluate the XPath expression on an input document
- Node result = (Node)expression.evaluate(context.domHeader, javax.xml.xpath.XPathConstants.NODE);
- 
- Object o = null;
+		javax.xml.xpath.XPathFactory factory =
+				javax.xml.xpath.XPathFactory.newInstance();
+
+		// 2. Use the XPathFactory to create a new XPath object
+		javax.xml.xpath.XPath xpath = factory.newXPath();
+
+		// 3. Compile an XPath string into an XPathExpression
+		javax.xml.xpath.XPathExpression expression = xpath.compile(".//Security");
+
+		log.info("header to validate : \n {}", MyXmlUtils.DomToString(context.domHeader) );
+
+		// 4. Evaluate the XPath expression on an input document
+		Node result = (Node)expression.evaluate(context.domHeader, javax.xml.xpath.XPathConstants.NODE);
+
+		Object o = null;
 	}
 
 	@Optional
