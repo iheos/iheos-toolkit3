@@ -19,7 +19,7 @@ public class BaseTest {
 	
 	@Rule
 	public TestName name = new TestName();
-
+	
 	/*
 	 * Test initialization
 	 */
@@ -36,7 +36,7 @@ public class BaseTest {
 	}
 	
 	@BeforeClass
-	public static final void checkTomcatIsOn() {
+	public static void checkTomcatIsOn() {
 		try{
 			ping(8080);
 		}

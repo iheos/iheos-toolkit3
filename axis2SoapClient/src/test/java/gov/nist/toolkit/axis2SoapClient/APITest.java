@@ -23,91 +23,88 @@ import org.junit.Test;
 
 public class APITest extends BaseTest {
 
-	/*
-	 * Ignored when building the module because it depends on the manual setup
-	 * of the target service.
-	 */
-//	@Ignore
-//	@Test
-//	public void runRequest() throws IOException, SoapClientFault {
-//
-//		RequestConfig conf = getTestConfiguration();
-//
-//		ConfigurationContext context = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
-//				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo",
-//				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo/conf/axis2.xml");
-//
-//		SoapClient c = new Axis2SoapClient(context);
-//
-//		// get payload
-//		OMElement payload = createPayLoad();
-//		SOAPFactory fac = OMAbstractFactory.getSOAP12Factory();
-//		SOAPEnvelope envelope = fac.getDefaultEnvelope();
-//		envelope.getBody().addChild(payload);
-//
-//		SOAPEnvelope res = c.runBlockingRequest(conf, envelope);
-//		System.out.println(OMProcessing.toString(res));
-//
-//	}
+	
+	 /* Ignored when building the module because it depends on the manual setup
+	  	of the target service.*/
+	 
+ 	@Test
+ 	public void runRequest() throws IOException, SoapClientFault {
+ 
+ 		RequestConfig conf = getTestConfiguration();
+ 
+ 		ConfigurationContext context = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
+ 				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo",
+ 				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo/conf/axis2.xml");
+ 
+ 		SoapClient c = new Axis2SoapClient(context);
+ 
+ 		// get payload
+ 		OMElement payload = createPayLoad();
+ 		SOAPFactory fac = OMAbstractFactory.getSOAP12Factory();
+ 		SOAPEnvelope envelope = fac.getDefaultEnvelope();
+ 		envelope.getBody().addChild(payload);
+ 
+ 		SOAPEnvelope res = c.runBlockingRequest(conf, envelope);
+ 		System.out.println(OMProcessing.toString(res));
+ 
+ 	}
 
-	/*
-	 * This test shows we can provide additional headers.
-	 */
-//	@Ignore
-//	@Test
-//	public void runRequestWithAdditionalHeaders() throws IOException, SoapClientFault {
-//
-//		RequestConfig conf = getTestConfiguration();
-//
-//		ConfigurationContext context = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
-//				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo",
-//				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo/conf/axis2.xml");
-//
-//		SoapClient c = new Axis2SoapClient(context);
-//
-//		// get payload
-//		OMElement payload = createPayLoad();
-//		OMElement headers = createMessageIdHeader();
-//		SOAPFactory fac = OMAbstractFactory.getSOAP12Factory();
-//		SOAPEnvelope envelope = fac.getDefaultEnvelope();
-//		envelope.getBody().addChild(payload);
-//
-//		OMNamespace secNs = fac.createOMNamespace(
-//				"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd", "wsse");
-//		SOAPHeaderBlock h1 = envelope.getHeader().addHeaderBlock("Security", secNs);
-//		h1.setText("blah");
-//
-//		SOAPEnvelope res = c.runBlockingRequest(conf, envelope);
-//		System.out.println(OMProcessing.toString(res));
-//	}
+	
+	 /* This test shows we can provide additional headers.*/
+	 
+ 	@Test
+ 	public void runRequestWithAdditionalHeaders() throws IOException, SoapClientFault {
+ 
+ 		RequestConfig conf = getTestConfiguration();
+ 
+ 		ConfigurationContext context = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
+ 				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo",
+ 				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo/conf/axis2.xml");
+ 
+ 		SoapClient c = new Axis2SoapClient(context);
+ 
+ 		// get payload
+ 		OMElement payload = createPayLoad();
+ 		OMElement headers = createMessageIdHeader();
+ 		SOAPFactory fac = OMAbstractFactory.getSOAP12Factory();
+ 		SOAPEnvelope envelope = fac.getDefaultEnvelope();
+ 		envelope.getBody().addChild(payload);
+ 
+ 		OMNamespace secNs = fac.createOMNamespace(
+ 				"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd", "wsse");
+ 		SOAPHeaderBlock h1 = envelope.getHeader().addHeaderBlock("Security", secNs);
+ 		h1.setText("blah");
+ 
+ 		SOAPEnvelope res = c.runBlockingRequest(conf, envelope);
+ 		System.out.println(OMProcessing.toString(res));
+ 	}
 
-//	@Ignore
-//	@Test
-//	public void runRequestWithAdditionalRequiredHeaders() throws IOException, SoapClientFault {
-//
-//		RequestConfig conf = getTestConfiguration();
-//
-//		ConfigurationContext context = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
-//				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo",
-//				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo/conf/axis2.xml");
-//
-//		SoapClient c = new Axis2SoapClient(context);
-//
-//		// get payload
-//		OMElement payload = createPayLoad();
-//		OMElement headers = createMessageIdHeader();
-//		SOAPFactory fac = OMAbstractFactory.getSOAP12Factory();
-//		SOAPEnvelope envelope = fac.getDefaultEnvelope();
-//		envelope.getBody().addChild(payload);
-//
-//		OMNamespace omNs = fac.createOMNamespace("http://www.w3.org/2005/08/addressing", "wsa");
-//		SOAPHeaderBlock h1 = envelope.getHeader().addHeaderBlock("MessageID", omNs);
-//		h1.setText("urn:uuid:9");
-//
-//		SOAPEnvelope res = c.runBlockingRequest(conf, envelope);
-//		System.out.println(OMProcessing.toString(res));
-//
-//	}
+ 	@Test
+ 	public void runRequestWithAdditionalRequiredHeaders() throws IOException, SoapClientFault {
+ 
+ 		RequestConfig conf = getTestConfiguration();
+ 
+ 		ConfigurationContext context = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
+ 				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo",
+ 				System.getProperty("user.dir") + "/src/test/resources/validConfig/axis2repo/conf/axis2.xml");
+ 
+ 		SoapClient c = new Axis2SoapClient(context);
+ 
+ 		// get payload
+ 		OMElement payload = createPayLoad();
+ 		OMElement headers = createMessageIdHeader();
+ 		SOAPFactory fac = OMAbstractFactory.getSOAP12Factory();
+ 		SOAPEnvelope envelope = fac.getDefaultEnvelope();
+ 		envelope.getBody().addChild(payload);
+ 
+ 		OMNamespace omNs = fac.createOMNamespace("http://www.w3.org/2005/08/addressing", "wsa");
+ 		SOAPHeaderBlock h1 = envelope.getHeader().addHeaderBlock("MessageID", omNs);
+ 		h1.setText("urn:uuid:9");
+ 
+ 		SOAPEnvelope res = c.runBlockingRequest(conf, envelope);
+ 		System.out.println(OMProcessing.toString(res));
+ 
+ 	}
 
 	private OMElement createMessageIdHeader() {
 		OMFactory fac = OMAbstractFactory.getOMFactory();
@@ -136,5 +133,7 @@ public class APITest extends BaseTest {
 		method.addChild(value);
 		return method;
 	}
+	
+	
 
 }
