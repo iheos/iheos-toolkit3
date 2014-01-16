@@ -91,10 +91,11 @@ public class WsseHeaderValidator implements Validator {
 			parseResult = run(request, config)
 		}
 
-		if(parseResult.getFailureCount() != 0){ //we do not want to go forward if parsing validation failed
-			log.error("parsing validation failed. Validation will stop.")
-			return
-		}
+		//For now, desactivate, we should use suite in the future
+//		if(parseResult.getFailureCount() != 0){ //we do not want to go forward if parsing validation failed
+//			log.error("parsing validation failed. Validation will stop.")
+//			return
+//		}
 
 		// parsing succeeded, we run all the other validations.
 		RunnerBuilder builder = new ValRunnerBuilder(message)

@@ -71,5 +71,5 @@ public class SignatureVerificationVal extends BaseVal {
 			fail(e.getMessage())
 		}
 	}
-	
+
 }

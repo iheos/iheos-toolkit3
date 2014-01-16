@@ -4,18 +4,23 @@ import static org.junit.Assert.*
 import gov.nist.hit.ds.wsseTool.api.config.Context
 import gov.nist.hit.ds.wsseTool.api.config.ContextFactory
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess
+import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
 import gov.nist.hit.ds.wsseTool.generation.opensaml.OpenSamlWsseSecurityGenerator
 import gov.nist.hit.ds.wsseTool.util.MyXmlUtils
 import gov.nist.hit.ds.wsseTool.validation.WsseHeaderValidator;
 import gov.nist.toolkit.wsseTool.BaseTest
 
+import java.io.IOException;
 import java.security.KeyStoreException
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Before
 import org.junit.Test
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
+import org.xml.sax.SAXException;
 
 
 class ValidationTest extends BaseTest {
@@ -73,5 +78,19 @@ class ValidationTest extends BaseTest {
 		WsseHeaderValidator val = new WsseHeaderValidator();
 		val.validate(MyXmlUtils.getDocumentWithResourcePath(file).getDocumentElement(),context);
 		}
+	
+	@Test
+	public void purposeOfUseTest() throws GenerationException, SAXException, IOException, ParserConfigurationException {
+		def file = "sets/SoapRequest.xml";
+		WsseHeaderValidator val = new WsseHeaderValidator();
+		val.validate(MyXmlUtils.getDocumentWithResourcePath(file).getDocumentElement(),context);
+	}
+	
+	@Test
+	public void purposeOfUseTest2() throws GenerationException, SAXException, IOException, ParserConfigurationException {
+		def file = "sets/SoapRequest2.xml";
+		WsseHeaderValidator val = new WsseHeaderValidator();
+		val.validate(MyXmlUtils.getDocumentWithResourcePath(file).getDocumentElement(),context);
+	}
 		
 }
