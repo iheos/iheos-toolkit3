@@ -63,7 +63,7 @@
 					</saml2:Attribute>
 					<saml2:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse">
 						<saml2:AttributeValue>
-							<PurposeForUse code="TREATMENT" codeSystem="2.16.840.1.113883.3.18.7.1" codeSystemName="nhin-purpose" displayName="Treatment" xsi:type="CE" xmlns="urn:hl7-org:v3" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+							<PurposeOfUse code="TREATMENT" codeSystem="2.16.840.1.113883.3.18.7.1" codeSystemName="nhin-purpose" displayName="Treatment" xsi:type="CE" xmlns="urn:hl7-org:v3" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 						</saml2:AttributeValue>
 					</saml2:Attribute>
 					<saml2:Attribute Name="urn:oasis:names:tc:xspa:2.0:subject:npi">

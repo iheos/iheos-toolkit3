@@ -78,10 +78,11 @@ public class SignatureGenerator {
 	 * Create a signature
 	 * @param eltToSignId : id of the element to sign
 	 * @param keyInfo : mechanism to verify the signature (public key, saml token)
+	 * @param transformList2 
 	 * @return a XMLSignature to sign the elt
 	 * @throws GeneralSecurityException
 	 */
-	public static XMLSignature generateSignatureWithCustomKeyInfo(String eltToSignId, KeyInfo keyInfo)
+	public static XMLSignature generateSignatureWithCustomKeyInfo(String eltToSignId, KeyInfo keyInfo, List<Transform> transformList)
 			throws GeneralSecurityException {
 		try {
 			// 1 - Reference
@@ -89,10 +90,6 @@ public class SignatureGenerator {
 			// The referenceURI must be the saml assertion id
 			// (MA 1043) @URI = <value of saml:Assertion/@ID>
 			String referenceURI = eltToSignId;
-
-			List<Transform> transformList = new ArrayList<Transform>();
-			transformList.add(fac.newTransform(Transform.ENVELOPED, (TransformParameterSpec) null));
-			transformList.add(fac.newTransform(CanonicalizationMethod.EXCLUSIVE, (C14NMethodParameterSpec) null));
 
 			Reference ref = fac.newReference(referenceURI, fac.newDigestMethod(DigestMethod.SHA1, null), transformList,
 					null, null);
