@@ -58,12 +58,15 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 */
 	private static final String repContainerLabel = "repositoryIndex";		
 	private static final String assetId = PnIdentifier.getQuotedIdentifer(PropertyKey.ASSET_ID);
-	private static final String locationId = "location";
+	private static final String locationId = PropertyKey.LOCATION.toString();
 	private static final String assetType = PnIdentifier.getQuotedIdentifer(PropertyKey.ASSET_TYPE);
 	private static final String repId = PnIdentifier.getQuotedIdentifer(PropertyKey.REPOSITORY_ID);
 	private static final String displayOrder = PnIdentifier.getQuotedIdentifer(PropertyKey.DISPLAY_ORDER); 
 	private static final String parentId = PnIdentifier.getQuotedIdentifer(PropertyKey.PARENT_ID);
 	private static final String createdDate =  PnIdentifier.getQuotedIdentifer(PropertyKey.CREATED_DATE);
+	private static final String hash = PropertyKey.HASH.toString();
+	private static final String reposAcs = PropertyKey.REPOSITORY_ACCESS.toString();
+	private static final String indexSession = PropertyKey.INDEX_SESSION.toString();
 	
 	private static final String CACHED_SESSION = "CACHED";
 	private static final String CONTAINER_VERSION = "2013-12-26";
@@ -82,10 +85,10 @@ public class DbIndexContainer implements IndexContainer, Index {
 	+ locationId + " varchar(512),"									/* This is the file path */
 	+ parentId +  " varchar(64),"									/* The parent asset Id. A null-value indicates top-level asset and no children */
 	+ assetType + " varchar(32)," 									/* Asset type - usually same as the keyword property */ 
-	+"hash varchar(64),"											/* (Internal use) The hash of the property file */
-	+"reposAcs varchar(40),"										/* (Internal use) src enum string */	
+	+ hash + " varchar(64),"											/* (Internal use) The hash of the property file */
+	+ reposAcs + " varchar(40),"										/* (Internal use) src enum string */	
 	+ displayOrder + " int,"         						    	/* This is a reserved keyword for sorting purpose */
-	+"indexSession varchar(64))";									/* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */				
+	+ indexSession +" varchar(64))";									/* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */				
 
 	/**
 	 * Index a repository on the file system. This wrapper method eventually calls an internal method that uses two internal logical data sets to identify assets that are to be indexed, refreshed, or marked as stale.  

@@ -83,7 +83,11 @@ public class SearchTerm implements IsSerializable, Serializable {
 	
 	public SearchTerm(PropertyKey key, Operator op, String[] values) {
 		super();
-		setPropName(key.toString());
+		if (key.isInternalUseOnly()) {
+			setPropName(key.toString());
+		} else {
+			setPropName(PnIdentifier.getQuotedIdentifer(key.toString()));
+		}
 		this.operator = op;
 		this.values = values;
 
@@ -91,7 +95,11 @@ public class SearchTerm implements IsSerializable, Serializable {
 	
 	public SearchTerm(PropertyKey key, Operator op, String value) {
 		super();
-		setPropName(key.toString());
+		if (key.isInternalUseOnly()) {
+			setPropName(key.toString());
+		} else {
+			setPropName(PnIdentifier.getQuotedIdentifer(key.toString()));
+		}
 		this.operator = op;
 		this.values = new String[]{value};
 	}
@@ -116,17 +124,7 @@ public class SearchTerm implements IsSerializable, Serializable {
 	public void setAssetType(String assetType) {
 		this.assetType = assetType;
 	}
-	public String getDbPropName() {
-		
-		
-		
-		if (!PnIdentifier.uniquePropertyColumn) {
-			return PnIdentifier.getQuotedIdentifer(propName);
-		} else {
-			return propName;
-		}
-		
-	}
+
 	public String getPropName() {		
 		return propName;
 	}
@@ -157,10 +155,10 @@ public class SearchTerm implements IsSerializable, Serializable {
 	public String toString() {
 		
 		if (Operator.EQUALTOANY.equals(getOperator())) {
-			return getDbPropName() + getOperator().toString() + getValueAsCsv();
+			return getPropName() + getOperator().toString() + getValueAsCsv();
 		}
 		
-		String propName = getDbPropName();
+		String propName = getPropName();
 		if (null == values[0]) {
 			return propName + "is null ";
 		} else {

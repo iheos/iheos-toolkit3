@@ -124,6 +124,10 @@ public class SearchCriteria implements IsSerializable, Serializable {
 		this.searchCriteria = searchCriteria;
 	}
 
+	/**
+	 * TODO: Not used?
+	 * @return
+	 */
 	public ArrayList<String> getProperties() {
 		if (properties.isEmpty()) {
 			this.toString();

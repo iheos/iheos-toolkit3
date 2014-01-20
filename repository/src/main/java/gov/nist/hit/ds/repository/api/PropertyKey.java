@@ -8,92 +8,124 @@ package gov.nist.hit.ds.repository.api;
  *
  */
 
-public enum PropertyKey {
-       UNIDENTIFIED(){},
+public enum PropertyKey {	
+       UNIDENTIFIED(false){},
        
-       ASSET_ID(){
+       ASSET_ID(false){
            @Override
            public String toString() {
                return "id";
            }
        },
-       ASSET_TYPE(){
+       ASSET_TYPE(false){
            @Override
            public String toString() {
                return "type";
            }
        },	        
-       CREATED_DATE(){
+       CREATED_DATE(false){
            @Override
            public String toString() {
                return "createdDate";
            }
        },
-       DESCRIPTION() {	        	
+       DESCRIPTION(false) {	        	
            @Override
            public String toString() {
                return "description";
            }	        	
        },
-       DISPLAY_NAME() {	        	
+       DISPLAY_NAME(false) {	        	
            @Override
            public String toString() {
                return "displayName";
            }	        	
        },
-       DISPLAY_ORDER(){
+       DISPLAY_ORDER(false){
            @Override
            public String toString() {
                return "displayOrder";
            }
        },	        
-       EXPIRATION_DATE(){
+       EXPIRATION_DATE(false){
            @Override
            public String toString() {
                return "expirationDate";
            }
        },
-       LOCATION() {
+       HASH(true) {
+           @Override
+           public String toString() {
+               return "hash";
+           }    	   
+       },
+       INDEX_SESSION(true) {
+    	   @Override
+           public String toString() {
+               return "indexSession";
+           }
+       },       
+       LOCATION(true) {
            @Override
            public String toString() {
                return "location";
            }
        },
-       MIME_TYPE(){
+       MIME_TYPE(false){
            @Override
            public String toString() {
                return "mimeType";
            }
        },
-       MODIFIED_DATE() {
+       MODIFIED_DATE(false) {
           	@Override
               public String toString() {
                   return "modifiedDate";
               }
        },
-       PARENT_ID(){
+       PARENT_ID(false){
            @Override
            public String toString() {
                return "parentId";
            }
        },
-       REPOSITORY_ID(){
+       REPOSITORY_ID(false){
            @Override
            public String toString() {
                return "repositoryId";
            }
        },
-       STATUS(){
+       REPOSITORY_ACCESS(true) {
+           @Override
+           public String toString() {
+               return "reposAcs";
+           }
+       }, 
+       STATUS(false){
            @Override
            public String toString() {
                return "status";
            }
        },
-       UPDATED_DATE() {
+       UPDATED_DATE(false) {
           	@Override
             public String toString() {
                 return "updatedDate";
             }
         };
 
+    	private boolean internalUseOnly;
+
+		public boolean isInternalUseOnly() {
+			return internalUseOnly;
+		}
+
+		public void setInternalUseOnly(boolean internalUseOnly) {
+			this.internalUseOnly = internalUseOnly;
+		}
+		
+		private PropertyKey(boolean isInternal) {
+			setInternalUseOnly(isInternal);
+		}
+    	
    }
