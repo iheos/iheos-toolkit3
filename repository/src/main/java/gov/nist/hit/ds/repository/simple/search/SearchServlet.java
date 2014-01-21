@@ -36,7 +36,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
  */
 public class SearchServlet extends HttpServlet {
 
-	private static final String USAGE_STR = "Usage: ?reposSrc=<Resident|External>&reposId=value&assetId=value&[level=<1,2,3>]&[reportType=<1,2>]";
+	private static final String USAGE_STR = "Usage: ?reposSrc=<Resident|External>&reposId=value&<asset=filenamewithextension|assetId=value>&[level=<1,2,3>]&[reportType=<1,2>]";
 	// private static Logger logger = Logger.getLogger(SearchServlet.class.getName());
 
 	
