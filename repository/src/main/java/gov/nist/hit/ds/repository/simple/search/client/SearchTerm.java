@@ -86,7 +86,7 @@ public class SearchTerm implements IsSerializable, Serializable {
 		if (key.isInternalUseOnly()) {
 			setPropName(key.toString());
 		} else {
-			setPropName(PnIdentifier.getQuotedIdentifer(key.toString()));
+			setPropNameQuoted(key.toString());
 		}
 		this.operator = op;
 		this.values = values;
@@ -98,7 +98,7 @@ public class SearchTerm implements IsSerializable, Serializable {
 		if (key.isInternalUseOnly()) {
 			setPropName(key.toString());
 		} else {
-			setPropName(PnIdentifier.getQuotedIdentifer(key.toString()));
+			setPropNameQuoted(key.toString());
 		}
 		this.operator = op;
 		this.values = new String[]{value};
@@ -106,17 +106,18 @@ public class SearchTerm implements IsSerializable, Serializable {
 	
 	public SearchTerm(String propName, Operator op, String[] values) {
 		super();
-		setPropName(propName);
+		setPropNameQuoted(propName);
 		this.operator = op;
 		this.values = values;
 	}
 	
 	public SearchTerm(String propName, Operator op, String value) {
 		super();
-		setPropName(propName);
+		setPropNameQuoted(propName);
 		this.operator = op;
 		this.values = new String[]{value};
-	}	
+	}
+		
 	
 	public String getAssetType() {
 		return assetType;
@@ -128,6 +129,11 @@ public class SearchTerm implements IsSerializable, Serializable {
 	public String getPropName() {		
 		return propName;
 	}
+	
+	public void setPropNameQuoted(String propName) {
+		setPropName(PnIdentifier.getQuotedIdentifer(propName));
+	}
+	
 	public void setPropName(String propName) {		
 		this.propName = propName; // Preserve case as the getProperty method is case sensitive
 	}

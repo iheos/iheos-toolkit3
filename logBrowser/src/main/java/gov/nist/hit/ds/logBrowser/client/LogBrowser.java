@@ -3,6 +3,7 @@ package gov.nist.hit.ds.logBrowser.client;
 
 import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
 import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
+import gov.nist.hit.ds.logBrowser.client.widgets.SearchWidget;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -48,6 +50,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -62,6 +66,7 @@ public class LogBrowser implements EntryPoint {
 	VerticalPanel treePanel = new VerticalPanel();
 	SplitLayoutPanel splitPanel = new SplitLayoutPanel(5);
 	ScrollPanel centerPanel = new ScrollPanel();
+	TabLayoutPanel contentTlp = new TabLayoutPanel(20, Unit.PX);
 	SplitLayoutPanel westContent = new SplitLayoutPanel(2);
 	ListBox reposLbx = new ListBox();
 	
@@ -75,6 +80,18 @@ public class LogBrowser implements EntryPoint {
  
     		
     // private HandlerRegistration handlerRegistration;
+    
+    
+    protected TabPanel addTab(Widget w, String lbl) {
+      	
+      	TabPanel tp = new TabPanel();
+      	tp.setVisible(true);
+
+      	w.setVisible(true);
+      	tp.add(w,lbl);
+      	return tp;
+      	
+    }
     
 	public LogBrowser() {}
 	
@@ -154,7 +171,18 @@ public class LogBrowser implements EntryPoint {
 																
 							splitPanel.addWest(westContent, 300); // 400  -- Math.round(.15 * Window.getClientWidth())
 							// centerPanel.add(new HTML("<h2 style='color:maroon'>Recent Activity</h2><hr/>")); // Startup message
-							splitPanel.add(centerPanel);
+							
+							// before tab: splitPanel.add(centerPanel);
+							
+						    contentTlp.setVisible(true);
+						    centerPanel.getElement().getStyle()
+					        .setProperty("border", "none");
+						    contentTlp.add(centerPanel, "Content Viewer"); // Content
+						    SearchWidget searchWidget = new SearchWidget(null); 
+						    searchWidget.getElement().getStyle()
+							        .setProperty("border", "none");
+						    contentTlp.add(searchWidget, "Search"); // Search
+						    splitPanel.add(contentTlp);
 							
 							RootLayoutPanel.get().add(splitPanel);
 							
@@ -372,7 +400,7 @@ public class LogBrowser implements EntryPoint {
 
 						public void onSuccess(AssetNode an) {
 							centerPanel.clear();
-							splitPanel.remove(centerPanel);
+							//// splitPanel.remove(centerPanel);
 							
 							// HTML safeHtml = new HTML(SafeHtmlUtils.fromString(an.getTxtContent()));
 							
@@ -418,7 +446,7 @@ public class LogBrowser implements EntryPoint {
 							}
 							
 							
-							splitPanel.add(centerPanel);		
+							//// splitPanel.add(centerPanel);		
 						}
 
 						/**
