@@ -3,6 +3,8 @@ package gov.nist.hit.ds.logBrowser.client.widgets;
 
 
 
+import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
+import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEventHandler;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.ContextSupplement;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
@@ -194,11 +196,19 @@ public class SearchWidget extends Composite {
 						resultFt.setWidget(0, 3, new HTML("Description"));
 						
 	
-						for (AssetNode a : result) {
-							resultFt.setWidget(row,0,  new HTML(a.getRepId()));
-							resultFt.setWidget(row,1,  new HTML(a.getAssetId()));
-							resultFt.setWidget(row,2,  new Anchor(a.getDisplayName()));
-							resultFt.setWidget(row++,3,  new HTML(a.getDescription()));
+						for (final AssetNode an : result) {
+							resultFt.setWidget(row,0,  new HTML(an.getRepId()));
+							resultFt.setWidget(row,1,  new HTML(an.getAssetId()));
+							
+							Anchor assetLnk = new Anchor(an.getDisplayName());
+							assetLnk.addClickHandler(new ClickHandler() {
+								
+								public void onClick(ClickEvent event) {
+									eventBus.fireEvent(new AssetClickedEvent(an)); // Need to use AssetNode									
+								}
+							});
+							resultFt.setWidget(row,2, assetLnk);
+							resultFt.setWidget(row++,3,  new HTML(an.getDescription()));
 						}
 					}	
 					

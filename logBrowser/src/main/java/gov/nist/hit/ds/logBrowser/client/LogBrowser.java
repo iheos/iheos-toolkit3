@@ -1,6 +1,8 @@
 package gov.nist.hit.ds.logBrowser.client;
 
 
+import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
+import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEventHandler;
 import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
 import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
 import gov.nist.hit.ds.logBrowser.client.widgets.SearchWidget;
@@ -35,6 +37,7 @@ import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -77,7 +80,8 @@ public class LogBrowser implements EntryPoint {
 	final public RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
     protected ArrayList<String> propNames = new ArrayList<String>();
     protected Map<String, String> reposProps = new HashMap<String,String>();
- 
+    SimpleEventBus eventBus;
+    AsyncCallback<AssetNode> contentSetup = null;
     		
     // private HandlerRegistration handlerRegistration;
     
@@ -101,6 +105,8 @@ public class LogBrowser implements EntryPoint {
 
 	  public void onModuleLoad() {
 
+		 eventBus = new SimpleEventBus();
+		    
 	    // CwOptionalTextBox otb = new CwOptionalTextBox("Enable text input");
 	    // RootPanel.get().add(panel);
 	    
@@ -178,10 +184,31 @@ public class LogBrowser implements EntryPoint {
 						    centerPanel.getElement().getStyle()
 					        .setProperty("border", "none");
 						    contentTlp.add(centerPanel, "Content Viewer"); // Content
-						    SearchWidget searchWidget = new SearchWidget(null); 
+						    
+						    ScrollPanel searchPanel = new ScrollPanel();						    						    
+							contentSetup = new AsyncCallback<AssetNode>() {
+								public void onFailure(Throwable arg0) {
+									centerPanel.clear();							
+									centerPanel.add(new HTML("Content could not be loaded. " + arg0.toString()));
+									propsWidget.setHTML("");
+								}
+
+								public void onSuccess(AssetNode an) {
+									displayAssetContent(an);
+								}
+								
+							};
+						    eventBus.addHandler(AssetClickedEvent.TYPE, new AssetClickedEventHandler() {								
+								public void onAssetClick(AssetClickedEvent event) {
+									reposService.getAssetTxtContent(event.getValue(), contentSetup); 
+								}
+							}); 
+						    SearchWidget searchWidget = new SearchWidget(eventBus); 
 						    searchWidget.getElement().getStyle()
 							        .setProperty("border", "none");
-						    contentTlp.add(searchWidget, "Search"); // Search
+						    searchPanel.add(searchWidget);
+						    contentTlp.add(searchPanel, "Search"); // Search
+						    
 						    splitPanel.add(contentTlp);
 							
 							RootLayoutPanel.get().add(splitPanel);
@@ -389,100 +416,7 @@ public class LogBrowser implements EntryPoint {
 				public void onSelection(SelectionEvent<TreeItem> treeItem) {
 					// Window.alert(((AssetTreeItem)treeItem.getSelectedItem()).getAssetId());
 					AssetNode an = ((AssetTreeItem)treeItem.getSelectedItem()).getAssetNode();
-					
-					AsyncCallback<AssetNode> contentSetup = new AsyncCallback<AssetNode>() {
 
-						public void onFailure(Throwable arg0) {
-							centerPanel.clear();							
-							centerPanel.add(new HTML("Content could not be loaded. " + arg0.toString()));
-							propsWidget.setHTML("");
-						}
-
-						public void onSuccess(AssetNode an) {
-							centerPanel.clear();
-							//// splitPanel.remove(centerPanel);
-							
-							// HTML safeHtml = new HTML(SafeHtmlUtils.fromString(an.getTxtContent()));
-							
-							// westContent.remove(propsWidget);
-							SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
-							String propsTxt = (an.getProps()!=null)?an.getProps().trim():"";
-							// margin-top:0px;margin-left:3px;
-							propsContent.appendHtmlConstant("<div style='margin:3px;'>Asset Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
-							if (an.getLocation()!=null) {
-								propsContent.appendHtmlConstant("<!-- <br/>Asset Location:<br/><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>" + an.getLocation()  + "</span>-->");
-							}
-							propsContent.appendHtmlConstant("</div>");
-							propsWidget.setWidth("250px");
-							propsWidget.setHTML(propsContent.toSafeHtml());
-							
-							/*
-							propsWidget.getElement().getStyle()
-					        .setProperty("borderTop", "1px dotted #e7e7e7"); // 1px solid #e7e7e7
-							propsWidget.getElement().getStyle()
-					        .setProperty("borderBottom", "1px dotted #e7e7e7"); // 1px solid #e7e7e7
-							*/
-							
-							// westContent.add(propsWidget, DockPanel.SOUTH);
-							
-							// westContent.add(propsWidget);
-							if (an.isContentAvailable()) {
-								if ("text/csv".equals(an.getMimeType())) {
-									   CellTable<List<String>> table = createCellTable(an.getCsv());								    
-									    centerPanel.add(table);							    
-								} else if ("text/xml".equals(an.getMimeType()) || "application/soap+xml".equals(an.getMimeType())) {
-									String xmlStr = an.getTxtContent().replace("<br/>", "\r\n");
-									String shStr = SyntaxHighlighter.highlight(xmlStr, BrushFactory.newXmlBrush() , false);
-									centerPanel.add(new HTML(shStr));
-								} else if ("text/json".equals(an.getMimeType())) {
-									// centerPanel.add(new HTML("<pre>" + an.getTxtContent() + "</pre>"));
-									String shStr = SyntaxHighlighter.highlight(an.getTxtContent(), BrushFactory.newCssBrush() , false);
-									centerPanel.add(new HTML(shStr));
-								} else {								
-									centerPanel.add(new HTML(an.getTxtContent()));	
-								}								
-							} else {
-								centerPanel.add(new HTML("<!-- Content not available. -->"));
-							}
-							
-							
-							//// splitPanel.add(centerPanel);		
-						}
-
-						/**
-						 * @param an
-						 * @return
-						 */
-						private CellTable<List<String>> createCellTable(String [][]csv) {
-							// Create a CellTable (based on Stack ans. 15122103).
-							 CellTable<List<String>> table = new CellTable<List<String>>();							 							 
-							 
-							 
-							 // Get the rows as List
-							    int rowLen = csv.length;
-							    int colLen = csv[0].length;
-							    List<List<String>> rows = new ArrayList<List<String>>(rowLen);
-							    
-							    for (int r = 1; r < rowLen; r++) {
-							        List<String> row = Arrays.asList(csv[r]);
-							        rows.add(row);
-							    }  
-
-							    // Create table columns
-							    for (int c = 0; c < colLen; c++) {
-							        table.addColumn(new IndexedColumn(c), 
-							              new TextHeader(csv[0][c]));
-							    }
-							    
-							    // Create a list data provider.
-							    final ListDataProvider<List<String>> dataProvider  = new ListDataProvider<List<String>>();
-							    dataProvider.setList(rows);
-							    
-							    dataProvider.addDataDisplay(table);
-							return table;
-						}
-						
-					};
 					reposService.getAssetTxtContent(an, contentSetup); 
 					
 				}
@@ -495,6 +429,90 @@ public class LogBrowser implements EntryPoint {
 		    }
 		    
 		    return tree;
+	  }
+		/**
+		 * @param an
+		 * @return
+		 */
+		private CellTable<List<String>> createCellTable(String [][]csv) {
+			// Create a CellTable (based on Stack ans. 15122103).
+			 CellTable<List<String>> table = new CellTable<List<String>>();							 							 
+			 
+			 
+			 // Get the rows as List
+			    int rowLen = csv.length;
+			    int colLen = csv[0].length;
+			    List<List<String>> rows = new ArrayList<List<String>>(rowLen);
+			    
+			    for (int r = 1; r < rowLen; r++) {
+			        List<String> row = Arrays.asList(csv[r]);
+			        rows.add(row);
+			    }  
+
+			    // Create table columns
+			    for (int c = 0; c < colLen; c++) {
+			        table.addColumn(new IndexedColumn(c), 
+			              new TextHeader(csv[0][c]));
+			    }
+			    
+			    // Create a list data provider.
+			    final ListDataProvider<List<String>> dataProvider  = new ListDataProvider<List<String>>();
+			    dataProvider.setList(rows);
+			    
+			    dataProvider.addDataDisplay(table);
+			return table;
+		}
+		
+	  protected void displayAssetContent(AssetNode an) {
+			centerPanel.clear();
+			//// splitPanel.remove(centerPanel);
+			
+			// HTML safeHtml = new HTML(SafeHtmlUtils.fromString(an.getTxtContent()));
+			
+			// westContent.remove(propsWidget);
+			SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
+			String propsTxt = (an.getProps()!=null)?an.getProps().trim():"";
+			// margin-top:0px;margin-left:3px;
+			propsContent.appendHtmlConstant("<div style='margin:3px;'>Asset Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
+			if (an.getLocation()!=null) {
+				propsContent.appendHtmlConstant("<!-- <br/>Asset Location:<br/><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>" + an.getLocation()  + "</span>-->");
+			}
+			propsContent.appendHtmlConstant("</div>");
+			propsWidget.setWidth("250px");
+			propsWidget.setHTML(propsContent.toSafeHtml());
+			
+			/*
+			propsWidget.getElement().getStyle()
+	        .setProperty("borderTop", "1px dotted #e7e7e7"); // 1px solid #e7e7e7
+			propsWidget.getElement().getStyle()
+	        .setProperty("borderBottom", "1px dotted #e7e7e7"); // 1px solid #e7e7e7
+			*/
+			
+			// westContent.add(propsWidget, DockPanel.SOUTH);
+			
+			// westContent.add(propsWidget);
+			if (an.isContentAvailable()) {
+				if ("text/csv".equals(an.getMimeType())) {
+					   CellTable<List<String>> table = createCellTable(an.getCsv());								    
+					    centerPanel.add(table);							    
+				} else if ("text/xml".equals(an.getMimeType()) || "application/soap+xml".equals(an.getMimeType())) {
+					String xmlStr = an.getTxtContent().replace("<br/>", "\r\n");
+					String shStr = SyntaxHighlighter.highlight(xmlStr, BrushFactory.newXmlBrush() , false);
+					centerPanel.add(new HTML(shStr));
+				} else if ("text/json".equals(an.getMimeType())) {
+					// centerPanel.add(new HTML("<pre>" + an.getTxtContent() + "</pre>"));
+					String shStr = SyntaxHighlighter.highlight(an.getTxtContent(), BrushFactory.newCssBrush() , false);
+					centerPanel.add(new HTML(shStr));
+				} else {								
+					centerPanel.add(new HTML(an.getTxtContent()));	
+				}								
+			} else {
+				centerPanel.add(new HTML("<!-- Content not available. -->"));
+			}
+			
+			contentTlp.selectTab(0);
+			//// splitPanel.add(centerPanel);		
+
 	  }
 	  
 	  protected AssetTreeItem createTreeItem(AssetNode an) {
