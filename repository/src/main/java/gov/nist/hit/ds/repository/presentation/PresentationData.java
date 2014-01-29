@@ -179,8 +179,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 					aDst.setDisplayName(aSrc.getDisplayName());
 					aDst.setMimeType(aSrc.getMimeType());
 					aDst.setReposSrc(aSrc.getSource().getAccess().name());
-					if (aSrc.getPath()!=null)
-						aDst.setLocation(aSrc.getPath().toString());
+					if (aSrc.getPath()!=null) {
+						aDst.setLocation(aSrc.getPropFileRelativePart()); 
+					}
 					result.add(aDst);
 				}
 			}
