@@ -166,7 +166,7 @@ public class SearchTerm implements IsSerializable, Serializable {
 		
 		String propName = getPropName();
 		if (null == values[0]) {
-			return propName + "is null ";
+			return propName + " is null ";
 		} else {
 			return propName + getOperator().toString() + "'" + values[0] + "' "; 
 		}		
