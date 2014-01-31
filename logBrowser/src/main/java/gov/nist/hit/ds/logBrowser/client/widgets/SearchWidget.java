@@ -4,7 +4,6 @@ package gov.nist.hit.ds.logBrowser.client.widgets;
 
 
 import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
-import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEventHandler;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.ContextSupplement;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
@@ -191,14 +190,14 @@ public class SearchWidget extends Composite {
 
 						
 						resultFt.setWidget(0, 0, new HTML("Repository Id"));
-						resultFt.setWidget(0, 1, new HTML("Asset Id"));
+						resultFt.setWidget(0, 1, new HTML("Created Date"));
 						resultFt.setWidget(0, 2, new HTML("Display Name"));
 						resultFt.setWidget(0, 3, new HTML("Description"));
 						
 	
 						for (final AssetNode an : result) {
 							resultFt.setWidget(row,0,  new HTML(an.getRepId()));
-							resultFt.setWidget(row,1,  new HTML(an.getAssetId()));
+							resultFt.setWidget(row,1,  new HTML(an.getCreatedDate()));
 							
 							Anchor assetLnk = new Anchor(an.getDisplayName());
 							assetLnk.addClickHandler(new ClickHandler() {
