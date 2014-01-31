@@ -69,6 +69,7 @@ public class AssetNodeBuilder {
 					,a.getDescription()
 					,a.getMimeType()
 					,a.getSource().getAccess().name());
+			parent.setParentId(a.getProperty(PropertyKey.PARENT_ID));
 			if (a.getPath()!=null) {
 				// parent.setLocation(a.getPath().toString());
 				parent.setLocation(a.getPropFileRelativePart());
@@ -109,6 +110,7 @@ public class AssetNodeBuilder {
 						,a.getDescription()
 						,a.getMimeType()
 						,a.getSource().getAccess().name());
+				child.setParentId(a.getProperty(PropertyKey.PARENT_ID));
 				if (a.getPath()!=null) {
 					// child.setLocation(a.getPath().toString());
 					child.setLocation(a.getPropFileRelativePart());
@@ -127,19 +129,49 @@ public class AssetNodeBuilder {
 		
 	}	
 	
-//	public List<String> getParentChain(Repository repos, String relativeLocation) {
-//		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
-//		criteria.append(new SearchTerm(PropertyKey.LOCATION,Operator.EQUALTO, relativeLocation); 
-// 		
-//		AssetIterator iter;
-//		try {
-//			iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
-//			
-//			while (iter.hasNextAsset()) {
-//				Asset a = iter.nextAsset();
-//				// TODO use parent location
-//
-//	}
+	public AssetNode getParentChain(Repository repos, AssetNode child) throws RepositoryException {		
+		SearchCriteria criteria = new SearchCriteria(Criteria.OR);
+		criteria.append(new SearchTerm(PropertyKey.LOCATION,Operator.EQUALTO, child.getParentId()));
+		criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO, child.getParentId()));
+ 		
+		AssetIterator iter;
+		try {
+			iter = new SearchResultIterator(new Repository[]{repos}, criteria);
+			
+			if (iter.hasNextAsset()) { // Get the first one
+				Asset a = iter.nextAsset();
+				AssetNode parent = new AssetNode(a.getRepository().getIdString()
+						,(a.getId()!=null)?a.getId().getIdString():null
+						,(a.getAssetType()==null)?null:a.getAssetType().toString()
+						,a.getDisplayName()
+						,a.getDescription()
+						,a.getMimeType()
+						,a.getSource().getAccess().name());
+				parent.setParentId(a.getProperty(PropertyKey.PARENT_ID));
+				if (a.getPath()!=null) {
+					// child.setLocation(a.getPath().toString());
+					parent.setLocation(a.getPropFileRelativePart());
+				}
+				parent.setContentAvailable(a.hasContent());
+		
+				List<AssetNode> children = getImmediateChildren(repos, parent);
+				List<AssetNode> childrenUpdate = new ArrayList<AssetNode>();
+				for (AssetNode c : children) {
+					if (c.getLocation()!=null && c.getLocation().equals(child.getLocation())) {
+						childrenUpdate.add(child);
+					} else
+						childrenUpdate.add(c);
+				}
+				parent.addChildren(childrenUpdate);
+				
+				return getParentChain(repos, parent);
+
+			} 
+		} catch (Exception ex) {
+			logger.warning(ex.toString());
+		}
+		return child;
+	}
 
 	private boolean addChildIndicator(Repository repos, AssetNode potentialParent) throws RepositoryException {
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
@@ -174,6 +206,7 @@ public class AssetNodeBuilder {
 						,a.getDescription()
 						,a.getMimeType()
 						,a.getSource().getAccess().name());
+				child.setParentId(a.getProperty(PropertyKey.PARENT_ID));
 				if (a.getPath()!=null) {
 					// child.setLocation(a.getPath().toString());
 					child.setLocation(a.getPropFileRelativePart());

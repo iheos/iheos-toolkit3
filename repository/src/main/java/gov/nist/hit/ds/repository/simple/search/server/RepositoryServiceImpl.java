@@ -82,6 +82,16 @@ RepositoryService {
 		}
 	}
 
+	@Override
+	public AssetNode getParentChain(AssetNode an)
+			throws RepositoryConfigException {
+		try {
+			return PresentationData.getParentChain(an);	
+		} catch (Exception re) {
+			throw new RepositoryConfigException(re.toString());
+		}
+	}
+
 
 
 }

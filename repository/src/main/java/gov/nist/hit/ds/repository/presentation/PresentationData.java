@@ -113,6 +113,13 @@ public class PresentationData implements IsSerializable, Serializable  {
 		return result;
 	}
 	
+	public static AssetNode getParentChain(AssetNode an) throws RepositoryException {
+		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
+		AssetNodeBuilder anb = new AssetNodeBuilder();
+		
+		return anb.getParentChain(repos, an);		
+	}
+	
 
 	public static List<AssetNode> getImmediateChildren(AssetNode an) throws RepositoryException {
 		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
@@ -179,6 +186,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 					aDst.setDisplayName(aSrc.getDisplayName());
 					aDst.setMimeType(aSrc.getMimeType());
 					aDst.setReposSrc(aSrc.getSource().getAccess().name());
+					aDst.setParentId(aSrc.getProperty(PropertyKey.PARENT_ID));
 					if (aSrc.getPath()!=null) {
 						aDst.setLocation(aSrc.getPropFileRelativePart()); 
 					}

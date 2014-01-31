@@ -14,5 +14,6 @@ public interface RepositoryServiceAsync {
 	void getAssetTree(String[][] repos, AsyncCallback<List<AssetNode>> callback);
 	void getAssetTxtContent(AssetNode an, AsyncCallback<AssetNode> callback);
 	void getImmediateChildren(AssetNode an, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
+	void getParentChain(AssetNode an, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
 
 }

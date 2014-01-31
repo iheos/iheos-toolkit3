@@ -18,6 +18,7 @@ public class AssetNode implements IsSerializable, Serializable {
 	
 	private String repId;
 	private String assetId;
+	private String parentId;
 	private String type;
 	private String displayName;
 	private String description;
@@ -62,6 +63,10 @@ public class AssetNode implements IsSerializable, Serializable {
 	
 	public void addChild(AssetNode a) {
 		children.add(a);
+	}
+	
+	public void addChildren(List<AssetNode> children) {
+		this.children.addAll(children);
 	}
 	
 	public String getRepId() {
@@ -149,6 +154,14 @@ public class AssetNode implements IsSerializable, Serializable {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 
 	
