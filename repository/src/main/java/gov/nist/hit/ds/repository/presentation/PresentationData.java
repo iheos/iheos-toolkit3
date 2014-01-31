@@ -78,11 +78,20 @@ public class PresentationData implements IsSerializable, Serializable  {
 		List<String> indexProps = new ArrayList<String>(); 
 		for (Access acs : RepositorySource.Access.values()) {
 			try {
-				indexProps.addAll(DbIndexContainer.getIndexableProperties(Configuration.getRepositorySrc(acs)));
+				List<String> srcProps = DbIndexContainer.getIndexableProperties(Configuration.getRepositorySrc(acs));
+				if (!indexProps.isEmpty()) {
+					for (String s: srcProps) {
+						if (!indexProps.contains(s)) {
+							indexProps.add(s);
+						}
+					}					
+				} else
+					indexProps.addAll(srcProps);
 			} catch (RepositoryException e) {
 				e.printStackTrace();
 			}
 		}
+		Collections.sort(indexProps);
 		return indexProps;
 	}
 	
@@ -117,7 +126,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
 		AssetNodeBuilder anb = new AssetNodeBuilder();
 		
-		return anb.getParentChain(repos, an);		
+		return anb.getParentChain(repos, an, true);		
 	}
 	
 
@@ -187,6 +196,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 					aDst.setMimeType(aSrc.getMimeType());
 					aDst.setReposSrc(aSrc.getSource().getAccess().name());
 					aDst.setParentId(aSrc.getProperty(PropertyKey.PARENT_ID));
+					aDst.setCreatedDate(aSrc.getCreatedDate());
 					if (aSrc.getPath()!=null) {
 						aDst.setLocation(aSrc.getPropFileRelativePart()); 
 					}

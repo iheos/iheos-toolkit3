@@ -81,7 +81,7 @@ public class AssetNodeBuilderTest {
 			assertTrue("grandchild1".equals(grandchild.getDisplayName()));
 			
 			System.out.println("*** chain test ***");
-			AssetNode chain = anb.getParentChain(repos, grandchild);
+			AssetNode chain = anb.getParentChain(repos, grandchild, true);
 			chainTest(chain);
 			
 		} catch (Exception ex) {

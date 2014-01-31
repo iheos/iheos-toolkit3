@@ -25,6 +25,7 @@ public class AssetNode implements IsSerializable, Serializable {
 	private String mimeType;
 	private String reposSrc;
 	private String location;
+	private String createdDate;
 	
 	private boolean hasContent;
 	private String txtContent;
@@ -162,6 +163,14 @@ public class AssetNode implements IsSerializable, Serializable {
 
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
+	}
+
+	public String getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	

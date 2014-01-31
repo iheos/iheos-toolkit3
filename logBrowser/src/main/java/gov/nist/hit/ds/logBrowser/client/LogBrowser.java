@@ -213,8 +213,8 @@ public class LogBrowser implements EntryPoint {
 												List<AssetNode> topLevelAsset = new ArrayList<AssetNode>();
 												topLevelAsset.add(an);
 												treeHolder.add(popTreeWidget(topLevelAsset,target,true));
+												reposService.getAssetTxtContent(target, contentSetup);
 											}});
-										reposService.getAssetTxtContent(target, contentSetup);
 									} catch (RepositoryConfigException e) {
 										e.printStackTrace();
 									}
@@ -439,6 +439,10 @@ public class LogBrowser implements EntryPoint {
 		    	AssetTreeItem treeItem = createTreeItem(an, target, expandLeaf);
 		    	if (expandLeaf) {
 		    		treeItem.setState(true); // Open node
+		    		if ((target!=null && an.getLocation()!=null) && an.getLocation().equals(target.getLocation())) {
+		        		treeItemTarget = treeItem;
+		        		treeItemTarget.setSelected(true);
+		        	}
 		    	}
 		    	tree.addItem(treeItem);
 		    }
@@ -520,16 +524,20 @@ public class LogBrowser implements EntryPoint {
 					centerPanel.add(new HTML(shStr));
 				} else {								
 					centerPanel.add(new HTML(an.getTxtContent()));	
+				} 
+			} else {	
+				if (treeItemTarget.getChildCount()>0) {
+					centerPanel.add(new HTML("")); // Higher-level asset may not have any content		
+				} else {
+					centerPanel.add(new HTML("There is no content for the selected asset."));			
 				}
-			} else {
-				centerPanel.add(new HTML("Content not available."));
-			}
+			}		        		 
 			
 			contentTlp.selectTab(0);
 			//// splitPanel.add(centerPanel);		
 
 	  }
-	  
+	  	  	  
 	  protected AssetTreeItem createTreeItem(AssetNode an, AssetNode target, Boolean expandLeaf) {
 	        AssetTreeItem item = new AssetTreeItem(an);
 

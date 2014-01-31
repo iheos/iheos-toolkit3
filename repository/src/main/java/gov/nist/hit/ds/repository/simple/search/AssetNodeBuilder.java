@@ -129,13 +129,16 @@ public class AssetNodeBuilder {
 		
 	}	
 	
-	public AssetNode getParentChain(Repository repos, AssetNode child) throws RepositoryException {		
+	public AssetNode getParentChain(Repository repos, AssetNode child, boolean initial) throws RepositoryException {		
 		SearchCriteria criteria = new SearchCriteria(Criteria.OR);
 		criteria.append(new SearchTerm(PropertyKey.LOCATION,Operator.EQUALTO, child.getParentId()));
 		criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO, child.getParentId()));
  		
 		AssetIterator iter;
 		try {
+			if (initial) {
+				child.addChildren(getImmediateChildren(repos, child));
+			}
 			iter = new SearchResultIterator(new Repository[]{repos}, criteria);
 			
 			if (iter.hasNextAsset()) { // Get the first one
@@ -153,7 +156,7 @@ public class AssetNodeBuilder {
 					parent.setLocation(a.getPropFileRelativePart());
 				}
 				parent.setContentAvailable(a.hasContent());
-		
+				
 				List<AssetNode> children = getImmediateChildren(repos, parent);
 				List<AssetNode> childrenUpdate = new ArrayList<AssetNode>();
 				for (AssetNode c : children) {
@@ -164,7 +167,7 @@ public class AssetNodeBuilder {
 				}
 				parent.addChildren(childrenUpdate);
 				
-				return getParentChain(repos, parent);
+				return getParentChain(repos, parent, false);
 
 			} 
 		} catch (Exception ex) {
