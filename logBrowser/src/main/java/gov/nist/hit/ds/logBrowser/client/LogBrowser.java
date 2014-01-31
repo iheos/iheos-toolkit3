@@ -82,6 +82,7 @@ public class LogBrowser implements EntryPoint {
     protected Map<String, String> reposProps = new HashMap<String,String>();
     SimpleEventBus eventBus;
     AsyncCallback<AssetNode> contentSetup = null;
+    AssetTreeItem treeItemTarget = null;     
     		
     // private HandlerRegistration handlerRegistration;
     
@@ -200,7 +201,24 @@ public class LogBrowser implements EntryPoint {
 							};
 						    eventBus.addHandler(AssetClickedEvent.TYPE, new AssetClickedEventHandler() {								
 								public void onAssetClick(AssetClickedEvent event) {
-									reposService.getAssetTxtContent(event.getValue(), contentSetup); 
+									try {
+										final AssetNode target = event.getValue(); 
+										reposService.getParentChain(target, new AsyncCallback<AssetNode>(){
+
+											public void onFailure(Throwable arg0) {												
+												propsWidget.setHTML("Search result action could not be synchronized with the tree: " + arg0.toString()); 
+											}
+											public void onSuccess(AssetNode an) {
+												treeHolder.clear();
+												List<AssetNode> topLevelAsset = new ArrayList<AssetNode>();
+												topLevelAsset.add(an);
+												treeHolder.add(popTreeWidget(topLevelAsset,target,true));
+											}});
+										reposService.getAssetTxtContent(target, contentSetup);
+									} catch (RepositoryConfigException e) {
+										e.printStackTrace();
+									}
+ 
 								}
 							}); 
 						    SearchWidget searchWidget = new SearchWidget(eventBus); 
@@ -221,7 +239,7 @@ public class LogBrowser implements EntryPoint {
 
 								public void onSuccess(List<AssetNode> a) {
 									treeHolder.clear();
-									treeHolder.add(popTreeWidget(a));
+									treeHolder.add(popTreeWidget(a,null,false));
 									
 									// populate repository props here
 									propsWidget.setHTML("");
@@ -303,7 +321,7 @@ public class LogBrowser implements EntryPoint {
 	    
 	  }
 
-	  protected Widget popTreeWidget(List<AssetNode> a) {
+	  protected Widget popTreeWidget(List<AssetNode> a, AssetNode target, Boolean expandLeaf) {
 		    Tree tree = new Tree();
 		    final PopupPanel menu = new PopupPanel(true);
 		    
@@ -319,15 +337,7 @@ public class LogBrowser implements EntryPoint {
 		            	   
 		                 // Close the item immediately
 		                 item.setState(false, false);
-
-		                 // Add a random number of children to the item
-//		                 String itemText = item.getText();
-//		                 int numChildren = 5;
-//		                 for (int i = 0; i < numChildren; i++) {
-//		                   TreeItem child = item.addTextItem(itemText + "." + i);
-//		                   child.addTextItem("");
-//		                 }
-		                 
+                 
 		                 final AsyncCallback<List<AssetNode>> addImmediateChildren = new AsyncCallback<List<AssetNode>>() {
 
 								public void onFailure(Throwable a) {
@@ -336,7 +346,7 @@ public class LogBrowser implements EntryPoint {
 
 								public void onSuccess(List<AssetNode> a) {
 									for (AssetNode an : a) {
-								    	AssetTreeItem treeItem = createTreeItem(an);
+								    	AssetTreeItem treeItem = createTreeItem(an, null, false);
 								    	item.addItem(treeItem);
 								    	item.setState(true); // Open node
 								    }									
@@ -414,17 +424,22 @@ public class LogBrowser implements EntryPoint {
 		    tree.addSelectionHandler(new SelectionHandler<TreeItem>() {				
 		    	
 				public void onSelection(SelectionEvent<TreeItem> treeItem) {
+					try {
+						treeItemTarget.setSelected(false);	
+					} finally {}					
+					
 					// Window.alert(((AssetTreeItem)treeItem.getSelectedItem()).getAssetId());
 					AssetNode an = ((AssetTreeItem)treeItem.getSelectedItem()).getAssetNode();
 
-					reposService.getAssetTxtContent(an, contentSetup); 
-					
+					reposService.getAssetTxtContent(an, contentSetup); 					
 				}
 			});
 		    
 		    for (AssetNode an : a) {
-		    	AssetTreeItem treeItem = createTreeItem(an);
-		    	// treeItem.setState(true); Open node
+		    	AssetTreeItem treeItem = createTreeItem(an, target, expandLeaf);
+		    	if (expandLeaf) {
+		    		treeItem.setState(true); // Open node
+		    	}
 		    	tree.addItem(treeItem);
 		    }
 		    
@@ -505,9 +520,9 @@ public class LogBrowser implements EntryPoint {
 					centerPanel.add(new HTML(shStr));
 				} else {								
 					centerPanel.add(new HTML(an.getTxtContent()));	
-				}								
+				}
 			} else {
-				centerPanel.add(new HTML("<!-- Content not available. -->"));
+				centerPanel.add(new HTML("Content not available."));
 			}
 			
 			contentTlp.selectTab(0);
@@ -515,11 +530,20 @@ public class LogBrowser implements EntryPoint {
 
 	  }
 	  
-	  protected AssetTreeItem createTreeItem(AssetNode an) {
+	  protected AssetTreeItem createTreeItem(AssetNode an, AssetNode target, Boolean expandLeaf) {
 	        AssetTreeItem item = new AssetTreeItem(an);
 
 	        for (AssetNode child : an.getChildren()) {
-	            item.addItem(createTreeItem(child));
+	        	AssetTreeItem treeItem = createTreeItem(child, target, expandLeaf);
+	        	if (expandLeaf && !(treeItem.getChildCount() == 1 && "HASCHILDREN".equals(treeItem.getChild(0).getText()))) {
+		    		treeItem.setState(true); // Open node
+		        	if ((target!=null && child.getLocation()!=null) && child.getLocation().equals(target.getLocation())) {
+		        		treeItemTarget = treeItem;
+		        		treeItemTarget.setSelected(true);
+		        	}
+		    	}
+
+	            item.addItem(treeItem);
 	        }	        
 	        return item;
 	    }
