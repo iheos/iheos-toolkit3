@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.Parameter;
@@ -24,7 +24,7 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 	 * @return 
 	 * @throws RepositoryException
 	 */
-	public SimpleRepository(Id id) throws RepositoryException {
+	public SimpleRepository(ArtifactId id) throws RepositoryException {
 		super(id);
 	}
 
@@ -141,7 +141,7 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 	}
 	
 	@Override
-	public void deleteAsset(Id assetId) throws RepositoryException {
+	public void deleteAsset(ArtifactId assetId) throws RepositoryException {
 
 		Parameter param = new Parameter("delete Id");
 		param.assertNotNull(assetId);

@@ -1,11 +1,10 @@
 package gov.nist.hit.ds.repository.simple;
 
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.Id;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
@@ -23,7 +22,7 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	File reposDir = null;
 	File[] assetFileNames;
 	int assetFileNamesIndex = 0;
-	Id repositoryId = null;
+	ArtifactId repositoryId = null;
 	boolean[] selections = null;
 	Type type = null;
 	private Repository repository;
@@ -84,10 +83,8 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		if (!hasNextAsset())
 			throw new RepositoryException(RepositoryException.NO_MORE_ITERATOR_ELEMENTS);
 		File filename = assetFileNames[assetFileNamesIndex++];
-
-		Repository repos = new RepositoryFactory(getRepository().getSource()).getRepository(repositoryId);
 		
-		return repos.getAssetByPath(filename);
+		return repository.getAssetByPath(filename);
 		
 		// This should not be required because the filename is already available for direct loading purposes
 		// Id assetId = Configuration.getAssetIdFromFilename(filename.getName());

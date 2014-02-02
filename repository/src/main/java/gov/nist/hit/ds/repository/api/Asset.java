@@ -213,7 +213,7 @@ public interface Asset {
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNIMPLEMENTED
      *         UNIMPLEMENTED}
      */
-    gov.nist.hit.ds.repository.api.Id getId() throws gov.nist.hit.ds.repository.api.RepositoryException;
+    gov.nist.hit.ds.repository.api.ArtifactId getId() throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
      * Get the AssetType of this Asset.  AssetTypes are used to categorize
@@ -369,7 +369,7 @@ public interface Asset {
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNIMPLEMENTED
      *         UNIMPLEMENTED}
      */
-    public gov.nist.hit.ds.repository.api.Id getRepository()
+    public gov.nist.hit.ds.repository.api.ArtifactId getRepository()
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -509,7 +509,7 @@ public interface Asset {
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
      */
-    public void removeAsset(gov.nist.hit.ds.repository.api.Id assetId, boolean includeChildren)
+    public void removeAsset(gov.nist.hit.ds.repository.api.ArtifactId assetId, boolean includeChildren)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
@@ -565,7 +565,7 @@ public interface Asset {
     public File getPropFile()
     		throws RepositoryException;
     
-	public File getPropFile(Id id) 
+	public File getPropFile(ArtifactId id) 
 			throws RepositoryException;
 	
 	public java.util.Properties getProperties()

@@ -2,7 +2,7 @@ package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.LongValueIterator;
 import gov.nist.hit.ds.repository.api.PropertiesIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -27,7 +27,7 @@ public abstract class BaseRepository implements Repository {
 	boolean isNew;
 	
 	private RepositorySource source;
-	private Id reposId;
+	private ArtifactId reposId;
 
 	@Override
 	public File getRoot() throws RepositoryException {		
@@ -63,7 +63,7 @@ public abstract class BaseRepository implements Repository {
 	 * @param root - filesystem directory that holds the repository contents
 	 * @throws RepositoryException
 	 */
-	public BaseRepository(Id id) throws RepositoryException {
+	public BaseRepository(ArtifactId id) throws RepositoryException {
 		setReposId(id);
 		isNew = false;
 	}
@@ -127,7 +127,7 @@ public abstract class BaseRepository implements Repository {
 	}
 
 	@Override
-	public Id getId() throws RepositoryException {
+	public ArtifactId getId() throws RepositoryException {
 //		load();
 		
 		if (!loaded) {
@@ -138,7 +138,7 @@ public abstract class BaseRepository implements Repository {
 				throw new RepositoryException(RepositoryException.UNKNOWN_ID + 
 						" - loading repository but Repository.id is empty");
 			}
-			Id id = new SimpleId(idString);
+			ArtifactId id = new SimpleId(idString);
 			return id;
 			
 		}			
@@ -159,7 +159,7 @@ public abstract class BaseRepository implements Repository {
 	/**
 	 * This method returns an asset that is primarily used for read-only operations. To update an asset return by this method, setAutoFlush to true.
 	 */
-	public Asset getAsset(Id assetId) throws RepositoryException {
+	public Asset getAsset(ArtifactId assetId) throws RepositoryException {
 		// File reposDir =  new File(Configuration.getRepositoriesDataDir(getSource()).toString()  + File.separator + getId().getIdString());
 		File reposDir =  getRoot();
 		if (!reposDir.exists() || !reposDir.isDirectory())
@@ -270,32 +270,32 @@ public abstract class BaseRepository implements Repository {
 	}
 
 	@Override
-	public Type getStatus(Id assetId) throws RepositoryException {
+	public Type getStatus(ArtifactId assetId) throws RepositoryException {
 //		load();
 		throw new RepositoryException(RepositoryException.UNIMPLEMENTED);
 	}
 
 	@Override
-	public boolean validateAsset(Id assetId) throws RepositoryException {
+	public boolean validateAsset(ArtifactId assetId) throws RepositoryException {
 //		load();
 		throw new RepositoryException(RepositoryException.UNIMPLEMENTED);
 	}
 
 	@Override
-	public void invalidateAsset(Id assetId) throws RepositoryException {
+	public void invalidateAsset(ArtifactId assetId) throws RepositoryException {
 //		load();
 		throw new RepositoryException(RepositoryException.UNIMPLEMENTED);
 	}
 
 	@Override
-	public Asset getAssetByDate(Id assetId, long date)
+	public Asset getAssetByDate(ArtifactId assetId, long date)
 			throws RepositoryException {
 //		load();
 		throw new RepositoryException(RepositoryException.UNIMPLEMENTED);
 	}
 
 	@Override
-	public LongValueIterator getAssetDates(Id assetId)
+	public LongValueIterator getAssetDates(ArtifactId assetId)
 			throws RepositoryException {
 //		load();
 		throw new RepositoryException(RepositoryException.UNIMPLEMENTED);
@@ -310,7 +310,7 @@ public abstract class BaseRepository implements Repository {
 	}
 
 	@Override
-	public Id copyAsset(Asset asset) throws RepositoryException {
+	public ArtifactId copyAsset(Asset asset) throws RepositoryException {
 //		load();
 		throw new RepositoryException(RepositoryException.UNIMPLEMENTED);
 	}
@@ -384,11 +384,11 @@ public abstract class BaseRepository implements Repository {
 	}
 
 	
-	private Id getReposId() {
+	private ArtifactId getReposId() {
 		return reposId;
 	}
 
-	private void setReposId(Id reposId) {
+	private void setReposId(ArtifactId reposId) {
 		this.reposId = reposId;
 	}
 

@@ -2,7 +2,7 @@ package gov.nist.hit.ds.repository.simple;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import gov.nist.hit.ds.repository.api.Id;
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class SimpleRepositoryTest {
 
-	static Id repId = null;
+	static ArtifactId repId = null;
 	
 	
 	@BeforeClass
@@ -54,7 +54,7 @@ public class SimpleRepositoryTest {
 				"Repos "+ new Hl7Date().now(),
 				"Description",
 				simpleType);
-		Id repId1 = repos1.getId();
+		ArtifactId repId1 = repos1.getId();
 		Type repType1 = repos1.getType();
 		
 		assertTrue("query for type simple should return a repository of type simple - got [" +
@@ -64,7 +64,7 @@ public class SimpleRepositoryTest {
 				"Repos 2",
 				"Description",
 				simpleType);
-		Id repId2 = repos2.getId();
+		ArtifactId repId2 = repos2.getId();
 		Type repType2 = repos2.getType();
 		
 		assertTrue("query for type simple should return a repository of type simple - got [" +
@@ -135,7 +135,7 @@ public class SimpleRepositoryTest {
 		
 	}
 	
-	boolean findRepo(Type type, Id repIdToFind) throws RepositoryException {
+	boolean findRepo(Type type, ArtifactId repIdToFind) throws RepositoryException {
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 		for (RepositoryIterator ri=fact.getRepositoriesByType(type); ri.hasNextRepository();) {
 			Repository r = ri.nextRepository();

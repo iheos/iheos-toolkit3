@@ -102,6 +102,9 @@ public class RepositoryException extends ToolkitRuntimeException  {
 
     /** Unknown Repository */
     public static final String UNKNOWN_REPOSITORY = "Unknown Repository ";
+
+    /** Asset not found */
+    public static final String ASSET_NOT_FOUND = "Asset not found";
     
     /** Src not found */
     public static final String REPOSITORY_SRC_NOT_FOUND = "Repository source not found";
