@@ -426,7 +426,9 @@ public class LogBrowser implements EntryPoint {
 				public void onSelection(SelectionEvent<TreeItem> treeItem) {
 					try {
 						treeItemTarget.setSelected(false);	
-					} finally {}					
+					} catch(Exception ex) {
+						// Focus shifted from the search-browse mode to normal browsing mode
+					}
 					
 					// Window.alert(((AssetTreeItem)treeItem.getSelectedItem()).getAssetId());
 					AssetNode an = ((AssetTreeItem)treeItem.getSelectedItem()).getAssetNode();
