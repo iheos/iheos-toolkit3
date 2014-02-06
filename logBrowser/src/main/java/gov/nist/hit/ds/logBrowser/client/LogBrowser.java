@@ -25,6 +25,7 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -47,6 +48,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -65,11 +69,11 @@ import com.google.gwt.view.client.ListDataProvider;
 public class LogBrowser implements EntryPoint {
 
 	private static Logger logger = Logger.getLogger(LogBrowser.class.getName());
+	TabLayoutPanel featureTlp = new TabLayoutPanel(20, Unit.PX);
 	private static final int CONTEXTMENU_XOFFSET = 10;
 	VerticalPanel treePanel = new VerticalPanel();
 	SplitLayoutPanel splitPanel = new SplitLayoutPanel(5);
 	ScrollPanel centerPanel = new ScrollPanel();
-	TabLayoutPanel contentTlp = new TabLayoutPanel(20, Unit.PX);
 	SplitLayoutPanel westContent = new SplitLayoutPanel(2);
 	ListBox reposLbx = new ListBox();
 	
@@ -80,24 +84,11 @@ public class LogBrowser implements EntryPoint {
 	final public RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
     protected ArrayList<String> propNames = new ArrayList<String>();
     protected Map<String, String> reposProps = new HashMap<String,String>();
-    SimpleEventBus eventBus;
-    AsyncCallback<AssetNode> contentSetup = null;
     AssetTreeItem treeItemTarget = null;     
-    		
-    // private HandlerRegistration handlerRegistration;
-    
-    
-    protected TabPanel addTab(Widget w, String lbl) {
-      	
-      	TabPanel tp = new TabPanel();
-      	tp.setVisible(true);
 
-      	w.setVisible(true);
-      	tp.add(w,lbl);
-      	return tp;
-      	
-    }
+    SimpleEventBus eventBus;
     
+
 	public LogBrowser() {}
 	
 	/**
@@ -107,23 +98,107 @@ public class LogBrowser implements EntryPoint {
 	  public void onModuleLoad() {
 
 		 eventBus = new SimpleEventBus();
-		    
-	    // CwOptionalTextBox otb = new CwOptionalTextBox("Enable text input");
-	    // RootPanel.get().add(panel);
+		  
+		 featureTlp.add(setupBrowseFeature(),"Browse");
+		 
 	    
+		 RootLayoutPanel.get().add(featureTlp);
+	  }
+	  
+	  protected SplitLayoutPanel setupSearchFeature() {
+		    SplitLayoutPanel searchMainLayoutPanel = new SplitLayoutPanel(5); // Search-main panel
+		    searchMainLayoutPanel.getElement().getStyle()
+	        .setProperty("border", "3px solid #e7e7e7"); //
+
+		    final SplitLayoutPanel searchLbSplitPanel = new SplitLayoutPanel(1);
+			final ScrollPanel searchLbCenterPanel = new ScrollPanel();
+			SplitLayoutPanel searchLbWestContent = new SplitLayoutPanel(2);
+		    			
+			final VerticalPanel searchLbTreeHolder = new VerticalPanel();
+			final HTML searchLbPropsWidget = new HTML();
+			// searchLbTreeHolder.add(new HTML("&nbsp;Loading..."));
+			ScrollPanel sp = new ScrollPanel(searchLbTreeHolder);
+			ScrollPanel spProps = new ScrollPanel(searchLbPropsWidget);
+			searchLbWestContent.addSouth(spProps, Math.round(0.2 * Window.getClientHeight()));
+			searchLbWestContent.add(sp); 
+
+			searchLbSplitPanel.getElement().getStyle().setVisibility(Visibility.HIDDEN);
+			searchLbSplitPanel.addWest(searchLbWestContent, 300); // 400  -- Math.round(.15 * Window.getClientWidth())
+			searchLbSplitPanel.add(searchLbCenterPanel);
+			
+		    ScrollPanel searchPanel = new ScrollPanel(); 				// Search parameters 
+		    
+		    SearchWidget searchWidget = new SearchWidget(eventBus);
+		    searchWidget.getElement().getStyle()
+	        .setProperty("border", "none");
+		    searchWidget.getElement().getStyle()
+		    .setPaddingLeft(3, Unit.PX);
+
+		    searchPanel.add(searchWidget);
+		    searchMainLayoutPanel.addWest(searchPanel, 632); // Math.round(0.40 * Window.getClientWidth())
+		    searchMainLayoutPanel.add(searchLbSplitPanel);
+
+		    
+		    final AsyncCallback<AssetNode> searchLbContentSetup = new AsyncCallback<AssetNode>() {
+				public void onFailure(Throwable arg0) {
+					searchLbSplitPanel.getElement().getStyle().setVisibility(Visibility.VISIBLE);
+					searchLbCenterPanel.clear();							
+					searchLbCenterPanel.add(new HTML("Content could not be loaded. " + arg0.toString()));
+					// propsWidget.setHTML("");
+				}
+
+				public void onSuccess(AssetNode an) {
+					searchLbSplitPanel.getElement().getStyle().setVisibility(Visibility.VISIBLE);
+					displayAssetContent(an, searchLbCenterPanel, searchLbPropsWidget);
+				}
+				
+			};
+
+		    
+		    eventBus.addHandler(AssetClickedEvent.TYPE, new AssetClickedEventHandler() {								
+				public void onAssetClick(AssetClickedEvent event) {
+					try {
+						final AssetNode target = event.getValue(); 
+						reposService.getParentChain(target, new AsyncCallback<AssetNode>(){
+
+							public void onFailure(Throwable arg0) {												
+								searchLbPropsWidget.setHTML("Search result action could not be synchronized with the tree: " + arg0.toString()); 
+							}
+							public void onSuccess(AssetNode an) {
+								searchLbTreeHolder.clear();
+								List<AssetNode> topLevelAsset = new ArrayList<AssetNode>();
+								topLevelAsset.add(an);
+								searchLbTreeHolder.add(popTreeWidget(topLevelAsset,target,true, searchLbContentSetup));
+								reposService.getAssetTxtContent(target, searchLbContentSetup);
+							}});
+					} catch (RepositoryConfigException e) {
+						e.printStackTrace();
+					}
+
+				}
+			}); 
+
+		    						    
+		    return searchMainLayoutPanel;
+
+	  }
+	  
+	  protected SplitLayoutPanel setupBrowseFeature() {
+				  
 		  // splitPanel.addNorth(new HTML("Log Browser"), 20);
 		  
 		  splitPanel.getElement().getStyle()
-	        .setProperty("border", "3px solid #e7e7e7");
+	        .setProperty("border", "3px solid #e7e7e7"); // 
 		  /*
 		  StyleInjector.inject(".gwt-SplitLayoutPanel .gwt-SplitLayoutPanel-HDragger "
-                  + "{ width: 5px !important; background: green; }");
+               + "{ width: 5px !important; background: green; }");
 		  */
 		  
+		 
 	    try {
 			reposService.setRepositoryConfig(new AsyncCallback<Boolean>(){
 				public void onSuccess(Boolean a){
-					
+
 					AsyncCallback<List<RepositoryTag>> reposTags = new AsyncCallback<List<RepositoryTag>>() {
 
 						public void onFailure(Throwable a) {
@@ -153,23 +228,27 @@ public class LogBrowser implements EntryPoint {
 								
 							}
 														
-							Label lblRepos = new Label("Repository:");
+							HTML lblRepos = new HTML("Repository: ");
 							
 							// lblRepos.setWidth("25%");
 							reposLbx.setWidth("125px"); // 90
 							FlexTable grid = new FlexTable();
 							grid.setCellPadding(1);
-							grid.setCellSpacing(2);
+							grid.setCellSpacing(3);
+							grid.setBorderWidth(0);
+//							grid.setWidget(0, 0, new HTML("&nbsp;"));
+//							grid.getFlexCellFormatter().setColSpan(0, 0, 2);
 							grid.setWidget(0, 0, lblRepos );
 							grid.setWidget(0, 1, reposLbx);
 							
+							treePanel.add(new HTML("&nbsp;"));
 							treePanel.add(grid);
 
 
 							ScrollPanel spProps = new ScrollPanel(propsWidget);
 							westContent.addSouth(spProps, Math.round(0.2 * Window.getClientHeight()));
 							
-							treePanel.add(new HTML("&nbsp;"));
+							// treePanel.add(new HTML("&nbsp;"));
 							final VerticalPanel treeHolder = new VerticalPanel();
 							treeHolder.add(new HTML("&nbsp;Loading..."));
 							treePanel.add(treeHolder);
@@ -181,13 +260,15 @@ public class LogBrowser implements EntryPoint {
 							
 							// before tab: splitPanel.add(centerPanel);
 							
-						    contentTlp.setVisible(true);
 						    centerPanel.getElement().getStyle()
-					        .setProperty("border", "none");
-						    contentTlp.add(centerPanel, "Content Viewer"); // Content
+					        .setProperty("border", "none");					   						    
 						    
-						    ScrollPanel searchPanel = new ScrollPanel();						    						    
-							contentSetup = new AsyncCallback<AssetNode>() {
+						    splitPanel.add(centerPanel);						   
+							
+							// RootLayoutPanel.get().add(splitPanel);
+							
+						    
+						    final AsyncCallback<AssetNode> contentSetup = new AsyncCallback<AssetNode>() {
 								public void onFailure(Throwable arg0) {
 									centerPanel.clear();							
 									centerPanel.add(new HTML("Content could not be loaded. " + arg0.toString()));
@@ -195,42 +276,11 @@ public class LogBrowser implements EntryPoint {
 								}
 
 								public void onSuccess(AssetNode an) {
-									displayAssetContent(an);
+									displayAssetContent(an, centerPanel, propsWidget);
 								}
 								
 							};
-						    eventBus.addHandler(AssetClickedEvent.TYPE, new AssetClickedEventHandler() {								
-								public void onAssetClick(AssetClickedEvent event) {
-									try {
-										final AssetNode target = event.getValue(); 
-										reposService.getParentChain(target, new AsyncCallback<AssetNode>(){
-
-											public void onFailure(Throwable arg0) {												
-												propsWidget.setHTML("Search result action could not be synchronized with the tree: " + arg0.toString()); 
-											}
-											public void onSuccess(AssetNode an) {
-												treeHolder.clear();
-												List<AssetNode> topLevelAsset = new ArrayList<AssetNode>();
-												topLevelAsset.add(an);
-												treeHolder.add(popTreeWidget(topLevelAsset,target,true));
-												reposService.getAssetTxtContent(target, contentSetup);
-											}});
-									} catch (RepositoryConfigException e) {
-										e.printStackTrace();
-									}
- 
-								}
-							}); 
-						    SearchWidget searchWidget = new SearchWidget(eventBus); 
-						    searchWidget.getElement().getStyle()
-							        .setProperty("border", "none");
-						    searchPanel.add(searchWidget);
-						    contentTlp.add(searchPanel, "Search"); // Search
 						    
-						    splitPanel.add(contentTlp);
-							
-							RootLayoutPanel.get().add(splitPanel);
-							
 							final AsyncCallback<List<AssetNode>> treeSetup = new AsyncCallback<List<AssetNode>>() {
 
 								public void onFailure(Throwable a) {
@@ -239,7 +289,7 @@ public class LogBrowser implements EntryPoint {
 
 								public void onSuccess(List<AssetNode> a) {
 									treeHolder.clear();
-									treeHolder.add(popTreeWidget(a,null,false));
+									treeHolder.add(popTreeWidget(a,null,false, contentSetup));
 									
 									// populate repository props here
 									propsWidget.setHTML("");
@@ -309,19 +359,32 @@ public class LogBrowser implements EntryPoint {
 					};
 					 reposService.getIndexablePropertyNames(propsSetup);
 					 */
+					
+					featureTlp.add(setupSearchFeature(), "Search");
 				}
 				public void onFailure(Throwable t) {Window.alert("Repository config failed: "+t.getMessage());}
 			});
 		} catch (Exception e) {
 			logger.log(Level.SEVERE,"main setRepositoryConfig failed: " + e.toString());
 		}
-
-
 	    
+	    return splitPanel;
 	    
 	  }
+	  
+	  protected TabPanel addTab(Widget w, String lbl) {
+	      	
+	      	TabPanel tp = new TabPanel();
+	      	tp.setVisible(true);
 
-	  protected Widget popTreeWidget(List<AssetNode> a, AssetNode target, Boolean expandLeaf) {
+	      	w.setVisible(true);
+	      	tp.add(w,lbl);
+	      	return tp;
+	      	
+	    }
+
+
+	  protected Widget popTreeWidget(List<AssetNode> a, AssetNode target, Boolean expandLeaf, final AsyncCallback<AssetNode> contentSetup) {
 		    Tree tree = new Tree();
 		    final PopupPanel menu = new PopupPanel(true);
 		    
@@ -337,7 +400,7 @@ public class LogBrowser implements EntryPoint {
 		            	   
 		                 // Close the item immediately
 		                 item.setState(false, false);
-                 
+               
 		                 final AsyncCallback<List<AssetNode>> addImmediateChildren = new AsyncCallback<List<AssetNode>>() {
 
 								public void onFailure(Throwable a) {
@@ -353,7 +416,7 @@ public class LogBrowser implements EntryPoint {
 								}
 								
 							};
- 
+
 		                 try {
 							reposService.getImmediateChildren(an, addImmediateChildren);
 						} catch (RepositoryConfigException e) {
@@ -368,7 +431,7 @@ public class LogBrowser implements EntryPoint {
 		                 item.setState(true, false);
 		               }
 		        }
-  
+
 		      });
 		    
 		    // context menu
@@ -419,13 +482,18 @@ public class LogBrowser implements EntryPoint {
 					
 				}
 			}, ContextMenuEvent.getType());
+		    
+
 
 		    // on selected handler here
 		    tree.addSelectionHandler(new SelectionHandler<TreeItem>() {				
 		    	
 				public void onSelection(SelectionEvent<TreeItem> treeItem) {
 					try {
-						treeItemTarget.setSelected(false);	
+						if (featureTlp.getSelectedIndex()==1 && treeItemTarget!=null) {
+							treeItemTarget.setSelected(treeItemTarget.getUserObject().equals(treeItem.getSelectedItem().getUserObject()));									
+						}
+						
 					} catch(Exception ex) {
 						// Focus shifted from the search-browse mode to normal browsing mode
 					}
@@ -441,7 +509,12 @@ public class LogBrowser implements EntryPoint {
 		    	AssetTreeItem treeItem = createTreeItem(an, target, expandLeaf);
 		    	if (expandLeaf) {
 		    		treeItem.setState(true); // Open node
-		    		if ((target!=null && an.getLocation()!=null) && an.getLocation().equals(target.getLocation())) {
+		    		if (featureTlp.getSelectedIndex()==1 && (target!=null && an.getLocation()!=null) && an.getLocation().equals(target.getLocation())) {
+		    			try {
+							treeItemTarget.setSelected(false);	
+						} catch(Exception ex) {
+							// Focus shifted from the search-browse mode to normal browsing mode
+						}
 		        		treeItemTarget = treeItem;
 		        		treeItemTarget.setSelected(true);
 		        	}
@@ -484,8 +557,8 @@ public class LogBrowser implements EntryPoint {
 			return table;
 		}
 		
-	  protected void displayAssetContent(AssetNode an) {
-			centerPanel.clear();
+	  protected void displayAssetContent(AssetNode an, ScrollPanel contentPanel, HTML propsWidget) {
+		  contentPanel.clear();
 			//// splitPanel.remove(centerPanel);
 			
 			// HTML safeHtml = new HTML(SafeHtmlUtils.fromString(an.getTxtContent()));
@@ -515,27 +588,33 @@ public class LogBrowser implements EntryPoint {
 			if (an.isContentAvailable()) {
 				if ("text/csv".equals(an.getMimeType())) {
 					   CellTable<List<String>> table = createCellTable(an.getCsv());								    
-					    centerPanel.add(table);							    
+					   contentPanel.add(table);							    
 				} else if ("text/xml".equals(an.getMimeType()) || "application/soap+xml".equals(an.getMimeType())) {
 					String xmlStr = an.getTxtContent().replace("<br/>", "\r\n");
 					String shStr = SyntaxHighlighter.highlight(xmlStr, BrushFactory.newXmlBrush() , false);
-					centerPanel.add(new HTML(shStr));
+					contentPanel.add(new HTML(shStr));
 				} else if ("text/json".equals(an.getMimeType())) {
 					// centerPanel.add(new HTML("<pre>" + an.getTxtContent() + "</pre>"));
 					String shStr = SyntaxHighlighter.highlight(an.getTxtContent(), BrushFactory.newCssBrush() , false);
-					centerPanel.add(new HTML(shStr));
+					contentPanel.add(new HTML(shStr));
 				} else {								
-					centerPanel.add(new HTML(an.getTxtContent()));	
+					contentPanel.add(new HTML(an.getTxtContent()));	
 				} 
 			} else {	
-				if (treeItemTarget.getChildCount()>0) {
-					centerPanel.add(new HTML("")); // Higher-level asset may not have any content		
-				} else {
-					centerPanel.add(new HTML("There is no content for the selected asset."));			
+				if (an.getMimeType()!=null) { // Mime-type exists, but no content file
+					Image img = new Image();					
+					img.setUrl(GWT.getModuleBaseForStaticFiles() + "images/nocontent.gif");
+					VerticalPanel imgPanel = new VerticalPanel();
+					imgPanel.setWidth("100%");
+					imgPanel.setHeight("100%");
+					imgPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+					imgPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);					
+					imgPanel.add(img);
+					contentPanel.add(imgPanel); // "There is no content for the selected asset."
+					// new HTML("<img height=" src='" + GWT.getModuleBaseForStaticFiles() + "images/nocontent.gif'>")
 				}
 			}		        		 
 			
-			contentTlp.selectTab(0);
 			//// splitPanel.add(centerPanel);		
 
 	  }
@@ -600,6 +679,4 @@ public class LogBrowser implements EntryPoint {
 	        }
 		
 	     }
-
-
 }

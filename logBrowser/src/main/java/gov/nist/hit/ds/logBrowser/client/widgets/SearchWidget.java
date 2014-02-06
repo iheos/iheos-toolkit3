@@ -82,7 +82,8 @@ public class SearchWidget extends Composite {
 	public Button moveDown = new Button("Move Down");
 	protected ArrayList<String> propNames = new ArrayList<String>();
 	
-	static String DEFAULTWIDTH = "30em";
+	static String DEFAULTWIDTH = "26em";
+	static String REPOSLBOXWIDTH = "17em";
 	static String DEFAULTTITLEWIDTH = "15em";
 	static String MOVEMENTWIDTH = "7em";
 
@@ -106,11 +107,11 @@ public class SearchWidget extends Composite {
 
 		StyleInjector.inject(".searchCriteriaGroup {background-color: #F5F5F5}");
 
-		HTML title = new HTML();
-		title.setHTML("<h2>Search</h2>");
-		topPanel.add(title);
+//		HTML title = new HTML();
+//		title.setHTML("<h2>Search</h2>");
+//		topPanel.add(title);
 		
-		grid.setCellSpacing(20);
+		grid.setCellSpacing(15);
 
 		reposService.getRepositoryDisplayTags(reposSetup);
 		reposService.getIndexablePropertyNames(propsSetup);
@@ -317,7 +318,7 @@ public class SearchWidget extends Composite {
 		VerticalPanel panel = new VerticalPanel();
 		FlexTable grid = new FlexTable();
 
-		panel.add(new HTML("<h3>Select Repositories</h3>"));
+		panel.add(new HTML("<h4>Select Repositories</h4>"));
 		panel.add(new HTML("  " ));
 
 		panel.add(grid);
@@ -327,10 +328,10 @@ public class SearchWidget extends Composite {
 		// HTML h;
 		
 		reposLeft.setVisibleItemCount(5);
-		reposLeft.setWidth(DEFAULTWIDTH);		
+		reposLeft.setWidth(REPOSLBOXWIDTH);		
 		
 		reposRight.setVisibleItemCount(5);
-		reposRight.setWidth(DEFAULTWIDTH);
+		reposRight.setWidth(REPOSLBOXWIDTH);
 		
 		
 		grid.setWidget(row, col++, lblAvailableRepos);
@@ -1037,7 +1038,7 @@ public class SearchWidget extends Composite {
 			return new VerticalPanel();
 		}
 		
-		criteriaPanel.add(new HTML("<h3>Add Search Criteria</h3>"));
+		criteriaPanel.add(new HTML("<h4>Add Search Criteria</h4>"));
 		criteriaPanel.add(new HTML("  " ));
 		
 		FlexTable queryMode = new FlexTable();

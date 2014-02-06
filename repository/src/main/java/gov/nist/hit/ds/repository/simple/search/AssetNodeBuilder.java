@@ -30,7 +30,6 @@ public class AssetNodeBuilder {
 			CHILDREN,
 			PARENT_ONLY
 	};	 
-	
 	private Depth retrieveDepth;
 	
 	public AssetNodeBuilder() {
@@ -131,8 +130,9 @@ public class AssetNodeBuilder {
 	
 	public AssetNode getParentChain(Repository repos, AssetNode child, boolean initial) throws RepositoryException {		
 		SearchCriteria criteria = new SearchCriteria(Criteria.OR);
+		criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO, child.getParentId()));		
 		criteria.append(new SearchTerm(PropertyKey.LOCATION,Operator.EQUALTO, child.getParentId()));
-		criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO, child.getParentId()));
+
  		
 		AssetIterator iter;
 		try {
@@ -143,32 +143,35 @@ public class AssetNodeBuilder {
 			
 			if (iter.hasNextAsset()) { // Get the first one
 				Asset a = iter.nextAsset();
-				AssetNode parent = new AssetNode(a.getRepository().getIdString()
-						,(a.getId()!=null)?a.getId().getIdString():null
-						,(a.getAssetType()==null)?null:a.getAssetType().toString()
-						,a.getDisplayName()
-						,a.getDescription()
-						,a.getMimeType()
-						,a.getSource().getAccess().name());
-				parent.setParentId(a.getProperty(PropertyKey.PARENT_ID));
-				if (a.getPath()!=null) {
-					// child.setLocation(a.getPath().toString());
-					parent.setLocation(a.getPropFileRelativePart());
+				// logger.fine("is --- " + child.getLocation() + " = " + a.getPropFileRelativePart());
+				if (!child.getLocation().equals(a.getPropFileRelativePart())) {
+					AssetNode parent = new AssetNode(a.getRepository().getIdString()
+							,(a.getId()!=null)?a.getId().getIdString():null
+							,(a.getAssetType()==null)?null:a.getAssetType().toString()
+							,a.getDisplayName()
+							,a.getDescription()
+							,a.getMimeType()
+							,a.getSource().getAccess().name());
+					parent.setParentId(a.getProperty(PropertyKey.PARENT_ID));
+					if (a.getPath()!=null) {
+						// child.setLocation(a.getPath().toString());
+						parent.setLocation(a.getPropFileRelativePart());
+					}
+					parent.setContentAvailable(a.hasContent());
+					
+					List<AssetNode> children = getImmediateChildren(repos, parent);
+					List<AssetNode> childrenUpdate = new ArrayList<AssetNode>();
+					for (AssetNode c : children) {
+						if (c.getLocation()!=null && c.getLocation().equals(child.getLocation())) {
+							childrenUpdate.add(child);
+						} else
+							childrenUpdate.add(c);
+					}
+					parent.addChildren(childrenUpdate);
+					
+					return getParentChain(repos, parent, false);
+					
 				}
-				parent.setContentAvailable(a.hasContent());
-				
-				List<AssetNode> children = getImmediateChildren(repos, parent);
-				List<AssetNode> childrenUpdate = new ArrayList<AssetNode>();
-				for (AssetNode c : children) {
-					if (c.getLocation()!=null && c.getLocation().equals(child.getLocation())) {
-						childrenUpdate.add(child);
-					} else
-						childrenUpdate.add(c);
-				}
-				parent.addChildren(childrenUpdate);
-				
-				return getParentChain(repos, parent, false);
-
 			} 
 		} catch (Exception ex) {
 			logger.warning(ex.toString());
