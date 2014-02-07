@@ -5,7 +5,7 @@ import groovy.util.slurpersupport.GPathResult
 
 import javax.xml.namespace.NamespaceContext
 
-class GroovyHeader {
+public class GroovyHeader {
 
 	public Map<String,GPathResult> map
 	public NamespaceContext namespaces

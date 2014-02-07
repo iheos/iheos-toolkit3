@@ -8,7 +8,6 @@ import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Optional
 import gov.nist.hit.ds.wsseTool.validation.engine.annotations.Validation
 import gov.nist.hit.ds.wsseTool.validation.tests.BaseVal
 import gov.nist.hit.ds.wsseTool.validation.tests.CommonVal
-import gov.nist.toolkit.wsseTool.validation.data.*
 import groovy.util.slurpersupport.GPathResult
 
 import java.text.MessageFormat

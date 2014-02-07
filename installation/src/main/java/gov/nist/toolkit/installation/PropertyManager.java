@@ -153,12 +153,8 @@ public class PropertyManager {
 		try {
 			toolkitProperties.load(new FileInputStream(propFile));
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+            throw new RuntimeException(e);
 		}
 	}
 	

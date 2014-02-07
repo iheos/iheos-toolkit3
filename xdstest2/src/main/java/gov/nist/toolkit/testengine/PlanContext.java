@@ -200,7 +200,8 @@ public class PlanContext extends BasicContext {
 
 			Iterator elements = testplan.getChildElements();
 			while (elements.hasNext()) {
-				OMElement part = (OMElement) elements.next();
+				OMElement parta = (OMElement) elements.next();
+				OMElement part = parta.cloneOMElement();
 				String part_name = part.getLocalName();
 
 				// as we step through the plan, all plan elements are copied to results file with

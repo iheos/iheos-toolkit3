@@ -740,11 +740,13 @@ public class XdsTestServiceManager extends CommonServiceManager {
 												stepResult.documents = new ArrayList<Document>();
 											stepResult.documents.add(doc);
 
-											File localFile = new File(
-													Installation.installation().warHome() + File.separator + 
-													"xdstools2" + File.separator + "DocumentCache" + File.separator
-													+ doc.uid
-													+ getRepositoryCacheFileExtension(doc.mimeType));
+                                            File documentCache = new File(
+                                                    Installation.installation().warHome() + File.separator +
+                                                            "xdstools2" + File.separator + "DocumentCache"
+                                            );
+											File localFile = new File(documentCache, doc.uid + getRepositoryCacheFileExtension(doc.mimeType));
+
+                                            documentCache.mkdirs();
 
 											Io.bytesToFile(localFile,
 													ri.getContents());

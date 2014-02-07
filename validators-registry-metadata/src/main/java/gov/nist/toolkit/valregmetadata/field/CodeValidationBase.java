@@ -50,7 +50,8 @@ public class CodeValidationBase {
 		this.vc = vc;
 		loadCodes();
 	}
-	
+
+    // TODO major cleanup needed of load codes logic
 	void loadCodes() throws XdsInternalException {
 		if (codes != null)
 			return;

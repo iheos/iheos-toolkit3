@@ -426,7 +426,10 @@ ToolkitService {
 		}
 		
 		// Force short session timeout for testing
-		hsession.setMaxInactiveInterval(60/4);    // one quarter minute
+		//hsession.setMaxInactiveInterval(60/4);    // one quarter minute
+
+        // more realistic session timeout - 1 hour
+        hsession.setMaxInactiveInterval(1*60*60);
 		
 		//******************************************
 		//

@@ -6,9 +6,9 @@ import gov.nist.toolkit.tk.client.TkProps;
 
 import java.io.File;
 
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
+
+import javax.servlet.ServletContext;
 
 public class Installation {
 	File warHome = null;

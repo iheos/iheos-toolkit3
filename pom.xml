@@ -85,7 +85,8 @@
 		<module>xdstest2-logging</module>
 		<module>xdstools2</module>
 		<module>soapClientAPI</module>
-	</modules>
+        <module>ebrimIntegrationTest</module>
+    </modules>
 
 	<distributionManagement>
 		<snapshotRepository>
@@ -105,7 +106,7 @@
 			<dependency>
 				<groupId>org.codehaus.groovy</groupId>
 				<artifactId>groovy-all</artifactId>
-				<version>2.1.8</version>
+				<version>2.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.ws.commons.axiom</groupId>
