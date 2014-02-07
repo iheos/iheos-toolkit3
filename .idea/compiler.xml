@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Javac" />
+    <resourceExtensions />
+    <wildcardResourcePatterns>
+      <entry name="!?*.java" />
+      <entry name="!?*.form" />
+      <entry name="!?*.class" />
+      <entry name="!?*.groovy" />
+      <entry name="!?*.scala" />
+      <entry name="!?*.flex" />
+      <entry name="!?*.kt" />
+      <entry name="!?*.clj" />
+    </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="false">
+        <processorPath useClasspath="true" />
+      </profile>
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="actorfactory" />
+        <module name="actortransaction" />
+        <module name="common" />
+        <module name="common-datatypes" />
+        <module name="direct" />
+        <module name="direct-listener" />
+        <module name="direct-sim" />
+        <module name="direct-support" />
+        <module name="dns" />
+        <module name="docref" />
+        <module name="dsig" />
+        <module name="dst" />
+        <module name="ebrimIntegrationTest" />
+        <module name="email" />
+        <module name="env-settings" />
+        <module name="error-recording" />
+        <module name="http" />
+        <module name="installation" />
+        <module name="message-dispatch" />
+        <module name="message-validator-factory" />
+        <module name="registry-metadata" />
+        <module name="registry-msg-formats" />
+        <module name="registry-support" />
+        <module name="rest" />
+        <module name="results" />
+        <module name="security-common" />
+        <module name="session" />
+        <module name="sim-common" />
+        <module name="simulators" />
+        <module name="site-management" />
+        <module name="soap" />
+        <module name="soapClientAPI" />
+        <module name="testkit" />
+        <module name="testkit-utilities" />
+        <module name="timer" />
+        <module name="tk" />
+        <module name="utilities" />
+        <module name="validators-ccda" />
+        <module name="validators-direct-factory" />
+        <module name="validators-registry-message" />
+        <module name="validators-registry-metadata" />
+        <module name="validators-support" />
+        <module name="wsseTool" />
+        <module name="xds-exceptions" />
+        <module name="xdstest-gui" />
+        <module name="xdstest2" />
+        <module name="xdstest2-logging" />
+        <module name="xdstools2" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="actorfactory" target="1.6" />
+      <module name="actortransaction" target="1.6" />
+      <module name="common" target="1.6" />
+      <module name="common-datatypes" target="1.6" />
+      <module name="direct" target="1.6" />
+      <module name="direct-listener" target="1.6" />
+      <module name="direct-sim" target="1.6" />
+      <module name="direct-support" target="1.6" />
+      <module name="dns" target="1.6" />
+      <module name="docref" target="1.6" />
+      <module name="dsig" target="1.6" />
+      <module name="dst" target="1.6" />
+      <module name="ebrimIntegrationTest" target="1.6" />
+      <module name="email" target="1.6" />
+      <module name="env-settings" target="1.6" />
+      <module name="error-recording" target="1.6" />
+      <module name="http" target="1.6" />
+      <module name="installation" target="1.6" />
+      <module name="message-dispatch" target="1.6" />
+      <module name="message-validator-factory" target="1.6" />
+      <module name="registry-metadata" target="1.6" />
+      <module name="registry-msg-formats" target="1.6" />
+      <module name="registry-support" target="1.6" />
+      <module name="rest" target="1.6" />
+      <module name="results" target="1.6" />
+      <module name="security-common" target="1.6" />
+      <module name="session" target="1.6" />
+      <module name="sim-common" target="1.6" />
+      <module name="simulators" target="1.6" />
+      <module name="site-management" target="1.6" />
+      <module name="soap" target="1.6" />
+      <module name="soapClientAPI" target="1.6" />
+      <module name="testkit" target="1.6" />
+      <module name="testkit-utilities" target="1.6" />
+      <module name="timer" target="1.6" />
+      <module name="tk" target="1.6" />
+      <module name="toolkit2" target="1.6" />
+      <module name="utilities" target="1.6" />
+      <module name="validators-ccda" target="1.6" />
+      <module name="validators-direct-factory" target="1.6" />
+      <module name="validators-registry-message" target="1.6" />
+      <module name="validators-registry-metadata" target="1.6" />
+      <module name="validators-support" target="1.6" />
+      <module name="wsseTool" target="1.6" />
+      <module name="xds-exceptions" target="1.6" />
+      <module name="xdstest-gui" target="1.6" />
+      <module name="xdstest2" target="1.6" />
+      <module name="xdstest2-logging" target="1.6" />
+      <module name="xdstools2" target="1.6" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
+

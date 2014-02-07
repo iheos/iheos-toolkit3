@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="target22">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/sim-common/target/sim-common-v2-maven-alpha.jar!/" />
+      <root url="jar://$PROJECT_DIR$/sim-common/target/sim-common-v2-maven-alpha-sources.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

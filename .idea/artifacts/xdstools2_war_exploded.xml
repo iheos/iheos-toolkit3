@@ -1,0 +1,230 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="xdstools2:war exploded">
+    <output-path>$PROJECT_DIR$/xdstools2/target/xdstools2-v2-maven-alpha</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="xdstools2/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="xdstools2" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.google.gwt:gwt-servlet:2.5.1" />
+          <element id="library" level="project" name="Maven: javax.validation:validation-api:1.0.0.GA" />
+          <element id="library" level="project" name="Maven: javax.validation:validation-api:sources:1.0.0.GA" />
+          <element id="library" level="project" name="Maven: junit:junit:4.11" />
+          <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:1.3" />
+          <element id="library" level="project" name="Maven: org.apache.ws.commons.axiom:axiom-api:1.2.14" />
+          <element id="library" level="project" name="Maven: org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1" />
+          <element id="library" level="project" name="Maven: org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1" />
+          <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.1.1" />
+          <element id="library" level="project" name="Maven: jaxen:jaxen:1.1.4" />
+          <element id="library" level="project" name="Maven: org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1" />
+          <element id="library" level="project" name="Maven: org.apache.james:apache-mime4j-core:0.7.2" />
+          <element id="library" level="project" name="Maven: org.apache.ws.commons.axiom:axiom-impl:1.2.14" />
+          <element id="library" level="project" name="Maven: org.codehaus.woodstox:woodstox-core-asl:4.1.4" />
+          <element id="library" level="project" name="Maven: org.codehaus.woodstox:stax2-api:3.1.1" />
+          <element id="archive" name="sim-common-v2-maven-alpha.jar">
+            <element id="module-output" name="sim-common" />
+          </element>
+          <element id="library" level="project" name="Maven: log4j:log4j:1.2.17" />
+          <element id="archive" name="actortransaction-v2-maven-alpha.jar">
+            <element id="module-output" name="actortransaction" />
+          </element>
+          <element id="archive" name="xdstest-gui-v2-maven-alpha.jar">
+            <element id="module-output" name="xdstest-gui" />
+          </element>
+          <element id="library" level="project" name="Maven: org.apache.ws.commons.axiom:axiom-dom:1.2.10" />
+          <element id="library" level="project" name="Maven: org.codehaus.woodstox:wstx-asl:3.2.9" />
+          <element id="archive" name="session-v2-maven-alpha.jar">
+            <element id="module-output" name="session" />
+          </element>
+          <element id="library" level="project" name="Maven: dnsjava:dnsjava:2.0.8" />
+          <element id="archive" name="actorfactory-v2-maven-alpha.jar">
+            <element id="module-output" name="actorfactory" />
+          </element>
+          <element id="archive" name="env-settings-v2-maven-alpha.jar">
+            <element id="module-output" name="env-settings" />
+          </element>
+          <element id="archive" name="installation-v2-maven-alpha.jar">
+            <element id="module-output" name="installation" />
+          </element>
+          <element id="library" level="project" name="Maven: org.mortbay.jetty:javax.servlet:5.1.12" />
+          <element id="archive" name="tk-v2-maven-alpha.jar">
+            <element id="module-output" name="tk" />
+          </element>
+          <element id="archive" name="utilities-v2-maven-alpha.jar">
+            <element id="module-output" name="utilities" />
+          </element>
+          <element id="library" level="project" name="Maven: xerces:xercesImpl:2.10.0" />
+          <element id="library" level="project" name="Maven: xml-apis:xml-apis:1.4.01" />
+          <element id="archive" name="common-datatypes-v2-maven-alpha.jar">
+            <element id="module-output" name="common-datatypes" />
+          </element>
+          <element id="archive" name="xds-exceptions-v2-maven-alpha.jar">
+            <element id="module-output" name="xds-exceptions" />
+          </element>
+          <element id="archive" name="http-v2-maven-alpha.jar">
+            <element id="module-output" name="http" />
+          </element>
+          <element id="library" level="project" name="Maven: javax.mail:mailapi:1.4.3" />
+          <element id="library" level="project" name="Maven: javax.activation:activation:1.1.1" />
+          <element id="library" level="project" name="Maven: soap:soap:2.3.1" />
+          <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
+          <element id="library" level="project" name="Maven: backport-util-concurrent:backport-util-concurrent:3.1" />
+          <element id="archive" name="error-recording-v2-maven-alpha.jar">
+            <element id="module-output" name="error-recording" />
+          </element>
+          <element id="library" level="project" name="Maven: org.apache.velocity:velocity:1.5" />
+          <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.2.1" />
+          <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.6" />
+          <element id="library" level="project" name="Maven: oro:oro:2.0.8" />
+          <element id="archive" name="registry-metadata-v2-maven-alpha.jar">
+            <element id="module-output" name="registry-metadata" />
+          </element>
+          <element id="library" level="project" name="Maven: org.apache.ws.commons.axiom:axiom-common-impl:1.2.14" />
+          <element id="library" level="project" name="Maven: com.sun.ebxml:ebxmlrr-common:1.0" />
+          <element id="archive" name="docref-v2-maven-alpha.jar">
+            <element id="module-output" name="docref" />
+          </element>
+          <element id="archive" name="registry-support-v2-maven-alpha.jar">
+            <element id="module-output" name="registry-support" />
+          </element>
+          <element id="archive" name="results-v2-maven-alpha.jar">
+            <element id="module-output" name="results" />
+          </element>
+          <element id="archive" name="site-management-v2-maven-alpha.jar">
+            <element id="module-output" name="site-management" />
+          </element>
+          <element id="library" level="project" name="Maven: org.codehaus.groovy:groovy-all:2.0.0" />
+          <element id="archive" name="validators-support-v2-maven-alpha.jar">
+            <element id="module-output" name="validators-support" />
+          </element>
+          <element id="archive" name="common-v2-maven-alpha.jar">
+            <element id="module-output" name="common" />
+          </element>
+          <element id="library" level="project" name="Maven: com.berryworks:edireader:4.7.3" />
+          <element id="archive" name="direct-v2-maven-alpha.jar">
+            <element id="module-output" name="direct" />
+          </element>
+          <element id="library" level="project" name="Maven: javax.mail:mail:1.4.5" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bcmail-jdk15on:1.47" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk15on:1.47" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bcpkix-jdk15on:1.47" />
+          <element id="library" level="project" name="Maven: org.apache.directory.studio:org.apache.commons.io:2.4" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
+          <element id="library" level="project" name="Maven: org.apache.james:apache-mailet-base:1.1" />
+          <element id="library" level="project" name="Maven: org.apache.james:apache-mailet:2.4" />
+          <element id="library" level="project" name="Maven: wsdl4j:wsdl4j:1.6.2" />
+          <element id="archive" name="message-validator-factory-v2-maven-alpha.jar">
+            <element id="module-output" name="message-validator-factory" />
+          </element>
+          <element id="archive" name="validators-ccda-v2-maven-alpha.jar">
+            <element id="module-output" name="validators-ccda" />
+          </element>
+          <element id="library" level="project" name="Maven: commons-fileupload:commons-fileupload:1.2" />
+          <element id="library" level="project" name="Maven: org.apache.geronimo.bundles:commons-httpclient:3.1_2" />
+          <element id="library" level="project" name="Maven: org.eclipse.birt.runtime.3_7_1:org.eclipse.emf.ecore:2.7.0" />
+          <element id="library" level="project" name="Maven: org.eclipse.emf:org.eclipse.emf.common:2.9.1-v20130827-0309" />
+          <element id="library" level="project" name="Maven: org.openhealthtools:mdht.emf.runtime:1.0.0.201309181641" />
+          <element id="library" level="project" name="Maven: org.openhealthtools:mdht.uml.cda.consol:1.2.0.201309181642" />
+          <element id="library" level="project" name="Maven: org.openhealthtools:mdht.uml.cda.mu2consol:1.2.0.201309181642" />
+          <element id="library" level="project" name="Maven: org.openhealthtools:mdht.uml.cda.resources:1.2.0.201212211415" />
+          <element id="library" level="project" name="Maven: org.openhealthtools:mdht.uml.cda:1.2.0.201309181641" />
+          <element id="library" level="project" name="Maven: org.openhealthtools:mdht.uml.hl7.rim:1.2.0.201309181641" />
+          <element id="library" level="project" name="Maven: org.openhealthtools:mdht.uml.hl7.vocab:1.2.0.201309181641" />
+          <element id="library" level="project" name="Maven: org.openhealthtools:mdht.uml.term.models:1.1.0.201210151242" />
+          <element id="archive" name="validators-registry-message-v2-maven-alpha.jar">
+            <element id="module-output" name="validators-registry-message" />
+          </element>
+          <element id="library" level="project" name="Maven: org.apache.axis2:axis2-kernel:1.6.2" />
+          <element id="library" level="project" name="Maven: org.apache.geronimo.specs:geronimo-ws-metadata_2.0_spec:1.1.2" />
+          <element id="library" level="project" name="Maven: org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1" />
+          <element id="library" level="project" name="Maven: commons-httpclient:commons-httpclient:3.1" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.3" />
+          <element id="library" level="project" name="Maven: org.apache.ws.commons.schema:XmlSchema:1.4.7" />
+          <element id="library" level="project" name="Maven: org.apache.neethi:neethi:3.0.2" />
+          <element id="library" level="project" name="Maven: org.apache.woden:woden-api:1.0M9" />
+          <element id="library" level="project" name="Maven: org.apache.woden:woden-impl-dom:1.0M9" />
+          <element id="library" level="project" name="Maven: org.apache.woden:woden-impl-commons:1.0M9" />
+          <element id="library" level="project" name="Maven: javax.ws.rs:jsr311-api:1.0" />
+          <element id="library" level="project" name="Maven: org.opensaml:opensaml:2.5.3" />
+          <element id="library" level="project" name="Maven: org.opensaml:openws:1.4.4" />
+          <element id="library" level="project" name="Maven: org.opensaml:xmltooling:1.3.4" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk15:1.46" />
+          <element id="library" level="project" name="Maven: joda-time:joda-time:1.6.2" />
+          <element id="library" level="project" name="Maven: ca.juliusdavies:not-yet-commons-ssl:0.3.9" />
+          <element id="library" level="project" name="Maven: org.apache.santuario:xmlsec:1.5.6" />
+          <element id="library" level="project" name="Maven: xml-resolver:xml-resolver:1.2" />
+          <element id="library" level="project" name="Maven: xalan:xalan:2.7.1" />
+          <element id="library" level="project" name="Maven: xalan:serializer:2.7.1" />
+          <element id="library" level="project" name="Maven: velocity:velocity:1.5" />
+          <element id="library" level="project" name="Maven: org.owasp.esapi:esapi:2.0.1" />
+          <element id="library" level="project" name="Maven: org.apache.xmlbeans:xmlbeans-xmlpublic:2.6.0" />
+          <element id="library" level="project" name="Maven: stax:stax-api:1.0.1" />
+          <element id="archive" name="registry-msg-formats-v2-maven-alpha.jar">
+            <element id="module-output" name="registry-msg-formats" />
+          </element>
+          <element id="library" level="project" name="Maven: org.slf4j:log4j-over-slf4j:1.7.5" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.5" />
+          <element id="archive" name="soap-v2-maven-alpha.jar">
+            <element id="module-output" name="soap" />
+          </element>
+          <element id="library" level="project" name="Maven: org.apache.directory.studio:org.apache.commons.logging:1.1.3" />
+          <element id="archive" name="dsig-v2-maven-alpha.jar">
+            <element id="module-output" name="dsig" />
+          </element>
+          <element id="archive" name="security-common-v2-maven-alpha.jar">
+            <element id="module-output" name="security-common" />
+          </element>
+          <element id="archive" name="wsseTool-3.0.0.jar">
+            <element id="module-output" name="wsseTool" />
+          </element>
+          <element id="library" level="project" name="Maven: commons-validator:commons-validator:1.4.0" />
+          <element id="library" level="project" name="Maven: commons-beanutils:commons-beanutils:1.8.3" />
+          <element id="library" level="project" name="Maven: commons-digester:commons-digester:1.8" />
+          <element id="archive" name="validators-registry-metadata-v2-maven-alpha.jar">
+            <element id="module-output" name="validators-registry-metadata" />
+          </element>
+          <element id="archive" name="dns-v2-maven-alpha.jar">
+            <element id="module-output" name="dns" />
+          </element>
+          <element id="archive" name="testkit-utilities-v2-maven-alpha.jar">
+            <element id="module-output" name="testkit-utilities" />
+          </element>
+          <element id="archive" name="xdstest2-v2-maven-alpha.jar">
+            <element id="module-output" name="xdstest2" />
+          </element>
+          <element id="library" level="project" name="Maven: org.apache.axis2:axis2:1.6.2" />
+          <element id="library" level="project" name="Maven: org.apache.axis2:axis2-transport-local:1.6.2" />
+          <element id="library" level="project" name="Maven: org.apache.axis2:axis2-transport-http:1.6.2" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.0" />
+          <element id="library" level="project" name="Maven: bouncycastle:bcprov-jdk15:124" />
+          <element id="archive" name="direct-support-v2-maven-alpha.jar">
+            <element id="module-output" name="direct-support" />
+          </element>
+          <element id="archive" name="xdstest2-logging-v2-maven-alpha.jar">
+            <element id="module-output" name="xdstest2-logging" />
+          </element>
+          <element id="archive" name="direct-sim-v2-maven-alpha.jar">
+            <element id="module-output" name="direct-sim" />
+          </element>
+          <element id="library" level="project" name="Maven: org.mortbay.jetty:jetty-util:6.1.26" />
+          <element id="archive" name="email-v2-maven-alpha.jar">
+            <element id="module-output" name="email" />
+          </element>
+          <element id="library" level="project" name="Maven: javax.mail:javax.mail-api:1.5.1" />
+          <element id="archive" name="message-dispatch-v2-maven-alpha.jar">
+            <element id="module-output" name="message-dispatch" />
+          </element>
+          <element id="archive" name="simulators-v2-maven-alpha.jar">
+            <element id="module-output" name="simulators" />
+          </element>
+          <element id="archive" name="validators-direct-factory-v2-maven-alpha.jar">
+            <element id="module-output" name="validators-direct-factory" />
+          </element>
+        </element>
+      </element>
+      <element id="gwt-compiler-output" facet="xdstools2/gwt/GWT" />
+    </root>
+  </artifact>
+</component>

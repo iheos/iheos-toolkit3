@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Ccda2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/bin/gov/nist/toolkit/valregmsg/test/resources/xdm/Ccda.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

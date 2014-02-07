@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.openhealthtools:mdht.emf.runtime:1.0.0.201309181641">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/openhealthtools/mdht.emf.runtime/1.0.0.201309181641/mdht.emf.runtime-1.0.0.201309181641.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/openhealthtools/mdht.emf.runtime/1.0.0.201309181641/mdht.emf.runtime-1.0.0.201309181641-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/openhealthtools/mdht.emf.runtime/1.0.0.201309181641/mdht.emf.runtime-1.0.0.201309181641-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

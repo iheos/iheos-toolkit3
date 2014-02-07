@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="XDM-Samples">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/xdstools2/target/xdstools2-v2-maven-alpha/WEB-INF/classes/main/webapp/testdata/XDM-Samples/Sage.zip!/" />
+      <root url="jar://$PROJECT_DIR$/xdstools2/target/xdstools2-v2-maven-alpha/WEB-INF/classes/main/webapp/testdata/XDM-Samples/Siemens.zip!/" />
+      <root url="jar://$PROJECT_DIR$/xdstools2/target/xdstools2-v2-maven-alpha/WEB-INF/classes/main/webapp/testdata/XDM-Samples/Medicity.zip!/" />
+      <root url="jar://$PROJECT_DIR$/xdstools2/target/xdstools2-v2-maven-alpha/WEB-INF/classes/main/webapp/testdata/XDM-Samples/Epic.zip!/" />
+      <root url="jar://$PROJECT_DIR$/xdstools2/target/xdstools2-v2-maven-alpha/WEB-INF/classes/main/webapp/testdata/XDM-Samples/MIE.zip!/" />
+      <root url="jar://$PROJECT_DIR$/xdstools2/target/xdstools2-v2-maven-alpha/WEB-INF/classes/main/webapp/testdata/XDM-Samples/Allscripts.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

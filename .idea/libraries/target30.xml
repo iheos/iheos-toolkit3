@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="target30">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/xds-exceptions/target/xds-exceptions-v2-maven-alpha-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/xds-exceptions/target/xds-exceptions-v2-maven-alpha.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

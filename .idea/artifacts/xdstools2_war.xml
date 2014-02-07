@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="xdstools2:war">
+    <output-path>$PROJECT_DIR$/xdstools2/target</output-path>
+    <root id="archive" name="xdstools2-v2-maven-alpha.war">
+      <element id="artifact" artifact-name="xdstools2:war exploded" />
+    </root>
+  </artifact>
+</component>

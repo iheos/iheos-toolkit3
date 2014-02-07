@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="testkit-v2-maven-alpha">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/testkit/target/testkit-v2-maven-alpha.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

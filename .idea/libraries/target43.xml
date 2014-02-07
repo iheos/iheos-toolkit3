@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="target43">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/validators-support/target/validators-support-v2-maven-alpha-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/validators-support/target/validators-support-v2-maven-alpha.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

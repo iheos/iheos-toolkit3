@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="target37">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/message-validator-factory/target/message-validator-factory-v2-maven-alpha-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/message-validator-factory/target/message-validator-factory-v2-maven-alpha.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="IHE_XDM1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/direct/src/main/java/gov/nist/direct/test/resources/directMessages/IHE_XDM.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
