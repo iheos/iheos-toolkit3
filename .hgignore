@@ -30,3 +30,7 @@ bin/*
 
 # Maven generated
 MANIFEST.MF
+
+# idea
+out/
+xdstools2/build/
