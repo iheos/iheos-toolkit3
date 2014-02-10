@@ -6,6 +6,7 @@ package gov.nist.hit.ds.logBrowser.client.widgets;
 import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.ContextSupplement;
+import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
@@ -17,6 +18,7 @@ import gov.nist.hit.ds.repository.simple.search.client.SimpleData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
@@ -52,6 +54,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class SearchWidget extends Composite {
+	private static Logger logger = Logger.getLogger(SearchWidget.class.getName());
 	public VerticalPanel topPanel;
 	private static final String PROP_VALUE = "propValue";
 	private static final String PROP_NAME = "propName";
@@ -587,6 +590,9 @@ public class SearchWidget extends Composite {
 	public void debugTxt(Object o) {
 		// lblTxt.setText("setting " + o.toString());
 		// new PopupMessage(o.toString());
+		if (o!=null) {
+			logger.fine("debug: " + o.toString());
+		}
 	}
 	
 	protected void printTable(SearchCriteria sc, String ancestorId) {
@@ -748,7 +754,7 @@ public class SearchWidget extends Composite {
 					int pnIdx = 0;
 					
 					for (int cx=0; cx<getPropNames().size();cx++) {
-						if (getPropNames().get(cx).equals(st.getPropName())) {
+						if (getPropNames().get(cx).equals(PnIdentifier.stripQuotes(st.getPropName()))) {
 							pnIdx = cx; 
 						}
 						stPn.addItem(getPropNames().get(cx));
