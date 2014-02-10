@@ -79,9 +79,9 @@ public class MiscTest {
 	
 	@Test
 	public void xmlFmtTest() {
-		System.out.print(XmlFormatter.normalize("<html><head><title>Title</title></head><body><h1>Header</h1></body></html>"));
+		System.out.println(XmlFormatter.normalize("<html><head><title>Title</title></head><body><h1>Header</h1></body></html>"));
 		
-		System.out.print(XmlFormatter.htmlize("<html><head><title>Title</title></head><body><h1>Header</h1></body></html>"));
+		System.out.println(XmlFormatter.htmlize("<html><head><title>Title</title></head><body><h1>Header</h1></body></html>"));
         
 	}
 	

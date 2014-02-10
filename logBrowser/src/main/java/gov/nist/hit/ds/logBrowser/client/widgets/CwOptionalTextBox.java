@@ -26,7 +26,7 @@ public class CwOptionalTextBox extends Composite implements
 
      // Set the check box's caption, and check it by default.
      checkBox.setText(caption);
-     checkBox.setChecked(true);
+     // checkBox.setChecked(true);
      checkBox.addClickHandler(this);
 
      // All composites must call initWidget() in their constructors.
@@ -39,7 +39,7 @@ public class CwOptionalTextBox extends Composite implements
    public void onClick(ClickEvent event) {
      if (event.getSource() == checkBox) {
        // When the check box is clicked, update the text box's enabled state.
-       textBox.setEnabled(checkBox.isChecked());
+       // textBox.setEnabled(checkBox.isChecked());
      }
    }
 

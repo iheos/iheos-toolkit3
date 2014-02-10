@@ -29,4 +29,5 @@ public interface RepositoryService extends RemoteService  {
 	public AssetNode getAssetTxtContent(AssetNode an) throws RepositoryConfigException;
 	public List<AssetNode> getImmediateChildren(AssetNode an) throws RepositoryConfigException;
 	public AssetNode getParentChain(AssetNode an) throws RepositoryConfigException;
+	public Boolean isRepositoryConfigured() throws RepositoryConfigException;
 }

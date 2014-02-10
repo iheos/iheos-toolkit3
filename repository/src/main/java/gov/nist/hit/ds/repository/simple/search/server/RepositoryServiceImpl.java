@@ -92,6 +92,15 @@ RepositoryService {
 		}
 	}
 
+	@Override
+	public Boolean isRepositoryConfigured() throws RepositoryConfigException {
+		try {
+			return PresentationData.isRepositoryConfigured();	
+		} catch (Exception re) {
+			throw new RepositoryConfigException(re.toString());
+		}
+	}
+
 
 
 }

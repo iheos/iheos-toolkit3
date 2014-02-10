@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.repository.presentation;
 
+import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -25,6 +27,7 @@ import gov.nist.hit.ds.utilities.csv.CSVParser;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,6 +75,17 @@ public class PresentationData implements IsSerializable, Serializable  {
 	        
 	        return rtList;
 	
+	}
+	
+	public static Boolean isRepositoryConfigured() throws RepositoryException {
+		try {
+			Installation.installation().initialize();
+		} catch (InitializationFailedException e) {
+			logger.fine(e.toString());
+		} catch (IOException e) {
+			logger.fine(e.toString());
+		}		
+		return new Boolean(Configuration.configuration().isRepositorySystemInitialized());
 	}
 	
 	public static List<String> getIndexablePropertyNames() {
