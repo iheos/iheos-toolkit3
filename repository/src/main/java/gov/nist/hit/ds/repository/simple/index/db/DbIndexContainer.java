@@ -1525,6 +1525,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			// This needs to be independent from the syncRep call because there columns might not have fully expanded 
 			int orderBy=0;
 			for (Repository rep : fRep) {
+				if (rep==null) continue; // Nothing found by the getHitCount call above, skip to next repos
 				
 				String sqlStr = "insert into "+searchSession+"(repId,assetId,reposAcs,reposOrder,displayOrder,createdDate,propFile)"
 						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (orderBy++) + "," + displayOrder + "," + createdDate + "," + locationId + " from " + repContainerLabel 
