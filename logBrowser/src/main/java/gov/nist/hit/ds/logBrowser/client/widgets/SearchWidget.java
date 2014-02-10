@@ -4,6 +4,7 @@ package gov.nist.hit.ds.logBrowser.client.widgets;
 
 
 import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
+import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.ContextSupplement;
 import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
@@ -454,8 +455,14 @@ public class SearchWidget extends Composite {
 	
 	protected void setPropNameSelector(int index, String path) {
 		String s = getPropNames().get(index);
-		getSt(path).setPropNameQuoted(s);
-		// getSt(path).setPropName(s);		
+		PropertyKey p = PropertyKey.getPropertyKey(s);
+		
+		if (p==null) { // Not part of original property key enumeration, automatic quoted identifier 
+			getSt(path).setPropNameQuoted(s);
+		} else { // identifier based on property key
+			getSt(path).setPropName(p.getPropertyName());
+		} 
+		
 	}
 	
 	protected void setStValue(String value, String path) {	

@@ -3,6 +3,8 @@
  */
 package gov.nist.hit.ds.repository.api;
 
+import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
+
 /**
  * @author Sunil.Bhaskarla
  *
@@ -119,6 +121,24 @@ public enum PropertyKey {
 		public boolean isInternalUseOnly() {
 			return internalUseOnly;
 		}
+		
+		public static PropertyKey getPropertyKey(String Pn) {
+			if (Pn!=null)
+				for (PropertyKey p : PropertyKey.values()) {
+					if (PnIdentifier.stripQuotes(Pn).equals(p.toString())) {
+						return p;
+					}
+				}
+			return null;
+		}
+		
+		public String getPropertyName() {
+			if (isInternalUseOnly()) {
+				return this.toString();
+			} else {
+				return PnIdentifier.getQuotedIdentifer(this.toString());
+			}
+		}
 
 		public void setInternalUseOnly(boolean internalUseOnly) {
 			this.internalUseOnly = internalUseOnly;
@@ -126,6 +146,6 @@ public enum PropertyKey {
 		
 		private PropertyKey(boolean isInternal) {
 			setInternalUseOnly(isInternal);
-		}
+		}		
     	
    }
