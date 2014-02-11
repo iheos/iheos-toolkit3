@@ -23,59 +23,79 @@ public class SearchTerm implements IsSerializable, Serializable {
     
    				
 	public static enum Operator {
-		EQUALTO() {
+		EQUALTO("equal to") {
 			@Override
 			public String toString() {
 				return " = ";	
 			}
 		},
-		EQUALTOANY() {
+		EQUALTOANY("in") {
 			@Override
 			public String toString() {
 				return " in ";	
 			}
 		},
-		NOTEQUALTO() {
+		NOTEQUALTO("not equal to") {
 			@Override
 			public String toString() {
 				return " != ";	
 			}
 		},
-		NOTEQUALTOANY() {
+		NOTEQUALTOANY("not equal to any") {
 			@Override
 			public String toString() {
 				return " not in ";	
 			}
 		},		
-		LESSTHAN() {
+		LESSTHAN("less than") {
 			@Override
 			public String toString() {
 				return " < ";	
 			}
 		},
-		LESSTHANOREQUALTO() {
+		LESSTHANOREQUALTO("less than or equal to") {
 			@Override
 			public String toString() {
 				return " <= ";	
 			}
 		},
-		GREATERTHAN() {
+		GREATERTHAN("greater than") {
 			@Override
 			public String toString() {
 				return " > ";	
 			}
 		},
-		GREATERTHANOREQUALTO() {
+		GREATERTHANOREQUALTO("greater than or equal to") {
 			@Override
 			public String toString() {
 				return " >= ";	
 			}
-		},LIKE() {
+		},LIKE("like") {
 			@Override
 			public String toString() {
 				return " like ";	
 			}
+		},UNSPECIFIED("is unspecified") {
+			@Override
+			public String toString() {
+				return " is null ";	
+			}
 		};
+		
+    	private String displayName;
+		
+		private Operator(String displayName) {
+			setDisplayName(displayName);
+		}
+		
+		private void setDisplayName(String displayName) {
+			this.displayName = displayName;
+		}		
+		
+		public String getDisplayName() {
+			return this.displayName;
+		}
+		
 	}
     
     
@@ -159,14 +179,19 @@ public class SearchTerm implements IsSerializable, Serializable {
 	
 	@Override
 	public String toString() {
-		
-		if (Operator.EQUALTOANY.equals(getOperator())) {
-			return getPropName() + getOperator().toString() + getValueAsCsv();
-		}
-		
+
 		String propName = getPropName();
+		
+		if (Operator.EQUALTOANY.equals(getOperator())
+			|| Operator.NOTEQUALTOANY.equals(getOperator())
+			|| Operator.LIKE.equals(getOperator())) {
+			return propName + getOperator().toString() + getValueAsCsv();
+		} 
+		
 		if (null == values[0]) {
 			return propName + " is null ";
+		} else if (Operator.UNSPECIFIED.equals(getOperator())) {
+			return propName + getOperator().toString();
 		} else {
 			return propName + getOperator().toString() + "'" + values[0] + "' "; 
 		}		

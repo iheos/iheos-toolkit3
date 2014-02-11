@@ -65,6 +65,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 
 public class LogBrowserWidget extends Composite {
+	/**
+	 *
+	 * @author Sunil.Bhaskarla
+	 */
 	private static Logger logger = Logger.getLogger(LogBrowserWidget.class.getName());
 	TabLayoutPanel featureTlp = new TabLayoutPanel(20, Unit.PX);
 	private static final int CONTEXTMENU_XOFFSET = 10;
@@ -160,7 +164,7 @@ public class LogBrowserWidget extends Composite {
 		    .setPaddingLeft(3, Unit.PX);
 
 		    searchPanel.add(searchWidget);
-		    searchMainLayoutPanel.addWest(searchPanel, 632); // Math.round(0.40 * Window.getClientWidth())
+		    searchMainLayoutPanel.addWest(searchPanel, 650); // 632, Math.round(0.40 * Window.getClientWidth())
 		    searchMainLayoutPanel.add(searchLbSplitPanel);
 
 		    
@@ -627,7 +631,7 @@ public class LogBrowserWidget extends Composite {
 				} 
 			} else {	
 				if (an.getMimeType()!=null) { // Mime-type exists, but no content file
-					  StyleInjector.inject(".centerImg{position:fixed;top:30%;left:50%;}");
+					  StyleInjector.inject(".centerImg{position:relative;top:250px;left:50%;}");
 
 					VerticalPanel imgPanel = new VerticalPanel(); // ;
 					imgPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);

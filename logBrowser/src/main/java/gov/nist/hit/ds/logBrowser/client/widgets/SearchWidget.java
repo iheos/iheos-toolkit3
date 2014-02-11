@@ -55,6 +55,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class SearchWidget extends Composite {
+	/**
+	 *
+	 * @author Sunil.Bhaskarla
+	 */
 	private static Logger logger = Logger.getLogger(SearchWidget.class.getName());
 	public VerticalPanel topPanel;
 	private static final String PROP_VALUE = "propValue";
@@ -86,7 +90,7 @@ public class SearchWidget extends Composite {
 	public Button moveDown = new Button("Move Down");
 	protected ArrayList<String> propNames = new ArrayList<String>();
 	
-	static String DEFAULTWIDTH = "26em";
+	static String DEFAULTWIDTH = "20em";
 	static String REPOSLBOXWIDTH = "17em";
 	static String DEFAULTTITLEWIDTH = "15em";
 	static String MOVEMENTWIDTH = "7em";
@@ -770,7 +774,8 @@ public class SearchWidget extends Composite {
 					stPn.addChangeHandler(new CSelectorChangeHandler(PROP_NAME, nodeId));					
 					
 					for (SearchTerm.Operator e : SearchTerm.Operator.values()) {
-						stOp.addItem(e.toString());
+						// stOp.addItem(e.toString());
+						stOp.addItem(e.getDisplayName());
 					}					
 					stOp.setSelectedIndex(st.getOperator().ordinal());
 					stOp.addChangeHandler(new CSelectorChangeHandler(OPERATOR, nodeId));
