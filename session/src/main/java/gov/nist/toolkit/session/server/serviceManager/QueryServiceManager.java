@@ -20,28 +20,7 @@ import gov.nist.toolkit.results.client.Result;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.results.client.StepResult;
 import gov.nist.toolkit.session.server.Session;
-import gov.nist.toolkit.session.server.services.FindDocuments;
-import gov.nist.toolkit.session.server.services.FindFolders;
-import gov.nist.toolkit.session.server.services.FindPatient;
-import gov.nist.toolkit.session.server.services.FolderValidation;
-import gov.nist.toolkit.session.server.services.GetAssociations;
-import gov.nist.toolkit.session.server.services.GetDocuments;
-import gov.nist.toolkit.session.server.services.GetFolderAndContents;
-import gov.nist.toolkit.session.server.services.GetFolders;
-import gov.nist.toolkit.session.server.services.GetFoldersForDocument;
-import gov.nist.toolkit.session.server.services.GetObjects;
-import gov.nist.toolkit.session.server.services.GetRelated;
-import gov.nist.toolkit.session.server.services.GetSSandContents;
-import gov.nist.toolkit.session.server.services.GetSubmissionSets;
-import gov.nist.toolkit.session.server.services.LifecycleValidation;
-import gov.nist.toolkit.session.server.services.MpqFindDocuments;
-import gov.nist.toolkit.session.server.services.ProvideAndRetrieve;
-import gov.nist.toolkit.session.server.services.RegisterAndQuery;
-import gov.nist.toolkit.session.server.services.RetrieveDocument;
-import gov.nist.toolkit.session.server.services.SrcStoresDocVal;
-import gov.nist.toolkit.session.server.services.SubmitRegistryTestdata;
-import gov.nist.toolkit.session.server.services.SubmitRepositoryTestdata;
-import gov.nist.toolkit.session.server.services.SubmitXDRTestdata;
+import gov.nist.toolkit.session.server.services.*;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.xdsexception.ExceptionUtil;
 import gov.nist.toolkit.xdsexception.XdsException;
@@ -137,7 +116,16 @@ public class QueryServiceManager extends CommonServiceManager {
 		}
 	}
 
-	public List<Result> getDocuments(SiteSpec site, AnyIds aids) {
+    public List<Result> findDocumentsByRefId(SiteSpec site, String pid, List<String> refIds) {
+        logger.debug(session.id() + ": " + "findDocumentsByRefId");
+        try {
+            return new FindDocumentsByRefId(session).run(site, pid, refIds);
+        } catch (XdsException e) {
+            return buildResultList(e);
+        }
+    }
+
+    public List<Result> getDocuments(SiteSpec site, AnyIds aids) {
 		logger.debug(session.id() + ": " + "getDocuments");
 		if (site == null) site = session.siteSpec;
 		try {

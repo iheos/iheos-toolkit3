@@ -2,10 +2,6 @@ package gov.nist.toolkit.xdstest2logging;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.registrysupport.logging.RegistryResponseLog;
-import gov.nist.toolkit.xdstest2logging.NotALogFileException;
-import gov.nist.toolkit.xdstest2logging.Report;
-import gov.nist.toolkit.xdstest2logging.SectionGoals;
-import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
@@ -149,7 +145,8 @@ public class LogFileContent implements Serializable {
 				err.name = "Error getting report from step " + i;
 				reports.add(err);
 			}
-			OMElement sectionReportsEle = log.getReports();
+//			OMElement sectionReportsEle = log.getReports();
+            OMElement sectionReportsEle = log.getRawReports();
 			if (sectionReportsEle != null) {
 				try {
 					List<Report> sectionReports = Report.parseReports(sectionReportsEle);
