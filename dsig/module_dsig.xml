@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_dsig" default="compile.module.dsig">
+  <dirname property="module.dsig.basedir" file="${ant.file.module_dsig}"/>
+  
+  <property name="module.jdk.home.dsig" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.dsig" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.dsig" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.dsig" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="dsig.output.dir" value="${module.dsig.basedir}/target/classes"/>
+  <property name="dsig.testoutput.dir" value="${module.dsig.basedir}/target/test-classes"/>
+  
+  <path id="dsig.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="dsig.module.production.classpath">
+    <path refid="${module.jdk.classpath.dsig}"/>
+    <path refid="library.maven:_org.apache.santuario:xmlsec:1.4.5.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.12.classpath"/>
+    <path refid="library.maven:_logkit:logkit:1.0.1.classpath"/>
+    <path refid="library.maven:_avalon-framework:avalon-framework:4.1.3.classpath"/>
+    <path refid="library.maven:_javax.servlet:servlet-api:2.3.classpath"/>
+    <pathelement location="${security-common.output.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+  </path>
+  
+  <path id="dsig.runtime.production.module.classpath">
+    <pathelement location="${dsig.output.dir}"/>
+    <path refid="library.maven:_org.apache.santuario:xmlsec:1.4.5.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.12.classpath"/>
+    <path refid="library.maven:_logkit:logkit:1.0.1.classpath"/>
+    <path refid="library.maven:_avalon-framework:avalon-framework:4.1.3.classpath"/>
+    <path refid="library.maven:_javax.servlet:servlet-api:2.3.classpath"/>
+    <path refid="security-common.runtime.production.module.classpath"/>
+    <path refid="xds-exceptions.runtime.production.module.classpath"/>
+    <path refid="utilities.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="dsig.module.classpath">
+    <path refid="${module.jdk.classpath.dsig}"/>
+    <pathelement location="${dsig.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+    <path refid="library.maven:_org.apache.santuario:xmlsec:1.4.5.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.12.classpath"/>
+    <path refid="library.maven:_logkit:logkit:1.0.1.classpath"/>
+    <path refid="library.maven:_avalon-framework:avalon-framework:4.1.3.classpath"/>
+    <path refid="library.maven:_javax.servlet:servlet-api:2.3.classpath"/>
+    <pathelement location="${security-common.testoutput.dir}"/>
+    <pathelement location="${security-common.output.dir}"/>
+    <pathelement location="${xds-exceptions.testoutput.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+    <pathelement location="${utilities.testoutput.dir}"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.testoutput.dir}"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+  </path>
+  
+  <path id="dsig.runtime.module.classpath">
+    <pathelement location="${dsig.testoutput.dir}"/>
+    <pathelement location="${dsig.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+    <path refid="library.maven:_org.apache.santuario:xmlsec:1.4.5.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.12.classpath"/>
+    <path refid="library.maven:_logkit:logkit:1.0.1.classpath"/>
+    <path refid="library.maven:_avalon-framework:avalon-framework:4.1.3.classpath"/>
+    <path refid="library.maven:_javax.servlet:servlet-api:2.3.classpath"/>
+    <path refid="security-common.runtime.module.classpath"/>
+    <path refid="xds-exceptions.runtime.module.classpath"/>
+    <path refid="utilities.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.dsig">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.dsig">
+    <patternset refid="excluded.from.module.dsig"/>
+  </patternset>
+  
+  <path id="dsig.module.sourcepath">
+    <dirset dir="${module.dsig.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="dsig.module.test.sourcepath">
+    <dirset dir="${module.dsig.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.dsig" depends="compile.module.dsig.production,compile.module.dsig.tests" description="Compile module dsig"/>
+  
+  <target name="compile.module.dsig.production" depends="register.custom.compilers,compile.module.security-common,compile.module.xds-exceptions,compile.module.utilities,compile.module.common-datatypes" description="Compile module dsig; production classes">
+    <mkdir dir="${dsig.output.dir}"/>
+    <javac2 destdir="${dsig.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.dsig}/javac">
+      <compilerarg line="${compiler.args.dsig}"/>
+      <bootclasspath refid="dsig.module.bootclasspath"/>
+      <classpath refid="dsig.module.production.classpath"/>
+      <src refid="dsig.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.dsig"/>
+    </javac2>
+    
+    <copy todir="${dsig.output.dir}">
+      <fileset dir="${module.dsig.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.dsig.tests" depends="register.custom.compilers,compile.module.dsig.production" description="compile module dsig; test classes" unless="skip.tests">
+    <mkdir dir="${dsig.testoutput.dir}"/>
+    <javac2 destdir="${dsig.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.dsig}/javac">
+      <compilerarg line="${compiler.args.dsig}"/>
+      <bootclasspath refid="dsig.module.bootclasspath"/>
+      <classpath refid="dsig.module.classpath"/>
+      <src refid="dsig.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.dsig"/>
+    </javac2>
+    
+    <copy todir="${dsig.testoutput.dir}">
+      <fileset dir="${module.dsig.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.dsig" description="cleanup module">
+    <delete dir="${dsig.output.dir}"/>
+    <delete dir="${dsig.testoutput.dir}"/>
+  </target>
+</project>

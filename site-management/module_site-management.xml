@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_site-management" default="compile.module.site-management">
+  <dirname property="module.site-management.basedir" file="${ant.file.module_site-management}"/>
+  
+  <property name="module.jdk.home.site-management" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.site-management" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.site-management" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.site-management" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="site-management.output.dir" value="${module.site-management.basedir}/target/classes"/>
+  <property name="site-management.testoutput.dir" value="${module.site-management.basedir}/target/test-classes"/>
+  
+  <path id="site-management.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="site-management.module.production.classpath">
+    <path refid="${module.jdk.classpath.site-management}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <pathelement location="${actortransaction.output.dir}"/>
+    <pathelement location="${registry-support.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+  </path>
+  
+  <path id="site-management.runtime.production.module.classpath">
+    <pathelement location="${site-management.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="actortransaction.runtime.production.module.classpath"/>
+    <path refid="registry-support.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="utilities.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.production.module.classpath"/>
+    <path refid="xds-exceptions.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+  </path>
+  
+  <path id="site-management.module.classpath">
+    <path refid="${module.jdk.classpath.site-management}"/>
+    <pathelement location="${site-management.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <pathelement location="${actortransaction.testoutput.dir}"/>
+    <pathelement location="${actortransaction.output.dir}"/>
+    <pathelement location="${registry-support.testoutput.dir}"/>
+    <pathelement location="${registry-support.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <pathelement location="${utilities.testoutput.dir}"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.testoutput.dir}"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.testoutput.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+  </path>
+  
+  <path id="site-management.runtime.module.classpath">
+    <pathelement location="${site-management.testoutput.dir}"/>
+    <pathelement location="${site-management.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <path refid="actortransaction.runtime.module.classpath"/>
+    <path refid="registry-support.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="utilities.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.module.classpath"/>
+    <path refid="xds-exceptions.runtime.module.classpath"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.site-management">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.site-management">
+    <patternset refid="excluded.from.module.site-management"/>
+  </patternset>
+  
+  <path id="site-management.module.sourcepath">
+    <dirset dir="${module.site-management.basedir}">
+      <include name="src/main/java"/>
+      <include name="src/main/resources"/>
+    </dirset>
+  </path>
+  
+  <path id="site-management.module.test.sourcepath">
+    <dirset dir="${module.site-management.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.site-management" depends="compile.module.site-management.production,compile.module.site-management.tests" description="Compile module site-management"/>
+  
+  <target name="compile.module.site-management.production" depends="register.custom.compilers,compile.module.actortransaction,compile.module.registry-support,compile.module.utilities,compile.module.common-datatypes,compile.module.xds-exceptions" description="Compile module site-management; production classes">
+    <mkdir dir="${site-management.output.dir}"/>
+    <groovyc destdir="${site-management.output.dir}" fork="yes">
+      <src refid="site-management.module.sourcepath"/>
+      <classpath refid="site-management.module.production.classpath"/>
+      <patternset refid="excluded.from.compilation.site-management"/>
+      <javac debug="${compiler.debug}">
+        <compilerarg line="${compiler.args.site-management}"/>
+      </javac>
+    </groovyc>
+    <instrumentIdeaExtensions destdir="${site-management.output.dir}">
+      <compilerarg line="${compiler.args.site-management}"/>
+      <bootclasspath refid="site-management.module.bootclasspath"/>
+      <classpath refid="site-management.module.production.classpath"/>
+      <src refid="site-management.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.site-management"/>
+    </instrumentIdeaExtensions>
+    
+    <copy todir="${site-management.output.dir}">
+      <fileset dir="${module.site-management.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.site-management.basedir}/src/main/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.site-management.tests" depends="register.custom.compilers,compile.module.site-management.production" description="compile module site-management; test classes" unless="skip.tests">
+    <mkdir dir="${site-management.testoutput.dir}"/>
+    <groovyc destdir="${site-management.testoutput.dir}" fork="yes">
+      <src refid="site-management.module.test.sourcepath"/>
+      <classpath refid="site-management.module.classpath"/>
+      <patternset refid="excluded.from.compilation.site-management"/>
+      <javac debug="${compiler.debug}">
+        <compilerarg line="${compiler.args.site-management}"/>
+      </javac>
+    </groovyc>
+    <instrumentIdeaExtensions destdir="${site-management.testoutput.dir}">
+      <compilerarg line="${compiler.args.site-management}"/>
+      <bootclasspath refid="site-management.module.bootclasspath"/>
+      <classpath refid="site-management.module.classpath"/>
+      <src refid="site-management.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.site-management"/>
+    </instrumentIdeaExtensions>
+    
+    <copy todir="${site-management.testoutput.dir}">
+      <fileset dir="${module.site-management.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.site-management" description="cleanup module">
+    <delete dir="${site-management.output.dir}"/>
+    <delete dir="${site-management.testoutput.dir}"/>
+  </target>
+  
+  <property name="gwt.compiler.output.site-management" value="${module.site-management.basedir}/GWTCompilerOutput_site-management"/>
+  
+  <!-- Run GWT compiler for GWT module ${gwt.module.name} -->
+  <target name="run.gwt.compiler.site-management" description="Run GWT compiler">
+    <java fork="true" jvm="${module.jdk.bin.site-management}/java" classname="com.google.gwt.dev.Compiler">
+      <jvmarg line="-Xmx256m"/>
+      <classpath>
+        <pathelement location="${gwt.sdk.home.site-management}/gwt-dev.jar"/>
+        <path refid="site-management.module.sourcepath"/>
+        <path refid="actortransaction.module.sourcepath"/>
+        <path refid="registry-support.module.sourcepath"/>
+        <path refid="utilities.module.sourcepath"/>
+        <path refid="common-datatypes.module.sourcepath"/>
+        <path refid="xds-exceptions.module.sourcepath"/>
+        <path refid="site-management.module.classpath"/>
+      </classpath>
+      <arg value="-logLevel"/>
+      <arg value="WARN"/>
+      <arg value="-war"/>
+      <arg value="${gwt.compiler.output.site-management}"/>
+      <arg value="-style"/>
+      <arg value="DETAILED"/>
+      <arg value="${gwt.module.name}"/>
+    </java>
+  </target>
+  
+  <target name="compile.gwt.site-management" depends="compile.module.site-management" description="Compile all GWT modules in module site-management">
+    <antcall target="run.gwt.compiler.site-management">
+      <param name="gwt.module.name" value="gov.nist.toolkit.sitemanagement.siteManagement"/>
+    </antcall>
+  </target>
+</project>

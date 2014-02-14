@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_message-dispatch" default="compile.module.message-dispatch">
+  <dirname property="module.message-dispatch.basedir" file="${ant.file.module_message-dispatch}"/>
+  
+  <property name="module.jdk.home.message-dispatch" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.message-dispatch" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.message-dispatch" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.message-dispatch" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="message-dispatch.output.dir" value="${module.message-dispatch.basedir}/target/classes"/>
+  <property name="message-dispatch.testoutput.dir" value="${module.message-dispatch.basedir}/target/test-classes"/>
+  
+  <path id="message-dispatch.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="message-dispatch.module.production.classpath">
+    <path refid="${module.jdk.classpath.message-dispatch}"/>
+    <path refid="library.maven:_javax.mail:javax.mail-api:1.5.1.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+  </path>
+  
+  <path id="message-dispatch.runtime.production.module.classpath">
+    <pathelement location="${message-dispatch.output.dir}"/>
+    <path refid="library.maven:_javax.mail:javax.mail-api:1.5.1.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+  </path>
+  
+  <path id="message-dispatch.module.classpath">
+    <path refid="${module.jdk.classpath.message-dispatch}"/>
+    <pathelement location="${message-dispatch.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+    <path refid="library.maven:_javax.mail:javax.mail-api:1.5.1.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+  </path>
+  
+  <path id="message-dispatch.runtime.module.classpath">
+    <pathelement location="${message-dispatch.testoutput.dir}"/>
+    <pathelement location="${message-dispatch.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+    <path refid="library.maven:_javax.mail:javax.mail-api:1.5.1.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.message-dispatch">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.message-dispatch">
+    <patternset refid="excluded.from.module.message-dispatch"/>
+  </patternset>
+  
+  <path id="message-dispatch.module.sourcepath">
+    <dirset dir="${module.message-dispatch.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="message-dispatch.module.test.sourcepath">
+    <dirset dir="${module.message-dispatch.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.message-dispatch" depends="compile.module.message-dispatch.production,compile.module.message-dispatch.tests" description="Compile module message-dispatch"/>
+  
+  <target name="compile.module.message-dispatch.production" depends="register.custom.compilers" description="Compile module message-dispatch; production classes">
+    <mkdir dir="${message-dispatch.output.dir}"/>
+    <javac2 destdir="${message-dispatch.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.message-dispatch}/javac">
+      <compilerarg line="${compiler.args.message-dispatch}"/>
+      <bootclasspath refid="message-dispatch.module.bootclasspath"/>
+      <classpath refid="message-dispatch.module.production.classpath"/>
+      <src refid="message-dispatch.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.message-dispatch"/>
+    </javac2>
+    
+    <copy todir="${message-dispatch.output.dir}">
+      <fileset dir="${module.message-dispatch.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.message-dispatch.tests" depends="register.custom.compilers,compile.module.message-dispatch.production" description="compile module message-dispatch; test classes" unless="skip.tests">
+    <mkdir dir="${message-dispatch.testoutput.dir}"/>
+    <javac2 destdir="${message-dispatch.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.message-dispatch}/javac">
+      <compilerarg line="${compiler.args.message-dispatch}"/>
+      <bootclasspath refid="message-dispatch.module.bootclasspath"/>
+      <classpath refid="message-dispatch.module.classpath"/>
+      <src refid="message-dispatch.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.message-dispatch"/>
+    </javac2>
+    
+    <copy todir="${message-dispatch.testoutput.dir}">
+      <fileset dir="${module.message-dispatch.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.message-dispatch" description="cleanup module">
+    <delete dir="${message-dispatch.output.dir}"/>
+    <delete dir="${message-dispatch.testoutput.dir}"/>
+  </target>
+</project>

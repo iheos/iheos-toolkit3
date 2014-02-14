@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_error-recording" default="compile.module.error-recording">
+  <dirname property="module.error-recording.basedir" file="${ant.file.module_error-recording}"/>
+  
+  <property name="module.jdk.home.error-recording" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.error-recording" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.error-recording" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.error-recording" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="error-recording.output.dir" value="${module.error-recording.basedir}/target/classes"/>
+  <property name="error-recording.testoutput.dir" value="${module.error-recording.basedir}/target/test-classes"/>
+  
+  <path id="error-recording.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="error-recording.module.production.classpath">
+    <path refid="${module.jdk.classpath.error-recording}"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+  </path>
+  
+  <path id="error-recording.runtime.production.module.classpath">
+    <pathelement location="${error-recording.output.dir}"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+  </path>
+  
+  <path id="error-recording.module.classpath">
+    <path refid="${module.jdk.classpath.error-recording}"/>
+    <pathelement location="${error-recording.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+  </path>
+  
+  <path id="error-recording.runtime.module.classpath">
+    <pathelement location="${error-recording.testoutput.dir}"/>
+    <pathelement location="${error-recording.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.error-recording">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.error-recording">
+    <patternset refid="excluded.from.module.error-recording"/>
+  </patternset>
+  
+  <path id="error-recording.module.sourcepath">
+    <dirset dir="${module.error-recording.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="error-recording.module.test.sourcepath">
+    <dirset dir="${module.error-recording.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.error-recording" depends="compile.module.error-recording.production,compile.module.error-recording.tests" description="Compile module error-recording"/>
+  
+  <target name="compile.module.error-recording.production" depends="register.custom.compilers" description="Compile module error-recording; production classes">
+    <mkdir dir="${error-recording.output.dir}"/>
+    <javac2 destdir="${error-recording.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.error-recording}/javac">
+      <compilerarg line="${compiler.args.error-recording}"/>
+      <bootclasspath refid="error-recording.module.bootclasspath"/>
+      <classpath refid="error-recording.module.production.classpath"/>
+      <src refid="error-recording.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.error-recording"/>
+    </javac2>
+    
+    <copy todir="${error-recording.output.dir}">
+      <fileset dir="${module.error-recording.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.error-recording.tests" depends="register.custom.compilers,compile.module.error-recording.production" description="compile module error-recording; test classes" unless="skip.tests">
+    <mkdir dir="${error-recording.testoutput.dir}"/>
+    <javac2 destdir="${error-recording.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.error-recording}/javac">
+      <compilerarg line="${compiler.args.error-recording}"/>
+      <bootclasspath refid="error-recording.module.bootclasspath"/>
+      <classpath refid="error-recording.module.classpath"/>
+      <src refid="error-recording.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.error-recording"/>
+    </javac2>
+    
+    <copy todir="${error-recording.testoutput.dir}">
+      <fileset dir="${module.error-recording.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.error-recording" description="cleanup module">
+    <delete dir="${error-recording.output.dir}"/>
+    <delete dir="${error-recording.testoutput.dir}"/>
+  </target>
+  
+  <property name="gwt.compiler.output.error-recording" value="${module.error-recording.basedir}/GWTCompilerOutput_error-recording"/>
+  
+  <!-- Run GWT compiler for GWT module ${gwt.module.name} -->
+  <target name="run.gwt.compiler.error-recording" description="Run GWT compiler">
+    <java fork="true" jvm="${module.jdk.bin.error-recording}/java" classname="com.google.gwt.dev.Compiler">
+      <jvmarg line="-Xmx256m"/>
+      <classpath>
+        <pathelement location="${gwt.sdk.home.error-recording}/gwt-dev.jar"/>
+        <path refid="error-recording.module.sourcepath"/>
+        <path refid="error-recording.module.classpath"/>
+      </classpath>
+      <arg value="-logLevel"/>
+      <arg value="WARN"/>
+      <arg value="-war"/>
+      <arg value="${gwt.compiler.output.error-recording}"/>
+      <arg value="-style"/>
+      <arg value="DETAILED"/>
+      <arg value="${gwt.module.name}"/>
+    </java>
+  </target>
+  
+  <target name="compile.gwt.error-recording" depends="compile.module.error-recording" description="Compile all GWT modules in module error-recording">
+    <antcall target="run.gwt.compiler.error-recording">
+      <param name="gwt.module.name" value="gov.nist.toolkit.errorrecording.errorRecording"/>
+    </antcall>
+  </target>
+</project>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_tk" default="compile.module.tk">
+  <dirname property="module.tk.basedir" file="${ant.file.module_tk}"/>
+  
+  <property name="module.jdk.home.tk" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.tk" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.tk" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.tk" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="tk.output.dir" value="${module.tk.basedir}/target/classes"/>
+  <property name="tk.testoutput.dir" value="${module.tk.basedir}/target/test-classes"/>
+  
+  <path id="tk.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="tk.module.production.classpath">
+    <path refid="${module.jdk.classpath.tk}"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+  </path>
+  
+  <path id="tk.runtime.production.module.classpath">
+    <pathelement location="${tk.output.dir}"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="utilities.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.production.module.classpath"/>
+    <path refid="xds-exceptions.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="tk.module.classpath">
+    <path refid="${module.jdk.classpath.tk}"/>
+    <pathelement location="${tk.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <pathelement location="${utilities.testoutput.dir}"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.testoutput.dir}"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.testoutput.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+  </path>
+  
+  <path id="tk.runtime.module.classpath">
+    <pathelement location="${tk.testoutput.dir}"/>
+    <pathelement location="${tk.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="utilities.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.module.classpath"/>
+    <path refid="xds-exceptions.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.tk">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.tk">
+    <patternset refid="excluded.from.module.tk"/>
+  </patternset>
+  
+  <path id="tk.module.sourcepath">
+    <dirset dir="${module.tk.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="tk.module.test.sourcepath">
+    <dirset dir="${module.tk.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.tk" depends="compile.module.tk.production,compile.module.tk.tests" description="Compile module tk"/>
+  
+  <target name="compile.module.tk.production" depends="register.custom.compilers,compile.module.utilities,compile.module.common-datatypes,compile.module.xds-exceptions" description="Compile module tk; production classes">
+    <mkdir dir="${tk.output.dir}"/>
+    <javac2 destdir="${tk.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.tk}/javac">
+      <compilerarg line="${compiler.args.tk}"/>
+      <bootclasspath refid="tk.module.bootclasspath"/>
+      <classpath refid="tk.module.production.classpath"/>
+      <src refid="tk.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.tk"/>
+    </javac2>
+    
+    <copy todir="${tk.output.dir}">
+      <fileset dir="${module.tk.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.tk.tests" depends="register.custom.compilers,compile.module.tk.production" description="compile module tk; test classes" unless="skip.tests">
+    <mkdir dir="${tk.testoutput.dir}"/>
+    <javac2 destdir="${tk.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.tk}/javac">
+      <compilerarg line="${compiler.args.tk}"/>
+      <bootclasspath refid="tk.module.bootclasspath"/>
+      <classpath refid="tk.module.classpath"/>
+      <src refid="tk.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.tk"/>
+    </javac2>
+    
+    <copy todir="${tk.testoutput.dir}">
+      <fileset dir="${module.tk.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.tk" description="cleanup module">
+    <delete dir="${tk.output.dir}"/>
+    <delete dir="${tk.testoutput.dir}"/>
+  </target>
+  
+  <property name="gwt.compiler.output.tk" value="${module.tk.basedir}/GWTCompilerOutput_tk"/>
+  
+  <!-- Run GWT compiler for GWT module ${gwt.module.name} -->
+  <target name="run.gwt.compiler.tk" description="Run GWT compiler">
+    <java fork="true" jvm="${module.jdk.bin.tk}/java" classname="com.google.gwt.dev.Compiler">
+      <jvmarg line="-Xmx256m"/>
+      <classpath>
+        <pathelement location="${gwt.sdk.home.tk}/gwt-dev.jar"/>
+        <path refid="tk.module.sourcepath"/>
+        <path refid="utilities.module.sourcepath"/>
+        <path refid="common-datatypes.module.sourcepath"/>
+        <path refid="xds-exceptions.module.sourcepath"/>
+        <path refid="tk.module.classpath"/>
+      </classpath>
+      <arg value="-logLevel"/>
+      <arg value="WARN"/>
+      <arg value="-war"/>
+      <arg value="${gwt.compiler.output.tk}"/>
+      <arg value="-style"/>
+      <arg value="DETAILED"/>
+      <arg value="${gwt.module.name}"/>
+    </java>
+  </target>
+  
+  <target name="compile.gwt.tk" depends="compile.module.tk" description="Compile all GWT modules in module tk">
+    <antcall target="run.gwt.compiler.tk">
+      <param name="gwt.module.name" value="gov.nist.toolkit.tk.tk"/>
+    </antcall>
+  </target>
+</project>

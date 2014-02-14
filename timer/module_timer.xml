@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_timer" default="compile.module.timer">
+  <dirname property="module.timer.basedir" file="${ant.file.module_timer}"/>
+  
+  <property name="module.jdk.home.timer" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.timer" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.timer" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.timer" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="timer.output.dir" value="${module.timer.basedir}/target/classes"/>
+  <property name="timer.testoutput.dir" value="${module.timer.basedir}/target/test-classes"/>
+  
+  <path id="timer.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="timer.module.production.classpath">
+    <path refid="${module.jdk.classpath.timer}"/>
+  </path>
+  
+  <path id="timer.runtime.production.module.classpath">
+    <pathelement location="${timer.output.dir}"/>
+  </path>
+  
+  <path id="timer.module.classpath">
+    <path refid="${module.jdk.classpath.timer}"/>
+    <pathelement location="${timer.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+  </path>
+  
+  <path id="timer.runtime.module.classpath">
+    <pathelement location="${timer.testoutput.dir}"/>
+    <pathelement location="${timer.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.timer">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.timer">
+    <patternset refid="excluded.from.module.timer"/>
+  </patternset>
+  
+  <path id="timer.module.sourcepath">
+    <dirset dir="${module.timer.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="timer.module.test.sourcepath">
+    <dirset dir="${module.timer.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.timer" depends="compile.module.timer.production,compile.module.timer.tests" description="Compile module timer"/>
+  
+  <target name="compile.module.timer.production" depends="register.custom.compilers" description="Compile module timer; production classes">
+    <mkdir dir="${timer.output.dir}"/>
+    <javac2 destdir="${timer.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.timer}/javac">
+      <compilerarg line="${compiler.args.timer}"/>
+      <bootclasspath refid="timer.module.bootclasspath"/>
+      <classpath refid="timer.module.production.classpath"/>
+      <src refid="timer.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.timer"/>
+    </javac2>
+    
+    <copy todir="${timer.output.dir}">
+      <fileset dir="${module.timer.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.timer.tests" depends="register.custom.compilers,compile.module.timer.production" description="compile module timer; test classes" unless="skip.tests">
+    <mkdir dir="${timer.testoutput.dir}"/>
+    <javac2 destdir="${timer.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.timer}/javac">
+      <compilerarg line="${compiler.args.timer}"/>
+      <bootclasspath refid="timer.module.bootclasspath"/>
+      <classpath refid="timer.module.classpath"/>
+      <src refid="timer.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.timer"/>
+    </javac2>
+    
+    <copy todir="${timer.testoutput.dir}">
+      <fileset dir="${module.timer.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.timer" description="cleanup module">
+    <delete dir="${timer.output.dir}"/>
+    <delete dir="${timer.testoutput.dir}"/>
+  </target>
+</project>

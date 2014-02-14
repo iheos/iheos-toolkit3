@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_validators-ccda" default="compile.module.validators-ccda">
+  <dirname property="module.validators-ccda.basedir" file="${ant.file.module_validators-ccda}"/>
+  
+  <property name="module.jdk.home.validators-ccda" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.validators-ccda" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.validators-ccda" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.validators-ccda" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="validators-ccda.output.dir" value="${module.validators-ccda.basedir}/target/classes"/>
+  <property name="validators-ccda.testoutput.dir" value="${module.validators-ccda.basedir}/target/test-classes"/>
+  
+  <path id="validators-ccda.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="validators-ccda.module.production.classpath">
+    <path refid="${module.jdk.classpath.validators-ccda}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <path refid="library.maven:_commons-fileupload:commons-fileupload:1.3.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.bundles:commons-httpclient:3.1_2.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_org.eclipse.birt.runtime.3_7_1:org.eclipse.emf.ecore:2.7.0.classpath"/>
+    <path refid="library.maven:_org.eclipse.emf:org.eclipse.emf.common:2.9.1-v20130827-0309.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.emf.runtime:1.0.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.consol:1.2.0.201309181642.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.mu2consol:1.2.0.201309181642.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.resources:1.2.0.201212211415.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.hl7.rim:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.hl7.vocab:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.term.models:1.1.0.201210151242.classpath"/>
+    <pathelement location="${error-recording.output.dir}"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+    <pathelement location="${validators-support.output.dir}"/>
+    <pathelement location="${registry-metadata.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <pathelement location="${docref.output.dir}"/>
+    <pathelement location="${registry-support.output.dir}"/>
+  </path>
+  
+  <path id="validators-ccda.runtime.production.module.classpath">
+    <pathelement location="${validators-ccda.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <path refid="library.maven:_commons-fileupload:commons-fileupload:1.3.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.bundles:commons-httpclient:3.1_2.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_org.eclipse.birt.runtime.3_7_1:org.eclipse.emf.ecore:2.7.0.classpath"/>
+    <path refid="library.maven:_org.eclipse.emf:org.eclipse.emf.common:2.9.1-v20130827-0309.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.emf.runtime:1.0.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.consol:1.2.0.201309181642.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.mu2consol:1.2.0.201309181642.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.resources:1.2.0.201212211415.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.hl7.rim:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.hl7.vocab:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.term.models:1.1.0.201210151242.classpath"/>
+    <path refid="error-recording.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+    <path refid="utilities.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.production.module.classpath"/>
+    <path refid="xds-exceptions.runtime.production.module.classpath"/>
+    <path refid="validators-support.runtime.production.module.classpath"/>
+    <path refid="registry-metadata.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <path refid="docref.runtime.production.module.classpath"/>
+    <path refid="registry-support.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="validators-ccda.module.classpath">
+    <path refid="${module.jdk.classpath.validators-ccda}"/>
+    <pathelement location="${validators-ccda.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <path refid="library.maven:_commons-fileupload:commons-fileupload:1.3.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.bundles:commons-httpclient:3.1_2.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_org.eclipse.birt.runtime.3_7_1:org.eclipse.emf.ecore:2.7.0.classpath"/>
+    <path refid="library.maven:_org.eclipse.emf:org.eclipse.emf.common:2.9.1-v20130827-0309.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.emf.runtime:1.0.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.consol:1.2.0.201309181642.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.mu2consol:1.2.0.201309181642.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.resources:1.2.0.201212211415.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.hl7.rim:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.hl7.vocab:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.term.models:1.1.0.201210151242.classpath"/>
+    <pathelement location="${error-recording.testoutput.dir}"/>
+    <pathelement location="${error-recording.output.dir}"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+    <pathelement location="${utilities.testoutput.dir}"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.testoutput.dir}"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.testoutput.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+    <pathelement location="${validators-support.testoutput.dir}"/>
+    <pathelement location="${validators-support.output.dir}"/>
+    <pathelement location="${registry-metadata.testoutput.dir}"/>
+    <pathelement location="${registry-metadata.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <pathelement location="${docref.testoutput.dir}"/>
+    <pathelement location="${docref.output.dir}"/>
+    <pathelement location="${registry-support.testoutput.dir}"/>
+    <pathelement location="${registry-support.output.dir}"/>
+  </path>
+  
+  <path id="validators-ccda.runtime.module.classpath">
+    <pathelement location="${validators-ccda.testoutput.dir}"/>
+    <pathelement location="${validators-ccda.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <path refid="library.maven:_commons-fileupload:commons-fileupload:1.3.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.bundles:commons-httpclient:3.1_2.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_org.eclipse.birt.runtime.3_7_1:org.eclipse.emf.ecore:2.7.0.classpath"/>
+    <path refid="library.maven:_org.eclipse.emf:org.eclipse.emf.common:2.9.1-v20130827-0309.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.emf.runtime:1.0.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.consol:1.2.0.201309181642.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.mu2consol:1.2.0.201309181642.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda.resources:1.2.0.201212211415.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.cda:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.hl7.rim:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.hl7.vocab:1.2.0.201309181641.classpath"/>
+    <path refid="library.maven:_org.openhealthtools:mdht.uml.term.models:1.1.0.201210151242.classpath"/>
+    <path refid="error-recording.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+    <path refid="utilities.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.module.classpath"/>
+    <path refid="xds-exceptions.runtime.module.classpath"/>
+    <path refid="validators-support.runtime.module.classpath"/>
+    <path refid="registry-metadata.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <path refid="docref.runtime.module.classpath"/>
+    <path refid="registry-support.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.validators-ccda">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.validators-ccda">
+    <patternset refid="excluded.from.module.validators-ccda"/>
+  </patternset>
+  
+  <path id="validators-ccda.module.sourcepath">
+    <dirset dir="${module.validators-ccda.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="validators-ccda.module.test.sourcepath">
+    <dirset dir="${module.validators-ccda.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.validators-ccda" depends="compile.module.validators-ccda.production,compile.module.validators-ccda.tests" description="Compile module validators-ccda"/>
+  
+  <target name="compile.module.validators-ccda.production" depends="register.custom.compilers,compile.module.error-recording,compile.module.utilities,compile.module.common-datatypes,compile.module.xds-exceptions,compile.module.validators-support,compile.module.registry-metadata,compile.module.docref,compile.module.registry-support" description="Compile module validators-ccda; production classes">
+    <mkdir dir="${validators-ccda.output.dir}"/>
+    <javac2 destdir="${validators-ccda.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.validators-ccda}/javac">
+      <compilerarg line="${compiler.args.validators-ccda}"/>
+      <bootclasspath refid="validators-ccda.module.bootclasspath"/>
+      <classpath refid="validators-ccda.module.production.classpath"/>
+      <src refid="validators-ccda.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.validators-ccda"/>
+    </javac2>
+    
+    <copy todir="${validators-ccda.output.dir}">
+      <fileset dir="${module.validators-ccda.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.validators-ccda.tests" depends="register.custom.compilers,compile.module.validators-ccda.production" description="compile module validators-ccda; test classes" unless="skip.tests">
+    <mkdir dir="${validators-ccda.testoutput.dir}"/>
+    <javac2 destdir="${validators-ccda.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.validators-ccda}/javac">
+      <compilerarg line="${compiler.args.validators-ccda}"/>
+      <bootclasspath refid="validators-ccda.module.bootclasspath"/>
+      <classpath refid="validators-ccda.module.classpath"/>
+      <src refid="validators-ccda.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.validators-ccda"/>
+    </javac2>
+    
+    <copy todir="${validators-ccda.testoutput.dir}">
+      <fileset dir="${module.validators-ccda.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.validators-ccda" description="cleanup module">
+    <delete dir="${validators-ccda.output.dir}"/>
+    <delete dir="${validators-ccda.testoutput.dir}"/>
+  </target>
+</project>

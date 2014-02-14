@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_toolkit2" default="compile.module.toolkit2">
+  <dirname property="module.toolkit2.basedir" file="${ant.file.module_toolkit2}"/>
+  
+  <property name="module.jdk.home.toolkit2" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.toolkit2" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.toolkit2" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.toolkit2" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="toolkit2.output.dir" value="${module.toolkit2.basedir}/target/classes"/>
+  <property name="toolkit2.testoutput.dir" value="${module.toolkit2.basedir}/target/test-classes"/>
+  
+  <path id="toolkit2.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="toolkit2.module.production.classpath">
+    <path refid="${module.jdk.classpath.toolkit2}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+  </path>
+  
+  <path id="toolkit2.runtime.production.module.classpath">
+    <pathelement location="${toolkit2.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+  </path>
+  
+  <path id="toolkit2.module.classpath">
+    <path refid="${module.jdk.classpath.toolkit2}"/>
+    <pathelement location="${toolkit2.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+  </path>
+  
+  <path id="toolkit2.runtime.module.classpath">
+    <pathelement location="${toolkit2.testoutput.dir}"/>
+    <pathelement location="${toolkit2.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.toolkit2">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.toolkit2">
+    <patternset refid="excluded.from.module.toolkit2"/>
+  </patternset>
+  
+  
+  <target name="compile.module.toolkit2" depends="compile.module.toolkit2.production,compile.module.toolkit2.tests" description="Compile module toolkit2"/>
+  
+  <target name="compile.module.toolkit2.production" depends="register.custom.compilers" description="Compile module toolkit2; production classes"/>
+  
+  <target name="compile.module.toolkit2.tests" depends="register.custom.compilers,compile.module.toolkit2.production" description="compile module toolkit2; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.toolkit2" description="cleanup module">
+    <delete dir="${toolkit2.output.dir}"/>
+    <delete dir="${toolkit2.testoutput.dir}"/>
+  </target>
+</project>

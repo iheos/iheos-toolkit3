@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_testkit" default="compile.module.testkit">
+  <dirname property="module.testkit.basedir" file="${ant.file.module_testkit}"/>
+  
+  <property name="module.jdk.home.testkit" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.testkit" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.testkit" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.testkit" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="testkit.output.dir" value="${module.testkit.basedir}/target/classes"/>
+  <property name="testkit.testoutput.dir" value="${module.testkit.basedir}/target/test-classes"/>
+  
+  <path id="testkit.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="testkit.module.production.classpath">
+    <path refid="${module.jdk.classpath.testkit}"/>
+  </path>
+  
+  <path id="testkit.runtime.production.module.classpath">
+    <pathelement location="${testkit.output.dir}"/>
+  </path>
+  
+  <path id="testkit.module.classpath">
+    <path refid="${module.jdk.classpath.testkit}"/>
+    <pathelement location="${testkit.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+  </path>
+  
+  <path id="testkit.runtime.module.classpath">
+    <pathelement location="${testkit.testoutput.dir}"/>
+    <pathelement location="${testkit.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.testkit">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.testkit">
+    <patternset refid="excluded.from.module.testkit"/>
+  </patternset>
+  
+  
+  <target name="compile.module.testkit" depends="compile.module.testkit.production,compile.module.testkit.tests" description="Compile module testkit"/>
+  
+  <target name="compile.module.testkit.production" depends="register.custom.compilers" description="Compile module testkit; production classes"/>
+  
+  <target name="compile.module.testkit.tests" depends="register.custom.compilers,compile.module.testkit.production" description="compile module testkit; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.testkit" description="cleanup module">
+    <delete dir="${testkit.output.dir}"/>
+    <delete dir="${testkit.testoutput.dir}"/>
+  </target>
+</project>

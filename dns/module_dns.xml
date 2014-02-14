@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_dns" default="compile.module.dns">
+  <dirname property="module.dns.basedir" file="${ant.file.module_dns}"/>
+  
+  <property name="module.jdk.home.dns" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.dns" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.dns" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.dns" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="dns.output.dir" value="${module.dns.basedir}/target/classes"/>
+  <property name="dns.testoutput.dir" value="${module.dns.basedir}/target/test-classes"/>
+  
+  <path id="dns.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="dns.module.production.classpath">
+    <path refid="${module.jdk.classpath.dns}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+    <path refid="library.maven:_dnsjava:dnsjava:2.0.8.classpath"/>
+  </path>
+  
+  <path id="dns.runtime.production.module.classpath">
+    <pathelement location="${dns.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+    <path refid="library.maven:_dnsjava:dnsjava:2.0.8.classpath"/>
+  </path>
+  
+  <path id="dns.module.classpath">
+    <path refid="${module.jdk.classpath.dns}"/>
+    <pathelement location="${dns.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+    <path refid="library.maven:_dnsjava:dnsjava:2.0.8.classpath"/>
+  </path>
+  
+  <path id="dns.runtime.module.classpath">
+    <pathelement location="${dns.testoutput.dir}"/>
+    <pathelement location="${dns.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+    <path refid="library.maven:_dnsjava:dnsjava:2.0.8.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.dns">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.dns">
+    <patternset refid="excluded.from.module.dns"/>
+  </patternset>
+  
+  <path id="dns.module.sourcepath">
+    <dirset dir="${module.dns.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="dns.module.test.sourcepath">
+    <dirset dir="${module.dns.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.dns" depends="compile.module.dns.production,compile.module.dns.tests" description="Compile module dns"/>
+  
+  <target name="compile.module.dns.production" depends="register.custom.compilers" description="Compile module dns; production classes">
+    <mkdir dir="${dns.output.dir}"/>
+    <groovyc destdir="${dns.output.dir}" fork="yes">
+      <src refid="dns.module.sourcepath"/>
+      <classpath refid="dns.module.production.classpath"/>
+      <patternset refid="excluded.from.compilation.dns"/>
+      <javac debug="${compiler.debug}">
+        <compilerarg line="${compiler.args.dns}"/>
+      </javac>
+    </groovyc>
+    <instrumentIdeaExtensions destdir="${dns.output.dir}">
+      <compilerarg line="${compiler.args.dns}"/>
+      <bootclasspath refid="dns.module.bootclasspath"/>
+      <classpath refid="dns.module.production.classpath"/>
+      <src refid="dns.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.dns"/>
+    </instrumentIdeaExtensions>
+    
+    <copy todir="${dns.output.dir}">
+      <fileset dir="${module.dns.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.dns.tests" depends="register.custom.compilers,compile.module.dns.production" description="compile module dns; test classes" unless="skip.tests">
+    <mkdir dir="${dns.testoutput.dir}"/>
+    <groovyc destdir="${dns.testoutput.dir}" fork="yes">
+      <src refid="dns.module.test.sourcepath"/>
+      <classpath refid="dns.module.classpath"/>
+      <patternset refid="excluded.from.compilation.dns"/>
+      <javac debug="${compiler.debug}">
+        <compilerarg line="${compiler.args.dns}"/>
+      </javac>
+    </groovyc>
+    <instrumentIdeaExtensions destdir="${dns.testoutput.dir}">
+      <compilerarg line="${compiler.args.dns}"/>
+      <bootclasspath refid="dns.module.bootclasspath"/>
+      <classpath refid="dns.module.classpath"/>
+      <src refid="dns.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.dns"/>
+    </instrumentIdeaExtensions>
+    
+    <copy todir="${dns.testoutput.dir}">
+      <fileset dir="${module.dns.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.dns" description="cleanup module">
+    <delete dir="${dns.output.dir}"/>
+    <delete dir="${dns.testoutput.dir}"/>
+  </target>
+</project>

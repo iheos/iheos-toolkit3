@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_common-datatypes" default="compile.module.common-datatypes">
+  <dirname property="module.common-datatypes.basedir" file="${ant.file.module_common-datatypes}"/>
+  
+  <property name="module.jdk.home.common-datatypes" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.common-datatypes" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.common-datatypes" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.common-datatypes" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="common-datatypes.output.dir" value="${module.common-datatypes.basedir}/target/classes"/>
+  <property name="common-datatypes.testoutput.dir" value="${module.common-datatypes.basedir}/target/test-classes"/>
+  
+  <path id="common-datatypes.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="common-datatypes.module.production.classpath">
+    <path refid="${module.jdk.classpath.common-datatypes}"/>
+  </path>
+  
+  <path id="common-datatypes.runtime.production.module.classpath">
+    <pathelement location="${common-datatypes.output.dir}"/>
+  </path>
+  
+  <path id="common-datatypes.module.classpath">
+    <path refid="${module.jdk.classpath.common-datatypes}"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+  </path>
+  
+  <path id="common-datatypes.runtime.module.classpath">
+    <pathelement location="${common-datatypes.testoutput.dir}"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.common-datatypes">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.common-datatypes">
+    <patternset refid="excluded.from.module.common-datatypes"/>
+  </patternset>
+  
+  <path id="common-datatypes.module.sourcepath">
+    <dirset dir="${module.common-datatypes.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="common-datatypes.module.test.sourcepath">
+    <dirset dir="${module.common-datatypes.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.common-datatypes" depends="compile.module.common-datatypes.production,compile.module.common-datatypes.tests" description="Compile module common-datatypes"/>
+  
+  <target name="compile.module.common-datatypes.production" depends="register.custom.compilers" description="Compile module common-datatypes; production classes">
+    <mkdir dir="${common-datatypes.output.dir}"/>
+    <javac2 destdir="${common-datatypes.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.common-datatypes}/javac">
+      <compilerarg line="${compiler.args.common-datatypes}"/>
+      <bootclasspath refid="common-datatypes.module.bootclasspath"/>
+      <classpath refid="common-datatypes.module.production.classpath"/>
+      <src refid="common-datatypes.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.common-datatypes"/>
+    </javac2>
+    
+    <copy todir="${common-datatypes.output.dir}">
+      <fileset dir="${module.common-datatypes.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.common-datatypes.tests" depends="register.custom.compilers,compile.module.common-datatypes.production" description="compile module common-datatypes; test classes" unless="skip.tests">
+    <mkdir dir="${common-datatypes.testoutput.dir}"/>
+    <javac2 destdir="${common-datatypes.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.common-datatypes}/javac">
+      <compilerarg line="${compiler.args.common-datatypes}"/>
+      <bootclasspath refid="common-datatypes.module.bootclasspath"/>
+      <classpath refid="common-datatypes.module.classpath"/>
+      <src refid="common-datatypes.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.common-datatypes"/>
+    </javac2>
+    
+    <copy todir="${common-datatypes.testoutput.dir}">
+      <fileset dir="${module.common-datatypes.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.common-datatypes" description="cleanup module">
+    <delete dir="${common-datatypes.output.dir}"/>
+    <delete dir="${common-datatypes.testoutput.dir}"/>
+  </target>
+  
+  <property name="gwt.compiler.output.common-datatypes" value="${module.common-datatypes.basedir}/GWTCompilerOutput_common-datatypes"/>
+  
+  <!-- Run GWT compiler for GWT module ${gwt.module.name} -->
+  <target name="run.gwt.compiler.common-datatypes" description="Run GWT compiler">
+    <java fork="true" jvm="${module.jdk.bin.common-datatypes}/java" classname="com.google.gwt.dev.Compiler">
+      <jvmarg line="-Xmx256m"/>
+      <classpath>
+        <pathelement location="${gwt.sdk.home.common-datatypes}/gwt-dev.jar"/>
+        <path refid="common-datatypes.module.sourcepath"/>
+        <path refid="common-datatypes.module.classpath"/>
+      </classpath>
+      <arg value="-logLevel"/>
+      <arg value="WARN"/>
+      <arg value="-war"/>
+      <arg value="${gwt.compiler.output.common-datatypes}"/>
+      <arg value="-style"/>
+      <arg value="DETAILED"/>
+      <arg value="${gwt.module.name}"/>
+    </java>
+  </target>
+  
+  <target name="compile.gwt.common-datatypes" depends="compile.module.common-datatypes" description="Compile all GWT modules in module common-datatypes"/>
+</project>

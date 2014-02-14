@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_actorfactory" default="compile.module.actorfactory">
+  <dirname property="module.actorfactory.basedir" file="${ant.file.module_actorfactory}"/>
+  
+  <property name="module.jdk.home.actorfactory" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.actorfactory" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.actorfactory" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.actorfactory" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="actorfactory.output.dir" value="${module.actorfactory.basedir}/target/classes"/>
+  <property name="actorfactory.testoutput.dir" value="${module.actorfactory.basedir}/target/test-classes"/>
+  
+  <path id="actorfactory.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="actorfactory.module.production.classpath">
+    <path refid="${module.jdk.classpath.actorfactory}"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <pathelement location="${actortransaction.output.dir}"/>
+    <pathelement location="${env-settings.output.dir}"/>
+    <pathelement location="${installation.output.dir}"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <pathelement location="${tk.output.dir}"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+    <pathelement location="${http.output.dir}"/>
+    <path refid="library.maven:_javax.mail:mailapi:1.4.3.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+    <path refid="library.maven:_soap:soap:2.3.1.classpath"/>
+    <path refid="library.maven:_javax.servlet:servlet-api:2.5.classpath"/>
+    <path refid="library.maven:_backport-util-concurrent:backport-util-concurrent:3.1.classpath"/>
+    <pathelement location="${error-recording.output.dir}"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+    <pathelement location="${registry-metadata.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <pathelement location="${docref.output.dir}"/>
+    <pathelement location="${registry-support.output.dir}"/>
+    <pathelement location="${results.output.dir}"/>
+    <pathelement location="${sim-common.output.dir}"/>
+    <pathelement location="${site-management.output.dir}"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+    <pathelement location="${validators-support.output.dir}"/>
+  </path>
+  
+  <path id="actorfactory.runtime.production.module.classpath">
+    <pathelement location="${actorfactory.output.dir}"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="actortransaction.runtime.production.module.classpath"/>
+    <path refid="env-settings.runtime.production.module.classpath"/>
+    <path refid="installation.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <path refid="tk.runtime.production.module.classpath"/>
+    <path refid="utilities.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.production.module.classpath"/>
+    <path refid="xds-exceptions.runtime.production.module.classpath"/>
+    <path refid="http.runtime.production.module.classpath"/>
+    <path refid="library.maven:_javax.mail:mailapi:1.4.3.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+    <path refid="library.maven:_soap:soap:2.3.1.classpath"/>
+    <path refid="library.maven:_javax.servlet:servlet-api:2.5.classpath"/>
+    <path refid="library.maven:_backport-util-concurrent:backport-util-concurrent:3.1.classpath"/>
+    <path refid="error-recording.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+    <path refid="registry-metadata.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <path refid="docref.runtime.production.module.classpath"/>
+    <path refid="registry-support.runtime.production.module.classpath"/>
+    <path refid="results.runtime.production.module.classpath"/>
+    <path refid="sim-common.runtime.production.module.classpath"/>
+    <path refid="site-management.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+    <path refid="validators-support.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="actorfactory.module.classpath">
+    <path refid="${module.jdk.classpath.actorfactory}"/>
+    <pathelement location="${actorfactory.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <pathelement location="${actortransaction.testoutput.dir}"/>
+    <pathelement location="${actortransaction.output.dir}"/>
+    <pathelement location="${env-settings.testoutput.dir}"/>
+    <pathelement location="${env-settings.output.dir}"/>
+    <pathelement location="${installation.testoutput.dir}"/>
+    <pathelement location="${installation.output.dir}"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <pathelement location="${tk.testoutput.dir}"/>
+    <pathelement location="${tk.output.dir}"/>
+    <pathelement location="${utilities.testoutput.dir}"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.testoutput.dir}"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.testoutput.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+    <pathelement location="${http.testoutput.dir}"/>
+    <pathelement location="${http.output.dir}"/>
+    <path refid="library.maven:_javax.mail:mailapi:1.4.3.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+    <path refid="library.maven:_soap:soap:2.3.1.classpath"/>
+    <path refid="library.maven:_javax.servlet:servlet-api:2.5.classpath"/>
+    <path refid="library.maven:_backport-util-concurrent:backport-util-concurrent:3.1.classpath"/>
+    <pathelement location="${error-recording.testoutput.dir}"/>
+    <pathelement location="${error-recording.output.dir}"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+    <pathelement location="${registry-metadata.testoutput.dir}"/>
+    <pathelement location="${registry-metadata.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <pathelement location="${docref.testoutput.dir}"/>
+    <pathelement location="${docref.output.dir}"/>
+    <pathelement location="${registry-support.testoutput.dir}"/>
+    <pathelement location="${registry-support.output.dir}"/>
+    <pathelement location="${results.testoutput.dir}"/>
+    <pathelement location="${results.output.dir}"/>
+    <pathelement location="${sim-common.testoutput.dir}"/>
+    <pathelement location="${sim-common.output.dir}"/>
+    <pathelement location="${site-management.testoutput.dir}"/>
+    <pathelement location="${site-management.output.dir}"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+    <pathelement location="${validators-support.testoutput.dir}"/>
+    <pathelement location="${validators-support.output.dir}"/>
+  </path>
+  
+  <path id="actorfactory.runtime.module.classpath">
+    <pathelement location="${actorfactory.testoutput.dir}"/>
+    <pathelement location="${actorfactory.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="actortransaction.runtime.module.classpath"/>
+    <path refid="env-settings.runtime.module.classpath"/>
+    <path refid="installation.runtime.module.classpath"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <path refid="tk.runtime.module.classpath"/>
+    <path refid="utilities.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.module.classpath"/>
+    <path refid="xds-exceptions.runtime.module.classpath"/>
+    <path refid="http.runtime.module.classpath"/>
+    <path refid="library.maven:_javax.mail:mailapi:1.4.3.classpath"/>
+    <path refid="library.maven:_javax.activation:activation:1.1.classpath"/>
+    <path refid="library.maven:_soap:soap:2.3.1.classpath"/>
+    <path refid="library.maven:_javax.servlet:servlet-api:2.5.classpath"/>
+    <path refid="library.maven:_backport-util-concurrent:backport-util-concurrent:3.1.classpath"/>
+    <path refid="error-recording.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.velocity:velocity:1.5.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.1.classpath"/>
+    <path refid="library.maven:_commons-lang:commons-lang:2.1.classpath"/>
+    <path refid="library.maven:_oro:oro:2.0.8.classpath"/>
+    <path refid="registry-metadata.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <path refid="docref.runtime.module.classpath"/>
+    <path refid="registry-support.runtime.module.classpath"/>
+    <path refid="results.runtime.module.classpath"/>
+    <path refid="sim-common.runtime.module.classpath"/>
+    <path refid="site-management.runtime.module.classpath"/>
+    <path refid="library.maven:_org.codehaus.groovy:groovy-all:2.0.0.classpath"/>
+    <path refid="validators-support.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.actorfactory">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.actorfactory">
+    <patternset refid="excluded.from.module.actorfactory"/>
+  </patternset>
+  
+  <path id="actorfactory.module.sourcepath">
+    <dirset dir="${module.actorfactory.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="actorfactory.module.test.sourcepath">
+    <dirset dir="${module.actorfactory.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.actorfactory" depends="compile.module.actorfactory.production,compile.module.actorfactory.tests" description="Compile module actorfactory"/>
+  
+  <target name="compile.module.actorfactory.production" depends="register.custom.compilers,compile.module.actortransaction,compile.module.env-settings,compile.module.installation,compile.module.tk,compile.module.utilities,compile.module.common-datatypes,compile.module.xds-exceptions,compile.module.http,compile.module.error-recording,compile.module.registry-metadata,compile.module.docref,compile.module.registry-support,compile.module.results,compile.module.sim-common,compile.module.site-management,compile.module.validators-support" description="Compile module actorfactory; production classes">
+    <mkdir dir="${actorfactory.output.dir}"/>
+    <javac2 destdir="${actorfactory.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.actorfactory}/javac">
+      <compilerarg line="${compiler.args.actorfactory}"/>
+      <bootclasspath refid="actorfactory.module.bootclasspath"/>
+      <classpath refid="actorfactory.module.production.classpath"/>
+      <src refid="actorfactory.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.actorfactory"/>
+    </javac2>
+    
+    <copy todir="${actorfactory.output.dir}">
+      <fileset dir="${module.actorfactory.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.actorfactory.tests" depends="register.custom.compilers,compile.module.actorfactory.production" description="compile module actorfactory; test classes" unless="skip.tests">
+    <mkdir dir="${actorfactory.testoutput.dir}"/>
+    <javac2 destdir="${actorfactory.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.actorfactory}/javac">
+      <compilerarg line="${compiler.args.actorfactory}"/>
+      <bootclasspath refid="actorfactory.module.bootclasspath"/>
+      <classpath refid="actorfactory.module.classpath"/>
+      <src refid="actorfactory.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.actorfactory"/>
+    </javac2>
+    
+    <copy todir="${actorfactory.testoutput.dir}">
+      <fileset dir="${module.actorfactory.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.actorfactory" description="cleanup module">
+    <delete dir="${actorfactory.output.dir}"/>
+    <delete dir="${actorfactory.testoutput.dir}"/>
+  </target>
+  
+  <property name="gwt.compiler.output.actorfactory" value="${module.actorfactory.basedir}/GWTCompilerOutput_actorfactory"/>
+  
+  <!-- Run GWT compiler for GWT module ${gwt.module.name} -->
+  <target name="run.gwt.compiler.actorfactory" description="Run GWT compiler">
+    <java fork="true" jvm="${module.jdk.bin.actorfactory}/java" classname="com.google.gwt.dev.Compiler">
+      <jvmarg line="-Xmx256m"/>
+      <classpath>
+        <pathelement location="${gwt.sdk.home.actorfactory}/gwt-dev.jar"/>
+        <path refid="actorfactory.module.sourcepath"/>
+        <path refid="actortransaction.module.sourcepath"/>
+        <path refid="env-settings.module.sourcepath"/>
+        <path refid="installation.module.sourcepath"/>
+        <path refid="tk.module.sourcepath"/>
+        <path refid="utilities.module.sourcepath"/>
+        <path refid="common-datatypes.module.sourcepath"/>
+        <path refid="xds-exceptions.module.sourcepath"/>
+        <path refid="http.module.sourcepath"/>
+        <path refid="error-recording.module.sourcepath"/>
+        <path refid="registry-metadata.module.sourcepath"/>
+        <path refid="docref.module.sourcepath"/>
+        <path refid="registry-support.module.sourcepath"/>
+        <path refid="results.module.sourcepath"/>
+        <path refid="sim-common.module.sourcepath"/>
+        <path refid="site-management.module.sourcepath"/>
+        <path refid="validators-support.module.sourcepath"/>
+        <path refid="actorfactory.module.classpath"/>
+      </classpath>
+      <arg value="-logLevel"/>
+      <arg value="WARN"/>
+      <arg value="-war"/>
+      <arg value="${gwt.compiler.output.actorfactory}"/>
+      <arg value="-style"/>
+      <arg value="DETAILED"/>
+      <arg value="${gwt.module.name}"/>
+    </java>
+  </target>
+  
+  <target name="compile.gwt.actorfactory" depends="compile.module.actorfactory" description="Compile all GWT modules in module actorfactory">
+    <antcall target="run.gwt.compiler.actorfactory">
+      <param name="gwt.module.name" value="gov.nist.toolkit.actorfactory.actorfactory"/>
+    </antcall>
+  </target>
+</project>

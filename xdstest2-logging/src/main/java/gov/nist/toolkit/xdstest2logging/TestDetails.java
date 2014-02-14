@@ -318,8 +318,9 @@ public class TestDetails  {
 				continue;
 			if (upToSection != null && dir.equals(upToSection))
 				return logs;
-			File path = new File(logdir + File.separator + area + File.separator + testNum + File.separatorChar + dir + File.separatorChar + "log.xml");
-			if ( ! path.exists() )
+//			File path = new File(logdir + File.separator + area + File.separator + testNum + File.separatorChar + dir + File.separatorChar + "log.xml");
+            File path = new File(logdir + File.separator + dir + File.separatorChar + "log.xml");
+            if ( ! path.exists() )
 				throw new Exception("TestSpec " + toString() + " references the section " + dir + 
 						" - no log file exists ( file " + path.toString() + " does not exist");
 			logs.add(path);
@@ -355,9 +356,11 @@ public class TestDetails  {
 			return null;
 		
 		if (section != null && !section.equals("") && !section.equals("None"))
-			path = new File(logdir + File.separator + area + File.separator + testNum + File.separatorChar + section + File.separatorChar + "log.xml");
+            path = new File(logdir + File.separator + ".." + File.separator + testNum + File.separatorChar + section + File.separatorChar + "log.xml");
+//			path = new File(logdir + File.separator + area + File.separator + testNum + File.separatorChar + section + File.separatorChar + "log.xml");
 		else
-			path = new File(logdir + File.separator + area + File.separator + testNum + File.separatorChar  + "log.xml");
+            path = new File(logdir + File.separator + ".." + File.separator + testNum + File.separatorChar  + "log.xml");
+//			path = new File(logdir + File.separator + area + File.separator + testNum + File.separatorChar  + "log.xml");
 		return path;
 	}
 

@@ -395,6 +395,9 @@ public class Xdstest2 {
 					for (String detail : stepLog.getDetails()) {
 						res.add("Detail: " + detail);
 					}
+                    for (String report : stepLog.getReports()) {
+                        res.add("Report: " + report);
+                    }
 
 					try {
 						Metadata m;

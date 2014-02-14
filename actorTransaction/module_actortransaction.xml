@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_actortransaction" default="compile.module.actortransaction">
+  <dirname property="module.actortransaction.basedir" file="${ant.file.module_actortransaction}"/>
+  
+  <property name="module.jdk.home.actortransaction" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.actortransaction" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.actortransaction" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.actortransaction" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="actortransaction.output.dir" value="${module.actortransaction.basedir}/target/classes"/>
+  <property name="actortransaction.testoutput.dir" value="${module.actortransaction.basedir}/target/test-classes"/>
+  
+  <path id="actortransaction.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="actortransaction.module.production.classpath">
+    <path refid="${module.jdk.classpath.actortransaction}"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+  </path>
+  
+  <path id="actortransaction.runtime.production.module.classpath">
+    <pathelement location="${actortransaction.output.dir}"/>
+  </path>
+  
+  <path id="actortransaction.module.classpath">
+    <path refid="${module.jdk.classpath.actortransaction}"/>
+    <pathelement location="${actortransaction.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+  </path>
+  
+  <path id="actortransaction.runtime.module.classpath">
+    <pathelement location="${actortransaction.testoutput.dir}"/>
+    <pathelement location="${actortransaction.output.dir}"/>
+    <path refid="library.maven:_junit:junit:4.11.classpath"/>
+    <path refid="library.maven:_org.hamcrest:hamcrest-core:1.3.classpath"/>
+    <path refid="library.maven:_com.google.gwt:gwt-user:2.5.1.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_javax.validation:validation-api:sources:1.0.0.ga.classpath"/>
+    <path refid="library.maven:_org.json:json:20090211.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.actortransaction">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.actortransaction">
+    <patternset refid="excluded.from.module.actortransaction"/>
+  </patternset>
+  
+  <path id="actortransaction.module.sourcepath">
+    <dirset dir="${module.actortransaction.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="actortransaction.module.test.sourcepath">
+    <dirset dir="${module.actortransaction.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.actortransaction" depends="compile.module.actortransaction.production,compile.module.actortransaction.tests" description="Compile module actortransaction"/>
+  
+  <target name="compile.module.actortransaction.production" depends="register.custom.compilers" description="Compile module actortransaction; production classes">
+    <mkdir dir="${actortransaction.output.dir}"/>
+    <javac2 destdir="${actortransaction.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.actortransaction}/javac">
+      <compilerarg line="${compiler.args.actortransaction}"/>
+      <bootclasspath refid="actortransaction.module.bootclasspath"/>
+      <classpath refid="actortransaction.module.production.classpath"/>
+      <src refid="actortransaction.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.actortransaction"/>
+    </javac2>
+    
+    <copy todir="${actortransaction.output.dir}">
+      <fileset dir="${module.actortransaction.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.actortransaction.tests" depends="register.custom.compilers,compile.module.actortransaction.production" description="compile module actortransaction; test classes" unless="skip.tests">
+    <mkdir dir="${actortransaction.testoutput.dir}"/>
+    <javac2 destdir="${actortransaction.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.actortransaction}/javac">
+      <compilerarg line="${compiler.args.actortransaction}"/>
+      <bootclasspath refid="actortransaction.module.bootclasspath"/>
+      <classpath refid="actortransaction.module.classpath"/>
+      <src refid="actortransaction.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.actortransaction"/>
+    </javac2>
+    
+    <copy todir="${actortransaction.testoutput.dir}">
+      <fileset dir="${module.actortransaction.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.actortransaction" description="cleanup module">
+    <delete dir="${actortransaction.output.dir}"/>
+    <delete dir="${actortransaction.testoutput.dir}"/>
+  </target>
+  
+  <property name="gwt.compiler.output.actortransaction" value="${module.actortransaction.basedir}/GWTCompilerOutput_actortransaction"/>
+  
+  <!-- Run GWT compiler for GWT module ${gwt.module.name} -->
+  <target name="run.gwt.compiler.actortransaction" description="Run GWT compiler">
+    <java fork="true" jvm="${module.jdk.bin.actortransaction}/java" classname="com.google.gwt.dev.Compiler">
+      <jvmarg line="-Xmx256m"/>
+      <classpath>
+        <pathelement location="${gwt.sdk.home.actortransaction}/gwt-dev.jar"/>
+        <path refid="actortransaction.module.sourcepath"/>
+        <path refid="actortransaction.module.classpath"/>
+      </classpath>
+      <arg value="-logLevel"/>
+      <arg value="WARN"/>
+      <arg value="-war"/>
+      <arg value="${gwt.compiler.output.actortransaction}"/>
+      <arg value="-style"/>
+      <arg value="DETAILED"/>
+      <arg value="${gwt.module.name}"/>
+    </java>
+  </target>
+  
+  <target name="compile.gwt.actortransaction" depends="compile.module.actortransaction" description="Compile all GWT modules in module actortransaction">
+    <antcall target="run.gwt.compiler.actortransaction">
+      <param name="gwt.module.name" value="gov.nist.toolkit.actortransaction.actorTransaction"/>
+    </antcall>
+  </target>
+</project>

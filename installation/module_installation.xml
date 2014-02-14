@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_installation" default="compile.module.installation">
+  <dirname property="module.installation.basedir" file="${ant.file.module_installation}"/>
+  
+  <property name="module.jdk.home.installation" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.installation" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.installation" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.installation" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="installation.output.dir" value="${module.installation.basedir}/target/classes"/>
+  <property name="installation.testoutput.dir" value="${module.installation.basedir}/target/test-classes"/>
+  
+  <path id="installation.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="installation.module.production.classpath">
+    <path refid="${module.jdk.classpath.installation}"/>
+    <path refid="library.maven:_log4j:log4j:1.2.16.classpath"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <pathelement location="${tk.output.dir}"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+  </path>
+  
+  <path id="installation.runtime.production.module.classpath">
+    <pathelement location="${installation.output.dir}"/>
+    <path refid="library.maven:_log4j:log4j:1.2.16.classpath"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <path refid="tk.runtime.production.module.classpath"/>
+    <path refid="utilities.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.production.module.classpath"/>
+    <path refid="xds-exceptions.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="installation.module.classpath">
+    <path refid="${module.jdk.classpath.installation}"/>
+    <pathelement location="${installation.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.16.classpath"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <pathelement location="${tk.testoutput.dir}"/>
+    <pathelement location="${tk.output.dir}"/>
+    <pathelement location="${utilities.testoutput.dir}"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.testoutput.dir}"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.testoutput.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+  </path>
+  
+  <path id="installation.runtime.module.classpath">
+    <pathelement location="${installation.testoutput.dir}"/>
+    <pathelement location="${installation.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.16.classpath"/>
+    <path refid="library.maven:_org.mortbay.jetty:javax.servlet:5.1.12.classpath"/>
+    <path refid="tk.runtime.module.classpath"/>
+    <path refid="utilities.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.module.classpath"/>
+    <path refid="xds-exceptions.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.installation">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.installation">
+    <patternset refid="excluded.from.module.installation"/>
+  </patternset>
+  
+  <path id="installation.module.sourcepath">
+    <dirset dir="${module.installation.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="installation.module.test.sourcepath">
+    <dirset dir="${module.installation.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.installation" depends="compile.module.installation.production,compile.module.installation.tests" description="Compile module installation"/>
+  
+  <target name="compile.module.installation.production" depends="register.custom.compilers,compile.module.tk,compile.module.utilities,compile.module.common-datatypes,compile.module.xds-exceptions" description="Compile module installation; production classes">
+    <mkdir dir="${installation.output.dir}"/>
+    <javac2 destdir="${installation.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.installation}/javac">
+      <compilerarg line="${compiler.args.installation}"/>
+      <bootclasspath refid="installation.module.bootclasspath"/>
+      <classpath refid="installation.module.production.classpath"/>
+      <src refid="installation.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.installation"/>
+    </javac2>
+    
+    <copy todir="${installation.output.dir}">
+      <fileset dir="${module.installation.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.installation.tests" depends="register.custom.compilers,compile.module.installation.production" description="compile module installation; test classes" unless="skip.tests">
+    <mkdir dir="${installation.testoutput.dir}"/>
+    <javac2 destdir="${installation.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.installation}/javac">
+      <compilerarg line="${compiler.args.installation}"/>
+      <bootclasspath refid="installation.module.bootclasspath"/>
+      <classpath refid="installation.module.classpath"/>
+      <src refid="installation.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.installation"/>
+    </javac2>
+    
+    <copy todir="${installation.testoutput.dir}">
+      <fileset dir="${module.installation.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.installation" description="cleanup module">
+    <delete dir="${installation.output.dir}"/>
+    <delete dir="${installation.testoutput.dir}"/>
+  </target>
+</project>

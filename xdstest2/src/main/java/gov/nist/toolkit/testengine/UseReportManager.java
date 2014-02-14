@@ -1,11 +1,7 @@
 package gov.nist.toolkit.testengine;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
-import gov.nist.toolkit.xdstest2logging.Report;
-import gov.nist.toolkit.xdstest2logging.SectionLogMap;
-import gov.nist.toolkit.xdstest2logging.TestDetails;
-import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
+import gov.nist.toolkit.xdstest2logging.*;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
 import java.io.File;
@@ -148,7 +144,8 @@ public class UseReportManager  {
 			if (stepLog == null)
 				throw new XdsInternalException("UseReportManager#resolve: cannot find log for step " + ur.step + " in section " + ur.section + "\n" + toString() + "\n" + previousLogs.toString() + "\n");
 
-			OMElement reportEles = stepLog.getReports();
+//			OMElement reportEles = stepLog.getReports();
+            OMElement reportEles = stepLog.getRawReports();
 			if (reportEles == null)
 				throw new XdsInternalException("UseReportManager#resolve: cannot find Reports section for step  " + ur.step + " in section " + ur.section + "\n" + toString() + "\n" + previousLogs.toString() + "\n");	
 

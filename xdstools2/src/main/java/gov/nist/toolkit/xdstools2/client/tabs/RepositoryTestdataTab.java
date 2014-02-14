@@ -26,7 +26,9 @@ public class RepositoryTestdataTab  extends GenericQueryTab {
 	static {
 		transactionTypes.add(TransactionType.PROVIDE_AND_REGISTER);
 	}
-	
+
+    // Coupled transaction semantics not relevant to this tool. To see how it is used
+    // look in FindDocuments tab.
 	static CoupledTransactions couplings = new CoupledTransactions();
 
 
@@ -41,6 +43,8 @@ public class RepositoryTestdataTab  extends GenericQueryTab {
 	}
 	
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
+        // Create top level VerticalPanel that defines this tab and link it into the
+        // tab system.  Also add Close button.
 		myContainer = container;
 		topPanel = new VerticalPanel();
 		

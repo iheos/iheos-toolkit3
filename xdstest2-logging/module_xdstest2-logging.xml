@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_xdstest2-logging" default="compile.module.xdstest2-logging">
+  <dirname property="module.xdstest2-logging.basedir" file="${ant.file.module_xdstest2-logging}"/>
+  
+  <property name="module.jdk.home.xdstest2-logging" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.xdstest2-logging" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.xdstest2-logging" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.xdstest2-logging" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="xdstest2-logging.output.dir" value="${module.xdstest2-logging.basedir}/target/classes"/>
+  <property name="xdstest2-logging.testoutput.dir" value="${module.xdstest2-logging.basedir}/target/test-classes"/>
+  
+  <path id="xdstest2-logging.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="xdstest2-logging.module.production.classpath">
+    <path refid="${module.jdk.classpath.xdstest2-logging}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <pathelement location="${registry-metadata.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <pathelement location="${docref.output.dir}"/>
+    <pathelement location="${registry-support.output.dir}"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+  </path>
+  
+  <path id="xdstest2-logging.runtime.production.module.classpath">
+    <pathelement location="${xdstest2-logging.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="registry-metadata.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <path refid="docref.runtime.production.module.classpath"/>
+    <path refid="registry-support.runtime.production.module.classpath"/>
+    <path refid="utilities.runtime.production.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.production.module.classpath"/>
+    <path refid="xds-exceptions.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="xdstest2-logging.module.classpath">
+    <path refid="${module.jdk.classpath.xdstest2-logging}"/>
+    <pathelement location="${xdstest2-logging.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <pathelement location="${registry-metadata.testoutput.dir}"/>
+    <pathelement location="${registry-metadata.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <pathelement location="${docref.testoutput.dir}"/>
+    <pathelement location="${docref.output.dir}"/>
+    <pathelement location="${registry-support.testoutput.dir}"/>
+    <pathelement location="${registry-support.output.dir}"/>
+    <pathelement location="${utilities.testoutput.dir}"/>
+    <pathelement location="${utilities.output.dir}"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <pathelement location="${common-datatypes.testoutput.dir}"/>
+    <pathelement location="${common-datatypes.output.dir}"/>
+    <pathelement location="${xds-exceptions.testoutput.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+  </path>
+  
+  <path id="xdstest2-logging.runtime.module.classpath">
+    <pathelement location="${xdstest2-logging.testoutput.dir}"/>
+    <pathelement location="${xdstest2-logging.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-dom:1.2.10.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-api:1.2.14.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.6.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_jaxen:jaxen:1.1.4.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:wstx-asl:3.2.9.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="registry-metadata.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-common-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_com.sun.ebxml:ebxmlrr-common:1.0.classpath"/>
+    <path refid="docref.runtime.module.classpath"/>
+    <path refid="registry-support.runtime.module.classpath"/>
+    <path refid="utilities.runtime.module.classpath"/>
+    <path refid="library.maven:_org.apache.ws.commons.axiom:axiom-impl:1.2.14.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:woodstox-core-asl:4.1.4.classpath"/>
+    <path refid="library.maven:_org.codehaus.woodstox:stax2-api:3.1.1.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.10.0.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.4.01.classpath"/>
+    <path refid="common-datatypes.runtime.module.classpath"/>
+    <path refid="xds-exceptions.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.xdstest2-logging">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.xdstest2-logging">
+    <patternset refid="excluded.from.module.xdstest2-logging"/>
+  </patternset>
+  
+  <path id="xdstest2-logging.module.sourcepath">
+    <dirset dir="${module.xdstest2-logging.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="xdstest2-logging.module.test.sourcepath">
+    <dirset dir="${module.xdstest2-logging.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.xdstest2-logging" depends="compile.module.xdstest2-logging.production,compile.module.xdstest2-logging.tests" description="Compile module xdstest2-logging"/>
+  
+  <target name="compile.module.xdstest2-logging.production" depends="register.custom.compilers,compile.module.registry-metadata,compile.module.docref,compile.module.registry-support,compile.module.utilities,compile.module.common-datatypes,compile.module.xds-exceptions" description="Compile module xdstest2-logging; production classes">
+    <mkdir dir="${xdstest2-logging.output.dir}"/>
+    <javac2 destdir="${xdstest2-logging.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.xdstest2-logging}/javac">
+      <compilerarg line="${compiler.args.xdstest2-logging}"/>
+      <bootclasspath refid="xdstest2-logging.module.bootclasspath"/>
+      <classpath refid="xdstest2-logging.module.production.classpath"/>
+      <src refid="xdstest2-logging.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.xdstest2-logging"/>
+    </javac2>
+    
+    <copy todir="${xdstest2-logging.output.dir}">
+      <fileset dir="${module.xdstest2-logging.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.xdstest2-logging.tests" depends="register.custom.compilers,compile.module.xdstest2-logging.production" description="compile module xdstest2-logging; test classes" unless="skip.tests">
+    <mkdir dir="${xdstest2-logging.testoutput.dir}"/>
+    <javac2 destdir="${xdstest2-logging.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.xdstest2-logging}/javac">
+      <compilerarg line="${compiler.args.xdstest2-logging}"/>
+      <bootclasspath refid="xdstest2-logging.module.bootclasspath"/>
+      <classpath refid="xdstest2-logging.module.classpath"/>
+      <src refid="xdstest2-logging.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.xdstest2-logging"/>
+    </javac2>
+    
+    <copy todir="${xdstest2-logging.testoutput.dir}">
+      <fileset dir="${module.xdstest2-logging.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.xdstest2-logging" description="cleanup module">
+    <delete dir="${xdstest2-logging.output.dir}"/>
+    <delete dir="${xdstest2-logging.testoutput.dir}"/>
+  </target>
+</project>

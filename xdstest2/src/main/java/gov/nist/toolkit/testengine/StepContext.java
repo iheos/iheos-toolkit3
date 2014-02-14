@@ -1,27 +1,6 @@
 package gov.nist.toolkit.testengine;
 
-import gov.nist.toolkit.testengine.transactions.BasicTransaction;
-import gov.nist.toolkit.testengine.transactions.DirectTransaction;
-import gov.nist.toolkit.testengine.transactions.DsubPublishTransaction;
-import gov.nist.toolkit.testengine.transactions.DsubSubscribeTransaction;
-import gov.nist.toolkit.testengine.transactions.EchoV2Transaction;
-import gov.nist.toolkit.testengine.transactions.EchoV3Transaction;
-import gov.nist.toolkit.testengine.transactions.EpsosTransaction;
-import gov.nist.toolkit.testengine.transactions.GenericSoap11Transaction;
-import gov.nist.toolkit.testengine.transactions.IGQTransaction;
-import gov.nist.toolkit.testengine.transactions.MPQTransaction;
-import gov.nist.toolkit.testengine.transactions.MockTransaction;
-import gov.nist.toolkit.testengine.transactions.MuTransaction;
-import gov.nist.toolkit.testengine.transactions.NullTransaction;
-import gov.nist.toolkit.testengine.transactions.ProvideAndRegisterTransaction;
-import gov.nist.toolkit.testengine.transactions.RegisterTransaction;
-import gov.nist.toolkit.testengine.transactions.RetrieveTransaction;
-import gov.nist.toolkit.testengine.transactions.SimpleTransaction;
-import gov.nist.toolkit.testengine.transactions.SqlQueryTransaction;
-import gov.nist.toolkit.testengine.transactions.StoredQueryTransaction;
-import gov.nist.toolkit.testengine.transactions.XCQTransaction;
-import gov.nist.toolkit.testengine.transactions.XDRProvideAndRegisterTransaction;
-import gov.nist.toolkit.testengine.transactions.XcpdTransaction;
+import gov.nist.toolkit.testengine.transactions.*;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
 import java.io.FileNotFoundException;
@@ -339,8 +318,12 @@ public class StepContext extends BasicContext implements ErrorReportingInterface
 				else if (instruction_name.equals("DirectTransaction")) 
 				{
 					transaction = new DirectTransaction(this, instruction, instruction_output);
-				} 
-				else 
+				}
+                else if (instruction_name.equals("SocketTransaction"))
+                {
+                    transaction = new SocketTransaction(this, instruction, instruction_output);
+                }
+                else
 				{
 					dumpContextIntoOutput(test_step_output);
 					throw new XdsInternalException(ins_context.error("StepContext: Don't understand instruction named " + instruction_name));

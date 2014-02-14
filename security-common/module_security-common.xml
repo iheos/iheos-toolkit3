@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_security-common" default="compile.module.security-common">
+  <dirname property="module.security-common.basedir" file="${ant.file.module_security-common}"/>
+  
+  <property name="module.jdk.home.security-common" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.security-common" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.security-common" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.security-common" value="-encoding UTF-8 -source 1.6 -target 1.6 ${compiler.args}"/>
+  
+  <property name="security-common.output.dir" value="${module.security-common.basedir}/target/classes"/>
+  <property name="security-common.testoutput.dir" value="${module.security-common.basedir}/target/test-classes"/>
+  
+  <path id="security-common.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="security-common.module.production.classpath">
+    <path refid="${module.jdk.classpath.security-common}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+  </path>
+  
+  <path id="security-common.runtime.production.module.classpath">
+    <pathelement location="${security-common.output.dir}"/>
+    <path refid="xds-exceptions.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="security-common.module.classpath">
+    <path refid="${module.jdk.classpath.security-common}"/>
+    <pathelement location="${security-common.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+    <pathelement location="${xds-exceptions.testoutput.dir}"/>
+    <pathelement location="${xds-exceptions.output.dir}"/>
+  </path>
+  
+  <path id="security-common.runtime.module.classpath">
+    <pathelement location="${security-common.testoutput.dir}"/>
+    <pathelement location="${security-common.output.dir}"/>
+    <path refid="library.maven:_junit:junit:3.8.1.classpath"/>
+    <path refid="xds-exceptions.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.security-common">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.security-common">
+    <patternset refid="excluded.from.module.security-common"/>
+  </patternset>
+  
+  <path id="security-common.module.sourcepath">
+    <dirset dir="${module.security-common.basedir}">
+      <include name="src/main/java"/>
+    </dirset>
+  </path>
+  
+  <path id="security-common.module.test.sourcepath">
+    <dirset dir="${module.security-common.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.security-common" depends="compile.module.security-common.production,compile.module.security-common.tests" description="Compile module security-common"/>
+  
+  <target name="compile.module.security-common.production" depends="register.custom.compilers,compile.module.xds-exceptions" description="Compile module security-common; production classes">
+    <mkdir dir="${security-common.output.dir}"/>
+    <javac2 destdir="${security-common.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.security-common}/javac">
+      <compilerarg line="${compiler.args.security-common}"/>
+      <bootclasspath refid="security-common.module.bootclasspath"/>
+      <classpath refid="security-common.module.production.classpath"/>
+      <src refid="security-common.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.security-common"/>
+    </javac2>
+    
+    <copy todir="${security-common.output.dir}">
+      <fileset dir="${module.security-common.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.security-common.tests" depends="register.custom.compilers,compile.module.security-common.production" description="compile module security-common; test classes" unless="skip.tests">
+    <mkdir dir="${security-common.testoutput.dir}"/>
+    <javac2 destdir="${security-common.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.security-common}/javac">
+      <compilerarg line="${compiler.args.security-common}"/>
+      <bootclasspath refid="security-common.module.bootclasspath"/>
+      <classpath refid="security-common.module.classpath"/>
+      <src refid="security-common.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.security-common"/>
+    </javac2>
+    
+    <copy todir="${security-common.testoutput.dir}">
+      <fileset dir="${module.security-common.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.security-common" description="cleanup module">
+    <delete dir="${security-common.output.dir}"/>
+    <delete dir="${security-common.testoutput.dir}"/>
+  </target>
+</project>
