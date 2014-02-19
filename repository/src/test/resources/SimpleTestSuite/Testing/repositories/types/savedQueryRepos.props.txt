@@ -1,0 +1,10 @@
+# repository type savedQueryRepos
+
+# must match filename
+keyword=savedQueryRepos
+
+# repository|asset
+domain=repository 
+   
+description=The most basic repository type
+

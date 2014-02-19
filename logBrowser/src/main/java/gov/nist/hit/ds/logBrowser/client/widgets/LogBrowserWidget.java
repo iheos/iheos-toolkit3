@@ -52,6 +52,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -65,13 +66,17 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 
 public class LogBrowserWidget extends Composite {
+
 	/**
 	 *
 	 * @author Sunil.Bhaskarla
 	 */
 	private static Logger logger = Logger.getLogger(LogBrowserWidget.class.getName());
-	TabLayoutPanel featureTlp = new TabLayoutPanel(20, Unit.PX);
+	private static final int WESTERNBAR = 545;	
 	private static final int CONTEXTMENU_XOFFSET = 10;
+	TabLayoutPanel featureTlp = new TabLayoutPanel(20, Unit.PX);
+	LayoutPanel featureLp = new LayoutPanel();
+	
 	VerticalPanel treePanel = new VerticalPanel();
 	SplitLayoutPanel splitPanel = new SplitLayoutPanel(5);
 	ScrollPanel centerPanel = new ScrollPanel();
@@ -114,23 +119,42 @@ public class LogBrowserWidget extends Composite {
 			}
 
 			public void onSuccess(Boolean rs) {
-				for (Feature f : features) {
-					setupFeature(f);
-				}		 				    				 
+				if (features!=null) {
+					if (features.length>1) {
+						for (Feature f : features) {
+							featureTlp.add(setupFeature(f), f.toString());
+						}		 				    				 					
+					} else if (features.length==1) {						
+						featureLp.add(setupFeature(features[0]));
+					}
+				} else {
+					Window.alert("No log browsers features were selected");
+				}
 
 			}			
 		});
 
-		 initWidget(featureTlp);
+		if (features!=null) {
+			if (features.length>1) {
+				initWidget(featureTlp);		
+			} else {
+				initWidget(featureLp);
+			}
+	
+		}		 
+	      
 		 //// Use this in embedded mode: RootLayoutPanel.get().add(featureTlp);
 	}
 	
-	protected void setupFeature(Feature f) {
+	protected Widget setupFeature(Feature f) {
+		
 		if (Feature.BROWSE==f) {
-			 featureTlp.add(setupBrowseFeature(),f.toString());				
-		} else if (Feature.SEARCH==f) {
-			featureTlp.add(setupSearchFeature(), f.toString());				
-		}  
+			return setupBrowseFeature();				
+		} 
+		else if (Feature.SEARCH==f) {
+			return setupSearchFeature();				
+		}
+		return null;
 	}
 	
 
@@ -164,7 +188,7 @@ public class LogBrowserWidget extends Composite {
 		    .setPaddingLeft(3, Unit.PX);
 
 		    searchPanel.add(searchWidget);
-		    searchMainLayoutPanel.addWest(searchPanel, 650); // 632, Math.round(0.40 * Window.getClientWidth())
+		    searchMainLayoutPanel.addWest(searchPanel, WESTERNBAR); // 632, Math.round(0.40 * Window.getClientWidth())
 		    searchMainLayoutPanel.add(searchLbSplitPanel);
 
 		    
@@ -253,26 +277,35 @@ public class LogBrowserWidget extends Composite {
 								
 								reposLbx.addItem(rt.getDisplayName(), rt.getCompositeId());
 								reposProps.put(rt.getCompositeId(), rt.getProperties());
-								
-								
 							}
+																			
 														
-							HTML lblRepos = new HTML("Repository: ");
+							HTML lblRepos = new HTML("Select a Repository ");
 							
 							// lblRepos.setWidth("25%");
-							reposLbx.setWidth("125px"); // 90
+							reposLbx.setWidth("16em"); // 90
 							FlexTable grid = new FlexTable();
-							grid.setCellPadding(1);
-							grid.setCellSpacing(3);
+							// grid.setCellPadding(0); // 1
+							// grid.setCellSpacing(0); // 3
 							grid.setBorderWidth(0);
 //							grid.setWidget(0, 0, new HTML("&nbsp;"));
 //							grid.getFlexCellFormatter().setColSpan(0, 0, 2);
-							grid.setWidget(0, 0, lblRepos );
-							grid.setWidget(0, 1, reposLbx);
+							HTML browseHeader = new HTML("&nbsp;"); // <h4>Browse Available Repositories</h4>
+							// browseHeader.setStyleName("searchCriteriaGroup");
+							grid.setWidget(0, 0, browseHeader);
+							// grid.getFlexCellFormatter().setColSpan(0, 0, 2);
+							grid.setWidget(1, 0, lblRepos );
+							// grid.getFlexCellFormatter().setColSpan(1, 0, 2);
+							grid.setWidget(2, 0, reposLbx);
+							grid.setWidth("100%");
 							
-							treePanel.add(new HTML("&nbsp;"));
+							// treePanel.add(new HTML("&nbsp;"));
 							treePanel.add(grid);
-
+							
+							treePanel.getElement().getStyle()
+					        .setProperty("border", "none");
+							treePanel.getElement().getStyle()
+						    .setPaddingLeft(3, Unit.PX);
 
 							ScrollPanel spProps = new ScrollPanel(propsWidget);
 							westContent.addSouth(spProps, Math.round(0.2 * Window.getClientHeight()));
@@ -489,8 +522,15 @@ public class LogBrowserWidget extends Composite {
 					VerticalPanel menuItemPanel = new VerticalPanel();
 					
 					try {
-						
-						AssetNode an =  (AssetNode)((Tree)event.getSource()).getSelectedItem().getUserObject();
+						AssetNode an =  null;
+						try {
+							// Browse method
+							an =  (AssetNode)((Tree)event.getSource()).getSelectedItem().getUserObject();														
+						} catch (Exception ex) {
+							// Search method
+							an = treeItemTarget.getAssetNode(); // ((AssetTreeItem)((Tree)event.getSource()).getSelectedItem()).getAssetNode();								
+						}						
+
 						if (an.isContentAvailable()) {
 							menuItemPanel.add(new Anchor("Download content"
 									,GWT.getHostPageBaseURL() + "repository/downloadAsset?"
@@ -544,8 +584,8 @@ public class LogBrowserWidget extends Composite {
 						} catch(Exception ex) {
 							// Focus shifted from the search-browse mode to normal browsing mode
 						}
+		    			treeItem.setSelected(true);
 		        		treeItemTarget = treeItem;
-		        		treeItemTarget.setSelected(true);
 		        	}
 		    	}
 		    	tree.addItem(treeItem);

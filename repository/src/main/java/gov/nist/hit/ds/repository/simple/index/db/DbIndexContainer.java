@@ -131,7 +131,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 		iter = new SimpleAssetIterator(repos);
 		 		
 		if (!iter.hasNextAsset()) {
-			logger.fine("Nothing to index in " + reposId);
+			logger.fine("Nothing to index in " + reposId + ". Removing all indexed items.");
+			// Purge index because there are no assets on the file system
+			removeIndex(reposId, repos.getSource().getAccess().name(), "");
 			return -1;
 		}		
 		
@@ -568,14 +570,14 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * Remove stale indexes
 	 */
 	@Override
-	public void removeIndex(String reposId, String sessionId) throws RepositoryException {
+	public void removeIndex(String reposId, String acs, String sessionId) throws RepositoryException {
 		if (reposId!=null && !"".equals(reposId)) {
 			DbContext dbc = new DbContext();			
 			try {
 				dbc.setConnection(DbConnection.getInstance().getConnection());
 	 
-				String sqlStr = "delete from "+ repContainerLabel + " where " + repId + " = ? and indexSession != ?";
-				int rsData = dbc.executePrepared(sqlStr, new String[]{reposId,sessionId});
+				String sqlStr = "delete from "+ repContainerLabel + " where " + repId + " = ? and reposAcs=? and indexSession != ?";
+				int rsData = dbc.executePrepared(sqlStr, new String[]{reposId,acs,sessionId});
 				logger.fine("Number of stale items removed: " + rsData);
 
 			} catch (SQLException e) {
@@ -1452,7 +1454,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 		String searchCriteriaWhere = searchCriteria.toString();		
 
 		String sqlStr = "select count(*)ct from " + repContainerLabel 
-		+ " where " + repId + " = ? and reposAcs=? and( "+ searchCriteriaWhere + ")" ;
+		+ " where " + repId + " = ? and reposAcs=? "  +(!"".equals(searchCriteriaWhere)?" and( "+ searchCriteriaWhere + ")":"");
 		logger.fine(sqlStr);
 		
 		DbContext dbc = new DbContext();
@@ -1489,10 +1491,11 @@ public class DbIndexContainer implements IndexContainer, Index {
 	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) throws RepositoryException {
 		Repository[] fRep = new Repository[repositories.length];
 		int cx=0;
-		for (Repository rep : repositories) {
-			if (getHitCount(rep, searchCriteria, orderByStr) > 0) {
-				fRep[cx++] = rep;
-				logger.fine("filtered repos:" + rep.getDisplayName());
+		for (Repository repos : repositories) {
+			indexRep(repos);
+			if (getHitCount(repos, searchCriteria, orderByStr) > 0) {
+				fRep[cx++] = repos;
+				logger.fine("filtered repos:" + repos.getDisplayName());
 			}
 		}
 		
@@ -1529,7 +1532,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 				
 				String sqlStr = "insert into "+searchSession+"(repId,assetId,reposAcs,reposOrder,displayOrder,createdDate,propFile)"
 						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (orderBy++) + "," + displayOrder + "," + createdDate + "," + locationId + " from " + repContainerLabel 
-						+ " where " + repId + " = ? and reposAcs=? and( "+ searchCriteriaWhere + ")" ;
+						+ " where " + repId + " = ? and reposAcs=? " +(!"".equals(searchCriteriaWhere)?" and( "+ searchCriteriaWhere + ")":"");
 				
 				try {					
 				//	 dbc.internalCmd(sqlString);

@@ -16,5 +16,8 @@ public interface RepositoryServiceAsync {
 	void getImmediateChildren(AssetNode an, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
 	void getParentChain(AssetNode an, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
 	void isRepositoryConfigured(AsyncCallback<Boolean> callback) throws RepositoryConfigException;
-
+	void getSearchCriteria(String queryLoc, AsyncCallback<QueryParameters> callback) throws RepositoryConfigException;	
+	void getSearchCriteria(String reposId, String acs, String queryLoc, AsyncCallback<QueryParameters> callback) throws RepositoryConfigException;
+	void saveSearchCriteria(QueryParameters qp, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
+	void getSavedQueries(String id, String acs, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
 }

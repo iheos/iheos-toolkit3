@@ -23,77 +23,88 @@ public class SearchTerm implements IsSerializable, Serializable {
     
    				
 	public static enum Operator {
-		EQUALTO("equal to") {
+		EQUALTO("equal to", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " = ";	
 			}
 		},
-		EQUALTOANY("in") {
-			@Override
-			public String toString() {
-				return " in ";	
-			}
-		},
-		NOTEQUALTO("not equal to") {
+		NOTEQUALTO("not equal to", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " != ";	
 			}
 		},
-		NOTEQUALTOANY("not equal to any") {
-			@Override
-			public String toString() {
-				return " not in ";	
-			}
-		},		
-		LESSTHAN("less than") {
+		LESSTHAN("less than", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " < ";	
 			}
 		},
-		LESSTHANOREQUALTO("less than or equal to") {
+		LESSTHANOREQUALTO("less than or equal to", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " <= ";	
 			}
 		},
-		GREATERTHAN("greater than") {
+		GREATERTHAN("greater than", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " > ";	
 			}
 		},
-		GREATERTHANOREQUALTO("greater than or equal to") {
+		GREATERTHANOREQUALTO("greater than or equal to", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " >= ";	
 			}
-		},LIKE("like") {
+		},LIKE("like", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " like ";	
 			}
-		},UNSPECIFIED("is unspecified") {
+		},UNSPECIFIED("is unspecified", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " is null ";	
 			}
+		},
+		// Keep multiple value operators always at the end because the ordinal is important 
+		EQUALTOANY("in any", Boolean.TRUE) {
+			@Override
+			public String toString() {
+				return " in ";	
+			}
+		},		
+		NOTEQUALTOANY("not equal to any", Boolean.TRUE) {
+			@Override
+			public String toString() {
+				return " not in ";	
+			}
 		};
 		
     	private String displayName;
+    	private Boolean multipleValues;
 		
-		private Operator(String displayName) {
+		private Operator(String displayName, Boolean allowsMultipleValues) {
 			setDisplayName(displayName);
+			setMultipleValues(allowsMultipleValues);
 		}
 		
 		private void setDisplayName(String displayName) {
 			this.displayName = displayName;
-		}		
+		}
 		
 		public String getDisplayName() {
 			return this.displayName;
+		}
+
+		public Boolean getMultipleValues() {
+			return multipleValues;
+		}
+
+		public void setMultipleValues(Boolean multipleValues) {
+			this.multipleValues = multipleValues;
 		}
 		
 	}
@@ -183,8 +194,7 @@ public class SearchTerm implements IsSerializable, Serializable {
 		String propName = getPropName();
 		
 		if (Operator.EQUALTOANY.equals(getOperator())
-			|| Operator.NOTEQUALTOANY.equals(getOperator())
-			|| Operator.LIKE.equals(getOperator())) {
+			|| Operator.NOTEQUALTOANY.equals(getOperator())) {
 			return propName + getOperator().toString() + getValueAsCsv();
 		} 
 		
@@ -193,8 +203,16 @@ public class SearchTerm implements IsSerializable, Serializable {
 		} else if (Operator.UNSPECIFIED.equals(getOperator())) {
 			return propName + getOperator().toString();
 		} else {
-			return propName + getOperator().toString() + "'" + values[0] + "' "; 
+			return propName + getOperator().toString() + "'" + safeValue(values[0]) + "' "; 
 		}		
+	}
+	
+	private String safeValue(String userInput) {
+		if (userInput!=null && !"".equals(userInput)) {
+			String safeStr = userInput.replaceAll("'", "");
+			return safeStr.replaceAll("\"", "");			
+		}
+		return userInput;
 	}
 	
 	private String getValueAsCsv() {
@@ -202,7 +220,7 @@ public class SearchTerm implements IsSerializable, Serializable {
 		int valueLen =  getValues().length;
 		
 		for (int cx=0; cx<valueLen; cx++) {
-			csv += "'" + values[cx] + "'" + ((cx<valueLen-1) ?",":"");
+			csv += "'" + safeValue(values[cx]) + "'" + ((cx<valueLen-1) ?",":"");
 		}
 		return "(" + csv + ")";
 	}

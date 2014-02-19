@@ -4,6 +4,7 @@ import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.presentation.PresentationData;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
@@ -100,6 +101,50 @@ RepositoryService {
 			throw new RepositoryConfigException(re.toString());
 		}
 	}
+
+	@Override
+	public AssetNode saveSearchCriteria(QueryParameters qp)
+			throws RepositoryConfigException {
+		try {
+			return PresentationData.saveSearchCriteria(qp);	
+		} catch (Exception re) {
+			throw new RepositoryConfigException(re.toString()); 
+		}
+	}
+
+	@Override
+	public List<AssetNode> getSavedQueries(String id, String acs)
+			throws RepositoryConfigException {
+		try {
+			return PresentationData.getSavedQueries(id, acs);	
+		} catch (Exception re) {
+			throw new RepositoryConfigException(re.toString()); 
+		}
+	}
+
+	@Override
+	public QueryParameters getSearchCriteria(String id, String acs,
+			String queryLoc) throws RepositoryConfigException {
+		try {
+			return PresentationData.getSearchCriteria(id, acs, queryLoc);	
+		} catch (Exception re) {
+			throw new RepositoryConfigException(re.toString()); 
+		}
+
+	}
+
+	@Override
+	public QueryParameters getSearchCriteria(String queryLoc)
+			throws RepositoryConfigException {
+		try {
+			return PresentationData.getSearchCriteria(queryLoc);	
+		} catch (Exception re) {
+			throw new RepositoryConfigException(re.toString()); 
+		}
+
+	}
+
+	
 
 
 

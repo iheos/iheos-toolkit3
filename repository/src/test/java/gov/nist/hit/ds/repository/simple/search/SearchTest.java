@@ -13,12 +13,15 @@ import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
+import gov.nist.hit.ds.repository.presentation.PresentationData;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
+import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
@@ -47,7 +50,7 @@ public class SearchTest {
 	}
 
 	@Test
-	public void multipleBaseCriteriaTest() {		 		
+	public void multipleBaseCriteriaTest() throws RepositoryException {		 		
 
 		/* All Search criteria constructions are based on bottom-up approach
 		 * Idea is to build parts and assemble them together
@@ -76,11 +79,36 @@ public class SearchTest {
 		SearchCriteria criteria = new SearchCriteria(Criteria.OR);
 		criteria.append(subCriteriaA);
 		criteria.append(subCriteriaB);
-		
-		
-		
-		
+				
 		System.out.println(criteria.toString());
+		
+		
+		final Access acs = Access.RW_EXTERNAL;
+		
+		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(acs));
+		Repository repos = fact.createNamedRepository(
+				"repos-search-target",
+				"Description",
+				new SimpleType("simpleRepos"),
+				"repos-search-target"
+				);
+
+		
+		String[][] selectedRepos = new String[1][2];
+		selectedRepos[0][0] = repos.getId().getIdString();
+		selectedRepos[0][1] = acs.name();
+		
+		QueryParameters qp = new QueryParameters(selectedRepos,criteria);
+		qp.setName("firstTest");
+		
+		AssetNode an = PresentationData.saveSearchCriteria(qp);
+
+		System.out.println(an.getAssetId());
+		
+		QueryParameters qp2 = PresentationData.getSearchCriteria(an.getRepId(),an.getReposSrc(), an.getLocation());
+		
+		assertTrue(qp.getSelectedRepos().length==qp2.getSelectedRepos().length);
+		assertTrue(qp.getSearchCriteria().toString().equals(qp2.getSearchCriteria().toString()));
 		
 	}
 	
@@ -396,9 +424,7 @@ public class SearchTest {
 
 
 	}
-		
-	
-	
+			
 }
 
 	

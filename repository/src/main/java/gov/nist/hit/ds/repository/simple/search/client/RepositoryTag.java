@@ -19,6 +19,7 @@ public class RepositoryTag implements Comparable<RepositoryTag>, IsSerializable,
 	private static final long serialVersionUID = 1367578960873454316L;
 	// instance variables 
     private String id;
+    private String type;
     private String displayName;
     private String source;
     private String properties;
@@ -30,9 +31,10 @@ public class RepositoryTag implements Comparable<RepositoryTag>, IsSerializable,
     {
         
     }
-    public RepositoryTag(String id, String source, String displayName, String properties)
+    public RepositoryTag(String id, String type, String source, String displayName, String properties)
     {
         setId(id);
+        setType(type);
         setSource(source);
         setDisplayName(displayName);
         setProperties(properties);
@@ -80,6 +82,12 @@ public class RepositoryTag implements Comparable<RepositoryTag>, IsSerializable,
 	}
 	public void setProperties(String properties) {
 		this.properties = properties;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 
    

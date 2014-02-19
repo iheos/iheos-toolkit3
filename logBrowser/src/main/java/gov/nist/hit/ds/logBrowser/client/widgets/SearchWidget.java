@@ -1,13 +1,12 @@
 package gov.nist.hit.ds.logBrowser.client.widgets;
 
 
-
-
 import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.ContextSupplement;
 import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
+import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
@@ -16,6 +15,7 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 import gov.nist.hit.ds.repository.simple.search.client.SimpleData;
+import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLTable;
@@ -51,8 +52,6 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
-
 
 public class SearchWidget extends Composite {
 	/**
@@ -90,8 +89,9 @@ public class SearchWidget extends Composite {
 	public Button moveDown = new Button("Move Down");
 	protected ArrayList<String> propNames = new ArrayList<String>();
 	
-	static String DEFAULTWIDTH = "20em";
-	static String REPOSLBOXWIDTH = "17em";
+	static String PREFWIDTH = "10em"; // 20em
+	static String DEFAULTWIDTH = "14em"; // 20em
+	static String REPOSLBOXWIDTH = "15em"; // 17em
 	static String DEFAULTTITLEWIDTH = "15em";
 	static String MOVEMENTWIDTH = "7em";
 
@@ -103,7 +103,10 @@ public class SearchWidget extends Composite {
     RadioButton simpleQuery = new RadioButton("queryMode", "Simple");
     RadioButton advancedQuery = new RadioButton("queryMode", "Advanced");
     Button searchBtn = new Button("Search");
-    
+	ListBox qSelector = new ListBox();
+	TextBox sqTxt = new TextBox();
+	DisclosurePanel advancedDisclosure = new DisclosurePanel();
+	
 	final public RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
 	private EventBus eventBus;
 
@@ -111,9 +114,11 @@ public class SearchWidget extends Composite {
 	public SearchWidget(SimpleEventBus eventBus) {
 	    this.eventBus = eventBus;
 
+	    searchBtn.setWidth("6em");
+	    
 		topPanel = new VerticalPanel();
 
-		StyleInjector.inject(".searchCriteriaGroup {background-color: #F5F5F5}");
+		StyleInjector.inject(".searchCriteriaGroup {background-color: #F5F5F5} .searchHeader {background-color: #E6E6FA}");
 
 //		HTML title = new HTML();
 //		title.setHTML("<h2>Search</h2>");
@@ -147,6 +152,9 @@ public class SearchWidget extends Composite {
 				lblAvailableRepos.setTitle("There are " + rtList.size() + " repositories.");
 				
 				for (RepositoryTag rt : rtList) {
+					if ("savedQueryRepos".equals(rt.getType())) {
+						popQuerySelector(rt.getCompositeId());
+					}
 					reposLeft.addItem(rt.getDisplayName(), rt.getCompositeId());
 				}
 							
@@ -324,15 +332,128 @@ public class SearchWidget extends Composite {
 	}
 	protected VerticalPanel reposList() {
 		VerticalPanel panel = new VerticalPanel();
-		FlexTable grid = new FlexTable();
-
-		panel.add(new HTML("<h4>Select Repositories</h4>"));
-		panel.add(new HTML("  " ));
-
-		panel.add(grid);
-
+		
+		panel.add(new HTML("<h4 class='searchHeader'>Quick Search</h4>"));
+		panel.add(new HTML("  "));
+		FlexTable prefGrid = new FlexTable();		
 		int row = 0;
 		int col = 0;
+		
+		prefGrid.setWidget(row++, col, new HTML("Select a Query "));
+		qSelector.setWidth("136px");
+		prefGrid.setWidget(row, col++, qSelector);
+		Button btnRun = new Button("Run");
+		btnRun.setWidth("6em");
+		prefGrid.setWidget(row, col, btnRun);
+		
+		btnRun.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				
+				if (qSelector.getItemCount()==0) return;
+				
+				String queryLoc = qSelector.getValue(qSelector.getSelectedIndex());
+				
+				try {
+					reposService.getSearchCriteria(queryLoc, new AsyncCallback<QueryParameters>() {
+
+						public void onFailure(Throwable arg0) {
+								Window.alert("Could not get search criteria: " + arg0.getMessage());
+						}
+
+						public void onSuccess(QueryParameters qp) {
+							try {
+								if (qp.getSelectedRepos()!=null) {
+									// 1. Move everything from right to left
+									int items = reposRight.getItemCount();
+									if (items>0) {
+										for (int cx=0; cx<items; cx++) {
+											reposRight.setSelectedIndex(cx);
+										}
+									}							
+									moveItem(reposRight, reposLeft);
+									
+									// 2. Clear all selections
+									items = reposLeft.getItemCount();
+									for (int cx=0; cx<items; cx++) {
+										reposLeft.setItemSelected(cx, false);
+									}
+									
+									// 3. Move selected based on selection criteria
+									items = reposLeft.getItemCount();
+									int selItems = qp.getSelectedRepos().length;
+									for (int cx=0; cx<selItems; cx++) {
+										for (int jx=0; jx<items; jx++) {								
+											String[] compositeKey = reposLeft.getValue(jx).split("\\^");
+											if (compositeKey.length==2 && compositeKey[0]!=null && compositeKey[1]!=null)
+												if (compositeKey[0].equals(qp.getSelectedRepos()[cx][0]) && compositeKey[1].equals(qp.getSelectedRepos()[cx][1])) {
+													reposLeft.setItemSelected(jx, true);
+												}
+										}									
+									}
+									moveItem(reposLeft, reposRight);
+									
+								}								
+							} catch (Exception ex) {
+								Window.alert("One or more repositories could not selected.");
+							}							
+							
+							if (qp.getAdvancedMode()!=null) {
+								if (qp.getAdvancedMode()) {
+									simpleQuery.setValue(false);
+									advancedQuery.setValue(true);	
+								} else {
+									advancedQuery.setValue(false);
+									simpleQuery.setValue(true);
+								}
+								
+								advancedBuilderOption(qp.getAdvancedMode());
+							} else {
+								simpleQuery.setValue(true);
+								advancedBuilderOption(false);
+							}
+							
+							if (qp.getSearchCriteria()!=null) {
+								try {
+									if (sc.getSearchCriteria()!=null) sc.getSearchCriteria().clear();
+									if (sc.getSearchTerms()!=null) sc.getSearchTerms().clear();
+									if (sc.getProperties()!=null) sc.getProperties().clear();		
+									sc = null;
+								} catch (Exception ex) {
+									logger.fine("Sc clear exception: " + ex.toString());
+								}
+								sc = qp.getSearchCriteria();
+								redrawTable();
+							}
+							
+							if (reposRight.getItemCount()>0) {
+								runSearch();	
+							}
+							
+						}
+					} );
+				} catch (RepositoryConfigException e) {
+					
+					Window.alert("Call failed: " + e.toString());
+				}
+				
+			}
+		});
+
+
+		// row++; col=0;
+		
+		panel.add (prefGrid);
+		
+		FlexTable reposGrid = new FlexTable();		
+		
+		panel.add(new HTML("<h4 class='searchHeader'>Ad-hoc Search</h4>"));
+		panel.add(new HTML("  "));
+
+		panel.add(reposGrid);
+
+		row = 0;
+		col = 0;
 		// HTML h;
 		
 		reposLeft.setVisibleItemCount(5);
@@ -342,13 +463,13 @@ public class SearchWidget extends Composite {
 		reposRight.setWidth(REPOSLBOXWIDTH);
 		
 		
-		grid.setWidget(row, col++, lblAvailableRepos);
-		grid.setWidget(row, col++, new HTML("&nbsp;"));
-		grid.setWidget(row, col++, new HTML("Selected Repositories"));
-		grid.setWidget(row, col, new HTML("Search Order"));
+		reposGrid.setWidget(row, col++, lblAvailableRepos);
+		reposGrid.setWidget(row, col++, new HTML("&nbsp;"));
+		reposGrid.setWidget(row, col++, new HTML("Selected Repositories"));
+		reposGrid.setWidget(row, col, new HTML("Search Order"));
 		
 		
-		HTMLTable.CellFormatter formatter = grid.getCellFormatter();
+		HTMLTable.CellFormatter formatter = reposGrid.getCellFormatter();
 		 formatter.setHorizontalAlignment(row, col, HasHorizontalAlignment.ALIGN_CENTER);
 		 formatter.setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_MIDDLE);
 		 
@@ -356,17 +477,17 @@ public class SearchWidget extends Composite {
 		
 		col=0;
 		
-		grid.setWidget(row, col++, reposLeft);
+		reposGrid.setWidget(row, col++, reposLeft);
 		
 		FlexTable miniTable = new FlexTable();		
 		
 		miniTable.setWidget(0, 0, moveRight);
 		miniTable.setWidget(1, 0, moveLeft);
 		
-		grid.setWidget(row, col++, miniTable);
+		reposGrid.setWidget(row, col++, miniTable);
 				
 		
-		grid.setWidget(row, col++, reposRight);
+		reposGrid.setWidget(row, col++, reposRight);
 		
 		
 		
@@ -376,14 +497,14 @@ public class SearchWidget extends Composite {
 		miniTable.setWidget(0, 0, moveUp);
 		miniTable.setWidget(1, 0, moveDown);
 		
-		grid.setWidget(row, col++, miniTable);
+		reposGrid.setWidget(row, col++, miniTable);
 		
 		
-		grid.setWidget(++row, 0, lblTxt);
-		grid.getFlexCellFormatter().setColSpan(row, 0, col);
+		reposGrid.setWidget(++row, 0, lblTxt);
+		reposGrid.getFlexCellFormatter().setColSpan(row, 0, col);
 
-		grid = new FlexTable();
-		panel.add(grid);
+		reposGrid = new FlexTable();
+		panel.add(reposGrid);
 		
 		return panel;
 	}
@@ -774,8 +895,9 @@ public class SearchWidget extends Composite {
 					stPn.addChangeHandler(new CSelectorChangeHandler(PROP_NAME, nodeId));					
 					
 					for (SearchTerm.Operator e : SearchTerm.Operator.values()) {
-						// stOp.addItem(e.toString());
-						stOp.addItem(e.getDisplayName());
+						if (!e.getMultipleValues()) { // Exclude multiple values from UI to simplify building criteria, although they can be used through the API 
+							stOp.addItem(e.getDisplayName());
+						}
 					}					
 					stOp.setSelectedIndex(st.getOperator().ordinal());
 					stOp.addChangeHandler(new CSelectorChangeHandler(OPERATOR, nodeId));
@@ -808,8 +930,6 @@ public class SearchWidget extends Composite {
 				setGroup(ancestorId, stGroup);
 				
 				// mainTable.setWidget(0, 0, stGroup);
-									
-			  	  
 			}
 
 	}
@@ -958,6 +1078,38 @@ public class SearchWidget extends Composite {
 
 		return cSelector;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private void popQuerySelector(String savedQueryReposId) {
+		
+		String[] compositeKey = savedQueryReposId.split("\\^");
+//		String[][] selectedRepos = new String[1][2];
+//		selectedRepos[0][0] = compositeKey[0];
+//		selectedRepos[0][1] = compositeKey[1];
+
+		AsyncCallback<List<AssetNode>> searchResults = new AsyncCallback<List<AssetNode>> () {
+
+			public void onFailure(Throwable arg0) {
+				Window.alert("savedQueryRepos could not be loaded: " + arg0.getMessage());
+			}
+
+			public void onSuccess(List<AssetNode> result) {
+				for (AssetNode an: result) {
+					qSelector.addItem(an.getDisplayName(), an.getLocation());	
+				}
+				
+			}
+		};
+
+		try {
+			reposService.getSavedQueries(compositeKey[0],compositeKey[1], searchResults);
+		} catch (RepositoryConfigException e) {
+			Window.alert("Call failed: " + e.toString());
+		}
+	}
 
 	/**
 	 * @param ancestorId
@@ -1049,15 +1201,38 @@ public class SearchWidget extends Composite {
 	Button newSeachTerm = new Button(newSeachTermTxt);
 	Button newCriteriaGroup = new Button(newCriteriaGroupTxt);
 
-
+	/**
+	 * 
+	 */
+	public void runSearch() {
+		int itemCt = reposRight.getItemCount();
+		
+		if (itemCt==0) {
+			Window.alert("Please select at least one repository.");
+			return;
+		} else {
+			resultPanel.clear();
+			resultPanel.add(new HTML("&nbsp;"));
+			resultPanel.add(new HTML("Searching..."));
+			topPanel.add(resultPanel);
+			
+			searchBtn.setEnabled(false);
+			
+			String[][] selectedRepos = getSelectedRepos(itemCt);
+			 reposService.search(selectedRepos, sc, searchResults);
+			 // ((ListBox)event.getSource()).setEnabled(false);
+		}
+	}
+	
 	protected VerticalPanel searchPanel() {
 		
 		if (getPropNames()==null || (getPropNames()!=null && getPropNames().size()==0)) {			
 			return new VerticalPanel();
 		}
 		
-		criteriaPanel.add(new HTML("<h4>Add Search Criteria</h4>"));
-		criteriaPanel.add(new HTML("  " ));
+		criteriaPanel.setWidth("100%");
+		criteriaPanel.add(new HTML("<h4 >Add Search Criteria</h4>")); // class='searchCriteriaGroup'
+		criteriaPanel.add(new HTML("  "));
 		
 		FlexTable queryMode = new FlexTable();
 		
@@ -1082,6 +1257,7 @@ public class SearchWidget extends Composite {
 		});
 	    
 	    Button resetCriteriaBtn = new Button("Reset");
+	    resetCriteriaBtn.setWidth("6em");
 	    resetCriteriaBtn.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
@@ -1094,49 +1270,65 @@ public class SearchWidget extends Composite {
 	    searchBtn.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
-				
-				
-				int itemCt = reposRight.getItemCount();
-				
-				if (itemCt==0) {
-					Window.alert("Please select at least one repository.");
-					return;
-				} else {
-					resultPanel.clear();
-					resultPanel.add(new HTML("&nbsp;"));
-					resultPanel.add(new HTML("Searching..."));
-					topPanel.add(resultPanel);
-					
-					searchBtn.setEnabled(false);
-					
-					String[][] selectedRepos = new String[itemCt][2];
-					for (int cx=0; cx<itemCt; cx++ ) {
-						// System.out.println(reposRight.getValue(cx) + " -- " + reposRight.getItemText(cx));
-						if (null==reposRight.getValue(cx) || "".equals(reposRight.getValue(cx))) {
-							Window.alert(reposRight.getItemText(cx) +" value is null");
-						} else {
-							String[] compositeKey = reposRight.getValue(cx).split("\\^");
-							selectedRepos[cx][0] = compositeKey[0];
-							selectedRepos[cx][1] = compositeKey[1];							
-						}
-					}
-					 reposService.search(selectedRepos, sc, searchResults);
-					 // ((ListBox)event.getSource()).setEnabled(false);
-				}
-				
-
-				
-			}
+				runSearch();			
+			}		
 		});
 		
 	    // simpleQuery.setValue(true);
 	    
-		queryMode.setWidget(0, 0, new HTML("Criteria Builder Mode")); //		
+		queryMode.setWidget(0, 0, new HTML("Criteria Builder Mode")); 		
 		queryMode.setWidget(1, 0, simpleQuery);
 		queryMode.setWidget(1, 1, advancedQuery);
 		queryMode.setWidget(1, 2, resetCriteriaBtn);
 		queryMode.setWidget(1, 3, searchBtn);
 		queryMode.getFlexCellFormatter().setColSpan(0, 0, 4);
+	
+		FlexTable saveGrid = new FlexTable();
+		saveGrid.setWidget(0, 0, new HTML("Save Workspace Query as"));
+		sqTxt.setWidth("132px");
+		saveGrid.setWidget(1, 0, sqTxt);		
+		Button btnSave = new Button("Save");
+		btnSave.setWidth("6em");
+		saveGrid.setWidget(1, 1, btnSave);
+		saveGrid.getFlexCellFormatter().setColSpan(0, 0, 2);
+		
+		queryMode.setWidget(2, 0, saveGrid);
+		queryMode.getFlexCellFormatter().setColSpan(2, 0, 4);
+		
+		btnSave.addClickHandler(new ContextSupplement<String>("") {			
+			public void onClick(ClickEvent event) {
+				if ("".equals(sqTxt.getText())) {
+					Window.alert("Please enter a name");
+					return;
+				}
+				QueryParameters qp = new QueryParameters();
+
+				String[][] selectedRepos = getSelectedRepos(reposRight.getItemCount());
+				qp.setName(sqTxt.getText());
+				qp.setAdvancedMode(advancedQuery.getValue());
+				qp.setSelectedRepos(selectedRepos);
+				qp.setSearchCriteria(sc);
+
+				try {
+					reposService.saveSearchCriteria(qp, new AsyncCallback<AssetNode>() {
+						public void onFailure(Throwable arg0) {
+							Window.alert("Criteria could not be saved: " + arg0.toString());
+						}
+
+						public void onSuccess(AssetNode an) {
+							qSelector.addItem(an.getDisplayName(), an.getLocation());
+							sqTxt.setText("");
+							Window.alert("Save successful");
+						}
+						
+					});
+				} catch (RepositoryConfigException e) {
+					Window.alert("Criteria error: " + e.toString());
+				}
+			}
+		});
+
+
 		
 				
 		criteriaPanel.add(queryMode);
@@ -1152,6 +1344,24 @@ public class SearchWidget extends Composite {
 
 	}
 	
+	/**
+	 * @param itemCt
+	 * @return
+	 */
+	protected String[][] getSelectedRepos(int itemCt) {
+		String[][] selectedRepos = new String[itemCt][2];
+		for (int cx=0; cx<itemCt; cx++ ) {
+			// System.out.println(reposRight.getValue(cx) + " -- " + reposRight.getItemText(cx));
+			if (null==reposRight.getValue(cx) || "".equals(reposRight.getValue(cx))) {
+				Window.alert(reposRight.getItemText(cx) +" value is null");
+			} else {
+				String[] compositeKey = reposRight.getValue(cx).split("\\^");
+				selectedRepos[cx][0] = compositeKey[0];
+				selectedRepos[cx][1] = compositeKey[1];							
+			}
+		}
+		return selectedRepos;
+	}
 	
 	class CSelectorChangeHandler implements ChangeHandler {
 
