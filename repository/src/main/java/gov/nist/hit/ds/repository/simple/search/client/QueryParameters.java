@@ -10,12 +10,14 @@ public class QueryParameters implements IsSerializable, Serializable {
 	/**
 	 * 
 	 */
+	
 	private static final long serialVersionUID = 841897853812501709L;
 
 	private String name;
 	private SearchCriteria searchCriteria;
 	private String[][] selectedRepos;
 	private Boolean advancedMode;
+	
 
 	public QueryParameters() {		
 	}

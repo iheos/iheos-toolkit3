@@ -447,7 +447,7 @@ public class SearchWidget extends Composite {
 		
 		FlexTable reposGrid = new FlexTable();		
 		
-		panel.add(new HTML("<h4 class='searchHeader'>Ad-hoc Search</h4>"));
+		panel.add(new HTML("<h4 class='searchHeader'>Search Criteria</h4>"));
 		panel.add(new HTML("  "));
 
 		panel.add(reposGrid);
@@ -1231,8 +1231,8 @@ public class SearchWidget extends Composite {
 		}
 		
 		criteriaPanel.setWidth("100%");
-		criteriaPanel.add(new HTML("<h4 >Add Search Criteria</h4>")); // class='searchCriteriaGroup'
-		criteriaPanel.add(new HTML("  "));
+		// criteriaPanel.add(new HTML("<h4 >Add Search Criteria</h4>")); // class='searchCriteriaGroup'
+		// criteriaPanel.add(new HTML("  "));
 		
 		FlexTable queryMode = new FlexTable();
 		

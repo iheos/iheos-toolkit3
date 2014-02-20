@@ -71,7 +71,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 	private static final String CACHED_SESSION = "CACHED";
 	private static final String CONTAINER_VERSION = "2013-12-26";
 	private static final String CONTAINER_VERSION_ID = "VERSION";
-	private static final String BYPASS_VERSION = "BYPASS"; 
+	private static final String BYPASS_VERSION = "BYPASS";
+
 	
 	/* Use an upgrade script to update existing tables in case a newer version of TTT (new ArtRep API) runs against an older copy of the repositoryIndex table in the database */
 	/**
@@ -1549,8 +1550,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 				}
 			}
 					
+			// ResultSet rs = dbc.executeQuery("select * from (select repId,assetId,reposAcs,propFile,reposOrder,createdDate,row_number() over() as rownum from "+searchSession+")as tr where tr.rownum<="+ QueryParameters.MAX_RESULTS +" order by tr.reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?",tr."+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
+
 			ResultSet rs = dbc.executeQuery("select repId,assetId,reposAcs,propFile from "+searchSession+" order by reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?","+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
-						
 			
 			
     		List<AssetNode> assetList = popAssetNode(rs);

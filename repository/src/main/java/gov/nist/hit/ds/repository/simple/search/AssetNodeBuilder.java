@@ -47,9 +47,7 @@ public class AssetNodeBuilder {
 	}
 	
 	public List<AssetNode> build(Repository repos, String orderBy) throws RepositoryException {
-		
-		new DbIndexContainer().indexRep(repos);
-		
+			
 		List<AssetNode> topLevelAssets = new ArrayList<AssetNode>();
 	
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);

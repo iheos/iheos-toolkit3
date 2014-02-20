@@ -52,6 +52,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 	/**
 	 * 
 	 */
+	public static final int MAX_RESULTS = 500;
+	
 	private static final long serialVersionUID = 4939311135239253727L;
 	private static Logger logger = Logger.getLogger(PresentationData.class.getName());
 	
@@ -360,7 +362,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 			iter = new SearchResultIterator(reposList, sc );
 		
 			int recordCt = 0;
-			if (iter!=null && recordCt++ < 500) {// hard limit for now
+			if (iter!=null && recordCt++ <= MAX_RESULTS) { // hard limit for now
+				
 				while (iter.hasNextAsset()) {
 					gov.nist.hit.ds.repository.api.Asset aSrc = iter.nextAsset();
 					
