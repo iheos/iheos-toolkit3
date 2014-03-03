@@ -1,6 +1,6 @@
 package gov.nist.toolkit.testengine.transactions;
 
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.xdsexception.XdsException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
@@ -8,8 +8,8 @@ import org.apache.axiom.om.OMElement;
 
 public class NullTransaction extends BasicTransaction {
 
-	public NullTransaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
+	public NullTransaction() {
+        super();
 		defaultEndpointProcessing = false;
 		noMetadataProcessing = true;
 	}

@@ -1,6 +1,8 @@
-package gov.nist.toolkit.testengine;
+package gov.nist.toolkit.testengine.engine;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
+import gov.nist.toolkit.testengine.OmLogger;
+import gov.nist.toolkit.testengine.TestLogFactory;
 import gov.nist.toolkit.xdsexception.MetadataValidationException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
@@ -13,7 +15,7 @@ import javax.xml.namespace.QName;
 import org.apache.axiom.om.OMElement;
 
 public class BasicContext  {
-	BasicContext parent_context;
+	public BasicContext parent_context;
 	HashMap atts;
 	OmLogger testLog = new TestLogFactory().getLogger();
 	
@@ -41,11 +43,11 @@ public class BasicContext  {
 		return (String) getObj(attname);
 	}
 	
-	public PlanContext getPlan() {
+	public PlanContext planContext() {
 		if (this instanceof PlanContext) 
 			return (PlanContext) this;
 		if (parent_context != null)
-			return parent_context.getPlan();
+			return parent_context.planContext();
 		return null;
 	}
 	

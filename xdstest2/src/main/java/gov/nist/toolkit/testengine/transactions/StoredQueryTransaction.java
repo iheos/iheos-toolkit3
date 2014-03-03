@@ -2,7 +2,7 @@ package gov.nist.toolkit.testengine.transactions;
 
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.xdsexception.ExceptionUtil;
 import gov.nist.toolkit.xdsexception.XdsException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
@@ -23,8 +23,8 @@ public class StoredQueryTransaction extends QueryTransaction {
 	boolean is_xca = false;
 	boolean clean_params = false;
 
-	public StoredQueryTransaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
+	public StoredQueryTransaction() {
+		super();
 	}
 
 	public void run(OMElement request) throws XdsException {

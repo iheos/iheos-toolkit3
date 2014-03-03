@@ -3,14 +3,10 @@ package gov.nist.toolkit.testengine.transactions;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymetadata.MetadataParser;
-import gov.nist.toolkit.testengine.StepContext;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.xdsexception.ExceptionUtil;
 import gov.nist.toolkit.xdsexception.XdsException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.File;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axis2.AxisFault;
@@ -18,12 +14,14 @@ import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
 
+import java.io.File;
+
 public class SqlQueryTransaction extends QueryTransaction {
 	OMElement expected_contents = null;
 	OMElement metadata = null;
 
-	public SqlQueryTransaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
+	public SqlQueryTransaction() {
+		super();
 	}
 
 	protected void parseInstruction(OMElement part) throws XdsInternalException {

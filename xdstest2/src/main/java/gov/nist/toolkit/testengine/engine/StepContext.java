@@ -1,5 +1,6 @@
-package gov.nist.toolkit.testengine;
+package gov.nist.toolkit.testengine.engine;
 
+import gov.nist.toolkit.testengine.*;
 import gov.nist.toolkit.testengine.transactions.*;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
@@ -223,111 +224,98 @@ public class StepContext extends BasicContext implements ErrorReportingInterface
 				
 				instruction_output = testLog.add_simple_element(test_step_output, instruction_name);
 				instruction_output.addAttribute("step", step_id, null);
+
+                TransactionFactory factory = new TransactionFactory(this);
+                transaction = factory.build(instruction_name, instruction, instruction_output);
 				
-				if (instruction_name.equals("SqlQueryTransaction")) 
-				{
-					transaction = new SqlQueryTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("StoredQueryTransaction")) 
-				{
-					transaction = new StoredQueryTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("GenericSoap11Transaction")) 
-				{
-					transaction = new GenericSoap11Transaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("DsubSubscribeTransaction")) 
-				{
-					transaction = new DsubSubscribeTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("IGQTransaction")) 
-				{
-					transaction = new IGQTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("XCQTransaction")) 
-				{
-					transaction = new XCQTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("EpsosTransaction")) 
-				{
-					transaction = new EpsosTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("MPQTransaction")) 
-				{
-					transaction = new MPQTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("SimpleTransaction")) 
-				{
-					transaction = new SimpleTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("RetrieveTransaction")) 
-				{
-					transaction = new RetrieveTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("NullTransaction")) 
-				{
-					transaction = new NullTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("XCRTransaction"))
-				{
-					transaction = new RetrieveTransaction(this, instruction, instruction_output);
-					((RetrieveTransaction)transaction).setIsXca(true);
-				} 
-				else if (instruction_name.equals("IGRTransaction"))
-				{
-					transaction = new RetrieveTransaction(this, instruction, instruction_output);
-					((RetrieveTransaction)transaction).setIsXca(true);
-					((RetrieveTransaction)transaction).setUseIG(true);
-				} 
-				else if (instruction_name.equals("RegisterTransaction")) 
-				{
-					transaction = new RegisterTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("MuTransaction")) 
-				{
-					transaction = new MuTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("PublishTransaction")) 
-				{
-					transaction = new DsubPublishTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("MockTransaction")) 
-				{
-					transaction = new MockTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("ProvideAndRegisterTransaction")) 
-				{
-					transaction = new ProvideAndRegisterTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("XDRProvideAndRegisterTransaction")) 
-				{
-					transaction = new XDRProvideAndRegisterTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("EchoV2Transaction")) 
-				{
-					transaction = new EchoV2Transaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("EchoV3Transaction")) 
-				{
-					transaction = new EchoV3Transaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("XcpdTransaction")) 
-				{
-					transaction = new XcpdTransaction(this, instruction, instruction_output);
-				} 
-				else if (instruction_name.equals("DirectTransaction")) 
-				{
-					transaction = new DirectTransaction(this, instruction, instruction_output);
-				}
-                else if (instruction_name.equals("SocketTransaction"))
-                {
-                    transaction = new SocketTransaction(this, instruction, instruction_output);
-                }
-                else
-				{
-					dumpContextIntoOutput(test_step_output);
-					throw new XdsInternalException(ins_context.error("StepContext: Don't understand instruction named " + instruction_name));
-				}
+//				if (instruction_name.equals("StoredQueryTransaction"))
+//				{
+//					transaction = new StoredQueryTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("GenericSoap11Transaction"))
+//				{
+//					transaction = new GenericSoap11Transaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("IGQTransaction"))
+//				{
+//					transaction = new IGQTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("XCQTransaction"))
+//				{
+//					transaction = new XCQTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("MPQTransaction"))
+//				{
+//					transaction = new MPQTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("SimpleTransaction"))
+//				{
+//					transaction = new SimpleTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("RetrieveTransaction"))
+//				{
+//					transaction = new RetrieveTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("NullTransaction"))
+//				{
+//					transaction = new NullTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("XCRTransaction"))
+//				{
+//					transaction = new RetrieveTransaction(this, instruction, instruction_output);
+//					((RetrieveTransaction)transaction).setIsXca(true);
+//				}
+//				else if (instruction_name.equals("IGRTransaction"))
+//				{
+//					transaction = new RetrieveTransaction(this, instruction, instruction_output);
+//					((RetrieveTransaction)transaction).setIsXca(true);
+//					((RetrieveTransaction)transaction).setUseIG(true);
+//				}
+//				else if (instruction_name.equals("RegisterTransaction"))
+//				{
+//					transaction = new RegisterTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("MuTransaction"))
+//				{
+//					transaction = new MuTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("MockTransaction"))
+//				{
+//					transaction = new MockTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("ProvideAndRegisterTransaction"))
+//				{
+//					transaction = new ProvideAndRegisterTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("XDRProvideAndRegisterTransaction"))
+//				{
+//					transaction = new XDRProvideAndRegisterTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("EchoV2Transaction"))
+//				{
+//					transaction = new EchoV2Transaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("EchoV3Transaction"))
+//				{
+//					transaction = new EchoV3Transaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("XcpdTransaction"))
+//				{
+//					transaction = new XcpdTransaction(this, instruction, instruction_output);
+//				}
+//				else if (instruction_name.equals("DirectTransaction"))
+//				{
+//					transaction = new DirectTransaction(this, instruction, instruction_output);
+//				}
+//                else if (instruction_name.equals("SocketTransaction"))
+//                {
+//                    transaction = new SocketTransaction(this, instruction, instruction_output);
+//                }
+//                else
+//				{
+//					dumpContextIntoOutput(test_step_output);
+//					throw new XdsInternalException(ins_context.error("StepContext: Don't understand instruction named " + instruction_name));
+//				}
 
 				setTransaction(transaction);
 				transaction.setPlanContext(plan_context);

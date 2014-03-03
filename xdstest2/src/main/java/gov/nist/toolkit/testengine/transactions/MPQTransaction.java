@@ -1,14 +1,13 @@
 package gov.nist.toolkit.testengine.transactions;
 
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 
 import org.apache.axiom.om.OMElement;
 
 public class MPQTransaction extends StoredQueryTransaction {
 
-	public MPQTransaction(StepContext s_ctx, OMElement instruction,
-			OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
+	public MPQTransaction() {
+		super();
 	}
 
 	protected String getRequestAction() {

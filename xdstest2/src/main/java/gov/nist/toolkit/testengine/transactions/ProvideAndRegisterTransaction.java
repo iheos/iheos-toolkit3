@@ -5,7 +5,7 @@ import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymetadata.MetadataParser;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.soap.axis2.Swa;
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.valregmsg.service.SoapActionFactory;
@@ -42,8 +42,7 @@ public class ProvideAndRegisterTransaction extends RegisterTransaction {
 	boolean use_xop = true;
 	HashMap<String, String> document_id_filenames = new HashMap<String, String>();
 
-	public ProvideAndRegisterTransaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
+	public ProvideAndRegisterTransaction() {
 	}
 
 	protected  String getBasicTransactionName() {

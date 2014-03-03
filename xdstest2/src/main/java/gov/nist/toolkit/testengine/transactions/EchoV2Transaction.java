@@ -2,7 +2,7 @@ package gov.nist.toolkit.testengine.transactions;
 
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.registrymetadata.Metadata;
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.xdsexception.ExceptionUtil;
 import gov.nist.toolkit.xdsexception.MetadataException;
@@ -21,8 +21,7 @@ import org.apache.axis2.client.ServiceClient;
 
 public class EchoV2Transaction  extends BasicTransaction {
 	
-	public EchoV2Transaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
+	public EchoV2Transaction() {
 	}
 	public void run(OMElement metadata_element) 
 	throws XdsException {

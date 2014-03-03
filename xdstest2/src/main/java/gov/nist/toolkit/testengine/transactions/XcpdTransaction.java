@@ -1,7 +1,7 @@
 package gov.nist.toolkit.testengine.transactions;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.valregmsg.validation.schematron.ReportProcessor;
 import gov.nist.toolkit.valregmsg.validation.schematron.schematronValidation;
 import gov.nist.toolkit.xdsexception.MetadataException;
@@ -23,9 +23,8 @@ public class XcpdTransaction extends BasicTransaction {
 
 	boolean clean_params = true;
 	
-	public XcpdTransaction(StepContext s_ctx, OMElement instruction,
-			OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
+	public XcpdTransaction() {
+		super();
 	}
 
 	protected void run(OMElement request) throws Exception {

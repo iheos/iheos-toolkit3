@@ -15,10 +15,10 @@ import gov.nist.toolkit.testengine.ErrorReportingInterface;
 import gov.nist.toolkit.testengine.Linkage;
 import gov.nist.toolkit.testengine.OmLogger;
 import gov.nist.toolkit.testengine.PatientIdAllocator;
-import gov.nist.toolkit.testengine.PlanContext;
+import gov.nist.toolkit.testengine.engine.PlanContext;
 import gov.nist.toolkit.testengine.RegistryUtility;
 import gov.nist.toolkit.testengine.ReportManager;
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.testengine.TestConfig;
 import gov.nist.toolkit.testengine.TestLogFactory;
 import gov.nist.toolkit.testengine.TestMgmt;
@@ -55,11 +55,15 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axis2.AxisFault;
 import org.apache.log4j.Logger;
 
+/**
+ * All Transactions extend this class.
+ */
 public abstract class BasicTransaction  {
+    PlanContext planContext = null;
+    protected StepContext s_ctx;
+
 	protected OMElement instruction;
 	protected OMElement instruction_output;
-	PlanContext planContext = null;
-	protected StepContext s_ctx;
 	OmLogger testLog = new TestLogFactory().getLogger();
 
 	boolean step_failure = false;
@@ -93,8 +97,8 @@ public abstract class BasicTransaction  {
 	boolean useMtom;
 	boolean useAddressing;
 	boolean isSQ;
-	boolean noMetadataProcessing = false;  // example Retrieve request - no metadata to process
-	boolean defaultEndpointProcessing = true;
+	public boolean noMetadataProcessing = false;  // example Retrieve request - no metadata to process
+	public boolean defaultEndpointProcessing = true;
 
 	protected String repositoryUniqueId = null;
 	private final static Logger logger = Logger.getLogger(BasicTransaction.class);
@@ -327,11 +331,7 @@ public abstract class BasicTransaction  {
 		return "Unknown";
 	}
 
-
-	// to force sub-classes to use following constructor
-	private BasicTransaction() {  }
-
-	protected BasicTransaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
+	public void initialize(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
 		this.s_ctx = s_ctx;
 		this.instruction = instruction;
 		this.instruction_output = instruction_output;
@@ -344,7 +344,6 @@ public abstract class BasicTransaction  {
 		assertions = new ArrayList<OMElement>();
 		local_linkage_data = new HashMap<String, String>();
 		isSQ = false;
-
 	}
 
 	String xds_version_name() {
@@ -657,8 +656,8 @@ public abstract class BasicTransaction  {
 
 	protected void parseRepEndpoint(String repositoryUniqueId, boolean isSecure) throws Exception {
 		if (endpoint == null || endpoint.equals("")) {
-			if (s_ctx.getPlan().getRegistryEndpoint() != null) 
-				endpoint = s_ctx.getPlan().getRegistryEndpoint();
+			if (s_ctx.planContext().getRegistryEndpoint() != null)
+				endpoint = s_ctx.planContext().getRegistryEndpoint();
 			else {
 				try {
 					// check current site first before looking at all the rest
@@ -685,8 +684,8 @@ public abstract class BasicTransaction  {
 
 	protected void parseGatewayEndpoint(String home, boolean isSecure) throws Exception {
 		if (endpoint == null || endpoint.equals("")) {
-			if (s_ctx.getPlan().getRegistryEndpoint() != null) 
-				endpoint = s_ctx.getPlan().getRegistryEndpoint();
+			if (s_ctx.planContext().getRegistryEndpoint() != null)
+				endpoint = s_ctx.planContext().getRegistryEndpoint();
 			else
 				try {
 					endpoint = testConfig.site.getEndpoint(TransactionType.XC_RETRIEVE, isSecure, async);
@@ -701,8 +700,8 @@ public abstract class BasicTransaction  {
 
 	protected void parseIGREndpoint(String home, boolean isSecure) throws Exception {
 		if (endpoint == null || endpoint.equals("")) {
-			if (s_ctx.getPlan().getRegistryEndpoint() != null) 
-				endpoint = s_ctx.getPlan().getRegistryEndpoint();
+			if (s_ctx.planContext().getRegistryEndpoint() != null)
+				endpoint = s_ctx.planContext().getRegistryEndpoint();
 			else
 				try {
 					endpoint = testConfig.site.getEndpoint(TransactionType.IG_RETRIEVE, isSecure, async);
@@ -835,7 +834,7 @@ public abstract class BasicTransaction  {
 	}
 
 	//	public void compileExtraLinkage() throws XdsInternalException {
-	//		Map<String, String> externalLinkage = s_ctx.getPlan().getExtraLinkage();
+	//		Map<String, String> externalLinkage = s_ctx.planContext().getExtraLinkage();
 	//		if (externalLinkage != null) {
 	//			Linkage linkage = new Linkage(testConfig);
 	//			for (String key : externalLinkage.keySet()) {
@@ -846,7 +845,7 @@ public abstract class BasicTransaction  {
 	//	}
 
 	public void compileExtraLinkage(OMElement root) throws XdsInternalException {
-		Map<String, String> externalLinkage = s_ctx.getPlan().getExtraLinkage();
+		Map<String, String> externalLinkage = s_ctx.planContext().getExtraLinkage();
 		if (externalLinkage != null) {
 			Linkage linkage = new Linkage(testConfig);
 			for (String key : externalLinkage.keySet()) {

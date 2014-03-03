@@ -1,5 +1,7 @@
 package gov.nist.toolkit.testengine;
 
+import gov.nist.toolkit.testengine.engine.BasicContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.testengine.transactions.BasicTransaction;
 
 

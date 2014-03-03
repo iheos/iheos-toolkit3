@@ -6,7 +6,7 @@ import gov.nist.direct.logger.LogPathsSingleton;
 import gov.nist.direct.logger.MessageLogManager;
 import gov.nist.direct.utils.Utils;
 import gov.nist.toolkit.directsupport.SMTPException;
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.testengine.smtp.SMTPAddress;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.xdsexception.ExceptionUtil;
@@ -59,10 +59,7 @@ public class DirectTransaction extends BasicTransaction {
 		Security.addProvider(new BouncyCastleProvider()); 
 	} 
 
-	public DirectTransaction(StepContext s_ctx, OMElement instruction,
-			OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
-		// TODO Auto-generated constructor stub
+	public DirectTransaction() {
 	}
 
 	@Override

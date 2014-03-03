@@ -6,6 +6,7 @@ import gov.nist.toolkit.sitemanagement.CombinedSiteLoader;
 import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.soap.axis2.Soap;
+import gov.nist.toolkit.testengine.engine.PlanContext;
 import gov.nist.toolkit.testengine.logrepository.LogRepository;
 import gov.nist.toolkit.testengine.logrepository.LogRepositoryFactory;
 import gov.nist.toolkit.xdstest2logging.LogFileContent;
@@ -697,7 +698,7 @@ public class XdsTest {
 					logFiles.add(testConfig.logFile);
 				}
 				
-				PlanContext plan = new PlanContext();		
+				PlanContext plan = new PlanContext();
 				plan.setPreviousSectionLogs(testSpec.sectionLogMap);
 				plan.setTestConfig(testConfig);
 				plan.setCurrentSection(section);

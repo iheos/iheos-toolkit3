@@ -1,6 +1,5 @@
 package gov.nist.toolkit.testengine.test;
 
-import gov.nist.toolkit.testengine.StepContext;
 import gov.nist.toolkit.xdsexception.XdsException;
 import junit.framework.TestCase;
 
@@ -9,7 +8,7 @@ public class BasicTransactionTest extends TestCase {
 
 	public void testEndpoint() throws XdsException {
 
-		BasicTransactionWrapper b = new BasicTransactionWrapper(new StepContext(null), null, null);
+		BasicTransactionWrapper b = new BasicTransactionWrapper();
 
 		b.setEndpoint("http://localhost:9080/tf5/services/registryb");
 

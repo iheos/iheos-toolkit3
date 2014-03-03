@@ -6,7 +6,7 @@ import gov.nist.toolkit.testengine.Linkage;
 import gov.nist.toolkit.testengine.RetContext;
 import gov.nist.toolkit.testengine.RetInfo;
 import gov.nist.toolkit.testengine.RetrieveB;
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.io.Sha1Bean;
 import gov.nist.toolkit.utilities.xml.Util;
@@ -76,8 +76,7 @@ public class RetrieveTransaction extends BasicTransaction {
 	
 	public void setUseIG(boolean useIG) { this.useIG = useIG; }
 
-	public RetrieveTransaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
+	public RetrieveTransaction() {
 		defaultEndpointProcessing = false;
 		parse_metadata = false;
 		noMetadataProcessing = true;
@@ -133,8 +132,8 @@ public class RetrieveTransaction extends BasicTransaction {
 				}
 			}
 			
-			if (s_ctx.getPlan().getExtraLinkage() != null)
-				testLog.add_name_value(instruction_output, "TemplateParams", s_ctx.getPlan().getExtraLinkage());
+			if (s_ctx.planContext().getExtraLinkage() != null)
+				testLog.add_name_value(instruction_output, "TemplateParams", s_ctx.planContext().getExtraLinkage());
 			
 			if (clean_params)
 				cleanRetParams(request_ele);

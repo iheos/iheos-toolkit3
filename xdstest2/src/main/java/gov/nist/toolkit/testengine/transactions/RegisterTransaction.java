@@ -3,7 +3,7 @@ package gov.nist.toolkit.testengine.transactions;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymetadata.MetadataParser;
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.xdsexception.ExceptionUtil;
 import gov.nist.toolkit.xdsexception.XdsException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
@@ -12,10 +12,12 @@ import org.apache.axiom.om.OMElement;
 
 public class RegisterTransaction extends BasicTransaction {
 
-	public RegisterTransaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
-		//		this.xds_version = xds_version;
-	}
+    public RegisterTransaction() {}
+
+//	public RegisterTransaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
+//		super(s_ctx, instruction, instruction_output);
+//		//		this.xds_version = xds_version;
+//	}
 
 	String transactionName() {
 		if (async) return "r.as";

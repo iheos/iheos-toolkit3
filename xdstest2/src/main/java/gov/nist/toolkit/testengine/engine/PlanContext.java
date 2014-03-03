@@ -1,5 +1,8 @@
-package gov.nist.toolkit.testengine;
+package gov.nist.toolkit.testengine.engine;
 
+import gov.nist.toolkit.testengine.Linkage;
+import gov.nist.toolkit.testengine.TestConfig;
+import gov.nist.toolkit.testengine.TransactionSettings;
 import gov.nist.toolkit.testengine.transactions.BasicTransaction;
 import gov.nist.toolkit.xdstest2logging.LogFileContent;
 import gov.nist.toolkit.xdstest2logging.NotALogFileException;
@@ -24,7 +27,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
 
 public class PlanContext extends BasicContext {
-	OMElement results_document = null;
+	public OMElement results_document = null;
 	String defaultRegistryEndpoint = null;
 	Map<String, String> externalLinkage = null;
 	Map<String, Object> externalLinkage2 = null;  // for binary stuff like certificates
@@ -167,7 +170,7 @@ public class PlanContext extends BasicContext {
 		}
 	}
 
-	boolean run(File testplanFile)  throws Exception {
+	public boolean run(File testplanFile)  throws Exception {
 		if (testConfig.verbose)
 			System.out.println("Run section " + testplanFile);
 		try {

@@ -1,7 +1,7 @@
 package gov.nist.toolkit.testengine.transactions;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.xdsexception.MetadataException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
@@ -9,9 +9,8 @@ import org.apache.axiom.om.OMElement;
 
 public class MockTransaction extends BasicTransaction {
 
-	public MockTransaction(StepContext s_ctx, OMElement instruction,
-			OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
+	public MockTransaction() {
+		super();
 	}
 
 	 

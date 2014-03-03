@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.xdsexception.MetadataException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
@@ -21,9 +21,7 @@ public class SocketTransaction extends BasicTransaction {
     byte[] input;
     byte[] output;
 
-    public SocketTransaction(StepContext s_ctx, OMElement instruction,
-                             OMElement instruction_output) {
-        super(s_ctx, instruction, instruction_output);
+    public SocketTransaction() {
     }
 
     @Override

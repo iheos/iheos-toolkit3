@@ -2,7 +2,7 @@ package gov.nist.toolkit.testengine.transactions;
 
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryResponseParser;
-import gov.nist.toolkit.testengine.StepContext;
+import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
@@ -16,8 +16,7 @@ public class SimpleTransaction extends BasicTransaction {
 	OMElement metadata_ele = null;
 	String action = null;
 	
-	public SimpleTransaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
-		super(s_ctx, instruction, instruction_output);
+	public SimpleTransaction() {
 	}
 	
 	
