@@ -10,50 +10,26 @@ import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorListGenerator;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryResponseParser;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.soap.axis2.Soap;
-import gov.nist.toolkit.testengine.AssertionEngine;
-import gov.nist.toolkit.testengine.ErrorReportingInterface;
-import gov.nist.toolkit.testengine.Linkage;
-import gov.nist.toolkit.testengine.OmLogger;
-import gov.nist.toolkit.testengine.PatientIdAllocator;
+import gov.nist.toolkit.testengine.*;
 import gov.nist.toolkit.testengine.engine.PlanContext;
-import gov.nist.toolkit.testengine.RegistryUtility;
-import gov.nist.toolkit.testengine.ReportManager;
 import gov.nist.toolkit.testengine.engine.StepContext;
-import gov.nist.toolkit.testengine.TestConfig;
-import gov.nist.toolkit.testengine.TestLogFactory;
-import gov.nist.toolkit.testengine.TestMgmt;
-import gov.nist.toolkit.testengine.TransactionSettings;
-import gov.nist.toolkit.testengine.TransactionStatus;
-import gov.nist.toolkit.testengine.UseReportManager;
-import gov.nist.toolkit.testengine.Validator;
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
-import gov.nist.toolkit.xdstest2logging.NotALogFileException;
-import gov.nist.toolkit.xdstest2logging.SectionLogMap;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.valregmsg.service.SoapActionFactory;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.MetadataValidationException;
-import gov.nist.toolkit.xdsexception.NoMetadataException;
-import gov.nist.toolkit.xdsexception.SchemaValidationException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.namespace.QName;
-import javax.xml.parsers.FactoryConfigurationError;
-
+import gov.nist.toolkit.xdsexception.*;
+import gov.nist.toolkit.xdstest2logging.LogFileContent;
+import gov.nist.toolkit.xdstest2logging.NotALogFileException;
+import gov.nist.toolkit.xdstest2logging.SectionLogMap;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axis2.AxisFault;
 import org.apache.log4j.Logger;
+
+import javax.xml.namespace.QName;
+import javax.xml.parsers.FactoryConfigurationError;
+import java.io.File;
+import java.util.*;
 
 /**
  * All Transactions extend this class.
