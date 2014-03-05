@@ -1,0 +1,5 @@
+# simEvent
+
+keyword=simEvent
+domain=asset
+description=simEvent desc

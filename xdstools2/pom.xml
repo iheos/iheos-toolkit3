@@ -155,7 +155,6 @@
 	<build>
 		<!-- Generate compiled stuff in the folder used for developing mode -->
 		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
-
 		<plugins>
 
 			<!-- GWT Maven Plugin -->
@@ -222,6 +221,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
 
 </project>
