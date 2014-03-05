@@ -56,11 +56,6 @@
 			<artifactId>junit</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>bouncycastle</groupId>
-			<artifactId>bcprov-jdk15</artifactId>
-			<version>124</version>
-		</dependency>
-		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>actorfactory</artifactId>
 			<version>v2-maven-alpha</version>
