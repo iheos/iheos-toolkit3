@@ -2,13 +2,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>gov.nist.toolkit</groupId>
-		<artifactId>toolkit2</artifactId>
-		<version>v2-maven-alpha</version>
-	</parent>
+    <parent>
+        <groupId>gov.nist.toolkit</groupId>
+        <artifactId>toolkit2</artifactId>
+        <version>v2-maven-alpha</version>
+    </parent>
 
-	<artifactId>validators-registry-metadata</artifactId>
+		<groupId>gov.nist.toolkit</groupId>
+		<artifactId>validators-registry-metadata</artifactId>
+		<version>v2-maven-alpha</version>
 
 
 	<dependencies>
@@ -70,6 +72,7 @@
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
+		<version>2.0.0</version>
 		</dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

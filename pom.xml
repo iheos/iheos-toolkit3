@@ -39,7 +39,7 @@
 	<modules>
 		<module>actorfactory</module>
 		<module>actortransaction</module>
-<!--waiting to fix integration issue with tests 		<module>axis2SoapClient</module> -->
+		<!--waiting to fix integration issue with tests <module>axis2SoapClient</module> -->
 		<module>common</module>
 		<module>common-datatypes</module>
 		<module>direct</module>
@@ -54,12 +54,15 @@
 		<module>env-settings</module>
 		<module>error-recording</module>
 		<module>http</module>
+		<module>initialization</module>     <!-- v3 -->
 		<module>installation</module>
+		<module>logBrowser</module> 		<!-- v3 -->
 		<module>message-dispatch</module>
 		<module>message-validator-factory</module>
 		<module>registry-metadata</module>
 		<module>registry-msg-formats</module>
 		<module>registry-support</module>
+		<module>repository</module>         <!-- v3 -->
 		<module>rest</module>
 		<module>results</module>
 		<module>security-common</module>
@@ -73,6 +76,7 @@
 		<module>timer</module>
 		<module>tk</module>
 		<module>utilities</module>
+		<module>v3utilities</module>       <!-- v3 -->
 		<module>validators-ccda</module>
 		<module>validators-direct-factory</module>
 		<module>validators-registry-message</module>
@@ -85,8 +89,8 @@
 		<module>xdstest2-logging</module>
 		<module>xdstools2</module>
 		<module>soapClientAPI</module>
-        <module>ebrimIntegrationTest</module>
-    </modules>
+		<module>ebrimIntegrationTest</module>
+	</modules>
 
 	<distributionManagement>
 		<snapshotRepository>
@@ -125,22 +129,28 @@
 				<version>2.5.1</version>
 				<scope>provided</scope>
 			</dependency>
-
 		</dependencies>
-
 	</dependencyManagement>
 
-
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-	</dependencies>
-
+    <dependencies>
+     <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.11</version>
+     </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -174,7 +184,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
@@ -184,5 +194,41 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-compiler-plugin
+										</artifactId>
+										<versionRange>
+											[2.0,)
+										</versionRange>
+										<goals>
+											<goal>testCompile</goal>
+											<goal>compile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>

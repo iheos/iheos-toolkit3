@@ -49,4 +49,5 @@
 			<version>v2-maven-alpha</version>
 		</dependency>
 	</dependencies>
+
 </project>
