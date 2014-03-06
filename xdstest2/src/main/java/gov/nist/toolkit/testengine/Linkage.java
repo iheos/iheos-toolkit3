@@ -9,20 +9,14 @@ import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.xdsexception.ExceptionUtil;
 import gov.nist.toolkit.xdsexception.MetadataException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.namespace.QName;
-import javax.xml.parsers.FactoryConfigurationError;
-
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.xpath.AXIOMXPath;
+
+import javax.xml.namespace.QName;
+import javax.xml.parsers.FactoryConfigurationError;
+import java.io.File;
+import java.util.*;
 
 public class Linkage extends BasicLinkage {
 	OMElement instruction_output;
@@ -430,7 +424,7 @@ public class Linkage extends BasicLinkage {
 
 				} else {
 					if (file.contains("MGMT")) 
-						file = file.replaceFirst("MGMT", testConfig.testmgmt_dir);
+						file = file.replaceFirst("MGMT", testConfig.testmgmt_dir.toString());
 					OMElement root = Parse.parse_xml_file(file);
 					AXIOMXPath xpathExpression = new AXIOMXPath (xpath);
 					String result = xpathExpression.stringValueOf(root);

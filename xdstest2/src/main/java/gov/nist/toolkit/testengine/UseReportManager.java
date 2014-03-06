@@ -1,16 +1,14 @@
 package gov.nist.toolkit.testengine;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdstest2logging.*;
+import gov.nist.toolkit.testengine.logging.*;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.axiom.om.OMElement;
 
+import javax.xml.namespace.QName;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.namespace.QName;
-
-import org.apache.axiom.om.OMElement;
 
 public class UseReportManager  {
 	List<UseReport> useReports;
@@ -48,7 +46,7 @@ public class UseReportManager  {
 			tspec.setLogDir(config.logRepository.logDir());
 			File testlogFile = tspec.getTestLog(test, section);
 			if (testlogFile != null)
-				priorTests.put((section.equals("") ? "None" : section), new LogFileContent(testlogFile));
+				priorTests.put((section.equals("") ? "None" : section), new TestSectionLogContent(testlogFile));
 		}
 	}
 	
@@ -135,7 +133,7 @@ public class UseReportManager  {
 
 	public void resolve(SectionLogMap previousLogs) throws XdsInternalException {
 		for (UseReport ur : useReports) {
-			LogFileContent log = previousLogs.get(ur.section);
+			TestSectionLogContent log = previousLogs.get(ur.section);
 			if (log == null) 
 				log = priorTests.get(ur.section);
 			if (log == null)

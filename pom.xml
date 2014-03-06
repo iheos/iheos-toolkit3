@@ -84,10 +84,11 @@
 		<module>xds-exceptions</module>
 		<module>xdstest-gui</module>
 		<module>xdstest2</module>
-		<module>xdstest2-logging</module>
+<!--		<module>xdstest2-logging</module>   -->
 		<module>xdstools2</module>
 		<module>soapClientAPI</module>
         <module>ebrimIntegrationTest</module>
+        <module>soapAPI</module>
     </modules>
 
 	<distributionManagement>

@@ -1,7 +1,7 @@
 package gov.nist.toolkit.testengine.logrepository;
 
 import gov.nist.toolkit.results.client.XdstestLogId;
-import gov.nist.toolkit.testengine.LogMap;
+import gov.nist.toolkit.testengine.logging.LogMap;
 import gov.nist.toolkit.xdsexception.XdsException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
@@ -18,7 +18,7 @@ public class JavaSerializationIO implements ILoggerIO  {
 	Logger logger = Logger.getLogger(JavaSerializationIO.class);
 
 	/* (non-Javadoc)
-	 * @see gov.nist.toolkit.testengine.logrepository.ILoggerIO#logOut(gov.nist.toolkit.results.client.XdstestLogId, gov.nist.toolkit.testengine.LogMap, java.io.File)
+	 * @see gov.nist.toolkit.testengine.logrepository.ILoggerIO#logOut(gov.nist.toolkit.results.client.XdstestLogId, gov.nist.toolkit.testengine.logging.LogMap, java.io.File)
 	 */
 	 
 	public void logOut(XdstestLogId id, LogMap log, File logDir) throws XdsException {

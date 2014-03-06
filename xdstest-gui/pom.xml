@@ -33,10 +33,12 @@
 			<artifactId>utilities</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
+<!--
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>xdstest2-logging</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
+-->
   </dependencies>
 </project>

@@ -11,29 +11,18 @@ import gov.nist.toolkit.registrymetadata.UuidAllocator;
 import gov.nist.toolkit.registrymetadata.client.Document;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.results.ResultBuilder;
-import gov.nist.toolkit.results.client.AssertionResult;
-import gov.nist.toolkit.results.client.AssertionResults;
-import gov.nist.toolkit.results.client.CodesConfiguration;
-import gov.nist.toolkit.results.client.CodesResult;
-import gov.nist.toolkit.results.client.MetadataToMetadataCollectionParser;
-import gov.nist.toolkit.results.client.Result;
-import gov.nist.toolkit.results.client.SiteSpec;
-import gov.nist.toolkit.results.client.StepResult;
-import gov.nist.toolkit.results.client.TestLogs;
-import gov.nist.toolkit.results.client.XdstestLogId;
+import gov.nist.toolkit.results.client.*;
 import gov.nist.toolkit.session.server.CodesConfigurationBuilder;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.session.server.TestSessionNotSelectedException;
 import gov.nist.toolkit.session.server.services.TestLogCache;
 import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
-import gov.nist.toolkit.testengine.LogMap;
-import gov.nist.toolkit.testengine.ResultPersistence;
-import gov.nist.toolkit.testengine.RetInfo;
-import gov.nist.toolkit.testengine.RetrieveB;
-import gov.nist.toolkit.testengine.TestLogsBuilder;
-import gov.nist.toolkit.testengine.TransactionSettings;
-import gov.nist.toolkit.testengine.Xdstest2;
+import gov.nist.toolkit.testengine.*;
+import gov.nist.toolkit.testengine.logging.TestSectionLogContent;
+import gov.nist.toolkit.testengine.logging.LogMap;
+import gov.nist.toolkit.testengine.logging.TestDetails;
+import gov.nist.toolkit.testengine.logging.TestStepLogContent;
 import gov.nist.toolkit.testengine.logrepository.LogRepositoryFactory;
 import gov.nist.toolkit.testkitutilities.TestDefinition;
 import gov.nist.toolkit.testkitutilities.TestKit;
@@ -42,22 +31,13 @@ import gov.nist.toolkit.utilities.xml.OMFormatter;
 import gov.nist.toolkit.xdsexception.EnvironmentNotSelectedException;
 import gov.nist.toolkit.xdsexception.ExceptionUtil;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
-import gov.nist.toolkit.xdstest2logging.TestDetails;
-import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.parsers.FactoryConfigurationError;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
+
+import javax.xml.parsers.FactoryConfigurationError;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class XdsTestServiceManager extends CommonServiceManager {
 	CodesConfiguration codesConfiguration = null;
@@ -503,7 +483,7 @@ public class XdsTestServiceManager extends CommonServiceManager {
 		testDetailsList.add(testDetails);
 
 		for (String section : lm.getLogFileContentMap().keySet()) {
-			LogFileContent ll = lm.getLogFileContentMap().get(section);
+			TestSectionLogContent ll = lm.getLogFileContentMap().get(section);
 			testDetails.addTestPlanLog(section, ll);
 		}
 
@@ -547,7 +527,7 @@ public class XdsTestServiceManager extends CommonServiceManager {
 		if (sectionNames.size() == 0) {
 			for (File f : testDir.listFiles()) {
 				if (f.isFile() && f.getName().equals("log.xml")) {
-					LogFileContent ll = new LogFileContent(f);
+					TestSectionLogContent ll = new TestSectionLogContent(f);
 					lm.add(f.getName(), ll);
 				} 
 			}
@@ -555,7 +535,7 @@ public class XdsTestServiceManager extends CommonServiceManager {
 		} else {
 			for (String sectionName : sectionNames ) {
 				File lfx = new File(testDir + File.separator + sectionName + File.separator + "log.xml");
-				LogFileContent ll = new LogFileContent(lfx);
+				TestSectionLogContent ll = new TestSectionLogContent(lfx);
 				lm.add(sectionName, ll);
 			}
 		}
@@ -603,26 +583,6 @@ public class XdsTestServiceManager extends CommonServiceManager {
 		}
 	}
 
-	//	Result mkResult(Throwable t) {
-	//		Result r = mkResult();
-	//		r.addAssertion(ExceptionUtil.exception_details(t), false);
-	//		return r;
-	//	}
-
-	//	Result mkResult() {
-	//		Result r = new Result();
-	//		Calendar calendar = Calendar.getInstance();
-	//		r.timestamp = calendar.getTime().toString();
-	//
-	//		return r;
-	//	}
-
-	//	Result mkResult(XdstestLogId id) {
-	//		Result result = mkResult();
-	//		result.logId = id;
-	//		return result;
-	//	}
-
 	XdstestLogId newTestLogId() {
 		return new XdstestLogId(UuidAllocator.allocate().replaceAll(":", "_"));
 	}
@@ -636,27 +596,12 @@ public class XdsTestServiceManager extends CommonServiceManager {
 		}
 		Result result = ResultBuilder.RESULT(label);
 		result.logId = logId;
-		//		Result result = mkResult(logId);
-
-		//		// Also save the log file organized by sessionID, siteName, testNumber
-		//		// This allows xdstest2 to use sessionID/siteNae dir as the LOGDIR
-		//		// for referencing old log file. May also lead to downloadable log files
-		//		// for Pre-Connectathon test results
-		//		
-		//		SessionCache sc = new SessionCache(s, getTestLogCache());
-		//		for (LogMapItem item : lm.items) {
-		//			sc.addLogFile(item.log);
-		//			
-		//		}
-
-		// load metadata results into Result
-		//		List<TestSpec> testSpecs = s.xt.getTestSpecs();
 		if (testSpecs != null) {
 			for (TestDetails testSpec : testSpecs) {
 				for (String section : testSpec.sectionLogMap.keySet()) {
 					if (section.equals("THIS"))
 						continue;
-					LogFileContent testlog = testSpec.sectionLogMap.get(section);
+					TestSectionLogContent testlog = testSpec.sectionLogMap.get(section);
 					for (int i = 0; i < testlog.size(); i++) {
 						StepResult stepResult = new StepResult();
 						boolean stepPass = false;

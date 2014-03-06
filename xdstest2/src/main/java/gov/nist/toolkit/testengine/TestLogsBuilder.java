@@ -2,8 +2,10 @@ package gov.nist.toolkit.testengine;
 
 import gov.nist.toolkit.results.client.TestLog;
 import gov.nist.toolkit.results.client.TestLogs;
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
-import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
+import gov.nist.toolkit.testengine.logging.TestSectionLogContent;
+import gov.nist.toolkit.testengine.logging.LogMap;
+import gov.nist.toolkit.testengine.logging.LogMapItem;
+import gov.nist.toolkit.testengine.logging.TestStepLogContent;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class TestLogsBuilder {
 		TestLogs logs = new TestLogs();
 		
 		for (LogMapItem item : logMap.getItems()) {
-			LogFileContent logFile = item.log;
+			TestSectionLogContent logFile = item.log;
 			for (TestStepLogContent stepLog : logFile.getStepLogs()) {
 				TestLog testLog = new TestLog();
 				String stepName = stepLog.getName();

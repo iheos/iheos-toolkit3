@@ -3,21 +3,19 @@ package gov.nist.toolkit.testengine;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.axiom.om.OMAttribute;
+import org.apache.axiom.om.OMElement;
 
+import javax.xml.namespace.QName;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.xml.namespace.QName;
-
-import org.apache.axiom.om.OMAttribute;
-import org.apache.axiom.om.OMElement;
 
 
 public abstract class IdAllocator {
 	TestConfig testConfig;
 
-	String mgmt_dir; 
+	File mgmt_dir;
 	File patientIdFile;
 	File altPatientIdFile;
 	protected File uniqueIdBaseFile;
@@ -34,12 +32,12 @@ public abstract class IdAllocator {
 	
 	public IdAllocator(TestConfig config) {
 		testConfig = config;
-		mgmt_dir = testConfig.testmgmt_dir; 
-		patientIdFile = new File(mgmt_dir +  File.separator + "patientid.txt");
-		altPatientIdFile = new File(mgmt_dir +  File.separator + "patientid_alt.txt");
-		uniqueIdBaseFile = new File(mgmt_dir +  File.separator + "uniqueid_base.txt");
-		uniqueIdIncrFile = new File(mgmt_dir +  File.separator + "uniqueid_incr.txt");
-		sourceIdFile = new File(mgmt_dir +  File.separator + "sourceid.txt");
+		mgmt_dir = testConfig.testmgmt_dir;
+		patientIdFile = new File(mgmt_dir, "patientid.txt");
+		altPatientIdFile = new File(mgmt_dir, "patientid_alt.txt");
+		uniqueIdBaseFile = new File(mgmt_dir, "uniqueid_base.txt");
+		uniqueIdIncrFile = new File(mgmt_dir, "uniqueid_incr.txt");
+		sourceIdFile = new File(mgmt_dir, "sourceid.txt");
 	}
 	
 	public String assign(Metadata metadata, String object_type, String external_identifier_uuid, HashMap<String, String> assignments, String no_assign_uid_to) 

@@ -5,13 +5,14 @@ import gov.nist.toolkit.securityCommon.SecurityParams;
 import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.testengine.errormgr.AssertionResults;
+import gov.nist.toolkit.testengine.logging.*;
 import gov.nist.toolkit.testengine.logrepository.LogRepository;
 import gov.nist.toolkit.xdsexception.EnvironmentNotSelectedException;
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
-import gov.nist.toolkit.xdstest2logging.StepGoals;
-import gov.nist.toolkit.xdstest2logging.TestDetails;
-import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
+import org.apache.log4j.Logger;
 
+import javax.net.ssl.*;
+import javax.security.cert.CertificateException;
+import javax.security.cert.X509Certificate;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,17 +21,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import javax.security.cert.CertificateException;
-import javax.security.cert.X509Certificate;
-
-import org.apache.log4j.Logger;
 
 /***
  * API for XDSTest test engine
@@ -63,7 +53,7 @@ public class Xdstest2 {
 		this.toolkitDir = toolkitDir;
 		xt = new XdsTest();
 		xt.setToolkit(toolkitDir);
-		setTestkitLocation(new File(toolkitDir + File.separator + "testkit"));
+		setTestkitLocation(new File(toolkitDir, "testkit"));
 		xt.loadTestKitVersion();
 		this.tki = tki;
 		initSecurity(toolkitDir);
@@ -262,6 +252,8 @@ public class Xdstest2 {
 		this.site = site;
 	}
 
+    public void setTestConfig(TestConfig tc) { xt.testConfig = tc; }
+
 	/**
 	 * Install site collection, usually from actors.xml
 	 * This is needed when site is later specified by name.  Each site knows its own name.
@@ -357,7 +349,7 @@ public class Xdstest2 {
 			for (String section : sections) {
 				if (section.equals("THIS"))
 					continue;
-				LogFileContent testLog = testSpec.getTestPlanLogs().get(section);
+				TestSectionLogContent testLog = testSpec.getTestPlanLogs().get(section);
 				if (testLog == null) {
 					// this section failed - report it and continue;
 					res.add("Section: " + section);
@@ -443,7 +435,7 @@ public class Xdstest2 {
 
 		for (TestDetails testSpec : testDetails) {
 			for (String section : testSpec.getTestPlanLogs().keySet()) {
-				LogFileContent testLog = testSpec.getTestPlanLogs().get(section);
+				TestSectionLogContent testLog = testSpec.getTestPlanLogs().get(section);
 				if (testLog == null) {
 					if (section.equals("THIS"))
 						continue;

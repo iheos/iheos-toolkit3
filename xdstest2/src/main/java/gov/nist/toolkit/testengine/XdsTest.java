@@ -7,28 +7,21 @@ import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.soap.axis2.Soap;
 import gov.nist.toolkit.testengine.engine.PlanContext;
+import gov.nist.toolkit.testengine.logging.TestSectionLogContent;
+import gov.nist.toolkit.testengine.logging.TestDetails;
+import gov.nist.toolkit.testengine.logging.TestStepLogContent;
 import gov.nist.toolkit.testengine.logrepository.LogRepository;
 import gov.nist.toolkit.testengine.logrepository.LogRepositoryFactory;
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
-import gov.nist.toolkit.xdstest2logging.TestDetails;
-import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.xdsexception.ExceptionUtil;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 import gov.nist.toolkit.xdsexception.XdsParameterException;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import org.apache.log4j.Logger;
 
 import javax.xml.parsers.FactoryConfigurationError;
-
-import org.apache.log4j.Logger;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 
 public class XdsTest {
@@ -208,8 +201,7 @@ public class XdsTest {
 		version = Io.stringFromFile(new File(toolkit + "/admin/version")).trim();
 		testConfig.version = version;
 
-		mgmt = toolkit + File.separator + "xdstest";
-		testConfig.testmgmt_dir = mgmt;
+		testConfig.testmgmt_dir = new File(toolkit, "xdstest");
 
 		loadTestKitVersion();
 		
@@ -237,7 +229,7 @@ public class XdsTest {
 	}
 
 	void loadTestKitVersion() throws Exception {
-		File toolkitVersionFile = new File(toolkit + File.separator + "admin" + File.separator + "version");
+		File toolkitVersionFile = new File(new File(toolkit, "admin"), "version");
 		if (!toolkitVersionFile.exists())
 			throw new Exception("Invalid toolkit (" + toolkit + ") - no admin/version file");
 		testConfig.testkitVersion = Io.stringFromFile(toolkitVersionFile).trim().replaceAll(" ", "_");
@@ -371,8 +363,12 @@ public class XdsTest {
 		testConfig.configHome = (site != null) ? site.getHome() : "";
 		testConfig.trace = showExceptionTrace;
 		testConfig.prepare_only = prepareOnly;
-		if (testConfig.soap == null)
+		if (testConfig.soap == null) {
+            logger.debug("Default Soap module used");
 			testConfig.soap = new Soap();
+        } else {
+            logger.debug("Custom Soap module used");
+        }
 
 		testConfig.pid_allocate_endpoint = (site != null) ? site.getPidAllocateURI() : null;
 
@@ -381,7 +377,7 @@ public class XdsTest {
 
 	private void showResponse() throws FactoryConfigurationError, Exception {
 		for (File logFile : logFiles) {
-			LogFileContent log = new LogFileContent(logFile);
+			TestSectionLogContent log = new TestSectionLogContent(logFile);
 			StringBuffer buf = new StringBuffer();
 			for (int i=0; i<log.size(); i++) {
 				TestStepLogContent tslog = log.getTestStepLog(i);
@@ -399,9 +395,9 @@ public class XdsTest {
 		StringBuffer buf = new StringBuffer();
 		buf.append("*******************   Error Summary  *******************\n");
 		for (File logFile : logFiles) {
-			LogFileContent log;
+			TestSectionLogContent log;
 			try {
-				log = new LogFileContent(logFile);
+				log = new TestSectionLogContent(logFile);
 			} 
 			catch (Exception e) {
 				buf.append("Error: " + e.getMessage() );
@@ -444,7 +440,7 @@ public class XdsTest {
 		System.out.println(buf);
 	}
 
-	private void addAssertionErrors(StringBuffer buf, LogFileContent log,
+	private void addAssertionErrors(StringBuffer buf, TestSectionLogContent log,
 			int stepIndex) {
 		List<String> assertionErrors = null;
 		try {
@@ -463,7 +459,7 @@ public class XdsTest {
 		}
 	}
 
-	private void addSoapFaults(StringBuffer buf, LogFileContent log,
+	private void addSoapFaults(StringBuffer buf, TestSectionLogContent log,
 			int stepIndex) {
 		List<String> soapFaults = null;
 		try {
@@ -484,7 +480,7 @@ public class XdsTest {
 	}
 
 	private void addRegistryResponseErrors(StringBuffer buf,
-			LogFileContent log, int stepIndex, String stepName) {
+			TestSectionLogContent log, int stepIndex, String stepName) {
 		RegistryResponseLog rr;
 		try {
 			rr = log.getUnexpectedErrors(stepIndex);
@@ -709,7 +705,7 @@ public class XdsTest {
 				plan.setTransactionSettings(ts);
 
 				boolean status =  plan.run(testPlanFile);
-				testSpec.addTestPlanLog(section, new LogFileContent(plan.results_document));
+				testSpec.addTestPlanLog(section, new TestSectionLogContent(plan.results_document));
 
 				if (status) 
 					System.out.println("\t\t...Pass");
@@ -950,11 +946,9 @@ public class XdsTest {
 
 	public void setToolkit(File toolkit) throws IOException {
 		this.toolkit = toolkit;
-		mgmt = toolkit + File.separator + "xdstest";
 		logRepository = //new TestLogRepository(null);
 		new LogRepositoryFactory().getRepository(Installation.installation().testLogFile(), null, LogRepositoryFactory.IO_format.JAVA_SERIALIZATION, LogRepositoryFactory.Id_type.TIME_ID, null);
-//		logRepository = new File(toolkit + File.separator + "logs");
-		testConfig.testmgmt_dir = mgmt;
+		testConfig.testmgmt_dir = new File(toolkit, "xdstest");
 	}
 
 	String bpeek() throws XdsParameterException { haveArg("bpeak() failed - list empty"); return bargs.get(bargs.size()-1);  }

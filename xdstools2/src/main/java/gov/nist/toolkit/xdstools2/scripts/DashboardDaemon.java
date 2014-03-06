@@ -11,12 +11,12 @@ import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.sitemanagement.SeparateSiteLoader;
 import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
-import gov.nist.toolkit.testengine.LogMap;
-import gov.nist.toolkit.testengine.LogMapItem;
+import gov.nist.toolkit.testengine.logging.LogMap;
+import gov.nist.toolkit.testengine.logging.LogMapItem;
 import gov.nist.toolkit.testengine.TransactionSettings;
 import gov.nist.toolkit.testengine.Xdstest2;
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
-import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
+import gov.nist.toolkit.testengine.logging.TestSectionLogContent;
+import gov.nist.toolkit.testengine.logging.TestStepLogContent;
 import gov.nist.toolkit.xdstools2.client.RegistryStatus;
 import gov.nist.toolkit.xdstools2.client.RepositoryStatus;
 
@@ -174,7 +174,7 @@ public class DashboardDaemon {
 				continue;
 			}
 			LogMapItem item = logMap.getItems().get(0);
-			LogFileContent logFile = item.log;
+			TestSectionLogContent logFile = item.log;
 			List<TestStepLogContent> testStepLogs;
 			try {
 				testStepLogs = logFile.getStepLogs();
@@ -300,7 +300,7 @@ public class DashboardDaemon {
 				continue;
 			}
 			LogMapItem item = logMap.getItems().get(0);
-			LogFileContent logFile = item.log;
+			TestSectionLogContent logFile = item.log;
 			List<TestStepLogContent> testStepLogs;
 			try {
 				testStepLogs = logFile.getStepLogs();

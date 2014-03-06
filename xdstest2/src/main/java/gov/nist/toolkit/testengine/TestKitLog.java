@@ -2,7 +2,7 @@ package gov.nist.toolkit.testengine;
 
 
 
-import gov.nist.toolkit.xdstest2logging.TestDetails;
+import gov.nist.toolkit.testengine.logging.TestDetails;
 
 import java.io.File;
 import java.util.regex.Matcher;

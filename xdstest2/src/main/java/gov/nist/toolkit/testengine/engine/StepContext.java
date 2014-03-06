@@ -1,17 +1,15 @@
 package gov.nist.toolkit.testengine.engine;
 
 import gov.nist.toolkit.testengine.*;
-import gov.nist.toolkit.testengine.transactions.*;
+import gov.nist.toolkit.testengine.transactions.BasicTransaction;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.FileNotFoundException;
-import java.util.Iterator;
-
-import javax.xml.namespace.QName;
-
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;
+
+import javax.xml.namespace.QName;
+import java.io.FileNotFoundException;
+import java.util.Iterator;
 
 public class StepContext extends BasicContext implements ErrorReportingInterface {
 	OMElement output = null;

@@ -1,7 +1,7 @@
 package gov.nist.toolkit.testengine.test;
 
 import gov.nist.toolkit.testengine.TestCollection;
-import gov.nist.toolkit.xdstest2logging.TestDetails;
+import gov.nist.toolkit.testengine.logging.TestDetails;
 import gov.nist.toolkit.xdsexception.ExceptionUtil;
 
 import java.io.File;

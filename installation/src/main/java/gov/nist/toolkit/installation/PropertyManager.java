@@ -1,17 +1,12 @@
 package gov.nist.toolkit.installation;
 
 import gov.nist.toolkit.utilities.io.Io;
+import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import org.apache.log4j.Logger;
 
 public class PropertyManager {
 
@@ -151,7 +146,8 @@ public class PropertyManager {
 			return;
 		toolkitProperties = new Properties();
 		try {
-			toolkitProperties.load(new FileInputStream(propFile));
+            toolkitProperties.load(getClass().getClassLoader().getResourceAsStream("toolkit.properties"));
+//			toolkitProperties.load(new FileInputStream(propFile));
 
 		} catch (Exception e) {
             throw new RuntimeException(e);

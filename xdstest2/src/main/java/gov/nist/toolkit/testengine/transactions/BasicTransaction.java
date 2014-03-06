@@ -10,16 +10,17 @@ import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorListGenerator;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryResponseParser;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.soap.axis2.Soap;
+import gov.nist.toolkit.soapAPI.axis2.SoapInterface;
 import gov.nist.toolkit.testengine.*;
 import gov.nist.toolkit.testengine.engine.PlanContext;
 import gov.nist.toolkit.testengine.engine.StepContext;
+import gov.nist.toolkit.testengine.logging.NotALogFileException;
+import gov.nist.toolkit.testengine.logging.SectionLogMap;
+import gov.nist.toolkit.testengine.logging.TestSectionLogContent;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.valregmsg.service.SoapActionFactory;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.xdsexception.*;
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
-import gov.nist.toolkit.xdstest2logging.NotALogFileException;
-import gov.nist.toolkit.xdstest2logging.SectionLogMap;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
@@ -79,7 +80,7 @@ public abstract class BasicTransaction  {
 	protected String repositoryUniqueId = null;
 	private final static Logger logger = Logger.getLogger(BasicTransaction.class);
 	Map<String, String> nameUuidMap = null;
-	private Soap soap;
+	private SoapInterface soap;
 
 	//	Metadata metadata = null;
 	OMElement request_element;
@@ -220,7 +221,7 @@ public abstract class BasicTransaction  {
 			SectionLogMap sectionLogs = getPlan().getPreviousSectionLogs();
 			// add in current section log so we can reference ourself
 			try {
-				sectionLogs.put("THIS", new LogFileContent(getPlan().getLog(), true /* incomplete is ok */));
+				sectionLogs.put("THIS", new TestSectionLogContent(getPlan().getLog(), true /* incomplete is ok */));
 			} catch (NotALogFileException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
@@ -261,41 +262,41 @@ public abstract class BasicTransaction  {
 		linkage.apply(metadata);
 	}
 
-	public String toString() {
-		String exceptionString = "";
-
-		try {
-			throw new Exception("foo");
-		} catch (Exception e) { exceptionString = ExceptionUtil.exception_local_stack(e); }
-		return new StringBuffer()
-		.append("Called From:\n")
-		.append(exceptionString)
-		.append("Step = ").append(s_ctx.getId()).append("\n")
-		.append("transaction = ").append(this.getClass().getName()).append("\n")
-		.append("step_failure = ").append(step_failure).append("\n")
-		.append("parse_metadata = ").append(parse_metadata).append("\n")
-		.append("xds_version = ").append(xdsVersionName()).append("\n")
-		.append("use_id = ").append((use_id == null) ? null : use_id.toString())
-		.append("use_xpath = ").append((use_xpath == null) ? null : use_xpath.toString())
-		.append("use_object_ref = ").append((use_object_ref == null) ? null : use_object_ref.toString())
-		.append("use_repository_unique_id = ").append((use_repository_unique_id == null) ? null : use_repository_unique_id.toString())
-		.append("data_refs = ").append((data_refs == null) ? null : data_refs.toString())
-		.append("assertions = ").append((assertions == null) ? null : assertions.toString())
-		.append("endpoint = ").append(endpoint).append("\n")
-		.append("linkage = ").append((local_linkage_data == null) ? null : local_linkage_data.toString())
-		.append("metadata_filename = ").append(metadata_filename).append("\n")
-		.append("assign_uuids = ").append(assign_uuids).append("\n")
-		.append("assign_uids = ").append(assign_uids).append("\n")
-		.append("no_assign_uid_to = ").append(no_assign_uid_to).append("\n")
-		.append("assign_patient_id = ").append(assign_patient_id).append("\n")
-		.append("soap_1_2 = ").append(soap_1_2).append("\n")
-		.append("repositoryUniqueId = ").append(repositoryUniqueId).append("\n")
-		.append("nameUuidMap = ").append(nameUuidMap).append("\n")
-
-		.toString();
-
-
-	}
+//	public String toString() {
+//		String exceptionString = "";
+//
+//		try {
+//			throw new Exception("foo");
+//		} catch (Exception e) { exceptionString = ExceptionUtil.exception_local_stack(e); }
+//		return new StringBuffer()
+//		.append("Called From:\n")
+//		.append(exceptionString)
+//		.append("Step = ").append(s_ctx.getId()).append("\n")
+//		.append("transaction = ").append(this.getClass().getName()).append("\n")
+//		.append("step_failure = ").append(step_failure).append("\n")
+//		.append("parse_metadata = ").append(parse_metadata).append("\n")
+//		.append("xds_version = ").append(xdsVersionName()).append("\n")
+//		.append("use_id = ").append((use_id == null) ? null : use_id.toString())
+//		.append("use_xpath = ").append((use_xpath == null) ? null : use_xpath.toString())
+//		.append("use_object_ref = ").append((use_object_ref == null) ? null : use_object_ref.toString())
+//		.append("use_repository_unique_id = ").append((use_repository_unique_id == null) ? null : use_repository_unique_id.toString())
+//		.append("data_refs = ").append((data_refs == null) ? null : data_refs.toString())
+//		.append("assertions = ").append((assertions == null) ? null : assertions.toString())
+//		.append("endpoint = ").append(endpoint).append("\n")
+//		.append("linkage = ").append((local_linkage_data == null) ? null : local_linkage_data.toString())
+//		.append("metadata_filename = ").append(metadata_filename).append("\n")
+//		.append("assign_uuids = ").append(assign_uuids).append("\n")
+//		.append("assign_uids = ").append(assign_uids).append("\n")
+//		.append("no_assign_uid_to = ").append(no_assign_uid_to).append("\n")
+//		.append("assign_patient_id = ").append(assign_patient_id).append("\n")
+//		.append("soap_1_2 = ").append(soap_1_2).append("\n")
+//		.append("repositoryUniqueId = ").append(repositoryUniqueId).append("\n")
+//		.append("nameUuidMap = ").append(nameUuidMap).append("\n")
+//
+//		.toString();
+//
+//
+//	}
 
 	public String xdsVersionName() {
 		if (xds_version == BasicTransaction.xds_none)
@@ -531,11 +532,11 @@ public abstract class BasicTransaction  {
 
 
 	void print_step_history(OMElement this_instruction_output) {
-		System.out.println("Step History:");
+		logger.debug("Step History:");
 		OMElement step_output = (OMElement) this_instruction_output.getParent();
 		while (step_output != null) {
 			String id = step_output.getAttributeValue(new QName("id"));
-			System.out.println("id = " + id);
+            logger.debug("id = " + id);
 			step_output = (OMElement) step_output.getPreviousOMSibling();
 		}
 	}
@@ -605,7 +606,7 @@ public abstract class BasicTransaction  {
 		endpoint = this.s_ctx.getRegistryEndpoint();   // this is busted, always returns null
 		if (endpoint == null || endpoint.equals("") || testConfig.endpointOverride) {			//boolean async = false;
 			if (testConfig.verbose)
-				System.out.println("endpoint coming from actors.xml");
+                logger.debug("endpoint coming from actors.xml");
 			if (trans.getCode().endsWith(".as")) { 
 				xds_version = xds_b;
 			}
@@ -627,7 +628,7 @@ public abstract class BasicTransaction  {
 	}
 
 	void showEndpoint() {
-		System.out.println("        Endpoint = " + endpoint);
+        logger.debug("        Endpoint = " + endpoint);
 	}
 
 	protected void parseRepEndpoint(String repositoryUniqueId, boolean isSecure) throws Exception {
@@ -744,7 +745,7 @@ public abstract class BasicTransaction  {
 			return metadata;
 		}
 		catch (MetadataException e) {
-			e.printStackTrace();
+            logger.debug(ExceptionUtil.exception_details(e));
 			fatal("Error parsing metadata: filename is " + metadata_filename + ", Error is: " + e.getMessage());
 		}
 
@@ -968,13 +969,13 @@ public abstract class BasicTransaction  {
 				fatal("WaitBefore: zero delay requested");
 			try {
 				long t0, t1, diff;
-				System.out.print("Waiting " + milliseconds + " milliseconds ...");
+                logger.debug("Waiting " + milliseconds + " milliseconds ...");
 				t0 = System.currentTimeMillis();
 				do {
 					t1 = System.currentTimeMillis();
 					diff = t1 - t0;
 				} while (diff < milliseconds);
-				System.out.println("Done");
+                logger.debug("Done");
 			} catch (Exception e) {
 				fatal("WaitBefore failed: " + e.getMessage());
 			}
@@ -984,7 +985,7 @@ public abstract class BasicTransaction  {
 		}
 
 		if (testConfig.verbose)
-			System.out.println("<<<PRE-TRANSACTION>>>\n" + toString() + "<<<///PRE-TRANSACTION>>>\n");
+            logger.debug("<<<PRE-TRANSACTION>>>\n" + toString() + "<<<///PRE-TRANSACTION>>>\n");
 
 	}
 
@@ -1120,17 +1121,21 @@ public abstract class BasicTransaction  {
 	}
 
 	protected void soapCall(OMElement requestBody) throws Exception {
-		soap = new Soap();
-		testConfig.soap = soap;
+        if (testConfig.soap == null) {
+		    soap = new Soap();
+		    testConfig.soap = soap;
+        } else {
+            soap = testConfig.soap;
+        }
 		if(transactionSettings.siteSpec != null && transactionSettings.siteSpec.isSaml){
 			testConfig.saml = transactionSettings.siteSpec.isSaml;
 		}
-//		soap = testConfig.soap;
 		soap.setAsync(async);
 		soap.setUseSaml(testConfig.saml);
 		if (testConfig.saml) {
-			System.out.println("\tAxis2 client Repository: " + testConfig.testmgmt_dir + File.separator + "rampart" + File.separator + "client_repositories");
-			System.out.println("\tEnabling WSSEC ...");
+            logger.debug("\tAxis2 client Repository: " + testConfig.testmgmt_dir + File.separator + "rampart" + File
+                    .separator + "client_repositories");
+            logger.debug("\tEnabling WSSEC ...");
 			soap.setRepositoryLocation(testConfig.testmgmt_dir + File.separator + "rampart" + File.separator + "client_repositories" );
 		}
 
@@ -1145,19 +1150,6 @@ public abstract class BasicTransaction  {
 				}
 		}
 		
-		/*
-		if (wsSecHeaders != null) {
-			for (OMElement hdr : wsSecHeaders)
-				try {
-					soap.addSecHeader(Util.deep_copy(hdr));
-				} catch (XdsInternalException e) {
-					s_ctx.set_error(e.getMessage());
-					failed();
-					logSoapRequest(soap);
-				}
-		}
-		*/
-
 		try {
 			testLog.add_name_value(instruction_output, "InputMetadata", requestBody);
 
@@ -1171,7 +1163,8 @@ public abstract class BasicTransaction  {
 					useAddressing,  // WS-Addressing
 					soap_1_2,  // SOAP 1.2
 					getRequestAction(),
-					getResponseAction(), patientId
+				getResponseAction(),
+                    patientId
 			);
 		}
 		catch (AxisFault e) {

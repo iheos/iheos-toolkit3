@@ -1,10 +1,8 @@
 package gov.nist.toolkit.testengine;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdstest2logging.Report;
-import gov.nist.toolkit.utilities.xml.OMFormatter;
+import gov.nist.toolkit.testengine.logging.Report;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.XdsException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
 import java.util.ArrayList;

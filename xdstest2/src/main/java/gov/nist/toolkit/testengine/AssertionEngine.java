@@ -7,17 +7,11 @@ import gov.nist.toolkit.xdsexception.ExceptionUtil;
 import gov.nist.toolkit.xdsexception.XMLParserException;
 import gov.nist.toolkit.xdsexception.XdsException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Formatter;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
-import javax.xml.namespace.QName;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.xpath.AXIOMXPath;
+
+import javax.xml.namespace.QName;
+import java.util.*;
 
 public class AssertionEngine {
 	ArrayList<OMElement> raw_data_refs = null;
@@ -53,7 +47,7 @@ public class AssertionEngine {
 				throw new XdsException("DataRef has missing or empty as attribute", null);
 
 			if (file.contains("MGMT")) {
-				file = file.replaceFirst("MGMT", testConfig.testmgmt_dir);
+				file = file.replaceFirst("MGMT", testConfig.testmgmt_dir.toString());
 			}
 
 			DataRef dr = new DataRef(file, as);

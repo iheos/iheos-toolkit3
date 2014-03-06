@@ -60,6 +60,11 @@
 			<artifactId>docref</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
+        <dependency>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>soapAPI</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>dsig</artifactId>

@@ -4,9 +4,9 @@ import gov.nist.toolkit.testengine.Linkage;
 import gov.nist.toolkit.testengine.TestConfig;
 import gov.nist.toolkit.testengine.TransactionSettings;
 import gov.nist.toolkit.testengine.transactions.BasicTransaction;
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
-import gov.nist.toolkit.xdstest2logging.NotALogFileException;
-import gov.nist.toolkit.xdstest2logging.SectionLogMap;
+import gov.nist.toolkit.testengine.logging.TestSectionLogContent;
+import gov.nist.toolkit.testengine.logging.NotALogFileException;
+import gov.nist.toolkit.testengine.logging.SectionLogMap;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.xdsexception.ExceptionUtil;
@@ -32,7 +32,7 @@ public class PlanContext extends BasicContext {
 	Map<String, String> externalLinkage = null;
 	Map<String, Object> externalLinkage2 = null;  // for binary stuff like certificates
 	SectionLogMap previousSectionLogs;
-	LogFileContent currentSectionLog;
+	TestSectionLogContent currentSectionLog;
 	String currentSection;
 	TestConfig testConfig;
 	TransactionSettings transactionSettings = null;
@@ -79,10 +79,10 @@ public class PlanContext extends BasicContext {
 	}
 	
 	public void setCurrentSectionLog(OMElement ele) throws NotALogFileException, Exception {
-		currentSectionLog = new LogFileContent(ele);
+		currentSectionLog = new TestSectionLogContent(ele);
 	}
 	
-	public LogFileContent getCurrentSectionLog() {
+	public TestSectionLogContent getCurrentSectionLog() {
 		return currentSectionLog;
 	}
 	

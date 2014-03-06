@@ -3,7 +3,7 @@ package gov.nist.toolkit.xdstestgui.server;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
+import gov.nist.toolkit.testengine.logging.TestSectionLogContent;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class SessionCache {
 		return dir;
 	}
 	
-	 void addLogFile(LogFileContent lf) throws IOException {
+	 void addLogFile(TestSectionLogContent lf) throws IOException {
 		String test = lf.getTest();
 		String section = lf.getSection();
 		File dir;

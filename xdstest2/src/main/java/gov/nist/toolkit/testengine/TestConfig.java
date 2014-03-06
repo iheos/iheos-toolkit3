@@ -1,7 +1,7 @@
 package gov.nist.toolkit.testengine;
 
 import gov.nist.toolkit.sitemanagement.client.Site;
-import gov.nist.toolkit.soap.axis2.Soap;
+import gov.nist.toolkit.soapAPI.axis2.SoapInterface;
 import gov.nist.toolkit.testengine.logrepository.LogRepository;
 
 import java.io.File;
@@ -28,7 +28,7 @@ public class TestConfig {
 	 public File logFile = null;
 	
 	// Full path to xdstoolkit/xdstest directory
-	 public String testmgmt_dir = null;
+	 public File testmgmt_dir = null;
 	
 	// REST service to call to allocate a patient id for testing 
 	// Configured in actors.xml
@@ -47,7 +47,7 @@ public class TestConfig {
 	
 	 public boolean endpointOverride = false;
 	
-	 public boolean verbose  = true;
+	 public boolean verbose  = false;
 	
 	 public boolean trace = false;
 	
@@ -61,18 +61,18 @@ public class TestConfig {
 	
 	 public String args = "";
 	
-	 public Soap soap = null;
+	 public SoapInterface soap = null;
 	
 	 public String testkitVersion = null;
 	
 	 public void rememberPatientId(String pid) throws FileNotFoundException, IOException {
 		if (testmgmt_dir == null) return;
 		
-		FileOutputStream fos = new FileOutputStream(new File(testmgmt_dir + File.separatorChar + "patientid_base.txt"));
+		FileOutputStream fos = new FileOutputStream(new File(testmgmt_dir, "patientid_base.txt"));
 		fos.write(pid.substring(0,pid.indexOf("^")).getBytes());
 		fos.close();
 
-		fos = new FileOutputStream(new File(testmgmt_dir + File.separatorChar + "assigning_authority.txt"));
+		fos = new FileOutputStream(new File(testmgmt_dir, "assigning_authority.txt"));
 		fos.write(pid.substring(pid.lastIndexOf("^")+1).getBytes());
 		fos.close();
 	}
