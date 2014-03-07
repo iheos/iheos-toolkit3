@@ -22,8 +22,7 @@ eventLog/*
 #ignore repository test data files
 repositories/data/*
 repository/www-test/*
-webapp/WEB-INF/*
-webapp/logBrowser/*
+
 # Eclipse metadata
 .classpath
 .project
