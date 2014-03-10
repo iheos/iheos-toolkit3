@@ -1,13 +1,12 @@
 package gov.nist.toolkit.simulators.sim.reg.store;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdsexception.MetadataException;
+import org.apache.axiom.om.OMElement;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
 
 public class RegistryFactory {
 

@@ -1,18 +1,17 @@
 package gov.nist.toolkit.registrymsgformats.registry;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.ValidationStepResult;
 import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.registrysupport.logging.ErrorLogger;
 import gov.nist.toolkit.registrysupport.logging.LogMessage;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMNamespace;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMNamespace;
 
 public abstract class Response implements ErrorLogger {
 	public final static short version_2 = 2;

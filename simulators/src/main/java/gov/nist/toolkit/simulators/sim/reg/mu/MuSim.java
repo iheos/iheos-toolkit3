@@ -1,5 +1,6 @@
 package gov.nist.toolkit.simulators.sim.reg.mu;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
@@ -11,13 +12,11 @@ import gov.nist.toolkit.simulators.sim.reg.store.ProcessMetadataInterface;
 import gov.nist.toolkit.simulators.sim.reg.store.RegIndex;
 import gov.nist.toolkit.simulators.support.SimCommon;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
-import gov.nist.toolkit.xdsexception.MetadataException;
+import org.apache.axiom.om.OMElement;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.log4j.Logger;
 
 public class MuSim extends RegRSim {
 	Exception startUpException = null;

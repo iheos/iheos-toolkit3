@@ -1,15 +1,12 @@
 package gov.nist.toolkit.installation;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 public class PropertyServiceManager  /*extends CommonServiceManager*/ {
 	PropertyManager propertyManager = null;

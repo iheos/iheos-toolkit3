@@ -1,20 +1,19 @@
 package gov.nist.toolkit.validatorsregistrymetadata;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.valregmetadata.coding.*;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.axiom.om.OMElement;
+import org.junit.Before;
+import org.junit.Test;
 
+import javax.xml.parsers.FactoryConfigurationError;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.xml.parsers.FactoryConfigurationError;
-
-import org.apache.axiom.om.OMElement;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class UpdateCodesTest {
     private static final File codesFile = new File("/Users/bmajur/tmp/NA2014/environment/NA2014/codes.xml");

@@ -1,18 +1,16 @@
 package gov.nist.toolkit.registrymsgformats.registry;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.xml.namespace.QName;
-
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.xpath.AXIOMXPath;
 import org.jaxen.JaxenException;
+
+import javax.xml.namespace.QName;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class RegistryResponseParser {
 	OMElement response_element;
@@ -38,7 +36,7 @@ public class RegistryResponseParser {
 		this.response_element = response_element;
 	}
 	
-	public RegistryResponse getRegistryResponse() throws XdsInternalException { 
+	public RegistryResponse getRegistryResponse() throws XdsInternalException {
 		parse(); 
 		return response; 
 	}

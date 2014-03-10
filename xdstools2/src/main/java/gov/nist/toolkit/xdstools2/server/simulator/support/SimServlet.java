@@ -1,11 +1,8 @@
 package gov.nist.toolkit.xdstools2.server.simulator.support;
 
-import gov.nist.toolkit.actorfactory.ActorFactory;
-import gov.nist.toolkit.actorfactory.RegistryActorFactory;
-import gov.nist.toolkit.actorfactory.SimCache;
-import gov.nist.toolkit.actorfactory.SimDb;
-import gov.nist.toolkit.actorfactory.SimulatorFactory;
-import gov.nist.toolkit.actorfactory.SiteServiceManager;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.toolkit.actorfactory.*;
 import gov.nist.toolkit.actorfactory.client.NoSimException;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
 import gov.nist.toolkit.actortransaction.client.ATFactory;
@@ -33,19 +30,8 @@ import gov.nist.toolkit.valsupport.client.MessageValidationResults;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorderBuilder;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.XdsException;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.apache.axiom.om.OMElement;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -53,9 +39,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.log4j.Logger;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
 
 public class SimServlet  extends HttpServlet {
 	static Logger logger = Logger.getLogger(SimServlet.class);
@@ -249,7 +236,7 @@ public class SimServlet  extends HttpServlet {
 			db = new SimDb(simDbDir, simid, actor, transaction);
 			response.setContentType("application/zip");
 			db.getMessageLogZip(response.getOutputStream(), message);
-			response.getOutputStream().close();
+//			response.getOutputStream().close();
 			response.addHeader("Content-Disposition", "attachment; filename=" + message + ".zip");
 		} catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -642,11 +629,11 @@ public class SimServlet  extends HttpServlet {
 
 
 	void closeOut(HttpServletResponse response) {
-		try {
-			response.getOutputStream().close();
-		} catch (IOException e) {
-			
-		}
+//		try {
+//			response.getOutputStream().close();
+//		} catch (IOException e) {
+//
+//		}
 	}
 
 	Calendar getNewExpiration() {

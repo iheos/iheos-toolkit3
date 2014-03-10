@@ -1,13 +1,11 @@
 package gov.nist.toolkit.valccda;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.InputStream;
+import org.apache.axiom.om.OMElement;
 
 import javax.xml.parsers.FactoryConfigurationError;
-
-import org.apache.axiom.om.OMElement;
+import java.io.InputStream;
 
 // does the supplied chunk of XML look like a CDA document?
 public class CdaDetector {

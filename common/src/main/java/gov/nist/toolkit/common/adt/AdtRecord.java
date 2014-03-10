@@ -6,13 +6,14 @@
 
 package gov.nist.toolkit.common.adt;
 
+import com.sun.ebxml.registry.util.UUID;
+import com.sun.ebxml.registry.util.UUIDFactory;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import com.sun.ebxml.registry.util.UUID;
-import com.sun.ebxml.registry.util.UUIDFactory;
 
 /**
  * Currently for the purposes of XDS, an ADT patient record consists of only a

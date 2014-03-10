@@ -1,6 +1,6 @@
 package gov.nist.toolkit.testengine.test;
 
-import gov.nist.toolkit.xdsexception.XdsException;
+import gov.nist.hit.ds.xdsException.XdsException;
 import junit.framework.TestCase;
 
 

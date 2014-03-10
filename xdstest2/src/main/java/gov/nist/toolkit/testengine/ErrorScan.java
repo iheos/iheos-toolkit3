@@ -1,16 +1,14 @@
 package gov.nist.toolkit.testengine;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.testkitutilities.TestkitWalker;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.File;
-
-import javax.xml.parsers.FactoryConfigurationError;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.xpath.AXIOMXPath;
 import org.jaxen.JaxenException;
+
+import javax.xml.parsers.FactoryConfigurationError;
+import java.io.File;
 
 /**
  * Scan testkit for problems.

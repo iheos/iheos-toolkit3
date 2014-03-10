@@ -1,15 +1,14 @@
 package gov.nist.toolkit.testengine;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.common.testsupport.OMGenerator;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.axiom.om.OMElement;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-
-import org.apache.axiom.om.OMElement;
 
 public class TestMgmt extends OMGenerator {
 	TestConfig testConfig;

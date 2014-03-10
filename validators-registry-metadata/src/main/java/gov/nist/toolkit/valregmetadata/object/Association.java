@@ -1,19 +1,14 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.axiom.om.OMElement;
+
+import java.util.*;
 
 public class Association extends AbstractRegistryObject implements TopLevelObject {
 	String source = "";
@@ -49,7 +44,7 @@ public class Association extends AbstractRegistryObject implements TopLevelObjec
 	}
 
 
-	public Association(Metadata m, OMElement ro, ValidationContext vc) throws XdsInternalException  {
+	public Association(Metadata m, OMElement ro, ValidationContext vc) throws XdsInternalException {
 		super(m, ro);
 		source = ro.getAttributeValue(MetadataSupport.source_object_qname);
 		target = ro.getAttributeValue(MetadataSupport.target_object_qname);

@@ -31,5 +31,13 @@
 			<artifactId>tk</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
+               <dependency>
+                        <groupId>com.sun.ebxml</groupId>
+                        <artifactId>ebxmlrr-common</artifactId>
+                        <version>1.0</version>
+                        <scope>system</scope>
+                        <systemPath>${basedir}/../lib/ebxmlrr-common-1.0.jar</systemPath>
+                </dependency>
+
 	</dependencies>
 </project>

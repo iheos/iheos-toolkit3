@@ -1,5 +1,8 @@
 package gov.nist.toolkit.simulators.sim.reg.sq;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.MetadataValidationException;
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.logging.LoggerException;
 import gov.nist.toolkit.simulators.sim.reg.store.DocEntry;
@@ -11,9 +14,6 @@ import gov.nist.toolkit.valregmsg.registry.SQCodeOr;
 import gov.nist.toolkit.valregmsg.registry.storedquery.generic.FindDocuments;
 import gov.nist.toolkit.valregmsg.registry.storedquery.generic.StoredQueryFactory.QueryReturnType;
 import gov.nist.toolkit.valregmsg.registry.storedquery.support.StoredQuerySupport;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.MetadataValidationException;
-import gov.nist.toolkit.xdsexception.XdsException;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class FindDocumentsSim extends FindDocuments {
 	}
 	
 	protected Metadata runImplementation() throws MetadataException,
-			XdsException, LoggerException {
+            XdsException, LoggerException {
 		
 		MetadataCollection mc = ri.getMetadataCollection();
 		List<DocEntry> results;

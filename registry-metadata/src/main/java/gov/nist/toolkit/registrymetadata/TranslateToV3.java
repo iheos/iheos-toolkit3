@@ -1,15 +1,13 @@
 package gov.nist.toolkit.registrymetadata;
 
-import gov.nist.toolkit.registrymetadata.TranslateToV2.Att;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.util.Iterator;
-
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
+
+import java.util.Iterator;
 
 public class TranslateToV3 extends Translate {
     int id_count = 1;

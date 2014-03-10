@@ -1,14 +1,13 @@
 package gov.nist.toolkit.testengine;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.http.httpclient.HttpClient;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
-
-import org.apache.log4j.Logger;
 
 
 /**
@@ -24,7 +23,7 @@ public class PatientIdAllocator extends IdAllocator {
 		current_pid = null;  // done at end of each test step
 	}
 
-	void loadCurrent() throws IOException, XdsInternalException  {
+	void loadCurrent() throws IOException, XdsInternalException {
 		current_pid =  loadPatientId();
 	}
 

@@ -1,5 +1,6 @@
 package gov.nist.toolkit.sitemanagement;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.actortransaction.client.ATFactory;
 import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
 import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
@@ -7,15 +8,12 @@ import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.sitemanagement.client.TransactionBean;
 import gov.nist.toolkit.sitemanagement.client.TransactionCollection;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.util.HashMap;
-import java.util.Iterator;
-
-import javax.xml.namespace.QName;
-
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
+
+import javax.xml.namespace.QName;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public abstract class SiteLoader {
 	
@@ -37,7 +35,7 @@ public abstract class SiteLoader {
 	protected
 	void parseSite(Site s, OMElement conf) throws Exception {
 		if (!conf.getLocalName().equals("site"))
-			throw new XdsInternalException("Site parser: top element of site definition must be site, " + 
+			throw new XdsInternalException("Site parser: top element of site definition must be site, " +
 					conf.getLocalName() + " found"	);
 		s.setName(conf.getAttributeValue(new QName("name")));
 

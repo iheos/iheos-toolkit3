@@ -1,16 +1,13 @@
 package gov.nist.toolkit.testengine.transactions;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryResponseParser;
-import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.File;
+import org.apache.axiom.om.OMElement;
 
 import javax.xml.parsers.FactoryConfigurationError;
-
-import org.apache.axiom.om.OMElement;
+import java.io.File;
 
 public class SimpleTransaction extends BasicTransaction {
 	OMElement metadata_ele = null;

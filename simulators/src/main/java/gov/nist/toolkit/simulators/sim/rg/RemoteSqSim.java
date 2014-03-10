@@ -1,5 +1,7 @@
 package gov.nist.toolkit.simulators.sim.rg;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.actorfactory.RegistryActorFactory;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
@@ -22,13 +24,10 @@ import gov.nist.toolkit.utilities.xml.OMFormatter;
 import gov.nist.toolkit.valregmsg.registry.AdhocQueryResponse;
 import gov.nist.toolkit.valregmsg.service.SoapActionFactory;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.util.List;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class RemoteSqSim  extends TransactionSimulator implements MetadataGeneratingSim, AdhocQueryResponseGeneratingSim {
 	AdhocQueryResponse response;

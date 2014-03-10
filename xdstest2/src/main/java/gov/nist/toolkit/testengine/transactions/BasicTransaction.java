@@ -1,5 +1,6 @@
 package gov.nist.toolkit.testengine.transactions;
 
+import gov.nist.hit.ds.xdsException.*;
 import gov.nist.toolkit.actortransaction.client.ATFactory;
 import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
 import gov.nist.toolkit.common.datatypes.Hl7Date;
@@ -10,7 +11,6 @@ import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorListGenerator;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryResponseParser;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.soap.axis2.Soap;
-import gov.nist.toolkit.soapAPI.axis2.SoapInterface;
 import gov.nist.toolkit.testengine.*;
 import gov.nist.toolkit.testengine.engine.PlanContext;
 import gov.nist.toolkit.testengine.engine.StepContext;
@@ -20,7 +20,6 @@ import gov.nist.toolkit.testengine.logging.TestSectionLogContent;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.valregmsg.service.SoapActionFactory;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.*;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
@@ -80,7 +79,7 @@ public abstract class BasicTransaction  {
 	protected String repositoryUniqueId = null;
 	private final static Logger logger = Logger.getLogger(BasicTransaction.class);
 	Map<String, String> nameUuidMap = null;
-	private SoapInterface soap;
+	private Soap soap;
 
 	//	Metadata metadata = null;
 	OMElement request_element;
@@ -1124,9 +1123,10 @@ public abstract class BasicTransaction  {
         if (testConfig.soap == null) {
 		    soap = new Soap();
 		    testConfig.soap = soap;
-        } else {
-            soap = testConfig.soap;
         }
+//        else {
+//            soap = testConfig.soap;
+//        }
 		if(transactionSettings.siteSpec != null && transactionSettings.siteSpec.isSaml){
 			testConfig.saml = transactionSettings.siteSpec.isSaml;
 		}

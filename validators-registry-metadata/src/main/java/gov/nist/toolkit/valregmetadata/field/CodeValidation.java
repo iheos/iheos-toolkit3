@@ -1,9 +1,9 @@
 package gov.nist.toolkit.valregmetadata.field;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorListGenerator;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
 
 
 //this gets invoked from both Validator.java and directly from Repository.  Should optimize the implementation so that codes.xml

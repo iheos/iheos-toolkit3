@@ -1,18 +1,17 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valregmetadata.datatype.FormatValidator;
 import gov.nist.toolkit.valregmetadata.datatype.FormatValidatorCalledIncorrectlyException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.axiom.om.OMContainer;
+import org.apache.axiom.om.OMElement;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.axiom.om.OMContainer;
-import org.apache.axiom.om.OMElement;
 
 public class Slot {
 	String name = "";
@@ -74,7 +73,7 @@ public class Slot {
 	public String getName() { return name; }
 	public List<String> getValues() { return values; }
 	
-	public String getValue(int index) throws  XdsInternalException {
+	public String getValue(int index) throws XdsInternalException {
 		if (values.size() <= index)
 			throw new XdsInternalException(ownerIdentifyingString() + ": Slot " + name + " does not have a " + index + "th value");
 		return values.get(index);

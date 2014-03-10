@@ -1,10 +1,10 @@
 package gov.nist.toolkit.xdstest2;
 
+import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsException.LoadKeystoreException;
+import gov.nist.hit.ds.xdsException.XdsFormatException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.soapAPI.axis2.SoapInterface;
-import gov.nist.toolkit.xdsexception.EnvironmentNotSelectedException;
-import gov.nist.toolkit.xdsexception.LoadKeystoreException;
-import gov.nist.toolkit.xdsexception.XdsFormatException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;
 

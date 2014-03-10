@@ -1,5 +1,3 @@
-package gov.nist.toolkit.sitemanagement.test;
-
 import static org.junit.Assert.*
 import gov.nist.toolkit.actortransaction.client.ATFactory
 import gov.nist.toolkit.sitemanagement.client.TransactionBean

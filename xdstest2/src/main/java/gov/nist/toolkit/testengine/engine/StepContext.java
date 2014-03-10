@@ -1,8 +1,8 @@
 package gov.nist.toolkit.testengine.engine;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.testengine.*;
 import gov.nist.toolkit.testengine.transactions.BasicTransaction;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;

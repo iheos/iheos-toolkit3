@@ -1,5 +1,6 @@
 package gov.nist.toolkit.registrymetadata;
 
+import gov.nist.hit.ds.xdsException.*;
 import gov.nist.toolkit.docref.EbRS;
 import gov.nist.toolkit.docref.EbRim;
 import gov.nist.toolkit.docref.MetadataTables;
@@ -7,30 +8,11 @@ import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.registrysupport.logging.LogMessage;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.MetadataValidationException;
-import gov.nist.toolkit.xdsexception.NoMetadataException;
-import gov.nist.toolkit.xdsexception.NoSubmissionSetException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import org.apache.axiom.om.*;
 
 import javax.xml.namespace.QName;
-
-import org.apache.axiom.om.OMAbstractFactory;
-import org.apache.axiom.om.OMAttribute;
-import org.apache.axiom.om.OMContainer;
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMFactory;
-import org.apache.axiom.om.OMNamespace;
-import org.apache.axiom.om.OMNode;
+import java.io.File;
+import java.util.*;
 
 public class Metadata {
 	protected OMFactory fac;
@@ -154,7 +136,7 @@ public class Metadata {
 	}
 
 	public Metadata mkClone() throws XdsInternalException, MetadataException,
-	MetadataValidationException {
+            MetadataValidationException {
 		Metadata m = new Metadata();
 
 		m.interpretAsSubmission = this.interpretAsSubmission;

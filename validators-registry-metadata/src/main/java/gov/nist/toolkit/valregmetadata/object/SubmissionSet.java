@@ -1,22 +1,16 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valregmetadata.datatype.DtmFormat;
-import gov.nist.toolkit.valregmetadata.datatype.XonXcnFormat;
 import gov.nist.toolkit.valregmetadata.datatype.XonXcnXtnFormat;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.axiom.om.OMElement;
+
+import java.util.*;
 
 public class SubmissionSet extends AbstractRegistryObject implements TopLevelObject {
 
@@ -170,7 +164,7 @@ public class SubmissionSet extends AbstractRegistryObject implements TopLevelObj
 
 	static public String table416 = "ITI TF-3: Table 4.1-6";
 
-	public SubmissionSet(Metadata m, OMElement ro) throws XdsInternalException  {
+	public SubmissionSet(Metadata m, OMElement ro) throws XdsInternalException {
 		super(m, ro);
 	}
 

@@ -1,17 +1,13 @@
 package gov.nist.toolkit.valregmsg.registry.storedquery.support;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.docref.SqDocRef;
 import gov.nist.toolkit.valregmsg.registry.And;
 import gov.nist.toolkit.valregmsg.registry.SQCodedTerm;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SqParams {
 	Map<String, Object> params;

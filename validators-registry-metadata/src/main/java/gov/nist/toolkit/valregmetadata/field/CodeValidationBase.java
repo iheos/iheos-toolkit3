@@ -1,5 +1,8 @@
 package gov.nist.toolkit.valregmetadata.field;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.http.httpclient.HttpClient;
@@ -9,23 +12,14 @@ import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.valregmetadata.object.Classification;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.xml.namespace.QName;
-
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
+
+import javax.xml.namespace.QName;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.*;
 
 public class CodeValidationBase {
 	Metadata m;
@@ -256,13 +250,13 @@ public class CodeValidationBase {
 			for (OMElement cl_ele : classifications) {
 	
 				Classification cl = null;
-				try {
-					cl = new Classification(m, cl_ele);
-				} catch (XdsInternalException e) {
-					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
-					continue;
-				}
-				validate(er, cl);
+                try {
+                    cl = new Classification(m, cl_ele);
+                } catch (XdsInternalException e) {
+                    er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
+                    continue;
+                }
+                validate(er, cl);
 	
 				validateAssocClassifications(er, cl);
 	

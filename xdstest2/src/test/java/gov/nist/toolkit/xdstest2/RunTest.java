@@ -3,11 +3,11 @@ package gov.nist.toolkit.xdstest2;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.sitemanagement.Sites;
+import gov.nist.toolkit.soap.axis2.Soap;
 import gov.nist.toolkit.testengine.TestConfig;
 import gov.nist.toolkit.testengine.TransactionSettings;
 import gov.nist.toolkit.testengine.Xdstest2;
 import gov.nist.toolkit.testengine.logrepository.LogRepositoryFactory;
-import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class RunTest {
 
-    @Test
+
     public void runTest() throws Exception {
         String testName = "simpleSubmit";
         List<String> sections = new ArrayList<String>();
@@ -59,14 +59,14 @@ public class RunTest {
         xt.setSecure(false);
         xt.setWssec(false);
 
-        tc.soap = new MockSoap();
+        tc.soap = new Soap();
         xt.setTestConfig(tc);
 
-        xt.run(
-                null,
-                null,
-                true,
-                ts
-                );
+//        xt.run(
+//                null,
+//                null,
+//                true,
+//                ts
+//                );
     }
 }

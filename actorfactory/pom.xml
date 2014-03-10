@@ -88,9 +88,17 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>xds-exceptions</artifactId>
+			<artifactId>xdsException</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
+               <dependency>
+                        <groupId>com.sun.ebxml</groupId>
+                        <artifactId>ebxmlrr-common</artifactId>
+                        <version>1.0</version>
+                        <scope>system</scope>
+                        <systemPath>${basedir}/../lib/ebxmlrr-common-1.0.jar</systemPath>
+                </dependency>
+
 	</dependencies>
 
 	<build>
@@ -108,7 +116,7 @@
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
+	</plugins>
 		<pluginManagement>
 			<plugins>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 

@@ -1,30 +1,17 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.valregmetadata.datatype.AnyFormat;
-import gov.nist.toolkit.valregmetadata.datatype.CxFormat;
-import gov.nist.toolkit.valregmetadata.datatype.DtmFormat;
-import gov.nist.toolkit.valregmetadata.datatype.HashFormat;
-import gov.nist.toolkit.valregmetadata.datatype.IntFormat;
-import gov.nist.toolkit.valregmetadata.datatype.OidFormat;
-import gov.nist.toolkit.valregmetadata.datatype.Rfc3066Format;
-import gov.nist.toolkit.valregmetadata.datatype.SourcePatientInfoFormat;
-import gov.nist.toolkit.valregmetadata.datatype.XcnFormat;
+import gov.nist.toolkit.valregmetadata.datatype.*;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.axiom.om.OMElement;
+
+import java.util.*;
 
 public class DocumentEntry extends AbstractRegistryObject implements TopLevelObject {
 	static List<String> definedSlots = 
@@ -200,7 +187,7 @@ public class DocumentEntry extends AbstractRegistryObject implements TopLevelObj
 		this.objectType = MetadataSupport.XDSDocumentEntry_objectType_uuid;
 	}
 
-	public DocumentEntry(Metadata m, OMElement de) throws XdsInternalException  {
+	public DocumentEntry(Metadata m, OMElement de) throws XdsInternalException {
 		super(m, de);
 		mimeType = de.getAttributeValue(MetadataSupport.mime_type_qname);
 		objectType = de.getAttributeValue(MetadataSupport.object_type_qname);

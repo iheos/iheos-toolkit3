@@ -1,20 +1,15 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valregmetadata.datatype.DtmFormat;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.axiom.om.OMElement;
+
+import java.util.*;
 
 public class Folder extends AbstractRegistryObject implements TopLevelObject {
 
@@ -105,7 +100,7 @@ public class Folder extends AbstractRegistryObject implements TopLevelObject {
 	}
 
 
-	public Folder(Metadata m, OMElement ro) throws XdsInternalException  {
+	public Folder(Metadata m, OMElement ro) throws XdsInternalException {
 		super(m, ro);
 	}
 	

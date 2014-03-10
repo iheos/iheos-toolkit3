@@ -1,5 +1,6 @@
 package gov.nist.toolkit.testengine;
 
+import gov.nist.hit.ds.xdsException.*;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryResponseParser;
@@ -7,28 +8,16 @@ import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.soap.axis2.Soap;
 import gov.nist.toolkit.testengine.transactions.BasicTransaction;
 import gov.nist.toolkit.valregmsg.service.SoapActionFactory;
-import gov.nist.toolkit.xdsexception.EnvironmentNotSelectedException;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.MetadataValidationException;
-import gov.nist.toolkit.xdsexception.SchemaValidationException;
-import gov.nist.toolkit.xdsexception.XdsConfigurationException;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsIOException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-import gov.nist.toolkit.xdsexception.XdsPreparsedException;
-import gov.nist.toolkit.xdsexception.XdsWSException;
-
-import java.io.IOException;
-import java.util.HashMap;
-
-import javax.xml.namespace.QName;
-import javax.xml.parsers.FactoryConfigurationError;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
+
+import javax.xml.namespace.QName;
+import javax.xml.parsers.FactoryConfigurationError;
+import java.io.IOException;
+import java.util.HashMap;
 
 public class RetrieveB {
 	String endpoint = null;
@@ -113,8 +102,8 @@ public class RetrieveB {
 
 	public OMElement run()
 	throws XdsInternalException, FactoryConfigurationError,
-	XdsException, XdsIOException, MetadataException,
-	XdsConfigurationException, MetadataValidationException, XdsWSException, AxisFault, EnvironmentNotSelectedException {
+            XdsException, XdsIOException, MetadataException,
+            XdsConfigurationException, MetadataValidationException, XdsWSException, AxisFault, EnvironmentNotSelectedException {
 
 		OMElement result = null;
 		OMElement request = r_ctx.getRequest();

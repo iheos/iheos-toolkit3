@@ -1,9 +1,7 @@
 package gov.nist.toolkit.testengine.transactions;
 
-import gov.nist.toolkit.testengine.engine.StepContext;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 public class NullTransaction extends BasicTransaction {

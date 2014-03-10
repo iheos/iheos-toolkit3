@@ -5,36 +5,25 @@ import gov.nist.direct.directGenerator.impl.WrappedMessageGenerator;
 import gov.nist.direct.logger.LogPathsSingleton;
 import gov.nist.direct.logger.MessageLogManager;
 import gov.nist.direct.utils.Utils;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.directsupport.SMTPException;
-import gov.nist.toolkit.testengine.engine.StepContext;
 import gov.nist.toolkit.testengine.smtp.SMTPAddress;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.security.Security;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import org.apache.axiom.om.OMElement;
+import org.apache.log4j.Logger;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.mail.Address;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import org.apache.axiom.om.OMElement;
-import org.apache.log4j.Logger;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import java.io.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.security.Security;
+import java.util.*;
 
 public class DirectTransaction extends BasicTransaction {
 	File certFile = null;
@@ -220,7 +209,7 @@ public class DirectTransaction extends BasicTransaction {
 //		return in;
 //	}
 
-	void verifyParameters() throws XdsInternalException  {
+	void verifyParameters() throws XdsInternalException {
 		List<String> errors = new ArrayList<String>();
 
 		if (certFile == null) {

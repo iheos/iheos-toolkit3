@@ -1,20 +1,14 @@
 package gov.nist.toolkit.simulators.sim.reg.sq;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.logging.LoggerException;
-import gov.nist.toolkit.simulators.sim.reg.store.Assoc;
-import gov.nist.toolkit.simulators.sim.reg.store.DocEntry;
-import gov.nist.toolkit.simulators.sim.reg.store.Fol;
-import gov.nist.toolkit.simulators.sim.reg.store.MetadataCollection;
-import gov.nist.toolkit.simulators.sim.reg.store.RegIndex;
-import gov.nist.toolkit.simulators.sim.reg.store.Ro;
-import gov.nist.toolkit.simulators.sim.reg.store.SubSet;
+import gov.nist.toolkit.simulators.sim.reg.store.*;
 import gov.nist.toolkit.valregmsg.registry.storedquery.generic.GetSubmissionSetAndContents;
 import gov.nist.toolkit.valregmsg.registry.storedquery.generic.StoredQueryFactory.QueryReturnType;
 import gov.nist.toolkit.valregmsg.registry.storedquery.support.StoredQuerySupport;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,7 +27,7 @@ public class GetSubmissionSetAndContentsSim extends GetSubmissionSetAndContents 
 	}
 
 	protected Metadata runImplementation() throws MetadataException,
-			XdsException, LoggerException {
+            XdsException, LoggerException {
 
 		MetadataCollection mc = ri.getMetadataCollection();
 //		List<Ro> results = new ArrayList<Ro>();

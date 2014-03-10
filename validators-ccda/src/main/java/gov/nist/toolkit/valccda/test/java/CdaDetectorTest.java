@@ -1,19 +1,17 @@
 package gov.nist.toolkit.valccda.test.java;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.valccda.CdaDetector;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.File;
-import java.io.IOException;
-
-import javax.xml.parsers.FactoryConfigurationError;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.junit.Assert;
 import org.junit.Test;
+
+import javax.xml.parsers.FactoryConfigurationError;
+import java.io.File;
+import java.io.IOException;
 
 public class CdaDetectorTest {
 	File ccdaFile = new File("validators-ccda/src/gov/nist/toolkit/valccda/test/resources/CCDA_CCD_Ambulatory.xml");
@@ -44,9 +42,9 @@ public class CdaDetectorTest {
 		} catch (IOException e) {
 			Assert.fail(e.getMessage());
 		} catch (XdsInternalException e) {
-			Assert.fail(e.getMessage());
-		}
-	}
+            Assert.fail(e.getMessage());
+        }
+    }
 	
 	@Test
 	public void cDAaCDAFromInputStream() {
@@ -56,8 +54,8 @@ public class CdaDetectorTest {
 			Assert.fail(e.getMessage());
 		} catch (IOException e) {
 			Assert.fail(e.getMessage());
-		} catch (XdsInternalException e) {
-			Assert.fail(e.getMessage());
+        } catch (XdsInternalException e) {
+            Assert.fail(e.getMessage());
 		}
 	}
 	
@@ -69,8 +67,8 @@ public class CdaDetectorTest {
 			Assert.fail(e.getMessage());
 		} catch (IOException e) {
 			Assert.fail(e.getMessage());
-		} catch (XdsInternalException e) {
-			Assert.fail(e.getMessage());
+        } catch (XdsInternalException e) {
+            Assert.fail(e.getMessage());
 		}
 	}
 	
@@ -86,7 +84,8 @@ public class CdaDetectorTest {
 			Assert.fail(e.getMessage());
 		} catch (IOException e) {
 			Assert.fail(e.getMessage());
-		} catch (XdsInternalException e) {
+        } catch (XdsInternalException e) {
+            Assert.fail(e.getMessage());
 		}
 	}
 	
@@ -99,9 +98,9 @@ public class CdaDetectorTest {
 			Assert.fail(e.getMessage());
 		} catch (IOException e) {
 			Assert.fail(e.getMessage());
-		} catch (XdsInternalException e) {
-			Assert.fail(e.getMessage());
 		} catch (OMException e) {
+        } catch (XdsInternalException e) {
+            Assert.fail(e.getMessage());
 		}
 	}
 	
@@ -128,8 +127,8 @@ public class CdaDetectorTest {
 			Assert.fail(e.getMessage());
 		} catch (IOException e) {
 			Assert.fail(e.getMessage());
-		} catch (XdsInternalException e) {
-			Assert.fail(e.getMessage());
+        } catch (XdsInternalException e) {
+            Assert.fail(e.getMessage());
 		}
 	}
 	
@@ -141,8 +140,8 @@ public class CdaDetectorTest {
 			Assert.fail(e.getMessage());
 		} catch (IOException e) {
 			Assert.fail(e.getMessage());
-		} catch (XdsInternalException e) {
-			Assert.fail(e.getMessage());
+        } catch (XdsInternalException e) {
+            Assert.fail(e.getMessage());
 		}
 	}
 	

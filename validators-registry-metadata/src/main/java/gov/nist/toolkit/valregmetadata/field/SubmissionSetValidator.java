@@ -1,13 +1,11 @@
 package gov.nist.toolkit.valregmetadata.field;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.axiom.om.OMElement;
 
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
 
 public class SubmissionSetValidator extends ValidatorCommon {
 

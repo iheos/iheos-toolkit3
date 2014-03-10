@@ -1,5 +1,7 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
@@ -10,20 +12,17 @@ import gov.nist.toolkit.valregmetadata.datatype.FormatValidator;
 import gov.nist.toolkit.valregmetadata.datatype.OidFormat;
 import gov.nist.toolkit.valregmetadata.datatype.UuidFormat;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.axiom.om.OMElement;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.axiom.om.OMElement;
-
 public abstract class AbstractRegistryObject {
 
 	abstract public String identifyingString();
-	abstract public OMElement toXml() throws XdsInternalException;
+	abstract public OMElement toXml() throws XdsInternalException, XdsInternalException;
 	abstract public void validateSlotsLegal(ErrorRecorder er);
 	abstract public void validateRequiredSlotsPresent(ErrorRecorder er, ValidationContext vc);
 	abstract public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc);
@@ -60,7 +59,7 @@ public abstract class AbstractRegistryObject {
 		return false;
 	}
 
-	public void updateDone() throws XdsInternalException, MetadataException  {
+	public void updateDone() throws XdsInternalException, MetadataException {
 		ro = toXml();
 		m = MetadataParser.parseObject(ro);
 	}

@@ -1,17 +1,16 @@
 package gov.nist.toolkit.registrymetadata;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.registrysupport.logging.LogMessage;
-import gov.nist.toolkit.xdsexception.MetadataException;
+import org.apache.axiom.om.OMAttribute;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.axiom.om.OMAttribute;
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMNode;
 
 public class IdIndex {
 	Metadata m;

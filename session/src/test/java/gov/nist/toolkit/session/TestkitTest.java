@@ -6,7 +6,6 @@ import gov.nist.toolkit.results.client.Result;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.session.server.serviceManager.XdsTestServiceManager;
-import org.junit.Test;
 
 import java.io.File;
 import java.util.HashMap;
@@ -19,7 +18,7 @@ import java.util.Map;
 public class TestkitTest {
     File warHome = new File("/Users/bmajur/workspace3/toolkit3/xdstools2/src/main/webapp");
 
-    @Test
+
     public void registerTest() {
         Session session = new Session(warHome, SiteServiceManager.getSiteServiceManager(), "sessionId1");
         SiteSpec siteSpec;

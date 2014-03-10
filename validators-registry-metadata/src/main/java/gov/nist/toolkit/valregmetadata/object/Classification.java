@@ -1,12 +1,11 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
 import org.apache.axiom.om.OMElement;
 
 public class Classification extends AbstractRegistryObject {
@@ -39,7 +38,7 @@ public class Classification extends AbstractRegistryObject {
 		return super.equals(c);
 	}
 
-	public OMElement toXml(OMElement parent) throws XdsInternalException  {
+	public OMElement toXml(OMElement parent) throws XdsInternalException {
 		ro = MetadataSupport.om_factory.createOMElement(MetadataSupport.classification_qnamens);
 		ro.addAttribute(MetadataSupport.id_qname.getLocalPart(), id, null);
 		ro.addAttribute(MetadataSupport.classificationscheme_qname.getLocalPart(), classification_scheme, null);

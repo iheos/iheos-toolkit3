@@ -1,14 +1,12 @@
 package gov.nist.toolkit.envSetting;
 
+import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
 import gov.nist.toolkit.installation.Installation;
-import gov.nist.toolkit.xdsexception.EnvironmentNotSelectedException;
-import gov.nist.toolkit.xdsexception.NoSessionException;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 public class EnvSetting {
 	static Map<String, EnvSetting> settings = new HashMap<String, EnvSetting>();

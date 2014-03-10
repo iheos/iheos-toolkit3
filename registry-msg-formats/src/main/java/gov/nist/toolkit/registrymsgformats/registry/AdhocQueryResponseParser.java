@@ -1,11 +1,10 @@
 package gov.nist.toolkit.registrymsgformats.registry;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.axiom.om.OMElement;
 
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
 
 public class AdhocQueryResponseParser {
 	OMElement ele;

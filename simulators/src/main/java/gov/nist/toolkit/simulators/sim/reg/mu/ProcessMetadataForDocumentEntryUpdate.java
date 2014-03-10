@@ -1,24 +1,18 @@
 package gov.nist.toolkit.simulators.sim.reg.mu;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.toolkit.common.datatypes.Hl7Date;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 import gov.nist.toolkit.registrymetadata.Metadata;
-import gov.nist.toolkit.simulators.sim.reg.store.Assoc;
-import gov.nist.toolkit.simulators.sim.reg.store.DocEntry;
-import gov.nist.toolkit.simulators.sim.reg.store.Fol;
-import gov.nist.toolkit.simulators.sim.reg.store.MetadataCollection;
-import gov.nist.toolkit.simulators.sim.reg.store.ProcessMetadataForRegister;
-import gov.nist.toolkit.simulators.sim.reg.store.ProcessMetadataInterface;
+import gov.nist.toolkit.simulators.sim.reg.store.*;
 import gov.nist.toolkit.simulators.sim.reg.store.RegIndex.AssocType;
 import gov.nist.toolkit.simulators.sim.reg.store.RegIndex.StatusValue;
-import gov.nist.toolkit.xdsexception.MetadataException;
-
-import java.util.List;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class ProcessMetadataForDocumentEntryUpdate implements ProcessMetadataInterface {
 	static Logger log = Logger.getLogger(ProcessMetadataForDocumentEntryUpdate.class);

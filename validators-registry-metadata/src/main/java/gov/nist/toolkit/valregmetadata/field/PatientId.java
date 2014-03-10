@@ -1,10 +1,10 @@
 package gov.nist.toolkit.valregmetadata.field;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdsexception.MetadataException;
 
 import java.util.ArrayList;
 import java.util.List;

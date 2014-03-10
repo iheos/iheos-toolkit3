@@ -1,17 +1,15 @@
 package gov.nist.toolkit.http;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.TextErrorRecorder;
 import gov.nist.toolkit.http.HttpHeader.HttpHeaderParseException;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-
-import java.io.IOException;
-import java.util.Enumeration;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.Logger;
+import java.io.IOException;
+import java.util.Enumeration;
 
 public class HttpParser {
 	byte[] input;

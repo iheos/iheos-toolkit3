@@ -1,10 +1,9 @@
 package gov.nist.toolkit.valregmsg.registry;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorListGenerator;
 import gov.nist.toolkit.registrymsgformats.registry.Response;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
 import org.apache.axiom.om.OMElement;
 
 public class RetrieveMultipleResponse extends Response {

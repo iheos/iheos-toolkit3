@@ -1,5 +1,6 @@
 package gov.nist.toolkit.simulators.sim.reg.store;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.toolkit.common.datatypes.Hl7Date;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
@@ -7,13 +8,11 @@ import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.simulators.sim.reg.store.RegIndex.AssocType;
 import gov.nist.toolkit.valregmetadata.field.SubmissionStructure;
-import gov.nist.toolkit.xdsexception.MetadataException;
+import org.apache.axiom.om.OMElement;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.log4j.Logger;
 
 public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 	static Logger log = Logger.getLogger(ProcessMetadataForRegister.class);

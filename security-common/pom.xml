@@ -20,7 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>xds-exceptions</artifactId>
+			<artifactId>xdsException</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 	</dependencies>

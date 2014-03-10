@@ -1,11 +1,11 @@
 package gov.nist.toolkit.valregmsg.registry.storedquery.validation;
 
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.logging.LoggerException;
 import gov.nist.toolkit.valregmsg.registry.storedquery.generic.GetDocumentsAndAssociations;
 import gov.nist.toolkit.valregmsg.registry.storedquery.support.StoredQuerySupport;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsException;
 
 public class ValidationGetDocumentsAndAssociations extends
 		GetDocumentsAndAssociations {
@@ -17,7 +17,7 @@ public class ValidationGetDocumentsAndAssociations extends
 
 	@Override
 	protected Metadata runImplementation() throws MetadataException,
-			XdsException, LoggerException {
+            XdsException, LoggerException {
 		// TODO Auto-generated method stub
 		return null;
 	}

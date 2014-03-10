@@ -6,22 +6,16 @@
 
 package gov.nist.toolkit.utilities.xsl;
 
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringBufferInputStream;
-import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Iterator;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * A class for handling XSL transforms.

@@ -1,5 +1,7 @@
 package gov.nist.toolkit.valregmsg.registry.storedquery.support;
 
+import gov.nist.hit.ds.xdsException.MetadataValidationException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.docref.EbRim;
 import gov.nist.toolkit.docref.SqDocRef;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
@@ -7,19 +9,11 @@ import gov.nist.toolkit.valregmsg.registry.SQCodeAnd;
 import gov.nist.toolkit.valregmsg.registry.SQCodeOr;
 import gov.nist.toolkit.valregmsg.registry.SQCodedTerm;
 import gov.nist.toolkit.valregmsg.registry.storedquery.paramtypes.ParameterExamples;
-import gov.nist.toolkit.xdsexception.MetadataValidationException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import org.apache.axiom.om.OMElement;
 
 import javax.xml.namespace.QName;
-
-import org.apache.axiom.om.OMElement;
+import java.math.BigInteger;
+import java.util.*;
 
 public class ParamParser {
 	String queryid;
