@@ -1,5 +1,6 @@
 package gov.nist.toolkit.simulators.sim.ig;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
 import gov.nist.toolkit.actortransaction.client.ATFactory;
 import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
@@ -8,11 +9,7 @@ import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymetadata.MetadataParser;
-import gov.nist.toolkit.registrymsgformats.registry.AdhocQueryRequest;
-import gov.nist.toolkit.registrymsgformats.registry.AdhocQueryRequestParser;
-import gov.nist.toolkit.registrymsgformats.registry.AdhocQueryResponseParser;
-import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorListGenerator;
-import gov.nist.toolkit.registrymsgformats.registry.Response;
+import gov.nist.toolkit.registrymsgformats.registry.*;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.simulators.sim.reg.AdhocQueryResponseGeneratingSim;
 import gov.nist.toolkit.simulators.support.MetadataGeneratingSim;
@@ -25,14 +22,12 @@ import gov.nist.toolkit.valregmsg.message.SoapMessageValidator;
 import gov.nist.toolkit.valregmsg.registry.AdhocQueryResponse;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import org.apache.axiom.om.OMElement;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.log4j.Logger;
 
 public class XcQuerySim extends MessageValidator implements MetadataGeneratingSim, AdhocQueryResponseGeneratingSim {
 	SimCommon common;

@@ -1,11 +1,10 @@
 package gov.nist.toolkit.testengine.test;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.testengine.logging.TestDetails;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import org.junit.Test;
 
 import java.io.File;
-
-import org.junit.Test;
 
 
 public class TestSpecTest {

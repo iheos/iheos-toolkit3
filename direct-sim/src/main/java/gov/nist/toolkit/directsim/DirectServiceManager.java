@@ -1,20 +1,19 @@
 package gov.nist.toolkit.directsim;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
 import gov.nist.toolkit.directsim.client.DirectRegistrationData;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.results.client.Result;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.session.server.services.SendDirect;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 public class DirectServiceManager  extends CommonServiceManager {
 	Session session = null;

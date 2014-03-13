@@ -1,14 +1,13 @@
 package gov.nist.toolkit.valregmsg.message;
 
+import gov.nist.hit.ds.utilities.xml.SchemaValidation;
+import gov.nist.hit.ds.xdsException.SchemaValidationException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
-import gov.nist.hit.ds.utilities.xml.SchemaValidation;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
-import gov.nist.toolkit.xdsexception.SchemaValidationException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
 import org.apache.axiom.om.OMElement;
 
 /**

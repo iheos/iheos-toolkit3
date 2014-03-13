@@ -1,15 +1,13 @@
 package gov.nist.toolkit.testengine;
 
+import gov.nist.hit.ds.xdsException.XdsIOException;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.xdsexception.XdsIOException;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMText;
+import sun.misc.BASE64Decoder;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMText;
-
-import sun.misc.BASE64Decoder;
 
 public class Mtom {
 	private OMElement document;

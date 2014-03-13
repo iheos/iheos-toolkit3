@@ -6,6 +6,7 @@
 		<artifactId>toolkit2</artifactId>
 		<version>v2-maven-alpha</version>
 	</parent>
+
 	<artifactId>soapClientAPI</artifactId>
 
 	<dependencies>

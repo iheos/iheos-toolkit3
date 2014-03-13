@@ -1,12 +1,12 @@
 package gov.nist.toolkit.simulators.support;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryResponse;
 import gov.nist.toolkit.registrymsgformats.registry.Response;
 import gov.nist.toolkit.simulators.sim.reg.RegistryResponseGeneratingSim;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
 
 public class UnknownSim extends TransactionSimulator implements RegistryResponseGeneratingSim  {
 	Response response;

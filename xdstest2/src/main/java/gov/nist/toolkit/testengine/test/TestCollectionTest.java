@@ -1,13 +1,12 @@
 package gov.nist.toolkit.testengine.test;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.testengine.TestCollection;
 import gov.nist.toolkit.testengine.logging.TestDetails;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.List;
-
-import org.junit.Test;
 
 
 public class TestCollectionTest {

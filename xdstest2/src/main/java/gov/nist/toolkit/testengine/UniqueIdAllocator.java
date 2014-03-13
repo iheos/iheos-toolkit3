@@ -1,8 +1,8 @@
 package gov.nist.toolkit.testengine;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.common.datatypes.Hl7Date;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

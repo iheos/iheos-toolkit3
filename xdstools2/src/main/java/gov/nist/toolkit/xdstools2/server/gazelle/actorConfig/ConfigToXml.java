@@ -1,12 +1,13 @@
 package gov.nist.toolkit.xdstools2.server.gazelle.actorConfig;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
 import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
 import gov.nist.toolkit.sitemanagement.SeparateSiteLoader;
 import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import org.apache.axiom.om.OMElement;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.axiom.om.OMElement;
 
 public class ConfigToXml {
 

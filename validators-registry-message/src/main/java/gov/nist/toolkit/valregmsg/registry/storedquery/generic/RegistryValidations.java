@@ -1,10 +1,9 @@
 package gov.nist.toolkit.valregmsg.registry.storedquery.generic;
 
+import gov.nist.hit.ds.xdsException.XMLParserException;
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.logging.LoggerException;
-import gov.nist.toolkit.xdsexception.MetadataValidationException;
-import gov.nist.toolkit.xdsexception.XMLParserException;
-import gov.nist.toolkit.xdsexception.XdsException;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public interface RegistryValidations {
 	 * @throws XdsException
 	 * @throws LoggerException
 	 */
-	public List<String> validateApproved(List<String> uuids)  throws  XdsException, LoggerException;
+	public List<String> validateApproved(List<String> uuids)  throws XdsException, LoggerException;
 	
 	/**
 	 * Validate uids found in metadata are proper. Uids of Folder and Submission Set may not

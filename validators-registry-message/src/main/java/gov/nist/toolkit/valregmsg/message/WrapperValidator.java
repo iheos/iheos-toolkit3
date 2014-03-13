@@ -1,22 +1,17 @@
 package gov.nist.toolkit.valregmsg.message;
 
+import gov.nist.hit.ds.utilities.xml.SchemaValidation;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
-import gov.nist.hit.ds.utilities.xml.SchemaValidation;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
+
+import java.util.*;
 
 /**
  * Validate wrappers of a message.  Wrappers are the XML elements that wrap the metadata

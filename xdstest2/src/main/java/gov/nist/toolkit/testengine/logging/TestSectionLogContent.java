@@ -1,9 +1,9 @@
 package gov.nist.toolkit.testengine.logging;
 
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.registrysupport.logging.RegistryResponseLog;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import javax.xml.namespace.QName;

@@ -1,23 +1,16 @@
 package gov.nist.toolkit.xdstools2.server.simulator.support;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.actorfactory.SimDb;
 import gov.nist.toolkit.http.HttpMessage;
 import gov.nist.toolkit.http.HttpParseException;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import org.apache.log4j.Logger;
 
+import javax.servlet.*;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
 
 public class SimServletFilter implements Filter {
 	static Logger logger = Logger.getLogger(SimServletFilter.class);

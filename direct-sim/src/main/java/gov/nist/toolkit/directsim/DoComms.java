@@ -1,10 +1,11 @@
 package gov.nist.toolkit.directsim;
 
-import gov.nist.toolkit.messageDispatch.MessageDispatchUtils;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.actorfactory.DirectActorFactory;
 import gov.nist.toolkit.directsupport.SMTPException;
 import gov.nist.toolkit.email.Emailer;
 import gov.nist.toolkit.installation.Installation;
+import gov.nist.toolkit.messageDispatch.MessageDispatchUtils;
 import gov.nist.toolkit.simulators.support.ValidateMessageService;
 import gov.nist.toolkit.tk.TkLoader;
 import gov.nist.toolkit.tk.TkPropsServer;
@@ -15,30 +16,17 @@ import gov.nist.toolkit.valsupport.client.MessageValidatorDisplay;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorderBuilder;
 import gov.nist.toolkit.valsupport.message.HtmlValFormatter;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
+import org.apache.log4j.Logger;
+import org.mortbay.log.Log;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
-
-import org.apache.log4j.Logger;
-import org.mortbay.log.Log;
+import java.io.*;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.*;
+import java.util.regex.Matcher;
 
 public class DoComms implements Runnable {
 	Socket server;

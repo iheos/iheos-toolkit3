@@ -1,5 +1,6 @@
 package gov.nist.toolkit.xdstools2.server.ValService;
 
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.simulators.support.ValidateMessageService;
@@ -9,11 +10,7 @@ import gov.nist.toolkit.valsupport.client.MessageValidatorDisplay;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorderBuilder;
 import gov.nist.toolkit.valsupport.message.HtmlValFormatter;
-import gov.nist.toolkit.xdsexception.XdsException;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -21,8 +18,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class ValServlet extends HttpServlet {
 	static Logger logger = Logger.getLogger(ValServlet.class);

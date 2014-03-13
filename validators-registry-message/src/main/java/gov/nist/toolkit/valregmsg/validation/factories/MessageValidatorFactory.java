@@ -1,5 +1,6 @@
 package gov.nist.toolkit.valregmsg.validation.factories;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
@@ -13,36 +14,20 @@ import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.valccda.CcdaMessageValidator;
-import gov.nist.toolkit.valregmsg.message.DocumentAttachmentMapper;
-import gov.nist.toolkit.valregmsg.message.DocumentElementValidator;
-import gov.nist.toolkit.valregmsg.message.HttpMessageValidator;
-import gov.nist.toolkit.valregmsg.message.MetadataMessageValidator;
-import gov.nist.toolkit.valregmsg.message.MetadataOrderValidator;
-import gov.nist.toolkit.valregmsg.message.QueryRequestMessageValidator;
-import gov.nist.toolkit.valregmsg.message.QueryResponseValidator;
-import gov.nist.toolkit.valregmsg.message.RegistryResponseValidator;
-import gov.nist.toolkit.valregmsg.message.RetrieveRequestValidator;
-import gov.nist.toolkit.valregmsg.message.RetrieveResponseValidator;
-
-import gov.nist.toolkit.valregmsg.message.SchemaValidator;
-import gov.nist.toolkit.valregmsg.message.SchematronValidator;
-import gov.nist.toolkit.valregmsg.message.SoapMessageValidator;
-import gov.nist.toolkit.valregmsg.message.WrapperValidator;
+import gov.nist.toolkit.valregmsg.message.*;
 import gov.nist.toolkit.valregmsg.xdm.XdmDecoder;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine.ValidationStep;
 import gov.nist.toolkit.valsupport.message.NullMessageValidator;
 import gov.nist.toolkit.valsupport.registry.RegistryValidationInterface;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-
-import java.io.File;
-import java.util.List;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.xpath.AXIOMXPath;
 import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * A collection of static methods for initiating validations where each method 

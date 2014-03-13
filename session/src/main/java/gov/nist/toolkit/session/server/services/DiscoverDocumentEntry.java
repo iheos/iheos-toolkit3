@@ -1,5 +1,6 @@
 package gov.nist.toolkit.session.server.services;
 
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
 import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
 import gov.nist.toolkit.registrymetadata.client.AnyId;
@@ -8,7 +9,6 @@ import gov.nist.toolkit.results.client.Result;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.results.client.StepResult;
 import gov.nist.toolkit.session.server.Session;
-import gov.nist.toolkit.xdsexception.XdsException;
 
 import java.util.ArrayList;
 import java.util.List;

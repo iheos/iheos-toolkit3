@@ -1,5 +1,6 @@
 package gov.nist.toolkit.simulators.sim.rep;
 
+import gov.nist.hit.ds.xdsException.XDSMissingDocumentException;
 import gov.nist.toolkit.actorfactory.ActorFactory;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
 import gov.nist.toolkit.docref.Mtom;
@@ -20,15 +21,13 @@ import gov.nist.toolkit.valregmsg.message.MultipartContainer;
 import gov.nist.toolkit.valregmsg.message.StoredDocumentInt;
 import gov.nist.toolkit.valregmsg.service.SoapActionFactory;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
-import gov.nist.toolkit.xdsexception.XDSMissingDocumentException;
+import org.apache.axiom.om.OMElement;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.log4j.Logger;
 
 public class RepPnRSim extends TransactionSimulator implements MetadataGeneratingSim {
 	Metadata m = null;

@@ -1,22 +1,20 @@
 package gov.nist.toolkit.xdstools2.server.test.java.simulatorServiceManager;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.actorfactory.SimCache;
-import gov.nist.toolkit.actorfactory.SimManager;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.actorfactory.client.Simulator;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
 import gov.nist.toolkit.actortransaction.client.ATFactory;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.sitemanagement.Sites;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
 import gov.nist.toolkit.xdstools2.server.serviceManager.SimulatorServiceManager;
-
-import java.io.File;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.File;
 
 public class SimManagerTest {
 	static File warHome = new File("/home/bill/Documents/sf/toolkit/xdstools2/war");

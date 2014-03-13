@@ -1,18 +1,20 @@
 package gov.nist.toolkit.testengine.engine;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.MetadataValidationException;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.testengine.Linkage;
 import gov.nist.toolkit.testengine.TestConfig;
 import gov.nist.toolkit.testengine.TransactionSettings;
-import gov.nist.toolkit.testengine.transactions.BasicTransaction;
-import gov.nist.toolkit.testengine.logging.TestSectionLogContent;
 import gov.nist.toolkit.testengine.logging.NotALogFileException;
 import gov.nist.toolkit.testengine.logging.SectionLogMap;
+import gov.nist.toolkit.testengine.logging.TestSectionLogContent;
+import gov.nist.toolkit.testengine.transactions.BasicTransaction;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.MetadataValidationException;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.axiom.om.OMElement;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,9 +24,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.log4j.Logger;
 
 public class PlanContext extends BasicContext {
 	public OMElement results_document = null;
@@ -261,7 +260,7 @@ public class PlanContext extends BasicContext {
 			set_status_in_output();
 			transactionSettings.res.add(e.getMessage(), "", false);
 		}
-		catch (XdsException e) {  
+		catch (XdsException e) {
 			String errorDetails = ExceptionUtil.exception_details(e);
 			testLog.add_name_value(results_document, "FatalError", errorDetails);
 			status = false;

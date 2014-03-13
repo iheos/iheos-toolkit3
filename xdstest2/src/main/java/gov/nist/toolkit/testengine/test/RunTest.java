@@ -1,15 +1,14 @@
 package gov.nist.toolkit.testengine.test;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsParameterException;
 import gov.nist.toolkit.testengine.XdsTest;
 import gov.nist.toolkit.testkitutilities.TestEnvConfig;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.XdsParameterException;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-
-import org.junit.Test;
 
 
 public class RunTest extends TestEnvConfig {

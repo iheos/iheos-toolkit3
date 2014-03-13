@@ -1,5 +1,6 @@
 package gov.nist.toolkit.simulators.support;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
 import gov.nist.toolkit.actorfactory.SimDb;
 import gov.nist.toolkit.errorrecording.client.ErrorRecorderAdapter;
@@ -17,7 +18,6 @@ import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorder;
 import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorderBuilder;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
 import gov.nist.toolkit.valsupport.registry.RegistryValidationInterface;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;

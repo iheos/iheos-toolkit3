@@ -1,5 +1,6 @@
 package gov.nist.toolkit.valregmsg.xdm;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
@@ -12,7 +13,8 @@ import gov.nist.toolkit.valregmsg.validation.factories.MessageValidatorFactory;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import org.apache.axiom.om.OMElement;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,9 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.zip.ZipException;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.log4j.Logger;
 
 public class
         XdmDecoder extends MessageValidator {

@@ -1,5 +1,6 @@
 package gov.nist.toolkit.testengine;
 
+import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.securityCommon.SecurityParams;
 import gov.nist.toolkit.sitemanagement.Sites;
@@ -7,7 +8,6 @@ import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.testengine.errormgr.AssertionResults;
 import gov.nist.toolkit.testengine.logging.*;
 import gov.nist.toolkit.testengine.logrepository.LogRepository;
-import gov.nist.toolkit.xdsexception.EnvironmentNotSelectedException;
 import org.apache.log4j.Logger;
 
 import javax.net.ssl.*;

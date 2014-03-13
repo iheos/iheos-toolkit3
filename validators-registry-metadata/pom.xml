@@ -8,9 +8,7 @@
         <version>v2-maven-alpha</version>
     </parent>
 
-		<groupId>gov.nist.toolkit</groupId>
 		<artifactId>validators-registry-metadata</artifactId>
-		<version>v2-maven-alpha</version>
 
 
 	<dependencies>
@@ -57,7 +55,7 @@
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>utilities</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
@@ -67,7 +65,7 @@
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>xdsException</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>

@@ -1,10 +1,12 @@
 package gov.nist.toolkit.soap.axis2;
 
+import gov.nist.hit.ds.xdsException.HttpCodeException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.HttpCodeException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMNamespace;
 
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -14,9 +16,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMNamespace;
 
 public class Swa {
 	String endpoint;

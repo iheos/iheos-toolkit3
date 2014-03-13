@@ -1,18 +1,12 @@
 package gov.nist.toolkit.testengine.logrepository;
 
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.results.client.XdstestLogId;
 import gov.nist.toolkit.testengine.logging.LogMap;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 import org.apache.log4j.Logger;
+
+import java.io.*;
 
 public class JavaSerializationIO implements ILoggerIO  {
 	Logger logger = Logger.getLogger(JavaSerializationIO.class);
