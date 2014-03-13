@@ -86,7 +86,6 @@
 		<module>timer</module>
 		<module>tk</module>
 		<module>utilities</module>
-        <!--  <module>v3utilities</module>        v3 -->
 		<module>validators-ccda</module>
 		<module>validators-direct-factory</module>
 		<module>validators-registry-message</module>
@@ -96,7 +95,6 @@
 		<module>xdsException</module>
 		<module>xdstest-gui</module>
 		<module>xdstest2</module>
-<!--		<module>xdstest2-logging</module>   -->
 		<module>xdstools2</module>
 		<module>soapClientAPI</module>
         <module>ebrimIntegrationTest</module>
