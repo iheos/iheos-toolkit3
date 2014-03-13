@@ -69,7 +69,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	private static final String indexSession = PropertyKey.INDEX_SESSION.toString();
 	
 	private static final String CACHED_SESSION = "CACHED";
-	private static final String CONTAINER_VERSION = "2013-12-26";
+	private static final String CONTAINER_VERSION = "2014-03-13";
 	private static final String CONTAINER_VERSION_ID = "VERSION";
 	private static final String BYPASS_VERSION = "BYPASS";
 
@@ -80,11 +80,11 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 */
 	private static final String repContainerDefinition = 
 	"(repositoryIndexId integer not null  generated always as identity," 	/* (Internal use) This is the primary key */
-	+ repId + " varchar(64) not null,"								/* This is the repository Id as it appears on the filesystem */
-	+ assetId + " varchar(64)," /* */								/* This is the asset Id of the asset under the repository folder */
+	+ repId + " varchar(128) not null,"								/* This is the repository Id as it appears on the filesystem */
+	+ assetId + " varchar(512)," /* */								/* This is the asset Id of the asset under the repository folder */
 	+ createdDate + " varchar(32)," 								/* Asset created date */
-	+ locationId + " varchar(512),"									/* This is the file path */
-	+ parentId +  " varchar(64),"									/* The parent asset Id. A null-value indicates top-level asset and no children */
+	+ locationId + " varchar(1024),"									/* This is the file path */
+	+ parentId +  " varchar(512),"									/* The parent asset Id. A null-value indicates top-level asset and no children */
 	+ assetType + " varchar(32)," 									/* Asset type - usually same as the keyword property */ 
 	+ hash + " varchar(64),"											/* (Internal use) The hash of the property file */
 	+ reposAcs + " varchar(40),"										/* (Internal use) src enum string */	
