@@ -84,6 +84,7 @@
 		<module>validators-support</module>
 		<module>wssetool</module>
 		<module>xds-exceptions</module>
+		<module>xdsException</module> 	  <!-- v3 -->
 		<module>xdstest-gui</module>
 		<module>xdstest2</module>
 		<module>xdstest2-logging</module>

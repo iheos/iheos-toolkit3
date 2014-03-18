@@ -1,0 +1,9 @@
+#
+#Fri Aug 02 19:58:44 EDT 2013
+displayName=My Site
+createdDate=20130802195844
+modifiedDate=20130802195844
+type=testdef
+repositoryId=testkit
+description=This is my test
+#id=testdef1

@@ -20,7 +20,6 @@ target/
 eventLog/*
 
 #ignore repository test data files
-repositories/data/*
 repository/www-test/*
 
 # Eclipse metadata
