@@ -4,7 +4,7 @@ import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 
-public class CloseableTabWidget extends Tab {
+public class CloseableTabWidget extends Tab implements TabInterface {
 	private VLayout panel = new VLayout(10);
 	
 	public CloseableTabWidget(String s){
