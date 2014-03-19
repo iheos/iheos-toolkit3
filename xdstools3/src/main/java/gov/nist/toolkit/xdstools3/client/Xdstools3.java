@@ -1,10 +1,12 @@
 package gov.nist.toolkit.xdstools3.client;
 
+import gov.nist.toolkit.xdstools2.client.TabbedWindow;
+import gov.nist.toolkit.xdstools2.client.tabs.actorConfigTab.ActorConfigTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.ConfigurationTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.FindDocumentTab;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.GenericTabSetWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.TabSetWidget;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -41,16 +43,16 @@ public class Xdstools3 implements EntryPoint {
 		ConfigToolbar configBar = new ConfigToolbar();
 
 		// Tabs
-		final GenericTabSetWidget topTabSet = new GenericTabSetWidget();  
+		final TabSetWidget topTabSet = new TabSetWidget();  
 		CloseableTabWidget findDocsTab = new FindDocumentTab(); 
 		CloseableTabWidget configTab = new ConfigurationTab(); 
-        CloseableTabWidget homeTab = new CloseableTabWidget("Home"); 
-		 homeTab.setCanClose(false);
-        
+        CloseableTabWidget homeTab = new CloseableTabWidget("Home");  homeTab.setCanClose(false);
+		
         // Add all tabs to the main TabSet
         topTabSet.addTab(homeTab); 
         topTabSet.addTab(findDocsTab); 
         topTabSet.addTab(configTab);
+  
 
 		// Main layout
         VLayout mainLayout = new VLayout(); 

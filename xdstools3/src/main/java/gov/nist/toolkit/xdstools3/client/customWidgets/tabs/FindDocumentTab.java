@@ -9,31 +9,32 @@ import com.smartgwt.client.widgets.layout.VLayout;
 
 
 public class FindDocumentTab extends CloseableTabWidget {
-	String header = "Find Documents";
+	static String header = "Find Documents";
 
 	public FindDocumentTab() { 
-		super("Find Documents");
+		super(header);
 
-		// Set header and subtitles
 		setHeader(header);
-
-		// Contents
-		AllEndpointsWidget endpoints = new AllEndpointsWidget();
-		FindDocumentForm findDocs = new FindDocumentForm();
-		ValidationSummaryWidget output = new ValidationSummaryWidget();
-		
-		HLayout upperPanel = new HLayout();
-		upperPanel.addMembers(endpoints, findDocs);
-		endpoints.setWidth("20%");
-
-		VLayout findDocsPanel = new VLayout(); 
-		findDocsPanel.setWidth100();
-		findDocsPanel.setHeight100(); 
-		findDocsPanel.addMembers(upperPanel, output);
-		upperPanel.setHeight("50%");
-		output.setHeight("*");
-		setPane(findDocsPanel);
+		setContents();
 	}  
+	
+	private void setContents(){
+				AllEndpointsWidget endpoints = new AllEndpointsWidget();
+				FindDocumentForm findDocs = new FindDocumentForm();
+				ValidationSummaryWidget output = new ValidationSummaryWidget();
+				
+				HLayout upperPanel = new HLayout();
+				upperPanel.addMembers(endpoints, findDocs);
+				endpoints.setWidth("20%");
+
+				VLayout findDocsPanel = new VLayout(); 
+				findDocsPanel.setWidth100();
+				findDocsPanel.setHeight100(); 
+				findDocsPanel.addMembers(upperPanel, output);
+				upperPanel.setHeight("50%");
+				output.setHeight("*");
+				setPane(findDocsPanel);
+	}
 
 
 }  
