@@ -1,17 +1,10 @@
 package gov.nist.hit.ds.simSupport.simrepo;
 
-import gov.nist.hit.ds.initialization.installation.Installation;
-import gov.nist.hit.ds.repository.api.*;
-import gov.nist.hit.ds.repository.api.RepositorySource.Access;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
+import gov.nist.hit.ds.repository.api.ArtifactId;
+import gov.nist.hit.ds.simSupport.client.Simulator;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import gov.nist.hit.ds.simSupport.client.Simulator;
-import org.apache.log4j.Logger;
 
 /**
  * Initialization and access functions for simulator repository.
@@ -22,7 +15,7 @@ public class SimRepoFactory {
 //	static Logger logger = Logger.getLogger(SimRepoFactory.class);
 
     public void installRepositoryLinkage(Simulator simulator) {
-        Id repositoryId = simulator.getSimAsset().getRepository();
+        ArtifactId repositoryId = simulator.getSimAsset().getRepository();
         simulator.setRepositoryId(repositoryId);
     }
 

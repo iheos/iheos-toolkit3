@@ -36,7 +36,7 @@ public class MetadataRepository {
     }
 
     public Asset saveObject(byte[] data, String id) throws MetadataCannotBeOverwrittenException {
-        Id assetId = new SimpleId(id);
+        ArtifactId assetId = new SimpleId(id);
         // metadata cannot be overwritten
         if (assetExists(assetId)) throw new MetadataCannotBeOverwrittenException("MetadataRepository: attempt to overwrite <" + id + ">");
 
@@ -53,7 +53,7 @@ public class MetadataRepository {
     }
 
     // does asset exist as child of metadataDirectory?
-    private boolean assetExists(Id assetId) {
+    private boolean assetExists(ArtifactId assetId) {
 
 // TODO replace this with real repository code - not sure this is the best approach
         try {

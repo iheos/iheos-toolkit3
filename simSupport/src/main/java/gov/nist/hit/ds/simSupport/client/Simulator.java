@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.simSupport.client;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
@@ -11,8 +12,6 @@ import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Holder of a simulator definition.  Simulators are identified by their
@@ -28,13 +27,13 @@ public class Simulator implements Serializable, IsSerializable {
     private List<ActorSimConfig> configs = new ArrayList<ActorSimConfig>();
     private SimId simId;
     private Asset simAsset = null;
-    private Id repositoryId = null;
+    private ArtifactId repositoryId = null;
 
-    public Id getRepositoryId() {
+    public ArtifactId getRepositoryId() {
         return repositoryId;
     }
 
-    public void setRepositoryId(Id repositoryId) {
+    public void setRepositoryId(ArtifactId repositoryId) {
         this.repositoryId = repositoryId;
     }
 
