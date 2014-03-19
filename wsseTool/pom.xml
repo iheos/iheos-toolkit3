@@ -6,21 +6,6 @@
 	<artifactId>wsseTool</artifactId>
 	<version>3.0.0</version>
 
-<!--
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>Internal Releases</name>
-			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>Internal Snapshots</name>
-			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
--->
 
 	<repositories>
 		<repository>

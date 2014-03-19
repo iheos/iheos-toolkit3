@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.initialization.installation;
 
 import gov.nist.hit.ds.utilities.io.Io;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,8 +9,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import org.apache.log4j.Logger;
 
 public class PropertyManager {
 
@@ -62,31 +61,37 @@ public class PropertyManager {
 		}
 	}
 
+    @Deprecated
 	public String getPassword() {
 		loadProperties();
 		return (String) toolkitProperties.get("Admin_password");
 	}
 
+    @Deprecated
 	public String getToolkitHost() {
 		loadProperties();
 		return (String) toolkitProperties.get("Toolkit_Host");
 	}
 
+    @Deprecated
 	public String getToolkitPort() {
 		loadProperties();
 		return (String) toolkitProperties.get("Toolkit_Port");
 	}
 
+    @Deprecated
 	public String getToolkitTlsPort()  {
 		loadProperties();
 		return (String) toolkitProperties.get("Toolkit_TLS_Port");
 	}
 
+    @Deprecated
 	public String getToolkitGazelleConfigURL()  {
 		loadProperties();
 		return (String) toolkitProperties.get("Gazelle_Config_URL");
 	}
 
+    @Deprecated
 	public String getExternalCache()  {
 		loadProperties();
 		String cache = (String) toolkitProperties.get("External_Cache");
@@ -94,6 +99,7 @@ public class PropertyManager {
 		return cache;
 	}
 
+    @Deprecated
 	public boolean isUseActorsFile()  {
 		loadProperties();
 		String use = (String) toolkitProperties.get("Use_Actors_File");
@@ -102,11 +108,13 @@ public class PropertyManager {
 		return "true".compareToIgnoreCase(use) == 0;
 	}
 
+    @Deprecated
 	public String getDefaultAssigningAuthority()  {
 		loadProperties();
 		return (String) toolkitProperties.get("PatientID_Assigning_Authority");
 	}
 
+    @Deprecated
 	public String getDefaultEnvironmentName()  {
 		loadProperties();
 		return (String) toolkitProperties.get("Default_Environment");
@@ -131,15 +139,18 @@ public class PropertyManager {
 		Io.stringToFile(currentFile, name);
 	}
 
+    @Deprecated
 	public String getToolkitEnableAllCiphers()  {
 		loadProperties();
 		return (String) toolkitProperties.getProperty("Enable_all_ciphers");
 	}
 
+    @Deprecated
 	public void save(Map<String, String> props) throws IOException  {
 		saveProperties();
 	}
 
+    @Deprecated
 	public void loadProperties()  {
 		if (toolkitProperties != null) {
 			return;
@@ -153,10 +164,31 @@ public class PropertyManager {
 		}
 	}
 
+    public void loadProperties(File toolkitPropertiesFile) {
+        toolkitProperties = new Properties();
+        try {
+            toolkitProperties.load(Io.getInputStreamFromFile(toolkitPropertiesFile));
+        } catch (IOException e) {
+            logger.fatal("Could not load toolkit properties from <" + toolkitPropertiesFile + ">");
+            throw new RuntimeException("Could not load toolkit properties from <" + toolkitPropertiesFile + ">");
+        }
+    }
+
+    @Deprecated
 	public void saveProperties() throws IOException {
 		saveProperties(toolkitProperties, Installation.installation().getToolkitPropertiesFile());
 	}
 
+    public void saveProperties(File file) {
+        try {
+            saveProperties(toolkitProperties, file);
+        } catch (IOException e) {
+            logger.fatal("Could not save toolkit properties to <" + file + ">");
+            throw new RuntimeException("Could not save toolkit properties to <" + file + ">");
+        }
+    }
+
+    @Deprecated
 	public void saveProperties(Properties props, File file) throws IOException {
 		FileOutputStream fos = null;
 		try {
@@ -169,6 +201,7 @@ public class PropertyManager {
 		}
 	}
 
+    @Deprecated
 	public Map<String, String> getPropertyMap()  {
 		loadProperties();
 		Map<String, String> props = new HashMap<String, String>();

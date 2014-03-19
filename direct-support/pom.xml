@@ -5,9 +5,10 @@
 	<parent>
 		<groupId>gov.nist.toolkit</groupId>
 		<artifactId>toolkit2</artifactId>
-		<version>v2-maven-alpha</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
+	<version>v2-maven-alpha</version>
 	<artifactId>direct-support</artifactId>
 
   <dependencies>

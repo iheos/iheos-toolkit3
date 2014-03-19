@@ -4,7 +4,7 @@
    <parent>
 	<groupId>gov.nist.toolkit</groupId>
 	<artifactId>toolkit2</artifactId>
-	<version>v2-maven-alpha</version>
+	<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
   <!-- POM file generated with GWT webAppCreator -->
@@ -37,6 +37,13 @@
       <version>${gwtVersion}</version>
       <scope>provided</scope>
     </dependency>
+               <dependency>
+                        <groupId>com.sun.ebxml</groupId>
+                        <artifactId>ebxmlrr-common</artifactId>
+                        <version>1.0</version>
+                        <scope>system</scope>
+                        <systemPath>${basedir}/../lib/ebxmlrr-common-1.0.jar</systemPath>
+                </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

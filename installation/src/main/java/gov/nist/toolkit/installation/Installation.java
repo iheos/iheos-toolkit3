@@ -7,6 +7,9 @@ import org.apache.log4j.Logger;
 import javax.servlet.ServletContext;
 import java.io.File;
 
+/**
+ * This class is obsolete.  All code should migrate to use initialization/Installation.java instead.
+ */
 public class Installation {
 	File warHome = null;
 	File externalCache = null;
@@ -23,7 +26,14 @@ public class Installation {
 			me = new Installation();
 		return me;
 	}
-	
+
+    /**
+     * Deprecated, this job is performed by the Toolkit class now and
+     * requires no calls to trigger the initialization.
+     * @param servletContext
+     * @return
+     */
+    @Deprecated
 	static public Installation installation(ServletContext servletContext) {
 		if (me == null)
 			me = new Installation();
@@ -32,12 +42,36 @@ public class Installation {
 		return me;
 	}
 
+    /**
+     * Deprecated, this job is performed by the Toolkit class now.
+     * @param servletContext
+     * @return
+     */
+     @Deprecated
+    static public Installation installation(File warHome) {
+        if (me == null)
+            me = new Installation();
+        me.warHome = warHome;
+        return me;
+    }
+
 	private Installation() {   }
-	
+
+    /**
+     * Use Toolkit class instead.
+     * @return
+     */
+    @Deprecated
 	public File warHome() { 
 		return warHome; 
 		}
-	public void warHome(File warHome) { 
+
+    /**
+     * Deprecated, this job is performed by the Toolkit class now and
+     * requires no calls to trigger the initialization.
+     */
+    @Deprecated
+	public void warHome(File warHome) {
 		this.warHome = warHome; 
 		}
 	public File externalCache() { return externalCache; }

@@ -5,10 +5,11 @@
     <parent>
         <artifactId>toolkit2</artifactId>
         <groupId>gov.nist.toolkit</groupId>
-        <version>v2-maven-alpha</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+	<version>v2-maven-alpha</version>
     <artifactId>soapAPI</artifactId>
 
     <dependencies>
