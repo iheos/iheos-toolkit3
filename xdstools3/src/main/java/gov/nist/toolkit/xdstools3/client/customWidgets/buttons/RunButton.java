@@ -1,6 +1,5 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets;
+package gov.nist.toolkit.xdstools3.client.customWidgets.buttons;
 
-import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.form.fields.ButtonItem;
 
 /**
@@ -9,9 +8,9 @@ import com.smartgwt.client.widgets.form.fields.ButtonItem;
  * @author dazais
  *
  */
-public class RunWidget extends ButtonItem {
+public class RunButton extends ButtonItem {
 	
-	public RunWidget(){
+	public RunButton(){
 		setTitle("Run");
 		setDisabled(true);  
 	}

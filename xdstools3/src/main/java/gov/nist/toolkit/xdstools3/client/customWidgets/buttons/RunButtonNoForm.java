@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets;
+package gov.nist.toolkit.xdstools3.client.customWidgets.buttons;
 
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.Button;
@@ -9,10 +9,10 @@ import com.smartgwt.client.widgets.layout.HLayout;
  * @author dazais
  *
  */
-public class RunWidgetNoForm extends HLayout {
+public class RunButtonNoForm extends HLayout {
 	Button run ;
 	
-	public RunWidgetNoForm(){
+	public RunButtonNoForm(){
 		run = new Button("Run");
 		run.setAlign(Alignment.CENTER);
 		addChild(run);

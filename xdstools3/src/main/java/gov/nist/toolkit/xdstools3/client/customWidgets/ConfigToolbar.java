@@ -1,9 +1,14 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets;
 
+import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.LoginDialogWidget;
+import gov.nist.toolkit.xdstools3.server.LoginManager;
+
 import com.google.gwt.user.client.ui.ListBox;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.IconButton;
 import com.smartgwt.client.widgets.WidgetCanvas;
+import com.smartgwt.client.widgets.events.ClickEvent;
+import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
 import com.smartgwt.client.widgets.menu.IconMenuButton;
@@ -63,8 +68,22 @@ public class ConfigToolbar extends RibbonBar {
 		actorsGroup.addControls(configEndpoints, listEndpoints); 
 
 		// Menu group: Admin 
+		// Behavior: Clicking on any of the buttons in the admin group opens a dialog to allow the user to log in as admin,
+		// IF not logged in yet. Then follows to the link initially requested.
 		RibbonGroup adminGroup = createRibbonGroup("Admin Panel"); 
 		IconButton button = getIconButton("Settings", "icon_gear.png") ;
+		button.addClickHandler(new ClickHandler() {  
+			@Override
+			public void onClick(ClickEvent event) {
+				//if (!LoginManager.getInstance().isLoggedAsAdmin()) missing rpc call and user management
+				showLoginWindow();
+			}
+
+			private void showLoginWindow() {
+				LoginDialogWidget dialog = new LoginDialogWidget();
+				dialog.show();
+			}  
+        });  
 		adminGroup.addControl(button);
 
 		// Add menu groups to menu bar  

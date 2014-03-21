@@ -1,5 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets;
 
+import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.RunButton;
+
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.form.DynamicForm;
@@ -20,6 +22,9 @@ public class FindDocumentForm extends DynamicForm {
 		createInputs();
 	}
 
+	/**
+	 * Creates the fields
+	 */
 	public void createInputs() {
 		PatientIDWidget pid = new PatientIDWidget();
 
@@ -32,9 +37,9 @@ public class FindDocumentForm extends DynamicForm {
         linkItem.setVAlign(VerticalAlignment.CENTER);
 		
 		CheckboxItem includeOnDemand = new CheckboxItem("includeOnDemand");  
-		includeOnDemand.setTitle("Include on-demand document entries"); 
+		includeOnDemand.setTitle("Include on-demand document entries");
 		
-		final RunWidget runButton = new RunWidget();
+		final RunButton runButton = new RunButton();
 		setFields(new FormItem[] {pid, linkItem, includeOnDemand, runButton});
 		
 		// Event handlers
