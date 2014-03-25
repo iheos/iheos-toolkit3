@@ -950,9 +950,11 @@ public class SearchWidget extends Composite {
 	
 	}
 
-	/**
-	 * @param cmdGroup
-	 */
+    /**
+     *
+     * @param path
+     * @return
+     */
 	private Button newRemoveGroupBtn(String path) {
 		
 			Button removeGroupBtn = new Button(removeGroupTxt);			

@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface RepositoryService extends RemoteService  {
 
 	
-	/* Artifact Repository Services */
+	/* Toolkit Artifact Repository Services */
 	public List<RepositoryTag> getRepositoryDisplayTags() throws RepositoryConfigException;
 	public List<String> getIndexablePropertyNames() throws NoServletSessionException;
 	public Boolean setRepositoryConfig() throws RepositoryConfigException;
@@ -34,4 +34,5 @@ public interface RepositoryService extends RemoteService  {
 	public QueryParameters getSearchCriteria(String id, String acs, String queryLoc) throws RepositoryConfigException;
 	public AssetNode saveSearchCriteria(QueryParameters qp) throws RepositoryConfigException;
 	public List<AssetNode> getSavedQueries(String id, String acs) throws RepositoryConfigException;
+    public List<AssetNode> getTxUpdates(String queue) throws RepositoryConfigException;
 }

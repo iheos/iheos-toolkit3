@@ -26,6 +26,10 @@
 			<id>internal-nist-repo-maven-central</id>
 			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/central/</url>
 		</repository>
+        <repository>
+            <id>jboss-maven2-release-repository</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/jboss-thirdparty-releases/</url>
+        </repository>
 		<repository>
 			<id>codehaus</id>
 			<url>http://repository.codehaus.org/org/codehaus</url>

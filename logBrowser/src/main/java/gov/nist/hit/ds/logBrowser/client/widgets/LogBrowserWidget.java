@@ -1,8 +1,11 @@
 package gov.nist.hit.ds.logBrowser.client.widgets;
 
 
+import com.google.gwt.user.client.ui.TabBar;
 import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
 import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEventHandler;
+import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEvent;
+import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEventHandler;
 import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
 import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
 import gov.nist.hit.ds.repository.simple.Configuration;
@@ -64,6 +67,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
+import org.omg.CORBA.TRANSACTION_MODE;
 
 public class LogBrowserWidget extends Composite {
 
@@ -90,9 +94,13 @@ public class LogBrowserWidget extends Composite {
 	final public RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
     protected ArrayList<String> propNames = new ArrayList<String>();
     protected Map<String, String> reposProps = new HashMap<String,String>();
-    AssetTreeItem treeItemTarget = null;     
+    AssetTreeItem treeItemTarget = null;
+    HTML tabTitle = new HTML(Feature.TRANSACTION_MONITOR.toString());
+    int txMonTab = -1;
 
     SimpleEventBus eventBus;
+
+    // TODO: refactor widgets for internal use
     
 	public static enum Feature {
 		BROWSE() {
@@ -105,7 +113,12 @@ public class LogBrowserWidget extends Composite {
 			public String toString() {
 				return "Search";	
 			}
-		} 
+		}, TRANSACTION_MONITOR() {
+            @Override
+            public String toString() {
+                return "Transaction Monitor";
+            }
+        }
 	};
 
 	public LogBrowserWidget(SimpleEventBus eventBus, final Feature[] features) throws RepositoryConfigException {
@@ -115,20 +128,28 @@ public class LogBrowserWidget extends Composite {
 
 			public void onFailure(Throwable arg0) {
 				
-				Window.alert("Repository system is not available: " + arg0.toString());
+				Window.alert("The repository system configuration is not available: " + arg0.toString());
 			}
 
 			public void onSuccess(Boolean rs) {
 				if (features!=null) {
 					if (features.length>1) {
+                        int cx=0;
 						for (Feature f : features) {
-							featureTlp.add(setupFeature(f), f.toString());
+
+
+                            if (Feature.TRANSACTION_MONITOR.equals(f)) {
+                                txMonTab = cx;
+                            }
+                            featureTlp.add(setupFeature(f),f.toString());
+                            cx++;
+
 						}		 				    				 					
 					} else if (features.length==1) {						
 						featureLp.add(setupFeature(features[0]));
 					}
 				} else {
-					Window.alert("No log browsers features were selected");
+					Window.alert("No log browser features were selected");
 				}
 
 			}			
@@ -136,7 +157,7 @@ public class LogBrowserWidget extends Composite {
 
 		if (features!=null) {
 			if (features.length>1) {
-				initWidget(featureTlp);		
+				initWidget(featureTlp);
 			} else {
 				initWidget(featureLp);
 			}
@@ -153,10 +174,40 @@ public class LogBrowserWidget extends Composite {
 		} 
 		else if (Feature.SEARCH==f) {
 			return setupSearchFeature();				
-		}
+		} else if (Feature.TRANSACTION_MONITOR==f) {
+            return setupTxMonitorFeature();
+        }
 		return null;
 	}
-	
+
+    protected Widget setupTxMonitorFeature() {
+
+        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus);
+        txMonitor.getElement().getStyle()
+                .setProperty("border", "none");
+
+
+        eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
+            @Override
+            public void onNewTxMessage(NewTxMessageEvent event) {
+
+               //fix: Window.alert(""+txMonTab + " "+featureTlp.getTabWidget(1).getTitle() );
+
+
+                if (txMonTab>-1) {
+
+                    //Window.alert(featureTlp.getTabWidget(txMonTab).getElement().getInnerText());
+                    featureTlp.getTabWidget(txMonTab).getElement().setInnerText(Feature.TRANSACTION_MONITOR.toString() + " ("+ event.getValue() + ")");
+
+                    // featureTlp.getWidget(txMonTab).setTitle(Feature.TRANSACTION_MONITOR.toString() + " ("+event.getValue()+")");
+
+                }
+
+            }
+        });
+
+        return txMonitor;
+    }
 
 	  protected SplitLayoutPanel setupSearchFeature() {
 		    SplitLayoutPanel searchMainLayoutPanel = new SplitLayoutPanel(5); // Search-main panel
@@ -593,10 +644,12 @@ public class LogBrowserWidget extends Composite {
 		    
 		    return tree;
 	  }
-		/**
-		 * @param an
-		 * @return
-		 */
+
+    /**
+     *
+     * @param csv
+     * @return
+     */
 		private CellTable<List<String>> createCellTable(String [][]csv) {
 			// Create a CellTable (based on Stack ans. 15122103).
 			 CellTable<List<String>> table = new CellTable<List<String>>();							 							 
@@ -663,10 +716,11 @@ public class LogBrowserWidget extends Composite {
 					String shStr = SyntaxHighlighter.highlight(xmlStr, BrushFactory.newXmlBrush() , false);
 					contentPanel.add(new HTML(shStr));
 				} else if ("text/json".equals(an.getMimeType())) {
-					// centerPanel.add(new HTML("<pre>" + an.getTxtContent() + "</pre>"));
 					String shStr = SyntaxHighlighter.highlight(an.getTxtContent(), BrushFactory.newCssBrush() , false);
 					contentPanel.add(new HTML(shStr));
-				} else {								
+				} else if ("text/plain".equals(an.getMimeType())) {
+                    centerPanel.add(new HTML("<pre style='margin-top:0px;'>" + an.getTxtContent() + "</pre>"));
+                } else {
 					contentPanel.add(new HTML(an.getTxtContent()));	
 				} 
 			} else {	

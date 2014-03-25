@@ -295,15 +295,19 @@ public class FolderManager {
 			return pff.getDirectMatch();	
 		} else {
 			if (assetFileNames!=null && assetFileNames.length>0 && assetFileNames[0]!=null) {
-				
-				if (assetFileNames[0].isFile()) {
-					return new File[]{assetFileNames[0],null};	
-				} else if (assetFileNames[0].isDirectory()) {			
-					File[] nestedMatch = getAssetPath(pff, assetFileNames[0]);
-					if (nestedMatch!=null && nestedMatch.length>0 && nestedMatch[0]!=null)
-						return nestedMatch;						
-				}
-				
+
+                if (assetFileNames!=null && assetFileNames.length>0) {
+                    for (File assetFileName : assetFileNames ) {
+                        if (assetFileName.isFile()) {
+                            return new File[]{assetFileName,null};
+                        } else if (assetFileName.isDirectory()) {
+                            File[] nestedMatch = getAssetPath(pff, assetFileName);
+                            if (nestedMatch!=null && nestedMatch.length>0 && nestedMatch[0]!=null)
+                                return nestedMatch;
+                        }
+                    }
+                }
+
 			} 
 
 

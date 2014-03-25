@@ -31,7 +31,13 @@ public class LogBrowser implements EntryPoint {
 		 LogBrowserWidget logBrowserWidget = null;
 					
 			try {
-				logBrowserWidget = new LogBrowserWidget(eventBus, new Feature[]{Feature.BROWSE, Feature.SEARCH}); // 
+				logBrowserWidget = new LogBrowserWidget(eventBus,
+                        new Feature[]{
+                                Feature.BROWSE
+                                , Feature.SEARCH
+                                , Feature.TRANSACTION_MONITOR
+                                });
+
 			} catch (RepositoryConfigException e) {
 				Window.alert("Could not initialize log browser widget: " + e.toString());
 			}			

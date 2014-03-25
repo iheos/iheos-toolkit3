@@ -122,7 +122,16 @@ RepositoryService {
 		}
 	}
 
-	@Override
+    @Override
+    public List<AssetNode> getTxUpdates(String queue) throws RepositoryConfigException {
+        try {
+            return PresentationData.getLiveUpdates(queue);
+        } catch (Exception re) {
+            throw new RepositoryConfigException(re.toString());
+        }
+    }
+
+    @Override
 	public QueryParameters getSearchCriteria(String id, String acs,
 			String queryLoc) throws RepositoryConfigException {
 		try {
@@ -143,6 +152,7 @@ RepositoryService {
 		}
 
 	}
+
 
 	
 

@@ -36,16 +36,31 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
+import net.timewalker.ffmq3.FFMQConstants;
+
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.IsSerializable;
+
+
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageListener;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 public class PresentationData implements IsSerializable, Serializable  {
 
@@ -53,10 +68,17 @@ public class PresentationData implements IsSerializable, Serializable  {
 	 * 
 	 */
 	public static final int MAX_RESULTS = 500;
-	
+    public static final String TXMON_QUEUE = "txmon";
+
 	private static final long serialVersionUID = 4939311135239253727L;
 	private static Logger logger = Logger.getLogger(PresentationData.class.getName());
-	
+    /* ActiveMQ Messaging - not used
+    private static final String DEFAULT_BROKER_NAME = "tcp://localhost:61616";
+    private static final String DEFAULT_USER_NAME = ActiveMQConnection.DEFAULT_USER;
+    private static final String DEFAULT_PASSWORD = ActiveMQConnection.DEFAULT_PASSWORD;
+    */
+
+
 	public List<RepositoryTag> getRepositoryDisplayTags() throws RepositoryConfigException {
 		
         List<RepositoryTag> rtList = new ArrayList<RepositoryTag>();
@@ -423,17 +445,22 @@ public class PresentationData implements IsSerializable, Serializable  {
 		
 		aDst.setRepId(aSrc.getRepository().getIdString());
 		aDst.setAssetId(aSrc.getId().getIdString());
+        if (aSrc.getAssetType()!=null)
+            aDst.setType(aSrc.getAssetType().getKeyword());
 		aDst.setDescription(aSrc.getDescription());
 		aDst.setDisplayName(aSrc.getDisplayName());
 		aDst.setMimeType(aSrc.getMimeType());
 		aDst.setReposSrc(aSrc.getSource().getAccess().name());
 		if (aSrc.getPath()!=null)
 			aDst.setLocation(aSrc.getPath().toString());
-		
-		if (aSrc.getContent()!=null) {
+
+         if (aSrc.getContent()!=null) {
 			try {
 				String content = new String(aSrc.getContent());
-				if ("text/xml".equals(aSrc.getMimeType()) || "application/soap+xml".equals(aSrc.getMimeType())) {
+                if (an.getType()!=null && an.getType().startsWith("raw")) {
+                    content = SafeHtmlUtils.fromString(content).asString();
+                    aDst.setTxtContent(content);
+                } else if ("text/xml".equals(aSrc.getMimeType()) || "application/soap+xml".equals(aSrc.getMimeType())) {
 					aDst.setTxtContent(XmlFormatter.htmlize(content));			
 				} else if ("text/csv".equals(aSrc.getMimeType())) {
 					aDst.setCsv(processCsvContent(content));
@@ -487,12 +514,13 @@ public class PresentationData implements IsSerializable, Serializable  {
 			}
 		return sb.toString();
 	}
-	
-	
-	/**
-	 * @param aDst
-	 * @param content
-	 */
+
+
+    /**
+     *
+     * @param content
+     * @return
+     */
 	private static String prettyPrintJson(String content) {
 
 //	   JSONValue jsonValue = JSONParser.parseStrict(content);
@@ -519,10 +547,11 @@ public class PresentationData implements IsSerializable, Serializable  {
 	}
 
 
-	/**
-	 * @param aDst
-	 * @param content
-	 */
+    /**
+     *
+     * @param content
+     * @return
+     */
 	private static String[][] processCsvContent(String content) {
 		CSVParser parser = new CSVParser(content);
 		int sz = parser.size(); 
@@ -565,7 +594,189 @@ public class PresentationData implements IsSerializable, Serializable  {
 		return repos;
 	}
 
+    public static List<AssetNode> getLiveUpdates(String queue)  {
+        ArrayList<AssetNode> result = new ArrayList<AssetNode>();
 
+        MessageConsumer consumer = null;
+        String txDetail = null;
+        String repId = null;
+        String acs = null;
+        String headerLoc = null;
+        String bodyLoc = null;
+        String ioHeaderId = null;
+        String msgType = null;
+
+        try {
+
+            Hashtable<String,String> env = new Hashtable<String, String>();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, FFMQConstants.JNDI_CONTEXT_FACTORY);
+            env.put(Context.PROVIDER_URL, "tcp://localhost:10002");
+            Context context = new InitialContext(env);
+
+            // Lookup a connection factory in the context
+            javax.jms.QueueConnectionFactory factory = (QueueConnectionFactory) context.lookup(FFMQConstants.JNDI_QUEUE_CONNECTION_FACTORY_NAME);
+
+
+            javax.jms.QueueConnection connection = factory.createQueueConnection();
+
+            javax.jms.QueueSession session = null;
+
+            session = connection.createQueueSession(false,
+                    javax.jms.Session.AUTO_ACKNOWLEDGE);
+            connection.start();
+
+            Destination destination = session.createQueue(TXMON_QUEUE);
+
+            // Create a MessageConsumer from the Session to the Topic or Queue
+            consumer = session.createConsumer(destination);
+
+            // Wait for a message
+            Message message = consumer.receive(1000*30);
+
+            if (message instanceof MapMessage) {
+                txDetail = (String)((MapMessage)message).getObject("txDetail");
+                repId = (String)((MapMessage)message).getObject("repId");
+                acs = (String)((MapMessage)message).getObject("acs");
+                headerLoc = (String)((MapMessage)message).getObject("headerLoc");
+                bodyLoc = (String)((MapMessage)message).getObject("bodyLoc");
+                ioHeaderId = (String)((MapMessage)message).getObject("ioHeaderId");
+                msgType = (String)((MapMessage)message).getObject("msgType");
+            } else {
+                // Print error message if Message was not a TextMessage.
+                logger.fine("JMS Message type not known or Possible timeout ");
+            }
+
+            consumer.close();
+            session.close();
+            connection.close();
+
+        } catch (Exception ex) {
+            logger.warning(ex.toString());
+            ex.printStackTrace();
+        }
+
+
+        if (txDetail!=null) {
+            logger.fine(txDetail);
+
+            AssetNode headerMsg = new AssetNode();
+            headerMsg.setParentId(ioHeaderId); // ioHeaderId is two levels up that links both the request and response
+            headerMsg.setType("raw_"+msgType);
+            headerMsg.setRepId(repId);
+            headerMsg.setReposSrc(acs);
+            headerMsg.setLocation(headerLoc);
+            headerMsg.setCsv(processCsvContent(txDetail));
+            result.add(headerMsg);
+
+            if (bodyLoc!=null) {
+                AssetNode bodyMsg = new AssetNode();
+                bodyMsg.setParentId(ioHeaderId);
+                bodyMsg.setType("raw_"+msgType);
+                bodyMsg.setRepId(repId);
+                bodyMsg.setReposSrc(acs);
+                bodyMsg.setLocation(bodyLoc);
+                result.add(bodyMsg);
+            }
+
+            return result;
+        } else {
+            logger.fine("Empty consumer message?");
+        }
+
+
+        return null;
+    }
+
+    /**
+     *
+     * @param queue
+     * @return
+    This is the ActiveMq version
+    public static List<AssetNode> getLiveUpdates(String queue)  {
+        ArrayList<AssetNode> result = new ArrayList<AssetNode>();
+
+        javax.jms.QueueConnection connection = null;
+        javax.jms.QueueSession session = null;
+        MessageConsumer consumer = null;
+        String txDetail = null;
+        String repId = null;
+        String acs = null;
+        String headerLoc = null;
+        String bodyLoc = null;
+        String ioHeaderId = null;
+        String msgType = null;
+
+        try {
+
+            javax.jms.QueueConnectionFactory connectionFactory;
+            connectionFactory = new ActiveMQConnectionFactory(DEFAULT_USER_NAME, DEFAULT_PASSWORD, DEFAULT_BROKER_NAME);
+            connection = connectionFactory.createQueueConnection(DEFAULT_USER_NAME, DEFAULT_PASSWORD);
+            session = connection.createQueueSession(false,
+                    javax.jms.Session.AUTO_ACKNOWLEDGE);
+            connection.start();
+
+            Destination destination = session.createQueue(DEFAULT_QUEUE);
+
+            // Create a MessageConsumer from the Session to the Topic or Queue
+            consumer = session.createConsumer(destination);
+
+            // Wait for a message indefinitely
+            Message message = consumer.receive();
+
+            if (message instanceof MapMessage) {
+                txDetail = (String)((MapMessage)message).getObject("txDetail");
+                repId = (String)((MapMessage)message).getObject("repId");
+                acs = (String)((MapMessage)message).getObject("acs");
+                headerLoc = (String)((MapMessage)message).getObject("headerLoc");
+                bodyLoc = (String)((MapMessage)message).getObject("bodyLoc");
+                ioHeaderId = (String)((MapMessage)message).getObject("ioHeaderId");
+                msgType = (String)((MapMessage)message).getObject("msgType");
+            } else {
+                // Print error message if Message was not a TextMessage.
+                logger.info("JMS Message type not known ");
+            }
+
+            consumer.close();
+            session.close();
+            connection.close();
+
+        } catch (Exception ex) {
+            logger.warning(ex.toString());
+            ex.printStackTrace();
+        }
+
+
+        if (txDetail!=null) {
+            logger.fine(txDetail);
+
+            AssetNode headerMsg = new AssetNode();
+            headerMsg.setParentId(ioHeaderId); // ioHeaderId is two levels up that links both the request and response
+            headerMsg.setType("raw_"+msgType);
+            headerMsg.setRepId(repId);
+            headerMsg.setReposSrc(acs);
+            headerMsg.setLocation(headerLoc);
+            headerMsg.setCsv(processCsvContent(txDetail));
+            result.add(headerMsg);
+
+            if (bodyLoc!=null) {
+                AssetNode bodyMsg = new AssetNode();
+                bodyMsg.setParentId(ioHeaderId);
+                bodyMsg.setType("raw_"+msgType);
+                bodyMsg.setRepId(repId);
+                bodyMsg.setReposSrc(acs);
+                bodyMsg.setLocation(bodyLoc);
+                result.add(bodyMsg);
+            }
+
+            return result;
+        } else {
+            logger.fine("Empty consumer message?");
+        }
+
+
+        return null;
+    }
+     */
 }
 
 
