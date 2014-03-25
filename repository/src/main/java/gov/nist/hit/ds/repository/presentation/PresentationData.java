@@ -598,6 +598,8 @@ public class PresentationData implements IsSerializable, Serializable  {
         ArrayList<AssetNode> result = new ArrayList<AssetNode>();
 
         MessageConsumer consumer = null;
+        javax.jms.QueueSession session = null;
+        javax.jms.QueueConnection connection = null;
         String txDetail = null;
         String repId = null;
         String acs = null;
@@ -617,9 +619,8 @@ public class PresentationData implements IsSerializable, Serializable  {
             javax.jms.QueueConnectionFactory factory = (QueueConnectionFactory) context.lookup(FFMQConstants.JNDI_QUEUE_CONNECTION_FACTORY_NAME);
 
 
-            javax.jms.QueueConnection connection = factory.createQueueConnection();
+            connection = factory.createQueueConnection();
 
-            javax.jms.QueueSession session = null;
 
             session = connection.createQueueSession(false,
                     javax.jms.Session.AUTO_ACKNOWLEDGE);
@@ -641,18 +642,33 @@ public class PresentationData implements IsSerializable, Serializable  {
                 bodyLoc = (String)((MapMessage)message).getObject("bodyLoc");
                 ioHeaderId = (String)((MapMessage)message).getObject("ioHeaderId");
                 msgType = (String)((MapMessage)message).getObject("msgType");
+
             } else {
                 // Print error message if Message was not a TextMessage.
                 logger.fine("JMS Message type not known or Possible timeout ");
             }
 
-            consumer.close();
-            session.close();
-            connection.close();
 
         } catch (Exception ex) {
             logger.warning(ex.toString());
             ex.printStackTrace();
+        } finally {
+            if (consumer!=null) {
+                try {
+                    consumer.close();
+                } catch (Exception ex) {}
+            }
+            if (session!=null) {
+                try {
+                    session.close();
+                } catch (Exception ex) {}
+            }
+            if (connection!=null) {
+                try {
+                    connection.close();
+                } catch (Exception ex) {}
+            }
+
         }
 
 
