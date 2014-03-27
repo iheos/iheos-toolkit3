@@ -636,7 +636,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @param columnMap
 	 * @throws RepositoryException
 	 */
-	public void expandContainer(String[] column, ConcurrentHashMap<String,String> columnMap) throws RepositoryException {
+	public synchronized void expandContainer(String[] column, ConcurrentHashMap<String,String> columnMap) throws RepositoryException {
 		DbContext dbc = new DbContext();
 		try {
 			dbc.setConnection(DbConnection.getInstance().getConnection());
