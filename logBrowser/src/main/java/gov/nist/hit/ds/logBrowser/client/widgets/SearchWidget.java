@@ -340,7 +340,7 @@ public class SearchWidget extends Composite {
 		int col = 0;
 		
 		prefGrid.setWidget(row++, col, new HTML("Select a Query "));
-		qSelector.setWidth("136px");
+		qSelector.setWidth("142px");
 		prefGrid.setWidget(row, col++, qSelector);
 		Button btnRun = new Button("Run");
 		btnRun.setWidth("6em");
