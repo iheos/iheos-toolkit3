@@ -7,6 +7,8 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -52,13 +54,19 @@ public class TransactionMonitorWidget extends Composite {
 	final public RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
 	private SimpleEventBus eventBus;
 
+    SplitLayoutPanel southPanel = new SplitLayoutPanel(2);
     SplitLayoutPanel mainSplitPanel = new SplitLayoutPanel(3);
+
     VerticalPanel contentPanel = new VerticalPanel();
     ScrollPanel centerPanel = new ScrollPanel();
     //ListDataProvider<List<String>> dataProvider  = new ListDataProvider<List<String>>();
     ListDataProvider<TxDetailRow> dataProvider  = new ListDataProvider<TxDetailRow>();
+    /*
+    Sample 2-way Exchange pattern txDetail:
+    20140326160812,"RESPONSE", "","500","localhost","localhost:8080","localhost:8001^ProxyRuleMappingName: localcap","text/html","","65","0"
 
-    final String[] columns = {"Timestamp","Type","Path","Status","Sender","Receiver","ContentType","Method","Length","ResponseTime"};
+     */
+    final String[] columns = {"Timestamp","Status","Exchange Initiator","Exchange Responder","Exchange Artifact","Proxy","Path","ContentType","Method","Length","Response Time"};
     MessageViewerWidget requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
     MessageViewerWidget responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
     Map<Integer, String> txRowParentId = new HashMap<Integer, String>();
@@ -152,14 +160,22 @@ public class TransactionMonitorWidget extends Composite {
         // All composites must call initWidget() in their constructors.
 	     initWidget(setupMainPanel());
 
+        Window.addResizeHandler(new ResizeHandler() {
+            @Override
+            public void onResize(ResizeEvent event) {
+                mainSplitPanel.setWidgetSize(southPanel,.4 * Window.getClientHeight());
+                southPanel.setWidgetSize(requestViewerWidget, (.5 * Window.getClientWidth()));
+            }
+        });
 
         /* live connection */
-        // TODO: gracefully deattach existing connection on exit
+        // TODO: gracefully deattach existing connection on exit -- only an issue when attached to a PTP queue
         try {
             reposService.getTxUpdates("",updateHandler);
         } catch (Exception ex) {
             logger.warning(ex.toString());
         }
+
 
     }
 
@@ -204,12 +220,12 @@ public class TransactionMonitorWidget extends Composite {
         responseViewerWidget.getElement().getStyle()
                 .setProperty("border", "none");
 
+        //TODO: add resize handlers to fix the viewer widget centering when the browser window is resized by the user
 
-        SplitLayoutPanel southPanel = new SplitLayoutPanel(2);
-        southPanel.addWest(requestViewerWidget,Math.round(.5 * Window.getClientWidth())); // Math.round(.15 * Window.getClientWidth())
+        southPanel.addWest(requestViewerWidget,Math.round(.5 * Window.getClientWidth()));
         southPanel.add(responseViewerWidget);
 
-        mainSplitPanel.addSouth(southPanel,Math.round(.7 * Window.getClientHeight())); // 500
+        mainSplitPanel.addSouth(southPanel,Math.round(.4 * Window.getClientHeight())); // 500
         mainSplitPanel.add(setupTable(centerPanel));
 
 
