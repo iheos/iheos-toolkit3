@@ -607,6 +607,7 @@ public class PresentationData implements IsSerializable, Serializable  {
         String bodyLoc = null;
         String ioHeaderId = null;
         String msgType = null;
+        String proxyDetail = null;
 
         try {
 
@@ -636,15 +637,17 @@ public class PresentationData implements IsSerializable, Serializable  {
 
             if (message instanceof MapMessage) {
                 txDetail = (String)((MapMessage)message).getObject("txDetail");
+
                 repId = (String)((MapMessage)message).getObject("repId");
                 acs = (String)((MapMessage)message).getObject("acs");
                 headerLoc = (String)((MapMessage)message).getObject("headerLoc");
                 bodyLoc = (String)((MapMessage)message).getObject("bodyLoc");
                 ioHeaderId = (String)((MapMessage)message).getObject("ioHeaderId");
                 msgType = (String)((MapMessage)message).getObject("msgType");
+                proxyDetail = (String)((MapMessage)message).getObject("proxyDetail");
 
             } else {
-                // Print error message if Message was not a TextMessage.
+                // Print error message if Message was not recognized
                 logger.fine("JMS Message type not known or Possible timeout ");
             }
 
@@ -682,6 +685,7 @@ public class PresentationData implements IsSerializable, Serializable  {
             headerMsg.setReposSrc(acs);
             headerMsg.setLocation(headerLoc);
             headerMsg.setCsv(processCsvContent(txDetail));
+            headerMsg.setProps(proxyDetail);
             result.add(headerMsg);
 
             if (bodyLoc!=null) {

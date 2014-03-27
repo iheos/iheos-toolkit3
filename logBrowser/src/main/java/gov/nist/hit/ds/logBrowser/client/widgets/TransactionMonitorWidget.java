@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.logBrowser.client.widgets;
 
 
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -11,6 +12,8 @@ import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy;
@@ -66,7 +69,7 @@ public class TransactionMonitorWidget extends Composite {
     20140326160812,"RESPONSE", "","500","localhost","localhost:8080","localhost:8001^ProxyRuleMappingName: localcap","text/html","","65","0"
 
      */
-    final String[] columns = {"Timestamp","Status","Exchange Initiator","Exchange Responder","Exchange Artifact","Proxy","Path","ContentType","Method","Length","Response Time"};
+    final String[] columns = {"Timestamp","Status","Artifact","Message From","Proxy","Forwarded To","Path","ContentType","Method","Length","Response Time"};
     MessageViewerWidget requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
     MessageViewerWidget responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
     Map<Integer, String> txRowParentId = new HashMap<Integer, String>();
@@ -371,23 +374,54 @@ public class TransactionMonitorWidget extends Composite {
 
     }
 
-    class IndexedColumn extends Column<TxDetailRow, String> {
+    class IndexedColumn extends Column<TxDetailRow, SafeHtml> {
         private final int index;
         public IndexedColumn(int index) {
-            super(new TextCell());
+            super(new SafeHtmlCell());
             this.index = index;
         }
+
+        @Override
+        public SafeHtml getValue(TxDetailRow o) {
+
+            try {
+                SafeHtmlBuilder shb = new SafeHtmlBuilder();
+
+                if (this.index==4) {
+
+                    AssetNode an = txRowAssetNode.get(o.getKey()).get(0);
+
+                    shb.appendHtmlConstant("<span title='" + an.getProps() + "'>");
+                    shb.appendEscaped(o.getCsvData().get(this.index));
+                    shb.appendHtmlConstant("</span>");
+
+                } else {
+                    shb.appendEscaped(o.getCsvData().get(this.index));
+                }
+
+                return shb.toSafeHtml();
+
+            } catch (Exception ex) {
+                return new SafeHtmlBuilder().toSafeHtml();
+            }
+        }
+
+        /*
+         // For use with String type, for example: Column<TxDetailRow, String>:
+        //  super(new TextCell());
+
         @Override
         public String getValue(TxDetailRow object) {
 
             try {
                 return object.getCsvData().get(this.index);
 
-             // return object.get(this.index);
+             // Straight String[]: return object.get(this.index);
             } catch (Exception ex) {
                 return "";
             }
         }
+        */
     }
 
 
