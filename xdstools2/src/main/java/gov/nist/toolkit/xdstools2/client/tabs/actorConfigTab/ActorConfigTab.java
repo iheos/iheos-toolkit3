@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs.actorConfigTab;
 
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.ActorType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.TransactionType;
 import gov.nist.toolkit.http.client.HtmlMarkup;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.sitemanagement.client.TransactionBean;

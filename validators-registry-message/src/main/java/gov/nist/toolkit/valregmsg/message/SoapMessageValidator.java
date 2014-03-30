@@ -1,8 +1,9 @@
 package gov.nist.toolkit.valregmsg.message;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.soap.wsseToolkitAdapter.WsseHeaderValidatorAdapter;
 import gov.nist.toolkit.valregmsg.service.SoapActionFactory;
@@ -11,16 +12,13 @@ import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
 import gov.nist.toolkit.valsupport.registry.RegistryValidationInterface;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.namespace.QName;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axis2.util.XMLUtils;
 import org.w3c.dom.Element;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Validate a SOAP wrapper according to ITI Appendix V and launch new
@@ -48,11 +46,11 @@ public class SoapMessageValidator extends MessageValidator {
 	}
 
 	void err(String msg, String ref) {
-		er.err(XdsErrorCode.Code.NoCode, msg, this, ref);
+		er.err(XdsErrorCode.Code.NoCode, new ErrorContext(msg, ref), this);
 	}
 
 	void err(String msg) {
-		er.err(XdsErrorCode.Code.NoCode, msg, this, null);
+		er.err(XdsErrorCode.Code.NoCode, new ErrorContext(msg, null), this);
 	}
 
 	void err(Exception e) {
@@ -79,7 +77,7 @@ public class SoapMessageValidator extends MessageValidator {
 		return messagebody;
 	}
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 
 

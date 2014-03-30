@@ -1,8 +1,9 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
@@ -62,7 +63,7 @@ public class ExternalIdentifier extends AbstractRegistryObject {
 		return "ExternalIdentifier(identificationScheme=" + identificationScheme + ", type=" + name + ")";
 	}
 	
-	public void validateStructure(ErrorRecorder er, ValidationContext vc) {
+	public void validateStructure(IAssertionGroup er, ValidationContext vc) {
 		validateId(er, vc, "entryUUID", id, null);
 		OMElement parentEle = (OMElement) ro.getParent();
 		String parentEleId = ((parentEle == null) ? "null" :
@@ -70,28 +71,28 @@ public class ExternalIdentifier extends AbstractRegistryObject {
 		String registryObject = ro.getAttributeValue(MetadataSupport.registry_object_qname);
 		
 		if (parentEle != null && !parentEleId.equals(registryObject))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": is a child of object " + parentEleId + " but the registryObject value is " + 
-					registryObject + ", they must match", this, "ITI TF-3: 4.1.12.5");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": is a child of object " + parentEleId + " but the registryObject value is " +
+					registryObject + ", they must match", "ITI TF-3: 4.1.12.5"), this);
 		
 		if (value == null || value.equals(""))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": value attribute missing or empty", this, "ebRIM 3.0 section 2.11.1");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": value attribute missing or empty", "ebRIM 3.0 section 2.11.1"), this);
 		
 		if (getName() == null || getName().equals(""))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": display name (Name element) missing or empty", this, "ITI TF-3: 4.1.12.5");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": display name (Name element) missing or empty", "ITI TF-3: 4.1.12.5"), this);
 	}
 
 	public OMElement toXml() throws XdsInternalException  {
 		return toXml(null);
 	}
 
-	public void validateRequiredSlotsPresent(ErrorRecorder er,
+	public void validateRequiredSlotsPresent(IAssertionGroup er,
 			ValidationContext vc) {
 	}
 
-	public void validateSlotsCodedCorrectly(ErrorRecorder er,
+	public void validateSlotsCodedCorrectly(IAssertionGroup er,
 			ValidationContext vc) {
 	}
 
-	public void validateSlotsLegal(ErrorRecorder er) {
+	public void validateSlotsLegal(IAssertionGroup er) {
 	}
 }

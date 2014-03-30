@@ -1,7 +1,6 @@
 package gov.nist.toolkit.valsupport.errrec;
 
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
-
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 
 public class GwtErrorRecorderBuilder implements ErrorRecorderBuilder {
 

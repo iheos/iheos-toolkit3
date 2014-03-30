@@ -8,7 +8,8 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
-	<version>v2-maven-alpha</version>
+	<groupId>gov.nist.toolkit</groupId>
+	<version>3.0.0-SNAPSHOT</version>
 	<artifactId>http</artifactId>
 
 	<dependencies>
@@ -20,7 +21,6 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -47,19 +47,20 @@
 			<version>3.1</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>error-recording</artifactId>
-			<version>v2-maven-alpha</version>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>eventLog</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>errorRecording</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
 			<artifactId>utilities</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
+			<groupId>gov.nist.hit.ds</groupId>
 			<artifactId>xdsException</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
                <dependency>
                         <groupId>com.sun.ebxml</groupId>

@@ -19,22 +19,21 @@ Authors: William Majurski
 
 package gov.nist.direct.directValidator.impl;
 
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import gov.nist.direct.directValidator.MessageValidatorFacade;
 import gov.nist.direct.utils.ValidationSummary;
 import gov.nist.direct.utils.ValidationUtils;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorder;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
 import javax.mail.Header;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
 public class ProcessEnvelope {
 	
@@ -47,7 +46,7 @@ public class ProcessEnvelope {
 	private MessageValidatorFacade msgValidator = new DirectMimeMessageValidatorFacade();
 
 	
-	public void validateMimeEntity(ErrorRecorder er, Part m, ValidationSummary validationSummary, int partNumber) throws Exception {		
+	public void validateMimeEntity(IAssertionGroup er, Part m, ValidationSummary validationSummary, int partNumber) throws Exception {
 		// Calculate the shift
 		String shift = "";
 		for(int i=0;i<partNumber;i++) {
@@ -123,11 +122,11 @@ public class ProcessEnvelope {
 		
 	}
 	
-	public void validateMessageHeader(ErrorRecorder er, Message m, ValidationSummary validationSummary, int partNumber, boolean wrapped) throws Exception {
+	public void validateMessageHeader(IAssertionGroup er, Message m, ValidationSummary validationSummary, int partNumber, boolean wrapped) throws Exception {
 		er.sectionHeading("Message Header Checklist");
 		
 		// Separate ErrorRecorder for the summary
-		ErrorRecorder separate = new GwtErrorRecorder();
+        IAssertionGroup separate = new GwtErrorRecorder();
 		
 		String shift = "";
 		if(partNumber==0) {
@@ -403,7 +402,7 @@ public class ProcessEnvelope {
 		
 	}
 	
-	public void validateDirectMessageInnerDecryptedMessage(ErrorRecorder er, Part m) throws Exception {
+	public void validateDirectMessageInnerDecryptedMessage(IAssertionGroup er, Part m) throws Exception {
 		// DTS 133b, Validate Content-Type
 		msgValidator.validateMessageContentTypeB(er, m.getContentType());
 		

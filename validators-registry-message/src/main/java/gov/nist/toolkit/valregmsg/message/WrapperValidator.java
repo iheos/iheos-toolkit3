@@ -1,9 +1,10 @@
 package gov.nist.toolkit.valregmsg.message;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.utilities.xml.SchemaValidation;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
@@ -31,10 +32,10 @@ public class WrapperValidator extends MessageValidator {
 	}
 	
 	void err(String msg, String ref) {
-		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, msg, this, ref);
+		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msg, ref), this);
 	}
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		String transaction = vc.getTransactionName();
 		List<String> expectedWrappers = wrapperList.get(transaction);

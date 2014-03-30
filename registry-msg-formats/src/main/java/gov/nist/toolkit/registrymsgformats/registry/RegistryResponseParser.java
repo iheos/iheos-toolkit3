@@ -1,5 +1,7 @@
 package gov.nist.toolkit.registrymsgformats.registry;
 
+import gov.nist.hit.ds.registryMsgFormats.RegistryError;
+import gov.nist.hit.ds.registryMsgFormats.RegistryErrorListParser;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import org.apache.axiom.om.OMAttribute;

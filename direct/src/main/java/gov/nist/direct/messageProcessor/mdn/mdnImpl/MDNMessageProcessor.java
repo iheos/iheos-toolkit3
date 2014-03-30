@@ -31,9 +31,28 @@ import gov.nist.direct.messageProcessor.direct.directImpl.MimeMessageParser;
 import gov.nist.direct.messageProcessor.direct.directImpl.WrappedMessageProcessor;
 import gov.nist.direct.utils.ParseUtils;
 import gov.nist.direct.utils.Utils;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorder;
+import org.apache.log4j.Logger;
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cms.*;
+import org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient;
+import org.bouncycastle.cms.jcajce.JceKeyTransRecipientId;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.mail.smime.SMIMEEnveloped;
+import org.bouncycastle.mail.smime.SMIMEException;
+import org.bouncycastle.mail.smime.SMIMESigned;
+import org.bouncycastle.mail.smime.SMIMEUtil;
+import org.bouncycastle.util.Store;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Part;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,31 +63,6 @@ import java.security.cert.CertificateException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Part;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-
-import org.apache.log4j.Logger;
-import org.bouncycastle.cert.X509CertificateHolder;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.cms.CMSException;
-import org.bouncycastle.cms.RecipientId;
-import org.bouncycastle.cms.RecipientInformation;
-import org.bouncycastle.cms.RecipientInformationStore;
-import org.bouncycastle.cms.SignerInformation;
-import org.bouncycastle.cms.SignerInformationStore;
-import org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient;
-import org.bouncycastle.cms.jcajce.JceKeyTransRecipientId;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.mail.smime.SMIMEEnveloped;
-import org.bouncycastle.mail.smime.SMIMEException;
-import org.bouncycastle.mail.smime.SMIMESigned;
-import org.bouncycastle.mail.smime.SMIMEUtil;
-import org.bouncycastle.util.Store;
 
 
 /**
@@ -99,7 +93,7 @@ public class MDNMessageProcessor {
 	private String password;;
 	ValidationContext vc = new ValidationContext();
 	WrappedMessageProcessor wrappedParser = new WrappedMessageProcessor();
-	ErrorRecorder mainEr;
+	IAssertionGroup mainEr;
 	boolean encrypted;
 	boolean signed;
 	LogPathsSingleton ls;
@@ -116,7 +110,7 @@ public class MDNMessageProcessor {
 	}
 
 	// message is parsed multiple times in following calls. TODO
-	public void processMDNMessage(ErrorRecorder er, byte[] inputDirectMessage, byte[] _directCertificate, String _password, ValidationContext vc) {
+	public void processMDNMessage(IAssertionGroup er, byte[] inputDirectMessage, byte[] _directCertificate, String _password, ValidationContext vc) {
 		directCertificate = _directCertificate;
 		password = _password;
 		this.vc = vc;
@@ -234,7 +228,7 @@ public class MDNMessageProcessor {
 		
 	}
 
-	public void processPart(ErrorRecorder er, Part p) throws Exception {
+	public void processPart(IAssertionGroup er, Part p) throws Exception {
 		
 		if (p == null)
 			return;
@@ -316,7 +310,7 @@ public class MDNMessageProcessor {
 		}
 	}
 
-	public Part processSMIMEEnvelope(ErrorRecorder er, Part p, InputStream certificate, String password) {
+	public Part processSMIMEEnvelope(IAssertionGroup er, Part p, InputStream certificate, String password) {
 
 		CertificateLoader certLoader = null;
 		RecipientId     recId = null;		
@@ -360,9 +354,9 @@ public class MDNMessageProcessor {
 			er.error("No DTS", "Certificate File", "Error un-enveloping message body", e1.getMessage(), "-");
 		} catch (CMSException e1) {
 			e1.printStackTrace();
-			er.err("No DTS", "Certificate File", "Error un-enveloping message body", e1.getMessage(), "-");
+			er.error("No DTS", "Certificate File", "Error un-enveloping message body", e1.getMessage(), "-");
 		} catch (Exception e1) {
-			er.err("No DTS", "Certificate File", "Error un-enveloping message body", e1.getMessage(), "-");
+			er.error("No DTS", "Certificate File", "Error un-enveloping message body", e1.getMessage(), "-");
 		}
 
 		this.encrypted = true;
@@ -377,7 +371,7 @@ public class MDNMessageProcessor {
 	/**
 	 * verify the signature (assuming the cert is contained in the message)
 	 */
-	private void verifySignature(ErrorRecorder er, SMIMESigned s) throws Exception{
+	private void verifySignature(IAssertionGroup er, SMIMESigned s) throws Exception{
 		//
 		// certificates and crls passed in the signature
 		//

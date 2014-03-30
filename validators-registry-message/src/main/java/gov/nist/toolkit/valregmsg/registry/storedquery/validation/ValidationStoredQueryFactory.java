@@ -1,11 +1,12 @@
 package gov.nist.toolkit.valregmsg.registry.storedquery.validation;
 
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
 import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.docref.SqDocRef;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymsgformats.registry.Response;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
@@ -28,7 +29,7 @@ public class ValidationStoredQueryFactory extends StoredQueryFactory {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ValidationStoredQueryFactory(OMElement ahqr, ErrorRecorder er) throws XdsException,
+	public ValidationStoredQueryFactory(OMElement ahqr, IAssertionGroup er) throws XdsException,
 	LoggerException {
 		super(ahqr, er);
 	}

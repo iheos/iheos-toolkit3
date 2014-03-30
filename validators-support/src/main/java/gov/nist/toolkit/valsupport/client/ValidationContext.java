@@ -1,16 +1,13 @@
 package gov.nist.toolkit.valsupport.client;
 
-
+import com.google.gwt.user.client.rpc.IsSerializable;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.commondatatypes.client.SchematronMetadataTypes;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
-
 
 /**
  * Collection of flags and logic to record needed validation steps. If validation

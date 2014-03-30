@@ -1,14 +1,15 @@
 package gov.nist.toolkit.common.datatypes;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 
 public class UuidValidator {
-	ErrorRecorder er;
+	IAssertionGroup er;
 	String rawMsgPrefix = "Validating UUID format of "; 
 	String msgPrefix;
 	
-	public UuidValidator(ErrorRecorder er, String errorMsgPrefix) {
+	public UuidValidator(IAssertionGroup er, String errorMsgPrefix) {
 		this.er = er;
 		if (errorMsgPrefix != null) 
 			rawMsgPrefix = errorMsgPrefix;
@@ -23,10 +24,10 @@ public class UuidValidator {
 			if (d.indexOf(digit) > -1)
 				continue;
 			if (d.indexOf(String.valueOf(digit).toLowerCase()) > -1) {
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, errorPrefix + " - hex digits must be lower case, found - " + digit, this, null);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(errorPrefix + " - hex digits must be lower case, found - " + digit, null), this);
 				return false;
 			} else {
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, errorPrefix + " - non-hex digit found - " + digit, this, null);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(errorPrefix + " - non-hex digit found - " + digit, null), this);
 				return false;
 			}
 		}
@@ -38,7 +39,7 @@ public class UuidValidator {
 		msgPrefix = rawMsgPrefix + uuid;
 		
 		if (!uuid.startsWith("urn:uuid:")) {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, msgPrefix + " - does not have urn:uuid: prefix", this, null);
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - does not have urn:uuid: prefix", null), this);
 			return;
 		}
 		
@@ -46,7 +47,7 @@ public class UuidValidator {
 		String[] parts = content.split("-");
 		
 		if (parts.length != 5) {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, msgPrefix + " - does not have 5 hex-digit groups separated by the - character", this, null);
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - does not have 5 hex-digit groups separated by the - character", null), this);
 			return;
 		}
 
@@ -54,27 +55,27 @@ public class UuidValidator {
 		
 		part = parts[0];
 		if (part.length() != 8)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, msgPrefix + " - first hex character group must have 8 digits", this, null);
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - first hex character group must have 8 digits", null), this);
 		allHexDigits(part, msgPrefix);
 		
 		part = parts[1];
 		if (part.length() != 4)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, msgPrefix + " - second hex character group must have 4 digits", this, null);
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - second hex character group must have 4 digits", null), this);
 		allHexDigits(part, msgPrefix);
 		
 		part = parts[2];
 		if (part.length() != 4)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, msgPrefix + " - third hex character group must have 4 digits", this, null);
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - third hex character group must have 4 digits", null), this);
 		allHexDigits(part, msgPrefix);
 		
 		part = parts[3];
 		if (part.length() != 4)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, msgPrefix + " - fourth hex character group must have 4 digits", this, null);
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - fourth hex character group must have 4 digits", null), this);
 		allHexDigits(part, msgPrefix);
 		
 		part = parts[4];
 		if (part.length() != 12)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, msgPrefix + " - fifth hex character group must have 12 digits", this, null);
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msgPrefix + " - fifth hex character group must have 12 digits", null), this);
 		allHexDigits(part, msgPrefix);
 		
 	}

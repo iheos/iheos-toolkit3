@@ -1,19 +1,19 @@
 package gov.nist.toolkit.valsupport.errrec;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem;
-import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem.ReportingCompletionType;
-import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem.ReportingLevel;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class GwtErrorRecorder implements ErrorRecorder  {
+public class GwtErrorRecorder implements IAssertionGroup {
 
 	ErrorRecorderBuilder errorRecorderBuilder;
 	List<ValidatorErrorItem> summary = new ArrayList<ValidatorErrorItem>();
@@ -72,7 +72,7 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 		List<String> msgs = new ArrayList<String>();
 
 		for (ValidatorErrorItem info : errMsgs) {
-			if (info.level != ReportingLevel.ERROR)
+			if (info.level != ValidatorErrorItem.ReportingLevel.ERROR)
 				continue;
 			msgs.add(info.msg);
 		}
@@ -84,7 +84,7 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 		List<String> codes = new ArrayList<String>();
 
 		for (ValidatorErrorItem info : errMsgs) {
-			if (info.level != ReportingLevel.ERROR)
+			if (info.level != ValidatorErrorItem.ReportingLevel.ERROR)
 				continue;
 			codes.add(info.getCodeString());
 		}
@@ -108,7 +108,7 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 		return false;
 	}
 
-	public void err(Code code, String msg, String location, String resource) {
+	public void err(XdsErrorCode.Code code, String msg, String location, String resource) {
 		if (msg == null || msg.trim().equals(""))
 			return;
 		logger.debug(ExceptionUtil.here("err - " + msg));
@@ -130,7 +130,7 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 		}
 	}
 
-	public void err(Code code, Exception e) {
+	public void err(XdsErrorCode.Code code, Exception e) {
 		err(code, ExceptionUtil.exception_details(e), null, "");
 	}
 
@@ -157,7 +157,20 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 
 	}
 
-	public void sectionHeading(String msg) {
+    public void err(XdsErrorCode.Code code, ErrorContext context, Object location) {
+
+    }
+
+
+    public void warning(String code, ErrorContext context, String location) {
+
+    }
+
+    public void warning(XdsErrorCode.Code code, ErrorContext context, String location) {
+
+    }
+
+    public void sectionHeading(String msg) {
 		tagLastInfo2();
 		ValidatorErrorItem ei = new ValidatorErrorItem();
 		ei.level = ValidatorErrorItem.ReportingLevel.SECTIONHEADING;
@@ -203,7 +216,7 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 	// because of conflict in types, 5th parm is Object and down a few lines is 
 	// another method with 5th param of String, the compiler will generate a 
 	// call here.  This, the err1 stuff to disambiguate.
-	public void err(Code code, String msg, String location, String resource,
+	public void err(XdsErrorCode.Code code, String msg, String location, String resource,
 			Object log_message) {
 		//		if (log_message != null && log_message instanceof String)
 		//			err1(code, msg, location, resource, log_message);
@@ -215,7 +228,7 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 		err1(code, msg, location, severity, resource);
 	}
 
-	public void err(Code code, String msg, Object location, String resource) {
+	public void err(XdsErrorCode.Code code, String msg, Object location, String resource) {
 		String loc = "";
 		if (location != null)
 			loc = location.getClass().getSimpleName();
@@ -233,7 +246,7 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 			return;
 		logger.debug(ExceptionUtil.here("err - " + msg));
 		boolean isWarning = (severity == null) ? false : ((severity.indexOf("Warning") != -1));
-		ReportingCompletionType ctype = (isWarning) ? ValidatorErrorItem.ReportingCompletionType.WARNING : ValidatorErrorItem.ReportingCompletionType.ERROR;
+		ValidatorErrorItem.ReportingCompletionType ctype = (isWarning) ? ValidatorErrorItem.ReportingCompletionType.WARNING : ValidatorErrorItem.ReportingCompletionType.ERROR;
 		ValidatorErrorItem ei = new ValidatorErrorItem();
 		ei.level = (isWarning) ? ValidatorErrorItem.ReportingLevel.WARNING : ValidatorErrorItem.ReportingLevel.ERROR;
 		ei.msg = msg;
@@ -253,7 +266,7 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 
 	}
 
-	public void err(Code code, String msg, String location, String severity,
+	public void err(XdsErrorCode.Code code, String msg, String location, String severity,
 			String resource) {
 		err1(code.toString(), msg, location, severity, resource);
 	}
@@ -265,13 +278,13 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 	}
 
 	 
-	public void warning(Code code, String msg, String location, String resource) {
+	public void warning(XdsErrorCode.Code code, String msg, String location, String resource) {
 		err1(code.toString(), msg, location, "Warning", resource);
 
 	}
 
 	 
-	public ErrorRecorder buildNewErrorRecorder() {
+	public IAssertionGroup buildNewErrorRecorder() {
 		return this;
 	}
 
@@ -285,8 +298,12 @@ public class GwtErrorRecorder implements ErrorRecorder  {
 		return nbErrors;
 	}
 
-	 
-	public void concat(ErrorRecorder er) {
+    @Override
+    public void concat(IAssertionGroup er) {
+
+    }
+
+    public void concat(ErrorRecorder er) {
 		this.errMsgs.addAll(er.getErrMsgs());
 	}
 

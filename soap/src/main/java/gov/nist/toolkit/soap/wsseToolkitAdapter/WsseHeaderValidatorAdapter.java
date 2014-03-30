@@ -1,25 +1,25 @@
 package gov.nist.toolkit.soap.wsseToolkitAdapter;
 
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.TextErrorRecorder;
 import gov.nist.hit.ds.wsseTool.api.config.ContextFactory;
 import gov.nist.hit.ds.wsseTool.api.config.GenContext;
 import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
 import gov.nist.hit.ds.wsseTool.api.exceptions.GenerationException;
 import gov.nist.hit.ds.wsseTool.validation.WsseHeaderValidator;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.TextErrorRecorder;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.soap.wsseToolkitAdapter.log4jToErrorRecorder.AppenderForErrorRecorder;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
-
-import java.security.KeyStoreException;
-import java.util.List;
-
 import org.apache.axiom.om.OMElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
+
+import java.security.KeyStoreException;
+import java.util.List;
 
 /**
  * Temporary adapter between toolkit legacy validation code and the wsse module
@@ -66,7 +66,7 @@ public class WsseHeaderValidatorAdapter extends MessageValidator {
 
 		WsseHeaderValidatorAdapter validator = new WsseHeaderValidatorAdapter(
 				new ValidationContext(), wsseHeader);
-		ErrorRecorder er = new TextErrorRecorder();
+		IAssertionGroup er = new TextErrorRecorder();
 		MessageValidatorEngine mvc = new MessageValidatorEngine();
 		validator.run(er, mvc);
 	}
@@ -93,7 +93,7 @@ public class WsseHeaderValidatorAdapter extends MessageValidator {
 	}
 
 	 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 
 		try {
 			// We use a special appender to record message coming from the wsse

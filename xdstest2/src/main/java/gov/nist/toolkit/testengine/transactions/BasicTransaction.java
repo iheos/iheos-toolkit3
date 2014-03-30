@@ -1,8 +1,8 @@
 package gov.nist.toolkit.testengine.transactions;
 
 import gov.nist.hit.ds.xdsException.*;
-import gov.nist.toolkit.actortransaction.client.ATFactory;
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.TransactionType;
 import gov.nist.toolkit.common.datatypes.Hl7Date;
 import gov.nist.toolkit.registrymetadata.IdParser;
 import gov.nist.toolkit.registrymetadata.Metadata;

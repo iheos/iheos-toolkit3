@@ -6,7 +6,7 @@ import gov.nist.toolkit.actorfactory.SimManager;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.actorfactory.client.Simulator;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
-import gov.nist.toolkit.actortransaction.client.ATFactory;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.xdstools2.server.serviceManager.SimulatorServiceManager;
 import org.junit.After;

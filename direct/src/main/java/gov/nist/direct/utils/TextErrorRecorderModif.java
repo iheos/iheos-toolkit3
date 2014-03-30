@@ -17,14 +17,15 @@ Authors: Frederic de Vaulx
 
 package gov.nist.direct.utils;
 
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.TextErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.TextErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 
-public class TextErrorRecorderModif extends TextErrorRecorder implements ErrorRecorder {
+public class TextErrorRecorderModif extends TextErrorRecorder implements IAssertionGroup {
 	
 	public int lastErrCount = 0;
 	public List<ErrorInfo> errMsgs = new ArrayList<ErrorInfo>();
@@ -84,28 +85,28 @@ public class TextErrorRecorderModif extends TextErrorRecorder implements ErrorRe
 		
 	}
 
-	public void err(Code arg0, Exception arg1) {
+	public void err(XdsErrorCode.Code arg0, Exception arg1) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void err(Code arg0, String arg1, String arg2, String arg3) {
+	public void err(XdsErrorCode.Code arg0, String arg1, String arg2, String arg3) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void err(Code arg0, String arg1, Object arg2, String arg3) {
+	public void err(XdsErrorCode.Code arg0, String arg1, Object arg2, String arg3) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void err(Code arg0, String arg1, String arg2, String arg3,
+	public void err(XdsErrorCode.Code arg0, String arg1, String arg2, String arg3,
 			Object arg4) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void err(Code arg0, String arg1, String arg2, String arg3,
+	public void err(XdsErrorCode.Code arg0, String arg1, String arg2, String arg3,
 			String arg4) {
 		// TODO Auto-generated method stub
 		
@@ -136,7 +137,7 @@ public class TextErrorRecorderModif extends TextErrorRecorder implements ErrorRe
 		
 	}
 
-	public void warning(Code arg0, String arg1, String arg2, String arg3) {
+	public void warning(XdsErrorCode.Code arg0, String arg1, String arg2, String arg3) {
 		// TODO Auto-generated method stub
 		
 	}

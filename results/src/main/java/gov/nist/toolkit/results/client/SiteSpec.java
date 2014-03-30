@@ -1,7 +1,5 @@
 package gov.nist.toolkit.results.client;
 
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**

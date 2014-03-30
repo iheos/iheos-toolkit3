@@ -19,15 +19,14 @@ Authors: William Majurski
 
 package gov.nist.direct.directValidator.impl;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.mail.Address;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-
 import gov.nist.direct.directValidator.interfaces.MessageHeadersValidator;
 import gov.nist.direct.utils.ValidationUtils;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+
+import javax.mail.Address;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 
@@ -37,7 +36,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	
 
 	// DTS 196, All Headers, Required
-	public void validateAllHeaders(ErrorRecorder er, String[] header, String[] headerContent, boolean wrapped) {
+	public void validateAllHeaders(IAssertionGroup er, String[] header, String[] headerContent, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6;http://tools.ietf.org/html/rfc5322#section-3.6;RFC 5321: Section 2.3.1;http://tools.ietf.org/html/rfc5321.html#section-2.3.1";
 		boolean isAscii = true;
 		for(int i=0;i<header.length;i++) {
@@ -56,7 +55,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 103-105, Return Path, Conditional
-	public void validateReturnPath(ErrorRecorder er, String returnPath, boolean wrapped) {
+	public void validateReturnPath(IAssertionGroup er, String returnPath, boolean wrapped) {
 		String rfc = "RFC 5321: Section 4.4;http://tools.ietf.org/html/rfc5321.html#section-4.4;RFC 5322: Section 3.6.7;http://tools.ietf.org/html/rfc5322#section-3.6.7";
 		String txtReturnPath = SafeHtmlUtils.htmlEscape(returnPath);
 		if(returnPath.equals("")) {
@@ -73,7 +72,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 104-106, Received, Conditional
-	public void validateReceived(ErrorRecorder er, String received, boolean wrapped) {
+	public void validateReceived(IAssertionGroup er, String received, boolean wrapped) {
 	
 		// String part variable
 		String fromText = ValidationUtils.getReceivedPart(received, "from ");
@@ -146,7 +145,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 
 	// DTS 197, Resent Fields, Required
-	public void validateResentFields(ErrorRecorder er, String[] resentField, boolean wrapped) {
+	public void validateResentFields(IAssertionGroup er, String[] resentField, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.6;http://tools.ietf.org/html/rfc5322#section-3.6.6";
 		int i = 0;
 		boolean present = false;
@@ -175,7 +174,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 107, Resent-Date, Conditional
-	public void validateResentDate(ErrorRecorder er, String resentDate, boolean wrapped) {
+	public void validateResentDate(IAssertionGroup er, String resentDate, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.6;http://tools.ietf.org/html/rfc5322#section-3.6.6";
 		if(ValidationUtils.validateDate(resentDate)) {
 			er.success("107", "Resent-Date", resentDate, "date-time", rfc);
@@ -188,7 +187,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 
 	// DTS 108, Resent-From, Conditional
-	public void validateResentFrom(ErrorRecorder er, String resentFrom, boolean wrapped) {
+	public void validateResentFrom(IAssertionGroup er, String resentFrom, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.6;http://tools.ietf.org/html/rfc5322#section-3.6.6";
 		if(ValidationUtils.validateEmail(resentFrom)) {
 			er.success("108", "Resent-From", resentFrom, "mailbox-list", rfc);
@@ -201,7 +200,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 109, Resent-Sender, Conditional
-	public void validateResentSender(ErrorRecorder er, String resentSender, String resentFrom, boolean wrapped) {
+	public void validateResentSender(IAssertionGroup er, String resentSender, String resentFrom, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.6;http://tools.ietf.org/html/rfc5322#section-3.6.6";
 		if(ValidationUtils.validateEmail(resentSender) && !resentSender.equals(resentFrom)) {
 			er.success("109", "Resent-Sender", resentSender, "mailbox-list", rfc);
@@ -216,7 +215,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 
 	// DTS 110, Resent-to, Optional
-	public void validateResentTo(ErrorRecorder er, String resentTo, boolean wrapped) {
+	public void validateResentTo(IAssertionGroup er, String resentTo, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.6;http://tools.ietf.org/html/rfc5322#section-3.6.6";
 		if(ValidationUtils.validateEmail(resentTo)) {
 			er.success("110", "Resent-To", resentTo, "address-list", rfc);
@@ -229,7 +228,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 
 	// DTS 111, Resent-cc, Optional
-	public void validateResentCc(ErrorRecorder er, String resentCc, boolean wrapped) {
+	public void validateResentCc(IAssertionGroup er, String resentCc, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.6;http://tools.ietf.org/html/rfc5322#section-3.6.6";
 		if(ValidationUtils.validateEmail(resentCc)) {
 			er.success("111", "Resent-Cc", resentCc, "address-list", rfc);
@@ -242,7 +241,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 
 	// DTS 112, Resent-bcc, Optional
-	public void validateResentBcc(ErrorRecorder er, String resentBcc, boolean wrapped) {
+	public void validateResentBcc(IAssertionGroup er, String resentBcc, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.6;http://tools.ietf.org/html/rfc5322#section-3.6.6";
 		if(ValidationUtils.validateEmail(resentBcc)) {
 			er.success("112", "Resent-Bcc", resentBcc, "address-list", rfc);
@@ -255,7 +254,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 
 	// DTS 113, Resent-Msg-Id, Conditional
-	public void validateResentMsgId(ErrorRecorder er, String resentMsgId, boolean wrapped) {
+	public void validateResentMsgId(IAssertionGroup er, String resentMsgId, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.6;http://tools.ietf.org/html/rfc5322#section-3.6.6";
 		if(ValidationUtils.validateAddrSpec(resentMsgId)) {
 			er.success("113", "Resent-Msg-Id", SafeHtmlUtils.htmlEscape(resentMsgId), "msg-id", rfc);
@@ -268,7 +267,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 114, Orig-Date, Required
-	public void validateOrigDate(ErrorRecorder er, String origDate, boolean wrapped) {
+	public void validateOrigDate(IAssertionGroup er, String origDate, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.1;http://tools.ietf.org/html/rfc5322#section-3.6.1";
 		if(origDate.equals("") && !wrapped) {
 			er.info("114", "Orig-Date", "Not present", "Wrapped Message: Orig-Date is not present on the outer (encrypted) message", rfc);
@@ -284,7 +283,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 
 	// DTS 115, From, Required
-	public void validateFrom(ErrorRecorder er, String from, boolean wrapped) {
+	public void validateFrom(IAssertionGroup er, String from, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.2;http://tools.ietf.org/html/rfc5322#section-3.6.2";
 		if(from.equals("") && !wrapped) {
 			er.info("115", "From", "Not present", "Wrapped Message: From is not present on the outer (encrypted) message", rfc);
@@ -301,7 +300,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 116, Sender, Conditional
-	public void validateSender(ErrorRecorder er, String sender, Address[] from, boolean wrapped) {
+	public void validateSender(IAssertionGroup er, String sender, Address[] from, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.2;http://tools.ietf.org/html/rfc5322#section-3.6.2";
 		if(from.length>1) {
 			if(ValidationUtils.validateEmail(sender)) {
@@ -320,7 +319,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 117, Reply-To, Optional
-	public void validateReplyTo(ErrorRecorder er, String replyTo, boolean wrapped) {
+	public void validateReplyTo(IAssertionGroup er, String replyTo, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.2;http://tools.ietf.org/html/rfc5322#section-3.6.2";
 		if(replyTo.equals("") && !wrapped) {
 			er.info("117", "Reply-To", "Not present", "Wrapped Message: Reply-To is not present on the outer (encrypted) message", rfc);
@@ -337,7 +336,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 
 	// DTS 118, To, Required
-	public void validateTo(ErrorRecorder er, String to, boolean wrapped) {
+	public void validateTo(IAssertionGroup er, String to, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.3;http://tools.ietf.org/html/rfc5322#section-3.6.3";
 		if(to.equals("") && !wrapped) {
 			er.info("118", "To", "Not present", "Wrapped Message: To is not present on the outer (encrypted) message", rfc);
@@ -354,7 +353,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 119, cc, Optional
-	public void validateCc(ErrorRecorder er, String cc, boolean wrapped) {
+	public void validateCc(IAssertionGroup er, String cc, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.3;http://tools.ietf.org/html/rfc5322#section-3.6.3";
 		if(cc.equals("")) {
 			er.info("119", "Cc", "Not present", "address-list", rfc);
@@ -369,7 +368,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 120, Bcc, Optional
-	public void validateBcc(ErrorRecorder er, String bcc, boolean wrapped) {
+	public void validateBcc(IAssertionGroup er, String bcc, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.3;http://tools.ietf.org/html/rfc5322#section-3.6.3";
 		if(bcc.equals("")) {
 			er.success("120", "Bcc", "Not present", "Should not be present", rfc);
@@ -384,7 +383,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 
 	// DTS 121, Message-Id, Required
-	public void validateMessageId(ErrorRecorder er, String messageId, boolean wrapped) {
+	public void validateMessageId(IAssertionGroup er, String messageId, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.4;http://tools.ietf.org/html/rfc5322#section-3.6.4";
 		if(messageId.equals("") && !wrapped) {
 			er.warning("121", "Message-Id", "Not present", "Wrapped Message: Message-Id is not present on the outer (encrypted) message", rfc);
@@ -400,7 +399,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 
 	// DTS 122, In-reply-to, Optional
-	public void validateInReplyTo(ErrorRecorder er, String inReplyTo, String date, boolean wrapped) {
+	public void validateInReplyTo(IAssertionGroup er, String inReplyTo, String date, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.4;http://tools.ietf.org/html/rfc5322#section-3.6.4";
 		// Check 1: Must be formatted as one or more <randomstringwithoutspaces@randomstringwithoutspaces>
 		if(ValidationUtils.validateAddrSpec(inReplyTo)) {
@@ -414,7 +413,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 123, References, Optional
-	public void validateReferences(ErrorRecorder er, String references, boolean wrapped) {
+	public void validateReferences(IAssertionGroup er, String references, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.4;http://tools.ietf.org/html/rfc5322#section-3.6.4";
 		if(ValidationUtils.validateAddrSpec(references)) {
 			er.success("123", "References", references, "<string with no spaces\"@\"string with no spaces>", rfc);
@@ -427,7 +426,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 124, Subject, Optional
-	public void validateSubject(ErrorRecorder er, String subject, String filename, boolean wrapped) {
+	public void validateSubject(IAssertionGroup er, String subject, String filename, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.5;http://tools.ietf.org/html/rfc5322#section-3.6.5";
 		if(subject == null && !wrapped) {
 			er.warning("124", "Subject", "Not present", "Wrapped Message: Subject is not present on the outer (encrypted) message", rfc);
@@ -439,14 +438,14 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 			if(subject.contains("XDM/1.0/DDM")) {
 				er.success("124", "Subject", subject, "Filename is ZIP: Subject must contain XDM/1.0/DDM", rfc);
 			} else {
-				er.err("124", "Subject", subject, "Filename is ZIP: Subject must contain XDM/1.0/DDM", rfc);
+				er.error("124", "Subject", subject, "Filename is ZIP: Subject must contain XDM/1.0/DDM", rfc);
 			}
 		}
 		
 	}
 	
 	// DTS 125, Comments, Optional
-	public void validateComments(ErrorRecorder er, String comments, boolean wrapped) {
+	public void validateComments(IAssertionGroup er, String comments, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.5;http://tools.ietf.org/html/rfc5322#section-3.6.5";
 		if(comments.equals("")) {
 			er.info("125", "Comments", "Not present", "May not be present", rfc);
@@ -457,7 +456,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 126, Keywords, Optional
-	public void validateKeywords(ErrorRecorder er, String keyword, boolean wrapped) {
+	public void validateKeywords(IAssertionGroup er, String keyword, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.5;http://tools.ietf.org/html/rfc5322#section-3.6.5";
 		if(keyword.equals("")) {
 			er.info("126", "Keywords", "Not present", "May not be present", rfc);
@@ -468,7 +467,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 127, Optional-field, Optional
-	public void validateOptionalField(ErrorRecorder er, String optionalField, boolean wrapped) {
+	public void validateOptionalField(IAssertionGroup er, String optionalField, boolean wrapped) {
 		String rfc = "RFC 5322: Section 3.6.8;http://tools.ietf.org/html/rfc5322#section-3.6.8";
 		if(optionalField.equals("")) {
 			er.info("127", "Optional-field", "Not present", "May not be present", rfc);
@@ -479,7 +478,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 128, Disposition-Notification-To, Optional
-	public void validateDispositionNotificationTo(ErrorRecorder er, String dispositionNotificationTo, boolean wrapped) {
+	public void validateDispositionNotificationTo(IAssertionGroup er, String dispositionNotificationTo, boolean wrapped) {
 		String rfc = "IHE Vol2b: Section 3.32.4.1.3";
 		if(dispositionNotificationTo.equals("")) {
 			er.info("128", "Disposition-Notification-To", "Not present", "May not be present", rfc);
@@ -494,7 +493,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 	}
 	
 	// DTS 102b, MIME-Version, Required
-	public void validateMIMEVersion(ErrorRecorder er, String MIMEVersion, boolean wrapped) {
+	public void validateMIMEVersion(IAssertionGroup er, String MIMEVersion, boolean wrapped) {
 		String rfc = "RFC 2045: Section 4;http://tools.ietf.org/html/rfc2045#section-4";
 		if(MIMEVersion.equals("") && !wrapped) {
 			er.warning("102b", "MIME-Version", "Not present", "Wrapped Message: MIME-Version is not present on the outer (encrypted) message", rfc);
@@ -507,7 +506,7 @@ public class DirectMessageHeadersValidator implements MessageHeadersValidator {
 			if(matcher.matches()) {
 				er.success("102b", "MIME-Version", MIMEVersion, "1*DIGIT \".\" 1*DIGIT", rfc);
 			} else {
-				er.err("102b", "MIME-Version", MIMEVersion, "1*DIGIT \".\" 1*DIGIT", rfc);
+				er.error("102b", "MIME-Version", MIMEVersion, "1*DIGIT \".\" 1*DIGIT", rfc);
 			}
 		}
 		

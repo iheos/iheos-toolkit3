@@ -1,17 +1,17 @@
 package gov.nist.toolkit.valregmsg.message;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMNode;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMNode;
 
 /**
  * An abstract class that performs XML Element order checking.  The
@@ -31,11 +31,11 @@ public abstract class OrderValidator extends MessageValidator {
 		this.xml = xml;
 	}
 
-	public void run(ErrorRecorder er) {
+	public void run(IAssertionGroup er) {
 		this.er = er;
 		
 		if (xml == null) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, "No content present", this, "");
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("No content present", ""), this);
 			return;
 		}
 
@@ -58,12 +58,12 @@ public abstract class OrderValidator extends MessageValidator {
 			if (ele2 != null) {
 				String ele2Name = ele2.getLocalName();
 				if (!canFollow(ele1Name, ele2Name))
-					er.err(XdsErrorCode.Code.XDSRegistryError, 
-							"Child elements of " + ele.getLocalName() + "(id=" + new Metadata().getId(ele) + ")" +
+					er.err(XdsErrorCode.Code.XDSRegistryError,
+                            new ErrorContext("Child elements of " + ele.getLocalName() + "(id=" + new Metadata().getId(ele) + ")" +
 							" are out of Schema required order:   " +
 							" element " + ele2.getLocalName() + " cannot follow element " + ele1.getLocalName() + 
 							". Elements must be in this order " + elementOrder
-							, this, reference);
+							, reference), this);
 			}
 			checkElementOrder(ele1);
 		}

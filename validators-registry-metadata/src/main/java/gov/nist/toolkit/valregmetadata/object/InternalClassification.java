@@ -1,7 +1,7 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valsupport.client.ValidationContext;

@@ -1,16 +1,17 @@
 package gov.nist.toolkit.valregmsg.registry.storedquery.generic;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.*;
 import gov.nist.toolkit.docref.EbRS;
 import gov.nist.toolkit.docref.SqDocRef;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymsgformats.registry.Response;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.registrysupport.logging.LogMessage;
 import gov.nist.toolkit.registrysupport.logging.LoggerException;
-import gov.nist.toolkit.valregmsg.registry.AdhocQueryResponse;
+import gov.nist.toolkit.registrymsgformats.registry.AdhocQueryResponse;
 import gov.nist.toolkit.valregmsg.registry.storedquery.support.ParamParser;
 import gov.nist.toolkit.valregmsg.registry.storedquery.support.SqParams;
 import gov.nist.toolkit.valregmsg.registry.storedquery.support.StoredQuerySupport;
@@ -50,7 +51,7 @@ abstract public class StoredQueryFactory {
 	String service_name;
 	boolean is_secure = false;
 	protected Response response = null;
-	protected ErrorRecorder er = null;
+	protected IAssertionGroup er = null;
 	String homeCommunityId = null;
 
 	public void setIsSecure(boolean is) { is_secure = is; }
@@ -75,7 +76,7 @@ abstract public class StoredQueryFactory {
 		build();
 	}
 
-	public StoredQueryFactory(OMElement ahqr, ErrorRecorder er) throws XdsException, LoggerException {
+	public StoredQueryFactory(OMElement ahqr, IAssertionGroup er) throws XdsException, LoggerException {
 		this.ahqr = ahqr;
 		this.params = null;
 		this.log_message = null;
@@ -115,7 +116,7 @@ abstract public class StoredQueryFactory {
 
 		OMElement response_option = MetadataSupport.firstChildWithLocalName(ahqr, "ResponseOption") ;
 		if (response_option == null) 
-			er.err(XdsErrorCode.Code.XDSRegistryError, "Cannot find /AdhocQueryRequest/ResponseOption element", this, "ebRS 3.0 Section 6.1.1.1");
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Cannot find /AdhocQueryRequest/ResponseOption element", "ebRS 3.0 Section 6.1.1.1"), this);
 
 		String return_type = response_option.getAttributeValue(MetadataSupport.return_type_qname);
 
@@ -128,8 +129,8 @@ abstract public class StoredQueryFactory {
 			returnType = QueryReturnType.LEAFCLASSWITHDOCUMENT;
 		
 		else
-			er.err(XdsErrorCode.Code.XDSRegistryError, "/AdhocQueryRequest/ResponseOption/@returnType must be LeafClass or ObjectRef or for some special queries LeafClassWithRepositoryItem. Found value "
-					+ return_type, this, EbRS.ReturnTypes);
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("/AdhocQueryRequest/ResponseOption/@returnType must be LeafClass or ObjectRef or for some special queries LeafClassWithRepositoryItem. Found value "
+					+ return_type, EbRS.ReturnTypes), this);
 
 		OMElement adhoc_query = MetadataSupport.firstChildWithLocalName(ahqr, "AdhocQuery") ;
 		if (adhoc_query == null) {

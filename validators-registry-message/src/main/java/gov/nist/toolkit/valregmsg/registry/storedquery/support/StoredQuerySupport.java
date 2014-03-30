@@ -1,7 +1,8 @@
 package gov.nist.toolkit.valregmsg.registry.storedquery.support;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrysupport.logging.LogMessage;
 import gov.nist.toolkit.registrysupport.logging.LoggerException;
 import gov.nist.toolkit.valregmsg.registry.SQCodeAnd;
@@ -11,7 +12,7 @@ import gov.nist.toolkit.valregmsg.registry.storedquery.generic.StoredQueryFactor
 import java.util.ArrayList;
 
 public class StoredQuerySupport {
-	public ErrorRecorder er;
+	public IAssertionGroup er;
 	public LogMessage log_message;
 	public SqParams params;
 	public StringBuffer query;
@@ -32,7 +33,7 @@ public class StoredQuerySupport {
 	 * @param log_message
 	 * @throws LoggerException 
 	 */
-	public StoredQuerySupport(ErrorRecorder response, LogMessage log_message)  {
+	public StoredQuerySupport(IAssertionGroup response, LogMessage log_message)  {
 		this.er = response;
 		this.log_message = log_message;
 		init();
@@ -46,7 +47,7 @@ public class StoredQuerySupport {
 	 * @param log_message (Message)
 	 * @param is_secure
 	 */
-	public StoredQuerySupport(SqParams params, QueryReturnType return_objects, ErrorRecorder response, LogMessage log_message, boolean is_secure) {
+	public StoredQuerySupport(SqParams params, QueryReturnType return_objects, IAssertionGroup response, LogMessage log_message, boolean is_secure) {
 		this.er = response;
 		this.log_message = log_message;
 		this.params = params;
@@ -122,7 +123,7 @@ public class StoredQuerySupport {
 
 		if (value == null && alternatives == null) {
 			if (required ) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter " + name + " is required but not present in query", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+				er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter " + name + " is required but not present in query", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 				this.has_validation_errors = true;
 				return;
 			} 
@@ -133,7 +134,7 @@ public class StoredQuerySupport {
 			System.out.println("looking for alternatives");
 			if (! isAlternativePresent(alternatives)) {
 				if ( ! has_alternate_validation_errors) {
-					er.err(XdsErrorCode.Code.XDSRegistryError, "One of these parameters must be present in the query: " + valuesAsString(name, alternatives), "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+					er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("One of these parameters must be present in the query: " + valuesAsString(name, alternatives),  "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 					has_alternate_validation_errors = true;  // keeps from generating multiples of this message
 				}
 				has_validation_errors = true;
@@ -146,15 +147,15 @@ public class StoredQuerySupport {
 
 		if (is_code) {
  			if ( !(value instanceof SQCodedTerm)) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + 
-						", must be a coded term", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+				er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name +
+						", must be a coded term", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 				this.has_validation_errors = true;
 				return;
  			}
  			
  			if ( (value instanceof SQCodeAnd) && !and_or_ok) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + 
-						", is coded with AND/OR semantics which are not allowed on this parameter", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+				er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name +
+						", is coded with AND/OR semantics which are not allowed on this parameter", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 				this.has_validation_errors = true;
 				return;
  			}
@@ -162,17 +163,17 @@ public class StoredQuerySupport {
 		} else {
 
 			if (multiple && !(value instanceof ArrayList)) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + ", accepts multiple values but (  ) syntax is missing", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+				er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name + ", accepts multiple values but (  ) syntax is missing", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 				this.has_validation_errors = true;
 				return;
 			}
 			if (!multiple && (value instanceof ArrayList)) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + ", accepts single value value only but (  )  syntax is present", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+				er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name + ", accepts single value value only but (  )  syntax is present", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 				this.has_validation_errors = true;
 				return;
 			}
 			if (multiple && (value instanceof ArrayList) && ((ArrayList) value).size() == 0) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + ", (  )  syntax is present but list is empty", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+				er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name + ", (  )  syntax is present but list is empty", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 				this.has_validation_errors = true;
 				return;
 			}
@@ -191,11 +192,11 @@ public class StoredQuerySupport {
 								( ((ArrayList)a_o).get(0) instanceof String) 
 						)
 				) {
-					er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + ", is not coded as a string (is type " + a_o.getClass().getName() + ") (single quotes missing?)", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+					er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name + ", is not coded as a string (is type " + a_o.getClass().getName() + ") (single quotes missing?)", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 					this.has_validation_errors = true;
 				}
 				if (!is_string && !(a_o instanceof Integer)) {
-					er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + " is not coded as a number (is type " + a_o.getClass().getName() + ") (single quotes present)", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+					er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name + " is not coded as a number (is type " + a_o.getClass().getName() + ") (single quotes present)",  "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 					this.has_validation_errors = true;
 				}
 			}
@@ -210,7 +211,7 @@ public class StoredQuerySupport {
 
 		if (value == null && alternatives == null) {
 			if (required ) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter " + name + " is required but not present in query", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+				er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter " + name + " is required but not present in query", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 				this.has_validation_errors = true;
 				return;
 			} 
@@ -221,7 +222,7 @@ public class StoredQuerySupport {
 			System.out.println("looking for alternatives");
 			if (! isAlternativePresent(alternatives)) {
 				if ( ! has_alternate_validation_errors) {
-					er.err(XdsErrorCode.Code.XDSRegistryError, "One of these parameters must be present in the query: " + valuesAsString(name, alternatives), "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+					er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("One of these parameters must be present in the query: " + valuesAsString(name, alternatives),  "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 					has_alternate_validation_errors = true;  // keeps from generating multiples of this message
 				}
 				has_validation_errors = true;
@@ -233,17 +234,17 @@ public class StoredQuerySupport {
 			return;
 
 		if (multiple && !(value instanceof ArrayList)) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + ", accepts multiple values but (  ) syntax is missing", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name + ", accepts multiple values but (  ) syntax is missing", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 			this.has_validation_errors = true;
 			return;
 		}
 		if (!multiple && (value instanceof ArrayList)) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + ", accepts single value value only but (  )  syntax is present", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name + ", accepts single value value only but (  )  syntax is present", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 			this.has_validation_errors = true;
 			return;
 		}
 		if (multiple && (value instanceof ArrayList) && ((ArrayList) value).size() == 0) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + ", (  )  syntax is present but list is empty", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name + ", (  )  syntax is present but list is empty", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 			this.has_validation_errors = true;
 			return;
 		}
@@ -262,11 +263,11 @@ public class StoredQuerySupport {
 							( ((ArrayList)a_o).get(0) instanceof String) 
 					)
 			) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + ", is not coded as a string (is type " + a_o.getClass().getName() + ") (single quotes missing?)", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+				er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name + ", is not coded as a string (is type " + a_o.getClass().getName() + ") (single quotes missing?)", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 				this.has_validation_errors = true;
 			}
 			if (!is_string && !(a_o instanceof Integer)) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + name + " is not coded as a number (is type " + a_o.getClass().getName() + ") (single quotes present)", "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+				er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + name + " is not coded as a number (is type " + a_o.getClass().getName() + ") (single quotes present)", "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 				this.has_validation_errors = true;
 			}
 		}
@@ -276,20 +277,20 @@ public class StoredQuerySupport {
 
 		Object same_as_value = params.getParm(same_size_as);
 		if ( !(same_as_value instanceof ArrayList)) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + same_size_as + " must have same number of values as parameter " + name, "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + same_size_as + " must have same number of values as parameter " + name, "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 			this.has_validation_errors = true;
 			return;
 		}
 		ArrayList same_as_values = (ArrayList) same_as_value;
 
 		if ( !(value instanceof ArrayList)) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + same_size_as + " must have same number of values as parameter " + name, "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + same_size_as + " must have same number of values as parameter " + name, "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 			this.has_validation_errors = true;
 			return;
 		}
 
 		if (same_as_values.size() != values.size()) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, "Parameter, " + same_size_as + " must have same number of values as parameter " + name, "StoredQuery.java", "ITI TF-2a: 3.18.4.1.2.3.7", log_message);
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Parameter, " + same_size_as + " must have same number of values as parameter " + name, "ITI TF-2a: 3.18.4.1.2.3.7"), this);
 			this.has_validation_errors = true;
 			return;
 		}

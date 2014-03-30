@@ -1,12 +1,13 @@
 package gov.nist.toolkit.registrymsgformats.registry;
 
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.hit.ds.xdsException.*;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem;
-import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem.ReportingCompletionType;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
 import gov.nist.toolkit.registrymetadata.Metadata;
+import gov.nist.toolkit.registrymetadata.client.Code;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.registrysupport.logging.ErrorLogger;
 import gov.nist.toolkit.registrysupport.logging.LogMessage;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public class RegistryErrorListGenerator implements ErrorLogger, ErrorRecorder{
+public class RegistryErrorListGenerator implements ErrorLogger, IAssertionGroup {
 	public final static short version_2 = 2;
 	public final static short version_3 = 3;
 	String errors_and_warnings = "";
@@ -66,7 +67,7 @@ public class RegistryErrorListGenerator implements ErrorLogger, ErrorRecorder{
 			return;
 		
 		for (ValidatorErrorItem vei : er.getValidatorErrorInfo()) {
-			if (vei.completion == ReportingCompletionType.ERROR) {
+			if (vei.completion == ValidatorErrorItem.ReportingCompletionType.ERROR) {
 				addError(vei.msg, vei.getCodeString(), vei.location);
 			} 
 		}
@@ -448,7 +449,12 @@ public class RegistryErrorListGenerator implements ErrorLogger, ErrorRecorder{
 		return has_errors;
 	}
 
-	public void err(String code, String msg, String location, String severity,
+    @Override
+    public void err(XdsErrorCode.Code code, Exception e) {
+
+    }
+
+    public void err(String code, String msg, String location, String severity,
 			String resource) {
 		add_error(code, msg, location + " - " + severity, resource, null);
 	}
@@ -468,7 +474,7 @@ public class RegistryErrorListGenerator implements ErrorLogger, ErrorRecorder{
 		
 	}
 
-	public void warning(Code code, String msg, String location, String resource) {
+    public void warning(Code code, String msg, String location, String resource) {
 		// TODO Auto-generated method stub
 		
 	}

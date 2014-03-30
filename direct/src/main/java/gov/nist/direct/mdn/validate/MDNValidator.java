@@ -16,9 +16,8 @@ Authors: Frederic de Vaulx
 
 package gov.nist.direct.mdn.validate;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-
-
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 
 public interface MDNValidator {
 	
@@ -30,7 +29,7 @@ public interface MDNValidator {
 	 * @param er
 	 * @param dts450
 	 */
-	public void validateMDNSignatureAndEncryption(ErrorRecorder er, boolean signed, boolean encrypted);
+	public void validateMDNSignatureAndEncryption(IAssertionGroup er, boolean signed, boolean encrypted);
 
 	
 	
@@ -43,25 +42,25 @@ public interface MDNValidator {
 	/**
 	 *  DTS 451, Message Headers - Contains DTS 452, 453, 454
 	 */
-	public void validateMessageHeaders(ErrorRecorder er, String messageHeader);
+	public void validateMessageHeaders(IAssertionGroup er, String messageHeader);
 	
 	
 	/**
 	 *  DTS 452, Disposition-Notification-To, Required
 	 */
-	public void validateMDNRequestHeader(ErrorRecorder er, String dispositionNotificationTo);
+	public void validateMDNRequestHeader(IAssertionGroup er, String dispositionNotificationTo);
 		
 	
 	/**
 	 *  DTS 453, Disposition-Notification-Options, warning
 	 */
-	public void validateDispositionNotificationOptions(ErrorRecorder er, String dispNotifTo);
+	public void validateDispositionNotificationOptions(IAssertionGroup er, String dispNotifTo);
 	
 
 	/**
 	 *  DTS 454, Original-Recipient-Header, warning
 	 */
-	public void validateOriginalRecipientHeader(ErrorRecorder er, String originalRecipient);
+	public void validateOriginalRecipientHeader(IAssertionGroup er, String originalRecipient);
 	
 	
 	
@@ -73,62 +72,62 @@ public interface MDNValidator {
 	/**
 	 *  DTS 455, Report content, warning - Contains DTS 456 to 466
 	 */
-	public void validateReportContent(ErrorRecorder er, String reportContent);
+	public void validateReportContent(IAssertionGroup er, String reportContent);
 	
 	/**
 	 *  DTS 456, Disposition-Notification-Content, warning
 	 */
-	public void validateDispositionNotificationContent(ErrorRecorder er, String reportingUA, String mdnGateway, String originalRecipient, 
+	public void validateDispositionNotificationContent(IAssertionGroup er, String reportingUA, String mdnGateway, String originalRecipient,
 			String finalRecipient, String originalMessageID, String disposition, 
 			String failure, String error, String warning, String extension);
 	
 	/**
 	 *  DTS 457, Reporting-UA-Field, warning
 	 */
-	public void validateReportingUAField(ErrorRecorder er, String reportingUA);
+	public void validateReportingUAField(IAssertionGroup er, String reportingUA);
 	
 	/**
 	 *  DTS 458, mdn-gateway-field, Required
 	 */
-	public void validateMDNGatewayField(ErrorRecorder er, String mdnGateway);
+	public void validateMDNGatewayField(IAssertionGroup er, String mdnGateway);
 	
 	/**
 	 *  DTS 459, original-recipient-field, Required
 	 */
-	public void validateOriginalRecipientField(ErrorRecorder er, String originalRecipient);
+	public void validateOriginalRecipientField(IAssertionGroup er, String originalRecipient);
 	
 	/**
 	 *  DTS 460, final-recipient-field, Required
 	 */
-	public void validateFinalRecipientField(ErrorRecorder er, String finalRecipient);
+	public void validateFinalRecipientField(IAssertionGroup er, String finalRecipient);
 
 	/**
 	 *  DTS 461, original-message-id-field, Required
 	 */
-	public void validateOriginalMessageIdField(ErrorRecorder er, String originalMessageID);
+	public void validateOriginalMessageIdField(IAssertionGroup er, String originalMessageID);
 	
 	/**
 	 *  DTS 462, disposition-field, Required
 	 */
-	public void validateDispositionField(ErrorRecorder er, String disposition);
+	public void validateDispositionField(IAssertionGroup er, String disposition);
 	
 	/**
 	 *  DTS 463, failure-field, Required
 	 */
-	public void validateFailureField(ErrorRecorder er, String failure);
+	public void validateFailureField(IAssertionGroup er, String failure);
 	
 	/**
 	 *  DTS 464, error-field, Required
 	 */
-	public void validateErrorField(ErrorRecorder er, String error);
+	public void validateErrorField(IAssertionGroup er, String error);
 	
 	/**
 	 *  DTS 465, warning-field, Required
 	 */
-	public void validateWarningField(ErrorRecorder er, String warning);
+	public void validateWarningField(IAssertionGroup er, String warning);
 	
 	/**
 	 *  DTS 466, extension-field, Required
 	 */
-	public void validateExtensionField(ErrorRecorder er, String extension);
+	public void validateExtensionField(IAssertionGroup er, String extension);
 }

@@ -1,11 +1,12 @@
 package gov.nist.toolkit.valregmetadata.datatype;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 
 public class UuidFormat extends FormatValidator {
 
-	public UuidFormat(ErrorRecorder er, String context, String resource) {
+	public UuidFormat(IAssertionGroup er, String context, String resource) {
 		super(er, context, resource);
 	}
 

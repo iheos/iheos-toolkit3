@@ -1,9 +1,11 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
@@ -95,7 +97,7 @@ public class Author extends AbstractRegistryObject {
 		classificationScheme = cl.getAttributeValue(MetadataSupport.classificationscheme_qname);
 	}
 
-	public void validateStructure(ErrorRecorder er, ValidationContext vc)  {
+	public void validateStructure(IAssertionGroup er, ValidationContext vc)  {
 		validateId(er, vc, "entryUUID", id, null);
 		OMElement parentEle = (OMElement) ro.getParent();
 		String parentEleId =  ((parentEle == null) ? "null" :
@@ -103,14 +105,14 @@ public class Author extends AbstractRegistryObject {
 		String classifiedObjectId = ro.getAttributeValue(MetadataSupport.classified_object_qname);
 
 		if (parentEle != null && !parentEleId.equals(classifiedObjectId))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": is a child of object " + parentEleId + " but the classifiedObject value is " + 
-					classifiedObjectId + ", they must match", this, "ITI TF-3: 4.1.12.2");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": is a child of object " + parentEleId + " but the classifiedObject value is " +
+					classifiedObjectId + ", they must match", "ITI TF-3: 4.1.12.2"), this);
 
 		try {
 			if (getClassificationScheme() == null || getClassificationScheme().equals(""))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": does not have a value for the classificationScheme attribute", this, "ebRIM 3.0 section 4.3.1");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": does not have a value for the classificationScheme attribute", "ebRIM 3.0 section 4.3.1"), this);
 			else if (!getClassificationScheme().startsWith("urn:uuid:"))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": classificationScheme attribute value is not have urn:uuid: prefix", this, "ITI TF-3: 4.3.1");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": classificationScheme attribute value is not have urn:uuid: prefix", "ITI TF-3: 4.3.1"), this);
 		} catch (XdsInternalException e) {
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
 		}

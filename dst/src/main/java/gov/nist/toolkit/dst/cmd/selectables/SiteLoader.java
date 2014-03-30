@@ -1,8 +1,5 @@
 package gov.nist.toolkit.dst.cmd.selectables;
 
-import gov.nist.toolkit.sitemanagement.CombinedSiteLoader;
-import gov.nist.toolkit.sitemanagement.Sites;
-import gov.nist.toolkit.sitemanagement.client.Site;
 
 import java.io.File;
 import java.util.List;

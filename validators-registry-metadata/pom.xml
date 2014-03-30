@@ -16,27 +16,23 @@
 		<dependency>
 			<groupId>org.apache.ws.commons.axiom</groupId>
 			<artifactId>axiom-dom</artifactId>
-			<version>1.2.10</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>2.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>error-recording</artifactId>
-			<version>v2-maven-alpha</version>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>errorRecording</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>http</artifactId>
-			<version>v2-maven-alpha</version>
+        		<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
@@ -44,8 +40,8 @@
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>registry-msg-formats</artifactId>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>registryMsgFormats</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
@@ -54,9 +50,8 @@
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
+			<groupId>gov.nist.hit.ds</groupId>
 			<artifactId>utilities</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
@@ -64,14 +59,12 @@
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
+			<groupId>gov.nist.hit.ds</groupId>
 			<artifactId>xdsException</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
-		<version>2.0.0</version>
 		</dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

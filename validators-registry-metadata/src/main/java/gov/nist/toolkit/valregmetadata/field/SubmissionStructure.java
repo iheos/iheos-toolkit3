@@ -1,17 +1,18 @@
 package gov.nist.toolkit.valregmetadata.field;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.registry.RegistryValidationInterface;
+import org.apache.axiom.om.OMElement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
 
 public class SubmissionStructure {
 	Metadata m;
@@ -24,13 +25,13 @@ public class SubmissionStructure {
 		this.rvi = rvi;
 	}
 
-	public void run(ErrorRecorder er, ValidationContext vc)   {
+	public void run(IAssertionGroup er, ValidationContext vc)   {
 		submission_structure(er, vc);
 
 	}
 
 
-	void submission_structure(ErrorRecorder er, ValidationContext vc)   {
+	void submission_structure(IAssertionGroup er, ValidationContext vc)   {
 		if (vc.isSubmit() && vc.isRequest) 
 			er.sectionHeading("Submission Structure");
 		ss_doc_fol_must_have_ids(er, vc);
@@ -154,7 +155,7 @@ public class SubmissionStructure {
 		return haveAssoc("HasMember", ssid, id);
 	}
 	
-	void log_hasmember_usage(ErrorRecorder er) {
+	void log_hasmember_usage(IAssertionGroup er) {
 		
 		er.detail("A HasMember association can be used to do the following:");
 		er.detail("  Link the SubmissionSet to a DocumentEntry in the submission (if it has SubmissionSetStatus value of Original)");
@@ -374,7 +375,7 @@ public class SubmissionStructure {
 	
 	String assocsRef = "ITI Tf-3: 4.1";
 
-	void evalHasMember(ErrorRecorder er, OMElement assoc) {
+	void evalHasMember(IAssertionGroup er, OMElement assoc) {
 		String source = m.getAssocSource(assoc);
 		String target = m.getAssocTarget(assoc);
 		String type = m.getAssocType(assoc);
@@ -393,14 +394,14 @@ public class SubmissionStructure {
 		} else if (is_fol_to_de_hasmember(assoc)) {
 			er.detail(assocDescription(assoc) + ": is a Folder to DocumentEntry HasMember association");
 		} else {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, assocDescription(assoc) + ": do not understand this HasMember association. " +
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(assocDescription(assoc) + ": do not understand this HasMember association. " +
 					"sourceObject is " + objectDescription(source) +
-					" and targetObject is " + objectDescription(target), this, assocsRef);
+					" and targetObject is " + objectDescription(target), assocsRef), this);
 			hasmember_error = true;
 		}
 	}
 
-	void evalRelationship(ErrorRecorder er, OMElement assoc) {
+	void evalRelationship(IAssertionGroup er, OMElement assoc) {
 		String source = m.getAssocSource(assoc);
 		String target = m.getAssocTarget(assoc);
 		String type = m.getAssocType(assoc);
@@ -409,18 +410,18 @@ public class SubmissionStructure {
 			return;
 
 		if (!isDocumentEntry(source))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in submission with its sourceObject attribute, it references " + objectDescription(source), this, "ITI TF-3: 4.1.6.1");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in submission with its sourceObject attribute, it references " + objectDescription(source), "ITI TF-3: 4.1.6.1"), this);
 		
 		if (containsObject(target)) {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectDescription(target) + " which is in the submission", this, "ITI TF-3: 4.1.6.1");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectDescription(target) + " which is in the submission", "ITI TF-3: 4.1.6.1"), this);
 		}
 		
 		if (!isUUID(target)) {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectDescription(target) + " which is a symbolic ID that cannot reference an object in the registry", this, "ITI TF-3: 4.1.6.1");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectDescription(target) + " which is a symbolic ID that cannot reference an object in the registry", "ITI TF-3: 4.1.6.1"), this);
 		}
 	}
 
-	void evalSigns(ErrorRecorder er, OMElement assoc) {
+	void evalSigns(IAssertionGroup er, OMElement assoc) {
 
 	}
 
@@ -433,7 +434,7 @@ public class SubmissionStructure {
 				"APND"
 		);
 
-	void eval_assocs(ErrorRecorder er) {
+	void eval_assocs(IAssertionGroup er) {
 		for (OMElement assoc : m.getAssociations()) {
 			String type = m.getAssocType(assoc);
 			if (type == null)
@@ -463,25 +464,25 @@ public class SubmissionStructure {
 		}
 	}
 
-	void cannotValidate(ErrorRecorder er, String context) {
-		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, context + ": cannot validate - error parsing", this, "ebRIM");
+	void cannotValidate(IAssertionGroup er, String context) {
+		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(context + ": cannot validate - error parsing", "ebRIM"), this);
 	}
 
-	void has_single_ss(ErrorRecorder er, ValidationContext vc) {
+	void has_single_ss(IAssertionGroup er, ValidationContext vc) {
 		List<OMElement> ssEles = m.getSubmissionSets();
 		if (ssEles.size() == 0) {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "Submission does not contain a SubmissionSet", this, "ITI TF-3: 4.1.4");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("Submission does not contain a SubmissionSet", "ITI TF-3: 4.1.4"), this);
 		} else if (ssEles.size() > 1) {
 			List<String> doc = new ArrayList<String>();
 			for (String ssid : m.getSubmissionSetIds())
 				doc.add(objectDescription(ssid));
 			
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "Submission contains multiple SubmissionSets: " + doc , this, "ITI TF-3: 4.1.4");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("Submission contains multiple SubmissionSets: " + doc , "ITI TF-3: 4.1.4"), this);
 		} else
 			er.detail(ssDescription(ssEles.get(0)) + ": SubmissionSet found");
 	}
 	
-	void symbolic_refs_not_in_submission(ErrorRecorder er) {
+	void symbolic_refs_not_in_submission(IAssertionGroup er) {
 		List<OMElement> assocs = m.getAssociations();
 
 		for (int i=0; i<assocs.size(); i++) {
@@ -494,18 +495,18 @@ public class SubmissionStructure {
 				continue;
 			
 			if (!isUUID(source) && !submissionContains(source))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, objectDescription(assoc) + ": sourceObject has value " + source +
-						" which is not in the submission but cannot be in registry since it is not in UUID format", this, "ITI TF-3: 4.1.12.3");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(objectDescription(assoc) + ": sourceObject has value " + source +
+						" which is not in the submission but cannot be in registry since it is not in UUID format", "ITI TF-3: 4.1.12.3"), this);
 
 			if (!isUUID(target) && !submissionContains(target))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, objectDescription(assoc) + ": targetObject has value " + target +
-						" which is not in the submission but cannot be in registry since it is not in UUID format", this, "ITI TF-3: 4.1.12.3");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(objectDescription(assoc) + ": targetObject has value " + target +
+						" which is not in the submission but cannot be in registry since it is not in UUID format", "ITI TF-3: 4.1.12.3"), this);
 }
 	}
 
 
 
-	void sss_relates_to_ss(ErrorRecorder er, ValidationContext vc) {
+	void sss_relates_to_ss(IAssertionGroup er, ValidationContext vc) {
 		String ss_id = m.getSubmissionSetId();
 		List<OMElement> assocs = m.getAssociations();
 
@@ -532,15 +533,15 @@ public class SubmissionStructure {
 			if (a_source.equals(ss_id)) {
 				String hm = assoc_type("HasMember");
 				if ( !a_type.equals(hm)) {
-					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "Association referencing SubmissionSet has type " + a_type + " but only type " + assoc_type("HasMember") + " is allowed", this, "ITI TF-3: 4.1.4");
+					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("Association referencing SubmissionSet has type " + a_type + " but only type " + assoc_type("HasMember") + " is allowed", "ITI TF-3: 4.1.4"), this);
 					hasmember_error = true;
 				}
 				if (target_is_included_is_doc) {
 					if ( ! m.hasSlot(assoc, "SubmissionSetStatus")) {
-						er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "Association(" +
+						er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("Association(" +
 								assoc.getAttributeValue(MetadataSupport.id_qname) +
-								") has sourceObject pointing to SubmissionSet and targetObject pointing to a DocumentEntry but contains no SubmissionSetStatus Slot", this, "ITI TF-3: 4.1.4.1"
-						);
+								") has sourceObject pointing to SubmissionSet and targetObject pointing to a DocumentEntry but contains no SubmissionSetStatus Slot", "ITI TF-3: 4.1.4.1"
+						), this);
 					} 
 				} else if (m.getFolderIds().contains(a_target)) {
 
@@ -550,15 +551,15 @@ public class SubmissionStructure {
 			}
 			else {
 				if ( m.hasSlot(assoc, "SubmissionSetStatus") && !"Reference".equals(m.getSlotValue(assoc, "SubmissionSetStatus", 0)))
-					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "Association " +
+					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("Association " +
 							assoc.getAttributeValue(MetadataSupport.id_qname) +
-							" does not have sourceObject pointing to SubmissionSet but contains SubmissionSetStatus Slot with value Original", this, "ITI TF-3: 4.1.4.1"
-					);
+							" does not have sourceObject pointing to SubmissionSet but contains SubmissionSetStatus Slot with value Original", "ITI TF-3: 4.1.4.1"
+					), this);
 			}
 		}
 	}
 
-	void ss_doc_fol_must_have_ids(ErrorRecorder er, ValidationContext vc) {
+	void ss_doc_fol_must_have_ids(IAssertionGroup er, ValidationContext vc) {
 		List<OMElement> docs = m.getExtrinsicObjects();
 		List<OMElement> rps = m.getRegistryPackages();
 
@@ -568,7 +569,7 @@ public class SubmissionStructure {
 			if (	id == null ||
 					id.equals("")
 			) {
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "All RegistryPackage and ExtrinsicObject objects must have id attributes", this, "ebRIM 2.4.1");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("All RegistryPackage and ExtrinsicObject objects must have id attributes", "ebRIM 2.4.1"), this);
 				return;
 			}
 		}
@@ -578,7 +579,7 @@ public class SubmissionStructure {
 			if (	id == null ||
 					id.equals("")
 			) {
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "All RegistryPackage and ExtrinsicObject objects must have id attributes", this, "ebRIM 2.4.1");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("All RegistryPackage and ExtrinsicObject objects must have id attributes", "ebRIM 2.4.1"), this);
 				return;
 			}
 		}
@@ -644,7 +645,7 @@ public class SubmissionStructure {
 //		return !containsObject(id) && isUUID(id);
 //	}
 
-	void ss_status_single_value(ErrorRecorder er, ValidationContext vc) {
+	void ss_status_single_value(IAssertionGroup er, ValidationContext vc) {
 		List<OMElement> assocs = m.getAssociations();
 		String ss_id = m.getSubmissionSetId();
 
@@ -659,7 +660,7 @@ public class SubmissionStructure {
 
 			String ss_status = m.getSlotValue(assoc, "SubmissionSetStatus", 1);
 			if (ss_status != null)
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "SubmissionSetStatus Slot on SubmissionSet association has more than one value", this, "ITI TF-3: 4.1.4.1");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("SubmissionSetStatus Slot on SubmissionSet association has more than one value", "ITI TF-3: 4.1.4.1"), this);
 		}
 	}
 
@@ -735,7 +736,7 @@ public class SubmissionStructure {
 		}
 	}
 
-	void all_docs_linked_to_ss(ErrorRecorder er, ValidationContext vc) {
+	void all_docs_linked_to_ss(IAssertionGroup er, ValidationContext vc) {
 		List<OMElement> docs = m.getExtrinsicObjects();
 
 		for (int i=0; i<docs.size(); i++) {
@@ -744,22 +745,22 @@ public class SubmissionStructure {
 			OMElement assoc = find_assoc(m.getSubmissionSetId(), assoc_type("HasMember"), doc.getAttributeValue(MetadataSupport.id_qname));
 
 			if ( assoc == null) {
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "DocumentEntry(" + 
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("DocumentEntry(" +
 						doc.getAttributeValue(MetadataSupport.id_qname) + 
 						") is not linked to the SubmissionSet with a " + assoc_type("HasMember") + " Association",
-						this, "ITI TF-3: 4.1.4.1");
+						"ITI TF-3: 4.1.4.1"), this);
 			} else {
 				if (!has_sss_slot(assoc)) {
-					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, assocDescription(assoc) + 
+					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(assocDescription(assoc) +
 							": links a DocumentEntry to the SubmissionSet but does not have a " + 
 							"SubmissionSetStatus Slot with value Original", 
-							this, "ITI TF-3: 4.1.4.1");
+							"ITI TF-3: 4.1.4.1"), this);
 					hasmember_error = true;
 				} else if (!is_sss_original(assoc)) {
-					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, assocDescription(assoc) + 
+					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(assocDescription(assoc) +
 							": links a DocumentEntry to the SubmissionSet but does not have a " + 
 							"SubmissionSetStatus Slot with value Original", 
-							this, "ITI TF-3: 4.1.4.1");
+							"ITI TF-3: 4.1.4.1"), this);
 					hasmember_error = true;
 				}
 			}
@@ -767,15 +768,15 @@ public class SubmissionStructure {
 		}
 	}
 
-	void all_fols_linked_to_ss(ErrorRecorder er, ValidationContext vc) {
+	void all_fols_linked_to_ss(IAssertionGroup er, ValidationContext vc) {
 		List<OMElement> fols = m.getFolders();
 
 		for (int i=0; i<fols.size(); i++) {
 			OMElement fol = (OMElement) fols.get(i);
 
 			if ( !has_assoc(m.getSubmissionSetId(), assoc_type("HasMember"), m.getId(fol))) {
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "Folder " + m.getId(fol) + " is not linked to the SubmissionSet with a " + assoc_type("HasMember") + " Association",
-						this, "ITI TF-3: 4.1.4.2");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("Folder " + m.getId(fol) + " is not linked to the SubmissionSet with a " + assoc_type("HasMember") + " Association",
+						"ITI TF-3: 4.1.4.2"), this);
 				hasmember_error = true;
 			}
 

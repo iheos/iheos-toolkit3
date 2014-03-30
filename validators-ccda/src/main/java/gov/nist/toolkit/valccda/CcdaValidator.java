@@ -15,22 +15,21 @@ Inner wrappers are DirectDecoder
  * 
  */
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import org.apache.log4j.Logger;
+import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.ecore.EClass;
+import org.openhealthtools.mdht.uml.cda.mu2consol.Mu2consolPackage;
+import org.openhealthtools.mdht.uml.cda.util.CDADiagnostic;
+import org.openhealthtools.mdht.uml.cda.util.CDAUtil;
+import org.openhealthtools.mdht.uml.cda.util.ValidationResult;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.eclipse.emf.common.util.Diagnostic;
-import org.eclipse.emf.ecore.EClass;
-import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
-import org.openhealthtools.mdht.uml.cda.mu2consol.Mu2consolPackage;
-import org.openhealthtools.mdht.uml.cda.util.CDADiagnostic;
-import org.openhealthtools.mdht.uml.cda.util.CDAUtil;
-import org.openhealthtools.mdht.uml.cda.util.ValidationResult;
 
 public class CcdaValidator {
 	static Logger logger = Logger.getLogger(CcdaValidator.class);
@@ -57,7 +56,7 @@ public class CcdaValidator {
 	 * @param er
 	 * @throws Exception
 	 */
-	public synchronized static void validateCDA(InputStream is, String validationType, ErrorRecorder er) throws Exception {
+	public synchronized static void validateCDA(InputStream is, String validationType, IAssertionGroup er) throws Exception {
 		Mu2consolPackage.eINSTANCE.eClass();
 		ValidationResult result = new ValidationResult();
 		EClass type = null; //typeMap.get(validationType);
@@ -100,7 +99,7 @@ public class CcdaValidator {
 		}
 		 
 		} catch (Exception e) {
-			er.err("FATAL ERROR in Loading the document for MDHT validation, check to ensure document format is XML, MESSAGE FROM INTERNAL EXCEPTION = " + e.getMessage(), "", "","", "");
+			er.err(XdsErrorCode.Code.NoCode, new ErrorContext("FATAL ERROR in Loading the document for MDHT validation, check to ensure document format is XML, MESSAGE FROM INTERNAL EXCEPTION = "), e);
 		}
 		
 		long end_time = System.currentTimeMillis();
@@ -112,12 +111,12 @@ public class CcdaValidator {
 		
 		for (Diagnostic dq : result.getErrorDiagnostics()) {
 			CDADiagnostic cdaDiagnosticq = new CDADiagnostic(dq);
-			er.err(Code.NoCode, cdaDiagnosticq.getCode() + "|" + cdaDiagnosticq.getMessage(), cdaDiagnosticq.getPath(), cdaDiagnosticq.getSource());
+			er.err(XdsErrorCode.Code.NoCode, new ErrorContext(cdaDiagnosticq.getCode() + "|" + cdaDiagnosticq.getMessage() + "|" + cdaDiagnosticq.getPath() + "|" + cdaDiagnosticq.getSource()), null);
 			errors++;
 		}
 		for (Diagnostic dq : result.getWarningDiagnostics()) {
 			CDADiagnostic cdaDiagnosticq = new CDADiagnostic(dq);
-			er.warning("", cdaDiagnosticq.getCode() + "|" + cdaDiagnosticq.getMessage(), cdaDiagnosticq.getPath(), cdaDiagnosticq.getSource());
+			er.warning(XdsErrorCode.Code.NoCode, new ErrorContext(cdaDiagnosticq.getCode() + "|" + cdaDiagnosticq.getMessage() + "|" + cdaDiagnosticq.getPath() + "|" + cdaDiagnosticq.getSource()), null);
 			warnings++;
 		}
 		for (Diagnostic dq : result.getInfoDiagnostics()) {

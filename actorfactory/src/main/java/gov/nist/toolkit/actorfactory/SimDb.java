@@ -1,18 +1,15 @@
 package gov.nist.toolkit.actorfactory;
 
+import gov.nist.hit.ds.http.parser.*;
 import gov.nist.toolkit.actorfactory.client.NoSimException;
-import gov.nist.toolkit.actortransaction.client.ATFactory;
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
-import gov.nist.toolkit.http.HttpHeader.HttpHeaderParseException;
-import gov.nist.toolkit.http.HttpMessage;
-import gov.nist.toolkit.http.HttpParseException;
-import gov.nist.toolkit.http.HttpParser;
-import gov.nist.toolkit.http.ParseException;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.ActorType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.TransactionType;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.simcommon.server.ExtendedPropertyManager;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.io.ZipDir;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 /**
  * Each simulator has an on-disk presence that keeps track of its long
@@ -361,7 +356,7 @@ public class SimDb {
 		return Io.stringFromFile(f);
 	}
 
-	public HttpMessage getParsedRequest() throws HttpParseException, ParseException, IOException, HttpHeaderParseException {
+	public HttpMessage getParsedRequest() throws HttpParseException, ParseException, IOException, HttpHeader.HttpHeaderParseException {
 		HttpParser parser = new HttpParser(getRequestMessageHeader().getBytes());
 
 		HttpMessage msg = parser.getHttpMessage();

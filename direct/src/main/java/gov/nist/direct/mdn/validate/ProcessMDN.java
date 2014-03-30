@@ -1,15 +1,16 @@
 package gov.nist.direct.mdn.validate;
 
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import org.apache.commons.io.IOUtils;
+
+import javax.mail.MessagingException;
+import javax.mail.Part;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
-import javax.mail.MessagingException;
-import javax.mail.Part;
-import org.apache.commons.io.IOUtils;
-
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
 
 /**
  * This class calls the full MDN message validation
@@ -34,7 +35,7 @@ public class ProcessMDN {
 	private ArrayList<String> headerName;
 	private ArrayList<String> headerField;
 	
-	public ProcessMDN(ErrorRecorder er, Part p){
+	public ProcessMDN(IAssertionGroup er, Part p){
 		headerName = new ArrayList<String>();
 		headerField = new ArrayList<String>();	
 		
@@ -87,7 +88,7 @@ public class ProcessMDN {
 		extension = getMDNHeader("extension");
 	}
 
-	public void validate(ErrorRecorder er){
+	public void validate(IAssertionGroup er){
 
 		MDNValidator validator = new MDNValidatorImpl();
 

@@ -19,20 +19,18 @@ Authors: William Majurski
 
 package gov.nist.direct.directValidator.impl;
 
-import java.util.Enumeration;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import gov.nist.direct.directValidator.interfaces.MimeEntityValidator;
+import gov.nist.direct.utils.ValidationUtils;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import junit.framework.Assert;
 
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
-
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-
-import junit.framework.Assert;
-import gov.nist.direct.directValidator.interfaces.MimeEntityValidator;
-import gov.nist.direct.utils.ValidationUtils;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DirectMimeEntityValidator implements MimeEntityValidator {
 
@@ -43,7 +41,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	// xxxxxxxxxxxxxx MIME Headers xxxxxxxxxxxxxxxxxxxx
 	
 	// DTS 190, All Mime Header Fields, Required
-	public void validateAllMimeHeaderFields(ErrorRecorder er, String header) {
+	public void validateAllMimeHeaderFields(IAssertionGroup er, String header) {
 		String rfc = "RFC 2045: Section 1, 3, 5;http://tools.ietf.org/html/rfc2045;RFC 5322: Section 2.2, 3.2.2;http://tools.ietf.org/html/rfc5322";
 		if(header.contains("\"")) {
 			String[] splitHeader = null;
@@ -67,13 +65,13 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	}
 	
 	// DTS 102a, MIME-Version, Optinal
-	public void validateAllMIMEVersion(ErrorRecorder er, String mimeVersion) {
+	public void validateAllMIMEVersion(IAssertionGroup er, String mimeVersion) {
 		Assert.fail("Not Yet Implemented");
 		
 	}
 
 	// DTS 133-145-146, Content-Type, Required
-	public void validateContentType(ErrorRecorder er, String contentType) {
+	public void validateContentType(IAssertionGroup er, String contentType) {
 		String rfc = "RFC 2045: Section 5, 5.2;http://tools.ietf.org/html/rfc2045#section-5;RFC 5751: Section 3.2, 3.2.1;http://tools.ietf.org/html/rfc5751#section-3.2";
 		final String xContentType =  "^X-.*";
 		Pattern pattern = Pattern.compile(xContentType, Pattern.CASE_INSENSITIVE);
@@ -91,7 +89,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	}
 
 	// DTS 191, Content-Type Subtype, Required
-	public void validateContentTypeSubtype(ErrorRecorder er, String subtype) {
+	public void validateContentTypeSubtype(IAssertionGroup er, String subtype) {
 		String rfc = "RFC 2045: Section 1;http://tools.ietf.org/html/rfc2045#section-1";
 		String[] typeAndSubtype = subtype.split("/"); // first one is the type (ex. "text"), second one is the subtype (ex. "plain").
 		if (typeAndSubtype[1] != "") {
@@ -102,7 +100,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	}
 
 	// DTS 192, Content-Type name, Conditional
-	public void validateContentTypeName(ErrorRecorder er, String contentTypeName) {
+	public void validateContentTypeName(IAssertionGroup er, String contentTypeName) {
 		String rfc = "RFC 5751: Section 3.2.1;http://tools.ietf.org/html/rfc5751#section-3.2.1";
 		if(contentTypeName == null) {
 			er.error("192", "Content-Type Name", contentTypeName, "Content Type Name must be present", rfc);
@@ -112,7 +110,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	}
 
 	// DTS 193, Content-Type S/MIME-Type, Conditional
-	public void validateContentTypeSMIMEType(ErrorRecorder er, String contentTypeSMIMEType) {
+	public void validateContentTypeSMIMEType(IAssertionGroup er, String contentTypeSMIMEType) {
 		String rfc = "RFC 5751: Section 3.2.1;http://tools.ietf.org/html/rfc5751#section-3.2.1;RFC 5751: 3.2.2;http://tools.ietf.org/html/rfc5751#section-3.2.2";
 		if(contentTypeSMIMEType == null) {
 			er.error("192", "Content-Type S/MIME-Type", contentTypeSMIMEType, "Content Type S/MIME-Type must be present", rfc);
@@ -122,7 +120,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	}
 
 	// DTS 137-140, Content-Type Boundary, Conditional
-	public void validateContentTypeBoundary(ErrorRecorder er, String contentTypeBoundary) {
+	public void validateContentTypeBoundary(IAssertionGroup er, String contentTypeBoundary) {
 		String rfc = "RFC 2046: Section 5.1.1;http://tools.ietf.org/html/rfc2046#section-5.1.1;RFC 2045: Section 5;http://tools.ietf.org/html/rfc2045#section-5";
 		// MUST be encapsulated by "" if it contains a colon (:)
 		if (contentTypeBoundary.contains(":")) {
@@ -148,7 +146,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	}
 
 	// DTS 156, Content-type Disposition, Conditional
-	public void validateContentTypeDisposition(ErrorRecorder er, String contentTypeDisposition, String contentType) {
+	public void validateContentTypeDisposition(IAssertionGroup er, String contentTypeDisposition, String contentType) {
 		String rfc = "RFC 5751: Section 3.2.1;http://tools.ietf.org/html/rfc5751#section-3.2.1";
 		if (contentType.contains("application/pkcs7-mime")) {
 			if (contentTypeDisposition == null) {
@@ -165,7 +163,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	}
 	
 	// DTS 161-194, Content-Disposition filename, Optional
-	public void validateContentDispositionFilename(ErrorRecorder er, String content) {
+	public void validateContentDispositionFilename(IAssertionGroup er, String content) {
 		String rfc = "RFC 5751: Section 3.2.1;http://tools.ietf.org/html/rfc5751#section-3.2.1";
 		final String extension =  ".*\\.p7c$|.*\\.p7z$|.*\\.p7s$|.*\\.p7m$";
 		Pattern pattern = Pattern.compile(extension, Pattern.CASE_INSENSITIVE);
@@ -194,7 +192,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	}
 	
 	// DTS 134-143, Content-Id, Optional
-	public void validateContentId(ErrorRecorder er, String content) {
+	public void validateContentId(IAssertionGroup er, String content) {
 		String rfc = "RFC 2045: Section 4;http://tools.ietf.org/html/rfc2045#section-4;RFC 2045: Section 7;http://tools.ietf.org/html/rfc2045#section-7";
 		if(content.equals("")) {
 			er.info("134-143", "Content-Id", "Not present", "Content-Id should be present", rfc);
@@ -213,7 +211,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	}
 	
 	// DTS 135-142-144, Content-Description, Optional
-	public void validateContentDescription(ErrorRecorder er, String content) {
+	public void validateContentDescription(IAssertionGroup er, String content) {
 		String rfc = "RFC 2045: Section 4;http://tools.ietf.org/html/rfc2045#section-4;RFC 2045: Section 8;http://tools.ietf.org/html/rfc2045#section-8";
 		if(content.equals("")) {
 			er.info("135-142-144", "Content-Description", "Not present", "", rfc);
@@ -224,7 +222,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	}
 	
 	// DTS 136-148-157, Content-Transfer-Encoding, Optional
-	public void validateContentTransferEncodingOptional(ErrorRecorder er, String contentTransfertEncoding, String contentType) {
+	public void validateContentTransferEncodingOptional(IAssertionGroup er, String contentTransfertEncoding, String contentType) {
 		String rfc = "RFC 2045: Section 6, 6.1, 6.4, 6.7, 6.8;http://tools.ietf.org/html/rfc2045#section-6;RFC 5751: Section 3.1.2, 3.1.3;http://tools.ietf.org/html/rfc5751#section-3.2.1";
 		if(contentType.contains("multipart") || contentType.contains("message")) {
 			if(contentTransfertEncoding.contains("7bit") || contentTransfertEncoding.contains("8bit") || contentTransfertEncoding.contains("binary")) {
@@ -245,7 +243,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	}
 	
 	// DTS 138-149, Content-*, Optional
-	public void validateContentAll(ErrorRecorder er, String content) {
+	public void validateContentAll(IAssertionGroup er, String content) {
 		String rfc = "RFC 2045: Section 9;http://tools.ietf.org/html/rfc2045#section-9";
 		if(content.startsWith("content-")) {
 			er.success("138-149", "Content-*", content, "Should begin by content-*", rfc);
@@ -258,7 +256,7 @@ public class DirectMimeEntityValidator implements MimeEntityValidator {
 	// xxxxxxxxxxxxxxx MIME Body  xxxxxxxxxxxxxxx
 	
 	// DTS 195, Body, Required
-	public void validateBody(ErrorRecorder er, Part p, String body) {
+	public void validateBody(IAssertionGroup er, Part p, String body) {
 		String rfc = "RFC 2046: Section 5.1.1;http://tools.ietf.org/html/rfc2046#section-5.1.1";
 		String bodyTxt = SafeHtmlUtils.htmlEscape(body);
 		if(body.length()>50) {

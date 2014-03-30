@@ -1,7 +1,5 @@
 package gov.nist.toolkit.simcommon.client.config;
 
-import gov.nist.toolkit.actortransaction.client.ATFactory;
-import gov.nist.toolkit.actortransaction.client.ATFactory.ParamType;
 
 import java.io.Serializable;
 import java.util.List;

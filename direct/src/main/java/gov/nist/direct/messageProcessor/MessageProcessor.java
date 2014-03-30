@@ -23,13 +23,13 @@ import gov.nist.direct.messageProcessor.direct.directImpl.DirectMimeMessageProce
 import gov.nist.direct.messageProcessor.direct.directImpl.MimeMessageParser;
 import gov.nist.direct.messageProcessor.mdn.mdnImpl.MDNMessageProcessor;
 import gov.nist.direct.messageProcessor.utils.MessageDispatchUtils;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
+import org.apache.log4j.Logger;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
-import org.apache.log4j.Logger;
 
 
 
@@ -52,7 +52,7 @@ public class MessageProcessor implements MessageProcessorInterface {
 	/**
 	 * Facade handler to process all types of messages
 	 */
-	public void processMessage(ErrorRecorder er, byte[] inputDirectMessage, byte[] _directCertificate, String _password, ValidationContext vc) {
+	public void processMessage(IAssertionGroup er, byte[] inputDirectMessage, byte[] _directCertificate, String _password, ValidationContext vc) {
 
 		// Parse the message
 		MimeMessage mm = MimeMessageParser.parseMessage(er, inputDirectMessage);

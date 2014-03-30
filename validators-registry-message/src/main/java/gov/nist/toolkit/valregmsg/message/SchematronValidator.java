@@ -1,22 +1,22 @@
 package gov.nist.toolkit.valregmsg.message;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.toolkit.valregmsg.validation.schematron.ReportProcessor;
 import gov.nist.toolkit.valregmsg.validation.schematron.schematronValidation;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
+import org.apache.axiom.om.OMElement;
+import org.apache.xmlbeans.XmlObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.xmlbeans.XmlObject;
-
 public class SchematronValidator extends MessageValidator {
-	ErrorRecorder er;
+	IAssertionGroup er;
 	OMElement message;
 
 	public SchematronValidator(ValidationContext vc, OMElement xml) {
@@ -25,18 +25,18 @@ public class SchematronValidator extends MessageValidator {
 	}
 
 	void err(String msg, String ref) {
-		er.err(XdsErrorCode.Code.NoCode, msg, this, ref);
+		er.err(XdsErrorCode.Code.NoCode, new ErrorContext(msg, ref), this);
 	}
 
 	void err(String msg) {
-		er.err(XdsErrorCode.Code.NoCode, msg, this, null);
+		er.err(XdsErrorCode.Code.NoCode, new ErrorContext(msg, null), this);
 	}
 
 	void err(Exception e) {
 		er.err(XdsErrorCode.Code.NoCode, e);
 	}
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 
 		int schematronValidationType = vc.getSchematronValidationType();
@@ -75,7 +75,7 @@ public class SchematronValidator extends MessageValidator {
 
 	}
 
-	public void reportFormatter(XmlObject report, ErrorRecorder er) {
+	public void reportFormatter(XmlObject report, IAssertionGroup er) {
 
 		// String formattedReport = null;
 		String reportAsString = report.xmlText();

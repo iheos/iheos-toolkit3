@@ -1,10 +1,11 @@
 package gov.nist.toolkit.valregmsg.message;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
-import gov.nist.toolkit.http.HttpParseException;
-import gov.nist.toolkit.http.HttpParserBa;
-import gov.nist.toolkit.http.ParseException;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.http.parser.HttpParseException;
+import gov.nist.hit.ds.http.parser.HttpParserBa;
+import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
@@ -41,7 +42,7 @@ public class HttpMessageValidator extends MessageValidator {
 		this.rvi = rvi;
 	}
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		
 		try {
@@ -58,7 +59,7 @@ public class HttpMessageValidator extends MessageValidator {
 			hparser.setErrorRecorder(er);
 			if (hparser.isMultipart()) {
 				if (vc.isValid() && vc.requiresSimpleSoap()) 
-					er.err(vc.getBasicErrorCode(), "Requested message type requires SIMPLE SOAP format message - MTOM format found", this, "ITI TF Volumes 2a and 2b");
+					er.err(vc.getBasicErrorCode(), new ErrorContext("Requested message type requires SIMPLE SOAP format message - MTOM format found", "ITI TF Volumes 2a and 2b"), this);
 				else
 					er.detail("Message is Multipart format");
 				er.detail("Scheduling MTOM parser");
@@ -68,9 +69,9 @@ public class HttpMessageValidator extends MessageValidator {
 				boolean val = vc.isValid(); 
 				boolean mt = vc.requiresMtom();
 				if (!val && mt)
-					er.err(vc.getBasicErrorCode(), "Invalid message format: " + vc, this, "ITI TF Volumes 2a and 2b");
+					er.err(vc.getBasicErrorCode(), new ErrorContext("Invalid message format: " + vc, "ITI TF Volumes 2a and 2b"), this);
 				if (mt)
-					er.err(vc.getBasicErrorCode(), "Request Message is SIMPLE SOAP but MTOM is required", this, "ITI TF Volumes 2a and 2b");
+					er.err(vc.getBasicErrorCode(), new ErrorContext("Request Message is SIMPLE SOAP but MTOM is required", "ITI TF Volumes 2a and 2b"), this);
 				else
 					er.detail("Request Message is SIMPLE SOAP format");
 				er.detail("Scheduling SIMPLE SOAP parser");

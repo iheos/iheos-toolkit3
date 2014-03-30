@@ -20,21 +20,20 @@ Authors: William Majurski
 
 package gov.nist.direct.messageProcessor.direct.directImpl;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Properties;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Properties;
 
 
 
 public class MimeMessageParser {
 
-	public static MimeMessage parseMessage(ErrorRecorder er, byte[] message){
+	public static MimeMessage parseMessage(IAssertionGroup er, byte[] message){
 
 		//
 		// Get a Session object with the default properties.

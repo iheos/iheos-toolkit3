@@ -1,7 +1,8 @@
 package gov.nist.toolkit.valccda;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
@@ -27,7 +28,7 @@ public class CcdaMessageValidator extends MessageValidator {
 	 * @param mvc
 	 */
 	@Override
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		er.challenge("Validating the CCDA against CCDA type &lt;" + ccdaType + ">");
 
 		try {

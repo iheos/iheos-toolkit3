@@ -21,7 +21,7 @@ import gov.nist.toolkit.simulators.support.SimCommon;
 import gov.nist.toolkit.simulators.support.TransactionSimulator;
 import gov.nist.toolkit.soap.axis2.Soap;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
-import gov.nist.toolkit.valregmsg.registry.AdhocQueryResponse;
+import gov.nist.toolkit.registrymsgformats.registry.AdhocQueryResponse;
 import gov.nist.toolkit.valregmsg.service.SoapActionFactory;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import org.apache.axiom.om.OMElement;

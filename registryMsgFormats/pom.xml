@@ -1,0 +1,78 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>gov.nist.toolkit</groupId>
+		<artifactId>toolkit2</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>gov.nist.hit.ds</groupId>
+	<version>v2-maven-alpha</version>
+	<artifactId>registryMsgFormats</artifactId>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.ws.commons.axiom</groupId>
+			<artifactId>axiom-common-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>errorRecording</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.toolkit</groupId>
+			<artifactId>registry-metadata</artifactId>
+			<version>v2-maven-alpha</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.toolkit</groupId>
+			<artifactId>registry-support</artifactId>
+			<version>v2-maven-alpha</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>utilities</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>eventLog</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>simSupport</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>gov.nist.toolkit</groupId>
+			<artifactId>validators-support</artifactId>
+			<version>v2-maven-alpha</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>xdsException</artifactId>
+		</dependency>
+               <dependency>
+                        <groupId>com.sun.ebxml</groupId>
+                        <artifactId>ebxmlrr-common</artifactId>
+                        <version>1.0</version>
+                        <scope>system</scope>
+                        <systemPath>${basedir}/../lib/ebxmlrr-common-1.0.jar</systemPath>
+                </dependency>
+
+	</dependencies>
+</project>

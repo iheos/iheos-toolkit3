@@ -1,17 +1,17 @@
 package gov.nist.toolkit.valregmsg.message;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorList;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
+import org.apache.axiom.om.OMElement;
 
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
 
 /**
  * Validate a RegistryResponse message.
@@ -33,24 +33,24 @@ public class RegistryResponseValidator extends MessageValidator {
 		this.xml = xml;
 	}
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		
 		if (xml == null) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, "RegistryResponseValidator: no RegistryResponse found", this, "");
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("RegistryResponseValidator: no RegistryResponse found", ""), this);
 			return;
 		}
 
 		String longStatus = xml.getAttributeValue(MetadataSupport.status_qname);
 		if (longStatus == null) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, "RegistryResponseValidator: required attribute status is missing", this, "ebRS 3.0 Schema");
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("RegistryResponseValidator: required attribute status is missing", "ebRS 3.0 Schema"), this);
 			return;
 		}
 
 		if (!statusValues.contains(longStatus))
-			er.err(XdsErrorCode.Code.XDSRegistryError, "RegistryResponseValidator: status attribute must be one of these values: "
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("RegistryResponseValidator: status attribute must be one of these values: "
 					+ statusValues + " found instead " + longStatus,
-					this, "ITI TF-3: 4.1.13");
+					"ITI TF-3: 4.1.13"), this);
 
 		boolean isPartialSuccess = longStatus.endsWith(":PartialSuccess");
 		boolean isSuccess = longStatus.endsWith(":Success");
@@ -61,14 +61,14 @@ public class RegistryResponseValidator extends MessageValidator {
 		boolean hasErrors = rel.hasError();		
 
 		if (isPartialSuccess && !isPartialSuccessPermitted())
-			er.err(XdsErrorCode.Code.XDSRegistryError, "Status is PartialSuccess but this status not allowed on this transaction", this, "ITI TF-3: 4.1.13");
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Status is PartialSuccess but this status not allowed on this transaction", "ITI TF-3: 4.1.13"), this);
 
 
 		if (hasErrors && isSuccess)
-			er.err(XdsErrorCode.Code.XDSRegistryError, "RegistryResponse contains errors but status is Success", this, "ebRS 3.0 Section 2.1.6.2");
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("RegistryResponse contains errors but status is Success", "ebRS 3.0 Section 2.1.6.2"), this);
 
 		if (!isSuccess && !hasErrors)
-			er.err(XdsErrorCode.Code.XDSRegistryError, "Status attribute is " + longStatus + " but no errors are present", this, "ebRS 3.0 Section 2.1.3.2");
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("Status attribute is " + longStatus + " but no errors are present", "ebRS 3.0 Section 2.1.3.2"), this);
 
 
 	}

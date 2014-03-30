@@ -1,5 +1,6 @@
 package gov.nist.toolkit.simulators.support;
 
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.XdsException;
@@ -182,9 +183,9 @@ public class SimCommon {
 		return !sent;
 	}
 
-	ErrorRecorder er = null;
+	IAssertionGroup er = null;
 
-	public ErrorRecorder getCommonErrorRecorder() {
+	public IAssertionGroup getCommonErrorRecorder() {
 		if (er == null) {
 			er = new GwtErrorRecorderBuilder().buildNewErrorRecorder();
 			NullMessageValidator val = new NullMessageValidator(vc);
@@ -278,7 +279,7 @@ public class SimCommon {
 
 		}
 
-		ErrorRecorder er = mv.getErrorRecorder();
+        IAssertionGroup er = mv.getErrorRecorder();
 		if (!(er instanceof GwtErrorRecorder)) {
 			SoapFault fault = new SoapFault(SoapFault.FaultCodes.Receiver, "InternalError: Simulator: ErrorRecorder not instance of GwtErrorRecorder");
 			return fault;

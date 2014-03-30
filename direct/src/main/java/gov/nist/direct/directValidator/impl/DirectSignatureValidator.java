@@ -19,22 +19,21 @@ Authors: William Majurski
 
 package gov.nist.direct.directValidator.impl;
 
-import java.security.cert.X509Certificate;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import gov.nist.direct.directValidator.interfaces.SignatureValidator;
+import gov.nist.direct.utils.ValidationUtils;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSProcessable;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder;
 import org.bouncycastle.operator.OperatorCreationException;
 
-import gov.nist.direct.directValidator.interfaces.SignatureValidator;
-import gov.nist.direct.utils.ValidationUtils;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import java.security.cert.X509Certificate;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DirectSignatureValidator implements SignatureValidator {
 
@@ -44,7 +43,7 @@ public class DirectSignatureValidator implements SignatureValidator {
 	
 
 	// DTS 166, SignedData.encapContentInfo, Required
-	public void validateSignedDataEncapContentInfo(ErrorRecorder er, String SignedDataEncapContentInfo) {
+	public void validateSignedDataEncapContentInfo(IAssertionGroup er, String SignedDataEncapContentInfo) {
 		String rfc = "RFC 5652: 5.1, 5.2;http://tools.ietf.org/html/rfc5652#section-5.1";
 		if(!SignedDataEncapContentInfo.equals("")) {
 			er.success("166", "SignedData.encapContentInfo", SignedDataEncapContentInfo.substring(0, 50) + "...", "SignedData.encapContentInfo (signed content + content type identifier) must be present" , rfc);
@@ -55,7 +54,7 @@ public class DirectSignatureValidator implements SignatureValidator {
 	}
 
 	// DTS 222, tbsCertificate.signature.algorithm, Required
-	public void validateTbsCertificateSA(ErrorRecorder er, String tbsCertSA) {
+	public void validateTbsCertificateSA(IAssertionGroup er, String tbsCertSA) {
 		String rfc = "RFC 5280: 4.1.2.3;http://tools.ietf.org/html/rfc5280#section-4.1.2.3";
 		if(!tbsCertSA.equals("")) {
 			er.success("222", "tbsCertificate.signature.algorithm", tbsCertSA,  "tbsCertificate.signature.algorithm (name of the algorithm) must be present", rfc);
@@ -66,7 +65,7 @@ public class DirectSignatureValidator implements SignatureValidator {
 	}
 
 	// DTS 225, tbsCertificate.subject, Required
-	public void validateTbsCertificateSubject(ErrorRecorder er, String tbsCertSubject) {
+	public void validateTbsCertificateSubject(IAssertionGroup er, String tbsCertSubject) {
 		String rfc = "RFC 5280: 4.1.2.6, 4.1.2.4;http://tools.ietf.org/html/rfc5280#section-4.1.2.4";
 		if(!tbsCertSubject.equals("")) {
 			er.success("225", "tbsCertificate.subject", tbsCertSubject,  "tbsCertificate.subject (subject name) must be present", rfc);
@@ -76,7 +75,7 @@ public class DirectSignatureValidator implements SignatureValidator {
 	}
 	
 	// DTS 240, Extensions.subjectAltName, Conditional
-	public void validateExtensionsSubjectAltName(ErrorRecorder er, Collection<List<?>> ExtensionSubjectAltName) {
+	public void validateExtensionsSubjectAltName(IAssertionGroup er, Collection<List<?>> ExtensionSubjectAltName) {
 		String rfc = "RFC 5280: 4.1.2.6;http://tools.ietf.org/html/rfc5280#section-4.1.2.6";
 		//System.out.println(ExtensionSubjectAltName);
 		if(ExtensionSubjectAltName != null) {
@@ -151,7 +150,7 @@ public class DirectSignatureValidator implements SignatureValidator {
 	
 
 	// DTS-165	DigestAlgorithm	Direct Message	Required
-	public void validateDigestAlgorithmDirectMessage(ErrorRecorder er, String digestAlgo, String micalg) {
+	public void validateDigestAlgorithmDirectMessage(IAssertionGroup er, String digestAlgo, String micalg) {
 		String rfc = "RFC 5280: 4.1.1.2;http://tools.ietf.org/html/rfc5280#section-4.1.1.2";
 		String textDigestAlgo = "";
 		// Convert the digest algorithm OID into a string
@@ -177,20 +176,20 @@ public class DirectSignatureValidator implements SignatureValidator {
 	}
 
 	@Override
-	public void validateSecondMIMEPart(ErrorRecorder er, boolean secondMIMEPart) {
+	public void validateSecondMIMEPart(IAssertionGroup er, boolean secondMIMEPart) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateAllNonMIMEMessageHeaders(ErrorRecorder er,
+	public void validateAllNonMIMEMessageHeaders(IAssertionGroup er,
 			String nonMIMEHeader) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateContentType2(ErrorRecorder er, String contentType) {
+	public void validateContentType2(IAssertionGroup er, String contentType) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -198,7 +197,7 @@ public class DirectSignatureValidator implements SignatureValidator {
 	
 
 	@Override
-	public void validateDTS163(ErrorRecorder er, String dts163) {
+	public void validateDTS163(IAssertionGroup er, String dts163) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -207,7 +206,7 @@ public class DirectSignatureValidator implements SignatureValidator {
 	 *  DTS 164, Signed Data, Required
 	 */
 	@Override
-	public void validateSignedData(ErrorRecorder er, CMSProcessable cmsProcessable){
+	public void validateSignedData(IAssertionGroup er, CMSProcessable cmsProcessable){
 		String rfc = "RFC 5652: 5.1;http://tools.ietf.org/html/rfc5652#section-5.1";	
 		if(cmsProcessable.getContent() != null) {
 			er.success("164", "Signed Data", cmsProcessable.toString(),  "Must be present", rfc);
@@ -218,126 +217,126 @@ public class DirectSignatureValidator implements SignatureValidator {
 
 	
 	@Override
-	public void validateDigestAlgorithm(ErrorRecorder er, String digestAlgorithm) {
+	public void validateDigestAlgorithm(IAssertionGroup er, String digestAlgorithm) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateEncapsuledInfo2(ErrorRecorder er,
+	public void validateEncapsuledInfo2(IAssertionGroup er,
 			String encapsulatedInfo) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateEncapsuledInfo3(ErrorRecorder er,
+	public void validateEncapsuledInfo3(IAssertionGroup er,
 			String encapsulatedInfo) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateCertificates(ErrorRecorder er, String certificates) {
+	public void validateCertificates(IAssertionGroup er, String certificates) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateCrls(ErrorRecorder er, String crls) {
+	public void validateCrls(IAssertionGroup er, String crls) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignerInfos(ErrorRecorder er, String signerInfos) {
+	public void validateSignerInfos(IAssertionGroup er, String signerInfos) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignerInfosSid(ErrorRecorder er, String signerInfosSid) {
+	public void validateSignerInfosSid(IAssertionGroup er, String signerInfosSid) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignerIdentifier(ErrorRecorder er,
+	public void validateSignerIdentifier(IAssertionGroup er,
 			String signerIdentifier) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignerIdentifierIssueAndSerialNumber(ErrorRecorder er,
+	public void validateSignerIdentifierIssueAndSerialNumber(IAssertionGroup er,
 			String signerInfos) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignerInfosDigestAlgorithm(ErrorRecorder er,
+	public void validateSignerInfosDigestAlgorithm(IAssertionGroup er,
 			String signerInfosDigestAlgorithm) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignerIdentifierSubjectKeyIdentifier(ErrorRecorder er,
+	public void validateSignerIdentifierSubjectKeyIdentifier(IAssertionGroup er,
 			String signerInfos) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignedAttrs(ErrorRecorder er, String signerInfos) {
+	public void validateSignedAttrs(IAssertionGroup er, String signerInfos) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignedAttrsMessageDigest(ErrorRecorder er,
+	public void validateSignedAttrsMessageDigest(IAssertionGroup er,
 			String signerInfos) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignedAttrsContentType(ErrorRecorder er,
+	public void validateSignedAttrsContentType(IAssertionGroup er,
 			String signerInfos) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignerInfosSignatureAlgorithm(ErrorRecorder er,
+	public void validateSignerInfosSignatureAlgorithm(IAssertionGroup er,
 			String signerInfosSignatureAlgorithm) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignerInfosSignature(ErrorRecorder er,
+	public void validateSignerInfosSignature(IAssertionGroup er,
 			String signerInfosSignature) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignerInfosUnsignedAttrs(ErrorRecorder er,
+	public void validateSignerInfosUnsignedAttrs(IAssertionGroup er,
 			String signerInfosUnsignedAttrs) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateBoundary(ErrorRecorder er, String boundary) {
+	public void validateBoundary(IAssertionGroup er, String boundary) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void validateSignedDataAtLeastOneCertificate(ErrorRecorder er, Collection c) {
+	public void validateSignedDataAtLeastOneCertificate(IAssertionGroup er, Collection c) {
 		String rfc = "RFC 5652: 5.1, 10.2.3;http://tools.ietf.org/html/rfc5652#section-5.1";
 		if(!c.isEmpty()) {
 			er.success("167", "Signed Data", c.toString(),  "Must be present, Message with at least one certificate", rfc);
@@ -348,7 +347,7 @@ public class DirectSignatureValidator implements SignatureValidator {
 	}
 
 	@Override
-	public void validateSignature(ErrorRecorder er, X509Certificate cert, SignerInformation signer, String BC) {
+	public void validateSignature(IAssertionGroup er, X509Certificate cert, SignerInformation signer, String BC) {
 		String rfc = "RFC 5652: 5.1, 10.2.3;http://tools.ietf.org/html/rfc5652#section-5.1";
 		try {
 			if (signer.verify(new JcaSimpleSignerInfoVerifierBuilder().setProvider(BC).build(cert))) {
@@ -369,7 +368,7 @@ public class DirectSignatureValidator implements SignatureValidator {
 	}
 	
 	// C2 - Key size <=2048
-	public void validateKeySize(ErrorRecorder er, String key){
+	public void validateKeySize(IAssertionGroup er, String key){
 //		byte[] c = null;
 //			try {
 //				c = Base64.decode(key);
@@ -382,7 +381,7 @@ public class DirectSignatureValidator implements SignatureValidator {
 	}
 
 	@Override
-	public void validateSecondMIMEPartBody(ErrorRecorder er,
+	public void validateSecondMIMEPartBody(IAssertionGroup er,
 			String secondMIMEPartBody) {
 		// TODO Auto-generated method stub
 		

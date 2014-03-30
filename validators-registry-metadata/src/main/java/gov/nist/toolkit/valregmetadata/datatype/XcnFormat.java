@@ -1,6 +1,6 @@
 package gov.nist.toolkit.valregmetadata.datatype;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 
 public class XcnFormat extends FormatValidator {
 

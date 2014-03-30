@@ -1,16 +1,16 @@
 package gov.nist.toolkit.valregmetadata.datatype;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
-
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import org.apache.axiom.om.OMElement;
 
 public abstract class FormatValidator {
-	ErrorRecorder er;
+    IAssertionGroup er;
 	String context;
 	String resource;
 	
-	public FormatValidator(ErrorRecorder er, String context, String resource) {
+	public FormatValidator(IAssertionGroup er, String context, String resource) {
 		this.er = er;
 		this.context = context;
 		this.resource = resource;
@@ -35,6 +35,6 @@ public abstract class FormatValidator {
 	}
 	
 	protected void err(String input, String error, String additionalResource) {
-		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, context + ": " + input + " : " + error, this, getResource(additionalResource));
+		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(context + ": " + input + " : " + error, getResource(additionalResource)), this);
 	}
 }

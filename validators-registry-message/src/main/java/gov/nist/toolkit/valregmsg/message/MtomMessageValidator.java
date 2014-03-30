@@ -1,13 +1,14 @@
 package gov.nist.toolkit.valregmsg.message;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.http.parser.HttpParseException;
+import gov.nist.hit.ds.http.parser.HttpParserBa;
+import gov.nist.hit.ds.http.parser.MultipartParserBa;
+import gov.nist.hit.ds.http.parser.PartBa;
 import gov.nist.toolkit.docref.Mtom;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
-import gov.nist.toolkit.http.HttpParseException;
-import gov.nist.toolkit.http.HttpParserBa;
-import gov.nist.toolkit.http.MultipartParserBa;
-import gov.nist.toolkit.http.PartBa;
 import gov.nist.toolkit.valregmsg.validation.factories.MessageValidatorFactory;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
@@ -35,7 +36,7 @@ public class MtomMessageValidator extends MessageValidator {
 	}
 
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		headers.setErrorRecorder(er);
 		try {
@@ -51,7 +52,7 @@ public class MtomMessageValidator extends MessageValidator {
 
 			er.detail("Multipart contains " + mp.getPartCount() + " parts");
 			if (mp.getPartCount() == 0) {
-				er.err(XdsErrorCode.Code.NoCode, "Cannot continue parsing, no Parts found", this, "");
+				er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Cannot continue parsing, no Parts found", ""), this);
 				return;
 			}
 			
@@ -68,7 +69,7 @@ public class MtomMessageValidator extends MessageValidator {
 			if (startPart != null)
 				er.detail("Found start part - " + startPart.getContentId());
 			else {
-				er.err(XdsErrorCode.Code.NoCode, "Start part [" + mp.getStartPartId() + "] not found", this, Mtom.XOP_example2);
+				er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Start part [" + mp.getStartPartId() + "] not found", Mtom.XOP_example2), this);
 				return;
 			}
 				

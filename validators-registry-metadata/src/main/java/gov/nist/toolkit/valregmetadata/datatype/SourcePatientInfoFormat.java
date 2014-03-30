@@ -1,9 +1,8 @@
 package gov.nist.toolkit.valregmetadata.datatype;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valregmetadata.field.ValidatorCommon;
-
 import org.apache.axiom.om.OMElement;
 
 public class SourcePatientInfoFormat extends FormatValidator{

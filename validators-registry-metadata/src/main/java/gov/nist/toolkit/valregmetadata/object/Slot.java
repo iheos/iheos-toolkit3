@@ -1,8 +1,9 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valregmetadata.datatype.FormatValidator;
 import gov.nist.toolkit.valregmetadata.datatype.FormatValidatorCalledIncorrectlyException;
@@ -97,9 +98,9 @@ public class Slot {
 		return getOwnerType() + "(" + getOwnerId() + ")";
 	}
 	
-	public void validate(ErrorRecorder er, boolean multivalue, FormatValidator validator, String resource) {
+	public void validate(IAssertionGroup er, boolean multivalue, FormatValidator validator, String resource) {
 		if (!multivalue && values.size() > 1)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, getOwnerType() + "(" + getOwnerId() + ") has Slot " + name + " which is required to have a single value, " + values.size() + "  values found", this, resource);
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(getOwnerType() + "(" + getOwnerId() + ") has Slot " + name + " which is required to have a single value, " + values.size() + "  values found", resource), this);
 		try {
 			for (String value : values) {
 				validator.validate(value);

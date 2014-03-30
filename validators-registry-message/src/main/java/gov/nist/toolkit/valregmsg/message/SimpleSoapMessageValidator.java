@@ -1,11 +1,12 @@
 package gov.nist.toolkit.valregmsg.message;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
-import gov.nist.toolkit.http.HttpHeader;
-import gov.nist.toolkit.http.HttpParserBa;
-import gov.nist.toolkit.http.ParseException;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.http.parser.HttpHeader;
+import gov.nist.hit.ds.http.parser.HttpParserBa;
+import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.toolkit.valregmsg.validation.factories.MessageValidatorFactory;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
@@ -37,7 +38,7 @@ public class SimpleSoapMessageValidator extends MessageValidator {
 		this.bodyBytes = body;
 	}
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		String contentTypeString = hparser.getHttpMessage().getHeader("content-type");
 		try {
@@ -71,7 +72,7 @@ public class SimpleSoapMessageValidator extends MessageValidator {
 	}
 	
 	void err(String msg, String ref) {
-		er.err(XdsErrorCode.Code.NoCode, msg, this, ref);
+		er.err(XdsErrorCode.Code.NoCode, new ErrorContext(msg, ref), this);
 	}
 	
 	void err(Exception e) {

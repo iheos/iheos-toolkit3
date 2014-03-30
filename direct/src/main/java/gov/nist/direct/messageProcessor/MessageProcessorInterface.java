@@ -19,12 +19,12 @@ Authors: William Majurski
 
 package gov.nist.direct.messageProcessor;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 
 
 
 public interface MessageProcessorInterface {
 
-	public void processMessage(ErrorRecorder er, byte[] message, byte[] _directCertificate, String _password, ValidationContext vc);
+	public void processMessage(IAssertionGroup er, byte[] message, byte[] _directCertificate, String _password, ValidationContext vc);
 }

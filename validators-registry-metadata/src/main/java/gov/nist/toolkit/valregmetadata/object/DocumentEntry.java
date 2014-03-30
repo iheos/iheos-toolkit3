@@ -1,10 +1,9 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valregmetadata.datatype.*;
@@ -347,12 +346,12 @@ public class DocumentEntry extends AbstractRegistryObject implements TopLevelObj
 						MetadataSupport.documentAvailability_online.equals(val)) {
 
 				} else {
-					er.err(Code.XDSRegistryMetadataError, "Slot documentAvailability must have one of two values: " + MetadataSupport.documentAvailability_offline + " or " +
+					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "Slot documentAvailability must have one of two values: " + MetadataSupport.documentAvailability_offline + " or " +
 							MetadataSupport.documentAvailability_online + ". Found instead " + val, this, table415
 					);
 				}
 			} catch (Exception e) {
-				er.err(Code.XDSRegistryMetadataError, e);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
 			}
 		}
 	}

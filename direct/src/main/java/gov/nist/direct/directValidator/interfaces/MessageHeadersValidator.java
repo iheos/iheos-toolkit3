@@ -19,9 +19,10 @@ Authors: William Majurski
 
 package gov.nist.direct.directValidator.interfaces;
 
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+
 import javax.mail.Address;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
 
 public interface MessageHeadersValidator{
 	
@@ -34,153 +35,153 @@ public interface MessageHeadersValidator{
 	/**
 	 *  DTS 196, All Headers, Required
 	 */
-	public void validateAllHeaders(ErrorRecorder er, String[] header, String[] headerContent, boolean wrapped);
+	public void validateAllHeaders(IAssertionGroup er, String[] header, String[] headerContent, boolean wrapped);
 	
 	/**
 	 *  DTS 103-105, Return Path, Conditional
 	 * @param er
 	 * @param returnPath
 	 */
-	public void validateReturnPath(ErrorRecorder er, String returnPath, boolean wrapped);
+	public void validateReturnPath(IAssertionGroup er, String returnPath, boolean wrapped);
 		
 	/**
 	 *  DTS 104-106, Received, Conditional
 	 */
-	public void validateReceived(ErrorRecorder er, String received, boolean wrapped);
+	public void validateReceived(IAssertionGroup er, String received, boolean wrapped);
 	
 	/**
 	 *  DTS 197, Resent Fields, Required
 	 */
-	public void validateResentFields(ErrorRecorder er, String[] resentField, boolean wrapped);
+	public void validateResentFields(IAssertionGroup er, String[] resentField, boolean wrapped);
 	
 	/**
 	 *  DTS 107, Resent-Date, Conditional
 	 */
-	public void validateResentDate(ErrorRecorder er, String resentDate, boolean wrapped);
+	public void validateResentDate(IAssertionGroup er, String resentDate, boolean wrapped);
 	
 	/**
 	 *  DTS 108, Resent-From, Conditional
 	 */
-	public void validateResentFrom(ErrorRecorder er, String resentFrom, boolean wrapped);
+	public void validateResentFrom(IAssertionGroup er, String resentFrom, boolean wrapped);
 	
 	/**
 	 *  DTS 109, Resent-Sender, Conditional
 	 */
-	public void validateResentSender(ErrorRecorder er, String resentSender, String resentFrom, boolean wrapped);
+	public void validateResentSender(IAssertionGroup er, String resentSender, String resentFrom, boolean wrapped);
 	
 	/**
 	 *  DTS 110, Resent-to, Optional
 	 * @param resentTo
 	 */
-	public void validateResentTo(ErrorRecorder er, String resentTo, boolean wrapped);
+	public void validateResentTo(IAssertionGroup er, String resentTo, boolean wrapped);
 	
 	/**
 	 *  DTS 111, Resent-cc, Optional
 	 * @param resentCc
 	 */
-	public void validateResentCc(ErrorRecorder er, String resentCc, boolean wrapped);
+	public void validateResentCc(IAssertionGroup er, String resentCc, boolean wrapped);
 	
 	/**
 	 *  DTS 112, Resent-bcc, Optional
 	 * @param resentBcc
 	 */
-	public void validateResentBcc(ErrorRecorder er, String resentBcc, boolean wrapped);
+	public void validateResentBcc(IAssertionGroup er, String resentBcc, boolean wrapped);
 		
 	/**
 	 *  DTS 113, Resent-Msg-Id, Conditional
 	 */
-	public void validateResentMsgId(ErrorRecorder er, String resentMsgId, boolean wrapped);
+	public void validateResentMsgId(IAssertionGroup er, String resentMsgId, boolean wrapped);
 	
 	/**
 	 *  DTS 114, Orig-Date, Required
 	 */
-	public void validateOrigDate(ErrorRecorder er, String origDate, boolean wrapped);
+	public void validateOrigDate(IAssertionGroup er, String origDate, boolean wrapped);
 		
 	/**
 	 *  DTS 115, From, Required
 	 */
-	public void validateFrom(ErrorRecorder er, String from, boolean wrapped);
+	public void validateFrom(IAssertionGroup er, String from, boolean wrapped);
 	
 	/**
 	 *  DTS 116, Sender, Conditional
 	 * @param er
 	 * @param sender
 	 */
-	public void validateSender(ErrorRecorder er, String sender, Address[] from, boolean wrapped);
+	public void validateSender(IAssertionGroup er, String sender, Address[] from, boolean wrapped);
 		
 	/**
 	 *  DTS 117, Reply-To, Optional
 	 * @param replyTo
 	 */
-	public void validateReplyTo(ErrorRecorder er, String replyTo, boolean wrapped);
+	public void validateReplyTo(IAssertionGroup er, String replyTo, boolean wrapped);
 		
 	/**
 	 *  DTS 118, To, Required
 	 */
-	public void validateTo(ErrorRecorder er, String to, boolean wrapped);
+	public void validateTo(IAssertionGroup er, String to, boolean wrapped);
 	
 	/**
 	 *  DTS 119, cc, Optional
 	 * @param cc
 	 */
-	public void validateCc(ErrorRecorder er, String cc, boolean wrapped);
+	public void validateCc(IAssertionGroup er, String cc, boolean wrapped);
 	
 	/**
 	 *  DTS 120, Bcc, Optional
 	 * @param bcc
 	 */
-	public void validateBcc(ErrorRecorder er, String bcc, boolean wrapped);
+	public void validateBcc(IAssertionGroup er, String bcc, boolean wrapped);
 		
 	/**
 	 *  DTS 121, Message-Id, Required
 	 */
-	public void validateMessageId(ErrorRecorder er, String messageId, boolean wrapped);
+	public void validateMessageId(IAssertionGroup er, String messageId, boolean wrapped);
 	
 	/**
 	 *  DTS 122, In-reply-to, Optional
 	 * @param inReplyTo
 	 */
-	public void validateInReplyTo(ErrorRecorder er, String inReplyTo, String date, boolean wrapped);
+	public void validateInReplyTo(IAssertionGroup er, String inReplyTo, String date, boolean wrapped);
 	
 	/**
 	 *  DTS 123, References, Optional
 	 * @param references
 	 */
-	public void validateReferences(ErrorRecorder er, String references, boolean wrapped);
+	public void validateReferences(IAssertionGroup er, String references, boolean wrapped);
 	
 	/**
 	 *  DTS 124, Subject, Optional
 	 * @param subject
 	 * @param filename
 	 */
-	public void validateSubject(ErrorRecorder er, String subject, String filename, boolean wrapped);
+	public void validateSubject(IAssertionGroup er, String subject, String filename, boolean wrapped);
 	
 	/**
 	 *  DTS 125, Comments, Optional
 	 * @param comments
 	 */
-	public void validateComments(ErrorRecorder er, String comments, boolean wrapped);
+	public void validateComments(IAssertionGroup er, String comments, boolean wrapped);
 	
 	/**
 	 *  DTS 126, Keywords, Optional
 	 * @param keyword
 	 */
-	public void validateKeywords(ErrorRecorder er, String keyword, boolean wrapped);
+	public void validateKeywords(IAssertionGroup er, String keyword, boolean wrapped);
 	
 	/**
 	 *  DTS 127, Optional-field, Optional
 	 * @param optionalField
 	 */
-	public void validateOptionalField(ErrorRecorder er, String optionalField, boolean wrapped);
+	public void validateOptionalField(IAssertionGroup er, String optionalField, boolean wrapped);
 	
 	/**
 	 *  DTS 128, Disposition-Notification-To, Optional
 	 * @param dispositionNotificationTo
 	 */
-	public void validateDispositionNotificationTo(ErrorRecorder er, String dispositionNotificationTo, boolean wrapped);	
+	public void validateDispositionNotificationTo(IAssertionGroup er, String dispositionNotificationTo, boolean wrapped);
 		
 	/**
 	 *  DTS 102b, MIME-Version, Required
 	 */
-	public void validateMIMEVersion(ErrorRecorder er, String MIMEVersion, boolean wrapped);
+	public void validateMIMEVersion(IAssertionGroup er, String MIMEVersion, boolean wrapped);
 }

@@ -18,32 +18,22 @@ Authors: Frederic de Vaulx
 package gov.nist.direct.utils;
 
 import gov.nist.direct.messageProcessor.direct.directImpl.MimeMessageParser;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.TextErrorRecorder;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.TextErrorRecorder;
 import gov.nist.toolkit.utilities.io.Io;
+import org.apache.mailet.base.mail.MimeMultipartReport;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
-import org.apache.mailet.base.mail.MimeMultipartReport;
-
 
 public class Utils {
-	static ErrorRecorder er = new TextErrorRecorder();
+	static IAssertionGroup er = new TextErrorRecorder();
 
 
 
@@ -92,7 +82,7 @@ public class Utils {
 
 
 	public static ArrayList<String> readFile(File f) {
-		ErrorRecorder er = new TextErrorRecorder();
+        IAssertionGroup er = new TextErrorRecorder();
 
 		ArrayList<String> array = new ArrayList<String>();
 		BufferedReader bufferedReader = null;
@@ -126,7 +116,7 @@ public class Utils {
 	 * @return the data from the input file
 	 */
 	public static Map<String, Integer> readFileToMap(File f) {
-		ErrorRecorder er = new TextErrorRecorder();
+        IAssertionGroup er = new TextErrorRecorder();
 		Map<String, Integer> data = new HashMap<String, Integer>();
 		BufferedReader bufferedReader = null;
 
@@ -289,7 +279,7 @@ public class Utils {
 
 
 	// Getters and Setters
-	public static void setErrorRecorder(ErrorRecorder er) {
+	public static void setErrorRecorder(IAssertionGroup er) {
 		Utils.er = er;
 	}
 

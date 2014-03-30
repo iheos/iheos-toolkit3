@@ -1,15 +1,14 @@
 package gov.nist.toolkit.valsupport.engine;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
 import gov.nist.toolkit.valsupport.message.NullMessageValidator;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 /**
  * Maintain collection of validation steps and run them on request.  New steps are added to the end of the list. 
@@ -24,11 +23,11 @@ public class MessageValidatorEngine {
 	public class ValidationStep {
 		String stepName;
 		MessageValidator validator;
-		ErrorRecorder er;
+		IAssertionGroup er;
 		boolean ran = false;
 
 		public String getStepName() { return stepName; }
-		public ErrorRecorder getErrorRecorder() { return er; }
+		public IAssertionGroup getErrorRecorder() { return er; }
 		public boolean hasErrors() { return er.hasErrors(); }
 
 		public String toString() {
@@ -178,7 +177,7 @@ public class MessageValidatorEngine {
 	 * @param er its private ErrorRecorder
 	 * @return the ValidationStep structure which is used internally to the engine
 	 */
-	public ValidationStep addMessageValidator(String stepName, MessageValidator v, ErrorRecorder er) {
+	public ValidationStep addMessageValidator(String stepName, MessageValidator v, IAssertionGroup er) {
 		ValidationStep step = new ValidationStep();
 		step.stepName = stepName;
 		step.validator = v;
@@ -193,7 +192,7 @@ public class MessageValidatorEngine {
 	 * @param stepName name of the validation step
 	 * @param er its private ErrorRecorder
 	 */
-	public void addErrorRecorder(String stepName, ErrorRecorder er) {
+	public void addErrorRecorder(String stepName, IAssertionGroup er) {
 		ValidationStep step = addMessageValidator(stepName, new NullMessageValidator(new ValidationContext()), er);
 		step.ran = true;
 	}

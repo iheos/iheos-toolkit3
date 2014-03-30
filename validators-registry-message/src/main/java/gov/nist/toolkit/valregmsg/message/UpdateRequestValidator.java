@@ -1,7 +1,8 @@
 package gov.nist.toolkit.valregmsg.message;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymetadata.MetadataParser;
 import gov.nist.toolkit.valregmetadata.field.MetadataValidator;
@@ -9,11 +10,10 @@ import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
 import gov.nist.toolkit.valsupport.registry.RegistryValidationInterface;
+import org.apache.axiom.om.OMElement;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
 
 /**
  * Validate metadata update request messages
@@ -32,7 +32,7 @@ public class UpdateRequestValidator extends MessageValidator {
 	}
 	
 	void err(String msg, String ref) {
-		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, msg, this, ref);
+		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(msg, ref), this);
 	}
 	
 	void err(Exception e) {
@@ -40,7 +40,7 @@ public class UpdateRequestValidator extends MessageValidator {
 	}
 
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		if (xml == null) {
 			err("UpdateRequestValidator: top element null", "");

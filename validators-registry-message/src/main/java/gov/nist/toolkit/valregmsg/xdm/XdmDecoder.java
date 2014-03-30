@@ -1,10 +1,11 @@
 package gov.nist.toolkit.valregmsg.xdm;
 
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.errorRecording.factories.TextErrorRecorderBuilder;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
-import gov.nist.toolkit.errorrecording.factories.TextErrorRecorderBuilder;
+import gov.nist.hit.ds.xdsException.XDMException;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.Util;
@@ -72,7 +73,7 @@ public class
 	 * @param is InputStream to test
 	 * @throws ZipException - fails ZIP decoding
 	 * @throws IOException - really bad
-	 * @throws XDMException - ZIP decoding ok, critical XDM elements missing - probably ZIP of some other content
+	 * @throws gov.nist.hit.ds.xdsException.XDMException - ZIP decoding ok, critical XDM elements missing - probably ZIP of some other content
 	 */
 	public void detect(InputStream is) throws ZipException, IOException, XDMException {
 		contents = new ZipDecoder().parse(is);
@@ -99,19 +100,19 @@ public class
 
 		er.challenge("Looking for INDEX.HTM");
 		if (!hasIndexHtm()) {
-			er.err(Code.NoCode, "File INDEX.HTM not found", "","");
+			er.err(XdsErrorCode.Code.NoCode, "File INDEX.HTM not found", "","");
 			logger.info("File INDEX.HTM not found");
 		}
 
 		er.challenge("Looking for README.TXT");
 		if (!hasReadmeTxt()) {
-			er.err(Code.NoCode, "File README.TXT not found", "","");
+			er.err(XdsErrorCode.Code.NoCode, "File README.TXT not found", "","");
 			logger.info("File README.TXT not found");
 		}
 
 		er.challenge("Looking for directory IHE_XDM");
 		if (!hasIheXdm()) {
-			er.err(Code.NoCode, "Directory IHE_XDM not found", "","");
+			er.err(XdsErrorCode.Code.NoCode, "Directory IHE_XDM not found", "","");
 			logger.info("Directory IHE_XDM not found");
 			return;
 		}
@@ -121,7 +122,7 @@ public class
 
 		for (Path subsetDir : subsetDirs) {
 			if (!hasMetadata(subsetDir)) {
-				er.err(Code.NoCode, "SubmissionSet directory <" + subsetDir + "> has no METADATA.XML file", "","");
+				er.err(XdsErrorCode.Code.NoCode, "SubmissionSet directory <" + subsetDir + "> has no METADATA.XML file", "","");
 			} else {
 				Path metadataFilename = new Path(subsetDir + "METADATA.XML");
 				er.challenge("Parsing metadata from " + metadataFilename);
@@ -159,15 +160,15 @@ public class
 						String uri  = m.getSlotValue(eo, "URI", 0);
 
 						if (hash == null)
-							er.err(Code.NoCode, "hash attribute not found", subsetDir,"");
+							er.err(XdsErrorCode.Code.NoCode, "hash attribute not found", subsetDir,"");
 						else
 							er.detail("hash attribute found");
 						if (size == null)
-							er.err(Code.NoCode, "size attribute not found", subsetDir,"");
+							er.err(XdsErrorCode.Code.NoCode, "size attribute not found", subsetDir,"");
 						else
 							er.detail("size attribute found");
 						if (uri == null) {
-							er.err(Code.NoCode, "URI attribute not found", subsetDir,"");
+							er.err(XdsErrorCode.Code.NoCode, "URI attribute not found", subsetDir,"");
 							return;
 						}
 						else
@@ -175,7 +176,7 @@ public class
 
 						Path uriPath = new Path(subsetDir + uri);
 						if (!contents.containsKey(uriPath)) {
-							er.err(Code.NoCode, "URI attribute is " + uri + " but file does not exist", subsetDir,"");
+							er.err(XdsErrorCode.Code.NoCode, "URI attribute is " + uri + " but file does not exist", subsetDir,"");
 							logger.info("URI attribute is " + uri + " but file does not exist");
 							return;
 						}
@@ -185,11 +186,11 @@ public class
 						ByteArray doc = contents.get(uriPath);
 
 						if (size != null && !size.equals(doc.getSizeAsString()))
-							er.err(Code.NoCode, "Metadata size is " + size + " but document size is " + doc.getSizeAsString(), subsetDir,"");
+							er.err(XdsErrorCode.Code.NoCode, "Metadata size is " + size + " but document size is " + doc.getSizeAsString(), subsetDir,"");
 						else
 							er.detail("size matches");
 						if (hash != null && !hash.equalsIgnoreCase(doc.getSha1()))
-							er.err(Code.NoCode, "Metadata hash is " + hash + " but document hash is " + doc.getSha1(), subsetDir,"");
+							er.err(XdsErrorCode.Code.NoCode, "Metadata hash is " + hash + " but document hash is " + doc.getSha1(), subsetDir,"");
 						else
 							er.detail("hash matches");
 
@@ -223,7 +224,7 @@ public class
 
 					}
 				} catch (Exception e) {
-					er.err(Code.NoCode, "Error reading metadata from " + metadataFilename + "\n" + ExceptionUtil.exception_details(e), subsetDir,"");
+					er.err(XdsErrorCode.Code.NoCode, "Error reading metadata from " + metadataFilename + "\n" + ExceptionUtil.exception_details(e), subsetDir,"");
 					logger.info("Error reading metadata from " + metadataFilename + "\n" + ExceptionUtil.exception_details(e));
 					return;
 				}
@@ -241,11 +242,11 @@ public class
 			contents = new ZipDecoder().parse(in);
 		} 
 		catch (ZipException e) {
-			er.err(Code.NoCode, e);
+			er.err(XdsErrorCode.Code.NoCode, e);
 			return false;
 		}
 		catch (IOException e) {
-			er.err(Code.NoCode, e);
+			er.err(XdsErrorCode.Code.NoCode, e);
 			return false;
 		}
 		return true;

@@ -6,12 +6,10 @@ import gov.nist.hit.ds.wsseTool.parsing.groovyXML.GroovyHeader
 import gov.nist.hit.ds.wsseTool.parsing.opensaml.OpenSamlSecurityHeader
 import gov.nist.hit.ds.wsseTool.util.MyXmlUtils
 import groovy.util.slurpersupport.GPathResult
-
-import java.lang.reflect.Field
+import org.w3c.dom.Element
 
 import javax.xml.namespace.NamespaceContext
-
-import org.w3c.dom.Element
+import java.lang.reflect.Field
 
 class MessageParser {
 

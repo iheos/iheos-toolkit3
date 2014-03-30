@@ -1,8 +1,10 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valregmetadata.datatype.DtmFormat;
@@ -137,7 +139,7 @@ public class Folder extends AbstractRegistryObject implements TopLevelObject {
 		return ro;
 	}
 
-	public void validate(ErrorRecorder er, ValidationContext vc,
+	public void validate(IAssertionGroup er, ValidationContext vc,
 			Set<String> knownIds) {
 		
 		if (vc.skipInternalStructure)
@@ -166,25 +168,25 @@ public class Folder extends AbstractRegistryObject implements TopLevelObject {
 		verifyIdsUnique(er, knownIds);
 	}
 
-	public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
+	public void validateSlotsCodedCorrectly(IAssertionGroup er, ValidationContext vc)  {
 
 		//                    name				   multi	format                                                  resource
 		validateSlot(er, 	"lastUpdateTime", 	   false, 	new DtmFormat(er, "Slot lastUpdateTime",            table417),  table417);
 	}
 
-	public void validateRequiredSlotsPresent(ErrorRecorder er, ValidationContext vc) {
+	public void validateRequiredSlotsPresent(IAssertionGroup er, ValidationContext vc) {
 		// Slots always required
 		for (String slotName : requiredSlots) {
 			if (getSlot(slotName) == null)
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": Slot " + slotName + " missing", this, table417);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": Slot " + slotName + " missing", table417), this);
 		}
 	}
 
-	public void validateSlotsLegal(ErrorRecorder er)  {
+	public void validateSlotsLegal(IAssertionGroup er)  {
 		verifySlotsUnique(er);
 		for (Slot slot : getSlots()) {
 			if ( ! legal_slot_name(slot.getName()))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": " + slot.getName() + " is not a legal slot name for a SubmissionSet",  this,  table417);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": " + slot.getName() + " is not a legal slot name for a SubmissionSet",  table417), this);
 
 		}
 	}
@@ -195,7 +197,7 @@ public class Folder extends AbstractRegistryObject implements TopLevelObject {
 		return definedSlots.contains(name);
 	}
 
-	public void validateTopAtts(ErrorRecorder er, ValidationContext vc) {
+	public void validateTopAtts(IAssertionGroup er, ValidationContext vc) {
 		validateTopAtts(er, vc, table417, statusValues);
 	}
 

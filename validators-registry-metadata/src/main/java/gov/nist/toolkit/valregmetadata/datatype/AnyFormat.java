@@ -1,7 +1,6 @@
 package gov.nist.toolkit.valregmetadata.datatype;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import org.apache.axiom.om.OMElement;
 
 public class AnyFormat extends FormatValidator {

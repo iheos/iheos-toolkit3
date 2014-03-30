@@ -8,6 +8,7 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
+	<groupId>gov.nist.toolkit</groupId>
 	<version>v2-maven-alpha</version>
 	<artifactId>site-management</artifactId>
 
@@ -28,23 +29,19 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>actortransaction</artifactId>
-			<version>v2-maven-alpha</version>
+			<artifactId>actorTransaction</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>registry-support</artifactId>
-			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
+			<groupId>gov.nist.hit.ds</groupId>
 			<artifactId>utilities</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
+			<groupId>gov.nist.hit.ds</groupId>
 			<artifactId>xdsException</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>

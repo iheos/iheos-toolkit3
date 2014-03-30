@@ -19,9 +19,11 @@ Authors: William Majurski
 
 package gov.nist.direct.directValidator.interfaces;
 
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+
 import javax.mail.Part;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
 
 public interface MimeEntityValidator  {
 	
@@ -33,79 +35,79 @@ public interface MimeEntityValidator  {
 	/** 
 	 * DTS 190, All Mime Header Fields, Required
 	 */
-	public void validateAllMimeHeaderFields(ErrorRecorder er, String header);
+	public void validateAllMimeHeaderFields(IAssertionGroup er, String header);
 	
 	/**
 	 *  DTS 102a, MIME-Version
 	 * @param er
 	 * @param mimeVersion
 	 */
-	public void validateAllMIMEVersion(ErrorRecorder er, String mimeVersion);
+	public void validateAllMIMEVersion(IAssertionGroup er, String mimeVersion);
 		
 	/**
 	 * DTS 133-145-146, Content-Type, Required
 	 */
-	public void validateContentType(ErrorRecorder er, String contentType);
+	public void validateContentType(IAssertionGroup er, String contentType);
 		
 	/**
 	 *  DTS 191, Content-Type Subtype, Required
 	 */
-	public void validateContentTypeSubtype(ErrorRecorder er, String subtype);
+	public void validateContentTypeSubtype(IAssertionGroup er, String subtype);
 		
 	/**
 	 *  DTS 192, Content-Type name, Conditional
 	 */
-	public void validateContentTypeName(ErrorRecorder er, String contentTypeName);
+	public void validateContentTypeName(IAssertionGroup er, String contentTypeName);
 		
 	/**
 	 *  DTS 193, Content-Type S/MIME-Type, Conditional
 	 */
-	public void validateContentTypeSMIMEType(ErrorRecorder er, String contentTypeSMIMEType);
+	public void validateContentTypeSMIMEType(IAssertionGroup er, String contentTypeSMIMEType);
 		
 	/**
 	 *  DTS 137-140, Content-Type Boundary, Conditional
 	 */
-	public void validateContentTypeBoundary(ErrorRecorder er, String contentTypeBoundary);
+	public void validateContentTypeBoundary(IAssertionGroup er, String contentTypeBoundary);
 		
 	/**
 	 *  DTS 156, Content-type Disposition, Conditional
 	 */
-	public void validateContentTypeDisposition(ErrorRecorder er, String contentTypeDisposition, String contentType);
+	public void validateContentTypeDisposition(IAssertionGroup er, String contentTypeDisposition, String contentType);
 		
 	/**
 	 *  DTS 161-194, Content-Disposition filename, Optional
 	 * @param er
 	 * @param content
 	 */
-	public void validateContentDispositionFilename(ErrorRecorder er, String content);
+	public void validateContentDispositionFilename(IAssertionGroup er, String content);
 	
 	/**
 	 *  DTS 134-143, Content-Id, Optional
 	 * @param er
 	 * @param content
 	 */
-	public void validateContentId(ErrorRecorder er, String content);
+	public void validateContentId(IAssertionGroup er, String content);
 	
 	/**
 	 *  DTS 135-142-144, Content-Description, Optional
 	 * @param er
 	 * @param content
 	 */
-	public void validateContentDescription(ErrorRecorder er, String content);
+	public void validateContentDescription(IAssertionGroup er, String content);
 	
 	/**
 	 *  DTS 136-148-157, Content-Transfer-Encoding, Optional
 	 * @param er
 	 * @param content
 	 */
-	public void validateContentTransferEncodingOptional(ErrorRecorder er, String contentTransfertEncoding, String contentType);
+	public void validateContentTransferEncodingOptional(IAssertionGroup er, String contentTransfertEncoding, String contentType);
 	
 	/**
 	 *  DTS 138-149, Content-*, Optional
 	 * @param er
 	 * @param content
 	 */
-	public void validateContentAll(ErrorRecorder er, String content);
+	public void validateContentAll(IAssertionGroup er, String content);
 	
 	
 	// xxxxxxxxxxxxxxx MIME Body  xxxxxxxxxxxxxxx
@@ -116,7 +118,7 @@ public interface MimeEntityValidator  {
 	 * @param er
 	 * @param body
 	 */
-	public void validateBody(ErrorRecorder er, Part p, String body);
+	public void validateBody(IAssertionGroup er, Part p, String body);
 	
 	
 }

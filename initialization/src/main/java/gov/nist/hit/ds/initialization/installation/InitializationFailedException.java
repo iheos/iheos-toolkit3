@@ -1,6 +1,8 @@
 package gov.nist.hit.ds.initialization.installation;
 
-public class InitializationFailedException extends Exception {
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+
+public class InitializationFailedException extends ToolkitRuntimeException {
 
 	private static final long serialVersionUID = 4525592414022786089L;
 

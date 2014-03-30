@@ -1,8 +1,10 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
@@ -106,7 +108,7 @@ public class Classification extends AbstractRegistryObject {
 		return parent.getAttributeValue(MetadataSupport.id_qname);
 	}
 
-	public void validateStructure(ErrorRecorder er, ValidationContext vc) {
+	public void validateStructure(IAssertionGroup er, ValidationContext vc) {
 		validateId(er, vc, "entryUUID", id, "ITI TF-3: 4.1.12.2");
 		OMElement parentEle = (OMElement) ro.getParent();
 		String parentEleId =  ((parentEle == null) ? "null" :
@@ -114,22 +116,22 @@ public class Classification extends AbstractRegistryObject {
 		String classifiedObjectId = ro.getAttributeValue(MetadataSupport.classified_object_qname);
 
 		if (parentEle != null && !parentEleId.equals(classifiedObjectId))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": is a child of object " + parentEleId + " but the classifiedObject value is " + 
-					classifiedObjectId + ", they must match", this, "ITI TF-3: 4.1.12.2");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": is a child of object " + parentEleId + " but the classifiedObject value is " +
+					classifiedObjectId + ", they must match", "ITI TF-3: 4.1.12.2"), this);
 
 		if (getClassificationScheme() == null || getClassificationScheme().equals(""))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": does not have a value for the classificationScheme attribute", this, "ebRIM 3.0 section 4.3.1");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": does not have a value for the classificationScheme attribute", "ebRIM 3.0 section 4.3.1"), this);
 		else if (!getClassificationScheme().startsWith("urn:uuid:"))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": classificationScheme attribute value is not have urn:uuid: prefix", this, "ITI TF-3: 4.3.1");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": classificationScheme attribute value is not have urn:uuid: prefix", "ITI TF-3: 4.3.1"), this);
 
 		if (getCodeValue().equals(""))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": nodeRepresentation attribute is missing or empty", this, "ebRIM 3.0 section 4.3.1");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": nodeRepresentation attribute is missing or empty", "ebRIM 3.0 section 4.3.1"), this);
 
 		if (getCodeDisplayName().equals("")) 
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": no name attribute", this, "ITI TF-3: 4.1.12.2");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": no name attribute", "ITI TF-3: 4.1.12.2"), this);
 
 		if (getCodeScheme().equals(""))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": no codingScheme Slot", this, "ITI TF-3: 4.1.12.2");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": no codingScheme Slot", "ITI TF-3: 4.1.12.2"), this);
 
 	}
 

@@ -22,28 +22,7 @@ package gov.nist.direct.messageProcessor.direct.directImpl;
 
 import gov.nist.direct.directValidator.impl.ProcessEnvelope;
 import gov.nist.direct.messageProcessor.cert.CertificateLoader;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.cert.CertificateException;
-import java.util.Date;
-import java.util.Enumeration;
-
-import javax.mail.Address;
-import javax.mail.Header;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Part;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimeUtility;
-
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.bouncycastle.cms.CMSException;
@@ -57,6 +36,22 @@ import org.bouncycastle.mail.smime.SMIMEEnveloped;
 import org.bouncycastle.mail.smime.SMIMEException;
 import org.bouncycastle.mail.smime.SMIMESigned;
 import org.bouncycastle.mail.smime.SMIMEUtil;
+
+import javax.mail.*;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.cert.CertificateException;
+import java.util.Date;
+import java.util.Enumeration;
 
 public class WrappedMessageProcessor {
 	
@@ -86,7 +81,7 @@ public class WrappedMessageProcessor {
 		messageID = "";
 	}
 	
-	public void messageParser(ErrorRecorder er, byte[] inputDirectMessage, byte[] _directCertificate, String _password) {
+	public void messageParser(IAssertionGroup er, byte[] inputDirectMessage, byte[] _directCertificate, String _password) {
 		directCertificate = _directCertificate;
 		password = _password;
 		
@@ -102,7 +97,7 @@ public class WrappedMessageProcessor {
 		
 	}
 	
-	public void processPart(ErrorRecorder er, Part p) throws Exception {
+	public void processPart(IAssertionGroup er, Part p) throws Exception {
 		
 		if (p == null) {
 			logger.debug("Null part");
@@ -246,7 +241,7 @@ public class WrappedMessageProcessor {
 		}
 	}
 	
-	public Part processSMIMEEnvelope(ErrorRecorder er, Part p, InputStream certificate, String password) {
+	public Part processSMIMEEnvelope(IAssertionGroup er, Part p, InputStream certificate, String password) {
 		
 		CertificateLoader certLoader = null;
 		RecipientId     recId = null;		

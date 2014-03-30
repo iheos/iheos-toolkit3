@@ -20,7 +20,7 @@ Authors: William Majurski
 
 package gov.nist.direct.messageProcessor.mdn;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 
 public interface MDNMessageProcessorInterface {

@@ -1,9 +1,7 @@
 package gov.nist.toolkit.valsupport.client;
 
-import gov.nist.toolkit.errorrecording.client.ValidationStepResult;
-import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem;
-import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem.ReportingCompletionType;
-import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem.ReportingLevel;
+import gov.nist.hit.ds.errorRecording.client.ValidationStepResult;
+import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 
 import java.util.List;
 
@@ -189,9 +187,9 @@ public class MessageValidatorDisplay {
 				}
 
 				if (!lessdetail) {
-					if (er.completion == ReportingCompletionType.OK)
+					if (er.completion == ValidatorErrorItem.ReportingCompletionType.OK)
 						f.setStatus("ok");
-					else if (ReportingLevel.CHALLENGE == er.level && er.completion == ReportingCompletionType.ERROR)
+					else if (ValidatorErrorItem.ReportingLevel.CHALLENGE == er.level && er.completion == ValidatorErrorItem.ReportingCompletionType.ERROR)
 						f.setStatus(f.red("error"));
 				}
 				if (row_advance)

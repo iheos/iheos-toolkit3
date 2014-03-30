@@ -1,8 +1,8 @@
 package gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab;
 
-import gov.nist.toolkit.actortransaction.client.ATFactory;
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.ActorType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.TransactionType;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.xdstools2.client.CoupledTransactions;
 

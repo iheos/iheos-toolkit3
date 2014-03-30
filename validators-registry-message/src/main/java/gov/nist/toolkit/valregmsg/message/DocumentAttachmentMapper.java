@@ -1,24 +1,20 @@
 package gov.nist.toolkit.valregmsg.message;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.http.parser.HttpHeader;
 import gov.nist.toolkit.common.coder.Base64Coder;
 import gov.nist.toolkit.docref.Mtom;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
-import gov.nist.toolkit.http.HttpHeader;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.util.XPathEvaluator;
+
+import java.util.*;
 
 /**
  * Creates a mapping from DocumentEntry.id (used in metadata) to Document.cid 
@@ -84,7 +80,7 @@ public class DocumentAttachmentMapper  extends MessageValidator {
 		this.xml = xml;
 	}
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		
 		XPathEvaluator eval = new XPathEvaluator();
@@ -113,9 +109,9 @@ public class DocumentAttachmentMapper  extends MessageValidator {
 					OMElement include = includes.get(0);
 					String cid = include.getAttributeValue(MetadataSupport.href_qname);
 					if (cid == null || cid.equals("")) {
-						er.err(XdsErrorCode.Code.XDSRepositoryError, "No href attribute on XOP Include", this, Mtom.XOP_include);
+						er.err(XdsErrorCode.Code.XDSRepositoryError, new ErrorContext("No href attribute on XOP Include", Mtom.XOP_include), this);
 					} else if (!cid.startsWith("cid:")) {
-						er.err(XdsErrorCode.Code.XDSRepositoryError, "XOP Include href attribute must have prefix cid:", this, Mtom.XOP_include);
+						er.err(XdsErrorCode.Code.XDSRepositoryError, new ErrorContext("XOP Include href attribute must have prefix cid:", Mtom.XOP_include), this);
 					} else {
 						String aid = cid;
 						if (aid.startsWith("cid:"))
@@ -126,7 +122,7 @@ public class DocumentAttachmentMapper  extends MessageValidator {
 					
 					String includeNSURI = include.getNamespace().getNamespaceURI();
 					if (!"http://www.w3.org/2004/08/xop/include".equals(includeNSURI))
-						er.err(XdsErrorCode.Code.XDSRepositoryError, "Wrong XML namespace on Include element.  Found " + includeNSURI + " but it should have been http://www.w3.org/2004/08/xop/include", this, Mtom.XOP_include);
+						er.err(XdsErrorCode.Code.XDSRepositoryError, new ErrorContext("Wrong XML namespace on Include element.  Found " + includeNSURI + " but it should have been http://www.w3.org/2004/08/xop/include", Mtom.XOP_include), this);
 					
 					include.detach();   // later, Schema will not expect the XOP format Include so detach from XML tree
 					
@@ -145,7 +141,7 @@ public class DocumentAttachmentMapper  extends MessageValidator {
 					//er.detail("Un-optimized MTOM/XOP encoding found");
 					String base64Contents = docEle.getText();
 					if (base64Contents == null || base64Contents.equals("")) {
-						er.err(XdsErrorCode.Code.XDSRepositoryError, "Document contents not a XOP Include pointing to a separate Part and not inline Base64", this, Mtom.XOP_include);
+						er.err(XdsErrorCode.Code.XDSRepositoryError, new ErrorContext("Document contents not a XOP Include pointing to a separate Part and not inline Base64", Mtom.XOP_include), this);
 					} else {
 						byte[] contents = Base64Coder.decode(base64Contents);
 						StoredDocumentInt sd = new StoredDocumentInt();
@@ -157,7 +153,7 @@ public class DocumentAttachmentMapper  extends MessageValidator {
 					}
 				} else {
 					// multiple Include????
-					er.err(XdsErrorCode.Code.XDSRepositoryError, "Multiple Include elements found under Document element", this, Mtom.XOP_include);
+					er.err(XdsErrorCode.Code.XDSRepositoryError, new ErrorContext("Multiple Include elements found under Document element", Mtom.XOP_include), this);
 				}
 			}
 		} catch (Exception e) {

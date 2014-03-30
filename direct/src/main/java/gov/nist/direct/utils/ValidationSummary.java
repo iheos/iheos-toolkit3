@@ -1,6 +1,8 @@
 package gov.nist.direct.utils;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 
 import java.util.ArrayList;
 
@@ -116,7 +118,7 @@ public class ValidationSummary {
 		return res;
 	}
 	
-	public void writeErrorRecorder(ErrorRecorder er) {
+	public void writeErrorRecorder(IAssertionGroup er) {
 		// Encrypted Message Headers
 		for(int i=0;i<encryptedMessageSummaryList.size();i++) {
 			switch(encryptedMessageSummaryList.get(i).value) {
@@ -124,7 +126,7 @@ public class ValidationSummary {
 				er.detail(encryptedMessageSummaryList.get(i).key);
 				break;
 			case ERROR:
-				er.err("", encryptedMessageSummaryList.get(i).key, "", "", "");
+				er.err(XdsErrorCode.Code.NoCode, new ErrorContext(encryptedMessageSummaryList.get(i).key, ""), null);
 				break;
 			case PART:
 				er.sectionHeading(encryptedMessageSummaryList.get(i).key);
@@ -141,7 +143,7 @@ public class ValidationSummary {
 				er.detail(decryptedMessageSummaryList.get(i).key);
 				break;
 			case ERROR:
-				er.err("", decryptedMessageSummaryList.get(i).key, "", "", "");
+				er.err(XdsErrorCode.Code.NoCode, new ErrorContext(decryptedMessageSummaryList.get(i).key, ""), null);
 				break;
 			case PART:
 				er.sectionHeading(decryptedMessageSummaryList.get(i).key);
@@ -157,7 +159,7 @@ public class ValidationSummary {
 			er.detail(signatureStatus.key);
 			break;
 		case ERROR:
-			er.err("", signatureStatus.key, "", "", "");
+			er.err(XdsErrorCode.Code.NoCode, new ErrorContext(signatureStatus.key, null), null);
 			break;
 		default:
 			break;

@@ -1,9 +1,9 @@
 package gov.nist.toolkit.valregmsg.message;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.http.MultipartMessageBa;
-import gov.nist.toolkit.http.MultipartParserBa;
-import gov.nist.toolkit.http.PartBa;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.http.parser.MultipartMessageBa;
+import gov.nist.hit.ds.http.parser.MultipartParserBa;
+import gov.nist.hit.ds.http.parser.PartBa;
 import gov.nist.toolkit.valregmsg.validation.factories.MessageValidatorFactory;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
@@ -21,7 +21,7 @@ public class MultipartContainer extends MessageValidator {
 		this.mp = mp;
 	}
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		
 		MultipartMessageBa mm = mp.getMultipartMessage();

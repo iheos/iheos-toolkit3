@@ -1,8 +1,8 @@
 package gov.nist.toolkit.xdstools2.scripts;
 
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.ActorType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.TransactionType;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymetadata.MetadataParser;
 import gov.nist.toolkit.registrysupport.MetadataSupport;

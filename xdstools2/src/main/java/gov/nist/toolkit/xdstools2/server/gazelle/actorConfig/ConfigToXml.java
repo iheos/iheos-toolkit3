@@ -1,8 +1,8 @@
 package gov.nist.toolkit.xdstools2.server.gazelle.actorConfig;
 
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.ActorType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.TransactionType;
 import gov.nist.toolkit.sitemanagement.SeparateSiteLoader;
 import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;

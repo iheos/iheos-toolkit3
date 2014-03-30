@@ -1,20 +1,19 @@
 package gov.nist.registry.common2.direct;
 
-
 import gov.nist.direct.messageProcessor.MessageProcessor;
 import gov.nist.direct.messageProcessor.MessageProcessorInterface;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
+import org.apache.log4j.Logger;
+import org.mortbay.util.IO;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.apache.log4j.Logger;
-import org.mortbay.util.IO;
 
 public class DirectDecoder extends MessageValidator {
 	InputStream in, certificate;
@@ -31,7 +30,7 @@ public class DirectDecoder extends MessageValidator {
 	}
 
 	@Override
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		
 	
 		byte[] directMessage = null;

@@ -1,13 +1,13 @@
 package gov.nist.toolkit.valregmsg.validation.factories;
 
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.errorRecording.factories.TextErrorRecorderBuilder;
+import gov.nist.hit.ds.http.parser.HttpParseException;
+import gov.nist.hit.ds.http.parser.HttpParserBa;
+import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
-import gov.nist.toolkit.errorrecording.factories.TextErrorRecorderBuilder;
-import gov.nist.toolkit.http.HttpParseException;
-import gov.nist.toolkit.http.HttpParserBa;
-import gov.nist.toolkit.http.ParseException;
 import gov.nist.toolkit.messagevalidatorfactory.MessageValidatorFactory2I;
 import gov.nist.toolkit.messagevalidatorfactory.MessageValidatorFactoryFactory;
 import gov.nist.toolkit.registrysupport.MetadataSupport;

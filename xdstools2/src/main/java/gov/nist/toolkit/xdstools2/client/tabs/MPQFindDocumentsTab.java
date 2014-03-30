@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.TransactionType;
 import gov.nist.toolkit.results.client.AssertionResult;
 import gov.nist.toolkit.results.client.CodesConfiguration;
 import gov.nist.toolkit.results.client.CodesResult;

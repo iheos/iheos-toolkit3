@@ -1,14 +1,12 @@
 package gov.nist.toolkit.valsupport.client;
 
-import gov.nist.toolkit.errorrecording.client.ValidationStepResult;
-import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem;
-import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem.ReportingLevel;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
+import com.google.gwt.user.client.rpc.IsSerializable;
+import gov.nist.hit.ds.errorRecording.client.ValidationStepResult;
+import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * A collection of error/statuses/messages for a collection of validation steps.
@@ -78,7 +76,7 @@ public class MessageValidationResults implements IsSerializable {
 	public boolean hasErrors() {
 		for (ValidationStepResult result : results) {
 			for (ValidatorErrorItem info : result.er) {
-				if (info.level == ReportingLevel.ERROR)
+				if (info.level == ValidatorErrorItem.ReportingLevel.ERROR)
 					return true;
 			}
 		}
@@ -91,7 +89,7 @@ public class MessageValidationResults implements IsSerializable {
 	 * @param stepName
 	 * @param msg
 	 */
-	public void addError(Code code, String stepName, String msg) {
+	public void addError(XdsErrorCode.Code code, String stepName, String msg) {
 		ValidationStepResult result = new ValidationStepResult();
 		result.stepName = stepName;
 		ValidatorErrorItem v = new ValidatorErrorItem();

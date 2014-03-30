@@ -1,9 +1,10 @@
 package gov.nist.toolkit.valregmsg.message;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
-import gov.nist.toolkit.http.MultipartParserBa;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.http.parser.MultipartParserBa;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
@@ -19,7 +20,7 @@ public class DocumentElementValidator extends MessageValidator {
 		this.mvc = mvc;
 	}
 
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		
 		MessageValidator mcmv = mvc.findMessageValidator("MultipartContainer");
@@ -31,7 +32,7 @@ public class DocumentElementValidator extends MessageValidator {
 		
 		MessageValidator mmv = mvc.findMessageValidator("MetadataContainer");
 		if (mmv == null) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, "DocumentElementValidator: cannot retrieve MetadataContainer class from validator stack", this, "Data not available");
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("DocumentElementValidator: cannot retrieve MetadataContainer class from validator stack", "Data not available"), this);
 			return;
 		}
 		MetadataContainer mc = (MetadataContainer) mmv;

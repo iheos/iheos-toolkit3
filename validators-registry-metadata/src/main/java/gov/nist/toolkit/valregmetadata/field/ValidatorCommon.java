@@ -1,19 +1,17 @@
 package gov.nist.toolkit.valregmetadata.field;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorListGenerator;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
+import org.apache.axiom.om.OMElement;
 
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.axiom.om.OMElement;
 
 public class ValidatorCommon implements ErrorRecorder {
 	Metadata m;
@@ -248,28 +246,28 @@ public class ValidatorCommon implements ErrorRecorder {
 		
 	}
 
-	public void err(Code code, String msg, String location, String resource,
+	public void err(XdsErrorCode.Code code, String msg, String location, String resource,
 			Object log_message) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void err(Code code, String msg, String resource) {
+	public void err(XdsErrorCode.Code code, String msg, String resource) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void err(Code code, Exception e) {
+	public void err(XdsErrorCode.Code code, Exception e) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void err(Code code, String msg, String location, String resource) {
+	public void err(XdsErrorCode.Code code, String msg, String location, String resource) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void err(Code code, String msg, Object location, String resource) {
+	public void err(XdsErrorCode.Code code, String msg, Object location, String resource) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -286,7 +284,7 @@ public class ValidatorCommon implements ErrorRecorder {
 		
 	}
 
-	public void err(Code code, String msg, String location, String severity,
+	public void err(XdsErrorCode.Code code, String msg, String location, String severity,
 			String resource) {
 		// TODO Auto-generated method stub
 		
@@ -300,7 +298,7 @@ public class ValidatorCommon implements ErrorRecorder {
 	}
 
 	
-	public void warning(Code code, String msg, String location, String resource) {
+	public void warning(XdsErrorCode.Code code, String msg, String location, String resource) {
 		// TODO Auto-generated method stub
 		
 	}

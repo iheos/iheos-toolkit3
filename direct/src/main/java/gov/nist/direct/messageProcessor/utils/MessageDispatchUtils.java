@@ -21,7 +21,8 @@ Authors: William Majurski
 package gov.nist.direct.messageProcessor.utils;
 
 import gov.nist.direct.messageProcessor.direct.directImpl.WrappedMessageProcessor;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -30,7 +31,7 @@ public class MessageDispatchUtils {
 	
 	WrappedMessageProcessor processor = new WrappedMessageProcessor();
 	
-	public MessageDispatchUtils(ErrorRecorder er, byte[] msg, byte[] directCertificate, String password) {
+	public MessageDispatchUtils(IAssertionGroup er, byte[] msg, byte[] directCertificate, String password) {
 		processor.messageParser(er, msg, directCertificate, password);
 	}
 	
@@ -41,7 +42,7 @@ public class MessageDispatchUtils {
 		return this.processor.getIsDirect();
 	}
 	
-	public static boolean isEncrypted(ErrorRecorder er, MimeMessage msg) throws MessagingException{
+	public static boolean isEncrypted(IAssertionGroup er, MimeMessage msg) throws MessagingException{
 		//if(!msg.isMimeType("application/pkcs7-mime")) {
 		if (msg.getContentType().contains("application/pkcs7-mime") || msg.getContentType().contains("application/x-pkcs7-mime")){
 			return true;

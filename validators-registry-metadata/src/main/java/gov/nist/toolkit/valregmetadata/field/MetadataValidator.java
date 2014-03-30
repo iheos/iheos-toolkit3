@@ -1,8 +1,9 @@
 package gov.nist.toolkit.valregmetadata.field;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valregmetadata.object.Association;
@@ -27,13 +28,13 @@ public class MetadataValidator {
 		this.rvi = rvi;
 	}
 	
-	public void run(ErrorRecorder er) {
+	public void run(IAssertionGroup er) {
 		runObjectStructureValidation(er);
 		runCodeValidation(er);
 		runSubmissionStructureValidation(er);
 	}
 	
-	public void runCodeValidation(ErrorRecorder er)   {
+	public void runCodeValidation(IAssertionGroup er)   {
 		CodeValidation cv = new CodeValidation(m);
 		try {
 			cv.setValidationContext(vc);
@@ -44,7 +45,7 @@ public class MetadataValidator {
 		cv.run(er);
 	}
 
-	public void runObjectStructureValidation(ErrorRecorder er)   {
+	public void runObjectStructureValidation(IAssertionGroup er)   {
 		
 		if (vc.skipInternalStructure)
 			return;
@@ -109,11 +110,11 @@ public class MetadataValidator {
 			else if (m.getFolderIds().contains(id))
 				;
 			else
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "RegistryPackage(" + id + ") : is not classified as SubmissionSet or Folder", this, "ITI TF-3: 4.1.9.1");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext("RegistryPackage(" + id + ") : is not classified as SubmissionSet or Folder", "ITI TF-3: 4.1.9.1"), this);
 		}
 	}
 
-	public void runSubmissionStructureValidation(ErrorRecorder er) {
+	public void runSubmissionStructureValidation(IAssertionGroup er) {
 		new SubmissionStructure(m, rvi).run(er, vc);
 	}
 	

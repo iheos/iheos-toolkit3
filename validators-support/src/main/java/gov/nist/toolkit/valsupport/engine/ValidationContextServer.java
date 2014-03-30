@@ -1,9 +1,8 @@
 package gov.nist.toolkit.valsupport.engine;
 
-
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.commondatatypes.client.SchematronMetadataTypes;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 
 import java.util.ArrayList;
 import java.util.List;

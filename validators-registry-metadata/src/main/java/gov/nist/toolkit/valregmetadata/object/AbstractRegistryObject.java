@@ -1,9 +1,11 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymetadata.MetadataParser;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
@@ -23,9 +25,9 @@ public abstract class AbstractRegistryObject {
 
 	abstract public String identifyingString();
 	abstract public OMElement toXml() throws XdsInternalException, XdsInternalException;
-	abstract public void validateSlotsLegal(ErrorRecorder er);
-	abstract public void validateRequiredSlotsPresent(ErrorRecorder er, ValidationContext vc);
-	abstract public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc);
+	abstract public void validateSlotsLegal(IAssertionGroup er);
+	abstract public void validateRequiredSlotsPresent(IAssertionGroup er, ValidationContext vc);
+	abstract public void validateSlotsCodedCorrectly(IAssertionGroup er, ValidationContext vc);
 
 	OMElement ro;
 	List<Slot> slots = new ArrayList<Slot>();
@@ -352,7 +354,7 @@ public abstract class AbstractRegistryObject {
 		return eis;
 	}
 
-	public void validateSlot(ErrorRecorder er, String slotName, boolean multivalue, FormatValidator validator, String resource) {
+	public void validateSlot(IAssertionGroup er, String slotName, boolean multivalue, FormatValidator validator, String resource) {
 		Slot slot = getSlot(slotName);
 		if (slot == null) {
 			return;
@@ -361,13 +363,13 @@ public abstract class AbstractRegistryObject {
 		slot.validate(er, multivalue, validator, resource);
 	}
 
-	public boolean verifySlotsUnique(ErrorRecorder er) {
+	public boolean verifySlotsUnique(IAssertionGroup er) {
 		boolean ok = true;
 		List<String> names = new ArrayList<String>();
 		for (Slot slot : slots) {
 			if (names.contains(slot.getName())) 
 				if (er != null) {
-					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": Slot " + slot.getName() + " is multiply defined", this, "ebRIM 3.0 section 2.8.2");
+					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": Slot " + slot.getName() + " is multiply defined", "ebRIM 3.0 section 2.8.2"), this);
 					ok = false;
 				}
 				else
@@ -376,22 +378,22 @@ public abstract class AbstractRegistryObject {
 		return ok;
 	}
 	
-	public void validateTopAtts(ErrorRecorder er, ValidationContext vc, String tableRef, List<String> statusValues) {
+	public void validateTopAtts(IAssertionGroup er, ValidationContext vc, String tableRef, List<String> statusValues) {
 		validateId(er, vc, "entryUUID", id, null);
 		
 		if (vc.isSQ && vc.isResponse) {
 			if (status == null) 
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": availabilityStatus attribute (status attribute in XML) must be present", this, tableRef);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": availabilityStatus attribute (status attribute in XML) must be present", tableRef), this);
 			else {
 				if (!statusValues.contains(status))
-					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": availabilityStatus attribute must take on one of these values: " + statusValues + ", found " + status, this, "ITI TF-2a: 3.18.4.1.2.3.6");
+					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": availabilityStatus attribute must take on one of these values: " + statusValues + ", found " + status, "ITI TF-2a: 3.18.4.1.2.3.6"), this);
 			}
 			
 			validateId(er, vc, "lid", lid, null);
 			
 			List<OMElement> versionInfos = MetadataSupport.childrenWithLocalName(ro, "VersionInfo");
 			if (versionInfos.size() == 0) {
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": VersionInfo attribute missing", this, "ebRIM Section 2.5.1");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": VersionInfo attribute missing", "ebRIM Section 2.5.1"), this);
 			}
 		}
 
@@ -401,10 +403,10 @@ public abstract class AbstractRegistryObject {
 		}
 	}
 
-	public void validateId(ErrorRecorder er, ValidationContext vc, String attName, String attValue, String resource) {
+	public void validateId(IAssertionGroup er, ValidationContext vc, String attName, String attValue, String resource) {
 		String defaultResource = "ITI TF-3: 4.1.12.3";
 		if (attValue == null || attValue.equals("")) {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": " + attName + " attribute empty or missing", this, (resource!=null) ? resource : defaultResource);
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": " + attName + " attribute empty or missing", (resource!=null) ? resource : defaultResource), this);
 		} else {
 			if (vc.isSQ && vc.isResponse) {
 				new UuidFormat(er, identifyingString() + " " + attName + " attribute must be a UUID", (resource!=null) ? resource : defaultResource).validate(id);
@@ -424,10 +426,10 @@ public abstract class AbstractRegistryObject {
 		
 	}
 	
-	public void verifyIdsUnique(ErrorRecorder er, Set<String> knownIds) {
+	public void verifyIdsUnique(IAssertionGroup er, Set<String> knownIds) {
 		if (id != null) {
 			if (knownIds.contains(id))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": entryUUID " + id + "  identifies multiple objects", this, "ITI TF-3: 4.1.12.3 and ebRS 5.1.2");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": entryUUID " + id + "  identifies multiple objects", "ITI TF-3: 4.1.12.3 and ebRS 5.1.2"), this);
 			knownIds.add(id);
 		}
 		
@@ -442,16 +444,16 @@ public abstract class AbstractRegistryObject {
 		
 		
 	}
-	public void validateHome(ErrorRecorder er, String resource) {
+	public void validateHome(IAssertionGroup er, String resource) {
 		if (home == null) 
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": homeCommunityId attribute must be present", this, resource);
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": homeCommunityId attribute must be present", resource), this);
 		else {
 			if (home.length() > 64)
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": homeCommunityId is limited to 64 characters, found " + home.length(), this, resource);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": homeCommunityId is limited to 64 characters, found " + home.length(), resource), this);
 			
 			String[] parts = home.split(":");
 			if (parts.length < 3 || !parts[0].equals("urn") || !parts[1].equals("oid"))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": homeCommunityId must begin with urn:oid: prefix, found [" + home + "]", this, resource);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": homeCommunityId must begin with urn:oid: prefix, found [" + home + "]", resource), this);
 			new OidFormat(er, identifyingString() + " homeCommunityId", resource).validate(parts[parts.length-1]);
 		}
 	}
@@ -465,13 +467,13 @@ public abstract class AbstractRegistryObject {
 		return i;
 	}
 	
-	public void validateClassificationsLegal(ErrorRecorder er, ClassAndIdDescription desc, String resource) {
+	public void validateClassificationsLegal(IAssertionGroup er, ClassAndIdDescription desc, String resource) {
 		List<String> cSchemes = new ArrayList<String>();
 
 		for (Classification c : getClassifications()) {
 			String cScheme = c.getClassificationScheme();
 			if (cScheme == null || cScheme.equals("") || !desc.definedSchemes.contains(cScheme)) {
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": " + c.identifyingString() + " has an unknown classificationScheme attribute value: " + cScheme, this, resource);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": " + c.identifyingString() + " has an unknown classificationScheme attribute value: " + cScheme, resource), this);
 			} else {
 				cSchemes.add(cScheme);
 			}
@@ -481,7 +483,7 @@ public abstract class AbstractRegistryObject {
 		cSchemeSet.addAll(cSchemes);
 		for (String cScheme : cSchemeSet) {
 			if (count(cSchemes, cScheme) > 1 && !desc.multipleSchemes.contains(cScheme))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": " + classificationDescription(desc, cScheme) + " is specified multiple times, only one allowed", this, resource);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": " + classificationDescription(desc, cScheme) + " is specified multiple times, only one allowed", resource), this);
 		}
 	}
 
@@ -493,17 +495,17 @@ public abstract class AbstractRegistryObject {
 		return "ExternalIdentifier(" + eiScheme + ")(" + desc.names.get(eiScheme) + ")";
 	}
 
-	public void validateRequiredClassificationsPresent(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
+	public void validateRequiredClassificationsPresent(IAssertionGroup er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
 		if (!(vc.isXDM || vc.isXDRLimited)) {
 			for (String cScheme : desc.requiredSchemes) {
 				List<Classification> cs = getClassificationsByClassificationScheme(cScheme);
 				if (cs.size() == 0) 
-					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": " + classificationDescription(desc, cScheme) + " is required but missing", this, resource);
+					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": " + classificationDescription(desc, cScheme) + " is required but missing", resource), this);
 			}
 		}
 	}
 
-	public void validateClassificationsCodedCorrectly(ErrorRecorder er, ValidationContext vc) {
+	public void validateClassificationsCodedCorrectly(IAssertionGroup er, ValidationContext vc) {
 		for (Classification c : getClassifications()) 
 			c.validateStructure(er, vc);
 
@@ -511,7 +513,7 @@ public abstract class AbstractRegistryObject {
 			a.validateStructure(er, vc);
 	}
 
-	public void validateClassifications(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
+	public void validateClassifications(IAssertionGroup er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
 		er.challenge("Validating Classifications present are legal");
 		validateClassificationsLegal(er, desc, resource);
 		er.challenge("Validating Required Classifications present");
@@ -520,7 +522,7 @@ public abstract class AbstractRegistryObject {
 		validateClassificationsCodedCorrectly(er, vc);
 	}
 
-	public void validateExternalIdentifiers(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
+	public void validateExternalIdentifiers(IAssertionGroup er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
 		er.challenge("Validating ExternalIdentifiers present are legal");
 		validateExternalIdentifiersLegal(er, desc, resource);
 		er.challenge("Validating Required ExternalIdentifiers present");
@@ -529,7 +531,7 @@ public abstract class AbstractRegistryObject {
 		validateExternalIdentifiersCodedCorrectly(er, vc, desc, resource);
 	}
 	
-	public void validateExternalIdentifiersCodedCorrectly(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
+	public void validateExternalIdentifiersCodedCorrectly(IAssertionGroup er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
 		for (ExternalIdentifier ei : getExternalIdentifiers()) {
 			ei.validateStructure(er, vc);
 			if (MetadataSupport.XDSDocumentEntry_uniqueid_uuid.equals(ei.getIdentificationScheme())) {
@@ -537,9 +539,9 @@ public abstract class AbstractRegistryObject {
 				new OidFormat(er, identifyingString() + ": " + ei.identifyingString(), externalIdentifierDescription(desc, ei.getIdentificationScheme()))
 				.validate(parts[0]);
 				if (parts[0].length() > 64)
-					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": " + ei.identifyingString() + " OID part of DocumentEntry uniqueID is limited to 64 digits", this, resource);
+					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": " + ei.identifyingString() + " OID part of DocumentEntry uniqueID is limited to 64 digits", resource), this);
 				if (parts.length > 1 && parts[1].length() > 16) {
-					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": " + ei.identifyingString() + " extension part of DocumentEntry uniqueID is limited to 16 characters", this, resource);
+					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": " + ei.identifyingString() + " extension part of DocumentEntry uniqueID is limited to 16 characters", resource), this);
 				}
 
 			} else if (MetadataSupport.XDSDocumentEntry_patientid_uuid.equals(ei.getIdentificationScheme())){
@@ -551,26 +553,26 @@ public abstract class AbstractRegistryObject {
 
 
 	
-	public void validateRequiredExternalIdentifiersPresent(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
+	public void validateRequiredExternalIdentifiersPresent(IAssertionGroup er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
 		for (String idScheme : desc.requiredSchemes) {
 			List<ExternalIdentifier> eis = getExternalIdentifiers(idScheme);
 			if (eis.size() == 0)
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": " + externalIdentifierDescription(desc, idScheme) + " is required but missing", this, resource);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": " + externalIdentifierDescription(desc, idScheme) + " is required but missing", resource), this);
 			if (eis.size() > 1)
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": " + externalIdentifierDescription(desc, idScheme) + " is specified multiple times, only one allowed", this, resource);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": " + externalIdentifierDescription(desc, idScheme) + " is specified multiple times, only one allowed", resource), this);
 		}
 	}
 
 
-	public void validateExternalIdentifiersLegal(ErrorRecorder er, ClassAndIdDescription desc, String resource) {
+	public void validateExternalIdentifiersLegal(IAssertionGroup er, ClassAndIdDescription desc, String resource) {
 		for (ExternalIdentifier ei : getExternalIdentifiers()) {
 			String idScheme = ei.getIdentificationScheme();
 			if (idScheme == null || idScheme.equals("") || !desc.definedSchemes.contains(idScheme)) 
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": " + ei.identifyingString() + " has an unknown identificationScheme attribute value: " + idScheme, this, resource);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": " + ei.identifyingString() + " has an unknown identificationScheme attribute value: " + idScheme, resource), this);
 		}
 	}
 
-	public void validateSlots(ErrorRecorder er, ValidationContext vc) {
+	public void validateSlots(IAssertionGroup er, ValidationContext vc) {
 		er.challenge("Validating that Slots present are legal");
 		validateSlotsLegal(er);
 		er.challenge("Validating required Slots present");

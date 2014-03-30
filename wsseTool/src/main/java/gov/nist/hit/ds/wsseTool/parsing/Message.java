@@ -5,10 +5,9 @@ import gov.nist.hit.ds.wsseTool.api.config.KeystoreAccess;
 import gov.nist.hit.ds.wsseTool.parsing.groovyXML.GroovyHeader;
 import gov.nist.hit.ds.wsseTool.parsing.opensaml.OpenSamlSecurityHeader;
 import gov.nist.hit.ds.wsseTool.validation.engine.TestData;
+import org.w3c.dom.Element;
 
 import java.util.Map;
-
-import org.w3c.dom.Element;
 
 public class Message extends GenContext implements TestData {
 

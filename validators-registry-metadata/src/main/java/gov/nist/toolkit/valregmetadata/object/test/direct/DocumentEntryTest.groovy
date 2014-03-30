@@ -1,16 +1,16 @@
 package gov.nist.toolkit.valregmetadata.object.test.direct
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder
-import gov.nist.toolkit.errorrecording.TextErrorRecorder
+import gov.nist.hit.ds.errorRecording.ErrorRecorder
+import gov.nist.hit.ds.errorRecording.TextErrorRecorder
 import gov.nist.toolkit.registrymetadata.Metadata
 import gov.nist.toolkit.registrymetadata.MetadataParser
 import gov.nist.toolkit.utilities.xml.Util
 import gov.nist.toolkit.valregmetadata.object.DocumentEntry
 import gov.nist.toolkit.valsupport.client.ValidationContext
-
 import org.apache.axiom.om.OMElement
 import org.junit.Test
-import static org.junit.Assert.*
+
+import static org.junit.Assert.assertFalse
 
 class DocumentEntryTest {
 	def goodde = '''

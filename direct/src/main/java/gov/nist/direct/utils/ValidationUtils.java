@@ -17,6 +17,17 @@ Authors: Frederic de Vaulx
 
 package gov.nist.direct.utils;
 
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.TextErrorRecorder;
+
+import javax.mail.BodyPart;
+import javax.mail.Header;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,17 +40,6 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.mail.BodyPart;
-import javax.mail.Header;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.TextErrorRecorder;
 
 public class ValidationUtils {
 	final static String randomString = "[0-9,a-z,_,\\-,.]+"; // case insensitive
@@ -103,7 +103,7 @@ public class ValidationUtils {
 	 * @return
 	 */
 	public static String findBoundary(String[] headerContents) {
-		ErrorRecorder er = new TextErrorRecorder();
+        IAssertionGroup er = new TextErrorRecorder();
 		String boundary = "";
 	
 		for (int i = 0;i<headerContents.length;i++){

@@ -1,8 +1,9 @@
 package gov.nist.toolkit.valregmetadata.object;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
@@ -105,7 +106,7 @@ public class Association extends AbstractRegistryObject implements TopLevelObjec
 		return ro;
 	}
 
-	public void validate(ErrorRecorder er, ValidationContext vc,
+	public void validate(IAssertionGroup er, ValidationContext vc,
 			Set<String> knownIds) {
 		if (vc.skipInternalStructure)
 			return;
@@ -123,11 +124,11 @@ public class Association extends AbstractRegistryObject implements TopLevelObjec
 		verifyNotReferenceSelf(er);
 	}
 	
-	void verifyNotReferenceSelf(ErrorRecorder er) {
+	void verifyNotReferenceSelf(IAssertionGroup er) {
 		if (source.equals(id))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + " sourceObject attribute references self", this, "???");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + " sourceObject attribute references self", "???"), this);
 		if (target.equals(id))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + " targetObject attribute references self", this, "???");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + " targetObject attribute references self", "???"), this);
 	}
 
 	static List<String> assocs_with_documentation = 
@@ -138,7 +139,7 @@ public class Association extends AbstractRegistryObject implements TopLevelObjec
 				MetadataSupport.assoctype_xfrm_rplc
 		);
 
-	public void validateClassifications(ErrorRecorder er, ValidationContext vc) {
+	public void validateClassifications(IAssertionGroup er, ValidationContext vc) {
 
 		er.challenge("Classifications present are legal");
 
@@ -146,16 +147,16 @@ public class Association extends AbstractRegistryObject implements TopLevelObjec
 		if (c.size() == 0)
 			;
 		else if (c.size() > 1)
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + 
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() +
 					": may contain only a single documentation classification (classificationScheme=" + 
-					MetadataSupport.XDSAssociationDocumentation_uuid + ")", this, "ITI TF-3 4.1.6.1");
+					MetadataSupport.XDSAssociationDocumentation_uuid + ")", "ITI TF-3 4.1.6.1"), this);
 		else {
 			if (!assocs_with_documentation.contains(type))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + 
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() +
 						": documentation classification (classificationScheme=" + 
 						MetadataSupport.XDSAssociationDocumentation_uuid + 
 						") may only be present on the following association types: " + 
-						assocs_with_documentation, this, "ITI TF-3 4.1.6.1");
+						assocs_with_documentation, "ITI TF-3 4.1.6.1"), this);
 		}
 		er.challenge("Required Classifications present");
 		er.challenge("Classifications coded correctly");
@@ -169,7 +170,7 @@ public class Association extends AbstractRegistryObject implements TopLevelObjec
 				MetadataSupport.assoctype_xfrm_rplc
 				);
 
-	public void validateTopAtts(ErrorRecorder er, ValidationContext vc) {
+	public void validateTopAtts(IAssertionGroup er, ValidationContext vc) {
 		validateId(er, vc, "entryUUID", id, null);
 
 		validateId(er, vc, "sourceObject", source, null);
@@ -182,21 +183,21 @@ public class Association extends AbstractRegistryObject implements TopLevelObjec
 				
 		if (muReq) {
 			if (basicType == false && muType == false)
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": associationType " + type + " unknown. Known assocationTypes are " + assocTypes + " and " + assocTypesMU, this, "ITI TF-3 Table 4.1-2.1");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": associationType " + type + " unknown. Known assocationTypes are " + assocTypes + " and " + assocTypesMU, "ITI TF-3 Table 4.1-2.1"), this);
 		}
 				
 		else if (vc.isResponse) {
 			if (!assocTypes.contains(type) && !assocTypesMU.contains(type))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": associationType " + type + " unknown. Known assocationTypes are " + assocTypes + " and " + assocTypesMU, this, "ITI TF-3 Table 4.1-2.1");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": associationType " + type + " unknown. Known assocationTypes are " + assocTypes + " and " + assocTypesMU, "ITI TF-3 Table 4.1-2.1"), this);
 		}
 		
 		else if (!assocTypes.contains(type))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": associationType " + type + " unknown. Known assocationTypes are " + assocTypes, this, "ITI TF-3 Table 4.1-2.1");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": associationType " + type + " unknown. Known assocationTypes are " + assocTypes, "ITI TF-3 Table 4.1-2.1"), this);
 
 		
 	}
 
-	public void validateRequiredSlotsPresent(ErrorRecorder er,
+	public void validateRequiredSlotsPresent(IAssertionGroup er,
 			ValidationContext vc) {
 //		Metadata m = getMetadata();
 //		if (type.equals(MetadataSupport.assoctype_has_member) &&
@@ -210,7 +211,7 @@ public class Association extends AbstractRegistryObject implements TopLevelObjec
 
 	}
 
-	public void validateSlotsCodedCorrectly(ErrorRecorder er,
+	public void validateSlotsCodedCorrectly(IAssertionGroup er,
 			ValidationContext vc) {
 		Slot s = getSlot(MetadataSupport.assoc_slot_submission_set_status);
 		if (s == null)
@@ -220,13 +221,13 @@ public class Association extends AbstractRegistryObject implements TopLevelObjec
 			if ("Original".equals(value) || "Reference".equals(value))
 				;
 			else
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": SubmissionSetStatus Slot can only take value Original or Reference", this, "ITI TF-3: 4.1.4.1");
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": SubmissionSetStatus Slot can only take value Original or Reference", "ITI TF-3: 4.1.4.1"), this);
 		} else {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, identifyingString() + ": SubmissionSetStatus Slot must have only single value", this, "ITI TF-3: 4.1.4.1");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(identifyingString() + ": SubmissionSetStatus Slot must have only single value", "ITI TF-3: 4.1.4.1"), this);
 		}
 	}
 
-	public void validateSlotsLegal(ErrorRecorder er) {
+	public void validateSlotsLegal(IAssertionGroup er) {
 		// work done by validateRequiredSlotsPresent
 	}
 

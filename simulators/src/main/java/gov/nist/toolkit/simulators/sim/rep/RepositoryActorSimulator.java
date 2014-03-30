@@ -2,7 +2,7 @@ package gov.nist.toolkit.simulators.sim.rep;
 
 import gov.nist.toolkit.actorfactory.SimDb;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.TransactionType;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorListGenerator;
 import gov.nist.toolkit.registrymsgformats.registry.Response;

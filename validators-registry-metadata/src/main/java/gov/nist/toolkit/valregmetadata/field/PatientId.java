@@ -1,8 +1,9 @@
 package gov.nist.toolkit.valregmetadata.field;
 
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 
@@ -11,11 +12,11 @@ import java.util.List;
 
 public class PatientId {
 	List<String> patient_ids;
-	ErrorRecorder er;
+    IAssertionGroup er;
 	Metadata m;
 
 
-	public PatientId( Metadata m, ErrorRecorder er) {
+	public PatientId( Metadata m, IAssertionGroup er) {
 		this.er = er;
 		this.m = m;
 		patient_ids = new ArrayList<String>();
@@ -28,9 +29,9 @@ public class PatientId {
 		gather_patient_ids(m, m.getFolderIds(),          MetadataSupport.XDSFolder_patientid_uuid);
 
 		if (patient_ids.size() > 1)
-			er.err(XdsErrorCode.Code.XDSPatientIdDoesNotMatch, "Multiple Patient IDs found in submission: " + patient_ids, this, "ITI TF-3: 4.1.4.1");
+			er.err(XdsErrorCode.Code.XDSPatientIdDoesNotMatch, new ErrorContext("Multiple Patient IDs found in submission: " + patient_ids, "ITI TF-3: 4.1.4.1"), this);
 		} catch (Exception e) {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e.getMessage(), this, "");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new ErrorContext(e.getMessage(), ""), this);
 		}
 }
 

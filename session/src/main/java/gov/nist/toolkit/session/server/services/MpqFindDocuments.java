@@ -2,7 +2,7 @@ package gov.nist.toolkit.session.server.services;
 
 import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.ActorType;
 import gov.nist.toolkit.registrymetadata.client.Code;
 import gov.nist.toolkit.results.client.Result;
 import gov.nist.toolkit.results.client.SiteSpec;

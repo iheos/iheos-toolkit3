@@ -1,6 +1,7 @@
 package gov.nist.toolkit.simulators.support;
 
-import gov.nist.toolkit.actortransaction.client.ATFactory;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory;
 import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
@@ -16,7 +17,7 @@ import java.io.IOException;
  */
 public abstract class ActorSimulator  {
 	protected SimCommon common;
-	protected ErrorRecorder er;
+	protected IAssertionGroup er;
 
 //	protected GwtErrorRecorderBuilder gerb = new GwtErrorRecorderBuilder();
 //	protected ErrorRecorder er = gerb.buildNewErrorRecorder();  // default error recorder - others can be created to segregate messages

@@ -1,7 +1,7 @@
 package gov.nist.toolkit.session.server.serviceManager;
 
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.ActorType;
 import gov.nist.toolkit.envSetting.EnvSetting;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.session.server.Session;

@@ -5,7 +5,7 @@ import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
 import gov.nist.toolkit.actorfactory.SimCache;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.ActorType;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymetadata.client.*;
 import gov.nist.toolkit.results.ResultBuilder;

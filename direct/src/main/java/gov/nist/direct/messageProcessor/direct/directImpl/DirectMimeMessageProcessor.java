@@ -27,13 +27,14 @@ import gov.nist.direct.messageProcessor.direct.DirectMessageProcessorInterface;
 import gov.nist.direct.utils.Utils;
 import gov.nist.direct.utils.ValidationSummary;
 import gov.nist.direct.utils.ValidationSummary.Status;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.xdsException.XDMException;
 import gov.nist.toolkit.messagevalidatorfactory.MessageValidatorFactoryFactory;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.valccda.CdaDetector;
-import gov.nist.toolkit.valregmsg.xdm.XDMException;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorder;
@@ -110,7 +111,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 
 
 
-	public void processAndValidateDirectMessage(ErrorRecorder er, byte[] inputDirectMessage, byte[] _directCertificate, String _password, ValidationContext vc){
+	public void processAndValidateDirectMessage(IAssertionGroup er, byte[] inputDirectMessage, byte[] _directCertificate, String _password, ValidationContext vc){
 		directCertificate = _directCertificate;
 		password = _password;
 		this.vc = vc;
@@ -118,7 +119,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 		this.anchorNumber = 0;
 
 		// New ErrorRecorder to put summary first
-		ErrorRecorder mainEr = new GwtErrorRecorder();
+		IAssertionGroup mainEr = new GwtErrorRecorder();
 
 		// Parse the message to see if it is wrapped
 		wrappedParser.messageParser(er, inputDirectMessage, _directCertificate, _password);
@@ -156,7 +157,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 			er.detail("############################Message Content Summary################################");
 			er.detail("");
 
-			ErrorRecorder summaryEr = new GwtErrorRecorder();
+            IAssertionGroup summaryEr = new GwtErrorRecorder();
 			validationSummary.writeErrorRecorder(summaryEr);
 			er.concat(summaryEr);
 
@@ -176,7 +177,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 	/**
 	 * 
 	 *  Validates a part of the message*/
-	public void processPart(ErrorRecorder er, Part p) throws Exception{
+	public void processPart(IAssertionGroup er, Part p) throws Exception{
 
 		if (p == null)
 			return;
@@ -235,13 +236,13 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 				ProcessEnvelope process = new ProcessEnvelope();
 
 				// Separate ErrorRecorder
-				ErrorRecorder separate = new GwtErrorRecorder();
+                IAssertionGroup separate = new GwtErrorRecorder();
 
 				process.validateMimeEntity(separate, p, validationSummary, shiftNumber+1);
 				er.concat(separate);
 
 				// Separate ErrorRecorder 2
-				ErrorRecorder separate2 = new GwtErrorRecorder();
+                IAssertionGroup separate2 = new GwtErrorRecorder();
 
 				process.validateMessageHeader(separate2, (Message)p, validationSummary, partNumber, true);
 				er.concat(separate2);
@@ -354,7 +355,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 			ProcessEnvelope process = new ProcessEnvelope();
 
 			// Separate ErrorRecorder
-			ErrorRecorder separate = new GwtErrorRecorder();
+            IAssertionGroup separate = new GwtErrorRecorder();
 			process.validateMimeEntity(separate, p, validationSummary, shiftNumber);
 			er.concat(separate);
 
@@ -396,7 +397,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 			ProcessEnvelope process = new ProcessEnvelope();
 
 			// Separate ErrorRecorder
-			ErrorRecorder separate = new GwtErrorRecorder();
+            IAssertionGroup separate = new GwtErrorRecorder();
 			process.validateMimeEntity(separate, p, validationSummary,shiftNumber);
 			er.concat(separate);
 
@@ -452,7 +453,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 	/**
 	 * Validates the envelope of the message
 	 * */
-	public void processEnvelope(ErrorRecorder er, Message m) throws Exception {
+	public void processEnvelope(IAssertionGroup er, Message m) throws Exception {
 		//er.detail("Processing Envelope");
 		ProcessEnvelope process = new ProcessEnvelope();
 		MessageValidatorFacade msgValidator = new DirectMimeMessageValidatorFacade();
@@ -464,14 +465,14 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 
 
 		// Separate ErrorRecorder
-		ErrorRecorder separate2 = new GwtErrorRecorder();
+        IAssertionGroup separate2 = new GwtErrorRecorder();
 		process.validateMessageHeader(separate2, m, validationSummary, 0, !wrappedParser.getWrapped());
 		er.concat(separate2);
 
 		// MIME Entity Validation
 
 		// Separate ErrorRecorder
-		ErrorRecorder separate = new GwtErrorRecorder();
+        IAssertionGroup separate = new GwtErrorRecorder();
 		process.validateMimeEntity(separate, m, validationSummary, shiftNumber);
 		er.concat(separate);
 
@@ -508,7 +509,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 	/**
 	 * 
 	 * */
-	public void processText(ErrorRecorder er, Part p) throws Exception{
+	public void processText(IAssertionGroup er, Part p) throws Exception{
 		//er.detail("Processing Text");
 		er.detail("====================Process Text/plain Part==========================;anchor=part" + anchorNumber);
 		ProcessEnvelope process = new ProcessEnvelope();
@@ -517,7 +518,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 		validationSummary.recordKey(getShiftIndent(shiftNumber) + "Part " + partNumber +": text/plain interpreted as a text content;link=part" + anchorNumber, Status.PART, true);
 
 		// Separate ErrorRecorder
-		ErrorRecorder separate = new GwtErrorRecorder();
+        IAssertionGroup separate = new GwtErrorRecorder();
 		process.validateMimeEntity(separate, p, validationSummary, shiftNumber+1);
 		er.concat(separate);
 
@@ -556,7 +557,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 		anchorNumber++;
 	}
 
-	public void processTextHTML(ErrorRecorder er, Part p) throws Exception {
+	public void processTextHTML(IAssertionGroup er, Part p) throws Exception {
 		er.detail("====================Process Text/html Part==========================;anchor=part" + anchorNumber);
 		ProcessEnvelope process = new ProcessEnvelope();
 
@@ -564,7 +565,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 		validationSummary.recordKey(getShiftIndent(shiftNumber) + "Part " + partNumber +": text/html interpreted as a html content;link=part" + anchorNumber, Status.PART, true);
 
 		// Separate ErrorRecorder
-		ErrorRecorder separate = new GwtErrorRecorder();
+        IAssertionGroup separate = new GwtErrorRecorder();
 		process.validateMimeEntity(separate, p, validationSummary, shiftNumber+1);
 
 		MessageValidatorFacade msgValidator = new DirectMimeMessageValidatorFacade();
@@ -612,7 +613,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 	/**
 	 * 
 	 * */
-	public void processTextXML(ErrorRecorder er, Part p) throws Exception{
+	public void processTextXML(IAssertionGroup er, Part p) throws Exception{
 		er.detail("====================Processing Text XML==========================;anchor=part" + anchorNumber);
 		logger.info("Processing attachments, Validation context is " + vc.toString());
 
@@ -622,7 +623,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 		ProcessEnvelope process = new ProcessEnvelope();
 
 		// Separate ErrorRecorder
-		ErrorRecorder separate = new GwtErrorRecorder();
+        IAssertionGroup separate = new GwtErrorRecorder();
 		process.validateMimeEntity(separate, p, validationSummary, shiftNumber+1);
 		er.concat(separate);
 
@@ -698,7 +699,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 		anchorNumber++;
 	}
 
-	public void processApplicationXML(ErrorRecorder er, Part p) throws Exception {
+	public void processApplicationXML(IAssertionGroup er, Part p) throws Exception {
 		if(p.getFileName() != null && p.getFileName().contains(".xsl")) {
 			er.detail("\n====================Stylesheet found: " + p.getFileName() + "==========================\n;link=part" + anchorNumber);
 			logger.info("Processing attachments application/xml, Validation context is " + vc.toString());
@@ -734,7 +735,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 			ProcessEnvelope process = new ProcessEnvelope();
 
 			// Separate ErrorRecorder
-			ErrorRecorder separate = new GwtErrorRecorder();
+            IAssertionGroup separate = new GwtErrorRecorder();
 			process.validateMimeEntity(separate, p, validationSummary, shiftNumber+1);
 			er.concat(separate);
 
@@ -817,11 +818,11 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 	 * verify the signature (assuming the cert is contained in the message)
 	 */
 	@SuppressWarnings("rawtypes")
-	private void verifySignature(ErrorRecorder er, SMIMESigned s, String contentTypeMicalg) throws Exception{
+	private void verifySignature(IAssertionGroup er, SMIMESigned s, String contentTypeMicalg) throws Exception{
 		MessageValidatorFacade msgValidator = new DirectMimeMessageValidatorFacade();
 
 		// Separate ErrorRecorder
-		ErrorRecorder separate = new GwtErrorRecorder();
+        IAssertionGroup separate = new GwtErrorRecorder();
 
 		// DTS-164, SignedData exists for the message
 		msgValidator.validateSignedData(separate, s.getSignedContent());
@@ -914,7 +915,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 	/**
 	 * 
 	 * */
-	public Part processSMIMEEnvelope(ErrorRecorder er, Part p, InputStream certificate, String password) {
+	public Part processSMIMEEnvelope(IAssertionGroup er, Part p, InputStream certificate, String password) {
 		//er.detail("Processing S/MIME");
 		logger.info("Processing SMIME Envelope");
 		//
@@ -1062,7 +1063,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 		// Validate Inner decrypted message
 		ProcessEnvelope process = new ProcessEnvelope();
 		// Separate ErrorRecorder
-		ErrorRecorder separate = new GwtErrorRecorder();
+        IAssertionGroup separate = new GwtErrorRecorder();
 		try {
 			process.validateDirectMessageInnerDecryptedMessage(separate, mimeEntityBodyPart);
 			er.concat(separate);
@@ -1082,7 +1083,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 	 * 
 	 * */
 	//TODO should probably be replaced later by a call to an XDM validator in the toolkit
-	public void processZip(ErrorRecorder er, Part p) throws IOException, XDMException, Exception {
+	public void processZip(IAssertionGroup er, Part p) throws IOException, XDMException, Exception {
 
 		// Update summary
 		validationSummary.recordKey(getShiftIndent(shiftNumber) + "Part " + partNumber +": application/zip interpreted as a XDM Content;link=part" + anchorNumber, Status.PART, true);
@@ -1092,7 +1093,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 		ProcessEnvelope process = new ProcessEnvelope();
 
 		// Separate ErrorRecorder
-		ErrorRecorder separate = new GwtErrorRecorder();
+        IAssertionGroup separate = new GwtErrorRecorder();
 		process.validateMimeEntity(separate, p, validationSummary, shiftNumber+1);
 		er.concat(separate);
 		MessageValidatorFacade msgValidator = new DirectMimeMessageValidatorFacade();
@@ -1154,7 +1155,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 	/**
 	 * 
 	 * */
-	public void processOctetStream(ErrorRecorder er, Part p) throws Exception{
+	public void processOctetStream(IAssertionGroup er, Part p) throws Exception{
 		//er.detail("Processing Octet Stream");
 
 		// Update summary
@@ -1165,7 +1166,7 @@ public class DirectMimeMessageProcessor implements DirectMessageProcessorInterfa
 		ProcessEnvelope process = new ProcessEnvelope();
 
 		// Separate ErrorRecorder
-		ErrorRecorder separate = new GwtErrorRecorder();
+        IAssertionGroup separate = new GwtErrorRecorder();
 		process.validateMimeEntity(separate, p, validationSummary, shiftNumber+1);
 		er.concat(separate);
 

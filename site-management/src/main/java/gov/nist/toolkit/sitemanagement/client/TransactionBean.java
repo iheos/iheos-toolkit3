@@ -1,8 +1,8 @@
 package gov.nist.toolkit.sitemanagement.client;
 
-import gov.nist.toolkit.actortransaction.client.ATFactory;
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.ActorType;
+import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.TransactionType;
 
 import java.io.Serializable;
 

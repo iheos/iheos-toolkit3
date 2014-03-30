@@ -4,7 +4,7 @@ import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 import gov.nist.toolkit.registrymsgformats.registry.Response;
 import gov.nist.toolkit.simulators.sim.reg.sq.SQFactory;
-import gov.nist.toolkit.valregmsg.registry.AdhocQueryResponse;
+import gov.nist.toolkit.registrymsgformats.registry.AdhocQueryResponse;
 import gov.nist.toolkit.valregmsg.registry.storedquery.generic.StoredQuery;
 import gov.nist.toolkit.valregmsg.registry.storedquery.generic.StoredQueryFactory;
 import gov.nist.toolkit.valregmsg.registry.storedquery.support.StoredQuerySupport;

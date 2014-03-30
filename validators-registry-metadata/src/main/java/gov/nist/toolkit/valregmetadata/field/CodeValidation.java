@@ -1,29 +1,28 @@
 package gov.nist.toolkit.valregmetadata.field;
 
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.registrymetadata.Metadata;
-import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorListGenerator;
 
 
 //this gets invoked from both Validator.java and directly from Repository.  Should optimize the implementation so that codes.xml
 //gets cached in memory.
 public class CodeValidation extends CodeValidationBase {
 //	RegistryErrorListGenerator rel;       all errors to go through the ErrorRecorder interface
-	ErrorRecorder er;
+	IAssertionGroup er;
 	boolean is_submit;
 	boolean xds_b;
 
-	public CodeValidation(Metadata m, boolean is_submit, boolean xds_b, RegistryErrorListGenerator rel) throws XdsInternalException {
-		super(1);
-
-		this.m = m;
-//		this.rel = rel;
-		this.is_submit = is_submit;
-		this.xds_b = xds_b;
-		
-		er = rel;    // all errors to go through the ErrorRecorder interface
-	}
+//	public CodeValidation(Metadata m, boolean is_submit, boolean xds_b, RegistryErrorListGenerator rel) throws XdsInternalException {
+//		super(1);
+//
+//		this.m = m;
+////		this.rel = rel;
+//		this.is_submit = is_submit;
+//		this.xds_b = xds_b;
+//
+//		er = rel;    // all errors to go through the ErrorRecorder interface
+//	}
 	
 	public CodeValidation(Metadata m) {
 		super();

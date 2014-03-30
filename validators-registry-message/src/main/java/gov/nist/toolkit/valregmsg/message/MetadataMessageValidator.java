@@ -1,8 +1,10 @@
 package gov.nist.toolkit.valregmsg.message;
 
-import gov.nist.toolkit.errorrecording.ErrorRecorder;
-import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
-import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymetadata.MetadataParser;
 import gov.nist.toolkit.valregmetadata.field.MetadataValidator;
@@ -10,7 +12,6 @@ import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
 import gov.nist.toolkit.valsupport.registry.RegistryValidationInterface;
-
 import org.apache.axiom.om.OMElement;
 
 public class MetadataMessageValidator extends MessageValidator {
@@ -35,11 +36,11 @@ public class MetadataMessageValidator extends MessageValidator {
 		this.rvi = rvi;
 	}
 	
-	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
 		this.er = er;
 		
 		if (xml == null) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, "MetadataMessageValidator: top element null", this, "");
+			er.err(XdsErrorCode.Code.XDSRegistryError, new ErrorContext("MetadataMessageValidator: top element null",  ""), this);
 			return;
 		}
 		
@@ -68,7 +69,7 @@ public class MetadataMessageValidator extends MessageValidator {
 
 	}
 	
-	static public void contentSummary(ErrorRecorder er, Metadata m) {
+	static public void contentSummary(IAssertionGroup er, Metadata m) {
 		er.detail("**Metadata Validation**");
 		er.sectionHeading("Content Summary");
 		er.detail(m.getSubmissionSetIds().size() + " SubmissionSets");
