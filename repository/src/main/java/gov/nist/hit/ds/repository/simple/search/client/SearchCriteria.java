@@ -77,18 +77,29 @@ public class SearchCriteria implements IsSerializable, Serializable {
 					if (!properties.contains(propName)) {
 						properties.add(propName);
 					}
-					criteria += st.toString() + ((cx<stLen-1)? getCriteria().toString():"");
+                    String stExpression = st.toString();
+                    if ("".equals(stExpression)) {
+                        stExpression = "1=1 ";
+                    }
+                    criteria += stExpression + ((cx<stLen-1)? getCriteria().toString():"");
+
 				}
 			
 				
 			} 
 			if (!searchCriteria.isEmpty()) {
 				if (!searchTerms.isEmpty()) {
-					criteria += searchCriteria.get(0).getCriteria().toString();
+                    String cExp0 = searchCriteria.get(0).getCriteria().toString();
+                    if ("".equals(cExp0))
+                        cExp0 = "2=2";
+					criteria += cExp0;
 				}
 				int scLen = searchCriteria.size();
 				for (int cx=0; cx<scLen;cx++) {
-					criteria += "(" + searchCriteria.get(cx).toString() + ((cx<scLen-1)?") "+ getCriteria().toString() +"  ":")")  ;
+                    String scExp1 = searchCriteria.get(cx).toString();
+                    String cExp = getCriteria().toString();
+
+					criteria += "(" + ((!"".equals(scExp1))?scExp1:"3=3") + ((cx<scLen-1)?") "+ cExp +"  ":")")  ;
 				}			
 			}
 			

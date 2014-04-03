@@ -55,7 +55,12 @@ RepositoryService {
 		return PresentationData.search(reposData, sc);
 	}
 
-	@Override
+    @Override
+    public Boolean searchHit(String[][] repos, SearchCriteria sc, Boolean newIndexOnly) throws RepositoryConfigException {
+        return PresentationData.searchHit(repos, sc, newIndexOnly);
+    }
+
+    @Override
 	public List<AssetNode> getAssetTree(String[][] reposData)
 			throws RepositoryConfigException {
 		return PresentationData.getTree(reposData);

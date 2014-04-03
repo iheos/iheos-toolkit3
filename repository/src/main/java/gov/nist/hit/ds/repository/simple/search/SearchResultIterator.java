@@ -14,6 +14,7 @@ import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.simple.SimpleAsset;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
@@ -34,6 +35,8 @@ public class SearchResultIterator implements AssetIterator  {
 	List<AssetNode> crs = null;
 	int totalRecords = -1;
 	int fetchedRecords = 0;
+
+    private boolean loadProperties = true;
 	
 
 	/**
@@ -48,8 +51,14 @@ public class SearchResultIterator implements AssetIterator  {
 	 */
 	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
 
-		init(repositories,searchCriteria,"");
+		init(repositories,searchCriteria,"", false);
 	}
+
+    public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, boolean newIndexOnly, boolean loadProperties) throws RepositoryException {
+
+        setLoadProperties(loadProperties);
+        init(repositories,searchCriteria,"", newIndexOnly);
+    }
 	/**
 	 * 
 	 * @param repositories
@@ -59,19 +68,19 @@ public class SearchResultIterator implements AssetIterator  {
 	 */
 	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, String orderBy) throws RepositoryException {
 
-		init(repositories,searchCriteria,orderBy);
+		init(repositories,searchCriteria,orderBy, false);
 	}
 	
 	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, PropertyKey key) throws RepositoryException {
 
-		init(repositories,searchCriteria,key.toString());
+		init(repositories,searchCriteria,key.toString(), false);
 	}
 		
 	private void init(Repository[] repositories, SearchCriteria searchCriteria,
-			String orderBy) throws RepositoryException {
+			String orderBy, boolean newIndexOnly) throws RepositoryException {
 		DbIndexContainer dbc = new DbIndexContainer();
 		
-		crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy);
+		crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy, newIndexOnly);
 		if (crs==null)
 			totalRecords = 0;
 		else
@@ -113,26 +122,46 @@ public class SearchResultIterator implements AssetIterator  {
 				}
 				
 				Repository repos = new RepositoryFactory(reposSrc).getRepository(repId);
+
+                Asset a = null;
+
+                if (isLoadProperties()) {
+                    logger.info("loading by prop pop method");
+                    String propFileStr = an.getLocation();
+                    if (propFileStr!=null && !"".equals(propFileStr)) {
+                        String fullPath = repos.getRoot() + File.separator + propFileStr;
+                        logger.fine("Retrieving by path: " + fullPath);
+                        File propFile = new File(fullPath);
+                        a = repos.getAssetByPath(propFile);
+                        a.setPath(propFile);
+
+                        if (a==null) {
+                            logger.warning("Asset prop load by path failed" + propFileStr);
+    //					assetId = new SimpleId(crs.getString(2));
+    //					if (assetId!=null) {
+    //						logger.fine("Retrieving by path: " + assetId.getIdString());
+    //						a = repos.getAsset(assetId);
+    //					}
+                        }
+
+                    }
+
+                } else {
+                    logger.info("partial prop direct pop");
+                    a = new SimpleAsset(repos.getSource());
+
+                    a.setProperty(PropertyKey.REPOSITORY_ID,an.getRepId());
+                    a.setProperty(PropertyKey.ASSET_ID,an.getAssetId());
+                    a.setProperty(PropertyKey.DISPLAY_NAME,an.getDisplayName());
+                    a.setProperty(PropertyKey.DESCRIPTION,an.getDescription());
+                    a.setProperty(PropertyKey.PARENT_ID,an.getParentId());
+                    a.setProperty(PropertyKey.MIME_TYPE,an.getMimeType());
+                    a.setProperty(PropertyKey.CREATED_DATE,an.getCreatedDate());
+                    a.setPath(new File(an.getLocation())); // Relative
+
+                }
 				
-				String propFileStr = an.getLocation();
-				Asset a = null;
-				if (propFileStr!=null && !"".equals(propFileStr)) {
-					String fullPath = repos.getRoot() + File.separator + propFileStr;
-					logger.fine("Retrieving by path: " + fullPath);
-					File propFile = new File(fullPath);
-					a = repos.getAssetByPath(propFile);
-					a.setPath(propFile);
-				} 
-				
-				if (a==null) {
-					logger.warning("Asset prop load by path failed" + propFileStr);
-//					assetId = new SimpleId(crs.getString(2));
-//					if (assetId!=null) {
-//						logger.fine("Retrieving by path: " + assetId.getIdString());
-//						a = repos.getAsset(assetId);						
-//					}
-				} 
-				
+
 				return a;
 
 			}			
@@ -146,6 +175,13 @@ public class SearchResultIterator implements AssetIterator  {
 		return null;
 	
 	}
-	
+
+    public boolean isLoadProperties() {
+        return loadProperties;
+    }
+
+    public void setLoadProperties(boolean loadProperties) {
+        this.loadProperties = loadProperties;
+    }
 
 }
