@@ -104,7 +104,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @return An int value of the number of assets updated or added to the database
 	 * @throws RepositoryException
 	 */
-	public int indexRep(Repository repos) throws RepositoryException {
+	public int indexRep(Repository repos, boolean indexNewAssetsOnly) throws RepositoryException {
 		SimpleAssetIterator iter = null;
 		
 		if (repos==null || repos.getId()==null) {
@@ -140,7 +140,15 @@ public class DbIndexContainer implements IndexContainer, Index {
 		
 		int totalAssetsIndexed = -1;
 //		if (iter.getSize()<=maxIndexFast) {
-			totalAssetsIndexed = indexRepository(repos, iter);
+
+
+            if (indexNewAssetsOnly) {
+                totalAssetsIndexed = appendIndex(repos, iter);
+            } else {
+                totalAssetsIndexed = indexRepository(repos, iter);
+            }
+
+
 //		} else {
 //			totalAssetsIndexed = indexRepLong(repos,iter);
 //		}
@@ -149,8 +157,65 @@ public class DbIndexContainer implements IndexContainer, Index {
 		return totalAssetsIndexed;
 	}
 
+
+    /**
+     * Index a subset of assets
+     * @param repos
+     * @param iter
+     * @return
+     * @throws RepositoryException
+     */
+    private int appendIndex(Repository repos, SimpleAssetIterator iter) throws RepositoryException {
+        int totalAssetsIndexed = 0;
+        String reposId = repos.getId().getIdString();
+        Map<String, String> unIndexed = new HashMap<String,String>();
+        Map<String, Asset> unIndexedAsset = new HashMap<String,Asset>();
+
+        if (iter!=null && iter.hasNextAsset()) {
+
+            Map<String, String> reposDbIndex = getIndexedHash(repos);
+            Map<String, String> reposFsIndex = new HashMap<String,String>();
+            Map<String, Asset> assetMap = new HashMap<String,Asset>();
+
+            while (iter.hasNextAsset()) {
+                Asset a = iter.nextAsset();
+
+                String key = a.getPropFileRelativePart();
+
+                if (!reposDbIndex.containsKey(key)) {
+                    unIndexed.put(key,getAssetPropertyHash(a));
+                    unIndexedAsset.put(key, a);
+                    totalAssetsIndexed++;
+                }
+            }
+
+            if (!unIndexed.isEmpty()) {
+                List<String> aList = new ArrayList<String>();
+                aList.addAll(unIndexed.keySet());
+
+                ExecutorService svc = Executors.newCachedThreadPool();
+                final ConcurrentHashMap<String, String> columnMap = new ConcurrentHashMap<String, String>();
+
+                svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset, columnMap)));
+
+                svc.shutdown();
+                boolean svcStatus = false;
+                try {
+                    svcStatus = svc.awaitTermination(15,TimeUnit.MINUTES);
+                } catch (InterruptedException e) {
+                    logger.warning("svc termination failed!");
+                }
+
+                logger.info("indexNew svc exit status: " + svcStatus);
+            }
+
+        }
+        return totalAssetsIndexed;
+    }
+
+
 	/**
-	 * The indexing method    
+	 * Full indexing method
 	 * @param repos The repository object
 	 * @param iter A SimpleAssetIterator to the repository on the file system
 	 * @return An int value of the number of assets updated or added to the database 
@@ -322,9 +387,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 	/**
 	 * Count the number of records return by the provided SQL String.
 	 * Provide a SQL String with ONE count column labeled as "ct"
-	 * Returns an integer with the actual count
+	 *
 	 * @param sqlStr
-	 * @return
+	 * @return Returns an integer with the actual count
 	 * @throws RepositoryException
 	 */
 	private int getQuickCount(String sqlStr) throws RepositoryException {	
@@ -636,7 +701,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @param columnMap
 	 * @throws RepositoryException
 	 */
-	public void expandContainer(String[] column, ConcurrentHashMap<String,String> columnMap) throws RepositoryException {
+	public synchronized void expandContainer(String[] column, ConcurrentHashMap<String,String> columnMap) throws RepositoryException {
 		DbContext dbc = new DbContext();
 		try {
 			dbc.setConnection(DbConnection.getInstance().getConnection());
@@ -701,13 +766,13 @@ public class DbIndexContainer implements IndexContainer, Index {
 	}
 	
 
-	/**
-	 * Returns whether a given property for the assetType has a container column associated in the index database.
-	 * @param assetType
-	 * @param property
-	 * @return
-	 * @throws RepositoryException
-	 */
+    /**
+     *
+     * @param dbCol
+     * @return Returns whether a given property for the assetType has a container column associated in the index database.
+     * @throws RepositoryException
+     */
+
 	public boolean isIndexed(String dbCol) throws RepositoryException {
 		int records=0;
 		DbContext dbc = new DbContext();		
@@ -815,8 +880,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 	
 	
 	/**
-	 * Returns full unique column headers including prefix and suffix, ex. "assetTyp_property" 
-	 * @return
+	 *
+	 * @return Returns full unique column headers including prefix and suffix, ex. "assetTyp_property"
 	*/ 
 	static public ArrayList<String> getIndexableDbProperties(RepositorySource rs) {
 		return getIndexableProperties(rs,false,false);		
@@ -824,8 +889,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 	
 	
 	/**
-	 * Returns quoted identifiers if uniquePropertyColumn is not specified, and suffixes only 
-	 * @return
+	 *
+	 * @return Returns quoted identifiers if uniquePropertyColumn is not specified, and suffixes only
 	 */
 	static public ArrayList<String> getIndexableProperties(RepositorySource rs) {
 		return getIndexableProperties(rs,false,true);		
@@ -959,12 +1024,12 @@ public class DbIndexContainer implements IndexContainer, Index {
 
 	
 	/**
-	 * 
+	 *
 	 * @param repos
 	 * @param iter
 	 * @param assetMap
 	 * @param reposFsIndex
-	 * @return
+	 * @return Returns the hash of the entire repository and populates the assetMap and reposFsIndex based on the given iterator
 	 * @throws RepositoryException
 	 */
 	private String getFsHash(Repository repos, SimpleAssetIterator iter, Map<String, Asset> assetMap, Map<String, String> reposFsIndex) throws RepositoryException {
@@ -974,14 +1039,12 @@ public class DbIndexContainer implements IndexContainer, Index {
 				
 				while (iter.hasNextAsset()) {
 					Asset a = iter.nextAsset();
-					Properties assetProps = a.getProperties();
 					assetMap.put(a.getPropFileRelativePart(), a);
-					 
 					
 					try {
-						String hash = getHash(assetProps.toString().getBytes());
+						String hash = getAssetPropertyHash(a);
 						reposFsIndex.put(a.getPropFileRelativePart()
-								,hash);
+                                , hash);
 						reposHash += hash;
 					} catch (Exception ex) {
 						logger.warning("Quick hash calc failed: " + ex.toString());					
@@ -996,6 +1059,16 @@ public class DbIndexContainer implements IndexContainer, Index {
 			
 			return null;
 	}
+
+    /**
+     *
+     * @param a
+     * @return Returns the property file hash
+     */
+    private String getAssetPropertyHash(Asset a) throws RepositoryException {
+        Properties assetProps = a.getProperties();
+        return getHash(assetProps.toString().getBytes());
+    }
 
 	/**
 	 * 
@@ -1081,12 +1154,13 @@ public class DbIndexContainer implements IndexContainer, Index {
 	}
 
 
-	/**
-	 * @param reposId
-	 * @param reposFsIndex
-	 * @param reposDbIndex
-	 * @throws SQLException
-	 */
+    /**
+     *
+     * @param repos
+     * @param reposFsIndex
+     * @param reposDbIndex
+     * @throws SQLException
+     */
 	private void cleanupStaleItems(Repository repos,
 			Map<String, String> reposFsIndex, Map<String, String> reposDbIndex)
 			throws SQLException {
@@ -1121,8 +1195,6 @@ public class DbIndexContainer implements IndexContainer, Index {
 
 
 	/**
-	 * @param sbParam
-	 * @param paramValues
 		private static enum RefreshParamIndex {
 		UNDEFINED,
 		REPOSID,
@@ -1439,7 +1511,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @throws RepositoryException 
 	 */
 	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
-		return getAssetsBySearch(repositories, searchCriteria, "");
+		return getAssetsBySearch(repositories, searchCriteria, "", false);
 	}
 	
 	/**
@@ -1481,19 +1553,33 @@ public class DbIndexContainer implements IndexContainer, Index {
 		return records;
 	}
 	
-	/**
-	 * Note: An Order by property is only limited to what is available as per the session container not per columns available in the index container.
-	 * @param repositories
-	 * @param searchCriteria
-	 * @param orderBy
-	 * @return
-	 * @throws RepositoryException 
-	 */
-	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) throws RepositoryException {
+
+    /**
+     * Note: An Order by property is only limited to what is available as per the session container not per columns available in the index container.
+     * @param repositories
+     * @param searchCriteria
+     * @param orderByStr
+     * @return
+     * @throws RepositoryException
+     */
+    public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) throws RepositoryException {
+        return getAssetsBySearch(repositories,searchCriteria,orderByStr,false);
+    }
+
+    /**
+     *
+     * @param repositories
+     * @param searchCriteria
+     * @param orderByStr
+     * @param indexNewAssetsOnly
+     * @return
+     * @throws RepositoryException
+     */
+	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr, boolean indexNewAssetsOnly) throws RepositoryException {
 		Repository[] fRep = new Repository[repositories.length];
 		int cx=0;
 		for (Repository repos : repositories) {
-			indexRep(repos);
+            indexRep(repos, indexNewAssetsOnly);
 			if (getHitCount(repos, searchCriteria, orderByStr) > 0) {
 				fRep[cx++] = repos;
 				logger.fine("filtered repos:" + repos.getDisplayName());

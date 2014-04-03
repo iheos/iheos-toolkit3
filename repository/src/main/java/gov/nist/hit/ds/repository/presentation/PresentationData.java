@@ -370,6 +370,29 @@ public class PresentationData implements IsSerializable, Serializable  {
 		
 		return result;
 	}
+
+
+    public static Boolean searchHit(String[][] reposData, SearchCriteria sc, boolean newIndexOnly) {
+        ArrayList<AssetNode> result = new ArrayList<AssetNode>();
+
+        try {
+
+            Repository[] reposList = getReposList(reposData);
+
+            AssetIterator iter = null;
+
+            iter = new SearchResultIterator(reposList, sc, newIndexOnly, false);
+
+            int recordCt = 0;
+            if (iter!=null && iter.hasNextAsset()) {
+                return Boolean.TRUE;
+            }
+        } catch (Exception ex) {
+            logger.warning(ex.toString());
+        }
+
+        return Boolean.FALSE;
+    }
 	
 	public static List<AssetNode> search(String[][] reposData, SearchCriteria sc) {
 		
@@ -381,7 +404,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 
 		AssetIterator iter = null;
 		
-			iter = new SearchResultIterator(reposList, sc );
+			iter = new SearchResultIterator(reposList, sc);
 		
 			int recordCt = 0;
 			if (iter!=null && recordCt++ <= MAX_RESULTS) { // hard limit for now
@@ -598,13 +621,17 @@ public class PresentationData implements IsSerializable, Serializable  {
         ArrayList<AssetNode> result = new ArrayList<AssetNode>();
 
         MessageConsumer consumer = null;
+        javax.jms.QueueSession session = null;
+        javax.jms.QueueConnection connection = null;
         String txDetail = null;
         String repId = null;
         String acs = null;
+        String parentLoc = null; // This is the artifact (header/body) parent location
         String headerLoc = null;
         String bodyLoc = null;
         String ioHeaderId = null;
         String msgType = null;
+        String proxyDetail = null;
 
         try {
 
@@ -617,9 +644,8 @@ public class PresentationData implements IsSerializable, Serializable  {
             javax.jms.QueueConnectionFactory factory = (QueueConnectionFactory) context.lookup(FFMQConstants.JNDI_QUEUE_CONNECTION_FACTORY_NAME);
 
 
-            javax.jms.QueueConnection connection = factory.createQueueConnection();
+            connection = factory.createQueueConnection();
 
-            javax.jms.QueueSession session = null;
 
             session = connection.createQueueSession(false,
                     javax.jms.Session.AUTO_ACKNOWLEDGE);
@@ -635,48 +661,75 @@ public class PresentationData implements IsSerializable, Serializable  {
 
             if (message instanceof MapMessage) {
                 txDetail = (String)((MapMessage)message).getObject("txDetail");
+
                 repId = (String)((MapMessage)message).getObject("repId");
                 acs = (String)((MapMessage)message).getObject("acs");
+                parentLoc = (String)((MapMessage)message).getObject("parentLoc");
                 headerLoc = (String)((MapMessage)message).getObject("headerLoc");
                 bodyLoc = (String)((MapMessage)message).getObject("bodyLoc");
                 ioHeaderId = (String)((MapMessage)message).getObject("ioHeaderId");
                 msgType = (String)((MapMessage)message).getObject("msgType");
+                proxyDetail = (String)((MapMessage)message).getObject("proxyDetail");
+
             } else {
-                // Print error message if Message was not a TextMessage.
+                // Print error message if Message was not recognized
                 logger.fine("JMS Message type not known or Possible timeout ");
             }
 
-            consumer.close();
-            session.close();
-            connection.close();
 
         } catch (Exception ex) {
             logger.warning(ex.toString());
             ex.printStackTrace();
-        }
+        } finally {
+            if (consumer!=null) {
+                try {
+                    consumer.close();
+                } catch (Exception ex) {}
+            }
+            if (session!=null) {
+                try {
+                    session.close();
+                } catch (Exception ex) {}
+            }
+            if (connection!=null) {
+                try {
+                    connection.close();
+                } catch (Exception ex) {}
+            }
 
+        }
 
         if (txDetail!=null) {
             logger.fine(txDetail);
 
-            AssetNode headerMsg = new AssetNode();
-            headerMsg.setParentId(ioHeaderId); // ioHeaderId is two levels up that links both the request and response
-            headerMsg.setType("raw_"+msgType);
-            headerMsg.setRepId(repId);
-            headerMsg.setReposSrc(acs);
-            headerMsg.setLocation(headerLoc);
-            headerMsg.setCsv(processCsvContent(txDetail));
-            result.add(headerMsg);
+            if (parentLoc!=null) {
+                AssetNode parentHdr = new AssetNode();
+                parentHdr.setLocation(parentLoc);
+                result.add(parentHdr);
 
-            if (bodyLoc!=null) {
-                AssetNode bodyMsg = new AssetNode();
-                bodyMsg.setParentId(ioHeaderId);
-                bodyMsg.setType("raw_"+msgType);
-                bodyMsg.setRepId(repId);
-                bodyMsg.setReposSrc(acs);
-                bodyMsg.setLocation(bodyLoc);
-                result.add(bodyMsg);
+                AssetNode headerMsg = new AssetNode();
+                headerMsg.setParentId(ioHeaderId); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
+                headerMsg.setType("raw_"+msgType);
+                headerMsg.setRepId(repId);
+                headerMsg.setReposSrc(acs);
+                headerMsg.setLocation(headerLoc);
+                headerMsg.setCsv(processCsvContent(txDetail));
+                headerMsg.setProps(proxyDetail);
+                result.add(headerMsg);
+
+                if (bodyLoc!=null) {
+                    AssetNode bodyMsg = new AssetNode();
+                    bodyMsg.setParentId(ioHeaderId);
+                    bodyMsg.setType("raw_"+msgType);
+                    bodyMsg.setRepId(repId);
+                    bodyMsg.setReposSrc(acs);
+                    bodyMsg.setLocation(bodyLoc);
+                    result.add(bodyMsg);
+                }
+
             }
+
+
 
             return result;
         } else {

@@ -118,6 +118,11 @@ public class LogBrowserWidget extends Composite {
             public String toString() {
                 return "Transaction Monitor";
             }
+        }, TRANSACTION_FILTER() {
+            @Override
+            public String toString() {
+                return "Transaction Filter";
+            }
         }
 	};
 
@@ -176,13 +181,23 @@ public class LogBrowserWidget extends Composite {
 			return setupSearchFeature();				
 		} else if (Feature.TRANSACTION_MONITOR==f) {
             return setupTxMonitorFeature();
+        } else if (Feature.TRANSACTION_FILTER==f) {
+            return setupTxFilter();
         }
 		return null;
 	}
 
+    protected Widget setupTxFilter() {
+        TransactionMonitorFilterWidget txFilter = new TransactionMonitorFilterWidget(eventBus);
+        txFilter.getElement().getStyle()
+                .setProperty("border", "none");
+
+        return  txFilter;
+    }
+
     protected Widget setupTxMonitorFeature() {
 
-        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus);
+        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus, Boolean.TRUE, Boolean.TRUE);
         txMonitor.getElement().getStyle()
                 .setProperty("border", "none");
 
@@ -191,15 +206,9 @@ public class LogBrowserWidget extends Composite {
             @Override
             public void onNewTxMessage(NewTxMessageEvent event) {
 
-               //fix: Window.alert(""+txMonTab + " "+featureTlp.getTabWidget(1).getTitle() );
-
-
                 if (txMonTab>-1) {
 
-                    //Window.alert(featureTlp.getTabWidget(txMonTab).getElement().getInnerText());
                     featureTlp.getTabWidget(txMonTab).getElement().setInnerText(Feature.TRANSACTION_MONITOR.toString() + " ("+ event.getValue() + ")");
-
-                    // featureTlp.getWidget(txMonTab).setTitle(Feature.TRANSACTION_MONITOR.toString() + " ("+event.getValue()+")");
 
                 }
 
@@ -232,7 +241,12 @@ public class LogBrowserWidget extends Composite {
 			
 		    ScrollPanel searchPanel = new ScrollPanel(); 				// Search parameters 
 		    
-		    SearchWidget searchWidget = new SearchWidget(eventBus);
+		    SearchWidget searchWidget = new SearchWidget(eventBus, new SearchWidget.Option[]{
+                    SearchWidget.Option.QUICK_SEARCH,
+                    SearchWidget.Option.SEARCH_CRITERIA_REPOSITORIES,
+                    SearchWidget.Option.CRITERIA_BUILDER_MODE
+            });
+
 		    searchWidget.getElement().getStyle()
 	        .setProperty("border", "none");
 		    searchWidget.getElement().getStyle()

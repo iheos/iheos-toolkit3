@@ -11,6 +11,7 @@ public interface RepositoryServiceAsync {
 	void getIndexablePropertyNames(AsyncCallback<List<String>> callback);
 	void setRepositoryConfig(AsyncCallback<Boolean> callback) throws Exception;
 	void search(String[][] repos, SearchCriteria sc, AsyncCallback<List<AssetNode>> callback);
+    void searchHit(String[][] repos, SearchCriteria sc, Boolean newIndexOnly, AsyncCallback<Boolean> callback);
 	void getAssetTree(String[][] repos, AsyncCallback<List<AssetNode>> callback);
 	void getAssetTxtContent(AssetNode an, AsyncCallback<AssetNode> callback);
 	void getImmediateChildren(AssetNode an, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
@@ -22,3 +23,4 @@ public interface RepositoryServiceAsync {
 	void getSavedQueries(String id, String acs, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
     void getTxUpdates(String queue, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
 }
+
