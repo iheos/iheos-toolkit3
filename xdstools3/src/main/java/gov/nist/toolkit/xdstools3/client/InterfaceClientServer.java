@@ -11,5 +11,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
  *
  */
 public interface InterfaceClientServer extends RemoteService {
+	//public boolean logMeIn(String username, String password);
+	
 
 }

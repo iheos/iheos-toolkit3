@@ -49,13 +49,12 @@
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 			<version>2.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
-			<scope>runtime</scope>
 			<version>2.5.1</version>
 		</dependency>
 		<dependency>

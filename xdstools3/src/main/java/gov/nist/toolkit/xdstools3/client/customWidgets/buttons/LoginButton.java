@@ -12,7 +12,6 @@ public class LoginButton extends IButton {
 	
 	public LoginButton(){
 		setTitle("Login");
-		setDisabled(true);
 		setWidth(80);
 	}
 	

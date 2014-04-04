@@ -9,5 +9,5 @@ package gov.nist.toolkit.xdstools3.client;
  *
  */
 public interface InterfaceClientServerAsync {
-
+	//public boolean logMeIn(String username, String password, AsyncCallback callback);
 }

@@ -1,8 +1,8 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets;
 
 import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.LoginDialogWidget;
-import gov.nist.toolkit.xdstools3.server.LoginManager;
 
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.ListBox;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.IconButton;
@@ -17,8 +17,10 @@ import com.smartgwt.client.widgets.toolbar.RibbonBar;
 import com.smartgwt.client.widgets.toolbar.RibbonGroup;
 
 public class ConfigToolbar extends RibbonBar {
+	private SimpleEventBus bus;
 
-	public ConfigToolbar() {
+	public ConfigToolbar(SimpleEventBus _bus) {
+		bus = _bus;
 
 		setMembersMargin(2); 
 		setBorder("0px");
@@ -80,7 +82,7 @@ public class ConfigToolbar extends RibbonBar {
 			}
 
 			private void showLoginWindow() {
-				LoginDialogWidget dialog = new LoginDialogWidget();
+				LoginDialogWidget dialog = new LoginDialogWidget(bus);
 				dialog.show();
 			}  
         });  

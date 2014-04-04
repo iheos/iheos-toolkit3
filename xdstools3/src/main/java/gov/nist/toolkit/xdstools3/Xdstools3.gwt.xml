@@ -2,6 +2,9 @@
 <module rename-to="xdstools3">
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
+	<!-- <inherits name="com.smartgwt.tools.SmartGwtTools"/> -->
+    <!-- <inherits name="com.smartgwtee.tools.Tools"/> -->
+   <!--  <inherits name="com.smartgwtee.SmartGwtEE"/> -->
 
 	<!-- Inherit the default GWT style sheet. You can change -->
 	<!-- the theme of your GWT application by uncommenting -->
@@ -10,7 +13,6 @@
 	<!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
 	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
 	<!-- <inherits name='com.google.gwt.user.theme.clean.Clean'/> -->
-
 	<inherits name="com.smartgwt.SmartGwtNoTheme"/>
 	<inherits name="com.smartclient.theme.silverwave.SilverWave" />
 	<!--<inherits name="com.smartclient.theme.enterprise.Enterprise"/> -->
@@ -21,6 +23,7 @@
 
 	<script src='showcase/sc/modules/ISC_DataBinding.js'></script>
 	<script src='showcase/sc/modules/ISC_Drawing.js'></script>
+	<!--<script src='isomorphic/DataSourceLoader?dataSource=server/data/datasources/toolkit_config.xml'></script>-->
 
 	<!-- Specify the app entry point class. -->
 	<entry-point class='gov.nist.toolkit.xdstools3.client.Xdstools3' />
