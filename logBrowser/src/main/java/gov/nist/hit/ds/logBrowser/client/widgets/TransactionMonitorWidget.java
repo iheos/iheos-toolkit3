@@ -284,6 +284,24 @@ public class TransactionMonitorWidget extends Composite {
         southPanel.setVisible(true);
     }
 
+    public void clear() {
+
+        requestViewerWidget.setIoHeaderId(null);
+        requestViewerWidget.setHeaderContent(new HTML(""));
+        requestViewerWidget.setMessageContent(new HTML(""));
+
+        responseViewerWidget.setIoHeaderId(null);
+        responseViewerWidget.setHeaderContent(new HTML(""));
+        responseViewerWidget.setMessageContent(new HTML(""));
+
+        getTxRowParentId().clear();
+        getTxRowAssetNode().clear();
+
+        List<TxDetailRow> rowList = dataProvider.getList();
+        rowList.clear();
+
+    }
+
     protected class TxDetailRow  {
 
         int key;

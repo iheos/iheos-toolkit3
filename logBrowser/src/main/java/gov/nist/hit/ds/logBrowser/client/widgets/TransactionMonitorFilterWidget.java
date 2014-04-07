@@ -92,7 +92,7 @@ public class TransactionMonitorFilterWidget extends Composite {
         //stackPanel.setHeight("100%");
         stackPanel.setWidth("100%");
 
-        stackPanel.add(txMonitor, createPanelHeader("Filtered Transactions",null,null), 2);
+        stackPanel.add(txMonitor, createPanelHeader("Filtered Transactions",createFilterHeaderOptions(),null), 2);
 
         return stackPanel;
 
@@ -111,7 +111,7 @@ public class TransactionMonitorFilterWidget extends Composite {
         stackPanel.setWidth("100%");
 
         // Add filter section
-        stackPanel.add(createFilterWidget(), createPanelHeader("Filter", null, null), 2);
+        stackPanel.add(createFilterWidget(), createPanelHeader("Filter", null, null), 2); // Not the filter monitor but the filter selection
 
         // filterSplitPanel.addWest(stackPanel, Math.round(.3 * Window.getClientWidth()));
         // stackPanel = new StackLayoutPanel(Style.Unit.EM);
@@ -125,7 +125,23 @@ public class TransactionMonitorFilterWidget extends Composite {
         return stackPanel;
     }
 
-    private List<Widget> createMonitorHeaderOptions() {
+    private List<Widget> createFilterHeaderOptions() {
+        List<Widget> options = new ArrayList<Widget>();
+
+        HTML optClear = new HTML("[Clear]");
+        optClear.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                getTxFilter().clear();
+            }
+        });
+        options.add(optClear);
+
+
+        return options;
+    }
+
+        private List<Widget> createMonitorHeaderOptions() {
         List<Widget> options = new ArrayList<Widget>();
 
         HTML optShowDetail = new HTML("[Show Detail]");
@@ -142,7 +158,7 @@ public class TransactionMonitorFilterWidget extends Composite {
         optClear.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                //
+                getTxMonitorLive().clear();
             }
         });
         options.add(optClear);
@@ -219,7 +235,7 @@ public class TransactionMonitorFilterWidget extends Composite {
             }
 
 
-        return new SimplePanel(hPanel);
+        return new SimplePanel(hPanel); // This wrapper will span out fully to 100% width
 
     }
 
