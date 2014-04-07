@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -30,7 +31,11 @@ import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.logging.Logger;
 
 public class TransactionMonitorFilterWidget extends Composite {
@@ -69,12 +74,31 @@ public class TransactionMonitorFilterWidget extends Composite {
     protected Widget setupMainPanel() {
         SplitLayoutPanel mainSplitPanel = new SplitLayoutPanel(3);
 
-        mainSplitPanel.addSouth(setupMonitor(Boolean.FALSE, Boolean.TRUE, Boolean.TRUE), Math.round(.5 * Window.getClientHeight()));
+        mainSplitPanel.addSouth(createFilteredMonitorPanel(), Math.round(.5 * Window.getClientHeight()));
 
         mainSplitPanel.add(setupFilterBasedResultsPanel()); // Filter selection and results stack panel
 
         return mainSplitPanel;
     }
+
+    private Widget createFilteredMonitorPanel() {
+        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus,false,true);
+        txMonitor.getElement().getStyle()
+                .setProperty("border", "none");
+
+        setTxFilter(txMonitor);
+
+        StackLayoutPanel stackPanel = new StackLayoutPanel(Style.Unit.EM);
+        //stackPanel.setHeight("100%");
+        stackPanel.setWidth("100%");
+
+        stackPanel.add(txMonitor, createPanelHeader("Filtered Transactions",null,null), 2);
+
+        return stackPanel;
+
+    }
+
+
 
 
     protected Widget setupFilterBasedResultsPanel() {
@@ -87,58 +111,49 @@ public class TransactionMonitorFilterWidget extends Composite {
         stackPanel.setWidth("100%");
 
         // Add filter section
-        Widget filterHeader = createHeaderWidget("Filter",null, null);
-        stackPanel.add(setupFilter(), filterHeader, 2);
+        stackPanel.add(createFilterWidget(), createPanelHeader("Filter", null, null), 2);
 
         // filterSplitPanel.addWest(stackPanel, Math.round(.3 * Window.getClientWidth()));
         // stackPanel = new StackLayoutPanel(Style.Unit.EM);
         // stackPanel.setWidth("100%");
 
-        HTML anchor = new HTML("[Show Message Detail] [Clear]" );
-        anchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                getTxMonitorLive().showTxDetail();
-            }
-        });
-        // Add monitor section
-        Widget resultsHeader = createHeaderWidget("Transaction Monitor",
-                anchor, null);
-        stackPanel.add(setupMonitor(Boolean.TRUE, Boolean.FALSE, Boolean.FALSE), resultsHeader, 2);
+        // Add live monitor section
+        stackPanel.add(createLiveTxMonitorWidget(), createPanelHeader("Transaction Monitor", createMonitorHeaderOptions(), null), 2);
 
         // filterSplitPanel.add(stackPanel);
 
         return stackPanel;
     }
 
-    private Widget setupMonitor(Boolean enableListener, Boolean stackPanelWrapper, Boolean showTxDetail) {
+    private List<Widget> createMonitorHeaderOptions() {
+        List<Widget> options = new ArrayList<Widget>();
 
-        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus,enableListener,showTxDetail);
-        txMonitor.getElement().getStyle()
-                .setProperty("border", "none");
+        HTML optShowDetail = new HTML("[Show Detail]");
+        optShowDetail.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                //
+            }
+        });
+
+        options.add(optShowDetail);
+
+        HTML optClear = new HTML("[Clear]");
+        optClear.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                //
+            }
+        });
+        options.add(optClear);
 
 
-        if (!stackPanelWrapper) {
-            setTxMonitorLive(txMonitor);
-            return txMonitor;
-        } else {
-            setTxFilter(txMonitor);
-        }
-
-        StackLayoutPanel stackPanel = new StackLayoutPanel(Style.Unit.EM);
-        //stackPanel.setHeight("100%");
-        stackPanel.setWidth("100%");
-
-        Widget liveHeader = createHeaderWidget("Filtered Transactions", new Anchor("[Clear]"  ,""), null);
-
-        stackPanel.add(txMonitor, liveHeader, 2);
-
-        return stackPanel;
-
+        return options;
     }
 
-    private Widget setupFilter() {
-        ScrollPanel searchPanel = new ScrollPanel(); 				// Search parameters
+
+    private Widget createFilterWidget() {
+        ScrollPanel filterPanel = new ScrollPanel(); 				// Search parameters
 
         searchWidget = new SearchWidget(eventBus, new SearchWidget.Option[]{
                 SearchWidget.Option.QUICK_SEARCH,
@@ -152,7 +167,7 @@ public class TransactionMonitorFilterWidget extends Composite {
         searchWidget.getElement().getStyle()
                 .setPaddingLeft(3, Style.Unit.PX);
 
-        searchPanel.add(searchWidget);
+        filterPanel.add(searchWidget);
 
         eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
             @Override
@@ -165,8 +180,49 @@ public class TransactionMonitorFilterWidget extends Composite {
             }
         });
 
-        return searchPanel;
+        return filterPanel;
+
     }
+
+
+
+    private Widget createLiveTxMonitorWidget() {
+        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus,true /*enableListener*/,false/*showDetail*/);
+        txMonitor.getElement().getStyle()
+                .setProperty("border", "none");
+
+            setTxMonitorLive(txMonitor);
+        return txMonitor;
+    }
+
+    private Widget createPanelHeader(String text, List<Widget> options, ImageResource icon) {
+
+        // Add the image and text to a horizontal panel
+        HorizontalPanel hPanel = new HorizontalPanel();
+        //hPanel.setWidth("100%");
+        hPanel.setSpacing(0);
+        hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
+        if (icon!=null) {
+            hPanel.add(new Image(icon));
+        }
+
+        HTML headerText = new HTML(text + "&nbsp;");
+
+        headerText.setStyleName("cw-StackPanelHeader");
+        hPanel.add(headerText);
+
+        if (options!=null)
+            for (Widget w: options) {
+                hPanel.add(w);
+                hPanel.add(new HTML("&nbsp;")); // Spacer
+            }
+
+
+        return new SimplePanel(hPanel);
+
+    }
+
 
     protected void activateFilter(final int idx, String location) {
 
@@ -229,37 +285,9 @@ public class TransactionMonitorFilterWidget extends Composite {
     private void setFilterError(String msg) {
         searchWidget.getResultPanel().clear();
         searchWidget.getResultPanel().add(new HTML("<font color='red'>" + msg + "</font>"));
-
     }
 
 
-
-            private Widget createHeaderWidget(String text, Widget additionalLink, ImageResource image) {
-        // Add the image and text to a horizontal panel
-        HorizontalPanel hPanel = new HorizontalPanel();
-        hPanel.setHeight("100%");
-        hPanel.setSpacing(0);
-        hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        // hPanel.add(new Image(image));
-        HTML headerText = new HTML(text + "&nbsp;");
-
-        headerText.setStyleName("cw-StackPanelHeader");
-        hPanel.add(headerText);
-
-        if (additionalLink!=null) {
-            hPanel.add(additionalLink);
-        }
-
-        SimplePanel sp =  new SimplePanel(hPanel);
-        sp.addHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                //
-            }
-        }, ClickEvent.getType() );
-
-        return sp;
-    }
 
     public TransactionMonitorWidget getTxMonitorLive() {
         return txMonitorLive;
