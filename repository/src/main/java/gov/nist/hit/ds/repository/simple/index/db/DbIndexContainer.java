@@ -42,7 +42,10 @@ import java.util.logging.Logger;
  */
 public class DbIndexContainer implements IndexContainer, Index {
 
-	/**
+    public static final int WAIT_MILLIS = 3000;
+    public static final int TWO_MINS_MILLIS = 120000;
+
+    /**
 	 * 
 	 * An enumeration of status codes for a given asset in the index container   
 	 *
@@ -122,8 +125,24 @@ public class DbIndexContainer implements IndexContainer, Index {
 		// Make this repos is not being actively queued for indexing by another instance
 		
 		if (isReposQueuedForIndexing(repos)) {
+
 			logger.warning("Repos <" + reposId + "> is already queued for indexing.");
-			return -1;
+                int cx = 0;
+
+                while (isReposQueuedForIndexing(repos) && (cx*WAIT_MILLIS < TWO_MINS_MILLIS)) { // Two minutes
+                    try {
+                        logger.fine("Waiting for <" + reposId + ">  indexing to finish...");
+                        Thread.sleep(WAIT_MILLIS);
+                        cx++;
+                    } catch (InterruptedException ie) {
+                        logger.warning(ie.toString());
+                    }
+                }
+            if (cx*WAIT_MILLIS > TWO_MINS_MILLIS) {
+                logger.warning("<" + reposId + ">  Indexing taking too long! Results may be stale.");
+            }
+            logger.info("<" + reposId + ">  loop exit");
+            return -1; // Use recently indexed
 		} else {
 			queueReposForIndex(repos,true);
 		}
