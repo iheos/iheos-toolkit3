@@ -172,11 +172,13 @@ public class TransactionMonitorFilterWidget extends Composite {
         ScrollPanel filterPanel = new ScrollPanel(); 				// Search parameters
 
         searchWidget = new SearchWidget(eventBus, new SearchWidget.Option[]{
-                SearchWidget.Option.QUICK_SEARCH,
-                SearchWidget.Option.TWO_SEARCH_TERMS_PER_ROW
+                SearchWidget.Option.QUICK_SEARCH
+                ,SearchWidget.Option.TWO_SEARCH_TERMS_PER_ROW
+                ,SearchWidget.Option.APPLY_CRITERIA_WITHOUT_RUNNING
                 // SearchWidget.Option.SEARCH_CRITERIA_REPOSITORIES,
                 // SearchWidget.Option.CRITERIA_BUILDER_MODE
         });
+
 
         searchWidget.getElement().getStyle()
                 .setProperty("border", "none");
