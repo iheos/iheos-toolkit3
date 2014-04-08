@@ -72,7 +72,10 @@ public class TransactionMonitorWidget extends Composite {
     20140326160812,"RESPONSE", "","500","localhost","localhost:8080","localhost:8001^ProxyRuleMappingName: localcap","text/html","","65","0"
 
      */
-    final String[] columns = {"Timestamp","Status","Artifact","Message From","Proxy","Forwarded To","Path","ContentType","Method","Length","Response Time"};
+    private final String COLUMN_HEADER_PROXY = "Proxy";
+    private final String COLUMN_HEADER_RESPONSE_TIME_MS = "Response Time (ms)";
+
+    final String[] columns = {"Timestamp","Status","Artifact","Message From",COLUMN_HEADER_PROXY,"Forwarded To","Path","ContentType","Method","Length",COLUMN_HEADER_RESPONSE_TIME_MS};
     MessageViewerWidget requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
     MessageViewerWidget responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
     Map<Integer, String> txRowParentId = new HashMap<Integer, String>();
@@ -187,14 +190,16 @@ public class TransactionMonitorWidget extends Composite {
         Window.addResizeHandler(new ResizeHandler() {
             @Override
             public void onResize(ResizeEvent event) {
-                int containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
-                int containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
 
                 try {
+                    int containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
+                    int containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
 
-                    txMonitorMainSplitPanel.setWidgetSize(southPanel, .4 * containerHeight);
+
+
                     if (getShowTxDetail()) {
-                        southPanel.setWidgetSize(requestViewerWidget, .5 * containerWidth);
+                        txMonitorMainSplitPanel.setWidgetSize(southPanel, Math.round(.4 * containerHeight));
+                        southPanel.setWidgetSize(requestViewerWidget, Math.round(.5 * containerWidth));
                     }
 
                 } catch (Exception ex) {
@@ -458,15 +463,26 @@ public class TransactionMonitorWidget extends Composite {
             try {
                 SafeHtmlBuilder shb = new SafeHtmlBuilder();
 
-                if (this.index==4) {
+                if (COLUMN_HEADER_PROXY.equals(columns[this.index])) {
 
-                    AssetNode an = txRowAssetNode.get(o.getKey()).get(0);
+                    AssetNode an = txRowAssetNode.get(o.getKey()).get(1); // headerMsg
 
                     shb.appendHtmlConstant("<span title='" + an.getProps() + "'>");
                     shb.appendEscaped(o.getCsvData().get(this.index));
                     shb.appendHtmlConstant("</span>");
 
-                } else {
+                } else if (COLUMN_HEADER_RESPONSE_TIME_MS.equals(columns[this.index])) {
+                    if ("0".equals(o.getCsvData().get(this.index))) { // Reformat 0 ms to less than 1 ms
+                        shb.appendEscaped("<1");
+                    } else  {
+                        shb.appendEscaped(""+o.getCsvData().get(this.index));
+                    }
+
+                    if (!"".equals(o.getCsvData().get(this.index))) {
+                        shb.appendHtmlConstant("<span style=\"font-size:9px\">&nbsp;ms</span>");
+                    }
+                }
+                else {
                     shb.appendEscaped(o.getCsvData().get(this.index));
                 }
 
