@@ -9,7 +9,6 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -21,7 +20,6 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEvent;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEventHandler;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -32,10 +30,8 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class TransactionMonitorFilterWidget extends Composite {
@@ -141,7 +137,7 @@ public class TransactionMonitorFilterWidget extends Composite {
         return options;
     }
 
-        private List<Widget> createMonitorHeaderOptions() {
+    private List<Widget> createMonitorHeaderOptions() {
         List<Widget> options = new ArrayList<Widget>();
 
         HTML optShowDetail = new HTML("[Show Detail]");
@@ -285,7 +281,7 @@ public class TransactionMonitorFilterWidget extends Composite {
                         //resultPanel.add(new HTML("hit "+idx));
                         //getTxFilter().setTxRowParentId(getTxMonitorLive().getTxRowParentId());
                         //getTxFilter().setTxRowAssetNode(getTxMonitorLive().getTxRowAssetNode());
-                        List<AssetNode> anList = getTxMonitorLive().getTxRowAssetNode().get(new Integer(idx));
+                        Map<String,AssetNode> anList = getTxMonitorLive().getTxRowAssetNode().get(new Integer(idx));
                         //resultPanel.add(new HTML("---"+ (anList==null) + " " + getTxMonitorLive().getTxRowAssetNode().size()));
                         getTxFilter().popTx(anList);
                     }
