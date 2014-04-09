@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -612,7 +613,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 
     public static Map<String,AssetNode> getLiveUpdates(String queue)  {
         //ArrayList<AssetNode> result = new ArrayList<AssetNode>();
-        Map<String,AssetNode> result =  new Hashtable<String,AssetNode>();
+        Map<String,AssetNode> result =  new HashMap<String,AssetNode>();
 
         MessageConsumer consumer = null;
         javax.jms.QueueSession session = null;
