@@ -1,25 +1,5 @@
 package gov.nist.hit.ds.logBrowser.client.widgets;
 
-import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
-import gov.nist.hit.ds.repository.api.PropertyKey;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.ContextSupplement;
-import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
-import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
-import gov.nist.hit.ds.repository.simple.search.client.SimpleData;
-import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -51,6 +31,25 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
+import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import gov.nist.hit.ds.repository.simple.search.client.ContextSupplement;
+import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
+import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
+import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
+import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
+import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
+import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
+import gov.nist.hit.ds.repository.simple.search.client.SimpleData;
+import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class SearchWidget extends Composite {
 	/**
@@ -162,11 +161,11 @@ public class SearchWidget extends Composite {
 		StyleInjector.inject(".searchCriteriaGroup {background-color: #F5F5F5} .searchHeader {background-color: #E6E6FA; width:100%}");
         StyleInjector.inject(".roundedButton1 {\n" +
                 "  margin: 0;\n" +
-                "  padding: 5px 7px;\n" +
+                "  padding: 1px 3px;\n" +
                 "  text-decoration: none;\n" +
-                "  cursor: pointer;\n" +
+                "  color:steel; cursor: pointer;\n" +
                 "  cursor: hand;\n" +
-                "  font-size:small;\n" +
+                "  font-weight:normal;font-size:smaller;\n" +
                 "  background: url(\"images/hborder.png\") repeat-x 0px -2077px;\n" +
                 "  border:1px solid #bbb;\n" +
                 "  border-bottom: 1px solid #a0a0a0;\n" +
