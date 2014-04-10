@@ -48,6 +48,9 @@ public class TransactionMonitorFilterWidget extends Composite {
 
     private TransactionMonitorWidget txMonitorLive;
     private TransactionMonitorWidget txFilter;
+    private HTML liveCounterTxt = new HTML("");
+    private int filterHitCounter = 0;
+    private HTML filterCounterTxt = new HTML("");
 
     /*
     Sample 2-way Exchange pattern txDetail:
@@ -88,7 +91,7 @@ public class TransactionMonitorFilterWidget extends Composite {
         //stackPanel.setHeight("100%");
         stackPanel.setWidth("100%");
 
-        stackPanel.add(txMonitor, createPanelHeader("Filtered Transactions",createFilterHeaderOptions(),null), 2);
+        stackPanel.add(txMonitor, createPanelHeader("Filtered Messages",createFilterHeaderOptions(),null), 2);
 
         return stackPanel;
 
@@ -107,14 +110,25 @@ public class TransactionMonitorFilterWidget extends Composite {
         stackPanel.setWidth("100%");
 
         // Add filter section
-        stackPanel.add(createFilterWidget(), createPanelHeader("Filter", null, null), 2); // Not the filter monitor but the filter selection
+        stackPanel.add(createFilterWidget(), createPanelHeader("Message Filter", null, null), 2); // Not the filter monitor but the filter selection
 
         // filterSplitPanel.addWest(stackPanel, Math.round(.3 * Window.getClientWidth()));
         // stackPanel = new StackLayoutPanel(Style.Unit.EM);
         // stackPanel.setWidth("100%");
 
         // Add live monitor section
-        stackPanel.add(createLiveTxMonitorWidget(), createPanelHeader("Transaction Monitor", createMonitorHeaderOptions(), null), 2);
+        setTxMonitorLive(createLiveTxMonitorWidget());
+
+        eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
+            @Override
+            public void onNewTxMessage(NewTxMessageEvent event) {
+
+                getLiveCounterTxt().setText("("+ (event.getValue()+1) + ")");
+                filter(event.getValue(), event.getAssetNode().getLocation());
+            }
+        });
+
+        stackPanel.add(getTxMonitorLive(), createPanelHeader("Port Monitor", createMonitorHeaderOptions(), null), 2);
 
         // filterSplitPanel.add(stackPanel);
 
@@ -124,10 +138,15 @@ public class TransactionMonitorFilterWidget extends Composite {
     private List<Widget> createFilterHeaderOptions() {
         List<Widget> options = new ArrayList<Widget>();
 
-        HTML optClear = new HTML("[Clear]");
+        options.add(getFilterCounterTxt());
+
+        HTML optClear = new HTML("Clear");
+        optClear.setStyleName("roundedButton1");
         optClear.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+                filterHitCounter = 0;
+                getFilterCounterTxt().setText("");
                 getTxFilter().clear();
             }
         });
@@ -140,7 +159,10 @@ public class TransactionMonitorFilterWidget extends Composite {
     private List<Widget> createMonitorHeaderOptions() {
         List<Widget> options = new ArrayList<Widget>();
 
-        HTML optShowDetail = new HTML("[Show Detail]");
+        options.add(getLiveCounterTxt());
+
+        HTML optShowDetail = new HTML("Show Detail");
+        optShowDetail.setStyleName("roundedButton1");
         optShowDetail.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -150,10 +172,12 @@ public class TransactionMonitorFilterWidget extends Composite {
 
         options.add(optShowDetail);
 
-        HTML optClear = new HTML("[Clear]");
+        HTML optClear = new HTML("Clear");
+        optClear.setStyleName("roundedButton1");
         optClear.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+                getLiveCounterTxt().setText("");
                 getTxMonitorLive().clear();
             }
         });
@@ -183,29 +207,17 @@ public class TransactionMonitorFilterWidget extends Composite {
 
         filterPanel.add(searchWidget);
 
-        eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
-            @Override
-            public void onNewTxMessage(NewTxMessageEvent event) {
-
-                // Get criteria and append the location and check the searchresultiterator to see if it exists/count match
-                // call method with assetNode list to populate the filtered list
-
-                activateFilter(event.getValue(), event.getAssetNode().getLocation());
-            }
-        });
-
         return filterPanel;
 
     }
 
 
 
-    private Widget createLiveTxMonitorWidget() {
+    private TransactionMonitorWidget createLiveTxMonitorWidget() {
         TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus,true /*enableListener*/,false/*showDetail*/);
         txMonitor.getElement().getStyle()
                 .setProperty("border", "none");
 
-            setTxMonitorLive(txMonitor);
         return txMonitor;
     }
 
@@ -237,8 +249,9 @@ public class TransactionMonitorFilterWidget extends Composite {
 
     }
 
-
-    protected void activateFilter(final int idx, String location) {
+    protected void filter(final int idx, String location) {
+        // Get criteria and append the location and check the searchresultiterator to see if it exists/count match
+        // call method with assetNode list to populate the filtered list
 
         if (location==null) {
             logger.severe("Asset location is missing!");
@@ -283,7 +296,9 @@ public class TransactionMonitorFilterWidget extends Composite {
                         //getTxFilter().setTxRowAssetNode(getTxMonitorLive().getTxRowAssetNode());
                         Map<String,AssetNode> anList = getTxMonitorLive().getTxRowAssetNode().get(new Integer(idx));
                         //resultPanel.add(new HTML("---"+ (anList==null) + " " + getTxMonitorLive().getTxRowAssetNode().size()));
-                        getTxFilter().popTx(anList);
+                        if (getTxFilter().popTx(anList)) {
+                             getFilterCounterTxt().setText("("+ (++filterHitCounter) + ")");
+                        }
                     }
                 }
             });
@@ -319,5 +334,20 @@ public class TransactionMonitorFilterWidget extends Composite {
         this.txFilter = txFilter;
     }
 
+    public HTML getFilterCounterTxt() {
+        return filterCounterTxt;
+    }
+
+    public void setFilterCounterTxt(HTML filterCounterTxt) {
+        this.filterCounterTxt = filterCounterTxt;
+    }
+
+    public HTML getLiveCounterTxt() {
+        return liveCounterTxt;
+    }
+
+    public void setLiveCounterTxt(HTML liveCounterTxt) {
+        this.liveCounterTxt = liveCounterTxt;
+    }
 
 }

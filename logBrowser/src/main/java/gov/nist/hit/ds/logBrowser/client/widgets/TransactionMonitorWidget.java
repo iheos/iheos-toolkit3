@@ -64,7 +64,7 @@ public class TransactionMonitorWidget extends Composite {
 
      */
     private final String COLUMN_HEADER_PROXY = "Proxy";
-    private final String COLUMN_HEADER_RESPONSE_TIME_MS = "Response Time (ms)";
+    private final String COLUMN_HEADER_RESPONSE_TIME_MS = "Response Time";
 
     final String[] columns = {"Timestamp","Status","Artifact","Message From",COLUMN_HEADER_PROXY,"Forwarded To","Path","ContentType","Method","Length",COLUMN_HEADER_RESPONSE_TIME_MS};
     MessageViewerWidget requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
@@ -109,7 +109,7 @@ public class TransactionMonitorWidget extends Composite {
         }
     };
 
-    public void popTx(Map<String,AssetNode> anList) {
+    public Boolean popTx(Map<String,AssetNode> anList) {
         if (anList==null) {
             logger.info("Null assetNode: bad tx message?");
         } else {
@@ -141,7 +141,7 @@ public class TransactionMonitorWidget extends Composite {
 
                             // Manage the event with the parent loc for immediate indexing
                             if (getListenerEnabled()) {
-                                eventBus.fireEvent(new NewTxMessageEvent(txRowIdx,anList.get("parentLoc")));
+                                eventBus.fireEvent(new NewTxMessageEvent(txRowIdx/*zero based idx*/,anList.get("parentLoc")));
                             }
                             txRowIdx++;
 
@@ -162,7 +162,7 @@ public class TransactionMonitorWidget extends Composite {
             }
         }
 
-        return;
+        return Boolean.TRUE;
     }
     /**
      *
@@ -459,7 +459,7 @@ public class TransactionMonitorWidget extends Composite {
 
                 if (COLUMN_HEADER_PROXY.equals(columns[this.index])) {
 
-                    AssetNode an = txRowAssetNode.get(o.getKey()).get(1); // headerMsg
+                    AssetNode an = txRowAssetNode.get(o.getKey()).get("header"); // headerMsg
 
                     shb.appendHtmlConstant("<span title='" + an.getProps() + "'>");
                     shb.appendEscaped(o.getCsvData().get(this.index));
