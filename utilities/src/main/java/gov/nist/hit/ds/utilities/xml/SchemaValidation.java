@@ -4,7 +4,7 @@
 
 package gov.nist.hit.ds.utilities.xml;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.utilities.xdsException.XdsInternalException;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import org.apache.axiom.om.OMElement;
 import org.apache.xerces.parsers.DOMParser;

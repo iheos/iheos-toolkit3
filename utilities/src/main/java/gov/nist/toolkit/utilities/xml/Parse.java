@@ -1,6 +1,6 @@
 package gov.nist.toolkit.utilities.xml;
 
-import gov.nist.hit.ds.xdsException.XMLParserException;
+import gov.nist.hit.ds.utilities.xdsException.XMLParserException;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 

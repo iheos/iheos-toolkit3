@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.utilities.io;
 
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.utilities.xdsException.ToolkitRuntimeException;
 
 public class Hash {
 	public String compute_hash(ByteBuffer buffer) throws ToolkitRuntimeException {
