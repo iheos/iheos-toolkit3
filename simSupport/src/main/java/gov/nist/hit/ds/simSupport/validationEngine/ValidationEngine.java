@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.simSupport.validationEngine;
 
-import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
@@ -9,7 +9,7 @@ import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 

@@ -1,3 +1,0 @@
-# Module logBrowser
-# RPC service class, partial path of RPC policy file
-gov.nist.hit.ds.repository.simple.search.client.RepositoryService, 3963DD876940E459852B459D729C838E.gwt.rpc

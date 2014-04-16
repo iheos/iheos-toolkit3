@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.repository.presentation;
 
-import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
-import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.utilities.initialization.installation.InitializationFailedException;
+import gov.nist.hit.ds.utilities.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;

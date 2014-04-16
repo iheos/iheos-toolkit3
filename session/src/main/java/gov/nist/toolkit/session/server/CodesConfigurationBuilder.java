@@ -1,6 +1,6 @@
 package gov.nist.toolkit.session.server;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.utilities.xdsException.XdsInternalException;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.results.client.CodeConfiguration;
 import gov.nist.toolkit.results.client.CodesConfiguration;

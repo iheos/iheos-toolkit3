@@ -1,9 +1,9 @@
 package gov.nist.toolkit.valsupport.client;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import gov.nist.hit.ds.errorRecording.client.ValidationStepResult;
-import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
-import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.eventLog.errorRecording.client.ValidationStepResult;
+import gov.nist.hit.ds.eventLog.errorRecording.client.ValidatorErrorItem;
+import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 
 import java.util.ArrayList;
 import java.util.List;

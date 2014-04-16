@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools2.server;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.utilities.xdsException.XdsInternalException;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymetadata.MetadataParser;
 import gov.nist.toolkit.registrymetadata.client.*;

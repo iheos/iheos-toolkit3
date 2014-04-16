@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.utilities.xdsException.XdsInternalException;
 import gov.nist.toolkit.http.httpclient.HttpClient;
 import gov.nist.toolkit.valregmetadata.field.CodeValidation;
 import gov.nist.toolkit.xdstools2.client.PidAllocateService;

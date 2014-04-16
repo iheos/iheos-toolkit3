@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.simSupport.simrepo;
 
 import gov.nist.hit.ds.actorTransaction.client.ActorType;
-import gov.nist.hit.ds.initialization.installation.ExtendedPropertyManager;
+import gov.nist.hit.ds.utilities.initialization.installation.ExtendedPropertyManager;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import org.apache.log4j.Logger;
 

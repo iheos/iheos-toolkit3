@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.simSupport.components.parsers;
 
-import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;

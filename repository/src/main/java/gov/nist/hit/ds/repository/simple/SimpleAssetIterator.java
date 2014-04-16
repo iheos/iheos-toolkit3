@@ -6,7 +6,7 @@ import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.Type;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
 
 import java.io.File;
 import java.io.FilenameFilter;

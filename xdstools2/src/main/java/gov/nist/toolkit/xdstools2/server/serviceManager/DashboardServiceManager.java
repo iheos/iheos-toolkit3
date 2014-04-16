@@ -1,9 +1,9 @@
 package gov.nist.toolkit.xdstools2.server.serviceManager;
 
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.utilities.xdsException.XdsException;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
-import gov.nist.toolkit.installation.Installation;
+import gov.nist.hit.ds.utilities.installation.Installation;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.xdstools2.client.RegistryStatus;
 import gov.nist.toolkit.xdstools2.client.RepositoryStatus;

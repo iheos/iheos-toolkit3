@@ -6,7 +6,7 @@ import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.errorRecording.factories.ErrorRecorderBuilder;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;

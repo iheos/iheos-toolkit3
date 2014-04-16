@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.eventLog;
 
-
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.assertion.Assertions;
 import gov.nist.hit.ds.eventLog.assertion.Fault;

@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools2.server.upload;
 
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
 import gov.nist.toolkit.http.*;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl;

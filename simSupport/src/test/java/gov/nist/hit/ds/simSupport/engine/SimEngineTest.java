@@ -1,28 +1,21 @@
 package gov.nist.hit.ds.simSupport.engine;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import gov.nist.hit.ds.eventLog.Event;
-import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
-import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.event.EventBuilder;
-import gov.nist.hit.ds.simSupport.sims.BarUser;
-import gov.nist.hit.ds.simSupport.sims.Base;
-import gov.nist.hit.ds.simSupport.sims.FooMaker;
-import gov.nist.hit.ds.simSupport.sims.FooMakerError;
-import gov.nist.hit.ds.simSupport.sims.FooUser;
-import gov.nist.hit.ds.simSupport.sims.FooUserBarMaker;
+import gov.nist.hit.ds.simSupport.sims.*;
+import gov.nist.hit.ds.utilities.initialization.installation.InitializationFailedException;
+import gov.nist.hit.ds.utilities.initialization.installation.Installation;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class SimEngineTest {
 	Event event = null;

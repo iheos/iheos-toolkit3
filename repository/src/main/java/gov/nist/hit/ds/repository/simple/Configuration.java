@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.repository.simple;
 
-import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.utilities.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;

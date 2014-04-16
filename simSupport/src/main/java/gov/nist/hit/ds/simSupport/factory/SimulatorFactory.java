@@ -16,7 +16,7 @@ import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.serializer.SimulatorSerializer;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.repository.SiteRepository;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.utilities.xdsException.ToolkitRuntimeException;
 import org.apache.log4j.Logger;
 
 import java.util.List;

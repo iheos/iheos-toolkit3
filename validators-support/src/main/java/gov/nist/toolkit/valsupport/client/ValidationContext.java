@@ -1,7 +1,7 @@
 package gov.nist.toolkit.valsupport.client;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.commondatatypes.client.SchematronMetadataTypes;
 

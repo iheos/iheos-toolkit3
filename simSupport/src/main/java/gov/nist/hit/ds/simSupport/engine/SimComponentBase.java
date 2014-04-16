@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.simSupport.engine;
 
-import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
@@ -12,7 +12,7 @@ import gov.nist.hit.ds.simSupport.validationEngine.ValidationEngine;
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -363,7 +363,7 @@ public abstract class SimComponentBase implements SimComponent {
 			throw new SoapFaultException(
 					ag,
 					vf.faultCode(),
-					new ErrorContext(a.getMsg(), Assertion.buildSemiDivided(vf.ref()))
+					new ErrorContext(a.getMsg(), SemiDivided.buildSemiDivided(vf.ref()))
 					);
 		}
 	}

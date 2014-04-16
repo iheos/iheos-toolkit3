@@ -1,2 +1,0 @@
-serviceClass: gov.nist.hit.ds.repository.simple.search.client.RepositoryService
-path: 3963DD876940E459852B459D729C838E.gwt.rpc

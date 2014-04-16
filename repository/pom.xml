@@ -28,15 +28,6 @@
 			<groupId>gov.nist.hit.ds</groupId>
 			<artifactId>utilities</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>gov.nist.hit.ds</groupId>
-			<artifactId>xdsException</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.nist.hit.ds</groupId>
-			<artifactId>initialization</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
-		</dependency>
 
 		<!-- 3rd party -->
 		<dependency>

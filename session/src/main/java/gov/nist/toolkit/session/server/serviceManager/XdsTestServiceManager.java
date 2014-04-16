@@ -2,12 +2,12 @@ package gov.nist.toolkit.session.server.serviceManager;
 
 import gov.nist.direct.client.MessageLog;
 import gov.nist.direct.logger.UserLog;
-import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.utilities.xdsException.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.utilities.xdsException.XdsInternalException;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
-import gov.nist.toolkit.installation.Installation;
+import gov.nist.hit.ds.utilities.installation.Installation;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrymetadata.MetadataParser;
 import gov.nist.toolkit.registrymetadata.UuidAllocator;

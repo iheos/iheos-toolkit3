@@ -1,6 +1,6 @@
 package gov.nist.toolkit.session.test.java.server.services;
 
-import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.utilities.xdsException.XdsException;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory.ActorType;
 import gov.nist.toolkit.results.client.Result;
