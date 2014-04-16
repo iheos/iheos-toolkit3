@@ -6,7 +6,7 @@ import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.EndpointLabel;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.client.TransactionType;
-import gov.nist.hit.ds.utilities.initialization.installation.Installation;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
 import gov.nist.hit.ds.simSupport.client.BooleanActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.EndpointActorSimConfigElement;
@@ -14,7 +14,7 @@ import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.TextActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.TimeActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.simrepo.SimDb;
-import gov.nist.hit.ds.utilities.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.Date;
 

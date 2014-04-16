@@ -1,12 +1,13 @@
 package gov.nist.hit.ds.http.parser;
 
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
-import org.apache.log4j.Logger;
 
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 public class MultipartParser {
 	HttpParser hp;

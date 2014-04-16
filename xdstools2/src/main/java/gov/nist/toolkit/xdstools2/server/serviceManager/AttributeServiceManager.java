@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools2.server.serviceManager;
 
-import gov.nist.hit.ds.utilities.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
 import org.apache.log4j.Logger;
 

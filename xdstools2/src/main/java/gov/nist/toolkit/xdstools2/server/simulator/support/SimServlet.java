@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.server.simulator.support;
 
-import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.utilities.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.actorfactory.*;
 import gov.nist.toolkit.actorfactory.client.NoSimException;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
@@ -12,7 +12,7 @@ import gov.nist.toolkit.errorrecording.ErrorRecorder;
 import gov.nist.toolkit.http.HttpHeader;
 import gov.nist.toolkit.http.HttpHeader.HttpHeaderParseException;
 import gov.nist.toolkit.http.ParseException;
-import gov.nist.hit.ds.utilities.installation.Installation;
+import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.simcommon.client.config.SimulatorConfigElement;
 import gov.nist.toolkit.simulators.sim.ig.IgActorSimulator;

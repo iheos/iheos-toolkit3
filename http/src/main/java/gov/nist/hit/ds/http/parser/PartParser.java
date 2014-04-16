@@ -1,11 +1,10 @@
 package gov.nist.hit.ds.http.parser;
 
-import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
-import gov.nist.hit.ds.eventLog.errorRecording.TempErrorRecorderAdaptor;
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
+
 import org.apache.log4j.Logger;
 
 
@@ -23,7 +22,7 @@ public class PartParser extends HttpParser {
 	public PartParser(byte[] msg, IAssertionGroup er, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException {
 //		super(msg,er);
 		logger.debug("new PartParser(" + this.toString() + ")");
-		this.er = new TempErrorRecorderAdaptor(er);
+		this.er = er;
 		this.appendixV = appendixV;
 		init(msg, part, er);
 		initPart();

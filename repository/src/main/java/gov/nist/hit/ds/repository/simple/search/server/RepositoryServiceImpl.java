@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.repository.simple.search.server;
 
-import gov.nist.hit.ds.utilities.initialization.installation.Installation;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.presentation.PresentationData;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;

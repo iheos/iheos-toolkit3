@@ -43,8 +43,12 @@
             <artifactId>eventLog</artifactId>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
+            <groupId>gov.nist.toolkit</groupId>
             <artifactId>actorTransaction</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>errorRecording</artifactId>
         </dependency>
     </dependencies>
 </project>

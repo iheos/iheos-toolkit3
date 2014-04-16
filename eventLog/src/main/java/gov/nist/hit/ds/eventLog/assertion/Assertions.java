@@ -31,8 +31,8 @@ public class Assertions {
 		a.setOrder(counter++);
 		a.setProperty(PropertyKey.STATUS, ag.getMaxStatus().name());
 		logger.debug("flushing CSVTable:");
-		logger.debug(new AssertionGroupIO(ag.assertionList).getTable().toString());
-		a.updateContent(new AssertionGroupIO(ag.assertionList).getTable().toString(), "text/csv");
+		logger.debug(ag.getTable().toString());
+		a.updateContent(ag.getTable().toString(), "text/csv");
 	}
 	
 	AssertionStatus getAssertionStatus() {

@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.eventLog.assertion;
 
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 
 /**
  * Describe a reference to a validation.
@@ -20,7 +20,7 @@ public class ValidationRef {
 	 * @param msg - valiation msg
 	 * @param ref - validation references
 	 */
-	public ValidationRef(String id, XdsErrorCode.Code errCode, String msg, String[] ref) {
+	public ValidationRef(String id, Code errCode, String msg, String[] ref) {
 		this.id = id;
 		this.errCode = errCode.name();
 		this.msg = msg;

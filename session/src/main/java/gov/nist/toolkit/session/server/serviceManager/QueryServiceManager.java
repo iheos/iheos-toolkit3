@@ -1,7 +1,7 @@
 package gov.nist.toolkit.session.server.serviceManager;
 
-import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.utilities.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
 import gov.nist.toolkit.actorfactory.SimCache;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;

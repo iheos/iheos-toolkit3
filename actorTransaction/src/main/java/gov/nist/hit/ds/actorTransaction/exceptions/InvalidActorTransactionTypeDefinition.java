@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.actorTransaction.exceptions;
 
-import gov.nist.hit.ds.utilities.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 public class InvalidActorTransactionTypeDefinition extends ToolkitRuntimeException {
 	private static final long serialVersionUID = -1594140646987298373L;

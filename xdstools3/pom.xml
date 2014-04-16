@@ -51,6 +51,11 @@
   	</dependency>
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>xdsException</artifactId>
+  		<version>3.0.0-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
   		<artifactId>registryMsgFormats</artifactId>
   		<version>3.0.0-SNAPSHOT</version>
   	</dependency>
@@ -86,6 +91,10 @@
   	</dependency>
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>errorRecording</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
   		<artifactId>eventLog</artifactId>
   		<version>3.0.0-SNAPSHOT</version>
   	</dependency>
@@ -97,6 +106,11 @@
   	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
   		<artifactId>httpSoapValidator</artifactId>
+  		<version>3.0.0-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nist.hit.ds</groupId>
+  		<artifactId>initialization</artifactId>
   		<version>3.0.0-SNAPSHOT</version>
   	</dependency>
   	<dependency>

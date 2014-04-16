@@ -26,13 +26,14 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<groovy.version>2.0.0</groovy.version>
     </properties>
 
     <modules>
-        <!--
         <module>actorfactory</module>
+        <module>actorTransaction</module>
+        <!--waiting to fix integration issue with tests <module>axis2SoapClient</module> -->
         <module>common</module>
+        <module>common-datatypes</module>
         <module>direct</module>
         <module>direct-listener</module>
         <module>direct-sim</module>
@@ -42,45 +43,47 @@
         <module>dsig</module>
         <module>email</module>
         <module>env-settings</module>
-        <module>logBrowser</module>
+        <module>errorRecording</module>  <!-- v3 -->
+        <module>eventLog</module>    <!-- v3 -->
+        <module>http</module>     <!-- v3 -->
+        <module>initialization</module>     <!-- v3 -->
+        <module>installation</module>
+        <module>logBrowser</module> 		<!-- v3 -->
         <module>message-dispatch</module>
         <module>message-validator-factory</module>
         <module>registry-metadata</module>
         <module>registryMsgFormats</module>
         <module>registry-support</module>
+        <module>repository</module>         <!-- v3 -->
         <module>rest</module>
         <module>results</module>
         <module>security-common</module>
         <module>session</module>
         <module>sim-common</module>
+        <module>simSupport</module>
         <module>simulators</module>
+        <module>siteManagement</module>
         <module>soap</module>
+        <module>soapSupport</module>
         <module>testkit</module>
         <module>testkit-utilities</module>
         <module>timer</module>
         <module>tk</module>
+        <module>toolkit</module>     <!-- V3 -->
+        <module>utilities</module>
         <module>validators-ccda</module>
         <module>validators-direct-factory</module>
         <module>validators-registry-message</module>
         <module>validators-registry-metadata</module>
+        <module>validators-support</module>
         <module>wssetool</module>
+        <module>xdsException</module>
         <module>xdstest-gui</module>
         <module>xdstest2</module>
         <module>xdstools2</module>
         <module>soapClientAPI</module>
-        <module>soapAPI</module>
         <module>ebrimIntegrationTest</module>
-        -->
-        <module>common-datatypes</module>
-        <module>actor-transaction</module>
-        <module>event-log</module>    <!-- v3 -->
-        <module>http</module>     <!-- v3 -->
-        <module>repository</module>         <!-- v3 -->
-        <module>sim-support</module>
-        <module>site-management</module>
-        <module>soap-support</module>
-        <module>validators-support</module>
-        <module>utilities</module>
+        <module>soapAPI</module>
     </modules>
 
 
@@ -100,11 +103,6 @@
                 <version>4.11</version>
             </dependency>
             <dependency>
-                <groupId>org.spockframework</groupId>
-                <artifactId>spock-core</artifactId>
-                <version>0.7-groovy-2.0</version>
-                <scope>test</scope>
-            </dependency>                <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>1.2.17</version>
@@ -178,6 +176,11 @@
                 <version>3.0.1</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>initialization</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
 
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
@@ -230,6 +233,11 @@
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
 
+            <dependency>
+                <groupId>gov.nist.toolkit</groupId>
+                <version>v2-maven-alpha</version>
+                <artifactId>installation</artifactId>
+            </dependency>
             <dependency>
                 <groupId>gov.nist.toolkit</groupId>
                 <version>v2-maven-alpha</version>

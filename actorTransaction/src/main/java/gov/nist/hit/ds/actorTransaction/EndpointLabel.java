@@ -28,10 +28,10 @@ public class EndpointLabel {
 		tls = false;
 		async = false;
 		if (parts == null || parts.length <= 1)  {
-			transType = TransactionTypeFactory.find(label);
+			transType = TransactionType.find(label);
 			return;
 		}
-		transType = TransactionTypeFactory.find(parts[0]);
+		transType = TransactionType.find(parts[0]);
 		
 		int i=1;
 		tls = i < parts.length && "TLS".equalsIgnoreCase(parts[i]);

@@ -27,7 +27,7 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
-import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

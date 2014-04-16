@@ -5,7 +5,7 @@ import gov.nist.direct.config.DirectConfigManager;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
 import gov.nist.toolkit.common.coder.Base64Coder;
 import gov.nist.toolkit.dns.DnsLookup;
-import gov.nist.hit.ds.utilities.installation.Installation;
+import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.results.client.Result;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.testengine.logrepository.LogRepositoryFactory;

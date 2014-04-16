@@ -4,8 +4,8 @@ import gov.nist.hit.ds.actorTransaction.client.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean;
 import gov.nist.hit.ds.siteManagement.client.TransactionCollection;
-import gov.nist.hit.ds.utilities.xdsException.XdsInternalException;
-import org.apache.axiom.om.OMAbstractFactory;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.toolkit.registrysupport.MetadataSupport;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 
@@ -98,16 +98,16 @@ public abstract class SiteLoader {
 	}
 	
 	public OMElement siteToXML(Site s) {
-		OMElement site_ele = OMAbstractFactory.getOMFactory().createOMElement("site", null);
+		OMElement site_ele = MetadataSupport.om_factory.createOMElement("site", null);
 
-		OMAttribute site_name_att = OMAbstractFactory.getOMFactory().createOMAttribute("name", null, s.getName());
+		OMAttribute site_name_att = MetadataSupport.om_factory.createOMAttribute("name", null, s.getName());
 		site_ele.addAttribute(site_name_att);
 
 		TransactionCollection trans = s.transactions();
 		TransactionCollection repos = s.repositories();
 
 		if (s.home != null) {
-			OMElement home_ele = OMAbstractFactory.getOMFactory().createOMElement("home", null);
+			OMElement home_ele = MetadataSupport.om_factory.createOMElement("home", null);
 			home_ele.setText(s.home);
 			site_ele.addChild(home_ele);
 		}
@@ -146,7 +146,7 @@ public abstract class SiteLoader {
 //		}
 
 		for (TransactionBean tb : repos.transactions) {
-			OMElement trans_ele = OMAbstractFactory.getOMFactory().createOMElement("repository", null);
+			OMElement trans_ele = MetadataSupport.om_factory.createOMElement("repository", null);
 			String name_suffix = "";
 			if (tb.isAsync) name_suffix = ".as";
 			trans_ele.addAttribute("uid", tb.getName() + name_suffix, null);
@@ -156,8 +156,8 @@ public abstract class SiteLoader {
 		}
 
 		if (s.pidAllocateURI != null) {
-            OMAbstractFactory.getOMFactory().createOMComment(site_ele, "Patient ID allocation service to use with this site");
-			OMElement pida_ele = OMAbstractFactory.getOMFactory().createOMElement("PidAllocateEndpoint", null);
+			MetadataSupport.om_factory.createOMComment(site_ele, "Patient ID allocation service to use with this site");
+			OMElement pida_ele = MetadataSupport.om_factory.createOMElement("PidAllocateEndpoint", null);
 			pida_ele.setText(s.pidAllocateURI);
 			site_ele.addChild(pida_ele);
 		}
@@ -170,9 +170,9 @@ public abstract class SiteLoader {
 		OMElement trans_ele;
 		
 		if (isTransaction)
-			trans_ele = OMAbstractFactory.getOMFactory().createOMElement("transaction", null);
+			trans_ele = MetadataSupport.om_factory.createOMElement("transaction", null);
 		else
-			trans_ele = OMAbstractFactory.getOMFactory().createOMElement("repository", null);
+			trans_ele = MetadataSupport.om_factory.createOMElement("repository", null);
 		String name_suffix = "";
 		if (tb.isAsync) name_suffix = ".as";
 		TransactionType tt = tb.getTransactionType();

@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.simSupport.loader;
 
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.http.parser.ParseException;
@@ -47,7 +47,7 @@ public abstract class AbstractLogLoader extends SimComponentBase {
 			else
 				body = Io.bytesFromFile(new File(dir, "request_body.bin"));
 		} catch (IOException e) {
-			ag.err(XdsErrorCode.Code.NoCode, e);
+			ag.err(Code.NoCode, e);
 		}
 	}
 

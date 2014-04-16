@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.siteManagement.loader;
 
 import gov.nist.hit.ds.siteManagement.client.Site;
+import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.utilities.xml.Util;
-import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 
 import java.io.File;
@@ -51,10 +51,10 @@ public class CombinedSiteLoader extends SiteLoader {
 	}
 	
 	public OMElement toXML(Sites sites) {
-		OMElement sites_ele = OMAbstractFactory.getOMFactory().createOMElement("sites", null);
+		OMElement sites_ele = MetadataSupport.om_factory.createOMElement("sites", null);
 
 		if (sites.defaultSiteName != null) {
-			OMElement dsn = OMAbstractFactory.getOMFactory().createOMElement("defaultsite", null);
+			OMElement dsn = MetadataSupport.om_factory.createOMElement("defaultsite", null);
 			dsn.setText(sites.defaultSiteName);
 			sites_ele.addChild(dsn);
 		}

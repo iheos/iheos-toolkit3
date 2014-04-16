@@ -1,6 +1,7 @@
 package gov.nist.toolkit.valsupport.message;
 
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
+import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import org.apache.axiom.om.OMElement;
@@ -35,18 +36,18 @@ abstract public class MessageValidator {
 		return buf.toString();
 	}
 	
-//	public String formatObjectIdentity(OMElement ele) {
-//		Metadata m = new Metadata();
-//		String id = m.getId(ele);
-//
-//		if (id != null && !id.equals(""))
-//			return ele.getLocalName() + "(id=" + id + ")";
-//
-//		String title = m.getTitleValue(ele);
-//		if (title != null && !title.equals(""))
-//			return ele.getLocalName() + "(title=" + title + ")";
-//
-//		return ele.getLocalName() + "(??)";
-//	}
+	public String formatObjectIdentity(OMElement ele) {
+		Metadata m = new Metadata(); 
+		String id = m.getId(ele);
+		
+		if (id != null && !id.equals(""))
+			return ele.getLocalName() + "(id=" + id + ")";
+
+		String title = m.getTitleValue(ele);
+		if (title != null && !title.equals(""))
+			return ele.getLocalName() + "(title=" + title + ")";
+		
+		return ele.getLocalName() + "(??)";
+	}
 
 }

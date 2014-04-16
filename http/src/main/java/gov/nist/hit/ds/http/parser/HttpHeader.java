@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.http.parser;
 
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;

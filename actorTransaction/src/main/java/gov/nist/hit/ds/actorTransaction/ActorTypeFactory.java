@@ -2,12 +2,10 @@ package gov.nist.hit.ds.actorTransaction;
 
 import gov.nist.hit.ds.actorTransaction.client.ActorType;
 import gov.nist.hit.ds.actorTransaction.client.TransactionType;
-import gov.nist.hit.ds.actorTransaction.exceptions.ActorTypeNotDefinedException;
 import gov.nist.hit.ds.actorTransaction.exceptions.InvalidActorTransactionTypeDefinition;
-import gov.nist.hit.ds.actorTransaction.exceptions.InvalidActorTypeDefinitionException;
 
-import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ActorTypeFactory {
 	static Map<String, ActorType> actorTypeMap = new HashMap<String, ActorType>();
@@ -36,55 +34,56 @@ public class ActorTypeFactory {
 		ActorType tt = actorTypeMap.get(actorTypeName);
 		if (tt != null)
 			return tt;
-		return loadActorType(actorTypeName);
+//		return loadActorType(actorTypeName);
+        return null;
 	}
 
-	private static ActorType loadActorType(String typeName) throws InvalidActorTransactionTypeDefinition {
-		InputStream in = ActorTypeFactory.class.getClassLoader().getResourceAsStream(typeName + "Actor.properties");
-		if (in == null)
-			throw new ActorTypeNotDefinedException("Resource File <" + typeName + "Actor.properties> not found");
-		Properties props;
-		try {
-			props = new Properties();
-			props.load(in);
-		} catch (Exception e) {
-			throw new ActorTypeNotDefinedException("type = " + typeName, e);
-		}
+//	private static ActorType loadActorType(String typeName) throws InvalidActorTransactionTypeDefinition {
+//		InputStream in = ActorTypeFactory.class.getClassLoader().getResourceAsStream(typeName + "Actor.properties");
+//		if (in == null)
+//			throw new ActorTypeNotDefinedException("Resource File <" + typeName + "Actor.properties> not found");
+//		Properties props;
+//		try {
+//			props = new Properties();
+//			props.load(in);
+//		} catch (Exception e) {
+//			throw new ActorTypeNotDefinedException("type = " + typeName, e);
+//		}
+//
+//		ActorType ttype = new ActorType();
+//		ttype.name = props.getProperty("name");
+//		ttype.shortName = props.getProperty("shortName");
+//		ttype.actorSimFactoryClassName = props.getProperty("actorSimFactoryClass");
+//		List<TransactionType> transactionTypes = new ArrayList<TransactionType>();
+//		ttype.transactionTypes = transactionTypes;
+//		for (Object okey : props.keySet()) {
+//			String key = (String) okey;
+//			if (key.startsWith("transactionType")) {
+//				TransactionType tt = TransactionTypeFactory.getTransactionType(props.getProperty(key));
+//				if (!transactionTypes.contains(tt))
+//					transactionTypes.add(tt);
+//			}
+//		}
+//
+//		check(ttype);
+//
+//		actorTypeMap.put(typeName, ttype);
+//		return ttype;
+//	}
 
-		ActorType ttype = new ActorType();
-		ttype.setName(props.getProperty("name"));
-		ttype.setShortName(props.getProperty("shortName"));
-		ttype.setActorSimFactoryClassName(props.getProperty("actorSimFactoryClass"));
-		List<TransactionType> transactionTypes = new ArrayList<TransactionType>();
-		ttype.setTransactionTypes(transactionTypes);
-		for (Object okey : props.keySet()) {
-			String key = (String) okey;
-			if (key.startsWith("transactionType")) {
-				TransactionType tt = TransactionTypeFactory.getTransactionType(props.getProperty(key));
-				if (!transactionTypes.contains(tt))
-					transactionTypes.add(tt);
-			}
-		}
-		
-		check(ttype);
-
-		actorTypeMap.put(typeName, ttype);
-		return ttype;
-	}
-
-	private static void check(ActorType at) throws InvalidActorTypeDefinitionException {
-		String val;
-		
-		val = at.getName();
-		if (val == null || val.equals(""))
-			throw new InvalidActorTypeDefinitionException("name not defined");
-		val = at.getShortName();
-		if (val == null || val.equals(""))
-			throw new InvalidActorTypeDefinitionException("shortName not defined");
-		val = at.getActorSimFactoryClassName();
-		if (val == null || val.equals(""))
-			throw new InvalidActorTypeDefinitionException("actorSimFactoryClass not defined");
-		if (at.getTransactionTypes().size() == 0)
-			throw new InvalidActorTypeDefinitionException("must define at least one transaction");
-	}
+//	private static void check(ActorType at) throws InvalidActorTypeDefinitionException {
+//		String val;
+//
+//		val = at.name;
+//		if (val == null || val.equals(""))
+//			throw new InvalidActorTypeDefinitionException("name not defined");
+//		val = at.shortName;
+//		if (val == null || val.equals(""))
+//			throw new InvalidActorTypeDefinitionException("shortName not defined");
+//		val = at.actorSimFactoryClassName;
+//		if (val == null || val.equals(""))
+//			throw new InvalidActorTypeDefinitionException("actorSimFactoryClass not defined");
+//		if (at.transactionTypes.size() == 0)
+//			throw new InvalidActorTypeDefinitionException("must define at least one transaction");
+//	}
 }

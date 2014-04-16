@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools2.server.ValService;
 
-import gov.nist.hit.ds.utilities.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.simulators.support.ValidateMessageService;

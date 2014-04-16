@@ -1,11 +1,11 @@
 package gov.nist.hit.ds.siteManagement.repository;
 
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.*;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.siteManagement.SiteLoader;
 import gov.nist.hit.ds.siteManagement.loader.Sites;
-import gov.nist.hit.ds.utilities.initialization.installation.Installation;
 import org.apache.axiom.om.OMElement;
 
 import java.io.File;

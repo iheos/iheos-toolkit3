@@ -1,6 +1,6 @@
 package gov.nist.toolkit.valsupport.message;
 
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 

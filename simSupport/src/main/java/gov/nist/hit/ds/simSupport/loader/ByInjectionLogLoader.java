@@ -2,7 +2,7 @@ package gov.nist.hit.ds.simSupport.loader;
 
 import org.apache.log4j.Logger;
 
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
+import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;

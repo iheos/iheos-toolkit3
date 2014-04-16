@@ -7,8 +7,8 @@
 package gov.nist.toolkit.http.httpclient;
 
 import gov.nist.hit.ds.utilities.xml.XML;
-import gov.nist.hit.ds.utilities.xdsException.HttpCodeException;
-import gov.nist.hit.ds.utilities.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.HttpCodeException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.http.axis2soap.MultipartMap;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.XmlUtil;
@@ -531,7 +531,7 @@ public class HttpClient implements HostnameVerifier {
 		conn.setUseCaches(false);
 		conn.setRequestMethod("POST");
 		conn.setRequestProperty("Accept", "text/html, text/xml");
-		// other web user agents setAssertionGroup two hyphens to start of declared boundary
+		// other web user agents add two hyphens to start of declared boundary
 		// so we will too
 		conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary.substring(2));
 		String auth = getAuthorization();
@@ -909,7 +909,7 @@ public class HttpClient implements HostnameVerifier {
         for(int i = 0; i < pieces.length; i++) {
             System.out.println(pieces[i]);
             if(pieces[i].startsWith("urn:uuid:"))
-                uuids.setAssertionGroup(pieces[i]);
+                uuids.add(pieces[i]);
         }
         return uuids;
 		 */
@@ -1050,7 +1050,7 @@ public class HttpClient implements HostnameVerifier {
 	//	valueNode = valueNode.getFirstChild();
 	//	}
 	//	String value = valueNode.getNodeValue();
-	//	avalues.setAssertionGroup(value);
+	//	avalues.add(value);
 	//	}
 	//	map.put(name,  avalues);
 	//	}

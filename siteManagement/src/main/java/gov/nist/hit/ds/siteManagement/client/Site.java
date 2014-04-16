@@ -2,7 +2,6 @@ package gov.nist.hit.ds.siteManagement.client;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
-import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.actorTransaction.client.ActorType;
 import gov.nist.hit.ds.actorTransaction.client.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
@@ -111,7 +110,7 @@ public class Site  implements IsSerializable, Serializable {
 	}
 	
 	public void addTransaction(String transactionName, String endpoint, boolean isSecure, boolean isAsync) {
-		TransactionType ttype = TransactionTypeFactory.find(transactionName);
+		TransactionType ttype = TransactionType.find(transactionName);
 		addTransaction(new TransactionBean(ttype, RepositoryType.NONE, endpoint, isSecure, isAsync));
 	}
 

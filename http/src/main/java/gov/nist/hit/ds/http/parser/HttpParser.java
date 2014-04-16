@@ -1,11 +1,10 @@
 package gov.nist.hit.ds.http.parser;
 
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
+import gov.nist.hit.ds.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
-import gov.nist.hit.ds.eventLog.errorRecording.TempErrorRecorderAdaptor;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.utilities.io.Io;
-import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,7 @@ public class HttpParser {
 	byte[] input;
 	int from;
 	int to = 0;
-	TempErrorRecorderAdaptor er = null;
+	IAssertionGroup er = null;
 	String charset = null;
 	HttpMessage message = new HttpMessage();
 	MultipartParser multiparser;
@@ -97,7 +96,7 @@ public class HttpParser {
 	} 
 
 	public void setErrorRecorder(IAssertionGroup er) {
-		this.er = new TempErrorRecorderAdaptor(er);
+		this.er = er;
 	}
 
 	public HttpParser() {
@@ -118,7 +117,7 @@ public class HttpParser {
 
 	public HttpParser(HttpServletRequest request, IAssertionGroup er) throws IOException, HttpParseException {
 		logger.debug("new HttpParser(" + this.toString() + ")");
-		this.er = new TempErrorRecorderAdaptor(er);
+		this.er = er;
 		init(request);
 	}
 
@@ -132,7 +131,7 @@ public class HttpParser {
 		
 		if (er == null) {
 			// caller must not be interested in the ErrorRecorder results
-			er = new TempErrorRecorderAdaptor(null);
+			er = new AssertionGroup();
 		}
 
 		message.bodyBytes = Io.getBytesFromInputStream(request.getInputStream());
@@ -145,18 +144,18 @@ public class HttpParser {
 	public HttpParser(byte[] msg) throws HttpParseException, HttpHeaderParseException, ParseException {
 		logger.debug("new HttpParser(" + this.toString() + ")");
 		er = null;
-		init(msg, null, new TempErrorRecorderAdaptor(er));
+		init(msg, null, er);
 	}
 
 	public HttpParser(byte[] msg, IAssertionGroup er) throws HttpParseException, HttpHeaderParseException, ParseException  {
 		logger.debug("new HttpParser(" + this.toString() + ")");
-		this.er = new TempErrorRecorderAdaptor(er);
+		this.er = er;
 		init(msg, null, er);
 	}
 	
 	public HttpParser(byte[] msg, IAssertionGroup er, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException  {
 		logger.debug("new HttpParser(" + this.toString() + ")");
-		this.er = new TempErrorRecorderAdaptor(er);
+		this.er = er;
 		this.appendixV = appendixV;
 		init(msg, null, er);
 	}
@@ -187,7 +186,7 @@ public class HttpParser {
 
 	public void tryMultipart()  {
 		try {
-			multiparser = new MultipartParser(this, new TempErrorRecorderAdaptor(er), appendixV);
+			multiparser = new MultipartParser(this, er, appendixV);
 			message.multipart = multiparser.message;
 			logger.debug("HttpParser(" + this.toString() + ") - isMultipart=" + isMultipart() );
 		} catch (ParseException e) {

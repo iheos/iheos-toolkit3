@@ -1,13 +1,13 @@
 package gov.nist.toolkit.session.server;
 
-import gov.nist.hit.ds.utilities.xdsException.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
 import gov.nist.toolkit.actorfactory.SimCache;
 import gov.nist.toolkit.actorfactory.SimDb;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.actorfactory.client.NoSimException;
 import gov.nist.toolkit.envSetting.EnvSetting;
-import gov.nist.hit.ds.utilities.installation.Installation;
-import gov.nist.hit.ds.utilities.installation.PropertyServiceManager;
+import gov.nist.toolkit.installation.Installation;
+import gov.nist.toolkit.installation.PropertyServiceManager;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.results.client.AssertionResults;
 import gov.nist.toolkit.results.client.SiteSpec;

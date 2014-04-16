@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.repository.simple.search;
 
-import gov.nist.hit.ds.utilities.initialization.installation.Installation;
-import gov.nist.hit.ds.utilities.initialization.installation.PropertyServiceManager;
+import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.initialization.installation.PropertyServiceManager;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;

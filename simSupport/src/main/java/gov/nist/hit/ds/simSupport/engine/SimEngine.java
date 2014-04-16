@@ -1,16 +1,15 @@
 package gov.nist.hit.ds.simSupport.engine;
 
+import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.SoapFault;
-import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
-import org.apache.log4j.Logger;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -19,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 
 /**
@@ -119,7 +120,7 @@ public class SimEngine /* implements MessageValidatorEngine */ {
 				} catch (SoapFaultException e) {
 					SoapFault soapFault = new SoapFault(soapEnvironment, e);
 					try {
-						simStep.getAssertionGroup().err(XdsErrorCode.Code.SoapFault, e);
+						simStep.getAssertionGroup().err(Code.SoapFault, e);
 						soapFault.send();
 					} catch (Exception e1) {
 						logger.error(ExceptionUtil.exception_details(e1));

@@ -48,11 +48,19 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.hit.ds</groupId>
-			<artifactId>event-log</artifactId>
+			<artifactId>eventLog</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>errorRecording</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.hit.ds</groupId>
 			<artifactId>utilities</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>xdsException</artifactId>
 		</dependency>
                <dependency>
                         <groupId>com.sun.ebxml</groupId>

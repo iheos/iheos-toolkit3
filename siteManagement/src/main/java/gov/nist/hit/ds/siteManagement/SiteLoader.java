@@ -6,7 +6,7 @@ import gov.nist.hit.ds.siteManagement.client.TransactionBean;
 import gov.nist.hit.ds.siteManagement.client.TransactionCollection;
 import gov.nist.hit.ds.utilities.xml.Parse;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.utilities.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.HashMap;
 import java.util.Iterator;

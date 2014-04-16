@@ -1,0 +1,10 @@
+# asset type site
+keyword=simpleType
+domain=asset
+indexes=patientId, startTime(DTM), description, location, type
+description=Simulator Event Repository type
+
+
+## specify lifetime in 'n' days, where 'n' is an integer
+
+lifetime=30 days

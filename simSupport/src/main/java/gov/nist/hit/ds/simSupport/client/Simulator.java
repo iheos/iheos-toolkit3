@@ -7,7 +7,7 @@ import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.client.TransactionType;
 import gov.nist.hit.ds.repository.api.*;
 import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.utilities.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -12,7 +12,7 @@ public class EndpointLabelParseTest {
 	@Before
 	public void before()  {
 		ActorTypeFactory.find("registry");
-		register = TransactionTypeFactory.find("register");
+		register = TransactionType.find("register");
 	}
 	
 	@Test

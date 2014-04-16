@@ -16,7 +16,7 @@ public class EndpointLabelBuildTest {
 	
 	@Test
 	public void buildTest()  {
-		TransactionType register = TransactionTypeFactory.find("register");
+		TransactionType register = TransactionType.find("register");
 		EndpointLabel label;
 		label = new EndpointLabel(
 				register,

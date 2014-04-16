@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.siteManagement.loader;
 
-import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.actorTransaction.client.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean;
@@ -93,7 +92,7 @@ public class TransactionOfferingFactory {
 					continue;
 				TransactionType tt;
 				if (tb.isRetrieve()) {
-                    tt = TransactionTypeFactory.find("RETRIEVE");
+					tt = TransactionType.RETRIEVE;
 				} else 
 					tt = tb.getTransactionType();
 				

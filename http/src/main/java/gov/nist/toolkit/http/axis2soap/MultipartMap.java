@@ -6,7 +6,7 @@
 
 package gov.nist.toolkit.http.axis2soap;
 
-import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import org.apache.soap.util.mime.ByteArrayDataSource;
 
 import javax.mail.internet.MimeBodyPart;

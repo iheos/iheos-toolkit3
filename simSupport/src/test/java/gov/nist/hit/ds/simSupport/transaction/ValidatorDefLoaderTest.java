@@ -2,8 +2,8 @@ package gov.nist.hit.ds.simSupport.transaction;
 
 import static org.junit.Assert.assertTrue;
 
-import gov.nist.hit.ds.utilities.initialization.installation.InitializationFailedException;
-import gov.nist.hit.ds.utilities.initialization.installation.Installation;
+import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
+import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.loader.ValidatorDefLoader;

@@ -1,7 +1,6 @@
 package gov.nist.hit.ds.siteManagement.client;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.actorTransaction.client.ActorType;
 import gov.nist.hit.ds.actorTransaction.client.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
@@ -105,7 +104,7 @@ public class TransactionCollection implements IsSerializable, Serializable {
 	}
 	
 	static TransactionType getTransactionFromCode(String transactionCode) {
-		return TransactionTypeFactory.find(transactionCode);
+		return TransactionType.find(transactionCode);
 	}
 	
 	static public String getTransactionName(String transactionCode) {
@@ -221,7 +220,7 @@ public class TransactionCollection implements IsSerializable, Serializable {
 //			throw new Exception("Actors.xml configuration problem: site " + collectionName + 
 //					" defines transaction " + t.toString() + " multiple times\n Relevant part of Site definition is:\n" + toString());
 		transactions.add(new TransactionBean(
-				TransactionTypeFactory.find(transactionName),
+				TransactionType.find(transactionName),
 				isRepositories ? RepositoryType.REPOSITORY : RepositoryType.NONE, 
 				endpoint, 
 				isSecure, 

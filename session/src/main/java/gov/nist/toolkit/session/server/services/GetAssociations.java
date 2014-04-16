@@ -1,6 +1,6 @@
 package gov.nist.toolkit.session.server.services;
 
-import gov.nist.hit.ds.utilities.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
 import gov.nist.toolkit.registrymetadata.client.AnyIds;
 import gov.nist.toolkit.registrymetadata.client.ObjectRefs;
