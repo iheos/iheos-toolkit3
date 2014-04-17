@@ -10,7 +10,7 @@ import gov.nist.hit.ds.eventLog.assertion.annotations.Validation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.validationEngine.ValidationEngine;
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault;
-import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.xdsException.soapSupport.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import org.apache.log4j.Logger;

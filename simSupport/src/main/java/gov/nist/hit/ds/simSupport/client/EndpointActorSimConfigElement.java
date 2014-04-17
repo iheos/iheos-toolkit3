@@ -2,7 +2,6 @@ package gov.nist.hit.ds.simSupport.client;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.EndpointLabel;
-import gov.nist.hit.ds.actorTransaction.client.ParamType;
 
 import java.io.Serializable;
 

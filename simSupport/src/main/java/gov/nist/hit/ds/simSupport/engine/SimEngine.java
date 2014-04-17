@@ -7,7 +7,7 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
-import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.xdsException.soapSupport.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.SoapFault;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 

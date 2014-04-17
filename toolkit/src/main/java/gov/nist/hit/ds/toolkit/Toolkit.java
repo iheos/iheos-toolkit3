@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.toolkit;
 
-import gov.nist.hit.ds.initialization.installation.Installation;
-import gov.nist.hit.ds.initialization.installation.PropertyManager;
+import gov.nist.hit.ds.toolkit.installation.Installation;
+import gov.nist.hit.ds.toolkit.installation.PropertyManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 

@@ -1,6 +1,6 @@
 package gov.nist.toolkit.utilities.io;
 
-import gov.nist.hit.ds.utilities.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 public class Hash {
 	public String compute_hash(ByteBuffer buffer) throws XdsInternalException {

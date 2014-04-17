@@ -54,6 +54,11 @@
 			<artifactId>common-datatypes</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
+		<dependency>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>xdsException</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
 		
 	</dependencies>
 </project>

@@ -5,7 +5,7 @@ import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
-import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.xdsException.soapSupport.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import org.apache.log4j.Logger;
 

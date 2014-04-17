@@ -5,7 +5,6 @@ import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.EndpointLabel;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.client.ActorType;
-import gov.nist.hit.ds.actorTransaction.client.ParamType;
 import gov.nist.hit.ds.actorTransaction.client.TransactionType;
 
 import java.io.Serializable;

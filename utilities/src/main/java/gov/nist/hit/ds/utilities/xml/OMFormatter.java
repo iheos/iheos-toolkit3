@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.utilities.xml;
 
-import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.utilities.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.File;
 import java.util.Iterator;

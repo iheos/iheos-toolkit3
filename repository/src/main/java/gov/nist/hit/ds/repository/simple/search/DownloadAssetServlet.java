@@ -1,7 +1,5 @@
 package gov.nist.hit.ds.repository.simple.search;
 
-import gov.nist.hit.ds.initialization.installation.Installation;
-import gov.nist.hit.ds.initialization.installation.PropertyServiceManager;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -15,6 +13,8 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
+import gov.nist.hit.ds.toolkit.installation.Installation;
+import gov.nist.hit.ds.toolkit.installation.PropertyServiceManager;
 
 import java.io.File;
 import java.io.FileReader;

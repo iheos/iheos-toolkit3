@@ -34,8 +34,7 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.hit.ds</groupId>
-			<artifactId>initialization</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
+			<artifactId>toolkit</artifactId>
 		</dependency>
 
 		<!-- 3rd party -->

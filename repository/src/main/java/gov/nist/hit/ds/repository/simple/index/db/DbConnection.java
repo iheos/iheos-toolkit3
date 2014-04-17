@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.repository.simple.index.db;
 
-import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.index.IndexDataSource;
 
@@ -8,6 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 

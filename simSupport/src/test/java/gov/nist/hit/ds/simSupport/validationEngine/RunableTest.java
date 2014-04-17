@@ -4,7 +4,7 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault;
-import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.xdsException.soapSupport.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 
 import org.junit.Assert;

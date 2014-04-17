@@ -1,7 +1,7 @@
 package gov.nist.toolkit.utilities.xml;
 
-import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.utilities.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.utilities.io.Io;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMAttribute;

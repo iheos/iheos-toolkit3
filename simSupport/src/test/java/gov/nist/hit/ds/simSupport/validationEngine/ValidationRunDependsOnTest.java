@@ -19,7 +19,7 @@ import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.event.EventBuilder;
-import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.xdsException.soapSupport.SoapFaultException;
 
 public class ValidationRunDependsOnTest   extends SimComponentBase {
 	

@@ -1,6 +1,7 @@
 package gov.nist.toolkit.utilities.io;
 
-import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
+
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.io.*;
 import java.util.zip.ZipEntry;

@@ -3,7 +3,7 @@ package gov.nist.hit.ds.simSupport.engine;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
+import gov.nist.hit.ds.xdsException.soapSupport.SoapFaultException;
 
 public class MyComponent implements SimComponent {
 	String name;

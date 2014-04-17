@@ -1,7 +1,5 @@
 package gov.nist.hit.ds.repository.presentation;
 
-import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
-import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
@@ -27,6 +25,8 @@ import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.toolkit.installation.InitializationFailedException;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVParser;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
