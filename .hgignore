@@ -16,9 +16,6 @@ target/
 **.jar
 
 
-# coming from the log repository
-eventLog/*
-
 #ignore repository test data files
 repository/www-test/*
 

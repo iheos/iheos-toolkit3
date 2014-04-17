@@ -1,0 +1,11 @@
+package gov.nist.hit.ds.eventLog
+
+/**
+ * Created by bill on 4/15/14.
+ */
+class InOutMessages {
+    String reqHdr = null
+    byte[] reqBody = null
+    String respHdr = null
+    byte[] respBody = null
+}
