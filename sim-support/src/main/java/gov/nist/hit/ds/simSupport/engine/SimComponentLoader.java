@@ -6,6 +6,8 @@ import gov.nist.hit.ds.simSupport.exception.SimEngineSubscriptionException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -36,6 +38,14 @@ public class SimComponentLoader {
 		this.parmMap = parmMap;
 	}
 
+    Map<String, String> asMap(Properties p) {
+        Map<String, String> parameterMap = new HashMap<String, String>();
+        for (String propName : p.stringPropertyNames()) {
+            parameterMap.put(propName, p.getProperty(propName));
+        }
+        return parameterMap;
+    }
+
     public SimComponent load() throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineException, SimChainLoaderException {
         mkInstance();
         if (parmMap != null)
@@ -62,7 +72,7 @@ public class SimComponentLoader {
 	}
 
 	void injectParameters(Properties parmeterMap) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		new Injector(component, parmeterMap).injectAll();
+		new Injector(component, asMap(parmeterMap)).injectAll();
 	}
 
 }

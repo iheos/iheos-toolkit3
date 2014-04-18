@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.simSupport.sims;
 
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.datatypes.Foo;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;

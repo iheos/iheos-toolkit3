@@ -2,14 +2,14 @@ package gov.nist.hit.ds.simSupport.transaction;
 
 import static org.junit.Assert.assertTrue;
 
-import gov.nist.hit.ds.utilities.initialization.installation.InitializationFailedException;
-import gov.nist.hit.ds.utilities.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.loader.ValidatorDefLoader;
 
 import java.io.IOException;
 
+import gov.nist.hit.ds.toolkit.installation.InitializationFailedException;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import org.junit.Before;
 import org.junit.Test;
 

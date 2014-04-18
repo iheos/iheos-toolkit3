@@ -1,13 +1,14 @@
 package gov.nist.hit.ds.simSupport.engine;
 
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.event.EventBuilder;
 import gov.nist.hit.ds.simSupport.exception.SimEngineException;
 import gov.nist.hit.ds.simSupport.sims.*;
-import gov.nist.hit.ds.utilities.initialization.installation.InitializationFailedException;
-import gov.nist.hit.ds.utilities.initialization.installation.Installation;
+import gov.nist.hit.ds.toolkit.installation.InitializationFailedException;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import org.junit.Before;
 import org.junit.Test;
 

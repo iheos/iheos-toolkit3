@@ -4,9 +4,9 @@ import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
+import gov.nist.hit.ds.soapSupport.FaultCode;
+import gov.nist.hit.ds.soapSupport.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
-import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
-import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import org.apache.log4j.Logger;
 
 public class SimEndpointParser extends SimComponentBase {

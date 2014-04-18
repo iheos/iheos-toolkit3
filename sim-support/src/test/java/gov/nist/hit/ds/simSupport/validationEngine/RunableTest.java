@@ -4,9 +4,9 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault;
-import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
-import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 
+import gov.nist.hit.ds.soapSupport.FaultCode;
+import gov.nist.hit.ds.soapSupport.SoapFaultException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +19,7 @@ public class RunableTest extends SimComponentBase {
 		getValidationEngine().reset();
 	}
 	
-	@ValidationFault(id="VAL1", msg="One must equal one", faultCode=FaultCode.Sender, ref="First Grade")
+	@ValidationFault(id="VAL1", msg="One must equal one", faultCode= FaultCode.Sender, ref="First Grade")
 	public void validationFaultTest() throws SoapFaultException {
 		assertEquals(1,1);
 	}

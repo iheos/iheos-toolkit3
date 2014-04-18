@@ -1,6 +1,9 @@
-package gov.nist.hit.ds.eventLog.soapSupport;
+package gov.nist.hit.ds.soapSupport;
 
 
+import gov.nist.hit.ds.eventLog.assertion.Assertion;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
+import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
 import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
@@ -54,8 +57,25 @@ public class SoapFaultException extends Exception {
 	public SoapFaultException(IAssertionGroup er, FaultCode faultCode, ErrorContext errorContext) {
 		this(er, faultCode, errorContext.toString(), null, null);
 	}
-		
-	public String toString() {
+
+    public SoapFaultException(AssertionGroup er, FaultCode faultCode, ErrorContext errorContext) {
+        Assertion a = new Assertion();
+        a.setFound(faultCode.name());
+        a.setStatus(AssertionStatus.FAULT);
+        a.setMsg(errorContext.getMsg());
+        a.setReference(errorContext.getResource());
+        er.addAssertion(a);
+    }
+
+    public SoapFaultException(AssertionGroup er, FaultCode faultCode, String msg) {
+        Assertion a = new Assertion();
+        a.setFound(faultCode.name());
+        a.setStatus(AssertionStatus.FAULT);
+        a.setMsg(msg);
+        er.addAssertion(a);
+    }
+
+    public String toString() {
 		StringBuffer buf = new StringBuffer();
 		
 		buf.append(faultCode.toString()).append(": ").append(faultString);

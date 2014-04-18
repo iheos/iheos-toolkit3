@@ -12,12 +12,16 @@ import org.apache.log4j.Logger
 class ArtifactsDAO {
     Asset artifactsAsset;
     int counter = 1;
-    static Logger logger = Logger.getLogger(Artifacts.class);
+    static Logger logger = Logger.getLogger(Artifacts);
 
-    def save(Artifacts artifacts, Asset parent) throws RepositoryException {
+    def init(Asset parent) throws RepositoryException {
         artifactsAsset = AssetHelper.createChildAsset(parent, "Artifacts", "", new SimpleType("simArtifacts"));
+        artifactsAsset
+    }
+
+    def save(Artifacts artifacts) throws RepositoryException {
         artifacts.artifactOrder.each { name ->
-            logger.trace("Artifact: " + name + " = " + value);
+            logger.debug("Artifact: " + name + " = " + artifacts.artifactMap[name]);
             Asset a = AssetHelper.createChildAsset(artifactsAsset, name, "", new SimpleType("simpleType"));
             a.setOrder(counter++);
             a.updateContent(artifacts.artifactMap[name], "text/plain");

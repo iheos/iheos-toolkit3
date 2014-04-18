@@ -1,8 +1,8 @@
-package gov.nist.hit.ds.eventLog.soapSupport;
+package gov.nist.hit.ds.soapSupport;
 
-import gov.nist.hit.ds.eventLog.soapSupport.core.SoapEnvironment;
-import gov.nist.hit.ds.eventLog.soapSupport.core.SoapResponseGenerator;
-import gov.nist.hit.ds.eventLog.soapSupport.core.SoapUtil;
+import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
+import gov.nist.hit.ds.soapSupport.core.SoapResponseGenerator;
+import gov.nist.hit.ds.soapSupport.core.SoapUtil;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 
 import org.apache.axiom.om.OMElement;

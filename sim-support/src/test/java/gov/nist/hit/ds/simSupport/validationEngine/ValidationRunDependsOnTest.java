@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
+import gov.nist.hit.ds.soapSupport.SoapFaultException;
+import gov.nist.hit.ds.toolkit.installation.InitializationFailedException;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,15 +14,12 @@ import org.junit.Test;
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.assertion.annotations.Validation;
-import gov.nist.hit.ds.utilities.initialization.installation.InitializationFailedException;
-import gov.nist.hit.ds.utilities.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.event.EventBuilder;
-import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 
 public class ValidationRunDependsOnTest   extends SimComponentBase {
 	
@@ -30,7 +30,7 @@ public class ValidationRunDependsOnTest   extends SimComponentBase {
 		Configuration.configuration();
 		event = new EventBuilder().buildEvent(new SimId("ST-reg-1"), ActorTypeFactory.find("registry").getShortName(), TransactionTypeFactory.find("register").getShortName());
 		ag = new AssertionGroup();
-		event.addAssertionGroup(ag);
+//		event.addAssertionGroup(ag);
 	}
 	
 	@Validation(id="VAL1", msg="A Validation", ref="First Grade", dependsOn={"VAL2"})

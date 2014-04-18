@@ -7,7 +7,6 @@ import gov.nist.hit.ds.actorTransaction.*;
 
 import java.util.List;
 
-import gov.nist.toolkit.actortransaction.obsolete.client.TransactionType;
 import org.junit.Test;
 
 public class SimulatorConfigTest {

@@ -4,9 +4,7 @@ import gov.nist.hit.ds.utilities.string.StringUtil
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Enumeration;
-import java.util.Properties;
+import java.lang.reflect.Method
 
 import org.apache.log4j.Logger;
 
@@ -19,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class Injector {
 	def object;
-	def paramMap;
+    Map<String, String> paramMap;
 	static Logger logger = Logger.getLogger(Injector);
 
 	/**
@@ -39,19 +37,19 @@ public class Injector {
 
 	void injectAll() throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		logger.trace("Injecting on class <${object.class.name}>")
-        paramMap.keys().each { paramName ->
+        paramMap.keySet().each { paramName ->
             if ('class' == paramName) return;
-            def paramValue = paramMap.getProperty(paramName);
+            def paramValue = paramMap[paramName];
 			logger.trace("Parm name = <" + paramName + "> value = <" + paramValue + ">");
-            Object[] params = [ paramValue ] as Array
-            Method setter = getSetter(paramName);
-            logger.trace("Method is: <" + setter + "> Parm is: <" + paramValue + ">");
-            setter.invoke(object, params);
+            Object[] params = [ paramValue ].toArray()
+            Method setterMethod = getSetterMethod(paramName);
+            logger.trace("Method is: <" + setterMethod + "> Parm is: <" + paramValue + ">");
+            setterMethod.invoke(object, params);
         }
 	}
 
-	def getSetter(String paramName) throws SecurityException, NoSuchMethodException  {
-		Class<?>[] paramTypes = [ String ] as Array
+	def getSetterMethod(String paramName) throws SecurityException, NoSuchMethodException  {
+		Class<?>[] paramTypes = [ String ].toArray()
 		Method method = object.class.getMethod("set${StringUtil.capitalize(paramName)}", paramTypes);
 		return method;
 	}

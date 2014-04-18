@@ -4,6 +4,7 @@ import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.eventLog.errorRecording.SystemErrorRecorder;
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -59,7 +60,7 @@ public class SimChain  {
 
 	public boolean hasErrors() {
 		for (SimStep step : steps) {
-			IAssertionGroup er = step.getAssertionGroup(); 
+			AssertionGroup er = step.getAssertionGroup();
 			if (er != null && er.hasErrors())
 				return true;
 		}
@@ -70,38 +71,18 @@ public class SimChain  {
 	 * Get an informal list of errors - to support logging, not reporting
 	 * @return
 	 */
-	public String getErrors() {
-		StringBuffer buf = new StringBuffer();
-		for (SimStep step : steps) {
-			AssertionGroup ag = step.getAssertionGroup(); 
-			if (ag != null && ag.hasErrors()) {
-				ag.resetEnumeration();
-				while (ag.hasMoreElements()) {
-					Assertion as = ag.nextElement();
-					if (as.getStatus().isError()) {
-						buf.append(as.getStatus()).append(" : ").append(as.getMsg()).append("\n");
-					}
-				}
-			}
-    	}
-		return buf.toString();
-	}
+	public String getErrors() { return "There may be errors"; }
+
 
 	public String getLog() {
 		StringBuffer buf = new StringBuffer();
 		buf.append("---------------------------------------------------------------\n");
 		for (SimStep step : steps) {
-			IAssertionGroup er = step.getAssertionGroup();
+			AssertionGroup er = step.getAssertionGroup();
 			if (er == null) {
-				buf.append("FATAL ERROR: Step <" + step.getName() + "> does not have an ErrorRecorder\n");
-				continue;
+				throw new ToolkitRuntimeException("FATAL ERROR: Step <" + step.getName() + "> does not have an ErrorRecorder\n");
 			}
-			if (!(er instanceof SystemErrorRecorder)) {
-				buf.append("FATAL ERROR: Step <" + step.getName() + "> ErrorRecorder is of type <" + er.getClass().getName() + ">\n");
-				continue;
-			}
-			SystemErrorRecorder ser = (SystemErrorRecorder) er;
-			buf.append(ser.toString());
+			buf.append(er.toString());
 			buf.append("---------------------------------------------------------------\n");
 		}		
 		return buf.toString();

@@ -10,25 +10,31 @@ import gov.nist.hit.ds.repository.api.RepositoryException
 class EventDAO {
 
     void save(Event event) throws RepositoryException {
-        Asset a;
-        def inOut = new InOutMessagesDAO();
-        a = inOut.init(event);
-        a.setOrder(1);
+        if (event.eventAsset == null) return  // in-memory only
 
-        def artifacts = new ArtifactsDAO();
-        a = artifacts.init(event);
-        a.setOrder(2);
+        Asset a
 
-        def assertionGroupDAO = new AssertionGroupDAO();
-        a = assertionGroupDAO.init(event);
+        def inOut = new InOutMessagesDAO()
+        a = inOut.init(event.eventAsset)
+        a.setOrder(1)
+        inOut.save(event.inOutMessages)
+
+        def artifacts = new ArtifactsDAO()
+        a = artifacts.init(event.eventAsset)
+        a.setOrder(2)
+        artifacts.save(event.artifacts)
+
+        def assertionGroup = new AssertionGroupDAO()
+        a = assertionGroup.init(event.eventAsset);
         a.setOrder(3);
+        assertionGroup.save(event.assertionGroup)
 
-        // Created only if needed
-        if (event.fault) {
-            def fault = new Fault();
-            fault.init(event)
-            fault.setOrder(4)
-        }
+//        // Created only if needed
+//        if (event.fault) {
+//            def fault = new Fault();
+//            fault.init(event)
+//            fault.setOrder(4)
+//        }
     }
 
 }

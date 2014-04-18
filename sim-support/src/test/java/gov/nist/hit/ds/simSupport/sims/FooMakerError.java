@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.simSupport.sims;
 
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
@@ -10,7 +11,7 @@ import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 public class FooMakerError implements SimComponent{
 
 	Foo foo;
-	IAssertionGroup er;
+	AssertionGroup er;
 	Event event;
 
 	public Foo getFoo() {
@@ -35,7 +36,7 @@ public class FooMakerError implements SimComponent{
 		try {
 			throw new Exception("FooMakerError");
 		} catch (Exception e) {
-			er.err(XdsErrorCode.Code.NoCode, e);
+//			er.err(XdsErrorCode.Code.NoCode, e);
 		}
 	}
 

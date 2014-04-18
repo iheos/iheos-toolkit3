@@ -5,4 +5,6 @@ package gov.nist.hit.ds.simSupport.engine
  */
 class SingleSetter {
     def name
+
+    def setName(String name) { this.name = name }
 }

@@ -1,42 +1,47 @@
-package gov.nist.hit.ds.simSupport.event;
+package gov.nist.hit.ds.eventLog
 
-import gov.nist.hit.ds.eventLog.Event;
-import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.Repository;
-import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.api.RepositoryFactory;
-import gov.nist.hit.ds.repository.api.RepositorySource.Access;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.simSupport.client.SimId;
-import gov.nist.hit.ds.simSupport.simrepo.SimRepoFactory;
-
-import org.apache.log4j.Logger;
-
-import java.util.Calendar;
-import java.util.Date;
+import gov.nist.hit.ds.repository.api.Repository
+import gov.nist.hit.ds.repository.simple.SimpleType
+import org.apache.log4j.Logger
 
 public class EventBuilder {
 	static Logger logger = Logger.getLogger(EventBuilder.class);
 
-	public Event buildEvent(SimId simId, String actorShortName, String transactionShortName) throws RepositoryException {
-		Event event = null;
-			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-			Repository repos = fact.createNamedRepository(
-					"SimLogs", 
-					"SimLogs", 
-					new SimpleType("simEventRepos"),               // repository type
-					actorShortName + "-" + simId    // repository name
-					);
-			Asset eventAsset = repos.createAsset(
-					nowAsFilenameBase(),
-					transactionShortName + " Event", 
-					new SimpleType("simEvent"));
-			event = new Event(eventAsset);
-			logger.debug("New Event asset <" + eventAsset.getId() + ">");
-		return event;
-		
-	}
+    /**
+     * Repository == null makes this an in-memory Event, it is never saved
+     * to the repository.
+     * @param repository
+     * @return
+     */
+    Event buildEvent(Repository repository) {
+        def eventAsset = null
+        if (repository) {
+            def assetName = nowAsFilenameBase()
+            logger.debug('New event <${assetName}>')
+            def type = new SimpleType('event')
+            eventAsset = repository.createAsset(assetName, 'Event', type)
+        }
+        new Event(eventAsset)
+    }
+
+//	public Event buildEvent(SimId simId, String actorShortName, String transactionShortName) throws RepositoryException {
+//		Event event = null;
+//			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+//			Repository repos = fact.createNamedRepository(
+//					"SimLogs",
+//					"SimLogs",
+//					new SimpleType("eventRepos"),               // repository type
+//					actorShortName + "-" + simId    // repository name
+//					);
+//			Asset eventAsset = repos.createAsset(
+//					nowAsFilenameBase(),
+//					transactionShortName + " Event",
+//					new SimpleType("simEvent"));
+//			event = new Event(eventAsset);
+//			logger.debug("New Event asset <" + eventAsset.getId() + ">");
+//		return event;
+//
+//	}
 
     String nowAsFilenameBase() {
         Date date = new Date();

@@ -8,7 +8,7 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>gov.nist.toolkit</groupId>
+	<groupId>gov.nist.hit.ds</groupId>
 	<version>3.0.0-SNAPSHOT</version>
 	<artifactId>http</artifactId>
 
@@ -48,11 +48,7 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.hit.ds</groupId>
-			<artifactId>eventLog</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.nist.hit.ds</groupId>
-			<artifactId>errorRecording</artifactId>
+			<artifactId>event-log</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.hit.ds</groupId>

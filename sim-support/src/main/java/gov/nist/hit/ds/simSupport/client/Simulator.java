@@ -1,13 +1,13 @@
 package gov.nist.hit.ds.simSupport.client;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import gov.nist.toolkit.actortransaction.obsolete.client.ActorType;
+import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
-import gov.nist.toolkit.actortransaction.obsolete.client.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.repository.api.*;
 import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.utilities.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.Serializable;
 import java.util.ArrayList;

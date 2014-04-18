@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.simSupport.loader;
 
+import gov.nist.hit.ds.eventLog.assertion.Assertion;
+import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
@@ -9,6 +11,7 @@ import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.utilities.html.HttpMessageContent;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.xml.XmlText;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +50,9 @@ public abstract class AbstractLogLoader extends SimComponentBase {
 			else
 				body = Io.bytesFromFile(new File(dir, "request_body.bin"));
 		} catch (IOException e) {
-			ag.err(XdsErrorCode.Code.NoCode, e);
+            Assertion a = new Assertion();
+            a.setStatus(AssertionStatus.INTERNALERROR);
+            a.setFound(ExceptionUtil.exception_details(e));
 		}
 	}
 

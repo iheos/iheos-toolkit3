@@ -6,14 +6,14 @@ import gov.nist.hit.ds.actorTransaction.*;
 
 import java.util.List;
 
-import gov.nist.toolkit.actortransaction.obsolete.client.TransactionType;
 import org.junit.Before;
 import org.junit.Test;
 
 public class FindConfigOneEndpointTest {
 	ActorSimConfig sConfig;
+    ActorType actorType = ActorTypeFactory.find("registry");
 	List<AbstractActorSimConfigElement> cEles = sConfig.findConfigs(
-            new TransactionType[] { TransactionTypeFactory.find("register") },
+            new TransactionType[] { actorType.find("register") },
             new TlsType[] { TlsType.TLS},
             new AsyncType[] { AsyncType.ASYNC, AsyncType.SYNC});
 	

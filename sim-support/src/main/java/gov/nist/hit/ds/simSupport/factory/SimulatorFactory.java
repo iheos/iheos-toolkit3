@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.simSupport.factory;
 
+import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
-import gov.nist.toolkit.actortransaction.obsolete.client.ActorType;
-import gov.nist.toolkit.actortransaction.obsolete.client.TransactionType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.repository.api.*;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
@@ -15,7 +15,7 @@ import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.serializer.SimulatorSerializer;
 import gov.nist.hit.ds.siteManagement.client.Site;
-import gov.nist.hit.ds.utilities.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 import org.apache.log4j.Logger;
 
 import java.util.List;

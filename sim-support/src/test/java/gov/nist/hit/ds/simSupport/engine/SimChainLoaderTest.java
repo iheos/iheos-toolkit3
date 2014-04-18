@@ -4,10 +4,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.simSupport.exception.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.exception.SimEngineException;
-import gov.nist.hit.ds.utilities.initialization.installation.InitializationFailedException;
-import gov.nist.hit.ds.utilities.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.client.SimId;
@@ -16,6 +15,8 @@ import gov.nist.hit.ds.simSupport.event.EventBuilder;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import gov.nist.hit.ds.toolkit.installation.InitializationFailedException;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import org.apache.log4j.BasicConfigurator;
 import org.junit.Before;
 import org.junit.Test;

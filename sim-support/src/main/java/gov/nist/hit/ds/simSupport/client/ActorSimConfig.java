@@ -204,7 +204,7 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		for (AbstractActorSimConfigElement ele : getAll()) {
 			if (ele.getType() != ParamType.ENDPOINT) continue;
 			String name = ele.getName();
-			EndpointLabel elabel = new EndpointLabel(name);
+			EndpointLabel elabel = new EndpointLabel(actorType, name);
 			if (!tTypes.has(elabel.getTransType())) continue;
 			if (!tls.has(elabel.getTlsType())) continue;
 			if (!async.has(elabel.getAsyncType())) continue;

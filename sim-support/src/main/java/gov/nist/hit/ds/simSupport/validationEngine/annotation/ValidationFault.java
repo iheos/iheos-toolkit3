@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.simSupport.validationEngine.annotation;
 
-import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
 import gov.nist.hit.ds.eventLog.errorRecording.RequiredOptional;
+import gov.nist.hit.ds.soapSupport.FaultCode;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

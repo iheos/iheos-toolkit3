@@ -5,7 +5,7 @@ import spock.lang.*
 /**
  * Created by bill on 4/15/14.
  */
-class TestAssertionGroup extends Specification {
+class AssertionGroupTest extends Specification {
 
     def "Assert in"() {
 
@@ -18,6 +18,8 @@ class TestAssertionGroup extends Specification {
         then:
         asser.status == AssertionStatus.SUCCESS
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.SUCCESS
+
     }
 
     def "Not Assert in"() {
@@ -31,6 +33,7 @@ class TestAssertionGroup extends Specification {
         then:
         asser.status == AssertionStatus.ERROR
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.ERROR
     }
 
     def "fail"() {
@@ -45,6 +48,7 @@ class TestAssertionGroup extends Specification {
         asser.found == ''
         asser.status == AssertionStatus.ERROR
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.ERROR
     }
 
     def "Assert Equals"() {
@@ -59,6 +63,7 @@ class TestAssertionGroup extends Specification {
         asser.found == 'bye'
         asser.status == AssertionStatus.SUCCESS
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.SUCCESS
     }
 
     def "Not Assert Equals"() {
@@ -73,6 +78,7 @@ class TestAssertionGroup extends Specification {
         asser.found == 'by'
         asser.status == AssertionStatus.ERROR
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.ERROR
     }
 
     def "Assert True"() {
@@ -87,6 +93,7 @@ class TestAssertionGroup extends Specification {
         asser.found == 'True'
         asser.status == AssertionStatus.SUCCESS
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.SUCCESS
     }
 
     def "Not Assert True"() {
@@ -101,6 +108,7 @@ class TestAssertionGroup extends Specification {
         asser.found == 'False'
         asser.status == AssertionStatus.ERROR
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.ERROR
     }
 
     def "Assert NotNull"() {
@@ -115,6 +123,7 @@ class TestAssertionGroup extends Specification {
         asser.found == 'Found'
         asser.status == AssertionStatus.SUCCESS
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.SUCCESS
     }
 
     def "Not Assert NotNull"() {
@@ -129,6 +138,7 @@ class TestAssertionGroup extends Specification {
         asser.found == 'Missing'
         asser.status == AssertionStatus.ERROR
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.ERROR
     }
 
     def "InfoFound boolean"() {
@@ -143,6 +153,7 @@ class TestAssertionGroup extends Specification {
         asser.found == 'True'
         asser.status == AssertionStatus.INFO
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.SUCCESS
     }
 
     def "Not InfoFound boolean"() {
@@ -157,6 +168,7 @@ class TestAssertionGroup extends Specification {
         asser.found == 'False'
         asser.status == AssertionStatus.INFO
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.SUCCESS
     }
 
     def "InfoFound string"() {
@@ -171,6 +183,7 @@ class TestAssertionGroup extends Specification {
         asser.found == 'hi'
         asser.status == AssertionStatus.INFO
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.SUCCESS
     }
 
     def "Not InfoFound string"() {
@@ -185,6 +198,7 @@ class TestAssertionGroup extends Specification {
         asser.found == 'False'
         asser.status == AssertionStatus.INFO
         ag.assertions.size() == 1
+        ag.worstStatus == AssertionStatus.SUCCESS
     }
 
 

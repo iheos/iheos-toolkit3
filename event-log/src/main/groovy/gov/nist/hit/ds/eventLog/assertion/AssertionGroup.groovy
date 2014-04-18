@@ -12,7 +12,6 @@ public class AssertionGroup  {
     List<Assertion> assertions = []
     AssertionStatus worstStatus = AssertionStatus.SUCCESS;
     def validatorName = "AssertionGroup";
-    def saveInLog = true;
 
     private static Logger logger = Logger.getLogger(AssertionGroup);
     private final static String dashes = "---";
@@ -23,15 +22,22 @@ public class AssertionGroup  {
 
     public int size() { return assertions.size(); }
 
-    def addAssertion(Assertion asser) {
+    Assertion addAssertion(Assertion asser) {
         if (asser.getStatus().ordinal() > worstStatus.ordinal())
             worstStatus = asser.getStatus();
         assertions.add(asser);
+        asser
     }
 
     Assertion getFirstFailedAssertion() { return assertions.find { it.failed } }
 
     boolean hasErrors() { return worstStatus.isError() }
+
+    boolean hasUnsaved() {
+        assertions.find { !it.saved }
+    }
+
+    public Assertion getAssertion(int i) { assertions[i] }
 
     /************************************************************
      *
@@ -47,10 +53,9 @@ public class AssertionGroup  {
         Assertion a = new Assertion();
         a.expected = expecteds.toString();
         a.found = found;
-        addAssertion(a);
-        for (int i=0; i<expecteds.length; i++) if (expecteds[i] == found) return a
+        for (int i=0; i<expecteds.length; i++) if (expecteds[i] == found) return addAssertion(a)
         a.status = AssertionStatus.ERROR
-        return a;
+        addAssertion(a);
     }
 
     public Assertion fail(String expectedValue) {

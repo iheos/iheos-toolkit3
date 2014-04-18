@@ -1,6 +1,8 @@
 package gov.nist.hit.ds.actorTransaction;
 
 
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+
 /**
  * Generate labels for endpoints for when they are stored in 
  * SimulatorConfig objects.
@@ -23,6 +25,7 @@ public class EndpointLabel {
 	 * @param label
 	 */
 	public EndpointLabel(ActorType actorType, String label)  {
+        if (actorType == null) throw new ToolkitRuntimeException("ActorType is null");
 		String[] parts = label.split("_");
 		tls = false;
 		async = false;

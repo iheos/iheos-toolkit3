@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.simSupport.simrepo;
 
-import gov.nist.toolkit.actortransaction.obsolete.client.ActorType;
-import gov.nist.hit.ds.utilities.initialization.installation.ExtendedPropertyManager;
+import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.simSupport.client.SimId;
+import gov.nist.hit.ds.toolkit.installation.ExtendedPropertyManager;
 import org.apache.log4j.Logger;
 
 import java.io.File;

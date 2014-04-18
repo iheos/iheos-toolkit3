@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.engine;
 
 import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.eventLog.EventDAO;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -10,10 +11,10 @@ import gov.nist.hit.ds.simSupport.exception.SimChainLoaderException;
 import gov.nist.hit.ds.simSupport.exception.SimEngineException;
 import gov.nist.hit.ds.simSupport.exception.SimEngineExecutionException;
 import gov.nist.hit.ds.simSupport.exception.SimEngineSubscriptionException;
+import gov.nist.hit.ds.soapSupport.SoapFault;
+import gov.nist.hit.ds.soapSupport.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
-import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
-import gov.nist.hit.ds.soapSupport.soapFault.SoapFault;
-import gov.nist.hit.ds.utilities.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -104,12 +105,12 @@ public class SimEngine /* implements MessageValidatorEngine */ {
 				simStepCompleted(simStep);
 				SimComponent simComponent = simStep.getSimComponent();
 				if (simStep.getAssertionGroup() == null) {
-					AssertionGroup ag = new AssertionGroup().setValidatorName(simComponent.getClass().getSimpleName());
+					AssertionGroup ag = event.getAssertionGroup();
+                    ag.setValidatorName(simComponent.getClass().getName());
 					simStep.setEvent(event);
 					simStep.setAssertionGroup(ag);
-					event.addAssertionGroup(ag);
 				}
-				simStep.getAssertionGroup().setSaveInLog(simComponent.showOutputInLogs());
+//				simStep.getAssertionGroup().setSaveInLog(simComponent.showOutputInLogs());
 //				if (simComponent.getName() == null)
 //					simStep.getAssertionGroup().sectionHeading("Validator");
 //				else
@@ -123,15 +124,15 @@ public class SimEngine /* implements MessageValidatorEngine */ {
 				} catch (SoapFaultException e) {
 					SoapFault soapFault = new SoapFault(soapEnvironment, e);
 					try {
-						simStep.getAssertionGroup().err(XdsErrorCode.Code.SoapFault, e);
+                        simStep.getEvent().setFault(e.getMessage());
 						soapFault.send();
 					} catch (Exception e1) {
 						logger.error(ExceptionUtil.exception_details(e1));
 					}
-					event.flush();
+                    new EventDAO().save(event);
 					return;
 				}
-				event.flush();
+                new EventDAO().save(event);
 				if (simChain.hasErrors()) {
 					logger.error("Engine Error: " + simChain.getErrors());
 					errorsFound = true;
@@ -300,11 +301,11 @@ public class SimEngine /* implements MessageValidatorEngine */ {
 				if (returnType.equals(subClass)) {
 					// found a matching publisher
 					// Do something with it.....
-					PubSubMatch match = new PubSubMatch()
-					.setPubMethod(pubMethod)
-					.setPubObject(pubObject)
-					.setSubMethod(subMethod)
-					.setSubObject(subscriptionObject);
+					PubSubMatch match = new PubSubMatch();
+                    match.setPubMethod(pubMethod);
+                    match.setPubObject(pubObject);
+                    match.setSubMethod(subMethod);
+                    match.setSubObject(subscriptionObject);
 					return match;
 				}
 			}
@@ -368,12 +369,12 @@ public class SimEngine /* implements MessageValidatorEngine */ {
 	 */
 	void executePubSub(PubSubMatch match) throws SimEngineExecutionException {
 		try {
-			Object o = match.pubMethod.invoke(match.pubObject, (Object[]) null);
+			Object o = match.getPubMethod().invoke(match.getPubObject(), (Object[]) null);
 			if (o == null)
 				System.out.println(".Value is null");
 			Object[] args = new Object[1];
 			args[0] = o;
-			match.subMethod.invoke(match.subObject, args);
+			match.getSubMethod().invoke(match.getSubObject(), args);
 		} catch (IllegalArgumentException e) {
 			throw new SimEngineExecutionException(e);
 		} catch (IllegalAccessException e) {

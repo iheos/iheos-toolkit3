@@ -5,7 +5,7 @@ import spock.lang.*
 /**
  * Created by bill on 4/15/14.
  */
-class TestAssertionDAO extends Specification {
+class AssertionDAOTest extends Specification {
     def dao = new AssertionDAO()
 
     def "Translate Assertion through CSV"() {

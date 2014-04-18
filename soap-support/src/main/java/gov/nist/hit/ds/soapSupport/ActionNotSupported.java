@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.eventLog.soapSupport;
+package gov.nist.hit.ds.soapSupport;
 
 import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
 

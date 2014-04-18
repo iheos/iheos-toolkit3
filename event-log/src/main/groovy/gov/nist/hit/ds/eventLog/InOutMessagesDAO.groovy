@@ -11,11 +11,13 @@ class InOutMessagesDAO {
 	Asset inOutAsset;
 	final static String reqHdrType = "reqHdrType";
 	final static String reqBodyType = "reqBodyType";
-	final static String resType = "resType";
+	final static String resHdrType = "resHdrType";
+    final static String resBodyType = "resBodyType";
 	static Logger logger = Logger.getLogger(InOutMessagesDAO.class);
 
 	def init(Asset parent) throws RepositoryException {
 		inOutAsset = AssetHelper.createChildAsset(parent, "Input/Output Messages", "", new SimpleType("simInOut"));
+        inOutAsset
 	}
 
     InOutMessages load(Asset inOutAsset) {
@@ -28,11 +30,13 @@ class InOutMessagesDAO {
         iom
     }
 
-    void save(InOutMessages iom, Asset inOutAsset) {
-        this.inOutAsset = inOutAsset
+    // can be called multiple times - keeps track of what has been flushed to disk
+    void save(InOutMessages iom) {
         iom.with {
-            putRequestHeader(reqHdr)
-            putRequestBody(reqBody)
+            if (reqHdr && !reqHdrSaved) { putRequestHeader(reqHdr); reqHdrSaved = true }
+            if (reqBody && !reqBodySaved) { putRequestBody(reqBody); reqBodySaved = true }
+            if (respHdr && !respHdrSaved) { putResponseHeader(respHdr); respHdrSaved = true }
+            if (respBody && !respBodySaved) { putResponseBody(respBody);  respBodySaved = true }
         }
     }
 
@@ -65,17 +69,25 @@ class InOutMessagesDAO {
 		return ai.nextAsset().getContent();
 	}
 	
-	public void putResponse(String response) throws RepositoryException {
-		logger.debug("Response\n" + response);
-		Asset a = AssetHelper.createChildAsset(inOutAsset, "Response", "", new SimpleType(resType));
+	public void putResponseHeader(String hdr) throws RepositoryException {
+		logger.debug("Response\n" + hdr);
+		Asset a = AssetHelper.createChildAsset(inOutAsset, "Response Header", "", new SimpleType(resHdrType));
 		a.setOrder(3);
-		a.updateContent(response, "text/plain");
+		a.updateContent(hdr, "text/plain");
 	}
 
-	public String getResponse() throws RepositoryException {
-		AssetIterator ai = inOutAsset.getAssetsByType(new SimpleType(resType));
+    public void putResponseBody(byte[] bytes) throws RepositoryException {
+        logger.debug("Body\n" + new String(bytes));
+        Asset a = AssetHelper.createChildAsset(inOutAsset, "Response Body", "", new SimpleType(resBodyType));
+        a.setOrder(2);
+        a.updateContent(bytes);
+        a.setMimeType("application/octet-stream");
+    }
+
+    public String getResponseHeader() throws RepositoryException {
+		AssetIterator ai = inOutAsset.getAssetsByType(new SimpleType(resHdrType));
 		if (!ai.hasNextAsset())
-			throw new RepositoryException("Error Retrieving response message from Repository");
+			throw new RepositoryException("Error Retrieving response header from Repository");
 		return new String(ai.nextAsset().getContent());
 	}
 

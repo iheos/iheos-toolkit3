@@ -6,7 +6,7 @@ import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
-import gov.nist.hit.ds.utilities.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;

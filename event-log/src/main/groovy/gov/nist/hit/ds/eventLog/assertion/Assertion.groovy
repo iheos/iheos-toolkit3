@@ -13,6 +13,7 @@ class Assertion {
     def code = "";
     def location = "";
     RequiredOptional requiredOptional = RequiredOptional.R;
+    def saved = false
 
     boolean failed() { return status.isError(); }
 
@@ -30,6 +31,9 @@ class Assertion {
                 code == a.code &&
                 location == a.location &&
                 requiredOptional == a.requiredOptional
-
     }
+
+    public String getMsg() { msg }
+    public String getFound() { found }
+    public String getExpected() { expected }
 }
