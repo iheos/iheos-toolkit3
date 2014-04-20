@@ -37,13 +37,13 @@ public class SimEngineTest {
 				.setSimComponent(new FooMaker());
 		simSteps.add(fooMakerStep);
 
-		SimChain simChain = new SimChain().setSteps(simSteps);
+		SimChain simChain = new SimChain().addSteps(simSteps);
 
 		SimEngine engine = new SimEngine(simChain, event);
 		assertFalse(engine.isStepCompleted(fooMakerStep));
-		assertFalse(engine.isComplete());
+		assertFalse(!engine.isRunable());
 		engine.simStepCompleted(fooMakerStep);
-		assertTrue(engine.isComplete());
+		assertTrue(!engine.isRunable());
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class SimEngineTest {
 		simSteps.add(new SimStep().setName("BarUser Name").setSimComponent(
 				new BarUser()));
 
-		SimChain simChain = new SimChain().setBase(base).setSteps(simSteps);
+		SimChain simChain = new SimChain().setBase(base).addSteps(simSteps);
 
 		run(simChain);
 	}
@@ -75,7 +75,7 @@ public class SimEngineTest {
 		simSteps.add(new SimStep().setName("FooUser").setSimComponent(
 				new FooUser()));
 
-		SimChain simChain = new SimChain().setSteps(simSteps);
+		SimChain simChain = new SimChain().addSteps(simSteps);
 
 		assertFalse(simChain.hasErrors());
 		run(simChain);

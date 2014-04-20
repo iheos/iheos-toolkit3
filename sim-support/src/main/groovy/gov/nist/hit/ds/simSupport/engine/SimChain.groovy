@@ -1,14 +1,8 @@
-package gov.nist.hit.ds.simSupport.engine;
+package gov.nist.hit.ds.simSupport.engine
 
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
-import gov.nist.hit.ds.eventLog.errorRecording.SystemErrorRecorder;
-import gov.nist.hit.ds.eventLog.assertion.Assertion;
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Define a simulator chain - mode up of
@@ -26,45 +20,28 @@ public class SimChain  {
 	Object base = null;
 	List<SimStep> steps = new ArrayList<SimStep>();
 
-	public SimChain setSteps(List<SimStep> steps) {
+    def init(Event event) { steps.each { it.init(event) } }
+
+	public SimChain addSteps(List<SimStep> steps) {
 		this.steps.addAll(steps);
 		return this;
 	}
 	
-	public List<SimStep> getSteps() {
-		return steps;
-	}
-
-	public SimChain add(SimStep ss) {
+	def addStep(SimStep ss) {
 		steps.add(ss);
-		return this;
 	}
 
-	public SimChain add(int index, SimStep ss) {
+	public SimChain addStep(int index, SimStep ss) {
 		((ArrayList<SimStep>)steps).add(index, ss);
 		return this;
 	}
 
-	public Object getBase() {
-		return base;
-	}
+    SimStep getRunableStep() { steps.find { !it.completed } }
 
-	public SimChain setBase(Object base) {
-		this.base = base;
-		return this;
-	}
-
-	public Iterator<SimStep> iterator() {
-		return steps.iterator();
-	}
+    List<Object> getComponents() { steps.collect { it.simComponent }}
 
 	public boolean hasErrors() {
-		for (SimStep step : steps) {
-			AssertionGroup er = step.getAssertionGroup();
-			if (er != null && er.hasErrors())
-				return true;
-		}
-		return false;
+        steps.find { it.getAssertionGroup()?.hasErrors() }
 	}
 
 	/**

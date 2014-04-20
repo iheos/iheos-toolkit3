@@ -42,6 +42,6 @@ public class SimChainLoader {
 
 		}
 
-		return new SimChain().setSteps(simSteps);
+		return new SimChain().addSteps(simSteps);
 	}
 }

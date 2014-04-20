@@ -14,19 +14,14 @@ public class SimStep {
 	AssertionGroup assertionGroup = null;  // set by engine
 	Event event = null;        // set by engine
 	SimComponent simComponent = null;
+    boolean completed = false;
 
-	public String getName() {
-		return name;
-	}
-	
-	public SimStep setName(String name) {
-		this.name = name;
-		return this;
-	}
-	
-	public Event getEvent() {
-		return event;
-	}
+    def init(Event event) {
+        if (this.event) return
+        this.event = event
+        assertionGroup = event.assertionGroup
+        assertionGroup.validatorName = simComponent.class.name
+    }
 
 	public SimStep setEvent(Event event) {
 		this.event = event;
@@ -34,32 +29,18 @@ public class SimStep {
 		return this;
 	}
 
-	public AssertionGroup getAssertionGroup() {
-		return assertionGroup;
-	}
-	
-	public SimStep setAssertionGroup(AssertionGroup er) {
-		this.assertionGroup = er;
-		simComponent.setAssertionGroup(er);
-		return this;
+	public SimStep setAssertionGroup(AssertionGroup assertionGroup) {
+		this.assertionGroup = assertionGroup
+		simComponent.setAssertionGroup(assertionGroup)
+		return this
 	}
 	
 	public SimComponent getSimComponent() {
 		// link to ErrorRecorder here since we
 		// don't know the ordering of setter calls
-		simComponent.setAssertionGroup(assertionGroup);
-		return simComponent;
+		simComponent.setAssertionGroup(assertionGroup)
+		return simComponent
 	}
-	
-	public SimStep setSimComponent(SimComponent valsim) {
-		this.simComponent = valsim;
-		return this;
-	}
-	
-	public String toString() {
-		if (name != null)
-			return name;
-		else
-			return super.toString();
-	}
+
+	public String toString() { (name) ? name : super.toString() }
 }

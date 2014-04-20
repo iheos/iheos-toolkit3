@@ -47,7 +47,7 @@ public class SimChainLoaderTest {
 
 			for (SimStep step : simChain.getSteps()) 
 				assertFalse(engine.isStepCompleted(step));
-			assertFalse(engine.isComplete());
+			assertFalse(!engine.isRunable());
 
 
 			engine.run();
@@ -55,7 +55,7 @@ public class SimChainLoaderTest {
 
 			for (SimStep step : simChain.getSteps()) 
 				assertTrue(engine.isStepCompleted(step));
-			assertTrue(engine.isComplete());
+			assertTrue(!engine.isRunable());
 
 
 		} catch (IOException e) {
@@ -105,7 +105,7 @@ public class SimChainLoaderTest {
 
 			for (SimStep step : engine.getSimChain().getSteps()) 
 				assertFalse(engine.isStepCompleted(step));
-			assertFalse(engine.isComplete());
+			assertFalse(!engine.isRunable());
 
 
 			engine.run();
@@ -113,7 +113,7 @@ public class SimChainLoaderTest {
 
 			for (SimStep step : engine.getSimChain().getSteps()) 
 				assertTrue(engine.isStepCompleted(step));
-			assertTrue(engine.isComplete());
+			assertTrue(!engine.isRunable());
 
 
 		} catch (IOException e) {
