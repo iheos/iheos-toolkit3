@@ -22,17 +22,12 @@
       </dependency>
 	  	<dependency>
 	  		<groupId>gov.nist.hit.ds</groupId>
-	  		<artifactId>actorTransaction</artifactId>
+	  		<artifactId>actor-transaction</artifactId>
 	  		<version>3.0.0-SNAPSHOT</version>
 	  	</dependency>
 	  	<dependency>
 	  		<groupId>gov.nist.hit.ds</groupId>
 	  		<artifactId>http</artifactId>
-	  		<version>3.0.0-SNAPSHOT</version>
-	  	</dependency>
-	  	<dependency>
-	  		<groupId>gov.nist.hit.ds</groupId>
-	  		<artifactId>errorRecording</artifactId>
 	  		<version>3.0.0-SNAPSHOT</version>
 	  	</dependency>
 	  	<dependency>
@@ -42,7 +37,7 @@
 	  	</dependency>
 	  	<dependency>
 	  		<groupId>gov.nist.hit.ds</groupId>
-	  		<artifactId>siteManagement</artifactId>
+	  		<artifactId>site-management</artifactId>
 	  		<version>3.0.0-SNAPSHOT</version>
 	  	</dependency>
 	  	<dependency>
@@ -56,15 +51,11 @@
 	  	</dependency>
 	  	<dependency>
 	  		<groupId>gov.nist.hit.ds</groupId>
-	  		<artifactId>eventLog</artifactId>
-	  	</dependency>
-	  	<dependency>
-	  		<groupId>gov.nist.hit.ds</groupId>
 	  		<artifactId>repository</artifactId>
 	  	</dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>eventLog</artifactId>
+          <artifactId>event-log</artifactId>
       </dependency>
   </dependencies>
 
