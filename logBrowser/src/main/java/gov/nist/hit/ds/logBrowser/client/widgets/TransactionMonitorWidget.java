@@ -183,8 +183,8 @@ public class TransactionMonitorWidget extends Composite {
             public void onResize(ResizeEvent event) {
 
                 try {
-                    int containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
-                    int containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
+                    long containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
+                    long containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
 
 
 

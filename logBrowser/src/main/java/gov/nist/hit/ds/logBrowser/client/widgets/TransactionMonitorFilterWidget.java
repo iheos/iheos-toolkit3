@@ -48,6 +48,7 @@ public class TransactionMonitorFilterWidget extends Composite {
 
     private TransactionMonitorWidget txMonitorLive;
     private TransactionMonitorWidget txFilter;
+    private Widget southStackPanel;
     private HTML liveCounterTxt = new HTML("");
     private int filterHitCounter = 0;
     private HTML filterCounterTxt = new HTML("");
@@ -73,7 +74,10 @@ public class TransactionMonitorFilterWidget extends Composite {
     protected Widget setupMainPanel() {
         SplitLayoutPanel mainSplitPanel = new SplitLayoutPanel(3);
 
-        mainSplitPanel.addSouth(createFilteredMonitorPanel(), Math.round(.5 * Window.getClientHeight()));
+
+        setSouthStackPanel(createFilteredMonitorPanel());
+        //// getSouthStackPanel().setVisible(Boolean.FALSE);
+        mainSplitPanel.addSouth(getSouthStackPanel(), Math.round(.5 * Window.getClientHeight()));
 
         mainSplitPanel.add(setupFilterBasedResultsPanel()); // Filter selection and results stack panel
 
@@ -128,7 +132,7 @@ public class TransactionMonitorFilterWidget extends Composite {
             }
         });
 
-        stackPanel.add(getTxMonitorLive(), createPanelHeader("Port Monitor", createMonitorHeaderOptions(), null), 2);
+        stackPanel.add(getTxMonitorLive(), createPanelHeader("Proxy Monitor", createMonitorHeaderOptions(), null), 2);
 
         // filterSplitPanel.add(stackPanel);
 
@@ -268,6 +272,9 @@ public class TransactionMonitorFilterWidget extends Composite {
             setFilterError("No filter has been applied or the repository selection is missing!");
             return;
         } else {
+            if (!getSouthStackPanel().isVisible()) {
+                //// getSouthStackPanel().setVisible(Boolean.TRUE);
+            }
 
             //resultPanel.add(new HTML("&nbsp;"));
             //resultPanel.add(new HTML("Searching..."));
@@ -348,6 +355,13 @@ public class TransactionMonitorFilterWidget extends Composite {
 
     public void setLiveCounterTxt(HTML liveCounterTxt) {
         this.liveCounterTxt = liveCounterTxt;
+    }
+    public Widget getSouthStackPanel() {
+        return southStackPanel;
+    }
+
+    public void setSouthStackPanel(Widget southStackPanel) {
+        this.southStackPanel = southStackPanel;
     }
 
 }
