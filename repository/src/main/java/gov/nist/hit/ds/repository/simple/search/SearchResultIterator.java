@@ -1,12 +1,8 @@
 package gov.nist.hit.ds.repository.simple.search;
 
-import java.io.File;
-import java.util.List;
-import java.util.logging.Logger;
-
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -19,6 +15,10 @@ import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
+
+import java.io.File;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class SearchResultIterator implements AssetIterator  {
 
@@ -134,6 +134,7 @@ public class SearchResultIterator implements AssetIterator  {
                         File propFile = new File(fullPath);
                         a = repos.getAssetByPath(propFile);
                         a.setPath(propFile);
+                        logger.fine("mimeType:" + a.getMimeType());
 
                         if (a==null) {
                             logger.warning("Asset prop load by path failed" + propFileStr);
