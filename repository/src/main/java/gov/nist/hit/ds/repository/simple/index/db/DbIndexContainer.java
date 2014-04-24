@@ -18,8 +18,8 @@ import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.utilities.io.Hash;
+import gov.nist.hit.ds.repository.simple.index.db.IndexerThread.IndexStatus;
 
-import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,16 +45,7 @@ public class DbIndexContainer implements IndexContainer, Index {
     public static final int WAIT_MILLIS = 3000;
     public static final int TWO_MINS_MILLIS = 120000;
 
-    /**
-	 * 
-	 * An enumeration of status codes for a given asset in the index container   
-	 *
-	 */
-	private static enum IndexStatus {
-		NOT_INDEXED,
-		INDEXED,
-		STALE
-	};	
+
 	private static Logger logger = Logger.getLogger(DbIndexContainer.class.getName());
 	/**
 	 * The name of the internal index container or the database table name
@@ -70,13 +61,18 @@ public class DbIndexContainer implements IndexContainer, Index {
 	private static final String hash = PropertyKey.HASH.toString();
 	private static final String reposAcs = PropertyKey.REPOSITORY_ACCESS.toString();
 	private static final String indexSession = PropertyKey.INDEX_SESSION.toString();
+
+    private static final String[] commonAssetPropertyIndex = {assetId,locationId,assetType,repId,displayOrder,parentId,createdDate,hash,reposAcs,indexSession}; // Transform to an enum as needed in future
 	
 	private static final String CACHED_SESSION = "CACHED";
 	private static final String CONTAINER_VERSION = "2014-03-13";
 	private static final String CONTAINER_VERSION_ID = "VERSION";
 	private static final String BYPASS_VERSION = "BYPASS";
 
-	
+    // Repository index marker
+    private static final ConcurrentHashMap<String, Boolean> reposIndexMap = new ConcurrentHashMap<String, Boolean>();
+
+
 	/* Use an upgrade script to update existing tables in case a newer version of TTT (new ArtRep API) runs against an older copy of the repositoryIndex table in the database */
 	/**
 	 * The index container definition
@@ -120,9 +116,10 @@ public class DbIndexContainer implements IndexContainer, Index {
 			logger.fine("New index container created.");
 		}
 		
-		String reposId = repos.getId().getIdString();		
-		
-		// Make this repos is not being actively queued for indexing by another instance
+		String reposId = repos.getId().getIdString();
+
+		/*
+		///// Make this repos is not being actively queued for indexing by another instance
 		
 		if (isReposQueuedForIndexing(repos)) {
 
@@ -146,7 +143,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 		} else {
 			queueReposForIndex(repos,true);
 		}
-		
+		*/
 		
 		iter = new SimpleAssetIterator(repos);
 		 		
@@ -161,18 +158,37 @@ public class DbIndexContainer implements IndexContainer, Index {
 //		if (iter.getSize()<=maxIndexFast) {
 
 
-            if (indexNewAssetsOnly) {
-                totalAssetsIndexed = appendIndex(repos, iter);
-            } else {
-                totalAssetsIndexed = indexRepository(repos, iter);
+        // Mark index
+        if (getReposIndexMap().get(reposId)!=null) {
+            logger.info(reposId + " is already being indexed...");
+                synchronized (iter) {
+                    if (indexNewAssetsOnly) {
+                        totalAssetsIndexed = appendIndex(repos, iter);
+                    } else {
+                        totalAssetsIndexed = indexRepository(repos, iter);
+                    }
+                    logger.info(reposId + " exiting...");
+                }
+        } else {
+            getReposIndexMap().put(reposId,Boolean.TRUE);
+            try {
+                if (indexNewAssetsOnly) {
+                    totalAssetsIndexed = appendIndex(repos, iter);
+                } else {
+                    totalAssetsIndexed = indexRepository(repos, iter);
+                }
+            } finally {
+                getReposIndexMap().remove(reposId);
             }
+        }
+
 
 
 //		} else {
 //			totalAssetsIndexed = indexRepLong(repos,iter);
 //		}
 		
-		queueReposForIndex(repos,false);
+		//// queueReposForIndex(repos,false);
 		return totalAssetsIndexed;
 	}
 
@@ -213,9 +229,8 @@ public class DbIndexContainer implements IndexContainer, Index {
                 aList.addAll(unIndexed.keySet());
 
                 ExecutorService svc = Executors.newCachedThreadPool();
-                final ConcurrentHashMap<String, String> columnMap = new ConcurrentHashMap<String, String>();
 
-                svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset, columnMap)));
+                svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset)));
 
                 svc.shutdown();
                 boolean svcStatus = false;
@@ -317,8 +332,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			logger.fine("Repos Id <" + reposId + "> is already synced.");
 		} else {
 			ExecutorService svc = Executors.newCachedThreadPool();
-			final ConcurrentHashMap<String, String> columnMap = new ConcurrentHashMap<String, String>();
-			
+
 			int batchSz = 27;
 			int sz = aList.size();
 			
@@ -343,18 +357,18 @@ public class DbIndexContainer implements IndexContainer, Index {
 				int cx = 0;
 				while (end <= sz) {
 					logger.fine("running indexer thread " + cx++);
-					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, end), unIndexed, unIndexedAsset, columnMap)));					
+					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, end), unIndexed, unIndexedAsset)));
 					start += batchSz;
 					end +=batchSz;
 				}
 				
 				if (end>sz) {
-					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, sz), unIndexed, unIndexedAsset, columnMap)));
+					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, sz), unIndexed, unIndexedAsset)));
 				}
 					
 					
 			} else {
-				svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset, columnMap)));
+				svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset)));
 			}
 			
 			svc.shutdown();
@@ -567,7 +581,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @return
 	 * @throws RepositoryException
 	 */
-	public int addIndex(DbContext dbc, String repositoryId, String assetId, String assetType, String locationStr, String property, String value)
+	public static int addIndex(DbContext dbc, String repositoryId, String assetId, String assetType, String locationStr, String property, String value)
 			throws RepositoryException {
 		int[] rsData = null;
 		
@@ -597,7 +611,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	
 	
 
-	public void updateIndex(int idKey, String propCol, String value)
+	public static void updateIndex(int idKey, String propCol, String value)
 			throws RepositoryException {
 		
 		DbContext dbc = new DbContext();
@@ -628,7 +642,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @param val
 	 * @throws RepositoryException
 	 */
-	public void updateIndexKeys(int idKey, String setFragment, String[] val)
+	public static void updateIndexKeys(int idKey, String setFragment, String[] val)
 			throws RepositoryException {
 		
 		DbContext dbc = new DbContext();			
@@ -717,59 +731,52 @@ public class DbIndexContainer implements IndexContainer, Index {
 	/**
 	 * Expand the index container to allow for new indexable properties 
 	 * @param column
-	 * @param columnMap
 	 * @throws RepositoryException
 	 */
-	public synchronized void expandContainer(String[] column, ConcurrentHashMap<String,String> columnMap) throws RepositoryException {
+	public static synchronized String[] expandContainer(String[] column) throws RepositoryException {
+        if (column==null)
+            return null;
+
 		DbContext dbc = new DbContext();
+        String[] result = new String[column.length];
+        int colCounter=0;
 		try {
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 
-				
+
 			if (column!=null) {
 				String sqlStr = "";
 //				String index = "";
 
-				try {
-									
-//					int cx=0; 
+
+
 					for (String c : column) {
-						String dbCol = getDbIndexedColumn(assetType, c);
-						
-						if (!columnMap.containsKey(dbCol)) {
-							
-							if (!isIndexed(dbCol)) {
-								logger.fine(dbCol + " is to-be-indexed");
-								columnMap.put(dbCol, "to-be-indexed");
-//								if (cx++>0) index+=",";
-//								index += dbCol;
-		
-								// Can only add one at a time
-								sqlStr = "alter table "+ repContainerLabel + " add column " + dbCol + " varchar(128)";					
-								dbc.internalCmd(sqlStr);								
-							} else {
-								logger.fine(dbCol + " indexed");
-								columnMap.put(dbCol, "indexed");
-							}
-							
-						} else {
-							logger.fine("Column "+ c +" already exists ");
-						}
-						
+						String colId = getColumnIdentifier(assetType, c);
+
+                        String dbCol = null;
+
+                        try {
+                            dbCol = getIndexedColumn(colId);
+                            logger.fine(dbCol + " is already indexed");
+                            result[colCounter++] = dbCol;
+                        } catch (RepositoryException re) {
+                            try {
+                                addIdxByColId(dbc, colId);
+                                result[colCounter++] = dbCol;
+                            } catch (SQLException e) {
+                               logger.severe("addIdxByColId failed for:" + dbCol);
+                            }
+                        }
+
 					}
 					
-				} catch (SQLException e) {
-					e.printStackTrace();
-					throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
-				} 
-			}
+				}
 			
 			} catch (Exception ex) {
 			logger.warning(ex.toString());
 		} finally {
 			dbc.close();
 		}
-
 			
 //			try {
 //				if (sqlStr!="") {
@@ -779,43 +786,59 @@ public class DbIndexContainer implements IndexContainer, Index {
 //			} catch (SQLException e) {
 //				logger.fine("Index probably exists.");
 //			}
-			
-		
-		
+
+        return (colCounter>0)?result:null;
+
 	}
-	
+
+    private static void addIdxByColId(DbContext dbc, String colId) throws SQLException {
+        String sqlStr;
+        logger.fine(colId + " is to-be-indexed");
+
+        // Can only add one at a time
+        sqlStr = "alter table "+ repContainerLabel + " add column " + colId + " varchar(128)";
+        dbc.internalCmd(sqlStr);
+    }
+
 
     /**
      *
-     * @param dbCol
+     * @param colId The table column
      * @return Returns whether a given property for the assetType has a container column associated in the index database.
      * @throws RepositoryException
      */
 
-	public boolean isIndexed(String dbCol) throws RepositoryException {
+	public static String getIndexedColumn(String colId) throws RepositoryException {
 		int records=0;
 		DbContext dbc = new DbContext();		
 		try {
 			
 			if (!PnIdentifier.uniquePropertyColumn) { // Take care of quoted identifiers
-				dbCol = dbCol.replace("\"", "");
+				colId = colId.replace("\"", "");
 			}
-			
-			if (repContainerDefinition.contains(dbCol)) { // Quick check in definition
-				logger.fine("Quick check pass: " + dbCol);
-				return true;
-			}
+
+            for (String key : commonAssetPropertyIndex) {
+                if (key.equals(colId)) {
+                    logger.fine("Quick check pass: " + colId);
+                    return colId;
+                }
+            }
+
+//			if (repContainerDefinition.contains(dbCol)) { // Quick check in definition
+//				logger.fine("Quick check pass: " + dbCol);
+//				return true;
+//			}
 			
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			String sqlStr = "select count(c.columnname)ct from sys.syscolumns c, sys.systables t "
 							+"where c.referenceid=t.tableid and t.tabletype='T' and lower(t.tablename)=lower('" + repContainerLabel 
-							+ "') and lower(c.columnname) = lower('" + dbCol + "')";
+							+ "') and lower(c.columnname) = lower('" + colId + "')";
 			ResultSet rs = dbc.executeQuery(sqlStr);
 			
 			if (rs!=null) {
 				if (rs.next()) {
 			          records = rs.getInt("ct");
-			          logger.fine(dbCol + ": records: " + records);
+			          logger.fine(colId + ": records: " + records);
 
 				}
 				rs.close();
@@ -829,17 +852,17 @@ public class DbIndexContainer implements IndexContainer, Index {
 			dbc.close();
 		}
 		
-		if (records==0) 
-			return false;
-		else
-			return true;
+		if (records==0)
+            throw new RepositoryException(RepositoryException.INDEX_ERROR, new Exception("Not indexed"));
+
+		return PnIdentifier.getQuotedIdentifer(colId);
 	}
 	
 	public String getColumn(String assetType, String property) throws RepositoryException {
 		if (!PnIdentifier.uniquePropertyColumn) {
 			return property.replace("\"", "");
 		} else 
-			return getDbIndexedColumn(assetType, property);
+			return getColumnIdentifier(assetType, property);
 	}
 
 	/**
@@ -849,9 +872,16 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @throws RepositoryException
 	 */
 	
-	public static String getDbIndexedColumn(String assetType, String property)
-			throws RepositoryException {		
-		if (!PnIdentifier.uniquePropertyColumn) {			
+	public static String getColumnIdentifier(String assetType, String property)
+			throws RepositoryException {
+
+		if (!PnIdentifier.uniquePropertyColumn) {
+            for (String key : commonAssetPropertyIndex) {
+                if (key.equals(property)) {
+                    logger.fine("Quick check pass: " + key);
+                    return key;
+                }
+            }
 			return PnIdentifier.getQuotedIdentifer(property);
 		} else {			
 			String dbCol = null;		
@@ -1089,88 +1119,7 @@ public class DbIndexContainer implements IndexContainer, Index {
         return getHash(assetProps.toString().getBytes());
     }
 
-	/**
-	 * 
-	 * The worker thread to index a repository on the file system
-	 *
-	 */
-	private class IndexerThread implements Runnable {
-//		private int totalAssetsIndexed = -1;
-		private final Map<String, String> unIndexed; // read-only
-		private final Map<String, Asset> unIndexedAsset; // read-only
-		private Repository repos;
-		private String reposId;
-		private List<String> aList;
-		private final ConcurrentHashMap<String, String> columnMap; // read-write
-		
-		public IndexerThread(Repository repos,List<String> aList, Map<String, String> unIndexed, Map<String, Asset> assetMap, ConcurrentHashMap<String, String> columnMap) throws RepositoryException {
-			this.unIndexed = unIndexed;
-			this.unIndexedAsset = assetMap;
-			this.repos = repos;
-			this.aList = aList;
-			this.reposId = repos.getId().getIdString();
-			this.columnMap = columnMap;
-			
-		}
-		
-		@Override
-		public void run() {			
 
-			try {
-				for (String key : aList) {
-
-						Asset a = unIndexedAsset.get(key);
-						File propFile = a.getPropFile();
-						String relativePartStr = a.getPropFileRelativePart(); // Make paths relative to repository root 
-						IndexStatus idxStatus = IndexStatus.NOT_INDEXED;
-						
-						logger.fine("Found indexable asset property file: " + relativePartStr);
-						
-						String assetId = (a.getId()!=null)?a.getId().getIdString():null; 
-						if (assetId == null || "".equals(assetId)) {
-							logger.fine("Missing asset Id for " + propFile);
-						}
-	
-						String typeKeyword = (a.getAssetType()==null?null:a.getAssetType().getKeyword());
-						// Properties should already be loaded by getAsset call by the Iterator
-						Properties assetProps = a.getProperties();
-									
-						String hash = unIndexed.get(key);
-						int idxId = -1;
-							
-							expandContainer(assetProps.stringPropertyNames().toArray(new String[assetProps.size()]), columnMap);
-							
-							for (String propertyName : assetProps.stringPropertyNames() ) { /* use properties for partial index */ 						
-								try {
-									String propertyValue = a.getProperty(propertyName);
-									logger.fine("prop-" + propertyName + " -- " + propertyValue);
-									if (propertyValue!=null && !"".equals(propertyValue)) {
-										
-										if (IndexStatus.NOT_INDEXED.equals(idxStatus)) {
-											idxId = addIndex(reposId,assetId,typeKeyword,relativePartStr,getDbIndexedColumn(typeKeyword,propertyName),propertyValue);
-											idxStatus = IndexStatus.STALE;
-										} else if (idxId!=-1) {
-											updateIndex(idxId, getDbIndexedColumn(typeKeyword,propertyName), propertyValue);									
-										}
-	
-	//									totalAssetsIndexed++;
-									}
-								} catch (Exception e)  {
-									; // Ignore if property doesn't exist
-								}					
-							}
-	
-							updateIndexKeys(idxId, "hash=?,reposAcs=?,location=?", new String[]{hash, repos.getSource().getAccess().name(), relativePartStr}); // Note the use of unquoted identifier vs. quoted identifiers for asset property references
-					
-			}
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				logger.warning(ex.toString());
-			} 
-				
-
-	}
-	}
 
 
     /**
@@ -1689,9 +1638,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	}
 	
 	/**
-	 * 
-	 * @param searchCriteria
-	 * @return
+	 *
 	 
 	private String getWhereClause(SearchTerm[] searchCriteria) {
 		String whereClause = " where ";
@@ -1728,5 +1675,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 	}
 	*/
 
-	
+    public ConcurrentHashMap<String, Boolean> getReposIndexMap() {
+        return reposIndexMap;
+    }
+
+
 }

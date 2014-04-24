@@ -8,15 +8,13 @@ import gov.nist.hit.ds.repository.simple.index.CreateContainerTest;
 import gov.nist.hit.ds.repository.simple.index.ExpandContainerTest;
 import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilderTest;
 import gov.nist.hit.ds.repository.simple.search.SearchTest;
-
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.ClassRule;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+
+import java.io.File;
 
 /**
  * 
