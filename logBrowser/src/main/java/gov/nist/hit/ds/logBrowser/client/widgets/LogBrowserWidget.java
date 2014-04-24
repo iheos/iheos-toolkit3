@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.logBrowser.client.widgets;
 
 
-import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
@@ -19,6 +19,7 @@ import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -118,7 +119,7 @@ public class LogBrowserWidget extends Composite {
         }, TRANSACTION_FILTER() {
             @Override
             public String toString() {
-                return "Messages";
+                return "Transaction Filter";
             }
         }
 	};
@@ -205,7 +206,7 @@ public class LogBrowserWidget extends Composite {
 
                 if (txMonTab>-1) {
 
-                    featureTlp.getTabWidget(txMonTab).getElement().setInnerText(Feature.TRANSACTION_MONITOR.toString() + " ("+ (event.getValue()+1) + ")");
+                    featureTlp.getTabWidget(txMonTab).getElement().setInnerText(Feature.TRANSACTION_MONITOR.toString() + " ("+ event.getValue() + ")");
 
                 }
 
@@ -661,19 +662,31 @@ public class LogBrowserWidget extends Composite {
      * @param csv
      * @return
      */
-		private CellTable<List<String>> createCellTable(String [][]csv) {
+		private CellTable<List<SafeHtml>> createCellTable(String [][]csv) {
 			// Create a CellTable (based on Stack ans. 15122103).
-			 CellTable<List<String>> table = new CellTable<List<String>>();							 							 
-			 
+			 // CellTable<List<String>> table = new CellTable<List<String>>();
+            CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>();
 			 
 			 // Get the rows as List
 			    int rowLen = csv.length;
 			    int colLen = csv[0].length;
-			    List<List<String>> rows = new ArrayList<List<String>>(rowLen);
+			    List<List<SafeHtml>> rows = new ArrayList<List<SafeHtml>>(rowLen);
 			    
 			    for (int r = 1; r < rowLen; r++) {
-			        List<String> row = Arrays.asList(csv[r]);
-			        rows.add(row);
+			        List<String> textRow = Arrays.asList(csv[r]);
+                    if (textRow!=null) {
+                        int textRowSz = textRow.size();
+                        if (textRowSz>0) {
+                            List<SafeHtml> htmlRow = new ArrayList<SafeHtml>(textRowSz);
+                            for (int cx=0; cx<textRowSz; cx++) {
+                                SafeHtmlBuilder shb = new SafeHtmlBuilder();
+                                String val =  textRow.get(cx);
+                                htmlRow.add(htmlBuilder(val).toSafeHtml());
+                            }
+                            rows.add(htmlRow);
+                        }
+                    }
+
 			    }  
 
 			    // Create table columns
@@ -683,14 +696,38 @@ public class LogBrowserWidget extends Composite {
 			    }
 			    
 			    // Create a list data provider.
-			    final ListDataProvider<List<String>> dataProvider  = new ListDataProvider<List<String>>();
+			    final ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
 			    dataProvider.setList(rows);
 			    
 			    dataProvider.addDataDisplay(table);
 			return table;
 		}
-		
-	  protected void displayAssetContent(AssetNode an, ScrollPanel contentPanel, HTML propsWidget) {
+
+    private SafeHtmlBuilder htmlBuilder(String v) {
+        SafeHtmlBuilder shb = new SafeHtmlBuilder();
+        if (v!=null) {
+
+            String[] values = v.split(" ");
+
+            for (String val : values) {
+                if (val.toLowerCase().startsWith("http://") || v.toLowerCase().startsWith("https://")) {
+                    shb.appendHtmlConstant("<a href='"
+                            + val
+                            + "' target='_blank'>" // Open link in new tab
+                    );
+                    shb.appendEscaped(val);
+                    shb.appendHtmlConstant("</a>&nbsp;");
+
+                } else {
+                    shb.appendEscaped(v);
+                }
+            }
+
+        }
+        return  shb;
+    }
+
+    protected void displayAssetContent(AssetNode an, ScrollPanel contentPanel, HTML propsWidget) {
 		  contentPanel.clear();
 			//// splitPanel.remove(centerPanel);
 			
@@ -720,7 +757,7 @@ public class LogBrowserWidget extends Composite {
 			// westContent.add(propsWidget);
 			if (an.isContentAvailable()) {
 				if ("text/csv".equals(an.getMimeType())) {
-					   CellTable<List<String>> table = createCellTable(an.getCsv());								    
+					   CellTable<List<SafeHtml>> table = createCellTable(an.getCsv());
 					   contentPanel.add(table);							    
 				} else if ("text/xml".equals(an.getMimeType()) || "application/soap+xml".equals(an.getMimeType())) {
 					String xmlStr = an.getTxtContent().replace("<br/>", "\r\n");
@@ -773,14 +810,16 @@ public class LogBrowserWidget extends Composite {
 	        return item;
 	    }
 	  
-	  class IndexedColumn extends Column<List<String>, String> {
+	  class IndexedColumn extends Column<List<SafeHtml>, SafeHtml> {
 		    private final int index;
 		    public IndexedColumn(int index) {
-		        super(new TextCell());
+		        // For use with String:
+		        // super(new TextCell());
+                super(new SafeHtmlCell());
 		        this.index = index;
 		    }
 		    @Override
-		    public String getValue(List<String> object) {
+		    public SafeHtml getValue(List<SafeHtml> object) {
 		        return object.get(this.index);
 		    }
 	  }
