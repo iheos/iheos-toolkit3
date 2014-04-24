@@ -3,13 +3,9 @@ package gov.nist.hit.ds.logBrowser.client.widgets;
 
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -18,14 +14,9 @@ import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -72,11 +63,14 @@ public class TransactionMonitorWidget extends Composite {
     20140326160812,"RESPONSE", "","500","localhost","localhost:8080","localhost:8001^ProxyRuleMappingName: localcap","text/html","","65","0"
 
      */
-    final String[] columns = {"Timestamp","Status","Artifact","Message From","Proxy","Forwarded To","Path","ContentType","Method","Length","Response Time"};
+    private final String COLUMN_HEADER_PROXY = "Proxy";
+    private final String COLUMN_HEADER_RESPONSE_TIME_MS = "Response Time";
+
+    final String[] columns = {"Timestamp","Status","Artifact","Message From",COLUMN_HEADER_PROXY,"Forwarded To","Path","ContentType","Method","Length",COLUMN_HEADER_RESPONSE_TIME_MS};
     MessageViewerWidget requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
     MessageViewerWidget responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
     Map<Integer, String> txRowParentId = new HashMap<Integer, String>();
-    Map<Integer, List<AssetNode>> txRowAssetNode = new HashMap<Integer, List<AssetNode>>();
+    Map<Integer, Map<String,AssetNode>> txRowAssetNode = new HashMap<Integer, Map<String,AssetNode>>();
     int txRowIdx = 0;
 
     final AsyncCallback<AssetNode> contentSetup = new AsyncCallback<AssetNode>() {
@@ -102,7 +96,7 @@ public class TransactionMonitorWidget extends Composite {
         }
 
     };
-    final AsyncCallback<List<AssetNode>> updateHandler = new AsyncCallback<List<AssetNode>> () {
+    final AsyncCallback<Map<String,AssetNode>> updateHandler = new AsyncCallback<Map<String,AssetNode>> () {
 
         @Override
         public void onFailure(Throwable caught) {
@@ -110,12 +104,12 @@ public class TransactionMonitorWidget extends Composite {
         }
 
         @Override
-        public void onSuccess(List<AssetNode> anList) {
+        public void onSuccess(Map<String,AssetNode> anList) {
             popTx(anList);
         }
     };
 
-    public void popTx(List<AssetNode> anList) {
+    public Boolean popTx(Map<String,AssetNode> anList) {
         if (anList==null) {
             logger.info("Null assetNode: bad tx message?");
         } else {
@@ -123,7 +117,7 @@ public class TransactionMonitorWidget extends Composite {
             logger.info("sz:"+anList.size());
 
             if (!anList.isEmpty() && anList.size()>0) {
-                AssetNode an = anList.get(1); // The header has got to exist
+                AssetNode an = anList.get("header"); // A header has got to exist
                 if (an!=null) {
                     if (an.getCsv() !=null) {
                         String[] csvData = an.getCsv()[0];
@@ -140,14 +134,14 @@ public class TransactionMonitorWidget extends Composite {
                                 responseViewerWidget.setIoHeaderId(an.getParentId());
                                 reposService.getAssetTxtContent(an, contentSetup);
 
-                                if (anList.size()==3) { // Body may not exist. For example as in a GET request
-                                    reposService.getAssetTxtContent(anList.get(2), contentSetup);
+                                if (anList.get("body")!=null) { // Body may not exist. For example as in a GET request
+                                    reposService.getAssetTxtContent(anList.get("body"), contentSetup);
                                 }
                             }
 
                             // Manage the event with the parent loc for immediate indexing
                             if (getListenerEnabled()) {
-                                eventBus.fireEvent(new NewTxMessageEvent(txRowIdx,anList.get(0)));
+                                eventBus.fireEvent(new NewTxMessageEvent(txRowIdx/*zero based idx*/,anList.get("parentLoc")));
                             }
                             txRowIdx++;
 
@@ -168,7 +162,7 @@ public class TransactionMonitorWidget extends Composite {
             }
         }
 
-        return;
+        return Boolean.TRUE;
     }
     /**
      *
@@ -187,14 +181,16 @@ public class TransactionMonitorWidget extends Composite {
         Window.addResizeHandler(new ResizeHandler() {
             @Override
             public void onResize(ResizeEvent event) {
-                int containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
-                int containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
 
                 try {
+                    long containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
+                    long containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
 
-                    txMonitorMainSplitPanel.setWidgetSize(southPanel, .4 * containerHeight);
+
+
                     if (getShowTxDetail()) {
-                        southPanel.setWidgetSize(requestViewerWidget, .5 * containerWidth);
+                        txMonitorMainSplitPanel.setWidgetSize(southPanel, Math.round(.4 * containerHeight));
+                        southPanel.setWidgetSize(requestViewerWidget, Math.round(.5 * containerWidth));
                     }
 
                 } catch (Exception ex) {
@@ -284,6 +280,25 @@ public class TransactionMonitorWidget extends Composite {
         southPanel.setVisible(true);
     }
 
+    public void clear() {
+
+        requestViewerWidget.setIoHeaderId(null);
+        requestViewerWidget.setHeaderContent(new HTML(""));
+        requestViewerWidget.setMessageContent(new HTML(""));
+
+        responseViewerWidget.setIoHeaderId(null);
+        responseViewerWidget.setHeaderContent(new HTML(""));
+        responseViewerWidget.setMessageContent(new HTML(""));
+
+        getTxRowParentId().clear();
+        getTxRowAssetNode().clear();
+
+        List<TxDetailRow> rowList = dataProvider.getList();
+        rowList.clear();
+
+        txRowIdx = 0; // Reset the index counter
+    }
+
     protected class TxDetailRow  {
 
         int key;
@@ -367,10 +382,10 @@ public class TransactionMonitorWidget extends Composite {
     public void setMessageViewer(int selectedIndex) {
 
                 if (selectedIndex<=txRowParentId.size()) {
-                    List<AssetNode> anList = txRowAssetNode.get(new Integer(selectedIndex));
+                    Map<String,AssetNode> anList = txRowAssetNode.get(new Integer(selectedIndex));
                     int anLen = anList.size();
                     if (anLen>0) {
-                        AssetNode an = anList.get(0);
+                        AssetNode an = anList.get("header");
 
                         //Window.alert("setup for" + selectedIndex + an.getParentId() + an.getType());
 
@@ -380,8 +395,8 @@ public class TransactionMonitorWidget extends Composite {
 
                         reposService.getAssetTxtContent(an, contentSetup);
 
-                        if (anList.size()==2) { // Body exists
-                            reposService.getAssetTxtContent(anList.get(1), contentSetup);
+                        if (anList.get("body")!=null) { // Body exists
+                            reposService.getAssetTxtContent(anList.get("body"), contentSetup);
                         }
 
                         if (txRowIdx==1)
@@ -391,7 +406,7 @@ public class TransactionMonitorWidget extends Composite {
                         int matchingPairIdx = -1;
                         for (int cx=0; cx<txRowIdx; cx++) {
                             if ((an!=null && an.getParentId()!=null) && txRowParentId!=null) {
-                                if (cx!=selectedIndex && an.getParentId().equals(txRowParentId.get(new Integer(cx)))) {
+                                if (cx!=selectedIndex && an.getParentId().equals(txRowParentId.get(cx))) {
                                     matchingPairIdx = cx;
                                     break;
                                 }
@@ -400,25 +415,27 @@ public class TransactionMonitorWidget extends Composite {
 
                         if (matchingPairIdx>-1) {
                             //Window.alert("match pair"+matchingPairIdx);
-                            List<AssetNode> anPair = txRowAssetNode.get(new Integer(matchingPairIdx));
+                            Map<String,AssetNode> anPair = txRowAssetNode.get(matchingPairIdx);
 
-                            if (anPair.size()>0) {
-                                reposService.getAssetTxtContent(anPair.get(0), contentSetup);
+                            if (anPair.get("header")!=null) {
+                                reposService.getAssetTxtContent(anPair.get("header"), contentSetup);
                             }
 
-                            if (anPair.size()==2) { // Body exists
-                                reposService.getAssetTxtContent(anPair.get(1), contentSetup);
+                            if (anPair.get("body")!=null) { // Body exists
+                                reposService.getAssetTxtContent(anPair.get("body"), contentSetup);
                             }
                         } else {
                             // No matching pair
-                            if ((an!=null && an.getType()!=null) && an.getType().indexOf("REQUEST")>-1) {
-                                responseViewerWidget.setIoHeaderId(an.getParentId());
-                                responseViewerWidget.setHeaderContent(new HTML(""));
-                                responseViewerWidget.setMessageContent(new HTML(""));
-                            } else {
-                                requestViewerWidget.setIoHeaderId(an.getParentId());
-                                requestViewerWidget.setHeaderContent(new HTML(""));
-                                requestViewerWidget.setMessageContent(new HTML(""));
+                            if (an!=null && an.getType()!=null) {
+                                if (an.getType().indexOf("REQUEST")>-1) {
+                                    responseViewerWidget.setIoHeaderId(an.getParentId());
+                                    responseViewerWidget.setHeaderContent(new HTML(""));
+                                    responseViewerWidget.setMessageContent(new HTML(""));
+                                } else {
+                                    requestViewerWidget.setIoHeaderId(an.getParentId());
+                                    requestViewerWidget.setHeaderContent(new HTML(""));
+                                    requestViewerWidget.setMessageContent(new HTML(""));
+                                }
                             }
                         }
                     }
@@ -440,15 +457,26 @@ public class TransactionMonitorWidget extends Composite {
             try {
                 SafeHtmlBuilder shb = new SafeHtmlBuilder();
 
-                if (this.index==4) {
+                if (COLUMN_HEADER_PROXY.equals(columns[this.index])) {
 
-                    AssetNode an = txRowAssetNode.get(o.getKey()).get(0);
+                    AssetNode an = txRowAssetNode.get(o.getKey()).get("header"); // headerMsg
 
                     shb.appendHtmlConstant("<span title='" + an.getProps() + "'>");
                     shb.appendEscaped(o.getCsvData().get(this.index));
                     shb.appendHtmlConstant("</span>");
 
-                } else {
+                } else if (COLUMN_HEADER_RESPONSE_TIME_MS.equals(columns[this.index])) {
+                    if ("0".equals(o.getCsvData().get(this.index))) { // Reformat 0 ms to less than 1 ms
+                        shb.appendEscaped("<1");
+                    } else  {
+                        shb.appendEscaped(""+o.getCsvData().get(this.index));
+                    }
+
+                    if (!"".equals(o.getCsvData().get(this.index))) {
+                        shb.appendHtmlConstant("<span style=\"font-size:9px\">&nbsp;ms</span>");
+                    }
+                }
+                else {
                     shb.appendEscaped(o.getCsvData().get(this.index));
                 }
 
@@ -500,11 +528,11 @@ public class TransactionMonitorWidget extends Composite {
         this.listenerEnabled = listenerEnabled;
     }
 
-    public Map<Integer, List<AssetNode>> getTxRowAssetNode() {
+    public Map<Integer, Map<String,AssetNode>> getTxRowAssetNode() {
         return txRowAssetNode;
     }
 
-    public void setTxRowAssetNode(Map<Integer, List<AssetNode>> txRowAssetNode) {
+    public void setTxRowAssetNode(Map<Integer, Map<String,AssetNode>> txRowAssetNode) {
         this.txRowAssetNode = txRowAssetNode;
     }
 

@@ -1,25 +1,5 @@
 package gov.nist.hit.ds.logBrowser.client.widgets;
 
-import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
-import gov.nist.hit.ds.repository.api.PropertyKey;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.ContextSupplement;
-import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
-import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
-import gov.nist.hit.ds.repository.simple.search.client.SimpleData;
-import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -51,6 +31,25 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
+import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import gov.nist.hit.ds.repository.simple.search.client.ContextSupplement;
+import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
+import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
+import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
+import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
+import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
+import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
+import gov.nist.hit.ds.repository.simple.search.client.SimpleData;
+import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class SearchWidget extends Composite {
 	/**
@@ -119,6 +118,11 @@ public class SearchWidget extends Composite {
             public String toString() {
                 return "Two search terms per row";
             }
+        }, APPLY_CRITERIA_WITHOUT_RUNNING() {
+            @Override
+            public String toString() {
+                return "Apply criteria";
+            }
         }
     };
 
@@ -154,14 +158,14 @@ public class SearchWidget extends Composite {
 	    
 		topPanel = new VerticalPanel();
 
-		StyleInjector.inject(".searchCriteriaGroup {background-color: #F5F5F5} .searchHeader {background-color: #E6E6FA}");
+		StyleInjector.inject(".searchCriteriaGroup {background-color: #F5F5F5} .searchHeader {background-color: #E6E6FA; width:100%}");
         StyleInjector.inject(".roundedButton1 {\n" +
                 "  margin: 0;\n" +
-                "  padding: 5px 7px;\n" +
+                "  padding: 1px 3px;\n" +
                 "  text-decoration: none;\n" +
-                "  cursor: pointer;\n" +
+                "  color:steel; cursor: pointer;\n" +
                 "  cursor: hand;\n" +
-                "  font-size:small;\n" +
+                "  font-weight:normal;font-size:smaller;\n" +
                 "  background: url(\"images/hborder.png\") repeat-x 0px -2077px;\n" +
                 "  border:1px solid #bbb;\n" +
                 "  border-bottom: 1px solid #a0a0a0;\n" +
@@ -444,10 +448,10 @@ public class SearchWidget extends Composite {
         int row = 0;
         int col = 0;
 
-        prefGrid.setWidget(row++, col, new HTML("Select a Query "));
+        prefGrid.setWidget(row++, col, new HTML("Select a Query/Filter "));
         qSelector.setWidth("142px");
         prefGrid.setWidget(row, col++, qSelector);
-        Button btnRun = new Button("Run");
+        Button btnRun = new Button(getQuickSearchCommandText());
         btnRun.setWidth("6em");
         prefGrid.setWidget(row, col, btnRun);
 
@@ -531,8 +535,10 @@ public class SearchWidget extends Composite {
                                 redrawTable();
                             }
 
-                            if (reposRight.getItemCount()>0) {
-                                runSearch();
+                            if (!isOptionEnabled(Option.APPLY_CRITERIA_WITHOUT_RUNNING)) {
+                                if (reposRight.getItemCount()>0) {
+                                    runSearch();
+                                }
                             }
 
                         }
@@ -576,7 +582,11 @@ public class SearchWidget extends Composite {
 		VerticalPanel panel = new VerticalPanel();
 
         if (isOptionEnabled(Option.QUICK_SEARCH)) {
-            addQuickSearchToPanel(panel, Option.QUICK_SEARCH.toString());
+            String headerText = Option.QUICK_SEARCH.toString();
+            if (isOptionEnabled(Option.APPLY_CRITERIA_WITHOUT_RUNNING)) {
+                headerText = "Select a Filter";
+            }
+            addQuickSearchToPanel(panel, headerText );
         }
 
         if (isOptionEnabled(Option.SEARCH_CRITERIA_REPOSITORIES)) {
@@ -1192,11 +1202,11 @@ public class SearchWidget extends Composite {
 
 		return cSelector;
 	}
-	
-	/**
-	 * 
-	 * @return
-	 */
+
+    /**
+     *
+     * @param savedQueryReposId
+     */
 	private void popQuerySelector(String savedQueryReposId) {
 		
 		String[] compositeKey = savedQueryReposId.split("\\^");
@@ -1204,26 +1214,37 @@ public class SearchWidget extends Composite {
 //		selectedRepos[0][0] = compositeKey[0];
 //		selectedRepos[0][1] = compositeKey[1];
 
-		AsyncCallback<List<AssetNode>> searchResults = new AsyncCallback<List<AssetNode>> () {
-
-			public void onFailure(Throwable arg0) {
-				Window.alert("savedQueryRepos could not be loaded: " + arg0.getMessage());
-			}
-
-			public void onSuccess(List<AssetNode> result) {
-				for (AssetNode an: result) {
-					qSelector.addItem(an.getDisplayName(), an.getLocation());	
-				}
-				
-			}
-		};
-
-		try {
-			reposService.getSavedQueries(compositeKey[0],compositeKey[1], searchResults);
-		} catch (RepositoryConfigException e) {
-			Window.alert("Call failed: " + e.toString());
-		}
+        popQuerySelector(compositeKey[0],compositeKey[1]);
 	}
+
+    /**
+     *
+     * @param id
+     * @param acs
+     */
+    private void popQuerySelector(String id, String acs) {
+        AsyncCallback<List<AssetNode>> searchResults = new AsyncCallback<List<AssetNode>> () {
+
+            public void onFailure(Throwable arg0) {
+                Window.alert("savedQueryRepos could not be loaded: " + arg0.getMessage());
+            }
+
+            public void onSuccess(List<AssetNode> result) {
+                qSelector.clear();
+                for (AssetNode an: result) {
+                    qSelector.addItem(an.getDisplayName(), an.getLocation());
+                }
+
+            }
+        };
+
+        try {
+            reposService.getSavedQueries(id,acs, searchResults);
+        } catch (RepositoryConfigException e) {
+            Window.alert("Call failed: " + e.toString());
+        }
+
+    }
 
 	/**
 	 * @param ancestorId
@@ -1430,7 +1451,8 @@ public class SearchWidget extends Composite {
                         }
 
                         public void onSuccess(AssetNode an) {
-                            qSelector.addItem(an.getDisplayName(), an.getLocation());
+                            popQuerySelector(an.getRepId(),an.getReposSrc());
+//                            qSelector.addItem(an.getDisplayName(), an.getLocation());
                             sqTxt.setText("");
                             Window.alert("Save successful");
                         }
@@ -1563,6 +1585,13 @@ public class SearchWidget extends Composite {
 
     public void setSc(SearchCriteria sc) {
         this.sc = sc;
+    }
+    public String getQuickSearchCommandText() {
+        if (!isOptionEnabled(Option.APPLY_CRITERIA_WITHOUT_RUNNING)) {
+            return "Run";
+        } else {
+            return "Apply";
+        }
     }
 
 }

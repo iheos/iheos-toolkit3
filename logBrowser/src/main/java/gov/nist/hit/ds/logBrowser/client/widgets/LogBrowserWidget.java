@@ -1,28 +1,6 @@
 package gov.nist.hit.ds.logBrowser.client.widgets;
 
 
-import com.google.gwt.user.client.ui.TabBar;
-import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
-import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEventHandler;
-import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEvent;
-import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEventHandler;
-import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
-import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
-import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
@@ -67,7 +45,26 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
-import org.omg.CORBA.TRANSACTION_MODE;
+import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
+import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEventHandler;
+import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEvent;
+import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEventHandler;
+import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
+import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
+import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
+import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LogBrowserWidget extends Composite {
 
@@ -121,7 +118,7 @@ public class LogBrowserWidget extends Composite {
         }, TRANSACTION_FILTER() {
             @Override
             public String toString() {
-                return "Transaction Filter";
+                return "Messages";
             }
         }
 	};
@@ -208,7 +205,7 @@ public class LogBrowserWidget extends Composite {
 
                 if (txMonTab>-1) {
 
-                    featureTlp.getTabWidget(txMonTab).getElement().setInnerText(Feature.TRANSACTION_MONITOR.toString() + " ("+ event.getValue() + ")");
+                    featureTlp.getTabWidget(txMonTab).getElement().setInnerText(Feature.TRANSACTION_MONITOR.toString() + " ("+ (event.getValue()+1) + ")");
 
                 }
 

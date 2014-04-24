@@ -12,6 +12,7 @@ import gov.nist.hit.ds.repository.simple.search.client.exception.NoServletSessio
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -128,7 +129,7 @@ RepositoryService {
 	}
 
     @Override
-    public List<AssetNode> getTxUpdates(String queue) throws RepositoryConfigException {
+    public Map<String,AssetNode> getTxUpdates(String queue) throws RepositoryConfigException {
         try {
             return PresentationData.getLiveUpdates(queue);
         } catch (Exception re) {

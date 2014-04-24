@@ -9,18 +9,17 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEvent;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEventHandler;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -30,7 +29,9 @@ import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class TransactionMonitorFilterWidget extends Composite {
@@ -47,6 +48,10 @@ public class TransactionMonitorFilterWidget extends Composite {
 
     private TransactionMonitorWidget txMonitorLive;
     private TransactionMonitorWidget txFilter;
+    private Widget southStackPanel;
+    private HTML liveCounterTxt = new HTML("");
+    private int filterHitCounter = 0;
+    private HTML filterCounterTxt = new HTML("");
 
     /*
     Sample 2-way Exchange pattern txDetail:
@@ -69,12 +74,34 @@ public class TransactionMonitorFilterWidget extends Composite {
     protected Widget setupMainPanel() {
         SplitLayoutPanel mainSplitPanel = new SplitLayoutPanel(3);
 
-        mainSplitPanel.addSouth(setupMonitor(Boolean.FALSE, Boolean.TRUE, Boolean.TRUE), Math.round(.5 * Window.getClientHeight()));
+
+        setSouthStackPanel(createFilteredMonitorPanel());
+        //// getSouthStackPanel().setVisible(Boolean.FALSE);
+        mainSplitPanel.addSouth(getSouthStackPanel(), Math.round(.5 * Window.getClientHeight()));
 
         mainSplitPanel.add(setupFilterBasedResultsPanel()); // Filter selection and results stack panel
 
         return mainSplitPanel;
     }
+
+    private Widget createFilteredMonitorPanel() {
+        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus,false,true);
+        txMonitor.getElement().getStyle()
+                .setProperty("border", "none");
+
+        setTxFilter(txMonitor);
+
+        StackLayoutPanel stackPanel = new StackLayoutPanel(Style.Unit.EM);
+        //stackPanel.setHeight("100%");
+        stackPanel.setWidth("100%");
+
+        stackPanel.add(txMonitor, createPanelHeader("Filtered Messages",createFilterHeaderOptions(),null), 2);
+
+        return stackPanel;
+
+    }
+
+
 
 
     protected Widget setupFilterBasedResultsPanel() {
@@ -87,88 +114,148 @@ public class TransactionMonitorFilterWidget extends Composite {
         stackPanel.setWidth("100%");
 
         // Add filter section
-        Widget filterHeader = createHeaderWidget("Filter",null, null);
-        stackPanel.add(setupFilter(), filterHeader, 2);
+        stackPanel.add(createFilterWidget(), createPanelHeader("Message Filter", null, null), 2); // Not the filter monitor but the filter selection
 
         // filterSplitPanel.addWest(stackPanel, Math.round(.3 * Window.getClientWidth()));
         // stackPanel = new StackLayoutPanel(Style.Unit.EM);
         // stackPanel.setWidth("100%");
 
-        HTML anchor = new HTML("[Show Message Detail] [Clear]" );
-        anchor.addClickHandler(new ClickHandler() {
+        // Add live monitor section
+        setTxMonitorLive(createLiveTxMonitorWidget());
+
+        eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
             @Override
-            public void onClick(ClickEvent event) {
-                getTxMonitorLive().showTxDetail();
+            public void onNewTxMessage(NewTxMessageEvent event) {
+
+                getLiveCounterTxt().setText("("+ (event.getValue()+1) + ")");
+                filter(event.getValue(), event.getAssetNode().getLocation());
             }
         });
-        // Add monitor section
-        Widget resultsHeader = createHeaderWidget("Transaction Monitor",
-                anchor, null);
-        stackPanel.add(setupMonitor(Boolean.TRUE, Boolean.FALSE, Boolean.FALSE), resultsHeader, 2);
+
+        stackPanel.add(getTxMonitorLive(), createPanelHeader("Proxy Monitor", createMonitorHeaderOptions(), null), 2);
 
         // filterSplitPanel.add(stackPanel);
 
         return stackPanel;
     }
 
-    private Widget setupMonitor(Boolean enableListener, Boolean stackPanelWrapper, Boolean showTxDetail) {
+    private List<Widget> createFilterHeaderOptions() {
+        List<Widget> options = new ArrayList<Widget>();
 
-        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus,enableListener,showTxDetail);
-        txMonitor.getElement().getStyle()
-                .setProperty("border", "none");
+        options.add(getFilterCounterTxt());
+
+        HTML optClear = new HTML("Clear");
+        optClear.setStyleName("roundedButton1");
+        optClear.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                filterHitCounter = 0;
+                getFilterCounterTxt().setText("");
+                getTxFilter().clear();
+            }
+        });
+        options.add(optClear);
 
 
-        if (!stackPanelWrapper) {
-            setTxMonitorLive(txMonitor);
-            return txMonitor;
-        } else {
-            setTxFilter(txMonitor);
-        }
-
-        StackLayoutPanel stackPanel = new StackLayoutPanel(Style.Unit.EM);
-        //stackPanel.setHeight("100%");
-        stackPanel.setWidth("100%");
-
-        Widget liveHeader = createHeaderWidget("Filtered Transactions", new Anchor("[Clear]"  ,""), null);
-
-        stackPanel.add(txMonitor, liveHeader, 2);
-
-        return stackPanel;
-
+        return options;
     }
 
-    private Widget setupFilter() {
-        ScrollPanel searchPanel = new ScrollPanel(); 				// Search parameters
+    private List<Widget> createMonitorHeaderOptions() {
+        List<Widget> options = new ArrayList<Widget>();
+
+        options.add(getLiveCounterTxt());
+
+        HTML optShowDetail = new HTML("Show Detail");
+        optShowDetail.setStyleName("roundedButton1");
+        optShowDetail.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                //
+            }
+        });
+
+        options.add(optShowDetail);
+
+        HTML optClear = new HTML("Clear");
+        optClear.setStyleName("roundedButton1");
+        optClear.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                getLiveCounterTxt().setText("");
+                getTxMonitorLive().clear();
+            }
+        });
+        options.add(optClear);
+
+
+        return options;
+    }
+
+
+    private Widget createFilterWidget() {
+        ScrollPanel filterPanel = new ScrollPanel(); 				// Search parameters
 
         searchWidget = new SearchWidget(eventBus, new SearchWidget.Option[]{
-                SearchWidget.Option.QUICK_SEARCH,
-                SearchWidget.Option.TWO_SEARCH_TERMS_PER_ROW
+                SearchWidget.Option.QUICK_SEARCH
+                ,SearchWidget.Option.TWO_SEARCH_TERMS_PER_ROW
+                ,SearchWidget.Option.APPLY_CRITERIA_WITHOUT_RUNNING
                 // SearchWidget.Option.SEARCH_CRITERIA_REPOSITORIES,
                 // SearchWidget.Option.CRITERIA_BUILDER_MODE
         });
+
 
         searchWidget.getElement().getStyle()
                 .setProperty("border", "none");
         searchWidget.getElement().getStyle()
                 .setPaddingLeft(3, Style.Unit.PX);
 
-        searchPanel.add(searchWidget);
+        filterPanel.add(searchWidget);
 
-        eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
-            @Override
-            public void onNewTxMessage(NewTxMessageEvent event) {
+        return filterPanel;
 
-                // Get criteria and append the location and check the searchresultiterator to see if it exists/count match
-                // call method with assetNode list to populate the filtered list
-
-                activateFilter(event.getValue(), event.getAssetNode().getLocation());
-            }
-        });
-
-        return searchPanel;
     }
 
-    protected void activateFilter(final int idx, String location) {
+
+
+    private TransactionMonitorWidget createLiveTxMonitorWidget() {
+        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus,true /*enableListener*/,false/*showDetail*/);
+        txMonitor.getElement().getStyle()
+                .setProperty("border", "none");
+
+        return txMonitor;
+    }
+
+    private Widget createPanelHeader(String text, List<Widget> options, ImageResource icon) {
+
+        // Add the image and text to a horizontal panel
+        HorizontalPanel hPanel = new HorizontalPanel();
+        //hPanel.setWidth("100%");
+        hPanel.setSpacing(0);
+        hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
+        if (icon!=null) {
+            hPanel.add(new Image(icon));
+        }
+
+        HTML headerText = new HTML(text + "&nbsp;");
+
+        headerText.setStyleName("cw-StackPanelHeader");
+        hPanel.add(headerText);
+
+        if (options!=null)
+            for (Widget w: options) {
+                hPanel.add(w);
+                hPanel.add(new HTML("&nbsp;")); // Spacer
+            }
+
+
+        return new SimplePanel(hPanel); // This wrapper will span out fully to 100% width
+
+    }
+
+    protected void filter(final int idx, String location) {
+        // Get criteria and append the location and check the searchresultiterator to see if it exists/count match
+        // call method with assetNode list to populate the filtered list
 
         if (location==null) {
             logger.severe("Asset location is missing!");
@@ -185,6 +272,9 @@ public class TransactionMonitorFilterWidget extends Composite {
             setFilterError("No filter has been applied or the repository selection is missing!");
             return;
         } else {
+            if (!getSouthStackPanel().isVisible()) {
+                //// getSouthStackPanel().setVisible(Boolean.TRUE);
+            }
 
             //resultPanel.add(new HTML("&nbsp;"));
             //resultPanel.add(new HTML("Searching..."));
@@ -211,9 +301,11 @@ public class TransactionMonitorFilterWidget extends Composite {
                         //resultPanel.add(new HTML("hit "+idx));
                         //getTxFilter().setTxRowParentId(getTxMonitorLive().getTxRowParentId());
                         //getTxFilter().setTxRowAssetNode(getTxMonitorLive().getTxRowAssetNode());
-                        List<AssetNode> anList = getTxMonitorLive().getTxRowAssetNode().get(new Integer(idx));
+                        Map<String,AssetNode> anList = getTxMonitorLive().getTxRowAssetNode().get(new Integer(idx));
                         //resultPanel.add(new HTML("---"+ (anList==null) + " " + getTxMonitorLive().getTxRowAssetNode().size()));
-                        getTxFilter().popTx(anList);
+                        if (getTxFilter().popTx(anList)) {
+                             getFilterCounterTxt().setText("("+ (++filterHitCounter) + ")");
+                        }
                     }
                 }
             });
@@ -229,37 +321,9 @@ public class TransactionMonitorFilterWidget extends Composite {
     private void setFilterError(String msg) {
         searchWidget.getResultPanel().clear();
         searchWidget.getResultPanel().add(new HTML("<font color='red'>" + msg + "</font>"));
-
     }
 
 
-
-            private Widget createHeaderWidget(String text, Widget additionalLink, ImageResource image) {
-        // Add the image and text to a horizontal panel
-        HorizontalPanel hPanel = new HorizontalPanel();
-        hPanel.setHeight("100%");
-        hPanel.setSpacing(0);
-        hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        // hPanel.add(new Image(image));
-        HTML headerText = new HTML(text + "&nbsp;");
-
-        headerText.setStyleName("cw-StackPanelHeader");
-        hPanel.add(headerText);
-
-        if (additionalLink!=null) {
-            hPanel.add(additionalLink);
-        }
-
-        SimplePanel sp =  new SimplePanel(hPanel);
-        sp.addHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                //
-            }
-        }, ClickEvent.getType() );
-
-        return sp;
-    }
 
     public TransactionMonitorWidget getTxMonitorLive() {
         return txMonitorLive;
@@ -277,5 +341,27 @@ public class TransactionMonitorFilterWidget extends Composite {
         this.txFilter = txFilter;
     }
 
+    public HTML getFilterCounterTxt() {
+        return filterCounterTxt;
+    }
+
+    public void setFilterCounterTxt(HTML filterCounterTxt) {
+        this.filterCounterTxt = filterCounterTxt;
+    }
+
+    public HTML getLiveCounterTxt() {
+        return liveCounterTxt;
+    }
+
+    public void setLiveCounterTxt(HTML liveCounterTxt) {
+        this.liveCounterTxt = liveCounterTxt;
+    }
+    public Widget getSouthStackPanel() {
+        return southStackPanel;
+    }
+
+    public void setSouthStackPanel(Widget southStackPanel) {
+        this.southStackPanel = southStackPanel;
+    }
 
 }

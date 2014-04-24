@@ -1,9 +1,10 @@
 package gov.nist.hit.ds.repository.simple.search.client;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 
 import java.util.List;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.util.Map;
 
 public interface RepositoryServiceAsync {
 	/* Artifact Repository Services */
@@ -21,6 +22,6 @@ public interface RepositoryServiceAsync {
 	void getSearchCriteria(String reposId, String acs, String queryLoc, AsyncCallback<QueryParameters> callback) throws RepositoryConfigException;
 	void saveSearchCriteria(QueryParameters qp, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
 	void getSavedQueries(String id, String acs, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
-    void getTxUpdates(String queue, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
+    void getTxUpdates(String queue, AsyncCallback<Map<String,AssetNode>> callback) throws RepositoryConfigException;
 }
 

@@ -35,7 +35,7 @@ public class LogBrowser implements EntryPoint {
                         new Feature[]{
                                 Feature.BROWSE
                                 , Feature.SEARCH
-                                // , Feature.TRANSACTION_MONITOR
+                                //, Feature.TRANSACTION_MONITOR
                                 , Feature.TRANSACTION_FILTER
                                 });
 

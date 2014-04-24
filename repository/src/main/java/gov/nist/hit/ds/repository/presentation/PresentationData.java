@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.repository.presentation;
 
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.ArtifactId;
@@ -30,37 +32,29 @@ import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfi
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVParser;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
+import net.timewalker.ffmq3.FFMQConstants;
+import org.codehaus.jackson.map.ObjectMapper;
 
+import javax.jms.Destination;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.QueueConnectionFactory;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Logger;
-
-import net.timewalker.ffmq3.FFMQConstants;
-
-import org.codehaus.jackson.map.ObjectMapper;
-
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.rpc.IsSerializable;
-
-
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.MapMessage;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.TextMessage;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 
 public class PresentationData implements IsSerializable, Serializable  {
 
@@ -617,8 +611,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 		return repos;
 	}
 
-    public static List<AssetNode> getLiveUpdates(String queue)  {
-        ArrayList<AssetNode> result = new ArrayList<AssetNode>();
+    public static Map<String,AssetNode> getLiveUpdates(String queue)  {
+        //ArrayList<AssetNode> result = new ArrayList<AssetNode>();
+        Map<String,AssetNode> result =  new HashMap<String,AssetNode>();
 
         MessageConsumer consumer = null;
         javax.jms.QueueSession session = null;
@@ -705,7 +700,7 @@ public class PresentationData implements IsSerializable, Serializable  {
             if (parentLoc!=null) {
                 AssetNode parentHdr = new AssetNode();
                 parentHdr.setLocation(parentLoc);
-                result.add(parentHdr);
+                result.put("parentLoc",parentHdr);
 
                 AssetNode headerMsg = new AssetNode();
                 headerMsg.setParentId(ioHeaderId); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
@@ -715,7 +710,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                 headerMsg.setLocation(headerLoc);
                 headerMsg.setCsv(processCsvContent(txDetail));
                 headerMsg.setProps(proxyDetail);
-                result.add(headerMsg);
+                result.put("header",headerMsg);
 
                 if (bodyLoc!=null) {
                     AssetNode bodyMsg = new AssetNode();
@@ -724,7 +719,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                     bodyMsg.setRepId(repId);
                     bodyMsg.setReposSrc(acs);
                     bodyMsg.setLocation(bodyLoc);
-                    result.add(bodyMsg);
+                    result.put("body",bodyMsg);
                 }
 
             }
