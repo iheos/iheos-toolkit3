@@ -673,8 +673,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 
 
         } catch (Exception ex) {
-            logger.warning(ex.toString());
-            ex.printStackTrace();
+            logger.finest(ex.toString());
+            // ex.printStackTrace();
         } finally {
             if (consumer!=null) {
                 try {
@@ -728,7 +728,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 
             return result;
         } else {
-            logger.fine("Empty consumer message?");
+            logger.finest("Empty consumer message?");
         }
 
 
