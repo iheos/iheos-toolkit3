@@ -53,7 +53,7 @@
  *  is deployed by editing or creating the proper configuration files.
  *  
  *  The SimChain, as described above, is the runtime representation of a simulator or validator. SimChains
- *  are definded through specially formatted Java property files. These files are read by the SimChainLoader
+ *  are definded through specially formatted Java property files. These files are read by the SimChainFactory
  *  which loads them into memory. The SimChain configuration for the early stages of SOAP over HTTP parsing and
  *  validation is:
  *  <pre>

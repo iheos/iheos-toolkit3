@@ -1,7 +1,5 @@
 package gov.nist.toolkit.simulators.support;
 
-import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.valregmsg.message.StoredDocumentInt;
 
 import java.io.File;
 import java.io.IOException;

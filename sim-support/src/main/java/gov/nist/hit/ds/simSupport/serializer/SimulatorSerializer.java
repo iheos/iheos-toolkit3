@@ -66,7 +66,7 @@ public class SimulatorSerializer {
 	
 	private Simulator repositoryLoad(SimId simId)  {
 		if (simId == null)
-			throw new ToolkitRuntimeException("Cannot load simulator for null SimId");
+			throw new ToolkitRuntimeException("Cannot loadFromPropertyBasedResource simulator for null SimId");
 		if (simRepository == null)
 			throw new ToolkitRuntimeException("Repository not set");
 		try {
@@ -78,7 +78,7 @@ public class SimulatorSerializer {
 			// read asset document, convert JSON to Simulator instance
 			return mapper.readValue(asset.getContent(), Simulator.class);
 		} catch (Exception e) {
-			throw new ToolkitRuntimeException("Cannot load Simulator <" + simId + ">", e);
+			throw new ToolkitRuntimeException("Cannot loadFromPropertyBasedResource Simulator <" + simId + ">", e);
 		}
 	}
 

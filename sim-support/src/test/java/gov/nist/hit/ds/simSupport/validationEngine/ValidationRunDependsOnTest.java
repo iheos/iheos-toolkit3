@@ -1,9 +1,13 @@
 package gov.nist.hit.ds.simSupport.validationEngine;
 
-import java.io.IOException;
-
-import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
-import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
+import gov.nist.hit.ds.eventLog.EventFactory;
+import gov.nist.hit.ds.eventLog.assertion.Assertion;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
+import gov.nist.hit.ds.eventLog.assertion.annotations.Validation;
+import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
+import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.SoapFaultException;
 import gov.nist.hit.ds.toolkit.installation.InitializationFailedException;
 import gov.nist.hit.ds.toolkit.installation.Installation;
@@ -11,15 +15,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import gov.nist.hit.ds.eventLog.assertion.Assertion;
-import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
-import gov.nist.hit.ds.eventLog.assertion.annotations.Validation;
-import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.simSupport.client.SimId;
-import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
-import gov.nist.hit.ds.simSupport.event.EventBuilder;
+import java.io.IOException;
 
 public class ValidationRunDependsOnTest   extends SimComponentBase {
 	
@@ -28,7 +24,7 @@ public class ValidationRunDependsOnTest   extends SimComponentBase {
 		Installation.reset();
 		Installation.installation().initialize();
 		Configuration.configuration();
-		event = new EventBuilder().buildEvent(new SimId("ST-reg-1"), ActorTypeFactory.find("registry").getShortName(), TransactionTypeFactory.find("register").getShortName());
+		event = new EventFactory().buildEvent(null);
 		ag = new AssertionGroup();
 //		event.addAssertionGroup(ag);
 	}

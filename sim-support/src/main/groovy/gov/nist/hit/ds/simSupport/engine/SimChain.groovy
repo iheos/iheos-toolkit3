@@ -5,7 +5,7 @@ import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 /**
- * Define a simulator chain - mode up of
+ * Define a simulator chain - made up of
  * a base object and a list of simulator steps.
  * The base object is like other components except that its
  * execution is beyond the scope of the SimEngine.  It is used
@@ -38,17 +38,25 @@ public class SimChain  {
 
     SimStep getRunableStep() { steps.find { !it.completed } }
 
-    List<Object> getComponents() { steps.collect { it.simComponent }}
+    boolean isDone() { hasErrors() || getRunableStep() == null }
 
-	public boolean hasErrors() {
-        steps.find { it.getAssertionGroup()?.hasErrors() }
-	}
+    List<Object> getComponents() { steps.collect { it.simComponent } }
+
+	public boolean hasErrors() { steps.find { it.getAssertionGroup()?.hasErrors() } }
+
+    public boolean hasInternalError() { steps.find { it.getAssertionGroup()?.hasInternalError() }}
 
 	/**
 	 * Get an informal list of errors - to support logging, not reporting
 	 * @return
 	 */
-	public String getErrors() { return "There may be errors"; }
+	List<String> getErrorMessages() {
+        List<String> msgs = []
+        steps.each { step ->
+            msgs.addAll(step.getAssertionGroup().getErrorMessages())
+        }
+        msgs
+    }
 
 
 	public String getLog() {

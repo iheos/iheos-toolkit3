@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 /**
  * SimComponentInject String type parameters into object. This is used by the
- * SimChainLoader to installRepositoryLinkage components from the property file
+ * SimChainFactory to installRepositoryLinkage components from the property file
  * based simulator configuration.
  * @author bmajur
  *

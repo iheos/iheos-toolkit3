@@ -125,8 +125,8 @@ public class SimulatorFactory {
      */
     public static void save(Simulator sim)  {
             if (sim.size() == 0) {
-                logger.error("Cannot save Simulator - no actor sims installed.");
-                throw new ToolkitRuntimeException("Cannot save Simulator - no actor sims installed.");
+                logger.error("Cannot save Simulator - no actor components installed.");
+                throw new ToolkitRuntimeException("Cannot save Simulator - no actor components installed.");
             }
 
             Repository repos = getSimulatorRepository();

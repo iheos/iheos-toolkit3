@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.simSupport.loader.ValidatorDefLoader;
+import gov.nist.hit.ds.simSupport.loader.PropertyResourceFactory;
 
 import java.io.IOException;
 
@@ -24,7 +24,7 @@ public class ValidatorDefLoaderTest {
 
 	@Test
 	public void loadTest() {
-		ValidatorDefLoader l = new ValidatorDefLoader("footrans.properties");
+		PropertyResourceFactory l = new PropertyResourceFactory("footrans.properties");
 		try {
 			l.load();
 		} catch (IOException e) {

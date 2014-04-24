@@ -17,6 +17,8 @@ class Assertion {
 
     boolean failed() { return status.isError(); }
 
+    boolean internalError() { return status == AssertionStatus.INTERNALERROR }
+
     public String toString() {
         new AssertionDAO().asCVSEntry(this).toString()
     }

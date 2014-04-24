@@ -11,7 +11,7 @@ class EventTest extends Specification {
 
     def "Input Header"() {
         setup:
-        def event = new EventBuilder().buildEvent(null)
+        def event = new EventFactory().buildEvent(null)
 
         when:
         def header = 'My Header'
@@ -23,7 +23,7 @@ class EventTest extends Specification {
 
     def "Artifact"() {
         setup:
-        def event = new EventBuilder().buildEvent(null)
+        def event = new EventFactory().buildEvent(null)
 
         when:
         def name = 'name'
@@ -36,7 +36,7 @@ class EventTest extends Specification {
 
     def 'Assertion'() {
         setup:
-        def event = new EventBuilder().buildEvent(null)
+        def event = new EventFactory().buildEvent(null)
 
         when:
         def assertion = new Assertion()

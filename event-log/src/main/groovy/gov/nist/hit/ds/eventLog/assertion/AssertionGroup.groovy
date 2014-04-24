@@ -29,9 +29,25 @@ public class AssertionGroup  {
         asser
     }
 
-    Assertion getFirstFailedAssertion() { return assertions.find { it.failed } }
+    Assertion getFirstFailedAssertion() { return assertions.find { it.failed() } }
 
-    boolean hasErrors() { return worstStatus.isError() }
+    List<Assertion> getFailedAssertions() {
+        def failedAssertions = []
+        assertions.each { assertion ->
+            if (assertion.failed()) failedAssertions << assertion
+        }
+        failedAssertions
+    }
+
+    List<String> getErrorMessages() {
+        def msgs = []
+        getFailedAssertions().each { msgs << it.msg }
+        msgs
+    }
+
+    boolean hasErrors() { return worstStatus >= AssertionStatus.ERROR }
+
+    boolean hasInternalError() { return worstStatus >= AssertionStatus.INTERNALERROR }
 
     boolean hasUnsaved() {
         assertions.find { !it.saved }
@@ -58,12 +74,25 @@ public class AssertionGroup  {
         addAssertion(a);
     }
 
-    public Assertion fail(String expectedValue) {
+    public Assertion fail(String failureMsg) {
         Assertion a = new Assertion();
         a.with {
-            expected = expectedValue
+            expected = ""
             found = ""
             status = AssertionStatus.ERROR
+            msg = failureMsg
+        }
+        addAssertion(a);
+        return a;
+    }
+
+    public Assertion internalError(String failureMsg) {
+        Assertion a = new Assertion();
+        a.with {
+            expected = ""
+            found = ""
+            status = AssertionStatus.INTERNALERROR
+            msg = failureMsg
         }
         addAssertion(a);
         return a;
