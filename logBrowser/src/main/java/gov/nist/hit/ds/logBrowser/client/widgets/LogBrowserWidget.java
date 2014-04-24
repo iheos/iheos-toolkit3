@@ -285,7 +285,7 @@ public class LogBrowserWidget extends Composite {
 								List<AssetNode> topLevelAsset = new ArrayList<AssetNode>();
 								topLevelAsset.add(an);
 								searchLbTreeHolder.add(popTreeWidget(topLevelAsset,target,true, searchLbContentSetup));
-								reposService.getAssetTxtContent(target, searchLbContentSetup);
+                                reposService.getAssetTxtContent(target, searchLbContentSetup);
 							}});
 					} catch (RepositoryConfigException e) {
 						e.printStackTrace();
@@ -767,7 +767,7 @@ public class LogBrowserWidget extends Composite {
 					String shStr = SyntaxHighlighter.highlight(an.getTxtContent(), BrushFactory.newCssBrush() , false);
 					contentPanel.add(new HTML(shStr));
 				} else if ("text/plain".equals(an.getMimeType())) {
-                    centerPanel.add(new HTML("<pre style='margin-top:0px;'>" + an.getTxtContent() + "</pre>"));
+                    contentPanel.add(new HTML("<pre style='margin-top:0px;'>" + an.getTxtContent() + "</pre>"));
                 } else {
 					contentPanel.add(new HTML(an.getTxtContent()));	
 				} 

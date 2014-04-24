@@ -442,7 +442,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
 		
 		Asset aSrc = null;
-		if (an.getLocation()!=null) {
+		if (an.getLocation()!=null) { // TODO: is this required? see if 'an' can be used without reloading
 			// aSrc = repos.getAssetByPath(new File(an.getLocation()));
 			aSrc = repos.getAssetByRelativePath(new File(an.getLocation()));
 			if (aSrc==null) {
@@ -472,6 +472,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 			aDst.setLocation(aSrc.getPath().toString());
 
          if (aSrc.getContent()!=null) {
+             logger.fine("*** has got content" + an.getType() + " aSrc.getMimeType():" + aSrc.getMimeType());
 			try {
 				String content = new String(aSrc.getContent());
                 if (an.getType()!=null && an.getType().startsWith("raw")) {
@@ -491,7 +492,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 			} catch (Exception e) {
 				logger.info("No content found for <"+ aDst.getAssetId() +">: May not have any content (which is okay for top-level assets): " + e.toString());
 			}			
-		}
+		} else {
+             logger.fine("*** getTextContent -- noContent" + an.getType() + " aSrc.getMimeType():" + aSrc.getMimeType());
+         }
 
 		try {
 			// aDst.setProps(FileUtils.readFileToString(aSrc.getPropFile()));
@@ -502,7 +505,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 			aDst.setProps(aSrc.getPropFile() + " could not be loaded.");
 			logger.warning(e.toString());
 		}
-		
+
 		return aDst;
 	}
 	
@@ -672,9 +675,9 @@ public class PresentationData implements IsSerializable, Serializable  {
             }
 
 
-        } catch (Exception ex) {
-            logger.warning(ex.toString());
-            ex.printStackTrace();
+        } catch (Exception ex) { // TODO: look into thrown an exception to avoid too many calls when broker is offline
+            logger.finest(ex.toString());
+            // ex.printStackTrace();
         } finally {
             if (consumer!=null) {
                 try {
@@ -728,7 +731,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 
             return result;
         } else {
-            logger.fine("Empty consumer message?");
+            logger.finest("Empty consumer message?");
         }
 
 
