@@ -44,7 +44,7 @@ public class SimChain  {
 
 	public boolean hasErrors() { steps.find { it.getAssertionGroup()?.hasErrors() } }
 
-    public boolean hasInternalError() { steps.find { it.getAssertionGroup()?.hasInternalError() }}
+    public boolean hasInternalErrors() { steps.find { it.getAssertionGroup()?.hasInternalError() }}
 
 	/**
 	 * Get an informal list of errors - to support logging, not reporting

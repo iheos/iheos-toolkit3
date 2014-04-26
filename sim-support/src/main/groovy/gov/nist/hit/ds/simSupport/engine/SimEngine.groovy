@@ -1,5 +1,4 @@
 package gov.nist.hit.ds.simSupport.engine
-
 import gov.nist.hit.ds.eventLog.EventDAO
 import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.simSupport.annotations.SimComponentInject
@@ -12,7 +11,6 @@ import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
 import gov.nist.hit.ds.xdsException.ExceptionUtil
 import org.apache.log4j.Logger
 
-import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 /**
  * Simulator Engine.
@@ -20,10 +18,12 @@ import java.lang.reflect.Method
  * @author bmajur
  *
  */
-public class SimEngine /* implements MessageValidatorEngine */ {
+public class SimEngine  {
     SimChain simChain;
-    int simsRun = 0;
     SoapEnvironment soapEnvironment;
+    def trace = false
+    def componentNamesRun = []
+    def stepsRun = []
     static Logger logger = Logger.getLogger(SimEngine)
 
 //    public SimEngine(String simChainResource) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SecurityException, IllegalArgumentException, SimChainLoaderException, SimEngineException, RepositoryException {
@@ -44,27 +44,48 @@ public class SimEngine /* implements MessageValidatorEngine */ {
      * @throws gov.nist.hit.ds.simSupport.exception.SimEngineSubscriptionException
      */
     public void run() throws SimEngineException, RepositoryException {
+        def eventDAO = new EventDAO()
         if (simChain.getBase() && (simChain.getBase() instanceof SoapEnvironment))
             soapEnvironment = (SoapEnvironment) simChain.getBase()
+       // if (trace && simChain.getBase()) componentNamesRun << simChain.getBase().class.name
 
-        while(!simChain.hasErrors() && isRunable()) {
+        while(!simChain.hasInternalErrors() && isRunable()) {
             SimStep simStep = simChain.getRunableStep()
             simStep.completed = true
 
-            SimComponent simComponent = simStep.simComponent
-            assert simComponent
-            def priorComponents = getPriorComponents(simComponent)
+            assert simStep.simComponent
+            def priorComponents = getPriorComponents(simStep.simComponent)
 
-            inject(simComponent, priorComponents, simStep)
-            simsRun++
-            runSimComponent(simComponent, simStep)
-            new EventDAO().save(simStep.event)
+            inject(simStep, priorComponents)
+            runSimComponent(simStep)
+            if (trace) componentNamesRun << simStep.simComponent.class.name
+            if (trace) stepsRun << simStep
+            eventDAO.save(simStep.event)
         }
     }
 
-    def inject(simComponent, priorComponents, SimStep simStep) {
+    StringBuffer getExecutionTrace() {
+        def buf = new StringBuffer()
+        if (!trace) return buf
+        buf.append('Engine trace:\n')
+        //componentNamesRun.each { buf.append('  ').append(it).append('\n') }
+        if (simChain.getBase()) buf.append('  ').append(simChain.getBase().class.name).append('\n')
+        stepsRun.each { step ->
+            buf.append('  ').append(step.simComponent.class.name)
+            if (step.hasInternalError()) buf.append('  ').append(step.getInternalError())
+            buf.append('\n')
+        }
+        return buf
+    }
+
+    /**
+     * Has the Simulator Chain run to completion?
+     */
+    public boolean isRunable() { simChain.getRunableStep()  }
+
+    def inject(SimStep simStep, priorComponents) {
         try {
-            injectInputs(simComponent, priorComponents)
+            injectInputs(simStep, priorComponents)
         } catch (SimEngineSubscriptionException e) {
             simStep.fail(e.getMessage())
         } catch (RuntimeException e) {
@@ -72,9 +93,9 @@ public class SimEngine /* implements MessageValidatorEngine */ {
         }
     }
 
-    def runSimComponent(def simComponent, def simStep) {
+    def runSimComponent(def simStep) {
         try {
-            simComponent.run(null)
+            simStep.simComponent.run(null)
         } catch (SoapFaultException e) {
             SoapFault soapFault = new SoapFault(soapEnvironment, e);
             try {
@@ -88,30 +109,13 @@ public class SimEngine /* implements MessageValidatorEngine */ {
         }
 
     }
-    /**
-     * Has the Simulator Chain injectAll to completion?  If not, maybe a SimStep added
-     * a new SimStep to the chain.  Either way, injectAll() should be called in a loop
-     * until isRunable() returns true;
-     * @return
-     */
-    public boolean isRunable() { simChain.getRunableStep()  }
-
-
-    List<String>  getClassNames(Class<?>[] classes) {
-        List<String> names = new ArrayList<String>();
-
-        for (int i=0; i<classes.length; i++)
-            names.add("<" + classes[i].getName() + ">");
-
-        return names;
-    }
 
     def getPriorComponents(simComponent) {
-        def allComponents = simChain.getComponents()
-        allComponents.reverse(true)  // reverse in place - look at most recent first
+        def allComponents = simChain.getComponents().reverse()
         def base = simChain.getBase()
         if (base) allComponents.add(base)
         def index = allComponents.indexOf(simComponent)
+        // all components that preceed simComponent (remember, list is revered)
         allComponents[index+1..<allComponents.size()]
     }
 
@@ -126,7 +130,8 @@ public class SimEngine /* implements MessageValidatorEngine */ {
      * @return
      * @throws gov.nist.hit.ds.simSupport.exception.SimEngineSubscriptionException
      */
-    void injectInputs(SimComponent subscriptionObject, priorComponents) throws SimEngineException {
+    void injectInputs(SimStep simStep, priorComponents) throws SimEngineException {
+        SimComponent subscriptionObject = simStep.simComponent
         Class<?> componentClass = subscriptionObject.class
         String componentClassName = componentClass.name
         if (componentClassName.indexOf('simSupport') != -1)
@@ -149,12 +154,12 @@ public class SimEngine /* implements MessageValidatorEngine */ {
         injectionMethods.each { injectionMethod ->
             Class<?>[] subParamTypes = injectionMethod.parameterTypes
             // must be single input param, input must be an object
-            if (subParamTypes == null || subParamTypes.length != 1) return
+            if (subParamTypes?.length != 1) return
             Class<?> injectableClass = subParamTypes[0];  // subscription class
 
             if (injectableClass.name.startsWith('java.'))
                 throw new SimEngineSubscriptionException("Illegal subscription type: java.*: <" + injectableClass.getClass().getName() + "> " + "<#" + subMethName + ">");
-            PubSubMatch match = findInjectable(subscriptionObject, injectableClass, injectionMethod, priorComponents);
+            PubSubMatch match = findInjectable(simStep, injectableClass, injectionMethod, priorComponents);
 
             logger.debug(match);
             executePubSub(match);
@@ -167,26 +172,27 @@ public class SimEngine /* implements MessageValidatorEngine */ {
      * @param subscriptionObject
      * @throws SimEngineSubscriptionException
      */
-    PubSubMatch findInjectable(SimComponent subscriptionObject, Class<?> subClass, Method subMethod, priorComponents) throws SimEngineSubscriptionException {
+    PubSubMatch findInjectable(SimStep simStep, Class<?> subClass, Method subMethod, priorComponents) throws SimEngineSubscriptionException {
+        SimComponent subscriptionObject = simStep.simComponent
         for (Object pubObject : priorComponents) {
             Method pubMethod = pubObject.class.methods.find { method ->
                 method.name.startsWith("get") && method.returnType == subClass
             }
             if (!pubMethod) continue
 
-            PubSubMatch match = new PubSubMatch();
+            PubSubMatch match = new PubSubMatch()
             match.pubMethod = pubMethod
             match.pubObject = pubObject
             match.subMethod = subMethod
             match.subObject = subscriptionObject
             return match;
         }
-        throw new SimEngineSubscriptionException(
-                'Component Chain execution error.\n' +
-                "Component <${subscriptionObject.class.name}> requires input of type ${subClass.name} which is not availble.\n" +
-                        'Available inputs are:\n' +
-                        documentSimsUpTo(subscriptionObject, priorComponents)
-        );
+        def err = 'Component execution error.\n' +
+                "    Component <${subscriptionObject.class.name}> requires input of type ${subClass.name} which is not availble.\n" +
+                '    Available inputs are:\n' +
+                documentSimsUpTo(subscriptionObject, priorComponents)
+        simStep.internalError(err)
+        throw new SimEngineSubscriptionException(err)
     }
 
     /**
@@ -197,17 +203,12 @@ public class SimEngine /* implements MessageValidatorEngine */ {
      */
     void executePubSub(PubSubMatch match) throws SimEngineExecutionException {
         try {
-            Object o = match.getPubMethod().invoke(match.getPubObject(), (Object[]) null);
-            if (o == null)
-                System.out.println(".Value is null");
+            Object o = match.getPubMethod().invoke(match.getPubObject(), (Object[]) null)
+            if (o == null) System.out.println(".Value is null");
             Object[] args = new Object[1];
             args[0] = o;
-            match.getSubMethod().invoke(match.getSubObject(), args);
-        } catch (IllegalArgumentException e) {
-            throw new SimEngineExecutionException(e);
-        } catch (IllegalAccessException e) {
-            throw new SimEngineExecutionException(e);
-        } catch (InvocationTargetException e) {
+            match.getSubMethod().invoke(match.getSubObject(), args)
+        } catch (Exception e) {
             throw new SimEngineExecutionException(e);
         }
     }
@@ -234,9 +235,7 @@ public class SimEngine /* implements MessageValidatorEngine */ {
     StringBuffer documentSimsUpTo(def targetComponent, def priorComponents) {
         StringBuffer buf = new StringBuffer();
         if (simChain.getBase()) {
-            buf.
-                    append("Component ").append(simChain.getBase().class.name).
-                    append(" offers types\n")
+            buf.append("Component ${simChain.getBase().class.name} offers types\n")
             getPublishedTypesDescription(buf, simChain.getBase());
         }
 
@@ -248,9 +247,8 @@ public class SimEngine /* implements MessageValidatorEngine */ {
         return buf;
     }
 
-    void getPublishedTypesDescription(StringBuffer buf,
-                                      Object pubSim) {
-        Method[] pubMethods = pubSim.class.methods;
+    void getPublishedTypesDescription(StringBuffer buf, Object pubSim) {
+        Method[] pubMethods = pubSim.class.methods
         pubMethods.each { pubMethod ->
             def methodName = pubMethod.name
             if (!methodName.startsWith("get")) return
@@ -268,16 +266,12 @@ public class SimEngine /* implements MessageValidatorEngine */ {
     }
 
     public StringBuffer getDescription(SimChain simChain) {
-        StringBuffer buf = new StringBuffer();
-        logger.debug("---------------------------------------------------------------\nSimChain Analyis\n");
+        StringBuffer buf = new StringBuffer()
+        logger.debug("---------------------------------------------------------------\nSimChain Analyis\n")
 
-        describe(simChain.getBase(), buf);
-        for(Iterator<SimStep> it=simChain.iterator(); it.hasNext(); ) {
-            SimStep step = it.next();
-            describe(step.getSimComponent(), buf);
-        }
-
-        return buf;
+        describe(simChain.getBase(), buf)
+        simChain.steps.each { describe(it.getSimComponent(), buf) }
+        return buf
     }
 
     void describe(Object o, StringBuffer buf) {
@@ -289,14 +283,14 @@ public class SimEngine /* implements MessageValidatorEngine */ {
 
         for (int i=0; i<methods.length; i++) {
             Method method = methods[i];
-            if (!method.isAnnotationPresent(SimComponentInject.class))
-                continue;
+            if (!method.isAnnotationPresent(SimComponentInject)) continue;
             String name = method.getName();
-            if (name.startsWith("set") && !name.equals("setErrorRecorder") && !name.equals("setName")) {
-                Class<?>[] parmTypes = method.getParameterTypes();
-                if (parmTypes != null && parmTypes.length ==1)
-                    buf.append("..Needs " + parmTypes[0].getSimpleName()).append(" <#").append(name).append(">").append("\n");
-            }
+            if (name.equals("setErrorRecorder")) continue
+            if (name.equals("setName")) continue
+            if (!name.startsWith("set")) continue
+            Class<?>[] parmTypes = method.getParameterTypes();
+            if (parmTypes?.length == 1)
+                buf.append("..Needs " + parmTypes[0].getSimpleName()).append(" <#").append(name).append(">").append("\n");
         }
 
         for (int i=0; i<methods.length; i++) {

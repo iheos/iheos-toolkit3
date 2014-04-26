@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.simSupport.engine
 
 import gov.nist.hit.ds.eventLog.EventFactory
-import gov.nist.hit.ds.simSupport.components.Base
+import gov.nist.hit.ds.simSupport.components.FooBarBase
 import spock.lang.Specification
 
 public class SimEngineTest extends Specification {
@@ -21,7 +21,7 @@ public class SimEngineTest extends Specification {
 
     def 'Base is Publisher'() {
         setup:
-        def base = new Base()  // pubs Foo and Bar
+        def base = new FooBarBase()  // pubs Foo and Bar
         def event = new EventFactory().buildEvent(null)
         def simChainFactory = new SimChainFactory(event)
         simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.BarUser', [:])
@@ -97,8 +97,6 @@ public class SimEngineTest extends Specification {
         when:
         engine.run()
         def errs = simChain.getErrorMessages()
-        print "Found ${errs.size()} errors."
-        print errs
 
         then:
         simChain.isDone()
@@ -141,36 +139,43 @@ public class SimEngineTest extends Specification {
         simChain.hasErrors()
     }
 
-//    public void errorCatchTest() throws RepositoryException {
-//        List<SimStep> simSteps = new ArrayList<SimStep>();
-//        SimStep step = new SimStep();
-//        step.setName("FooMakerError");
-//        step.setSimComponent(new FooMakerError());
-//        simSteps.add(step);
-//        step = new SimStep();
-//        step.setName("FooUser");
-//        step.setSimComponent(new FooUser());
-//        simSteps.add(step);
-//
-//        SimChain simChain = new SimChain().addSteps(simSteps);
-//
-//        assertFalse(simChain.hasErrors());
-//        run(simChain);
-//        assertTrue(simChain.hasErrors());
-//    }
-//
-//    void run(SimChain simChain) throws RepositoryException {
-//        Event event = new EventFactory().buildEvent(null);
-//        simChain.init(event);
-//        SimEngine engine = new SimEngine(simChain);
-//        try {
-//            engine.run();
-//            System.out.println(engine.getDescription(simChain));
-//        } catch (SimEngineException e) {
-//            System.out.flush();
-//            e.printStackTrace();
-//            fail();
-//        }
-//    }
+    def 'Trace'() {
+        setup:
+        def base = new FooBarBase()  // pubs Foo and Bar
+        def event = new EventFactory().buildEvent(null)
+        def simChainFactory = new SimChainFactory(event)
+        simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.BarUser', [:])
+        SimChain simChain = simChainFactory.simChain
+        simChain.base = base
+        SimEngine engine = new SimEngine(simChain)
+        engine.trace = true
+
+        when:
+        engine.run()
+        println engine.getExecutionTrace()
+
+        then:
+        simChain.isDone()
+    }
+
+    def 'Trace internal error'() {
+        setup:
+        def event = new EventFactory().buildEvent(null)
+        def simChainFactory = new SimChainFactory(event)
+        simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.BarUser', [:])
+        SimChain simChain = simChainFactory.simChain
+        SimEngine engine = new SimEngine(simChain)
+        engine.trace = true
+
+        when:
+        engine.run()
+        println engine.getExecutionTrace()
+
+        then:
+        simChain.isDone()
+        simChain.hasErrors()
+        simChain.hasInternalErrors()
+    }
+
 
 }

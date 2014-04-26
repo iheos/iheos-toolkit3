@@ -49,6 +49,13 @@ public class AssertionGroup  {
 
     boolean hasInternalError() { return worstStatus >= AssertionStatus.INTERNALERROR }
 
+    String getInternalError() {
+        def failure = assertions.find { assertion ->
+            assertion.internalError()
+        }
+        return failure?.msg
+    }
+
     boolean hasUnsaved() {
         assertions.find { !it.saved }
     }

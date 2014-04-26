@@ -49,6 +49,10 @@ public class SimStep {
 
     def fail(msg) { assertionGroup.fail(msg) }
 
+    def hasInternalError() { assertionGroup.hasInternalError() }
+
+    def getInternalError() { assertionGroup.getInternalError() }
+
     def internalError(msg) { assertionGroup.internalError(msg) }
 
 	public String toString() { (name) ? name : super.toString() }

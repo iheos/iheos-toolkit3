@@ -2,6 +2,7 @@ package gov.nist.hit.ds.simSupport.engine
 
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.simSupport.loader.PropertyResourceFactory
+import gov.nist.hit.ds.simSupport.loader.SimComponentPropFormatParser
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 
 /**
