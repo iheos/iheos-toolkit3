@@ -91,18 +91,21 @@ public abstract class BaseRepository implements Repository {
 	public void load() throws RepositoryException {
 		
 		if (!isNew && !isLoaded()) {
-			File typeDescriptorFile = new File(
-					root + File.separator + 
-					REPOSITORY_PROPERTY_FILE);
+			File propFile = getRepositoryPropFile();
 			properties = new Properties();
+            FileReader fr = null;
 			try {
-				FileReader fr = new FileReader(typeDescriptorFile);
+				fr = new FileReader(propFile);
 				properties.load(fr);
-				fr.close(); // This will release the file lock
+                loaded = true;
 			} catch (Exception e) {
 				throw new RepositoryException(RepositoryException.UNKNOWN_REPOSITORY + " : " + root, e);
 			} finally {
-				loaded = true;
+                if (fr!=null) {
+                    try {
+                        fr.close(); // This will release the file lock
+                    } catch (Throwable t) {}
+                }
 			}
 		}
 	}
@@ -326,7 +329,8 @@ public abstract class BaseRepository implements Repository {
 	protected File getRepositoryPropFile() throws RepositoryException {
 //		load();
 		//return new File (Configuration.getRepositoriesDataDir(getSource()) + File.separator + getId() + File.separator + REPOSITORY_PROPERTY_FILE); 
-		return new File(root.toString() + File.separator + REPOSITORY_PROPERTY_FILE);
+		// return new File(root.toString() + File.separator + REPOSITORY_PROPERTY_FILE);
+        return new File(root.toString(),REPOSITORY_PROPERTY_FILE);
 	}
 
 
