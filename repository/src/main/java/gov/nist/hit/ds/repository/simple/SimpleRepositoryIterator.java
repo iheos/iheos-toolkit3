@@ -5,10 +5,6 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryIterator;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.SimpleId;
-import gov.nist.hit.ds.repository.simple.SimpleRepository;
-import gov.nist.hit.ds.repository.simple.SimpleType;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -59,7 +55,7 @@ public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFil
 	
 	/**
 	 * Iterate across all provided repository sources and all types.
-	 * @param type
+	 * @param rss
 	 * @throws RepositoryException
 	 */
 	public SimpleRepositoryIterator(ArrayList<RepositorySource> rss) throws RepositoryException {
@@ -68,7 +64,8 @@ public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFil
 	
 	/** 
 	 * Iterate across all provided repository sources and specified type.
-	 * @param type
+	 * @param rss
+     * @param t
 	 * @throws RepositoryException
 	 */
 	public SimpleRepositoryIterator(ArrayList<RepositorySource> rss, Type t) throws RepositoryException {
@@ -143,21 +140,29 @@ public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFil
 
 	@Override
 	public boolean accept(File dir, String name) {
-		String repId = basename(name);
-		try {
-			if (type == null) {
-				return true;  
-			} else {
-				SimpleRepository repos = new SimpleRepository(new SimpleId(repId));
-				repos.setSource(new RepositorySource(this.repositorySource));
-				String typeStr = repos.getProperty("repositoryType");
-				Type t = new SimpleType(typeStr);
-				return type.isEqual(t);
-			}
-				
-		} catch (RepositoryException e) {
-			return false;
-		}
+
+        File f = new File(dir,name);
+
+        if (!f.isDirectory()) { // This is required to skip unrelated files such as .DS_Store
+            return false;
+        } else {
+            String repId = basename(name);
+            try {
+                SimpleRepository repos = new SimpleRepository(new SimpleId(repId));
+                repos.setSource(new RepositorySource(this.repositorySource)); // This is required to ensure a valid repository directory is recognized
+
+                if (type == null) {
+                    return true;
+                } else {
+                    String typeStr = repos.getProperty("repositoryType");
+                    Type t = new SimpleType(typeStr);
+                    return type.isEqual(t);
+                }
+
+            } catch (RepositoryException re) {  }
+
+        }
+        return false;
 	}
 
 	String basename(String filename) {
