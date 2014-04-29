@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.repository.simple;
 
+import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryIterator;
@@ -146,6 +147,8 @@ public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFil
         if (!f.isDirectory()) { // This is required to skip unrelated files such as .DS_Store
             return false;
         } else {
+            // TODO: Basename might not be needed for repositories because folder names (opposed to guid-named files) are being iterated
+            // and it's not clear as to how getting everything to the left of "." is desirable in that case
             String repId = basename(name);
             try {
                 SimpleRepository repos = new SimpleRepository(new SimpleId(repId));
@@ -154,7 +157,7 @@ public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFil
                 if (type == null) {
                     return true;
                 } else {
-                    String typeStr = repos.getProperty("repositoryType");
+                    String typeStr = repos.getProperty(PropertyKey.REPOSITORY_TYPE);
                     Type t = new SimpleType(typeStr);
                     return type.isEqual(t);
                 }
@@ -165,6 +168,11 @@ public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFil
         return false;
 	}
 
+    /**
+     *
+     * @param filename
+     * @return
+     */
 	String basename(String filename) {
 		int i = filename.lastIndexOf(".");
 		if (i == -1) return filename;
