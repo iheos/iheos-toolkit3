@@ -46,7 +46,7 @@ public class Xdstools3 implements EntryPoint {
 
 	public void onModuleLoad() {
 		
-		// Event handling
+		// Event handling in the GUI
 				final SimpleEventBus bus = new SimpleEventBus();
 				bus.addHandler(PingEvent.TYPE, new PingEventHandler(){
 					            public void onEvent(PingEvent event) {
@@ -58,8 +58,6 @@ public class Xdstools3 implements EntryPoint {
 					                }.schedule(1000);
 					            }
 					        });
-
-				
 
 
 		// Toolbar

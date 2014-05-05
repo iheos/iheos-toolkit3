@@ -11,15 +11,16 @@
 	</parent>
 
 	<artifactId>xdstools3</artifactId>
-	<!-- <version>3.0.0a</version> -->
+	<!-- <version>3.0.0dev</version>  -->
 	<packaging>war</packaging>
-	<name>xdstools3 Maven Webapp</name>
+	<name>xdstools3</name>
 	<properties>
 		<!-- Convenience property to set the GWT version -->
 		<gwtVersion>2.5.1</gwtVersion>
 		<!-- GWT needs at least java 1.5 -->
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<repositories>
@@ -50,12 +51,12 @@
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
 			<scope>provided</scope>
-			<version>2.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
-			<version>2.5.1</version>
+			<scope>runtime</scope>
+			<version>${gwtVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.smartgwt</groupId>
@@ -85,10 +86,9 @@
 
 
 	<build>
-		<finalName>xdstools3</finalName>
 		<!-- Generate compiled stuff in the folder used for developing mode -->
 		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
-
+		
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -122,6 +122,7 @@
 							<optimizationLevel>0</optimizationLevel>
 						</configuration>
 					</execution>
+
 				</executions>
 				<configuration>
 					<runTarget>Xdstools3.html</runTarget>

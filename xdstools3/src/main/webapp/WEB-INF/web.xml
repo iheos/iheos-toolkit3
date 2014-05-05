@@ -16,5 +16,15 @@
 		<welcome-file>Xdstools3.html</welcome-file>
 	</welcome-file-list>
 
+	<!-- Example servlet loaded into servlet container -->
+	<servlet>
+		<servlet-name>InterfaceClientServer</servlet-name>
+		<servlet-class>gov.nist.toolkit.xdstools3.server.InterfaceClientServerImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InterfaceClientServer</servlet-name>
+		<url-pattern>/xdstools3/service</url-pattern>
+	</servlet-mapping>
+
 </web-app>
 

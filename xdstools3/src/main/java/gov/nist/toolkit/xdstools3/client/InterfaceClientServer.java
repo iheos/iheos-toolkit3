@@ -1,6 +1,7 @@
 package gov.nist.toolkit.xdstools3.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 /**
  * Client side of the GWT RPC mechanism. This is the service class.
@@ -10,8 +11,9 @@ import com.google.gwt.user.client.rpc.RemoteService;
  * @see InterfaceClientServerImpl
  *
  */
+@RemoteServiceRelativePath("service")
 public interface InterfaceClientServer extends RemoteService {
-	//public boolean logMeIn(String username, String password);
+	public void logMeIn(String username, String password);
 	
 
 }

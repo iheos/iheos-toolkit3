@@ -1,10 +1,14 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog;
 
+import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
+import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.CancelButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.LoginButton;
 import gov.nist.toolkit.xdstools3.client.events.PingEvent;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
@@ -118,17 +122,17 @@ public class LoginDialogWidget extends Window {
 //	        				 SC.say("Response from the server:" + (String)data.toString());
 //	        			}
 //	        			
-//	              //  logMeIn();
+	                logMeIn();
 //	        });  
-//	            }});
+
 
 	            	
 	            	
 		cancel = new CancelButton();
 		 cancel.addClickHandler(new ClickHandler() {  
 	            public void onClick(ClickEvent event) {  
-	                form.reset(); // not sure if that is useful
-	                close(); // close window
+	                form.reset();
+	                close();
 	            }  
 	        });  
 		
@@ -145,22 +149,38 @@ public class LoginDialogWidget extends Window {
 	}
 
 	protected void logMeIn(){
-		Criteria c = form.getValuesAsCriteria();
-		DataSource.get("username").fetchData(null, new DSCallback() {
-
-			@Override
-			public void execute(DSResponse response, Object data,
-					DSRequest request) {
-			
-				Record[] records = response.getData();
-				//String registeredUser = (records[0]).toString();
-				 SC.say("Response from the server:" + (String)data.toString());
-			}
-			
-		});
+		//Criteria c = form.getValuesAsCriteria();
+	
+		// test of inter-widget calls (GUI side only)
+//		DataSource.get("username").fetchData(null, new DSCallback() {
+//
+//			@Override
+//			public void execute(DSResponse response, Object data,
+//					DSRequest request) {
+//			
+//				Record[] records = response.getData();
+//				//String registeredUser = (records[0]).toString();
+//				 SC.say("Response from the server:" + (String)data.toString());
+//			}
+//			
+//		});
 	
 		
-		
+		// test of client-server calls
+		InterfaceClientServerAsync intf = (InterfaceClientServerAsync) GWT.create(InterfaceClientServer.class);
+		 AsyncCallback callback = new AsyncCallback() {
+			    public void onFailure(Throwable caught) {
+			    	 SC.say("Failure on client side");
+			    }
+
+				@Override
+				public void onSuccess(Object result) {
+					 SC.say("Success on client side");
+					
+				}
+			  };
+
+		intf.logMeIn("", "", callback);
 		
 		
 //		DataSource.get("username").fetchData(null, new DSCallback() {
