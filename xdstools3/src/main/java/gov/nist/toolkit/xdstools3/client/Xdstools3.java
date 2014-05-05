@@ -48,16 +48,18 @@ public class Xdstools3 implements EntryPoint {
 		
 		// Event handling in the GUI
 				final SimpleEventBus bus = new SimpleEventBus();
-				bus.addHandler(PingEvent.TYPE, new PingEventHandler(){
-					            public void onEvent(PingEvent event) {
-					                System.out.print("Inside Ping --> ");
-					                new Timer(){
-					                    public void run() {
-					                       SC.say("pong event fired");
-					                    }
-					                }.schedule(1000);
-					            }
-					        });
+				
+	// The second part of this example is located in LoginDialog.
+	//				bus.addHandler(PingEvent.TYPE, new PingEventHandler(){
+	//					            public void onEvent(PingEvent event) {
+	//					                System.out.print("Inside Ping --> ");
+	//					                new Timer(){
+	//					                    public void run() {
+	//					                       SC.say("pong event fired");
+	//					                    }
+	//					                }.schedule(1000);
+	//					            }
+	//					        });
 
 
 		// Toolbar

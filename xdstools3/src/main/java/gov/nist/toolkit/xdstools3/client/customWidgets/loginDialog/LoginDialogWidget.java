@@ -29,9 +29,9 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
 public class LoginDialogWidget extends Window {
-//
-//	protected TextItem userName;
-//	protected TextItem password;
+	//
+	//	protected TextItem userName;
+	//	protected TextItem password;
 	protected DynamicForm form;
 	protected LoginButton login;
 	protected CancelButton cancel;
@@ -47,7 +47,7 @@ public class LoginDialogWidget extends Window {
 		setWidth(280); setHeight(140);
 		setShowResizeBar(false);
 		setAutoCenter(true);
-		
+
 		// Set DataSource (link to backend)
 		dataSource = new DataSource();  
 		dataSource.setID("toolkit_config");
@@ -55,7 +55,7 @@ public class LoginDialogWidget extends Window {
 		DataSourcePasswordField passwordField = new DataSourcePasswordField("password", "Password", 50, true);  
 		dataSource.setFields(firstNameField, passwordField);
 		dataSource.setDataURL("data/datasources/toolkit_config.xml");  
-		
+
 
 		VLayout vlayout = new VLayout();
 		vlayout.setHeight100();
@@ -64,7 +64,7 @@ public class LoginDialogWidget extends Window {
 		vlayout.setAlign(VerticalAlignment.CENTER);
 		addItem(vlayout);
 
-	
+
 
 
 	}
@@ -76,20 +76,20 @@ public class LoginDialogWidget extends Window {
 		form = new DynamicForm();
 		form.setDataSource(dataSource);
 		form.setUseAllDataSourceFields(true);
-		
 
-//		userName = new TextItem();
-//		userName.setName("_username");
-//		userName.setTitle("Username");
-//		userName.setRequired(true);
-//		
-//		password = new PasswordItem();
-//		password.setName("_password");
-//		password.setTitle("Password");
-//		password.setRequired(true);
-		
 
-	//	form.setFields(new FormItem[] {userName, password});
+		//		userName = new TextItem();
+		//		userName.setName("_username");
+		//		userName.setTitle("Username");
+		//		userName.setRequired(true);
+		//		
+		//		password = new PasswordItem();
+		//		password.setName("_password");
+		//		password.setTitle("Password");
+		//		password.setRequired(true);
+
+
+		//	form.setFields(new FormItem[] {userName, password});
 		form.setAutoFocus(true); form.setAutoFocusOnError(true);
 		form.setHeight(80);
 		form.setCellPadding(5);
@@ -103,40 +103,22 @@ public class LoginDialogWidget extends Window {
 	 */
 	private HLayout createButtons(){
 		login = new LoginButton();
-		 login.addClickHandler(new ClickHandler() {  
-	            public void onClick(ClickEvent event) {  
-	            	bus.fireEvent(new PingEvent("-----Simulation Started-----"));
-	            	}
-	             });
+		login.addClickHandler(new ClickHandler() {  
+			public void onClick(ClickEvent event) {  
+				logMeIn();
+			}
+		});        	
 
-	                //form.validate(false);  // this should be enough if implemented on server side too. validate() validates only on client
-	                // validate(bool) validates on both client and server
-//	                form.validateData(new DSCallback() {
-//
-//	        			@Override
-//	        			public void execute(DSResponse response, Object data,
-//	        					DSRequest request) {
-//	        			
-//	        				Record[] records = response.getData();
-//	        				//String registeredUser = (records[0]).toString();
-//	        				 SC.say("Response from the server:" + (String)data.toString());
-//	        			}
-//	        			
-	                logMeIn();
-//	        });  
-
-
-	            	
-	            	
 		cancel = new CancelButton();
-		 cancel.addClickHandler(new ClickHandler() {  
-	            public void onClick(ClickEvent event) {  
-	                form.reset();
-	                close();
-	            }  
-	        });  
-		
-	
+		cancel.addClickHandler(new ClickHandler() {  
+			public void onClick(ClickEvent event) {  
+				//bus.fireEvent(new PingEvent("-----Simulation Started-----"));
+				form.reset();
+				close();
+			}  
+		});  
+
+
 		HLayout buttonLayout = new HLayout();
 		buttonLayout.addMembers(cancel, login);
 		buttonLayout.setAlign(Alignment.CENTER);
@@ -150,58 +132,58 @@ public class LoginDialogWidget extends Window {
 
 	protected void logMeIn(){
 		//Criteria c = form.getValuesAsCriteria();
-	
+
 		// test of inter-widget calls (GUI side only)
-//		DataSource.get("username").fetchData(null, new DSCallback() {
-//
-//			@Override
-//			public void execute(DSResponse response, Object data,
-//					DSRequest request) {
-//			
-//				Record[] records = response.getData();
-//				//String registeredUser = (records[0]).toString();
-//				 SC.say("Response from the server:" + (String)data.toString());
-//			}
-//			
-//		});
-	
-		
+		//		DataSource.get("username").fetchData(null, new DSCallback() {
+		//
+		//			@Override
+		//			public void execute(DSResponse response, Object data,
+		//					DSRequest request) {
+		//			
+		//				Record[] records = response.getData();
+		//				//String registeredUser = (records[0]).toString();
+		//				 SC.say("Response from the server:" + (String)data.toString());
+		//			}
+		//			
+		//		});
+
+
 		// test of client-server calls
 		InterfaceClientServerAsync intf = (InterfaceClientServerAsync) GWT.create(InterfaceClientServer.class);
-		 AsyncCallback callback = new AsyncCallback() {
-			    public void onFailure(Throwable caught) {
-			    	 SC.say("Failure on client side");
-			    }
+		AsyncCallback callback = new AsyncCallback() {
+			public void onFailure(Throwable caught) {
+				SC.say("Failure on client side");
+			}
 
-				@Override
-				public void onSuccess(Object result) {
-					 SC.say("Success on client side");
-					
-				}
-			  };
+			@Override
+			public void onSuccess(Object result) {
+				SC.say("Success on client side");
+
+			}
+		};
 
 		intf.logMeIn("", "", callback);
-		
-		
-//		DataSource.get("username").fetchData(null, new DSCallback() {
-//			@Override
-//	         public void execute(DSResponse response, Object rawData, DSRequest request) {
-//	            if (response.getDataAsString().equals(userName._getValue())) {
-//	            	close();
-//	            	// displayMessageLoggedIn
-//	            }
-//	         }
-//	     });
-//		
-//		   DataSource.get("employees").fetchData(null, new DSCallback() {
-//		         public void execute(DSResponse response, Object rawData, DSRequest request) {
-//		             myGrid.setData(response.getData());
-//		         }
-//		     });
-//		  
+
+
+		//		DataSource.get("username").fetchData(null, new DSCallback() {
+		//			@Override
+		//	         public void execute(DSResponse response, Object rawData, DSRequest request) {
+		//	            if (response.getDataAsString().equals(userName._getValue())) {
+		//	            	close();
+		//	            	// displayMessageLoggedIn
+		//	            }
+		//	         }
+		//	     });
+		//		
+		//		   DataSource.get("employees").fetchData(null, new DSCallback() {
+		//		         public void execute(DSResponse response, Object rawData, DSRequest request) {
+		//		             myGrid.setData(response.getData());
+		//		         }
+		//		     });
+		//		  
 	}
-	
-	
+
+
 
 
 }

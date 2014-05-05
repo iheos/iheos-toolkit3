@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.server;
+package gov.nist.toolkit.xdstools3.server.login;
 
 /**
  * Tracks which users are logged in. For now, it only supports logging in as admin for the purpose of editing the configurations.
