@@ -193,20 +193,7 @@ public class TransactionMonitorWidget extends Composite {
             @Override
             public void onResize(ResizeEvent event) {
 
-                try {
-                    long containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
-                    long containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
-
-
-
-                    if (getShowTxDetail()) {
-                        txMonitorMainSplitPanel.setWidgetSize(southPanel, Math.round(.4 * containerHeight));
-                        southPanel.setWidgetSize(requestViewerWidget, Math.round(.5 * containerWidth));
-                    }
-
-                } catch (Exception ex) {
-                    logger.warning("Window resize failed:" + ex.toString());
-                }
+                resizeMessageDetailArea();
             }
         });
 
@@ -222,7 +209,28 @@ public class TransactionMonitorWidget extends Composite {
 
     }
 
+    private void resizeMessageDetailArea() {
+        try {
+            long containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
+            long containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
 
+            long messageDetailViewerHeight = getMessageDetailHeight(containerHeight);
+            txMonitorMainSplitPanel.setWidgetSize(southPanel, messageDetailViewerHeight);
+            southPanel.setWidgetSize(requestViewerWidget, Math.round(.5 * containerWidth));
+
+
+        } catch (Exception ex) {
+            logger.warning("Window resize failed:" + ex.toString());
+        }
+    }
+
+    private long getMessageDetailHeight(long containerHeight) {
+        long messageDetailViewerHeight = Math.round(.4 * containerHeight);
+        if (!getShowTxDetail()) {
+            messageDetailViewerHeight = 0;
+        }
+        return messageDetailViewerHeight;
+    }
 
 
     protected Boolean appendData(Map<String,AssetNode> anMap) { // int keyIdx, String[] csvRow
@@ -307,12 +315,11 @@ public class TransactionMonitorWidget extends Composite {
         southPanel.add(responseViewerWidget);
 
 
-
-        if (getShowTxDetail()) {
-            txMonitorMainSplitPanel.addSouth(southPanel, Math.round(.4 * containerHeight)); // 500
-
+        long messageDetailViewerHeight = getMessageDetailHeight(containerHeight);
+        if (!getShowTxDetail()) {
+            messageDetailViewerHeight = 0;
         }
-
+        txMonitorMainSplitPanel.addSouth(southPanel, messageDetailViewerHeight); // 500 Math.round(.4 * containerHeight)
 
         txMonitorMainSplitPanel.add(setupTable(centerPanel));
 
@@ -320,10 +327,6 @@ public class TransactionMonitorWidget extends Composite {
 
     }
 
-    public void showTxDetail() {
-
-        southPanel.setVisible(true);
-    }
 
     public void clear() {
 
@@ -436,14 +439,7 @@ public class TransactionMonitorWidget extends Composite {
 
 
         sp.add(txTable);
-//        VerticalPanel vp = new VerticalPanel();
-//
-//        SimplePager pager = new SimplePager();
-//        pager.setDisplay(txTable);
-//        vp.add(pager);
-//        vp.add(txTable);
-//
-//        sp.add(vp);
+
 
         getPager().getElement().getStyle().setMarginTop(0, Style.Unit.PX);
         //getPager().setHeight("50%");
@@ -636,6 +632,7 @@ public class TransactionMonitorWidget extends Composite {
 
     public void setShowTxDetail(Boolean showTxDetail) {
         this.showTxDetail = showTxDetail;
+        resizeMessageDetailArea();
     }
     public Boolean getListenerEnabled() {
         return listenerEnabled;
