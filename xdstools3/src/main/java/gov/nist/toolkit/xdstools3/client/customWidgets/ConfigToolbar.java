@@ -49,6 +49,7 @@ public class ConfigToolbar extends RibbonBar {
 		RibbonGroup testconfigGroup = createRibbonGroup("Test Configuration");  
 		CheckboxItem tls = new CheckboxItem("TLS");  
 		tls.setTitle("TLS"); 
+		tls.setWidth("40px");
 		DynamicForm tlsform = new DynamicForm();
 		tlsform.setFields(tls);
 		ListBox listBox_saml = new ListBox();
