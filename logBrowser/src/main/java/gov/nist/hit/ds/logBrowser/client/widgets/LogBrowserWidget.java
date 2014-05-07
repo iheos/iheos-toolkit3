@@ -119,7 +119,7 @@ public class LogBrowserWidget extends Composite {
         }, TRANSACTION_FILTER() {
             @Override
             public String toString() {
-                return "Transaction Filter";
+                return "Messages";
             }
         }
 	};

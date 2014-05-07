@@ -366,7 +366,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 	}
 
 
-    public static Boolean searchHit(String[][] reposData, SearchCriteria sc, boolean newIndexOnly) {
+    public synchronized static Boolean searchHit(String[][] reposData, SearchCriteria sc, boolean newIndexOnly) {
         ArrayList<AssetNode> result = new ArrayList<AssetNode>();
 
         try {
@@ -630,6 +630,8 @@ public class PresentationData implements IsSerializable, Serializable  {
         String ioHeaderId = null;
         String msgType = null;
         String proxyDetail = null;
+        String fromIp = null;
+        String toIp = null;
 
         try {
 
@@ -668,10 +670,12 @@ public class PresentationData implements IsSerializable, Serializable  {
                 ioHeaderId = (String)((MapMessage)message).getObject("ioHeaderId");
                 msgType = (String)((MapMessage)message).getObject("msgType");
                 proxyDetail = (String)((MapMessage)message).getObject("proxyDetail");
+                fromIp = (String)((MapMessage)message).getObject("messageFromIpAddress");
+                toIp = (String)((MapMessage)message).getObject("forwardedToIpAddress");
 
             } else {
                 // Print error message if Message was not recognized
-                logger.fine("JMS Message type not known or Possible timeout ");
+                logger.finest("JMS Message type not known or Possible timeout ");
             }
 
 
@@ -712,7 +716,10 @@ public class PresentationData implements IsSerializable, Serializable  {
                 headerMsg.setReposSrc(acs);
                 headerMsg.setLocation(headerLoc);
                 headerMsg.setCsv(processCsvContent(txDetail));
-                headerMsg.setProps(proxyDetail);
+                //headerMsg.setProps(proxyDetail);
+                headerMsg.getExtendedProps().put("proxyDetail",proxyDetail);
+                headerMsg.getExtendedProps().put("fromIp",fromIp);
+                headerMsg.getExtendedProps().put("toIp",toIp);
                 result.put("header",headerMsg);
 
                 if (bodyLoc!=null) {
