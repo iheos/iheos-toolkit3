@@ -149,6 +149,17 @@ public class TransactionMonitorFilterWidget extends Composite {
         options.add(getTxFilter().getPager());
         options.add(getFilterCounterTxt());
 
+        HTML optShowDetail = new HTML("Message Details");
+        optShowDetail.setStyleName("roundedButton1");
+        optShowDetail.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                getTxFilter().setShowTxDetail(!getTxFilter().getShowTxDetail());
+            }
+        });
+
+        options.add(optShowDetail);
+
         HTML optClear = new HTML("Clear");
         optClear.setStyleName("roundedButton1");
         optClear.addClickHandler(new ClickHandler() {
@@ -172,12 +183,12 @@ public class TransactionMonitorFilterWidget extends Composite {
 
         options.add(getLiveCounterTxt());
 
-        HTML optShowDetail = new HTML("Show Detail");
+        HTML optShowDetail = new HTML("Message Details");
         optShowDetail.setStyleName("roundedButton1");
         optShowDetail.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                //
+                getTxMonitorLive().setShowTxDetail(!getTxMonitorLive().getShowTxDetail());
             }
         });
 
