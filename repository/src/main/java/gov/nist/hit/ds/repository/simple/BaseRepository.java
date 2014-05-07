@@ -364,6 +364,10 @@ public abstract class BaseRepository implements Repository {
 		return properties.getProperty(name);
 	}
 
+    public String getProperty(PropertyKey pk) throws RepositoryException {
+        return getProperty(pk.toString());
+    }
+
 	@Override
 	public RepositorySource getSource() throws RepositoryException {
 		

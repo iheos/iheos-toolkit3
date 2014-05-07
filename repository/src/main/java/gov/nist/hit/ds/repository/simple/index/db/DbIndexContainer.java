@@ -161,16 +161,16 @@ public class DbIndexContainer implements IndexContainer, Index {
         // Mark index
         if (getReposIndexMap().get(reposId)!=null) {
             logger.info(reposId + " is already being indexed...");
-                synchronized (iter) {
-                    if (indexNewAssetsOnly) {
-                        totalAssetsIndexed = appendIndex(repos, iter);
-                    } else {
-                        totalAssetsIndexed = indexRepository(repos, iter);
-                    }
-                    logger.info(reposId + " exiting...");
+            synchronized (repos) {
+                if (indexNewAssetsOnly) {
+                    totalAssetsIndexed = appendIndex(repos, iter);
+                } else {
+                    totalAssetsIndexed = indexRepository(repos, iter);
                 }
+                logger.info(reposId + " exiting...");
+            }
         } else {
-            getReposIndexMap().put(reposId,Boolean.TRUE);
+            getReposIndexMap().put(reposId, Boolean.TRUE);
             try {
                 if (indexNewAssetsOnly) {
                     totalAssetsIndexed = appendIndex(repos, iter);

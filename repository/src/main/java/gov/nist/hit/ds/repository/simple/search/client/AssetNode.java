@@ -1,11 +1,13 @@
 package gov.nist.hit.ds.repository.simple.search.client;
 
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
+import java.util.Map;
 
 public class AssetNode implements IsSerializable, Serializable {
 
@@ -30,6 +32,7 @@ public class AssetNode implements IsSerializable, Serializable {
 	private boolean hasContent;
 	private String txtContent;
 	private String props;
+    private Map<String,String> extendedProps = new HashMap<String, String>();
 	private String[][] csv;
 	
 	
@@ -173,5 +176,12 @@ public class AssetNode implements IsSerializable, Serializable {
 		this.createdDate = createdDate;
 	}
 
-	
+    public Map<String, String> getExtendedProps() {
+        return extendedProps;
+    }
+
+    public void setExtendedProps(Map<String, String> extendedProps) {
+        this.extendedProps = extendedProps;
+    }
+
 }

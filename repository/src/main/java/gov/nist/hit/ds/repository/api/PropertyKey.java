@@ -102,7 +102,13 @@ public enum PropertyKey {
            public String toString() {
                return "reposAcs";
            }
-       }, 
+       },
+       REPOSITORY_TYPE(true) {
+           @Override
+           public String toString() {
+               return "repositoryType";
+           }
+       },
        STATUS(false){
            @Override
            public String toString() {

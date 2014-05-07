@@ -1,18 +1,20 @@
 package gov.nist.hit.ds.repository.simple.search;
 
-import static org.junit.Assert.assertTrue;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.presentation.PresentationData;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 public class MiscTest {
 
@@ -155,6 +157,21 @@ public class MiscTest {
 		}
 		*/
 	}
+
+    @Test
+    public void testList() {
+        List<String> list = new ArrayList<String>();
+
+        list.add("1");
+        list.add("2");
+        list.add("3");
+
+        list.add(1,"1.1");
+
+        for (String s : list) {
+            System.out.println(s);
+        }
+    }
 	
 	@Test
 	public void stringComp() {

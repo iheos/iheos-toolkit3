@@ -4,26 +4,26 @@ package gov.nist.hit.ds.logBrowser.client.event;
 import com.google.gwt.event.shared.GwtEvent;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 
+import java.util.Map;
+
 
 public class NewTxMessageEvent extends GwtEvent<NewTxMessageEventHandler>{
 	public static final Type<NewTxMessageEventHandler> TYPE = new Type<NewTxMessageEventHandler>();
 
 
-
     private int messageCount;
 
 
-    private AssetNode assetNode;
+    private Map<String,AssetNode> anMap;
 
-	  public NewTxMessageEvent(int value, AssetNode an) {
+	  public NewTxMessageEvent(int value, Map<String,AssetNode> anMap) {
 
           setMessageCount(value);
-
-          setAssetNode(an);
+          setAnMap(anMap);
 	  }
 
 	  public int getValue() {
-		return this.messageCount;
+		return getMessageCount();
 	}
 
     public int getMessageCount() {
@@ -34,13 +34,6 @@ public class NewTxMessageEvent extends GwtEvent<NewTxMessageEventHandler>{
         this.messageCount = messageCount;
     }
 
-    public AssetNode getAssetNode() {
-        return assetNode;
-    }
-
-    public void setAssetNode(AssetNode assetNode) {
-        this.assetNode = assetNode;
-    }
 
 	@Override
 	public Type<NewTxMessageEventHandler> getAssociatedType() {
@@ -53,6 +46,15 @@ public class NewTxMessageEvent extends GwtEvent<NewTxMessageEventHandler>{
 		handler.onNewTxMessage(this);
 		
 	}
+
+
+    public Map<String, AssetNode> getAnMap() {
+        return anMap;
+    }
+
+    public void setAnMap(Map<String, AssetNode> anMap) {
+        this.anMap = anMap;
+    }
 }
 
 
