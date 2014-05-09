@@ -46,18 +46,18 @@ public class ConfigToolbar extends RibbonBar {
 		sessionGroup.addControls(widgetCanvas_2, widgetCanvas_3); 
 
 		// Menu group: Test config
-		RibbonGroup testconfigGroup = createRibbonGroup("Test Configuration");  
-		CheckboxItem tls = new CheckboxItem("TLS");  
-		tls.setTitle("TLS"); 
-		tls.setWidth("40px");
-		DynamicForm tlsform = new DynamicForm();
-		tlsform.setFields(tls);
-		ListBox listBox_saml = new ListBox();
-		listBox_saml.addItem("SAML off");
-		listBox_saml.addItem("DIRECT SAML");
-		listBox_saml.setVisibleItemCount(1);
-		WidgetCanvas widgetCanvas_6 = new WidgetCanvas(listBox_saml);
-		testconfigGroup.addControls(widgetCanvas_6, tlsform); 
+//		RibbonGroup testconfigGroup = createRibbonGroup("Test Configuration");
+//		CheckboxItem tls = new CheckboxItem("TLS");
+//		tls.setTitle("TLS");
+//		tls.setWidth("40px");
+//		DynamicForm tlsform = new DynamicForm();
+//		tlsform.setFields(tls);
+//		ListBox listBox_saml = new ListBox();
+//		listBox_saml.addItem("SAML off");
+//		listBox_saml.addItem("DIRECT SAML");
+//		listBox_saml.setVisibleItemCount(1);
+//		WidgetCanvas widgetCanvas_6 = new WidgetCanvas(listBox_saml);
+//		testconfigGroup.addControls(widgetCanvas_6, tlsform);
 
 		//       Menu configMenu = new Menu();
 		//       configMenu.addItem(new MenuItem("Endpoint Configuration", "icon_gear.png", "Ctrl+D"));  
@@ -66,14 +66,15 @@ public class ConfigToolbar extends RibbonBar {
 
 		// Menu group: Site / Actors
 		RibbonGroup actorsGroup = createRibbonGroup("Endpoints");  
-		IconButton configEndpoints = getIconButton("Configure", "icon_gear.png");  
-		IconButton listEndpoints = getIconButton("View", "icon_gear.png"); 
-		actorsGroup.addControls(configEndpoints, listEndpoints); 
+		IconButton configEndpoints = getIconButton("Configure", "icon_gear.png"); configEndpoints.setWidth("80px");
+		IconButton listEndpoints = getIconButton("View", "icon_gear.png"); listEndpoints.setWidth("80px");
+		actorsGroup.addControls(configEndpoints, listEndpoints);
 
 		// Menu group: Admin 
 		// Behavior: Clicking on any of the buttons in the admin group opens a dialog to allow the user to log in as admin,
 		// IF not logged in yet. Then follows to the link initially requested.
-		RibbonGroup adminGroup = createRibbonGroup("Admin Panel"); 
+		RibbonGroup adminGroup = createRibbonGroup("Admin Panel");
+        adminGroup.setWidth("350px");
 		IconButton button = getIconButton("Settings", "icon_gear.png") ;
 		button.addClickHandler(new ClickHandler() {  
 			@Override
@@ -82,7 +83,9 @@ public class ConfigToolbar extends RibbonBar {
 				showLoginWindow();
 			}
 
+            // Opens login dialog, which then displays the Admin Settings tab if login is successful
 			private void showLoginWindow() {
+                // TODO The Login window is missing check of credentials in backend
 				LoginDialogWidget dialog = new LoginDialogWidget(bus);
 				dialog.show();
 			}  
@@ -90,7 +93,7 @@ public class ConfigToolbar extends RibbonBar {
 		adminGroup.addControl(button);
 
 		// Add menu groups to menu bar  
-		this.addMembers(sessionGroup, testconfigGroup, actorsGroup, adminGroup);  
+		this.addMembers(sessionGroup, actorsGroup, adminGroup);
 		this.setHeight(sessionGroup.getHeight());
 		this.setWidth100();
 	}

@@ -4,17 +4,13 @@ import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.CancelButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.LoginButton;
-import gov.nist.toolkit.xdstools3.client.events.PingEvent;
+import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.events.demo.PingEvent;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.smartgwt.client.data.Criteria;
-import com.smartgwt.client.data.DSCallback;
-import com.smartgwt.client.data.DSRequest;
-import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSource;
-import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.fields.DataSourcePasswordField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.Alignment;
@@ -111,10 +107,8 @@ public class LoginDialogWidget extends Window {
 
 		cancel = new CancelButton();
 		cancel.addClickHandler(new ClickHandler() {  
-			public void onClick(ClickEvent event) {  
-				//bus.fireEvent(new PingEvent("-----Simulation Started-----"));
-				form.reset();
-				close();
+			public void onClick(ClickEvent event) {
+                close();
 			}  
 		});  
 
@@ -131,23 +125,6 @@ public class LoginDialogWidget extends Window {
 	}
 
 	protected void logMeIn(){
-		//Criteria c = form.getValuesAsCriteria();
-
-		// test of inter-widget calls (GUI side only)
-		//		DataSource.get("username").fetchData(null, new DSCallback() {
-		//
-		//			@Override
-		//			public void execute(DSResponse response, Object data,
-		//					DSRequest request) {
-		//			
-		//				Record[] records = response.getData();
-		//				//String registeredUser = (records[0]).toString();
-		//				 SC.say("Response from the server:" + (String)data.toString());
-		//			}
-		//			
-		//		});
-
-
 		// test of client-server calls
 		InterfaceClientServerAsync intf = (InterfaceClientServerAsync) GWT.create(InterfaceClientServer.class);
 		AsyncCallback callback = new AsyncCallback() {
@@ -163,6 +140,10 @@ public class LoginDialogWidget extends Window {
 		};
 
 		intf.logMeIn("", "", callback);
+
+        // Display the Admin Settings tab if login was successful
+        bus.fireEvent(new OpenTabEvent("ADMIN"));
+
 
 
 		//		DataSource.get("username").fetchData(null, new DSCallback() {

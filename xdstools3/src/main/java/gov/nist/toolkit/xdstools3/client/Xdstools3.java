@@ -3,23 +3,18 @@ package gov.nist.toolkit.xdstools3.client;
 
 import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.ConfigurationTab;
+import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.SettingsTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.TabSetWidget;
-import gov.nist.toolkit.xdstools3.client.events.PingEvent;
-import gov.nist.toolkit.xdstools3.client.events.PingEventHandler;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.util.SC;
-import com.smartgwt.client.widgets.IButton;
-import com.smartgwt.client.widgets.events.ClickEvent;
-import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
+import gov.nist.toolkit.xdstools3.client.events.EventHandler;
+import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
 
 public class Xdstools3 implements EntryPoint {
 
@@ -42,14 +37,21 @@ public class Xdstools3 implements EntryPoint {
 	
 	private static final String APP_TITLE_IHE = "XDS Toolkit";
 
+    private TabSetWidget topTabSet;
+
 
 
 	public void onModuleLoad() {
 		
 		// Event handling in the GUI
 				final SimpleEventBus bus = new SimpleEventBus();
+        				bus.addHandler(OpenTabEvent.TYPE, new EventHandler(){
+        					            public void onEvent(OpenTabEvent event) {
+                                            openTab(event.getTabName());
+        					            }
+        					        });
 				
-	// The second part of this example is located in LoginDialog.
+	// The second part of this Eventbus example is located in LoginDialog.
 	//				bus.addHandler(PingEvent.TYPE, new PingEventHandler(){
 	//					            public void onEvent(PingEvent event) {
 	//					                System.out.print("Inside Ping --> ");
@@ -66,15 +68,14 @@ public class Xdstools3 implements EntryPoint {
 		ConfigToolbar configBar = new ConfigToolbar(bus);
 
 		// Tabs
-		final TabSetWidget topTabSet = new TabSetWidget();  
-		CloseableTabWidget findDocsTab = new FindDocumentTab(); 
-		CloseableTabWidget configTab = new ConfigurationTab(); 
+		topTabSet = new TabSetWidget();
+		CloseableTabWidget findDocsTab = new FindDocumentTab();
         CloseableTabWidget homeTab = new CloseableTabWidget("Home");  homeTab.setCanClose(false);
 		
         // Add all tabs to the main TabSet
         topTabSet.addTab(homeTab); 
         topTabSet.addTab(findDocsTab); 
-        topTabSet.addTab(configTab);
+
   
 
 		// Main layout
@@ -92,12 +93,14 @@ public class Xdstools3 implements EntryPoint {
 		RootLayoutPanel rp = RootLayoutPanel.get();
 		rp.add(container);
 
-		
-		
-
 	}
 
-
+public void openTab(String tabName) {
+    if (tabName == "ADMIN") {
+        CloseableTabWidget adminTab = new SettingsTab();
+        topTabSet.addTab(adminTab);
+    }
+}
 
 	public static int getWindowWidth() {
 		return WINDOW_WIDTH_TO_INTEGER;

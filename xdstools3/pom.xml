@@ -61,11 +61,13 @@
 		<dependency>
 			<groupId>com.smartgwt</groupId>
 			<artifactId>smartgwt</artifactId>
+            <version>4.1p</version>
 		</dependency>
-		<dependency>
-			<groupId>com.smartgwt</groupId>
-			<artifactId>smartgwt-skins</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>com.smartgwt</groupId>
+            <artifactId>smartgwt-skins</artifactId>
+            <version>4.1p</version>
+        </dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -117,7 +119,6 @@
 								(same as maven-war-plugin parameter) Default value is: ${basedir}/src/main/webapp. -->
 							<!-- hostedWebapp: Location of the hosted-mode web application structure. 
 								Default: ${project.build.directory}/${project.build.finalName} -->
-							<copyWebapp>true</copyWebapp>
 							<!-- no optimization takes place. Good for development -->
 							<optimizationLevel>0</optimizationLevel>
 						</configuration>
