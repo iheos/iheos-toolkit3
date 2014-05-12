@@ -1,9 +1,12 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab;
 
 import com.google.gwt.user.client.Window;
+import com.smartgwt.client.widgets.form.fields.SpacerItem;
 import com.smartgwt.client.widgets.form.fields.events.ClickEvent;
 import com.smartgwt.client.widgets.form.fields.events.ClickHandler;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.SAMLComboBox;
+import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSCheckbox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.RunButton;
 
 import com.smartgwt.client.types.Overflow;
@@ -30,9 +33,12 @@ public class FindDocumentForm extends DynamicForm {
 	 * Creates the fields
 	 */
 	public void createInputs() {
+        // A spacer item to use where needed
+        SpacerItem space = new SpacerItem();
+
 		PatientIDWidget pid = new PatientIDWidget();
 
-		// Link to Patient ID Generator
+		// External link to Patient ID Generator
         LinkItem linkItem = new LinkItem("pidGenerator");
         linkItem.setLinkTitle("Patient ID generator");
         linkItem.setStartRow(false);
@@ -45,12 +51,15 @@ public class FindDocumentForm extends DynamicForm {
             }
         });
 
+        // TLS and SAML
+        TLSCheckbox tls = new TLSCheckbox(); tls.setEndRow(true);
+        SAMLComboBox saml = new SAMLComboBox(); saml.setEndRow(true);
 		
 		CheckboxItem includeOnDemand = new CheckboxItem("includeOnDemand");  
-		includeOnDemand.setTitle("Include on-demand document entries");
+		includeOnDemand.setTitle("Include On-Demand document entries");
 		
 		final RunButton runButton = new RunButton();
-		setFields(new FormItem[] {pid, linkItem, includeOnDemand, runButton});
+		setFields(new FormItem[] {pid, linkItem, tls, space, saml, includeOnDemand, runButton});
 		
 		// Event handlers
 		 pid.addChangeHandler(new ChangeHandler() {  
@@ -59,8 +68,5 @@ public class FindDocumentForm extends DynamicForm {
 	            }  
 	        });
 	}
-	
-	
-
 
 }
