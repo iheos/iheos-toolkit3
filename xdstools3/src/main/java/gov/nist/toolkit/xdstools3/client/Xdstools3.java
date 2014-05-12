@@ -96,10 +96,17 @@ public class Xdstools3 implements EntryPoint {
 	}
 
 public void openTab(String tabName) {
+    CloseableTabWidget tab = null;
+
+    // create tab depending on parameter
     if (tabName == "ADMIN") {
         CloseableTabWidget adminTab = new SettingsTab();
-        topTabSet.addTab(adminTab);
-        topTabSet.selectTab(adminTab);
+        tab = adminTab;
+    }
+    // update set of tabs
+    if (tab != null) {
+        topTabSet.addTab(tab);
+        topTabSet.selectTab(tab);
     }
 }
 

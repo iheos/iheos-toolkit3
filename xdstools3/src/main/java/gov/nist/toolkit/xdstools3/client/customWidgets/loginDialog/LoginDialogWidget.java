@@ -124,6 +124,7 @@ public class LoginDialogWidget extends Window {
 
         // Display the Admin Settings tab if login was successful
         bus.fireEvent(new OpenTabEvent("ADMIN"));
+        close();
 	}
 
 
