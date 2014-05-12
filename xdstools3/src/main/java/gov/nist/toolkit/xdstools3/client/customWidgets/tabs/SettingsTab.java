@@ -46,7 +46,7 @@ public class SettingsTab extends CloseableTabWidget {
 
         TextItem gazelle = createField("gazelle", "Gazelle config URL", "", 400);
 
-        TextItem password = createField("password", "Admin password", "Password for administrator", 400);
+        TextItem password = createField("password", "Admin password", "", 400);
 
 		form.setFields(new FormItem[] { 
 				host, cache, password, tls_port, ciphers, environment, actors, gazelle, port
