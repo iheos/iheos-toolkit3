@@ -4,7 +4,7 @@ package gov.nist.toolkit.xdstools3.client;
 import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.SettingsTab;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.FindDocumentTab;
+import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.TabSetWidget;
 
 import com.google.gwt.core.client.EntryPoint;

@@ -1,7 +1,7 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.tabs;
+package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab;
 
-import gov.nist.toolkit.xdstools3.client.customWidgets.FindDocumentForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.AllEndpointsWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
 
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -14,7 +14,12 @@ public class FindDocumentTab extends CloseableTabWidget {
 	public FindDocumentTab() { 
 		super(header);
 
+        // Set tab header
 		setHeader(header);
+
+        // set page title
+        setTitle(header);
+
 		setContents();
 	}  
 	
