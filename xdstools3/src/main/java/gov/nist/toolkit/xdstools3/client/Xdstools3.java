@@ -99,6 +99,7 @@ public void openTab(String tabName) {
     if (tabName == "ADMIN") {
         CloseableTabWidget adminTab = new SettingsTab();
         topTabSet.addTab(adminTab);
+        topTabSet.selectTab(adminTab);
     }
 }
 

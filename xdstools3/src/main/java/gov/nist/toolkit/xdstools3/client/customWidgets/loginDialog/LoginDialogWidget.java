@@ -25,7 +25,7 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
 public class LoginDialogWidget extends Window {
-	//
+
 	//	protected TextItem userName;
 	//	protected TextItem password;
 	protected DynamicForm form;
@@ -36,7 +36,6 @@ public class LoginDialogWidget extends Window {
 
 	public LoginDialogWidget(SimpleEventBus _bus) {
 		bus = _bus;
-		SC.showConsole();
 
 		// Create elements
 		setTitle("Login");
@@ -45,12 +44,12 @@ public class LoginDialogWidget extends Window {
 		setAutoCenter(true);
 
 		// Set DataSource (link to backend)
-		dataSource = new DataSource();  
-		dataSource.setID("toolkit_config");
-		DataSourceTextField firstNameField = new DataSourceTextField("username", "Username", 50, true);  
-		DataSourcePasswordField passwordField = new DataSourcePasswordField("password", "Password", 50, true);  
-		dataSource.setFields(firstNameField, passwordField);
-		dataSource.setDataURL("data/datasources/toolkit_config.xml");  
+		dataSource = new DataSource();
+        dataSource.setID("toolkit_config");
+        DataSourceTextField firstNameField = new DataSourceTextField("username", "Username", 50, true);
+        DataSourcePasswordField passwordField = new DataSourcePasswordField("password", "Password", 50, true);
+        dataSource.setFields(firstNameField, passwordField);
+      //  dataSource.setDataURL("data/datasources/toolkit_config.xml"); not used
 
 
 		VLayout vlayout = new VLayout();
@@ -59,10 +58,6 @@ public class LoginDialogWidget extends Window {
 		vlayout.setAlign(Alignment.CENTER);
 		vlayout.setAlign(VerticalAlignment.CENTER);
 		addItem(vlayout);
-
-
-
-
 	}
 
 	/**
@@ -72,20 +67,6 @@ public class LoginDialogWidget extends Window {
 		form = new DynamicForm();
 		form.setDataSource(dataSource);
 		form.setUseAllDataSourceFields(true);
-
-
-		//		userName = new TextItem();
-		//		userName.setName("_username");
-		//		userName.setTitle("Username");
-		//		userName.setRequired(true);
-		//		
-		//		password = new PasswordItem();
-		//		password.setName("_password");
-		//		password.setTitle("Password");
-		//		password.setRequired(true);
-
-
-		//	form.setFields(new FormItem[] {userName, password});
 		form.setAutoFocus(true); form.setAutoFocusOnError(true);
 		form.setHeight(80);
 		form.setCellPadding(5);
@@ -101,9 +82,10 @@ public class LoginDialogWidget extends Window {
 		login = new LoginButton();
 		login.addClickHandler(new ClickHandler() {  
 			public void onClick(ClickEvent event) {  
-				logMeIn();
+				if (form.validate()){
+                logMeIn();
 			}
-		});        	
+		}});
 
 		cancel = new CancelButton();
 		cancel.addClickHandler(new ClickHandler() {  
@@ -120,22 +102,21 @@ public class LoginDialogWidget extends Window {
 		return buttonLayout;
 	}
 
-	protected boolean hasValue(TextItem field) {
-		return field.getValue() != null;
-	}
-
+    /**
+     * Perform login operations
+     */
 	protected void logMeIn(){
+
 		// test of client-server calls
 		InterfaceClientServerAsync intf = (InterfaceClientServerAsync) GWT.create(InterfaceClientServer.class);
 		AsyncCallback callback = new AsyncCallback() {
 			public void onFailure(Throwable caught) {
-				SC.say("Failure on client side");
+				SC.say("Failed to communicate with the server.");
 			}
 
 			@Override
 			public void onSuccess(Object result) {
-				SC.say("Success on client side");
-
+				SC.say("Communication with the server successful!");
 			}
 		};
 
@@ -143,25 +124,6 @@ public class LoginDialogWidget extends Window {
 
         // Display the Admin Settings tab if login was successful
         bus.fireEvent(new OpenTabEvent("ADMIN"));
-
-
-
-		//		DataSource.get("username").fetchData(null, new DSCallback() {
-		//			@Override
-		//	         public void execute(DSResponse response, Object rawData, DSRequest request) {
-		//	            if (response.getDataAsString().equals(userName._getValue())) {
-		//	            	close();
-		//	            	// displayMessageLoggedIn
-		//	            }
-		//	         }
-		//	     });
-		//		
-		//		   DataSource.get("employees").fetchData(null, new DSCallback() {
-		//		         public void execute(DSResponse response, Object rawData, DSRequest request) {
-		//		             myGrid.setData(response.getData());
-		//		         }
-		//		     });
-		//		  
 	}
 
 
