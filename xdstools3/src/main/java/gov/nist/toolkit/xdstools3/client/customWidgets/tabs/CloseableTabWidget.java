@@ -1,6 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.tabs;
 
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
@@ -35,8 +36,16 @@ public class CloseableTabWidget extends Tab implements TabInterface {
 		l.setHeight(20);
 		panel.addMember(l);
 		setPane(panel);
-		
 	}
+
+    /**
+     * Sets a tab contents
+     * @param pane The tab contents
+     */
+    public void setContents(Canvas pane){
+        panel.addMember(pane);
+        setPane(panel);
+    }
 	
 	
 }

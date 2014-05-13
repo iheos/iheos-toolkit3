@@ -17,13 +17,13 @@ public class FindDocumentTab extends CloseableTabWidget {
         // Set tab header
 		setHeader(header);
 
-        // set page title
-        setTitle(header);
+		createContents();
+	}
 
-		setContents();
-	}  
-	
-	private void setContents(){
+    /**
+     * Creates and sets the contents of the FindDocuments Tab
+     */
+	private void createContents(){
 				AllEndpointsWidget endpoints = new AllEndpointsWidget();
 				FindDocumentForm findDocs = new FindDocumentForm();
 				ValidationSummaryWidget output = new ValidationSummaryWidget();
@@ -36,9 +36,13 @@ public class FindDocumentTab extends CloseableTabWidget {
 				findDocsPanel.setWidth100();
 				findDocsPanel.setHeight100(); 
 				findDocsPanel.addMembers(upperPanel, output);
+
+                // dimensions
 				upperPanel.setHeight("50%");
 				output.setHeight("*");
-				setPane(findDocsPanel);
+
+                // calls a custom function that sets the contents and keeps the titles
+				setContents(findDocsPanel);
 	}
 
 
