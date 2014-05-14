@@ -3,7 +3,6 @@ package gov.nist.hit.ds.simSupport.components;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
-import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 
 public class FooUser implements SimComponent {
 	Event event;
@@ -22,7 +21,7 @@ public class FooUser implements SimComponent {
 	}
 
 	@Override
-	public void run(MessageValidatorEngine mve) {
+	public void run() {
 		
 	}
 

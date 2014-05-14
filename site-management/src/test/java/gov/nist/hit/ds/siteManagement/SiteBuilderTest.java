@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.siteManagement;
 
+import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory;
 import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.siteManagement.client.Site;
@@ -12,21 +13,12 @@ import static org.junit.Assert.fail;
 
 
 public class SiteBuilderTest {
-	static String workdir = "/Users/bill/tmp/sitetest";
 	Site site;
 	
 	@Before
 	public void setup() {
-//		File work = new File(workdir);
-//		File[] files = work.listFiles();
-//		if (files != null)
-//			for (File file : files) {
-//				file.delete();
-//			}
-//		work.delete();
-//		work.mkdir();
-		
-		site = new Site("mysite");
+        new ActorTransactionTypeFactory().load();
+        site = new Site("mysite");
 	}
 	
 	@Test
@@ -37,7 +29,7 @@ public class SiteBuilderTest {
 
 	@Test
 	public void testSimpleSiteConstruction() {
-		String transName = "sqb";
+		String transName = "sq";
 		String endpoint = "http://foo.bar";
 		boolean isSecure = true;
 		boolean isAsync = false;

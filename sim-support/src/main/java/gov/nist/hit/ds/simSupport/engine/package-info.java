@@ -1,5 +1,5 @@
 /**
- * The Sim Engine is a scheduler and dependency manager for simulators/validator components. A
+ * The Sim Engine is a scanForValidationMethods and dependency manager for simulators/validator components. A
  * simulator/validator component is a class implementing the interface SimComponent. This interface
  * requires that the class have a setErrorRecorder method and a injectAll method.
  * Two methods are required:

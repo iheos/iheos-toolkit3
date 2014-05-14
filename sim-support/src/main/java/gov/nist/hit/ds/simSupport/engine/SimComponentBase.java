@@ -34,7 +34,6 @@ public abstract class SimComponentBase implements SimComponent {
     String name;
     String description;
     ValidationEngine validationEngine;
-    boolean error = false;
     static Logger logger = Logger.getLogger(SimComponentBase.class);
 
     public SimComponentBase() {
@@ -49,10 +48,6 @@ public abstract class SimComponentBase implements SimComponent {
     @Override
     public void setAssertionGroup(AssertionGroup er) {
         this.ag = er;
-    }
-
-    public void flushEvent() throws RepositoryException {
-        //		event.flush();
     }
 
     @Override
@@ -77,7 +72,6 @@ public abstract class SimComponentBase implements SimComponent {
 
     public void runValidationEngine() throws SoapFaultException, RepositoryException {
         validationEngine.run();
-        flushEvent();
     }
 
     public ValidationEngine getValidationEngine() {
@@ -254,7 +248,7 @@ public abstract class SimComponentBase implements SimComponent {
      * Assertion is added to the AssertionGroup which keeps track
      * of all the assertions injectAll in a validator.
      *
-     * Some annotations cause a SOAPFault if an asseration fails. This is
+     * Some annotations cause a SOAPFault if an assertion fails. This is
      * handled here also.
      * @param a
      * @throws SoapFaultException
@@ -293,9 +287,6 @@ public abstract class SimComponentBase implements SimComponent {
         a.setMsg(vr.getMsg());
         a.setReference(vr.getRef());
         a.setLocation(vr.getLocation());
-
-        if (a.getStatus().isError())
-            error = true;
 
         logger.debug("Assertion: " + a);
     }
@@ -355,7 +346,4 @@ public abstract class SimComponentBase implements SimComponent {
             );
         }
     }
-
-    public boolean hasErrors() { return error; }
-
 }

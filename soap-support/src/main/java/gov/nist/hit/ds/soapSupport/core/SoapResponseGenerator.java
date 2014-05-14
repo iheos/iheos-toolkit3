@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.soapSupport.core;
 
+import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpResponseGenerator;
 import gov.nist.hit.ds.utilities.xml.OMFormatter;
-
 import org.apache.axiom.om.OMElement;
 
 /**
@@ -32,10 +32,14 @@ public class SoapResponseGenerator {
 	}
 	
 	public String send() throws Exception {
+        if (senv == null)
+            return "";
 		if (senv.multipart)
 			throw new Exception("SoapResponseGenerator#send: cannot generate multipart responses yet");
 		
-		senv.getHttpEnvironment().getResponse().setContentType("application/soap+xml");
+		HttpEnvironment httpEnv = senv.getHttpEnvironment();
+        if (httpEnv == null) return "";
+        httpEnv.getResponse().setContentType("application/soap+xml");
 		HttpResponseGenerator resp = new HttpResponseGenerator(senv.getHttpEnvironment());
 		String soapResponseString = new OMFormatter(getEnvelope()).toString(); 
 		resp.sendResponse(soapResponseString);

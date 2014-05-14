@@ -29,12 +29,13 @@ class EventDAO {
         a.setOrder(3);
         assertionGroup.save(event.assertionGroup)
 
-//        // Created only if needed
-//        if (event.fault) {
-//            def fault = new Fault();
-//            fault.init(event)
-//            fault.setOrder(4)
-//        }
+        // Created only if needed
+        if (event.fault) {
+            def fault = new FaultDAO();
+            fault.init(event)
+            fault.add(event.fault)
+            fault.setOrder(4)
+        }
     }
 
 }

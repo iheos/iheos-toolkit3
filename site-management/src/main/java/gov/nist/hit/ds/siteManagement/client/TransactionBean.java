@@ -5,6 +5,7 @@ import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 
@@ -29,7 +30,7 @@ public class TransactionBean implements IsSerializable, Serializable {
 						// otherwise this holds the repositoryUniqueId
 	TransactionType transType = null;
 	ActorType actorType = null;
-	
+    static Logger logger = Logger.getLogger(TransactionBean.class);
 	
 	// TODO: Remove RepositoryType? Not used for anything real yet.
 	public enum RepositoryType  implements IsSerializable, Serializable  { REPOSITORY, ODDS, NONE;
@@ -141,7 +142,7 @@ public class TransactionBean implements IsSerializable, Serializable {
 		
 		ActorType actorType;
 		if (repositoryType == RepositoryType.REPOSITORY)
-			actorType = ActorTypeFactory.find("repository");
+			actorType = ActorTypeFactory.find("rep");
 		else if (repositoryType == RepositoryType.ODDS)
 			actorType = ActorTypeFactory.find("odds");
 		else
@@ -149,7 +150,13 @@ public class TransactionBean implements IsSerializable, Serializable {
 		
 		if (!isNameUid()) 
 			throw new ToolkitRuntimeException("TransactionBean: Repository type actor is specified but descriptor is not an OID");
-		
+
+        if (actorType == null) {
+            logger.error("Cannot find Actor config for RepositoryType <" + repositoryType + ">");
+            logger.error("These Actor Types are available: " + ActorTypeFactory.getActorTypeNames());
+            throw new ToolkitRuntimeException("TransactionBean: RepositoryType <" + repositoryType + "> unknown");
+        }
+
 		// name can be trans name or repository uid
 		transType = actorType.find("retrieve");
 		this.repositoryType = repositoryType;

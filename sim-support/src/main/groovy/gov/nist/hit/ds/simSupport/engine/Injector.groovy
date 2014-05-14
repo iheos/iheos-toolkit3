@@ -1,13 +1,9 @@
-package gov.nist.hit.ds.simSupport.engine;
-
+package gov.nist.hit.ds.simSupport.engine
 import gov.nist.hit.ds.utilities.string.StringUtil
+import org.apache.log4j.Logger
 
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
-
-import org.apache.log4j.Logger;
-
 /**
  * SimComponentInject String type parameters into object. This is used by the
  * SimChainFactory to installRepositoryLinkage components from the property file
@@ -50,7 +46,13 @@ public class Injector {
 
 	def getSetterMethod(String paramName) throws SecurityException, NoSuchMethodException  {
 		Class<?>[] paramTypes = [ String ].toArray()
-		Method method = object.class.getMethod("set${StringUtil.capitalize(paramName)}", paramTypes);
-		return method;
+        try {
+            Method method = object.class.getMethod("set${StringUtil.capitalize(paramName)}", paramTypes);
+            return method;
+        } catch (NoSuchMethodException e) {
+            def msg = "SimChain loader: method does not exist: ${e.message}"
+            logger.error(msg)
+            throw new NoSuchMethodException(msg)
+        }
 	}
 }

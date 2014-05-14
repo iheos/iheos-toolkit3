@@ -2,7 +2,6 @@ package gov.nist.hit.ds.simSupport.engine
 import gov.nist.hit.ds.simSupport.exception.SimChainLoaderException
 import gov.nist.hit.ds.simSupport.exception.SimEngineException
 import gov.nist.hit.ds.simSupport.exception.SimEngineSubscriptionException
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
@@ -16,7 +15,7 @@ public class SimComponentFactory {
     String className;
     Map<String, String> parmMap;
     Class<?> clazz = null;
-    SimComponent component;
+    SimComponent component = null;
 
     /**
      * Load a SimComponent and return a newly created instance.
@@ -32,16 +31,17 @@ public class SimComponentFactory {
     SimComponentFactory(String className, Properties parmMap) {
         this.className = className
         this.parmMap = asMap(parmMap)
-        load()
     }
 
     SimComponentFactory(String className, Map<String, String> parms) {
         this.className = className
         this.parmMap = parms
-        load()
     }
 
-    SimComponent getComponent() { component }
+    SimComponent getComponent() throws Exception {
+        if (!component) load()
+        return component
+    }
 
     private Map<String, String> asMap(Properties p) {
         Map<String, String> parameterMap = new HashMap<String, String>();
@@ -51,30 +51,27 @@ public class SimComponentFactory {
         return parameterMap;
     }
 
-    SimComponent load() {
-        try {
-            mkInstance()
-            injectParameters()
-        } catch (Exception e) {
-            throw new ToolkitRuntimeException("Failed to loadFromPropertyBasedResource Component <${className}>", e)
-        }
-        component
+    def load() {
+        mkInstance()
+        injectParameters()
     }
 
     private def mkInstance() throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineException, SimChainLoaderException {
         try {
-            clazz = getClass().getClassLoader().loadClass(className);
+            clazz = getClass().getClassLoader().loadClass(className)
         } catch (ClassNotFoundException e) {
-            throw new SimChainLoaderException("SimComponentFactory: Cannot loadFromPropertyBasedResource SimComponent <" + className + ">");
+            def msg = "Component class not found: <${className}>"
+            throw new SimChainLoaderException(msg)
         } catch (NoClassDefFoundError e) {
-            throw new SimChainLoaderException("SimComponentFactory: Cannot loadFromPropertyBasedResource SimComponent <" + className + ">");
+            def msg = "Component class not found: <${className}>"
+            throw new SimChainLoaderException(msg)
         }
-        Constructor<?> cons = clazz.getConstructor((Class<?>[]) null);
-        Object instance = cons.newInstance((Object[]) null);
+        Constructor<?> cons = clazz.getConstructor((Class<?>[]) null)
+        Object instance = cons.newInstance((Object[]) null)
         if (instance instanceof SimComponent)
-            component = (SimComponent) instance;
+            component = (SimComponent) instance
         else
-            throw new SimEngineSubscriptionException("Component <" + className + "> does not implement the SimComponent interface");
+            throw new SimEngineSubscriptionException("Component <${className}> does not implement the SimComponent interface")
     }
 
     private def injectParameters() throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {

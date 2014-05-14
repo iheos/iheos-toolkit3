@@ -1,9 +1,11 @@
 package gov.nist.hit.ds.simSupport.engine
-
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.simSupport.loader.PropertyResourceFactory
 import gov.nist.hit.ds.simSupport.loader.SimComponentPropFormatParser
+import gov.nist.hit.ds.soapSupport.FaultCode
+import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import org.apache.log4j.Logger
 
 /**
  * The property file based format for a SimChain looks like:
@@ -38,6 +40,7 @@ import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 class SimChainFactory {
     SimChain simChain
     Event event
+    private static Logger logger = Logger.getLogger(SimChainFactory)
 
     /**
      * Build in a test environment:
@@ -49,13 +52,21 @@ class SimChainFactory {
     SimChainFactory(Event event) { this.event = event; simChain = new SimChain() }
 
     void addComponent(String className, Map<String, String> parameters) {
-        SimComponentFactory factory = new SimComponentFactory(className, parameters)
-        SimComponent component = factory.component
-        assert component
         SimStep simStep = new SimStep()
         simStep.init(event)
-        simStep.simComponent = component
         simChain.addStep(simStep)
+        SimComponent component = loadComponent(className, parameters, simStep)
+        simStep.simComponent = component
+    }
+
+    private SimComponent loadComponent(String className, Map<String, String> parameters, SimStep simStep) {
+        try {
+            SimComponentFactory factory = new SimComponentFactory(className, parameters)
+            return factory.component
+        }
+        catch (Exception e) {
+            throw new SoapFaultException(simStep.event, FaultCode.Receiver, e.message)
+        }
     }
 
     /**
@@ -66,23 +77,29 @@ class SimChainFactory {
      * @return SimChain
      */
      void loadFromPropertyBasedResource(String chainDefResource) {
-        List<SimStep> simSteps = new ArrayList<SimStep>();
-
         try {
             PropertyResourceFactory propFactory = new PropertyResourceFactory(chainDefResource)
             Properties properties = propFactory.getProperties()
             SimComponentPropFormatParser parser = new SimComponentPropFormatParser(properties)
             for (Properties parmMap : parser.getComponentProperties()) {
-                SimComponentFactory componentFactory = new SimComponentFactory(parmMap.getProperty("class"), parmMap)
-                SimComponent component = componentFactory.load()
-
-                def step = new SimStep()
-                step.simComponent = component
-                simSteps.add(step)
+                String className = parmMap.getProperty("class")
+                addComponent(className, withoutStandardProperties(parmMap))
             }
-            simChain.addSteps(simSteps)
+        } catch (SoapFaultException e) {
+            throw e
         } catch (Exception e) {
             throw new ToolkitRuntimeException("SimChainFactory failed.", e)
         }
+    }
+
+    private Properties withoutStandardProperties(Properties input) {
+        Properties out = new Properties()
+        input.each { key, value ->
+            if (key.endsWith('.class')) return
+            if (key.endsWith('.name')) return
+            if (key.endsWith('.description')) return
+            out.setProperty(key, value)
+        }
+        return out
     }
 }

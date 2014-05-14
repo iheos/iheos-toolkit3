@@ -7,7 +7,6 @@ import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.simSupport.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.FaultCode;
 import gov.nist.hit.ds.soapSupport.SoapFaultException;
 
@@ -30,7 +29,7 @@ public class SimEndPointParserSim extends SimComponentBase {
 	}
 
 	@Override
-	public void run(MessageValidatorEngine mve) throws SoapFaultException {
+	public void run() throws SoapFaultException {
 		String endpoint = httpParser.getEndpoint();
         Assertion a = new Assertion();
         a.setFound("Endpoint is <" + endpoint + ">");

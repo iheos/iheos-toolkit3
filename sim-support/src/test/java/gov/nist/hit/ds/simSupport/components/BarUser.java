@@ -4,7 +4,6 @@ import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.annotations.SimComponentInject;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
-import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 
 public class BarUser implements SimComponent {
 	Event event;
@@ -23,7 +22,7 @@ public class BarUser implements SimComponent {
 	}
 
 	@Override
-	public void run(MessageValidatorEngine mve) {
+	public void run() {
 		System.out.println("BarUser injectAll");
 	}
 

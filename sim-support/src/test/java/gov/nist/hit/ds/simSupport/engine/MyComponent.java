@@ -2,7 +2,6 @@ package gov.nist.hit.ds.simSupport.engine;
 
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
-import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.SoapFaultException;
 
 public class MyComponent implements SimComponent {
@@ -29,7 +28,7 @@ public class MyComponent implements SimComponent {
 	}
 
 	@Override
-	public void run(MessageValidatorEngine mve) throws SoapFaultException {
+	public void run() throws SoapFaultException {
 		
 	}
 

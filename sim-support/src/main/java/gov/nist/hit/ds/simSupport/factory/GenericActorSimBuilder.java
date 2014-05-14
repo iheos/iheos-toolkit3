@@ -3,11 +3,11 @@ package gov.nist.hit.ds.simSupport.factory;
 import gov.nist.hit.ds.actorTransaction.*;
 import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
-import gov.nist.hit.ds.simSupport.client.BooleanActorSimConfigElement;
-import gov.nist.hit.ds.simSupport.client.EndpointActorSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.BooleanActorSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.SimId;
-import gov.nist.hit.ds.simSupport.client.TextActorSimConfigElement;
-import gov.nist.hit.ds.simSupport.client.TimeActorSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TextActorSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TimeActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.simrepo.SimDb;
 
 import java.util.Date;

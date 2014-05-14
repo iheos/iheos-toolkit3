@@ -29,7 +29,8 @@ public class SoapFault {
 	public SoapFault(SoapEnvironment soapEnv, SoapFaultException e) {
 		this.soapEnv = soapEnv;
 		this.e = e;
-		soapEnv.setResponseAction("http://www.w3.org/2005/08/addressing/fault");
+        if (soapEnv != null)
+		    soapEnv.setResponseAction("http://www.w3.org/2005/08/addressing/fault");
 	}
 	
 	OMElement getXML() {

@@ -3,9 +3,8 @@ package gov.nist.hit.ds.soapSupport.core;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 
-import java.io.OutputStream;
-
 import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 
 /**
  * Keep track of SOAP/HTTP environment so response can be
@@ -21,7 +20,7 @@ public class SoapEnvironment {
 	String requestAction = null;
 	String responseAction = null;
 	String messageId = null;
-	HttpEnvironment httpEnv;
+	HttpEnvironment httpEnv = null;
 	Endpoint endpoint;
 	
 	public SoapEnvironment setEndpoint(Endpoint endpoint) {
@@ -45,6 +44,10 @@ public class SoapEnvironment {
 	public SoapEnvironment(HttpEnvironment httpEnv) {
 		this.httpEnv = httpEnv;
 	}
+    public SoapEnvironment() {
+
+    }
+
 	public HttpEnvironment getHttpEnvironment() {
 		return httpEnv;
 	}

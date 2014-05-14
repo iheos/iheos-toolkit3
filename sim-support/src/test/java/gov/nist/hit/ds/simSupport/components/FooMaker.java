@@ -3,7 +3,6 @@ package gov.nist.hit.ds.simSupport.components;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
-import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 
 public class FooMaker implements SimComponent {
 	Foo foo;
@@ -26,7 +25,7 @@ public class FooMaker implements SimComponent {
 
 
 	@Override
-	public void run(MessageValidatorEngine mve) {
+	public void run() {
 		foo = new Foo("Fubar");
 	}
 
@@ -57,4 +56,6 @@ public class FooMaker implements SimComponent {
 	public boolean showOutputInLogs() {
 		return false;
 	}
+
+    public void setParm(String value) {}
 }

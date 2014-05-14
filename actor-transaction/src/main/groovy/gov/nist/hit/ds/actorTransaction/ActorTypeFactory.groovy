@@ -1,34 +1,46 @@
-package gov.nist.hit.ds.actorTransaction;
+package gov.nist.hit.ds.actorTransaction
 
-import gov.nist.hit.ds.actorTransaction.exceptions.ActorTypeNotDefinedException;
-import gov.nist.hit.ds.actorTransaction.exceptions.InvalidActorTransactionTypeDefinition;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import groovy.util.logging.Log4j
 
-import java.io.InputStream;
-import java.util.*;
-
+@Log4j
 public class ActorTypeFactory {
 	static Map<String, ActorType> actorTypeMap = new HashMap<String, ActorType>();
 
-	public static ActorType find(String actorTypeName) throws InvalidActorTransactionTypeDefinition {
+    static Set<String> getActorTypeNames() {
+        return actorTypeMap.keySet();
+    }
+
+    public static ActorType find(String actorTypeName)  {
 		// must not be capitalized
 		if (Character.isUpperCase(actorTypeName.charAt(0)))
 			actorTypeName = Character.toLowerCase(actorTypeName.charAt(0)) + actorTypeName.substring(1);
 		ActorType actorType = actorTypeMap.get(actorTypeName);
 		if (actorType != null)
 			return actorType;
-		return loadActorType(actorTypeName);
+		return null
 	}
 
-	static ActorType loadActorType(String typeName) throws InvalidActorTransactionTypeDefinition {
+    public static TransactionType find(String actorTypeName, String transactionTypeName) {
+        ActorType actorType = find(actorTypeName)
+        if (!actorType) {
+            log.error("Actor type <${actorTypeName}> not found")
+            log.error("Actors defined are <${getActorTypeNames()}>")
+            throw new ToolkitRuntimeException("Actor type <${actorTypeName}> not found")
+        }
+        return actorType.find(transactionTypeName)
+    }
+
+	static ActorType loadActorType(String typeName)  {
 		InputStream inputStream = ActorTypeFactory.class.getClassLoader().getResourceAsStream(typeName + "Actor.properties");
 		if (inputStream == null)
-			throw new ActorTypeNotDefinedException("Resource File <" + typeName + "Actor.properties> not found");
+			return null;
 		Properties props;
 		try {
 			props = new Properties();
 			props.load(inputStream);
 		} catch (Exception e) {
-			throw new ActorTypeNotDefinedException("type = " + typeName, e);
+            return null
 		} finally {
             inputStream.close()
         }
@@ -51,6 +63,7 @@ public class ActorTypeFactory {
 		actorType.check();
 
 		actorTypeMap.put(typeName, actorType);
+        if (actorType.shortName) actorTypeMap.put(actorType.shortName, actorType)
 		return actorType;
 	}
 

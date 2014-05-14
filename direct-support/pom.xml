@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>gov.nist.toolkit</groupId>
-		<artifactId>toolkit2</artifactId>
+		<groupId>gov.nist.hit.ds</groupId>
+		<artifactId>toolkit3</artifactId>
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 

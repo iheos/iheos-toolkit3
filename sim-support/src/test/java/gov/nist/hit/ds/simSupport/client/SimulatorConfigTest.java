@@ -1,18 +1,24 @@
 package gov.nist.hit.ds.simSupport.client;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import gov.nist.hit.ds.actorTransaction.*;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.AbstractActorSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.List;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class SimulatorConfigTest {
 
 
-	@Test
+    @Before
+    public void setup() {
+        new ActorTransactionTypeFactory().load();
+    }
+
+    @Test
 	public void findTest2() {
 		ActorSimConfig sConfig = new ActorSimConfig(ActorTypeFactory.find("registry"));
 		sConfig.

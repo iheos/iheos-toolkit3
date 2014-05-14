@@ -3,15 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>gov.nist.toolkit</groupId>
-        <artifactId>toolkit2</artifactId>
+        <groupId>gov.nist.hit.ds</groupId>
+        <artifactId>toolkit3</artifactId>
         <version>3.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>gov.nist.toolkit</groupId>
-    <version>v2-maven-alpha</version>
-    <artifactId>validators-ccda</artifactId>
-
+    <groupId>gov.nist.hit.ds</groupId>
+        <version>3.0.0-SNAPSHOT</version>
+            <artifactId>validators-ccda</artifactId>
 
     <dependencies>
         <dependency>
@@ -97,20 +96,17 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>eventLog</artifactId>
+            <artifactId>event-log</artifactId>
             <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>utilities</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.toolkit</groupId>
             <artifactId>validators-support</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xdsException</artifactId>
+            <artifactId>tk-core</artifactId>
         </dependency>
         <!--
                        <dependency>

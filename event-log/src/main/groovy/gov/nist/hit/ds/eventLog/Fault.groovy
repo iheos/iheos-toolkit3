@@ -1,25 +1,24 @@
-package gov.nist.hit.ds.eventLog;
+package gov.nist.hit.ds.eventLog
 
-import gov.nist.hit.ds.repository.AssetHelper;
-import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.simple.SimpleType
-
-import javax.xml.ws.soap.SOAPFaultException;
-
+/**
+ * Created by bmajur on 4/29/14.
+ */
 class Fault {
-	Asset asset
+    String faultMsg = null
+    String faultCode = null
+    String faultActor = null
+    String faultDetail = null
 
-	public Asset init(Asset parent) throws RepositoryException {
-        asset = AssetHelper.createChildAsset(parent, "SoapFault", "", new SimpleType("simpleType"));
-        return asset
-	}
-	
-	public void add(String reportString) throws RepositoryException {
-		asset.updateContent(reportString, "text/plain");
-	}
+    def Fault() {}
 
-    public void add(SOAPFaultException e) {
-        add(e.message)
+//    def Fault(String msg, String code, String actor, String detail) {
+//        faultMsg = msg
+//        faultCode = code
+//        faultActor = actor
+//        faultDetail = detail
+//    }
+
+    String toString() {
+        "Actor=${faultActor}\nCode=${faultCode}\nMsg=${faultMsg}\nDetail=${faultDetail}"
     }
 }

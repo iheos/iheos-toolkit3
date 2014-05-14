@@ -2,12 +2,10 @@ package gov.nist.hit.ds.simSupport.loader;
 
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
-import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.utilities.html.HttpMessageContent;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.xml.XmlText;
@@ -31,7 +29,7 @@ public abstract class AbstractLogLoader extends SimComponentBase {
 	static Logger logger = Logger.getLogger(AbstractLogLoader.class);
 
 	@Override
-	public void run(MessageValidatorEngine mve) {
+	public void run() {
 		if (header == null && body == null)
 			load();
 	}

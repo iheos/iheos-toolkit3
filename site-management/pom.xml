@@ -3,8 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>gov.nist.toolkit</groupId>
-		<artifactId>toolkit2</artifactId>
+		<groupId>gov.nist.hit.ds</groupId>
+		<artifactId>core</artifactId>
+		<relativePath>../pom.core.xml</relativePath>
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
@@ -12,6 +13,14 @@
 	<version>3.0.0-SNAPSHOT</version>
 	<artifactId>site-management</artifactId>
 
+    <!--
+    Issues
+
+    1) No references to this package from within rest of Core.
+    but...
+    2) Current UI is very dependent on Sites
+
+    -->
 
 	<dependencies>
 		<dependency>

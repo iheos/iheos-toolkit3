@@ -46,6 +46,18 @@ public class SimChain  {
 
     public boolean hasInternalErrors() { steps.find { it.getAssertionGroup()?.hasInternalError() }}
 
+    public String getStepStatusString() {
+        StringBuffer buf = new StringBuffer()
+        buf.append('Name').append('\t').append('Completed').append('\n')
+        buf.append('----').append('\t').append('---------').append('\n')
+
+        steps.each {
+            buf.append(it.simComponent.name).append('\t').append(it.completed).append('\n')
+        }
+
+        return buf.toString()
+    }
+
 	/**
 	 * Get an informal list of errors - to support logging, not reporting
 	 * @return

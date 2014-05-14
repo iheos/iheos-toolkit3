@@ -122,7 +122,7 @@ public class AssertionGroup  {
             expected = expectedVal
             found = foundVal
         }
-        a.status = (expected == found) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
+        a.status = (expectedVal == foundVal) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
         addAssertion(a);
         return a;
     }

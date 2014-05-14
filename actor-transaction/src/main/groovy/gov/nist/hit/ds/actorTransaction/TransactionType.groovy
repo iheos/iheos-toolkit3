@@ -1,11 +1,12 @@
 package gov.nist.hit.ds.actorTransaction
 
+import com.google.gwt.user.client.rpc.IsSerializable
 import gov.nist.hit.ds.actorTransaction.exceptions.InvalidTransactionTypeDefinitionException;
 
 /**
  * Created by bill on 4/16/14.
  */
-class TransactionType {
+class TransactionType implements IsSerializable, Serializable {
     public String id
     public String name
     public String shortName

@@ -2,9 +2,8 @@ package gov.nist.hit.ds.simSupport.components;
 
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
-import gov.nist.hit.ds.simSupport.engine.SimComponent;
 import gov.nist.hit.ds.simSupport.annotations.SimComponentInject;
-import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
+import gov.nist.hit.ds.simSupport.engine.SimComponent;
 
 public class FooUserBarMaker implements SimComponent {
 	Foo foo;
@@ -29,7 +28,7 @@ public class FooUserBarMaker implements SimComponent {
 	}
 
 	@Override
-	public void run(MessageValidatorEngine mve) {
+	public void run() {
 		System.out.println("FooUserBarMaker running - foo is " + foo.getValue());
 	}
 

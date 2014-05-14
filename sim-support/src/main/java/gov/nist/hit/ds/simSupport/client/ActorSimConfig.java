@@ -2,6 +2,7 @@ package gov.nist.hit.ds.simSupport.client;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.*;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.AbstractActorSimConfigElement;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -134,7 +135,7 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 			return null;
 		
 		for (AbstractActorSimConfigElement ele : elements) {
-			if (name.equals(ele.name))
+			if (name.equals(ele.getName()))
 				return ele;
 		}
 		return null;

@@ -1,24 +1,23 @@
 package gov.nist.hit.ds.simSupport.client;
 
-import static org.junit.Assert.assertEquals;
-
 import gov.nist.hit.ds.actorTransaction.*;
-
-import java.util.List;
-
+import gov.nist.hit.ds.simSupport.client.configElementTypes.AbstractActorSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
 public class FindConfigOneEndpointTest {
 	ActorSimConfig sConfig;
-    ActorType actorType = ActorTypeFactory.find("registry");
-	List<AbstractActorSimConfigElement> cEles = sConfig.findConfigs(
-            new TransactionType[] { actorType.find("register") },
-            new TlsType[] { TlsType.TLS},
-            new AsyncType[] { AsyncType.ASYNC, AsyncType.SYNC});
+    ActorType actorType;
+	List<AbstractActorSimConfigElement> cEles;
 	
 	@Before
 	public void startUp() {
+        new ActorTransactionTypeFactory().load();
 		sConfig = new ActorSimConfig(ActorTypeFactory.find("registry")).
 				add(
 						new EndpointActorSimConfigElement(
@@ -31,6 +30,11 @@ public class FindConfigOneEndpointTest {
 								
 								)
 						);
+        actorType = ActorTypeFactory.find("registry");
+        cEles = sConfig.findConfigs(
+                new TransactionType[] { actorType.find("register") },
+                new TlsType[] { TlsType.TLS},
+                new AsyncType[] { AsyncType.ASYNC, AsyncType.SYNC});
 	}
 	
 	@Test

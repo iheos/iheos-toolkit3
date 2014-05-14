@@ -1,26 +1,33 @@
 package gov.nist.hit.ds.siteManagement
 
+import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.ActorTypeFactory
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
 import gov.nist.hit.ds.siteManagement.client.TransactionCollection
-import gov.nist.toolkit.actortransaction.obsolete.client.ATFactory
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 import static org.junit.Assert.*
 
 class TransactionCollectionTest {
 
+    @Before
+    public void setup() {
+        new ActorTransactionTypeFactory().load();
+    }
+
 	///////////////////////////////////////////////////////////
 	@Test
 	public void testEqualsTransactionCollection() {
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
 			TransactionBean.RepositoryType.NONE,
 			'http://fooo:40/bar',
 			false,
 			false)
 		TransactionCollection tc = new TransactionCollection(false)
 		tc.addTransaction(b)
-		TransactionBean b1 = new TransactionBean(ATFactory.TransactionType.REGISTER,
+		TransactionBean b1 = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
 			TransactionBean.RepositoryType.NONE,
 			'http://fooo:40/bar',
 			false,
@@ -33,15 +40,15 @@ class TransactionCollectionTest {
 
 	@Test
 	public void testNotEqualsTransactionCollection() {
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			'http://fooo:40/bar',
 			true,
 			false)
 		TransactionCollection tc = new TransactionCollection(false)
 		tc.addTransaction(b)
-		TransactionBean b1 = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b1 = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			'http://fooo:40/bar',
 			false,
 			false)
@@ -54,15 +61,15 @@ class TransactionCollectionTest {
 	@Test
 	public void testFixTlsEndpoints() {
 		String origEndpoint = 'http://fooo:40/bar' 
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			origEndpoint,
 			true,
 			false)
 		TransactionCollection tc = new TransactionCollection(false)
 		tc.addTransaction(b)
 		
-		TransactionBean b2 = tc.find(ATFactory.TransactionType.REGISTER, true, false)
+		TransactionBean b2 = tc.find(ActorTypeFactory.find('registry', 'register'), true, false)
 		assertTrue b2 != null
 		String endpoint = b2.getEndpoint();
 		assertTrue endpoint != null
@@ -78,8 +85,8 @@ class TransactionCollectionTest {
 	///////////////////////////////////////////////////////////
 	@Test
 	public void testContains() {
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			'http://fooo:40/bar',
 			false,
 			false)
@@ -95,8 +102,8 @@ class TransactionCollectionTest {
 
 	@Test
 	public void testSize() {
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			'http://fooo:40/bar',
 			false,
 			false)
@@ -108,65 +115,65 @@ class TransactionCollectionTest {
 	@Test
 	public void testHasActor() {
 		String origEndpoint = 'http://fooo:40/bar' 
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			origEndpoint,
 			true,
 			false)
 		TransactionCollection tc = new TransactionCollection(false)
 		tc.addTransaction(b)
-		assertTrue tc.hasActor(ATFactory.ActorType.REGISTRY)
-		assertFalse tc.hasActor(ATFactory.ActorType.REPOSITORY)
+		assertTrue tc.hasActor(ActorTypeFactory.find('registry'))
+		assertFalse tc.hasActor(ActorTypeFactory.find('repository'))
 	}
 
 	@Test
 	public void testHasTransaction() {
 		String origEndpoint = 'http://fooo:40/bar' 
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			origEndpoint,
 			true,
 			false)
 		TransactionCollection tc = new TransactionCollection(false)
 		tc.addTransaction(b)
 		
-		assertTrue tc.hasTransaction(ATFactory.TransactionType.REGISTER)
-		assertFalse tc.hasTransaction(ATFactory.TransactionType.RETRIEVE)
+		assertTrue tc.hasTransaction(ActorTypeFactory.find('registry', 'register'))
+		assertFalse tc.hasTransaction(ActorTypeFactory.find('repository', 'provideRegister'))
 	}
 
 	@Test
 	public void testFindTransactionTypeBooleanBoolean() {
 		String origEndpoint = 'http://fooo:40/bar' 
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			origEndpoint,
 			true,
 			false)
 		TransactionCollection tc = new TransactionCollection(false)
 		tc.addTransaction(b)
 
-		assertTrue null != tc.find(ATFactory.TransactionType.REGISTER, true, false)	
-		assertTrue null == tc.find(ATFactory.TransactionType.REGISTER, false, false)	
+		assertTrue null != tc.find(ActorTypeFactory.find('registry', 'register'), true, false)
+		assertTrue null == tc.find(ActorTypeFactory.find('registry', 'register'), false, false)
 	}
 
 	@Test
 	public void testFindStringBooleanBoolean() {
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			'http://fooo:40/bar',
 			true,
 			false)
 		TransactionCollection tc = new TransactionCollection(false)
 		tc.addTransaction(b)
 		
-		TransactionBean b2 = tc.find(ATFactory.TransactionType.REGISTER, true, false)
+		TransactionBean b2 = tc.find(ActorTypeFactory.find('registry', 'register'), true, false)
 		assertTrue b2 != null
 	}
 
 	@Test
 	public void testFindAll() {
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			'http://fooo:40/bar',
 			true,
 			false)
@@ -181,21 +188,21 @@ class TransactionCollectionTest {
 
 	@Test
 	public void testGetTransactionTypeBooleanBoolean() {
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			'http://fooo:40/bar',
 			true,
 			false)
 		TransactionCollection tc = new TransactionCollection(false)
 		tc.addTransaction(b)
 
-		assertEquals 'http://fooo:40/bar', tc.get(ATFactory.TransactionType.REGISTER, true, false)
+		assertEquals 'http://fooo:40/bar', tc.get(ActorTypeFactory.find('registry', 'register'), true, false)
 	}
 
 	@Test
 	public void testGetStringBooleanBoolean() {
-		TransactionBean b = new TransactionBean(ATFactory.TransactionType.REGISTER,
-			RepositoryType.NONE,
+		TransactionBean b = new TransactionBean(ActorTypeFactory.find('registry', 'register'),
+			TransactionBean.RepositoryType.NONE,
 			'http://fooo:40/bar',
 			true,
 			false)
@@ -208,7 +215,7 @@ class TransactionCollectionTest {
 	@Test
 	public void testAdd() {
 		TransactionCollection tc = new TransactionCollection(false)
-		tc.add("Register", 'http://fooo:40/bar', true, false)
+		tc.add("register", 'http://fooo:40/bar', true, false)
 		assertEquals 'http://fooo:40/bar', tc.get("Register", true, false)
 	}
 

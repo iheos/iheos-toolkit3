@@ -1,11 +1,12 @@
 package gov.nist.hit.ds.actorTransaction
 
+import com.google.gwt.user.client.rpc.IsSerializable
 import gov.nist.hit.ds.actorTransaction.exceptions.InvalidActorTypeDefinitionException
 
 /**
  * Created by bill on 4/16/14.
  */
-class ActorType {
+class ActorType implements IsSerializable, Serializable {
     String name
     String shortName
     String actorSimFactoryClassName

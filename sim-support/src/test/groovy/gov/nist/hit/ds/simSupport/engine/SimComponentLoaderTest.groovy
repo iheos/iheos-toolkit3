@@ -7,7 +7,7 @@ import spock.lang.Specification
  */
 class SimComponentLoaderTest extends Specification {
 
-    def 'Simple Load'() {
+    def 'Simple Load from call parameters'() {
         when:
         def parms = ['lang':'goblin']
         def loader = new SimComponentFactory('gov.nist.hit.ds.simSupport.components.ParmUser', parms)
@@ -17,4 +17,5 @@ class SimComponentLoaderTest extends Specification {
         then:
         component.getLang() == 'goblin'
     }
+
 }

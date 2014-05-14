@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.engine
 
 import gov.nist.hit.ds.eventLog.EventFactory
+import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
 import spock.lang.Specification
 
 class SimChainFactoryTest extends Specification {
@@ -27,10 +28,13 @@ class SimChainFactoryTest extends Specification {
         simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.FooMaker', parms)
         def simChain = simChainFactory.simChain
         simChain.init(event)
+        simChain.base = new SoapEnvironment()
         def engine = new SimEngine(simChain);
         engine.run()
+        println simChain.getStepStatusString()
 
         then:
-        !engine.isRunable()
+        engine.isComplete()
+        !engine.hasError
     }
 }

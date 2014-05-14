@@ -37,12 +37,21 @@ public class Toolkit {
      * of unit testing it does)
      */
     static {
+        try {
+            Installation.installation().initialize();
+        } catch (Exception e) {
+            logger.fatal(e.getMessage());
+            throw new RuntimeException(e);
+        }
         new Toolkit().initialize();
     }
 
     private void initialize() {
         URL resource = getClass().getResource("/toolkit.properties");
-        if (resource == null) logger.fatal("Cannot load toolkit.properties");
+        if (resource == null) {
+            logger.fatal("Cannot load toolkit.properties");
+            throw new RuntimeException("Cannot load toolkit.properties");
+        }
         else {
             logger.debug("toolkit.properties loaded from <" + resource + ">");
             toolkitPropertiesFile = new File(resource.getFile());
@@ -61,8 +70,20 @@ public class Toolkit {
             propertyManager = new PropertyManager();
             propertyManager.loadProperties(toolkitPropertiesFile);
 
+            try { Installation.installation().initialize(); }
+            catch (RuntimeException e) { throw e; }
+            catch (Exception e) { throw new RuntimeException(e); }
+            if (warRootFile == null) {
+                String msg = "Location of WAR file root not initialized";
+                logger.fatal(msg);
+                throw new RuntimeException(msg);
+            }
+            if ( externalCacheFile == null) {
+                String msg = "Location of External Cache not initialized";
+                logger.fatal(msg);
+                throw new RuntimeException(msg);
+            }
             try {
-                Installation.installation().initialize();
                 repositoriesTypesFile().mkdirs();
                 FileUtils.copyDirectory(defaultRepositoriesTypesFile(), repositoriesTypesFile());
             } catch (Exception e) {

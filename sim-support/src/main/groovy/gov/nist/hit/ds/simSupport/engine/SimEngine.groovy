@@ -1,10 +1,12 @@
 package gov.nist.hit.ds.simSupport.engine
 import gov.nist.hit.ds.eventLog.EventDAO
+import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.simSupport.annotations.SimComponentInject
 import gov.nist.hit.ds.simSupport.exception.SimEngineException
 import gov.nist.hit.ds.simSupport.exception.SimEngineExecutionException
 import gov.nist.hit.ds.simSupport.exception.SimEngineSubscriptionException
+import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFault
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
@@ -21,10 +23,12 @@ import java.lang.reflect.Method
 public class SimEngine  {
     SimChain simChain;
     SoapEnvironment soapEnvironment;
+    static Logger logger = Logger.getLogger(SimEngine)
+
     def trace = false
     def componentNamesRun = []
     def stepsRun = []
-    static Logger logger = Logger.getLogger(SimEngine)
+    boolean hasError = false
 
 //    public SimEngine(String simChainResource) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, SecurityException, IllegalArgumentException, SimChainLoaderException, SimEngineException, RepositoryException {
 //        this(new SimChainFactory(simChainResource).loadFromPropertyBasedResource(), event);
@@ -47,7 +51,22 @@ public class SimEngine  {
         def eventDAO = new EventDAO()
         if (simChain.getBase() && (simChain.getBase() instanceof SoapEnvironment))
             soapEnvironment = (SoapEnvironment) simChain.getBase()
-       // if (trace && simChain.getBase()) componentNamesRun << simChain.getBase().class.name
+        else {
+            SimStep simStep = simChain.getRunableStep()
+            Fault fault = new Fault(faultMsg:'No Base Object defined in SimChain, must be instance of SoapEnvironment',
+                    faultCode: FaultCode.Receiver.toString())
+            simStep.event.fault = fault
+            logger.error('No Base Object defined in SimChain, must be instance of SoapEnvironment')
+            hasError = true
+            SoapFaultException e = new SoapFaultException(null, FaultCode.Receiver,
+                    'No Base Object defined in SimChain',
+            '',''
+            )
+            SoapFault soapFault = new SoapFault(soapEnvironment, e);
+            soapFault.send()
+            eventDAO.save(simStep.event)
+            return
+        }
 
         while(!simChain.hasInternalErrors() && isRunable()) {
             SimStep simStep = simChain.getRunableStep()
@@ -64,24 +83,12 @@ public class SimEngine  {
         }
     }
 
-    StringBuffer getExecutionTrace() {
-        def buf = new StringBuffer()
-        if (!trace) return buf
-        buf.append('Engine trace:\n')
-        //componentNamesRun.each { buf.append('  ').append(it).append('\n') }
-        if (simChain.getBase()) buf.append('  ').append(simChain.getBase().class.name).append('\n')
-        stepsRun.each { step ->
-            buf.append('  ').append(step.simComponent.class.name)
-            if (step.hasInternalError()) buf.append('  ').append(step.getInternalError())
-            buf.append('\n')
-        }
-        return buf
-    }
-
     /**
-     * Has the Simulator Chain run to completion?
+     * Has the Simulator Chain scan to completion?
      */
-    public boolean isRunable() { simChain.getRunableStep()  }
+    public boolean isRunable() { !hasError && simChain.getRunableStep()  }
+
+    public boolean isComplete() { !isRunable() }
 
     def inject(SimStep simStep, priorComponents) {
         try {
@@ -93,19 +100,19 @@ public class SimEngine  {
         }
     }
 
-    def runSimComponent(def simStep) {
+    def runSimComponent(SimStep simStep) {
         try {
-            simStep.simComponent.run(null)
+            simStep.simComponent.run()
         } catch (SoapFaultException e) {
             SoapFault soapFault = new SoapFault(soapEnvironment, e);
             try {
-                simStep.event.fault = e.getMessage()  // ensure logging
+                simStep.event.fault = e.asFault();
                 soapFault.send()
             } catch (Exception e1) {
                 logger.error(ExceptionUtil.exception_details(e1))
             }
         } catch (RuntimeException e) {
-            logger.fatal(ExceptionUtil.exception_details())
+            logger.fatal(ExceptionUtil.exception_details(e))
         }
 
     }
@@ -120,7 +127,7 @@ public class SimEngine  {
     }
 
     /**
-     * Given a component to be run, identify its subscriptions and find
+     * Given a component to be scan, identify its subscriptions and find
      * publishers to provide them. Only consider pubilshers that come
      * earlier in the valchain. Execute the getter/setter combination
      * to inject the necessary parameter. The combination of getter/setter is
@@ -141,7 +148,7 @@ public class SimEngine  {
         Method[] componentMethods = componentClass.methods;
         // For all setters in this subscriptionObject, find and
         // execute the getter/setter pair to inject the necessary
-        // objects into subscriptionObject so it is ready to run.  Caller
+        // objects into subscriptionObject so it is ready to scan.  Caller
         //
 
         def injectionMethods
@@ -187,7 +194,7 @@ public class SimEngine  {
             match.subObject = subscriptionObject
             return match;
         }
-        def err = 'Component execution error.\n' +
+        def err = '\n    Component execution error.\n' +
                 "    Component <${subscriptionObject.class.name}> requires input of type ${subClass.name} which is not availble.\n" +
                 '    Available inputs are:\n' +
                 documentSimsUpTo(subscriptionObject, priorComponents)
@@ -303,5 +310,20 @@ public class SimEngine  {
             }
         }
     }
+
+    StringBuffer getExecutionTrace() {
+        def buf = new StringBuffer()
+        if (!trace) return buf
+        buf.append('Engine trace:\n')
+        //componentNamesRun.each { buf.append('  ').append(it).append('\n') }
+        if (simChain.getBase()) buf.append('  ').append(simChain.getBase().class.name).append('\n')
+        stepsRun.each { step ->
+            buf.append('  ').append(step.simComponent.class.name)
+            if (step.hasInternalError()) buf.append('  ').append(step.getInternalError())
+            buf.append('\n')
+        }
+        return buf
+    }
+
 
 }

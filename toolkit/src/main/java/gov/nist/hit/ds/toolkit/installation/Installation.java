@@ -31,7 +31,14 @@ public class Installation {
 	File toolkitPropertiesFile = null;
 	boolean initialized = false;
 
-	/**
+    static public Installation installation()   {
+        if (me == null) me = new Installation();
+        return me;
+    }
+
+    private Installation() {   }
+
+    /**
 	 * Initialize the installation.  This is called by a servlet initializiation
 	 * since that happens when the app is loaded. Before that first call,
 	 * warHome must be set or nothing else will work.  If this parameter
@@ -61,13 +68,21 @@ public class Installation {
 				// That file is tk_props.txt
 				// This means any external_cache that is located via class loaded must be initialized with a tk_props.txt file.
 				// The file can be empty.
+
+
 				ClassLoader cl = getClass().getClassLoader();
-				URL url = cl.getResource(externalCacheString + "/" + "tk_props.txt"); // Use of a standard backslash in URL works best. A File.separator mixed with URL causes a problem for Windows.
+                String tkPropsLoc = externalCacheString + "/" + "tk_props.txt";
+				URL url = cl.getResource(tkPropsLoc); // Use of a standard backslash in URL works best. A File.separator mixed with URL causes a problem for Windows.
 				if (url == null) {
-					String msg = "External Cache not present. Configured location is <" + externalCacheString + ">";
-					logger.fatal(msg);
-					throw new InitializationFailedException(msg);
+                    url = cl.getResource("external-cache/tk_props.txt");
+                    if (url == null) {
+                        String msg = "Cannot load tk_props.txt from <" + tkPropsLoc + "> or classpath.";
+                        logger.fatal(msg);
+                        throw new InitializationFailedException(msg);
+                    }
 				}
+
+
 				String ecString = StringUtil.removePrefix(url.toString(), "file:");
 				logger.info("Loading external cache from <" + ecString + ">");
 				externalCache = new File(ecString);
@@ -213,14 +228,6 @@ public class Installation {
 	public File getRepositoryRoot() {
 		return getExternalCacheManager().getRepositoryFile();
 	}
-
-	static public Installation installation()   {
-		if (me == null)
-			me = new Installation();
-		return me;
-	}	
-
-	private Installation() {   }
 
 	public PropertyManager getPropertyManager() {
 		return new PropertyManager();

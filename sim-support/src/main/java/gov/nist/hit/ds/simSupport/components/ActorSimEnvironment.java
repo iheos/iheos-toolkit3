@@ -4,7 +4,6 @@ import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.engine.SimComponent;
-import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.soapSupport.SoapFaultException;
 
 public class ActorSimEnvironment  implements SimComponent {
@@ -57,7 +56,7 @@ public class ActorSimEnvironment  implements SimComponent {
 	}
 
 	@Override
-	public void run(MessageValidatorEngine mve) throws SoapFaultException,
+	public void run() throws SoapFaultException,
 			RepositoryException {
 	}
 

@@ -1,7 +1,9 @@
-package gov.nist.hit.ds.simSupport.engine;
+package gov.nist.hit.ds.simSupport.engine
 
-import gov.nist.hit.ds.eventLog.Event;
-import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
+import gov.nist.hit.ds.eventLog.Event
+import gov.nist.hit.ds.eventLog.Fault
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
+import gov.nist.hit.ds.soapSupport.FaultCode
 
 /**
  * Define a single simulator step. Do not installRepositoryLinkage
@@ -32,6 +34,8 @@ public class SimStep {
         crosslink()
 	}
 
+    def setFault(Fault fault) { event.fault = fault }
+
     void setSimComponent(SimComponent component) {
         this.simComponent = component
         crosslink()
@@ -47,13 +51,19 @@ public class SimStep {
         if (simComponent) name = simComponent.getName()
     }
 
-    def fail(msg) { assertionGroup.fail(msg) }
+    def fail(String msg) { assertionGroup.fail(msg) }
 
     def hasInternalError() { assertionGroup.hasInternalError() }
 
     def getInternalError() { assertionGroup.getInternalError() }
 
-    def internalError(msg) { assertionGroup.internalError(msg) }
+    def internalError(String msg) {
+        Fault fault = new Fault()
+        fault.faultCode = FaultCode.Receiver.toString()
+        fault.faultMsg = msg
+        event.setFault(fault)
+        assertionGroup.internalError(msg)
+    }
 
 	public String toString() { (name) ? name : super.toString() }
 }
