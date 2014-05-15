@@ -43,32 +43,18 @@ public class ConfigToolbar extends RibbonBar {
 		listBox_1.addItem("Add new test session...");
 		listBox_1.setVisibleItemCount(1);
 		WidgetCanvas widgetCanvas_3 = new WidgetCanvas(listBox_1);
-		sessionGroup.addControls(widgetCanvas_2, widgetCanvas_3); 
+		sessionGroup.addControls(widgetCanvas_2, widgetCanvas_3);
 
-		// Menu group: Test config
-//		RibbonGroup testconfigGroup = createRibbonGroup("Test Configuration");
-//		CheckboxItem tls = new CheckboxItem("TLS");
-//		tls.setTitle("TLS");
-//		tls.setWidth("40px");
-//		DynamicForm tlsform = new DynamicForm();
-//		tlsform.setFields(tls);
-//		ListBox listBox_saml = new ListBox();
-//		listBox_saml.addItem("SAML off");
-//		listBox_saml.addItem("DIRECT SAML");
-//		listBox_saml.setVisibleItemCount(1);
-//		WidgetCanvas widgetCanvas_6 = new WidgetCanvas(listBox_saml);
-//		testconfigGroup.addControls(widgetCanvas_6, tlsform);
 
 		//       Menu configMenu = new Menu();
-		//       configMenu.addItem(new MenuItem("Endpoint Configuration", "icon_gear.png", "Ctrl+D"));  
+		//       configMenu.addItem(new MenuItem("Endpoint Configuration", "icon_gear.png", "Ctrl+D"));
 		//       configMenu.addItem(new MenuItem("List of Endpoints", "icon_gear.png", "Ctrl+P"));
 		//		IconMenuButton endpoints = getIconMenuButton("Endpoints","icon_gear.png", configMenu, true);
 
 		// Menu group: Site / Actors
 		RibbonGroup actorsGroup = createRibbonGroup("Endpoints");  
-		IconButton configEndpoints = getIconButton("Configure", "icon_gear.png"); configEndpoints.setWidth("80px");
-		IconButton listEndpoints = getIconButton("View", "icon_gear.png"); listEndpoints.setWidth("80px");
-		actorsGroup.addControls(configEndpoints, listEndpoints);
+		IconButton configEndpoints = getIconButton("View / Configure", "icon_gear.png"); configEndpoints.setWidth("80px");
+		actorsGroup.addControls(configEndpoints);
 
 		// Menu group: Admin 
 		// Behavior: Clicking on any of the buttons in the admin group opens a dialog to allow the user to log in as admin,
