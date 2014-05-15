@@ -1,6 +1,8 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.tabs;
 
+import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.VerticalAlignment;
+import com.smartgwt.client.widgets.form.fields.SectionItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import gov.nist.toolkit.xdstools3.client.customWidgets.CheckboxItemWithTooltipWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TextItemWithTooltipWidget;
@@ -27,31 +29,37 @@ public class SettingsTab extends CloseableTabWidget {
 
 
 		// Contents
-		FormattedDynamicForm form = new FormattedDynamicForm();
+        FormattedDynamicForm form = new FormattedDynamicForm();
 
 
         TextItem host = createField("host", "Toolkit host", "transport-testing.nist.gov", 400);
-
         TextItem port = createField("port", "Toolkit port", "12080", 400);
-
         TextItem tls_port = createField("tls_port", "Toolkit TLS Port", "12081", 400);
-
-		CheckboxItemWithTooltipWidget ciphers = createCheckBox("ciphers", "Enable all ciphers", "What does it do?", 400);
-
-        TextItem cache = createField("cache", "External cache", "Path of external_cache", 400);
-
+        TextItem cache = createField("cache", "External cache", "Ex.: C:\\Workspace\\external_cache", 400);
         TextItem environment = createField("environment", "Default environment	", "Ex.: MU2014, NA2014...", 400);
-
-		CheckboxItemWithTooltipWidget actors = createCheckBox("actors", "Use actors file", "What does it do?", 400);
-
         TextItem gazelle = createField("gazelle", "Gazelle config URL", "", 400);
-
         TextItem password = createField("password", "Admin password", "", 400);
 
-		form.setFields(new FormItem[] { 
-				host, cache, password, tls_port, ciphers, environment, actors, gazelle, port
-		}); 
 
+        // Build form sections
+        SectionItem section1 = new SectionItem();
+        section1.setDefaultValue("General");
+        section1.setSectionExpanded(true);
+        section1.setItemIds("host", "port", "tls_port", "cache", "environment");
+
+        SectionItem section2 = new SectionItem();
+        section2.setDefaultValue("Connectathon");
+        section2.setSectionExpanded(false);
+        section2.setItemIds("gazelle");
+
+        form.setFields(new FormItem[] {
+                section1, host, port, tls_port, cache, environment, section2, gazelle
+        });
+
+        // formatting
+        form.setWidth(600);
+        form.setLayoutAlign(Alignment.CENTER);
+        form.setMinColWidth(400);
 
 		getPanel().addMember(form);
 
