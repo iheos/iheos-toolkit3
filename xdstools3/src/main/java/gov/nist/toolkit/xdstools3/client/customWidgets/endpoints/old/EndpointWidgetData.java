@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.old;
 
   
 import com.smartgwt.client.widgets.grid.ListGridRecord;

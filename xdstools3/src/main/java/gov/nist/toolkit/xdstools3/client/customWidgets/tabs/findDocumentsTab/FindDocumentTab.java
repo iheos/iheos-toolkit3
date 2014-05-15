@@ -1,11 +1,13 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab;
 
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.AllEndpointsWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.old.AllEndpointsWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
 
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
+import gov.nist.toolkit.xdstools3.server.endpoints.EndpointDS;
 
 
 public class FindDocumentTab extends CloseableTabWidget {
@@ -15,7 +17,7 @@ public class FindDocumentTab extends CloseableTabWidget {
 		super(header);
 
         // Set tab header
-		setHeader(header);
+        setHeader(header);
 
 		createContents();
 	}
@@ -24,7 +26,7 @@ public class FindDocumentTab extends CloseableTabWidget {
      * Creates and sets the contents of the FindDocuments Tab
      */
 	private void createContents(){
-				AllEndpointsWidget endpoints = new AllEndpointsWidget();
+				EndpointWidget endpoints = new EndpointWidget();
 				FindDocumentForm findDocs = new FindDocumentForm();
 				ValidationSummaryWidget output = new ValidationSummaryWidget();
 				

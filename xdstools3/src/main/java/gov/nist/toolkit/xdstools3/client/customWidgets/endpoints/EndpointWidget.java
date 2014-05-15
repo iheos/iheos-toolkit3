@@ -33,96 +33,20 @@ import com.smartgwt.client.widgets.grid.events.SelectionUpdatedHandler;
  * @author dazais
  *
  */
-    public class EndpointWidget extends CanvasItem {  
+    public class EndpointWidget extends ListGrid {
     	
     	
-    	public EndpointWidget (String name) {  
-            super(name);  
-            setEndRow(true);  
-            setStartRow(true);    
-            setShowTitle(false);
-            
-              
-            // this is going to be an editable data item  
-            setShouldSaveValue(true);  
-              
-            addShowValueHandler(new ShowValueHandler() {  
-                @Override  
-                public void onShowValue(ShowValueEvent event) {  
-                    CanvasItem item = (CanvasItem) event.getSource();  
-                      
-                    ListGrid grid = (ListGrid)item.getCanvas();  
-                    if (grid==null) return;  
-                      
-                    grid.deselectAllRecords();  
-                    String value = (String) event.getDisplayValue();  
-                    if (value==null) return;  
-                      
-                    RecordList recordList = grid.getDataAsRecordList();  
-                    int index = recordList.findIndex(item.getFieldName(), value);  
-                    grid.selectRecord(index);  
-                }  
-            });  
-              
-            setInitHandler(new FormItemInitHandler () {  
-                @Override  
-                public void onInit(FormItem item) {  
-                    ListGrid grid = new ListGrid();   
-                    grid.setLeaveScrollbarGap(false); 
-                    grid.setWidth("*");  
-                    grid.setHeight("*");
-                    grid.setFields(((EndpointWidget) item).getGridFields());  
-                    grid.setData(((EndpointWidget)item).getGridData());  
-                    grid.setAutoFetchData(true);  
-                      
-                    grid.addDrawHandler(new DrawHandler() {  
-                        @Override  
-                        public void onDraw(DrawEvent event) {  
-                            ListGrid grid = (ListGrid)event.getSource();  
-                            RecordList data = grid.getDataAsRecordList();  
-                            CanvasItem item = grid.getCanvasItem();  
-                            String value = (String)item.getValue();  
-                            String fieldName = item.getFieldName();  
-                            if (value != null) grid.selectRecord(data.find(fieldName, value));                              
-                        }  
-                    });  
-                      
-                    grid.addSelectionUpdatedHandler(new SelectionUpdatedHandler() {  
-                        @Override  
-                        public void onSelectionUpdated(SelectionUpdatedEvent event) {  
-                            ListGrid grid = (ListGrid) event.getSource();  
-                            CanvasItem item = grid.getCanvasItem();  
-                            ListGridRecord record = grid.getSelectedRecord();  
-                            if (record != null) {  
-                                item.storeValue(record.getAttribute(item.getFieldName()));  
-                            } else {  
-                                item.storeValue((com.smartgwt.client.data.Record)null);  
-                            }  
-                        }  
-                    });  
-                      
-                    ((CanvasItem) item).setCanvas(grid);  
-                }  
-            });  
-        }  
+    	public EndpointWidget () {
+            setShowAllRecords(true);
+          //  setDataSource(EndpointsDS.getInstance());
+            // TODO needs to call on the Smartgwt server here to get datasource contents
+            setAutoFetchData(true);
+            draw();
+            setWidth(500);
+            setHeight(224);
+        }
           
-        private ListGridRecord[] gridData;  
-        public void setGridData(ListGridRecord[] gridData) {  
-            this.gridData = gridData;  
-        }  
-          
-        public ListGridRecord[] getGridData() {  
-            return gridData;  
-        }  
-          
-        private ListGridField[] gridFields;  
-        public void setGridFields(ListGridField... gridFields) {  
-            this.gridFields = gridFields;  
-        }  
-          
-        public ListGridField[] getGridFields() {  
-            return gridFields;  
-        }          
+
     };   // end class
       
     

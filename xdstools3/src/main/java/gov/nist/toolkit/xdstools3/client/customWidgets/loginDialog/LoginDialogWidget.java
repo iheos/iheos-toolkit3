@@ -45,7 +45,7 @@ public class LoginDialogWidget extends Window {
 
 		// Set DataSource (link to backend)
 		dataSource = new DataSource();
-        dataSource.setID("toolkit_config");
+        dataSource.setID("login");
         DataSourceTextField firstNameField = new DataSourceTextField("username", "Username", 50, true);
         DataSourcePasswordField passwordField = new DataSourcePasswordField("password", "Password", 50, true);
         dataSource.setFields(firstNameField, passwordField);

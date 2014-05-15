@@ -11,7 +11,7 @@ public class FormattedDynamicForm extends DynamicForm {
     public FormattedDynamicForm (){
        // setLayoutAlign(VerticalAlignment.CENTER);
         setCellPadding(10);
-        setColWidths(350);
+        //setColWidths(350);
     }
 
 }

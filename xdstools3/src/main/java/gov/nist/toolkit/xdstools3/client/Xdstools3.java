@@ -3,6 +3,7 @@ package gov.nist.toolkit.xdstools3.client;
 
 import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.SettingsTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.TabSetWidget;
@@ -69,16 +70,16 @@ public class Xdstools3 implements EntryPoint {
 
 		// Tabs
 		topTabSet = new TabSetWidget();
-		CloseableTabWidget findDocsTab = new FindDocumentTab();
         CloseableTabWidget homeTab = new CloseableTabWidget("Home");  homeTab.setCanClose(false);
+		CloseableTabWidget findDocsTab = new FindDocumentTab();
+        CloseableTabWidget mpqTab = new MPQTab();
 		
         // Add all tabs to the main TabSet
-        topTabSet.addTab(homeTab); 
-        topTabSet.addTab(findDocsTab); 
+        topTabSet.addTab(homeTab);
+        topTabSet.addTab(findDocsTab);
+        topTabSet.addTab(mpqTab);
 
-  
-
-		// Main layout
+        // Main layout
         VLayout mainLayout = new VLayout(); 
 		mainLayout.setWidth(WINDOW_WIDTH);
 		mainLayout.setHeight100(); 
