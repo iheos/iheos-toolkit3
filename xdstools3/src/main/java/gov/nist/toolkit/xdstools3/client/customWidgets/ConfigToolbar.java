@@ -1,5 +1,14 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
+import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
+import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
+import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
+import gov.nist.toolkit.xdstools3.client.clientServerUtils.CustomCallback;
+import gov.nist.toolkit.xdstools3.client.clientServerUtils.TransientArrayList;
 import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.LoginDialogWidget;
 
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -9,12 +18,13 @@ import com.smartgwt.client.widgets.IconButton;
 import com.smartgwt.client.widgets.WidgetCanvas;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.form.fields.CheckboxItem;
 import com.smartgwt.client.widgets.menu.IconMenuButton;
 import com.smartgwt.client.widgets.menu.Menu;
 import com.smartgwt.client.widgets.toolbar.RibbonBar;
 import com.smartgwt.client.widgets.toolbar.RibbonGroup;
+import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
+
+import java.util.ArrayList;
 
 public class ConfigToolbar extends RibbonBar {
 	private SimpleEventBus bus;
@@ -29,12 +39,26 @@ public class ConfigToolbar extends RibbonBar {
 		// Menu group: Session
 		RibbonGroup sessionGroup = createRibbonGroup("Session");
 
-		ListBox listBox = new ListBox();
+        // Environment selection
+		final ListBox listBox = new ListBox();
 		listBox.setWidth("290px");
 		listBox.addItem("Select environment");
 		listBox.addItem("Env1");
 		listBox.addItem("Env2");
 		listBox.setVisibleItemCount(1);
+
+//        listBox.addClickHandler(new ClickHandler() {
+//            public void onClick(ClickEvent event) {
+//                int selectedIndex = listBox.getSelectedIndex();
+//                String env = listBox.getItemText(selectedIndex);
+//                if (env.equals("")) {
+//                    //
+//                }
+//            }
+//        });
+
+
+
 		WidgetCanvas widgetCanvas_2 = new WidgetCanvas(listBox);
 		ListBox listBox_1 = new ListBox();
 		listBox_1.setWidth("290px");
@@ -83,6 +107,38 @@ public class ConfigToolbar extends RibbonBar {
 		this.setHeight(sessionGroup.getHeight());
 		this.setWidth100();
 	}
+
+
+    /**
+     * Calls to the backend for session parameters
+     */
+    protected void retrieveSessionParameters(){
+        String[] environments;
+        String[] sessions;
+
+        InterfaceClientServerAsync intf = GWT.create(InterfaceClientServer.class);
+       AsyncCallback<String[]> envCallback = new AsyncCallback<String[]>() {
+            public void onFailure(Throwable caught) {
+                // TODO: Do something with errors.
+            }
+            @Override
+            public void onSuccess(String[] result) {
+               // setEnvironments(result);
+            }
+        };
+        AsyncCallback<String[]> sessionCallback = new AsyncCallback<String[]>() {
+            public void onFailure(Throwable caught) {
+                // TODO: Do something with errors.
+            }
+            @Override
+            public void onSuccess(String[] result) {
+               // setSessions(result);
+            }
+        };
+       intf.retrieveEnvironments(envCallback);
+        intf.retrieveTestSessions(sessionCallback);
+    }
+
 
 	/**
 	 * Creates an icon button.

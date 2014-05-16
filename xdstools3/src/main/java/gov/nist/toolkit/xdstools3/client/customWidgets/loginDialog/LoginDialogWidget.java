@@ -2,6 +2,7 @@ package gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog;
 
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
+import gov.nist.toolkit.xdstools3.client.clientServerUtils.CustomCallback;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.CancelButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.LoginButton;
 import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
@@ -108,18 +109,8 @@ public class LoginDialogWidget extends Window {
 	protected void logMeIn(){
 
 		// test of client-server calls
-		InterfaceClientServerAsync intf = (InterfaceClientServerAsync) GWT.create(InterfaceClientServer.class);
-		AsyncCallback callback = new AsyncCallback() {
-			public void onFailure(Throwable caught) {
-				SC.say("Failed to communicate with the server.");
-			}
-
-			@Override
-			public void onSuccess(Object result) {
-				SC.say("Communication with the server successful!");
-			}
-		};
-
+		InterfaceClientServerAsync intf = GWT.create(InterfaceClientServer.class);
+        AsyncCallback callback = new CustomCallback();
 		intf.logMeIn("", "", callback);
 
         // Display the Admin Settings tab if login was successful
