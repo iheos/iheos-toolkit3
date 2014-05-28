@@ -32,3 +32,20 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+.txDataGridNoTableSpacing {
+    /* background-color: #f5f5f5; */
+    border-spacing: 0px;
+}
+
+.txDataGridEvenRow {
+    background-color: lavenderBlush; /*#E3E3E3 #ffffff */
+}
+
+.txDataGridOddRow {
+    background-color: lavender;
+}
+
+.txDataGridSelectedRow {
+    background-color: LightGoldenRodYellow; /* #FFFFCC */
+}

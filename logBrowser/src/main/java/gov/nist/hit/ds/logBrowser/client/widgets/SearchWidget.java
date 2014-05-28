@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
+import gov.nist.hit.ds.logBrowser.client.event.FilterSelectedEvent;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.ContextSupplement;
@@ -87,7 +88,7 @@ public class SearchWidget extends Composite {
 	FlexTable msgs = new FlexTable();
 	FlexTable grid = new FlexTable();
 	FlexTable existingGrid = new FlexTable();
-	DialogBox db = new DialogBox();
+	DialogBox dialogBox = new DialogBox();
 	
 	
 	String required = new String("*Required fields");
@@ -455,13 +456,17 @@ public class SearchWidget extends Composite {
         btnRun.setWidth("6em");
         prefGrid.setWidget(row, col, btnRun);
 
+        if (isOptionEnabled(Option.APPLY_CRITERIA_WITHOUT_RUNNING)) {
+            prefGrid.setWidget(row, ++col, new Button("Apply Changes"));
+        }
+
         btnRun.addClickHandler(new ClickHandler() {
 
             public void onClick(ClickEvent event) {
 
                 if (qSelector.getItemCount()==0) return;
 
-                String queryLoc = qSelector.getValue(qSelector.getSelectedIndex());
+                final String queryLoc = qSelector.getValue(qSelector.getSelectedIndex());
 
                 try {
                     reposService.getSearchCriteria(queryLoc, new AsyncCallback<QueryParameters>() {
@@ -539,6 +544,8 @@ public class SearchWidget extends Composite {
                                 if (reposRight.getItemCount()>0) {
                                     runSearch();
                                 }
+                            } else {
+                                eventBus.fireEvent(new FilterSelectedEvent(queryLoc));
                             }
 
                         }
@@ -1104,12 +1111,12 @@ public class SearchWidget extends Composite {
 						hpDialog.add(new HTML("&nbsp;"));
 						hpDialog.add(ft);
 						
-						db.clear();
-						db.setWidget(hpDialog);
+						dialogBox.clear();
+						dialogBox.setWidget(hpDialog);
 						
 						Button src = (Button)event.getSource();
-						db.setPopupPosition(src.getAbsoluteLeft(),src.getAbsoluteTop());
-						db.show();
+						dialogBox.setPopupPosition(src.getAbsoluteLeft(), src.getAbsoluteTop());
+						dialogBox.show();
 						
 						yesBtn.addClickHandler(new ContextSupplement<String>(getParameter()) {
 							
@@ -1127,7 +1134,7 @@ public class SearchWidget extends Composite {
 								} else {
 									addNewSearchCriteria();
 								}
-								db.hide();
+								dialogBox.hide();
 								redrawTable();
 								
 							}	
@@ -1135,7 +1142,7 @@ public class SearchWidget extends Composite {
 						
 						noBtn.addClickHandler(new ClickHandler() {
 							public void onClick(ClickEvent event) {
-								db.hide();
+								dialogBox.hide();
 							}
 						});
 					
@@ -1590,7 +1597,7 @@ public class SearchWidget extends Composite {
         if (!isOptionEnabled(Option.APPLY_CRITERIA_WITHOUT_RUNNING)) {
             return "Run";
         } else {
-            return "Apply";
+            return "Retrieve";
         }
     }
 

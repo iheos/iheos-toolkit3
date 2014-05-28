@@ -3,6 +3,7 @@ package gov.nist.hit.ds.logBrowser.client.widgets;
 
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.dom.client.StyleInjector;
@@ -32,6 +33,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -95,6 +97,46 @@ public class LogBrowserWidget extends Composite {
     AssetTreeItem treeItemTarget = null;
     HTML tabTitle = new HTML(Feature.TRANSACTION_MONITOR.toString());
     int txMonTab = -1;
+    final VerticalPanel treeHolder = new VerticalPanel();
+
+    final AsyncCallback<AssetNode> contentSetup = new AsyncCallback<AssetNode>() {
+        public void onFailure(Throwable arg0) {
+            centerPanel.clear();
+            centerPanel.add(new HTML("Content could not be loaded. " + arg0.toString()));
+            propsWidget.setHTML("");
+        }
+
+        public void onSuccess(AssetNode an) {
+            displayAssetContent(an, centerPanel, propsWidget);
+        }
+
+    };
+    final AsyncCallback<List<AssetNode>> treeSetup = new AsyncCallback<List<AssetNode>>() {
+
+        public void onFailure(Throwable a) {
+            Window.alert(a.toString());
+        }
+
+    public void onSuccess(List<AssetNode> a) {
+        treeHolder.clear();
+        treeHolder.add(popTreeWidget(a,null,false, contentSetup));
+
+        // populate repository props here
+        propsWidget.setHTML("");
+        SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
+        int idx = reposLbx.getSelectedIndex();
+        String propsTxt = reposProps.get(reposLbx.getValue(idx)); // use getItemText for display text
+        if (propsTxt!=null) {
+            // margin-top:0px;margin-left:3px;
+            propsContent.appendHtmlConstant("<div style='margin:3px;'>Repository Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
+            propsContent.appendHtmlConstant("</div>");
+            // propsWidget.setWidth("250px");
+            propsWidget.setHTML(propsContent.toSafeHtml());
+        }
+
+    }
+
+};
 
     SimpleEventBus eventBus;
 
@@ -121,7 +163,13 @@ public class LogBrowserWidget extends Composite {
             public String toString() {
                 return "Messages";
             }
+        } , TRANSACTION_FILTER_ADVANCED() {
+            @Override
+            public String toString() {
+                return "Messages";
+            }
         }
+
 	};
 
 	public LogBrowserWidget(SimpleEventBus eventBus, final Feature[] features) throws RepositoryConfigException {
@@ -181,9 +229,20 @@ public class LogBrowserWidget extends Composite {
             return setupTxMonitorFeature();
         } else if (Feature.TRANSACTION_FILTER==f) {
             return setupTxFilter();
+        } else if (Feature.TRANSACTION_FILTER_ADVANCED==f) {
+            return setupTxFilterAdvanced();
         }
 		return null;
 	}
+
+    protected Widget setupTxFilterAdvanced() {
+        TransactionMonitorFilterAdvancedWidget txFilter = new TransactionMonitorFilterAdvancedWidget(eventBus);
+        txFilter.getElement().getStyle()
+                .setProperty("border", "none");
+
+        return  txFilter;
+    }
+
 
     protected Widget setupTxFilter() {
         TransactionMonitorFilterWidget txFilter = new TransactionMonitorFilterWidget(eventBus);
@@ -195,7 +254,7 @@ public class LogBrowserWidget extends Composite {
 
     protected Widget setupTxMonitorFeature() {
 
-        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus, Boolean.TRUE, Boolean.TRUE);
+        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus, Boolean.TRUE, Boolean.FALSE,  Boolean.TRUE);
         txMonitor.getElement().getStyle()
                 .setProperty("border", "none");
 
@@ -356,11 +415,39 @@ public class LogBrowserWidget extends Composite {
 							HTML browseHeader = new HTML("&nbsp;"); // <h4>Browse Available Repositories</h4>
 							// browseHeader.setStyleName("searchCriteriaGroup");
 							grid.setWidget(0, 0, browseHeader);
-							// grid.getFlexCellFormatter().setColSpan(0, 0, 2);
+//							grid.getFlexCellFormatter().setColSpan(0, 0, 2);
 							grid.setWidget(1, 0, lblRepos );
-							// grid.getFlexCellFormatter().setColSpan(1, 0, 2);
-							grid.setWidget(2, 0, reposLbx);
-							grid.setWidth("100%");
+//							grid.getFlexCellFormatter().setColSpan(1, 0, 2);
+
+                            HorizontalPanel hpLbx = new HorizontalPanel();
+                            hpLbx.add(reposLbx);
+
+//							grid.setWidget(2, 0, reposLbx);
+
+                            Image img = new Image();
+                            img.setUrl(GWT.getModuleBaseForStaticFiles() + "images/refresh-sm.png");
+                            img.setHeight("16px");
+                            img.setWidth("16px");
+                            img.setAltText("Refresh");
+                            img.setTitle("Refresh");
+                            img.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.MIDDLE);
+//                            Anchor refAnchor = new Anchor();
+//                            refAnchor.set
+                            img.addClickHandler(new ClickHandler() {
+                                @Override
+                                public void onClick(ClickEvent event) {
+                                    refreshTree();
+                                }
+                            });
+                            hpLbx.add(new HTML("&nbsp;"));
+                            hpLbx.add(img);
+                            hpLbx.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+                            grid.setWidget(2,0,hpLbx);
+
+//                            HTMLTable.CellFormatter formatter = grid.getCellFormatter();
+//                            formatter.setHorizontalAlignment(2, 1, HasHorizontalAlignment.ALIGN_LEFT);
+
+                            grid.setWidth("100%");
 							
 							// treePanel.add(new HTML("&nbsp;"));
 							treePanel.add(grid);
@@ -374,7 +461,7 @@ public class LogBrowserWidget extends Composite {
 							westContent.addSouth(spProps, Math.round(0.2 * Window.getClientHeight()));
 							
 							// treePanel.add(new HTML("&nbsp;"));
-							final VerticalPanel treeHolder = new VerticalPanel();
+							//final VerticalPanel treeHolder = new VerticalPanel();
 							treeHolder.add(new HTML("&nbsp;Loading..."));
 							treePanel.add(treeHolder);
 							ScrollPanel sp = new ScrollPanel(treePanel);									
@@ -392,66 +479,16 @@ public class LogBrowserWidget extends Composite {
 							
 							// RootLayoutPanel.get().add(splitPanel);
 							
+
 						    
-						    final AsyncCallback<AssetNode> contentSetup = new AsyncCallback<AssetNode>() {
-								public void onFailure(Throwable arg0) {
-									centerPanel.clear();							
-									centerPanel.add(new HTML("Content could not be loaded. " + arg0.toString()));
-									propsWidget.setHTML("");
-								}
 
-								public void onSuccess(AssetNode an) {
-									displayAssetContent(an, centerPanel, propsWidget);
-								}
-								
-							};
-						    
-							final AsyncCallback<List<AssetNode>> treeSetup = new AsyncCallback<List<AssetNode>>() {
-
-								public void onFailure(Throwable a) {
-									Window.alert(a.toString());									
-								}
-
-								public void onSuccess(List<AssetNode> a) {
-									treeHolder.clear();
-									treeHolder.add(popTreeWidget(a,null,false, contentSetup));
-									
-									// populate repository props here
-									propsWidget.setHTML("");
-									SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
-									int idx = reposLbx.getSelectedIndex();
-									String propsTxt = reposProps.get(reposLbx.getValue(idx)); // use getItemText for display text 
-									if (propsTxt!=null) {
-										// margin-top:0px;margin-left:3px;
-										propsContent.appendHtmlConstant("<div style='margin:3px;'>Repository Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
-										propsContent.appendHtmlConstant("</div>");
-										// propsWidget.setWidth("250px");
-										propsWidget.setHTML(propsContent.toSafeHtml());											
-									}
-									
-								}
-								
-							};
 							reposService.getAssetTree(new String[][]{{reposData[0][0],reposData[0][1]}}, treeSetup);
 						
 							if (reposLbx.getItemCount()>0) {
 								reposLbx.addChangeHandler(new ChangeHandler() {
 									
 									public void onChange(ChangeEvent event) {
-										treeHolder.clear();
-										treeHolder.add(new HTML("&nbsp;Loading..."));
-										centerPanel.clear();
-
-										
-										
-										ListBox lbx = ((ListBox)event.getSource());
-										int idx = lbx.getSelectedIndex();
-										
-										// reposService.getAssetTree(new String[][]{{lbx.getItemText(idx),lbx.getValue(idx)}}, treeSetup);
-										String[] compositeKey = lbx.getValue(idx).split("\\^");
-										
-										reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, treeSetup);
-										
+					                    refreshTree();
 									}
 								});
 							}
@@ -496,6 +533,23 @@ public class LogBrowserWidget extends Composite {
 	    return splitPanel;
 	    
 	  }
+
+    protected void refreshTree() {
+        treeHolder.clear();
+        treeHolder.add(new HTML("&nbsp;Loading..."));
+        centerPanel.clear();
+
+
+
+        ListBox lbx = reposLbx; // ((ListBox)event.getSource());
+        int idx = lbx.getSelectedIndex();
+
+        // reposService.getAssetTree(new String[][]{{lbx.getItemText(idx),lbx.getValue(idx)}}, treeSetup);
+        String[] compositeKey = lbx.getValue(idx).split("\\^");
+
+        reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, treeSetup);
+
+    }
 	  
 	  protected TabPanel addTab(Widget w, String lbl) {
 	      	
