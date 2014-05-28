@@ -3,14 +3,13 @@
  */
 package gov.nist.hit.ds.repository.simple.search.client;
 
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import gov.nist.hit.ds.repository.simple.search.client.exception.NoServletSessionException;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 
 import java.util.List;
 import java.util.Map;
-
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 /**
  * @author Sunil.Bhaskarla
@@ -36,5 +35,5 @@ public interface RepositoryService extends RemoteService  {
 	public QueryParameters getSearchCriteria(String id, String acs, String queryLoc) throws RepositoryConfigException;
 	public AssetNode saveSearchCriteria(QueryParameters qp) throws RepositoryConfigException;
 	public List<AssetNode> getSavedQueries(String id, String acs) throws RepositoryConfigException;
-    public Map<String,AssetNode> getTxUpdates(String queue) throws RepositoryConfigException;
+    public Map<String,AssetNode> getTxUpdates(String queue, String filterLocation) throws RepositoryConfigException;
 }

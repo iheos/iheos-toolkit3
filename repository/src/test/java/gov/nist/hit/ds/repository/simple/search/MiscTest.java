@@ -11,11 +11,13 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.fail;
 public class MiscTest {
 
 	@Test
@@ -203,5 +205,18 @@ public class MiscTest {
 //		}
 //	
 	}
+
+    @Test
+    public void concMapTest() {
+        ConcurrentHashMap<String, AtomicBoolean> reposIndexMap = new ConcurrentHashMap<String, AtomicBoolean>();
+        try {
+            reposIndexMap.put("repos1", new AtomicBoolean(Boolean.TRUE));
+            reposIndexMap.put("repos1", new AtomicBoolean(Boolean.TRUE));
+
+        } catch (Throwable t) {
+            fail(t.toString());
+        }
+        System.out.println("concMapTest exit");
+    }
 	
 }

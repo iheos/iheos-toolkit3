@@ -14,12 +14,14 @@ import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
 import gov.nist.hit.ds.repository.simple.index.Index;
 import gov.nist.hit.ds.repository.simple.index.IndexContainer;
+import gov.nist.hit.ds.repository.simple.index.db.IndexerThread.IndexStatus;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
+import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.utilities.io.Hash;
-import gov.nist.hit.ds.repository.simple.index.db.IndexerThread.IndexStatus;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -70,8 +72,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 	private static final String BYPASS_VERSION = "BYPASS";
 
     // Repository index marker
-    private static final ConcurrentHashMap<String, Boolean> reposIndexMap = new ConcurrentHashMap<String, Boolean>();
-
+    private static final ConcurrentHashMap<String, Object> reposIndexMap = new ConcurrentHashMap<String, Object>();
+    private static Repository reposInContext = null;
+    private static final Integer[] intArray = new Integer[]{new Integer(0), new Integer(1), new Integer(2), new Integer(3), new Integer(4), new Integer(5), new Integer(6), new Integer(7), new Integer(8), new Integer(9), new Integer(10), new Integer(11)};
 
 	/* Use an upgrade script to update existing tables in case a newer version of TTT (new ArtRep API) runs against an older copy of the repositoryIndex table in the database */
 	/**
@@ -103,9 +106,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @return An int value of the number of assets updated or added to the database
 	 * @throws RepositoryException
 	 */
-	public int indexRep(Repository repos, boolean indexNewAssetsOnly) throws RepositoryException {
+	public int indexRep(Repository repos, boolean indexNewAssetsOnly, String[] locations) throws RepositoryException {
 		SimpleAssetIterator iter = null;
-		
+
 		if (repos==null || repos.getId()==null) {
 			logger.warning("Null repository or repository id");
 			return -1; 
@@ -144,41 +147,45 @@ public class DbIndexContainer implements IndexContainer, Index {
 			queueReposForIndex(repos,true);
 		}
 		*/
-		
-		iter = new SimpleAssetIterator(repos);
-		 		
-		if (!iter.hasNextAsset()) {
-			logger.fine("Nothing to index in " + reposId + ". Removing all indexed items.");
-			// Purge index because there are no assets on the file system
-			removeIndex(reposId, repos.getSource().getAccess().name(), "");
-			return -1;
-		}		
-		
-		int totalAssetsIndexed = -1;
+
+        int totalAssetsIndexed = -1;
 //		if (iter.getSize()<=maxIndexFast) {
 
 
         // Mark index
-        if (getReposIndexMap().get(reposId)!=null) {
-            logger.info(reposId + " is already being indexed...");
-            synchronized (repos) {
-                if (indexNewAssetsOnly) {
-                    totalAssetsIndexed = appendIndex(repos, iter);
-                } else {
-                    totalAssetsIndexed = indexRepository(repos, iter);
-                }
-                logger.info(reposId + " exiting...");
-            }
-        } else {
-            getReposIndexMap().put(reposId, Boolean.TRUE);
+        if (!reposIndexMap.containsKey(reposId)) {
+            logger.fine("putting repos " + reposId);
+            reposIndexMap.put(reposId, intArray[reposIndexMap.size()]);
+        }
+        synchronized (reposIndexMap.get(reposId)) { // repos
             try {
-                if (indexNewAssetsOnly) {
-                    totalAssetsIndexed = appendIndex(repos, iter);
+
+                if (locations!=null) {
+                   logger.fine("indexAsset:" + indexAsset(repos, locations));
                 } else {
-                    totalAssetsIndexed = indexRepository(repos, iter);
+                    iter = new SimpleAssetIterator(repos);
+
+                    if (!iter.hasNextAsset()) {
+                        logger.fine("Nothing to index in " + reposId + ". Removing all indexed items.");
+                        // Purge index because there are no assets on the file system
+                        removeIndex(reposId, repos.getSource().getAccess().name(), "");
+                        return -1;
+                    }
+
+                    if (indexNewAssetsOnly) {
+                            totalAssetsIndexed = appendIndex(repos, iter);
+                    } else {
+                        totalAssetsIndexed = indexRepository(repos, iter);
+                    }
+
                 }
             } finally {
-                getReposIndexMap().remove(reposId);
+                try {
+                    reposIndexMap.remove(reposId);
+                    logger.fine("removed " + reposId);
+                } catch (Throwable t) {
+                    logger.warning(t.toString());
+                }
             }
         }
 
@@ -193,6 +200,46 @@ public class DbIndexContainer implements IndexContainer, Index {
 	}
 
 
+    private boolean indexAsset(Repository repos, String[] locations) {
+        if (locations==null) return false;
+        boolean svcStatus = false;
+        try {
+            Map<String, String> unIndexed = new HashMap<String,String>();
+            Map<String, Asset> unIndexedAsset = new HashMap<String,Asset>();
+
+            for (String s : locations) {
+                logger.fine("indexing by relative location:" + s);
+                Asset a = repos.getAssetByRelativePath(new File(s));
+                unIndexed.put(s,getAssetPropertyHash(a));
+                unIndexedAsset.put(s, a);
+            }
+
+            ExecutorService svc = Executors.newCachedThreadPool();
+
+            List<String> aList = new ArrayList<String>();
+            aList.addAll(unIndexed.keySet());
+
+            svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset)));
+
+            svc.shutdown();
+
+            try {
+                svcStatus = svc.awaitTermination(15,TimeUnit.MINUTES);
+            } catch (InterruptedException e) {
+                logger.warning("svc termination failed!");
+            }
+
+            logger.info("indexNew svc exit status: " + svcStatus);
+
+
+        } catch (RepositoryException re) {
+            logger.warning(re.toString());
+        }
+
+        return svcStatus;
+
+    }
+
     /**
      * Index a subset of assets
      * @param repos
@@ -201,6 +248,8 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @throws RepositoryException
      */
     private int appendIndex(Repository repos, SimpleAssetIterator iter) throws RepositoryException {
+        if (repos==null) return -1;
+
         int totalAssetsIndexed = 0;
         String reposId = repos.getId().getIdString();
         Map<String, String> unIndexed = new HashMap<String,String>();
@@ -213,6 +262,7 @@ public class DbIndexContainer implements IndexContainer, Index {
             Map<String, Asset> assetMap = new HashMap<String,Asset>();
 
             while (iter.hasNextAsset()) {
+
                 Asset a = iter.nextAsset();
 
                 String key = a.getPropFileRelativePart();
@@ -256,6 +306,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @throws RepositoryException
 	 */
 	private int indexRepository(Repository repos, SimpleAssetIterator iter) throws RepositoryException {
+        if (repos==null) return -1;
+
 		int totalAssetsIndexed = 0;
 		String reposId = repos.getId().getIdString();
 		boolean repositorySynced = false;
@@ -1539,15 +1591,21 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @param repositories
      * @param searchCriteria
      * @param orderByStr
-     * @param indexNewAssetsOnly
+     * @param searchCriteriaLocationOnly
      * @return
      * @throws RepositoryException
      */
-	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr, boolean indexNewAssetsOnly) throws RepositoryException {
+	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr, boolean searchCriteriaLocationOnly) throws RepositoryException {
 		Repository[] fRep = new Repository[repositories.length];
 		int cx=0;
+        String locations[] = searchCriteria.findPropertyValue(PropertyKey.LOCATION.getPropertyName(), SearchTerm.Operator.EQUALTO);
 		for (Repository repos : repositories) {
-            indexRep(repos, indexNewAssetsOnly);
+            if (searchCriteriaLocationOnly) {
+                indexRep(repos, false, locations);
+            } else {
+                indexRep(repos,false, null);
+            }
+
 			if (getHitCount(repos, searchCriteria, orderByStr) > 0) {
 				fRep[cx++] = repos;
 				logger.fine("filtered repos:" + repos.getDisplayName());
@@ -1675,8 +1733,12 @@ public class DbIndexContainer implements IndexContainer, Index {
 	}
 	*/
 
-    public ConcurrentHashMap<String, Boolean> getReposIndexMap() {
-        return reposIndexMap;
+    public static Repository getReposInContext() {
+        return reposInContext;
+    }
+
+    public static void setReposInContext(Repository reposInContext) {
+        DbIndexContainer.reposInContext = reposInContext;
     }
 
 

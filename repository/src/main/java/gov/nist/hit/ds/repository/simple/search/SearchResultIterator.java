@@ -54,10 +54,10 @@ public class SearchResultIterator implements AssetIterator  {
 		init(repositories,searchCriteria,"", false);
 	}
 
-    public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, boolean newIndexOnly, boolean loadProperties) throws RepositoryException {
+    public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, boolean searchCriteriaLocationOnly, boolean loadProperties) throws RepositoryException {
 
         setLoadProperties(loadProperties);
-        init(repositories,searchCriteria,"", newIndexOnly);
+        init(repositories,searchCriteria,"", searchCriteriaLocationOnly);
     }
 	/**
 	 * 
@@ -77,10 +77,10 @@ public class SearchResultIterator implements AssetIterator  {
 	}
 		
 	private void init(Repository[] repositories, SearchCriteria searchCriteria,
-			String orderBy, boolean newIndexOnly) throws RepositoryException {
+			String orderBy, boolean searchCriteriaLocationOnly) throws RepositoryException {
 		DbIndexContainer dbc = new DbIndexContainer();
 		
-		crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy, newIndexOnly);
+		crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy, searchCriteriaLocationOnly);
 		if (crs==null)
 			totalRecords = 0;
 		else

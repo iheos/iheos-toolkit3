@@ -28,6 +28,7 @@ import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
+import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVParser;
@@ -66,6 +67,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 
 	private static final long serialVersionUID = 4939311135239253727L;
 	private static Logger logger = Logger.getLogger(PresentationData.class.getName());
+
+    private static final Object objLock = new Object();
+
     /* ActiveMQ Messaging - not used
     private static final String DEFAULT_BROKER_NAME = "tcp://localhost:61616";
     private static final String DEFAULT_USER_NAME = ActiveMQConnection.DEFAULT_USER;
@@ -366,24 +370,27 @@ public class PresentationData implements IsSerializable, Serializable  {
 	}
 
 
-    public synchronized static Boolean searchHit(String[][] reposData, SearchCriteria sc, boolean newIndexOnly) {
-        ArrayList<AssetNode> result = new ArrayList<AssetNode>();
+    public static Boolean searchHit(String[][] reposData, SearchCriteria sc, boolean searchByLocationOnly) {
 
-        try {
+        // TODO: is this required after direct prop file index?
+//        synchronized (objLock) {
+            try {
 
-            Repository[] reposList = getReposList(reposData);
+                Repository[] reposList = getReposList(reposData);
 
-            AssetIterator iter = null;
+                AssetIterator iter = null;
 
-            iter = new SearchResultIterator(reposList, sc, newIndexOnly, false);
+                iter = new SearchResultIterator(reposList, sc, searchByLocationOnly, false);
 
-            int recordCt = 0;
-            if (iter!=null && iter.hasNextAsset()) {
-                return Boolean.TRUE;
+                int recordCt = 0;
+                if (iter!=null && iter.hasNextAsset()) {
+                    return Boolean.TRUE;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                logger.warning("****" + ex.toString());
             }
-        } catch (Exception ex) {
-            logger.warning(ex.toString());
-        }
+//        }
 
         return Boolean.FALSE;
     }
@@ -614,7 +621,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 		return repos;
 	}
 
-    public static Map<String,AssetNode> getLiveUpdates(String queue)  {
+    public static Map<String,AssetNode> getLiveUpdates(String queue, String filterLocation) throws RepositoryException {
         //ArrayList<AssetNode> result = new ArrayList<AssetNode>();
         Map<String,AssetNode> result =  new HashMap<String,AssetNode>();
 
@@ -651,7 +658,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                     javax.jms.Session.AUTO_ACKNOWLEDGE);
             connection.start();
 
-            Destination destination = session.createQueue(TXMON_QUEUE);
+            Destination destination = session.createQueue((queue==null||("".equals(queue)))?TXMON_QUEUE:queue);
 
             // Create a MessageConsumer from the Session to the Topic or Queue
             consumer = session.createConsumer(destination);
@@ -664,7 +671,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 
                 repId = (String)((MapMessage)message).getObject("repId");
                 acs = (String)((MapMessage)message).getObject("acs");
-                parentLoc = (String)((MapMessage)message).getObject("parentLoc");
+                parentLoc = (String)((MapMessage)message).getObject("parentLoc"); /* relative propFilePath, ex. of Request */
                 headerLoc = (String)((MapMessage)message).getObject("headerLoc");
                 bodyLoc = (String)((MapMessage)message).getObject("bodyLoc");
                 ioHeaderId = (String)((MapMessage)message).getObject("ioHeaderId");
@@ -682,6 +689,7 @@ public class PresentationData implements IsSerializable, Serializable  {
         } catch (Exception ex) { // TODO: look into thrown an exception to avoid too many calls when broker is offline
             logger.finest(ex.toString());
             // ex.printStackTrace();
+            throw new RepositoryException(ex.toString());
         } finally {
             if (consumer!=null) {
                 try {
@@ -702,47 +710,85 @@ public class PresentationData implements IsSerializable, Serializable  {
         }
 
         if (txDetail!=null) {
-            logger.fine(txDetail);
+            try {
+                logger.fine(txDetail);
 
-            if (parentLoc!=null) {
-                AssetNode parentHdr = new AssetNode();
-                parentHdr.setLocation(parentLoc);
-                result.put("parentLoc",parentHdr);
+                if (parentLoc!=null) {
+                    logger.fine("parentLoc is not null" + parentLoc);
+                    AssetNode parentHdr = new AssetNode();
+                    parentHdr.setLocation(parentLoc);
+                    result.put("parentLoc",parentHdr);
 
-                AssetNode headerMsg = new AssetNode();
-                headerMsg.setParentId(ioHeaderId); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
-                headerMsg.setType("raw_"+msgType);
-                headerMsg.setRepId(repId);
-                headerMsg.setReposSrc(acs);
-                headerMsg.setLocation(headerLoc);
-                headerMsg.setCsv(processCsvContent(txDetail));
-                //headerMsg.setProps(proxyDetail);
-                headerMsg.getExtendedProps().put("proxyDetail",proxyDetail);
-                headerMsg.getExtendedProps().put("fromIp",fromIp);
-                headerMsg.getExtendedProps().put("toIp",toIp);
-                result.put("header",headerMsg);
+                    AssetNode headerMsg = new AssetNode();
+                    headerMsg.setParentId(ioHeaderId); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
+                    headerMsg.setType("raw_"+msgType);
+                    headerMsg.setRepId(repId);
+                    headerMsg.setReposSrc(acs);
+                    headerMsg.setLocation(headerLoc);
+                    headerMsg.setCsv(processCsvContent(txDetail));
+                    //headerMsg.setProps(proxyDetail);
+                    headerMsg.getExtendedProps().put("proxyDetail",proxyDetail);
+                    headerMsg.getExtendedProps().put("fromIp",fromIp);
+                    headerMsg.getExtendedProps().put("toIp",toIp);
+                    headerMsg.getExtendedProps().put("type",msgType);
 
-                if (bodyLoc!=null) {
-                    AssetNode bodyMsg = new AssetNode();
-                    bodyMsg.setParentId(ioHeaderId);
-                    bodyMsg.setType("raw_"+msgType);
-                    bodyMsg.setRepId(repId);
-                    bodyMsg.setReposSrc(acs);
-                    bodyMsg.setLocation(bodyLoc);
-                    result.put("body",bodyMsg);
+                    if (bodyLoc!=null) {
+                        AssetNode bodyMsg = new AssetNode();
+                        bodyMsg.setParentId(ioHeaderId);
+                        bodyMsg.setType("raw_"+msgType);
+                        bodyMsg.setRepId(repId);
+                        bodyMsg.setReposSrc(acs);
+                        bodyMsg.setLocation(bodyLoc);
+                        result.put("body",bodyMsg);
+                    }
+
+                    if (filterLocation!=null && !"".equals(filterLocation)) {
+                        logger.fine("backend filtering using: " + filterLocation);
+                        filterMessage(filterLocation, parentLoc, headerMsg);
+                    }
+
+                    result.put("header",headerMsg);
                 }
 
+                return result;
+            } catch (Throwable t) {
+                logger.warning(t.toString());
             }
-
-
-
-            return result;
         } else {
             logger.finest("Empty consumer message?");
         }
 
 
         return null;
+    }
+
+    private static void filterMessage(String filterLocation, String parentLoc, AssetNode headerMsg) {
+        // Filter
+        // reposService.getSearchCriteria(queryLoc, new AsyncCallback<QueryParameters>() {
+        try {
+
+            QueryParameters qp = getSearchCriteria(filterLocation);
+            SearchCriteria sc = qp.getSearchCriteria();
+
+            // Wrap into new sc
+            SearchCriteria subCriteria = new SearchCriteria(SearchCriteria.Criteria.AND);
+            subCriteria.append(new SearchTerm(PropertyKey.LOCATION, SearchTerm.Operator.EQUALTO,parentLoc));
+
+            SearchCriteria criteria = new SearchCriteria(SearchCriteria.Criteria.AND);
+            criteria.append(sc);
+            criteria.append(subCriteria);
+
+            String[][] selectedRepos =   qp.getSelectedRepos();
+
+            if (searchHit(selectedRepos, criteria, Boolean.TRUE)) {
+                headerMsg.getExtendedProps().put("searchHit","yes");
+            }
+
+
+            } catch (Throwable t) {
+                logger.warning(t.toString());
+
+        }
     }
 
     /**

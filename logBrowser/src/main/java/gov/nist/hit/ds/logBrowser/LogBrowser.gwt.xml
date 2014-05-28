@@ -32,8 +32,12 @@
 	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
 
 	<!-- Other module inherits -->
-	<!-- <inherits name="com.google.gwt.logging.Logging"/>  -->
-	<inherits name='gov.nist.hit.ds.repository.Repository' />
+	 <inherits name="com.google.gwt.logging.Logging"/>
+    <set-property name="gwt.logging.consoleHandler" value="DISABLED" />
+    <set-property name='gwt.logging.popupHandler' value='DISABLED'/>
+    <!--<set-property name='gwt.logging.enabled' value='FALSE'/>-->
+
+    <inherits name='gov.nist.hit.ds.repository.Repository' />
 
 	<!-- Specify the app entry point class. -->
 	<entry-point class='gov.nist.hit.ds.logBrowser.client.LogBrowser' />

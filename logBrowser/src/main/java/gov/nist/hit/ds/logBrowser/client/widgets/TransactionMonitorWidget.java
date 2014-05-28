@@ -16,7 +16,9 @@ import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -51,19 +53,25 @@ public class TransactionMonitorWidget extends Composite {
     private Boolean showTxDetail;
 
     private Boolean listenerEnabled;
+    private Boolean listening;
+    private Boolean filterEnabled;
 
-    SplitLayoutPanel southPanel = new SplitLayoutPanel(2);
-    SplitLayoutPanel txMonitorMainSplitPanel = new SplitLayoutPanel(3);
+    private SplitLayoutPanel southPanel = new SplitLayoutPanel(2);
+    private SplitLayoutPanel txMonitorMainSplitPanel = new SplitLayoutPanel(3);
 
     //VerticalPanel contentPanel = new VerticalPanel();
-    ScrollPanel centerPanel = new ScrollPanel();
-    //ListDataProvider<List<String>> dataProvider  = new ListDataProvider<List<String>>();
-    ListDataProvider<TxDetailRow> dataProvider  = new ListDataProvider<TxDetailRow>();
+    private ScrollPanel centerPanel = new ScrollPanel();
+    DialogBox dialogBox = new DialogBox();
 
+    //ListDataProvider<List<String>> dataProvider  = new ListDataProvider<List<String>>();
+    private CellTable<TxDetailRow> txTable = new CellTable<TxDetailRow>(CELLTABLE_PAGE_SIZE,KEY_PROVIDER);
+    private ListDataProvider<TxDetailRow> dataProvider  = new ListDataProvider<TxDetailRow>();
 
     public static final int MESSAGE_LEFT_MARGIN = 132;
     private SimplePager pager = new SimplePager();
 
+
+    private Boolean autoShowFirstMessage = false;
 
     /*
     Sample 2-way Exchange pattern txDetail:
@@ -72,18 +80,21 @@ public class TransactionMonitorWidget extends Composite {
      */
     private final String COLUMN_HEADER_PROXY = "Proxy";
     private final String COLUMN_HEADER_RESPONSE_TIME_MS = "Response Time";
-    private final String COLUMN_HEADER_ROW_SELECTED_IND = " ";
+    private final String COLUMN_HEADER_IND_OR_FLAG = " ";
     private final String COLUMN_HEADER_ROW_MESSAGE_FROM = "Message From";
     private final String COLUMN_HEADER_ROW_FORWARDED_TO = "Forwarded To";
 
-    final String[] columns = {COLUMN_HEADER_ROW_SELECTED_IND,"Timestamp","Status","Artifact",COLUMN_HEADER_ROW_MESSAGE_FROM,COLUMN_HEADER_PROXY,COLUMN_HEADER_ROW_FORWARDED_TO,"Path","ContentType","Method","Length",COLUMN_HEADER_RESPONSE_TIME_MS};
-    MessageViewerWidget requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
-    MessageViewerWidget responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
+    final String[] columns = {COLUMN_HEADER_IND_OR_FLAG,"Timestamp","Status","Artifact",COLUMN_HEADER_ROW_MESSAGE_FROM,COLUMN_HEADER_PROXY,COLUMN_HEADER_ROW_FORWARDED_TO,"Path","ContentType","Method","Length",COLUMN_HEADER_RESPONSE_TIME_MS};
+    private MessageViewerWidget requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
+    private MessageViewerWidget responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
     //Map<Integer, String> txRowParentId = new HashMap<Integer, String>();
     //Map<Integer, Map<String,AssetNode>> txRowAssetNode = new HashMap<Integer, Map<String,AssetNode>>();
     //int txRowIdx = 0;
 
-    final AsyncCallback<AssetNode> contentSetup = new AsyncCallback<AssetNode>() {
+
+    private String filterLocation;
+
+    private final AsyncCallback<AssetNode> contentSetup = new AsyncCallback<AssetNode>() {
         public void onFailure(Throwable arg0) {
             logger.warning(arg0.toString());
         }
@@ -106,7 +117,7 @@ public class TransactionMonitorWidget extends Composite {
         }
 
     };
-    final AsyncCallback<Map<String,AssetNode>> updateHandler = new AsyncCallback<Map<String,AssetNode>> () {
+    private final AsyncCallback<Map<String,AssetNode>> updateHandler = new AsyncCallback<Map<String,AssetNode>> () {
 
         @Override
         public void onFailure(Throwable caught) {
@@ -116,15 +127,20 @@ public class TransactionMonitorWidget extends Composite {
 
         @Override
         public void onSuccess(Map<String,AssetNode> anMap) {
-            popTx(anMap);
+            popTx(anMap,null);
         }
     };
 
-    public Boolean popTx(Map<String,AssetNode> anMap) {
+    public Boolean popTx(Map<String,AssetNode> anMap, Map<String,AssetNode> anMapRelated) {
+        logger.info("entering popTx " + ((getListenerEnabled())?"Live":"Bypass)"));
+        Boolean filteredMessage = false;
         if (anMap==null) {
-            logger.info("Null assetNode: bad tx message?");
+            logger.finest("Null assetNode: timeout or bad tx message?");
+            if (dialogBox.isShowing()) {
+                dialogBox.hide();
+            }
         } else {
-            logger.info("Got a message? " + anMap.isEmpty());
+            logger.info("Got an empty message? " + anMap.isEmpty());
             logger.info("sz:"+anMap.size());
 
             if (!anMap.isEmpty() && anMap.size()>0) {
@@ -133,13 +149,23 @@ public class TransactionMonitorWidget extends Composite {
                     if (an.getCsv() !=null) {
                         //String[] csvData = an.getCsv()[0];
                         // logger.info(csvData.toString());
-                        if (appendData(anMap)) {
+                        if (an.getExtendedProps().containsKey("searchHit")) {
+                            logger.info("this message has been filtered (back-end filter)!");
+                            filteredMessage = true;
+                            appendData(anMap);
+                        } else {
+                            appendData(anMap);
+                            appendData(anMapRelated);
+
+                            // old: Manage the event with the parent loc for immediate indexing
+
+
                             //if (!txRowParentId.containsKey(new Integer(txRowIdx))) {
                                 //txRowParentId.put(new Integer(txRowIdx), an.getParentId());
                                 //txRowAssetNode.put(new Integer(txRowIdx), anMap);
                             //}
 
-                            if ((requestViewerWidget.getIoHeaderId() == null || responseViewerWidget.getIoHeaderId() == null)
+                            if (getAutoShowFirstMessage()
                                     || (an.getParentId().equals(requestViewerWidget.getIoHeaderId()) && an.getParentId().equals(responseViewerWidget.getIoHeaderId()))) {
                                 requestViewerWidget.setIoHeaderId(an.getParentId());
                                 responseViewerWidget.setIoHeaderId(an.getParentId());
@@ -150,29 +176,32 @@ public class TransactionMonitorWidget extends Composite {
                                 }
                             }
 
-                            // Manage the event with the parent loc for immediate indexing
-                            if (getListenerEnabled()) {
-                                eventBus.fireEvent(new NewTxMessageEvent(dataProvider.getList().size()/*zero based idx*/,anMap));
-                            }
-                            //txRowIdx++;
-
                         }
 
+                    } else {
+                        Window.alert("no csv!?"  + an.getParentId());
                     }
 
                 }
+            } else {
+                Window.alert("empty map!?");
+            }
+
+
+            if (getListenerEnabled() && !getFilterEnabled()) {
+                logger.info("firing event: NewTxMessageEvent");
+                eventBus.fireEvent(new NewTxMessageEvent(dataProvider.getList().size()/*zero based idx*/,anMap));
+            } else if ((getFilterEnabled() &&  filteredMessage)) {
+                // raise BackendFilteredMessage
             }
 
         }
 
         if (getListenerEnabled()) {
-            try {
-                reposService.getTxUpdates("",updateHandler);
-            } catch (Exception ex) {
-                logger.warning(ex.getMessage());
-            }
+            activateListener();
         }
 
+        logger.info("leaving popTx " + ((getListenerEnabled())?"Live":"Bypass)"));
         return Boolean.TRUE;
     }
     /**
@@ -181,10 +210,11 @@ public class TransactionMonitorWidget extends Composite {
      * @param enableListener
      * @param showTxDetail
      */
-    public TransactionMonitorWidget(SimpleEventBus eventBus, Boolean enableListener, Boolean showTxDetail)  {
+    public TransactionMonitorWidget(SimpleEventBus eventBus, Boolean enableListener, Boolean enableFilter, Boolean showTxDetail)  {
         setEventBus(eventBus);
         setShowTxDetail(showTxDetail);
         setListenerEnabled(enableListener);
+        setFilterEnabled(enableFilter);
 
         // All composites must call initWidget() in their constructors.
 	     initWidget(setupMonitor());
@@ -197,16 +227,23 @@ public class TransactionMonitorWidget extends Composite {
             }
         });
 
-        if (getListenerEnabled()) {
-        /* live connection */
-            // TODO: gracefully deattach existing connection on exit -- only an issue when attached to a PTP queue
-            try {
-                reposService.getTxUpdates("",updateHandler);
-            } catch (Exception ex) {
-                logger.warning(ex.toString());
-            }
+        if (getListenerEnabled() && (!getFilterEnabled() || (getFilterEnabled() && getFilterLocation()!=null))) {
+            activateListener();
         }
+    }
 
+    private boolean activateListener() {
+
+        /* live connection */
+            // TODO: gracefully detach existing connection on exit -- only an issue when attached to a PTP queue
+            try {
+                reposService.getTxUpdates("", getFilterLocation(), updateHandler);
+                setListening(true);
+            } catch (Throwable t) {
+                logger.warning(t.toString());
+                setListening(false);
+            }
+        return getListening();
     }
 
     private void resizeMessageDetailArea() {
@@ -233,8 +270,13 @@ public class TransactionMonitorWidget extends Composite {
     }
 
 
-    protected Boolean appendData(Map<String,AssetNode> anMap) { // int keyIdx, String[] csvRow
-
+    private Boolean appendData(Map<String,AssetNode> anMap) { // int keyIdx, String[] csvRow
+        if (anMap==null) {
+            logger.fine("empty anMap");
+            return false;
+        }
+        logger.info("entering appendData" + anMap.get("header").getLocation());
+        logger.info("contains filtered message? " + (anMap.get("header").getExtendedProps().containsKey("searchHit")));
         try {
 //            int colLen = columns.length;
 //            String []csvRowNew = new String[colLen];
@@ -263,9 +305,10 @@ public class TransactionMonitorWidget extends Composite {
 
             int matchingPairIdx = findMatchingPairIdx(anMap.get("header"));
 
+            // if ("resHdrType".equals(anMap.get("header").getExtendedProps().get("type"))) {
             if (matchingPairIdx>-1) {
                 if (matchingPairIdx+1 < rowList.size()) {
-                    matchingPairIdx++; // Bundle message pair
+                     matchingPairIdx++; // Bundle message pair
                 } else {
                     matchingPairIdx = -1; // Just append
                 }
@@ -273,7 +316,6 @@ public class TransactionMonitorWidget extends Composite {
 
 
            boolean state = false;
-            //synchronized (rowList) {
                 if (matchingPairIdx>-1) {
                     try {
                         rowList.add(matchingPairIdx,txRow);
@@ -285,7 +327,6 @@ public class TransactionMonitorWidget extends Composite {
                 } else {
                     state = rowList.add(txRow);
                 }
-            //}
 
             return  state;
 
@@ -293,7 +334,12 @@ public class TransactionMonitorWidget extends Composite {
         } catch (Exception ex) {
             Window.alert(ex.toString());
             logger.warning(ex.toString());
+        } finally {
+            if (dataProvider!=null && dataProvider.getList()!=null) {
+                dataProvider.flush();
+            }
         }
+        // logger.warning("Append failed!!" + an.getParentId());
         return false;
     }
 
@@ -306,12 +352,12 @@ public class TransactionMonitorWidget extends Composite {
                 .setProperty("border", "none");
 
         long containerWidth = Window.getClientWidth(); // This must be in sync with the widget original load size, make constant
-        long containerHeight = Math.round(.5 * Window.getClientHeight());
+        long containerHeight = Integer.parseInt("" + Math.round(.5 * Window.getClientHeight()));
 
         //=  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
         // = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
 
-        southPanel.addWest(requestViewerWidget,Math.round(.5 * containerWidth));
+        southPanel.addWest(requestViewerWidget,Integer.parseInt(""+Math.round(.5 * containerWidth)));
         southPanel.add(responseViewerWidget);
 
 
@@ -347,7 +393,7 @@ public class TransactionMonitorWidget extends Composite {
         //txRowIdx = 0; // Reset the index counter
     }
 
-    protected class TxDetailRow  {
+    private class TxDetailRow  {
 
         private int key;
         private Map<String,AssetNode> anMap = null;
@@ -391,11 +437,10 @@ public class TransactionMonitorWidget extends Composite {
     };
 
 
-    protected ScrollPanel setupTable(ScrollPanel sp) {
+    private ScrollPanel setupTable(ScrollPanel sp) {
         //StyleInjector.inject(".txColHidden {background-color:black;visibility:hidden;display:none}");
         //CellTable<List<String>> txTable = new CellTable<List<String>>();
 
-        CellTable<TxDetailRow> txTable = new CellTable<TxDetailRow>(CELLTABLE_PAGE_SIZE,KEY_PROVIDER);
         txTable.setWidth("100%", true);
         txTable.setHeight("100%");
 
@@ -430,7 +475,7 @@ public class TransactionMonitorWidget extends Composite {
             public void onSelectionChange(SelectionChangeEvent event) {
 
                 TxDetailRow selected = selectionModel.getSelectedObject();
-                if (selected != null && getShowTxDetail()) {
+                if (selected != null ) {  // && getShowTxDetail()
                     //setMessageViewer(selected.getKey());
                     setMessageViewer(selected);
                 }
@@ -449,7 +494,7 @@ public class TransactionMonitorWidget extends Composite {
 
     }
 
-    private int findMatchingPairIdx(AssetNode an) {
+    public int findMatchingPairIdx(AssetNode an) {
         List<TxDetailRow> rowList = dataProvider.getList();
 
         if (an!=null) {
@@ -462,6 +507,46 @@ public class TransactionMonitorWidget extends Composite {
         }
 
         return -1;
+    }
+
+    public Map<String,AssetNode> findMatchingPair(AssetNode an) {
+        List<TxDetailRow> rowList = dataProvider.getList();
+
+        if (an!=null) {
+            String parentId = an.getParentId();
+            for (TxDetailRow row : rowList) {
+                if (!an.equals(row.anMap.get("header")) && parentId.equals(row.getAnMap().get("header").getParentId())) {
+                    return  row.getAnMap();  // rowList.indexOf(row).;
+                }
+            }
+        }
+
+        return null;
+    }
+
+
+    private int findIdx(AssetNode an) {
+        List<TxDetailRow> rowList = dataProvider.getList();
+
+        if (an!=null) {
+            String parentId = an.getParentId();
+            for (TxDetailRow row : rowList) {
+                if (an.equals(row.anMap.get("header")) && parentId.equals(row.getAnMap().get("header").getParentId())) {
+                    return rowList.indexOf(row);
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public Map<String,AssetNode> getRowMap(int idx) {
+        List<TxDetailRow> rowList = dataProvider.getList();
+
+        if (idx>-1) {
+            return rowList.get(idx).getAnMap();
+        }
+        return null;
     }
 
     /*
@@ -587,8 +672,11 @@ public class TransactionMonitorWidget extends Composite {
                     if (!"".equals(o.getCsvData().get(this.index))) {
                         shb.appendHtmlConstant("<span style=\"font-size:9px\">&nbsp;ms</span>");
                     }
-                } else if (COLUMN_HEADER_ROW_SELECTED_IND.equals(columns[this.index])) {
-                    shb.appendHtmlConstant("<span style=\"width:32px;height:32px;\">&nbsp;</span>");
+                } else if (COLUMN_HEADER_IND_OR_FLAG.equals(columns[this.index])) {
+                    if (!getListenerEnabled() && "yes".equals(headerMsg.getExtendedProps().get("frontendSearchHit"))) {
+                        shb.appendHtmlConstant("<span style=\"width:32px;height:32px;\"><img height=8 width=8 src='" + GWT.getModuleBaseForStaticFiles() + "images/bullet_ball_glass_green.png'/></span>");
+                    } else
+                        shb.appendHtmlConstant("<span style=\"width:32px;height:32px;\">&nbsp;</span>");
                 } else {
                     shb.appendEscaped(o.getCsvData().get(this.index));
                 }
@@ -643,9 +731,75 @@ public class TransactionMonitorWidget extends Composite {
     }
 
 
+    public Boolean getFilterEnabled() {
+        return filterEnabled;
+    }
+
+    public void setFilterEnabled(Boolean filterEnabled) {
+        this.filterEnabled = filterEnabled;
+    }
 
 
     public SimplePager getPager() {
         return pager;
+    }
+
+
+    public Boolean getAutoShowFirstMessage() {
+        return false;
+        // TODO: enable this after the row selection highlight method is implemented
+        // return  (autoShowFirstMessage && (requestViewerWidget.getIoHeaderId() == null || responseViewerWidget.getIoHeaderId() == null));
+    }
+
+    public Boolean getListening() {
+        return listening;
+    }
+
+    public void setListening(Boolean listening) {
+        this.listening = listening;
+    }
+
+    public void setAutoShowFirstMessage(Boolean autoShowFirstMessage) {
+        this.autoShowFirstMessage = autoShowFirstMessage;
+    }
+
+    public CellTable<TxDetailRow> getTxTable() {
+        return txTable;
+    }
+
+    public void setTxTable(CellTable<TxDetailRow> txTable) {
+        this.txTable = txTable;
+    }
+
+    public String getFilterLocation() {
+        return filterLocation;
+    }
+
+    public void setFilterLocation(String filterLocation) {
+    /*
+    initial status
+    1) no filter
+        - setting filter location via apply method should activate the filter
+    2) filter change
+        - apply method should automatically apply in the next listener (***after time out***) from the updateHandler
+    */
+
+        this.filterLocation = filterLocation;
+
+        if (!getListening()) {
+            setFilterEnabled(true);
+            activateListener();
+        } else {
+            HorizontalPanel hpDialog = new HorizontalPanel();
+
+            HTML txt = new HTML("<span style='color:red;font-size:large;font-style:bold'>Please wait...</span>");
+            hpDialog.add(txt);
+
+            dialogBox.clear();
+            dialogBox.setWidget(hpDialog);
+
+            dialogBox.setPopupPosition(Integer.parseInt(""+Math.round(Window.getClientWidth() * .5)), Integer.parseInt(""+Math.round(Window.getClientHeight() * .5)));
+            dialogBox.show();
+        }
     }
 }

@@ -21,6 +21,8 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import gov.nist.hit.ds.logBrowser.client.event.ListenerStatusEvent;
+import gov.nist.hit.ds.logBrowser.client.event.ListenerStatusEventHandler;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEvent;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEventHandler;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -35,26 +37,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class TransactionMonitorFilterWidget extends Composite {
+public class TransactionMonitorFilterAdvancedWidget extends Composite {
     public static final double HEADER_SIZE = 2.5;
 
     /**
 	 *
 	 * @author Sunil.Bhaskarla
 	 */
-	private static Logger logger = Logger.getLogger(TransactionMonitorFilterWidget.class.getName());
+	private static Logger logger = Logger.getLogger(TransactionMonitorFilterAdvancedWidget.class.getName());
 
 	final public RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
 	private SimpleEventBus eventBus;
     private SearchWidget searchWidget = null;
 
 
-    private TransactionMonitorWidget txMonitorLive;
-    private TransactionMonitorWidget txFilter;
+    private TransactionMonitorAdvancedWidget txMonitorLive;
+    private TransactionMonitorAdvancedWidget txFilter;
     private Widget southStackPanel;
     private HTML liveCounterTxt = new HTML("");
     private int filterHitCounter = 0;
     private HTML filterCounterTxt = new HTML("");
+
+
+    private HTML listenerStatusIndicator = new HTML("<span style=\"width:32px;height:32px;\"><img height=16 width=16 src='" + GWT.getModuleBaseForStaticFiles() + "images/environment_"
+            + ("ok")
+            + ".png'/></span>");
 
     /*
     Sample 2-way Exchange pattern txDetail:
@@ -64,7 +71,7 @@ public class TransactionMonitorFilterWidget extends Composite {
 
 
 
-    public TransactionMonitorFilterWidget(SimpleEventBus eventBus)  {
+    public TransactionMonitorFilterAdvancedWidget(SimpleEventBus eventBus)  {
 	    this.eventBus = eventBus;
 
         // All composites must call initWidget() in their constructors.
@@ -88,7 +95,7 @@ public class TransactionMonitorFilterWidget extends Composite {
     }
 
     private Widget createFilteredMonitorPanel() {
-        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus,false,false,true);
+        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus,false,false,true);
         txMonitor.setAutoShowFirstMessage(true);
         txMonitor.getElement().getStyle()
                 .setProperty("border", "none");
@@ -99,7 +106,7 @@ public class TransactionMonitorFilterWidget extends Composite {
         //stackPanel.setHeight("100%");
         stackPanel.setWidth("100%");
 
-        stackPanel.add(txMonitor, createPanelHeader("Filtered Messages",createFilterHeaderOptions(),null), HEADER_SIZE);
+        stackPanel.add(txMonitor, createPanelHeader("",createFilterHeaderOptions(),null), HEADER_SIZE);
 
         return stackPanel;
 
@@ -118,7 +125,7 @@ public class TransactionMonitorFilterWidget extends Composite {
         stackPanel.setWidth("100%");
 
         // Add filter section
-        stackPanel.add(createFilterWidget(), createPanelHeader("Message Filter", null, null), HEADER_SIZE); // Not the filter monitor but the filter selection
+        stackPanel.add(createFilterWidget(), createPanelHeader("", createCriteriaOptions(), null), HEADER_SIZE); // Not the filter monitor but the filter selection
 
         // filterSplitPanel.addWest(stackPanel, Math.round(.3 * Window.getClientWidth()));
         // stackPanel = new StackLayoutPanel(Style.Unit.EM);
@@ -141,6 +148,14 @@ public class TransactionMonitorFilterWidget extends Composite {
             }
         });
 
+        eventBus.addHandler(ListenerStatusEvent.TYPE, new ListenerStatusEventHandler() {
+            @Override
+            public void onListenerStatus(ListenerStatusEvent event) {
+                updateListenerStatusIndicator(event.getListening());
+            }
+        });
+
+
         /*
         Use this for backend (fixed) filtering -- does not take on the fly updates to filter
 
@@ -154,7 +169,7 @@ public class TransactionMonitorFilterWidget extends Composite {
         */
 
 
-        stackPanel.add(getTxMonitorLive(), createPanelHeader("Proxy Monitor", createMonitorHeaderOptions(), null), HEADER_SIZE);
+                stackPanel.add(getTxMonitorLive(), createPanelHeader("", createMonitorHeaderOptions(), null), HEADER_SIZE);
 
         // filterSplitPanel.add(stackPanel);
 
@@ -164,28 +179,10 @@ public class TransactionMonitorFilterWidget extends Composite {
     private List<Widget> createCriteriaOptions() {
         List<Widget> options = new ArrayList<Widget>();
 
-        HTML optShowDetail = new HTML("Activate");
-        optShowDetail.setStyleName("roundedButton1");
-        optShowDetail.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                getTxMonitorLive().setFilterEnabled(true);
-            }
-        });
+        options.add(new HTML("<span style=\"width:32px;height:32px;\"><img border=0 height=16 width=16 src='" + GWT.getModuleBaseForStaticFiles() + "images/code_colored"
+                +  ".png'/></span>"));
 
-        options.add(optShowDetail);
-
-        HTML optClear = new HTML("Clear");
-        optClear.setStyleName("roundedButton1");
-        optClear.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                filterHitCounter = 0;
-                getFilterCounterTxt().setText("");
-                getTxFilter().clear();
-            }
-        });
-        options.add(optClear);
+        options.add(new HTML("Message Filter"));
 
 
         return options;
@@ -193,6 +190,13 @@ public class TransactionMonitorFilterWidget extends Composite {
 
     private List<Widget> createFilterHeaderOptions() {
         List<Widget> options = new ArrayList<Widget>();
+
+        options.add(new HTML("<span style=\"width:32px;height:32px;\"><img border=0 height=16 width=16 src='" + GWT.getModuleBaseForStaticFiles() + "images/table2_selection_block"
+                +  ".png'/></span>"));
+
+        HTML headerText = new HTML("Filtered Messages");
+        headerText.getElement().getStyle().setWidth(TransactionMonitorWidget.MESSAGE_LEFT_MARGIN, Style.Unit.PX);
+        options.add(headerText);
 
         options.add(getTxFilter().getPager());
         options.add(getFilterCounterTxt());
@@ -224,8 +228,25 @@ public class TransactionMonitorFilterWidget extends Composite {
         return options;
     }
 
+    private void updateListenerStatusIndicator(Boolean on) {
+        String statusImg = (on ? "ok" : "error");
+        getListenerStatusIndicator().setHTML(("<span style=\"width:32px;height:32px;\"><img height=16 width=16 src='" + GWT.getModuleBaseForStaticFiles() + "images/environment_"
+                + statusImg
+                + ".png'/></span>"));
+//        getListenerStatusIndicator().setText(statusImg);
+        getListenerStatusIndicator().setTitle(statusImg);
+
+    }
+
     private List<Widget> createMonitorHeaderOptions() {
         List<Widget> options = new ArrayList<Widget>();
+
+        options.add(getListenerStatusIndicator());
+
+        HTML headerText = new HTML("Proxy Monitor");
+        headerText.getElement().getStyle().setWidth(TransactionMonitorWidget.MESSAGE_LEFT_MARGIN, Style.Unit.PX);
+        options.add(headerText);
+
 
         options.add(getTxMonitorLive().getPager());
 
@@ -283,8 +304,8 @@ public class TransactionMonitorFilterWidget extends Composite {
 
 
 
-    private TransactionMonitorWidget createLiveTxMonitorWidget() {
-        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus,true /*enableListener*/,false /*enable Filter, automatically set when filter is applied*/ , false/*showDetail*/);
+    private TransactionMonitorAdvancedWidget createLiveTxMonitorWidget() {
+        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus,true /*enableListener*/,false /*enable Filter, automatically set when filter is applied*/ , false/*showDetail*/);
         txMonitor.setAutoShowFirstMessage(false);
         txMonitor.getElement().getStyle()
                 .setProperty("border", "none");
@@ -305,11 +326,13 @@ public class TransactionMonitorFilterWidget extends Composite {
             hPanel.add(new Image(icon));
         }
 
-        HTML headerText = new HTML(text + "&nbsp;");
+        if (text!=null && !"".equals(text)) {
+            HTML headerText = new HTML(text + "&nbsp;");
 
-        headerText.setStyleName("cw-StackPanelHeader");
-        headerText.getElement().getStyle().setWidth(TransactionMonitorWidget.MESSAGE_LEFT_MARGIN, Style.Unit.PX);
-        hPanel.add(headerText);
+            headerText.setStyleName("cw-StackPanelHeader");
+            headerText.getElement().getStyle().setWidth(TransactionMonitorWidget.MESSAGE_LEFT_MARGIN, Style.Unit.PX);
+            hPanel.add(headerText);
+        }
 
         if (options!=null)
             for (Widget w: options) {
@@ -385,7 +408,7 @@ public class TransactionMonitorFilterWidget extends Composite {
                 }
 
                 public void onSuccess(Boolean hit) {
-                    logger.info("entering searchHit...");
+                    logger.fine("entering searchHit...");
                     /*
                     Following filtering scenarios where all related messages need to be displayed
                     1) Request and Response both match some criteria
@@ -393,45 +416,41 @@ public class TransactionMonitorFilterWidget extends Composite {
                     3) Response match but not Request, in this case Request only exists in the live section but not the filtered section
 
                      */
+                    String parentId = anMap.get("header").getParentId();
+                    Boolean filteredBundleLoaded = getTxFilter().isTxMessageBundleLoaded(parentId);
                     if (hit) {
-                        logger.info("searchHit!");
+                        logger.fine("searchHit!");
                         anMap.get("header").getExtendedProps().put("frontendSearchHit", "yes");
-                        //resultPanel.add(new HTML("hit "+idx));
-                        //getTxFilter().setTxRowParentId(getTxMonitorLive().getTxRowParentId());
-                        //getTxFilter().setTxRowAssetNode(getTxMonitorLive().getTxRowAssetNode());
-                        //Map<String,AssetNode> anMap = getTxMonitorLive().getTxRowAssetNode().get(new Integer(idx));
-                        //resultPanel.add(new HTML("---"+ (anList==null) + " " + getTxMonitorLive().getTxRowAssetNode().size()));
-//                        if (getTxFilter().popTx(anMap)) {
-                            // no longer needed with built-in pager control
-                            // getFilterCounterTxt().setText("("+ (++filterHitCounter) + ")");
-//                        }
-//                        int idx = getTxFilter().findMatchingPairIdx(anMap.get("header"));
-//                        int mainIdx = getTxMonitorLive().findMatchingPairIdx(anMap.get("header"));
-
-                        Map<String,AssetNode> matchingPairInFilteredSection = getTxFilter().findMatchingPair(anMap.get("header"));
-                        Map<String,AssetNode> matchingPairInLiveSection = getTxMonitorLive().findMatchingPair(anMap.get("header"));
 
 
-                        if (matchingPairInFilteredSection!=null) { // likely to be a response with a request already in filtered section
+                        Boolean liveBundleLoaded = getTxMonitorLive().isTxMessageBundleLoaded(parentId);
+
+
+                        if (filteredBundleLoaded) { // likely to be a response with a request already in filtered section
                             // case #1
                             logger.info("case #1-a");
                             getTxFilter().popTx(anMap,null);
-                        } else if (matchingPairInFilteredSection==null && matchingPairInLiveSection==null) { // likely to be the initial request
+                        } else if (!filteredBundleLoaded && !liveBundleLoaded) { // likely to be the initial request
                             // case #1
                             logger.info("case #1-b");
                             getTxFilter().popTx(anMap,null);
-                        } else if (matchingPairInFilteredSection==null && matchingPairInLiveSection!=null) { // likely to be a response with a request not in filtered section
+                        } else if (!filteredBundleLoaded && liveBundleLoaded) { // likely to be a response with a request not in filtered section
                             // case #3
                             logger.info("case #3");
-                            getTxFilter().popTx(matchingPairInLiveSection,anMap);
+                            getTxFilter().popTx(getTxMonitorLive().getAnMap(parentId,"request"),anMap);
                         }
 
                     } else {
                         logger.info("case: Not hit!");
                         // case #2 likely to be a response without match but request matches
                         //int idx = getTxFilter().findMatchingPairIdx(anMap.get("header"));
-                        Map<String,AssetNode> matchingPair = getTxFilter().findMatchingPair(anMap.get("header"));
-                        logger.info("non-matching message, see if other part is matching: " + ((matchingPair==null)?matchingPair.get("header").getParentId():"null"));
+                        Map<String,AssetNode> matchingPair =  null;
+                        try {
+                            matchingPair  = getTxFilter().getAnMap(parentId,"request"); //  getTxFilter().findMatchingPair(anMap.get("header"));
+                            logger.fine("non-matching message, see if other part is matching: " + ((matchingPair!=null)?matchingPair.get("header").getParentId():"null"));
+                        } catch (Throwable t) {
+                            logger.info(t.toString());
+                        }
                         //int mainIdx = getTxMonitorLive().findMatchingPairIdx(anMap.get("header"));
                         //if ("yes".equals(getTxFilter().getRowMap(idx).get("header").getExtendedProps().get("frontendSearchHit"))) {
                         if (matchingPair!=null) {
@@ -443,7 +462,7 @@ public class TransactionMonitorFilterWidget extends Composite {
 //                            }
                     }
                 }
-                    logger.info("leaving searchHit");
+                    logger.fine("leaving searchHit");
             }});
 
 
@@ -462,19 +481,19 @@ public class TransactionMonitorFilterWidget extends Composite {
 
 
 
-    public TransactionMonitorWidget getTxMonitorLive() {
+    public TransactionMonitorAdvancedWidget getTxMonitorLive() {
         return txMonitorLive;
     }
 
-    public void setTxMonitorLive(TransactionMonitorWidget txMonitorLive) {
+    public void setTxMonitorLive(TransactionMonitorAdvancedWidget txMonitorLive) {
         this.txMonitorLive = txMonitorLive;
     }
 
-    public TransactionMonitorWidget getTxFilter() {
+    public TransactionMonitorAdvancedWidget getTxFilter() {
         return txFilter;
     }
 
-    public void setTxFilter(TransactionMonitorWidget txFilter) {
+    public void setTxFilter(TransactionMonitorAdvancedWidget txFilter) {
         this.txFilter = txFilter;
     }
 
@@ -499,6 +518,13 @@ public class TransactionMonitorFilterWidget extends Composite {
 
     public void setSouthStackPanel(Widget southStackPanel) {
         this.southStackPanel = southStackPanel;
+    }
+    public HTML getListenerStatusIndicator() {
+        return listenerStatusIndicator;
+    }
+
+    public void setListenerStatusIndicator(HTML listenerStatusIndicator) {
+        this.listenerStatusIndicator = listenerStatusIndicator;
     }
 
 }

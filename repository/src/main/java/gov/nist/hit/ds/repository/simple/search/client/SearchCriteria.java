@@ -1,10 +1,10 @@
 package gov.nist.hit.ds.repository.simple.search.client;
 
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 /*
 	 All Search criteria constructions are based on bottom-up approach.
@@ -64,6 +64,28 @@ public class SearchCriteria implements IsSerializable, Serializable {
 		// sc.setId(this.searchCriteria.size());
 		this.searchCriteria.add(sc);
 	}
+
+    public String[] findPropertyValue(String propertyKey, SearchTerm.Operator op) {
+        ArrayList<String> values = new ArrayList<String>();
+        for (SearchTerm st: getSearchTerms()) {
+            if (st.getPropName()!=null && st.getPropName().equals(propertyKey)) {
+                if (st.getOperator()!=null && st.getOperator().equals(op)) {
+                    for (String s : st.getValues()) {
+                        values.add(s);
+                    }
+                }
+            }
+        }
+        if (getSearchCriteria()!=null) {
+            for (SearchCriteria sc : getSearchCriteria()) {
+                String valueArray[] = sc.findPropertyValue(propertyKey, op);
+                for (String s : valueArray) {
+                    values.add(s);
+                }
+            }
+        }
+        return values.toArray(new String[values.size()]);
+    }
 	
 	@Override
 	public String toString() {

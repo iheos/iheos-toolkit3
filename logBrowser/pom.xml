@@ -140,12 +140,12 @@
           <!-- URL that should be automatically opened in the GWT shell (gwt:run). -->
           <runTarget>logBrowser.html</runTarget>
           <!-- Ask GWT to create the Story of Your Compile (SOYC) (gwt:compile) -->
-          <compileReport>true</compileReport>
+          <compileReport>false</compileReport>
           <module>gov.nist.hit.ds.logBrowser.LogBrowser</module>
           <logLevel>INFO</logLevel>
           <style>${gwt.style}</style>
-
           <copyWebapp>true</copyWebapp>
+          <!-- <genParam>true</genParam> -->
         </configuration>
       </plugin>
 
