@@ -53,7 +53,7 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 
 public class TransactionMonitorAdvancedWidget extends Composite {
-    public static final int CELLTABLE_PAGE_SIZE = 100;
+    public static final int CELLTABLE_PAGE_SIZE = 60;
     /**
 	 *
 	 * @author Sunil.Bhaskarla
@@ -164,10 +164,10 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             logger.finest("good connection");
             eventBus.fireEvent(new ListenerStatusEvent(getListening()));
             popTx(anMap,null);
+            getTxTable().redraw();
             if (getListenerEnabled()) {
                 activateListener();
             }
-            getTxTable().redraw();
         }
     };
 
@@ -177,9 +177,9 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         Boolean filteredMessage = false;
         if (anMap==null) {
             logger.finest("Null assetNode: timeout or bad tx message?");
-            if (dialogBox.isShowing()) {
-                dialogBox.hide();
-            }
+//            if (dialogBox.isShowing()) {
+//                dialogBox.hide();
+//            }
         } else {
             logger.fine("Got an empty message? " + anMap.isEmpty());
             logger.fine("sz:"+anMap.size());
@@ -201,7 +201,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                                 appendData(anMapRelated);
 //                                txTable.redraw();
                             }
-                            txTable.redraw();
+
 
                             // old: Manage the event with the parent loc for immediate indexing
 
@@ -243,6 +243,10 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
         }
 
+        if (!getListenerEnabled()) {
+            txTable.redraw();
+        }
+
 
         logger.fine("leaving popTx " + ((getListenerEnabled()) ? "Live" : "Bypass)"));
         return Boolean.TRUE;
@@ -262,6 +266,12 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         // All composites must call initWidget() in their constructors.
 	     initWidget(setupMonitor());
 
+
+        if (getListenerEnabled() && (!getFilterEnabled() || (getFilterEnabled() && getFilterLocation()!=null))) {
+            activateListener();
+        }
+
+
         Window.addResizeHandler(new ResizeHandler() {
             @Override
             public void onResize(ResizeEvent event) {
@@ -270,10 +280,6 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
             }
         });
-
-        if (getListenerEnabled() && (!getFilterEnabled() || (getFilterEnabled() && getFilterLocation()!=null))) {
-            activateListener();
-        }
     }
 
     private boolean activateListener() {
@@ -291,25 +297,32 @@ public class TransactionMonitorAdvancedWidget extends Composite {
     }
 
     private void resizeMessageDetailArea() {
+        logger.fine("entering resizeMessageDetailArea");
         try {
-            long containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
-            long containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
+            if (txMonitorMainSplitPanel.getParent()!=null) {
+                logger.info("resizing...");
+                long containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
+                long containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
 
-            long messageDetailViewerHeight = getMessageDetailHeight(containerHeight);
-            txMonitorMainSplitPanel.setWidgetSize(southPanel, messageDetailViewerHeight);
-            southPanel.setWidgetSize(requestViewerWidget, Math.round(.5 * containerWidth));
+                long messageDetailViewerHeight = getMessageDetailHeight(containerHeight);
+                txMonitorMainSplitPanel.setWidgetSize(southPanel, messageDetailViewerHeight);
+                southPanel.setWidgetSize(requestViewerWidget, Math.round(.5 * containerWidth));
+            } else {
+                logger.info("parent is " + (txMonitorMainSplitPanel.getParent()==null) + " or no detail showing:  detail: " + getShowTxDetail());
+            }
 
-
-        } catch (Exception ex) {
-            logger.warning("Window resize failed:" + ex.toString());
+        } catch (Throwable t) {
+            logger.warning("Window resize failed:" + t.toString());
+//            t.printStackTrace();
         }
 
         try {
-            getTxTable().onResize();
-            getTxTable().redraw();
+//            getTxTable().onResize();
+//            getTxTable().redraw();
         } catch (Throwable t) {
             ;
         }
+        logger.fine("leaving resizeMessageDetailArea");
     }
 
     private long getMessageDetailHeight(long containerHeight) {
@@ -326,7 +339,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             logger.fine("empty anMap");
             return false;
         }
-        logger.fine("entering appendData" + anMap.get("header").getLocation());
+        logger.info("entering appendData" + anMap.get("header").getLocation());
         logger.fine("contains filtered message? " + (anMap.get("header").getExtendedProps().containsKey("searchHit")));
         try {
 
@@ -342,10 +355,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                 logger.fine("preparing new message bundle");
                 newBundle = true;
                 txMessageBundle = new TxMessageBundle();
-                if (rowList.isEmpty())
-                    txMessageBundle.setKey(0);
-                else
-                    txMessageBundle.setKey(rowList.size()-1);
+                txMessageBundle.setKey(rowList.size());
 
                 txMessageBundle.setParentId(parentId);
                 txMessageBundle.setPath(txRow.getCsvData().get(7));
@@ -356,26 +366,29 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             }
 
 
-            if ("raw_REQUEST".equals(anMap.get("header").getType())) {
-                txMessageBundle.getMessageDetailMap().put("request",txRow);
-            } else if ("raw_RESPONSE".equals(anMap.get("header").getType())) {
-                txMessageBundle.getMessageDetailMap().put("response",txRow);
-            }
+            String anType = anMap.get("header").getType();
+            if (anType!=null)
+                if (anType.indexOf("REQUEST")>-1) {
+                    txMessageBundle.getMessageDetailMap().put("request",txRow);
+                } else if (anType.indexOf("RESPONSE")>-1) {
+                    txMessageBundle.getMessageDetailMap().put("response",txRow);
+                }
 
 
             if (newBundle) {
-                logger.fine("adding new message bundle");
+                logger.info("adding new message bundle :" + anType);
                 rowList.add(txMessageBundle);
             }
 
 
         } catch (Exception ex) {
-            Window.alert(ex.toString());
+//            Window.alert(ex.toString());
             logger.warning(ex.toString());
             return false;
         } finally {
             if (dataProvider!=null && dataProvider.getList()!=null) {
                 dataProvider.flush();
+                dataProvider.refresh();
 //                txTable.redraw();
             }
         }
@@ -1065,9 +1078,9 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 //                        List<TxDetailRow> rowList = dataProvider.getList();
 //                        TxDetailRow row = rowList.get(selectedIndex);
 //                        row.getCsvData().set(0,"X");
-
-                        if (dataProvider.getList().size()==1)
-                            return;
+//
+//                        if (dataProvider.getList().size()==1)
+//                            return;
 
                         // Find matching pair if it exists
                         //int matchingPairIdx = findMatchingPairIdx(an,selectedIndex);
@@ -1191,7 +1204,16 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                     }
                 } else if (COLUMN_HEADER_SEARCH_HIT_IND.equals(columns[this.index])) {
                     if (!getListenerEnabled() && "yes".equals(headerMsg.getExtendedProps().get("frontendSearchHit"))) {
+//                        String criteria = headerMsg.getExtendedProps().get("frontendSearchHitCriteria");
+
                         shb.appendHtmlConstant("<span style=\"width:32px;height:32px;\"><img height=8 width=8 src='" + GWT.getModuleBaseForStaticFiles() + "images/bullet_ball_glass_green.png'/></span>");
+
+                        /*
+                        if (criteria!=null) {
+                            shb.appendEscaped(criteria);
+                        } */
+
+
                     } else
                         shb.appendHtmlConstant("<span style=\"width:32px;height:32px;\">&nbsp;</span>");
                 } else {

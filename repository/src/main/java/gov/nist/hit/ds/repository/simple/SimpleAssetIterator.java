@@ -26,6 +26,9 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
     private ArtifactId repositoryId = null;
     private boolean[] selections = null;
     private Type type = null;
+
+
+    private String time = null;
 	private Repository repository;
 
     private static Logger logger = Logger.getLogger(SimpleAssetIterator.class.getName());
@@ -56,6 +59,17 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		
 		assetFileNames = fList.toArray(new File[fList.size()]);				
 	}
+
+    public SimpleAssetIterator(Repository repos, String time) throws RepositoryException {
+        setRepository(repos);
+        this.repositoryId = repos.getId();
+        this.time = time;
+        // reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());
+        reposDir = repos.getRoot();
+        List<File> fList = setupList(reposDir);
+
+        assetFileNames = fList.toArray(new File[fList.size()]);
+    }
 	
 	private List<File> setupList(File dir) {		
  		ArrayList<File> af = new ArrayList<File>();
@@ -177,22 +191,41 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		if (f.isDirectory()) return true; // Look for child assets
 		if (f.isFile() && !name.endsWith(Configuration.PROPERTIES_FILE_EXT)) return false;  // not an asset property file
 		// parent restriction?
-		if (type == null) return true;    // no type restriction
+
+        /* TODO: work this out later because the precision in use by sdf may not be enough
+        if (time == null) {
+            return true;    // no time restriction
+        } else {
+
+            SimpleDateFormat sdf = new SimpleDateFormat(Hl7Date.parseFmt);
+
+            String assetLastModifiedDate = sdf.format(f.lastModified());
+            if (assetLastModifiedDate.compareTo(time)<0) {
+                return false;
+
+        }
+        */
+
+		if (type == null) {
+            return true;    // no type restriction
+        } else {
 		// Id assetId = Configuration.getAssetIdFromFilename(name);
 		
-		try {			
-			// This should not be required because the filename is already available for direct loading purposes
-			// SimpleAsset a =  (SimpleAsset) getRepository().getAsset(assetId);
-			
-			Asset a =  getRepository().getAssetByPath(new File(dir + File.separator + name));
-			
-			String aTypeStr = a.getProperty("type");
-			Type aType = new SimpleType(aTypeStr);
-			return type.isEqual(aType);
-		} catch (RepositoryException e) {
-			System.out.println(ExceptionUtil.exception_details(e));
-		}
-		return false;
+            try {
+                // This should not be required because the filename is already available for direct loading purposes
+                // SimpleAsset a =  (SimpleAsset) getRepository().getAsset(assetId);
+
+                Asset a =  getRepository().getAssetByPath(new File(dir + File.separator + name));
+
+                String aTypeStr = a.getProperty("type");
+                Type aType = new SimpleType(aTypeStr);
+                return type.isEqual(aType);
+            } catch (RepositoryException e) {
+                System.out.println(ExceptionUtil.exception_details(e));
+            }
+        }
+        return false;
+
 	}
 
 	/**
@@ -222,6 +255,13 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		else
 			return -1;
 	}
-	
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
 
 }
