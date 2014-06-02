@@ -208,6 +208,9 @@ public class MiscTest {
 
     @Test
     public void concMapTest() {
+
+        System.out.println("parse out:" + Boolean.parseBoolean(null));
+
         ConcurrentHashMap<String, AtomicBoolean> reposIndexMap = new ConcurrentHashMap<String, AtomicBoolean>();
         try {
             reposIndexMap.put("repos1", new AtomicBoolean(Boolean.TRUE));

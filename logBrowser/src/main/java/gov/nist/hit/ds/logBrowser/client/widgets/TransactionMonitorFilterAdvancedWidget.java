@@ -7,16 +7,17 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -229,12 +230,22 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
     }
 
     private void updateListenerStatusIndicator(Boolean on) {
-        String statusImg = (on ? "ok" : "error");
+        String statusImg;
+        String statusImgText;
+
+        if (on) {
+            statusImg = "ok";
+            statusImgText = "Ready to receive messages from the proxy";
+        } else {
+            statusImg = "error";
+            statusImgText = "Cannot receive messages from the proxy: Is the FFMQ service running?";
+        }
+
         getListenerStatusIndicator().setHTML(("<span style=\"width:32px;height:32px;\"><img height=16 width=16 src='" + GWT.getModuleBaseForStaticFiles() + "images/environment_"
                 + statusImg
                 + ".png'/></span>"));
 //        getListenerStatusIndicator().setText(statusImg);
-        getListenerStatusIndicator().setTitle(statusImg);
+        getListenerStatusIndicator().setTitle(statusImgText);
 
     }
 
@@ -341,8 +352,23 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
             }
 
 
-        return new SimplePanel(hPanel); // This wrapper will span out fully to 100% width
+        FocusPanel spStackHeaderWrapper = new FocusPanel(hPanel); // This wrapper will span out fully to 100% width
+        spStackHeaderWrapper.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
 
+                Timer timer = new Timer() {
+                    public void run() {
+                        logger.finest("attempting to redraw in case of the resize causing table to disappear bug");
+                        getTxMonitorLive().getTxTable().redraw();
+                    }
+                };
+                timer.schedule(500); // Stack panel should be expanded/restored by now
+
+//                getTxMonitorLive().getTxTable().onResize();
+            }
+        });
+        return spStackHeaderWrapper;
     }
 
     /*
@@ -421,6 +447,12 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
                     if (hit) {
                         logger.fine("searchHit!");
                         anMap.get("header").getExtendedProps().put("frontendSearchHit", "yes");
+
+//                        logger.info("*** " + criteria.toString());
+                        /*
+                        if (criteria!=null && criteria.toString()!=null && criteria.toString().indexOf("where")>-1) {
+                            anMap.get("header").getExtendedProps().put("frontendSearchHitCriteria", criteria.toString() .substring(criteria.toString().indexOf("where")));
+                        } */
 
 
                         Boolean liveBundleLoaded = getTxMonitorLive().isTxMessageBundleLoaded(parentId);

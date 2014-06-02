@@ -61,13 +61,14 @@ public class DbIndexContainer implements IndexContainer, Index {
 	private static final String parentId = PnIdentifier.getQuotedIdentifer(PropertyKey.PARENT_ID);
 	private static final String createdDate =  PnIdentifier.getQuotedIdentifer(PropertyKey.CREATED_DATE);
 	private static final String hash = PropertyKey.HASH.toString();
+    private static final String lastAccessTime = PropertyKey.LAST_ACCESS_TIME.toString();
 	private static final String reposAcs = PropertyKey.REPOSITORY_ACCESS.toString();
 	private static final String indexSession = PropertyKey.INDEX_SESSION.toString();
 
     private static final String[] commonAssetPropertyIndex = {assetId,locationId,assetType,repId,displayOrder,parentId,createdDate,hash,reposAcs,indexSession}; // Transform to an enum as needed in future
 	
 	private static final String CACHED_SESSION = "CACHED";
-	private static final String CONTAINER_VERSION = "2014-03-13";
+	private static final String CONTAINER_VERSION = "2014-05-29";
 	private static final String CONTAINER_VERSION_ID = "VERSION";
 	private static final String BYPASS_VERSION = "BYPASS";
 
@@ -85,13 +86,14 @@ public class DbIndexContainer implements IndexContainer, Index {
 	+ repId + " varchar(128) not null,"								/* This is the repository Id as it appears on the filesystem */
 	+ assetId + " varchar(512)," /* */								/* This is the asset Id of the asset under the repository folder */
 	+ createdDate + " varchar(32)," 								/* Asset created date */
-	+ locationId + " varchar(1024),"									/* This is the file path */
+	+ locationId + " varchar(1024),"								/* This is the file path */
 	+ parentId +  " varchar(512),"									/* The parent asset Id. A null-value indicates top-level asset and no children */
 	+ assetType + " varchar(32)," 									/* Asset type - usually same as the keyword property */ 
-	+ hash + " varchar(64),"											/* (Internal use) The hash of the property file */
-	+ reposAcs + " varchar(40),"										/* (Internal use) src enum string */	
+	+ hash + " varchar(64),"										/* (Internal use) The hash of the property file */
+    + lastAccessTime + " varchar(64),"							/* (Internal use) The last access or index time */
+	+ reposAcs + " varchar(40),"									/* (Internal use) src enum string */
 	+ displayOrder + " int,"         						    	/* This is a reserved keyword for sorting purpose */
-	+ indexSession +" varchar(64))";									/* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */				
+	+ indexSession +" varchar(64))";								/* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */
 
 	/**
 	 * Index a repository on the file system. This wrapper method eventually calls an internal method that uses two internal logical data sets to identify assets that are to be indexed, refreshed, or marked as stale.  
@@ -106,7 +108,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @return An int value of the number of assets updated or added to the database
 	 * @throws RepositoryException
 	 */
-	public int indexRep(Repository repos, boolean indexNewAssetsOnly, String[] locations) throws RepositoryException {
+	public int indexRep(Repository repos, boolean indexOnlyNewAssets, String[] locations) throws RepositoryException {
 		SimpleAssetIterator iter = null;
 
 		if (repos==null || repos.getId()==null) {
@@ -172,8 +174,13 @@ public class DbIndexContainer implements IndexContainer, Index {
                         return -1;
                     }
 
-                    if (indexNewAssetsOnly) {
-                            totalAssetsIndexed = appendIndex(repos, iter);
+                    String indexOnlyNewPropertyValue = null;
+                    if (repos.getProperties()!=null)
+                       indexOnlyNewPropertyValue = (String)repos.getProperties().get("indexOnlyNewItems");
+
+                    if (indexOnlyNewAssets || Boolean.parseBoolean(indexOnlyNewPropertyValue)) {
+                           // totalAssetsIndexed = appendIndex(repos, iter);
+                        totalAssetsIndexed = indexOnlyNewAssets(repos,iter);
                     } else {
                         totalAssetsIndexed = indexRepository(repos, iter);
                     }
@@ -297,6 +304,52 @@ public class DbIndexContainer implements IndexContainer, Index {
         return totalAssetsIndexed;
     }
 
+    /**
+     * Forward only index: A quick indexing method
+     * Indexes only new content without verifying previous content
+     */
+    private int indexOnlyNewAssets(Repository repos, SimpleAssetIterator iter) throws  RepositoryException {
+        logger.fine("Entering indexOnlyNewAssets");
+        if (repos==null) {
+            logger.finest("Repos is null");
+            return -1;
+        }
+
+
+        Map<String, String> unIndexed = new HashMap<String,String>();
+        Map<String, String> reposDbIndex = getIndexedHash(repos);
+        Map<String, Asset> unIndexedAsset = new HashMap<String,Asset>();
+        List<String> aList = new ArrayList<String>();
+        int totalAssetsIndexed = 0;
+
+        if (iter!=null && iter.hasNextAsset()) {
+            Asset a = iter.nextAsset();
+
+            String key = a.getPropFileRelativePart();
+
+            if (!reposDbIndex.containsKey(key)) {
+                unIndexed.put(key,getAssetPropertyHash(a));
+                unIndexedAsset.put(key, a);
+                aList.add(key);
+            }
+
+            if (!unIndexed.isEmpty()) {
+                beginIndexing(repos, unIndexed, unIndexedAsset, aList);
+                totalAssetsIndexed++;
+            } else {
+                logger.fine("Nothing new to index in repos: " + repos.getDisplayName() + " Id: " + repos.getId());
+            }
+
+        }
+
+        String previousTime = getReposDbIndexProperties(repos)[2];
+        logger.fine("previousTime: " + previousTime);
+//        setReposTime(repos, new Hl7Date().now(), previousTime != null);
+
+
+        logger.fine("Leaving indexOnlyNewAssets");
+        return totalAssetsIndexed;
+    }
 
 	/**
 	 * Full indexing method
@@ -306,14 +359,16 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @throws RepositoryException
 	 */
 	private int indexRepository(Repository repos, SimpleAssetIterator iter) throws RepositoryException {
-        if (repos==null) return -1;
+        if (repos==null) {
+            logger.finest("Repos is null");
+            return -1;
+        }
 
 		int totalAssetsIndexed = 0;
 		String reposId = repos.getId().getIdString();
 		boolean repositorySynced = false;
 		Map<String, String> unIndexed = new HashMap<String,String>();
 		Map<String, Asset> unIndexedAsset = new HashMap<String,Asset>();
-
 		List<String> aList = new ArrayList<String>();
 		
 		if (iter!=null && iter.hasNextAsset()) {
@@ -326,7 +381,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 				Map<String, String> reposFsIndex = new HashMap<String,String>();
 				String fullIndex = getFsHash(repos, iter, assetMap, reposFsIndex);								
 				
-				String[] reposData = getReposHash(repos);
+				String[] reposData = getReposDbIndexProperties(repos);
 				if (fullIndex!=null && !"".equals(fullIndex)) {
 					if (reposData != null) {
 						if (fullIndex.equals(reposData[1])) {
@@ -383,62 +438,66 @@ public class DbIndexContainer implements IndexContainer, Index {
 		if (repositorySynced) {
 			logger.fine("Repos Id <" + reposId + "> is already synced.");
 		} else {
-			ExecutorService svc = Executors.newCachedThreadPool();
-
-			int batchSz = 27;
-			int sz = aList.size();
-			
-			if (sz>=1000) {
-				batchSz += new Double(aList.size() * .0055).intValue(); // Use a .55% Load index on top of the base size 	
-			} 
-			
-			if (batchSz>=150) { // Set upper limit on batch size 
-				batchSz = 150;				
-			}
-			
-			if (sz/batchSz>=100) { // Set upper limit if exceeds high range
-				batchSz = sz/100;
-			}
-			
-			logger.fine("**** batch size: " + batchSz);
-			
-			if (sz >batchSz) {
-				int start = 0;
-				int end = batchSz;
-
-				int cx = 0;
-				while (end <= sz) {
-					logger.fine("running indexer thread " + cx++);
-					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, end), unIndexed, unIndexedAsset)));
-					start += batchSz;
-					end +=batchSz;
-				}
-				
-				if (end>sz) {
-					svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, sz), unIndexed, unIndexedAsset)));
-				}
-					
-					
-			} else {
-				svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset)));
-			}
-			
-			svc.shutdown();
-			boolean svcStatus = false;
-			try {
-				svcStatus = svc.awaitTermination(15,TimeUnit.MINUTES);
-			} catch (InterruptedException e) {
-				logger.warning("svc termination failed!");
-			} 
-			
-			logger.info("indexer svc exit status: " + svcStatus);
+            beginIndexing(repos, unIndexed, unIndexedAsset, aList);
 		}
 		
 		return totalAssetsIndexed;
 
 	}
-	
-	/**
+
+    private void beginIndexing(Repository repos, Map<String, String> unIndexed, Map<String, Asset> unIndexedAsset, List<String> aList) throws RepositoryException {
+        ExecutorService svc = Executors.newCachedThreadPool();
+
+        int batchSz = 27;
+        int sz = aList.size();
+
+        if (sz>=1000) {
+            batchSz += new Double(aList.size() * .0055).intValue(); // Use a .55% Load index on top of the base size
+        }
+
+        if (batchSz>=150) { // Set upper limit on batch size
+            batchSz = 150;
+        }
+
+        if (sz/batchSz>=100) { // Set upper limit if exceeds high range
+            batchSz = sz/100;
+        }
+
+        logger.fine("**** batch size: " + batchSz);
+
+        if (sz >batchSz) {
+            int start = 0;
+            int end = batchSz;
+
+            int cx = 0;
+            while (end <= sz) {
+                logger.fine("running indexer thread " + cx++);
+                svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, end), unIndexed, unIndexedAsset)));
+                start += batchSz;
+                end +=batchSz;
+            }
+
+            if (end>sz) {
+                svc.execute(new Thread(new IndexerThread(repos, aList.subList(start, sz), unIndexed, unIndexedAsset)));
+            }
+
+
+        } else {
+            svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset)));
+        }
+
+        svc.shutdown();
+        boolean svcStatus = false;
+        try {
+            svcStatus = svc.awaitTermination(15, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            logger.warning("svc termination failed!");
+        }
+
+        logger.info("indexer svc exit status: " + svcStatus);
+    }
+
+    /**
 	 * @return Returns the index container definition String 
 	 */
 	@Override
@@ -1269,13 +1328,40 @@ public class DbIndexContainer implements IndexContainer, Index {
 		return true;
 	}
 
+    private boolean setReposTime(Repository repos, String time, boolean update) throws RepositoryException {
+        if (repos!=null) {
+            DbContext dbc = new DbContext();
+            try {
+                String reposId = repos.getId().getIdString();
+                String compositeId = reposId + "_" +  repos.getSource().getAccess().name();
+                dbc.setConnection(DbConnection.getInstance().getConnection());
+
+                if (update) {
+                    String sqlStr = "update "+ repContainerLabel + " set "+ lastAccessTime +" =? where " + DbIndexContainer.repId + "=? and indexSession=?";
+                    int rsData = dbc.executePrepared(sqlStr, new String[]{time, compositeId, CACHED_SESSION});
+                    logger.fine("rows affected" + rsData);
+                } else {
+                    String sqlStr = "insert into "+ repContainerLabel  +"("+ lastAccessTime +"," + DbIndexContainer.repId + ",indexSession) values(?,?,?)";
+                    int[] id = dbc.executePreparedId(sqlStr, new String[]{time, compositeId, CACHED_SESSION});
+                    logger.fine("Inserted time "  + lastAccessTime + " key "  + id[1] +  " for " + compositeId);
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
+            } finally {
+                dbc.close();
+            }
+        }
+        return true;
+    }
 
 	/**
 	 * 
 	 * @param repos
 	 * @return
 	 */
-	private String[] getReposHash(Repository repos) {
+	private String[] getReposDbIndexProperties(Repository repos) {
 		String[] rsData = null;
 		DbContext dbc = new DbContext();
 
@@ -1284,7 +1370,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			String compositeId = reposId + "_" +  repos.getSource().getAccess().name();			
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 
-			String sqlStr = "select repositoryIndexId,hash from " + repContainerLabel 
+			String sqlStr = "select repositoryIndexId,hash from " + repContainerLabel
 					+" where " + DbIndexContainer.repId + "=? and indexSession=?";
 							
 			ResultSet rs = dbc.executeQuery(sqlStr, new String[]{compositeId, CACHED_SESSION});

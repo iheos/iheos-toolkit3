@@ -66,8 +66,14 @@ public enum PropertyKey {
            public String toString() {
                return "indexSession";
            }
-       },       
-       LOCATION(true) {
+       },
+        LAST_ACCESS_TIME(true) {
+            @Override
+            public String toString() {
+                return "lastAccessTime";
+            }
+        },
+        LOCATION(true) {
            @Override
            public String toString() {
                return "location";
