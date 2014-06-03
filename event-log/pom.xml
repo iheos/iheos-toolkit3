@@ -1,0 +1,73 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>gov.nist.hit.ds</groupId>
+        <artifactId>core</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+	<relativePath>../pom.core.xml</relativePath>
+    </parent>
+
+    <groupId>gov.nist.hit.ds</groupId>
+    <version>3.0.0-SNAPSHOT</version>
+    <artifactId>event-log</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>utilities</artifactId>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>repository</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.ebxml</groupId>
+            <artifactId>ebxmlrr-common</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../lib/ebxmlrr-common-1.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+    </build>
+</project>
