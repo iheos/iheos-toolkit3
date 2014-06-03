@@ -16,4 +16,8 @@ public class ToolkitRuntimeException extends RuntimeException {
 	public ToolkitRuntimeException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
+
+    public ToolkitRuntimeException(Throwable cause) {
+        super(cause);
+    }
 }
