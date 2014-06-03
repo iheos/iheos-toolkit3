@@ -23,59 +23,90 @@ public class SearchTerm implements IsSerializable, Serializable {
     
    				
 	public static enum Operator {
-		EQUALTO() {
+		EQUALTO("equal to", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " = ";	
 			}
 		},
-		EQUALTOANY() {
-			@Override
-			public String toString() {
-				return " in ";	
-			}
-		},
-		NOTEQUALTO() {
+		NOTEQUALTO("not equal to", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " != ";	
 			}
 		},
-		NOTEQUALTOANY() {
-			@Override
-			public String toString() {
-				return " not in ";	
-			}
-		},		
-		LESSTHAN() {
+		LESSTHAN("less than", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " < ";	
 			}
 		},
-		LESSTHANOREQUALTO() {
+		LESSTHANOREQUALTO("less than or equal to", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " <= ";	
 			}
 		},
-		GREATERTHAN() {
+		GREATERTHAN("greater than", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " > ";	
 			}
 		},
-		GREATERTHANOREQUALTO() {
+		GREATERTHANOREQUALTO("greater than or equal to", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " >= ";	
 			}
-		},LIKE() {
+		},LIKE("like", Boolean.FALSE) {
 			@Override
 			public String toString() {
 				return " like ";	
 			}
+		},UNSPECIFIED("is unspecified", Boolean.FALSE) {
+			@Override
+			public String toString() {
+				return " is null ";	
+			}
+		},
+		// Keep multiple value operators always at the end because the ordinal is important 
+		EQUALTOANY("in any", Boolean.TRUE) {
+			@Override
+			public String toString() {
+				return " in ";	
+			}
+		},		
+		NOTEQUALTOANY("not equal to any", Boolean.TRUE) {
+			@Override
+			public String toString() {
+				return " not in ";	
+			}
 		};
+		
+    	private String displayName;
+    	private Boolean multipleValues;
+		
+		private Operator(String displayName, Boolean allowsMultipleValues) {
+			setDisplayName(displayName);
+			setMultipleValues(allowsMultipleValues);
+		}
+		
+		private void setDisplayName(String displayName) {
+			this.displayName = displayName;
+		}
+		
+		public String getDisplayName() {
+			return this.displayName;
+		}
+
+		public Boolean getMultipleValues() {
+			return multipleValues;
+		}
+
+		public void setMultipleValues(Boolean multipleValues) {
+			this.multipleValues = multipleValues;
+		}
+		
 	}
     
     
@@ -83,7 +114,11 @@ public class SearchTerm implements IsSerializable, Serializable {
 	
 	public SearchTerm(PropertyKey key, Operator op, String[] values) {
 		super();
-		setPropName(key.toString());
+		if (key.isInternalUseOnly()) {
+			setPropName(key.toString());
+		} else {
+			setPropNameQuoted(key.toString());
+		}
 		this.operator = op;
 		this.values = values;
 
@@ -91,24 +126,29 @@ public class SearchTerm implements IsSerializable, Serializable {
 	
 	public SearchTerm(PropertyKey key, Operator op, String value) {
 		super();
-		setPropName(key.toString());
+		if (key.isInternalUseOnly()) {
+			setPropName(key.toString());
+		} else {
+			setPropNameQuoted(key.toString());
+		}
 		this.operator = op;
 		this.values = new String[]{value};
 	}
 	
 	public SearchTerm(String propName, Operator op, String[] values) {
 		super();
-		setPropName(propName);
+		setPropNameQuoted(propName);
 		this.operator = op;
 		this.values = values;
 	}
 	
 	public SearchTerm(String propName, Operator op, String value) {
 		super();
-		setPropName(propName);
+		setPropNameQuoted(propName);
 		this.operator = op;
 		this.values = new String[]{value};
-	}	
+	}
+		
 	
 	public String getAssetType() {
 		return assetType;
@@ -116,20 +156,15 @@ public class SearchTerm implements IsSerializable, Serializable {
 	public void setAssetType(String assetType) {
 		this.assetType = assetType;
 	}
-	public String getDbPropName() {
-		
-		
-		
-		if (!PnIdentifier.uniquePropertyColumn) {
-			return PnIdentifier.getQuotedIdentifer(propName);
-		} else {
-			return propName;
-		}
-		
-	}
+
 	public String getPropName() {		
 		return propName;
 	}
+	
+	public void setPropNameQuoted(String propName) {
+		setPropName(PnIdentifier.getQuotedIdentifer(propName));
+	}
+	
 	public void setPropName(String propName) {		
 		this.propName = propName; // Preserve case as the getProperty method is case sensitive
 	}
@@ -155,17 +190,29 @@ public class SearchTerm implements IsSerializable, Serializable {
 	
 	@Override
 	public String toString() {
+
+		String propName = getPropName();
 		
-		if (Operator.EQUALTOANY.equals(getOperator())) {
-			return getDbPropName() + getOperator().toString() + getValueAsCsv();
-		}
+		if (Operator.EQUALTOANY.equals(getOperator())
+			|| Operator.NOTEQUALTOANY.equals(getOperator())) {
+			return propName + getOperator().toString() + getValueAsCsv();
+		} 
 		
-		String propName = getDbPropName();
 		if (null == values[0]) {
-			return propName + "is null ";
+			return propName + " is null ";
+		} else if (Operator.UNSPECIFIED.equals(getOperator())) {
+			return propName + getOperator().toString();
 		} else {
-			return propName + getOperator().toString() + "'" + values[0] + "' "; 
+			return propName + getOperator().toString() + "'" + safeValue(values[0]) + "' "; 
 		}		
+	}
+	
+	private String safeValue(String userInput) {
+		if (userInput!=null && !"".equals(userInput)) {
+			String safeStr = userInput.replaceAll("'", "");
+			return safeStr.replaceAll("\"", "");			
+		}
+		return userInput;
 	}
 	
 	private String getValueAsCsv() {
@@ -173,7 +220,7 @@ public class SearchTerm implements IsSerializable, Serializable {
 		int valueLen =  getValues().length;
 		
 		for (int cx=0; cx<valueLen; cx++) {
-			csv += "'" + values[cx] + "'" + ((cx<valueLen-1) ?",":"");
+			csv += "'" + safeValue(values[cx]) + "'" + ((cx<valueLen-1) ?",":"");
 		}
 		return "(" + csv + ")";
 	}

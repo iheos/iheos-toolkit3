@@ -8,7 +8,6 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
@@ -58,7 +57,7 @@ public class AssetHelper {
 
 		SimpleRepository repos = new SimpleRepository(a.getRepository());
 		repos.setSource(a.getSource());		
-		new DbIndexContainer().indexRep(repos);
+		// new DbIndexContainer().indexRep(repos);
 				
 		return new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER.toString());
 		

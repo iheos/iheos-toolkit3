@@ -75,7 +75,7 @@ public abstract class BaseRepository implements Repository {
 	public BaseRepository() throws RepositoryException {
 		isNew = true;
 		setReposId(new IdFactory().getNewId());
-		properties.setProperty(PropertyKey.ASSET_ID.toString(), getReposId().getIdString());
+		properties.setProperty("id", getReposId().getIdString());
 	}
 	
 	/**
@@ -85,7 +85,7 @@ public abstract class BaseRepository implements Repository {
 	public BaseRepository(String name) throws RepositoryException {
 		isNew = true;
 		setReposId(new SimpleId(name));
-		properties.setProperty(PropertyKey.ASSET_ID.toString(), getReposId().getIdString());
+		properties.setProperty("id", getReposId().getIdString());
 	}
 
 	public void load() throws RepositoryException {
@@ -150,12 +150,8 @@ public abstract class BaseRepository implements Repository {
 		return properties.getProperty("description");
 	}
 
-    @Override
-    public Asset createAsset(String displayName, String description, Type assetType) throws RepositoryException {
-        return null;
-    }
 
-    @Override
+	@Override
 	/**
 	 * This method returns an asset that is primarily used for read-only operations. To update an asset return by this method, setAutoFlush to true.
 	 */

@@ -1,7 +1,5 @@
 package gov.nist.hit.ds.repository.simple.search;
 
-import gov.nist.hit.ds.initialization.installation.Installation;
-import gov.nist.hit.ds.initialization.installation.PropertyServiceManager;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -20,12 +18,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import gov.nist.hit.ds.toolkit.installation.Installation;
+import gov.nist.hit.ds.toolkit.installation.PropertyServiceManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -37,7 +36,8 @@ import org.apache.commons.lang3.StringEscapeUtils;
  */
 public class SearchServlet extends HttpServlet {
 
-	private static final String USAGE_STR = "Usage: ?reposSrc=<Resident|External>&reposId=value&assetId=value&[level=<1,2,3>]&[reportType=<1,2>]";
+	private static final String USAGE_STR = "Usage: ?reposSrc=<Resident|External>&reposId=value&<asset=filenamewithextension|assetId=value>&[level=<1,2,3>]&[reportType=<1,2>]";
+	// private static Logger logger = Logger.getLogger(SearchServlet.class.getName());
 
 	
 	private static final long serialVersionUID = 8326366092753151300L;
@@ -49,15 +49,18 @@ public class SearchServlet extends HttpServlet {
 
 		 /*		
 		  * 
-		http://127.0.0.1:8888/repository/search?reposSrc=?&reposId=ee332a45-4c5f-4762-a62d-c6f7e217e93a&assetId=172-7ce2-4c5b-b994-a0123&level=2
+		http://127.0.0.1:8888/repository/list?reposSrc=?&reposId=ee332a45-4c5f-4762-a62d-c6f7e217e93a&assetId=172-7ce2-4c5b-b994-a0123&level=2
 		
-		http://localhost:8080/xdstools3/repository/search?reposSrc=RW_EXTERNAL&reposId=ee332a45-4c5f-4762-a62d-c6f7e217e93a&assetId=172-7ce2-4c5b-b994-a0123&level=2
+		http://localhost:8080/xdstools3/repository/list?reposSrc=RW_EXTERNAL&reposId=ee332a45-4c5f-4762-a62d-c6f7e217e93a&assetId=172-7ce2-4c5b-b994-a0123&level=2
 		  *
 		  */
 		 
 		String reposSrc = request.getParameter("reposSrc");
 		String reposId = request.getParameter("reposId");
+
 		String assetId = request.getParameter("assetId");
+		String assetLoc = request.getParameter("asset");
+
 		String levelStr = request.getParameter("level"); // 1 (top level only) or 2 (multiple depth)
 		String reportTypeStr = request.getParameter("reportType"); // 1 or 2
 		Access acs = null; 
@@ -127,23 +130,23 @@ public class SearchServlet extends HttpServlet {
 		(Bill)
 
 		 */
-		 
-		if (assetId!=null && reposId!=null) {
-			
-			int level = 0;
-			if (levelStr!=null && !"".equals(levelStr)) {
-				level = Integer.parseInt(levelStr);
-				if (level<2) {
-					level = 0;
-				} else {
-					level = 2;
-				}
-			}
 
-			String result = getAsset(repos, assetId, level, level);
-			response.getWriter().write(printReport(result,acs));
-		 
-		} else {
+		int level = 0;
+		if (levelStr!=null && !"".equals(levelStr)) {
+			level = Integer.parseInt(levelStr);
+			if (level<2) {
+				level = 0;
+			} else {
+				level = 2;
+			}
+		}
+		
+		if (reposId!=null && (assetLoc!=null || assetId!=null)) {
+				
+				String result = getAsset(repos, assetLoc, assetId, level, level);
+				response.getWriter().write(printReport(result,acs));			
+		}
+		else {
 			throw new ServletException(USAGE_STR);			
 		}
 		
@@ -172,7 +175,7 @@ public class SearchServlet extends HttpServlet {
 		if (rpt==null || "".equals(rpt)) {
 			rpt = "<ul><li>No results found: <ol>" +
 					"<li>Has the repository folder been renamed? " +
-					"<ul><li>Assets within a repository should have the " + PropertyKey.REPOSITORY_ID + " coded within the properties file. A corresponding folder name on the filesystem must match the specified property value at all times." +
+					"<ul><li>Assets within a repository should have the " + PropertyKey.REPOSITORY_ID + " coded within the properties file and the corresponding folder name on the filesystem must match the specified property value at all times." +
 							"</li></ul></li></ol></li></ul><ul>" +
 							"<li>Configuration:<ul>" +  acs.name() +  " source:"+ pathStr  +"</ul></li></ul>";					
 			
@@ -180,14 +183,26 @@ public class SearchServlet extends HttpServlet {
 		return "<html><body style='font-family:arial,verdana,sans-serif;'>" + rpt + "</body></html>";
 	}
 
-	private String getAsset(Repository repos, String assetId, int topLevel, int level) {
+	private String getAsset(Repository repos, String assetLoc, String assetId, int topLevel, int level) {
 		StringBuffer sb = new StringBuffer();
 		
 		try {
 			SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 			
-			PropertyKey nest = (topLevel==level)? PropertyKey.ASSET_ID : PropertyKey.PARENT_ID;
-			criteria.append(new SearchTerm(nest,Operator.EQUALTO,assetId));			
+			
+			
+			PropertyKey nest = null;
+			
+			if (assetId!=null) {				
+				nest = (topLevel==level)? PropertyKey.ASSET_ID : PropertyKey.PARENT_ID;
+				criteria.append(new SearchTerm(nest,Operator.EQUALTO,assetId));
+			} else if (assetLoc!=null) {				
+				nest = (topLevel==level)? PropertyKey.LOCATION : PropertyKey.PARENT_ID;
+				criteria.append(new SearchTerm(nest,Operator.EQUALTO,assetLoc));
+			} else 
+				return null;
+			
+			
 			
 			AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
 			
@@ -208,7 +223,7 @@ public class SearchServlet extends HttpServlet {
 				rowCt = reportAddDetail(sb, rowCt, a);
 				
 				while (--levelCt>0) {
-					String child = getAsset(repos,a.getId().getIdString(),topLevel,levelCt);		// ul
+					String child = getAsset(repos,a.getPropFileRelativePart(), a.getId().getIdString(),topLevel,levelCt);		// ul
 					
 					if (child!=null && !"".equals(child)) {
 						reportAddChild(sb, child);

@@ -18,12 +18,14 @@ public class AssetNode implements IsSerializable, Serializable {
 	
 	private String repId;
 	private String assetId;
+	private String parentId;
 	private String type;
 	private String displayName;
 	private String description;
 	private String mimeType;
 	private String reposSrc;
 	private String location;
+	private String createdDate;
 	
 	private boolean hasContent;
 	private String txtContent;
@@ -62,6 +64,10 @@ public class AssetNode implements IsSerializable, Serializable {
 	
 	public void addChild(AssetNode a) {
 		children.add(a);
+	}
+	
+	public void addChildren(List<AssetNode> children) {
+		this.children.addAll(children);
 	}
 	
 	public String getRepId() {
@@ -149,6 +155,22 @@ public class AssetNode implements IsSerializable, Serializable {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	public String getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	

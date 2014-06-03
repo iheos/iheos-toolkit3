@@ -43,6 +43,8 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 	public SimpleRepository(String name) throws RepositoryException {
 		super(name);
 	}
+
+	
 	
 	public boolean isAutoFlush() {
 		return autoFlush;

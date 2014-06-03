@@ -6,4 +6,4 @@ modifiedDate=20130802195844
 type=testdef
 repositoryId=testkit
 description=This is my test
-id=testdef1
+#id=testdef1

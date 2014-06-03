@@ -1,7 +1,5 @@
 package gov.nist.hit.ds.repository.api;
 
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
-
 /**
  * OsidException or one of its subclasses is thrown by all methods of all
  * interfaces of an Open Service Interface Definition (OSID). This requires
@@ -23,7 +21,7 @@ import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
  * O.K.I&#46; OSID Definition License}.
  * </p>
  */
-public class RepositoryException extends ToolkitRuntimeException  {
+public class RepositoryException extends Exception  {
 
 
 	/**
@@ -130,7 +128,7 @@ public class RepositoryException extends ToolkitRuntimeException  {
     /** Repository already exists */
     public static final String REPOSITORY_API_REQUIREMENT_FAIL = "Error";
     
-    public RepositoryException() { super(""); }
+    public RepositoryException() {}
     
     public RepositoryException(String message) {
         super(message);

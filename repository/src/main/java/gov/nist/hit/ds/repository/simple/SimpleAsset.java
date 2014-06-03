@@ -694,7 +694,7 @@ public class SimpleAsset implements Asset, Flushable {
 		try {
 			name = getDisplayName();
 			if (name!=null && !"".equals(name)) {
-				return name + "(" + getId().getIdString() + ")";
+				return name;
 			} else {
 				name = getId().getIdString();
 			}

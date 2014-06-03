@@ -47,14 +47,23 @@ public class AssetNodeBuilderTest {
 		ArtifactId assetId = a.getId();
 		
 		Asset a2 = repos.createAsset("child", "This is my site", new SimpleType("siteAsset"));
-		a.setProperty(PropertyKey.DISPLAY_ORDER, "1");
+		a2.setProperty(PropertyKey.DISPLAY_ORDER, "1");
 		a2.setMimeType("text/plain");		
 		a2.updateContent("My Content".getBytes());
 		ArtifactId assetId2 = a2.getId();
 		
 		a.addAsset(a2);  // make a the parent of a2
-		
+
 		assertFalse(assetId.isEqual(assetId2));
+		
+		Asset a21 = repos.createAsset("grandchild1", "This is my site", new SimpleType("siteAsset"));
+		a21.setProperty(PropertyKey.DISPLAY_ORDER, "1");
+		a21.setMimeType("text/plain");		
+		a21.updateContent("My Content".getBytes());
+		// ArtifactId assetId21 = a21.getId();
+
+		a2.addAsset(a21);  // make a the parent of a21
+		
 	}
 
 	@Test
@@ -67,10 +76,26 @@ public class AssetNodeBuilderTest {
 			// Inspect the tree here 
 			
 			assertTrue("parent".equals(tree.get(0).getDisplayName()));
-			assertTrue("child".equals(tree.get(0).getChildren().get(0).getDisplayName()));
+			
+			AssetNode grandchild = tree.get(0).getChildren().get(0).getChildren().get(0);
+			assertTrue("grandchild1".equals(grandchild.getDisplayName()));
+			
+			System.out.println("*** chain test ***");
+			AssetNode chain = anb.getParentChain(repos, grandchild, true);
+			chainTest(chain);
 			
 		} catch (Exception ex) {
 			fail("builder test failed.");
 		}
+	}
+	
+	private void chainTest(AssetNode an) {
+		for (AssetNode child : an.getChildren()) {
+			System.out.println(child.getLocation());
+			if (child.getChildren()!=null) {
+				chainTest(child);
+			}
+		}
+	
 	}
 }

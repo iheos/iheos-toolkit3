@@ -1,6 +1,6 @@
 #
 #Fri Aug 02 19:58:44 EDT 2013
-DisplayName=This is a sample resident repository
+DisplayName=Sample resident repository
 description=Description
 repositoryType=simple
 id=testkit

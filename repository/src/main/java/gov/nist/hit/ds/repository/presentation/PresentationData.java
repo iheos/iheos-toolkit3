@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.repository.presentation;
 
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
+import gov.nist.hit.ds.repository.api.Parameter;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -10,21 +12,27 @@ import gov.nist.hit.ds.repository.api.RepositoryIterator;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleRepository;
+import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder;
-import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
 import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder.Depth;
+import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.toolkit.installation.InitializationFailedException;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVParser;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +52,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 	/**
 	 * 
 	 */
+	public static final int MAX_RESULTS = 500;
+	
 	private static final long serialVersionUID = 4939311135239253727L;
 	private static Logger logger = Logger.getLogger(PresentationData.class.getName());
 	
@@ -60,8 +70,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 					while (it.hasNextRepository()) {
 						r = it.nextRepository();
 						
-						rtList.add(new RepositoryTag(r.getId().getIdString(), acs.name(), r.getDisplayName(), getSortedMapString(r.getProperties())));
-						
+						rtList.add(new RepositoryTag(r.getId().getIdString(), r.getType().getKeyword(),  acs.name(), r.getDisplayName(), getSortedMapString(r.getProperties())));						
 					}
 				} catch (RepositoryException ex) {
 					logger.warning(ex.toString());
@@ -74,15 +83,35 @@ public class PresentationData implements IsSerializable, Serializable  {
 	
 	}
 	
+	public static Boolean isRepositoryConfigured() throws RepositoryException {
+		try {
+			Installation.installation().initialize();
+		} catch (InitializationFailedException e) {
+			logger.fine(e.toString());
+		} catch (IOException e) {
+			logger.fine(e.toString());
+		}		
+		return new Boolean(Configuration.configuration().isRepositorySystemInitialized());
+	}
+	
 	public static List<String> getIndexablePropertyNames() {
 		List<String> indexProps = new ArrayList<String>(); 
 		for (Access acs : RepositorySource.Access.values()) {
 			try {
-				indexProps.addAll(DbIndexContainer.getIndexableProperties(Configuration.getRepositorySrc(acs)));
+				List<String> srcProps = DbIndexContainer.getIndexableProperties(Configuration.getRepositorySrc(acs));
+				if (!indexProps.isEmpty()) {
+					for (String s: srcProps) {
+						if (!indexProps.contains(s)) {
+							indexProps.add(s);
+						}
+					}					
+				} else
+					indexProps.addAll(srcProps);
 			} catch (RepositoryException e) {
 				e.printStackTrace();
 			}
 		}
+		Collections.sort(indexProps);
 		return indexProps;
 	}
 	
@@ -111,6 +140,13 @@ public class PresentationData implements IsSerializable, Serializable  {
 		}
 				
 		return result;
+	}
+	
+	public static AssetNode getParentChain(AssetNode an) throws RepositoryException {
+		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
+		AssetNodeBuilder anb = new AssetNodeBuilder();
+		
+		return anb.getParentChain(repos, an, true);		
 	}
 	
 
@@ -150,9 +186,168 @@ public class PresentationData implements IsSerializable, Serializable  {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return reposList;
+		return reposList;	
 	}
 	
+	public static QueryParameters getSearchCriteria(String queryLoc)  throws RepositoryException {
+		Parameter param = new Parameter();		
+		param.setDescription("queryLoc");
+		param.assertNotNull(queryLoc);
+
+		Repository repos = getCannedQueryRepos();
+		Asset a = repos.getAssetByRelativePath(new File(queryLoc));
+		
+		return getQueryParams(a);
+	}
+	
+	public static QueryParameters getSearchCriteria(String id, String acs, String queryLoc)  throws RepositoryException {
+		Parameter param = new Parameter();
+		param.setDescription("repos id");
+		param.assertNotNull(id);
+		param.setDescription("acs");
+		param.assertNotNull(acs);
+		param.setDescription("queryLoc");
+		param.assertNotNull(queryLoc);
+		
+		Repository repos = composeRepositoryObject(id, acs);		
+		Asset a = repos.getAssetByRelativePath(new File(queryLoc));
+			
+		return getQueryParams(a);				
+	}
+
+	/**
+	 * @param a
+	 * @return
+	 * @throws RepositoryException
+	 */
+	private static QueryParameters getQueryParams(Asset a)
+			throws RepositoryException {
+		QueryParameters qp = null; 
+		
+		
+		try {
+			ObjectMapper mapper = new ObjectMapper();			
+			String[][] value = mapper.readValue(a.getProperty("selectedRepos"), String[][].class);
+			SearchCriteria sc = mapper.readValue(a.getContent(), SearchCriteria.class);
+			
+			String advancedMode = a.getProperty("advancedMode");
+			Boolean bVal = false;
+			if (advancedMode!=null) {
+				bVal = mapper.readValue(advancedMode, Boolean.class);
+			}
+			
+			qp = new QueryParameters(value,sc);
+			qp.setName(a.getDisplayName());
+			qp.setAdvancedMode(bVal);
+		} catch (Exception ex) {
+			logger.warning(ex.toString());
+			throw new RepositoryException(RepositoryException.IO_ERROR + "Could not load search criteria:"  + ex.toString());
+		}
+		
+		return qp;
+	}
+	
+	public static AssetNode saveSearchCriteria(QueryParameters qp) throws RepositoryException {
+		
+		Parameter param = new Parameter();
+
+		param.setDescription("Query params");
+		param.assertNotNull(qp);
+		param.setDescription("name");
+		param.assertNotNull(qp.getName());				
+		param.setDescription("reposData");
+		param.assertNotNull(qp.getSelectedRepos());
+		param.setDescription("searchCritieria");
+		param.assertNotNull(qp.getSearchCriteria());
+		
+		String name = qp.getName();
+		Repository repos = getCannedQueryRepos();
+		
+		// Create parent ,add two children 1) selected repos and 2) criteria or use props?
+		
+		Asset aSrc = repos.createAsset(name, "", new SimpleType("simpleType"));
+		aSrc.setMimeType("text/json");
+		
+				
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(aSrc.getContentFile(), qp.getSearchCriteria());
+			aSrc.setProperty("selectedRepos", mapper.writeValueAsString(qp.getSelectedRepos()));
+			if (qp.getAdvancedMode()!=null) {
+				aSrc.setProperty("advancedMode", mapper.writeValueAsString(qp.getAdvancedMode()));
+			}
+		} catch (Exception ex) {
+			logger.warning(ex.toString());
+			throw new RepositoryException(RepositoryException.IO_ERROR + "Could not save search criteria:"  + ex.toString());
+		} 
+		
+		AssetNode aDst = new AssetNode();
+		
+		aDst.setRepId(aSrc.getRepository().getIdString());
+		aDst.setAssetId(aSrc.getId().getIdString());
+		aDst.setDescription(aSrc.getDescription());
+		aDst.setDisplayName(aSrc.getDisplayName());
+		aDst.setMimeType(aSrc.getMimeType());
+		aDst.setReposSrc(aSrc.getSource().getAccess().name());
+		aDst.setParentId(aSrc.getProperty(PropertyKey.PARENT_ID));
+		aDst.setCreatedDate(aSrc.getCreatedDate());
+		if (aSrc.getPath()!=null) {
+			aDst.setLocation(aSrc.getPropFileRelativePart()); 
+		}
+		
+		return aDst;
+		
+	}
+
+	/**
+	 * @return
+	 * @throws RepositoryException
+	 */
+	private static Repository getCannedQueryRepos() throws RepositoryException {
+		RepositoryFactory reposFact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+		ArtifactId id = new SimpleId("saved-queries");
+		
+		Repository repos = null;
+		try {
+			repos = reposFact.getRepository(id);	
+		} catch (RepositoryException re) {
+			repos = reposFact.createNamedRepository(
+					id.getIdString(),
+					"repository search query",
+					new SimpleType("savedQueryRepos"),
+					id.getIdString()
+					);			
+		}
+		return repos;
+	}
+	
+	public static List<AssetNode> getSavedQueries(String id, String acs) throws RepositoryException {
+		ArrayList<AssetNode> result = new ArrayList<AssetNode>();
+		Repository repos = composeRepositoryObject(id, acs);
+		SimpleAssetIterator iter = new SimpleAssetIterator(repos);
+ 		
+		while (iter.hasNextAsset()) {
+			gov.nist.hit.ds.repository.api.Asset aSrc = iter.nextAsset();
+			
+			AssetNode aDst = new AssetNode();
+	
+			aDst.setRepId(aSrc.getRepository().getIdString());
+			aDst.setAssetId(aSrc.getId().getIdString());
+			aDst.setDescription(aSrc.getDescription());
+			aDst.setDisplayName(aSrc.getDisplayName());
+			aDst.setMimeType(aSrc.getMimeType());
+			aDst.setReposSrc(aSrc.getSource().getAccess().name());
+			aDst.setParentId(aSrc.getProperty(PropertyKey.PARENT_ID));
+			aDst.setCreatedDate(aSrc.getCreatedDate());
+			if (aSrc.getPath()!=null) {
+				aDst.setLocation(aSrc.getPropFileRelativePart()); 
+			}
+			result.add(aDst);
+
+		}
+		
+		return result;
+	}
 	
 	public static List<AssetNode> search(String[][] reposData, SearchCriteria sc) {
 		
@@ -167,7 +362,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 			iter = new SearchResultIterator(reposList, sc );
 		
 			int recordCt = 0;
-			if (iter!=null && recordCt++ < 500) {// hard limit for now
+			if (iter!=null && recordCt++ <= MAX_RESULTS) { // hard limit for now
+				
 				while (iter.hasNextAsset()) {
 					gov.nist.hit.ds.repository.api.Asset aSrc = iter.nextAsset();
 					
@@ -179,8 +375,18 @@ public class PresentationData implements IsSerializable, Serializable  {
 					aDst.setDisplayName(aSrc.getDisplayName());
 					aDst.setMimeType(aSrc.getMimeType());
 					aDst.setReposSrc(aSrc.getSource().getAccess().name());
-					if (aSrc.getPath()!=null)
-						aDst.setLocation(aSrc.getPath().toString());
+					aDst.setParentId(aSrc.getProperty(PropertyKey.PARENT_ID));
+					aDst.setCreatedDate(aSrc.getCreatedDate());
+					if (aSrc.getPath()!=null) {
+						aDst.setLocation(aSrc.getPropFileRelativePart());
+						try {
+							if (aSrc.getContentFile()!=null && aSrc.getContentFile().exists()) {
+								aDst.setContentAvailable(true);
+							}							
+						} catch (Exception ex) {
+							logger.warning("Content file not found?" + ex.toString());
+						}
+					}
 					result.add(aDst);
 				}
 			}
@@ -351,7 +557,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 		}
 	}
 	
-	private static Repository composeRepositoryObject(String id, String src) throws RepositoryException {
+	public static Repository composeRepositoryObject(String id, String src) throws RepositoryException {
 		SimpleRepository repos 
 							= new SimpleRepository(new SimpleId(id));
 		repos.setSource(Configuration.getRepositorySrc(Access.valueOf(src)));

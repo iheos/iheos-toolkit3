@@ -28,4 +28,10 @@ public interface RepositoryService extends RemoteService  {
 	public List<AssetNode> getAssetTree(String[][] repos) throws RepositoryConfigException;
 	public AssetNode getAssetTxtContent(AssetNode an) throws RepositoryConfigException;
 	public List<AssetNode> getImmediateChildren(AssetNode an) throws RepositoryConfigException;
+	public AssetNode getParentChain(AssetNode an) throws RepositoryConfigException;
+	public Boolean isRepositoryConfigured() throws RepositoryConfigException;
+	public QueryParameters getSearchCriteria(String queryLoc) throws RepositoryConfigException;	
+	public QueryParameters getSearchCriteria(String id, String acs, String queryLoc) throws RepositoryConfigException;
+	public AssetNode saveSearchCriteria(QueryParameters qp) throws RepositoryConfigException;
+	public List<AssetNode> getSavedQueries(String id, String acs) throws RepositoryConfigException;
 }

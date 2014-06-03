@@ -1,7 +1,7 @@
 # asset type site
 keyword=siteAsset
 domain=asset
-indexes=patientId, startTime(DTM), description, location, type
+indexes=patientId, startTime(DTM), description, location, type, createdDate
 description=Site asset
 
 

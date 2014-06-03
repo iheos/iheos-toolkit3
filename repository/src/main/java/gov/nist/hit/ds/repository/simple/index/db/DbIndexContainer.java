@@ -58,17 +58,21 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 */
 	private static final String repContainerLabel = "repositoryIndex";		
 	private static final String assetId = PnIdentifier.getQuotedIdentifer(PropertyKey.ASSET_ID);
-	private static final String locationId = "location";
+	private static final String locationId = PropertyKey.LOCATION.toString();
 	private static final String assetType = PnIdentifier.getQuotedIdentifer(PropertyKey.ASSET_TYPE);
 	private static final String repId = PnIdentifier.getQuotedIdentifer(PropertyKey.REPOSITORY_ID);
 	private static final String displayOrder = PnIdentifier.getQuotedIdentifer(PropertyKey.DISPLAY_ORDER); 
 	private static final String parentId = PnIdentifier.getQuotedIdentifer(PropertyKey.PARENT_ID);
 	private static final String createdDate =  PnIdentifier.getQuotedIdentifer(PropertyKey.CREATED_DATE);
+	private static final String hash = PropertyKey.HASH.toString();
+	private static final String reposAcs = PropertyKey.REPOSITORY_ACCESS.toString();
+	private static final String indexSession = PropertyKey.INDEX_SESSION.toString();
 	
 	private static final String CACHED_SESSION = "CACHED";
 	private static final String CONTAINER_VERSION = "2013-12-26";
 	private static final String CONTAINER_VERSION_ID = "VERSION";
-	private static final String BYPASS_VERSION = "BYPASS"; 
+	private static final String BYPASS_VERSION = "BYPASS";
+
 	
 	/* Use an upgrade script to update existing tables in case a newer version of TTT (new ArtRep API) runs against an older copy of the repositoryIndex table in the database */
 	/**
@@ -82,10 +86,10 @@ public class DbIndexContainer implements IndexContainer, Index {
 	+ locationId + " varchar(512),"									/* This is the file path */
 	+ parentId +  " varchar(64),"									/* The parent asset Id. A null-value indicates top-level asset and no children */
 	+ assetType + " varchar(32)," 									/* Asset type - usually same as the keyword property */ 
-	+"hash varchar(64),"											/* (Internal use) The hash of the property file */
-	+"reposAcs varchar(40),"										/* (Internal use) src enum string */	
+	+ hash + " varchar(64),"											/* (Internal use) The hash of the property file */
+	+ reposAcs + " varchar(40),"										/* (Internal use) src enum string */	
 	+ displayOrder + " int,"         						    	/* This is a reserved keyword for sorting purpose */
-	+"indexSession varchar(64))";									/* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */				
+	+ indexSession +" varchar(64))";									/* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */				
 
 	/**
 	 * Index a repository on the file system. This wrapper method eventually calls an internal method that uses two internal logical data sets to identify assets that are to be indexed, refreshed, or marked as stale.  
@@ -128,7 +132,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 		iter = new SimpleAssetIterator(repos);
 		 		
 		if (!iter.hasNextAsset()) {
-			logger.fine("Nothing to index in " + reposId);
+			logger.fine("Nothing to index in " + reposId + ". Removing all indexed items.");
+			// Purge index because there are no assets on the file system
+			removeIndex(reposId, repos.getSource().getAccess().name(), "");
 			return -1;
 		}		
 		
@@ -565,14 +571,14 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * Remove stale indexes
 	 */
 	@Override
-	public void removeIndex(String reposId, String sessionId) throws RepositoryException {
+	public void removeIndex(String reposId, String acs, String sessionId) throws RepositoryException {
 		if (reposId!=null && !"".equals(reposId)) {
 			DbContext dbc = new DbContext();			
 			try {
 				dbc.setConnection(DbConnection.getInstance().getConnection());
 	 
-				String sqlStr = "delete from "+ repContainerLabel + " where " + repId + " = ? and indexSession != ?";
-				int rsData = dbc.executePrepared(sqlStr, new String[]{reposId,sessionId});
+				String sqlStr = "delete from "+ repContainerLabel + " where " + repId + " = ? and reposAcs=? and indexSession != ?";
+				int rsData = dbc.executePrepared(sqlStr, new String[]{reposId,acs,sessionId});
 				logger.fine("Number of stale items removed: " + rsData);
 
 			} catch (SQLException e) {
@@ -1449,7 +1455,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 		String searchCriteriaWhere = searchCriteria.toString();		
 
 		String sqlStr = "select count(*)ct from " + repContainerLabel 
-		+ " where " + repId + " = ? and reposAcs=? and( "+ searchCriteriaWhere + ")" ;
+		+ " where " + repId + " = ? and reposAcs=? "  +(!"".equals(searchCriteriaWhere)?" and( "+ searchCriteriaWhere + ")":"");
 		logger.fine(sqlStr);
 		
 		DbContext dbc = new DbContext();
@@ -1486,10 +1492,11 @@ public class DbIndexContainer implements IndexContainer, Index {
 	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) throws RepositoryException {
 		Repository[] fRep = new Repository[repositories.length];
 		int cx=0;
-		for (Repository rep : repositories) {
-			if (getHitCount(rep, searchCriteria, orderByStr) > 0) {
-				fRep[cx++] = rep;
-				logger.fine("filtered repos:" + rep.getDisplayName());
+		for (Repository repos : repositories) {
+			indexRep(repos);
+			if (getHitCount(repos, searchCriteria, orderByStr) > 0) {
+				fRep[cx++] = repos;
+				logger.fine("filtered repos:" + repos.getDisplayName());
 			}
 		}
 		
@@ -1522,10 +1529,11 @@ public class DbIndexContainer implements IndexContainer, Index {
 			// This needs to be independent from the syncRep call because there columns might not have fully expanded 
 			int orderBy=0;
 			for (Repository rep : fRep) {
+				if (rep==null) continue; // Nothing found by the getHitCount call above, skip to next repos
 				
 				String sqlStr = "insert into "+searchSession+"(repId,assetId,reposAcs,reposOrder,displayOrder,createdDate,propFile)"
 						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (orderBy++) + "," + displayOrder + "," + createdDate + "," + locationId + " from " + repContainerLabel 
-						+ " where " + repId + " = ? and reposAcs=? and( "+ searchCriteriaWhere + ")" ;
+						+ " where " + repId + " = ? and reposAcs=? " +(!"".equals(searchCriteriaWhere)?" and( "+ searchCriteriaWhere + ")":"");
 				
 				try {					
 				//	 dbc.internalCmd(sqlString);
@@ -1542,8 +1550,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 				}
 			}
 					
+			// ResultSet rs = dbc.executeQuery("select * from (select repId,assetId,reposAcs,propFile,reposOrder,createdDate,row_number() over() as rownum from "+searchSession+")as tr where tr.rownum<="+ QueryParameters.MAX_RESULTS +" order by tr.reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?",tr."+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
+
 			ResultSet rs = dbc.executeQuery("select repId,assetId,reposAcs,propFile from "+searchSession+" order by reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?","+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
-						
 			
 			
     		List<AssetNode> assetList = popAssetNode(rs);
