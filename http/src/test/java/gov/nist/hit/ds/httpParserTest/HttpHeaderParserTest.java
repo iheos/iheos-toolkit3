@@ -1,11 +1,11 @@
 package gov.nist.hit.ds.httpParserTest;
 
-import static org.junit.Assert.assertTrue;
 import gov.nist.hit.ds.http.parser.HttpHeaderParser;
 import gov.nist.hit.ds.http.parser.ParseException;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class HttpHeaderParserTest {
 
