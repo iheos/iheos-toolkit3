@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.utilities.io;
 
+
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 public class Hash {
