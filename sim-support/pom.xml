@@ -5,9 +5,9 @@
 
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
-        <artifactId>core</artifactId>
+        <artifactId>toolkit3</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-	<relativePath>../pom.core.xml</relativePath>
+	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>gov.nist.hit.ds</groupId>
@@ -75,9 +75,6 @@
         <dependency>
             <groupId>com.sun.ebxml</groupId>
             <artifactId>ebxmlrr-common</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/../lib/ebxmlrr-common-1.0.jar</systemPath>
         </dependency>
     </dependencies>
 
