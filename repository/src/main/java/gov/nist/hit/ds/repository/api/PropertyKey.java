@@ -6,6 +6,7 @@ package gov.nist.hit.ds.repository.api;
 import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
 
 /**
+ * This enumeration contains some of the frequently used property keys, as in {@link Properties#getProperty(java.io.Serializable)}, which is common to all types repositories or assets.
  * @author Sunil.Bhaskarla
  *
  */
