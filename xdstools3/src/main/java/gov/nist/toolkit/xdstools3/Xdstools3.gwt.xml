@@ -3,20 +3,13 @@
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name='com.google.gwt.rpc.RPC' />
-	<!-- <inherits name="com.smartgwt.tools.SmartGwtTools"/> -->
+	 <inherits name="com.smartgwt.tools.SmartGwtTools"/>
     <!-- <inherits name="com.smartgwtee.tools.Tools"/> -->
    <!--  <inherits name="com.smartgwtee.SmartGwtEE"/> -->
 
-	<!-- Inherit the default GWT style sheet. You can change -->
-	<!-- the theme of your GWT application by uncommenting -->
-	<!-- any one of the following lines. -->
-	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
-	<!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
-	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
-	<!-- <inherits name='com.google.gwt.user.theme.clean.Clean'/> -->
 	<inherits name="com.smartgwt.SmartGwtNoTheme"/>
-	<inherits name="com.smartclient.theme.silverwave.SilverWave" />
-	<!--<inherits name="com.smartclient.theme.enterprise.Enterprise"/> -->
+    <!-- <inherits name="com.smartclient.theme.silverwave.SilverWave" />  -->
+	<inherits name="com.smartclient.theme.enterprise.Enterprise"/>
 	<!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
 
 

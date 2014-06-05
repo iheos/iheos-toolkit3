@@ -3,6 +3,8 @@ package gov.nist.toolkit.xdstools3.client.customWidgets;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
@@ -25,6 +27,7 @@ import com.smartgwt.client.widgets.toolbar.RibbonGroup;
 import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class ConfigToolbar extends RibbonBar {
 	private SimpleEventBus bus;
@@ -39,13 +42,24 @@ public class ConfigToolbar extends RibbonBar {
 		// Menu group: Session
 		RibbonGroup sessionGroup = createRibbonGroup("Session");
 
-        // Environment selection
-		final ListBox listBox = new ListBox();
-		listBox.setWidth("290px");
-		listBox.addItem("Select environment");
-		listBox.addItem("Env1");
-		listBox.addItem("Env2");
-		listBox.setVisibleItemCount(1);
+        final DynamicForm form = new DynamicForm();
+        SelectItem listBox = new SelectItem();
+        listBox.setShowTitle(false);
+       // listBox.setValueField("EmployeeId");
+        listBox.setDisplayField("Environment");
+        listBox.setWidth("290px");
+        listBox.setDefaultToFirstOption(true);
+        LinkedHashMap<String, String> valueMap = new LinkedHashMap<String, String>();
+        valueMap.put("Select Environment", "XX");
+       valueMap.put("NA2014", "US");
+        valueMap.put("EURO2011", "EU");
+        valueMap.put("EURO2012","EU");
+        valueMap.put("NwHIN", "US");
+        // TODO set flag icons
+       // listBox.setImageURLPrefix("flags/16/");
+       // listBox.setImageURLSuffix(".png");
+        listBox.setValueMap(valueMap);
+        form.setFields(listBox);
 
 //        listBox.addClickHandler(new ClickHandler() {
 //            public void onClick(ClickEvent event) {
@@ -59,7 +73,7 @@ public class ConfigToolbar extends RibbonBar {
 
 
 
-		WidgetCanvas widgetCanvas_2 = new WidgetCanvas(listBox);
+	//	WidgetCanvas widgetCanvas_2 = new WidgetCanvas(listBox);
 		ListBox listBox_1 = new ListBox();
 		listBox_1.setWidth("290px");
 		listBox_1.addItem("Select test session");
@@ -67,13 +81,7 @@ public class ConfigToolbar extends RibbonBar {
 		listBox_1.addItem("Add new test session...");
 		listBox_1.setVisibleItemCount(1);
 		WidgetCanvas widgetCanvas_3 = new WidgetCanvas(listBox_1);
-		sessionGroup.addControls(widgetCanvas_2, widgetCanvas_3);
-
-
-		//       Menu configMenu = new Menu();
-		//       configMenu.addItem(new MenuItem("Endpoint Configuration", "icon_gear.png", "Ctrl+D"));
-		//       configMenu.addItem(new MenuItem("List of Endpoints", "icon_gear.png", "Ctrl+P"));
-		//		IconMenuButton endpoints = getIconMenuButton("Endpoints","icon_gear.png", configMenu, true);
+		sessionGroup.addControls(form, widgetCanvas_3);
 
 		// Menu group: Site / Actors
 		RibbonGroup actorsGroup = createRibbonGroup("Endpoints");  
