@@ -48,11 +48,19 @@ public class MiscTest {
 		repos[0][0] = (new String[]{"file1","file2"});
 		
 		System.out.println("---- " + repos[0][0][0]);
-		
-		assert(false); // If asserts are checked explicitly, this should fail at runtime 
+
+        try {
+            assert(false); // If asserts are checked explicitly, this should fail at runtime
+            fail("assertion not checked");
+        } catch (AssertionError ae) {
+            // good!
+        }
+
 		
 	}
-	
+
+
+
 	@Test
 	public void npeTest() {
 		NullPointerException npe =  new NullPointerException();
@@ -135,14 +143,55 @@ public class MiscTest {
 		p.setProperty("a", "2");
 		p.setProperty("y", "3");
 		p.setProperty("l", "4");
-		
+
 		
 		System.out.println("******" + PresentationData.getSortedMapString(p));
-		
+
 	}
-	
-	
-	@Test
+
+    @Test
+    public void propertyKeyValueTest() {
+
+        Properties p = new Properties();
+
+        try {
+            p.setProperty(null, "null key");
+            fail("null key");
+        } catch (NullPointerException npe) {
+            // good!
+        }
+
+        try {
+            p.setProperty("goodKeyButNullValueTest",null);
+            fail("goodKeyButNullValueTest");
+        } catch (NullPointerException npe) {
+            // good!
+        }
+
+
+
+        try {
+            p.getProperty(null);
+            fail("get prop by null key");
+        } catch (NullPointerException npe) {
+            // good!
+        }
+
+
+
+        p.setProperty("patientId","100");
+            p.setProperty("PatientId","100");
+
+
+
+        System.out.println("property key/value test: " + p.size());
+
+    }
+
+
+
+
+    @Test
 	public void fnRegTest2() {
 		
 		System.out.println("::a3-b!c%zz_@#$ hello".replaceAll("[^@A-Za-z0-9-_. ]+", ""));
