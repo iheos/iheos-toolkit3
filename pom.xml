@@ -95,7 +95,8 @@
 		<module>xdstools2</module>
 		<module>soapClientAPI</module>
 		<module>ebrimIntegrationTest</module>
-	</modules>
+        <module>docentryeditor</module>
+    </modules>
 
 	<distributionManagement>
 		<snapshotRepository>
@@ -167,7 +168,7 @@
 					<target>1.6</target>
 				</configuration>
 				<dependencies>
-					<!-- Define dependency to Groovy Eclipse Compiler (as it's referred 
+					<!-- Define dependency to Groovy Eclipse Compiler (as it's referred
 						in compilerId) -->
 					<dependency>
 						<groupId>org.codehaus.groovy</groupId>
