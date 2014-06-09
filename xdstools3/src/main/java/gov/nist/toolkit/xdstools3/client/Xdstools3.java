@@ -5,7 +5,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
@@ -16,7 +15,6 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.TabSetWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.events.EventHandler;
 import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.restDatasourceTest.RestDs;
 
 public class Xdstools3 implements EntryPoint {
 
@@ -84,8 +82,8 @@ public class Xdstools3 implements EntryPoint {
         topTabSet.addTab(mpqTab);
 
         //test
-        CloseableTabWidget rest = new RestDs();
-        topTabSet.addTab(rest);
+        //CloseableTabWidget rest = new EndpointWidget();
+        //topTabSet.addTab(rest);
 
         // Main layout
         VLayout mainLayout = new VLayout(); 
@@ -102,7 +100,7 @@ public class Xdstools3 implements EntryPoint {
 		RootLayoutPanel rp = RootLayoutPanel.get();
 		rp.add(container);
 
-        SC.showConsole();
+        //SC.showConsole();
 
 	}
 
