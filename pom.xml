@@ -34,6 +34,10 @@
 			<id>codehaus</id>
 			<url>http://repository.codehaus.org/org/codehaus</url>
 		</repository>
+        <repository>
+            <id>smartgwt</id>
+            <url>http://www.smartclient.com/maven2</url>
+        </repository>
 	</repositories>
 
 	<properties>
@@ -93,6 +97,7 @@
 		<module>xdstest2</module>
 		<module>xdstest2-logging</module>
 		<module>xdstools2</module>
+        <module>xdstools3</module>
 		<module>soapClientAPI</module>
 		<module>ebrimIntegrationTest</module>
 	</modules>

@@ -7,10 +7,10 @@
     <!-- <inherits name="com.smartgwtee.tools.Tools"/> -->
    <!--  <inherits name="com.smartgwtee.SmartGwtEE"/> -->
 
-	<inherits name="com.smartgwt.SmartGwtNoTheme"/>
-    <!-- <inherits name="com.smartclient.theme.silverwave.SilverWave" />  -->
-	<inherits name="com.smartclient.theme.enterprise.Enterprise"/>
-	<!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
+    <!-- <inherits name="com.smartgwt.SmartGwtNoTheme"/> -->
+  <!-- <inherits name="com.smartclient.theme.silverwave.SilverWave" />  -->
+    <!-- <inherits name="com.smartclient.theme.enterprise.Enterprise"/> -->
+    <!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
 
 
 	<inherits name="com.google.gwt.resources.Resources" />

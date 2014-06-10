@@ -17,8 +17,6 @@
     <properties>
         <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.5.1</gwtVersion>
-        <roo.version>1.1.0.M2</roo.version>
-        <spring.version>4.0.5.RELEASE</spring.version> <!-- 3.0.3.RELEASE -->
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -32,6 +30,10 @@
         <repository>
             <id>internal-nist-repo-snapshots</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>smartgwt</id>
+            <url>http://www.smartclient.com/maven2</url>
         </repository>
     </repositories>
 
@@ -61,12 +63,18 @@
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt</artifactId>
-            <version>4.1p</version>
+            <version>4.0</version>
         </dependency>
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt-skins</artifactId>
-            <version>4.1p</version>
+            <version>4.0</version>
+        </dependency>
+        <!--<should be changed later into Jersey dependency>-->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.0</version>
         </dependency>
 
 
