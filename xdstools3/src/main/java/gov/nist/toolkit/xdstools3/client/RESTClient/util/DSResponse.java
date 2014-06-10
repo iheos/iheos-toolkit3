@@ -1,5 +1,5 @@
 package gov.nist.toolkit.xdstools3.client.RESTClient.util;
-;
+
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlElement;
 

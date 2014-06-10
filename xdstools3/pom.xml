@@ -35,6 +35,14 @@
             <id>smartgwt</id>
             <url>http://www.smartclient.com/maven2</url>
         </repository>
+        <repository>
+            <id>apache-central</id>
+            <url>http://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>codehaus</id>
+            <url>http://repository.codehaus.org/org/codehaus</url>
+        </repository>
     </repositories>
 
 
@@ -63,12 +71,12 @@
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt</artifactId>
-            <version>4.0</version>
+            <version>4.1p</version>
         </dependency>
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt-skins</artifactId>
-            <version>4.0</version>
+            <version>4.1p</version>
         </dependency>
         <!--<should be changed later into Jersey dependency>-->
         <dependency>
@@ -104,10 +112,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
 
