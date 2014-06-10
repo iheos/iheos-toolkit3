@@ -54,9 +54,9 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 	private void initDriver(DocumentModel model) {
 		editorDriver.initialize(view);
 		getView().author.initEditorDriver();
-		getView().title.initEditorDriver();
-		getView().comment.initEditorDriver();
-		getView().confidentialityCode.initEditorDriver();
+//		getView().title.initEditorDriver();
+//		getView().comment.initEditorDriver();
+//		getView().confidentialityCode.initEditorDriver();
 		editorDriver.edit(model);
 	}
 

@@ -1,7 +1,5 @@
 package edu.tn.xds.metadata.editor.client.editor;
 
-import javax.inject.Inject;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -11,74 +9,75 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData;
 import com.sencha.gxt.widget.core.client.container.SimpleContainer;
-
 import edu.tn.xds.metadata.editor.client.editor.validation.ValidationPresenter;
 import edu.tn.xds.metadata.editor.client.editor.validation.ValidationView;
 import edu.tn.xds.metadata.editor.client.generics.ActivityDisplayer;
 import edu.tn.xds.metadata.editor.client.generics.GenericMVP;
 import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
 
+import javax.inject.Inject;
+
 public class EditorActivity extends AbstractActivity {
 
-	@Inject
-	ActivityDisplayer displayer;
+    @Inject
+    ActivityDisplayer displayer;
 
-	GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter> editorMVP;
-	GenericMVP<DocumentModel, ValidationView, ValidationPresenter> validationMVP;
+    GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter> editorMVP;
+    GenericMVP<DocumentModel, ValidationView, ValidationPresenter> validationMVP;
 
-	@Inject
-	DocumentModelEditorView editorView;
-	@Inject
-	DocumentModelEditorPresenter editorPresenter;
-	@Inject
-	ValidationView validationView;
-	@Inject
-	ValidationPresenter validationPresenter;
+    @Inject
+    DocumentModelEditorView editorView;
+    @Inject
+    DocumentModelEditorPresenter editorPresenter;
+    @Inject
+    ValidationView validationView;
+    @Inject
+    ValidationPresenter validationPresenter;
 
-	// private static Logger logger =
-	// Logger.getLogger(EditorActivity.class.getName());
+    // private static Logger logger =
+    // Logger.getLogger(EditorActivity.class.getName());
 
-	@Override
-	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-		editorMVP = buildEditorMVP();
-		editorMVP.init();
-		validationMVP = buildValidationMVP();
-		validationMVP.init();
-		displayer.display(getContainer(), panel, eventBus);
-	}
+    @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        editorMVP = buildEditorMVP();
+        editorMVP.init();
+        validationMVP = buildValidationMVP();
+        validationMVP.init();
+        displayer.display(getContainer(), panel, eventBus);
+    }
 
-	private Widget getContainer() {
-		SimpleContainer sc = new SimpleContainer();
-		BorderLayoutContainer blc = new BorderLayoutContainer();
+    private Widget getContainer() {
+        SimpleContainer sc = new SimpleContainer();
+        BorderLayoutContainer blc = new BorderLayoutContainer();
 
-		ContentPanel validationView = new ContentPanel();
-		validationView.setHeadingText("Validation");
+        ContentPanel validationView = new ContentPanel();
+        validationView.setHeadingText("Validation");
 
-		ContentPanel center = new ContentPanel();
-		center.add(editorMVP.getDisplay());
-		center.setHeaderVisible(false);
-		center.setBorders(false);
-		blc.setCenterWidget(center);
+        ContentPanel center = new ContentPanel();
+        center.setHeaderVisible(false);
+        center.add(editorMVP.getDisplay());
 
-		BorderLayoutData southData = new BorderLayoutData(250);
-		southData.setCollapsible(true);
-		southData.setSplit(true);
-		southData.setCollapsed(true);
+        blc.setCenterWidget(center);
 
-		blc.setSouthWidget(validationView, southData);
+        BorderLayoutData southData = new BorderLayoutData(250);
+        southData.setCollapsible(true);
+        southData.setSplit(false);
+        southData.setCollapsed(true);
 
-		blc.collapse(LayoutRegion.SOUTH);
+        blc.setSouthWidget(validationView, southData);
 
-		sc.add(blc);
+        blc.collapse(LayoutRegion.SOUTH);
 
-		return sc;
-	}
+        sc.add(blc);
 
-	public GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter> buildEditorMVP() {
-		return new GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter>(editorView, editorPresenter);
-	}
+        return sc.asWidget();
+    }
 
-	public GenericMVP<DocumentModel, ValidationView, ValidationPresenter> buildValidationMVP() {
-		return new GenericMVP<DocumentModel, ValidationView, ValidationPresenter>(validationView, validationPresenter);
-	}
+    public GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter> buildEditorMVP() {
+        return new GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter>(editorView, editorPresenter);
+    }
+
+    public GenericMVP<DocumentModel, ValidationView, ValidationPresenter> buildValidationMVP() {
+        return new GenericMVP<DocumentModel, ValidationView, ValidationPresenter>(validationView, validationPresenter);
+    }
 }

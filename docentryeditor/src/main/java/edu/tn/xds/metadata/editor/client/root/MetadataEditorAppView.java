@@ -13,9 +13,9 @@ import edu.tn.xds.metadata.editor.client.MetadataEditorGinjector;
 /**
  * This class contains layout objects to handle the global interface layout,
  * which is divided into 3 parts.
- * 
+ *
  * @author OLIVIER
- * 
+ *
  */
 public class MetadataEditorAppView extends Viewport {
 
@@ -31,6 +31,7 @@ public class MetadataEditorAppView extends Viewport {
 		final MetadataEditorGinjector injector = MetadataEditorGinjector.instance;
 
 		BorderLayoutContainer con = new BorderLayoutContainer();
+        con.setBorders(true);
 
 		// NORTH
 		north = injector.getNorthPanel();

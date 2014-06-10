@@ -24,13 +24,13 @@ import org.hibernate.validator.constraints.NotEmpty;
  * This class also contains getters/setters.</br> In addition, it has verify
  * method to check its syntax.
  * </p>
- * 
+ *
  * <p>
  * <b>See below each method mentioned above.</b> <br>
  * {@link #verify() method verify}</br> {@link #toXML() method toXML} <br>
  * </p>
- * 
- * 
+ *
+ *
  * @see DocumentModel class DocumentModel
  * @see ModelElement class ModelElement
  */
@@ -40,8 +40,8 @@ public class NameValueDTM implements ModelElement, Serializable {
 	/**
 	 * <b>String256 name</b> - The name of the NameValue [Mandatory].<br>
 	 * Type: {@link String256}</br> </p>
-	 * 
-	 * 
+	 *
+	 *
 	 * @see String256 class String256
 	 * @see NameValueDTM
 	 */
@@ -51,7 +51,7 @@ public class NameValueDTM implements ModelElement, Serializable {
 	/**
 	 * <b>ArrayList(DTM)</b> - A list of values [Mandatory].<br>
 	 * Type: ArrayList of {@link DTM}
-	 * 
+	 *
 	 * @see NameValueDTM
 	 */
 	@NotNull
@@ -80,16 +80,16 @@ public class NameValueDTM implements ModelElement, Serializable {
 	}
 
 	/**
-	 * 
+	 *
 	 * <p>
 	 * <b>Method toXML</b> <br>
 	 * This method will be called to build a XML file by the
 	 * {@link DocumentModel} with the information taken from the local
 	 * {@link NameValueDTM}.<br>
 	 * </p>
-	 * 
+	 *
 	 * @return String which contains the NameValue in XML format
-	 * 
+	 *
 	 * @see NameValueDTM class NameValue
 	 */
 	public String toXML() {
@@ -110,13 +110,13 @@ public class NameValueDTM implements ModelElement, Serializable {
 	 * This method will be called to check whether the syntax's
 	 * {@link NameValueDTM} is correct </br>
 	 * </p>
-	 * 
+	 *
 	 * @return boolean true if the syntax is correct, else return false
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @see NameValueDTM
-	 * 
+	 *
 	 */
 	@Override
 	public boolean verify() throws String256Exception {

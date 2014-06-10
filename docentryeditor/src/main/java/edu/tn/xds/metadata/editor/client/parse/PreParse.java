@@ -4,9 +4,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.xml.client.DOMException;
 
 /**
- * 
+ *
  * <b>This class prepares a XML file to be parsed</b>
- * 
+ *
  * <p>
  * To do it, here are the following variables required
  * </p>
@@ -16,14 +16,14 @@ import com.google.gwt.xml.client.DOMException;
  * <li>{@link #documentXml} : The String which contains the XML data (String).</li>
  * </ul>
  * </p>
- * 
+ *
  * <p>
  * This class also contains getters/setters.<br>
  * In addition, it contains several methods such as cleanEscape to delete
  * unexpected space or allowUTF8 to enable UTF8 character in
  * {@link #documentXml}.
  * </p>
- * 
+ *
  * <p>
  * <b>How it works ?</b><br>
  * This class is a singleton which the only instance is called by a
@@ -31,31 +31,31 @@ import com.google.gwt.xml.client.DOMException;
  * cleanEscape and allowUTF called in the doPreParse method as follows:
  * {@link #doPreParse(String)}.</br>
  * </p>
- * 
- * 
+ *
+ *
  * <p>
  * <b>See below each method mentioned above or come back to an other class.</b>
  * <br>
  * {@link #cleanEscape()}</br> {@link #allowUTF8()} <br>
  * {@link #doPreParse(String)} </br>
  * </p>
- * 
- * 
- * 
+ *
+ *
+ *
  * @see Parse
- * 
+ *
  */
 public class PreParse {
 
 	/**
 	 * <p>
-	 * 
-	 * @param documentXml
+	 *
+	 * documentXml
 	 *            - The data taken from the XML document and send by the server,
 	 *            this is the String to parse.<br>
 	 *            Type : String</br>
 	 *            </p>
-	 * 
+	 *
 	 * @see PreParse
 	 * @see Parse
 	 */
@@ -63,13 +63,13 @@ public class PreParse {
 
 	/**
 	 * <p>
-	 * 
-	 * @param myPreParse
+	 *
+	 * myPreParse
 	 *            - The instance of PreParse class (it's a singleton class).<br>
 	 *            Type : PreParse</br>
 	 *            </p>
-	 * 
-	 * 
+	 *
+	 *
 	 * @see PreParse
 	 */
 	private final static PreParse myPreParse = new PreParse();
@@ -88,13 +88,13 @@ public class PreParse {
 		return documentXml;
 	}
 
-	public void setMessage(String msg) {
-		documentXml = msg;
-	}
+//	public void setMessage(String msg) {
+//		documentXml = msg;
+//	}
 
-	public String getMessage() {
-		return documentXml;
-	}
+//	public String getMessage() {
+//		return documentXml;
+//	}
 
 	/**
 	 * <p>
@@ -103,10 +103,10 @@ public class PreParse {
 	 * space.</br>It analysis char by char whether there are too much space.<br>
 	 * This method is called by {@link #doPreParse(String)}.
 	 * </p>
-	 * 
-	 * 
+	 *
+	 *
 	 * @see PreParse
-	 * 
+	 *
 	 */
 	public void cleanEscape() {
 		StringBuilder xmlWithoutEscape = new StringBuilder();
@@ -142,10 +142,10 @@ public class PreParse {
 	 * characters.<br>
 	 * This method is called by {@link #doPreParse(String)}.
 	 * </p>
-	 * 
-	 * 
+	 *
+	 *
 	 * @see PreParse
-	 * 
+	 *
 	 */
 	public void allowUTF8() {
 
