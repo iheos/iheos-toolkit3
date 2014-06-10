@@ -8,6 +8,7 @@
 		<version>v2-maven-alpha</version>
 	</parent>
 
+	<groupId>gov.nist.toolkit</groupId>		<version>v2-maven-alpha</version>
 	<artifactId>xds-exceptions</artifactId>
 
 

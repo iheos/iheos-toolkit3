@@ -10,6 +10,19 @@
 	<name>toolkit2</name>
 
 	<repositories>
+        <repository>
+            <id>maven-central</id>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>apache-central</id>
+            <url>http://repo.maven.apache.org/maven2</url>
+        </repository>
+		<repository>
+			<id>codehaus</id>
+			<url>http://repository.codehaus.org/org/codehaus</url>
+		</repository>
+
 		<repository>
 			<id>internal-nist-repo-releases</id>
 			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
@@ -30,10 +43,8 @@
             <id>jboss-maven2-release-repository</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/jboss-thirdparty-releases/</url>
         </repository>
-		<repository>
-			<id>codehaus</id>
-			<url>http://repository.codehaus.org/org/codehaus</url>
-		</repository>
+
+     
 	</repositories>
 
 	<properties>
@@ -87,7 +98,7 @@
 		<module>validators-registry-metadata</module>
 		<module>validators-support</module>
 		<module>wssetool</module>
-		<module>xds-exceptions</module>
+		<module>xds-exceptions</module> 
 		<module>xdsException</module> 	  <!-- v3 -->
 		<module>xdstest-gui</module>
 		<module>xdstest2</module>
@@ -145,95 +156,89 @@
      </dependency>
     </dependencies>
 
-	<build>
-		<plugins>
+
+    <build>
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.1</version>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
+                    <!-- Java version -->
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-compiler</artifactId>
+                        <version>2.8.0-01</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <!-- Groovy version -->
+                        <version>2.1.8-01</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.0-beta-1</version>
+                <configuration>
+                    <warSourceDirectory>${basedir}/target/xdstools2-v2-maven-alpha</warSourceDirectory>
                 </configuration>
             </plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
-				<configuration>
-					<!-- Bind Groovy Eclipse Compiler -->
-					<compilerId>groovy-eclipse-compiler</compilerId>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-				<dependencies>
-					<!-- Define dependency to Groovy Eclipse Compiler (as it's referred 
-						in compilerId) -->
-					<dependency>
-						<groupId>org.codehaus.groovy</groupId>
-						<artifactId>groovy-eclipse-compiler</artifactId>
-						<version>2.7.0-01</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.0-beta-1</version>
-				<configuration>
-					<warSourceDirectory>${basedir}/target/xdstools2-v2-maven-alpha</warSourceDirectory>
-				</configuration>
-			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-compiler-plugin
-										</artifactId>
-										<versionRange>
-											[2.0,)
-										</versionRange>
-										<goals>
-											<goal>testCompile</goal>
-											<goal>compile</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.apache.maven.plugins
+                                        </groupId>
+                                        <artifactId>
+                                            maven-compiler-plugin
+                                        </artifactId>
+                                        <versionRange> [2.0,) </versionRange>
+                                        <goals>
+                                            <goal>testCompile</goal>
+                                            <goal>compile</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
