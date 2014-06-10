@@ -380,8 +380,8 @@ public interface Asset {
     public String getMimeType() 
     		throws gov.nist.hit.ds.repository.api.RepositoryException;
     /**
-     * Get an Asset's content.  This method can be a convenience if one is not
-     * interested in all the structure of the Records.
+     * Get an Asset's content.
+     *
      *
      * @return java.io.Serializable
      *

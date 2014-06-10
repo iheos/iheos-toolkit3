@@ -8,7 +8,9 @@
 		<version>v2-maven-alpha</version>
 	</parent>
 
-	<artifactId>common-datatypes</artifactId>
+	<groupId>gov.nist.toolkit</groupId>		
+<!--	<version>v2-maven-alpha</version>
+-->	<artifactId>common-datatypes</artifactId>
 
   <dependencies>
     <dependency>
@@ -17,8 +19,10 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
-  	<build>
+
+
+	
+		<build>
 		<plugins>
 			<!-- ... or ask the plugin to detect them based on gwt modules files and 
 				copy the required java sources -->
@@ -71,4 +75,6 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+  
 </project>

@@ -8,6 +8,7 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
+import gov.nist.toolkit.xdstools3.client.RESTClient.RestDs;
 import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.MPQTab.MPQTab;
@@ -16,7 +17,6 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.TabSetWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.events.EventHandler;
 import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.restDatasourceTest.RestDs;
 
 public class Xdstools3 implements EntryPoint {
 

@@ -1,27 +1,9 @@
 package gov.nist.hit.ds.logBrowser.client.widgets;
 
 
-import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
-import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEventHandler;
-import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
-import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
-import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.dom.client.StyleInjector;
@@ -38,6 +20,7 @@ import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -50,6 +33,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -64,6 +48,26 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
+import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
+import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEventHandler;
+import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEvent;
+import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEventHandler;
+import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
+import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
+import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
+import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
+import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LogBrowserWidget extends Composite {
 
@@ -90,9 +94,53 @@ public class LogBrowserWidget extends Composite {
 	final public RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
     protected ArrayList<String> propNames = new ArrayList<String>();
     protected Map<String, String> reposProps = new HashMap<String,String>();
-    AssetTreeItem treeItemTarget = null;     
+    AssetTreeItem treeItemTarget = null;
+    HTML tabTitle = new HTML(Feature.TRANSACTION_MONITOR.toString());
+    int txMonTab = -1;
+    final VerticalPanel treeHolder = new VerticalPanel();
+
+    final AsyncCallback<AssetNode> contentSetup = new AsyncCallback<AssetNode>() {
+        public void onFailure(Throwable arg0) {
+            centerPanel.clear();
+            centerPanel.add(new HTML("Content could not be loaded. " + arg0.toString()));
+            propsWidget.setHTML("");
+        }
+
+        public void onSuccess(AssetNode an) {
+            displayAssetContent(an, centerPanel, propsWidget);
+        }
+
+    };
+    final AsyncCallback<List<AssetNode>> treeSetup = new AsyncCallback<List<AssetNode>>() {
+
+        public void onFailure(Throwable a) {
+            Window.alert(a.toString());
+        }
+
+    public void onSuccess(List<AssetNode> a) {
+        treeHolder.clear();
+        treeHolder.add(popTreeWidget(a,null,false, contentSetup));
+
+        // populate repository props here
+        propsWidget.setHTML("");
+        SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
+        int idx = reposLbx.getSelectedIndex();
+        String propsTxt = reposProps.get(reposLbx.getValue(idx)); // use getItemText for display text
+        if (propsTxt!=null) {
+            // margin-top:0px;margin-left:3px;
+            propsContent.appendHtmlConstant("<div style='margin:3px;'>Repository Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
+            propsContent.appendHtmlConstant("</div>");
+            // propsWidget.setWidth("250px");
+            propsWidget.setHTML(propsContent.toSafeHtml());
+        }
+
+    }
+
+};
 
     SimpleEventBus eventBus;
+
+    // TODO: refactor widgets for internal use
     
 	public static enum Feature {
 		BROWSE() {
@@ -105,7 +153,23 @@ public class LogBrowserWidget extends Composite {
 			public String toString() {
 				return "Search";	
 			}
-		} 
+		}, TRANSACTION_MONITOR() {
+            @Override
+            public String toString() {
+                return "Transaction Monitor";
+            }
+        }, TRANSACTION_FILTER() {
+            @Override
+            public String toString() {
+                return "Messages";
+            }
+        } , TRANSACTION_FILTER_ADVANCED() {
+            @Override
+            public String toString() {
+                return "Messages";
+            }
+        }
+
 	};
 
 	public LogBrowserWidget(SimpleEventBus eventBus, final Feature[] features) throws RepositoryConfigException {
@@ -115,20 +179,28 @@ public class LogBrowserWidget extends Composite {
 
 			public void onFailure(Throwable arg0) {
 				
-				Window.alert("Repository system is not available: " + arg0.toString());
+				Window.alert("The repository system configuration is not available: " + arg0.toString());
 			}
 
 			public void onSuccess(Boolean rs) {
 				if (features!=null) {
 					if (features.length>1) {
+                        int cx=0;
 						for (Feature f : features) {
-							featureTlp.add(setupFeature(f), f.toString());
+
+
+                            if (Feature.TRANSACTION_MONITOR.equals(f)) {
+                                txMonTab = cx;
+                            }
+                            featureTlp.add(setupFeature(f),f.toString());
+                            cx++;
+
 						}		 				    				 					
 					} else if (features.length==1) {						
 						featureLp.add(setupFeature(features[0]));
 					}
 				} else {
-					Window.alert("No log browsers features were selected");
+					Window.alert("No log browser features were selected");
 				}
 
 			}			
@@ -136,7 +208,7 @@ public class LogBrowserWidget extends Composite {
 
 		if (features!=null) {
 			if (features.length>1) {
-				initWidget(featureTlp);		
+				initWidget(featureTlp);
 			} else {
 				initWidget(featureLp);
 			}
@@ -153,10 +225,55 @@ public class LogBrowserWidget extends Composite {
 		} 
 		else if (Feature.SEARCH==f) {
 			return setupSearchFeature();				
-		}
+		} else if (Feature.TRANSACTION_MONITOR==f) {
+            return setupTxMonitorFeature();
+        } else if (Feature.TRANSACTION_FILTER==f) {
+            return setupTxFilter();
+        } else if (Feature.TRANSACTION_FILTER_ADVANCED==f) {
+            return setupTxFilterAdvanced();
+        }
 		return null;
 	}
-	
+
+    protected Widget setupTxFilterAdvanced() {
+        TransactionMonitorFilterAdvancedWidget txFilter = new TransactionMonitorFilterAdvancedWidget(eventBus);
+        txFilter.getElement().getStyle()
+                .setProperty("border", "none");
+
+        return  txFilter;
+    }
+
+
+    protected Widget setupTxFilter() {
+        TransactionMonitorFilterWidget txFilter = new TransactionMonitorFilterWidget(eventBus);
+        txFilter.getElement().getStyle()
+                .setProperty("border", "none");
+
+        return  txFilter;
+    }
+
+    protected Widget setupTxMonitorFeature() {
+
+        TransactionMonitorWidget txMonitor = new TransactionMonitorWidget(eventBus, Boolean.TRUE, Boolean.FALSE,  Boolean.TRUE);
+        txMonitor.getElement().getStyle()
+                .setProperty("border", "none");
+
+
+        eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
+            @Override
+            public void onNewTxMessage(NewTxMessageEvent event) {
+
+                if (txMonTab>-1) {
+
+                    featureTlp.getTabWidget(txMonTab).getElement().setInnerText(Feature.TRANSACTION_MONITOR.toString() + " ("+ event.getValue() + ")");
+
+                }
+
+            }
+        });
+
+        return txMonitor;
+    }
 
 	  protected SplitLayoutPanel setupSearchFeature() {
 		    SplitLayoutPanel searchMainLayoutPanel = new SplitLayoutPanel(5); // Search-main panel
@@ -181,7 +298,12 @@ public class LogBrowserWidget extends Composite {
 			
 		    ScrollPanel searchPanel = new ScrollPanel(); 				// Search parameters 
 		    
-		    SearchWidget searchWidget = new SearchWidget(eventBus);
+		    SearchWidget searchWidget = new SearchWidget(eventBus, new SearchWidget.Option[]{
+                    SearchWidget.Option.QUICK_SEARCH,
+                    SearchWidget.Option.SEARCH_CRITERIA_REPOSITORIES,
+                    SearchWidget.Option.CRITERIA_BUILDER_MODE
+            });
+
 		    searchWidget.getElement().getStyle()
 	        .setProperty("border", "none");
 		    searchWidget.getElement().getStyle()
@@ -222,7 +344,7 @@ public class LogBrowserWidget extends Composite {
 								List<AssetNode> topLevelAsset = new ArrayList<AssetNode>();
 								topLevelAsset.add(an);
 								searchLbTreeHolder.add(popTreeWidget(topLevelAsset,target,true, searchLbContentSetup));
-								reposService.getAssetTxtContent(target, searchLbContentSetup);
+                                reposService.getAssetTxtContent(target, searchLbContentSetup);
 							}});
 					} catch (RepositoryConfigException e) {
 						e.printStackTrace();
@@ -293,11 +415,39 @@ public class LogBrowserWidget extends Composite {
 							HTML browseHeader = new HTML("&nbsp;"); // <h4>Browse Available Repositories</h4>
 							// browseHeader.setStyleName("searchCriteriaGroup");
 							grid.setWidget(0, 0, browseHeader);
-							// grid.getFlexCellFormatter().setColSpan(0, 0, 2);
+//							grid.getFlexCellFormatter().setColSpan(0, 0, 2);
 							grid.setWidget(1, 0, lblRepos );
-							// grid.getFlexCellFormatter().setColSpan(1, 0, 2);
-							grid.setWidget(2, 0, reposLbx);
-							grid.setWidth("100%");
+//							grid.getFlexCellFormatter().setColSpan(1, 0, 2);
+
+                            HorizontalPanel hpLbx = new HorizontalPanel();
+                            hpLbx.add(reposLbx);
+
+//							grid.setWidget(2, 0, reposLbx);
+
+                            Image img = new Image();
+                            img.setUrl(GWT.getModuleBaseForStaticFiles() + "images/refresh-sm.png");
+                            img.setHeight("16px");
+                            img.setWidth("16px");
+                            img.setAltText("Refresh");
+                            img.setTitle("Refresh");
+                            img.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.MIDDLE);
+//                            Anchor refAnchor = new Anchor();
+//                            refAnchor.set
+                            img.addClickHandler(new ClickHandler() {
+                                @Override
+                                public void onClick(ClickEvent event) {
+                                    refreshTree();
+                                }
+                            });
+                            hpLbx.add(new HTML("&nbsp;"));
+                            hpLbx.add(img);
+                            hpLbx.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+                            grid.setWidget(2,0,hpLbx);
+
+//                            HTMLTable.CellFormatter formatter = grid.getCellFormatter();
+//                            formatter.setHorizontalAlignment(2, 1, HasHorizontalAlignment.ALIGN_LEFT);
+
+                            grid.setWidth("100%");
 							
 							// treePanel.add(new HTML("&nbsp;"));
 							treePanel.add(grid);
@@ -311,7 +461,7 @@ public class LogBrowserWidget extends Composite {
 							westContent.addSouth(spProps, Math.round(0.2 * Window.getClientHeight()));
 							
 							// treePanel.add(new HTML("&nbsp;"));
-							final VerticalPanel treeHolder = new VerticalPanel();
+							//final VerticalPanel treeHolder = new VerticalPanel();
 							treeHolder.add(new HTML("&nbsp;Loading..."));
 							treePanel.add(treeHolder);
 							ScrollPanel sp = new ScrollPanel(treePanel);									
@@ -329,66 +479,16 @@ public class LogBrowserWidget extends Composite {
 							
 							// RootLayoutPanel.get().add(splitPanel);
 							
+
 						    
-						    final AsyncCallback<AssetNode> contentSetup = new AsyncCallback<AssetNode>() {
-								public void onFailure(Throwable arg0) {
-									centerPanel.clear();							
-									centerPanel.add(new HTML("Content could not be loaded. " + arg0.toString()));
-									propsWidget.setHTML("");
-								}
 
-								public void onSuccess(AssetNode an) {
-									displayAssetContent(an, centerPanel, propsWidget);
-								}
-								
-							};
-						    
-							final AsyncCallback<List<AssetNode>> treeSetup = new AsyncCallback<List<AssetNode>>() {
-
-								public void onFailure(Throwable a) {
-									Window.alert(a.toString());									
-								}
-
-								public void onSuccess(List<AssetNode> a) {
-									treeHolder.clear();
-									treeHolder.add(popTreeWidget(a,null,false, contentSetup));
-									
-									// populate repository props here
-									propsWidget.setHTML("");
-									SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
-									int idx = reposLbx.getSelectedIndex();
-									String propsTxt = reposProps.get(reposLbx.getValue(idx)); // use getItemText for display text 
-									if (propsTxt!=null) {
-										// margin-top:0px;margin-left:3px;
-										propsContent.appendHtmlConstant("<div style='margin:3px;'>Repository Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
-										propsContent.appendHtmlConstant("</div>");
-										// propsWidget.setWidth("250px");
-										propsWidget.setHTML(propsContent.toSafeHtml());											
-									}
-									
-								}
-								
-							};
 							reposService.getAssetTree(new String[][]{{reposData[0][0],reposData[0][1]}}, treeSetup);
 						
 							if (reposLbx.getItemCount()>0) {
 								reposLbx.addChangeHandler(new ChangeHandler() {
 									
 									public void onChange(ChangeEvent event) {
-										treeHolder.clear();
-										treeHolder.add(new HTML("&nbsp;Loading..."));
-										centerPanel.clear();
-
-										
-										
-										ListBox lbx = ((ListBox)event.getSource());
-										int idx = lbx.getSelectedIndex();
-										
-										// reposService.getAssetTree(new String[][]{{lbx.getItemText(idx),lbx.getValue(idx)}}, treeSetup);
-										String[] compositeKey = lbx.getValue(idx).split("\\^");
-										
-										reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, treeSetup);
-										
+					                    refreshTree();
 									}
 								});
 							}
@@ -433,6 +533,23 @@ public class LogBrowserWidget extends Composite {
 	    return splitPanel;
 	    
 	  }
+
+    protected void refreshTree() {
+        treeHolder.clear();
+        treeHolder.add(new HTML("&nbsp;Loading..."));
+        centerPanel.clear();
+
+
+
+        ListBox lbx = reposLbx; // ((ListBox)event.getSource());
+        int idx = lbx.getSelectedIndex();
+
+        // reposService.getAssetTree(new String[][]{{lbx.getItemText(idx),lbx.getValue(idx)}}, treeSetup);
+        String[] compositeKey = lbx.getValue(idx).split("\\^");
+
+        reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, treeSetup);
+
+    }
 	  
 	  protected TabPanel addTab(Widget w, String lbl) {
 	      	
@@ -593,23 +710,37 @@ public class LogBrowserWidget extends Composite {
 		    
 		    return tree;
 	  }
-		/**
-		 * @param an
-		 * @return
-		 */
-		private CellTable<List<String>> createCellTable(String [][]csv) {
+
+    /**
+     *
+     * @param csv
+     * @return
+     */
+		private CellTable<List<SafeHtml>> createCellTable(String [][]csv) {
 			// Create a CellTable (based on Stack ans. 15122103).
-			 CellTable<List<String>> table = new CellTable<List<String>>();							 							 
-			 
+			 // CellTable<List<String>> table = new CellTable<List<String>>();
+            CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>();
 			 
 			 // Get the rows as List
 			    int rowLen = csv.length;
 			    int colLen = csv[0].length;
-			    List<List<String>> rows = new ArrayList<List<String>>(rowLen);
+			    List<List<SafeHtml>> rows = new ArrayList<List<SafeHtml>>(rowLen);
 			    
 			    for (int r = 1; r < rowLen; r++) {
-			        List<String> row = Arrays.asList(csv[r]);
-			        rows.add(row);
+			        List<String> textRow = Arrays.asList(csv[r]);
+                    if (textRow!=null) {
+                        int textRowSz = textRow.size();
+                        if (textRowSz>0) {
+                            List<SafeHtml> htmlRow = new ArrayList<SafeHtml>(textRowSz);
+                            for (int cx=0; cx<textRowSz; cx++) {
+                                SafeHtmlBuilder shb = new SafeHtmlBuilder();
+                                String val =  textRow.get(cx);
+                                htmlRow.add(htmlBuilder(val).toSafeHtml());
+                            }
+                            rows.add(htmlRow);
+                        }
+                    }
+
 			    }  
 
 			    // Create table columns
@@ -619,14 +750,38 @@ public class LogBrowserWidget extends Composite {
 			    }
 			    
 			    // Create a list data provider.
-			    final ListDataProvider<List<String>> dataProvider  = new ListDataProvider<List<String>>();
+			    final ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
 			    dataProvider.setList(rows);
 			    
 			    dataProvider.addDataDisplay(table);
 			return table;
 		}
-		
-	  protected void displayAssetContent(AssetNode an, ScrollPanel contentPanel, HTML propsWidget) {
+
+    private SafeHtmlBuilder htmlBuilder(String v) {
+        SafeHtmlBuilder shb = new SafeHtmlBuilder();
+        if (v!=null) {
+
+            String[] values = v.split(" ");
+
+            for (String val : values) {
+                if (val.toLowerCase().startsWith("http://") || v.toLowerCase().startsWith("https://")) {
+                    shb.appendHtmlConstant("<a href='"
+                            + val
+                            + "' target='_blank'>" // Open link in new tab
+                    );
+                    shb.appendEscaped(val);
+                    shb.appendHtmlConstant("</a>&nbsp;");
+
+                } else {
+                    shb.appendEscaped(v);
+                }
+            }
+
+        }
+        return  shb;
+    }
+
+    protected void displayAssetContent(AssetNode an, ScrollPanel contentPanel, HTML propsWidget) {
 		  contentPanel.clear();
 			//// splitPanel.remove(centerPanel);
 			
@@ -656,17 +811,18 @@ public class LogBrowserWidget extends Composite {
 			// westContent.add(propsWidget);
 			if (an.isContentAvailable()) {
 				if ("text/csv".equals(an.getMimeType())) {
-					   CellTable<List<String>> table = createCellTable(an.getCsv());								    
+					   CellTable<List<SafeHtml>> table = createCellTable(an.getCsv());
 					   contentPanel.add(table);							    
 				} else if ("text/xml".equals(an.getMimeType()) || "application/soap+xml".equals(an.getMimeType())) {
 					String xmlStr = an.getTxtContent().replace("<br/>", "\r\n");
 					String shStr = SyntaxHighlighter.highlight(xmlStr, BrushFactory.newXmlBrush() , false);
 					contentPanel.add(new HTML(shStr));
 				} else if ("text/json".equals(an.getMimeType())) {
-					// centerPanel.add(new HTML("<pre>" + an.getTxtContent() + "</pre>"));
 					String shStr = SyntaxHighlighter.highlight(an.getTxtContent(), BrushFactory.newCssBrush() , false);
 					contentPanel.add(new HTML(shStr));
-				} else {								
+				} else if ("text/plain".equals(an.getMimeType())) {
+                    contentPanel.add(new HTML("<pre style='margin-top:0px;'>" + an.getTxtContent() + "</pre>"));
+                } else {
 					contentPanel.add(new HTML(an.getTxtContent()));	
 				} 
 			} else {	
@@ -708,14 +864,16 @@ public class LogBrowserWidget extends Composite {
 	        return item;
 	    }
 	  
-	  class IndexedColumn extends Column<List<String>, String> {
+	  class IndexedColumn extends Column<List<SafeHtml>, SafeHtml> {
 		    private final int index;
 		    public IndexedColumn(int index) {
-		        super(new TextCell());
+		        // For use with String:
+		        // super(new TextCell());
+                super(new SafeHtmlCell());
 		        this.index = index;
 		    }
 		    @Override
-		    public String getValue(List<String> object) {
+		    public SafeHtml getValue(List<SafeHtml> object) {
 		        return object.get(this.index);
 		    }
 	  }

@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>actorfactory</artifactId>
+    <version>v2-maven-alpha</version>
 
 
 	<dependencies>

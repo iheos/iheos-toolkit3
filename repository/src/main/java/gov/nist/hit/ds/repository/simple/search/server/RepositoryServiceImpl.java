@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.repository.simple.search.server;
 
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.presentation.PresentationData;
 import gov.nist.hit.ds.repository.simple.Configuration;
@@ -12,8 +13,7 @@ import gov.nist.hit.ds.repository.simple.search.client.exception.NoServletSessio
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 
 import java.util.List;
-
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import java.util.Map;
 
 
 @SuppressWarnings("serial")
@@ -55,7 +55,12 @@ RepositoryService {
 		return PresentationData.search(reposData, sc);
 	}
 
-	@Override
+    @Override
+    public Boolean searchHit(String[][] repos, SearchCriteria sc, Boolean newIndexOnly) throws RepositoryConfigException {
+        return PresentationData.searchHit(repos, sc, newIndexOnly);
+    }
+
+    @Override
 	public List<AssetNode> getAssetTree(String[][] reposData)
 			throws RepositoryConfigException {
 		return PresentationData.getTree(reposData);
@@ -122,7 +127,16 @@ RepositoryService {
 		}
 	}
 
-	@Override
+    @Override
+    public Map<String,AssetNode> getTxUpdates(String queue, String filterLocation) throws RepositoryConfigException {
+        try {
+            return PresentationData.getLiveUpdates(queue,filterLocation);
+        } catch (Exception re) {
+            throw new RepositoryConfigException(re.toString());
+        }
+    }
+
+    @Override
 	public QueryParameters getSearchCriteria(String id, String acs,
 			String queryLoc) throws RepositoryConfigException {
 		try {
@@ -143,6 +157,7 @@ RepositoryService {
 		}
 
 	}
+
 
 	
 

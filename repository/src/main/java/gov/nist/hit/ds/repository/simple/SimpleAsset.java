@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.repository.simple;
 
+import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Parameter;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -11,6 +11,7 @@ import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
 import gov.nist.hit.ds.utilities.io.Io;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,11 +24,11 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import org.apache.commons.io.FileUtils;
-
+/**
+ * A SimpleAsset has two main parts on the filesystem: an asset properties file and an optional content file. The content file extension is based on the mimeType {@code setMimeType}. Parent-child relations transform the file to a folder on the filesystem and the parent properties are nested in the parent folder.
+ */
 public class SimpleAsset implements Asset, Flushable {
 	private static Logger logger = Logger.getLogger(SimpleAsset.class.getName());
-	String classNameForSerializable;
 	Properties properties = new Properties();
 	byte[] content = null;
 	boolean loadContentAttempted = false;
@@ -38,24 +39,39 @@ public class SimpleAsset implements Asset, Flushable {
 	transient RepositorySource source;
 	private transient File path;
 	private transient File contentPath = null;
-	
+
+    /**
+     * Creates a new instance of an asset only in memory, which is eventually intended towards flushing to disk.
+     * @param source {@code RepositorySource}
+     * @throws RepositoryException
+     */
 	public SimpleAsset(RepositorySource source) throws RepositoryException {
 		super();
 		setCreatedDate(new Hl7Date().now());
 		setSource(source);
 	}
 
+    /**
+     * Sets the repository Id
+     * @param repositoryId repository Id
+     * @throws RepositoryException
+     */
 	public void setRepository(ArtifactId repositoryId) throws RepositoryException {
 		setProperty(PropertyKey.REPOSITORY_ID, repositoryId.getIdString());
 	}
 
+    /**
+     *
+     * @param type The type of asset, which is within the asset domain
+     * @throws RepositoryException
+     */
 	public void setType(Type type) throws RepositoryException {
 		setProperty(PropertyKey.ASSET_TYPE, type.getKeyword());
 	}
 
 	/**
-	 * ArtifactId is case sensitive
-	 * @param id
+	 *
+	 * @param id ArtifactId is case sensitive
 	 * @throws RepositoryException
 	 */
 	public void setId(ArtifactId id) throws RepositoryException {		
@@ -65,39 +81,73 @@ public class SimpleAsset implements Asset, Flushable {
 
 	/**
 	 * Temporary update. This method does not flush contents immediately.
-	 * @param key
-	 * @param value
+	 * @param key The property key
+	 * @param value The value
 	 * @throws RepositoryException
 	 */
 	private void setPropertyTemp(PropertyKey key, String value) throws RepositoryException {
 		properties.setProperty(key.toString(), value);
 	}
-	
+
+    /**
+     * Set a property using the {@link gov.nist.hit.ds.repository.api.PropertyKey} enumeration using the Java Properties API.
+     * @param key The property key
+     * @param value The value
+     * @throws RepositoryException
+     */
 	@Override
 	public void setProperty(PropertyKey key, String value) throws RepositoryException {
-		setProperty(key.toString(), value);
+        Parameter p = new Parameter();
+        p.setDescription("key");
+        p.assertNotNull(key);
+        p.setDescription("value");
+        p.assertNotNull(value);
+
+        setProperty(key.toString(), value);
 	}
 
 	/**
 	 * An alternative to {@link SimpleAsset#setProperty(PropertyKey,String)} 
 	 * in cases where PropertyKeyLabel is not yet defined
-	 */
-	public void setProperty(String key, String value) throws RepositoryException { 
-			properties.setProperty(key, value);		
-			if (autoFlush) flush(getPropFile());		
+     * @param key The property key
+     * @param value The value
+     */
+	public void setProperty(String key, String value) throws RepositoryException {
+        Parameter p = new Parameter();
+        p.setDescription("key");
+        p.assertNotNull(key);
+        p.setDescription("value");
+        p.assertNotNull(value);
+
+        properties.setProperty(key, value);
+        if (autoFlush) flush(getPropFile());
 	}
 
-
-
+    /**
+     * Get a property based on the key, which cannot be null.
+     * @param key The property key
+     * @return String 
+     */
 	public String getProperty(String key) {
 		return properties.getProperty(key);
 	}
-	
+
+    /**
+     * Get a property based on the key, which cannot be null.
+     * @param key The property key
+     * @return String
+     */
 	@Override
 	public String getProperty(PropertyKey key) {
 		return properties.getProperty(key.toString());
 	}
 
+    /**
+     * Gets the base file, that is just the name part without any additional naming-extensions following the base file name.
+     * @param assetId The asset Id
+     * @return The partial file path, which is not readily usable.
+     * @throws RepositoryException
+     */
 	File getAssetBaseFile(ArtifactId assetId) throws RepositoryException {
 		
 		// get repository source from property
@@ -107,7 +157,13 @@ public class SimpleAsset implements Asset, Flushable {
 		
 		return new File(getBasePath(assetId) + File.separator + assetId.getIdString());
 	}
-	
+
+    /**
+     * Gets the path up till the repository or the parent folder, whichever is applicable.
+     * @param assetId The asset Id
+     * @return File
+     * @throws RepositoryException
+     */
 	private File getBasePath(ArtifactId assetId) throws RepositoryException {
 		
 		if (getPath()!=null) {
@@ -116,17 +172,33 @@ public class SimpleAsset implements Asset, Flushable {
 			return getReposDir();
 			
 	}
-		
+
+    /**
+     * Gets the repository root.
+     * @return File
+     * @throws RepositoryException
+     */
 	private File getReposDir() throws RepositoryException {
-		return new File(Configuration.getRepositoriesDataDir(getSource()).toString()  + File.separator + getRepository().getIdString());		
+		return new File(Configuration.getRepositoriesDataDir(getSource()).toString() , getRepository().getIdString());
 	}
 
-	
+
+    /**
+     * Gets the Java properties object
+     * @return Properties
+     * @throws RepositoryException
+     */
 	@Override
 	public Properties getProperties() throws RepositoryException {
 		return this.properties;
 	}
-		
+
+    /**
+     * Updates the property
+     * @param displayName The display name
+     *
+     * @throws RepositoryException
+     */
 	@Override
 	public void updateDisplayName(String displayName)
 			throws RepositoryException {
@@ -134,17 +206,33 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
 
+    /**
+     * Updates the property
+     * @param expirationDate in HL7 2.4 format: "YYYY[MM[DD]]"
+     *
+     * @throws RepositoryException
+     */
 	@Override
 	public void updateExpirationDate(String expirationDate)
 			throws RepositoryException {
 		setProperty(PropertyKey.EXPIRATION_DATE,expirationDate);
 	}
 
+    /**
+     * Gets the property
+     * @return String
+     * @throws RepositoryException
+     */
 	@Override
 	public String getDisplayName() throws RepositoryException {
 		return getProperty(PropertyKey.DISPLAY_NAME);		
 	}
 
+    /**
+     * Gets the property
+     * @return String
+     * @throws RepositoryException
+     */
 	@Override
 	public String getDescription() throws RepositoryException {
 		return getProperty(PropertyKey.DESCRIPTION);		
@@ -166,6 +254,11 @@ public class SimpleAsset implements Asset, Flushable {
 		return id;
 	}
 
+    /**
+     * Gets the asset domain type, as specified in the {@code types} folder in the repository source.
+     * @return Type
+     * @throws RepositoryException
+     */
 	@Override
 	public Type getAssetType() throws RepositoryException {		
 		String type = getProperty(PropertyKey.ASSET_TYPE);
@@ -175,18 +268,33 @@ public class SimpleAsset implements Asset, Flushable {
 			return null;
 	}
 
-
+    /**
+     * Gets the expiration date if available
+     * @return String
+     * @throws RepositoryException
+     */
 	@Override
 	public String getExpirationDate() throws RepositoryException {		
 		return getProperty(PropertyKey.EXPIRATION_DATE);
 	}
 
+    /**
+     *
+     * @return String
+     * @throws RepositoryException
+     */
 	@Override
 	public String getMimeType() throws RepositoryException {		
 		return getProperty(PropertyKey.MIME_TYPE);
 	}
 
 
+    /**
+     *
+     * @param createdDate in HL7 2.4 format: "YYYY[MM[DD]]"
+     *
+     * @throws RepositoryException
+     */
 	@Override
 	public void setCreatedDate(String createdDate)
 			throws RepositoryException {
@@ -195,16 +303,31 @@ public class SimpleAsset implements Asset, Flushable {
 						
 	}
 
+    /**
+     *
+     * @return A string containing date in HL7 2.4 format
+     * @throws RepositoryException
+     */
 	@Override
 	public String getCreatedDate() throws RepositoryException {
 		return getProperty(PropertyKey.CREATED_DATE);		
 	}
-	
+
+    /**
+     * Sets the display order of the asset for sorting purposes
+     * @param order The display order
+     * @throws RepositoryException
+     */
 	@Override
 	public void setOrder(int order) throws RepositoryException {
 		setProperty(PropertyKey.DISPLAY_ORDER,Integer.toString(order));
 	}
 
+    /**
+     * When the mimeType changes, the previous content file is removed from the repository.
+     * @param mimeType The mimeType
+     * @throws RepositoryException
+     */
 	@Override
 	public void setMimeType(String mimeType) throws RepositoryException {
 		
@@ -227,18 +350,33 @@ public class SimpleAsset implements Asset, Flushable {
 		deleteContent(oldContentFile);
 
 	}
-	
+
+    /**
+     * Gets the display order of the asset.
+     * @return String
+     * @throws RepositoryException
+     */
 	@Override
 	public String getOrder() throws RepositoryException {
 		return getProperty(PropertyKey.DISPLAY_ORDER);
 	}
 
+    /**
+     * For use with parent-child relationship.
+     * @param id The id
+     * @throws RepositoryException
+     */
 	@Override
 	public void setParentId(String id) throws RepositoryException {
 		setProperty(PropertyKey.PARENT_ID, id);
 	}
-	
 
+
+    /**
+     *
+     * @param description The asset description
+     * @throws RepositoryException
+     */
 	@Override
 	public void updateDescription(String description)
 			throws RepositoryException {
@@ -247,16 +385,32 @@ public class SimpleAsset implements Asset, Flushable {
 		}
 	}
 
+    /**
+     *
+     * @return The artifact
+     * @throws RepositoryException
+     */
 	@Override
 	public ArtifactId getRepository() throws RepositoryException {
 		return new SimpleId(getProperty(PropertyKey.REPOSITORY_ID));
 	}
-	
+
+    /**
+     * Gets the content file associated with the asset. There can be only one physical file at the moment. It is possible to use a Zip archive for bundling files.
+     * @return File
+     * @throws RepositoryException
+     */
 	@Override
 	public File getContentFile() throws RepositoryException {
 		return getContentFile(null);
 	}
-	
+
+    /**
+     *
+     * @param part Part of the file
+     * @return File The content file
+     * @throws RepositoryException
+     */
 	@Override	
 	public File getContentFile(File part) throws RepositoryException {
 		String assetContentFilePart = null;
@@ -301,6 +455,11 @@ public class SimpleAsset implements Asset, Flushable {
 		
 	}
 
+    /**
+     * Indicates whether a content file is associated with this asset and accessible.
+     * @return boolean
+     * @throws RepositoryException
+     */
 	@Override	
 	public boolean hasContent() throws RepositoryException {
 		File f = getContentFile();
@@ -316,6 +475,11 @@ public class SimpleAsset implements Asset, Flushable {
 		return false;
 	}
 
+    /**
+     *
+     * @return byte[]
+     * @throws RepositoryException
+     */
 	@Override
 	public byte[] getContent() throws RepositoryException {
 
@@ -332,18 +496,36 @@ public class SimpleAsset implements Asset, Flushable {
 		return content;
 	}
 
+    /**
+     *
+     * @param content raw data
+     *
+     * @throws RepositoryException
+     */
 	@Override
 	public void updateContent(byte[] content) throws RepositoryException {
 		this.content = content;
 		if (autoFlush) flush(getContentFile()); // getPropFile()
 	}
 
+    /**
+     *
+     * @param content Text content
+     * @param mimeType The mimeType
+     * @throws RepositoryException
+     */
 	@Override
 	public void updateContent(String content, String mimeType) throws RepositoryException {
 		this.content = content.getBytes();
 		setMimeType(mimeType);
 	}
 
+    /**
+     * Associates a child asset to the parent asset. At this point if the parent is a single-file, it is automatically converted to a folder on the filesystem. The properties of the parent are nested inside the parent folder, not at the same-level.
+     * @param asset The child asset
+     * @return Asset
+     * @throws RepositoryException
+     */
 	@Override
 	public Asset addAsset(Asset asset) throws RepositoryException {
 		
@@ -392,7 +574,14 @@ public class SimpleAsset implements Asset, Flushable {
 		return addAsset(asset);
 	}
 	*/
-	
+
+    /**
+     * Not yet implemented.
+     * @param assetId The asset Id
+     * @param includeChildren Remove all associate children
+     *
+     * @throws RepositoryException
+     */
 	@Override
 	public void removeAsset(ArtifactId assetId, boolean includeChildren)
 			throws RepositoryException {
@@ -410,19 +599,33 @@ public class SimpleAsset implements Asset, Flushable {
 		
 		if (assetPropFile.exists()) {
 			logger.fine("Deleting property file:"+ assetPropFile.toString());
-			assetPropFile.delete();
+			if (!assetPropFile.delete()) {
+                logger.warning("Delete failed: " +assetPropFile.toString());
+            }
 			deleteContent(getContentFile());
 		}
 	}
-	
+
+    /**
+     *
+     * @param assetContentFile The content file
+     * @throws RepositoryException
+     */
 	private void deleteContent(File assetContentFile) throws RepositoryException {
 
 		if (assetContentFile!=null && assetContentFile.exists()) {
 			logger.fine("Deleting content file:"+ assetContentFile.toString());
-			assetContentFile.delete();
+			if (!assetContentFile.delete()) {
+                logger.warning("File delete failed:" +assetContentFile.toString());
+            }
 		}		
 	}
 
+    /**
+     *
+     * @return AssetIterator
+     * @throws RepositoryException
+     */
 	@Override
 	public AssetIterator getAssets() throws RepositoryException {
 		
@@ -432,6 +635,12 @@ public class SimpleAsset implements Asset, Flushable {
 		return new SimpleAssetIterator(repos);
 	}
 
+    /**
+     *
+     * @param assetType The asset type
+     * @return AssetIterator
+     * @throws RepositoryException
+     */
 	@Override
 	public AssetIterator getAssetsByType(Type assetType)
 			throws RepositoryException {
@@ -441,26 +650,50 @@ public class SimpleAsset implements Asset, Flushable {
 		return new SimpleAssetIterator(repos, assetType);
 	}
 
+    /**
+     *
+     * @return boolean
+     */
 	@Override
 	public boolean isAutoFlush() {
 		return autoFlush;
 	}
 
+    /**
+     *
+     * @param autoFlush A flag to indicate that all property level updates are immediately flushed to disk.
+     */
 	@Override
 	public void setAutoFlush(boolean autoFlush) {
 		this.autoFlush = autoFlush;
 	}
-	
+
+    /**
+     * The asset path off the repository root.
+     * @return String
+     * @throws RepositoryException
+     */
 	@Override
 	public String getPropFileRelativePart() throws RepositoryException {
 		return getPropFile(this.getId()).toString().replace(getReposDir().toString(), "").replace("\\", "/");
 	}
-	
+
+    /**
+     * The absolute path of an asset.
+     * @return File
+     * @throws RepositoryException
+     */
 	@Override
 	public File getPropFile() throws RepositoryException {
 		return getPropFile(this.getId());
 	}
-	
+
+    /**
+     *
+     * @param id ArtifactId is case sensitive
+     * @return File
+     * @throws RepositoryException
+     */
 	@Override
 	public File getPropFile(ArtifactId id) throws RepositoryException {
 		
@@ -490,24 +723,24 @@ public class SimpleAsset implements Asset, Flushable {
 		// Not safe to assume the base dir residence anymore after the introduction of folder based storage
 		// return new File(getAssetBaseFile(id) + "." + Configuration.PROPERTIES_FILE_EXT);		
 	}
-	
-	String partTwo(String in, String separater) {
-		String[] parts = in.split(separater);
+
+
+	String partTwo(String in, String separator) {
+		String[] parts = in.split(separator);
 		if (parts == null || parts.length < 2) return in;
 		return parts[1];
 	}
 
-	String partOne(String in, String separater) {
-		String[] parts = in.split(separater);
+	String partOne(String in, String separator) {
+		String[] parts = in.split(separator);
 		if (parts == null || parts.length < 2) return in;
 		return parts[0];
 	}
 
 	/**
-	 * Load asset off disk into memory.
-	 * @param assetId
-	 * @param repositoryId
-	 * @return
+	 * Load an asset off the disk to memory.
+	 * @param assetId The asset Id
+	 * @return SimpleAsset
 	 * @throws RepositoryException
 	 */
 	public SimpleAsset load(ArtifactId assetId) throws RepositoryException {
@@ -543,7 +776,7 @@ public class SimpleAsset implements Asset, Flushable {
 	
 
 	/**
-	 * @param assetContentFile
+	 * @param assetContentFile The content file
 	 */
 	private void loadContent(File assetContentFile) {
 			try {				
@@ -553,8 +786,11 @@ public class SimpleAsset implements Asset, Flushable {
 				logger.info("Content load fail <" + assetContentFile.toString()  +">: " + e.toString());
 			} 		
 	}
-	
-	
+
+    /**
+     * Returns the file extension based on the {@code mimeType}
+     * @return String[]
+     */
 	@Override
 	public String[] getContentExtension() {
 		String[] sPart = new String[]{"","",""};
@@ -573,13 +809,23 @@ public class SimpleAsset implements Asset, Flushable {
 		}
 		return sPart;
 	}
-	
+
+    /**
+     * Immediately updates the asset on disk.
+     * @see {@link SimpleAsset#flush(java.io.File)}
+     * @throws RepositoryException
+     */
 	public void flush() throws RepositoryException {
 		File path = getPropFile();
 		setPath(path);
 		flush(path);
 	}
 
+    /**
+     * Updates the file on disk.
+     * @param propFile The property file
+     * @throws RepositoryException
+     */
 	@Override
 	public void flush(File propFile) throws RepositoryException {					
 		if (!getSource().getLocation().exists())
@@ -673,20 +919,12 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
 
-	/**
-	 * @return the indexable
-	 */
-	public boolean isIndexable() {
-		return indexable;
-	}
 
-	/**
-	 * @param indexable the indexable to set
-	 */
-	public void setIndexable(boolean indexable) {
-		this.indexable = indexable;
-	}
 
+    /**
+     * Returns the display name or Id string, whichever is available first.
+     * @return String
+     */
 	@Override
 	public String toString()  {
 
@@ -705,34 +943,63 @@ public class SimpleAsset implements Asset, Flushable {
 			
 	
 	}
-	
+
+    /**
+     * Determines if the mimeType startsWith "text".
+     * @return boolean
+     * @throws RepositoryException
+     */
 	public boolean isText() throws RepositoryException {
 		String mimeType = getMimeType();
 		return (mimeType!=null && mimeType.startsWith("text/"));
 	}
 
+    /**
+     *
+     * @return RepositorySource
+     */
 	@Override
 	public RepositorySource getSource() {
 		return source;
 	}
 
+    /**
+     *
+     * @param source RepositorySource
+     */
 	@Override
 	public void setSource(RepositorySource source) {
 		this.source = source;
 	}
 
+    /**
+     *
+     * @return File
+     */
 	public File getPath() {
 		return path;
 	}
 
+    /**
+     *
+     * @param path The file path
+     */
 	public void setPath(File path) {
 		this.path = path;
 	}
 
+    /**
+     *
+     * @return File
+     */
 	public File getContentPath() {
 		return contentPath;
 	}
 
+    /**
+     *
+     * @param contentPath The content file path
+     */
 	@Override
 	public void setContentPath(File contentPath) {
 		this.contentPath = contentPath;

@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.restDatasourceTest;
+package gov.nist.toolkit.xdstools3.client.RESTClient;
 
 import com.smartgwt.client.data.OperationBinding;
 import com.smartgwt.client.data.RestDataSource;
@@ -7,19 +7,22 @@ import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.client.types.DSProtocol;
 
 /**
- * SmartGWT datasource for accessing {@link gov.nist.toolkit.xdstools3.client.restDatasourceTest.message.Message} entities over http in a RESTful manner.
+ * SmartGWT datasource for accessing entities over http in a RESTful manner.
+ * Defines a RESTDataSource fields, operations and REST service URLs.
  */
-public class MessageDS extends RestDataSource {
+public class EndpointDS extends RestDataSource {
 	
-	public MessageDS() {
+	public EndpointDS() {
 		setID("MessageDS");
+
+        // Set fields
 		DataSourceTextField messageId = new DataSourceTextField("id");
 		messageId.setPrimaryKey(true);
 		messageId.setCanEdit(false);
-		
 		DataSourceTextField messageValue = new DataSourceTextField("value");
 		setFields(messageId, messageValue);
-		
+
+        // Define operations
 		OperationBinding fetch = new OperationBinding();
 		fetch.setOperationType(DSOperationType.FETCH);
 		fetch.setDataProtocol(DSProtocol.POSTMESSAGE);
@@ -33,7 +36,8 @@ public class MessageDS extends RestDataSource {
 		remove.setOperationType(DSOperationType.REMOVE);
 		remove.setDataProtocol(DSProtocol.POSTMESSAGE);
 		setOperationBindings(fetch, add, update, remove);
-				
+
+        // Define REST URLs
 		setFetchDataURL("rest/message/read");
 		setAddDataURL("rest/message/add");
 		setUpdateDataURL("rest/message/update");

@@ -3,14 +3,15 @@
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name='com.google.gwt.rpc.RPC' />
-	 <inherits name="com.smartgwt.tools.SmartGwtTools"/>
+    <inherits name="com.smartgwt.SmartGwt"/>
+    <!--   <inherits name="com.smartclient.tools.SmartClientTools"/>-->
     <!-- <inherits name="com.smartgwtee.tools.Tools"/> -->
    <!--  <inherits name="com.smartgwtee.SmartGwtEE"/> -->
 
-	<inherits name="com.smartgwt.SmartGwtNoTheme"/>
-    <!-- <inherits name="com.smartclient.theme.silverwave.SilverWave" />  -->
-	<inherits name="com.smartclient.theme.enterprise.Enterprise"/>
-	<!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
+    <!-- <inherits name="com.smartgwt.SmartGwtNoTheme"/> -->
+  <!-- <inherits name="com.smartclient.theme.silverwave.SilverWave" />  -->
+    <!-- <inherits name="com.smartclient.theme.enterprise.Enterprise"/> -->
+    <!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
 
 
 	<inherits name="com.google.gwt.resources.Resources" />

@@ -1,6 +1,5 @@
-package gov.nist.toolkit.xdstools3.client.restDatasourceTest.util;
+package gov.nist.toolkit.xdstools3.client.RESTClient.util;
 
-import javax.persistence.MappedSuperclass;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -10,7 +9,6 @@ import javax.xml.bind.annotation.XmlType;
  * @see //http://www.smartclient.com/docs/7.0rc2/a/b/c/go.html#class..RestDataSource
  */
 @XmlType
-@MappedSuperclass
 public abstract class DSRequest {
 
 	@XmlElement
@@ -18,16 +16,16 @@ public abstract class DSRequest {
 	
 	@XmlElement
 	private OperationType operationType;
-	
+
 	@XmlElement
 	private int startRow;
-	
+
 	@XmlElement
 	private int endRow;
-	
+
 	@XmlElement
 	private String componentId;
-	
+
 	public OperationType getOperationType() {
 		return operationType;
 	}

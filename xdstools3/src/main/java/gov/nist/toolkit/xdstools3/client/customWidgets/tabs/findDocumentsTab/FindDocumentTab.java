@@ -1,13 +1,10 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab;
 
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.old.AllEndpointsWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
-
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import gov.nist.toolkit.xdstools3.server.endpoints.EndpointDS;
+import gov.nist.toolkit.xdstools3.client.RESTClient.EndpointWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
 
 
 public class FindDocumentTab extends CloseableTabWidget {
@@ -31,8 +28,8 @@ public class FindDocumentTab extends CloseableTabWidget {
 				ValidationSummaryWidget output = new ValidationSummaryWidget();
 				
 				HLayout upperPanel = new HLayout();
-				upperPanel.addMembers(endpoints, findDocs);
-				endpoints.setWidth("20%");
+				upperPanel.addMembers(findDocs); // should also add endpoints
+				//endpoints.setWidth("20%");
 
 				VLayout findDocsPanel = new VLayout(); 
 				findDocsPanel.setWidth100();

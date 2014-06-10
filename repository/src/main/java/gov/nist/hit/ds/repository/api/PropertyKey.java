@@ -6,6 +6,7 @@ package gov.nist.hit.ds.repository.api;
 import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
 
 /**
+ * This enumeration contains some of the frequently used property keys, as in {@link Properties#getProperty(java.io.Serializable)}, which is common to all types repositories or assets.
  * @author Sunil.Bhaskarla
  *
  */
@@ -66,8 +67,14 @@ public enum PropertyKey {
            public String toString() {
                return "indexSession";
            }
-       },       
-       LOCATION(true) {
+       },
+        LAST_ACCESS_TIME(true) {
+            @Override
+            public String toString() {
+                return "lastAccessTime";
+            }
+        },
+        LOCATION(true) {
            @Override
            public String toString() {
                return "location";
@@ -102,7 +109,13 @@ public enum PropertyKey {
            public String toString() {
                return "reposAcs";
            }
-       }, 
+       },
+       REPOSITORY_TYPE(true) {
+           @Override
+           public String toString() {
+               return "repositoryType";
+           }
+       },
        STATUS(false){
            @Override
            public String toString() {

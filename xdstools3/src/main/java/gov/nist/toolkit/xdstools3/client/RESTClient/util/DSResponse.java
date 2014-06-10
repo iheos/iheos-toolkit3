@@ -1,11 +1,9 @@
-package gov.nist.toolkit.xdstools3.client.restDatasourceTest.util;
+package gov.nist.toolkit.xdstools3.client.RESTClient.util;
 
-import javax.persistence.MappedSuperclass;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlElement;
 
 @XmlType
-@MappedSuperclass
 public abstract class DSResponse {
     public static int STATUS_FAILURE = -1;
     public static int STATUS_LOGIN_INCORRECT = -5;

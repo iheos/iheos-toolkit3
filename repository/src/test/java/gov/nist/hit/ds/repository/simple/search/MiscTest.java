@@ -1,19 +1,23 @@
 package gov.nist.hit.ds.repository.simple.search;
 
-import static org.junit.Assert.assertTrue;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.presentation.PresentationData;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.junit.Test;
-
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 public class MiscTest {
 
 	@Test
@@ -44,11 +48,19 @@ public class MiscTest {
 		repos[0][0] = (new String[]{"file1","file2"});
 		
 		System.out.println("---- " + repos[0][0][0]);
-		
-		assert(false); // If asserts are checked explicitly, this should fail at runtime 
+
+        try {
+            assert(false); // If asserts are checked explicitly, this should fail at runtime
+            fail("assertion not checked");
+        } catch (AssertionError ae) {
+            // good!
+        }
+
 		
 	}
-	
+
+
+
 	@Test
 	public void npeTest() {
 		NullPointerException npe =  new NullPointerException();
@@ -131,14 +143,55 @@ public class MiscTest {
 		p.setProperty("a", "2");
 		p.setProperty("y", "3");
 		p.setProperty("l", "4");
-		
+
 		
 		System.out.println("******" + PresentationData.getSortedMapString(p));
-		
+
 	}
-	
-	
-	@Test
+
+    @Test
+    public void propertyKeyValueTest() {
+
+        Properties p = new Properties();
+
+        try {
+            p.setProperty(null, "null key");
+            fail("null key");
+        } catch (NullPointerException npe) {
+            // good!
+        }
+
+        try {
+            p.setProperty("goodKeyButNullValueTest",null);
+            fail("goodKeyButNullValueTest");
+        } catch (NullPointerException npe) {
+            // good!
+        }
+
+
+
+        try {
+            p.getProperty(null);
+            fail("get prop by null key");
+        } catch (NullPointerException npe) {
+            // good!
+        }
+
+
+
+        p.setProperty("patientId","100");
+            p.setProperty("PatientId","100");
+
+
+
+        System.out.println("property key/value test: " + p.size());
+
+    }
+
+
+
+
+    @Test
 	public void fnRegTest2() {
 		
 		System.out.println("::a3-b!c%zz_@#$ hello".replaceAll("[^@A-Za-z0-9-_. ]+", ""));
@@ -155,6 +208,21 @@ public class MiscTest {
 		}
 		*/
 	}
+
+    @Test
+    public void testList() {
+        List<String> list = new ArrayList<String>();
+
+        list.add("1");
+        list.add("2");
+        list.add("3");
+
+        list.add(1,"1.1");
+
+        for (String s : list) {
+            System.out.println(s);
+        }
+    }
 	
 	@Test
 	public void stringComp() {
@@ -186,5 +254,21 @@ public class MiscTest {
 //		}
 //	
 	}
+
+    @Test
+    public void concMapTest() {
+
+        System.out.println("parse out:" + Boolean.parseBoolean(null));
+
+        ConcurrentHashMap<String, AtomicBoolean> reposIndexMap = new ConcurrentHashMap<String, AtomicBoolean>();
+        try {
+            reposIndexMap.put("repos1", new AtomicBoolean(Boolean.TRUE));
+            reposIndexMap.put("repos1", new AtomicBoolean(Boolean.TRUE));
+
+        } catch (Throwable t) {
+            fail(t.toString());
+        }
+        System.out.println("concMapTest exit");
+    }
 	
 }
