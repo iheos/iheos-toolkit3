@@ -8,7 +8,9 @@
 		<version>v2-maven-alpha</version>
 	</parent>
 
-	<artifactId>actortransaction</artifactId>
+	<groupId>gov.nist.toolkit</groupId>
+<!--	<version>v2-maven-alpha</version>
+-->	<artifactId>actortransaction</artifactId>
 
 	<dependencies>
 		<dependency>
@@ -21,7 +23,7 @@
 			<artifactId>gwt-user</artifactId>
 		</dependency>
 	</dependencies>
-	
+
 	
 		<build>
 		<plugins>
@@ -76,4 +78,7 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	
+	
 </project>
