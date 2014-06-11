@@ -1,32 +1,24 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.smartgwt.client.util.SC;
-import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.form.fields.SelectItem;
-import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
-import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
-import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
-import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
-import gov.nist.toolkit.xdstools3.client.clientServerUtils.CustomCallback;
-import gov.nist.toolkit.xdstools3.client.clientServerUtils.TransientArrayList;
-import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.LoginDialogWidget;
-
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ListBox;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.IconButton;
 import com.smartgwt.client.widgets.WidgetCanvas;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
+import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.menu.IconMenuButton;
 import com.smartgwt.client.widgets.menu.Menu;
 import com.smartgwt.client.widgets.toolbar.RibbonBar;
 import com.smartgwt.client.widgets.toolbar.RibbonGroup;
-import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
+import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
+import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.LoginDialogWidget;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class ConfigToolbar extends RibbonBar {
@@ -92,7 +84,7 @@ public class ConfigToolbar extends RibbonBar {
 		// Behavior: Clicking on any of the buttons in the admin group opens a dialog to allow the user to log in as admin,
 		// IF not logged in yet. Then follows to the link initially requested.
 		RibbonGroup adminGroup = createRibbonGroup("Admin Panel");
-        adminGroup.setWidth("350px");
+        adminGroup.setWidth("450px");
 		IconButton button = getIconButton("Settings", "icon_gear.png") ;
 		button.addClickHandler(new ClickHandler() {  
 			@Override
@@ -113,7 +105,6 @@ public class ConfigToolbar extends RibbonBar {
 		// Add menu groups to menu bar  
 		this.addMembers(sessionGroup, actorsGroup, adminGroup);
 		this.setHeight(sessionGroup.getHeight());
-		this.setWidth100();
 	}
 
 

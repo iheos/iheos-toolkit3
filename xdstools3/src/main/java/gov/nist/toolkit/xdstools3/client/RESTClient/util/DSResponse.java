@@ -1,11 +1,9 @@
-package gov.nist.toolkit.xdstools3.client.restDatasourceTest.util;
+package gov.nist.toolkit.xdstools3.client.RESTClient.util;
 
-import javax.persistence.MappedSuperclass;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType
-@MappedSuperclass
 public abstract class DSResponse {
     public static int STATUS_FAILURE = -1;
     public static int STATUS_LOGIN_INCORRECT = -5;
@@ -16,19 +14,13 @@ public abstract class DSResponse {
     public static int STATUS_SUCCESS = 0;
     public static int STATUS_TRANSPORT_ERROR = -90;
     public static int STATUS_VALIDATION_ERROR = -4;
-	
-	@XmlElement
+
 	private int status;
-	
-	@XmlElement
 	private int startRow;
-	
-	@XmlElement
 	private int endRow;
-	
-	@XmlElement
-	private int totalRows;	
-	
+	private int totalRows;
+
+    @XmlElement(name = "startRow")
 	public int getStartRow() {
 		return startRow;
 	}
@@ -37,6 +29,7 @@ public abstract class DSResponse {
 		this.startRow = startRow;
 	}
 
+    @XmlElement(name = "endRow")
 	public int getEndRow() {
 		return endRow;
 	}
@@ -49,6 +42,7 @@ public abstract class DSResponse {
 		this.status = status;
 	}
 
+    @XmlElement(name = "status")
 	public int getStatus() {
 		return status;
 	}
@@ -57,6 +51,7 @@ public abstract class DSResponse {
 		this.totalRows = totalRows;
 	}
 
+    @XmlElement(name = "totalRows")
 	public int getTotalRows() {
 		return totalRows;
 	}

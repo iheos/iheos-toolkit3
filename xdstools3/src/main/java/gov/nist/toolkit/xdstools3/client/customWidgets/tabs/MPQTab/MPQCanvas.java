@@ -1,21 +1,16 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.MPQTab;
 
-import com.smartgwt.client.types.*;
+import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.form.fields.SelectItem;
-import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
-import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
-import com.smartgwt.client.widgets.grid.ListGrid;
-import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
+import gov.nist.toolkit.xdstools3.client.RESTClient.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.SAMLComboBox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSCheckbox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.RunButton;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.forms.FormattedDynamicForm;
 
 /**
@@ -49,7 +44,7 @@ public class MPQCanvas extends VLayout {
         Label label1 = new Label("Step 1: Select Actors");
         EndpointWidget endpoints = new EndpointWidget();
         VLayout actorsLayout = new VLayout();
-        actorsLayout.addMembers(label1, endpoints);
+        actorsLayout.addMembers(label1); // should also add endpoints
         actorsLayout.setAlign(Alignment.CENTER);
 
         // middle spacer

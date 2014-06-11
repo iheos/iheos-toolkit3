@@ -1,17 +1,15 @@
 package gov.nist.hit.ds.repository.simple.index;
 
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.IdFactory;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
-
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class CreateContainerTest  {
 	
@@ -71,9 +69,9 @@ public class CreateContainerTest  {
 		System.out.println("Running testExpandContainer...");
 		
 		DbIndexContainer dbc = new DbIndexContainer();
-		ConcurrentHashMap<String,String> columnMap = new ConcurrentHashMap<String,String>();
+
 		try {
-			dbc.expandContainer(new String[] {"a","b","c"}, columnMap);
+			dbc.expandContainer(new String[] {"a","b","c"});
 		} catch (Exception e) {
 			fail("test expand failed!");
 
@@ -114,13 +112,12 @@ public class CreateContainerTest  {
 		System.out.println("Running testCol...");
 		
 		DbIndexContainer dbc = new DbIndexContainer();
-		ConcurrentHashMap<String,String> columnMap = new ConcurrentHashMap<String,String>();
+
 		try {
-			dbc.expandContainer(new String[] {"x","b","z"},  columnMap);
-			System.out.println (dbc.isIndexed(dbc.getColumn("siteAsset", "a")));
+			dbc.expandContainer(new String[] {"x","b","z"});
+			System.out.println(dbc.getIndexedColumn(dbc.getColumn("siteAsset", "a")));
 		} catch (Exception e) {
 			fail("test expand failed!");
-						
 		}
 	}
 	

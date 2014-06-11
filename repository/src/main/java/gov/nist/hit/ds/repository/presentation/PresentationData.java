@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.repository.presentation;
 
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.ArtifactId;
@@ -26,37 +28,60 @@ import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
+import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVParser;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
+import net.timewalker.ffmq3.FFMQConstants;
+import org.codehaus.jackson.map.ObjectMapper;
 
+import javax.jms.Destination;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.QueueConnectionFactory;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.rpc.IsSerializable;
-
+/**
+ * This class wraps repository related methods that are most commonly used with a user interface or an external facing client.
+ */
 public class PresentationData implements IsSerializable, Serializable  {
 
-	/**
-	 * 
-	 */
 	public static final int MAX_RESULTS = 500;
-	
+    public static final String TXMON_QUEUE = "txmon";
+
 	private static final long serialVersionUID = 4939311135239253727L;
 	private static Logger logger = Logger.getLogger(PresentationData.class.getName());
-	
+
+    private static final Object objLock = new Object();
+
+    /* ActiveMQ Messaging - not used
+    private static final String DEFAULT_BROKER_NAME = "tcp://localhost:61616";
+    private static final String DEFAULT_USER_NAME = ActiveMQConnection.DEFAULT_USER;
+    private static final String DEFAULT_PASSWORD = ActiveMQConnection.DEFAULT_PASSWORD;
+    */
+
+
+    /**
+     * Gets a list of all repository tags from all sources
+     * @return The list of repository tags
+     * @throws RepositoryConfigException
+     */
 	public List<RepositoryTag> getRepositoryDisplayTags() throws RepositoryConfigException {
 		
         List<RepositoryTag> rtList = new ArrayList<RepositoryTag>();
@@ -82,7 +107,12 @@ public class PresentationData implements IsSerializable, Serializable  {
 	        return rtList;
 	
 	}
-	
+
+    /**
+     *
+     * @return True if the repository system has been initialized, that is to able to access the repository sources.
+     * @throws RepositoryException
+     */
 	public static Boolean isRepositoryConfigured() throws RepositoryException {
 		try {
 			Installation.installation().initialize();
@@ -91,9 +121,13 @@ public class PresentationData implements IsSerializable, Serializable  {
 		} catch (IOException e) {
 			logger.fine(e.toString());
 		}		
-		return new Boolean(Configuration.configuration().isRepositorySystemInitialized());
+		return Configuration.configuration().isRepositorySystemInitialized();
 	}
-	
+
+    /**
+     * Gets all indexable property names.
+     * @return An aggregate list of all indexable property names as specified by the asset domain type files in the {@code types} folder.
+     */
 	public static List<String> getIndexablePropertyNames() {
 		List<String> indexProps = new ArrayList<String>(); 
 		for (Access acs : RepositorySource.Access.values()) {
@@ -114,8 +148,13 @@ public class PresentationData implements IsSerializable, Serializable  {
 		Collections.sort(indexProps);
 		return indexProps;
 	}
-	
-	
+
+    /**
+     *
+     * @param reposData An array of repositories.
+     * @return Gets a list representing the asset relationship.
+     * @see gov.nist.hit.ds.repository.simple.search.client.AssetNode
+     */
 	public static List<AssetNode> getTree(String[][] reposData) {
 		
 		Repository[] reposList = getReposList(reposData);
@@ -141,15 +180,27 @@ public class PresentationData implements IsSerializable, Serializable  {
 				
 		return result;
 	}
-	
+
+    /**
+     * Gets the asset parent chain (from the bottom up)
+     * @param an The child asset.
+     * @return A link up to the root parent node.
+     * @throws RepositoryException
+     */
 	public static AssetNode getParentChain(AssetNode an) throws RepositoryException {
 		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
 		AssetNodeBuilder anb = new AssetNodeBuilder();
 		
 		return anb.getParentChain(repos, an, true);		
 	}
-	
 
+
+    /**
+     * Gets immediate children of the parent but not the grandchildren, however, there is an indicator {@code HASCHILDREN} of the presence of children attached to the child node.
+     * @param an The parent node.
+     * @return Children
+     * @throws RepositoryException
+     */
 	public static List<AssetNode> getImmediateChildren(AssetNode an) throws RepositoryException {
 		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
 					
@@ -165,7 +216,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 
 	
 	/**
-	 * @param repos
+     * Gets a repository object array from {@code String} array.
+	 * @param repos repository array
 	 */
 	private static Repository[] getReposList(String[][] repos) {
 		
@@ -188,7 +240,14 @@ public class PresentationData implements IsSerializable, Serializable  {
 		}
 		return reposList;	
 	}
-	
+
+    /**
+     * Gets a previously saved search criteria, or a canned query, from the file location that only exists within the Canned Query repository.
+     * @param queryLoc The relative path to load the criteria from.
+     * @return The query parameters that can be directly executed by the {@code search} method.
+     * @throws RepositoryException
+     * @see #search(String[][], gov.nist.hit.ds.repository.simple.search.client.SearchCriteria)
+     */
 	public static QueryParameters getSearchCriteria(String queryLoc)  throws RepositoryException {
 		Parameter param = new Parameter();		
 		param.setDescription("queryLoc");
@@ -199,7 +258,16 @@ public class PresentationData implements IsSerializable, Serializable  {
 		
 		return getQueryParams(a);
 	}
-	
+
+
+    /**
+     * Gets a previously saved criteria, or a canned query, from a specific repository source.
+     * @param id The repository Id.
+     * @param acs The repository source access.
+     * @param queryLoc The relative path to load the criteria from.
+     * @return The query parameters that can be directly executed by the {@code search} method.
+     * @throws RepositoryException
+     */
 	public static QueryParameters getSearchCriteria(String id, String acs, String queryLoc)  throws RepositoryException {
 		Parameter param = new Parameter();
 		param.setDescription("repos id");
@@ -216,8 +284,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 	}
 
 	/**
-	 * @param a
-	 * @return
+	 * Gets the query parameters off the asset content that has the QueryParameters in JSON format.
+     * @param a The asset with {@code selectedRepos} property.
+	 * @return The query parameters.
 	 * @throws RepositoryException
 	 */
 	private static QueryParameters getQueryParams(Asset a)
@@ -246,7 +315,13 @@ public class PresentationData implements IsSerializable, Serializable  {
 		
 		return qp;
 	}
-	
+
+    /**
+     * Saves the search criteria as an asset in the canned query repository.
+     * @param qp The query parameters object.
+     * @return The newly created asset.
+     * @throws RepositoryException
+     */
 	public static AssetNode saveSearchCriteria(QueryParameters qp) throws RepositoryException {
 		
 		Parameter param = new Parameter();
@@ -300,7 +375,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 	}
 
 	/**
-	 * @return
+     * Gets the canned query repository object if it exists or creates a new repository if need be.
+	 * @return The repository.
 	 * @throws RepositoryException
 	 */
 	private static Repository getCannedQueryRepos() throws RepositoryException {
@@ -320,7 +396,14 @@ public class PresentationData implements IsSerializable, Serializable  {
 		}
 		return repos;
 	}
-	
+
+    /**
+     * Gets a list of asset nodes from the specified repository.
+     * @param id The repository Id.
+     * @param acs The repository source access.
+     * @return A list of asset nodes.
+     * @throws RepositoryException
+     */
 	public static List<AssetNode> getSavedQueries(String id, String acs) throws RepositoryException {
 		ArrayList<AssetNode> result = new ArrayList<AssetNode>();
 		Repository repos = composeRepositoryObject(id, acs);
@@ -348,7 +431,42 @@ public class PresentationData implements IsSerializable, Serializable  {
 		
 		return result;
 	}
-	
+
+    /**
+     *
+     * @param reposData An array of repositories.
+     * @param sc The search criteria.
+     * @param searchByLocationOnly Search only by the location that is present in the search criteria.
+     * @return True if a match is found.
+     */
+    public static Boolean searchHit(String[][] reposData, SearchCriteria sc, boolean searchByLocationOnly) {
+
+            try {
+
+                Repository[] reposList = getReposList(reposData);
+
+                AssetIterator iter = null;
+
+                iter = new SearchResultIterator(reposList, sc, searchByLocationOnly, false);
+
+                int recordCt = 0;
+                if (iter!=null && iter.hasNextAsset()) {
+                    return Boolean.TRUE;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                logger.warning("****" + ex.toString());
+            }
+
+        return Boolean.FALSE;
+    }
+
+    /**
+     * Searches for the criteria in the specified repositories.
+     * @param reposData An array of repositories.
+     * @param sc The search criteria.
+     * @return List of asset nodes containing the search results.
+     */
 	public static List<AssetNode> search(String[][] reposData, SearchCriteria sc) {
 		
 		ArrayList<AssetNode> result = new ArrayList<AssetNode>();
@@ -359,7 +477,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 
 		AssetIterator iter = null;
 		
-			iter = new SearchResultIterator(reposList, sc );
+			iter = new SearchResultIterator(reposList, sc);
 		
 			int recordCt = 0;
 			if (iter!=null && recordCt++ <= MAX_RESULTS) { // hard limit for now
@@ -399,6 +517,12 @@ public class PresentationData implements IsSerializable, Serializable  {
 		
 	}
 
+    /**
+     * Gets the text content of an asset.
+     * @param an The asset node.
+     * @return A new asset node with possible text content.
+     * @throws RepositoryException
+     */
 	public static AssetNode getTextContent(AssetNode an) throws RepositoryException {
 		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
 		
@@ -423,17 +547,23 @@ public class PresentationData implements IsSerializable, Serializable  {
 		
 		aDst.setRepId(aSrc.getRepository().getIdString());
 		aDst.setAssetId(aSrc.getId().getIdString());
+        if (aSrc.getAssetType()!=null)
+            aDst.setType(aSrc.getAssetType().getKeyword());
 		aDst.setDescription(aSrc.getDescription());
 		aDst.setDisplayName(aSrc.getDisplayName());
 		aDst.setMimeType(aSrc.getMimeType());
 		aDst.setReposSrc(aSrc.getSource().getAccess().name());
 		if (aSrc.getPath()!=null)
 			aDst.setLocation(aSrc.getPath().toString());
-		
-		if (aSrc.getContent()!=null) {
+
+         if (aSrc.getContent()!=null) {
+             logger.fine("*** has got content" + an.getType() + " aSrc.getMimeType():" + aSrc.getMimeType());
 			try {
 				String content = new String(aSrc.getContent());
-				if ("text/xml".equals(aSrc.getMimeType()) || "application/soap+xml".equals(aSrc.getMimeType())) {
+                if (an.getType()!=null && an.getType().startsWith("raw")) {
+                    content = SafeHtmlUtils.fromString(content).asString();
+                    aDst.setTxtContent(content);
+                } else if ("text/xml".equals(aSrc.getMimeType()) || "application/soap+xml".equals(aSrc.getMimeType())) {
 					aDst.setTxtContent(XmlFormatter.htmlize(content));			
 				} else if ("text/csv".equals(aSrc.getMimeType())) {
 					aDst.setCsv(processCsvContent(content));
@@ -447,7 +577,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 			} catch (Exception e) {
 				logger.info("No content found for <"+ aDst.getAssetId() +">: May not have any content (which is okay for top-level assets): " + e.toString());
 			}			
-		}
+		} else {
+             logger.fine("*** getTextContent -- noContent" + an.getType() + " aSrc.getMimeType():" + aSrc.getMimeType());
+         }
 
 		try {
 			// aDst.setProps(FileUtils.readFileToString(aSrc.getPropFile()));
@@ -458,15 +590,15 @@ public class PresentationData implements IsSerializable, Serializable  {
 			aDst.setProps(aSrc.getPropFile() + " could not be loaded.");
 			logger.warning(e.toString());
 		}
-		
+
 		return aDst;
 	}
 	
 	
 	/**
-	 * 
-	 * @param p
-	 * @return
+	 * Sorts the properties map into text format.
+	 * @param p The properties object.
+	 * @return The sorted String.
 	 */
 	public static String getSortedMapString(java.util.Properties p) {
 		
@@ -487,12 +619,13 @@ public class PresentationData implements IsSerializable, Serializable  {
 			}
 		return sb.toString();
 	}
-	
-	
-	/**
-	 * @param aDst
-	 * @param content
-	 */
+
+
+    /**
+     * Pretty prints JSON text format.
+     * @param content The JSON text.
+     * @return The formatted text.
+     */
 	private static String prettyPrintJson(String content) {
 
 //	   JSONValue jsonValue = JSONParser.parseStrict(content);
@@ -519,10 +652,11 @@ public class PresentationData implements IsSerializable, Serializable  {
 	}
 
 
-	/**
-	 * @param aDst
-	 * @param content
-	 */
+    /**
+     * Realigns CSV structure to fix missing column headers or short rows.
+     * @param content The content.
+     * @return Realigned arrays.
+     */
 	private static String[][] processCsvContent(String content) {
 		CSVParser parser = new CSVParser(content);
 		int sz = parser.size(); 
@@ -556,7 +690,14 @@ public class PresentationData implements IsSerializable, Serializable  {
 			 return new String[][]{{"No data to display: CSV parser returned zero records."}};
 		}
 	}
-	
+
+    /**
+     * Composes a repository object.
+     * @param id The repository Id.
+     * @param src The repository source.
+     * @return The repository object.
+     * @throws RepositoryException
+     */
 	public static Repository composeRepositoryObject(String id, String src) throws RepositoryException {
 		SimpleRepository repos 
 							= new SimpleRepository(new SimpleId(id));
@@ -565,7 +706,279 @@ public class PresentationData implements IsSerializable, Serializable  {
 		return repos;
 	}
 
+    /**
+     * Gets updates from the JMS queue.
+     * @param queue The JMS queue.
+     * @param filterLocation The backend filter, or a canned query, location.
+     * @return Updates in a map of assetNodes.
+     * @throws RepositoryException
+     */
+    public static Map<String,AssetNode> getLiveUpdates(String queue, String filterLocation) throws RepositoryException {
+        //ArrayList<AssetNode> result = new ArrayList<AssetNode>();
+        Map<String,AssetNode> result =  new HashMap<String,AssetNode>();
 
+        MessageConsumer consumer = null;
+        javax.jms.QueueSession session = null;
+        javax.jms.QueueConnection connection = null;
+        String txDetail = null;
+        String repId = null;
+        String acs = null;
+        String parentLoc = null; // This is the artifact (header/body) parent location
+        String headerLoc = null;
+        String bodyLoc = null;
+        String ioHeaderId = null;
+        String msgType = null;
+        String proxyDetail = null;
+        String fromIp = null;
+        String toIp = null;
+
+        try {
+
+            Hashtable<String,String> env = new Hashtable<String, String>();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, FFMQConstants.JNDI_CONTEXT_FACTORY);
+            env.put(Context.PROVIDER_URL, "tcp://localhost:10002");
+            Context context = new InitialContext(env);
+
+            // Lookup a connection factory in the context
+            javax.jms.QueueConnectionFactory factory = (QueueConnectionFactory) context.lookup(FFMQConstants.JNDI_QUEUE_CONNECTION_FACTORY_NAME);
+
+
+            connection = factory.createQueueConnection();
+
+
+            session = connection.createQueueSession(false,
+                    javax.jms.Session.AUTO_ACKNOWLEDGE);
+            connection.start();
+
+            Destination destination = session.createQueue((queue==null||("".equals(queue)))?TXMON_QUEUE:queue);
+
+            // Create a MessageConsumer from the Session to the Topic or Queue
+            consumer = session.createConsumer(destination);
+
+            // Wait for a message
+            Message message = consumer.receive(1000*30);
+
+            if (message instanceof MapMessage) {
+                txDetail = (String)((MapMessage)message).getObject("txDetail");
+
+                repId = (String)((MapMessage)message).getObject("repId");
+                acs = (String)((MapMessage)message).getObject("acs");
+                parentLoc = (String)((MapMessage)message).getObject("parentLoc"); /* relative propFilePath, ex. of Request */
+                headerLoc = (String)((MapMessage)message).getObject("headerLoc");
+                bodyLoc = (String)((MapMessage)message).getObject("bodyLoc");
+                ioHeaderId = (String)((MapMessage)message).getObject("ioHeaderId");
+                msgType = (String)((MapMessage)message).getObject("msgType");
+                proxyDetail = (String)((MapMessage)message).getObject("proxyDetail");
+                fromIp = (String)((MapMessage)message).getObject("messageFromIpAddress");
+                toIp = (String)((MapMessage)message).getObject("forwardedToIpAddress");
+
+            } else {
+                // Print error message if Message was not recognized
+                logger.finest("JMS Message type not known or Possible timeout ");
+            }
+
+
+        } catch (Exception ex) { // TODO: look into thrown an exception to avoid too many calls when broker is offline
+            logger.finest(ex.toString());
+            // ex.printStackTrace();
+            throw new RepositoryException(ex.toString());
+        } finally {
+            if (consumer!=null) {
+                try {
+                    consumer.close();
+                } catch (Exception ex) {}
+            }
+            if (session!=null) {
+                try {
+                    session.close();
+                } catch (Exception ex) {}
+            }
+            if (connection!=null) {
+                try {
+                    connection.close();
+                } catch (Exception ex) {}
+            }
+
+        }
+
+        if (txDetail!=null) {
+            try {
+                logger.fine(txDetail);
+
+                if (parentLoc!=null) {
+                    logger.fine("parentLoc is not null" + parentLoc);
+                    AssetNode parentHdr = new AssetNode();
+                    parentHdr.setLocation(parentLoc);
+                    result.put("parentLoc",parentHdr);
+
+                    AssetNode headerMsg = new AssetNode();
+                    headerMsg.setParentId(ioHeaderId); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
+                    headerMsg.setType("raw_"+msgType);
+                    headerMsg.setRepId(repId);
+                    headerMsg.setReposSrc(acs);
+                    headerMsg.setLocation(headerLoc);
+                    headerMsg.setCsv(processCsvContent(txDetail));
+                    //headerMsg.setProps(proxyDetail);
+                    headerMsg.getExtendedProps().put("proxyDetail",proxyDetail);
+                    headerMsg.getExtendedProps().put("fromIp",fromIp);
+                    headerMsg.getExtendedProps().put("toIp",toIp);
+                    headerMsg.getExtendedProps().put("type",msgType);
+
+                    if (bodyLoc!=null) {
+                        AssetNode bodyMsg = new AssetNode();
+                        bodyMsg.setParentId(ioHeaderId);
+                        bodyMsg.setType("raw_"+msgType);
+                        bodyMsg.setRepId(repId);
+                        bodyMsg.setReposSrc(acs);
+                        bodyMsg.setLocation(bodyLoc);
+                        result.put("body",bodyMsg);
+                    }
+
+                    if (filterLocation!=null && !"".equals(filterLocation)) {
+                        logger.fine("backend filtering using: " + filterLocation);
+                        filterMessage(filterLocation, parentLoc, headerMsg);
+                    }
+
+                    result.put("header",headerMsg);
+                }
+
+                return result;
+            } catch (Throwable t) {
+                logger.warning(t.toString());
+            }
+        } else {
+            logger.finest("Empty consumer message?");
+        }
+
+
+        return null;
+    }
+
+    /**
+     * The backend filter method.
+     * @param filterLocation The backend filter, or a canned query, location.
+     * @param parentLoc The asset location.
+     * @param headerMsg The header message to register a hit flag.
+     */
+    private static void filterMessage(String filterLocation, String parentLoc, AssetNode headerMsg) {
+        // Filter
+        // reposService.getSearchCriteria(queryLoc, new AsyncCallback<QueryParameters>() {
+        try {
+
+            QueryParameters qp = getSearchCriteria(filterLocation);
+            SearchCriteria sc = qp.getSearchCriteria();
+
+            // Wrap into new sc
+            SearchCriteria subCriteria = new SearchCriteria(SearchCriteria.Criteria.AND);
+            subCriteria.append(new SearchTerm(PropertyKey.LOCATION, SearchTerm.Operator.EQUALTO,parentLoc));
+
+            SearchCriteria criteria = new SearchCriteria(SearchCriteria.Criteria.AND);
+            criteria.append(sc);
+            criteria.append(subCriteria);
+
+            String[][] selectedRepos =   qp.getSelectedRepos();
+
+            if (searchHit(selectedRepos, criteria, Boolean.TRUE)) {
+                headerMsg.getExtendedProps().put("searchHit","yes");
+            }
+
+
+            } catch (Throwable t) {
+                logger.warning(t.toString());
+
+        }
+    }
+
+    /**
+     *
+     * @param queue
+     * @return
+    This is the ActiveMq version
+    public static List<AssetNode> getLiveUpdates(String queue)  {
+        ArrayList<AssetNode> result = new ArrayList<AssetNode>();
+
+        javax.jms.QueueConnection connection = null;
+        javax.jms.QueueSession session = null;
+        MessageConsumer consumer = null;
+        String txDetail = null;
+        String repId = null;
+        String acs = null;
+        String headerLoc = null;
+        String bodyLoc = null;
+        String ioHeaderId = null;
+        String msgType = null;
+
+        try {
+
+            javax.jms.QueueConnectionFactory connectionFactory;
+            connectionFactory = new ActiveMQConnectionFactory(DEFAULT_USER_NAME, DEFAULT_PASSWORD, DEFAULT_BROKER_NAME);
+            connection = connectionFactory.createQueueConnection(DEFAULT_USER_NAME, DEFAULT_PASSWORD);
+            session = connection.createQueueSession(false,
+                    javax.jms.Session.AUTO_ACKNOWLEDGE);
+            connection.start();
+
+            Destination destination = session.createQueue(DEFAULT_QUEUE);
+
+            // Create a MessageConsumer from the Session to the Topic or Queue
+            consumer = session.createConsumer(destination);
+
+            // Wait for a message indefinitely
+            Message message = consumer.receive();
+
+            if (message instanceof MapMessage) {
+                txDetail = (String)((MapMessage)message).getObject("txDetail");
+                repId = (String)((MapMessage)message).getObject("repId");
+                acs = (String)((MapMessage)message).getObject("acs");
+                headerLoc = (String)((MapMessage)message).getObject("headerLoc");
+                bodyLoc = (String)((MapMessage)message).getObject("bodyLoc");
+                ioHeaderId = (String)((MapMessage)message).getObject("ioHeaderId");
+                msgType = (String)((MapMessage)message).getObject("msgType");
+            } else {
+                // Print error message if Message was not a TextMessage.
+                logger.info("JMS Message type not known ");
+            }
+
+            consumer.close();
+            session.close();
+            connection.close();
+
+        } catch (Exception ex) {
+            logger.warning(ex.toString());
+            ex.printStackTrace();
+        }
+
+
+        if (txDetail!=null) {
+            logger.fine(txDetail);
+
+            AssetNode headerMsg = new AssetNode();
+            headerMsg.setParentId(ioHeaderId); // ioHeaderId is two levels up that links both the request and response
+            headerMsg.setType("raw_"+msgType);
+            headerMsg.setRepId(repId);
+            headerMsg.setReposSrc(acs);
+            headerMsg.setLocation(headerLoc);
+            headerMsg.setCsv(processCsvContent(txDetail));
+            result.add(headerMsg);
+
+            if (bodyLoc!=null) {
+                AssetNode bodyMsg = new AssetNode();
+                bodyMsg.setParentId(ioHeaderId);
+                bodyMsg.setType("raw_"+msgType);
+                bodyMsg.setRepId(repId);
+                bodyMsg.setReposSrc(acs);
+                bodyMsg.setLocation(bodyLoc);
+                result.add(bodyMsg);
+            }
+
+            return result;
+        } else {
+            logger.fine("Empty consumer message?");
+        }
+
+
+        return null;
+    }
+     */
 }
 
 

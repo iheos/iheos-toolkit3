@@ -673,38 +673,6 @@ public interface Repository extends java.io.Serializable {
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
-     * Perform a search of the specified Type and get all the Assets that
-     * satisfy the SearchCriteria.  Iterators return a set, one at a time.
-     *
-     * @param searchCriteria
-     * @param searchType
-     * @param searchProperties
-     *
-     * @return AssetIterator  The order of the objects returned by the Iterator
-     *         is not guaranteed.
-     *
-     * @throws gov.nist.hit.ds.repository.api.RepositoryException An exception with one of
-     *         the following messages defined in
-     *         gov.nist.hit.ds.repository.api.RepositoryException may be thrown: {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#OPERATION_FAILED
-     *         OPERATION_FAILED}, {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#PERMISSION_DENIED
-     *         PERMISSION_DENIED}, {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#CONFIGURATION_ERROR
-     *         CONFIGURATION_ERROR}, {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#UNIMPLEMENTED
-     *         UNIMPLEMENTED}, {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#NULL_ARGUMENT
-     *         NULL_ARGUMENT}, {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_TYPE
-     *         UNKNOWN_TYPE}
-     */
-    public AssetIterator getAssetsBySearch(
-        java.io.Serializable searchCriteria, gov.nist.hit.ds.repository.api.Type searchType,
-        Properties searchProperties)
-        throws gov.nist.hit.ds.repository.api.RepositoryException;
-
-    /**
      * Create a copy of an Asset.  The Id, AssetType, and Repository for the
      * new Asset is set by the implementation.  
      *

@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.restDatasourceTest;
+package gov.nist.toolkit.xdstools3.client.RESTClient;
 
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.types.Alignment;
@@ -13,12 +13,12 @@ import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
 
 /**
- * Created by dazais on 5/21/2014.
- */
-public class RestDs extends CloseableTabWidget {
+* Created by dazais on 5/21/2014.
+*/
+public class RestTab extends CloseableTabWidget {
     static String header = "header";
 
-    public RestDs() {
+    public RestTab() {
         super(header);
         setContents(createLayout());
     }
@@ -123,7 +123,8 @@ public class RestDs extends CloseableTabWidget {
 //            }
 //        });
 
-        RestDataSource dataSource = new MessageDS();
+        RestDataSource dataSource = new EndpointDS();
+        dataSource.setID("endpointDS");
         final ListGrid messageGrid = new ListGrid();
         messageGrid.setHeight(300);
         messageGrid.setWidth(500);

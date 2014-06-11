@@ -2,22 +2,19 @@ package gov.nist.hit.ds.repository.simple;
 
 
 import gov.nist.hit.ds.initialization.installation.Installation;
-import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.index.BulkLoadTest;
 import gov.nist.hit.ds.repository.simple.index.CreateContainerTest;
 import gov.nist.hit.ds.repository.simple.index.ExpandContainerTest;
 import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilderTest;
 import gov.nist.hit.ds.repository.simple.search.SearchTest;
-
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.ClassRule;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+
+import java.io.File;
 
 /**
  * 

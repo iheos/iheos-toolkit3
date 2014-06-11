@@ -1,8 +1,5 @@
 package gov.nist.hit.ds.repository.simple;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -13,6 +10,10 @@ import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 public class SimpleNamedRepositoryTest {
 
@@ -76,6 +77,24 @@ public class SimpleNamedRepositoryTest {
 		assertTrue("created and retrieved asset id should be the same", assetId2.isEqual(found.getId()));		
 		
 	}
+
+    /*
+    @Test
+    public void findByIdDeepScan() throws RepositoryException {
+        RepositoryFactory reposFact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+        ArtifactId id = new SimpleId("transactions-cap");
+
+        Repository repos = null;
+        try {
+            repos = reposFact.getRepository(id);
+        } catch (RepositoryException re) {
+           fail(re.toString());
+        }
+        Asset ioHeader = repos.getAsset(new SimpleId("2014_03_14_23_50_09_89_105156956128474_io"));
+
+        assertNotNull(ioHeader);
+
+    } */
 	
 	@Test
 	public void getBadIdTest() throws RepositoryException {

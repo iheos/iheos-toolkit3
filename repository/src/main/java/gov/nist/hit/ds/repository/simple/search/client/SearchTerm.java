@@ -203,7 +203,10 @@ public class SearchTerm implements IsSerializable, Serializable {
 		} else if (Operator.UNSPECIFIED.equals(getOperator())) {
 			return propName + getOperator().toString();
 		} else {
-			return propName + getOperator().toString() + "'" + safeValue(values[0]) + "' "; 
+            if (!"".equals(values[0]))
+			    return propName + getOperator().toString() + "'" + safeValue(values[0]) + "' ";
+            else
+                return "";
 		}		
 	}
 	
