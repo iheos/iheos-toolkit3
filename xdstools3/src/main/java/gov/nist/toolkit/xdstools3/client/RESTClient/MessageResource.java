@@ -102,16 +102,26 @@ public class MessageResource {
 	@Produces( { MediaType.APPLICATION_XML})
 	@Consumes( { MediaType.TEXT_XML })
 	@Path("/read")
-	public String read(MessageDSRequest request) {
-//		MessageDSResponse response = new MessageDSResponse();
+	public MessageDSResponse read(MessageDSRequest request) {
+        MessageDSResponse response = new MessageDSResponse();
+        response.setStatus(DSResponse.STATUS_SUCCESS);
 //
 //		response.setStartRow(request.getStartRow());
 //
-//		if (request.getOperationType() != OperationType.FETCH) {
-//			response.setStatus(DSResponse.STATUS_FAILURE);
-//		} else {
-//			try {
-////				Collection<Message> messages = findMessageEntries(request.getStartRow(), 1 + (request.getEndRow() - request.getStartRow()));
+//        if (request.getOperationType() != OperationType.FETCH) {
+//            response.setStatus(DSResponse.STATUS_FAILURE);
+//        } else {
+//            try {
+        Endpoint endpoint1 = new Endpoint();
+        endpoint1.setId(1);
+        endpoint1.setValue("endpoint1");
+        response.addMessage(endpoint1);
+        response.setEndRow(1);
+        response.setTotalRows(1);
+
+
+
+       // Collection<Endpoint> messages = MessageDSR(request.getStartRow(), 1 + (request.getEndRow() - request.getStartRow()));
 ////				long count = Message.countMessages();
 ////				response.setEndRow(response.getStartRow()+messages.size()-1);
 ////				response.setTotalRows((int)count);
@@ -119,34 +129,35 @@ public class MessageResource {
 ////					response.addMessage(message);
 ////				}
 //               //response.addMessage(new Message(sb.toString()));
+
+
+
 //
-//                System.out.println("success on server");
-//			} catch (Exception e) {
-//				response.setStatus(DSResponse.STATUS_FAILURE);
-//			}
+//                StringBuffer sb = new StringBuffer();
+//                sb.append("<response>");
+//                sb.append("<status>0</status>");
+//                sb.append("<startRow>" + "0" + "</startRow>");
+//                sb.append("<endRow>" + "1" + "</endRow>");
+//                sb.append("<totalRows>10000</totalRows>");
+//                sb.append("<data>");
 //
-//			response.setStatus(DSResponse.STATUS_SUCCESS);
-//		}
-        StringBuffer sb = new StringBuffer();
-        sb.append("<response>");
-        sb.append("<status>0</status>");
-        sb.append("<startRow>" + "0" + "</startRow>");
-        sb.append("<endRow>" + "50" + "</endRow>");
-        sb.append("<totalRows>10000</totalRows>");
-        sb.append("<data>");
+//                sb.append("<record><id>idtest</id><value>Value</value></record>");
+//                sb.append("</data>");
+//                sb.append("</response>");
+                System.out.println("success on server");
 
-            sb.append("<record><id>idtest</id><value>Value</value></record>");
-        sb.append("</data>");
-        sb.append("</response>");
 
-        return sb.toString();
-//        sb.append("{response:");
-//        sb.append("{status:0,startRow:0,endRow:49,totalRows:50,data:[");
-//            sb.append("{id:\"Fund " + "\"}");
-//        sb.append("]}}");
-//        return sb.toString();
 
-	}
+                return response;
+//
+
+//            } catch (Exception e) {
+//                SC.say("Cannot reach server.");
+//                response.setStatus(DSResponse.STATUS_FAILURE);
+//            }
+        }
+       // return "";
+   // }
 
 //    @POST
 //    @Produces( { MediaType.APPLICATION_XML})
@@ -180,4 +191,6 @@ public class MessageResource {
 //
 //        return response;
 //    }
-}
+
+
+    }

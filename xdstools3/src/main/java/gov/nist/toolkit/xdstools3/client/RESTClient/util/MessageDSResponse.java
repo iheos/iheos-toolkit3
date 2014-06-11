@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools3.client.RESTClient.util;
 
-import gov.nist.toolkit.xdstools3.client.RESTClient.Message;
+import gov.nist.toolkit.xdstools3.client.RESTClient.Endpoint;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -20,16 +20,17 @@ public class MessageDSResponse extends DSResponse {
 	// Holds all incoming data
 	@XmlElementWrapper(name="data")
 	@XmlElement(name="record")
-	List<Message> data;
+	List<Endpoint> data;
 	
-	public Collection<Message> getMessages() {
+	public Collection<Endpoint> getMessages() {
 		return data;
 	}
 	
-	public void addMessage(Message message) {
-		if (data == null) {
-			data = new ArrayList<Message>();
-		}
-		this.data.add(message);
-	}
+	public void addMessage(Endpoint endpoint) {
+        if (data == null) {
+            data = new ArrayList<Endpoint>();
+        }
+        this.data.add(endpoint);
+    }
+
 }

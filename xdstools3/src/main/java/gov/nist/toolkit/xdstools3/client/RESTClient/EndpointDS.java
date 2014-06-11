@@ -13,7 +13,6 @@ import com.smartgwt.client.types.DSProtocol;
 public class EndpointDS extends RestDataSource {
 	
 	public EndpointDS() {
-		setID("MessageDS");
 
         // Set fields
 		DataSourceTextField messageId = new DataSourceTextField("id");

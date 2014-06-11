@@ -68,6 +68,8 @@
             <scope>runtime</scope>
             <version>${gwtVersion}</version>
         </dependency>
+
+        <!-- SmartGWT dependencies -->
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt</artifactId>
@@ -78,24 +80,18 @@
             <artifactId>smartgwt-skins</artifactId>
             <version>4.1p</version>
         </dependency>
-        <!--<should be changed later into Jersey dependency>-->
+
+        <!-- Jersey dependencies -->
         <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.0</version>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>1.9</version>
         </dependency>
-
-
-        <!--<dependency>-->
-        <!--<groupId>com.sun.jersey</groupId>-->
-        <!--<artifactId>jersey-server</artifactId>-->
-        <!--<version>1.9</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>com.sun.jersey</groupId>-->
-        <!--<artifactId>jersey-client</artifactId>-->
-        <!--<version>1.9</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>1.9</version>
+        </dependency>
         <!--<dependency>-->
         <!--<groupId>com.sun.jersey</groupId>-->
         <!--<artifactId>jersey-json</artifactId>-->

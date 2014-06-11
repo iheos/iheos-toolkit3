@@ -15,10 +15,10 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
 /**
 * Created by dazais on 5/21/2014.
 */
-public class RestDs extends CloseableTabWidget {
+public class RestTab extends CloseableTabWidget {
     static String header = "header";
 
-    public RestDs() {
+    public RestTab() {
         super(header);
         setContents(createLayout());
     }
@@ -124,6 +124,7 @@ public class RestDs extends CloseableTabWidget {
 //        });
 
         RestDataSource dataSource = new EndpointDS();
+        dataSource.setID("endpointDS");
         final ListGrid messageGrid = new ListGrid();
         messageGrid.setHeight(300);
         messageGrid.setWidth(500);

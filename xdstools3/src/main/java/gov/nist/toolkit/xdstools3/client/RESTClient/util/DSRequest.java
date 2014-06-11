@@ -11,21 +11,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType
 public abstract class DSRequest {
 
-	@XmlElement
 	private String dataSource;
-	
-	@XmlElement
 	private OperationType operationType;
-
-	@XmlElement
 	private int startRow;
-
-	@XmlElement
 	private int endRow;
-
-	@XmlElement
 	private String componentId;
 
+    @XmlElement(name = "operationType")
 	public OperationType getOperationType() {
 		return operationType;
 	}
@@ -34,6 +26,7 @@ public abstract class DSRequest {
 		this.operationType = operationType;
 	}
 
+    @XmlElement(name = "startRow")
 	public int getStartRow() {
 		return startRow;
 	}
@@ -42,6 +35,7 @@ public abstract class DSRequest {
 		this.startRow = startRow;
 	}
 
+    @XmlElement(name = "endRow")
 	public int getEndRow() {
 		return endRow;
 	}
@@ -49,12 +43,13 @@ public abstract class DSRequest {
 	public void setEndRow(int endRow) {
 		this.endRow = endRow;
 	}
-	
+
 	public void setComponentId(String componentId) {
 		this.componentId = componentId;
 	}
 
-	public String getComponentId() {
+    @XmlElement(name = "componentId")
+    public String getComponentId() {
 		return componentId;
 	}
 
@@ -62,6 +57,7 @@ public abstract class DSRequest {
 		this.dataSource = dataSource;
 	}
 
+    @XmlElement(name = "dataSource")
 	public String getDataSource() {
 		return dataSource;
 	}
