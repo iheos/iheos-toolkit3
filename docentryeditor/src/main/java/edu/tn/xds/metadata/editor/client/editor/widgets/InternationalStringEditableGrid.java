@@ -41,6 +41,8 @@ public class InternationalStringEditableGrid extends Composite {
         grid = new GenericEditableGrid<InternationalString>(InternationalString.class,gridTitle,
                 new ListStore<InternationalString>(isprops.key()), cm);
 
+        grid.setCheckBoxSelectionModel();
+
         LanguageCodeComboBox languageCodeComboBox = new LanguageCodeComboBox();
         languageCodeComboBox.setAllowBlank(false);
         languageCodeComboBox.setToolTip("The translation language's code is required. It can not be null. Please select one or delete the row.");

@@ -29,8 +29,6 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.SelectionChangedHandler;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import edu.tn.xds.metadata.editor.client.editor.properties.AuthorProperties;
-import edu.tn.xds.metadata.editor.client.editor.properties.CodedTermProperties;
-import edu.tn.xds.metadata.editor.client.editor.properties.InternationalStringProperties;
 import edu.tn.xds.metadata.editor.client.editor.widgets.*;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractView;
 import edu.tn.xds.metadata.editor.shared.model.Author;
@@ -66,12 +64,12 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 	IdentifierString256EditorWidget patientID = new IdentifierString256EditorWidget();
 
 	/* name values declaration */
-	NameValueString256EditorWidget legalAuthenticator = new NameValueString256EditorWidget();
-	NameValueString256EditorWidget sourcePatientId = new NameValueString256EditorWidget();
-	NameValueDTMEditorWidget creationTime = new NameValueDTMEditorWidget();
-	NameValueDTMEditorWidget serviceStartTime = new NameValueDTMEditorWidget();
-	NameValueDTMEditorWidget serviceStopTime = new NameValueDTMEditorWidget();
-	NameValueIntegerEditorWidget size = new NameValueIntegerEditorWidget();
+	NameValueString256EditorWidget legalAuthenticator = new NameValueString256EditorWidget("Legal Authenticator");
+	NameValueString256EditorWidget sourcePatientId = new NameValueString256EditorWidget("Source Patient ID");
+	NameValueDTMEditorWidget creationTime = new NameValueDTMEditorWidget("Creation Time");
+	NameValueDTMEditorWidget serviceStartTime = new NameValueDTMEditorWidget("Service Start Time");
+	NameValueDTMEditorWidget serviceStopTime = new NameValueDTMEditorWidget("Service Stop Time");
+	NameValueIntegerEditorWidget size = new NameValueIntegerEditorWidget("Size");
 
 	// ///////////////////////////////////////////////////////////////////////
 	// ---- AUTHORS WIDGETS
@@ -310,46 +308,46 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		/* name values options and fields */
 		/* ****************************** */
 		// Legal Authenticator (optional)
-		FieldSet fieldSet_nameValue_legalAuthenticator = new FieldSet();
-		fieldSet_nameValue_legalAuthenticator.setHeadingText("Legal Authenticator");
-		fieldSet_nameValue_legalAuthenticator.setCollapsible(true);
-		fieldSet_nameValue_legalAuthenticator.add(legalAuthenticator);
-		legalAuthenticator.setAllowBlanks(true, true);
+//		FieldSet fieldSet_nameValue_legalAuthenticator = new FieldSet();
+//		fieldSet_nameValue_legalAuthenticator.setHeadingText("Legal Authenticator");
+//		fieldSet_nameValue_legalAuthenticator.setCollapsible(true);
+//		fieldSet_nameValue_legalAuthenticator.add(legalAuthenticator);
+//		legalAuthenticator.setAllowBlanks(true, true);
 
 		// Source Patient ID (optional)
-		FieldSet fieldSet_nameValue_sourcePatientID = new FieldSet();
-		fieldSet_nameValue_sourcePatientID.setHeadingText("Source Patient ID");
-		fieldSet_nameValue_sourcePatientID.setCollapsible(true);
-		fieldSet_nameValue_sourcePatientID.add(sourcePatientId);
-		sourcePatientId.setAllowBlanks(true, true);
+//		FieldSet fieldSet_nameValue_sourcePatientID = new FieldSet();
+//		fieldSet_nameValue_sourcePatientID.setHeadingText("Source Patient ID");
+//		fieldSet_nameValue_sourcePatientID.setCollapsible(true);
+//		fieldSet_nameValue_sourcePatientID.add(sourcePatientId);
+//		sourcePatientId.setAllowBlanks(true, true);
 
 		// Service Start Time (optional)
-		FieldSet fieldSet_nameValue_serviceStartTime = new FieldSet();
-		fieldSet_nameValue_serviceStartTime.setHeadingText("Service Start Time");
-		fieldSet_nameValue_serviceStartTime.setCollapsible(true);
-		fieldSet_nameValue_serviceStartTime.add(serviceStartTime);
-		serviceStartTime.setAllowBlanks(/*true,*/ true);
+//		FieldSet fieldSet_nameValue_serviceStartTime = new FieldSet();
+//		fieldSet_nameValue_serviceStartTime.setHeadingText("Service Start Time");
+//		fieldSet_nameValue_serviceStartTime.setCollapsible(true);
+//		fieldSet_nameValue_serviceStartTime.add(serviceStartTime);
+//		serviceStartTime.setAllowBlanks(/*true,*/ true);
 
 		// Service Stop Time (optional)
-		FieldSet fieldSet_nameValue_serviceStopTime = new FieldSet();
-		fieldSet_nameValue_serviceStopTime.setHeadingText("Service Stop Time");
-		fieldSet_nameValue_serviceStopTime.setCollapsible(true);
-		fieldSet_nameValue_serviceStopTime.add(serviceStopTime);
-		serviceStopTime.setAllowBlanks(/*true,*/ true);
+//		FieldSet fieldSet_nameValue_serviceStopTime = new FieldSet();
+//		fieldSet_nameValue_serviceStopTime.setHeadingText("Service Stop Time");
+//		fieldSet_nameValue_serviceStopTime.setCollapsible(true);
+//		fieldSet_nameValue_serviceStopTime.add(serviceStopTime);
+//		serviceStopTime.setAllowBlanks(/*true,*/ true);
 
 		// Size (optional)
-		FieldSet fieldSet_nameValue_size = new FieldSet();
-		fieldSet_nameValue_size.setHeadingText("Size");
-		fieldSet_nameValue_size.setCollapsible(true);
-		fieldSet_nameValue_size.add(size);
-		size.setAllowBlanks(true, true);
+//		FieldSet fieldSet_nameValue_size = new FieldSet();
+//		fieldSet_nameValue_size.setHeadingText("Size");
+//		fieldSet_nameValue_size.setCollapsible(true);
+//		fieldSet_nameValue_size.add(size);
+////		size.setAllowBlanks(true, true);
 
 		// Creation Time (required)
-		FieldSet fieldSet_nameValue_creationTime = new FieldSet();
-		fieldSet_nameValue_creationTime.setHeadingText("Creation Time");
-		fieldSet_nameValue_creationTime.setCollapsible(true);
-		fieldSet_nameValue_creationTime.add(creationTime);
-		creationTime.setAllowBlanks(/*true,*/ true);
+//		FieldSet fieldSet_nameValue_creationTime = new FieldSet();
+//		fieldSet_nameValue_creationTime.setHeadingText("Creation Time");
+//		fieldSet_nameValue_creationTime.setCollapsible(true);
+//		fieldSet_nameValue_creationTime.add(creationTime);
+//		creationTime.setAllowBlanks(/*true,*/ true);
 
 		// AUTHORS (Optional)
 		FieldSet fieldSet_authors = new FieldSet();
@@ -388,7 +386,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		/* simple required fields added to FramedPanel container */
 		requiredFields.add(fieldSet_general_fields_required);
 		requiredFields.add(fieldSet_codedTerm_classCode);
-		requiredFields.add(fieldSet_nameValue_creationTime);
+		requiredFields.add(creationTime.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		requiredFields.add(fieldSet_codedTerm_formatCode);
 		requiredFields.add(fieldSet_codedTerm_healthcareFacility);
 		requiredFields.add(fieldSet_identifier_patient);
@@ -404,11 +402,11 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		optionalFields.add(fieldSet_authors);
 		optionalFields.add(commentsGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(confidentialityCodesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
-		optionalFields.add(fieldSet_nameValue_legalAuthenticator);
-		optionalFields.add(fieldSet_nameValue_serviceStartTime);
-		optionalFields.add(fieldSet_nameValue_serviceStopTime);
-		optionalFields.add(fieldSet_nameValue_size);
-		optionalFields.add(fieldSet_nameValue_sourcePatientID);
+		optionalFields.add(legalAuthenticator.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
+		optionalFields.add(serviceStartTime.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
+		optionalFields.add(serviceStopTime.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
+		optionalFields.add(size.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
+		optionalFields.add(sourcePatientId.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 //		optionalFields.add(field_titles);
 		optionalFields.add(titlesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 
@@ -612,31 +610,31 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 						"As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)\nOID format is \"[1-9](\\.[0-9]+)*]\""));
 
 		/* name values info */
-		legalAuthenticator.setEmptyTexts("", "ex: 123534YFQ1662");
-		legalAuthenticator.setToolTipConfigs(null, new ToolTipConfig("Value is a String", "It should contain les than 256 characters"));
-		sourcePatientId.setEmptyTexts("", "ex: 58642j65s^^^5.8.4");
-		sourcePatientId.setToolTipConfigs(null, new ToolTipConfig("Value is a String", "It should contain les than 256 characters"));
-		serviceStartTime.setEmptyTexts(/*"", */"ex: 201103160830");
-		serviceStartTime
-				.setToolTipConfigs(
-				/*		null,*/
-						new ToolTipConfig(
-								"DTM Value is a date/time value",
-								"The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59"));
-		serviceStopTime.setEmptyTexts(/*"",*/ "ex: 201103160830");
-		serviceStopTime
-				.setToolTipConfigs(
-						/*null,*/
-						new ToolTipConfig(
-								"DTM Value is a date/time value",
-								"The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59"));
-		creationTime.setEmptyTexts(/*"", */"ex: 201103160830");
-		creationTime
-				.setToolTipConfigs(
-						/*null,*/
-						new ToolTipConfig(
-								"DTM Value is a date/time value",
-								"The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59"));
+//		legalAuthenticator.setEmptyTexts("", "ex: 123534YFQ1662");
+//		legalAuthenticator.setToolTipConfigs(null, new ToolTipConfig("Value is a String", "It should contain les than 256 characters"));
+//		sourcePatientId.setEmptyTexts("", "ex: 58642j65s^^^5.8.4");
+//		sourcePatientId.setToolTipConfigs(null, new ToolTipConfig("Value is a String", "It should contain les than 256 characters"));
+//		serviceStartTime.setEmptyTexts(/*"", */"ex: 201103160830");
+//		serviceStartTime
+//				.setToolTipConfigs(
+//				/*		null,*/
+//						new ToolTipConfig(
+//								"DTM Value is a date/time value",
+//								"The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59"));
+//		serviceStopTime.setEmptyTexts(/*"",*/ "ex: 201103160830");
+//		serviceStopTime
+//				.setToolTipConfigs(
+//						/*null,*/
+//						new ToolTipConfig(
+//								"DTM Value is a date/time value",
+//								"The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59"));
+//		creationTime.setEmptyTexts(/*"", */"ex: 201103160830");
+//		creationTime
+//				.setToolTipConfigs(
+//						/*null,*/
+//						new ToolTipConfig(
+//								"DTM Value is a date/time value",
+//								"The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59"));
 	}
 
 }

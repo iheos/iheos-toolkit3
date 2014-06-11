@@ -37,6 +37,11 @@
             <version>2.5.1</version>
         </dependency>
         <dependency>
+            <groupId>com.google.web.bindery</groupId>
+            <artifactId>requestfactory-apt</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+        <dependency>
             <groupId>aopalliance</groupId>
             <artifactId>aopalliance</artifactId>
             <version>1.0</version>
@@ -111,5 +116,24 @@
     </dependencies>
     <build>
         <finalName>docentryeditor</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+                <dependencies>
+                    <!-- Need to run the RF Validation tool. This works on both the command-line
+               and in Eclipse, provided that m2e-apt is installed. -->
+                    <dependency>
+                        <groupId>com.google.web.bindery</groupId>
+                        <artifactId>requestfactory-apt</artifactId>
+                        <version>2.5.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
     </build>
 </project>

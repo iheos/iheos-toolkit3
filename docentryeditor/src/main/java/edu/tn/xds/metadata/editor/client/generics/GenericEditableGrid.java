@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;
+import com.sencha.gxt.data.shared.Converter;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
@@ -44,6 +45,7 @@ import java.util.List;
  *      ColumnModel<InternationalString> columnModel = new ColumnModel<InternationalString>(columnsConfigs);
  *
  *      GenericEditableGrid<InternationalString> grid=new GenericEditableGrid<InternationalString>(InternationalString.class,"Title",new ListStore<InternationalString>(isprops.key()), columnModel);
+ *      // grid.setCheckBoxSelectionModel();
  *
  *      LanguageCodeComboBox languageCodeComboBox = new LanguageCodeComboBox();
  *      languageCodeComboBox.setAllowBlank(false);
@@ -57,22 +59,24 @@ import java.util.List;
  * </code>
  * </pre>
  *
+ * @see Grid
  *
  * Created by onh2 on 6/10/2014.
  */
 public class GenericEditableGrid<M> extends Grid<M> {
 
-    ContentPanel pane = new ContentPanel();
-    VerticalLayoutContainer gridContainer = new VerticalLayoutContainer();
-    GridInlineEditing<M> editing;
+    private ContentPanel pane = new ContentPanel();
+    private VerticalLayoutContainer gridContainer = new VerticalLayoutContainer();
+    protected GridInlineEditing<M> editing;
 
-    Class<M> clazzM;
+    private Class<M> clazzM;
 
     // Toolbar elements
     private final ToolBar toolBar = new ToolBar();
     private final TextButton newItemButton = new TextButton();
     private final TextButton deleteItemsButton = new TextButton();
     private final TextButton clearButton = new TextButton();
+    private boolean checkBoxenabled=false;
 
     // TODO check if there is not a better way to check parameterized class type.
     public GenericEditableGrid(Class<M> parametrizedClass,String gridTitle,ListStore<M> listStore,ColumnModel<M> cm){
@@ -81,17 +85,7 @@ public class GenericEditableGrid<M> extends Grid<M> {
         clazzM=parametrizedClass;
         pane.setHeadingText(gridTitle);
 
-        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
-        IdentityValueProvider<M> identityValueProvider = new IdentityValueProvider<M>();
-        CheckBoxSelectionModel<M> selectColumn = new CheckBoxSelectionModel<M>(
-                identityValueProvider);
-        selectColumn.setSelectionMode(Style.SelectionMode.MULTI);
-        columnsConfigs.add(selectColumn.getColumn());
-        columnsConfigs.addAll(cm.getColumns());
-
-        this.cm=new ColumnModel<M>(columnsConfigs);
-
-        this.setSelectionModel(selectColumn);
+        this.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
         this.getView().setAutoFill(true);
         this.setBorders(false);
 
@@ -109,14 +103,15 @@ public class GenericEditableGrid<M> extends Grid<M> {
         gridContainer.add(this);
         pane.add(gridContainer);
 
-        // EDITING//
-        editing = new GridInlineEditing<M>(this);
-        editing.setClicksToEdit(ClicksToEdit.TWO);
+        setEditable();
 
         bindUI();
     }
 
-    private void bindUI() {
+    protected void setEditable() {
+        // EDITING//
+        editing = new GridInlineEditing<M>(this);
+        editing.setClicksToEdit(ClicksToEdit.TWO);
         editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<M>() {
             @Override
             public void onCompleteEdit(
@@ -124,14 +119,21 @@ public class GenericEditableGrid<M> extends Grid<M> {
                 getStore().commitChanges();
             }
         });
+    }
+
+    private void bindUI() {
         newItemButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent selectEvent) {
                 editing.cancelEditing();
                 M element = GWT.create(clazzM);
                 getStore().add(0, element);
+                int index=0;
+                if(checkBoxenabled){
+                    index=1;
+                }
                 editing.startEditing(new Grid.GridCell(getStore().indexOf(
-                        element), 1));
+                        element), index));
             }
         });
         deleteItemsButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -170,6 +172,26 @@ public class GenericEditableGrid<M> extends Grid<M> {
     }
 
     /**
+     * This Method enables the grid's selection checkbox column (for multiselection).
+     */
+    public void setCheckBoxSelectionModel(){
+        checkBoxenabled = true;
+        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
+        IdentityValueProvider<M> identityValueProvider = new IdentityValueProvider<M>();
+        CheckBoxSelectionModel<M> selectColumn = new CheckBoxSelectionModel<M>(
+                identityValueProvider);
+        selectColumn.setSelectionMode(Style.SelectionMode.MULTI);
+        columnsConfigs.add(selectColumn.getColumn());
+        columnsConfigs.addAll(cm.getColumns());
+
+        this.cm=new ColumnModel<M>(columnsConfigs);
+
+        this.setSelectionModel(selectColumn);
+
+        setEditable();
+    }
+
+    /**
      * Needs to be used to get the Grid Editable. It configures how the columns will be edited.
      *
      * @param columnConfig
@@ -181,10 +203,12 @@ public class GenericEditableGrid<M> extends Grid<M> {
         editing.addEditor(columnConfig,field);
     }
 
+    public <N,O> void addColumnEditorConfig(ColumnConfig<M, N> columnConfig, Converter<N, O> converter, Field<O> field) {
+        editing.addEditor(columnConfig,converter,field);
+    }
+
     @Override
     public Widget asWidget() {
-
-
         return pane.asWidget();
     }
 }
