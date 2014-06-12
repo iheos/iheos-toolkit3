@@ -11,8 +11,8 @@
     <!-- <inherits name="com.smartclient.theme.enterprise.Enterprise"/> -->
     <!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
 
-
 	<inherits name="com.google.gwt.resources.Resources" />
+    <inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
 
     <!-- <script src='showcase/sc/modules/ISC_DataBinding.js'></script> -->
     <!-- <script src='showcase/sc/modules/ISC_Drawing.js'></script> -->

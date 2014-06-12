@@ -22,7 +22,7 @@ public class CloseableTabWidget extends Tab implements TabInterface {
 		Label l = new Label();
 		//s = "<b>" + s + "</b>";
 		l.setContents(s);
-        l.setStyleName("appheader");
+        l.setStyleName("h3");
 		//l.setHeight(20);
         // l.setAlign(Alignment.CENTER);
 		panel.addMember(l);

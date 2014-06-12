@@ -8,9 +8,11 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
+import com.smartgwt.client.widgets.tab.Tab;
 import gov.nist.toolkit.xdstools3.client.RESTClient.RestTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.HomeTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.SettingsTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.TabSetWidget;
@@ -74,7 +76,7 @@ public class Xdstools3 implements EntryPoint {
 
 		// Tabs
 		topTabSet = new TabSetWidget();
-        CloseableTabWidget homeTab = new CloseableTabWidget("Home");  homeTab.setCanClose(false);
+        Tab homeTab = new HomeTab();
 		CloseableTabWidget findDocsTab = new FindDocumentTab();
         CloseableTabWidget mpqTab = new MPQTab();
 		
