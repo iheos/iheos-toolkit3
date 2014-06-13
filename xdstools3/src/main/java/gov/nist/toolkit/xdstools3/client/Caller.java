@@ -1,7 +1,6 @@
-package gov.nist.toolkit.xdstools3.server;
+package gov.nist.toolkit.xdstools3.client;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Singleton class that acts as a directory of all calls to server-side packages. All calls must go through this class in order to

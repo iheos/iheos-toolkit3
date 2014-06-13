@@ -2,9 +2,8 @@ package gov.nist.toolkit.xdstools3.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import gov.nist.toolkit.xdstools3.client.Caller;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
-
-import java.util.ArrayList;
 
 /**
  * Server side of the GWT RPC mechanism. 
