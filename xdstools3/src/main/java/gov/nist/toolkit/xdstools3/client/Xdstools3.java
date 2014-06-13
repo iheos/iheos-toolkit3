@@ -9,7 +9,6 @@ import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
-import gov.nist.toolkit.xdstools3.client.RESTClient.RestTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.HomeTab;
@@ -84,10 +83,6 @@ public class Xdstools3 implements EntryPoint {
         topTabSet.addTab(homeTab);
         topTabSet.addTab(findDocsTab);
         topTabSet.addTab(mpqTab);
-
-        //test
-        GenericCloseableTab rest = new RestTab();
-        topTabSet.addTab(rest);
 
         // Main layout
         VLayout mainLayout = new VLayout(); 

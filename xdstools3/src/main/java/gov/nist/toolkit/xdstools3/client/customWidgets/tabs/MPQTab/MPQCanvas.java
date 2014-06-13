@@ -44,7 +44,7 @@ public class MPQCanvas extends VLayout {
         Label label1 = new Label("Step 1: Select Actors");
         EndpointWidget endpoints = new EndpointWidget();
         VLayout actorsLayout = new VLayout();
-        actorsLayout.addMembers(label1); // should also add endpoints
+        actorsLayout.addMembers(label1, endpoints);
         actorsLayout.setAlign(Alignment.CENTER);
 
         // middle spacer
