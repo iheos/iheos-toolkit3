@@ -1,11 +1,11 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.MPQTab;
 
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.GenericCloseableTab;
 
 /**
  * Created by dazais on 5/14/2014.
  */
-public class MPQTab extends CloseableTabWidget {
+public class MPQTab extends GenericCloseableTab {
     static String header = "Multi-Patient Find Documents (MPQ)";
 
     public MPQTab() {

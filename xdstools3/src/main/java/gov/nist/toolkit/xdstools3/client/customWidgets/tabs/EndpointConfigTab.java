@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.tabs;
 
 
-public class EndpointConfigTab extends CloseableTabWidget {
+public class EndpointConfigTab extends GenericCloseableTab {
 	static String header = "Configure Endpoints";
 
 	public EndpointConfigTab() { 

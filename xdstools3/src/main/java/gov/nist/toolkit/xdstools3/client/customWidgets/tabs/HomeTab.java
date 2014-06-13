@@ -5,13 +5,14 @@ import com.smartgwt.client.widgets.tab.Tab;
 
 public class HomeTab extends Tab {
 
-	public HomeTab() {
-     setCanClose(false);
+    public HomeTab(String s) {
+        setTitle(s);
+        setCanClose(false);
     }
 
-	private void setContents(){
+    private void setContents(){
 
-	}
+    }
 
 
 }

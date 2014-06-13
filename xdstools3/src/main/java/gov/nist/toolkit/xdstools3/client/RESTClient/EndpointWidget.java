@@ -10,18 +10,15 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
 
 /**
  *
  * Created by dazais on 5/21/2014.
  */
-public class EndpointWidget extends CloseableTabWidget {
-    static String header = "header";
+public class EndpointWidget extends HLayout {
 
     public EndpointWidget() {
-        super(header);
-        setContents(createLayout());
+        VLayout vl = createLayout();
     }
 
     public VLayout createLayout() {
@@ -43,6 +40,7 @@ public class EndpointWidget extends CloseableTabWidget {
         grid.setCanRemoveRecords(true);
         grid.setListEndEditAction(RowEndEditAction.NEXT);
 
+        // Set ListGrid fields
         ListGridField idField = new ListGridField("id", "Id", 40);
         idField.setAlign(Alignment.LEFT);
         ListGridField messageField = new ListGridField("value", "Message");

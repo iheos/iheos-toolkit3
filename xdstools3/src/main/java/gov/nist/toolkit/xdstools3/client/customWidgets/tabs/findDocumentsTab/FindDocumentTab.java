@@ -3,11 +3,11 @@ package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.toolkit.xdstools3.client.RESTClient.EndpointWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
 
 
-public class FindDocumentTab extends CloseableTabWidget {
+public class FindDocumentTab extends GenericCloseableTab {
 	static String header = "Find Documents";
 
 	public FindDocumentTab() { 

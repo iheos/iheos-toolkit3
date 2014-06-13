@@ -5,7 +5,7 @@ import com.smartgwt.client.widgets.layout.VLayout;
 /**
  * Defines the profile for creating a tab.
  * @author dazais
- * @see CloseableTabWidget
+ * @see GenericCloseableTab
  *
  */
 public interface TabInterface {

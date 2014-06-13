@@ -11,7 +11,7 @@ import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import gov.nist.toolkit.xdstools3.client.RESTClient.RestTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.HomeTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.SettingsTab;
@@ -76,9 +76,9 @@ public class Xdstools3 implements EntryPoint {
 
 		// Tabs
 		topTabSet = new TabSetWidget();
-        Tab homeTab = new HomeTab();
-		CloseableTabWidget findDocsTab = new FindDocumentTab();
-        CloseableTabWidget mpqTab = new MPQTab();
+        Tab homeTab = new HomeTab("Home");
+		GenericCloseableTab findDocsTab = new FindDocumentTab();
+        GenericCloseableTab mpqTab = new MPQTab();
 		
         // Add all tabs to the main TabSet
         topTabSet.addTab(homeTab);
@@ -86,7 +86,7 @@ public class Xdstools3 implements EntryPoint {
         topTabSet.addTab(mpqTab);
 
         //test
-        CloseableTabWidget rest = new RestTab();
+        GenericCloseableTab rest = new RestTab();
         topTabSet.addTab(rest);
 
         // Main layout
@@ -109,11 +109,11 @@ public class Xdstools3 implements EntryPoint {
 	}
 
 public void openTab(String tabName) {
-    CloseableTabWidget tab = null;
+    GenericCloseableTab tab = null;
 
     // create tab depending on parameter
     if (tabName == "ADMIN") {
-        CloseableTabWidget adminTab = new SettingsTab();
+        GenericCloseableTab adminTab = new SettingsTab();
         tab = adminTab;
     }
     // update set of tabs

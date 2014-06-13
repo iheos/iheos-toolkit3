@@ -21,8 +21,7 @@ import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 public class FindDocumentForm extends DynamicForm {
 
 	public FindDocumentForm(){
-		setPadding(10);
-		setCellPadding(10);
+		setCellPadding(15);
 		setOverflow(Overflow.AUTO);
 		setNumCols(3);
 
@@ -30,7 +29,7 @@ public class FindDocumentForm extends DynamicForm {
 	}
 
 	/**
-	 * Creates the fields
+	 * Creates fields
 	 */
 	public void createInputs() {
         // A spacer item to use where needed

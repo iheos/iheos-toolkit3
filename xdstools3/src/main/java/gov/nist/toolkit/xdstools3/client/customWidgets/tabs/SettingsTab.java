@@ -1,18 +1,15 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.tabs;
 
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.form.fields.SectionItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import gov.nist.toolkit.xdstools3.client.customWidgets.CheckboxItemWithTooltipWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.TextItemWithTooltipWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.UploadItemWithTooltipWidget;
 
-import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.FormItem;
 import gov.nist.toolkit.xdstools3.client.customWidgets.forms.FormattedDynamicForm;
 
-public class SettingsTab extends CloseableTabWidget {
+public class SettingsTab extends GenericCloseableTab {
 	String title = "Settings";
 	String propertiesTitle = "Properties";
 

@@ -10,12 +10,12 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.GenericCloseableTab;
 
 /**
 * Created by dazais on 5/21/2014.
 */
-public class RestTab extends CloseableTabWidget {
+public class RestTab extends GenericCloseableTab {
     static String header = "header";
 
     public RestTab() {

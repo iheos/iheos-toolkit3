@@ -5,10 +5,10 @@ import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 
-public class CloseableTabWidget extends Tab implements TabInterface {
+public class GenericCloseableTab extends Tab implements TabInterface {
 	private VLayout panel = new VLayout(10);
 	
-	public CloseableTabWidget(String s){
+	public GenericCloseableTab(String s){
 		 setCanClose(true); 
 		 setTitle(s);
 	}
@@ -17,23 +17,20 @@ public class CloseableTabWidget extends Tab implements TabInterface {
 		return panel;
 	}
 	
-	// main header - h1
+	// main header
 	public void setHeader(String s){
 		Label l = new Label();
-		//s = "<b>" + s + "</b>";
 		l.setContents(s);
-        l.setStyleName("h3");
-		//l.setHeight(20);
-        // l.setAlign(Alignment.CENTER);
+        l.setStyleName("h4");
 		panel.addMember(l);
 		setPane(panel);
 	}
 	
-	// subtitles - h2
+	// subtitle
 	public void setSubtitle(String s){
 		Label l = new Label();
 		l.setContents(s);
-		l.setHeight(20);
+        l.setStyleName("h5");
 		panel.addMember(l);
 		setPane(panel);
 	}
