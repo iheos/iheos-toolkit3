@@ -72,7 +72,7 @@ public class Site  implements IsSerializable, Serializable {
 				}
 			}
 		}
-		ActorType repository = new ActorTransactionTypeFactory().getActorType("rep");
+		ActorType repository = new ActorTransactionTypeFactory().getActorTypeIfAvailable("rep");
 		for (TransactionBean b : repositories.transactions) {
 			if (repository.equals(b.actorType))
 			for (TransactionBean c : repositories.transactions) {
@@ -147,7 +147,8 @@ public class Site  implements IsSerializable, Serializable {
 	public void addRepository(TransactionBean transbean) {
 		repositories.addTransaction(transbean);
 	}
-	
+
+    // endpoint is for retrieve
 	public void addRepository(String repositoryUniqueId, RepositoryType repositoryType, String endpoint, boolean isSecure, boolean isAsync) {
 		TransactionBean bean = new TransactionBean(repositoryUniqueId, repositoryType, endpoint, isSecure, isAsync);
 		addRepository(bean);

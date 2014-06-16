@@ -31,7 +31,7 @@ import java.util.List;
  // Set the simulator ID
  sf.installRepositoryLinkage(SimId);
  // Add an Actor Simulator to it
- sf.addActorSim(ActorTypeFactory.getActorType("registry");
+ sf.addActorSim(ActorTypeFactory.getActorTypeIfAvailable("registry");
  // Persist it
  sf.save();
  </pre>

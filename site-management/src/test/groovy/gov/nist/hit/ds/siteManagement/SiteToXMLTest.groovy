@@ -48,7 +48,7 @@ public class SiteToXMLTest {
 
     @Before
     public void setup() {
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().load(config)
     }
 

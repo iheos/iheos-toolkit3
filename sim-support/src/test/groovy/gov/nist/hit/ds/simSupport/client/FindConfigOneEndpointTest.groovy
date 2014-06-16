@@ -1,9 +1,11 @@
 package gov.nist.hit.ds.simSupport.client
+
 import gov.nist.hit.ds.actorTransaction.*
 import gov.nist.hit.ds.simSupport.client.configElementTypes.AbstractActorSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement
-import org.junit.Test
+import gov.nist.hit.ds.simSupport.endpoint.Endpoint
 import org.junit.Before
+import org.junit.Test
 
 import static org.junit.Assert.assertEquals
 
@@ -46,25 +48,24 @@ public class FindConfigOneEndpointTest {
 '''
     @Before
     void setup() {
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().load(config)
         startUp()
     }
 
 	public void startUp() {
-		sConfig = new ActorSimConfig(new ActorTransactionTypeFactory().getActorType("reg")).
+		sConfig = new ActorSimConfig(new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg")).
 				add(
 						new EndpointActorSimConfigElement(
 								new EndpointLabel(
-										new ActorTransactionTypeFactory().getTransactionType("rb"),
+										new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb"),
 										TlsType.TLS,
 										AsyncType.ASYNC
 										),
-										"https://example.com/async"
-								
+										new Endpoint("https://example.com/async")
 								)
 						);
-        actorType = new ActorTransactionTypeFactory().getActorType("reg");
+        actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         cEles = sConfig.findConfigs(
                 [ actorType.find("rb") ],
                 [ TlsType.TLS ],
@@ -73,32 +74,32 @@ public class FindConfigOneEndpointTest {
 	
 	@Test
 	public void verifyTestdata() {
-		assertEquals(sConfig.getActorType(), new ActorTransactionTypeFactory().getActorType("reg"));
+		assertEquals(sConfig.getActorType(), new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg"));
 		assertEquals("ActorSimConfig size", 1, sConfig.elements.size());
 	}
 	
 	@Test
 	public void anyAnyTest() {
 		cEles = sConfig.findConfigs(
-                [ new ActorTransactionTypeFactory().getTransactionType("rb") ],
+                [ new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb") ],
 				[ TlsType.TLS, TlsType.NOTLS ],
 				[ AsyncType.ASYNC, AsyncType.SYNC ]);
-		assertEquals("findConfig any TLS any ASYNC size", 1, cEles.size());
+		assertEquals("findConfig any TLS any ASYNC", 1, cEles.size());
 	}
 
 	@Test
 	public void tlsAnyTest() {
 		cEles = sConfig.findConfigs(
-                [ new ActorTransactionTypeFactory().getTransactionType("rb") ],
+                [ new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb") ],
 				[ TlsType.TLS ],
 				[ AsyncType.ASYNC, AsyncType.SYNC ]);
-		assertEquals("findConfig any ASYNC size", 1, cEles.size());
+		assertEquals("findConfig any ASYNC", 1, cEles.size());
 	}
 	
 	@Test
 	public void anyAsyncTest() {
 		cEles = sConfig.findConfigs(
-                [ new ActorTransactionTypeFactory().getTransactionType("rb") ],
+                [ new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb") ],
 				[ TlsType.TLS, TlsType.NOTLS ],
 				[ AsyncType.ASYNC ]);
 		assertEquals("findConfig any TLS size", 1, cEles.size());
@@ -107,7 +108,7 @@ public class FindConfigOneEndpointTest {
 	@Test
 	public void tlsAsyncTest() {
 		cEles = sConfig.findConfigs(
-                [ new ActorTransactionTypeFactory().getTransactionType("rb") ],
+                [ new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb") ],
 				[ TlsType.TLS ],
 				[ AsyncType.ASYNC ]);
 		assertEquals("findConfig size", 1, cEles.size());
@@ -116,7 +117,7 @@ public class FindConfigOneEndpointTest {
 	@Test
 	public void noTlsAnyTest() {
 		cEles = sConfig.findConfigs(
-                [ new ActorTransactionTypeFactory().getTransactionType("rb") ],
+                [ new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb") ],
 				[ TlsType.NOTLS ],
 				[ AsyncType.ASYNC, AsyncType.SYNC ]);
 		assertEquals("findConfig any no TLS any ASYNC size", 0, cEles.size());
@@ -125,7 +126,7 @@ public class FindConfigOneEndpointTest {
 	@Test
 	public void anySyncTest() {
 		cEles = sConfig.findConfigs(
-                [ new ActorTransactionTypeFactory().getTransactionType("rb") ],
+                [ new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb") ],
 				[ TlsType.TLS, TlsType.NOTLS ],
 				[ AsyncType.SYNC ]);
 		assertEquals("findConfig any TLS SYNC size", 0, cEles.size());

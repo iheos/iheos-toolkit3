@@ -25,6 +25,10 @@ public class EndpointLabel {
 		this.tls = tlsType == TlsType.TLS;
 		this.async = asyncType == AsyncType.ASYNC;
 	}
+
+    public String toString() {
+        return "EndpointLabel:" + transType + ":" + tls + ":" + async;
+    }
 	
 	/**
 	 * Parse a display lqbel for an endpoint. An example is:  Register_TLS_ASYNC

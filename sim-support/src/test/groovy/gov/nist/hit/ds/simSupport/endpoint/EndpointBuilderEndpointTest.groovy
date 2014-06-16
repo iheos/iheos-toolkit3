@@ -1,15 +1,16 @@
-package gov.nist.hit.ds.actorTransaction;
+package gov.nist.hit.ds.simSupport.endpoint
 
-import org.junit.Before;
-import org.junit.Test;
+import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.AsyncType
+import gov.nist.hit.ds.actorTransaction.EndpointLabel
+import gov.nist.hit.ds.actorTransaction.TlsType
+import gov.nist.hit.ds.simSupport.client.SimId
+import spock.lang.Specification
 
-import static org.junit.Assert.assertEquals;
-
-public class EndpointLabelSetGetTest {
-
-	TransactionType register;
-    ActorType actorType;
-
+/**
+ * Created by bmajur on 6/6/14.
+ */
+class EndpointBuilderEndpointTest extends Specification {
     static String config = '''
 <ActorsTransactions>
     <transaction displayName="Stored Query" id="sq" code="sq" asyncCode="sq.as">
@@ -41,34 +42,20 @@ public class EndpointLabelSetGetTest {
     </actor>
 </ActorsTransactions>
 '''
-    @Before
     void setup() {
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().load(config)
-        actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
-        register = new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb')
     }
 
-	@Test
-	public void setGetTest()  {
-		EndpointLabel label = new EndpointLabel(actorType, "REGISTER");
+    def 'Build simple endpoint'() {
+        when:
+        def builder = new EndpointBuilder('localhost', '8080', 'xdstools2/sims', new SimId('123'))
+        def transType = new ActorTransactionTypeFactory().getTransactionType('rb')
+        def elabel = new EndpointLabel(transType, TlsType.NOTLS, AsyncType.SYNC)
+        def endpoint = builder.makeEndpoint('reg', elabel)
 
-		assertEquals("", register, label.getTransType());
-		
-		label.setTransType(register);
-		assertEquals("", register, label.getTransType());
-		
-		label.setAsync(true);
-		assertEquals("", AsyncType.ASYNC, label.getAsyncType());
-	
-		label.setAsync(false);
-		assertEquals("", AsyncType.SYNC, label.getAsyncType());
-	
-		label.setTls(true);
-		assertEquals("", TlsType.TLS, label.getTlsType());
+        then:
+        endpoint.value == 'http://localhost:8080/xdstools2/sims/123/reg/rb'
+    }
 
-		label.setTls(false);
-		assertEquals("", TlsType.NOTLS, label.getTlsType());
-}
-	
 }

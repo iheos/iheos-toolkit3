@@ -127,7 +127,7 @@ public class SimEngine  {
     }
 
     /**
-     * Given a component to be scan, identify its subscriptions and getActorType
+     * Given a component to be scan, identify its subscriptions and getActorTypeIfAvailable
      * publishers to provide them. Only consider pubilshers that come
      * earlier in the valchain. Execute the getter/setter combination
      * to inject the necessary parameter. The combination of getter/setter is
@@ -146,7 +146,7 @@ public class SimEngine  {
         else
             logger.debug("======================= " + componentClassName + "  ==========================");
         Method[] componentMethods = componentClass.methods;
-        // For all setters in this subscriptionObject, getActorType and
+        // For all setters in this subscriptionObject, getActorTypeIfAvailable and
         // execute the getter/setter pair to inject the necessary
         // objects into subscriptionObject so it is ready to scan.  Caller
         //

@@ -6,8 +6,9 @@ import gov.nist.hit.ds.actorTransaction.EndpointLabel
 import gov.nist.hit.ds.actorTransaction.TlsType
 import gov.nist.hit.ds.simSupport.client.configElementTypes.AbstractActorSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement
-import org.junit.Test
+import gov.nist.hit.ds.simSupport.endpoint.Endpoint
 import org.junit.Before
+import org.junit.Test
 
 import static org.junit.Assert.assertEquals
 
@@ -27,6 +28,11 @@ public class SimulatorConfigTest {
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
     </transaction>
+    <transaction displayName="Retrieve" id="ret" code="ret" asyncCode="ret.as">
+        <request action="urn:ihe:iti:2007:RetrieveDocumentSet"/>
+        <response action="urn:ihe:iti:2007:RetrieveDocumentSetResponse"/>
+        <property name="repositoryUniqueId" value=""/>
+    </transaction>
     <transaction displayName="Update" id="update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
@@ -40,38 +46,38 @@ public class SimulatorConfigTest {
     <actor displayName="Document Repository" id="rep">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="prb"/>
-        <property name="repositoryUniqueId" value="1.2.3.4"/>
+        <transaction id="ret"/>
     </actor>
 </ActorsTransactions>
 '''
     @Before
     void setup() {
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().load(config)
     }
 
     @Test
 	public void findTest2() {
-		ActorSimConfig sConfig = new ActorSimConfig(new ActorTransactionTypeFactory().getActorType("reg"));
+		ActorSimConfig sConfig = new ActorSimConfig(new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg"));
 		sConfig.
 				add(new EndpointActorSimConfigElement(
 						new EndpointLabel(
-								new ActorTransactionTypeFactory().getTransactionType("rb"),
+								new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb"),
 								TlsType.NOTLS,
 								AsyncType.ASYNC
 								),
-								"http://example.com/async")
+								new Endpoint("http://example.com/async"))
 						);
 		sConfig.add(new EndpointActorSimConfigElement(
 								new EndpointLabel(
-										new ActorTransactionTypeFactory().getTransactionType("rb"),
+										new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb"),
 										TlsType.TLS,
 										AsyncType.ASYNC
 										),
-										"https://example.com/async")
+										new Endpoint("https://example.com/async"))
 						);
 		List<AbstractActorSimConfigElement> cEles = sConfig.findConfigs(
-				[ new ActorTransactionTypeFactory().getTransactionType("rb") ],
+				[ new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb") ],
 				[  TlsType.TLS ],
 				[ AsyncType.ASYNC ]);
 		

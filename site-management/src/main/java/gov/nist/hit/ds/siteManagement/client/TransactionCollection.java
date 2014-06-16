@@ -203,7 +203,7 @@ public class TransactionCollection implements IsSerializable, Serializable {
                     isAsync));
         } else {
             transactions.add(new TransactionBean(
-                    new ActorTransactionTypeFactory().getTransactionType(transactionName),
+                    new ActorTransactionTypeFactory().getTransactionTypeIfAvailable(transactionName),
                     TransactionBean.RepositoryType.NONE,
                     endpoint,
                     isSecure,

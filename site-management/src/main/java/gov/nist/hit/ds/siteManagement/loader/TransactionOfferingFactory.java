@@ -93,7 +93,7 @@ public class TransactionOfferingFactory {
 					continue;
 				TransactionType tt;
 				if (tb.isRetrieve()) {
-                    tt = new ActorTransactionTypeFactory().getTransactionType("ret");
+                    tt = new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("ret");
 				} else 
 					tt = tb.getTransactionType();
 				

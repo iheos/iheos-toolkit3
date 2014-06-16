@@ -46,7 +46,7 @@ public class SiteBuilderTest {
 
     @Before
     public void setup() {
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().load(config)
         site = new Site("mysite");
     }
@@ -67,8 +67,8 @@ public class SiteBuilderTest {
 		site.addTransaction(transName, endpoint, isSecure, isAsync);
 		
 		assertTrue(site.size() == 1);
-		assertTrue(site.hasTransaction(new ActorTransactionTypeFactory().getTransactionType("sq")));
-		assertTrue(site.hasActor(new ActorTransactionTypeFactory().getActorType("reg")));
+		assertTrue(site.hasTransaction(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("sq")));
+		assertTrue(site.hasActor(new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg")));
 		assertTrue(site.validate());
 	}
 
