@@ -112,12 +112,25 @@ public class EndpointServer {
 //            response.setStatus(DSResponse.STATUS_FAILURE);
 //        } else {
 //            try {
+
+        // enter fake data
         Endpoint endpoint1 = new Endpoint();
-        endpoint1.setId(1);
-        endpoint1.setValue("endpoint1");
+        endpoint1.setType(EndpointType.ENDPOINT_TYPE_REGISTRY);
+        endpoint1.setName("endpoint1");
+
+        Endpoint endpoint2 = new Endpoint();
+        endpoint2.setType(EndpointType.ENDPOINT_TYPE_REGISTRY);
+        endpoint2.setName("test");
+
+        Endpoint endpoint3 = new Endpoint();
+        endpoint3.setType(EndpointType.ENDPOINT_TYPE_INIT_GATEWAY);
+        endpoint3.setName("test2");
+
         response.addMessage(endpoint1);
-        response.setEndRow(1);
-        response.setTotalRows(1);
+        response.addMessage(endpoint2);
+        response.addMessage(endpoint3);
+        response.setEndRow(3);
+        response.setTotalRows(3);
 
 
 

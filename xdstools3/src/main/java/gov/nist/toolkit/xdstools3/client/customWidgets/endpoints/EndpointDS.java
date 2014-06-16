@@ -15,11 +15,12 @@ public class EndpointDS extends RestDataSource {
 	public EndpointDS() {
 
         // Set fields
-		DataSourceTextField messageId = new DataSourceTextField("id");
-		messageId.setPrimaryKey(true);
-		messageId.setCanEdit(false);
-		DataSourceTextField messageValue = new DataSourceTextField("value");
-		setFields(messageId, messageValue);
+		DataSourceTextField endpointId = new DataSourceTextField("id");
+		endpointId.setPrimaryKey(true);
+		endpointId.setCanEdit(false);
+		DataSourceTextField endpointName = new DataSourceTextField("name");
+        DataSourceTextField endpointType = new DataSourceTextField("type");
+        setFields(endpointId, endpointName, endpointType);
 
         // Define operations
 		OperationBinding fetch = new OperationBinding();

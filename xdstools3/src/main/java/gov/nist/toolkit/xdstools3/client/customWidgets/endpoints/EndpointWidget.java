@@ -1,8 +1,9 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints;
 
 import com.smartgwt.client.data.RestDataSource;
-import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.RowEndEditAction;
+import com.smartgwt.client.types.SortDirection;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -30,20 +31,23 @@ public class EndpointWidget extends HLayout {
 
         // Create the ListGrid linked to the DataSource
         final ListGrid grid = new ListGrid();
-        grid.setHeight(300);
+        grid.setHeight(200);
         grid.setWidth(500);
-        grid.setTitle("Messages");
+        grid.setTitle("Endpoints");
         grid.setDataSource(dataSource);
         grid.setAutoFetchData(true);
-        grid.setCanEdit(true);
-        grid.setCanRemoveRecords(true);
         grid.setListEndEditAction(RowEndEditAction.NEXT);
 
+        // Configure sorting
+        grid.setSortField(1);
+        grid.setSortDirection(SortDirection.DESCENDING);
+        grid.setGroupStartOpen(GroupStartOpen.ALL);
+        grid.setGroupByField("type");
+
         // Set ListGrid fields
-        ListGridField idField = new ListGridField("id", "Id", 40);
-        idField.setAlign(Alignment.LEFT);
-        ListGridField messageField = new ListGridField("value", "Message");
-        grid.setFields(idField, messageField);
+        ListGridField typeField = new ListGridField("type", "Type");
+        ListGridField nameField = new ListGridField("name", "Name");
+        grid.setFields(typeField, nameField);
         return grid;
     }
 

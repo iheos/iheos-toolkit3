@@ -8,24 +8,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "endpoint")
 public class Endpoint {
 
-    String value;
-    int id;
+    String name;
+    String type;
 
     @XmlElement
-    public String getValue(){
-        return value;
-    }
+    public String getName(){ return name; }
 
-    public void setValue(String _value){
-        value = _value;
+    public void setName(String _name){
+        name = _name;
     }
 
     @XmlAttribute
-    public int getId() {
-        return id;
+    public String getType() {
+        return type;
     }
 
-    public void setId(int _id) {
-        id = _id;
-    }
+    public void setType(String _type) { type = _type; }
 }
