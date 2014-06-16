@@ -8,7 +8,7 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
-import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
+import gov.nist.toolkit.xdstools3.client.customWidgets.Toolbar;
 import gov.nist.toolkit.xdstools3.client.events.EventHandler;
 import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
@@ -70,7 +70,7 @@ public class Xdstools3 implements EntryPoint {
 
 
 		// Toolbar
-		ConfigToolbar configBar = new ConfigToolbar(bus);
+		Toolbar configBar = new Toolbar(bus);
 
 		// Tabs
 		topTabSet = new TabSetWidget();

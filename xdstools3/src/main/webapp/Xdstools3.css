@@ -40,9 +40,8 @@
 .glyphiconHome {
     margin-right: 20px;
 }
-.glyphiconNav {
-    margin-right: 10px;
-}
+
+
 .clickable {
     cursor: pointer;
 }
@@ -124,7 +123,7 @@
 }
 
 
-/* --- Navigation bar (not used in this app) --- */
+/* --- Navigation bar --- */
 .navbar .nav>li {
     float: left;
 }
@@ -148,6 +147,21 @@
     background-repeat: repeat-x;
     box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
 }
+.navbar-inner .ribbongroup {
+
+}
+
+/* Icons in nav bar are greyed out */
+.navbar-inner .glyphiconNav {
+    margin-right: 10px;
+    opacity: 0.25;
+}
+/* Icons in nav bar become darker on rollover */
+.navbar-inner .glyphiconNav:hover {
+    margin-right: 10px;
+    opacity: 0.5;
+}
+
 .navbar .nav>.active>a, .nav>.active>a, .navbar .nav>.active>a:hover, .navbar .nav>.active>a:focus {
     background-color: #fc0;
 }

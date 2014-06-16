@@ -1,6 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab;
 
 import com.smartgwt.client.widgets.layout.VStack;
+import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButtonNoForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
@@ -29,10 +30,11 @@ public class FindDocumentTab extends GenericCloseableTab {
         EndpointWidget endpoints = new EndpointWidget();
         FindDocumentForm findDocs = new FindDocumentForm();
         ValidationSummaryWidget output = new ValidationSummaryWidget();
+        GenericRunButtonNoForm runButton = new GenericRunButtonNoForm();
 
         // Add to layout
         VStack findDocsPanel = new VStack();
-        findDocsPanel.addMembers(findDocs, endpoints, output);
+        findDocsPanel.addMembers(findDocs, endpoints, runButton, output);
 
         return findDocsPanel;
     }

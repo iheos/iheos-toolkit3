@@ -6,11 +6,11 @@ import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
+import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.SAMLComboBox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSCheckbox;
-import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.RunButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.forms.GenericForm;
 
 /**
@@ -81,7 +81,7 @@ public class MPQCanvas extends VLayout {
         HealthcareCodesWidget codeGridsWidget = new HealthcareCodesWidget();
 
         // Run button
-        final RunButton runButton = new RunButton();
+        final GenericRunButton runButton = new GenericRunButton();
         DynamicForm runButtonForm = new DynamicForm();
         runButtonForm.setFields(runButton);
 

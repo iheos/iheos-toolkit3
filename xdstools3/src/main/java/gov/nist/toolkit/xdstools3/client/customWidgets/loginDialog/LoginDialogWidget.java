@@ -3,10 +3,9 @@ package gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
 import gov.nist.toolkit.xdstools3.client.clientServerUtils.CustomCallback;
-import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.CancelButton;
+import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericCancelButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.LoginButton;
 import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.events.demo.PingEvent;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -16,12 +15,10 @@ import com.smartgwt.client.data.fields.DataSourcePasswordField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.VerticalAlignment;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -31,7 +28,7 @@ public class LoginDialogWidget extends Window {
 	//	protected TextItem password;
 	protected DynamicForm form;
 	protected LoginButton login;
-	protected CancelButton cancel;
+	protected GenericCancelButton cancel;
 	protected DataSource dataSource;
 	private SimpleEventBus bus;
 
@@ -88,7 +85,7 @@ public class LoginDialogWidget extends Window {
 			}
 		}});
 
-		cancel = new CancelButton();
+		cancel = new GenericCancelButton();
 		cancel.addClickHandler(new ClickHandler() {  
 			public void onClick(ClickEvent event) {
                 close();
