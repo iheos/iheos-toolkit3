@@ -1,6 +1,6 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.MPQTab;
+package gov.nist.toolkit.xdstools3.client.tabs.MPQTab;
 
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 
 /**
  * Created by dazais on 5/14/2014.

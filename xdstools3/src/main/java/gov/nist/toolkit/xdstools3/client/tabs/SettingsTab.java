@@ -1,13 +1,13 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.tabs;
+package gov.nist.toolkit.xdstools3.client.tabs;
 
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.form.fields.SectionItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
-import gov.nist.toolkit.xdstools3.client.customWidgets.CheckboxItemWithTooltipWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.GenericCheckboxWithTooltipWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.UploadItemWithTooltipWidget;
 
 import com.smartgwt.client.widgets.form.fields.FormItem;
-import gov.nist.toolkit.xdstools3.client.customWidgets.forms.FormattedDynamicForm;
+import gov.nist.toolkit.xdstools3.client.customWidgets.forms.GenericForm;
 
 public class SettingsTab extends GenericCloseableTab {
 	String title = "Settings";
@@ -26,7 +26,7 @@ public class SettingsTab extends GenericCloseableTab {
 
 
 		// Contents
-        FormattedDynamicForm form = new FormattedDynamicForm();
+        GenericForm form = new GenericForm();
 
 
         TextItem host = createField("host", "Toolkit host", "transport-testing.nist.gov", 400);
@@ -72,8 +72,8 @@ public class SettingsTab extends GenericCloseableTab {
 		return item;
 	}
 
-	public CheckboxItemWithTooltipWidget createCheckBox(String name, String title, String tooltip, int width) {
-		CheckboxItemWithTooltipWidget item = new CheckboxItemWithTooltipWidget();
+	public GenericCheckboxWithTooltipWidget createCheckBox(String name, String title, String tooltip, int width) {
+		GenericCheckboxWithTooltipWidget item = new GenericCheckboxWithTooltipWidget();
 		item.setName(name);
 		item.setTitle(title);
 		item.setTooltip(tooltip);

@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab;
+package gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab;
 
 import com.google.gwt.user.client.Window;
 import com.smartgwt.client.widgets.form.fields.SpacerItem;

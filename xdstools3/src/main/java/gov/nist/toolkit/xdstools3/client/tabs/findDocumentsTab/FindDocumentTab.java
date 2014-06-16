@@ -1,9 +1,9 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab;
+package gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab;
 
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import gov.nist.toolkit.xdstools3.client.RESTClient.EndpointWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
 
 

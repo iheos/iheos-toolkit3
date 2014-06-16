@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.MPQTab;
+package gov.nist.toolkit.xdstools3.client.tabs.MPQTab;
 
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.Label;
@@ -6,12 +6,12 @@ import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
-import gov.nist.toolkit.xdstools3.client.RESTClient.EndpointWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.SAMLComboBox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSCheckbox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.RunButton;
-import gov.nist.toolkit.xdstools3.client.customWidgets.forms.FormattedDynamicForm;
+import gov.nist.toolkit.xdstools3.client.customWidgets.forms.GenericForm;
 
 /**
  * Created by dazais on 5/14/2014.
@@ -55,7 +55,7 @@ public class MPQCanvas extends VLayout {
         Label label2 = new Label("Step 2: Select TLS and SAML options");
         TLSCheckbox tls = new TLSCheckbox();
         SAMLComboBox saml = new SAMLComboBox();
-        FormattedDynamicForm formTls = new FormattedDynamicForm();
+        GenericForm formTls = new GenericForm();
         formTls.setFields(tls, saml);
         VLayout tlsLayout = new VLayout();
         tlsLayout.addMembers(label2, formTls);
@@ -73,7 +73,7 @@ public class MPQCanvas extends VLayout {
 
         // PID
         PatientIDWidget pid = new PatientIDWidget();
-        FormattedDynamicForm formPid = new FormattedDynamicForm();
+        GenericForm formPid = new GenericForm();
         formPid.setFields(pid);
 
 

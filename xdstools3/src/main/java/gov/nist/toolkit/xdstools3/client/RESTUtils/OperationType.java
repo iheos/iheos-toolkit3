@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.RESTClient.util;
+package gov.nist.toolkit.xdstools3.client.RESTUtils;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;

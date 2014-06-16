@@ -7,7 +7,7 @@ package gov.nist.toolkit.xdstools3.client.customWidgets;
  * @author dazais
  *
  */
-public class PatientIDWidget extends TextItemWithTooltipWidget {
+public class PatientIDWidget extends GenericTextItemWithTooltipWidget {
 	
 	private String tooltip = "Ex.: 2729f2aca58d47f^^^&1.3.6.1.4.1.21367.2005.3.7&ISO";
 	

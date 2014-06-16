@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.RESTClient;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints;
 
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.types.Alignment;

@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.tabs;
+package gov.nist.toolkit.xdstools3.client.tabs;
 
 
 public class EndpointConfigTab extends GenericCloseableTab {

@@ -9,12 +9,12 @@ import com.smartgwt.client.widgets.form.fields.TextItem;
  * @author dazais
  *
  */
-public class TextItemWithTooltipWidget extends TextItem {
+public class GenericTextItemWithTooltipWidget extends TextItem {
 	
 	private String tooltip;
 	private FormItemIcon icon = new FormItemIcon(); 
 	
-	public TextItemWithTooltipWidget(){
+	public GenericTextItemWithTooltipWidget(){
 	     icon.setSrc("help.png");
 	     icon.setPrompt("");
 	     setIcons(icon);  

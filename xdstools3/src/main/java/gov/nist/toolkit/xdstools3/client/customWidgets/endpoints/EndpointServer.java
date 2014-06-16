@@ -1,10 +1,10 @@
-package gov.nist.toolkit.xdstools3.client.RESTClient;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints;
 
 
-import gov.nist.toolkit.xdstools3.client.RESTClient.util.DSResponse;
-import gov.nist.toolkit.xdstools3.client.RESTClient.util.MessageDSRequest;
-import gov.nist.toolkit.xdstools3.client.RESTClient.util.MessageDSResponse;
-import gov.nist.toolkit.xdstools3.client.RESTClient.util.OperationType;
+import gov.nist.toolkit.xdstools3.client.RESTUtils.DSResponse;
+import gov.nist.toolkit.xdstools3.client.RESTUtils.MessageDSRequest;
+import gov.nist.toolkit.xdstools3.client.RESTUtils.MessageDSResponse;
+import gov.nist.toolkit.xdstools3.client.RESTUtils.OperationType;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -21,7 +21,7 @@ import javax.ws.rs.core.MediaType;
 */
 
 @Path("/message")
-public class MessageResource {
+public class EndpointServer {
 	@Produces( { MediaType.APPLICATION_XML })
 	@Consumes( { MediaType.TEXT_XML })
 	@POST

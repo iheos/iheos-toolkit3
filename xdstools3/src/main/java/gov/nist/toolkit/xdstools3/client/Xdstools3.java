@@ -10,12 +10,12 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.HomeTab;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.MPQTab.MPQTab;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.SettingsTab;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.TabSetWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab.FindDocumentTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.HomeTab;
+import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
+import gov.nist.toolkit.xdstools3.client.tabs.SettingsTab;
+import gov.nist.toolkit.xdstools3.client.tabs.TabSetWidget;
+import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.events.EventHandler;
 import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
 

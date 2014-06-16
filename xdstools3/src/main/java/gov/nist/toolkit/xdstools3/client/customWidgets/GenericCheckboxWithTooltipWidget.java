@@ -3,11 +3,11 @@ package gov.nist.toolkit.xdstools3.client.customWidgets;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
 import com.smartgwt.client.widgets.form.fields.FormItemIcon;
 
-public class CheckboxItemWithTooltipWidget extends CheckboxItem {
+public class GenericCheckboxWithTooltipWidget extends CheckboxItem {
 	private String tooltip;
 	private FormItemIcon icon = new FormItemIcon(); 
 	
-	public CheckboxItemWithTooltipWidget(){
+	public GenericCheckboxWithTooltipWidget(){
 	     icon.setSrc("help.png");
 	     icon.setPrompt("");
 	     setIcons(icon);

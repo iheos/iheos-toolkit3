@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.tabs;
+package gov.nist.toolkit.xdstools3.client.tabs;
 
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;

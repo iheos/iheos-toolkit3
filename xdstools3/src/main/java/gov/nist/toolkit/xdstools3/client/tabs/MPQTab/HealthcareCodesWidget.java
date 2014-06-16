@@ -1,9 +1,8 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.tabs.MPQTab;
+package gov.nist.toolkit.xdstools3.client.tabs.MPQTab;
 
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.SelectionStyle;
-import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.HLayout;
