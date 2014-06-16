@@ -1,48 +1,41 @@
 package gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab;
 
-import com.smartgwt.client.widgets.layout.HLayout;
-import com.smartgwt.client.widgets.layout.VLayout;
+import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 
 
 public class FindDocumentTab extends GenericCloseableTab {
-	static String header = "Find Documents";
+    static String header = "Find Documents";
 
-	public FindDocumentTab() { 
-		super(header);
+    public FindDocumentTab() {
+        super(header);
 
         // Set tab header
         setHeader(header);
 
-		createContents();
-	}
+        VStack stack = createContents();
+
+        // calls a custom function that sets the contents and keeps the titles
+        setContents(stack);
+    }
 
     /**
      * Creates and sets the contents of the FindDocuments Tab
      */
-	private void createContents(){
-				EndpointWidget endpoints = new EndpointWidget();
-				FindDocumentForm findDocs = new FindDocumentForm();
-				ValidationSummaryWidget output = new ValidationSummaryWidget();
-				
-				HLayout upperPanel = new HLayout();
-				upperPanel.addMembers(findDocs); // should also add endpoints
-				//endpoints.setWidth("20%");
+    private VStack createContents(){
+        // create components
+        EndpointWidget endpoints = new EndpointWidget();
+        FindDocumentForm findDocs = new FindDocumentForm();
+        ValidationSummaryWidget output = new ValidationSummaryWidget();
 
-				VLayout findDocsPanel = new VLayout(); 
-				findDocsPanel.setWidth100();
-				findDocsPanel.setHeight100(); 
-				findDocsPanel.addMembers(upperPanel, output);
+        // Add to layout
+        VStack findDocsPanel = new VStack();
+        findDocsPanel.addMembers(findDocs, endpoints, output);
 
-                // dimensions
-				upperPanel.setHeight("50%");
-				output.setHeight("*");
-
-                // calls a custom function that sets the contents and keeps the titles
-				setContents(findDocsPanel);
-	}
+        return findDocsPanel;
+    }
 
 
 }  

@@ -5,13 +5,13 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.RowEndEditAction;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.layout.VLayout;
+import com.smartgwt.client.widgets.layout.HLayout;
 
 /**
  *
  * Created by dazais on 5/21/2014.
  */
-public class EndpointWidget extends VLayout {
+public class EndpointWidget extends HLayout {
     ListGrid endpointGrid;
 
     public EndpointWidget()

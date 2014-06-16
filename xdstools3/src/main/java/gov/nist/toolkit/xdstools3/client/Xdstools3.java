@@ -5,19 +5,18 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
+import gov.nist.toolkit.xdstools3.client.events.EventHandler;
+import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.tabs.HomeTab;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.SettingsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.TabSetWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
-import gov.nist.toolkit.xdstools3.client.events.EventHandler;
-import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
 
 public class Xdstools3 implements EntryPoint {
 
@@ -99,7 +98,7 @@ public class Xdstools3 implements EntryPoint {
 		RootLayoutPanel rp = RootLayoutPanel.get();
 		rp.add(container);
 
-        SC.showConsole();
+        //SC.showConsole();
 
 	}
 
