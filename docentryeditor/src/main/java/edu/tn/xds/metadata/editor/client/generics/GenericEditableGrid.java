@@ -203,12 +203,19 @@ public class GenericEditableGrid<M> extends Grid<M> {
         editing.addEditor(columnConfig,field);
     }
 
-    public <N,O> void addColumnEditorConfig(ColumnConfig<M, N> columnConfig, Converter<N, O> converter, Field<O> field) {
-        editing.addEditor(columnConfig,converter,field);
-    }
+//    public <N,O> void addColumnEditorConfig(ColumnConfig<M, N> columnConfig, Converter<N, O> converter, Field<O> field) {
+//        editing.addEditor(columnConfig,converter,field);
+//    }
 
     @Override
     public Widget asWidget() {
         return pane.asWidget();
+    }
+
+
+    public void disableEditing() {
+        toolBar.setVisible(false);
+//        this.disable();
+        editing.clearEditors();
     }
 }

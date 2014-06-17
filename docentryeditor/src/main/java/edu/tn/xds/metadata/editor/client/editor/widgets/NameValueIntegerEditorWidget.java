@@ -119,4 +119,7 @@ public class NameValueIntegerEditorWidget extends Composite implements Editor<Na
 
 	}
 
+    public void disableEditing() {
+        listView.disableEditing();
+    }
 }

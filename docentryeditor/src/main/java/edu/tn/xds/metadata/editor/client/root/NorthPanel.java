@@ -47,11 +47,11 @@ public class NorthPanel extends ContentPanel {
 		setBorders(false);
 
 		HBoxLayoutContainer c = new HBoxLayoutContainer();
-		c.setPadding(new Padding(5));
+		c.setPadding(new Padding(5,20,5,5));
 		c.setHBoxLayoutAlign(HBoxLayoutAlign.MIDDLE);
 		c.setPack(BoxLayoutPack.END);
 
-		BoxLayoutData layoutData = new BoxLayoutData(new Margins(0, 5, 0, 0));
+		BoxLayoutData layoutData = new BoxLayoutData(new Margins(0, 10, 0, 0));
 
 		newButton = new TextButton("New");
 		newButton.setSize("50", "-1");
@@ -61,7 +61,7 @@ public class NorthPanel extends ContentPanel {
 		loadButton.setSize("50", "-1");
 		c.add(loadButton, layoutData);
 
-		saveButton = new TextButton("Save file");
+		saveButton = new TextButton("Download file");
 		saveButton.setSize("50", "-1");
 		saveButton.disable();
 		c.add(saveButton, layoutData);

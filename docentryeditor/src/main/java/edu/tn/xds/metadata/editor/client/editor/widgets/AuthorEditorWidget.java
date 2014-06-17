@@ -42,7 +42,7 @@ import edu.tn.xds.metadata.editor.shared.model.String256;
  * It does an automatic mapping between the Author class's attributes name and
  * the widget's fields name.
  * </p>
- * 
+ *
  * @see Author
  * @see AuthorEditorDriver
  * @see EditionMode
@@ -53,10 +53,10 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 	/**
 	 * The AuthorEditorDriver is the editr driver interface which handle the
 	 * edition of an Author through AuthorEditorWidget.
-	 * 
+	 *
 	 * @see Author
 	 * @see AuthorEditorWidget
-	 * 
+	 *
 	 */
 	interface AuthorEditorDriver extends SimpleBeanEditorDriver<Author, AuthorEditorWidget> {
 	}
@@ -408,9 +408,9 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 	 * Method to change the editor layout regarding an edition Mode. It actually
 	 * enable/disable the various widgets of the editor regarding the state of
 	 * edition.
-	 * 
+	 *
 	 * @see EditionMode
-	 * 
+	 *
 	 * @param editionMode
 	 *            EditionMode (NODATA,DISPLAY,NEW,EDIT)
 	 */
@@ -434,7 +434,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 	/**
 	 * This method handle the edition of a given author. It fill the editor with
 	 * the author's details and put it in edition.
-	 * 
+	 *
 	 * @param author
 	 *            The Author which will be edited.
 	 */
@@ -548,7 +548,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 
 	/**
 	 * Method to get the edited author. Should be called after save().
-	 * 
+	 *
 	 * @return edited Author
 	 */
 	public Author getModel() {

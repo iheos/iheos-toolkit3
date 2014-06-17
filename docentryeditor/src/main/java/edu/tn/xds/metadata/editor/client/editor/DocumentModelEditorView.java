@@ -69,7 +69,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 	NameValueDTMEditorWidget creationTime = new NameValueDTMEditorWidget("Creation Time");
 	NameValueDTMEditorWidget serviceStartTime = new NameValueDTMEditorWidget("Service Start Time");
 	NameValueDTMEditorWidget serviceStopTime = new NameValueDTMEditorWidget("Service Stop Time");
-	NameValueIntegerEditorWidget size = new NameValueIntegerEditorWidget("Size");
+	NameValueIntegerEditorWidget size = new NameValueIntegerEditorWidget("File Size");
 
 	// ///////////////////////////////////////////////////////////////////////
 	// ---- AUTHORS WIDGETS
@@ -233,17 +233,26 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		// //////////////////////////////////////////////////////////
 		// --- Adding OPTIONAL simple fields labels to containers
 		// //////////////////////////////////////////////////////////
-		VerticalLayoutContainer simpleOptionalFieldsContainer = new VerticalLayoutContainer();
-		simpleOptionalFieldsContainer.add(hashLabel, new VerticalLayoutData(1, -1));
-		simpleOptionalFieldsContainer.add(repositoryLabel, new VerticalLayoutData(1, -1));
-		simpleOptionalFieldsContainer.add(uriLabel, new VerticalLayoutData(1, -1));
+		VerticalLayoutContainer filePropertiesFieldsContainer = new VerticalLayoutContainer();
+		filePropertiesFieldsContainer.add(hashLabel, new VerticalLayoutData(1, -1));
+        filePropertiesFieldsContainer.add(size.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+
+        VerticalLayoutContainer repositoryAttributesFieldsContainer = new VerticalLayoutContainer();
+        repositoryAttributesFieldsContainer.add(uriLabel, new VerticalLayoutData(1, -1));
+        repositoryAttributesFieldsContainer.add(repositoryLabel, new VerticalLayoutData(1, -1));
 
 		/* OPTIONAL container added to a fieldset */
-		FieldSet fieldSet_general_fields_optional = new FieldSet();
-		fieldSet_general_fields_optional.setHeadingText("General optional");
-		fieldSet_general_fields_optional.setCollapsible(true);
+		FieldSet fieldSet_fileProperties = new FieldSet();
+		fieldSet_fileProperties.setHeadingText("Files properties");
+		fieldSet_fileProperties.setCollapsible(true);
 		// fieldSet_simple_fields.setWidth("auto");
-		fieldSet_general_fields_optional.add(simpleOptionalFieldsContainer);
+		fieldSet_fileProperties.add(filePropertiesFieldsContainer);
+
+        FieldSet fieldSet_repoAttributes = new FieldSet();
+        fieldSet_repoAttributes.setHeadingText("Repository attributes");
+        fieldSet_repoAttributes.setCollapsible(true);
+        // fieldSet_simple_fields.setWidth("auto");
+        fieldSet_repoAttributes.add(repositoryAttributesFieldsContainer);
 
 		// //////////////////////////////////////////////////////
 		// Other fields and options (init)
@@ -322,6 +331,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 //		sourcePatientId.setAllowBlanks(true, true);
 
 		// Service Start Time (optional)
+        serviceStartTime.disableEditing();
 //		FieldSet fieldSet_nameValue_serviceStartTime = new FieldSet();
 //		fieldSet_nameValue_serviceStartTime.setHeadingText("Service Start Time");
 //		fieldSet_nameValue_serviceStartTime.setCollapsible(true);
@@ -329,6 +339,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 //		serviceStartTime.setAllowBlanks(/*true,*/ true);
 
 		// Service Stop Time (optional)
+        serviceStopTime.disableEditing();
 //		FieldSet fieldSet_nameValue_serviceStopTime = new FieldSet();
 //		fieldSet_nameValue_serviceStopTime.setHeadingText("Service Stop Time");
 //		fieldSet_nameValue_serviceStopTime.setCollapsible(true);
@@ -336,6 +347,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 //		serviceStopTime.setAllowBlanks(/*true,*/ true);
 
 		// Size (optional)
+        size.disableEditing();
 //		FieldSet fieldSet_nameValue_size = new FieldSet();
 //		fieldSet_nameValue_size.setHeadingText("Size");
 //		fieldSet_nameValue_size.setCollapsible(true);
@@ -343,6 +355,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 ////		size.setAllowBlanks(true, true);
 
 		// Creation Time (required)
+        creationTime.disableEditing();
 //		FieldSet fieldSet_nameValue_creationTime = new FieldSet();
 //		fieldSet_nameValue_creationTime.setHeadingText("Creation Time");
 //		fieldSet_nameValue_creationTime.setCollapsible(true);
@@ -398,17 +411,18 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		// Adding and ordering fieldsets in OPTIONAL panel
 		// /////////////////////////////////////////////////////////
 		/* simple optional fields added to FramedPanel container */
-		optionalFields.add(fieldSet_general_fields_optional);
+		optionalFields.add(fieldSet_fileProperties);
+		optionalFields.add(fieldSet_repoAttributes);
+//		optionalFields.add(size.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(fieldSet_authors);
+		optionalFields.add(titlesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(commentsGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
-		optionalFields.add(confidentialityCodesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
+		optionalFields.add(sourcePatientId.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(legalAuthenticator.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
+		optionalFields.add(confidentialityCodesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(serviceStartTime.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(serviceStopTime.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
-		optionalFields.add(size.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
-		optionalFields.add(sourcePatientId.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 //		optionalFields.add(field_titles);
-		optionalFields.add(titlesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 
 		setWidgetsInfo();
 

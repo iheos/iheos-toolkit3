@@ -63,4 +63,8 @@ public class NameValueDTMEditorWidget extends Composite implements Editor<NameVa
         initWidget(listView.asWidget());
     }
 
+    public void disableEditing(){
+        listView.disableEditing();
+    }
+
 }
