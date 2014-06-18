@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-   <parent>
-	<groupId>gov.nist.toolkit</groupId>
-	<artifactId>toolkit2</artifactId>
-	<version>v2-maven-alpha</version>
-	</parent>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>gov.nist.hit.ds</groupId>
+        <artifactId>toolkit3</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+
+    <groupId>gov.nist.hit.ds</groupId>
+    <artifactId>logBrowser</artifactId>
+
 
   <!-- POM file generated with GWT webAppCreator -->
-  <modelVersion>4.0.0</modelVersion>
-<<<<<<< local
-  <groupId>gov.nist.hit.ds</groupId>
-  <artifactId>logBrowser</artifactId>
-=======
-  <parent>
-    <artifactId>toolkit3</artifactId>
-    <groupId>gov.nist.hit.ds</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <groupId>gov.nist.hit.ds.logBrowser</groupId>
-  <artifactId>LogBrowser</artifactId>
->>>>>>> other
   <packaging>war</packaging>
   <version>3.0.0-SNAPSHOT</version>
   <name>logBrowser</name>
@@ -30,11 +24,7 @@
     <gwtVersion>2.5.1</gwtVersion>
     <!-- GWT needs at least java 1.5 -->
     <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-<<<<<<< local
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-=======
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
->>>>>>> other
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 
@@ -71,7 +61,6 @@
       <scope>test</scope>
     </dependency>
 
-<<<<<<< local
 
     <dependency>
       <groupId>com.google.inject</groupId>
@@ -89,36 +78,12 @@
       <artifactId>javax.inject</artifactId>
       <version>1</version>
     </dependency>
-=======
-
-    <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
-      <version>2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.gwt.inject</groupId>
-      <artifactId>gin</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <!-- Use the JSR 330 injection interfaces-->
-    <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
-      <version>1</version>
-    </dependency>
->>>>>>> other
 
 	<dependency>
   		<groupId>gov.nist.hit.ds</groupId>
   		<artifactId>repository</artifactId>
-<<<<<<< local
   		<version>3.0.0-SNAPSHOT</version>
-=======
-  		<version>0.0.1-SNAPSHOT</version>
->>>>>>> other
   	</dependency>
-<<<<<<< local
     <dependency>
       <groupId>gov.nist.hit.ds</groupId>
       <artifactId>repository</artifactId>
@@ -126,10 +91,6 @@
       <classifier>sources</classifier>
       <scope>compile</scope>
     </dependency>
-
-
-=======
->>>>>>> other
   	 <dependency>
 	  		<groupId>gov.nist.hit.ds</groupId>
 	  		<artifactId>xdsException</artifactId>
@@ -145,7 +106,6 @@
     <plugins>
 
       <!-- GWT Maven Plugin -->
-<<<<<<< local
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
@@ -174,46 +134,11 @@
 
         <!-- Plugin configuration. There are many available options,
              see gwt-maven-plugin documentation at codehaus.org -->
-=======
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <version>2.5.1</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <version>${gwtVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <version>${gwtVersion}</version>
-          </dependency>
-        </dependencies>
-        <!-- JS is only needed in the package phase, this speeds up testing -->
-        <executions>
-          <execution>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
-
-        <!-- Plugin configuration. There are many available options,
-             see gwt-maven-plugin documentation at codehaus.org -->
->>>>>>> other
         <configuration>
    		  <compileSourcesArtifacts>
-<<<<<<< local
       		<compileSourcesArtifact>gov.nist.hit.ds:repository</compileSourcesArtifact> <!-- gov.nist.hit.ds:repository -->
-=======
-      		<compileSourcesArtifact>gov.nist.hit.ds:repository</compileSourcesArtifact>
->>>>>>> other
 		  </compileSourcesArtifacts>
-<<<<<<< local
-   
+
           <!-- URL that should be automatically opened in the GWT shell (gwt:run). -->
           <runTarget>logBrowser.html</runTarget>
           <!-- Ask GWT to create the Story of Your Compile (SOYC) (gwt:compile) -->
@@ -224,19 +149,6 @@
           <copyWebapp>true</copyWebapp>
           <!-- <genParam>true</genParam> -->
         </configuration>
-=======
-   
-          <!-- URL that should be automatically opened in the GWT shell (gwt:run). -->
-          <runTarget>logBrowser.html</runTarget>
-          <!-- Ask GWT to create the Story of Your Compile (SOYC) (gwt:compile) -->
-          <compileReport>true</compileReport>
-          <module>gov.nist.hit.ds.logBrowser.LogBrowser</module>
-          <logLevel>INFO</logLevel>
-          <style>${gwt.style}</style>
-
-          <copyWebapp>true</copyWebapp>
-        </configuration>
->>>>>>> other
       </plugin>
 
       <!-- Copy static web files before executing gwt:run -->
@@ -256,18 +168,17 @@
           <webappDirectory>${webappDirectory}</webappDirectory>
         </configuration>
       </plugin>
-<<<<<<< local
-=======
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
->>>>>>> other
+        <!--
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+                <source>1.5</source>
+                <target>1.5</target>
+            </configuration>
+        </plugin>
+        -->
 
     </plugins>
   <pluginManagement><plugins><plugin>
