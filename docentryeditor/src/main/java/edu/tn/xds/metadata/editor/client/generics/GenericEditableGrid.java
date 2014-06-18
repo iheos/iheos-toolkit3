@@ -218,7 +218,7 @@ public class GenericEditableGrid<M> extends Grid<M> {
         editing.clearEditors();
     }
 
-    private void disableToolbar() {
+    public void disableToolbar() {
         toolBar.disable();
         toolBar.setVisible(false);
     }

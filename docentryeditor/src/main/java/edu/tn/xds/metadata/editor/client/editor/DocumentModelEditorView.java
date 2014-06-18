@@ -357,6 +357,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
 		// Creation Time (required)
 //        creationTime.disableEditing();
+        creationTime.disableListToolbar();
 //		FieldSet fieldSet_nameValue_creationTime = new FieldSet();
 //		fieldSet_nameValue_creationTime.setHeadingText("Creation Time");
 //		fieldSet_nameValue_creationTime.setCollapsible(true);

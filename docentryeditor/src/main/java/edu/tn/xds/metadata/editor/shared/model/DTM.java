@@ -65,12 +65,6 @@ public class DTM implements ModelElement, Serializable {
         return this;
     }
 
-//	@Override
-//	@MatchesPattern(value = "[0-9]{4}([0-p]{2}){4,}")
-//	public String getString() {
-//		return dtm.getString();
-//
-//	}
 
     /**
      *
@@ -90,15 +84,6 @@ public class DTM implements ModelElement, Serializable {
         return dtm.toString();
     }
 
-    //    @Override
-    public boolean verify(String str) {
-        if (str.length() < 13) {
-            if (str.matches("[0-9]*")) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * <p>
