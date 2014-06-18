@@ -11,6 +11,7 @@
     <name>toolkit3</name>
 
     <repositories>
+        <!--
 		<repository>
 			<id>internal-nist-repo-releases</id>
 			<url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
@@ -31,6 +32,7 @@
             <id>jboss-maven2-release-repository</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/jboss-thirdparty-releases/</url>
         </repository>
+        -->
 <!--
 		<repository>
 			<id>codehaus</id>
