@@ -4,7 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;
-import com.sencha.gxt.data.shared.Converter;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
@@ -29,7 +28,7 @@ import java.util.List;
 
 /**
  * Generic widget for Inline Grid editing on double click.
- * For each editable field of the grid the method @see addEditorColumnConfig should be called.
+ * For each editable field of the grid the method {@link #addColumnEditorConfig(ColumnConfig, Field) addColumnEditorConfig} should be called.
  *
  * <br/><br/>Example:
  *
@@ -214,8 +213,13 @@ public class GenericEditableGrid<M> extends Grid<M> {
 
 
     public void disableEditing() {
-        toolBar.setVisible(false);
+        disableToolbar();
 //        this.disable();
         editing.clearEditors();
+    }
+
+    private void disableToolbar() {
+        toolBar.disable();
+        toolBar.setVisible(false);
     }
 }

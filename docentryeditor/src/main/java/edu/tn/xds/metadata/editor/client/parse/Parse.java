@@ -3,6 +3,7 @@ package edu.tn.xds.metadata.editor.client.parse;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
@@ -24,9 +25,9 @@ import edu.tn.xds.metadata.editor.shared.model.String256;
 import edu.tn.xds.metadata.editor.shared.model.String256Exception;
 
 /**
- * 
+ *
  * <b>This class parses a XML file to build the model</b>
- * 
+ *
  * <p>
  * To do it, here are the following variables required
  * </p>
@@ -36,14 +37,14 @@ import edu.tn.xds.metadata.editor.shared.model.String256Exception;
  * <li>{@link #myModel}: The document model which will be completed.</li>
  * </ul>
  * </p>
- * 
+ *
  * <p>
  * This class also contains getters/setters.<br>
  * In addition, it contains several methods such as buildMyModel, findElements,
  * getDocumentParsed, generalMethod and finally one method per element's
  * document.</br>
  * </p>
- * 
+ *
  * <p>
  * <b>How it works ?</b><br>
  * The method {@link #doParse(String)} return the completed model, indeed it
@@ -56,14 +57,14 @@ import edu.tn.xds.metadata.editor.shared.model.String256Exception;
  * singleton Preparse class to delete unexpected escape and to make it UTF-8
  * compatible.</br>
  * </p>
- * 
- * 
+ *
+ *
  * <p>
  * <b>See below each method mentioned above.</b> <br>
  * {@link #doParse(String)}</br> {@link #findElements()} <br>
  * {@link #generalMethod(String)}</br> {@link #getDocumentParsed()}
  * </p>
- * 
+ *
  * <p>
  * <b>See also the parseType methods:</b><br>
  * {@link #parseArrayInternationalString(String)}<br>
@@ -77,12 +78,12 @@ import edu.tn.xds.metadata.editor.shared.model.String256Exception;
  * {@link #parseNameValueDTM(String)}<br>
  * {@link #parseString256(String)}
  * </p>
- * 
+ *
  * @see DocumentModel
  * @see PreParse
  * @see String256
- * 
- * 
+ *
+ *
  */
 public class Parse {
 	private static Logger logger = Logger.getLogger(Parse.class.getName());
@@ -90,7 +91,7 @@ public class Parse {
 	 * <b>String documentXml</b> - The data taken from the XML document and send
 	 * by the server, this is the String to parse.<br>
 	 * Type: String</br>
-	 * 
+	 *
 	 * @see Parse
 	 */
 	private String documentXml;
@@ -99,7 +100,7 @@ public class Parse {
 	 * <b>Parse myParse</b> - The instance of Parse class (it's a singleton
 	 * class).<br>
 	 * Type: {@link Parse}</br>
-	 * 
+	 *
 	 * @see Parse
 	 */
 	private final static Parse instance = new Parse();
@@ -108,7 +109,7 @@ public class Parse {
 	 * <b>Document document</b> - The XML file which is contained in a Document
 	 * so as to be parsed.<br>
 	 * Type: {@link Document}</br>
-	 * 
+	 *
 	 * @see Parse
 	 */
 	private Document document;
@@ -117,7 +118,7 @@ public class Parse {
 	 * <b>DocumentModel myModel</b> - The model which will be completed by
 	 * buildMyModel using the data's XML file.<br>
 	 * Type: {@link DocumentModel}</br> </p>
-	 * 
+	 *
 	 * @see {@link #documentXml}
 	 * @see {@link #doParse(String)}
 	 * @see DocumentModel
@@ -125,19 +126,16 @@ public class Parse {
 	 */
 	private final DocumentModel myModel = new DocumentModel();
 
-	public Parse() {
-	}
-
 	/**
 	 * <b>Method doParse</b> <br>
 	 * Firstly, it calls {@link #getDocumentParsed()} method to parse the String
 	 * {@link #documentXml} and to complete the {@link DocumentModel}
 	 * {@link #myModel} thanks to the {@link #findElements()} method. </br>
-	 * 
+	 *
 	 * @param newDocumentXml
 	 *            - The String which contains the XML content
 	 * @return myModel - The {@link DocumentModel}
-	 * 
+	 *
 	 * @see Parse
 	 */
 	public DocumentModel doParse(String newDocumentXml) {
@@ -156,7 +154,7 @@ public class Parse {
 	}
 
 	private enum NodesEnum {
-		titles, comments, authors, mimetype, hash, id, classcode, confidentialitycode, creationtime, eventcode, formatcode, healthcarefacilitytype, languagecode, legalauthenticator, patientid, practicesettingcode, repositoryuniqueid, servicestarttime, servicestoptime, size, sourcepatientid, typecode, uniqueid, uri;
+		titles, comments, authors, mimetype, hash, id, classcode, confidentialitycode, creationtime, eventcode, formatcode, healthcarefacilitytype, languagecode, legalauthenticator, patientid, practicesettingcode, repositoryuniqueid, servicestarttime, servicestoptime, size, sourcepatientid, sourcepatientinfo, typecode, uniqueid, uri;
 	}
 
 	public String getDocumentXml() {
@@ -170,10 +168,10 @@ public class Parse {
 	/**
 	 * <b>Method getDocumentParsed</b> <br>
 	 * Get the instance of PreParse object to prepare the String parsing. </br>
-	 * 
+	 *
 	 * @see PreParse
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public void getDocumentParsed() {
 		PreParse preParse = PreParse.getInstance();
@@ -191,14 +189,14 @@ public class Parse {
 	 * <b>Method findElements</b> <br>
 	 * It calls all parseType methods on each element from {@link DocumentModel}
 	 * through {@link #generalMethod(String)}. </br>
-	 * 
-	 * 
+	 *
+	 *
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
-	 * 
+	 *
+	 *
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public void findElements() throws String256Exception {
 		generalMethod("titles");
@@ -219,6 +217,7 @@ public class Parse {
 		generalMethod("servicestoptime");
 		generalMethod("size");
 		generalMethod("sourcepatientid");
+		generalMethod("sourcepatientinfo");
 		generalMethod("typecode");
 		generalMethod("uniqueid");
 		generalMethod("uri");
@@ -230,16 +229,16 @@ public class Parse {
 	/**
 	 * <b>Method generalMethod</b> <br>
 	 * It calls all parseMethod on each element from {@link DocumentModel}.
-	 * 
+	 *
 	 * @param nodeString
 	 *            (String): The first node to match.
-	 * 
+	 *
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
-	 * 
+	 *
+	 *
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public void generalMethod(String nodeString) throws String256Exception {
 		NodesEnum nodesEnum = NodesEnum.valueOf(nodeString);
@@ -317,6 +316,10 @@ public class Parse {
 			myModel.setSourcePatientId(parseNameValueString256("sourcepatientid"));
 			break;
 
+        case sourcepatientinfo:
+			myModel.setSourcePatientInfo(parseNameValueString256("sourcepatientinfo"));
+			break;
+
 		case typecode:
 			myModel.setTypeCode(parseCodedTerm("typecode"));
 			break;
@@ -351,13 +354,13 @@ public class Parse {
 	 * <b>Method methodParseAuthors</b> <br>
 	 * To obtain the author(s) of the XML file (ArrayList of {@link Author}
 	 * ).</br>Called by {@link #generalMethod(String)}.
-	 * 
+	 *
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
-	 * 
+	 *
+	 *
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public void methodParseAuthors() throws String256Exception {
 		NodeList authorsNode = document.getElementsByTagName("authors");
@@ -472,15 +475,15 @@ public class Parse {
 	 * <b>Method parseString256</b> <br>
 	 * To obtain the element of type {@link String256}.</br>Called by
 	 * {@link #generalMethod(String)} on each {@link String256} element.
-	 * 
+	 *
 	 * @param node
 	 *            (String): The name of the root node.
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @return {@link String256}
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public String256 parseString256(String node) throws String256Exception {
 		NodeList nodeList = document.getElementsByTagName(node);
@@ -509,15 +512,15 @@ public class Parse {
 	 * <b>Method parseOID</b> <br>
 	 * To obtain the element of type {@link OID}.</br>Called by
 	 * {@link #generalMethod(String)} on each OID element.
-	 * 
+	 *
 	 * @param node
 	 *            (String): The name of the root node.
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @return {@link OID}
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public OID parseOID(String node) throws String256Exception {
 		NodeList nodeList = document.getElementsByTagName(node);
@@ -552,16 +555,16 @@ public class Parse {
 	 * {@link #generalMethod generalMethod} on each {@link IdentifierString256}
 	 * element.
 	 * </p>
-	 * 
+	 *
 	 * @param node
 	 *            (String) : The name of the root node.
-	 * 
+	 *
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @return {@link IdentifierString256}
 	 * @see Parse class Parse
-	 * 
+	 *
 	 */
 	public IdentifierString256 parseIdentifierString256(String node)
 			throws String256Exception {
@@ -604,16 +607,16 @@ public class Parse {
 	 * To obtain the element of type {@link IdentifierOID}.</br>Called by
 	 * {@link #generalMethod(String)} on each {@link IdentifierOID} element.
 	 * </p>
-	 * 
+	 *
 	 * @param node
 	 *            (String) : The name of the root node.
-	 * 
+	 *
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @return {@link IdentifierOID}
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public IdentifierOID parseIdentifierOID(String node)
 			throws String256Exception {
@@ -655,15 +658,15 @@ public class Parse {
 	 * To obtain the element of type ArrayList(InternationalString) .</br>Called
 	 * by {@link #generalMethod(String)} on each ArrayList(InternationalString)
 	 * element.
-	 * 
+	 *
 	 * @param node
 	 *            (String) : The name of the root node.
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @return ArrayList(InternationalString)
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public ArrayList<InternationalString> parseArrayInternationalString(
 			String node) throws String256Exception {
@@ -712,15 +715,15 @@ public class Parse {
 	 * <b>Method parseCodedTerm</b> <br>
 	 * To obtain the element of type CodedTerm.</br>Called by
 	 * {@link #generalMethod(String)} on each {@link CodedTerm} element. </p>
-	 * 
+	 *
 	 * @param node
 	 *            (String) : The name of the root node.
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @return {@link CodedTerm}
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public CodedTerm parseCodedTerm(String node) throws String256Exception {
 		NodeList nodeList = document.getElementsByTagName(node);
@@ -771,15 +774,15 @@ public class Parse {
 	 * To obtain the element of type ArrayList(CodedTerm).</br>Called by
 	 * {@link #generalMethod(String)} on each ArrayList(CodedTerm) element.
 	 * </p>
-	 * 
+	 *
 	 * @param node
 	 *            (String) : The name of the root node.
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @return ArrayList(CodedTerm)
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public ArrayList<CodedTerm> parseArrayCodedTerm(String node)
 			throws String256Exception {
@@ -839,16 +842,16 @@ public class Parse {
 	 * To obtain the element of type {@link NameValueString256}.</br>Called by
 	 * {@link #generalMethod(String)} on each {@link NameValueString256}
 	 * element.
-	 * 
+	 *
 	 * @param node
 	 *            (String) : The name of the root node.
-	 * 
+	 *
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @return {@link NameValueString256}
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public NameValueString256 parseNameValueString256(String node)
 			throws String256Exception {
@@ -889,13 +892,13 @@ public class Parse {
 	 * <b>Method parseNameValueInteger</b> <br>
 	 * To obtain the element of type {@link NameValueInteger}.</br>Called by
 	 * {@link #generalMethod(String)} on each {@link NameValueInteger} element.
-	 * 
+	 *
 	 * @param node
 	 *            (String) : The name of the root node.
-	 * 
+	 *
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @return {@link NameValueInteger}
 	 * @see Parse
 	 */
@@ -942,16 +945,16 @@ public class Parse {
 	 * <b>Method parseNameValueDTM</b> <br>
 	 * To obtain the element of type {@link NameValueDTM}.</br>Called by
 	 * {@link #generalMethod(String)} on each {@link NameValueDTM} element.
-	 * 
+	 *
 	 * @param node
 	 *            (String) : The name of the root node.
-	 * 
+	 *
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @return {@link NameValueDTM}
 	 * @see Parse
-	 * 
+	 *
 	 */
 	public NameValueDTM parseNameValueDTM(String node)
 			throws String256Exception {
@@ -984,7 +987,7 @@ public class Parse {
 				value256.setString(nodeList.item(0).getChildNodes().item(0)
 						.getChildNodes().item(1).getChildNodes().item(i)
 						.getFirstChild().getNodeValue());
-				dtm.setDtm(value256);
+				dtm.setDtm(DateTimeFormat.getFormat("yyyyMMddhhmmss").parse(value256.getString()));
 				values.add(dtm);
 			}
 			nameValue.setValues(values);

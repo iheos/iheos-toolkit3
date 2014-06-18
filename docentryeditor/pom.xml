@@ -1,14 +1,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>toolkit2</artifactId>
         <groupId>gov.nist.toolkit</groupId>
         <version>v2-maven-alpha</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
     <artifactId>docentryeditor</artifactId>
     <packaging>war</packaging>
+
     <name>doc-entry-editor</name>
+
+    <properties>
+        <!-- Convenience property to set the GWT version -->
+        <gwtVersion>2.5.1</gwtVersion>
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <url>http://maven.apache.org</url>
     <repositories>
         <repository>
@@ -16,6 +26,7 @@
             <url>http://gwt-maven.googlecode.com/svn/trunk/mavenrepo/</url>
         </repository>
     </repositories>
+
 
     <dependencies>
         <dependency>
@@ -31,13 +42,20 @@
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
-            <classifier>deps</classifier>
-            <version>2.5.1</version>
+            <!--<classifier>deps</classifier>-->
+            <version>${gwtVersion}</version>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <version>${gwtVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
-            <version>2.5.1</version>
+            <version>${gwtVersion}</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -49,12 +67,12 @@
         <dependency>
             <groupId>com.google.web.bindery</groupId>
             <artifactId>requestfactory-server</artifactId>
-            <version>2.5.1</version>
+            <version>${gwtVersion}</version>
         </dependency>
         <dependency>
             <groupId>com.google.web.bindery</groupId>
             <artifactId>requestfactory-apt</artifactId>
-            <version>2.5.1</version>
+            <version>${gwtVersion}</version>
         </dependency>
         <dependency>
             <groupId>aopalliance</groupId>
@@ -84,13 +102,13 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.1.1.Final</version>
+            <version>4.1.0.Final</version>
         </dependency>
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>jsr250-api</artifactId>
-            <version>1.0-20050927.133100</version>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>javax.annotation</groupId>-->
+        <!--<artifactId>jsr250-api</artifactId>-->
+        <!--<version>1.0-20050927.133100</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
@@ -131,58 +149,97 @@
     </dependencies>
     <build>
         <finalName>docentryeditor</finalName>
+        <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
         <!-- Generate compiled stuff in the folder used for developing mode -->
         <!--<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>-->
         <plugins>
-            <!-- GWT Maven Plugin -->
+            <!-- GWT Maven Plugin-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>${gwtVersion}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                        <version>${gwtVersion}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-dev</artifactId>
+                        <version>${gwtVersion}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-servlet</artifactId>
+                        <version>${gwtVersion}</version>
+                    </dependency>
+                </dependencies>
+                <!-- JS is only needed in the package phase, this speeds up testing -->
                 <executions>
                     <execution>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>compile</goal>
-                            <goal>test</goal>
-                            <goal>i18n</goal>
-                            <goal>generateAsync</goal>
                         </goals>
                     </execution>
                 </executions>
-                <!-- Plugin configuration. There are many available options, see gwt-maven-plugin
-                    documentation at codehaus.org -->
+                <!-- Plugin configuration. There are many available options,
+                     see gwt-maven-plugin documentation at codehaus.org -->
                 <configuration>
+                    <!-- URL that should be automatically opened in the GWT shell (gwt:run). -->
                     <runTarget>XDS-MetadataEditor.html</runTarget>
-                    <hostedWebapp>${webappDirectory}</hostedWebapp>
-                    <i18nMessagesBundle>com.kivar.lumina.client.Messages</i18nMessagesBundle>
+                    <!-- Ask GWT to create the Story of Your Compile (SOYC) (gwt:compile) -->
+                    <compileReport>true</compileReport>
+                    <module>edu.tn.xds.metadata.editor</module>
+                    <hostedWebapp>${webappDirectory}</hostedWebapp><!--makes file download work in dev mode-->
+                    <logLevel>INFO</logLevel>
+                    <style>${gwtVersion}</style>
+
+                    <copyWebapp>true</copyWebapp>
                 </configuration>
             </plugin>
 
-            <!-- Copy static web files before executing gwt:run -->
+            <!-- Maven WAR plugin -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.1.1</version>
+                <version>2.4</version>
+                <configuration>
+                    <!-- configured to be the same as for the gwt plugin -->
+                    <webappDirectory>${webappDirectory}</webappDirectory>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>compile</phase>
                         <goals>
+                            <!-- create an exploded version of the war in webappDirectory. Ideal
+                                for development -->
                             <goal>exploded</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <webappDirectory>${webappDirectory}</webappDirectory>
-                </configuration>
             </plugin>
+
+            <!-- Copy static web files before executing gwt:run -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.4.2</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${webappDirectory}/WEB-INF/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- RequestFactory Validation jar -->
@@ -200,12 +257,43 @@
                     <dependency>
                         <groupId>com.google.web.bindery</groupId>
                         <artifactId>requestfactory-apt</artifactId>
-                        <version>2.5.1</version>
+                        <version>${gwtVersion}</version>
                     </dependency>
                 </dependencies>
             </plugin>
+            <!--This plugin's configuration is used to store Eclipse m2e settings
+                                only. It has no influence on the Maven build itself. -->
 
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>
+                                            gwt-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [2.5.1,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>i18n</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <resources>
             <resource>
                 <directory>src/main/java</directory>
@@ -213,6 +301,12 @@
                     <include>**/client/**</include>
                     <include>**/*.gwt.xml</include>
                 </includes>
+            </resource>
+            <resource>
+                <directory>/src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>/src/main/webapp</directory>
             </resource>
         </resources>
     </build>

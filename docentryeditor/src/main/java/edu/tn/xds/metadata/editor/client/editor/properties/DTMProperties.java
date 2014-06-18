@@ -7,23 +7,25 @@ import com.sencha.gxt.data.shared.PropertyAccess;
 
 import edu.tn.xds.metadata.editor.shared.model.DTM;
 
+import java.util.Date;
+
 /**
  * Property Access interface for DTM entity. It handles the access to dtm's
  * attributes for GXT Stores. It handles the access to a key for the dtm object
  * as well as the dtm value.
- * 
+ *
  * This Property access only handles the DTM's attribute dtm.
- * 
+ *
  * @see DTM
- * 
+ *
  * @author Olivier
- * 
+ *
  */
 public interface DTMProperties extends PropertyAccess<DTM> {
 	/**
 	 * Returns the KeyProvider for DTM. It is consider that DTM's attribute
 	 * "dtm" will be the key of the entity.
-	 * 
+	 *
 	 * @return a KeyProvider for DTM
 	 */
 	@Path("dtm")
@@ -31,10 +33,10 @@ public interface DTMProperties extends PropertyAccess<DTM> {
 
 	/**
 	 * Returns ValueProvider for DTM dtm (value) attribute.
-	 * 
+	 *
 	 * @return CodedTerm ValueProvier for displayName
 	 */
-	@Path("dtm.string")
-	ValueProvider<DTM, String> dtm();
+	@Path("dtm")//.string
+	ValueProvider<DTM, Date> dtm();
 
 }

@@ -74,9 +74,6 @@ public class PreParse {
 	 */
 	private final static PreParse myPreParse = new PreParse();
 
-	public PreParse() {
-	}
-
 	public static PreParse getInstance() {
 		return myPreParse;
 	}
@@ -87,14 +84,6 @@ public class PreParse {
 		allowUTF8();
 		return documentXml;
 	}
-
-//	public void setMessage(String msg) {
-//		documentXml = msg;
-//	}
-
-//	public String getMessage() {
-//		return documentXml;
-//	}
 
 	/**
 	 * <p>
@@ -108,7 +97,7 @@ public class PreParse {
 	 * @see PreParse
 	 *
 	 */
-	public void cleanEscape() {
+    private void cleanEscape() {
 		StringBuilder xmlWithoutEscape = new StringBuilder();
 		try {
 			// Delete escape between > <
@@ -147,7 +136,7 @@ public class PreParse {
 	 * @see PreParse
 	 *
 	 */
-	public void allowUTF8() {
+    private void allowUTF8() {
 
 		// For the UTF-8 caracters : replace by their ASCII number
 		StringBuilder xmlEscaped = new StringBuilder();

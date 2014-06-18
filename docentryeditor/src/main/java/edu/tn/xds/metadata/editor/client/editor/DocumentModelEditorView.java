@@ -66,6 +66,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 	/* name values declaration */
 	NameValueString256EditorWidget legalAuthenticator = new NameValueString256EditorWidget("Legal Authenticator");
 	NameValueString256EditorWidget sourcePatientId = new NameValueString256EditorWidget("Source Patient ID");
+	NameValueString256EditorWidget sourcePatientInfo = new NameValueString256EditorWidget("Source Patient Info");
 	NameValueDTMEditorWidget creationTime = new NameValueDTMEditorWidget("Creation Time");
 	NameValueDTMEditorWidget serviceStartTime = new NameValueDTMEditorWidget("Service Start Time");
 	NameValueDTMEditorWidget serviceStopTime = new NameValueDTMEditorWidget("Service Stop Time");
@@ -331,7 +332,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 //		sourcePatientId.setAllowBlanks(true, true);
 
 		// Service Start Time (optional)
-        serviceStartTime.disableEditing();
+//        serviceStartTime.disableEditing();
 //		FieldSet fieldSet_nameValue_serviceStartTime = new FieldSet();
 //		fieldSet_nameValue_serviceStartTime.setHeadingText("Service Start Time");
 //		fieldSet_nameValue_serviceStartTime.setCollapsible(true);
@@ -339,7 +340,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 //		serviceStartTime.setAllowBlanks(/*true,*/ true);
 
 		// Service Stop Time (optional)
-        serviceStopTime.disableEditing();
+//        serviceStopTime.disableEditing();
 //		FieldSet fieldSet_nameValue_serviceStopTime = new FieldSet();
 //		fieldSet_nameValue_serviceStopTime.setHeadingText("Service Stop Time");
 //		fieldSet_nameValue_serviceStopTime.setCollapsible(true);
@@ -355,7 +356,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 ////		size.setAllowBlanks(true, true);
 
 		// Creation Time (required)
-        creationTime.disableEditing();
+//        creationTime.disableEditing();
 //		FieldSet fieldSet_nameValue_creationTime = new FieldSet();
 //		fieldSet_nameValue_creationTime.setHeadingText("Creation Time");
 //		fieldSet_nameValue_creationTime.setCollapsible(true);
@@ -418,6 +419,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		optionalFields.add(titlesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(commentsGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(sourcePatientId.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
+		optionalFields.add(sourcePatientInfo.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(legalAuthenticator.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(confidentialityCodesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(serviceStartTime.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));

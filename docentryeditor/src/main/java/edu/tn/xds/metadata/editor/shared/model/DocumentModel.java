@@ -11,10 +11,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 import edu.tn.xds.metadata.editor.client.parse.Parse;
 
 /**
- * 
+ *
  * <b>This class represents the model which have to be respected by the xml
  * document</b>
- * 
+ *
  * <p>
  * An XML document should have this different parameters
  * <ul>
@@ -49,13 +49,13 @@ import edu.tn.xds.metadata.editor.client.parse.Parse;
  * <li>{@link #uri}: An uri ({@link String256}).</li>
  * </ul>
  * </p>
- * 
+ *
  * <p>
  * This class also contains getters/setters, toXml() method to return
  * information in XML format and verify method to check syntax's document.
  * </p>
- * 
- * 
+ *
+ *
  * <p>
  * <b> See below each type of element you can find in this model</b><br>
  * {@link Author}</br> {@link CodedTerm} <br>
@@ -65,17 +65,17 @@ import edu.tn.xds.metadata.editor.client.parse.Parse;
  * {@link String256} </br> {@link OID}<br>
  * {@link DTM}
  * </p>
- * 
+ *
  * <p>
  * <b>See below each method mentioned above.</b> <br>
  * {@link #verify() method verify}</br> {@link #toXML() method toXML} <br>
  * </p>
- * 
+ *
  * <p>
  * DocumentModel is used in {@link Parse} class to complete the local
  * DocumentModel.
  * </p>
- * 
+ *
  * @see ModelElement class ModelElement
  */
 public class DocumentModel implements Serializable {
@@ -85,10 +85,10 @@ public class DocumentModel implements Serializable {
 	 * <b>ArrayList(InternationalString title</b> - The title of the document
 	 * [Optional].<br>
 	 * Type: ArrayList of {@link InternationalString}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..1 </p>
-	 * 
+	 *
 	 * @see InternationalString
 	 * @see DocumentModel
 	 */
@@ -99,10 +99,10 @@ public class DocumentModel implements Serializable {
 	 * <b>ArrayList(InternationalString) comments</b> - The comments of the
 	 * document [Optional].<br>
 	 * Type: ArrayList of {@link InternationalString}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..1 </p>
-	 * 
+	 *
 	 * @see InternationalString
 	 * @see DocumentModel
 	 */
@@ -113,10 +113,10 @@ public class DocumentModel implements Serializable {
 	 * <b>ArrayList(Author) authors</b> - The author(s) of the document
 	 * [Optional].<br>
 	 * Type: ArrayList of {@link Author}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..n </p>
-	 * 
+	 *
 	 * @see Author
 	 * @see DocumentModel
 	 */
@@ -126,10 +126,10 @@ public class DocumentModel implements Serializable {
 	/**
 	 * <b>CodedTerm classCode</b> - The class code of the document [Mandatory].<br>
 	 * Type: {@link CodedTerm}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..1 </p>
-	 * 
+	 *
 	 * @see CodedTerm
 	 * @see DocumentModel
 	 */
@@ -140,10 +140,10 @@ public class DocumentModel implements Serializable {
 	 * <b>CodedTerm confidentialityCode</b> - The confidentiality code of the
 	 * document [Mandatory].<br>
 	 * Type: ArrayList of {@link CodedTerm}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..n </p>
-	 * 
+	 *
 	 * @see CodedTerm
 	 * @see DocumentModel
 	 */
@@ -155,10 +155,10 @@ public class DocumentModel implements Serializable {
 	 * <b>NameValueDTM creationTime</b> - The creation time of the document
 	 * [Mandatory].<br>
 	 * Type: {@link NameValueDTM}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..1 </p>
-	 * 
+	 *
 	 * @see NameValueDTM
 	 * @see DocumentModel
 	 */
@@ -168,10 +168,10 @@ public class DocumentModel implements Serializable {
 	/**
 	 * <b>String256 id</b> - The id of the document [Mandatory].<br>
 	 * Type: {@link String256}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..1 </p>
-	 * 
+	 *
 	 * @see String256
 	 * @see DocumentModel
 	 */
@@ -182,10 +182,10 @@ public class DocumentModel implements Serializable {
 	 * <b>ArrayList(CodedTerm) eventCode</b> - The event code of the document
 	 * [Optional].<br>
 	 * Type: {@link CodedTerm}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..n </p>
-	 * 
+	 *
 	 * @see CodedTerm
 	 * @see DocumentModel
 	 */
@@ -196,10 +196,10 @@ public class DocumentModel implements Serializable {
 	 * <b>CodedTerm formatCode</b> - The format code of the document
 	 * [Mandatory].<br>
 	 * Type: {@link CodedTerm}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..1 </p>
-	 * 
+	 *
 	 * @see CodedTerm
 	 * @see DocumentModel
 	 */
@@ -209,10 +209,10 @@ public class DocumentModel implements Serializable {
 	/**
 	 * <b>String256 hash</b> - The hash of the document [Optional].<br>
 	 * Type: {@link String256}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..1 </p>
-	 * 
+	 *
 	 * @see String256
 	 * @see DocumentModel
 	 */
@@ -223,10 +223,10 @@ public class DocumentModel implements Serializable {
 	 * <b>CodedTerm healthcareFacilityType</b> - The health care facility type
 	 * of the document [Mandatory].<br>
 	 * Type: {@link CodedTerm}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..n </p>
-	 * 
+	 *
 	 * @see CodedTerm
 	 * @see DocumentModel
 	 */
@@ -238,10 +238,10 @@ public class DocumentModel implements Serializable {
 	 * <b>LanguageCode languageCode</b> - The language code of the document
 	 * [Mandatory].<br>
 	 * Type: {@link LanguageCode}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..1 </p>
-	 * 
+	 *
 	 * @see LanguageCode
 	 * @see DocumentModel
 	 */
@@ -253,10 +253,10 @@ public class DocumentModel implements Serializable {
 	 * <b>NameValueString256 legalAuthenticator</b> - The legal authenticator of
 	 * the document [Optional].<br>
 	 * Type: {@link NameValueString256}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..1 </p>
-	 * 
+	 *
 	 * @see NameValueString256
 	 * @see DocumentModel
 	 */
@@ -266,11 +266,11 @@ public class DocumentModel implements Serializable {
 	/**
 	 * <b>String256 mimeType</b> - The mimeType of the document [Mandatory].<br>
 	 * Type: {@link String256}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..1 </p>
-	 * 
-	 * 
+	 *
+	 *
 	 * @see String256
 	 * @see DocumentModel
 	 */
@@ -281,10 +281,10 @@ public class DocumentModel implements Serializable {
 	 * <b>IdentifierString256 patientID</b> - The patient id of the document
 	 * [Mandatory].<br>
 	 * Type: {@link IdentifierString256}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..1
-	 * 
+	 *
 	 * @see IdentifierString256
 	 * @see DocumentModel
 	 */
@@ -295,10 +295,10 @@ public class DocumentModel implements Serializable {
 	 * <b>CodedTerm practiceSettingCode</b> - The practice setting code of the
 	 * document [Mandatory].<br>
 	 * Type: {@link CodedTerm}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..1
-	 * 
+	 *
 	 * @see CodedTerm
 	 * @see DocumentModel
 	 */
@@ -309,10 +309,10 @@ public class DocumentModel implements Serializable {
 	 * <b>OID repositoryUId</b> - The repository unique id of the document
 	 * [Optional].<br>
 	 * Type: {@link String256}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..1 </p>
-	 * 
+	 *
 	 * @see OID
 	 * @see DocumentModel
 	 */
@@ -323,10 +323,10 @@ public class DocumentModel implements Serializable {
 	 * <b>NameValueDTM serviceStartTime</b> - The service start time of the
 	 * document [Optional].<br>
 	 * Type: {@link NameValueDTM}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..1
-	 * 
+	 *
 	 * @see NameValueDTM
 	 * @see DocumentModel
 	 */
@@ -337,10 +337,10 @@ public class DocumentModel implements Serializable {
 	 * <b>NameValueDTM serviceStopTime</b> - The service stop time of the
 	 * document [Optional].<br>
 	 * Type: {@link NameValueDTM}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..1 </p>
-	 * 
+	 *
 	 * @see NameValueDTM
 	 * @see DocumentModel
 	 */
@@ -348,13 +348,13 @@ public class DocumentModel implements Serializable {
 	private NameValueDTM serviceStopTime;
 
 	/**
-	 * 
+	 *
 	 * <b>NameValueInteger size</b> - The size of the document [Optional].<br>
 	 * Type: {@link NameValueInteger}</br> </p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..1 </p>
-	 * 
+	 *
 	 * @see NameValueInteger
 	 * @see DocumentModel
 	 */
@@ -364,23 +364,79 @@ public class DocumentModel implements Serializable {
 	/**
 	 * <b>NameValueString256 sourcePatientId</b> - The source patient id of the
 	 * document [Optional].<br>
+     *
 	 * Type: {@link NameValueString256}</br></p>
-	 * 
+	 *
 	 * <b>Cardinality:</b> 0..1</p>
-	 * 
+	 *
 	 * @see NameValueString256
 	 * @see DocumentModel
 	 */
 	@Nullable
 	private NameValueString256 sourcePatientId;
 
+    /**
+	 * <b>NameValueString256 sourcePatientInfo</b> - The source patient info of the
+	 * document [Optional].<br>
+     * <br/>
+     * This attribute should contain demographics information of the patient to
+     * whose medical record this document belongs, as the Document Source knew it at the time of Submission.
+     * <br/>
+     * This information typically includes: the patient first and last name, sex,
+     * and birth date. The Clinical XDS Affinity Domain policies may require
+     * more or less specific information and format.
+     * This patient information is not intended to be updated once the
+     * Document is registered (just as the Document content and metadata itself
+     * will not be updated without replacing the previous document). As
+     * sourcePatientInfo may have been updated by the source actor, it may no
+     * longer be in use within the Document Source (EHR-CR). It is only
+     * intended as an audit/checking mechanism and has occasional use for
+     * Document Consumer actors. Shall have a single value (only a single
+     * sourcePatientInfo slot may be present).
+     * <br/>
+     *
+     * XML Representation:
+     * <pre>
+     *     <code>
+     *          <rim:Slot name="sourcePatientInfo">
+     *               <rim:ValueList>
+     *                   <rim:Value>PID-3|DTP-1^^^&amp;1.3.6.1.4.1.21367.2005.3.7&amp;ISO</rim:Value>
+     *                   <rim:Value>PID-5|DICTAPHONE^ONE^^^</rim:Value>
+     *                   <rim:Value>PID-7|19650120</rim:Value>
+     *                   <rim:Value>PID-8|M</rim:Value>
+     *                   <rim:Value>PID-11|100 MainSt^^BURLINGTON^MA^01803^USA</rim:Value>
+     *               </rim:ValueList>
+     *          </rim:Slot>
+     *     </code>
+     * </pre>
+     *
+     * PID-3 should include the source patient identifier.
+     * PID-5 should include the patient name.
+     * PID-8 should code the patient gender as
+     * M – Male F – Female
+     * O – OtherU – Unknown
+     * PID-7 should include the patient date of birth.
+     * PID-11 should include the patient address.
+     * PID-2, PID-4, PID-12 and PID-19 should not be used.
+     *
+     *
+	 * Type: {@link NameValueString256}</br></p>
+	 *
+	 * <b>Cardinality:</b> 0..1</p>
+	 *
+	 * @see NameValueString256
+	 * @see DocumentModel
+	 */
+	@Nullable
+	private NameValueString256 sourcePatientInfo;
+
 	/**
 	 * <b>CodedTerm typeCode</b> - The type code of the document [Mandatory].<br>
 	 * Type: {@link CodedTerm}</br></p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..1</p>
-	 * 
+	 *
 	 * @see CodedTerm
 	 * @see DocumentModel
 	 */
@@ -388,15 +444,15 @@ public class DocumentModel implements Serializable {
 	private CodedTerm typeCode;
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * <b> IdentifierOID uniqueId</b> - The unique id of the document
 	 * [Mandatory].<br>
 	 * Type: {@link IdentifierOID}</br></p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 1..1</p>
-	 * 
+	 *
 	 * @see IdentifierOID
 	 * @see DocumentModel
 	 */
@@ -406,10 +462,10 @@ public class DocumentModel implements Serializable {
 	/**
 	 * <b>String256 uri</b> - The uri of the document [Optional].<br>
 	 * Type: {@link String256}</br></p>
-	 * 
+	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..1</p>
-	 * 
+	 *
 	 * @see String256
 	 * @see DocumentModel
 	 */
@@ -420,11 +476,11 @@ public class DocumentModel implements Serializable {
 	 * <b>ArrayList(ArrayList(String)) validationErrors</b> - The error(s) which
 	 * occure(s) when verify() method is called.<br>
 	 * Type: ArrayList<ArrayList<String>></br> </p>
-	 * 
+	 *
 	 * <p>
 	 * This array represents (("document_variable_name", errorMessage)
 	 * </p>
-	 * 
+	 *
 	 * @see DocumentModel class DocumentModel
 	 */
 	private final ArrayList<ArrayList<String>> validationErrors = new ArrayList<ArrayList<String>>();
@@ -453,6 +509,8 @@ public class DocumentModel implements Serializable {
 		size.setName(new String256().setString("size"));
 		sourcePatientId = new NameValueString256();
 		sourcePatientId.setName(new String256().setString("sourcePatientId"));
+        sourcePatientInfo = new NameValueString256();
+		sourcePatientInfo.setName(new String256().setString("sourcePatientInfo"));
 		typeCode = new CodedTerm();
 		uniqueId = new IdentifierOID();
 		uri = new String256();
@@ -641,6 +699,12 @@ public class DocumentModel implements Serializable {
 		this.sourcePatientId = sourcePatientId;
 	}
 
+    public NameValueString256 getSourcePatientInfo(){return sourcePatientInfo;}
+
+    public void setSourcePatientInfo(NameValueString256 sourcePatientInfo) {
+        this.sourcePatientInfo = sourcePatientInfo;
+    }
+
 	public CodedTerm getTypeCode() {
 		return typeCode;
 	}
@@ -672,10 +736,10 @@ public class DocumentModel implements Serializable {
 	 * from the local DocumentModel.<br>
 	 * It uses methods toXML() from each model class.
 	 * </p>
-	 * 
-	 * 
+	 *
+	 *
 	 * @return String which contains the document in XML format
-	 * 
+	 *
 	 * @see DocumentModel class DocumentModel
 	 */
 	public String toXML() {
@@ -684,12 +748,13 @@ public class DocumentModel implements Serializable {
 		System.out.println(getTitles());
 		if (!(getTitles() == null)) {
 			answer.append("\t<titles>\n");
+            // FIXME possibility for a nullPointerException
 			for (InternationalString str : titles) {
 				answer.append(str.toXML());
 			}
 			answer.append("\t</titles>\n");
 		}
-
+        // FIXME equals null seems strange
 		if (!getComments().equals(null)) {
 			answer.append("\t<comments>\n");
 			for (InternationalString str : comments) {
@@ -797,6 +862,12 @@ public class DocumentModel implements Serializable {
 			answer.append("\t</sourcepatientid>\n");
 		}
 
+        if (!getSourcePatientInfo().equals(null)) {
+            answer.append("\t<sourcepatientinfo>\n");
+            answer.append(sourcePatientInfo.toXML());
+            answer.append("\t</sourcepatientinfo>\n");
+        }
+
 		answer.append("\t<typecode>\n");
 		answer.append(typeCode.toXML());
 		answer.append("\t</typecode>\n");
@@ -824,8 +895,8 @@ public class DocumentModel implements Serializable {
 	 * It uses methods verify() from each model class</br> TODO (and save all
 	 * error message in validationError.)
 	 * </p>
-	 * 
-	 * 
+	 *
+	 *
 	 * @return boolean true if all the document is available, else return false
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
@@ -871,6 +942,7 @@ public class DocumentModel implements Serializable {
 			answer = ct.verify();
 		}
 
+        // FIXME possible NullPointerExceptions
 		answer = formatCode.verify();
 		answer = hash.verify();
 		answer = healthcareFacilityType.verify();
