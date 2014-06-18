@@ -6,17 +6,15 @@
 
 package gov.nist.toolkit.http.axis2soap;
 
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import org.apache.soap.util.mime.ByteArrayDataSource;
 
+import javax.mail.internet.MimeBodyPart;
+import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
-
-import javax.mail.internet.MimeBodyPart;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.soap.util.mime.ByteArrayDataSource;
 
 /**
  * Class used for easier manipulation of Multipart MIME data.
