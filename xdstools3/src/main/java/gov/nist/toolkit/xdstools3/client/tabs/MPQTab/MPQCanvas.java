@@ -1,16 +1,14 @@
 package gov.nist.toolkit.xdstools3.client.tabs.MPQTab;
 
-import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.layout.HLayout;
-import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
-import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButton;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
+import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.SAMLComboBox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSCheckbox;
+import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButton;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.forms.GenericForm;
 
 /**
@@ -20,7 +18,7 @@ public class MPQCanvas extends VLayout {
 
     public MPQCanvas(){
         // Actors widget, TLS and SAML options
-        HLayout up = createUpperLayout();
+        VStack up = createLayout();
         up.setMembersMargin(10);
 
         // PID and Codes
@@ -38,18 +36,15 @@ public class MPQCanvas extends VLayout {
 //        });
     }
 
-    public HLayout createUpperLayout(){
+    public VStack createLayout(){
         // Actors
         // TODO needs an actors widget with only Registries
         Label label1 = new Label("Step 1: Select Actors");
+        label1.setStyleName("h5");
         EndpointWidget endpoints = new EndpointWidget();
-        VLayout actorsLayout = new VLayout();
+        VStack actorsLayout = new VStack();
         actorsLayout.addMembers(label1, endpoints);
-        actorsLayout.setAlign(Alignment.CENTER);
-
-        // middle spacer
-        LayoutSpacer spacer = new LayoutSpacer();
-        spacer.setWidth("100");
+       // actorsLayout.setAlign(Alignment.CENTER);
 
         // TLS / SAML
         Label label2 = new Label("Step 2: Select TLS and SAML options");
@@ -57,14 +52,14 @@ public class MPQCanvas extends VLayout {
         SAMLComboBox saml = new SAMLComboBox();
         GenericForm formTls = new GenericForm();
         formTls.setFields(tls, saml);
-        VLayout tlsLayout = new VLayout();
+        VStack tlsLayout = new VStack();
         tlsLayout.addMembers(label2, formTls);
 
         // layout
-        HLayout upper = new HLayout();
-        upper.addMembers(actorsLayout, spacer, tlsLayout);
+        VStack upper = new VStack();
+        upper.addMembers(actorsLayout, tlsLayout);
         upper.setWidth100();
-        upper.setAlign(Alignment.CENTER);
+       // upper.setAlign(Alignment.CENTER);
         return upper;
     }
 

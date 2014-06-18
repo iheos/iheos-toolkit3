@@ -3,13 +3,13 @@ package gov.nist.toolkit.xdstools3.client.customWidgets;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.ListBox;
 import com.smartgwt.client.widgets.IconButton;
-import com.smartgwt.client.widgets.WidgetCanvas;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
+import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.toolbar.RibbonBar;
 import com.smartgwt.client.widgets.toolbar.RibbonGroup;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
@@ -24,30 +24,83 @@ public class Toolbar extends RibbonBar {
     public Toolbar(SimpleEventBus _bus) {
         bus = _bus;
 
-        setMembersMargin(2);
+        setMembersMargin(10);
         setStyleName("navbar-inner");
 
         // Menu group: Session
         RibbonGroup sessionGroup = createRibbonGroup("Session");
+        sessionGroup.setStyleName("session");
+        sessionGroup.setTitleStyle("session");
+       //sessionGroup.setGroupLabelStyleName("title");
+       // sessionGroup.setGroupLabelBackgroundColor("#ffec9d");
 
+//        ListBox listBox_1 = new ListBox();
+//        listBox_1.addItem("NA2014");
+//        listBox_1.addItem("EURO2011");
+//        listBox_1.addItem("EURO2012");
+//        listBox_1.addItem("NwHIN");
+//        listBox_1.setVisibleItemCount(1);
 
-        final DynamicForm form = new DynamicForm();
         SelectItem listBox = new SelectItem();
         listBox.setShowTitle(false);
-        listBox.setDisplayField("Environment");
-        listBox.setWidth("290px");
+        listBox.setShowOptionsFromDataSource(false);
+        listBox.setWidth("150");
+        listBox.setHeight("35");
         listBox.setDefaultToFirstOption(true);
         LinkedHashMap<String, String> valueMap = new LinkedHashMap<String, String>();
-        valueMap.put("Select Environment", "XX");
-        valueMap.put("NA2014", "US");
-        valueMap.put("EURO2011", "EU");
-        valueMap.put("EURO2012","EU");
-        valueMap.put("NwHIN", "US");
-        // TODO set flag icons
-        // listBox.setImageURLPrefix("flags/16/");
-        // listBox.setImageURLSuffix(".png");
+        valueMap.put("US1", "NA2014");
+        valueMap.put("EU1", "EURO2011");
+        valueMap.put("EU2", "EURO2012");
+        valueMap.put("US2", "NwHIN");
         listBox.setValueMap(valueMap);
-        form.setFields(listBox);
+        // This is a workaround for the  LinkedHashMap, which normally accepts unique elements only, to display the
+        // flags although several are redundant.
+        LinkedHashMap<String, String> valueIcons = new LinkedHashMap<String, String>();
+        valueIcons.put("US1", "US");
+        valueIcons.put("EU1", "EU");
+        valueIcons.put("US2", "US");
+        valueIcons.put("EU2", "EU");
+        listBox.setValueIcons(valueIcons);
+
+        // sets flag icons
+        listBox.setImageURLPrefix("icons/flags/16/");
+        listBox.setImageURLSuffix(".png");
+
+
+
+
+
+        ComboBoxItem cbItem = new ComboBoxItem();
+        cbItem.setShowTitle(false);
+        cbItem.setDefaultToFirstOption(true);
+        cbItem.setHeight(35);
+        cbItem.setWidth(200);
+        cbItem.setType("comboBox");
+        cbItem.setValueMap("Select test session", "Test session 1", "Add new test session...");
+
+        // create form
+        DynamicForm form = new DynamicForm();
+        form.setFields(listBox, cbItem);
+        form.setPadding(5);
+
+
+        sessionGroup.addControls(form);
+
+        LayoutSpacer spacer = new LayoutSpacer();
+        spacer.setWidth("380");
+
+
+        // Menu group: Site / Actors
+        IconButton endpointButton = getIconButton("View / Configure Endpoints", "icons/user_24x24.png", true);
+        endpointButton.setBaseStyle("glyphiconNav");
+
+        // Menu group: Admin
+        // Behavior: Clicking on any of the buttons in the admin group opens a dialog to allow the user to log in as admin,
+        // IF not logged in yet. Then follows to the link initially requested.
+        IconButton adminButton = getIconButton("Admin Settings", "icons/glyphicons/glyphicons_136_cogwheel.png", true) ;
+        adminButton.setBaseStyle("glyphiconNav");
+
+        // ---- Listeners ----
 
 //        listBox.addClickHandler(new ClickHandler() {
 //            public void onClick(ClickEvent event) {
@@ -58,28 +111,6 @@ public class Toolbar extends RibbonBar {
 //                }
 //            }
 //        });
-
-
-
-        //	WidgetCanvas widgetCanvas_2 = new WidgetCanvas(listBox);
-        ListBox listBox_1 = new ListBox();
-        listBox_1.setWidth("290px");
-        listBox_1.addItem("Select test session");
-        listBox_1.addItem("Test session 1");
-        listBox_1.addItem("Add new test session...");
-        listBox_1.setVisibleItemCount(1);
-        WidgetCanvas widgetCanvas_3 = new WidgetCanvas(listBox_1);
-        sessionGroup.addControls(form, widgetCanvas_3);
-
-        // Menu group: Site / Actors
-        IconButton endpointButton = getIconButton("View / Configure Endpoints", "glyphicons_136_cogwheel.png", true);
-        endpointButton.setStyleName("glyphiconNav");
-
-        // Menu group: Admin
-        // Behavior: Clicking on any of the buttons in the admin group opens a dialog to allow the user to log in as admin,
-        // IF not logged in yet. Then follows to the link initially requested.
-        IconButton adminButton = getIconButton("Admin Settings", "glyphicons_136_cogwheel.png", true) ;
-
 
         adminButton.addClickHandler(new ClickHandler() {
             @Override
@@ -97,8 +128,8 @@ public class Toolbar extends RibbonBar {
         });
 
         // Add menu groups to menu bar
-        this.addMembers(sessionGroup, endpointButton, adminButton);
-        this.setHeight(sessionGroup.getHeight());
+        this.addMembers(sessionGroup, spacer, endpointButton, adminButton);
+        draw();
     }
 
 
@@ -140,8 +171,8 @@ public class Toolbar extends RibbonBar {
      */
     private IconButton getIconButton(String title, String iconName, boolean vertical) {
         IconButton button = new IconButton(title);
-        button.setIcon("icons/glyphicons/" + iconName);
-       if (vertical) button.setOrientation("vertical");
+        button.setIcon(iconName);
+        if (vertical) button.setOrientation("vertical");
         return button;
     }
 

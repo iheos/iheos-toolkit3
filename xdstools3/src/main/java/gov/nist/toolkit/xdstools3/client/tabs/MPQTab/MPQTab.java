@@ -18,8 +18,6 @@ public class MPQTab extends GenericCloseableTab {
     }
 
     public void createContents(){
-       // EndpointWidget endpoints = new EndpointWidget();
-       // MPQForm form = new  MPQForm();
         MPQCanvas canvas = new MPQCanvas();
 
         // calls a custom function that sets the contents and keeps the titles

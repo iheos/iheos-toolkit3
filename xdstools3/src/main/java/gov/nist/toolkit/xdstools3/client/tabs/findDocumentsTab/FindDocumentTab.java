@@ -27,7 +27,9 @@ public class FindDocumentTab extends GenericCloseableTab {
      */
     private VStack createContents(){
         // create components
+        addSubtitle("Step 1: Enter Patient ID");
         EndpointWidget endpoints = new EndpointWidget();
+
         FindDocumentForm findDocs = new FindDocumentForm();
         ValidationSummaryWidget output = new ValidationSummaryWidget();
         GenericRunButtonNoForm runButton = new GenericRunButtonNoForm();
@@ -35,6 +37,7 @@ public class FindDocumentTab extends GenericCloseableTab {
         // Add to layout
         VStack findDocsPanel = new VStack();
         findDocsPanel.addMembers(findDocs, endpoints, runButton, output);
+        addSubtitle("Step 2: Select Endpoint");
 
         return findDocsPanel;
     }

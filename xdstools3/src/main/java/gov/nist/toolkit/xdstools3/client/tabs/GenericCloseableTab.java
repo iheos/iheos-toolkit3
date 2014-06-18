@@ -6,34 +6,34 @@ import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 
 public class GenericCloseableTab extends Tab implements TabInterface {
-	private VLayout panel = new VLayout(10);
-	
-	public GenericCloseableTab(String s){
-		 setCanClose(true); 
-		 setTitle(s);
-	}
+    private VLayout panel = new VLayout(10);
 
-	public VLayout getPanel() {
-		return panel;
-	}
-	
-	// main header
-	public void setHeader(String s){
-		Label l = new Label();
-		l.setContents(s);
+    public GenericCloseableTab(String s){
+        setCanClose(true);
+        setTitle(s);
+    }
+
+    public VLayout getPanel() {
+        return panel;
+    }
+
+    // main header
+    public void setHeader(String s){
+        Label l = new Label();
+        l.setContents(s);
+        l.setStyleName("h3");
+        panel.addMember(l);
+        setPane(panel);
+    }
+
+    // subtitle
+    public void addSubtitle(String s){
+        Label l = new Label();
+        l.setContents(s);
         l.setStyleName("h4");
-		panel.addMember(l);
-		setPane(panel);
-	}
-	
-	// subtitle
-	public void setSubtitle(String s){
-		Label l = new Label();
-		l.setContents(s);
-        l.setStyleName("h5");
-		panel.addMember(l);
-		setPane(panel);
-	}
+        panel.addMember(l);
+        setPane(panel);
+    }
 
     /**
      * Sets a tab contents
@@ -43,6 +43,6 @@ public class GenericCloseableTab extends Tab implements TabInterface {
         panel.addMember(pane);
         setPane(panel);
     }
-	
-	
+
+
 }

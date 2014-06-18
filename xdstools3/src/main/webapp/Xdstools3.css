@@ -32,6 +32,12 @@
     margin-left: 0;
 }
 
+/* Each tab */
+.tabpane {
+    border: 0;
+}
+.tabpane .h4{
+}
 
 /* --- Misc --- */
 .noSetting {
@@ -127,18 +133,18 @@
 .navbar .nav>li {
     float: left;
 }
-
+/*
 .navbar .brand {
     display: block;
     padding: 10px 20px;
     font-size: 20px;
     color: #777;
     text-shadow: 0 1px 0 #fff;
-}
+}*/
 
 .navbar-inner {
     min-height: 38px;
-    padding-left: 200px;
+    padding-left: 20px;
     padding-right: 20px;
     background: #ffec9d;
     border: 0;
@@ -147,32 +153,41 @@
     background-repeat: repeat-x;
     box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
 }
-.navbar-inner .ribbongroup {
 
+.navbar-inner:hover {
+    background: #ffec9d;
 }
+
+
+.navbar-inner .session {
+    background: #ffec9d;
+}
+
 
 /* Icons in nav bar are greyed out */
 .navbar-inner .glyphiconNav {
-    margin-right: 10px;
-    opacity: 0.25;
+    opacity:0.5;
+    filter:alpha(opacity=50); /* For IE8 and earlier */
 }
 /* Icons in nav bar become darker on rollover */
-.navbar-inner .glyphiconNav:hover {
-    margin-right: 10px;
-    opacity: 0.5;
-}
-
-.navbar .nav>.active>a, .nav>.active>a, .navbar .nav>.active>a:hover, .navbar .nav>.active>a:focus {
+.navbar-inner:hover > i.glyphiconNav {
+    opacity:1;
+    filter:alpha(opacity=100); /* For IE8 and earlier */
     background-color: #fc0;
-}
-.navbar .nav>.active>a, .navbar .nav>.active>a:hover, .navbar .nav>.active>a:focus {
-    color: #555;
-    text-decoration: none;
     box-shadow: inset 0 3px 8px rgba(0, 0, 0, .125);
 }
-.navbar .nav>li>a {
-    float: none;
-    padding: 10px 15px;
-    color: #777;
-    text-decoration: none;
-}
+
+/*.navbar-inner>.active>a, .navbar-inner>.active>a, .navbar-inner>.active>a:hover, .navbar-inner>.active>a:focus {*/
+/*background-color: #fc0;*/
+/*}*/
+/*.navbar-inner>.active>a, .navbar .nav>.active>a:hover, .navbar .nav>.active>a:focus {*/
+/*color: #555;*/
+/*text-decoration: none;*/
+/*box-shadow: inset 0 3px 8px rgba(0, 0, 0, .125);*/
+/*}*/
+/*.navbar .nav>li>a {*/
+/*float: none;*/
+/*padding: 10px 15px;*/
+/*color: #777;*/
+/*text-decoration: none;*/
+/*}*/
