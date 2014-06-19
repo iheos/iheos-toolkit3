@@ -1,0 +1,19 @@
+# repository type siteRepo
+
+# must match filename
+keyword=siteRepo
+
+# repository|asset
+domain=repository 
+   
+description=A repository for holding Site/actor definitions
+
+
+
+##
+## This is the new Repository Indexing feature for the v3 release
+## When this feature is turned on, then all indexable asset properties 
+## within this repository's type will be automatically indexed 
+# Indexes=on|off
+
+indexes=on

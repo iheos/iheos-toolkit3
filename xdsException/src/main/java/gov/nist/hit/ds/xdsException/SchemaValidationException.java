@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.xdsException;
 
-public class SchemaValidationException extends XdsInternalException {
+public class SchemaValidationException extends ToolkitRuntimeException {
 	
 	/**
 	 * 
