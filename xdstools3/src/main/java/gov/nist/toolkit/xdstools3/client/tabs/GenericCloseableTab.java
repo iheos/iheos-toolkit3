@@ -1,5 +1,6 @@
 package gov.nist.toolkit.xdstools3.client.tabs;
 
+import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.VLayout;
@@ -27,12 +28,11 @@ public class GenericCloseableTab extends Tab implements TabInterface {
     }
 
     // subtitle
-    public void addSubtitle(String s){
+    public Label createSubtitle(String s){
         Label l = new Label();
         l.setContents(s);
-        l.setStyleName("h4");
-        panel.addMember(l);
-        setPane(panel);
+        l.setStyleName("subtitle");
+        return l;
     }
 
     /**
@@ -42,6 +42,7 @@ public class GenericCloseableTab extends Tab implements TabInterface {
     public void setContents(Canvas pane){
         panel.addMember(pane);
         setPane(panel);
+        getPane().setAlign(Alignment.CENTER);
     }
 
 

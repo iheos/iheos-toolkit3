@@ -3,6 +3,7 @@ package gov.nist.toolkit.xdstools3.client.customWidgets;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.IconButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -25,14 +26,10 @@ public class Toolbar extends RibbonBar {
         bus = _bus;
 
         setMembersMargin(10);
-        setStyleName("navbar-inner");
+        setAlign(Alignment.CENTER);
 
         // Menu group: Session
         RibbonGroup sessionGroup = createRibbonGroup("Session");
-        sessionGroup.setStyleName("session");
-        sessionGroup.setTitleStyle("session");
-       //sessionGroup.setGroupLabelStyleName("title");
-       // sessionGroup.setGroupLabelBackgroundColor("#ffec9d");
 
 //        ListBox listBox_1 = new ListBox();
 //        listBox_1.addItem("NA2014");
@@ -45,7 +42,7 @@ public class Toolbar extends RibbonBar {
         listBox.setShowTitle(false);
         listBox.setShowOptionsFromDataSource(false);
         listBox.setWidth("150");
-        listBox.setHeight("35");
+        //listBox.setHeight("35");
         listBox.setDefaultToFirstOption(true);
         LinkedHashMap<String, String> valueMap = new LinkedHashMap<String, String>();
         valueMap.put("US1", "NA2014");
@@ -73,7 +70,7 @@ public class Toolbar extends RibbonBar {
         ComboBoxItem cbItem = new ComboBoxItem();
         cbItem.setShowTitle(false);
         cbItem.setDefaultToFirstOption(true);
-        cbItem.setHeight(35);
+        //cbItem.setHeight(35);
         cbItem.setWidth(200);
         cbItem.setType("comboBox");
         cbItem.setValueMap("Select test session", "Test session 1", "Add new test session...");
@@ -87,18 +84,16 @@ public class Toolbar extends RibbonBar {
         sessionGroup.addControls(form);
 
         LayoutSpacer spacer = new LayoutSpacer();
-        spacer.setWidth("380");
+        spacer.setWidth("360");
 
 
         // Menu group: Site / Actors
         IconButton endpointButton = getIconButton("View / Configure Endpoints", "icons/user_24x24.png", true);
-        endpointButton.setBaseStyle("glyphiconNav");
 
         // Menu group: Admin
         // Behavior: Clicking on any of the buttons in the admin group opens a dialog to allow the user to log in as admin,
         // IF not logged in yet. Then follows to the link initially requested.
         IconButton adminButton = getIconButton("Admin Settings", "icons/glyphicons/glyphicons_136_cogwheel.png", true) ;
-        adminButton.setBaseStyle("glyphiconNav");
 
         // ---- Listeners ----
 

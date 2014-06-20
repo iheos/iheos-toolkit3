@@ -5,13 +5,12 @@ import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.SelectionStyle;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.layout.HLayout;
-import com.smartgwt.client.widgets.layout.LayoutSpacer;
+import com.smartgwt.client.widgets.layout.VStack;
 
 /**
  * Created by dazais on 5/15/2014.
  */
-public class HealthcareCodesWidget extends HLayout {
+public class HealthcareCodesWidget extends VStack {
     private ListGrid codesGrid;
     private ListGrid selectedCodesGrid;
 
@@ -21,12 +20,12 @@ public class HealthcareCodesWidget extends HLayout {
         // Main list of codes and the summary of codes selected by the user
         createCodesGrids();
 
-        // middle spacer
-        LayoutSpacer spacer = new LayoutSpacer();
-        spacer.setWidth("*");
+       // LayoutSpacer spacer = new LayoutSpacer();
+       // spacer.setWidth("*");
 
         // Add both grids to the HLayout and set formatting
-        addMembers(codesGrid, spacer, selectedCodesGrid);
+        addMembers(selectedCodesGrid, codesGrid);
+        selectedCodesGrid.setAlign(Alignment.CENTER);
         setAlign(Alignment.CENTER);
 
     }
@@ -44,10 +43,10 @@ public class HealthcareCodesWidget extends HLayout {
         selectedCodesGrid.setFields(selectedCountriesField);
 
         ListGridField codesField = new ListGridField("code", "Code Values");
-        ListGridField codeTypeField = new ListGridField("codeType", "Selected Codes"); // the Type of Code is only useful for sorting
+       // ListGridField codeTypeField = new ListGridField("codeType", "Selected Codes"); // the Type of Code is only useful for sorting
         codesGrid.setFields(codesField);
         codesGrid.setGroupStartOpen(GroupStartOpen.ALL);
-        codesGrid.setGroupByField("codeType");
+        codesGrid.setGroupByField("code");
 
         // formatting
         codesGrid.setWidth(500);

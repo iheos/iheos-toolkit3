@@ -7,14 +7,13 @@
     <inherits name="com.smartgwt.SmartGwt"/>
     <inherits name="com.smartgwt.tools.SmartGwtTools"/>
 
-    <!-- TODO missing a SmartClient theme for correct display of textboxes -->
-    <!-- <inherits name="com.smartgwt.SmartGwtNoTheme"/>  -->
+    <inherits name="com.smartgwt.SmartGwtNoTheme"/>
+    <inherits name="com.smartclient.theme.xdstoolstheme.XdstoolsTheme" />
     <!--  <inherits name="com.smartclient.theme.silverwave.SilverWave" />  -->
-    <!-- <inherits name="com.smartclient.theme.enterprise.Enterprise"/>-->
-    <!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
+    <!-- <inherits name="com.smartclient.theme.enterprise.Enterprise"/>-->    <!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
 
     <inherits name="com.google.gwt.resources.Resources" />
-    <inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
+    <!--   <inherits name="org.gwtbootstrap3.GwtBootstrap3"/> -->
 
     <!-- <script src='showcase/sc/modules/ISC_DataBinding.js'></script> -->
     <!-- <script src='showcase/sc/modules/ISC_Drawing.js'></script> -->

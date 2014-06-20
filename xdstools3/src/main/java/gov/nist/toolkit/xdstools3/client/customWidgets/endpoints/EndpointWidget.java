@@ -6,6 +6,8 @@ import com.smartgwt.client.types.RowEndEditAction;
 import com.smartgwt.client.types.SortDirection;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
+import com.smartgwt.client.widgets.grid.events.SelectionChangedHandler;
+import com.smartgwt.client.widgets.grid.events.SelectionEvent;
 import com.smartgwt.client.widgets.layout.HLayout;
 
 /**
@@ -13,10 +15,10 @@ import com.smartgwt.client.widgets.layout.HLayout;
  * Created by dazais on 5/21/2014.
  */
 public class EndpointWidget extends HLayout {
-    ListGrid endpointGrid;
+    private ListGrid endpointGrid;
+    private boolean endpointValueSelected = false;
 
-    public EndpointWidget()
-    {
+    public EndpointWidget() {
         //formatting
         //setAutoHeight();
         // setmemebersmargin 15
@@ -48,6 +50,22 @@ public class EndpointWidget extends HLayout {
         ListGridField typeField = new ListGridField("type", "Type");
         ListGridField nameField = new ListGridField("name", "Name");
         grid.setFields(typeField, nameField);
+
+        // Listeners
+        // listen to changes in field value
+        grid.addSelectionChangedHandler(new SelectionChangedHandler() {
+
+                                                    public void onSelectionChanged(SelectionEvent event) {
+                                                        if (event.getRecord() != null) endpointValueSelected = true;
+
+                                                        // if yes, pass value to validation
+//                                                    String newValue = (event.getNewValue() == null ? null : event.getNewValue().toString());
+//                                                    disabledForm.getItem(FORM_FIELD_NAME).setValue(newValue);
+                                                    }
+                                                }
+
+        );
+
         return grid;
     }
 
@@ -63,5 +81,9 @@ public class EndpointWidget extends HLayout {
 //        });
 //        return updateButton;
 //    }
+
+    public boolean isEndpointValueSelected(){
+        return endpointValueSelected;
+    }
 
 }

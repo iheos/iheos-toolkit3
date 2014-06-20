@@ -70,16 +70,17 @@
         </dependency>
 
         <!-- SmartGWT dependencies -->
-        <dependency>
-            <groupId>com.smartgwt</groupId>
-            <artifactId>smartgwt</artifactId>
-            <version>4.1p</version>
-        </dependency>
-        <dependency>
-            <groupId>com.smartgwt</groupId>
-            <artifactId>smartgwt-skins</artifactId>
-            <version>4.1p</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.smartgwt</groupId>-->
+            <!--<artifactId>smartgwt</artifactId>-->
+            <!--<version>4.1p</version>-->
+        <!--</dependency>-->
+        <!-- currently working on local custom theme file-->
+       <!--<dependency>-->
+            <!--<groupId>com.smartgwt</groupId>-->
+            <!--<artifactId>smartgwt-skins</artifactId>-->
+            <!--<version>4.1p</version>-->
+        <!--</dependency>-->
 
         <!-- Jersey dependencies -->
         <dependency>

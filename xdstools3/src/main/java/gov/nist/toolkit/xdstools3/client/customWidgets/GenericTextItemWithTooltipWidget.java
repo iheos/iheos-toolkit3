@@ -15,7 +15,8 @@ public class GenericTextItemWithTooltipWidget extends TextItem {
 	private FormItemIcon icon = new FormItemIcon(); 
 	
 	public GenericTextItemWithTooltipWidget(){
-	     icon.setSrc("help.png");
+	     icon.setSrc("icons/glyphicons/glyphicons_194_circle_question_mark.png");
+         icon.setBaseStyle("glyphicon");
 	     icon.setPrompt("");
 	     setIcons(icon);  
 	}

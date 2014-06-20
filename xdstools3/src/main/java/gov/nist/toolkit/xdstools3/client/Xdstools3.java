@@ -5,6 +5,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.Side;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
@@ -12,10 +13,10 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.Toolbar;
 import gov.nist.toolkit.xdstools3.client.events.EventHandler;
 import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
 import gov.nist.toolkit.xdstools3.client.tabs.HomeTab;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.SettingsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.TabSetWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 
 public class Xdstools3 implements EntryPoint {
@@ -39,7 +40,7 @@ public class Xdstools3 implements EntryPoint {
 	
 	private static final String APP_TITLE_IHE = "XDS Toolkit";
 
-    private TabSetWidget topTabSet;
+    private GenericTabSet topTabSet;
 
 
 
@@ -73,20 +74,20 @@ public class Xdstools3 implements EntryPoint {
 		Toolbar configBar = new Toolbar(bus);
 
 		// Tabs
-		topTabSet = new TabSetWidget();
+		topTabSet = new GenericTabSet();
+        topTabSet.setTabBarPosition(Side.TOP);
+        topTabSet.setTabBarAlign(Alignment.CENTER);
         Tab homeTab = new HomeTab("Home");
 		GenericCloseableTab findDocsTab = new FindDocumentTab();
         GenericCloseableTab mpqTab = new MPQTab();
-		
-        // Add all tabs to the main TabSet
         topTabSet.addTab(homeTab);
         topTabSet.addTab(findDocsTab);
         topTabSet.addTab(mpqTab);
 
         // Main layout
-        VLayout mainLayout = new VLayout(); 
-		mainLayout.setWidth(WINDOW_WIDTH);
-		mainLayout.setHeight100(); 
+        VLayout mainLayout = new VLayout();
+		mainLayout.setHeight100();
+        mainLayout.setAlign(Alignment.CENTER);
 		mainLayout.addMembers(configBar, topTabSet);
 		
 		// Attach the contents to the RootLayoutPanel
