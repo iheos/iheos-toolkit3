@@ -31,13 +31,6 @@ public class Toolbar extends RibbonBar {
         // Menu group: Session
         RibbonGroup sessionGroup = createRibbonGroup("Session");
 
-//        ListBox listBox_1 = new ListBox();
-//        listBox_1.addItem("NA2014");
-//        listBox_1.addItem("EURO2011");
-//        listBox_1.addItem("EURO2012");
-//        listBox_1.addItem("NwHIN");
-//        listBox_1.setVisibleItemCount(1);
-
         SelectItem listBox = new SelectItem();
         listBox.setShowTitle(false);
         listBox.setShowOptionsFromDataSource(false);

@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.MPQTab;
+package gov.nist.toolkit.xdstools3.client.customWidgets.healthcareCodes;
 
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.GroupStartOpen;
