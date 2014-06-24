@@ -1,14 +1,6 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog;
 
-import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
-import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
-import gov.nist.toolkit.xdstools3.client.clientServerUtils.CustomCallback;
-import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericCancelButton;
-import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.LoginButton;
-import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
-
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.data.fields.DataSourcePasswordField;
@@ -21,6 +13,11 @@ import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
+import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
+import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
+import gov.nist.toolkit.xdstools3.client.clientServerUtils.CustomCallback;
+import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericCancelButton;
+import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.LoginButton;
 
 public class LoginDialogWidget extends Window {
 
@@ -30,10 +27,8 @@ public class LoginDialogWidget extends Window {
 	protected LoginButton login;
 	protected GenericCancelButton cancel;
 	protected DataSource dataSource;
-	private SimpleEventBus bus;
 
-	public LoginDialogWidget(SimpleEventBus _bus) {
-		bus = _bus;
+	public LoginDialogWidget() {
 
 		// Create elements
 		setTitle("Login");
@@ -47,7 +42,6 @@ public class LoginDialogWidget extends Window {
         DataSourceTextField firstNameField = new DataSourceTextField("username", "Username", 50, true);
         DataSourcePasswordField passwordField = new DataSourcePasswordField("password", "Password", 50, true);
         dataSource.setFields(firstNameField, passwordField);
-      //  dataSource.setDataURL("data/datasources/toolkit_config.xml"); not used
 
 
 		VLayout vlayout = new VLayout();
@@ -80,9 +74,10 @@ public class LoginDialogWidget extends Window {
 		login = new LoginButton();
 		login.addClickHandler(new ClickHandler() {  
 			public void onClick(ClickEvent event) {  
-				if (form.validate()){
+			//	if (form.validate()){
+                    form.saveData(); // form validation is included
                 logMeIn();
-			}
+		//	}
 		}});
 
 		cancel = new GenericCancelButton();
@@ -91,7 +86,6 @@ public class LoginDialogWidget extends Window {
                 close();
 			}  
 		});  
-
 
 		HLayout buttonLayout = new HLayout();
 		buttonLayout.addMembers(cancel, login);
@@ -104,18 +98,11 @@ public class LoginDialogWidget extends Window {
      * Perform login operations
      */
 	protected void logMeIn(){
-
-		// test of client-server calls
+        // call to server to log the user
 		InterfaceClientServerAsync intf = GWT.create(InterfaceClientServer.class);
         AsyncCallback callback = new CustomCallback();
 		intf.logMeIn("", "", callback);
-
-        // Display the Admin Settings tab if login was successful
-        bus.fireEvent(new OpenTabEvent("ADMIN"));
         close();
 	}
-
-
-
 
 }

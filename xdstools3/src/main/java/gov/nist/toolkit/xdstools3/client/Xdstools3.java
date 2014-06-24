@@ -2,7 +2,6 @@ package gov.nist.toolkit.xdstools3.client;
 
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Side;
@@ -18,6 +17,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.HomeTab;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.SettingsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
+import gov.nist.toolkit.xdstools3.client.util.Util;
 
 public class Xdstools3 implements EntryPoint {
 
@@ -44,34 +44,11 @@ public class Xdstools3 implements EntryPoint {
 
 
 
-
-
 	public void onModuleLoad() {
-
-		
-		// Event handling in the GUI
-				final SimpleEventBus bus = new SimpleEventBus();
-        				bus.addHandler(OpenTabEvent.TYPE, new EventHandler(){
-        					            public void onEvent(OpenTabEvent event) {
-                                            openTab(event.getTabName());
-        					            }
-        					        });
-				
-	// The second part of this Eventbus example is located in LoginDialog.
-	//				bus.addHandler(PingEvent.TYPE, new PingEventHandler(){
-	//					            public void onEvent(PingEvent event) {
-	//					                System.out.print("Inside Ping --> ");
-	//					                new Timer(){
-	//					                    public void run() {
-	//					                       SC.say("pong event fired");
-	//					                    }
-	//					                }.schedule(1000);
-	//					            }
-	//					        });
 
 
 		// Toolbar
-		Toolbar configBar = new Toolbar(bus);
+		Toolbar configBar = new Toolbar();
 
 		// Tabs
 		topTabSet = new GenericTabSet();
@@ -101,22 +78,29 @@ public class Xdstools3 implements EntryPoint {
 
         //SC.showConsole();
 
-	}
+        // Add listener for Open Tab events. The tabs called must be defined in function "openTab".
+        Util.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new EventHandler(){
+            public void onEvent(OpenTabEvent event) {
+                openTab(event.getTabName());
+            }
+        });
 
-public void openTab(String tabName) {
-    GenericCloseableTab tab = null;
+    }
 
-    // create tab depending on parameter
-    if (tabName == "ADMIN") {
-        GenericCloseableTab adminTab = new SettingsTab();
-        tab = adminTab;
+    public void openTab(String tabName) {
+        GenericCloseableTab tab = null;
+
+        // create tab depending on parameter
+        if (tabName == "ADMIN") {
+            GenericCloseableTab adminTab = new SettingsTab();
+            tab = adminTab;
+        }
+        // update set of tabs
+        if (tab != null) {
+            topTabSet.addTab(tab);
+            topTabSet.selectTab(tab);
+        }
     }
-    // update set of tabs
-    if (tab != null) {
-        topTabSet.addTab(tab);
-        topTabSet.selectTab(tab);
-    }
-}
 
 	public static int getWindowWidth() {
 		return WINDOW_WIDTH_TO_INTEGER;

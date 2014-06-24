@@ -1,6 +1,6 @@
-package gov.nist.toolkit.xdstools3.client.RESTUtils;
+package gov.nist.toolkit.xdstools3.client.customWidgets.healthcareCodes;
 
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.Endpoint;
+import gov.nist.toolkit.xdstools3.client.RESTUtils.DSRequest;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -16,20 +16,20 @@ import java.util.List;
  * @see //http://www.smartclient.com/docs/7.0rc2/a/b/c/go.html#class..RestDataSource
  */
 @XmlRootElement(name="request")
-public class MessageDSRequest extends DSRequest {
+public class HealthcareCodeDSRequest extends DSRequest {
 
 	// Holds all incoming data
 	@XmlElementWrapper(name="data")
-	@XmlElement(name="EndpointDS") // Must be the id of the EndpointDS
-	List<Endpoint> data;
+	@XmlElement(name="HealthcareCodeDS") // Must be the class name of the datasource
+	List<HealthcareCode> data;
 	
-	public Collection<Endpoint> getMessages() {
+	public Collection<HealthcareCode> getMessages() {
 		return data;
 	}
 	
-	public void addMessage(Endpoint endpoint) {
+	public void addMessage(HealthcareCode endpoint) {
 		if (data == null) {
-			data = new ArrayList<Endpoint>();
+			data = new ArrayList<HealthcareCode>();
 		}
 		data.add(endpoint);
 	}

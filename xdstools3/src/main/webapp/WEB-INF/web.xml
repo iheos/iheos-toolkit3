@@ -22,13 +22,19 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
-
+    <servlet>
+        <servlet-name>gov.nist.toolkit.xdstools3.Xdstools3 InterfaceClientServer</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools3.server.InterfaceClientServerImpl</servlet-class>
+    </servlet>
 
 
     <servlet-mapping>
         <servlet-name>jersey</servlet-name>
         <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>gov.nist.toolkit.xdstools3.Xdstools3 InterfaceClientServer</servlet-name>
+        <url-pattern>/xdstools3/service</url-pattern>
     </servlet-mapping>
 
     <!-- Default page to serve -->

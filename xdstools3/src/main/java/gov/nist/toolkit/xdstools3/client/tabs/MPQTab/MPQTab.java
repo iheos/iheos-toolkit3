@@ -7,7 +7,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButtonNoForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.healthcareCodes.HealthcareCodesWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.healthcareCodes.HealthcareCodeWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 
 /**
@@ -36,7 +36,7 @@ public class MPQTab extends GenericCloseableTab {
         Label label1 = createSubtitle("Step 1: Enter PID, OR select one or more Code Values");
         PatientIDWidget pid = new PatientIDWidget();
         // Create the Code grids
-        HealthcareCodesWidget codeGridsWidget = new HealthcareCodesWidget();
+        HealthcareCodeWidget codeGridsWidget = new HealthcareCodeWidget();
         HStack pidAndCodes = new HStack();
         pidAndCodes.addMembers(pid, codeGridsWidget);
 

@@ -2,6 +2,8 @@ package gov.nist.toolkit.xdstools3.client.clientServerUtils;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.util.SC;
+import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.util.Util;
 
 /**
  * Created by dazais on 5/16/2014.
@@ -12,8 +14,12 @@ public class CustomCallback implements AsyncCallback {
     }
 
     @Override
+    /**
+     * Displays the Admin Settings Tab if successful
+     */
     public void onSuccess(Object result) {
-        // no error message when things work fine
+        // Display the Admin Settings Tab if login was successful
+        Util.EVENT_BUS.fireEvent(new OpenTabEvent("ADMIN"));
     }
 
 

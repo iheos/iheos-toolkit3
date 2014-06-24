@@ -5,8 +5,13 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 @XmlRootElement(name = "endpoint")
 public class Endpoint {
+
+    /**
+     * The constructor must have no arguments (requirement of RESTful service).
+     */
 
     String name;
     String type;

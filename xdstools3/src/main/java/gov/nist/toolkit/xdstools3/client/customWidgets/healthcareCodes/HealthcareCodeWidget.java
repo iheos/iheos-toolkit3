@@ -1,8 +1,9 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.healthcareCodes;
 
+import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.SelectionStyle;
+import com.smartgwt.client.types.SortDirection;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.VStack;
@@ -10,12 +11,12 @@ import com.smartgwt.client.widgets.layout.VStack;
 /**
  * Created by dazais on 5/15/2014.
  */
-public class HealthcareCodesWidget extends VStack {
+public class HealthcareCodeWidget extends VStack {
     private ListGrid codesGrid;
     private ListGrid selectedCodesGrid;
 
 
-    public HealthcareCodesWidget() {
+    public HealthcareCodeWidget() {
 
         // Main list of codes and the summary of codes selected by the user
         createCodesGrids();
@@ -35,27 +36,44 @@ public class HealthcareCodesWidget extends VStack {
      * @see ListGrid in SmartGWT documentation
      */
     public void createCodesGrids() {
+        // Create the DataSource
+        RestDataSource ds = new HealthcareCodeDS();
+
+
+        // Create the ListGrid linked to the DataSource + additional list of codes selected by the user
         codesGrid = new ListGrid();
         selectedCodesGrid = new ListGrid();
 
-        // create the grid fields
-        ListGridField selectedCountriesField = new ListGridField("code", "Selected Codes");
-        selectedCodesGrid.setFields(selectedCountriesField);
-
-        ListGridField codesField = new ListGridField("code", "Code Values");
-       // ListGridField codeTypeField = new ListGridField("codeType", "Selected Codes"); // the Type of Code is only useful for sorting
-        codesGrid.setFields(codesField);
-        codesGrid.setGroupStartOpen(GroupStartOpen.ALL);
-        codesGrid.setGroupByField("code");
-
-        // formatting
+        // formatting for all codes
         codesGrid.setWidth(500);
         codesGrid.setHeight(224);
         codesGrid.setShowAllRecords(true);
         codesGrid.setSelectionType(SelectionStyle.MULTIPLE);
+        codesGrid.setDataSource(ds);
+        codesGrid.setAutoFetchData(true);
+
+        // Formatting for selected codes
         selectedCodesGrid.setWidth(250);
         selectedCodesGrid.setHeight(100);
         selectedCodesGrid.setShowAllRecords(true);
+
+        // Set Code fields
+        ListGridField codeField = new ListGridField("code", "Code");
+        ListGridField descrField = new ListGridField("description", "Description");
+        codeField.setWidth(100);
+        codesGrid.setFields(codeField, descrField);
+
+        // Set Selected Codes fields
+        ListGridField selectedCodesField = new ListGridField("code", "Selected Codes"); // TODO to change
+        selectedCodesGrid.setFields(selectedCodesField);
+
+        // Configure sorting
+        codesGrid.setSortField(1);
+        codesGrid.setSortDirection(SortDirection.DESCENDING);
+
+        // listeners
+
+
 
 }
 

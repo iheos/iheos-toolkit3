@@ -1,7 +1,6 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.IconButton;
@@ -16,14 +15,14 @@ import com.smartgwt.client.widgets.toolbar.RibbonGroup;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
 import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.LoginDialogWidget;
+import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.util.Util;
 
 import java.util.LinkedHashMap;
 
 public class Toolbar extends RibbonBar {
-    private SimpleEventBus bus;
 
-    public Toolbar(SimpleEventBus _bus) {
-        bus = _bus;
+    public Toolbar() {
 
         setMembersMargin(10);
         setAlign(Alignment.CENTER);
@@ -35,7 +34,6 @@ public class Toolbar extends RibbonBar {
         listBox.setShowTitle(false);
         listBox.setShowOptionsFromDataSource(false);
         listBox.setWidth("150");
-        //listBox.setHeight("35");
         listBox.setDefaultToFirstOption(true);
         LinkedHashMap<String, String> valueMap = new LinkedHashMap<String, String>();
         valueMap.put("US1", "NA2014");
@@ -56,14 +54,9 @@ public class Toolbar extends RibbonBar {
         listBox.setImageURLPrefix("icons/flags/16/");
         listBox.setImageURLSuffix(".png");
 
-
-
-
-
         ComboBoxItem cbItem = new ComboBoxItem();
         cbItem.setShowTitle(false);
         cbItem.setDefaultToFirstOption(true);
-        //cbItem.setHeight(35);
         cbItem.setWidth(200);
         cbItem.setType("comboBox");
         cbItem.setValueMap("Select test session", "Test session 1", "Add new test session...");
@@ -88,32 +81,30 @@ public class Toolbar extends RibbonBar {
         // IF not logged in yet. Then follows to the link initially requested.
         IconButton adminButton = getIconButton("Admin Settings", "icons/glyphicons/glyphicons_136_cogwheel.png", true) ;
 
-        // ---- Listeners ----
-
-//        listBox.addClickHandler(new ClickHandler() {
-//            public void onClick(ClickEvent event) {
-//                int selectedIndex = listBox.getSelectedIndex();
-//                String env = listBox.getItemText(selectedIndex);
-//                if (env.equals("")) {
-//                    //
-//                }
-//            }
-//        });
-
+        // Listeners
         adminButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                //if (!LoginManager.getInstance().isLoggedAsAdmin()) missing rpc call and user management
-                showLoginWindow();
+                // if not logged in
+                if (!Util.getInstance().getLoggedAsAdminStatus()) {
+                    // ask user to log in
+                    showLoginWindow();
+                } else {
+                    // Display the Admin Settings tab if logged in
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent("ADMIN"));
+                }
             }
 
             // Opens login dialog, which then displays the Admin Settings tab if login is successful
             private void showLoginWindow() {
-                // TODO The Login window is missing check of credentials in backend
-                LoginDialogWidget dialog = new LoginDialogWidget(bus);
+                LoginDialogWidget dialog = new LoginDialogWidget();
                 dialog.show();
             }
         });
+
+
+
+
 
         // Add menu groups to menu bar
         this.addMembers(sessionGroup, spacer, endpointButton, adminButton);

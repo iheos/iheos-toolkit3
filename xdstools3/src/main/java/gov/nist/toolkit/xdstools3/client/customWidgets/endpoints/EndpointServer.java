@@ -2,8 +2,6 @@ package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints;
 
 
 import gov.nist.toolkit.xdstools3.client.RESTUtils.DSResponse;
-import gov.nist.toolkit.xdstools3.client.RESTUtils.MessageDSRequest;
-import gov.nist.toolkit.xdstools3.client.RESTUtils.MessageDSResponse;
 import gov.nist.toolkit.xdstools3.client.RESTUtils.OperationType;
 
 import javax.ws.rs.Consumes;
@@ -26,8 +24,8 @@ public class EndpointServer {
 	@Consumes( { MediaType.TEXT_XML })
 	@POST
 	@Path("/add")
-	public MessageDSResponse create(MessageDSRequest request) {
-		MessageDSResponse response = new MessageDSResponse();
+	public EndpointDSResponse create(EndpointDSRequest request) {
+		EndpointDSResponse response = new EndpointDSResponse();
 
 		if (request.getOperationType() != OperationType.ADD || request.getMessages().size() != 1) {
 			response.setStatus(DSResponse.STATUS_FAILURE);
@@ -54,8 +52,8 @@ public class EndpointServer {
 	@Consumes( { MediaType.TEXT_XML })
 	@POST
 	@Path("/update")
-	public MessageDSResponse update(MessageDSRequest request) {
-		MessageDSResponse response = new MessageDSResponse();
+	public EndpointDSResponse update(EndpointDSRequest request) {
+		EndpointDSResponse response = new EndpointDSResponse();
 
 		if (request.getOperationType() != OperationType.UPDATE || request.getMessages().size() != 1) {
 			response.setStatus(DSResponse.STATUS_FAILURE);
@@ -77,8 +75,8 @@ public class EndpointServer {
 	@Consumes( { MediaType.TEXT_XML })
 	@POST
 	@Path("/remove")
-	public MessageDSResponse delete(MessageDSRequest request) {
-		MessageDSResponse response = new MessageDSResponse();
+	public EndpointDSResponse delete(EndpointDSRequest request) {
+		EndpointDSResponse response = new EndpointDSResponse();
 
 		if (request.getOperationType() != OperationType.REMOVE || request.getMessages().size() != 1) {
 			response.setStatus(DSResponse.STATUS_FAILURE);
@@ -102,8 +100,8 @@ public class EndpointServer {
 	@Produces( { MediaType.APPLICATION_XML})
 	@Consumes( { MediaType.TEXT_XML })
 	@Path("/read")
-	public MessageDSResponse read(MessageDSRequest request) {
-        MessageDSResponse response = new MessageDSResponse();
+	public EndpointDSResponse read(EndpointDSRequest request) {
+        EndpointDSResponse response = new EndpointDSResponse();
         response.setStatus(DSResponse.STATUS_SUCCESS);
 //
 //		response.setStartRow(request.getStartRow());
