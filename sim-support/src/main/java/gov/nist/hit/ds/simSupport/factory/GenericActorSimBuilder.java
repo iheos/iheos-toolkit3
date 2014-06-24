@@ -18,7 +18,8 @@ import java.util.Date;
  * Simulators. Holds configuration while other agents setAssertionGroup content.
  * @author bmajur
  *
- */  
+ */
+@Deprecated
 public class GenericActorSimBuilder {
 	ActorSimConfig sConfig;   // elements being constructed
 	SimId simId;  // needed to build endpoints
@@ -55,7 +56,9 @@ public class GenericActorSimBuilder {
 	public ActorSimConfig getActorSimConfig() {
 		return sConfig;
 	}
-	
+
+    // There is new code that generates endpoints.  I forget where.
+    @Deprecated
 	public GenericActorSimBuilder addEndpoint(String actorShortName, TransactionType transType, TlsType tls, AsyncType async) {
 
 		String contextName = Installation.installation().tkProps.get("toolkit.servlet.context", "xdstools3");

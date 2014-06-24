@@ -64,7 +64,7 @@ public class DocumentRegistryActorSim extends SimComponentBase {
     public Asset getMetadataDirectory() { return metadataDirectory; }
 	
 	@Override
-	public void run(MessageValidatorEngine mve) throws SoapFaultException {
+	public void run() throws SoapFaultException {
 		logger.trace("Run DocumentRegistryActorSim");
 
         actorType = ActorTypeFactory.find(actorSimEnvironment.getActorCode());

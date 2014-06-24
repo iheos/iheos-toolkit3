@@ -1,48 +1,42 @@
 package gov.nist.hit.ds.simServlet;
 
-import gov.nist.hit.ds.actorSimFactory.ActorSimFactory;
-import gov.nist.hit.ds.actorTransaction.ActorType;
-import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
+import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
-import gov.nist.hit.ds.errorRecording.ErrorContext;
 import gov.nist.hit.ds.eventLog.Event;
+import gov.nist.hit.ds.eventLog.EventFactory;
+import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
-import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.components.parsers.SimEndpointParser;
 import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
-import gov.nist.hit.ds.simSupport.engine.SimChainLoaderException;
-import gov.nist.hit.ds.simSupport.engine.SimEngineException;
-import gov.nist.hit.ds.simSupport.event.EventBuilder;
+import gov.nist.hit.ds.simSupport.exception.SimChainLoaderException;
+import gov.nist.hit.ds.simSupport.exception.SimEngineException;
+import gov.nist.hit.ds.soapSupport.FaultCode;
+import gov.nist.hit.ds.soapSupport.SoapFaultException;
 import gov.nist.hit.ds.soapSupport.core.Endpoint;
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
 import gov.nist.hit.ds.soapSupport.core.SoapResponseGenerator;
-import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
-import gov.nist.hit.ds.soapSupport.soapFault.FaultCode;
-import gov.nist.hit.ds.soapSupport.soapFault.SoapFault;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.xml.Parse;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Servlet to service simulator input transactions.
@@ -128,13 +122,13 @@ public class SimServlet extends HttpServlet {
 			return;
 
 
-		TransactionType transType = TransactionTypeFactory.find(simEndpoint.getTransaction());
+		TransactionType transType = new ActorTransactionTypeFactory().getTransactionType(simEndpoint.getTransaction());
 		if (transType == null) {
 			sendSoapFault(soapEnv, FaultCode.Sender, "Unknown transaction code [" + simEndpoint.getTransaction() + "]");
 			return;
 		}
-		soapEnv.setExpectedRequestAction(transType.getRequestAction());
-		soapEnv.setResponseAction(transType.getResponseAction());
+		soapEnv.setExpectedRequestAction(transType.requestAction);
+		soapEnv.setResponseAction(transType.responseAction);
 
 		boolean responseGenerated = handleSimulatorInputTransaction(request, soapEnv, simEndpoint, new Endpoint().setEndpoint(uri), event);
 
@@ -159,7 +153,7 @@ public class SimServlet extends HttpServlet {
 			Event event = (Event)httpEnv.getEventLog();
 			String responseBodyString;
 			try {
-				responseBodyString = event.getInOutMessages().getResponse();
+				responseBodyString = new String(event.getInOutMessages().getRespBody());
 			} catch (NullPointerException e) {
 				e.printStackTrace();
 				responseBodyString = "<None/>";
@@ -240,7 +234,7 @@ public class SimServlet extends HttpServlet {
 	private Event buildEvent(SoapEnvironment soapEnv, SimEndpoint simEndpoint) {
 		Event event = null;
 		try {
-			event = new EventBuilder().buildEvent(simEndpoint.getSimId(), ActorTypeFactory.find(simEndpoint.getActor()).getShortName(), simEndpoint.getTransaction());
+			event = new EventFactory().buildEvent(simEndpoint.getSimId(), ActorTypeFactory.find(simEndpoint.getActor()).getShortName(), simEndpoint.getTransaction());
 			//			SimDb db = new SimDb(simEndpoint.getSimId());
 			//			SimId simId = simEndpoint.getSimId();
 			//			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));

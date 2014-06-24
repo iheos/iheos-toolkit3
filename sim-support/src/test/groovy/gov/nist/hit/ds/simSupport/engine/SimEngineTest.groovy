@@ -10,7 +10,7 @@ public class SimEngineTest extends Specification {
 
     def 'Initial Chain Is Not Complete'() {
         when:
-        def event = new EventFactory().buildEvent(null)
+        def event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
         simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.FooMaker', [:])
 
@@ -23,7 +23,7 @@ public class SimEngineTest extends Specification {
 
     def 'Base is Publisher'() {
         setup:
-        def event = new EventFactory().buildEvent(null)
+        def event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
         simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.BarUser', [:])
         SimChain simChain = simChainFactory.simChain
@@ -87,7 +87,7 @@ public class SimEngineTest extends Specification {
 
     def 'No Matching Publishers on last component'() {
         setup:
-        def event = new EventFactory().buildEvent(null)
+        def event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
         simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.FooMaker', [:])
         // this one fails
@@ -108,7 +108,7 @@ public class SimEngineTest extends Specification {
 
     def 'No Matching Publishers on not last component'() {
         setup:
-        def event = new EventFactory().buildEvent(null)
+        def event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
         simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.FooMaker', [:])
         // this one fails
@@ -128,7 +128,7 @@ public class SimEngineTest extends Specification {
 
     def 'No Previous Publishers'() {
         setup:
-        def event = new EventFactory().buildEvent(null)
+        def event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
         simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.BarUser', [:])
         SimChain simChain = simChainFactory.simChain
@@ -146,7 +146,7 @@ public class SimEngineTest extends Specification {
     def 'Trace'() {
         setup:
         def base = new FooBarBase()  // pubs Foo and Bar
-        def event = new EventFactory().buildEvent(null)
+        def event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
         simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.BarUser', [:])
         SimChain simChain = simChainFactory.simChain
@@ -164,7 +164,7 @@ public class SimEngineTest extends Specification {
 
     def 'Trace internal error'() {
         setup:
-        def event = new EventFactory().buildEvent(null)
+        def event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
         simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.BarUser', [:])
         SimChain simChain = simChainFactory.simChain

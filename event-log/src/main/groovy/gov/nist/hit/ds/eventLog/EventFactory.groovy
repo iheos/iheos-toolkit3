@@ -6,7 +6,7 @@ import org.apache.log4j.Logger
 
 public class EventFactory {
 	static Logger logger = Logger.getLogger(EventFactory)
-
+    static Repository IN_MEMORY = null
     /**
      * Repository == null makes this an in-memory Event, it is never saved
      * to the repository.

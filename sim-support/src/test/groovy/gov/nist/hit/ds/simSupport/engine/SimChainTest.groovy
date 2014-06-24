@@ -10,7 +10,7 @@ class SimChainTest extends Specification {
 
     def 'SimChain retrieve errors'() {
         setup:
-        def event = new EventFactory().buildEvent(null)
+        def event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
         simChainFactory.addComponent('gov.nist.hit.ds.simSupport.components.FooMaker', [:])
         SimChain simChain = simChainFactory.simChain

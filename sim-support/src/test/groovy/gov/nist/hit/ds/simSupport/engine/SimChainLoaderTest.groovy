@@ -11,7 +11,7 @@ class SimChainLoaderTest extends Specification {
 
     def 'SimChain load from missing properties file'() {
         setup:
-        Event event = new EventFactory().buildEvent(null)
+        Event event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
 
         when:
@@ -26,7 +26,7 @@ class SimChainLoaderTest extends Specification {
 
     def 'Load simple SimChain from properties file - bad parameter'() {
         setup:
-        Event event = new EventFactory().buildEvent(null)
+        Event event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
 
         when:
@@ -40,7 +40,7 @@ class SimChainLoaderTest extends Specification {
 
     def 'Load simple SimChain from properties file - bad class'() {
         setup:
-        Event event = new EventFactory().buildEvent(null)
+        Event event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
 
         when:
@@ -54,7 +54,7 @@ class SimChainLoaderTest extends Specification {
 
     def 'Load simple SimChain from properties file'() {
         setup:
-        Event event = new EventFactory().buildEvent(null)
+        Event event = new EventFactory().buildEvent(EventFactory.IN_MEMORY)
         def simChainFactory = new SimChainFactory(event)
 
         when:
