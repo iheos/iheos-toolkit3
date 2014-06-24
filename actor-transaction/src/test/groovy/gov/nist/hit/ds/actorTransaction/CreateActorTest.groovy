@@ -43,18 +43,18 @@ class CreateActorTest extends Specification {
     }
 
     def 'Registry actor type exists in configuration - later tests cannot function without this'() {
-        expect: new ActorTransactionTypeFactory().getActorType('reg') != null
+        expect: new ActorTransactionTypeFactory().getActorTypeIfAvailable('reg') != null
     }
 
     def 'Repository actor type exists in configuration - later tests cannot function without this'() {
-        expect: new ActorTransactionTypeFactory().getActorType('rep') != null
+        expect: new ActorTransactionTypeFactory().getActorTypeIfAvailable('rep') != null
     }
 
     def 'Actor properties for Registry should contain no extra properties'() {
         setup: 'actor and transaction types are loaded by setup()'
 
         when: ''
-        ActorType actorType = new ActorTransactionTypeFactory().getActorType('reg')
+        ActorType actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable('reg')
 
 
         then: 'Verify actor properties are empty'
@@ -66,7 +66,7 @@ class CreateActorTest extends Specification {
         setup: 'actor and transaction types are loaded by setup()'
 
         when: ''
-        ActorType actorType = new ActorTransactionTypeFactory().getActorType('rep')
+        ActorType actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable('rep')
 
         then: 'Verify actor properties include repositoryUniqueId'
         actorType != null

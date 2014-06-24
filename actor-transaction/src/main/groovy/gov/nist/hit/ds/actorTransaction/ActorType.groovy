@@ -2,16 +2,20 @@ package gov.nist.hit.ds.actorTransaction
 
 import com.google.gwt.user.client.rpc.IsSerializable
 import gov.nist.hit.ds.actorTransaction.exceptions.InvalidActorTypeDefinitionException
+import groovy.transform.ToString
+import groovy.util.logging.Log4j
 
 /**
  * Created by bill on 4/16/14.
  */
+@Log4j
+@ToString(includeFields=true, includes="shortName, transactionTypes, props")
 class ActorType implements IsSerializable, Serializable {
     String name
     String shortName
     String actorSimFactoryClassName
     List<TransactionType> transactionTypes = new ArrayList<TransactionType>()
-    Map<String, String> properties = new HashMap<String, String>()
+    Map<String, String> props = new HashMap<String, String>()
 
     public String getName() { return name }
     public String getShortName() { return shortName }
@@ -21,9 +25,9 @@ class ActorType implements IsSerializable, Serializable {
         transactionTypes.find { it == transactionType }
     }
 
-    String getProperty(String key) { return properties.get(key) }
-    void putProperty(String key, String value) { properties.put(key, value) }
-    boolean containsKey(String key) { return properties.containsKey(key) }
+    String getActorProperty(String key) { return props.get(key) }
+    void putActorProperty(String key, String value) { props.put(key, value) }
+    boolean containsKey(String key) { return props.containsKey(key) }
 
     TransactionType find(String transactionTypeName) {
         transactionTypes.find {
@@ -31,9 +35,9 @@ class ActorType implements IsSerializable, Serializable {
         }
     }
 
-    String toString() {
-        return "ActorType: ${name} (${shortName} with ${properties.keySet()})"
-    }
+//    String toString() {
+//        return "ActorType: ${name} (${shortName} with ${properties.keySet()})"
+//    }
 
     void check(String typeName) throws InvalidActorTypeDefinitionException {
         String val;
@@ -50,5 +54,13 @@ class ActorType implements IsSerializable, Serializable {
         if (transactionTypes.size() == 0)
             throw new InvalidActorTypeDefinitionException("${typeName}: must define at least one transaction");
     }
+
+    List<EndpointLabel> endpointLabels() {
+        return transactionTypes.collect { ttype ->
+           [ new EndpointLabel(ttype, TlsType.NOTLS, AsyncType.SYNC) ,
+             new EndpointLabel(ttype, TlsType.TLS, AsyncType.SYNC) ]
+        }.flatten()
+    }
+
 
 }

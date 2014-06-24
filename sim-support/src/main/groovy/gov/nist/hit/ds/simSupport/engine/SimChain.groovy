@@ -22,19 +22,11 @@ public class SimChain  {
 
     def init(Event event) { steps.each { it.init(event) } }
 
-	public SimChain addSteps(List<SimStep> steps) {
-		this.steps.addAll(steps);
-		return this;
-	}
+	def addSteps(List<SimStep> steps) { this.steps.addAll(steps) }
 	
-	def addStep(SimStep ss) {
-		steps.add(ss);
-	}
+	def addStep(SimStep ss) { steps.add(ss) }
 
-	public SimChain addStep(int index, SimStep ss) {
-		((ArrayList<SimStep>)steps).add(index, ss);
-		return this;
-	}
+	def addStep(int index, SimStep ss) { ((ArrayList<SimStep>)steps).add(index, ss) }
 
     SimStep getRunableStep() { steps.find { !it.completed } }
 
@@ -67,7 +59,7 @@ public class SimChain  {
         steps.each { step ->
             msgs.addAll(step.getAssertionGroup().getErrorMessages())
         }
-        msgs
+        return msgs
     }
 
 

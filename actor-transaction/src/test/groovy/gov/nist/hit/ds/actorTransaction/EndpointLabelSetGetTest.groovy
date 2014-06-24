@@ -45,8 +45,8 @@ public class EndpointLabelSetGetTest {
     void setup() {
         ActorTransactionTypeFactory.clear()
         new ActorTransactionTypeFactory().load(config)
-        actorType = new ActorTransactionTypeFactory().getActorType("reg");
-        register = new ActorTransactionTypeFactory().getTransactionType('rb')
+        actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
+        register = new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb')
     }
 
 	@Test

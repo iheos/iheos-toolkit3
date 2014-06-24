@@ -43,14 +43,14 @@ class TransactionBeanTest {
 '''
     @Before
     void setup() {
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().load(config)
     }
 
     ///////////////////////////////////////////////////////////
     @Test
     public void testSameObjectHasSameIndex() {
-        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
@@ -60,12 +60,12 @@ class TransactionBeanTest {
 
     @Test
     public void testHasSameIndex() {
-        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
                 false)
-        TransactionBean c = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean c = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
@@ -75,12 +75,12 @@ class TransactionBeanTest {
 
     @Test
     public void testNotHasSameIndex() {
-        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
                 false)
-        TransactionBean c = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean c = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 true,
@@ -91,17 +91,17 @@ class TransactionBeanTest {
     ///////////////////////////////////////////////////////////
     @Test
     public void testEqualsTransactionBean() {
-        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
                 false)
-        TransactionBean c = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean c = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
                 false)
-        TransactionBean d = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean d = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 true,
@@ -114,24 +114,24 @@ class TransactionBeanTest {
     ///////////////////////////////////////////////////////////
     @Test
     public void testHasName() {
-        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
                 false)
-        assertTrue b.hasName('Register')
+        assertTrue b.hasName('rb')
     }
 
     ///////////////////////////////////////////////////////////
     @Test
     public void testGetName() {
-        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
                 false)
-        assertEquals(b.getName(), new ActorTransactionTypeFactory().getTransactionType('rb').name)
-        assertEquals(b.getName(), "Register")
+        assertEquals(b.getName(), new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb').name)
+        assertEquals(b.getName(), "rb")
     }
 
     ///////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ class TransactionBeanTest {
 
     @Test
     public void testIsNotRetrieve() {
-        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
@@ -189,29 +189,29 @@ class TransactionBeanTest {
     ///////////////////////////////////////////////////////////
     @Test
     public void testGetTransactionType() {
-        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
                 false)
-        assertTrue b.getTransactionType() == new ActorTransactionTypeFactory().getTransactionType('rb')
+        assertTrue b.getTransactionType() == new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb')
     }
 
     @Test
     ///////////////////////////////////////////////////////////
     public void testIsType() {
-        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
                 false)
-        assertTrue b.isType(new ActorTransactionTypeFactory().getTransactionType('rb'))
+        assertTrue b.isType(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'))
     }
 
     ///////////////////////////////////////////////////////////
     @Test
     public void testHasEndpoint() {
-        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionType('rb'),
+        TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,

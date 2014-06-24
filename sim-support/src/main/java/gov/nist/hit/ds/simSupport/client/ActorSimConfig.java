@@ -3,6 +3,8 @@ package gov.nist.hit.ds.simSupport.client;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.*;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.AbstractActorSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement;
+import groovy.transform.ToString;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.List;
  * @author bill
  *
  */
+@ToString(excludes="serialVersionUID, expires, isExpired, actorState")
 public class ActorSimConfig implements IsSerializable, Serializable {
 
 	private static final long serialVersionUID = -736965164284950123L;
@@ -150,7 +153,6 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	 * @return endpoint or null if no endpoint matches the type information.
 	 */
 	public String getEndpoint(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
-//		List<AbstractActorSimConfigElement> configs = findConfigs(new TransactionType[] { transType }, new TlsType[] { tlsType }, new AsyncType[] { asyncType });
         List<AbstractActorSimConfigElement> configs = findConfigs(
                 new ArrayList<TransactionType>(Arrays.asList(transType)),
                 new ArrayList<TlsType>(Arrays.asList(tlsType)),
@@ -167,7 +169,6 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	 * @param asyncTypes
 	 * @return
 	 */
-
     public List<AbstractActorSimConfigElement> findConfigs(List<TransactionType> transTypes, List<TlsType> tlsTypes, List<AsyncType> asyncTypes)  {
         List<AbstractActorSimConfigElement> simEles = new ArrayList<AbstractActorSimConfigElement>();
 
@@ -210,8 +211,8 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 
         for (AbstractActorSimConfigElement ele : getAll()) {
             if (ele.getType() != ParamType.ENDPOINT) continue;
-            String name = ele.getName();
-            EndpointLabel elabel = new EndpointLabel(actorType, name);
+            EndpointActorSimConfigElement endp = (EndpointActorSimConfigElement) ele;
+            EndpointLabel elabel = endp.getEndpointLabel();
             if (!tTypes.has(elabel.getTransType())) continue;
             if (!tls.has(elabel.getTlsType())) continue;
             if (!async.has(elabel.getAsyncType())) continue;
@@ -219,67 +220,8 @@ public class ActorSimConfig implements IsSerializable, Serializable {
         }
 
         return simEles;
-
-
-//        return findConfigs(
-//                (TransactionType[])transTypes.toArray(),
-//                (TlsType[])tlsTypes.toArray(),
-//                (AsyncType[])asyncTypes.toArray());
     }
 
-//	public List<AbstractActorSimConfigElement> findConfigs(TransactionType[] transTypes, TlsType[] tlsTypes, AsyncType[] asyncTypes)  {
-//		List<AbstractActorSimConfigElement> simEles = new ArrayList<AbstractActorSimConfigElement>();
-//
-//		class Tls {
-//			TlsType[] tlsTypes;
-//			Tls(TlsType[] types) { tlsTypes = types; }
-//			boolean has(TlsType type) {
-//				if (tlsTypes == null) return false;
-//				for (int i=0; i<tlsTypes.length; i++)
-//					if (type == tlsTypes[i]) return true;
-//				return false;
-//			}
-//		}
-//
-//		class Async {
-//			AsyncType[] asyncTypes;
-//			Async(AsyncType[] types) { asyncTypes = types; }
-//			boolean has(AsyncType type) {
-//				if (asyncTypes == null) return false;
-//				for (int i=0; i<asyncTypes.length; i++)
-//					if (type == asyncTypes[i]) return true;
-//				return false;
-//			}
-//		}
-//
-//		class TTypes {
-//			TransactionType[] transTypes;
-//			TTypes(TransactionType[] types) { transTypes = types; }
-//			boolean has(TransactionType type) {
-//				if (transTypes == null) return false;
-//				for (int i=0; i<transTypes.length; i++)
-//					if (type == transTypes[i]) return true;
-//				return false;
-//			}
-//		}
-//
-//		TTypes tTypes = new TTypes(transTypes);
-//		Tls tls = new Tls(tlsTypes);
-//		Async async = new Async(asyncTypes);
-//
-//		for (AbstractActorSimConfigElement ele : getAll()) {
-//			if (ele.getType() != ParamType.ENDPOINT) continue;
-//			String name = ele.getName();
-//			EndpointLabel elabel = new EndpointLabel(actorType, name);
-//			if (!tTypes.has(elabel.getTransType())) continue;
-//			if (!tls.has(elabel.getTlsType())) continue;
-//			if (!async.has(elabel.getAsyncType())) continue;
-//			simEles.add(ele);
-//		}
-//
-//		return simEles;
-//	}
-	
 	/**
 	 * Delete the config element based on its name.
 	 * @param name

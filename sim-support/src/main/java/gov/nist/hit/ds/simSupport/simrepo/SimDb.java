@@ -233,7 +233,7 @@ public class SimDb {
 //		for (File file : aDir.listFiles()) {
 //			if (file.isDirectory()) {
 //				String name = file.getName();
-//				return ActorType.getActorType(name);
+//				return ActorType.getActorTypeIfAvailable(name);
 //			}
 //		}
 //		return null;

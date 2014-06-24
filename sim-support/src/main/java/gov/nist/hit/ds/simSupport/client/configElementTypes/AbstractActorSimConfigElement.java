@@ -45,7 +45,7 @@ abstract public class AbstractActorSimConfigElement implements IsSerializable, S
 		buf.append(" type=").append(type);
 		buf.append(" value=").append(value);
 
-		buf.append(" editable=").append(isEditable());
+//		buf.append(" editable=").append(isEditable());
 
 		return buf.toString();
 	}
@@ -54,10 +54,5 @@ abstract public class AbstractActorSimConfigElement implements IsSerializable, S
 		this.value = value;
 		return this;
 	}
-
-//	public AbstractActorSimConfigElement setValue(Boolean o) { 
-//		value = o.toString();
-//		return this;
-//	}
 
 }

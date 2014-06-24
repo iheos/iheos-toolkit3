@@ -1,11 +1,13 @@
 package gov.nist.hit.ds.actorTransaction
 
 import com.google.gwt.user.client.rpc.IsSerializable
-import gov.nist.hit.ds.actorTransaction.exceptions.InvalidTransactionTypeDefinitionException;
+import gov.nist.hit.ds.actorTransaction.exceptions.InvalidTransactionTypeDefinitionException
+import groovy.transform.ToString;
 
 /**
  * Created by bill on 4/16/14.
  */
+@ToString(includeFields=true, includes="id, props")
 class TransactionType implements IsSerializable, Serializable {
     public String id
     public String name
@@ -18,6 +20,11 @@ class TransactionType implements IsSerializable, Serializable {
     public String getCode() { return code }
     public String getName() { return name }
     public String getShortName() { return shortName }
+    Map<String, String> props = new HashMap<String, String>()
+
+    String getTransactionProperty(String key) { return props.get(key) }
+    boolean hasTransactionProperty(String key) { return props.containsKey(key) }
+    void putTransactionProperty(String key, String value) { props.put(key, value) }
 
     boolean equals(TransactionType tt) {
         tt.name.equalsIgnoreCase(name)
@@ -33,7 +40,7 @@ class TransactionType implements IsSerializable, Serializable {
                 s.equalsIgnoreCase(asyncCode)
     }
 
-    String toString() { return name }
+//    String toString() { return name }
 
     void check()  {
         String val;

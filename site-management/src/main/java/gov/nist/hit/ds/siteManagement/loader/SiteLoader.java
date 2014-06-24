@@ -119,28 +119,28 @@ public abstract class SiteLoader {
 
 //		MetadataSupport.om_factory.createOMComment(site_ele, "REGISTRY");
 //		for (TransactionBean tb : trans.transactions) {
-//			if (ATFactory.RegistryActorType.hasTransaction(tb.getTransactionType())) {
+//			if (ATFactory.RegistryActorType.hasTransaction(tb.getTransactionTypeIfAvailable())) {
 //				addTransactionXML(site_ele, tb);
 //			}
 //		}
 //
 //		MetadataSupport.om_factory.createOMComment(site_ele, "RESPONDING GATEWAY");
 //		for (TransactionBean tb : trans.transactions) {
-//			if (ATFactory.RespondingGatewayActorType.hasTransaction(tb.getTransactionType())) {
+//			if (ATFactory.RespondingGatewayActorType.hasTransaction(tb.getTransactionTypeIfAvailable())) {
 //				addTransactionXML(site_ele, tb);
 //			}
 //		}
 //
 //		MetadataSupport.om_factory.createOMComment(site_ele, "INITIATING GATEWAY");
 //		for (TransactionBean tb : trans.transactions) {
-//			if (ATFactory.InitiatingGatewayActorType.hasTransaction(tb.getTransactionType())) {
+//			if (ATFactory.InitiatingGatewayActorType.hasTransaction(tb.getTransactionTypeIfAvailable())) {
 //				addTransactionXML(site_ele, tb);
 //			}
 //		}
 //		
 //		MetadataSupport.om_factory.createOMComment(site_ele, "REPOSITORY");
 //		for (TransactionBean tb : trans.transactions) {
-//			if (ATFactory.RepositoryActorType.hasTransaction(tb.getTransactionType())) {
+//			if (ATFactory.RepositoryActorType.hasTransaction(tb.getTransactionTypeIfAvailable())) {
 //				addTransactionXML(site_ele, tb);
 //			}
 //		}

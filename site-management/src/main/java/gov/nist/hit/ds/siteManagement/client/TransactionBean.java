@@ -142,9 +142,9 @@ public class TransactionBean implements IsSerializable, Serializable {
 		
 		ActorType actorType;
 		if (repositoryType == RepositoryType.REPOSITORY)
-			actorType = new ActorTransactionTypeFactory().getActorType("rep");
+			actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("rep");
 		else if (repositoryType == RepositoryType.ODDS)
-			actorType = new ActorTransactionTypeFactory().getActorType("odds");
+			actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("odds");
 		else
 			throw new ToolkitRuntimeException("TransactionBean: RepositoryType must be specified");
 		
@@ -152,7 +152,7 @@ public class TransactionBean implements IsSerializable, Serializable {
 			throw new ToolkitRuntimeException("TransactionBean: Repository type actor is specified but descriptor is not an OID");
 
         if (actorType == null) {
-            logger.error("Cannot getActorType Actor config for RepositoryType <" + repositoryType + ">");
+            logger.error("Cannot getActorTypeIfAvailable Actor config for RepositoryType <" + repositoryType + ">");
             logger.error("These Actor Types are available: " + new ActorTransactionTypeFactory().getActorTypeNames());
             throw new ToolkitRuntimeException("TransactionBean: RepositoryType <" + repositoryType + "> unknown");
         }

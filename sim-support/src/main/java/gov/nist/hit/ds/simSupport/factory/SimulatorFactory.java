@@ -4,10 +4,12 @@ import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.AsyncType;
 import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.repository.api.*;
+import gov.nist.hit.ds.repository.api.Asset;
+import gov.nist.hit.ds.repository.api.Repository;
+import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.IdFactory;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
@@ -29,9 +31,9 @@ import java.util.List;
  // Create empty Simulator
  SimulatorFactory sf = new SimulatorFactory();
  // Set the simulator ID
- sf.installRepositoryLinkage(SimId);
+ sf.initializeSimulator(SimId);
  // Add an Actor Simulator to it
- sf.addActorSim(ActorTypeFactory.getActorType("registry");
+ sf.addActorSim(ActorTypeFactory.getActorTypeIfAvailable("registry");
  // Persist it
  sf.save();
  </pre>
@@ -50,25 +52,17 @@ public class SimulatorFactory {
     TlsType[] tlsTypes = new TlsType[] { TlsType.NOTLS, TlsType.TLS };
     AsyncType[] asyncTypes = new AsyncType[] { AsyncType.SYNC, AsyncType.ASYNC };
 
-
+    /**
+     * Initialize the simulator.  SimId can be created with:
+     * new SimId(new IdFactory().getNewId().getIdString())
+     * @param simId
+     * @return
+     */
     public SimulatorFactory initializeSimulator(SimId simId) {
         logger.info("Creating simulator <" + simId + ">");
         this.simId = simId;
         sim = new Simulator(simId);
         return this;
-    }
-
-    /**
-     * Build Empty Simulator that actorSims can be added to.
-     * @return
-     * @throws RepositoryException
-     */
-    public SimulatorFactory initializeSimulator()  {
-        try {
-            return initializeSimulator(new SimId(new IdFactory().getNewId().getIdString()));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**
@@ -85,10 +79,7 @@ public class SimulatorFactory {
         // Sets asc field - this shows up in output
         ActorFactory actorFactory = lookupActorFactory(actorType);
         // installRepositoryLinkage actor simulator
-        actorFactory.initializeActorSim(
-                genericBuilder,
-                simId
-        );
+        actorFactory.initializeActorSim(genericBuilder, simId);
 
         List<TransactionType> incomingTransactions = actorFactory.getIncomingTransactions();
 

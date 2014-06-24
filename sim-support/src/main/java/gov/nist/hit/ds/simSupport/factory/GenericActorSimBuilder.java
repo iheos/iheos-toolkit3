@@ -1,14 +1,15 @@
 package gov.nist.hit.ds.simSupport.factory;
 
 import gov.nist.hit.ds.actorTransaction.*;
-import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
+import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.BooleanActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement;
-import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.TextActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.TimeActorSimConfigElement;
+import gov.nist.hit.ds.simSupport.endpoint.Endpoint;
 import gov.nist.hit.ds.simSupport.simrepo.SimDb;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 
 import java.util.Date;
 
@@ -17,7 +18,8 @@ import java.util.Date;
  * Simulators. Holds configuration while other agents setAssertionGroup content.
  * @author bmajur
  *
- */  
+ */
+@Deprecated
 public class GenericActorSimBuilder {
 	ActorSimConfig sConfig;   // elements being constructed
 	SimId simId;  // needed to build endpoints
@@ -54,12 +56,14 @@ public class GenericActorSimBuilder {
 	public ActorSimConfig getActorSimConfig() {
 		return sConfig;
 	}
-	
+
+    // There is new code that generates endpoints.  I forget where.
+    @Deprecated
 	public GenericActorSimBuilder addEndpoint(String actorShortName, TransactionType transType, TlsType tls, AsyncType async) {
 
 		String contextName = Installation.installation().tkProps.get("toolkit.servlet.context", "xdstools3");
 
-		String endpoint =  "http"
+		Endpoint endpoint =  new Endpoint("http"
 				+ ((tls.isTls()) ? "s" : "")
 				+ "://" 
 				+ Installation.installation().propertyServiceManager().getToolkitHost() 
@@ -72,7 +76,7 @@ public class GenericActorSimBuilder {
 				+ "/" +
 				actorShortName    
 				+ "/" 
-				+ transType.getCode();
+				+ transType.getCode());
 		sConfig.add(
 				new EndpointActorSimConfigElement(new EndpointLabel(transType,tls, async), endpoint).setEditable(true)
 				);

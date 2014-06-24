@@ -48,17 +48,17 @@ public class TransactionTypeFactoryTest {
 	// which is part of toolkit configuration
 	@Test
 	public void getTypeNamesTest() {
-		assertNotNull(new ActorTransactionTypeFactory().getTransactionType('rb'))
+		assertNotNull(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'))
 	}
 
 	@Test
 	public void getTransactionTypeByAsyncCodeTest()  {
-		assertNotNull(new ActorTransactionTypeFactory().getTransactionType("r.as"));
+		assertNotNull(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("r.as"));
 	}
 
 	@Test
 	public void verifyFieldsTest()   {
-		TransactionType tt = new ActorTransactionTypeFactory().getTransactionType("rb");
+		TransactionType tt = new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb");
 		assertTrue(tt.name.equals("Register"));
 		assertTrue(tt.shortName.equals("rb"));
 		assertTrue(tt.code.equals("rb"));
