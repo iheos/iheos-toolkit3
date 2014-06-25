@@ -82,7 +82,6 @@ public class NorthPanel extends ContentPanel {
 
 				// delete the default button
 				loadingDialog.getButtonBar().remove(0);
-				// loadingDialog.setAutoHide(true);
 				loadingDialog.setModal(true);
 				loadingDialog.show();
 			}

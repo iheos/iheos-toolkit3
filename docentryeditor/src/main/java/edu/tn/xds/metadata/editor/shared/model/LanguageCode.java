@@ -6,6 +6,7 @@ package edu.tn.xds.metadata.editor.shared.model;
  * standard</a>
  */
 
+// FIXME replace handly made language enum by a single class with Locale.getLanguage and Locale.getCountry to construct a list of LanguageCodes RFC3066
 public enum LanguageCode {
 	CATALAN("ca"), FRENCH_ANDORRA("fr-AD"), ARABIC_UNITED_ARAB_EMIRATES("ar-AE"), PERSIAN_AFGHANISTAN("fa-AF"), PUSHTO("ps"), UIGHUR("ug"), UZBEK_AFGHANISTAN(
 			"uz-AF"), ENGLISH_ANTIGUA_AND_BARBUDA("en-AG"), ENGLISH_ANGUILLA("en-Al"), ALBANIAN("sq"), ARMENIAN("hy"), DUTCH_ANTILLES("nl-AN"), KONGO(

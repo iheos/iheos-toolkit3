@@ -1,6 +1,8 @@
 package edu.tn.xds.metadata.editor.client.editor;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,8 +36,7 @@ public class EditorActivity extends AbstractActivity {
     @Inject
     ValidationPresenter validationPresenter;
 
-    // private static Logger logger =
-    // Logger.getLogger(EditorActivity.class.getName());
+    SimpleContainer sc;BorderLayoutContainer blc;
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
@@ -47,8 +48,8 @@ public class EditorActivity extends AbstractActivity {
     }
 
     private Widget getContainer() {
-        SimpleContainer sc = new SimpleContainer();
-        BorderLayoutContainer blc = new BorderLayoutContainer();
+        sc= new SimpleContainer();
+        blc= new BorderLayoutContainer();
 
         ContentPanel validationView = new ContentPanel();
         validationView.setHeadingText("Validation");

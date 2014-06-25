@@ -5,6 +5,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.Validator;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 
 import edu.tn.xds.metadata.editor.shared.model.IdentifierOID;
@@ -30,6 +31,10 @@ public class IdentifierOIDEditorWidget extends Composite implements
 
         vcontainer.add(valueLabel, new VerticalLayoutData(1, -1));
         vcontainer.add(idTypeLabel, new VerticalLayoutData(1, -1));
+    }
+
+    public void addValueFieldValidator(Validator validator){
+        value.addValidator(validator);
     }
 
     /**

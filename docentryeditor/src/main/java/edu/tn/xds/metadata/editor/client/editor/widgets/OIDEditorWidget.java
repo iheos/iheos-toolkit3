@@ -5,6 +5,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.Validator;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 
 import edu.tn.xds.metadata.editor.shared.model.OID;
@@ -30,10 +31,14 @@ public class OIDEditorWidget extends Composite implements Editor<OID> {
 		}
 	}
 
+    public void addValidator(Validator validator){
+        oid.addValidator(validator);
+    }
+
 	/**
 	 * This method sets the default text to display in an empty field (defaults
 	 * to null). It is done to help and guide the user during his input.
-	 * 
+	 *
 	 * @param oidEmptyText
 	 *            Default text displayed in an empty field
 	 */
@@ -43,7 +48,7 @@ public class OIDEditorWidget extends Composite implements Editor<OID> {
 
 	/**
 	 * Sets the widget's tool tip with the given config
-	 * 
+	 *
 	 * @param config
 	 */
 	public void setToolTipConfig(ToolTipConfig config) {
@@ -54,7 +59,7 @@ public class OIDEditorWidget extends Composite implements Editor<OID> {
 	 * Sets whether a field is valid when its value length = 0 (default to
 	 * true). This will warn the user through the editor widget if he didn't
 	 * input anything in field which does not allow blank.
-	 * 
+	 *
 	 * @param allowBlank
 	 *            true to allow blanks, false otherwise
 	 */

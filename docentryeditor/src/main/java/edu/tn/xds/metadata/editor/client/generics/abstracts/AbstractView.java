@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class AbstractView<P extends AbstractPresenter<?>> //
 		implements IsWidget {
 
-	protected static Logger logger = Logger.getLogger(AbstractView.class.getName());
+	protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
 	protected P presenter;
 	protected Widget ui;

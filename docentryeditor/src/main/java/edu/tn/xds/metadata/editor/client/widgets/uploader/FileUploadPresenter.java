@@ -31,7 +31,8 @@ public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
 
 		DocumentModel model = myParse.doParse(results);
 
-		logger.info("Metadata file: " + model.toXML());
+		logger.info("... file parsed.");
+//		logger.info("Metadata file: " + model.toXML());
 
 		// logger.info(myModel.toXML());
 		placeController.goTo(new EditorPlace());

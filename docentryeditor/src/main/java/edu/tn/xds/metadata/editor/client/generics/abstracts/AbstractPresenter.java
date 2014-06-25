@@ -8,7 +8,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 public abstract class AbstractPresenter<V extends AbstractView<?>> {
 
-	protected static Logger logger = Logger.getLogger(AbstractPresenter.class.getName());
+	protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
 	@Inject
 	protected EventBus eventBus;

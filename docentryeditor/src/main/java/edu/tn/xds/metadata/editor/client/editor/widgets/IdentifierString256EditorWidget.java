@@ -5,6 +5,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.Validator;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 
 import edu.tn.xds.metadata.editor.shared.model.IdentifierString256;
@@ -26,10 +27,14 @@ public class IdentifierString256EditorWidget extends Composite implements Editor
 		vcontainer.add(idTypeLabel, new VerticalLayoutData(1, -1));
 	}
 
+    public void addValueFieldValidator(Validator validator){
+        value.addValidator(validator);
+    }
+
 	/**
 	 * This method sets the default text to display in an empty field (defaults
 	 * to null). It is done to help and guide the user during his input.
-	 * 
+	 *
 	 * @param valueEmptyText
 	 *            Default text displayed in an empty value field
 	 * @param idTypeEmptyText
@@ -41,9 +46,9 @@ public class IdentifierString256EditorWidget extends Composite implements Editor
 	}
 
 	/**
-	 * 
+	 *
 	 * Sets the widget's tool tip with the given config
-	 * 
+	 *
 	 * @param valueConfig
 	 * @param idTypeConfig
 	 */
@@ -56,7 +61,7 @@ public class IdentifierString256EditorWidget extends Composite implements Editor
 	 * Sets whether a field is valid when its value length = 0 (default to
 	 * true). This will warn the user through the editor widget if he didn't
 	 * input anything in field which does not allow blank.
-	 * 
+	 *
 	 * @param b_value
 	 *            true to allow blank to the value field, false otherwise
 	 * @param b_idType

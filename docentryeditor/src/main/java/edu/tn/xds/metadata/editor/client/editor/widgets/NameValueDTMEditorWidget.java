@@ -16,7 +16,6 @@ import edu.tn.xds.metadata.editor.shared.model.DTM;
 import edu.tn.xds.metadata.editor.shared.model.NameValueDTM;
 
 import java.util.Date;
-import java.util.logging.Logger;
 
 /**
  * <p>
@@ -60,5 +59,6 @@ public class NameValueDTMEditorWidget extends Composite implements Editor<NameVa
     public void disableListToolbar(){
         listView.disableToolbar();
     }
+    public void setListMaxSize(int maxSize){listView.setStoreMaxLength(maxSize);}
 
 }

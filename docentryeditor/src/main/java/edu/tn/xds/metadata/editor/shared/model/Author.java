@@ -16,29 +16,30 @@ import org.hibernate.validator.constraints.NotEmpty;
  * An author has the following parameters:
  * <ul>
  * <li>{@link #authorPerson}: The name of the author ( {@link String256}) ;</li>
+ * <li>{@link #authorTelecommunication}: Telecommunication for the author, like email address ( {@link String256}) ;</li>
  * <li>{@link #authorInstitutions}: The institutions the author is working for
  * (List of {@link String256}) ;</li>
  * <li>{@link #authorRoles}: The roles of the author (List of {@link String256})
  * ;</li>
- * <li>{@link #authorSpecialties}: The specialities of the author (List of
+ * <li>{@link #authorSpecialties}: The specialties of the author (List of
  * {@link String256}).</li>
  * </ul>
  * </p>
  * <p>
  * It contains a toXML method to return the author in XML format.
  * </p>
- * 
+ *
  * <p>
  * This class also contains getters/setters.<br>
  * In addition, it has several methods such as verify, toXML or toString.</br>
  * </p>
- * 
+ *
  * <p>
  * <b>See below each method mentioned above.</b> <br>
  * {@link #verify() method verify}</br> {@link #toXML() method toXML} <br>
  * {@link #toString() method toString}
  * </p>
- * 
+ *
  * @see DocumentModel class DocumentModel
  * @see ModelElement class ModelElement </p>
  */
@@ -48,18 +49,28 @@ public class Author implements ModelElement, Serializable {
 	/**
 	 * <b>String256 authorPerson</b> - His name [Mandatory].<br>
 	 * Type: {@link String256}</br> </p>
-	 * 
+	 *
 	 * @see String256
 	 * @see Author
 	 */
 	@NotNull
 	private String256 authorPerson;
 
+    /**
+     * <b>String256 authorPerson</b> - His name [Mandatory].<br>
+     * Type: {@link String256}</br> </p>
+     *
+     * @see String256
+     * @see Author
+     */
+    @NotNull
+    private String256 authorTelecommunication;
+
 	/**
 	 * <b>List(String256) authorInstitutions</b> - The institutions that the
 	 * author is working for [Mandatory].<br>
 	 * Type: List of {@link String256}</br> </p>
-	 * 
+	 *
 	 * @see String256
 	 * @see Author
 	 */
@@ -70,7 +81,7 @@ public class Author implements ModelElement, Serializable {
 	/**
 	 * <b>String256 authorRoles</b> - His roles [Mandatory].<br>
 	 * Type: List of {@link String256}</br> </p>
-	 * 
+	 *
 	 * @see String256
 	 * @see Author
 	 */
@@ -82,8 +93,8 @@ public class Author implements ModelElement, Serializable {
 	 * <b>List(String256) authorSpecialties</b> Specialties - his specialties
 	 * [Mandatory].<br>
 	 * Type: List of {@link String256}</br> </p>
-	 * 
-	 * 
+	 *
+	 *
 	 * @see String256
 	 * @see Author
 	 */
@@ -93,6 +104,7 @@ public class Author implements ModelElement, Serializable {
 
 	public Author() {
 		authorPerson = new String256();
+        authorTelecommunication = new String256();
 		authorInstitutions = new ArrayList<String256>();
 		authorRoles = new ArrayList<String256>();
 		authorSpecialties = new ArrayList<String256>();
@@ -122,12 +134,12 @@ public class Author implements ModelElement, Serializable {
 		this.authorRoles = authorRoles;
 	}
 
-	public List<String256> getAuthorSpecialities() {
+	public List<String256> getAuthorSpecialties() {
 		return authorSpecialties;
 	}
 
-	public void setAuthorSpecialities(List<String256> authorSpecialities) {
-		this.authorSpecialties = authorSpecialities;
+	public void setAuthorSpecialties(List<String256> authorSpecialties) {
+		this.authorSpecialties = authorSpecialties;
 	}
 
 	/**
@@ -135,11 +147,11 @@ public class Author implements ModelElement, Serializable {
 	 * <b>Method toString</b> <br>
 	 * This method will be called to print author into a String </br>
 	 * </p>
-	 * 
+	 *
 	 * @return String which contains the author
-	 * 
+	 *
 	 * @see Author class Author
-	 * 
+	 *
 	 */
 	@Override
 	public String toString() {
@@ -154,7 +166,7 @@ public class Author implements ModelElement, Serializable {
 		for (String256 str : authorRoles) {
 			answer = answer + str.toString() + ",";
 		}
-		answer = answer + "\", AuthorSpecialities=\"";
+		answer = answer + "\", AuthorSpecialties=\"";
 
 		for (String256 str : authorSpecialties) {
 			answer = answer + str.toString() + ",";
@@ -164,23 +176,31 @@ public class Author implements ModelElement, Serializable {
 		return answer;
 	}
 
-	/**
+    public String256 getAuthorTelecommunication() {
+        return authorTelecommunication;
+    }
+
+    public void setAuthorTelecommunication(String256 authorTelecommunication) {
+        this.authorTelecommunication = authorTelecommunication;
+    }
+
+    /**
 	 * <p>
 	 * <b>Method toXML</b> <br>
 	 * This method will be called to build a XML file by the
 	 * {@link DocumentModel} with the information taken from the local Author.
 	 * </br>
 	 * </p>
-	 * 
+	 *
 	 * @return String which contains the author in XML format
-	 * 
+	 *
 	 * @see Author class Author
-	 * 
+	 *
 	 */
 	public String toXML() {
 		String answer;
 		answer = "\t\t<author>\n\t\t\t<authorperson>" + authorPerson.toString() + "</authorperson>\n\t\t\t<authorinstitutions>\n";
-
+        answer += "\t\t\t<authortelecommunication>" + authorTelecommunication.toString() + "</authortelecommunication>\n\t\t\t<authorinstitutions>\n";
 		for (String256 str : authorInstitutions) {
 			answer = answer + "\t\t\t\t<authorinstitution>" + str.toString() + "</authorinstitution>\n";
 		}
@@ -189,12 +209,12 @@ public class Author implements ModelElement, Serializable {
 		for (String256 str : authorRoles) {
 			answer = answer + "\t\t\t\t<authorrole>" + str.toString() + "</authorrole>\n";
 		}
-		answer = answer + "\t\t\t</authorroles>\n\t\t\t<authorspecialities>\n";
+		answer = answer + "\t\t\t</authorroles>\n\t\t\t<authorspecialties>\n";
 
 		for (String256 str : authorSpecialties) {
-			answer = answer + "\t\t\t\t<authorspeciality>" + str.toString() + "</authorspeciality>\n";
+			answer = answer + "\t\t\t\t<authorspecialty>" + str.toString() + "</authorspecialty>\n";
 		}
-		answer = answer + "\t\t\t</authorspecialities>\n\t\t</author>\n";
+		answer = answer + "\t\t\t</authorspecialties>\n\t\t</author>\n";
 
 		return answer;
 	}
@@ -205,13 +225,13 @@ public class Author implements ModelElement, Serializable {
 	 * This method will be called to check whether the syntax's Author is
 	 * correct </br>
 	 * </p>
-	 * 
+	 *
 	 * @return boolean true if the syntax is correct, else return false
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @see Author class Author
-	 * 
+	 *
 	 */
 	@Override
 	public boolean verify() throws String256Exception {

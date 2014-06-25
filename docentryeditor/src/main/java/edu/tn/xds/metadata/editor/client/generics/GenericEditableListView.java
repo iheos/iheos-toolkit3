@@ -1,11 +1,15 @@
 package edu.tn.xds.metadata.editor.client.generics;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.Converter;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.Field;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
+import com.sencha.gxt.widget.core.client.grid.Grid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +39,11 @@ public class GenericEditableListView<M,N> extends GenericEditableGrid<M> {
     public void addEditorConfig(Field<N> field){
         editing.addEditor(cc1,field);
     }
+
     public <O> void addEditorConfig(Converter<N,O> converter,Field<O> field){
         editing.addEditor(cc1,converter,field);
     }
+
     /**
      * Should not be used, use addEditorConfig(Field<N> field) instead.
      *

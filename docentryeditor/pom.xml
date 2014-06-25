@@ -265,35 +265,7 @@
                                 only. It has no influence on the Maven build itself. -->
 
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.codehaus.mojo</groupId>
-                                        <artifactId>
-                                            gwt-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [2.5.1,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>i18n</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+
         <resources>
             <resource>
                 <directory>src/main/java</directory>

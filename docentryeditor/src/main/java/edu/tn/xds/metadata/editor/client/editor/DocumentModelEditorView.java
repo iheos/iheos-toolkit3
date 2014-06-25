@@ -2,6 +2,8 @@ package edu.tn.xds.metadata.editor.client.editor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
@@ -24,6 +26,7 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.FieldSet;
+import com.sencha.gxt.widget.core.client.form.validator.RegExValidator;
 import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.SelectionChangedHandler;
@@ -161,13 +164,19 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
     ListStoreEditor<CodedTerm> confidentialityCodes;
     CodedTermsEditableGridWidget confidentialityCodesGrid;
 
+    // ///////////////////////////////////////////////////////////////////////
+    // ---- EventCodes WIDGETS
+    // ///////////////////////////////////////////////////////////////////////
+    ListStoreEditor<CodedTerm> eventCode;
+    CodedTermsEditableGridWidget eventCodesGrid;
+
 	// test button
 	// @Ignore
 	// TextButton btnSave = new TextButton("Save File");
 
 	@Override
 	protected Widget buildUI() {
-		HorizontalLayoutContainer container = new HorizontalLayoutContainer();
+		final HorizontalLayoutContainer container = new HorizontalLayoutContainer();
 		container.getElement().setMargins(10);
 		container.setBorders(false);
 
@@ -191,11 +200,13 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		FieldLabel idLabel = new FieldLabel(id, "ID");
 		idLabel.setLabelWidth(125);
 		id.setAllowBlank(false);
+        id.addValidator(new RegExValidator("[1-9][0-9]+","Value is not correct. It is supposed to be a number."));
 
 		// Hash Field (required)
 		FieldLabel hashLabel = new FieldLabel(hash, "Hash");
 		hashLabel.setLabelWidth(125);
 		hash.setAllowBlank(true);
+        hash.addValidator(new RegExValidator("[0-9a-fA-F]","Value is not correct. It is supposed to be a hexadecimal value."));
 
 		// Language Code Field (required)
 		FieldLabel languageCodeLabel = new FieldLabel(languageCode, "Language Code");
@@ -211,6 +222,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		FieldLabel repositoryLabel = new FieldLabel(repoUId, "Repository Unique ID");
 		repositoryLabel.setLabelWidth(125);
 		repoUId.setAllowBlank(true);
+        repoUId.addValidator(new RegExValidator("^[1-9][0-9]*(\\.[1-9][0-9]+)+$","Value is not correct. A repository unique ID is supposed to be a suite of numbers separated by periods."));
 
 		// URI Field (optional)
 		FieldLabel uriLabel = new FieldLabel(uri, "URI");
@@ -268,6 +280,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		fieldSet_identifier_patient.setCollapsible(true);
 		fieldSet_identifier_patient.add(patientID);
 		patientID.setAllowBlanks(false, false);
+        patientID.addValueFieldValidator(new RegExValidator("^[1-9][0-9a-z]+\\^{3}&[1-9](\\.[1-9][0-9]*)+(&ISO)$","Value's format is not a correct. \nIt should be like this: 6578946^^^&1.3.6.1.4.1.21367.2005.3.7&ISO."));
 
 		// Unique ID Fieds (required)
 		FieldSet fieldSet_identifier_unique = new FieldSet();
@@ -275,6 +288,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		fieldSet_identifier_unique.setCollapsible(true);
 		fieldSet_identifier_unique.add(uniqueId);
 		uniqueId.setAllowBlanks(false, false);
+        uniqueId.addValueFieldValidator(new RegExValidator("^[1-9](\\.[1-9][0-9]*)+\\^[1-9][0-9]+$","Value's format is not a correct. It is supposed to be a suite of figures separated by periods."));
 
 		/* ********************************** */
 		/* coded terms options and fieldset */
@@ -318,51 +332,28 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		/* name values options and fields */
 		/* ****************************** */
 		// Legal Authenticator (optional)
-//		FieldSet fieldSet_nameValue_legalAuthenticator = new FieldSet();
-//		fieldSet_nameValue_legalAuthenticator.setHeadingText("Legal Authenticator");
-//		fieldSet_nameValue_legalAuthenticator.setCollapsible(true);
-//		fieldSet_nameValue_legalAuthenticator.add(legalAuthenticator);
-//		legalAuthenticator.setAllowBlanks(true, true);
+        legalAuthenticator.setListMaxSize(1);
+//        legalAuthenticator.disableListToolbar();
 
 		// Source Patient ID (optional)
-//		FieldSet fieldSet_nameValue_sourcePatientID = new FieldSet();
-//		fieldSet_nameValue_sourcePatientID.setHeadingText("Source Patient ID");
-//		fieldSet_nameValue_sourcePatientID.setCollapsible(true);
-//		fieldSet_nameValue_sourcePatientID.add(sourcePatientId);
-//		sourcePatientId.setAllowBlanks(true, true);
+        sourcePatientId.addFieldValidator(new RegExValidator("^[A-Za-z]*[1-9][0-9]+\\^{3}&[1-9][0-9]*(\\.[0-9][1-9]*)+(&ISO)$"));
+        sourcePatientInfo.addFieldValidator(new RegExValidator("^PID-[1-9][0-9]{0,1}\\|"));
 
 		// Service Start Time (optional)
+        serviceStartTime.setListMaxSize(1);
 //        serviceStartTime.disableEditing();
-//		FieldSet fieldSet_nameValue_serviceStartTime = new FieldSet();
-//		fieldSet_nameValue_serviceStartTime.setHeadingText("Service Start Time");
-//		fieldSet_nameValue_serviceStartTime.setCollapsible(true);
-//		fieldSet_nameValue_serviceStartTime.add(serviceStartTime);
-//		serviceStartTime.setAllowBlanks(/*true,*/ true);
 
 		// Service Stop Time (optional)
+        serviceStopTime.setListMaxSize(1);
 //        serviceStopTime.disableEditing();
-//		FieldSet fieldSet_nameValue_serviceStopTime = new FieldSet();
-//		fieldSet_nameValue_serviceStopTime.setHeadingText("Service Stop Time");
-//		fieldSet_nameValue_serviceStopTime.setCollapsible(true);
-//		fieldSet_nameValue_serviceStopTime.add(serviceStopTime);
-//		serviceStopTime.setAllowBlanks(/*true,*/ true);
 
 		// Size (optional)
         size.disableEditing();
-//		FieldSet fieldSet_nameValue_size = new FieldSet();
-//		fieldSet_nameValue_size.setHeadingText("Size");
-//		fieldSet_nameValue_size.setCollapsible(true);
-//		fieldSet_nameValue_size.add(size);
-////		size.setAllowBlanks(true, true);
+//		size.setAllowBlanks(true, true);
 
 		// Creation Time (required)
 //        creationTime.disableEditing();
         creationTime.disableListToolbar();
-//		FieldSet fieldSet_nameValue_creationTime = new FieldSet();
-//		fieldSet_nameValue_creationTime.setHeadingText("Creation Time");
-//		fieldSet_nameValue_creationTime.setCollapsible(true);
-//		fieldSet_nameValue_creationTime.add(creationTime);
-//		creationTime.setAllowBlanks(/*true,*/ true);
 
 		// AUTHORS (Optional)
 		FieldSet fieldSet_authors = new FieldSet();
@@ -371,29 +362,21 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		fieldSet_authors.add(buildAuthorsEditorWidget());
 
 		// TITLES (Optional)
-		/*FieldSet field_titles = new FieldSet();
-		field_titles.setHeadingText("Titles");
-		field_titles.setCollapsible(true);
-		field_titles.add(buildTitlesEditorWidget());*/
         titlesGrid=new InternationalStringEditableGrid("Titles");
         titles = new ListStoreEditor<InternationalString>(titlesGrid.getGrid().getStore());
 
 
 		// COMMENTS (Optional)
-//		FieldSet field_comments = new FieldSet();
-//		field_comments.setHeadingText("Comments");
-//		field_comments.setCollapsible(true);
-//		field_comments.add(buildCommentsEditorWidget());
         commentsGrid=new InternationalStringEditableGrid("Comments");
         comments = new ListStoreEditor<InternationalString>(commentsGrid.getGrid().getStore());
 
 		// CONFIDENTIALITY CODE (Optional)
-//		FieldSet field_confCode = new FieldSet();
-//		field_confCode.setHeadingText("Confidentiality Codes");
-//		field_confCode.setCollapsible(true);
-//		field_confCode.add(buildConfCodesEditorWidget());
         confidentialityCodesGrid=new CodedTermsEditableGridWidget("Confidentiality Codes");
         confidentialityCodes=new ListStoreEditor<CodedTerm>(confidentialityCodesGrid.getGrid().getStore());
+
+        // CONFIDENTIALITY CODE (Optional)
+        eventCodesGrid=new CodedTermsEditableGridWidget("Event Codes");
+        eventCode=new ListStoreEditor<CodedTerm>(eventCodesGrid.getGrid().getStore());
 
 		// /////////////////////////////////////////////////////////
 		// Adding and ordering fieldsets in REQUIRED panel
@@ -415,7 +398,6 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		/* simple optional fields added to FramedPanel container */
 		optionalFields.add(fieldSet_fileProperties);
 		optionalFields.add(fieldSet_repoAttributes);
-//		optionalFields.add(size.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(fieldSet_authors);
 		optionalFields.add(titlesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(commentsGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
@@ -423,9 +405,9 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		optionalFields.add(sourcePatientInfo.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(legalAuthenticator.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(confidentialityCodesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
+		optionalFields.add(eventCodesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(serviceStartTime.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(serviceStopTime.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
-//		optionalFields.add(field_titles);
 
 		setWidgetsInfo();
 
@@ -434,65 +416,6 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
 		return form;
 	}
-
-	private Widget buildAuthorsEditorWidget() {
-		listViewAuthors = new ListView<Author, String>(new ListStore<Author>(authorprops.key()), authorprops.authorPerson());
-		listViewAuthors.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-		authors = new ListStoreEditor<Author>(listViewAuthors.getStore());
-
-		FieldSet authorFS = new FieldSet();
-		authorFS.setHeadingText("Author Entry");
-		authorFS.add(author);
-		author.setEditionMode(EditionMode.NODATA);
-
-		ContentPanel authorCP = new ContentPanel();
-		authorCP.setHeaderVisible(false);
-		authorCP.setBorders(false);
-		authorCP.setBodyBorder(false);
-		enableAuthorButtonWidgets(EditionMode.NODATA);
-		authorCP.addButton(newAuthorWidget);
-		authorCP.addButton(editAuthorWidget);
-		authorCP.addButton(saveAuthorWidget);
-		authorCP.addButton(cancelAuthorWidget);
-		authorCP.addButton(deleteAuthorWidget);
-		authorCP.setButtonAlign(BoxLayoutPack.END);
-
-		VerticalLayoutContainer vcon = new VerticalLayoutContainer();
-		vcon.add(listViewAuthors, new VerticalLayoutData(1, 150));
-		vcon.add(authorFS, new VerticalLayoutData(0.999, -1, new Margins(10, 0, 0, 0)));
-		vcon.add(authorCP, new VerticalLayoutData(-1, 30));
-		return vcon;
-	}
-
-	private void enableAuthorButtonWidgets(EditionMode editionMode) {
-		if (editionMode.equals(EditionMode.NODATA) || editionMode.equals(EditionMode.DISPLAY)) {
-			newAuthorWidget.setEnabled(true);
-			saveAuthorWidget.setEnabled(false);
-			cancelAuthorWidget.setEnabled(false);
-		}
-		if (editionMode.equals(EditionMode.NODATA)) {
-			editAuthorWidget.setEnabled(false);
-			deleteAuthorWidget.setEnabled(false);
-		}
-		if (editionMode.equals(EditionMode.DISPLAY)) {
-			deleteAuthorWidget.setEnabled(true);
-			editAuthorWidget.setEnabled(true);
-		}
-		if (editionMode.equals(EditionMode.NEW) || editionMode.equals(EditionMode.EDIT)) {
-			editAuthorWidget.setEnabled(false);
-			saveAuthorWidget.setEnabled(true);
-			cancelAuthorWidget.setEnabled(true);
-			deleteAuthorWidget.setEnabled(true);
-		}
-		if (editionMode.equals(EditionMode.NEW)) {
-			newAuthorWidget.setEnabled(false);
-		}
-		if (editionMode.equals(EditionMode.EDIT)) {
-			newAuthorWidget.setEnabled(true);
-		}
-	}
-
 
 	@Override
 	protected void bindUI() {
@@ -595,7 +518,65 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		});
 	}
 
-	/**
+    private Widget buildAuthorsEditorWidget() {
+        listViewAuthors = new ListView<Author, String>(new ListStore<Author>(authorprops.key()), authorprops.authorPerson());
+        listViewAuthors.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        authors = new ListStoreEditor<Author>(listViewAuthors.getStore());
+
+        FieldSet authorFS = new FieldSet();
+        authorFS.setHeadingText("Author Entry");
+        authorFS.add(author);
+        author.setEditionMode(EditionMode.NODATA);
+
+        ContentPanel authorCP = new ContentPanel();
+        authorCP.setHeaderVisible(false);
+        authorCP.setBorders(false);
+        authorCP.setBodyBorder(false);
+        enableAuthorButtonWidgets(EditionMode.NODATA);
+        authorCP.addButton(newAuthorWidget);
+        authorCP.addButton(editAuthorWidget);
+        authorCP.addButton(saveAuthorWidget);
+        authorCP.addButton(cancelAuthorWidget);
+        authorCP.addButton(deleteAuthorWidget);
+        authorCP.setButtonAlign(BoxLayoutPack.END);
+
+        VerticalLayoutContainer vcon = new VerticalLayoutContainer();
+        vcon.add(listViewAuthors, new VerticalLayoutData(1, 150));
+        vcon.add(authorFS, new VerticalLayoutData(0.999, -1, new Margins(10, 0, 0, 0)));
+        vcon.add(authorCP, new VerticalLayoutData(-1, 30));
+        return vcon;
+    }
+
+    private void enableAuthorButtonWidgets(EditionMode editionMode) {
+        if (editionMode.equals(EditionMode.NODATA) || editionMode.equals(EditionMode.DISPLAY)) {
+            newAuthorWidget.setEnabled(true);
+            saveAuthorWidget.setEnabled(false);
+            cancelAuthorWidget.setEnabled(false);
+        }
+        if (editionMode.equals(EditionMode.NODATA)) {
+            editAuthorWidget.setEnabled(false);
+            deleteAuthorWidget.setEnabled(false);
+        }
+        if (editionMode.equals(EditionMode.DISPLAY)) {
+            deleteAuthorWidget.setEnabled(true);
+            editAuthorWidget.setEnabled(true);
+        }
+        if (editionMode.equals(EditionMode.NEW) || editionMode.equals(EditionMode.EDIT)) {
+            editAuthorWidget.setEnabled(false);
+            saveAuthorWidget.setEnabled(true);
+            cancelAuthorWidget.setEnabled(true);
+            deleteAuthorWidget.setEnabled(true);
+        }
+        if (editionMode.equals(EditionMode.NEW)) {
+            newAuthorWidget.setEnabled(false);
+        }
+        if (editionMode.equals(EditionMode.EDIT)) {
+            newAuthorWidget.setEnabled(true);
+        }
+    }
+
+    /**
 	 * Sets information about each widgets to guide the user.
 	 */
 	public void setWidgetsInfo() {
@@ -618,7 +599,8 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		/* identifiers info */
 		patientID.setEmptyTexts("ex: 76cc^^1.3.6367.2005.3.7&ISO", "ex: urn:uuid:6b5aea1a-625s-5631-v4se-96a0a7b38446");
 		patientID.setToolTipConfigs(new ToolTipConfig("Value is a string", "It should contain less than 256 characters"), new ToolTipConfig(
-				"idType is a string", "It should contain less than 256 characters"));
+				"idType is a string256 in HL7 CX format", "The required format is:\n" +
+                "IDNumber^^^&OIDofAssigningAuthority&ISO"));
 		uniqueId.setEmptyTexts("ex: 76cc^^1.3.6367.2005.3.7&ISO", "ex: 2008.8.1.35447");
 		uniqueId.setToolTipConfigs(
 				new ToolTipConfig("Value is a string", "76cc^^1.3.6367.2005.3.7&ISO"),
@@ -627,31 +609,20 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 						"As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)\nOID format is \"[1-9](\\.[0-9]+)*]\""));
 
 		/* name values info */
-//		legalAuthenticator.setEmptyTexts("", "ex: 123534YFQ1662");
-//		legalAuthenticator.setToolTipConfigs(null, new ToolTipConfig("Value is a String", "It should contain les than 256 characters"));
+		legalAuthenticator.setEmptyTexts("ex: 11375^Welby^Marcus^J^Jr. MD^Dr^^^&1.2.840.113619.6.197&ISO");
+		legalAuthenticator.setEditingFieldToolTip("A legal authenticator is a string256 in XCN format. It should be formatted as follow: \n<b>Identifier^LastName^FirstName[^SecondName[^FurtherGivenNames]][^Suffix][^Prefix]^AssigningAuthority</b>.");
+        legalAuthenticator.addFieldValidator(new RegExValidator("^[0-9]+\\^(([A-Za-z]+\\.{0,1}\\s{0,1})+\\^){3,7}\\^{2}&[0-9]+(\\.[0-9]+)*(&ISO)$"));
 //		sourcePatientId.setEmptyTexts("", "ex: 58642j65s^^^5.8.4");
-//		sourcePatientId.setToolTipConfigs(null, new ToolTipConfig("Value is a String", "It should contain les than 256 characters"));
-//		serviceStartTime.setEmptyTexts(/*"", */"ex: 201103160830");
-//		serviceStartTime
-//				.setToolTipConfigs(
-//				/*		null,*/
-//						new ToolTipConfig(
-//								"DTM Value is a date/time value",
-//								"The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59"));
-//		serviceStopTime.setEmptyTexts(/*"",*/ "ex: 201103160830");
-//		serviceStopTime
-//				.setToolTipConfigs(
-//						/*null,*/
-//						new ToolTipConfig(
-//								"DTM Value is a date/time value",
-//								"The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59"));
-//		creationTime.setEmptyTexts(/*"", */"ex: 201103160830");
-//		creationTime
-//				.setToolTipConfigs(
-//						/*null,*/
-//						new ToolTipConfig(
-//								"DTM Value is a date/time value",
-//								"The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59"));
-	}
+//		sourcePatientId.setToolTipConfigs(null, new ToolTipConfig("Value is a String", "It shouldd contain les than 256 characters"));
+        sourcePatientInfo.setToolTipConfig(new ToolTipConfig("Help on Source Patient Info?","These elements should contain demographics information of the patient to\n" +
+                "whose medical record this document belongs. It is made several values and should be formatted as follow:<br/>" +
+                "<b>PID-3</b> should include the source patient identifier.<br/>" +
+                "<b>PID-5</b> should include the patient name.<br/>" +
+                "<b>PID-8</b> should code the patient gender as <br/>" +
+                "<center><i>M Male - F Female - O Other - U Unknown</i></center>" +
+                "<b>PID-7</b> should include the patient date of birth.<br/>" +
+                "<b>PID-11</b> should include the patient address.<br/>" +
+                "PID-2, PID-4, PID-12 and PID-19 should not be used.<br/>"));
+    }
 
 }

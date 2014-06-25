@@ -44,7 +44,7 @@ import edu.tn.xds.metadata.editor.shared.model.NameValueInteger;
  */
 public class NameValueIntegerEditorWidget extends Composite implements Editor<NameValueInteger> {
 
-	private static Logger logger = Logger.getLogger(NameValueIntegerEditorWidget.class.getName());
+//	private static Logger logger = Logger.getLogger(NameValueIntegerEditorWidget.class.getName());
 
 	// Custom KeyProvider to deal with Integer
 	public class IntegerKeyProvider implements ModelKeyProvider<Integer> {

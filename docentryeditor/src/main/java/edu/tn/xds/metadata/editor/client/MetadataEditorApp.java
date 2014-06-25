@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -19,8 +21,8 @@ import edu.tn.xds.metadata.editor.client.root.MetadataEditorAppView;
  * This is the XDS Metadata Editor Application EntryPoint. That's the first
  * class loaded, which instantiate the different object global to the
  * application.
- * 
- * 
+ *
+ *
  */
 public class MetadataEditorApp implements EntryPoint {
 
@@ -28,13 +30,14 @@ public class MetadataEditorApp implements EntryPoint {
 
 	private final MetadataEditorEventBus eventBus = injector.getEventBus();
 	private final SimplePanel activityPanel = new SimplePanel();
+    private MetadataEditorAppView appView;
 
-	protected static Logger logger = Logger.getLogger(MetadataEditorApp.class.getName());
+    protected static Logger logger = Logger.getLogger(MetadataEditorApp.class.getName());
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onModuleLoad() {
-		MetadataEditorAppView appView = injector.getMetadataEditorAppView();
+        appView = injector.getMetadataEditorAppView();
 
 		PlaceController placeController = injector.getPlaceController();
 
@@ -54,6 +57,15 @@ public class MetadataEditorApp implements EntryPoint {
 		logger.info("Application Started!");
 
 		historyHandler.handleCurrentHistory();
+
+//        appView.addResizeHandler(new ResizeHandler() {
+//            @Override
+//            public void onResize(ResizeEvent event) {
+//                appView.setWidth(event.getWidth()-25);
+//                appView.setHeight(event.getHeight());
+//            }
+//        });
 	}
+
 
 }

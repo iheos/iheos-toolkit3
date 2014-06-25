@@ -10,9 +10,9 @@ import java.util.logging.Logger;
 /**
  * This class enables to create a xml metadata file's content on the server and
  * retrieve the name of the generated file.
- * 
+ *
  * @author Olivier
- * 
+ *
  */
 public class SaveFileService implements Serializable {
 
@@ -25,7 +25,7 @@ public class SaveFileService implements Serializable {
 	/**
 	 * Distant method that save a String into a generated xml file in the
 	 * server. It returns the generated file name.
-	 * 
+	 *
 	 * @param fileContent
 	 * @return String filename
 	 */
@@ -46,7 +46,7 @@ public class SaveFileService implements Serializable {
 			out.write(fileContent.getBytes());
 			out.close();
 		} catch (IOException e) {
-			logger.warning(e.getMessage());
+			logger.warning("Error when writing metadata file on server.\n"+e.getMessage());
 			e.printStackTrace();
 		}
 		logger.fine("... temporary file created: " + FILE_REPOSITORY + "/" + filename);

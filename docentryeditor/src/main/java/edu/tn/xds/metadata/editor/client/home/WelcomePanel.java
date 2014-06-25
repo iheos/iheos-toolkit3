@@ -9,21 +9,6 @@ public class WelcomePanel extends HtmlLayoutContainer {
 		super("<br/><br/>" + "<div style='font-family:Helvetica;font-size:2em;font-weight:bold;color:#777777;text-align:center'>" + "Welcome !"
 				+ "</div>");
 
-		// TEST MENU //
-
-		// Menu actionMenu = new Menu();
-		// MenuItem e = new MenuItem("Enable");
-		// MenuItem d = new MenuItem("Disable");
-		// actionMenu.add(e);
-		// actionMenu.add(d);
-		//
-		// TextButton actionsBtn = new TextButton("Actions");
-		// actionsBtn.setMenu(actionMenu);
-		//
-		// this.add(actionsBtn);
-
-		// FIN TEST //
-
 		setBorders(false);
 		setSize("100%", "100%");
 	}

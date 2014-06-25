@@ -71,10 +71,6 @@ import edu.tn.xds.metadata.editor.client.parse.Parse;
  * {@link #verify() method verify}</br> {@link #toXML() method toXML} <br>
  * </p>
  *
- * <p>
- * DocumentModel is used in {@link Parse} class to complete the local
- * DocumentModel.
- * </p>
  *
  * @see ModelElement class ModelElement
  */
@@ -253,6 +249,22 @@ public class DocumentModel implements Serializable {
 	 * <b>NameValueString256 legalAuthenticator</b> - The legal authenticator of
 	 * the document [Optional].<br>
 	 * Type: {@link NameValueString256}</br> </p>
+     *
+     * Represents a participant who has legally authenticated or attested the
+     * document within the authorInstitution. Legal authentication implies that
+     * a document has been signed manually or electronically by the
+     * legalAuthenticator. This attribute may be absent if not applicable. If
+     * present, shall have a single value
+     *
+     * <pre>
+     *     {@code
+     *     <rim:Slot name="legalAuthenticator">
+     *            <rim:ValueList>
+     *               <rim:Value>^Welby^Marcus^^^Dr^MD</rim:Value>
+     *            </rim:ValueList>
+     *     </rim:Slot>
+     *     }
+     * </pre>
 	 *
 	 * <b>Cardinality:</b><br>
 	 * 0..1 </p>
@@ -264,9 +276,17 @@ public class DocumentModel implements Serializable {
 	private NameValueString256 legalAuthenticator;
 
 	/**
-	 * <b>String256 mimeType</b> - The mimeType of the document [Mandatory].<br>
+	 * <b>String256 mimeType</b> - The MIME Type of the document in the repository [Mandatory].<br>
 	 * Type: {@link String256}</br> </p>
 	 *
+     * <pre>
+     *     {@code
+     *        <rim:ExtrinsicObject mimeType="application/pdf"
+     *              id="theDocument"
+     *              objectType="urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1">
+     *     }
+     * </pre>
+     *
 	 * <b>Cardinality:</b><br>
 	 * 1..1 </p>
 	 *
@@ -397,8 +417,8 @@ public class DocumentModel implements Serializable {
      *
      * XML Representation:
      * <pre>
-     *     <code>
-     *          <rim:Slot name="sourcePatientInfo">
+     *     {@code
+     *     <rim:Slot name="sourcePatientInfo">
      *               <rim:ValueList>
      *                   <rim:Value>PID-3|DTP-1^^^&amp;1.3.6.1.4.1.21367.2005.3.7&amp;ISO</rim:Value>
      *                   <rim:Value>PID-5|DICTAPHONE^ONE^^^</rim:Value>
@@ -406,8 +426,8 @@ public class DocumentModel implements Serializable {
      *                   <rim:Value>PID-8|M</rim:Value>
      *                   <rim:Value>PID-11|100 MainSt^^BURLINGTON^MA^01803^USA</rim:Value>
      *               </rim:ValueList>
-     *          </rim:Slot>
-     *     </code>
+     *     </rim:Slot>
+     *     }
      * </pre>
      *
      * PID-3 should include the source patient identifier.
@@ -462,7 +482,57 @@ public class DocumentModel implements Serializable {
 	/**
 	 * <b>String256 uri</b> - The uri of the document [Optional].<br>
 	 * Type: {@link String256}</br></p>
-	 *
+     *
+     * For XDM the URI element shall point to the file containing the
+     * document.
+     * If present, shall have a single value.
+     * There are two formats for coding this attribute. If the string representing
+     * the URI is 128 characters or shorter, the short format may be used:
+     * <pre>
+     *     {@code
+     *      <rim:Slot name="URI">
+     *          <rim:ValueList>
+     *              <rim:Value>http://www.ihe.net</rim:Value>
+     *          </rim:ValueList>
+     *      </rim:Slot>
+     *      }
+     * </pre>
+     *
+     * If the string is more than 128 characters long, the long format shall be
+     * used:
+     * <pre>
+     *     {@code
+     *     <rim:Slot name="URI">
+     *          <rim:ValueList>
+     *              <rim:Value>1|http://www.ihe.net/IHERetrieveDocument?</rim:Value>
+     *              <rim:Value>2|requestType=DOCUMENT&documentUID=1.2.3</rim:Value>
+     *              <rim:Value>3|&preferredContentType=application%2fpdf</rim:Value>
+     *          </rim:ValueList>
+     *     </rim:Slot>
+     *     }
+     * </pre>
+     *
+     * Each Value is composed of an ordering prefix followed by a portion of
+     * the actual URI string. The ordering prefix shall be sequential starting at
+     * the value 1. When the long format is used, all Values shall have an
+     * ordering prefix.
+     * Each value is ordered by its ordering prefix:
+     * ordering-prefix :== digit vertical-bar
+     * digit :== ‘1’ | ‘2’ | ‘3’ | ‘4’ | ‘5’ | ‘6’ | ‘7’ | ‘8’ | ‘9’
+     * vertical-bar :== ‘|’
+     * The long version may be used for URIs of less than 129 characters. This
+     * profile does not specify how a URI is to be broken up into pieces. The
+     * following example is valid.
+     * <pre>
+     *     {@code
+     *      <rim:Slot name="URI">
+     *          <rim:ValueList>
+     *              <rim:Value>1|http://www.ihe.net</rim:Value>
+     *          </rim:ValueList>
+     *      </rim:Slot>
+	 *     }
+     * </pre>
+     *
 	 * <b>Cardinality:</b><br>
 	 * 0..1</p>
 	 *
