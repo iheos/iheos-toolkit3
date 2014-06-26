@@ -9,6 +9,7 @@ import com.sencha.gxt.widget.core.client.form.Validator;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import edu.tn.xds.metadata.editor.client.editor.properties.String256Properties;
 import edu.tn.xds.metadata.editor.client.generics.GenericEditableListView;
+import edu.tn.xds.metadata.editor.client.widgets.BoundedTextField;
 import edu.tn.xds.metadata.editor.shared.model.NameValueString256;
 import edu.tn.xds.metadata.editor.shared.model.String256;
 

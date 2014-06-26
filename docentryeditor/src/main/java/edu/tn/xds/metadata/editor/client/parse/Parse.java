@@ -364,7 +364,6 @@ public class Parse {
                 authorPerson256.setString(authorsNode.item(0).getChildNodes()
                         .item(i).getChildNodes().item(0).getFirstChild()
                         .getNodeValue());
-                logger.info("Author person: "+authorPerson256);
                 intern_temp.setAuthorPerson(authorPerson256);
 
                 // Set authortelecommunication
@@ -372,7 +371,6 @@ public class Parse {
                 authorTelecommunication256.setString(authorsNode.item(0).getChildNodes()
                         .item(i).getChildNodes().item(1).getFirstChild()
                         .getNodeValue());
-                logger.info("Author telecommunication: "+authorTelecommunication256);
                 intern_temp.setAuthorTelecommunication(authorTelecommunication256);
 
                 // Set authorInstitutions

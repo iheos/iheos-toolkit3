@@ -1,4 +1,4 @@
-package edu.tn.xds.metadata.editor.client.editor.widgets;
+package edu.tn.xds.metadata.editor.client.widgets;
 
 import com.sencha.gxt.widget.core.client.box.ConfirmMessageBox;
 

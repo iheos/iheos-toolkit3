@@ -34,6 +34,8 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.Selecti
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import edu.tn.xds.metadata.editor.client.editor.EditionMode;
 import edu.tn.xds.metadata.editor.client.editor.properties.String256Properties;
+import edu.tn.xds.metadata.editor.client.widgets.ConfirmDeleteDialog;
+import edu.tn.xds.metadata.editor.client.widgets.FieldEmptyValidator;
 import edu.tn.xds.metadata.editor.shared.model.Author;
 import edu.tn.xds.metadata.editor.shared.model.String256;
 
@@ -197,6 +199,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
         FieldLabel authorPersonLabel = new FieldLabel(authorPerson, "Author Person");
         authorPersonLabel.setLabelWidth(125);
         authorPerson.addValidator(new RegExValidator("^([A-Za-z]*[0-9]+\\^){0,1}[A-z]+(\\^{6}&[0-9](\\.[0-9])+&ISO$){0,1}"));
+        authorPerson.addValidator(new FieldEmptyValidator("author person"));
 
         FieldLabel authorTelecommunicationLabel = new FieldLabel(authorTelecommunication,"Telecommunication");
         authorTelecommunicationLabel.setLabelWidth(125);
@@ -204,7 +207,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
             @Override
             public List<EditorError> validate(Editor<String> editor, String value) {
                 List<EditorError> errors = null;
-                if (value != null && (!value.contains("@"))) {
+                if (value != null && value!="" && (!value.contains("@"))) {
                     errors = createError(editor, "Value is not a valid telecommunication email.", value);
                 }
                 return errors;
@@ -340,6 +343,9 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
         authorSpecialty.string.focus();
     }
 
+    /**
+     * Method that binds the UI widget's actions.
+     */
     private void bindUI() {
         // /////////////////////////////
         // --- List selection binding
@@ -348,10 +354,12 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
         listViewAuthInstitutions.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<String256>() {
             @Override
             public void onSelectionChanged(SelectionChangedEvent<String256> event) {
-                if (listViewAuthInstitutions.getSelectionModel().getSelectedItem() != null) {
-                    deleteInstitutionButton.enable();
-                } else {
-                    deleteInstitutionButton.disable();
+                if(listViewAuthInstitutions.isEnabled()) {
+                    if (listViewAuthInstitutions.getSelectionModel().getSelectedItem() != null) {
+                        deleteInstitutionButton.enable();
+                    } else {
+                        deleteInstitutionButton.disable();
+                    }
                 }
             }
         });
@@ -359,10 +367,12 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
         listViewAuthRoles.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<String256>() {
             @Override
             public void onSelectionChanged(SelectionChangedEvent<String256> event) {
-                if (listViewAuthRoles.getSelectionModel().getSelectedItem() != null) {
-                    deleteRoleButton.enable();
-                } else {
-                    deleteRoleButton.disable();
+                if(listViewAuthRoles.isEnabled()) {
+                    if (listViewAuthRoles.getSelectionModel().getSelectedItem() != null) {
+                        deleteRoleButton.enable();
+                    } else {
+                        deleteRoleButton.disable();
+                    }
                 }
             }
         });
@@ -370,10 +380,12 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
         listViewAuthSpecialties.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<String256>() {
             @Override
             public void onSelectionChanged(SelectionChangedEvent<String256> event) {
-                if (listViewAuthSpecialties.getSelectionModel().getSelectedItem() != null) {
-                    deleteSpecialtyButton.enable();
-                } else {
-                    deleteSpecialtyButton.disable();
+                if(listViewAuthSpecialties.isEnabled()) {
+                    if (listViewAuthSpecialties.getSelectionModel().getSelectedItem() != null) {
+                        deleteSpecialtyButton.enable();
+                    } else {
+                        deleteSpecialtyButton.disable();
+                    }
                 }
             }
         });
@@ -500,8 +512,14 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
         });
     }
 
-    private boolean contains(ListStore<String256> l, String256 str) {
-        for (String256 s : l.getAll()) {
+    /**
+     * Method to check if a list of String256 contains a specific value.
+     * @param list list of String256 values
+     * @param str value to look for in above list
+     * @return
+     */
+    private boolean contains(ListStore<String256> list, String256 str) {
+        for (String256 s : list.getAll()) {
             if (s.getString().equals(str.getString())) {
                 return true;
             }
@@ -517,6 +535,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
      *            The Author which will be edited.
      */
     public void edit(Author author) {
+//        authorEditorDriver.getErrors().clear();
         resetWidgets();
         setModel(author);
         authorEditorDriver.edit(author);
@@ -526,9 +545,19 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
      * Method to start the edition of a new Author.
      */
     public void editNew() {
+//        authorEditorDriver.getErrors().clear();
         model = new Author();
         edit(model);
         resetWidgets();
+    }
+
+    /**
+     * Method to check if errors remain in the author editor.
+     *
+     * @return hasErrors boolean
+     */
+    public boolean hasErrors(){
+        return authorEditorDriver.hasErrors();
     }
 
     /**
@@ -539,14 +568,19 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
         authorEditorDriver.initialize(this);
     }
 
+    /**
+     * This method clears the fields to add values in lists roles, institutions and specialties.
+     */
     private void resetWidgets() {
+        authorTelecommunication.string.clear();;
+        authorPerson.string.clear();
         authorInstitution.string.clear();
         authorRole.string.clear();
         authorSpecialty.string.clear();
     }
 
     /**
-     * Method that saves the changes in the Editor GUI in editor model.
+     * Method that saves the changes in the Editor GUI in editor's model object
      */
     public void save() {
         model = authorEditorDriver.flush();
@@ -559,9 +593,15 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
             d.getBody().addClassName("pad-text");
             d.setHideOnButtonClick(true);
             d.setWidth(300);
+            d.show();
         }
     }
 
+    /**
+     * Convenience function for setting disabled/enabled by boolean.
+     *
+     * @param enabled the enabled state
+     */
     private void setWidgetEnable(boolean enabled) {
         authorPerson.string.setEnabled(enabled);
         authorTelecommunication.string.setEnabled(enabled);
@@ -613,6 +653,11 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
         return model;
     }
 
+    /**.
+     * Simple setter method for AuthorEditorWidget's model>
+     *
+     * @param model author object to be edited.
+     */
     private void setModel(Author model) {
         this.model = model;
     }

@@ -2,8 +2,6 @@ package edu.tn.xds.metadata.editor.client.editor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
@@ -34,6 +32,7 @@ import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import edu.tn.xds.metadata.editor.client.editor.properties.AuthorProperties;
 import edu.tn.xds.metadata.editor.client.editor.widgets.*;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractView;
+import edu.tn.xds.metadata.editor.client.widgets.ConfirmDeleteDialog;
 import edu.tn.xds.metadata.editor.shared.model.Author;
 import edu.tn.xds.metadata.editor.shared.model.CodedTerm;
 import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
@@ -197,7 +196,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		// Simple fields label and options (init)
 		// /////////////////////////////////////
 		// ID Field (required)
-		FieldLabel idLabel = new FieldLabel(id, "ID");
+		FieldLabel idLabel = new FieldLabel(id, "Entry UUID");
 		idLabel.setLabelWidth(125);
 		id.setAllowBlank(false);
         id.addValidator(new RegExValidator("[1-9][0-9]+","Value is not correct. It is supposed to be a number."));
@@ -501,7 +500,9 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 					if (isAlreadyThere) {
 						Info.display("Impossible to add this value",
 								"This author person already exists for this document. You can not add him again.");
-					} else {
+					} else if (author.hasErrors()){
+                        Info.display("Impossible to add this value","There still are errors in the editor.");
+                    }else {
 						authors.getStore().add(author.getModel());
 						author.editNew();
 						listViewAuthors.getSelectionModel().deselectAll();

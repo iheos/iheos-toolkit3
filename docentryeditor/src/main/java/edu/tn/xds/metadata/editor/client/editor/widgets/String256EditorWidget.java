@@ -1,16 +1,14 @@
 package edu.tn.xds.metadata.editor.client.editor.widgets;
 
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.form.Validator;
-import com.sencha.gxt.widget.core.client.form.ValueBaseField;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 
+import edu.tn.xds.metadata.editor.client.widgets.BoundedTextField;
 import edu.tn.xds.metadata.editor.shared.model.String256;
 
 /**
