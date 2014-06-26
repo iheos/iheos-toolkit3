@@ -56,7 +56,7 @@ public class SimComponentFactory {
         injectParameters()
     }
 
-    private def mkInstance() throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineException, SimChainLoaderException {
+    def mkInstance() throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException, SimEngineException, SimChainLoaderException {
         try {
             clazz = getClass().getClassLoader().loadClass(className)
         } catch (ClassNotFoundException e) {
@@ -74,7 +74,7 @@ public class SimComponentFactory {
             throw new SimEngineSubscriptionException("Component <${className}> does not implement the SimComponent interface")
     }
 
-    private def injectParameters() throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    def injectParameters() throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         new Injector(component, parmMap).injectAll();
     }
 

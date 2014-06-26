@@ -39,8 +39,9 @@ class ActorType implements IsSerializable, Serializable {
 //        return "ActorType: ${name} (${shortName} with ${properties.keySet()})"
 //    }
 
-    void check(String typeName) throws InvalidActorTypeDefinitionException {
+    void check() throws InvalidActorTypeDefinitionException {
         String val;
+        String typeName = shortName
 
         val = name;
         if (val == null || val.equals(""))
@@ -48,9 +49,9 @@ class ActorType implements IsSerializable, Serializable {
         val = shortName;
         if (val == null || val.equals(""))
             throw new InvalidActorTypeDefinitionException("${typeName}: shortName not defined");
-        val = actorSimFactoryClassName;
-        if (val == null || val.equals(""))
-            throw new InvalidActorTypeDefinitionException("${typeName}: actorSimFactoryClass not defined");
+//        val = actorSimFactoryClassName;
+//        if (val == null || val.equals(""))
+//            throw new InvalidActorTypeDefinitionException("${typeName}: actorSimFactoryClass not defined");
         if (transactionTypes.size() == 0)
             throw new InvalidActorTypeDefinitionException("${typeName}: must define at least one transaction");
     }

@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.engine
 
 import gov.nist.hit.ds.simSupport.exception.SimEngineExecutionException
+import gov.nist.hit.ds.simSupport.simChain.SimChain
 
 /**
  * Scan a SimChain for structural integrity, that each subscription

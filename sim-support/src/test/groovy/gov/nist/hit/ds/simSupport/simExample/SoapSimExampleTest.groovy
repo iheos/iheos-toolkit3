@@ -1,8 +1,10 @@
 package gov.nist.hit.ds.simSupport.simExample
+
+import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.EventFactory
-import gov.nist.hit.ds.simSupport.engine.SimChain
-import gov.nist.hit.ds.simSupport.engine.SimChainFactory
+import gov.nist.hit.ds.simSupport.simChain.SimChain
+import gov.nist.hit.ds.simSupport.simChain.SimChainFactory
 import gov.nist.hit.ds.simSupport.engine.SimEngine
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
 import spock.lang.Specification
@@ -14,6 +16,42 @@ import spock.lang.Specification
  * because only the in-memory version of the repository is used.
  */
 class SoapSimExampleTest extends Specification {
+    static String config = '''
+<ActorsTransactions>
+    <transaction displayName="Stored Query" id="sq" code="sq" asyncCode="sq.as">
+        <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
+        <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
+    </transaction>
+    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as">
+        <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
+        <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
+    </transaction>
+    <transaction displayName="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
+        <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
+        <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
+    </transaction>
+    <transaction displayName="Update" id="update" code="update" asyncCode="update.as">
+        <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
+        <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
+    </transaction>
+    <actor displayName="Document Registry" id="reg">
+        <simFactoryClass class="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
+        <transaction id="rb"/>
+        <transaction id="sq"/>
+        <transaction id="update"/>
+    </actor>
+    <actor displayName="Document Repository" id="rep">
+        <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
+        <transaction id="prb"/>
+        <property name="repositoryUniqueId" value="1.2.3.4"/>
+    </actor>
+</ActorsTransactions>
+'''
+    void setup() {
+        new ActorTransactionTypeFactory().clear()
+        new ActorTransactionTypeFactory().load(config)
+    }
+
 
     // This test is more of an example than a test.  It shows
     // how to wire up a simulator with all the detail except

@@ -1,5 +1,8 @@
-package gov.nist.hit.ds.simSupport.engine
+package gov.nist.hit.ds.simSupport.simChain
 import gov.nist.hit.ds.eventLog.Event
+import gov.nist.hit.ds.simSupport.engine.SimComponent
+import gov.nist.hit.ds.simSupport.engine.SimComponentFactory
+import gov.nist.hit.ds.simSupport.engine.SimStep
 import gov.nist.hit.ds.simSupport.loader.PropertyResourceFactory
 import gov.nist.hit.ds.simSupport.loader.SimComponentPropFormatParser
 import gov.nist.hit.ds.soapSupport.FaultCode
@@ -51,7 +54,7 @@ class SimChainFactory {
      */
     SimChainFactory(Event event) { this.event = event; simChain = new SimChain() }
 
-    void addComponent(String className, Map<String, String> parameters) {
+    def addComponent(String className, Map<String, String> parameters) {
         SimStep simStep = new SimStep()
         simStep.init(event)
         simChain.addStep(simStep)
@@ -59,7 +62,7 @@ class SimChainFactory {
         simStep.simComponent = component
     }
 
-    private SimComponent loadComponent(String className, Map<String, String> parameters, SimStep simStep) {
+    SimComponent loadComponent(String className, Map<String, String> parameters, SimStep simStep) {
         try {
             SimComponentFactory factory = new SimComponentFactory(className, parameters)
             return factory.component
@@ -76,7 +79,7 @@ class SimChainFactory {
      * @param chainDefResource
      * @return SimChain
      */
-     void loadFromPropertyBasedResource(String chainDefResource) {
+     def loadFromPropertyBasedResource(String chainDefResource) {
         try {
             PropertyResourceFactory propFactory = new PropertyResourceFactory(chainDefResource)
             Properties properties = propFactory.getProperties()
@@ -88,11 +91,16 @@ class SimChainFactory {
         } catch (SoapFaultException e) {
             throw e
         } catch (Exception e) {
-            throw new ToolkitRuntimeException("SimChainFactory failed.", e)
+            throw new ToolkitRuntimeException("SimChainFactory failed: ${e.getMessage()}", e)
         }
     }
 
-    private Properties withoutStandardProperties(Properties input) {
+    static checkFromResource(String chainDefResource) throws Exception {
+            def factory = new SimChainFactory(null)
+            factory.loadFromPropertyBasedResource(chainDefResource)
+    }
+
+    Properties withoutStandardProperties(Properties input) {
         Properties out = new Properties()
         input.each { key, value ->
             if (key.endsWith('.class')) return

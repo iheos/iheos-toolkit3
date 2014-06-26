@@ -18,7 +18,8 @@ import java.io.IOException;
 
 /**
  * Classes that extend this class must set the File dir field to 
- * establish where the input data is to be found.
+ * establish where the input data is to be found OR set header
+ * and body with the actual values.
  * @author bmajur
  *
  */

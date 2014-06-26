@@ -1,7 +1,8 @@
-package gov.nist.hit.ds.simSupport.engine
+package gov.nist.hit.ds.simSupport.simChain
 
 import gov.nist.hit.ds.eventLog.Event;
-import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
+import gov.nist.hit.ds.simSupport.engine.SimStep;
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 /**

@@ -61,6 +61,7 @@ class ActorTransactionTypeFactory {
         ttype.asyncCode = tt.@asyncCode
         ttype.requestAction = tt.request.@action
         ttype.responseAction = tt.response.@action
+        ttype.simChainResourceName = tt.simChain.@resource
         transactionTypeMap.put(ttype.id, ttype)
         transactionTypeMap.put(ttype.code, ttype)
         transactionTypeMap.put(ttype.asyncCode, ttype)

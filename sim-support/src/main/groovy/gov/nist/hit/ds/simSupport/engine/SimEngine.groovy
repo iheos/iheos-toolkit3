@@ -6,6 +6,7 @@ import gov.nist.hit.ds.simSupport.annotations.SimComponentInject
 import gov.nist.hit.ds.simSupport.exception.SimEngineException
 import gov.nist.hit.ds.simSupport.exception.SimEngineExecutionException
 import gov.nist.hit.ds.simSupport.exception.SimEngineSubscriptionException
+import gov.nist.hit.ds.simSupport.simChain.SimChain
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFault
 import gov.nist.hit.ds.soapSupport.SoapFaultException

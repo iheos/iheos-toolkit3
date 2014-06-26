@@ -2,6 +2,8 @@ package gov.nist.hit.ds.simSupport.engine
 
 import gov.nist.hit.ds.eventLog.EventFactory
 import gov.nist.hit.ds.simSupport.components.FooBarBase
+import gov.nist.hit.ds.simSupport.simChain.SimChain
+import gov.nist.hit.ds.simSupport.simChain.SimChainFactory
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
 import spock.lang.Specification
 
