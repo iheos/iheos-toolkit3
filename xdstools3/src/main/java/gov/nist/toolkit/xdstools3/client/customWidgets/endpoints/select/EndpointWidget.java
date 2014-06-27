@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select;
 
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.types.GroupStartOpen;
@@ -72,8 +72,8 @@ public class EndpointWidget extends HLayout {
 //    public IButton createAddButton() {
 //        // Create "Add" button
 //        IButton updateButton = new IButton("Add message");
-//        updateButton.addClickHandler(new com.smartgwt.client.widgets.events.ClickHandler() {
-//            public void onClick(com.smartgwt.client.widgets.events.ClickEvent event) {
+//        updateButton.addClickHandler(new com.smartgwt.client.widgets.eventBusUtils.ClickHandler() {
+//            public void onClick(com.smartgwt.client.widgets.eventBusUtils.ClickEvent event) {
 //                Record message = new ListGridRecord();
 //                message.setAttribute("value", "...");
 //                grid.addData(message);

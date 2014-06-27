@@ -15,7 +15,7 @@ import com.smartgwt.client.widgets.toolbar.RibbonGroup;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
 import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.LoginDialogWidget;
-import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
 import java.util.LinkedHashMap;
@@ -79,37 +79,46 @@ public class Toolbar extends RibbonBar {
         // Menu group: Admin
         // Behavior: Clicking on any of the buttons in the admin group opens a dialog to allow the user to log in as admin,
         // IF not logged in yet. Then follows to the link initially requested.
-        IconButton adminButton = getIconButton("Admin Settings", "icons/glyphicons/glyphicons_136_cogwheel.png", true) ;
+        IconButton adminButton = getIconButton("Admin Settings", "icons/glyphicons/glyphicons_136_cogwheel.png", true);
 
         // Listeners
+        endpointButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // if not logged in
+                if (!Util.getInstance().getLoggedAsAdminStatus()) {
+                    // ask user to log in
+                    LoginDialogWidget dialog = new LoginDialogWidget("ENDPOINTS");
+                    dialog.show();
+                } else {
+                    // Display the Endpoint Settings tab if logged in
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent("ENDPOINTS"));
+                }
+            }
+        });
+
+
         adminButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 // if not logged in
                 if (!Util.getInstance().getLoggedAsAdminStatus()) {
                     // ask user to log in
-                    showLoginWindow();
+                    LoginDialogWidget dialog = new LoginDialogWidget("ADMIN");
+                    dialog.show();
                 } else {
                     // Display the Admin Settings tab if logged in
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent("ADMIN"));
                 }
             }
-
-            // Opens login dialog, which then displays the Admin Settings tab if login is successful
-            private void showLoginWindow() {
-                LoginDialogWidget dialog = new LoginDialogWidget();
-                dialog.show();
-            }
         });
 
 
 
-
-
-        // Add menu groups to menu bar
-        this.addMembers(sessionGroup, spacer, endpointButton, adminButton);
-        draw();
-    }
+    // Add menu groups to menu bar
+    this.addMembers(sessionGroup, spacer, endpointButton, adminButton);
+    draw();
+}
 
 
     /**

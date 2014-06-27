@@ -5,17 +5,15 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Side;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.Toolbar;
-import gov.nist.toolkit.xdstools3.client.events.EventHandler;
-import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
-import gov.nist.toolkit.xdstools3.client.tabs.HomeTab;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
+import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
-import gov.nist.toolkit.xdstools3.client.tabs.SettingsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
@@ -76,10 +74,10 @@ public class Xdstools3 implements EntryPoint {
 		RootLayoutPanel rp = RootLayoutPanel.get();
 		rp.add(container);
 
-        //SC.showConsole();
+        SC.showConsole();
 
-        // Add listener for Open Tab events. The tabs called must be defined in function "openTab".
-        Util.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new EventHandler(){
+        // Add listener for Open Tab eventBusUtils. The tabs called must be defined in function "openTab".
+        Util.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new OpenTabEventHandler(){
             public void onEvent(OpenTabEvent event) {
                 openTab(event.getTabName());
             }
@@ -87,6 +85,10 @@ public class Xdstools3 implements EntryPoint {
 
     }
 
+    /**
+     * Opens a given tab defined by its name. Updates the display to add this new tab and to bring it into focus.
+     * @param tabName the name of the tab to open.
+     */
     public void openTab(String tabName) {
         GenericCloseableTab tab = null;
 
@@ -94,6 +96,10 @@ public class Xdstools3 implements EntryPoint {
         if (tabName == "ADMIN") {
             GenericCloseableTab adminTab = new SettingsTab();
             tab = adminTab;
+        }
+        if (tabName == "ENDPOINTS") {
+            GenericCloseableTab endpointsTab = new EndpointConfigTab();
+            tab = endpointsTab;
         }
         // update set of tabs
         if (tab != null) {

@@ -1,7 +1,6 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure;
 
 import gov.nist.toolkit.xdstools3.client.RESTUtils.DSRequest;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.Endpoint;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -17,20 +16,20 @@ import java.util.List;
  * @see //http://www.smartclient.com/docs/7.0rc2/a/b/c/go.html#class..RestDataSource
  */
 @XmlRootElement(name="request")
-public class EndpointDSRequest extends DSRequest {
+public class EndpointConfigDSRequest extends DSRequest {
 
 	// Holds all incoming data
 	@XmlElementWrapper(name="data")
-	@XmlElement(name="EndpointDS") // Must be the id of the EndpointDS
-	List<Endpoint> data;
+	@XmlElement(name="EndpointConfigDS") // Must be the class name of the datasource
+	List<EndpointConfig> data;
 	
-	public Collection<Endpoint> getMessages() {
+	public Collection<EndpointConfig> getMessages() {
 		return data;
 	}
 	
-	public void addMessage(Endpoint endpoint) {
+	public void addMessage(EndpointConfig endpoint) {
 		if (data == null) {
-			data = new ArrayList<Endpoint>();
+			data = new ArrayList<EndpointConfig>();
 		}
 		data.add(endpoint);
 	}

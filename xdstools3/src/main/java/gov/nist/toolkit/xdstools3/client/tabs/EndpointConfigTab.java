@@ -1,27 +1,21 @@
 package gov.nist.toolkit.xdstools3.client.tabs;
 
 
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointsConfigWidget;
+
 public class EndpointConfigTab extends GenericCloseableTab {
-	static String header = "Configure Endpoints";
+	static String header = "View / Configure Endpoints";
 
 	public EndpointConfigTab() { 
 		super(header);
 
 		setHeader(header);
-		setContents();
+        createContents();
 	}  
 	
-	private void setContents(){
-	
-		
-
-//				VLayout findDocsPanel = new VLayout(); 
-//				findDocsPanel.setWidth100();
-//				findDocsPanel.setHeight100(); 
-//				findDocsPanel.addMembers(upperPanel, output);
-//				upperPanel.setHeight("50%");
-//				output.setHeight("*");
-				//setPane(findDocsPanel);
+	private void createContents(){
+        EndpointsConfigWidget viewEndpoints = new EndpointsConfigWidget();
+        setContents(viewEndpoints);
 	}
 
 

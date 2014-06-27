@@ -12,7 +12,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.SAMLComboBox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSCheckbox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButtonNoForm;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.EndpointWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 

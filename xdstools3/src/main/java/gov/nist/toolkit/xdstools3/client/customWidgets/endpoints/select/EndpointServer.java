@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select;
 
 
 import gov.nist.toolkit.xdstools3.client.RESTUtils.DSResponse;
