@@ -10,6 +10,7 @@ import com.sencha.gxt.widget.core.client.form.Field;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.grid.editing.ClicksToEdit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,4 +59,7 @@ public class GenericEditableListView<M,N> extends GenericEditableGrid<M> {
         super.addColumnEditorConfig(columnConfig, field);
     }
 
+    public void setOneClickToEdit(){
+        setEditable(ClicksToEdit.ONE);
+    }
 }

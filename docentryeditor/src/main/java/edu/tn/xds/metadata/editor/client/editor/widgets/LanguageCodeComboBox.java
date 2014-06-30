@@ -11,12 +11,13 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 
+import edu.tn.xds.metadata.editor.client.parse.PredefinedCodesParser;
 import edu.tn.xds.metadata.editor.shared.model.LanguageCode;
 
 /**
  * <p>
  * <b>This class represents the widget which matches LanguageCode model type</b>
- * <br>
+ * <br/>
  * </p>
  */
 public class LanguageCodeComboBox extends ComboBox<LanguageCode> {

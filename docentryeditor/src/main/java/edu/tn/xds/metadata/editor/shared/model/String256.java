@@ -21,13 +21,13 @@ import javax.validation.constraints.Size;
  * This class also contains getters/setters.</br> In addition, it has verify
  * method to check its syntax.
  * </p>
- * 
+ *
  * <p>
  * <b>See below each method mentioned above.</b> <br>
  * {@link #verify() method verify}</br> {@link #toString() method toString} <br>
  * </p>
- * 
- * 
+ *
+ *
  * @see String256Exception class String256Exception
  * @see DocumentModel class DocumentModel
  * @see ModelElement class ModelElement
@@ -40,8 +40,8 @@ public class String256 implements Serializable {
 	/**
 	 * <b>String256 string<b/> - The string [Mandatory].<br>
 	 * Type: String256</br>
-	 * 
-	 * 
+	 *
+	 *
 	 * @see String256 class String256
 	 */
 	@NotNull
@@ -61,12 +61,12 @@ public class String256 implements Serializable {
 	}
 
 	/**
-	 * 
+	 *
 	 * <p>
 	 * <b>Method verify</b></br> This method verify if the String contains less
 	 * than 256 characters.
 	 * </p>
-	 * 
+	 *
 	 * @return boolean: true if it's a String256 else false
 	 * @throws String256Exception
 	 *             if the String is larger than 256 characters
@@ -96,13 +96,26 @@ public class String256 implements Serializable {
 	 * This method will be called to build a XML file by the DocumentModel with
 	 * the information taken from the local String256.<br>
 	 * </p>
-	 * 
+	 *
 	 * @return String which contains the String256
-	 * 
+	 *
 	 * @see String256 class String256
 	 */
 	@Override
 	public String toString() {
 		return string;
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof String256)) return false;
+
+        String256 string256 = (String256) o;
+
+        if (string != null ? !string.equals(string256.string) : string256.string != null) return false;
+
+        return true;
+    }
+
 }

@@ -17,28 +17,28 @@ import javax.validation.constraints.NotNull;
  * {@link CodingScheme}) ;</li>
  * </ul>
  * </p>
- * 
+ *
  * <p>
  * It contains a toXML method to return the author in XML format and verify
  * method to check if syntax's CodedTerm is correct.
  * </p>
- * 
+ *
  * <p>
  * This class also contains getters/setters.
  * </p>
- * 
+ *
  * <p>
  * <b>See below the method mentioned above.</b> <br>
  * {@link #verify() method verify}</br> {@link #toXML() method toXML} <br>
  * </p>
- * 
+ *
  * @see DocumentModel class DocumentModel
  * @see ModelElement class ModelElement
- * 
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
+ *
  */
 public class CodedTerm implements ModelElement, Serializable {
 
@@ -47,7 +47,7 @@ public class CodedTerm implements ModelElement, Serializable {
 	/**
 	 * <b>String256 displayName</b> - The name of the CodedTerm [Mandatory].<br>
 	 * Type: {@link String256}</br> </p>
-	 * 
+	 *
 	 * @see String256
 	 * @see CodedTerm
 	 */
@@ -57,7 +57,7 @@ public class CodedTerm implements ModelElement, Serializable {
 	/**
 	 * <b>String256 code</b> - The code of the CodedTerm [Mandatory].<br>
 	 * Type: {@link String256}</br> </p>
-	 * 
+	 *
 	 * @see String256
 	 * @see CodedTerm
 	 */
@@ -67,7 +67,7 @@ public class CodedTerm implements ModelElement, Serializable {
 	/**
 	 * <b>CodingScheme codingScheme</b> - The name of the CodedTerm [Mandatory].<br>
 	 * Type: {@link CodingScheme}</br> </p>
-	 * 
+	 *
 	 * @see CodingScheme
 	 * @see CodedTerm
 	 */
@@ -111,11 +111,11 @@ public class CodedTerm implements ModelElement, Serializable {
 	 * {@link DocumentModel} with the information taken from the local
 	 * CodedTerm. </br>
 	 * </p>
-	 * 
+	 *
 	 * @return String which contains the CodedTerm in XML format
-	 * 
+	 *
 	 * @see CodedTerm class CodedTerm
-	 * 
+	 *
 	 */
 	public String toXML() {
 		String answer;
@@ -130,13 +130,13 @@ public class CodedTerm implements ModelElement, Serializable {
 	 * This method will be called to check whether the syntax's CodedTerm is
 	 * correct </br>
 	 * </p>
-	 * 
+	 *
 	 * @return boolean true if the syntax is correct, else return false
 	 * @throws String256Exception
 	 *             if there is a String256 with more than 256 characters
-	 * 
+	 *
 	 * @see CodedTerm class CodedTerm
-	 * 
+	 *
 	 */
 	@Override
 	public boolean verify() throws String256Exception {
@@ -147,6 +147,20 @@ public class CodedTerm implements ModelElement, Serializable {
 		return answer;
 	}
 
-	// Ajouter: abstract public AssertionGroup validateCode(String256 code);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CodedTerm codedTerm = (CodedTerm) o;
+
+        if (!code.equals(codedTerm.code)) return false;
+        if (!codingScheme.equals(codedTerm.codingScheme)) return false;
+        if (!displayName.equals(codedTerm.displayName)) return false;
+
+        return true;
+    }
+
+// Ajouter: abstract public AssertionGroup validateCode(String256 code);
 
 }

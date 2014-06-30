@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  *
  * <p>
  * <b>How it works ?</b><br>
- * The method {@link #doParse(String)} return the completed model, indeed it
+ * The method {@link #parse(String)} return the completed model, indeed it
  * calls {@link #findElements()} whose aim is to call the appropriate method
  * parseType where Type correspond to a specific type describe in the
  * {@link DocumentModel} (InternationalString, Author ...).</br>All this method
@@ -47,7 +47,7 @@ import java.util.logging.Logger;
  *
  * <p>
  * <b>See below each method mentioned above.</b> <br>
- * {@link #doParse(String)}</br> {@link #findElements()} <br>
+ * {@link #parse(String)}</br> {@link #findElements()} <br>
  * {@link #generalMethod(String)}</br> {@link #getDocumentParsed()}
  * </p>
  *
@@ -71,32 +71,32 @@ import java.util.logging.Logger;
  *
  *
  */
-public class Parse {
-    private static Logger logger = Logger.getLogger(Parse.class.getName());
+public class XdsParser {
+    private static Logger logger = Logger.getLogger(XdsParser.class.getName());
     /**
      * <b>String documentXml</b> - The data taken from the XML document and send
      * by the server, this is the String to parse.<br>
      * Type: String</br>
      *
-     * @see Parse
+     * @see XdsParser
      */
     private String documentXml;
 
     /**
      * <b>Parse myParse</b> - The instance of Parse class (it's a singleton
      * class).<br>
-     * Type: {@link Parse}</br>
+     * Type: {@link XdsParser}</br>
      *
-     * @see Parse
+     * @see XdsParser
      */
-    private final static Parse instance = new Parse();
+    private final static XdsParser instance = new XdsParser();
 
     /**
      * <b>Document document</b> - The XML file which is contained in a Document
      * so as to be parsed.<br>
      * Type: {@link Document}</br>
      *
-     * @see Parse
+     * @see XdsParser
      */
     private Document document;
 
@@ -106,12 +106,12 @@ public class Parse {
      * Type: {@link DocumentModel}</br> </p>
      *
      * @see DocumentModel
-     * @see Parse
+     * @see XdsParser
      */
     private final DocumentModel myModel = new DocumentModel();
 
     /**
-     * <b>Method doParse</b> <br>
+     * <b>Method parse</b> <br>
      * Firstly, it calls {@link #getDocumentParsed()} method to parse the String
      * {@link #documentXml} and to complete the {@link DocumentModel}
      * {@link #myModel} thanks to the {@link #findElements()} method. </br>
@@ -120,9 +120,9 @@ public class Parse {
      *            - The String which contains the XML content
      * @return myModel - The {@link DocumentModel}
      *
-     * @see Parse
+     * @see XdsParser
      */
-    public DocumentModel doParse(String newDocumentXml) {
+    public DocumentModel parse(String newDocumentXml) {
         documentXml = newDocumentXml;
         getDocumentParsed();
         try {
@@ -133,7 +133,7 @@ public class Parse {
         return myModel;
     }
 
-    public static Parse getInstance() {
+    public static XdsParser getInstance() {
         return instance;
     }
 
@@ -154,12 +154,12 @@ public class Parse {
      * Get the instance of PreParse object to prepare the String parsing. </br>
      *
      * @see PreParse
-     * @see Parse
+     * @see XdsParser
      *
      */
     public void getDocumentParsed() {
         PreParse preParse = PreParse.getInstance();
-        documentXml = preParse.doPreParse(documentXml);
+        documentXml = preParse.doPreParseUTF8(documentXml);
 
         // parse the XML document into a DOM
         document = XMLParser.parse(documentXml);
@@ -179,7 +179,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      *
-     * @see Parse
+     * @see XdsParser
      *
      */
     public void findElements() throws String256Exception {
@@ -221,7 +221,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      *
-     * @see Parse
+     * @see XdsParser
      *
      */
     public void generalMethod(String nodeString) throws String256Exception {
@@ -343,7 +343,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      *
-     * @see Parse
+     * @see XdsParser
      *
      */
     public void methodParseAuthors() throws String256Exception {
@@ -473,7 +473,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      * @return {@link String256}
-     * @see Parse
+     * @see XdsParser
      *
      */
     public String256 parseString256(String node) throws String256Exception {
@@ -510,7 +510,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      * @return {@link OID}
-     * @see Parse
+     * @see XdsParser
      *
      */
     public OID parseOID(String node) throws String256Exception {
@@ -554,7 +554,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      * @return {@link IdentifierString256}
-     * @see Parse class Parse
+     * @see XdsParser class Parse
      *
      */
     public IdentifierString256 parseIdentifierString256(String node)
@@ -606,7 +606,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      * @return {@link IdentifierOID}
-     * @see Parse
+     * @see XdsParser
      *
      */
     public IdentifierOID parseIdentifierOID(String node)
@@ -656,7 +656,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      * @return ArrayList(InternationalString)
-     * @see Parse
+     * @see XdsParser
      *
      */
     public ArrayList<InternationalString> parseArrayInternationalString(
@@ -713,7 +713,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      * @return {@link CodedTerm}
-     * @see Parse
+     * @see XdsParser
      *
      */
     public CodedTerm parseCodedTerm(String node) throws String256Exception {
@@ -772,7 +772,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      * @return ArrayList(CodedTerm)
-     * @see Parse
+     * @see XdsParser
      *
      */
     public ArrayList<CodedTerm> parseArrayCodedTerm(String node)
@@ -841,7 +841,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      * @return {@link NameValueString256}
-     * @see Parse
+     * @see XdsParser
      *
      */
     public NameValueString256 parseNameValueString256(String node)
@@ -891,7 +891,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      * @return {@link NameValueInteger}
-     * @see Parse
+     * @see XdsParser
      */
     public NameValueInteger parseNameValueInteger(String node)
             throws String256Exception {
@@ -944,7 +944,7 @@ public class Parse {
      *             if there is a String256 with more than 256 characters
      *
      * @return {@link NameValueDTM}
-     * @see Parse
+     * @see XdsParser
      *
      */
     public NameValueDTM parseNameValueDTM(String node)

@@ -27,7 +27,7 @@ public class NameValueDTMEditorWidget extends Composite implements Editor<NameVa
 
     ListStoreEditor<DTM> values;
     @Ignore
-    GenericEditableListView<DTM,Date> listView;
+    private GenericEditableListView<DTM,Date> listView;
 
     public NameValueDTMEditorWidget(String widgetTitle) {
 
@@ -44,6 +44,9 @@ public class NameValueDTMEditorWidget extends Composite implements Editor<NameVa
 
         listView.addEditorConfig(df);
 
+//        listView.setHeaderVisible(false);
+//        listView.setOneClickToEdit();
+
         // Modifying grid cell render for a Date
         Cell c =new DateCell(DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss"));
         listView.getColumnModel().getColumn(0).setCell(c);
@@ -52,12 +55,14 @@ public class NameValueDTMEditorWidget extends Composite implements Editor<NameVa
 
         initWidget(listView.asWidget());
     }
-
     public void disableEditing(){
         listView.disableEditing();
     }
     public void disableListToolbar(){
         listView.disableToolbar();
+    }
+    public GenericEditableListView<DTM,Date> getListView(){
+        return listView;
     }
     public void setListMaxSize(int maxSize){listView.setStoreMaxLength(maxSize);}
 

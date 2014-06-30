@@ -21,7 +21,8 @@ public interface AppImages extends ClientBundle{
     @Source("baseResources/checkbox.png")
     ImageResource checkbox();
 
-    @Source("baseResources/help.ico.gif")
+//    @Source("baseResources/help.ico.gif")
+    @Source("baseResources/comment.png")
     ImageResource help();
 
 }

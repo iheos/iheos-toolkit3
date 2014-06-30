@@ -22,6 +22,7 @@ import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.HideEvent.HideHandler;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.Field;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.FieldSet;
 import com.sencha.gxt.widget.core.client.form.validator.RegExValidator;
@@ -55,11 +56,12 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 	OIDEditorWidget repoUId = new OIDEditorWidget(false);
 
 	/* coded terms declaration */
-	CodedTermEditorWidget classCode = new CodedTermEditorWidget();
-	CodedTermEditorWidget formatCode = new CodedTermEditorWidget();
-	CodedTermEditorWidget healthcareFacilityType = new CodedTermEditorWidget();
-	CodedTermEditorWidget practiceSettingCode = new CodedTermEditorWidget();
-	CodedTermEditorWidget typeCode = new CodedTermEditorWidget();
+//	CodedTermEditorWidget classCode = new CodedTermEditorWidget();
+    PredefinedCodesComboBox classCode = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.CLASS_CODES);
+    PredefinedCodesComboBox formatCode = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.FORMAT_CODES);
+    PredefinedCodesComboBox healthcareFacilityType = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.HEALTHCARE_FACILITY_TYPE_CODES);
+    PredefinedCodesComboBox practiceSettingCode = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.PRACTICE_SETTING_CODES);
+    PredefinedCodesComboBox typeCode = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.TYPE_CODES);
 
 	/* Identifiers declaration */
 	IdentifierOIDEditorWidget uniqueId = new IdentifierOIDEditorWidget();
@@ -96,70 +98,17 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 	// ///////////////////////////////////////////////////////////////////////
 	// ---- Titles WIDGETS
 	// ///////////////////////////////////////////////////////////////////////
-/*
-	ListStoreEditor<InternationalString> titles;
-	// @Ignore
-	// ListView<InternationalString, String> listViewTitles;
-	@Ignore
-	Grid<InternationalString> gridTitles;
-	@Ignore
-	InternationalStringEditorWidget title = new InternationalStringEditorWidget();
-	@Ignore
-	TextButton newTitleWidget = new TextButton("New entry");
-	@Ignore
-	TextButton editTitleWidget = new TextButton("Edit entry");
-	@Ignore
-	TextButton saveTitleWidget = new TextButton("Save entry");
-	@Ignore
-	TextButton cancelTitleWidget = new TextButton("Cancel");
-	@Ignore
-	TextButton deleteTitleWidget = new TextButton("Delete entry");
-*/
     ListStoreEditor<InternationalString> titles;
     InternationalStringEditableGrid titlesGrid;
 	// ///////////////////////////////////////////////////////////////////////
 	// ---- Comments WIDGETS
 	// ///////////////////////////////////////////////////////////////////////
-//	ListStoreEditor<InternationalString> comments;
-//	// @Ignore
-//	// ListView<InternationalString, String> listViewComments;
-//	@Ignore
-//	Grid<InternationalString> gridComments;
-//	@Ignore
-//	InternationalStringEditorWidget comment = new InternationalStringEditorWidget();
-//	@Ignore
-//	TextButton newCommentWidget = new TextButton("New entry");
-//	@Ignore
-//	TextButton editCommentWidget = new TextButton("Edit entry");
-//	@Ignore
-//	TextButton saveCommentWidget = new TextButton("Save entry");
-//	@Ignore
-//	TextButton cancelCommentWidget = new TextButton("Cancel");
-//	@Ignore
-//	TextButton deleteCommentWidget = new TextButton("Delete entry");
     ListStoreEditor<InternationalString> comments;
     InternationalStringEditableGrid commentsGrid;
 
 	// ///////////////////////////////////////////////////////////////////////
 	// ---- ConfidentialityCodes WIDGETS
 	// ///////////////////////////////////////////////////////////////////////
-//	ListStoreEditor<CodedTerm> confidentialityCodes;
-//	@Ignore
-//	Grid<CodedTerm> gridConfidentialityCode;
-//	// @Ignore
-//	// ListView<CodedTerm, String> listViewConfidentialityCode;
-//	@Ignore
-//	CodedTermEditorWidget confidentialityCode = new CodedTermEditorWidget();
-//	@Ignore
-//	TextButton newConfidentialityCodeWidget = new TextButton("New entry");
-//	@Ignore
-//	TextButton editConfidentialityCodeWidget = new TextButton("Edit entry");
-//	@Ignore
-//	TextButton saveConfidentialityCodeWidget = new TextButton("Save entry");
-//	@Ignore
-//	TextButton cancelConfidentialityCodeWidget = new TextButton("Cancel");
-//	@Ignore
-//	TextButton deleteConfidentialityCodeWidget = new TextButton("Delete entry");
     ListStoreEditor<CodedTerm> confidentialityCodes;
     CodedTermsEditableGridWidget confidentialityCodesGrid;
 
@@ -168,10 +117,6 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
     // ///////////////////////////////////////////////////////////////////////
     ListStoreEditor<CodedTerm> eventCode;
     CodedTermsEditableGridWidget eventCodesGrid;
-
-	// test button
-	// @Ignore
-	// TextButton btnSave = new TextButton("Save File");
 
 	@Override
 	protected Widget buildUI() {
@@ -217,6 +162,26 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		mimeTypeLabel.setLabelWidth(125);
 		mimeType.setAllowBlank(false);
 
+        // Class Code Field (required)
+        FieldLabel classCodeLabel = new FieldLabel(classCode,"Class Code");
+        classCodeLabel.setLabelWidth(125);
+
+        // Format Code Field (required)
+        FieldLabel formatCodeLabel = new FieldLabel(formatCode,"Format Code");
+        formatCodeLabel.setLabelWidth(125);
+
+        // practiceSettingCode Field (required)
+        FieldLabel healthcareFacilityTypeLabel = new FieldLabel(healthcareFacilityType,"Healthcare Facility");
+        healthcareFacilityTypeLabel.setLabelWidth(125);
+
+         // healthcare facility Code Field (required)
+        FieldLabel practiceSettingCodeLabel = new FieldLabel(practiceSettingCode,"Practice Setting Code");
+        practiceSettingCodeLabel.setLabelWidth(125);
+
+        // healthcare facility Code Field (required)
+        FieldLabel typeCodeLabel = new FieldLabel(typeCode,"Type Code");
+        typeCodeLabel.setLabelWidth(125);
+
 		// Repository Unique ID Field (optional)
 		FieldLabel repositoryLabel = new FieldLabel(repoUId, "Repository Unique ID");
 		repositoryLabel.setLabelWidth(125);
@@ -235,6 +200,11 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		simpleRequiredFieldsContainer.add(idLabel, new VerticalLayoutData(1, -1));
 		simpleRequiredFieldsContainer.add(languageCodeLabel, new VerticalLayoutData(1, -1));
 		simpleRequiredFieldsContainer.add(mimeTypeLabel, new VerticalLayoutData(1, -1));
+        simpleRequiredFieldsContainer.add(classCodeLabel,new VerticalLayoutData(1,-1));
+        simpleRequiredFieldsContainer.add(formatCodeLabel,new VerticalLayoutData(1,-1));
+        simpleRequiredFieldsContainer.add(healthcareFacilityTypeLabel,new VerticalLayoutData(1,-1));
+        simpleRequiredFieldsContainer.add(practiceSettingCodeLabel,new VerticalLayoutData(1,-1));
+        simpleRequiredFieldsContainer.add(typeCodeLabel ,new VerticalLayoutData(1,-1));
 
 		/* REQUIRED container added to a fieldset */
 		FieldSet fieldSet_general_fields_required = new FieldSet();
@@ -293,39 +263,39 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		/* coded terms options and fieldset */
 		/* ********************************** */
 		// Class Code (required)
-		FieldSet fieldSet_codedTerm_classCode = new FieldSet();
-		fieldSet_codedTerm_classCode.setHeadingText("Class Code");
-		fieldSet_codedTerm_classCode.setCollapsible(true);
-		fieldSet_codedTerm_classCode.add(classCode);
-		classCode.setAllowBlanks(false, false, false);
+//		FieldSet fieldSet_codedTerm_classCode = new FieldSet();
+//		fieldSet_codedTerm_classCode.setHeadingText("Class Code");
+//		fieldSet_codedTerm_classCode.setCollapsible(true);
+//		fieldSet_codedTerm_classCode.add(classCode);
+//		classCode.setAllowBlanks(false, false, false);
 
 		// Format Code (required)
-		FieldSet fieldSet_codedTerm_formatCode = new FieldSet();
-		fieldSet_codedTerm_formatCode.setHeadingText("Format Code");
-		fieldSet_codedTerm_formatCode.setCollapsible(true);
-		fieldSet_codedTerm_formatCode.add(formatCode);
-		formatCode.setAllowBlanks(false, false, false);
+//		FieldSet fieldSet_codedTerm_formatCode = new FieldSet();
+//		fieldSet_codedTerm_formatCode.setHeadingText("Format Code");
+//		fieldSet_codedTerm_formatCode.setCollapsible(true);
+//		fieldSet_codedTerm_formatCode.add(formatCode);
+//		formatCode.setAllowBlanks(false, false, false);
 
 		// Healthcare Facility Type (required)
-		FieldSet fieldSet_codedTerm_healthcareFacility = new FieldSet();
-		fieldSet_codedTerm_healthcareFacility.setHeadingText("Healthcare Facility Type");
-		fieldSet_codedTerm_healthcareFacility.setCollapsible(true);
-		fieldSet_codedTerm_healthcareFacility.add(healthcareFacilityType);
-		healthcareFacilityType.setAllowBlanks(false, false, false);
+//		FieldSet fieldSet_codedTerm_healthcareFacility = new FieldSet();
+//		fieldSet_codedTerm_healthcareFacility.setHeadingText("Healthcare Facility Type");
+//		fieldSet_codedTerm_healthcareFacility.setCollapsible(true);
+//		fieldSet_codedTerm_healthcareFacility.add(healthcareFacilityType);
+//		healthcareFacilityType.setAllowBlanks(false, false, false);
 
 		// Practice Setting Code (required)
-		FieldSet fieldSet_codedTerm_practiceSettingCode = new FieldSet();
-		fieldSet_codedTerm_practiceSettingCode.setHeadingText("Practice Setting Code");
-		fieldSet_codedTerm_practiceSettingCode.setCollapsible(true);
-		fieldSet_codedTerm_practiceSettingCode.add(practiceSettingCode);
-		practiceSettingCode.setAllowBlanks(false, false, false);
+//		FieldSet fieldSet_codedTerm_practiceSettingCode = new FieldSet();
+//		fieldSet_codedTerm_practiceSettingCode.setHeadingText("Practice Setting Code");
+//		fieldSet_codedTerm_practiceSettingCode.setCollapsible(true);
+//		fieldSet_codedTerm_practiceSettingCode.add(practiceSettingCode);
+//		practiceSettingCode.setAllowBlanks(false, false, false);
 
 		// Type Code (required)
-		FieldSet fieldSet_codedTerm_typeCode = new FieldSet();
-		fieldSet_codedTerm_typeCode.setHeadingText("Type Code");
-		fieldSet_codedTerm_typeCode.setCollapsible(true);
-		fieldSet_codedTerm_typeCode.add(typeCode);
-		typeCode.setAllowBlanks(false, false, false);
+//		FieldSet fieldSet_codedTerm_typeCode = new FieldSet();
+//		fieldSet_codedTerm_typeCode.setHeadingText("Type Code");
+//		fieldSet_codedTerm_typeCode.setCollapsible(true);
+//		fieldSet_codedTerm_typeCode.add(typeCode);
+//		typeCode.setAllowBlanks(false, false, false);
 
 		/* ****************************** */
 		/* name values options and fields */
@@ -335,8 +305,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 //        legalAuthenticator.disableListToolbar();
 
 		// Source Patient ID (optional)
-        sourcePatientId.addFieldValidator(new RegExValidator("^[A-Za-z]*[1-9][0-9]+\\^{3}&[1-9][0-9]*(\\.[0-9][1-9]*)+(&ISO)$"));
-        sourcePatientInfo.addFieldValidator(new RegExValidator("^PID-[1-9][0-9]{0,1}\\|"));
+        sourcePatientInfo.setListMaxSize(10);
 
 		// Service Start Time (optional)
         serviceStartTime.setListMaxSize(1);
@@ -382,13 +351,13 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		// /////////////////////////////////////////////////////////
 		/* simple required fields added to FramedPanel container */
 		requiredFields.add(fieldSet_general_fields_required);
-		requiredFields.add(fieldSet_codedTerm_classCode);
+//		requiredFields.add(fieldSet_codedTerm_classCode);
 		requiredFields.add(creationTime.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
-		requiredFields.add(fieldSet_codedTerm_formatCode);
-		requiredFields.add(fieldSet_codedTerm_healthcareFacility);
+//		requiredFields.add(fieldSet_codedTerm_formatCode);
+//		requiredFields.add(fieldSet_codedTerm_healthcareFacility);
 		requiredFields.add(fieldSet_identifier_patient);
-		requiredFields.add(fieldSet_codedTerm_practiceSettingCode);
-		requiredFields.add(fieldSet_codedTerm_typeCode);
+//		requiredFields.add(fieldSet_codedTerm_practiceSettingCode);
+//		requiredFields.add(fieldSet_codedTerm_typeCode);
 		requiredFields.add(fieldSet_identifier_unique);
 
 		// /////////////////////////////////////////////////////////
@@ -578,43 +547,46 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
     }
 
     /**
-	 * Sets information about each widgets to guide the user.
+	 * Sets information about each widgets to guide the user. Tooltips, empty texts and validators
 	 */
 	public void setWidgetsInfo() {
-		/* simple fields info */
+		// entry uuid
 		id.setEmptyText("ex: 123456789");
 		id.setToolTipConfig(new ToolTipConfig("ID is a string", "It should contain less than 256 characters"));
+        // hash code
 		hash.setEmptyText("ex: Hex456");
 		hash.setToolTipConfig(new ToolTipConfig("Hash is a string", "It should contain less than 256 characters"));
+        // language code
 		languageCode.setEmptyText("ex: en-GB");
 		languageCode.setToolTipConfig(new ToolTipConfig("LanguageCode from RFC3066", "Language code format is \"[a-z](2)-[A-Z](2)\""));
-		mimeType.setEmptyText("ex: mimetype");
+		// mime type
+        mimeType.setEmptyText("ex: mimetype");
 		mimeType.setToolTipConfig(new ToolTipConfig("Mime Type is a string", "It should contain less than 256 characters"));
+		// repository unique id
 		repoUId.setEmptyText("ex: 1.2.7.0.3.2.37768.2007.2.2");
 		repoUId.setToolTipConfig(new ToolTipConfig("Repository Unique ID is an OID",
 				"As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)" + "\n"
 						+ "OID format is \"[1-9](\\.[0-9]+)*]\""));
+        // uri
 		uri.setEmptyText("ex: uriO");
 		uri.setToolTipConfig(new ToolTipConfig("URI is a string", "It should contain less than 256 characters"));
-
-		/* identifiers info */
+		// patient id
 		patientID.setEmptyTexts("ex: 76cc^^1.3.6367.2005.3.7&ISO", "ex: urn:uuid:6b5aea1a-625s-5631-v4se-96a0a7b38446");
 		patientID.setToolTipConfigs(new ToolTipConfig("Value is a string", "It should contain less than 256 characters"), new ToolTipConfig(
 				"idType is a string256 in HL7 CX format", "The required format is:\n" +
                 "IDNumber^^^&OIDofAssigningAuthority&ISO"));
-		uniqueId.setEmptyTexts("ex: 76cc^^1.3.6367.2005.3.7&ISO", "ex: 2008.8.1.35447");
+        // unique id
+        uniqueId.setEmptyTexts("ex: 76cc^^1.3.6367.2005.3.7&ISO", "ex: 2008.8.1.35447");
 		uniqueId.setToolTipConfigs(
-				new ToolTipConfig("Value is a string", "76cc^^1.3.6367.2005.3.7&ISO"),
+				new ToolTipConfig("Unique ID is an OID", "As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)<br/>Unique ID format is \"[1-9](\\.[0-9]+)*]\""),
 				new ToolTipConfig(
 						"idType is an OID",
-						"As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)\nOID format is \"[1-9](\\.[0-9]+)*]\""));
-
-		/* name values info */
-		legalAuthenticator.setEmptyTexts("ex: 11375^Welby^Marcus^J^Jr. MD^Dr^^^&1.2.840.113619.6.197&ISO");
+						"As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)<br/>Unique ID format is \"[1-9](\\.[0-9]+)*]\""));
+		// legal authenticator
 		legalAuthenticator.setEditingFieldToolTip("A legal authenticator is a string256 in XCN format. It should be formatted as follow: \n<b>Identifier^LastName^FirstName[^SecondName[^FurtherGivenNames]][^Suffix][^Prefix]^AssigningAuthority</b>.");
+		legalAuthenticator.setEmptyTexts("ex: 11375^Welby^Marcus^J^Jr. MD^Dr^^^&1.2.840.113619.6.197&ISO");
         legalAuthenticator.addFieldValidator(new RegExValidator("^[0-9]+\\^(([A-Za-z]+\\.{0,1}\\s{0,1})+\\^){3,7}\\^{2}&[0-9]+(\\.[0-9]+)*(&ISO)$"));
-//		sourcePatientId.setEmptyTexts("", "ex: 58642j65s^^^5.8.4");
-//		sourcePatientId.setToolTipConfigs(null, new ToolTipConfig("Value is a String", "It shouldd contain les than 256 characters"));
+        // source patient info
         sourcePatientInfo.setToolTipConfig(new ToolTipConfig("Help on Source Patient Info?","These elements should contain demographics information of the patient to\n" +
                 "whose medical record this document belongs. It is made several values and should be formatted as follow:<br/>" +
                 "<b>PID-3</b> should include the source patient identifier.<br/>" +
@@ -624,6 +596,11 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 "<b>PID-7</b> should include the patient date of birth.<br/>" +
                 "<b>PID-11</b> should include the patient address.<br/>" +
                 "PID-2, PID-4, PID-12 and PID-19 should not be used.<br/>"));
+        sourcePatientInfo.addFieldValidator(new RegExValidator("^PID-(((3|5|11|2|4|12|19)\\|)|(8\\|(M|F|O|U)$)|(7\\|(((19|20)\\d\\d)(0?[1-9]|1[012])(0?[1-9]|[12][0-9]|3[01])))$)","This value is not a correct source patient info."));
+        // source patient id
+        sourcePatientId.addFieldValidator(new RegExValidator("^[A-Za-z]*[1-9][0-9]+\\^{3}&[1-9][0-9]*(\\.[0-9][1-9]*)+(&ISO)$","This value is not a correct source patient id."));
+//		sourcePatientId.setToolTipConfigs(null, new ToolTipConfig("Value is a String", "It shouldd contain les than 256 characters"));
+//		sourcePatientId.setEmptyTexts("", "ex: 58642j65s^^^5.8.4");
     }
 
 }

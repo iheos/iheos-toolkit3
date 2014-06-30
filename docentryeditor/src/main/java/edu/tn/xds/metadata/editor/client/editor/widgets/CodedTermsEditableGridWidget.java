@@ -45,6 +45,8 @@ public class CodedTermsEditableGridWidget extends Composite {
         grid = new GenericEditableGrid<CodedTerm>(CodedTerm.class,gridTitle,
                 new ListStore<CodedTerm>(isprops.key()), cm);
 
+        grid.setCheckBoxSelectionModel();
+
         // Editing widgets
         TextField displayNameTF = new TextField();
         displayNameTF.setAllowBlank(false);

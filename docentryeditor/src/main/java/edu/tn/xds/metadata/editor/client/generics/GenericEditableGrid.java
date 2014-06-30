@@ -111,7 +111,7 @@ public class GenericEditableGrid<M> extends Grid<M> {
         clearButton.setToolTip("Clear all elements");
         toolBar.add(clearButton);
         helpButton.setIcon(AppImages.INSTANCE.help());
-        helpButton.setTitle("Help");
+        helpButton.setTitle("Help?");
 
         helpTooltipConfig.setTitleText("Widget help?");
         helpTooltipConfig.setAnchor(Style.Side.LEFT);
@@ -282,6 +282,23 @@ public class GenericEditableGrid<M> extends Grid<M> {
                 getStore().commitChanges();
             }
         });
+    }
+
+    protected void setEditable(ClicksToEdit clicksToEdit) {
+        // EDITING //
+        editing = new GridInlineEditing<M>(this);
+        editing.setClicksToEdit(clicksToEdit);
+        editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<M>() {
+            @Override
+            public void onCompleteEdit(
+                    CompleteEditEvent<M> completeEditEvent) {
+                getStore().commitChanges();
+            }
+        });
+    }
+
+    public void setHeaderVisible(boolean visible){
+        pane.setHeaderVisible(visible);
     }
 
     public void setStoreMaxLength(int storeMaxLength) {

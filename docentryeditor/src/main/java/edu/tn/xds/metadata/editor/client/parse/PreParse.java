@@ -27,9 +27,9 @@ import com.google.gwt.xml.client.DOMException;
  * <p>
  * <b>How it works ?</b><br>
  * This class is a singleton which the only instance is called by a
- * {@link Parse} object, then it enables to prepare the String thanks to
+ * {@link edu.tn.xds.metadata.editor.client.parse.XdsParser} object, then it enables to prepare the String thanks to
  * cleanEscape and allowUTF called in the doPreParse method as follows:
- * {@link #doPreParse(String)}.</br>
+ * {@link #doPreParseUTF8(String)}.</br>
  * </p>
  *
  *
@@ -37,12 +37,12 @@ import com.google.gwt.xml.client.DOMException;
  * <b>See below each method mentioned above or come back to an other class.</b>
  * <br>
  * {@link #cleanEscape()}</br> {@link #allowUTF8()} <br>
- * {@link #doPreParse(String)} </br>
+ * {@link #doPreParseUTF8(String)} </br>
  * </p>
  *
  *
  *
- * @see Parse
+ * @see edu.tn.xds.metadata.editor.client.parse.XdsParser
  *
  */
 public class PreParse {
@@ -50,27 +50,25 @@ public class PreParse {
 	/**
 	 * <p>
 	 *
-	 * documentXml
-	 *            - The data taken from the XML document and send by the server,
-	 *            this is the String to parse.<br>
-	 *            Type : String</br>
-	 *            </p>
+	 * documentXml - The data taken from the XML document and send by the
+	 * server, this is the String to parse.<br>
+	 * Type : String</br>
+	 * </p>
 	 *
-	 * @see PreParse
-	 * @see Parse
+	 * @see edu.tn.xds.metadata.editor.client.parse.PreParse
+	 * @see edu.tn.xds.metadata.editor.client.parse.XdsParser
 	 */
 	private static String documentXml;
 
 	/**
 	 * <p>
 	 *
-	 * myPreParse
-	 *            - The instance of PreParse class (it's a singleton class).<br>
-	 *            Type : PreParse</br>
-	 *            </p>
+	 * myPreParse - The instance of PreParse class (it's a singleton class).<br>
+	 * Type : PreParse</br>
+	 * </p>
 	 *
 	 *
-	 * @see PreParse
+	 * @see edu.tn.xds.metadata.editor.client.parse.PreParse
 	 */
 	private final static PreParse myPreParse = new PreParse();
 
@@ -78,10 +76,16 @@ public class PreParse {
 		return myPreParse;
 	}
 
-	public String doPreParse(String msg) {
+	public String doPreParseUTF8(String msg) {
 		documentXml = msg;
 		cleanEscape();
 		allowUTF8();
+		return documentXml;
+	}
+
+	public String doPreParse(String msg) {
+		documentXml = msg;
+		cleanEscape();
 		return documentXml;
 	}
 
@@ -90,14 +94,14 @@ public class PreParse {
 	 * <b>Method cleanEscape</b> <br>
 	 * It uses a {@link StringBuilder} to copy the data's XML without unexpected
 	 * space.</br>It analysis char by char whether there are too much space.<br>
-	 * This method is called by {@link #doPreParse(String)}.
+	 * This method is called by {@link #doPreParseUTF8(String)}.
 	 * </p>
 	 *
 	 *
-	 * @see PreParse
+	 * @see edu.tn.xds.metadata.editor.client.parse.PreParse
 	 *
 	 */
-    private void cleanEscape() {
+	private void cleanEscape() {
 		StringBuilder xmlWithoutEscape = new StringBuilder();
 		try {
 			// Delete escape between > <
@@ -108,7 +112,9 @@ public class PreParse {
 				if (c == 32) {
 					// Delete escape after an escape or after > (==62) or before
 					// < (==60)
-					if (documentXml.charAt(i - 1) == 62 || documentXml.charAt(i - 1) == 32 || documentXml.charAt(i + 1) == 60) {
+					if (documentXml.charAt(i - 1) == 62
+							|| documentXml.charAt(i - 1) == 32
+							|| documentXml.charAt(i + 1) == 60) {
 						// nothing is done, the white space is not appended
 					} else {
 						xmlWithoutEscape.append(c);
@@ -129,14 +135,14 @@ public class PreParse {
 	 * It uses a {@link StringBuilder} to copy the data's XML with available
 	 * UTF8 characters.</br>It analysis char by char whether there are UTF8
 	 * characters.<br>
-	 * This method is called by {@link #doPreParse(String)}.
+	 * This method is called by {@link #doPreParseUTF8(String)}.
 	 * </p>
 	 *
 	 *
-	 * @see PreParse
+	 * @see edu.tn.xds.metadata.editor.client.parse.PreParse
 	 *
 	 */
-    private void allowUTF8() {
+	private void allowUTF8() {
 
 		// For the UTF-8 caracters : replace by their ASCII number
 		StringBuilder xmlEscaped = new StringBuilder();
@@ -148,7 +154,10 @@ public class PreParse {
 					xmlEscaped.append("&#" + ((int) c) + ";");
 				} else {
 					// to avoid \n \t \s, warning : pb if \\n \\t \\s
-					if (c == 92 && (documentXml.charAt(i + 1) == 't' || documentXml.charAt(i + 1) == 'n' || documentXml.charAt(i + 1) == 's')) {
+					if (c == 92
+							&& (documentXml.charAt(i + 1) == 't'
+									|| documentXml.charAt(i + 1) == 'n' || documentXml
+									.charAt(i + 1) == 's')) {
 						i = i + 1;
 					} else {
 						// caracter TAB LF VT

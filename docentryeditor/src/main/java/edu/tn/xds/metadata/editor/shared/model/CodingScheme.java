@@ -63,8 +63,8 @@ public class CodingScheme implements ModelElement, Serializable {
 		return codingScheme;
 	}
 
-	public void setCodingScheme(String256 codingScheme) {
-		this.codingScheme = codingScheme;
+	public CodingScheme setCodingScheme(String256 codingScheme) {
+		this.codingScheme = codingScheme;return this;
 	}
 
 	/**
@@ -106,4 +106,17 @@ public class CodingScheme implements ModelElement, Serializable {
 
 		return answer;
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CodingScheme)) return false;
+
+        CodingScheme that = (CodingScheme) o;
+
+        if (!codingScheme.equals(that.codingScheme)) return false;
+
+        return true;
+    }
+
 }

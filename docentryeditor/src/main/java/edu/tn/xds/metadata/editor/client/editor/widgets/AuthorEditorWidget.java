@@ -221,12 +221,12 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 
         FieldLabel institutionLabel = new FieldLabel();
         institutionLabel.setText("Institution");
-        authorInstitution.addValidator(new RegExValidator("[A-Za-z]+(\\s[A-Za-z]+)" +
+        authorInstitution.addValidator(new RegExValidator("[A-Za-z]+(\\s[A-Za-z]+)*" +
                 "((\\^{9}[0-9]+(\\.[0-9]+)+)|" +
-                "(\\^{5}&[0-9]+(\\.[0-9]+)+&ISO\\^{4}[0-9]+))"));
-        authorInstitution.setToolTipConfig(new ToolTipConfig("Institution format","Examples:\n" +
-                "Some Hospital\n" +
-                "Some Hospital^^^^^^^^^1.2.3.4.5.6.7.8.9.1789.45\n" +
+                "(\\^{5}&[0-9]+(\\.[0-9]+)+&ISO\\^{4}[0-9]+)){0,1}","This value is incorrect for an author institution."));
+        authorInstitution.setToolTipConfig(new ToolTipConfig("Institution format","Examples:<br/>" +
+                "Some Hospital<br/>" +
+                "Some Hospital^^^^^^^^^1.2.3.4.5.6.7.8.9.1789.45<br/>" +
                 "Some Hospital^^^^^&1.2.3.4.5.6.7.8.9.1789&ISO^^^^45"));
 
         hcontainerInstitution.add(authorInstitution, new HorizontalLayoutData(1, 30, new Margins(0, 10, 10, 0)));
@@ -614,9 +614,18 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
         addInstitutionButton.setEnabled(enabled);
         addRoleButton.setEnabled(enabled);
         addSpecialtyButton.setEnabled(enabled);
-        deleteInstitutionButton.setEnabled(enabled);
-        deleteRoleButton.setEnabled(enabled);
-        deleteSpecialtyButton.setEnabled(enabled);
+        if(listViewAuthSpecialties.getSelectionModel().getSelectedItem()!=null||listViewAuthSpecialties.getSelectionModel().getSelectedItems().size()>0){
+            deleteSpecialtyButton.setEnabled(enabled);
+        }
+        if(listViewAuthRoles.getSelectionModel().getSelectedItem()!=null||listViewAuthRoles.getSelectionModel().getSelectedItems().size()>0){
+            deleteRoleButton.setEnabled(enabled);
+        }
+        if(listViewAuthInstitutions.getSelectionModel().getSelectedItem()!=null||listViewAuthInstitutions.getSelectionModel().getSelectedItems().size()>0){
+            deleteInstitutionButton.setEnabled(enabled);
+        }
+//        deleteInstitutionButton.setEnabled(enabled);
+//        deleteRoleButton.setEnabled(enabled);
+//        deleteSpecialtyButton.setEnabled(enabled);
     }
     /**
      * @return Current editionMode (state of the editor)

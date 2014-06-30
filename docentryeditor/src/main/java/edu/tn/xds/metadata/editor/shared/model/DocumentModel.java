@@ -8,8 +8,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import edu.tn.xds.metadata.editor.client.parse.Parse;
-
 /**
  *
  * <b>This class represents the model which have to be respected by the xml
