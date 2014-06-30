@@ -101,10 +101,7 @@ public class CodingScheme implements ModelElement, Serializable {
 	 */
 	@Override
 	public boolean verify() throws String256Exception {
-		boolean answer = true;
-		answer = codingScheme.verify();
-
-		return answer;
+		return codingScheme.verify();
 	}
 
     @Override

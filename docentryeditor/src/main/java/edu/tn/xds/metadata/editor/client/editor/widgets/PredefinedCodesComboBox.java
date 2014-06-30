@@ -12,9 +12,6 @@ import edu.tn.xds.metadata.editor.shared.model.CodedTerm;
 
 import java.util.List;
 
-/**
- * Created by onh2 on 6/26/2014.
- */
 public class PredefinedCodesComboBox extends ComboBox<CodedTerm> {
 
     public enum PredefinedCodes {

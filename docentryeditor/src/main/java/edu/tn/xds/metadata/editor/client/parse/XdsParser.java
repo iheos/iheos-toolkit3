@@ -141,14 +141,6 @@ public class XdsParser {
         titles, comments, authors, mimetype, hash, id, classcode, confidentialitycode, creationtime, eventcode, formatcode, healthcarefacilitytype, languagecode, legalauthenticator, patientid, practicesettingcode, repositoryuniqueid, servicestarttime, servicestoptime, size, sourcepatientid, sourcepatientinfo, typecode, uniqueid, uri;
     }
 
-    public String getDocumentXml() {
-        return documentXml;
-    }
-
-    public void setDocumentXml(String msg) {
-        this.documentXml = msg;
-    }
-
     /**
      * <b>Method getDocumentParsed</b> <br>
      * Get the instance of PreParse object to prepare the String parsing. </br>

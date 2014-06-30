@@ -112,11 +112,9 @@ public class PreParse {
 				if (c == 32) {
 					// Delete escape after an escape or after > (==62) or before
 					// < (==60)
-					if (documentXml.charAt(i - 1) == 62
+					if (!(documentXml.charAt(i - 1) == 62
 							|| documentXml.charAt(i - 1) == 32
-							|| documentXml.charAt(i + 1) == 60) {
-						// nothing is done, the white space is not appended
-					} else {
+							|| documentXml.charAt(i + 1) == 60)) {
 						xmlWithoutEscape.append(c);
 					}
 				} else {
@@ -161,9 +159,7 @@ public class PreParse {
 						i = i + 1;
 					} else {
 						// caracter TAB LF VT
-						if (c == 9 || c == 10 || c == 11) {
-
-						} else {
+						if (!(c == 9 || c == 10 || c == 11)){
 							xmlEscaped.append(c);
 						}
 					}

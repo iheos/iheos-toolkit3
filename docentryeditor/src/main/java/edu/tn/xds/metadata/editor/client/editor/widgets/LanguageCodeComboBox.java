@@ -1,9 +1,6 @@
 package edu.tn.xds.metadata.editor.client.editor.widgets;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell.TriggerAction;
 import com.sencha.gxt.data.shared.LabelProvider;
@@ -11,7 +8,6 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 
-import edu.tn.xds.metadata.editor.client.parse.PredefinedCodesParser;
 import edu.tn.xds.metadata.editor.shared.model.LanguageCode;
 
 /**
@@ -44,10 +40,7 @@ public class LanguageCodeComboBox extends ComboBox<LanguageCode> {
 
 		getStore().clear();
 
-		List<LanguageCode> l = new ArrayList<LanguageCode>();
-		for (LanguageCode lc : LanguageCode.values()) {
-			l.add(lc);
-		}
+		List<LanguageCode> l = new ArrayList<LanguageCode>(Arrays.asList(LanguageCode.values()));
 
 		Collections.sort(l, new Comparator<LanguageCode>() {
 

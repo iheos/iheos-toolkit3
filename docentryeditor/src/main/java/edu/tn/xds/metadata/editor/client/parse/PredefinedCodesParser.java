@@ -16,9 +16,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
-/**
- * Created by onh2 on 6/26/2014.
- */
 public enum PredefinedCodesParser {
     INSTANCE;
 

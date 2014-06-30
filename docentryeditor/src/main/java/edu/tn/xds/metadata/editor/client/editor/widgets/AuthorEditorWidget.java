@@ -207,7 +207,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
             @Override
             public List<EditorError> validate(Editor<String> editor, String value) {
                 List<EditorError> errors = null;
-                if (value != null && value!="" && (!value.contains("@"))) {
+                if (value != null || value.equals("") || (!value.contains("@"))) {
                     errors = createError(editor, "Value is not a valid telecommunication email.", value);
                 }
                 return errors;
@@ -572,7 +572,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
      * This method clears the fields to add values in lists roles, institutions and specialties.
      */
     private void resetWidgets() {
-        authorTelecommunication.string.clear();;
+        authorTelecommunication.string.clear();
         authorPerson.string.clear();
         authorInstitution.string.clear();
         authorRole.string.clear();

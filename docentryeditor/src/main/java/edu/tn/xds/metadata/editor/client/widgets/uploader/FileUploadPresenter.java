@@ -8,7 +8,6 @@ import edu.tn.xds.metadata.editor.client.editor.EditorPlace;
 import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractPresenter;
 import edu.tn.xds.metadata.editor.client.parse.XdsParser;
-import edu.tn.xds.metadata.editor.client.resources.AppResources;
 import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
 
 public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
