@@ -50,7 +50,8 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 	String256EditorWidget id = new String256EditorWidget();
 	String256EditorWidget hash = new String256EditorWidget();
 	LanguageCodeComboBox languageCode = new LanguageCodeComboBox();
-	String256EditorWidget mimeType = new String256EditorWidget();
+//	String256EditorWidget mimeType = new String256EditorWidget();
+	MimeTypeComboBox mimeType = new MimeTypeComboBox();
 	String256EditorWidget uri = new String256EditorWidget();
 	OIDEditorWidget repoUId = new OIDEditorWidget(false);
 

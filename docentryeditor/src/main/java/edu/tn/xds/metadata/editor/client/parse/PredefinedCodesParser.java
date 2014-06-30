@@ -35,6 +35,7 @@ public enum PredefinedCodesParser {
     private static final List<CodedTerm> typeCodes = new ArrayList<CodedTerm>();
     private static final List<CodedTerm> confidentialityCodes = new ArrayList<CodedTerm>();
     private static final List<CodedTerm> eventCodes = new ArrayList<CodedTerm>();
+    private static final List<String256> mimeTypes = new ArrayList<String256>();
 
 
     public List<CodedTerm> getCodes(PredefinedCodes predefinedCodes) {
@@ -109,5 +110,31 @@ public enum PredefinedCodesParser {
             }
         });
         return temp;
+    }
+
+    public List<String256> getMimeTypes() {
+        if(mimeTypes.size()==0) {
+            int index = 0;
+            while (!(((Element) nodes.item(index)).getAttribute("name")
+                    .equals("mimeType"))) {
+                index++;
+            }
+            NodeList n = ((Element) nodes.item(index))
+                    .getElementsByTagName("Code");
+            for (int i = 0; i < n.getLength(); i++) {
+                String256 code =new String256().setString(((Element) n
+                        .item(i)).getAttribute("code"));
+
+                if (!mimeTypes.contains(code))
+                    mimeTypes.add(code);
+            }
+            Collections.sort(mimeTypes, new Comparator<String256>() {
+                @Override
+                public int compare(String256 o1, String256 o2) {
+                    return o1.toString().compareTo(o2.toString());
+                }
+            });
+        }
+        return mimeTypes;
     }
 }

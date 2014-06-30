@@ -6,39 +6,33 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 import edu.tn.xds.metadata.editor.client.parse.PredefinedCodesParser;
-import edu.tn.xds.metadata.editor.shared.model.CodedTerm;
+import edu.tn.xds.metadata.editor.shared.model.String256;
 
 import java.util.List;
 
-public class PredefinedCodesComboBox extends ComboBox<CodedTerm> {
-
-    public enum PredefinedCodes {
-        CONTENT_TYPE_CODES, CLASS_CODES, CONFIDENTIALITY_CODES, FORMAT_CODES, HEALTHCARE_FACILITY_TYPE_CODES, PRACTICE_SETTING_CODES, EVENT_CODES, TYPE_CODES;
-    }
-
-    public PredefinedCodesComboBox(PredefinedCodes predefinedCodes) {
-        super(new ListStore<CodedTerm>(
-                new ModelKeyProvider<CodedTerm>() {
+public class MimeTypeComboBox extends ComboBox<String256> {
+    public MimeTypeComboBox(){
+        super(new ListStore<String256>(
+                new ModelKeyProvider<String256>() {
 
                     @Override
-                    public String getKey(CodedTerm item) {
+                    public String getKey(String256 item) {
                         if (item == null) {
                             return "NULL";
                         }
                         return item.toString();
                     }
-                }), new LabelProvider<CodedTerm>() {
+                }), new LabelProvider<String256>() {
 
             @Override
-            public String getLabel(CodedTerm item) {
-                return item.getDisplayName().toString();
+            public String getLabel(String256 item) {
+                return item.toString();
             }
         });
-
         getStore().clear();
 
-        List<CodedTerm> l = PredefinedCodesParser.INSTANCE
-                .getCodes(predefinedCodes);
+        List<String256> l = PredefinedCodesParser.INSTANCE
+                .getMimeTypes();
 
         getStore().addAll(l);
 
@@ -46,5 +40,4 @@ public class PredefinedCodesComboBox extends ComboBox<CodedTerm> {
         setForceSelection(true);
         setTypeAhead(true);
     }
-
 }
