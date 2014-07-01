@@ -3,7 +3,7 @@ package gov.nist.hit.ds.simSupport.simExample
 import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.simSupport.annotations.SimComponentInject
 import gov.nist.hit.ds.simSupport.annotations.SimComponentOutput
-import gov.nist.hit.ds.simSupport.engine.SimComponentBase
+import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import org.apache.axiom.om.OMElement
 
@@ -12,7 +12,7 @@ import org.apache.axiom.om.OMElement
  * @author bmajur
  *
  */
-public class SoapMessageParser extends SimComponentBase {
+public class SoapMessageParser extends ValComponentBase {
     OMElement xml;
     XmlMessage xmlMessage;
     OMElement header = null;

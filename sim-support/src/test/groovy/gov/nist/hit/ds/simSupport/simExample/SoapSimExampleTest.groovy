@@ -5,7 +5,7 @@ import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.EventFactory
 import gov.nist.hit.ds.simSupport.simChain.SimChain
 import gov.nist.hit.ds.simSupport.simChain.SimChainFactory
-import gov.nist.hit.ds.simSupport.engine.SimEngine
+import gov.nist.hit.ds.simSupport.simEngine.SimEngine
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
 import spock.lang.Specification
 /**
@@ -92,7 +92,7 @@ processing can be shown independent of the repository system.
         // Load base - this is the linkage back to where the inputs came from
         // and details of the formatting so the response can be formed later
         simChain.base = base
-        // Create engine to execute sim chain
+        // Create simEngine to execute sim chain
         SimEngine engine = new SimEngine(simChain)
 
         when:

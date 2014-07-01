@@ -1,10 +1,10 @@
 package gov.nist.hit.ds.simSupport.simChain
 import gov.nist.hit.ds.eventLog.Event
-import gov.nist.hit.ds.simSupport.engine.SimComponent
-import gov.nist.hit.ds.simSupport.engine.SimComponentFactory
-import gov.nist.hit.ds.simSupport.engine.SimStep
+import gov.nist.hit.ds.simSupport.simEngine.SimComponentFactory
+import gov.nist.hit.ds.simSupport.simEngine.SimStep
 import gov.nist.hit.ds.simSupport.loader.PropertyResourceFactory
 import gov.nist.hit.ds.simSupport.loader.SimComponentPropFormatParser
+import gov.nist.hit.ds.simSupport.validationEngine.ValComponent
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
@@ -58,11 +58,11 @@ class SimChainFactory {
         SimStep simStep = new SimStep()
         simStep.init(event)
         simChain.addStep(simStep)
-        SimComponent component = loadComponent(className, parameters, simStep)
+        ValComponent component = loadComponent(className, parameters, simStep)
         simStep.simComponent = component
     }
 
-    SimComponent loadComponent(String className, Map<String, String> parameters, SimStep simStep) {
+    ValComponent loadComponent(String className, Map<String, String> parameters, SimStep simStep) {
         try {
             SimComponentFactory factory = new SimComponentFactory(className, parameters)
             return factory.component

@@ -20,6 +20,7 @@ public class Toolkit {
     private static File warRootFile = null;
     private static File externalCacheFile = null;
     private static PropertyManager propertyManager;
+    private static boolean initialized = false;
     static Logger logger = Logger.getLogger(Toolkit.class);
 
     /**
@@ -36,17 +37,10 @@ public class Toolkit {
      * needs to have more than one toolkit.properties file to support the breadth
      * of unit testing it does)
      */
-    static {
-        try {
-            Installation.installation().initialize();
-        } catch (Exception e) {
-            logger.fatal(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        new Toolkit().initialize();
-    }
 
-    private void initialize() {
+    public void initialize() {
+        if (initialized) return;
+        initialized = true;
         URL resource = getClass().getResource("/toolkit.properties");
         if (resource == null) {
             logger.fatal("Cannot load toolkit.properties");
@@ -61,10 +55,10 @@ public class Toolkit {
             // production build
             if (
                     toolkitPropertiesFile.getParent().endsWith("classes") &&
-                    toolkitPropertiesFile.getParentFile().getParent().endsWith("WEB-INF"))
+                    toolkitPropertiesFile.getParentFile().getParent().endsWith("WAR"))
                 warRootFile = toolkitPropertiesFile.getParentFile().getParentFile();
-            else
-                warRootFile = null;
+//            else
+//                warRootFile = null;
             logger.debug("warRoot set to <" + warRootFile + ">");
 
             propertyManager = new PropertyManager();
@@ -79,9 +73,12 @@ public class Toolkit {
                 throw new RuntimeException(msg);
             }
             if ( externalCacheFile == null) {
-                String msg = "Location of External Cache not initialized";
-                logger.fatal(msg);
-                throw new RuntimeException(msg);
+                externalCacheFile = Installation.installation().externalCache;
+                if ( externalCacheFile == null) {
+                    String msg = "Location of External Cache not initialized";
+                    logger.fatal(msg);
+                    throw new RuntimeException(msg);
+                }
             }
             try {
                 repositoriesTypesFile().mkdirs();

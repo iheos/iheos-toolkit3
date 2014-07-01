@@ -2,9 +2,9 @@ package gov.nist.hit.ds.simSupport.components;
 
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
-import gov.nist.hit.ds.simSupport.engine.SimComponent;
+import gov.nist.hit.ds.simSupport.validationEngine.ValComponent;
 
-public class FooUser implements SimComponent {
+public class FooUser implements ValComponent {
 	Event event;
 	
 	public void setFoo(Foo f) {

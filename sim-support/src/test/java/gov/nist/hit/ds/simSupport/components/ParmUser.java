@@ -3,13 +3,13 @@ package gov.nist.hit.ds.simSupport.components;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.simSupport.engine.SimComponent;
+import gov.nist.hit.ds.simSupport.validationEngine.ValComponent;
 import gov.nist.hit.ds.soapSupport.SoapFaultException;
 
 /**
  * Created by bmajur on 4/21/14.
  */
-public class ParmUser implements SimComponent {
+public class ParmUser implements ValComponent {
     String lang;
 
     @Override

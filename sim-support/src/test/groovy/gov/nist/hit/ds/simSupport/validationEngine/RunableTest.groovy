@@ -1,13 +1,12 @@
 package gov.nist.hit.ds.simSupport.validationEngine
 import gov.nist.hit.ds.repository.api.RepositoryException
-import gov.nist.hit.ds.simSupport.engine.SimComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import org.junit.Assert
 import org.junit.Test
 
-public class RunableTest extends SimComponentBase {
+public class RunableTest extends ValComponentBase {
 	
 	@ValidationFault(id="VAL1", msg="One must equal one", faultCode= FaultCode.Sender, ref="First Grade")
 	public void validationFaultTest() throws SoapFaultException {

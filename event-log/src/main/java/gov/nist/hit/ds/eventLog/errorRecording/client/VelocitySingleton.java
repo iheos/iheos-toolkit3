@@ -25,7 +25,7 @@ public class VelocitySingleton {
 
 		// Template directory
 		String absolutePath = new File(Thread.currentThread().getContextClassLoader().getResource("").getFile()).getParentFile().getParentFile().getPath();//this goes to webapps directory
-		velocityProperties.put("file.resource.loader.path", absolutePath+"/WEB-INF/templates");
+		velocityProperties.put("file.resource.loader.path", absolutePath+"/WAR/templates");
 
 		try {
 			velocityEngine.init(velocityProperties);

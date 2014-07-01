@@ -5,7 +5,7 @@ import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.http.parser.ParseException;
-import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
+import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase;
 import gov.nist.hit.ds.utilities.html.HttpMessageContent;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.xml.XmlText;
@@ -23,7 +23,7 @@ import java.io.IOException;
  * @author bmajur
  *
  */
-public abstract class AbstractLogLoader extends SimComponentBase {
+public abstract class AbstractLogLoader extends ValComponentBase {
 	File dir;
 	String header = null;
 	byte[] body = null;

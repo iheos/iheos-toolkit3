@@ -26,7 +26,7 @@ public class Installation {
 	PropertyServiceManager propertyServiceMgr = null;
 	static Logger logger = Logger.getLogger(Installation.class);
 	static Installation me = null;
-	File externalCache;
+	public File externalCache;
 	String buildNumber;
 	File toolkitPropertiesFile = null;
 	boolean initialized = false;
