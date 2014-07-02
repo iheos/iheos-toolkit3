@@ -1,15 +1,15 @@
 package gov.nist.hit.ds.simSupport.validationEngine
+
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.EventFactory
 import gov.nist.hit.ds.eventLog.assertion.Assertion
 import gov.nist.hit.ds.simSupport.simChain.SimChain
 import gov.nist.hit.ds.simSupport.simChain.SimChainFactory
 import gov.nist.hit.ds.simSupport.simEngine.SimEngine
-import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
 import spock.lang.Specification
 
-public class FailedValidationRunTest  extends Specification {
+public class FailedValidationRunTestEx extends Specification {
 
     def 'Assertion Fails'() {
         setup:
