@@ -17,7 +17,7 @@ public class EventFactory {
         def eventAsset = null
         if (repository) {
             def assetName = nowAsFilenameBase()
-            logger.debug('New event <${assetName}>')
+            logger.debug("New event ${assetName}")
             def type = new SimpleType('event')
             eventAsset = repository.createAsset(assetName, 'Event', type)
         }

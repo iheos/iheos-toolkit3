@@ -1,14 +1,11 @@
 package gov.nist.hit.ds.repository.simple;
 
-import gov.nist.hit.ds.toolkit.installation.InitializationFailedException;
-import gov.nist.hit.ds.toolkit.installation.Installation;
-
-
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.api.Type;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 
 import java.io.File;
 import java.io.FileReader;
@@ -59,10 +56,11 @@ public class Configuration {
 			addSource(f,Access.RO_RESIDENT);
 			
 		} catch (NullPointerException npe) {
-			logger.info("No resident repository source found in WEB-INF/" + REPOSITORY_SOURCE_DIRNAME);
+			logger.info("No resident repository source found in WAR/" + REPOSITORY_SOURCE_DIRNAME);
 		}
 				
 		String ecDir = Installation.installation().getExternalCache().toString();
+        System.out.println("EC = " + ecDir);
 		
 		f = new File( ecDir + File.separator + REPOSITORY_SOURCE_DIRNAME); 
 		addSource(f,Access.RW_EXTERNAL);		
@@ -355,7 +353,7 @@ public class Configuration {
 		}
 		String errorHeader = RepositoryException.REPOSITORY_SRC_NOT_FOUND + ": The ("+ access.toString() +") " + REPOSITORY_SOURCE_DIRNAME ;
 		if (Access.RO_RESIDENT.equals(access)) {
-			throw new RepositoryException(errorHeader + " folder is missing in WEB-INF.");	
+			throw new RepositoryException(errorHeader + " folder is missing in WAR.");
 		} else {
 			throw new RepositoryException(errorHeader + " folder is missing in External Cache.");
 		}

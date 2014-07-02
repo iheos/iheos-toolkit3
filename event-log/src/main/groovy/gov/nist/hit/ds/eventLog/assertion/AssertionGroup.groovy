@@ -12,6 +12,7 @@ public class AssertionGroup  {
     List<Assertion> assertions = []
     AssertionStatus worstStatus = AssertionStatus.SUCCESS;
     def validatorName = "AssertionGroup";
+    def saveInLog = true
 
     private static Logger logger = Logger.getLogger(AssertionGroup);
     private final static String dashes = "---";

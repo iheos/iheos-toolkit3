@@ -16,6 +16,7 @@ class TransactionType implements IsSerializable, Serializable {
     public String asyncCode
     public String requestAction
     public String responseAction
+    public String simChainResourceName
 
     public String getCode() { return code }
     public String getName() { return name }
@@ -67,6 +68,9 @@ class TransactionType implements IsSerializable, Serializable {
         val = tt.responseAction;
         if (val == null || val.equals(""))
             throw new InvalidTransactionTypeDefinitionException("responseAction not defined");
+        val = tt.simChainResourceName;
+        if (val == null || val.equals(""))
+            throw new InvalidTransactionTypeDefinitionException("simChainName not defined");
     }
 
 

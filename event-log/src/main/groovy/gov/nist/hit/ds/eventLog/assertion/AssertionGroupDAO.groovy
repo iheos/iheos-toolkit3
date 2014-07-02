@@ -10,12 +10,15 @@ import gov.nist.hit.ds.utilities.csv.CSVTable;
 import org.apache.log4j.Logger;
 
 public class AssertionGroupDAO {
-    Asset assertionsAsset;
+    Asset parent;
+    Asset assertionGroupAsset
     int counter = 1;
     static Logger logger = Logger.getLogger(AssertionGroupDAO);
 
     public Asset init(Asset parent) throws RepositoryException {
-        return AssetHelper.createChildAsset(parent, "Validators", "", new SimpleType("simAssertions"))
+        this.parent = parent
+        assertionGroupAsset =  AssetHelper.createChildAsset(parent, "Validators", "", new SimpleType("simAssertions"))
+        return assertionGroupAsset
     }
 
     public void setAssertionGroup(AssertionGroup ag) throws RepositoryException {
@@ -25,7 +28,7 @@ public class AssertionGroupDAO {
     public void save(AssertionGroup ag) throws RepositoryException {
         logger.trace("AssertionGroup " + ag.toString());
         if (!ag.saveInLog) return;
-        Asset a = AssetHelper.createChildAsset(assertionsAsset, ag.getValidatorName(), "", new SimpleType("simpleType"))
+        Asset a = AssetHelper.createChildAsset(assertionGroupAsset, ag.getValidatorName(), "", new SimpleType("simpleType"))
         a.setOrder(counter++)
         a.setProperty(PropertyKey.STATUS, ag.getWorstStatus().name())
         logger.debug("flushing CSVTable")

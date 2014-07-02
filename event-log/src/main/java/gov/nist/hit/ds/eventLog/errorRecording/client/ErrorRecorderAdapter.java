@@ -183,7 +183,7 @@ public class ErrorRecorderAdapter {
 					}
 				}
 
-				//  first, get and initialize an engine  
+				//  first, get and initialize an simEngine
 				VelocityEngine ve = VelocitySingleton.getVelocityEngine();
 				//  next, get the Template
 				Template t = ve.getTemplate("DirectValidationReport.vm");
@@ -226,7 +226,7 @@ public class ErrorRecorderAdapter {
 
 	public String CcdaToHtml(ArrayList<CCDAValidationReportItem> ccdaItem) {
 		String res = "";
-		//  first, get and initialize an engine  
+		//  first, get and initialize an simEngine
 		try {
 			VelocityEngine ve = VelocitySingleton.getVelocityEngine();
 			Template t2 = ve.getTemplate("CCDAValidationReport.vm");
@@ -254,7 +254,7 @@ public class ErrorRecorderAdapter {
 
 	public String XdmToHtml(ArrayList<XDMValidationReportItem> xdmItem) {
 		String res = "";
-		//  first, get and initialize an engine  
+		//  first, get and initialize an simEngine
 		try {
 			VelocityEngine ve = VelocitySingleton.getVelocityEngine();
 			Template t2 = ve.getTemplate("XDMValidationReport.vm");

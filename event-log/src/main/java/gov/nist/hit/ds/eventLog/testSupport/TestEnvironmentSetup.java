@@ -9,7 +9,7 @@ import java.io.File;
 
 public class TestEnvironmentSetup {
 	File RepositoriesPath;  					// Repositories folder
-	File InstallationPath;						// Path containing the WEB-INF folder (for External_Cache)		
+	File InstallationPath;						// Path containing the WAR folder (for External_Cache)
 	File RepositoryRoot; 
 	
 	public TestEnvironmentSetup setup() throws InitializationFailedException {

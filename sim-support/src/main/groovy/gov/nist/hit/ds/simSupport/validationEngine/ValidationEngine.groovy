@@ -1,10 +1,11 @@
 package gov.nist.hit.ds.simSupport.validationEngine
+
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.assertion.Assertion
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus
 import gov.nist.hit.ds.eventLog.assertion.annotations.Validation
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext
-import gov.nist.hit.ds.simSupport.engine.SimComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
@@ -15,17 +16,20 @@ import org.apache.log4j.Logger
 import java.lang.reflect.InvocationTargetException
 
 public class ValidationEngine {
-    SimComponentBase validationObject
+    ValComponentBase validationObject
     List<ValidationMethod> validationMethods  // taken from validationObject
     // only one of these is non-null indicating what kind of assertion is being tested
     public ValidationFault validationFaultAnnotation
     public Validation validationAnnotation
     static Logger logger = Logger.getLogger(ValidationEngine)
 
-    public ValidationEngine(SimComponentBase validationObject) {
+    public ValidationEngine(ValComponentBase validationObject, Event event) {
         this.validationObject = validationObject
+        validationObject.ag = event.assertionGroup
+        validationObject.validationEngine = this
     }
 
+    // called (indirectly through ValComponentBase) by the validator method run()
     public void run() throws SoapFaultException {
         try {
             scanForValidationMethods()
@@ -42,13 +46,13 @@ public class ValidationEngine {
     }
 
     public void scanForValidationMethods() throws Exception {
-        validationMethods = new ValidationScanner(validationObject.class).scan()
+        validationMethods = new ValidationClassScanner(validationObject.class).scan()
     }
 
     public void runValidationMethods() throws Exception {
         ValidationMethod validationMethod = getARunableValidationMethod();
         while(validationMethod) {
-            logger.debug("Running Validation ${validationMethod.method.name} on ${validationObject.class.name}");
+            logger.debug("Starting Validation ${validationMethod.method.name} on ${validationObject.class.name}");
             invoke(validationMethod)
             validationMethod = getARunableValidationMethod();
         }
@@ -86,6 +90,7 @@ public class ValidationEngine {
         if (valMethod) {
             validationAnnotation = valMethod.validationAnnotation
             validationFaultAnnotation = valMethod.validationFaultAnnotation
+            assert validationAnnotation || validationFaultAnnotation
             valMethod.markHasBeenRun()
             return valMethod
         }

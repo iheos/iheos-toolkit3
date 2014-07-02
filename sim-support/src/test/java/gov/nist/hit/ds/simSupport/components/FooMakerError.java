@@ -2,9 +2,9 @@ package gov.nist.hit.ds.simSupport.components;
 
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
-import gov.nist.hit.ds.simSupport.engine.SimComponent;
+import gov.nist.hit.ds.simSupport.validationEngine.ValComponent;
 
-public class FooMakerError implements SimComponent{
+public class FooMakerError implements ValComponent {
 
 	Foo foo;
 	AssertionGroup er;
