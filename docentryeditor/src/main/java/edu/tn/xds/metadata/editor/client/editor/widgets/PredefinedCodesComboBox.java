@@ -37,6 +37,8 @@ public class PredefinedCodesComboBox extends ComboBox<CodedTerm> {
 
         getStore().clear();
 
+        this.setEmptyText("Select a code...");
+
         List<CodedTerm> l = PredefinedCodesParser.INSTANCE
                 .getCodes(predefinedCodes);
 

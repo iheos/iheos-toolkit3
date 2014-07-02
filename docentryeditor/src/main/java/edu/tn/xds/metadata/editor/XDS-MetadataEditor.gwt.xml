@@ -37,7 +37,7 @@
     <!-- http://code.google.com/p/google-gin -->
     <inherits name="com.google.gwt.inject.Inject" />
 
-    <!-- ****************************** *** Logging ****************************** -->
+    <!-- ********************************* Logging ****************************** -->
     <inherits name="com.google.gwt.logging.Logging" />
     <set-property name="gwt.logging.enabled" value="TRUE" />
     <set-property name="gwt.logging.logLevel" value="FINE" />

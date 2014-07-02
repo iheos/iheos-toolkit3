@@ -23,4 +23,12 @@ public class MetadataEditorEventBus extends SimpleEventBus {
 	public void fireSaveFileEvent(SaveFileEvent event) {
 		fireEvent(event);
 	}
+
+    public HandlerRegistration addEditNewEventHandler(EditNewEvent.EditNewHandler handler) {
+		return addHandler(EditNewEvent.TYPE, handler);
+	}
+
+	public void fireEditNewEvent(EditNewEvent event) {
+		fireEvent(event);
+	}
 }

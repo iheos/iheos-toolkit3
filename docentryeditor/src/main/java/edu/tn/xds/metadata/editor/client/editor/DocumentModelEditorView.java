@@ -49,14 +49,13 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 	/* simple fields declaration */
 	String256EditorWidget id = new String256EditorWidget();
 	String256EditorWidget hash = new String256EditorWidget();
-	LanguageCodeComboBox languageCode = new LanguageCodeComboBox();
-//	String256EditorWidget mimeType = new String256EditorWidget();
-	MimeTypeComboBox mimeType = new MimeTypeComboBox();
+    String256EditorWidget fileName = new String256EditorWidget();
 	String256EditorWidget uri = new String256EditorWidget();
+	LanguageCodeComboBox languageCode = new LanguageCodeComboBox();
+	MimeTypeComboBox mimeType = new MimeTypeComboBox();
 	OIDEditorWidget repoUId = new OIDEditorWidget(false);
 
 	/* coded terms declaration */
-//	CodedTermEditorWidget classCode = new CodedTermEditorWidget();
     PredefinedCodesComboBox classCode = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.CLASS_CODES);
     PredefinedCodesComboBox formatCode = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.FORMAT_CODES);
     PredefinedCodesComboBox healthcareFacilityType = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.HEALTHCARE_FACILITY_TYPE_CODES);
@@ -143,24 +142,23 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		// ID Field (required)
 		FieldLabel idLabel = new FieldLabel(id, "Entry UUID");
 		idLabel.setLabelWidth(125);
-		id.setAllowBlank(false);
-        id.addValidator(new RegExValidator("[1-9][0-9]+","Value is not correct. It is supposed to be a number."));
+
+        // Filename field
+        FieldLabel filenameLabel = new FieldLabel(fileName,"File name");
+        filenameLabel.setLabelWidth(125);
 
 		// Hash Field (required)
 		FieldLabel hashLabel = new FieldLabel(hash, "Hash");
 		hashLabel.setLabelWidth(125);
-		hash.setAllowBlank(true);
-        hash.addValidator(new RegExValidator("[0-9a-fA-F]","Value is not correct. It is supposed to be a hexadecimal value."));
 
 		// Language Code Field (required)
 		FieldLabel languageCodeLabel = new FieldLabel(languageCode, "Language Code");
 		languageCodeLabel.setLabelWidth(125);
-		languageCode.setAllowBlank(false);
+
 
 		// Mime Type Field (required)
 		FieldLabel mimeTypeLabel = new FieldLabel(mimeType, "Mime Type");
 		mimeTypeLabel.setLabelWidth(125);
-		mimeType.setAllowBlank(false);
 
         // Class Code Field (required)
         FieldLabel classCodeLabel = new FieldLabel(classCode,"Class Code");
@@ -178,25 +176,23 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         FieldLabel practiceSettingCodeLabel = new FieldLabel(practiceSettingCode,"Practice Setting Code");
         practiceSettingCodeLabel.setLabelWidth(125);
 
-        // healthcare facility Code Field (required)
+        // type Code Field (required)
         FieldLabel typeCodeLabel = new FieldLabel(typeCode,"Type Code");
         typeCodeLabel.setLabelWidth(125);
 
 		// Repository Unique ID Field (optional)
 		FieldLabel repositoryLabel = new FieldLabel(repoUId, "Repository Unique ID");
 		repositoryLabel.setLabelWidth(125);
-		repoUId.setAllowBlank(true);
-        repoUId.addValidator(new RegExValidator("^[1-9][0-9]*(\\.[1-9][0-9]+)+$","Value is not correct. A repository unique ID is supposed to be a suite of numbers separated by periods."));
 
 		// URI Field (optional)
 		FieldLabel uriLabel = new FieldLabel(uri, "URI");
 		uriLabel.setLabelWidth(125);
-		uri.setAllowBlank(true);
 
 		// ////////////////////////////////////////////////////
 		// --- Adding REQUIRED simple fields labels to containers
 		// ////////////////////////////////////////////////////
 		VerticalLayoutContainer simpleRequiredFieldsContainer = new VerticalLayoutContainer();
+        simpleRequiredFieldsContainer.add(filenameLabel,new VerticalLayoutData(1,-1));
 		simpleRequiredFieldsContainer.add(idLabel, new VerticalLayoutData(1, -1));
 		simpleRequiredFieldsContainer.add(languageCodeLabel, new VerticalLayoutData(1, -1));
 		simpleRequiredFieldsContainer.add(mimeTypeLabel, new VerticalLayoutData(1, -1));
@@ -227,13 +223,11 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		FieldSet fieldSet_fileProperties = new FieldSet();
 		fieldSet_fileProperties.setHeadingText("Files properties");
 		fieldSet_fileProperties.setCollapsible(true);
-		// fieldSet_simple_fields.setWidth("auto");
 		fieldSet_fileProperties.add(filePropertiesFieldsContainer);
 
         FieldSet fieldSet_repoAttributes = new FieldSet();
         fieldSet_repoAttributes.setHeadingText("Repository attributes");
         fieldSet_repoAttributes.setCollapsible(true);
-        // fieldSet_simple_fields.setWidth("auto");
         fieldSet_repoAttributes.add(repositoryAttributesFieldsContainer);
 
 		// //////////////////////////////////////////////////////
@@ -244,58 +238,20 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		/* identifiers options and fieldset */
 		/* ********************************* */
 		// Patient ID Fields (required)
-		FieldSet fieldSet_identifier_patient = new FieldSet();
-		fieldSet_identifier_patient.setHeadingText("Patient ID");
-		fieldSet_identifier_patient.setCollapsible(true);
-		fieldSet_identifier_patient.add(patientID);
-		patientID.setAllowBlanks(false, false);
-        patientID.addValueFieldValidator(new RegExValidator("^[1-9][0-9a-z]+\\^{3}&[1-9](\\.[1-9][0-9]*)+(&ISO)$","Value's format is not a correct. \nIt should be like this: 6578946^^^&1.3.6.1.4.1.21367.2005.3.7&ISO."));
+        FieldLabel patientIdLabel = new FieldLabel(patientID,"Patient ID");
+        patientIdLabel.setLabelWidth(125);
+        simpleRequiredFieldsContainer.add(patientIdLabel);
 
 		// Unique ID Fieds (required)
 		FieldSet fieldSet_identifier_unique = new FieldSet();
 		fieldSet_identifier_unique.setHeadingText("Unique ID");
 		fieldSet_identifier_unique.setCollapsible(true);
 		fieldSet_identifier_unique.add(uniqueId);
-		uniqueId.setAllowBlanks(false, false);
-        uniqueId.addValueFieldValidator(new RegExValidator("^[1-9](\\.[1-9][0-9]*)+\\^[1-9][0-9]+$","Value's format is not a correct. It is supposed to be a suite of figures separated by periods."));
+
 
 		/* ********************************** */
 		/* coded terms options and fieldset */
 		/* ********************************** */
-		// Class Code (required)
-//		FieldSet fieldSet_codedTerm_classCode = new FieldSet();
-//		fieldSet_codedTerm_classCode.setHeadingText("Class Code");
-//		fieldSet_codedTerm_classCode.setCollapsible(true);
-//		fieldSet_codedTerm_classCode.add(classCode);
-//		classCode.setAllowBlanks(false, false, false);
-
-		// Format Code (required)
-//		FieldSet fieldSet_codedTerm_formatCode = new FieldSet();
-//		fieldSet_codedTerm_formatCode.setHeadingText("Format Code");
-//		fieldSet_codedTerm_formatCode.setCollapsible(true);
-//		fieldSet_codedTerm_formatCode.add(formatCode);
-//		formatCode.setAllowBlanks(false, false, false);
-
-		// Healthcare Facility Type (required)
-//		FieldSet fieldSet_codedTerm_healthcareFacility = new FieldSet();
-//		fieldSet_codedTerm_healthcareFacility.setHeadingText("Healthcare Facility Type");
-//		fieldSet_codedTerm_healthcareFacility.setCollapsible(true);
-//		fieldSet_codedTerm_healthcareFacility.add(healthcareFacilityType);
-//		healthcareFacilityType.setAllowBlanks(false, false, false);
-
-		// Practice Setting Code (required)
-//		FieldSet fieldSet_codedTerm_practiceSettingCode = new FieldSet();
-//		fieldSet_codedTerm_practiceSettingCode.setHeadingText("Practice Setting Code");
-//		fieldSet_codedTerm_practiceSettingCode.setCollapsible(true);
-//		fieldSet_codedTerm_practiceSettingCode.add(practiceSettingCode);
-//		practiceSettingCode.setAllowBlanks(false, false, false);
-
-		// Type Code (required)
-//		FieldSet fieldSet_codedTerm_typeCode = new FieldSet();
-//		fieldSet_codedTerm_typeCode.setHeadingText("Type Code");
-//		fieldSet_codedTerm_typeCode.setCollapsible(true);
-//		fieldSet_codedTerm_typeCode.add(typeCode);
-//		typeCode.setAllowBlanks(false, false, false);
 
 		/* ****************************** */
 		/* name values options and fields */
@@ -355,23 +311,23 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		requiredFields.add(creationTime.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 //		requiredFields.add(fieldSet_codedTerm_formatCode);
 //		requiredFields.add(fieldSet_codedTerm_healthcareFacility);
-		requiredFields.add(fieldSet_identifier_patient);
+//		requiredFields.add(patientIdLabel,new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 //		requiredFields.add(fieldSet_codedTerm_practiceSettingCode);
 //		requiredFields.add(fieldSet_codedTerm_typeCode);
 		requiredFields.add(fieldSet_identifier_unique);
 
 		// /////////////////////////////////////////////////////////
-		// Adding and ordering fieldsets in OPTIONAL panel
+		// Adding and ordering fieldsets in OPTIONAL fields panel
 		// /////////////////////////////////////////////////////////
 		/* simple optional fields added to FramedPanel container */
 		optionalFields.add(fieldSet_fileProperties);
 		optionalFields.add(fieldSet_repoAttributes);
-		optionalFields.add(fieldSet_authors);
 		optionalFields.add(titlesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(commentsGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
+		optionalFields.add(fieldSet_authors);
+		optionalFields.add(legalAuthenticator.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(sourcePatientId.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(sourcePatientInfo.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
-		optionalFields.add(legalAuthenticator.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(confidentialityCodesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(eventCodesGrid.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 		optionalFields.add(serviceStartTime.asWidget(),new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
@@ -379,7 +335,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
 		setWidgetsInfo();
 
-		form.setScrollMode(ScrollMode.AUTOY);
+		form.setScrollMode(ScrollMode.AUTO);
 		form.add(container);
 
 		return form;
@@ -553,29 +509,57 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 		// entry uuid
 		id.setEmptyText("ex: 123456789");
 		id.setToolTipConfig(new ToolTipConfig("ID is a string", "It should contain less than 256 characters"));
+        id.setAllowBlank(false);
+        id.addValidator(new RegExValidator("[1-9][0-9]+","Value is not correct. It is supposed to be a number."));
         // hash code
 		hash.setEmptyText("ex: Hex456");
 		hash.setToolTipConfig(new ToolTipConfig("Hash is a string", "It should contain less than 256 characters"));
+        hash.setAllowBlank(true);
+        hash.addValidator(new RegExValidator("^[0-9a-fA-F]+$","Value is not correct. It is supposed to be a hexadecimal value."));
         // language code
-		languageCode.setEmptyText("ex: en-GB");
+        languageCode.setAllowBlank(false);
+		languageCode.setEmptyText("Select a language...");
 		languageCode.setToolTipConfig(new ToolTipConfig("LanguageCode from RFC3066", "Language code format is \"[a-z](2)-[A-Z](2)\""));
 		// mime type
-        mimeType.setEmptyText("ex: mimetype");
+        mimeType.setAllowBlank(false);
+        mimeType.setEmptyText("Select a mime type...");
 		mimeType.setToolTipConfig(new ToolTipConfig("Mime Type is a string", "It should contain less than 256 characters"));
+        // class code
+        classCode.setEmptyText("Select a class...");
+        // filename
+        fileName.setEmptyText("Metadata filename (with file extension)");
+        fileName.setToolTipConfig(new ToolTipConfig("Metadata file name (with extension)","This is the name of the metadata file which will be generated. <br/>For example: xds-metadata.xml"));
+        fileName.setAllowBlank(false);
+        // format code
+        formatCode.setEmptyText("Select a format...");
+        // healthcare facility
+        healthcareFacilityType.setEmptyText("Select an healthcare facility...");
+        // pratice setting code
+        practiceSettingCode.setEmptyText("Select a practice setting...");
+        // type code
+        typeCode.setEmptyText("Select a type...");
 		// repository unique id
 		repoUId.setEmptyText("ex: 1.2.7.0.3.2.37768.2007.2.2");
 		repoUId.setToolTipConfig(new ToolTipConfig("Repository Unique ID is an OID",
 				"As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)" + "\n"
 						+ "OID format is \"[1-9](\\.[0-9]+)*]\""));
+        repoUId.setAllowBlank(true);
+        repoUId.addValidator(new RegExValidator("^[1-9][0-9]*(\\.[1-9][0-9]*)+$","Value is not correct. A repository unique ID is supposed to be a suite of numbers separated by periods."));
         // uri
+        uri.setAllowBlank(true);
 		uri.setEmptyText("ex: uriO");
 		uri.setToolTipConfig(new ToolTipConfig("URI is a string", "It should contain less than 256 characters"));
 		// patient id
 		patientID.setEmptyTexts("ex: 76cc^^1.3.6367.2005.3.7&ISO", "ex: urn:uuid:6b5aea1a-625s-5631-v4se-96a0a7b38446");
-		patientID.setToolTipConfigs(new ToolTipConfig("Value is a string", "It should contain less than 256 characters"), new ToolTipConfig(
+		patientID.setToolTipConfigs(new ToolTipConfig("Patient ID is a String256 in HL7 CX format",  "The required format is:\n" +
+                "IDNumber^^^&OIDofAssigningAuthority&ISO"), new ToolTipConfig(
 				"idType is a string256 in HL7 CX format", "The required format is:\n" +
                 "IDNumber^^^&OIDofAssigningAuthority&ISO"));
+        patientID.setAllowBlanks(false, false);
+        patientID.addValueFieldValidator(new RegExValidator("^(([A-Za-z]*)|([1-9]))[0-9A-z]+\\^{3}&[1-9][0-9]*(\\.[0-9][1-9]*)+(&ISO)$","Value's format is not a correct. \nIt should be like this: 6578946^^^&1.3.6.1.4.1.21367.2005.3.7&ISO."));
         // unique id
+        uniqueId.setAllowBlanks(false, false);
+        uniqueId.addValueFieldValidator(new RegExValidator("^[1-9](\\.[1-9][0-9]*)+(\\^[1-9][0-9]+){0,1}$","Value's format is not a correct. It is supposed to be a suite of figures separated by periods."));
         uniqueId.setEmptyTexts("ex: 76cc^^1.3.6367.2005.3.7&ISO", "ex: 2008.8.1.35447");
 		uniqueId.setToolTipConfigs(
 				new ToolTipConfig("Unique ID is an OID", "As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)<br/>Unique ID format is \"[1-9](\\.[0-9]+)*]\""),

@@ -9,6 +9,7 @@ import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractPresenter;
 import edu.tn.xds.metadata.editor.client.parse.XdsParser;
 import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
+import edu.tn.xds.metadata.editor.shared.model.String256;
 
 public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
 
@@ -28,8 +29,8 @@ public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
 		results = results.replaceAll("&lt;", "<");
 		results = results.replaceAll("&gt;", ">");
 		results = results.replaceAll("&amp;", "&");
-
-		DocumentModel model = xdsParser.parse(results);
+		DocumentModel model = xdsParser.parse(results.split(";\\^;\\^;")[1]);
+        model.setFileName(new String256().setString(results.split(";\\^;\\^;")[0]));
 
 		logger.info("... file parsed.");
 //		logger.info("Metadata file: " + model.toXML());

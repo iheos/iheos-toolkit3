@@ -6,8 +6,10 @@ import com.google.web.bindery.requestfactory.shared.Service;
 
 import edu.tn.xds.metadata.editor.server.GenericServiceLocator;
 import edu.tn.xds.metadata.editor.server.SaveFileService;
+import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
 
 @Service(value = SaveFileService.class, locator = GenericServiceLocator.class)
 public interface SaveFileRequestContext extends RequestContext {
 	public Request<String> saveAsXMLFile(String name);
+	public Request<String> saveAsXMLFile(String filename,String filecontent);
 }

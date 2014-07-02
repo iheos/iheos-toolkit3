@@ -23,8 +23,9 @@ public class IdentifierString256EditorWidget extends Composite implements Editor
 		FieldLabel idTypeLabel = new FieldLabel(idType, "IdType");
 		idTypeLabel.setLabelWidth(125);
 
-		vcontainer.add(valueLabel, new VerticalLayoutData(1, -1));
-		vcontainer.add(idTypeLabel, new VerticalLayoutData(1, -1));
+//		vcontainer.add(valueLabel, new VerticalLayoutData(1, -1));
+//		vcontainer.add(idTypeLabel, new VerticalLayoutData(1, -1));
+        vcontainer.add(value,new VerticalLayoutData(1,-1));
 	}
 
     public void addValueFieldValidator(Validator validator){

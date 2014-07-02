@@ -34,6 +34,8 @@ public class MimeTypeComboBox extends ComboBox<String256> {
         List<String256> l = PredefinedCodesParser.INSTANCE
                 .getMimeTypes();
 
+        this.setEmptyText("Select a type...");
+
         getStore().addAll(l);
 
         setTriggerAction(ComboBoxCell.TriggerAction.ALL);

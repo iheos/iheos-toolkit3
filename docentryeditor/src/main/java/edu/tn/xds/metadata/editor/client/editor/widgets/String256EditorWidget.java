@@ -18,14 +18,14 @@ import edu.tn.xds.metadata.editor.shared.model.String256;
  */
 public class String256EditorWidget extends Composite implements Editor<String256> {
 
-	private final VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
 	BoundedTextField string = new BoundedTextField();
-    int initWindowWidth;
+//    int initWindowWidth;
 
 	public String256EditorWidget() {
+        VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
 		initWidget(vcontainer);
 		// string.setWidth(400);
-        initWindowWidth=Window.getClientWidth();
+//        initWindowWidth=Window.getClientWidth();
 
 		string.setWidth("auto");
 		string.setMaxLength(256);

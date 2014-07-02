@@ -17,6 +17,7 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 
 import edu.tn.xds.metadata.editor.client.editor.DocumentModelEditorMVP;
 import edu.tn.xds.metadata.editor.client.editor.EditorPlace;
+import edu.tn.xds.metadata.editor.client.event.EditNewEvent;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
 import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent;
 import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent.NewFileLoadedHandler;
@@ -104,6 +105,12 @@ public class NorthPanel extends ContentPanel {
 				saveButton.enable();
 			}
 		});
+        eventBus.addEditNewEventHandler(new EditNewEvent.EditNewHandler() {
+            @Override
+            public void onEditNew(EditNewEvent event) {
+                saveButton.enable();
+            }
+        });
 		newButton.addSelectHandler(new SelectHandler() {
 
 			@Override

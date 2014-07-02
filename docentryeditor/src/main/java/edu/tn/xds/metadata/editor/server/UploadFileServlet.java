@@ -40,6 +40,7 @@ public class UploadFileServlet extends HttpServlet {
 
 			while (iterator.hasNext()) {
 				FileItemStream item = iterator.next();
+                String filename=item.getName();
 
 				if (!item.isFormField()) {
 					logger.fine("file uploaded on server side");
@@ -51,7 +52,7 @@ public class UploadFileServlet extends HttpServlet {
 							ByteBuffer.wrap(encoded)).toString();
 
 					// Return file content to the client
-					resp.getOutputStream().print(fileContent);
+					resp.getOutputStream().print(filename+";^;^;"+fileContent);
 
 					// This was the previous method...
 					// String filename=writeTemporaryFile(item);
@@ -68,7 +69,7 @@ public class UploadFileServlet extends HttpServlet {
 
 	/**
 	 * A better solution without writing a temporary file has been implemented.
-	 * 
+	 *
 	 * @deprecated
 	 * @param item
 	 * @return filename

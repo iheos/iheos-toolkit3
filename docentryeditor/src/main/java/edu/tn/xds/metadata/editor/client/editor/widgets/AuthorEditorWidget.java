@@ -207,7 +207,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
             @Override
             public List<EditorError> validate(Editor<String> editor, String value) {
                 List<EditorError> errors = null;
-                if (value != null || value.equals("") || (!value.contains("@"))) {
+                if ( (!value.contains("@"))) {
                     errors = createError(editor, "Value is not a valid telecommunication email.", value);
                 }
                 return errors;

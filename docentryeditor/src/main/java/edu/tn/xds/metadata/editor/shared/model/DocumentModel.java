@@ -76,34 +76,6 @@ public class DocumentModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * <b>ArrayList(InternationalString title</b> - The title of the document
-	 * [Optional].<br>
-	 * Type: ArrayList of {@link InternationalString}</br> </p>
-	 *
-	 * <b>Cardinality:</b><br>
-	 * 0..1 </p>
-	 *
-	 * @see InternationalString
-	 * @see DocumentModel
-	 */
-	@Nullable
-	private ArrayList<InternationalString> titles;
-
-	/**
-	 * <b>ArrayList(InternationalString) comments</b> - The comments of the
-	 * document [Optional].<br>
-	 * Type: ArrayList of {@link InternationalString}</br> </p>
-	 *
-	 * <b>Cardinality:</b><br>
-	 * 0..1 </p>
-	 *
-	 * @see InternationalString
-	 * @see DocumentModel
-	 */
-	@Nullable
-	private ArrayList<InternationalString> comments;
-
-	/**
 	 * <b>ArrayList(Author) authors</b> - The author(s) of the document
 	 * [Optional].<br>
 	 * Type: ArrayList of {@link Author}</br> </p>
@@ -129,6 +101,20 @@ public class DocumentModel implements Serializable {
 	 */
 	@NotNull
 	private CodedTerm classCode;
+
+    /**
+     * <b>ArrayList(InternationalString) comments</b> - The comments of the
+     * document [Optional].<br>
+     * Type: ArrayList of {@link InternationalString}</br> </p>
+     *
+     * <b>Cardinality:</b><br>
+     * 0..1 </p>
+     *
+     * @see InternationalString
+     * @see DocumentModel
+     */
+    @Nullable
+    private ArrayList<InternationalString> comments;
 
 	/**
 	 * <b>CodedTerm confidentialityCode</b> - The confidentiality code of the
@@ -160,19 +146,6 @@ public class DocumentModel implements Serializable {
 	private NameValueDTM creationTime;
 
 	/**
-	 * <b>String256 id</b> - The id of the document [Mandatory].<br>
-	 * Type: {@link String256}</br> </p>
-	 *
-	 * <b>Cardinality:</b><br>
-	 * 1..1 </p>
-	 *
-	 * @see String256
-	 * @see DocumentModel
-	 */
-	@NotNull
-	private String256 id;
-
-	/**
 	 * <b>ArrayList(CodedTerm) eventCode</b> - The event code of the document
 	 * [Optional].<br>
 	 * Type: {@link CodedTerm}</br> </p>
@@ -185,6 +158,17 @@ public class DocumentModel implements Serializable {
 	 */
 	@Nullable
 	private ArrayList<CodedTerm> eventCode;
+
+    /**
+     * <b>String256 fileName</b> - The name of the metadata file which will be generated.
+     * [Mandatory]<br/>
+     *
+     * <b>Cardinality:</b><br/>
+     * 1..1
+     */
+    @NotNull
+    @NotEmpty
+    private String256 fileName;
 
 	/**
 	 * <b>CodedTerm formatCode</b> - The format code of the document
@@ -228,6 +212,19 @@ public class DocumentModel implements Serializable {
 	@NotEmpty
 	private CodedTerm healthcareFacilityType;
 
+    /**
+     * <b>String256 id</b> - The id of the document [Mandatory].<br>
+     * Type: {@link String256}</br> </p>
+     *
+     * <b>Cardinality:</b><br>
+     * 1..1 </p>
+     *
+     * @see String256
+     * @see DocumentModel
+     */
+    @NotNull
+    private String256 id;
+
 	/**
 	 * <b>LanguageCode languageCode</b> - The language code of the document
 	 * [Mandatory].<br>
@@ -240,7 +237,6 @@ public class DocumentModel implements Serializable {
 	 * @see DocumentModel
 	 */
 	@NotNull
-	// private String256 languageCode;
 	private LanguageCode languageCode;
 
 	/**
@@ -448,6 +444,20 @@ public class DocumentModel implements Serializable {
 	@Nullable
 	private NameValueString256 sourcePatientInfo;
 
+    /**
+     * <b>ArrayList(InternationalString title</b> - The title of the document
+     * [Optional].<br>
+     * Type: ArrayList of {@link InternationalString}</br> </p>
+     *
+     * <b>Cardinality:</b><br>
+     * 0..1 </p>
+     *
+     * @see InternationalString
+     * @see DocumentModel
+     */
+    @Nullable
+    private ArrayList<InternationalString> titles;
+
 	/**
 	 * <b>CodedTerm typeCode</b> - The type code of the document [Mandatory].<br>
 	 * Type: {@link CodedTerm}</br></p>
@@ -558,6 +568,7 @@ public class DocumentModel implements Serializable {
 		creationTime = new NameValueDTM();
 		creationTime.setName(new String256().setString("creationTime"));
 		id = new String256();
+        fileName=new String256();
 		formatCode = new CodedTerm();
 		hash = new String256();
 		healthcareFacilityType = new CodedTerm();
@@ -567,6 +578,7 @@ public class DocumentModel implements Serializable {
 				.setString("legalAuthenticator"));
 		mimeType = new String256();
 		patientID = new IdentifierString256();
+        patientID.setIdType(new String256().setString("urn:uuid:6b5aeala-874d-4603-a4bc-96a0a7b38446"));
 		practiceSettingCode = new CodedTerm();
 		repoUId = new OID();
 		serviceStartTime = new NameValueDTM();
@@ -581,6 +593,7 @@ public class DocumentModel implements Serializable {
 		sourcePatientInfo.setName(new String256().setString("sourcePatientInfo"));
 		typeCode = new CodedTerm();
 		uniqueId = new IdentifierOID();
+//        uniqueId.setIdType(new OID().setOid(new String256().setString("urn:uuid:2e82c1f6-a085-4c72-9da3-8640a32e42ab")));
 		uri = new String256();
 
 		titles = new ArrayList<InternationalString>();
@@ -695,7 +708,15 @@ public class DocumentModel implements Serializable {
 		this.legalAuthenticator = legalAuthenticator;
 	}
 
-	public String256 getMimeType() {
+    public String256 getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String256 fileName) {
+        this.fileName = fileName;
+    }
+
+    public String256 getMimeType() {
 		return mimeType;
 	}
 
@@ -726,14 +747,6 @@ public class DocumentModel implements Serializable {
 	public void setRepoUId(OID repoUId) {
 		this.repoUId = repoUId;
 	}
-
-	// public String256 getRepositoryUniqueId() {
-	// return repoUId;
-	// }
-	//
-	// public void setRepositoryUniqueId(OID repositoryUniqueId) {
-	// this.repoUId = repositoryUniqueId;
-	// }
 
 	public NameValueDTM getServiceStartTime() {
 		return serviceStartTime;

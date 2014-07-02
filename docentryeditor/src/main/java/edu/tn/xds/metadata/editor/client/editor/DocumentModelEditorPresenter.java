@@ -1,7 +1,6 @@
 package edu.tn.xds.metadata.editor.client.editor;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -86,6 +85,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 			if (editorDriver.hasErrors()) {
 				StringBuilder errorBuilder = new StringBuilder();
                 final ConfirmMessageBox cmb=new ConfirmMessageBox("Errors","There are errors in your editor. Are you sure you want to download a copy of these data? They may not be usable.");
+                cmb.show();
                 cmb.addHideHandler(new HideEvent.HideHandler() {
                     public void onHide(HideEvent event) {
                         if (cmb.getHideButton() == cmb.getButtonById(PredefinedButton.YES.name())) {
@@ -96,7 +96,6 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
                         }
                     }
                 });
-                cmb.show();
 //				for (EditorError error : editorDriver.getErrors()) {
 //					errorBuilder.append(error.getMessage() + "\n");
 //				}
@@ -106,6 +105,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 			}
 		} else {
             final ConfirmMessageBox cmb=new ConfirmMessageBox("Error","Data have not changed. Are you sure you want to download a copy of these data? They may not be usable.");
+            cmb.show();
             cmb.addHideHandler(new HideEvent.HideHandler() {
                 public void onHide(HideEvent event) {
                     if (cmb.getHideButton() == cmb.getButtonById(PredefinedButton.YES.name())) {
@@ -116,7 +116,6 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
                     }
                 }
             });
-            cmb.show();
 		}
 	}
 
@@ -146,6 +145,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
                 d.show();
             }
         });
+
 
     }
 

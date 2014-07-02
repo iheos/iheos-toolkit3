@@ -34,9 +34,6 @@ import java.util.Date;
  * @see DocumentModel class DocumentModel
  * @see ModelElement class ModelElement </p>
  *
- *
- *
- *
  */
 public class DTM implements ModelElement, Serializable {
 
@@ -49,7 +46,7 @@ public class DTM implements ModelElement, Serializable {
      * @see DocumentModel
      */
     @NotNull
-    @MatchesPattern(value = "[0-9]{4}([0-p]{2}){4,}")
+    @MatchesPattern(value = "[0-9]{4}([0-p]{2}){4,}")// FIXME check regexp pattern I don't get it on first sight
     private Date dtm;
 
     public DTM() {

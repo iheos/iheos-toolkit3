@@ -55,4 +55,40 @@ public class SaveFileService implements Serializable {
 		return filename;
 	}
 
+    /**
+	 * Distant method that save a String into a generated xml file in the
+	 * server. It returns the generated file name.
+	 *
+	 * @param fileContent
+     * @param filename
+	 * @return String filename
+	 */
+	public String saveAsXMLFile(String filename, String fileContent) {
+		logger.info("Saving xml file...");
+
+		// Random name created for save on server
+		String fileName = filename;
+        if(!(fileName.matches("(\\.[0-9A-Za-z]+)$")))
+            fileName+=".xml";
+
+		// Save xml file content into "files" repository
+		logger.info("Metadata xml file creation...");
+
+		FileOutputStream out;
+
+		try {
+			out = new FileOutputStream(new File(FILE_REPOSITORY, fileName));
+
+			out.write(fileContent.getBytes());
+			out.close();
+		} catch (IOException e) {
+			logger.warning("Error when writing metadata file on server.\n"+e.getMessage());
+			e.printStackTrace();
+		}
+		logger.fine("... temporary file created: " + FILE_REPOSITORY + "/" + fileName);
+
+		// return created file's name
+		return fileName;
+	}
+
 }
