@@ -2,21 +2,20 @@ package gov.nist.toolkit.xdstools3.client;
 
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.Side;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import gov.nist.toolkit.xdstools3.client.RESTClient.RestDs;
-import gov.nist.toolkit.xdstools3.client.customWidgets.ConfigToolbar;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.CloseableTabWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.MPQTab.MPQTab;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.SettingsTab;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.TabSetWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.tabs.findDocumentsTab.FindDocumentTab;
-import gov.nist.toolkit.xdstools3.client.events.EventHandler;
-import gov.nist.toolkit.xdstools3.client.events.OpenTabEvent;
+import com.smartgwt.client.widgets.tab.Tab;
+import gov.nist.toolkit.xdstools3.client.customWidgets.Toolbar;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
+import gov.nist.toolkit.xdstools3.client.tabs.*;
+import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
+import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
+import gov.nist.toolkit.xdstools3.client.util.Util;
 
 public class Xdstools3 implements EntryPoint {
 
@@ -39,58 +38,31 @@ public class Xdstools3 implements EntryPoint {
 	
 	private static final String APP_TITLE_IHE = "XDS Toolkit";
 
-    private TabSetWidget topTabSet;
-
-
+    private GenericTabSet topTabSet;
 
 
 
 	public void onModuleLoad() {
 
-		
-		// Event handling in the GUI
-				final SimpleEventBus bus = new SimpleEventBus();
-        				bus.addHandler(OpenTabEvent.TYPE, new EventHandler(){
-        					            public void onEvent(OpenTabEvent event) {
-                                            openTab(event.getTabName());
-        					            }
-        					        });
-				
-	// The second part of this Eventbus example is located in LoginDialog.
-	//				bus.addHandler(PingEvent.TYPE, new PingEventHandler(){
-	//					            public void onEvent(PingEvent event) {
-	//					                System.out.print("Inside Ping --> ");
-	//					                new Timer(){
-	//					                    public void run() {
-	//					                       SC.say("pong event fired");
-	//					                    }
-	//					                }.schedule(1000);
-	//					            }
-	//					        });
-
 
 		// Toolbar
-		ConfigToolbar configBar = new ConfigToolbar(bus);
+		Toolbar configBar = new Toolbar();
 
 		// Tabs
-		topTabSet = new TabSetWidget();
-        CloseableTabWidget homeTab = new CloseableTabWidget("Home");  homeTab.setCanClose(false);
-		CloseableTabWidget findDocsTab = new FindDocumentTab();
-        CloseableTabWidget mpqTab = new MPQTab();
-		
-        // Add all tabs to the main TabSet
+		topTabSet = new GenericTabSet();
+        topTabSet.setTabBarPosition(Side.TOP);
+        topTabSet.setTabBarAlign(Alignment.CENTER);
+        Tab homeTab = new HomeTab("Home");
+		GenericCloseableTab findDocsTab = new FindDocumentTab();
+        GenericCloseableTab mpqTab = new MPQTab();
         topTabSet.addTab(homeTab);
         topTabSet.addTab(findDocsTab);
         topTabSet.addTab(mpqTab);
 
-        //test
-        CloseableTabWidget rest = new RestDs();
-        topTabSet.addTab(rest);
-
         // Main layout
-        VLayout mainLayout = new VLayout(); 
-		mainLayout.setWidth(WINDOW_WIDTH);
-		mainLayout.setHeight100(); 
+        VLayout mainLayout = new VLayout();
+		mainLayout.setHeight100();
+        mainLayout.setAlign(Alignment.CENTER);
 		mainLayout.addMembers(configBar, topTabSet);
 		
 		// Attach the contents to the RootLayoutPanel
@@ -104,22 +76,37 @@ public class Xdstools3 implements EntryPoint {
 
         SC.showConsole();
 
-	}
+        // Add listener for Open Tab eventBusUtils. The tabs called must be defined in function "openTab".
+        Util.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new OpenTabEventHandler(){
+            public void onEvent(OpenTabEvent event) {
+                openTab(event.getTabName());
+            }
+        });
 
-public void openTab(String tabName) {
-    CloseableTabWidget tab = null;
+    }
 
-    // create tab depending on parameter
-    if (tabName == "ADMIN") {
-        CloseableTabWidget adminTab = new SettingsTab();
-        tab = adminTab;
+    /**
+     * Opens a given tab defined by its name. Updates the display to add this new tab and to bring it into focus.
+     * @param tabName the name of the tab to open.
+     */
+    public void openTab(String tabName) {
+        GenericCloseableTab tab = null;
+
+        // create tab depending on parameter
+        if (tabName == "ADMIN") {
+            GenericCloseableTab adminTab = new SettingsTab();
+            tab = adminTab;
+        }
+        if (tabName == "ENDPOINTS") {
+            GenericCloseableTab endpointsTab = new EndpointConfigTab();
+            tab = endpointsTab;
+        }
+        // update set of tabs
+        if (tab != null) {
+            topTabSet.addTab(tab);
+            topTabSet.selectTab(tab);
+        }
     }
-    // update set of tabs
-    if (tab != null) {
-        topTabSet.addTab(tab);
-        topTabSet.selectTab(tab);
-    }
-}
 
 	public static int getWindowWidth() {
 		return WINDOW_WIDTH_TO_INTEGER;

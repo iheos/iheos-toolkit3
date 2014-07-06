@@ -35,7 +35,7 @@ public class PidAllocateTab extends TabbedWindow {
 			"<p>Patient IDs allocated through this service will be fed to the Public Registry actor" +
 			"as part of the Patient Identity Feed transaction.  Once delivered, the Document Registry actor" +
 			"will accept Register Transactions for this Patient ID. All Patient IDs are allocated from an Assigning" +
-			"Authority. Because the Public Registry supports multiple concurrent test events, it operates" +
+			"Authority. Because the Public Registry supports multiple concurrent test eventBusUtils, it operates" +
 			"like multiple virtual Registries, each with their own Assigning Authority.</p><br />" +
 			"<p>Note: The Public Registry software can be installed on any machine.  This tool references " +
 			"the Registry on localhost (local to where the xdstools2 package is loaded)."

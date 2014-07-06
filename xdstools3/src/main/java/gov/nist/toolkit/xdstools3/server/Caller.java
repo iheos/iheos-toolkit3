@@ -1,7 +1,6 @@
 package gov.nist.toolkit.xdstools3.server;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Singleton class that acts as a directory of all calls to server-side packages. All calls must go through this class in order to
@@ -32,14 +31,15 @@ public class Caller implements Serializable {
 	}
 
 	// ---- List here the calls to backend packages ----
-
     /**
      * Login as admin
      * @param username the admin username
      * @param password the admin password
      */
 	public void logMeIn(String username, String password){
-		System.out.println("Call to server successful");
+
+        // TODO compare login with server-side admin credentials
+        System.out.println("Call to server successful");
 	}
 
     /**
