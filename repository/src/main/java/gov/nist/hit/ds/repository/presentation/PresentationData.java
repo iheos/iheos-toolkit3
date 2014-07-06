@@ -2,8 +2,8 @@ package gov.nist.hit.ds.repository.presentation;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.IsSerializable;
-import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
-import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.toolkit.installation.InitializationFailedException;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;

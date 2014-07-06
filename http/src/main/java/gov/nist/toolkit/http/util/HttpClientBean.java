@@ -6,25 +6,20 @@
 
 package gov.nist.toolkit.http.util;
 
-
+import gov.nist.hit.ds.xdsException.HttpClientException;
+import gov.nist.hit.ds.xdsException.HttpCodeException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.http.httpclient.HttpClient;
 import gov.nist.toolkit.http.httpclient.HttpClientInfo;
-import gov.nist.toolkit.xdsexception.HttpClientException;
-import gov.nist.toolkit.xdsexception.HttpCodeException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Serializable;
-import java.io.StringWriter;
-import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Map;
+import org.xml.sax.SAXException;
 
 import javax.mail.MessagingException;
 import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -138,7 +133,7 @@ public class HttpClientBean extends Object implements Serializable {
 	 * between HttpClient and registry.
 	 */
 	public boolean isRegistryResponse() 
-	throws HttpClientException, MalformedURLException, HttpCodeException, IOException, XdsInternalException, 
+	throws HttpClientException, MalformedURLException, HttpCodeException, IOException, XdsInternalException,
 	ParserConfigurationException, SAXException, MessagingException {
 		HttpClient sl = HttpClient.getConnection(this.getHost(),this.getPort(), this.getService(), false, username, password);
 		String registryStatus;

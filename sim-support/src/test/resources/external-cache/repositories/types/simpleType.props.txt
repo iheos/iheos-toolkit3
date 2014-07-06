@@ -1,0 +1,5 @@
+# simpleType
+
+keyword=simpleType
+domain=asset
+description=simpleType desc

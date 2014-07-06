@@ -1,107 +1,128 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>gov.nist.toolkit</groupId>
-		<artifactId>toolkit2</artifactId>
-		<version>v2-maven-alpha</version>
-	</parent>
+    <parent>
+        <groupId>gov.nist.hit.ds</groupId>
+        <artifactId>toolkit3</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+	<relativePath>../pom.xml</relativePath>
+    </parent>
 
-	<artifactId>site-management</artifactId>
+    <groupId>gov.nist.hit.ds</groupId>
+    <version>3.0.0-SNAPSHOT</version>
+    <artifactId>site-management</artifactId>
 
+    <!--
+    Issues
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ws.commons.axiom</groupId>
-			<artifactId>axiom-dom</artifactId>
-			<version>1.2.10</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>actortransaction</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>registry-support</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>utilities</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>xds-exceptions</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-all</artifactId>
-		</dependency>
-	</dependencies>
+    1) No references to this package from within rest of Core.
+    but...
+    2) Current UI is very dependent on Sites
 
-	<build>
-		<plugins>
-			<!-- ... or ask the plugin to detect them based on gwt modules files and 
-				copy the required java sources -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>resources</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.codehaus.mojo
-										</groupId>
-										<artifactId>
-											gwt-maven-plugin
-										</artifactId>
-										<versionRange>
-											[2.6.0-rc3,)
-										</versionRange>
-										<goals>
-											<goal>resources</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+    -->
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-dom</artifactId>
+            <version>1.2.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>actor-transaction</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>repository</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>utilities</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>xdsException</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>actor-transaction</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>toolkit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.ebxml</groupId>
+            <artifactId>ebxmlrr-common</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- ... or ask the plugin to detect them based on gwt modules files and
+                copy the required java sources -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings
+                    only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.codehaus.mojo
+                                        </groupId>
+                                        <artifactId>
+                                            gwt-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [2.6.0-rc3,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>resources</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

@@ -1,0 +1,5 @@
+# resHdrType
+
+keyword=resHdrType
+domain=asset
+description=resHdrType desc
