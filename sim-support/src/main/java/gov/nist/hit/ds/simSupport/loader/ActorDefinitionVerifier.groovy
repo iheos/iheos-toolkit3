@@ -16,7 +16,7 @@ class ActorDefinitionVerifier {
             actorType.check()
             actorType.transactionTypes.each {
                 it.check()
-                SimChainFactory.checkFromResource(it.simChainResourceName)
+                SimChainFactory.checkFromResource(it.implementationClassName)
             }
         } catch (Exception e) { return "Error verifying Actor ${actorName}: ${e.getMessage()}" }
         return null

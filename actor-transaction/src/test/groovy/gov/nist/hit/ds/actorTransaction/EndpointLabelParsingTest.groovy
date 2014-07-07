@@ -39,7 +39,7 @@ class EndpointLabelParsingTest extends Specification {
 '''
     def setup() {
         ActorTransactionTypeFactory.clear()
-        new ActorTransactionTypeFactory().load(config)
+        new ActorTransactionTypeFactory().loadFromString(config)
     }
 
     def "Name TLS Async"() {

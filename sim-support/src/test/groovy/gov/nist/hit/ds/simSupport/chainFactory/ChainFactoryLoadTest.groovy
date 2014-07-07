@@ -1,9 +1,6 @@
 package gov.nist.hit.ds.simSupport.chainFactory
 
-import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.simSupport.loader.ActorDefinitionVerifier
 import spock.lang.Specification
-
 /**
  * Created by bmajur on 6/25/14.
  */
@@ -52,59 +49,59 @@ class ChainFactoryLoadTest extends Specification {
     </actor>
 </ActorsTransactions>
 '''
-    void setup() {
-        new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().load(config)
-    }
-
-    def 'Good config should verify'() {
-        given: ''
-        def verifier = new ActorDefinitionVerifier()
-
-        when: ''
-
-        then: ''
-        verifier.verify('bar') == null
-    }
-
-    def 'Config with bad chain def should not verify'() {
-        given: ''
-        def verifier = new ActorDefinitionVerifier()
-
-        when: ''
-        def errs = verifier.verify('bar2')
-
-        then: ''
-        errs.contains('Error verifying Actor')
-        errs.contains('bar2')
-        errs.contains('Cannot load SimChain definition from')
-    }
-
-    def 'Config with bad simStep def should not verify'() {
-        given: ''
-        def verifier = new ActorDefinitionVerifier()
-
-        when: ''
-        def errs = verifier.verify('bar3')
-//        println "Big Error: ${errs}"
-
-        then: ''
-        errs.contains('Error verifying Actor')
-        errs.contains('bar3')
-        errs.contains('Component class not found')
-    }
-
-    def 'Config with bad simStep class should not verify'() {
-        given: ''
-        def verifier = new ActorDefinitionVerifier()
-
-        when: ''
-        def errs = verifier.verify('bar4')
-//        println "Big Error: ${errs}"
-
-        then: ''
-        errs.contains('Error verifying Actor')
-        errs.contains('bar4')
-        errs.contains('does not implement the SimComponent interface')
-    }
+//    void setup() {
+//        new ActorTransactionTypeFactory().clear()
+//        new ActorTransactionTypeFactory().loadFromString(config)
+//    }
+//
+//    def 'Good config should verify'() {
+//        given: ''
+//        def verifier = new ActorDefinitionVerifier()
+//
+//        when: ''
+//
+//        then: ''
+//        verifier.verify('bar') == null
+//    }
+//
+//    def 'Config with bad chain def should not verify'() {
+//        given: ''
+//        def verifier = new ActorDefinitionVerifier()
+//
+//        when: ''
+//        def errs = verifier.verify('bar2')
+//
+//        then: ''
+//        errs.contains('Error verifying Actor')
+//        errs.contains('bar2')
+//        errs.contains('Cannot loadFromString SimChain definition from')
+//    }
+//
+//    def 'Config with bad simStep def should not verify'() {
+//        given: ''
+//        def verifier = new ActorDefinitionVerifier()
+//
+//        when: ''
+//        def errs = verifier.verify('bar3')
+////        println "Big Error: ${errs}"
+//
+//        then: ''
+//        errs.contains('Error verifying Actor')
+//        errs.contains('bar3')
+//        errs.contains('Component class not found')
+//    }
+//
+//    def 'Config with bad simStep class should not verify'() {
+//        given: ''
+//        def verifier = new ActorDefinitionVerifier()
+//
+//        when: ''
+//        def errs = verifier.verify('bar4')
+////        println "Big Error: ${errs}"
+//
+//        then: ''
+//        errs.contains('Error verifying Actor')
+//        errs.contains('bar4')
+//        errs.contains('does not implement the SimComponent interface')
+//    }
 }

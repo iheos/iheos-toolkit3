@@ -41,7 +41,7 @@ public class TransactionTypeFactoryTest {
     @Before
     void setup() {
         ActorTransactionTypeFactory.clear()
-        new ActorTransactionTypeFactory().load(config)
+        new ActorTransactionTypeFactory().loadFromString(config)
     }
 
 	// This is testing against the registerTransaction.properties file

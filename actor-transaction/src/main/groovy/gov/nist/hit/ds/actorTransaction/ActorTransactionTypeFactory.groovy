@@ -44,7 +44,11 @@ class ActorTransactionTypeFactory {
 
     List<String> getActorTypeNames() { return actorTypeMap.keySet() }
 
-    void load(String config) {
+    void loadFromResource(String resourceName) {
+        loadFromString(this.class.getClassLoader().getResourceAsStream(resourceName).text)
+    }
+
+    void loadFromString(String config) {
         def records = new XmlSlurper().parseText(config)
         def transactions = records.transaction
         def actors = records.actor
@@ -61,7 +65,7 @@ class ActorTransactionTypeFactory {
         ttype.asyncCode = tt.@asyncCode
         ttype.requestAction = tt.request.@action
         ttype.responseAction = tt.response.@action
-        ttype.simChainResourceName = tt.simChain.@resource
+        ttype.implementationClassName = tt.@class
         transactionTypeMap.put(ttype.id, ttype)
         transactionTypeMap.put(ttype.code, ttype)
         transactionTypeMap.put(ttype.asyncCode, ttype)

@@ -48,7 +48,7 @@ public class SiteRepository {
 //		return sites;
 //	}
 //
-//	public Sites load(OMElement conf, Sites sites) throws Exception {
+//	public Sites loadFromString(OMElement conf, Sites sites) throws Exception {
 //		SiteLoader siteLoader = new SiteLoader();
 //
 //		siteLoader.parseSite(conf);
@@ -62,14 +62,14 @@ public class SiteRepository {
 //		return sites;
 //	}
 
-//	public Sites load(Repository repos, Sites sites) throws Exception {
+//	public Sites loadFromString(Repository repos, Sites sites) throws Exception {
 //		Directory reposDirectory = new Directory();
 //
 //		AssetIterator ai = repos.getAssetsByType(reposDirectory.getActorAssetType());
 //		while (ai.hasNextAsset()) {
 //			Asset a = ai.nextAsset();
 //			OMElement ele = Parse.parse_xml_string(new String(a.getContent()));
-//			load(ele, sites);
+//			loadFromString(ele, sites);
 //		}
 //		return sites;
 //	}

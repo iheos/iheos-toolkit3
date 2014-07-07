@@ -16,7 +16,7 @@ import spock.lang.Specification
  * Created by bmajur on 6/28/14.
  */
 @Log4j
-class FullTest extends Specification {
+class FullTestWithRepositoryTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
     <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as"
@@ -57,7 +57,7 @@ class FullTest extends Specification {
         repoFactory = new RepositoryFactory(repoSource)
 
         new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().load(actorsTransactions)
+        new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
     }
 
     File eventLogFile() { new File(repoDataDir, eventLogDirName) }
@@ -104,11 +104,6 @@ class FullTest extends Specification {
         when: ''
         Repository eventRepo = repoFactory.createNamedRepository('eventRepo', '', new SimpleType('eventLog'), eventLogDirName)
         Event event = new EventFactory().buildEvent(eventRepo)
-
-//        Repository simRepo = repoFactory.createNamedRepository('simRepo', '', new SimpleType('eventLog'), 'Sims')
-//        String simId = '123'
-//        def simType = new SimpleType('sim', 'sim')
-//        Asset simAsset = simRepo.createNamedAsset(simId, simId, simType, simId)
 
         // Setup
         String msg = 'Message'

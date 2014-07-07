@@ -49,7 +49,7 @@ class SoapSimExampleTest extends Specification {
 '''
     void setup() {
         new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().load(config)
+        new ActorTransactionTypeFactory().loadFromString(config)
     }
 
 

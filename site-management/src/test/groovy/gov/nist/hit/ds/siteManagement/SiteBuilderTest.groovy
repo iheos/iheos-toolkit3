@@ -47,7 +47,7 @@ public class SiteBuilderTest {
     @Before
     public void setup() {
         new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().load(config)
+        new ActorTransactionTypeFactory().loadFromString(config)
         site = new Site("mysite");
     }
 

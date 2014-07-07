@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.eventLog
 
+import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.Repository
 import gov.nist.hit.ds.repository.simple.SimpleType
 import org.apache.log4j.Logger
@@ -23,6 +24,13 @@ public class EventFactory {
         }
         new Event(eventAsset)
     }
+
+    Event buildEvent(Repository repository, Asset parentAsset) {
+        Event event = buildEvent(repository)
+        parentAsset.addAsset(event.eventAsset)
+        return event
+    }
+
 
 //	public Event buildEvent(SimId simId, String actorShortName, String transactionShortName) throws RepositoryException {
 //		Event event = null;

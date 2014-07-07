@@ -11,6 +11,8 @@ class EndpointBuilder {
     String port
     String base
     SimId simId
+    String actorCode
+    String transCode
 
     EndpointBuilder() {}
 
@@ -38,5 +40,12 @@ class EndpointBuilder {
         x = (x.charAt(0) == '/') ? clean(x.substring(1)) : x
         x = (x.charAt(x.size()-1) == '/') ? clean(x.substring(0, x.size()-1)) : x
         return x
+    }
+
+    def parse(String endpoint) {
+        def (http, serverPort, basePart, simStr, simid, actor, trans) = endpoint.tokenize('/')
+        simId = new SimId(simid)
+        actorCode = actor
+        transCode = trans
     }
 }
