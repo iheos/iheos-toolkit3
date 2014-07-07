@@ -20,14 +20,13 @@ public class EndpointConfigDS extends RestDataSource {
 
 	private EndpointConfigDS() {
         setID("supplyCategoryDS");
+        setDataURL("resources/datasources/categories.data.xml");
         setRecordXPath("/List/supplyCategory");
 
         // Set fields
 		DataSourceTextField endpointId = new DataSourceTextField("id");
 		endpointId.setPrimaryKey(true);
 		endpointId.setCanEdit(false);
-		DataSourceTextField endpointName = new DataSourceTextField("name");
-        DataSourceTextField endpointType = new DataSourceTextField("type");
         DataSourceTextField categoryName = new DataSourceTextField("categoryName", "Category", 128, true);
         categoryName.setPrimaryKey(true);
 
@@ -37,12 +36,11 @@ public class EndpointConfigDS extends RestDataSource {
         parentField.setRootValue("root");
         parentField.setForeignKey("supplyCategoryDS.categoryName");
 
-
         setFields(categoryName, parentField);
 
-        setDataURL("resources/datasources/categories.data.xml");
 
-        // Define REST URLs
+
+        // Define REST URLs - not used for now
 		//setFetchDataURL("rest/endpointconfig/read");
 		//setAddDataURL("rest/endpointconfig/add");
 		//setUpdateDataURL("rest/endpointconfig/update");
