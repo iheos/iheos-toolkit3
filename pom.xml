@@ -10,7 +10,7 @@
 
     <name>toolkit3</name>
 
-    <!--
+
 <repositories>
 <repository>
     <id>internal-nist-repo-releases</id>
@@ -46,7 +46,7 @@
     <url>http://repository.codehaus.org/org/codehaus</url>
 </repository>
 </repositories>
--->
+
 
 
     <properties>
