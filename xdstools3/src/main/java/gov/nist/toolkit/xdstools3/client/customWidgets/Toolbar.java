@@ -85,17 +85,9 @@ public class Toolbar extends RibbonBar {
         endpointButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // if not logged in
-                if (!Util.getInstance().getLoggedAsAdminStatus()) {
-                    // ask user to log in
-                    LoginDialogWidget dialog = new LoginDialogWidget("ENDPOINTS");
-                    dialog.show();
-                } else {
-                    // Display the Endpoint Settings tab if logged in
+                    // Display the Endpoint Settings tab
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent("ENDPOINTS"));
-                }
-            }
-        });
+        }});
 
 
         adminButton.addClickHandler(new ClickHandler() {

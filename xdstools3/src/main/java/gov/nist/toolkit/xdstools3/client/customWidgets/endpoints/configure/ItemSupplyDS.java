@@ -23,6 +23,7 @@ public class ItemSupplyDS extends RestDataSource {
 
 	private ItemSupplyDS() {
         setID("itemSupplyDS");
+        setDataURL("resources/datasources/endpoint_config.data.xml");
         setRecordXPath("/List/supplyItem"); // this is the path to the record we want to display, inside the XML file holding the data
         DataSourceIntegerField pkField = new DataSourceIntegerField("itemID");
         pkField.setHidden(true);
@@ -56,6 +57,5 @@ public class ItemSupplyDS extends RestDataSource {
         setFields(pkField, itemNameField, skuField, descriptionField, categoryField, unitsField,
                 unitCostField, inStockField, nextShipmentField);
 
-        setDataURL("resources/datasources/endpoint_config.data.xml");
     }
 }
