@@ -16,7 +16,7 @@ class FaultDAO {
 	}
 	
 	public void add(Fault fault) throws RepositoryException {
-		asset.updateContent(fault.toString(), "text/plain");
+		asset.setContent(fault.toString(), "text/plain");
 	}
 
     public void add(SOAPFaultException e) {

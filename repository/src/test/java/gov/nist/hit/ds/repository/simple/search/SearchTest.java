@@ -390,11 +390,11 @@ public class SearchTest {
 			
 			a = repos.createAsset("child 1", "This is my first site", new SimpleType("siteAsset"));
 			a.setOrder(1);			
-			parent.addAsset(a);
+			parent.addChild(a);
 			
 			a = repos.createAsset("child 2", "This is my second site", new SimpleType("siteAsset"));
 			a.setOrder(2);			
-			parent.addAsset(a);
+			parent.addChild(a);
 						
 			SimpleAssetIterator it = new SimpleAssetIterator(repos, new SimpleType("siteAsset"));
 			

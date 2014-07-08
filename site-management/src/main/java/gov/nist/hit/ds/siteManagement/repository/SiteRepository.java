@@ -1,16 +1,5 @@
 package gov.nist.hit.ds.siteManagement.repository;
 
-import gov.nist.hit.ds.repository.api.*;
-import gov.nist.hit.ds.repository.simple.SimpleId;
-import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.siteManagement.loader.SiteLoader;
-import gov.nist.hit.ds.siteManagement.loader.Sites;
-import gov.nist.hit.ds.toolkit.installation.Installation;
-import org.apache.axiom.om.OMElement;
-
-import java.io.File;
-
-
 public class SiteRepository {
 
 	static final String mainSiteRepoId = "MainSiteRepo";
@@ -88,7 +77,7 @@ public class SiteRepository {
 //				throw new ToolkitRuntimeException("Validation Errors: " + errs.toString());
 //
 //			OMElement xml = new SiteLoader().siteToXML(site);
-//			asset.updateContent(new OMFormatter(xml).toString(), "text/xml");
+//			asset.setContent(new OMFormatter(xml).toString(), "text/xml");
 //		} catch (RepositoryException e) {
 //			throw new ToolkitRuntimeException("Cannot save site <" + site.getName() + "> to repository", e);
 //		}

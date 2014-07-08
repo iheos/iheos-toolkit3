@@ -231,6 +231,12 @@ public interface Repository extends java.io.Serializable {
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
+     * Deletes the entire repository off the filesystem.
+     * @throws
+     */
+    void delete() throws RepositoryException;
+
+    /**
      * Get all the Assets in this Repository.  Iterators return a set, one at a
      * time.
      *
@@ -724,9 +730,9 @@ public interface Repository extends java.io.Serializable {
     /**
      * This method indicates whether this implementation supports Repository
      * methods: copyAsset, deleteAsset, invalidateAsset, updateDescription,
-     * updateDisplayName. Asset methods: addAsset, copyRecordStructure,
+     * updateDisplayName. Asset methods: addChild, copyRecordStructure,
      * createRecord, deleteRecord, inheritRecordStructure, removeAsset,
-     * updateContent, updateDescription, updateDisplayName,
+     * setContent, updateDescription, updateDisplayName,
      * updateEffectiveDate, updateExpirationDate. Part methods: createPart,
      * deletePart, updateDisplayName, updateValue. PartStructure methods:
      * updateDisplayName, validatePart. Record methods: createPart,
@@ -737,9 +743,9 @@ public interface Repository extends java.io.Serializable {
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNIMPLEMENTED
      *         UNIMPLEMENTED}, true indicates this implementation supports
      *         Repository methods: copyAsset, deleteAsset, invalidateAsset,
-     *         updateDescription, updateDisplayName. Asset methods: addAsset,
+     *         updateDescription, updateDisplayName. Asset methods: addChild,
      *         copyRecordStructure, createRecord, deleteRecord,
-     *         inheritRecordStructure, removeAsset, updateContent,
+     *         inheritRecordStructure, removeAsset, setContent,
      *         updateDescription, updateDisplayName, updateEffectiveDate,
      *         updateExpirationDate. Part methods: createPart, deletePart,
      *         updateDisplayName, updateValue. PartStructure methods:

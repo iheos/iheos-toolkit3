@@ -32,7 +32,7 @@ public class AssertionGroupDAO {
         a.setOrder(counter++)
         a.setProperty(PropertyKey.STATUS, ag.getWorstStatus().name())
         logger.debug("flushing CSVTable")
-        a.updateContent(asTable(ag.assertions).toString(), "text/csv")
+        a.setContent(asTable(ag.assertions).toString(), "text/csv")
     }
 
     AssertionStatus getAssertionStatus() { (ag == null) ? AssertionStatus.SUCCESS : ag.getWorstStatus() }

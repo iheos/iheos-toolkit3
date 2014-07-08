@@ -133,7 +133,14 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 		a.setAutoFlush(false);
 		a.setRepository(getId());
 		a.setType(assetType);
-		a.setId(new SimpleId(name));
+
+		/* fixed: this caused a bug when more than one asset is created with the same name */
+
+        /* Normally, in this situation, the name is the file name. */
+
+        a.setId(new IdFactory().getNewId(name));
+        a.setName(name);
+
 		a.updateDisplayName(displayName);
 		a.updateDescription(description);
 		a.setAutoFlush(true);		
