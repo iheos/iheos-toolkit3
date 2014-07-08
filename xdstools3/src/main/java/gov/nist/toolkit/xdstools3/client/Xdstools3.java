@@ -4,16 +4,18 @@ package gov.nist.toolkit.xdstools3.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.Side;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
+import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.Toolbar;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
-import gov.nist.toolkit.xdstools3.client.tabs.*;
+import gov.nist.toolkit.xdstools3.client.tabs.EndpointConfigTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
+import gov.nist.toolkit.xdstools3.client.tabs.SettingsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
@@ -52,8 +54,6 @@ public class Xdstools3 implements EntryPoint {
 
 		// Tabs
 		topTabSet = new GenericTabSet();
-        topTabSet.setTabBarPosition(Side.TOP);
-        topTabSet.setTabBarAlign(Alignment.CENTER);
         Tab homeTab = new HomeTab("Home");
 		GenericCloseableTab findDocsTab = new FindDocumentTab();
         GenericCloseableTab mpqTab = new MPQTab();
@@ -63,20 +63,22 @@ public class Xdstools3 implements EntryPoint {
 
         // Main layout
         VLayout mainLayout = new VLayout();
-		mainLayout.setHeight100();
-        mainLayout.setAlign(Alignment.CENTER);
 		mainLayout.addMembers(configBar, topTabSet);
+        mainLayout.setStyleName("mainLayout");
 		
 		// Attach the contents to the RootLayoutPanel
 		HLayout container = new HLayout();
-		container.setHeight100();
-		container.setWidth100();
-		container.setAlign(Alignment.CENTER); 
-		container.addMember(mainLayout);
+        container.setAlign(Alignment.CENTER);
+        container.setWidth100();
+        container.setHeight100();
+        container.addMembers(new LayoutSpacer(), mainLayout, new LayoutSpacer());
+        mainLayout.setWidth(900); // width has to be set here after use of LayoutSpacers, not in CSS, else it will not work.
+
 		RootLayoutPanel rp = RootLayoutPanel.get();
 		rp.add(container);
 
-        SC.showConsole();
+        // Smartgwt Console - useful for development, mainly tracking RPC calls
+        //SC.showConsole();
 
         // Add listener for Open Tab eventBusUtils. The tabs called must be defined in function "openTab".
         Util.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new OpenTabEventHandler(){

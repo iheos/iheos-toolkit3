@@ -9,7 +9,6 @@ import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
-import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.toolbar.RibbonBar;
 import com.smartgwt.client.widgets.toolbar.RibbonGroup;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
@@ -25,8 +24,9 @@ public class Toolbar extends RibbonBar {
 
     public Toolbar() {
 
-        setMembersMargin(10);
+        setMembersMargin(20);
         setAlign(Alignment.CENTER);
+        setStyleName("navbar");
 
         // Menu group: Session
         RibbonGroup sessionGroup = createRibbonGroup("Session");
@@ -58,21 +58,16 @@ public class Toolbar extends RibbonBar {
         ComboBoxItem cbItem = new ComboBoxItem();
         cbItem.setShowTitle(false);
         cbItem.setDefaultToFirstOption(true);
-        cbItem.setWidth(200);
+        cbItem.setWidth(480);
         cbItem.setType("comboBox");
         cbItem.setValueMap("Select test session", "Test session 1", "Add new test session...");
 
         // create form
         DynamicForm form = new DynamicForm();
         form.setFields(listBox, cbItem);
-        form.setPadding(5);
-
+        form.setCellPadding(10);
 
         sessionGroup.addControls(form);
-
-        LayoutSpacer spacer = new LayoutSpacer();
-        spacer.setWidth("360");
-
 
         // Menu group: Site / Actors
         IconButton endpointButton = getIconButton("View / Configure Endpoints", "icons/user_24x24.png", true);
@@ -81,6 +76,7 @@ public class Toolbar extends RibbonBar {
         // Behavior: Clicking on any of the buttons in the admin group opens a dialog to allow the user to log in as admin,
         // IF not logged in yet. Then follows to the link initially requested.
         IconButton adminButton = getIconButton("Admin Settings", "icons/glyphicons/glyphicons_136_cogwheel.png", true);
+
 
         // Listeners
         endpointButton.addClickHandler(new ClickHandler() {
@@ -109,7 +105,7 @@ public class Toolbar extends RibbonBar {
 
 
     // Add menu groups to menu bar
-    this.addMembers(sessionGroup, spacer, endpointButton, adminButton);
+    this.addMembers(sessionGroup, endpointButton, adminButton);
     draw();
 }
 

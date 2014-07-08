@@ -52,6 +52,7 @@ public class FindDocumentTab extends GenericCloseableTab {
         SpacerItem space = new SpacerItem();
         DynamicForm options = new DynamicForm();
         options.setFields(new FormItem[]{tls, space, saml, includeOnDemand});
+        options.setCellPadding(10);
 
         Label l3 = createSubtitle("Step 3: Select Endpoint");
         final EndpointWidget endpoints = new EndpointWidget();

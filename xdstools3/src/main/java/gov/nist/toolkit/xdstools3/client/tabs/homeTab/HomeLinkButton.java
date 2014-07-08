@@ -1,9 +1,9 @@
 package gov.nist.toolkit.xdstools3.client.tabs.homeTab;
 
 import com.smartgwt.client.util.SC;
-import com.smartgwt.client.widgets.form.fields.LinkItem;
-import com.smartgwt.client.widgets.form.fields.events.ClickEvent;
-import com.smartgwt.client.widgets.form.fields.events.ClickHandler;
+import com.smartgwt.client.widgets.IButton;
+import com.smartgwt.client.widgets.events.ClickEvent;
+import com.smartgwt.client.widgets.events.ClickHandler;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
@@ -11,11 +11,13 @@ import gov.nist.toolkit.xdstools3.client.util.Util;
 /**
  * Created by dazais on 7/8/2014.
  */
-public class HomeLink extends LinkItem {
+public class HomeLinkButton extends IButton {
 
-    public HomeLink(String _title){
+    public HomeLinkButton(String _title){
         final String title = _title;
         setTitle(title);
+        setBorder("0");
+        setWidth100();
 
         addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {

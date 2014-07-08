@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.tabs.homeTab;
 
 
-import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
 
@@ -20,12 +20,13 @@ public class HomeTab extends GenericTab {
     public VStack createQueryRetrieveDisplay(){
         VStack stack = new VStack();
 
-        HomeLink findDocs = new HomeLink("Find Documents");
-        HomeLink mpq = new HomeLink("MPQ Find Documents");
+        Label queriesAndRetrieves = createSubtitle("Queries and Retrieves");
 
-        DynamicForm form = new DynamicForm();
-        form.setItems(findDocs, mpq);
-        stack.setMembers(form);
+
+        HomeLinkButton findDocs = new HomeLinkButton("Find Documents");
+        HomeLinkButton mpq = new HomeLinkButton("MPQ Find Documents");
+
+        stack.setMembers(queriesAndRetrieves, findDocs, mpq);
 
         return stack;
     }

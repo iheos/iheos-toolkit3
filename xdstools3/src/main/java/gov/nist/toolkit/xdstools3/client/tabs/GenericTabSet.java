@@ -7,9 +7,7 @@ public class GenericTabSet extends TabSet {
 	
 	public GenericTabSet(){
 	    this.setTabBarPosition(Side.TOP);  
-	    this.setTabBarAlign(Side.LEFT); 
-	    this.setWidth100();
-	    this.setHeight100();
+	    this.setTabBarAlign(Side.LEFT);
         setStyleName("tabset");
 	}
 	
