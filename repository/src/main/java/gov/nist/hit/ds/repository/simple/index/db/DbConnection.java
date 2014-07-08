@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.repository.simple.index.db;
 
-import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.toolkit.installation.Installation;
+
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.index.IndexDataSource;
 

@@ -1,7 +1,6 @@
 package gov.nist.hit.ds.repository.simple;
 
-
-import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.index.BulkLoadTest;
 import gov.nist.hit.ds.repository.simple.index.CreateContainerTest;

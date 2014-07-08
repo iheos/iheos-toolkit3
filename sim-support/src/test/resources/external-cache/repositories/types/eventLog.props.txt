@@ -1,0 +1,6 @@
+# a repository to hold loggable events
+
+keyword=eventLog
+domain=repository
+description=Repository to hold loggable events
+indexes=off

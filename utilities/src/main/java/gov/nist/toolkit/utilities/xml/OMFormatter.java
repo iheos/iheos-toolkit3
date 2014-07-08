@@ -1,16 +1,14 @@
 package gov.nist.toolkit.utilities.xml;
 
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.File;
-import java.util.Iterator;
-
-import javax.xml.parsers.FactoryConfigurationError;
-
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
+
+import javax.xml.parsers.FactoryConfigurationError;
+import java.io.File;
+import java.util.Iterator;
 
 public class OMFormatter {
 	OMElement ele;

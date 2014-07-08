@@ -3,11 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>gov.nist.toolkit</groupId>
-		<artifactId>toolkit2</artifactId>
-		<version>v2-maven-alpha</version>
+		<groupId>gov.nist.hit.ds</groupId>
+		<artifactId>toolkit3</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<groupId>gov.nist.hit.ds</groupId>
+	<version>3.0.0-SNAPSHOT</version>
 	<artifactId>http</artifactId>
 
 	<dependencies>
@@ -19,7 +22,6 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -46,20 +48,22 @@
 			<version>3.1</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>error-recording</artifactId>
-			<version>v2-maven-alpha</version>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>event-log</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
+			<groupId>gov.nist.hit.ds</groupId>
 			<artifactId>utilities</artifactId>
-			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>xds-exceptions</artifactId>
-			<version>v2-maven-alpha</version>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>xdsException</artifactId>
 		</dependency>
+               <dependency>
+                        <groupId>com.sun.ebxml</groupId>
+                        <artifactId>ebxmlrr-common</artifactId>
+                </dependency>
+
 	</dependencies>
 
 	<build>

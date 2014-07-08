@@ -43,6 +43,7 @@ import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
 
+import java.lang.Boolean;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -162,9 +163,9 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         @Override
         public void onSuccess(Map<String,AssetNode> anMap) {
             logger.finest("good connection");
-            eventBus.fireEvent(new ListenerStatusEvent(getListening()));
             popTx(anMap,null);
             getTxTable().redraw();
+            eventBus.fireEvent(new ListenerStatusEvent(getListening()));
             if (getListenerEnabled()) {
                 activateListener();
             }
@@ -172,15 +173,15 @@ public class TransactionMonitorAdvancedWidget extends Composite {
     };
 
     public Boolean popTx(Map<String,AssetNode> anMap, Map<String,AssetNode> anMapRelated) {
-        if (anMap==null) return false;
-        logger.fine("entering popTx " + ((getListenerEnabled()) ? "Live" : "Bypass)"));
         Boolean filteredMessage = false;
         if (anMap==null) {
             logger.finest("Null assetNode: timeout or bad tx message?");
+            return Boolean.FALSE;
 //            if (dialogBox.isShowing()) {
 //                dialogBox.hide();
 //            }
         } else {
+            logger.info("entering popTx " + ((getListenerEnabled()) ? "Live" : "Bypass)"));
             logger.fine("Got an empty message? " + anMap.isEmpty());
             logger.fine("sz:"+anMap.size());
 
@@ -225,12 +226,14 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                         }
 
                     } else {
-                        Window.alert("no csv!?"  + an.getParentId());
+                        logger.warning("no csv!?" + an.getParentId());
                     }
 
+                } else {
+                    logger.warning("aN was null");
                 }
             } else {
-                Window.alert("empty map!?");
+                logger.warning("empty map!?");
             }
 
 
@@ -1058,6 +1061,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 if (dataProvider.getList().size()>0) {
                     //Map<String,AssetNode> anMap = txRowAssetNode.get(new Integer(selectedIndex));
+                  if (row.getMessageDetailMap().containsKey("request")) {
                     Map<String,AssetNode> anMap =  row.getMessageDetailMap().get("request").getAnMap();
                     int anLen = anMap.size();
                     if (anLen>0) {
@@ -1117,6 +1121,9 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                             }
                         }
                     }
+                } else {
+                      logger.info("no request found in bundle!");
+                  }
 
                 }
 

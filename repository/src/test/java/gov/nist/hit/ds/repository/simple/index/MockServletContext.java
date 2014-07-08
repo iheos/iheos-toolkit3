@@ -15,7 +15,7 @@ public class MockServletContext {
 	private static String basePath = "";
 	
 	
-	static public abstract ServletContext getServletContext(String reposPath) {
+	static public ServletContext getServletContext(String reposPath) {
 		basePath = reposPath;
 		
 		return new ServletContext() {

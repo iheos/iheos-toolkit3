@@ -5,14 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>gov.nist.toolkit</groupId>
-        <artifactId>toolkit2</artifactId>
-        <version>v2-maven-alpha</version>
+        <groupId>gov.nist.hit.ds</groupId>
+        <artifactId>toolkit3</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>xdstools3</artifactId>
     <!-- <version>3.0.0dev</version>  -->
     <packaging>war</packaging>
+    <groupId>gov.nist.toolkit</groupId>
     <name>xdstools3</name>
     <properties>
         <!-- Convenience property to set the GWT version -->
@@ -69,18 +70,17 @@
             <version>${gwtVersion}</version>
         </dependency>
 
-        <!-- SmartGWT dependencies -->
-        <!--<dependency>-->
-            <!--<groupId>com.smartgwt</groupId>-->
-            <!--<artifactId>smartgwt</artifactId>-->
-            <!--<version>4.1p</version>-->
-        <!--</dependency>-->
-        <!-- currently working on local custom theme file-->
-       <!--<dependency>-->
-            <!--<groupId>com.smartgwt</groupId>-->
-            <!--<artifactId>smartgwt-skins</artifactId>-->
-            <!--<version>4.1p</version>-->
-        <!--</dependency>-->
+        <!-- SmartGWT dependencies and custom theme XdstoolsTheme-->
+        <dependency>
+            <groupId>com.smartgwt</groupId>
+            <artifactId>smartgwt</artifactId>
+            <version>4.1p</version>
+        </dependency>
+        <dependency>
+            <groupId>com.smartgwt</groupId>
+            <artifactId>smartgwt-custom-theme</artifactId>
+            <version>4.1p</version>
+        </dependency>
 
         <!-- Jersey dependencies -->
         <dependency>
