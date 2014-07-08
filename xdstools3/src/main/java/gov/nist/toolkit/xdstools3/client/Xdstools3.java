@@ -15,6 +15,8 @@ import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
 import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
+import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
 public class Xdstools3 implements EntryPoint {
@@ -87,19 +89,30 @@ public class Xdstools3 implements EntryPoint {
 
     /**
      * Opens a given tab defined by its name. Updates the display to add this new tab and to bring it into focus.
+     * This function must be updated when new tabs are added to the application, as well as its related classes.
+     *
      * @param tabName the name of the tab to open.
+     * @see TabNamesUtil, OpenTabEvent
      */
     public void openTab(String tabName) {
         GenericCloseableTab tab = null;
 
         // create tab depending on parameter
-        if (tabName == "ADMIN") {
+        if (tabName == TabNamesUtil.getInstance().getAdminTabCode()) {
             GenericCloseableTab adminTab = new SettingsTab();
             tab = adminTab;
         }
-        if (tabName == "ENDPOINTS") {
+        if (tabName == TabNamesUtil.getInstance().getEndpointsTabCode()) {
             GenericCloseableTab endpointsTab = new EndpointConfigTab();
             tab = endpointsTab;
+        }
+        if (tabName == TabNamesUtil.getInstance().getFindDocumentsTabCode()) {
+            GenericCloseableTab findDocsTab = new FindDocumentTab();
+            tab = findDocsTab;
+        }
+        if (tabName == TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()) {
+            GenericCloseableTab mpqTab = new MPQTab();
+            tab = mpqTab;
         }
         // update set of tabs
         if (tab != null) {

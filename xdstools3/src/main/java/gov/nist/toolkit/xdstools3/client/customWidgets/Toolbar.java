@@ -16,6 +16,7 @@ import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
 import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.LoginDialogWidget;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
 import java.util.LinkedHashMap;
@@ -86,7 +87,7 @@ public class Toolbar extends RibbonBar {
             @Override
             public void onClick(ClickEvent event) {
                     // Display the Endpoint Settings tab
-                    Util.EVENT_BUS.fireEvent(new OpenTabEvent("ENDPOINTS"));
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getEndpointsTabCode()));
         }});
 
 
@@ -96,11 +97,11 @@ public class Toolbar extends RibbonBar {
                 // if not logged in
                 if (!Util.getInstance().getLoggedAsAdminStatus()) {
                     // ask user to log in
-                    LoginDialogWidget dialog = new LoginDialogWidget("ADMIN");
+                    LoginDialogWidget dialog = new LoginDialogWidget(TabNamesUtil.getInstance().getAdminTabCode());
                     dialog.show();
                 } else {
                     // Display the Admin Settings tab if logged in
-                    Util.EVENT_BUS.fireEvent(new OpenTabEvent("ADMIN"));
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getAdminTabCode()));
                 }
             }
         });
