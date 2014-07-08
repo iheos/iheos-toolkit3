@@ -216,6 +216,20 @@ public interface Asset {
     gov.nist.hit.ds.repository.api.ArtifactId getId() throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
+     * Gets the asset name if it exists. See {@link Repository#createNamedAsset(String, String, Type, String)}.
+     * @return
+     * @throws RepositoryException
+     */
+    String getName() throws RepositoryException;
+
+    /**
+     * Sets the asset name.
+     * @param name
+     * @throws RepositoryException
+     */
+    void setName(String name) throws RepositoryException;
+
+    /**
      * Get the AssetType of this Asset.  AssetTypes are used to categorize
      * Assets.
      *
@@ -426,7 +440,7 @@ public interface Asset {
      *         gov.nist.hit.ds.repository.api.RepositoryException#NULL_ARGUMENT
      *         NULL_ARGUMENT}
      */
-	public void updateContent(String content, String mimeType)
+	public void setContent(String content, String mimeType)
 	        throws gov.nist.hit.ds.repository.api.RepositoryException;
 	
 	
@@ -474,20 +488,31 @@ public interface Asset {
      *         {@link gov.nist.hit.ds.repository.api.RepositoryException#ALREADY_ADDED
      *         ALREADY_ADDED}
     
-    public Asset addAsset(gov.nist.hit.ds.repository.api.Id assetId)
+    public Asset addChild(gov.nist.hit.ds.repository.api.Id assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
      */
     
     /**
-     * 
-     * @param asset
-     * @return
+     * Add a child to this asset. The new asset is returned must now be used as a replacement for the original asset object after this call.
+     * @param asset The original asset.
+     * @return The new child asset with updated references.
      * @throws gov.nist.hit.ds.repository.api.RepositoryException
      */
-    public Asset addAsset(Asset asset)
+    public Asset addChild(Asset asset)
             throws gov.nist.hit.ds.repository.api.RepositoryException;
 
+
     /**
+     * Retrieve a child using the name. If more than one child exists with the same name, only the first one is retrieved.
+     * @param name Name is case-sensitive. See {@link gov.nist.hit.ds.repository.simple.SimpleRepository#createNamedAsset(String, String, Type, String)}
+     *
+     */
+    public Asset getChildByName(String name) throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+
+    /**
+     * What are the use cases for this method?
+     *
      * Remove an Asset from this Asset.  This method does not delete the Asset
      * from the Repository.
      *
@@ -508,9 +533,16 @@ public interface Asset {
      *         gov.nist.hit.ds.repository.api.RepositoryException#NULL_ARGUMENT
      *         NULL_ARGUMENT}, {@link
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_ID UNKNOWN_ID}
-     */
+
     public void removeAsset(gov.nist.hit.ds.repository.api.ArtifactId assetId, boolean includeChildren)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
+     */
+
+    /**
+     * Deletes an asset including any children.
+     * @throws gov.nist.hit.ds.repository.api.RepositoryException
+     */
+    public void deleteAsset() throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
      * Get all the Assets in this Asset.  Iterators return a set, one at a

@@ -29,7 +29,7 @@ public class AssetHelper {
 		logger.info("Created <" + a.getId() + ">");
 		a.setProperty(PropertyKey.PARENT_ID , parent.getId().getIdString());
 
-		parent.addAsset(a);
+		parent.addChild(a);
 		return a;
 	}
 	

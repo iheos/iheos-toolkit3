@@ -1,9 +1,7 @@
 package gov.nist.hit.ds.repository.simple.search;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.ArtifactId;
+import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
@@ -12,11 +10,13 @@ import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.List;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class AssetNodeBuilderTest {
@@ -52,7 +52,7 @@ public class AssetNodeBuilderTest {
 		a2.updateContent("My Content".getBytes());
 		ArtifactId assetId2 = a2.getId();
 		
-		a.addAsset(a2);  // make a the parent of a2
+		a.addChild(a2);  // make a the parent of a2
 
 		assertFalse(assetId.isEqual(assetId2));
 		
@@ -62,7 +62,7 @@ public class AssetNodeBuilderTest {
 		a21.updateContent("My Content".getBytes());
 		// ArtifactId assetId21 = a21.getId();
 
-		a2.addAsset(a21);  // make a the parent of a21
+		a2.addChild(a21);  // make a the parent of a21
 		
 	}
 

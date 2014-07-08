@@ -430,6 +430,7 @@ public abstract class BaseRepository implements Repository {
 		return propFile.exists();
 	}
 
+    @Override
 	public void delete() throws RepositoryException {
 //		load();
 		if (!isConfigured()) 

@@ -33,11 +33,19 @@ public class FolderManager {
 	// Use when folder name cannot be determined
 	public static final String LOST_AND_FOUND = "lost_and_found";
 	private static Logger logger = Logger.getLogger(FolderManager.class.getName());
+
+    public boolean doesParentAssetFolderExist(File fileName) throws RepositoryException {
+        Parameter param = new Parameter("filename");
+        param.assertNotNull(fileName);
+
+        return (fileName.getName().endsWith(Configuration.DOT_SEPARATOR +  PARENT_FILE_EXT));
+
+    }
 	
 	/**
 	 * 
-	 * @param reposDir
-	 * @param assetId
+	 * @param sa
+	 * @param folderName
 	 * @return
 	 * @throws RepositoryException
 	 */
@@ -62,7 +70,7 @@ public class FolderManager {
 		if (assetPaths!=null && assetPaths[0]!=null) {			
 
 			// Parent folder already exists, use it
-			if (assetPath.getName().endsWith(Configuration.DOT_SEPARATOR +  PARENT_FILE_EXT)) {
+			if (doesParentAssetFolderExist(assetPath)) {
 				return new File[]{residingFolder,assetPaths[1]};
 			}
 			
@@ -152,7 +160,7 @@ public class FolderManager {
 	/**
 	 * 
 	 * @param dir
-	 * @param assetId
+	 * @param id
 	 * @return
 	 * @throws RepositoryException
 	 */
@@ -178,12 +186,27 @@ public class FolderManager {
 	
 	
 	public File[] getAssetFileById(ArtifactId id, File baseDir) throws RepositoryException {
-		FileFilter pff = new FileFilter();
-		pff.setFileNamePart(id.getIdString()); 
-	
-		return getAssetPath(pff, baseDir);
-		
+        FileFilter pff = new FileFilter();
+        pff.setFileNamePart(id.getIdString());
+
+        return getAssetPath(pff, baseDir);
+
 	}
+
+    /**
+     *
+     * @param name Matches part of the name
+     * @param baseDir
+     * @return
+     * @throws RepositoryException
+     */
+    public File[] getAssetFileByName(String name, File baseDir) throws RepositoryException {
+        FileFilter pff = new FileFilter();
+        pff.setFileNamePart(name);
+        pff.setSearchByName(true);
+
+        return getAssetPath(pff, baseDir);
+    }
 	
 	
 	/**
@@ -191,12 +214,12 @@ public class FolderManager {
 	 * @param filename
 	 * @return
 	 */
-	public static String getAssetIdFromFilename(String fn) throws RepositoryException {
+	public static String getAssetIdFromFilename(String filename) throws RepositoryException {
 		Parameter param = new Parameter();
 		param.setDescription("fn");
-		param.assertNotNull(fn);
+		param.assertNotNull(filename);
 
-		String fnPart = fn.replace("." + Configuration.PARENT_TAG + ".", Configuration.DOT_SEPARATOR);
+		String fnPart = filename.replace("." + Configuration.PARENT_TAG + ".", Configuration.DOT_SEPARATOR);
 		fnPart = fnPart.replace(Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT, Configuration.DOT_SEPARATOR);
 		
 		int extIdx = fnPart.lastIndexOf(Configuration.DOT_SEPARATOR);
@@ -205,7 +228,7 @@ public class FolderManager {
 			return fnPart.substring(0, extIdx);
 		} 
 		
-		throw new RepositoryException(RepositoryException.OPERATION_FAILED + ": fn=" + fn);
+		throw new RepositoryException(RepositoryException.OPERATION_FAILED + ": fn=" + filename);
 	}
 
 	/**
@@ -236,6 +259,7 @@ public class FolderManager {
 		private String fileNamePart = "";
 		private File[] directMatch = new File[]{null,null};		
 		private boolean searchById = true; // Enable deepScan searchById by default
+        private boolean searchByName = false;
 
 		/**
 		 * Returns the first matching file with the specified fileNamePart or Id
@@ -243,7 +267,7 @@ public class FolderManager {
 		@Override
 		public boolean accept(File dir, String name) {
 			File f = new File(dir + File.separator + name);
-			if (name.contains(getFileNamePart())) { // File name is in GUID-string.props.txt format
+			if (!isSearchById() && name.contains(getFileNamePart())) { // File name is in GUID-string.props.txt format
 					if (name.endsWith(Configuration.PROPERTIES_FILE_EXT)) {
 						directMatch[0] = f;	// Props
 					} else 
@@ -253,11 +277,16 @@ public class FolderManager {
 				try {
 					if (f.isDirectory()) {
 						return true;
-					} else if (isSearchById()) { // Deep scan because files use a displayName convention and the Id is embedded in the property file
+					} else if (isSearchById() || isSearchByName()) { // Deep scan because files use a displayName convention and the Id is embedded in the property file
 						Properties props = new Properties();
 						loadProps(props, f);
-						String assetId = props.getProperty(PropertyKey.ASSET_ID.toString());
-						if (getFileNamePart().equals(assetId)) { // Id is case sensitive
+						String propVal = null;
+                        if (isSearchByName()) {
+                            propVal = props.getProperty(PropertyKey.ASSET_NAME.toString());
+                        } else if (isSearchById()) {
+                            propVal = props.getProperty(PropertyKey.ASSET_ID.toString());
+                        }
+                        if (propVal!=null && propVal.equals(getFileNamePart())) { // Id is case sensitive
 							return true;  
 						}						
 					}
@@ -284,7 +313,10 @@ public class FolderManager {
 		public boolean isSearchById() {
 			return searchById;
 		}
-		
+
+        public boolean isSearchByName() { return searchByName; }
+
+        public void setSearchByName(boolean searchByName) { this.searchByName = searchByName; }
 	};
 
 	private static File[] getAssetPath(FileFilter pff, File dir) throws RepositoryException {
@@ -335,8 +367,8 @@ public class FolderManager {
 	}
 	
 	/**
-	 * @param initialState
-	 * @param finalState
+	 * @param src
+	 * @param dst
 	 * @throws RepositoryException
 	 */
 	public static File[] moveChildToParent(File[] src, File[] dst)
