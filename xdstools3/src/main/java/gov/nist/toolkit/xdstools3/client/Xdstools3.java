@@ -23,31 +23,10 @@ import gov.nist.toolkit.xdstools3.client.util.Util;
 
 public class Xdstools3 implements EntryPoint {
 
-
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
-
-	private static final String WINDOW_WIDTH = "994px"; // fits 1024 px res for all browsers with a little extra room
-	private static final int WINDOW_WIDTH_TO_INTEGER = 994;
-	private static final String WINDOW_HEIGHT = "700px";
-	private static final String TOOLBAR_HEIGHT = "35px"; 	
-	private static final String TEST_RESULT_SUMMARY_HEIGHT = "100px"; 	
-
-
-	// sizes for Dock Panel Layout - units are arbitrary numbers, not pixels or percentages
-	private static final double DOCKPANEL_TOOLBAR_HEIGHT = 7;
-	private static final double DOCKPANEL_WEST_WIDTH = 25;
-	private static final double DOCKPANEL_SOUTH_HEIGHT = 20;
-	
-	private static final String APP_TITLE_IHE = "XDS Toolkit";
-
     private GenericTabSet topTabSet;
 
 
-
 	public void onModuleLoad() {
-
 
 		// Toolbar
 		Toolbar configBar = new Toolbar();
@@ -55,11 +34,7 @@ public class Xdstools3 implements EntryPoint {
 		// Tabs
 		topTabSet = new GenericTabSet();
         Tab homeTab = new HomeTab("Home");
-		GenericCloseableTab findDocsTab = new FindDocumentTab();
-        GenericCloseableTab mpqTab = new MPQTab();
         topTabSet.addTab(homeTab);
-        topTabSet.addTab(findDocsTab);
-        topTabSet.addTab(mpqTab);
 
         // Main layout
         VLayout mainLayout = new VLayout();
@@ -122,9 +97,5 @@ public class Xdstools3 implements EntryPoint {
             topTabSet.selectTab(tab);
         }
     }
-
-	public static int getWindowWidth() {
-		return WINDOW_WIDTH_TO_INTEGER;
-	}
 
 }

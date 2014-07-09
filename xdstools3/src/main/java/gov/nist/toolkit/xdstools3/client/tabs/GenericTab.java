@@ -5,6 +5,7 @@ import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
+import gov.nist.toolkit.xdstools3.client.customWidgets.design.IconLabel;
 
 public class GenericTab extends Tab implements TabInterface {
     private VLayout panel = new VLayout(10);
@@ -26,11 +27,17 @@ public class GenericTab extends Tab implements TabInterface {
         setPane(panel);
     }
 
-    // subtitle
-    public Label createSubtitle(String s){
-        Label l = new Label();
+    public IconLabel createSubtitle1(String s){
+        IconLabel l = new IconLabel();
         l.setContents(s);
-        l.setStyleName("subtitle");
+        l.setStyleName("subtitle1");
+        return l;
+    }
+
+    public IconLabel createSubtitle2(String s){
+        IconLabel l = new IconLabel();
+        l.setContents(s);
+        l.setStyleName("subtitle2");
         return l;
     }
 

@@ -33,7 +33,7 @@ public class MPQTab extends GenericCloseableTab {
         final VStack mpqPanel = new VStack();
 
         // PID
-        Label label1 = createSubtitle("Step 1: Enter PID, OR select one or more Code Values");
+        Label label1 = createSubtitle1("Step 1: Enter PID, OR select one or more Code Values");
         PatientIDWidget pid = new PatientIDWidget();
         // Create the Code grids
         HealthcareCodeWidget codeGridsWidget = new HealthcareCodeWidget();
@@ -42,11 +42,11 @@ public class MPQTab extends GenericCloseableTab {
 
         // Actors
         // TODO needs an actors widget with only Registries
-        Label label2 = createSubtitle("Step 2: Select Actors");
+        Label label2 = createSubtitle1("Step 2: Select Actors");
         EndpointWidget endpoints = new EndpointWidget();
 
         // TLS / SAML
-        Label label3 = createSubtitle("Step 3: Select TLS and SAML options");
+        Label label3 = createSubtitle1("Step 3: Select TLS and SAML options");
         TLSAndSAMLForm tlsSaml = new TLSAndSAMLForm();
 
         // Run button

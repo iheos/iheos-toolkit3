@@ -41,10 +41,10 @@ public class FindDocumentTab extends GenericCloseableTab {
         final VStack findDocsPanel = new VStack();
 
         // create components
-        Label l1 = createSubtitle("Step 1: Enter Patient ID");
+        Label l1 = createSubtitle1("Step 1: Enter Patient ID");
         final PatientIDWidget pid = new PatientIDWidget();
 
-        Label l2 = createSubtitle("Step 2: Select TLS / SAML / On-Demand options");
+        Label l2 = createSubtitle1("Step 2: Select TLS / SAML / On-Demand options");
         TLSCheckbox tls = new TLSCheckbox(); tls.setEndRow(true);
         SAMLComboBox saml = new SAMLComboBox(); saml.setEndRow(true);
         CheckboxItem includeOnDemand = new CheckboxItem("includeOnDemand");
@@ -54,7 +54,7 @@ public class FindDocumentTab extends GenericCloseableTab {
         options.setFields(new FormItem[]{tls, space, saml, includeOnDemand});
         options.setCellPadding(10);
 
-        Label l3 = createSubtitle("Step 3: Select Endpoint");
+        Label l3 = createSubtitle1("Step 3: Select Endpoint");
         final EndpointWidget endpoints = new EndpointWidget();
 
         ValidationSummaryWidget output = new ValidationSummaryWidget();

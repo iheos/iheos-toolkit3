@@ -13,6 +13,6 @@ public interface TabInterface {
 	
 	public VLayout getPanel();
 	public void setHeader(String s);
-	public Label createSubtitle(String s);
+	public Label createSubtitle1(String s);
 	
 }
