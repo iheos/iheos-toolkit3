@@ -10,7 +10,8 @@ import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
 /**
- * Created by dazais on 7/8/2014.
+ * Creates a button with the title passed in argument. Also creates a listener which fires an event through Eventbus,
+ * opening the tab that matches the title parameter.
  */
 public class HomeLinkButton extends IButton {
 
@@ -20,7 +21,7 @@ public class HomeLinkButton extends IButton {
         setTitle(title);
         setAlign(Alignment.LEFT);
         setBorder("0");
-        setWidth(300);
+        setWidth(400);
         setHeight(40);
 
         addClickHandler(new ClickHandler() {
@@ -29,6 +30,8 @@ public class HomeLinkButton extends IButton {
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFindDocumentsTabCode()));
                 else if (title == "MPQ Find Documents")
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()));
+                else if (title == "Message Validator")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getMessageValidatorTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });

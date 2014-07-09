@@ -11,5 +11,7 @@ public class IconLabel extends Label {
         super();
         setIconSpacing(10);
         setIconSize(20);
+        setWidth(400);
     }
+
 }

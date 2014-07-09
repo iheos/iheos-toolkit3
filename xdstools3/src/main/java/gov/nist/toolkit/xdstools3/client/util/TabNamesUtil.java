@@ -15,6 +15,7 @@ public class TabNamesUtil {
 
     public static final String findDocumentsTabCode = "FIND_DOCUMENTS";
     public static final String mpqFindDocumentsTabCode = "MPQ_FIND_DOCUMENTS";
+    public static final String messageValidatorTabCode = "MESSAGE_VALIDATOR";
     public static final String adminTabCode = "ADMIN";
     public static final String endpointsTabCode = "ENDPOINTS";
 
@@ -33,4 +34,6 @@ public class TabNamesUtil {
     public static String getMpqFindDocumentsTabCode() {
         return mpqFindDocumentsTabCode;
     }
+
+    public static String getMessageValidatorTabCode() { return messageValidatorTabCode; }
 }

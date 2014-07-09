@@ -11,11 +11,8 @@ import com.smartgwt.client.widgets.tab.Tab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.Toolbar;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
-import gov.nist.toolkit.xdstools3.client.tabs.EndpointConfigTab;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
+import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
-import gov.nist.toolkit.xdstools3.client.tabs.SettingsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
@@ -76,20 +73,19 @@ public class Xdstools3 implements EntryPoint {
 
         // create tab depending on parameter
         if (tabName == TabNamesUtil.getInstance().getAdminTabCode()) {
-            GenericCloseableTab adminTab = new SettingsTab();
-            tab = adminTab;
+            tab = new SettingsTab();
         }
         if (tabName == TabNamesUtil.getInstance().getEndpointsTabCode()) {
-            GenericCloseableTab endpointsTab = new EndpointConfigTab();
-            tab = endpointsTab;
+            tab = new EndpointConfigTab();
         }
         if (tabName == TabNamesUtil.getInstance().getFindDocumentsTabCode()) {
-            GenericCloseableTab findDocsTab = new FindDocumentTab();
-            tab = findDocsTab;
+            tab = new FindDocumentTab();
         }
         if (tabName == TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()) {
-            GenericCloseableTab mpqTab = new MPQTab();
-            tab = mpqTab;
+            tab = new MPQTab();
+        }
+        if (tabName == TabNamesUtil.getInstance().getMessageValidatorTabCode()) {
+            tab = new MessageValidatorTab();
         }
         // update set of tabs
         if (tab != null) {

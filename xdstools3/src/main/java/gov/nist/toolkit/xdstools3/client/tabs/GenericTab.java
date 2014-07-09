@@ -5,6 +5,7 @@ import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
+import gov.nist.toolkit.xdstools3.client.customWidgets.design.Formatter;
 import gov.nist.toolkit.xdstools3.client.customWidgets.design.IconLabel;
 
 public class GenericTab extends Tab implements TabInterface {
@@ -28,18 +29,9 @@ public class GenericTab extends Tab implements TabInterface {
     }
 
     public IconLabel createSubtitle1(String s){
-        IconLabel l = new IconLabel();
-        l.setContents(s);
-        l.setStyleName("subtitle1");
-        return l;
+       return Formatter.createSubtitle1(s); // TODO May need to be transformed into direct call inside each tab
     }
 
-    public IconLabel createSubtitle2(String s){
-        IconLabel l = new IconLabel();
-        l.setContents(s);
-        l.setStyleName("subtitle2");
-        return l;
-    }
 
     /**
      * Sets a tab contents
