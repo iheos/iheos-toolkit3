@@ -1,21 +1,17 @@
 package gov.nist.hit.ds.http.parser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.Principal;
+import java.util.*;
 
 public class HttpMessageBa implements HttpServletRequest {
 	String requestURI;
@@ -24,17 +20,19 @@ public class HttpMessageBa implements HttpServletRequest {
 	List<Header> headers = new ArrayList<Header>();
 	byte[] body;
 	MultipartMessageBa multipart;
+    static Logger logger = Logger.getLogger(HttpMessageBa.class);
 
-	class Header {
+
+    class Header {
 		String name;
 		String value;
 		String lcname;
 		
 		Header() {}
 		Header(String name, String value) {
-			this.name = name;
+			this.name = name.trim();
 			this.lcname = name.toLowerCase();
-			this.value = value;
+			this.value = value.trim();
 		}
 		
 		public String toString() {
@@ -132,9 +130,12 @@ public class HttpMessageBa implements HttpServletRequest {
 		if (headerName == null)
 			return null;
 		String lcHeaderName = headerName.toLowerCase();
-		
+
+        logger.debug("looking for header " + lcHeaderName);
 		for (int i=0; i<headers.size(); i++) {
+            logger.debug(headers.get(i).lcname);
 			if (lcHeaderName.equals(headers.get(i).lcname))
+                logger.debug("got it");
 				return headers.get(i).name + ": " + headers.get(i).value;
 		}
 		return null;
