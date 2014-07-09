@@ -15,14 +15,14 @@ public class EventFactory {
      * @return
      */
     Event buildEvent(Repository repository) {
-        def eventAsset = null
+        Asset eventAsset = null
         if (repository) {
             def assetName = nowAsFilenameBase()
             logger.debug("New event ${assetName}")
             def type = new SimpleType('event')
             eventAsset = repository.createAsset(assetName, 'Event', type)
         }
-        new Event(eventAsset)
+        return new Event(eventAsset)
     }
 
     Event buildEvent(Repository repository, Asset parentAsset) {
@@ -30,7 +30,6 @@ public class EventFactory {
         parentAsset.addAsset(event.eventAsset)
         return event
     }
-
 
 //	public Event buildEvent(SimId simId, String actorShortName, String transactionShortName) throws RepositoryException {
 //		Event event = null;

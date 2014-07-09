@@ -25,6 +25,8 @@
         <module>../xdsException</module>
         <module>../toolkit</module>
         <module>../common-datatypes</module>
+        <module>../httpSoapValidator</module>
+        <module>../ds-sims</module>
     </modules>
     
     <dependencies>

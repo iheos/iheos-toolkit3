@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.eventLog.assertion
 
-import gov.nist.hit.ds.eventLog.errorRecording.RequiredOptional;
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
+
 
 class Assertion {
     String id = "";

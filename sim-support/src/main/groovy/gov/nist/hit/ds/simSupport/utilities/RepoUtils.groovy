@@ -56,7 +56,6 @@ class RepoUtils {
     static Asset childWithId(Asset asset, ArtifactId aId) {
         for (AssetIterator it= asset.getAssets() ; it.hasNextAsset() ; ) {
             def a = it.nextAsset()
-            println a.id
             if (a.id.idString == aId.idString) { return a  }
         }
         return null

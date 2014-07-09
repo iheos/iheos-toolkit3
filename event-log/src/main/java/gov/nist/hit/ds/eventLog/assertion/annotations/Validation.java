@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.eventLog.assertion.annotations;
 
-import gov.nist.hit.ds.eventLog.errorRecording.RequiredOptional;
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

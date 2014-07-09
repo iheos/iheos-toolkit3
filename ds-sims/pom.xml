@@ -11,13 +11,16 @@
     <groupId>gov.nist.hit.ds</groupId>
     <version>3.0.0-SNAPSHOT</version>
     <artifactId>ds-sims</artifactId>
-    <packaging>pom</packaging>
-    
-    <modules>
-        <module>../example-module</module>
-    </modules>
-    
+
     <dependencies>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>httpSoapValidator</artifactId>
+        </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>actor-transaction</artifactId>

@@ -17,6 +17,9 @@ class TransactionType implements IsSerializable, Serializable {
     public String requestAction
     public String responseAction
     public String implementationClassName
+    // These are used at runtime
+    transient public boolean multiPart
+    transient public boolean soap
 
     public String getCode() { return code }
     public String getName() { return name }

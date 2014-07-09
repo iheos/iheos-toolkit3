@@ -66,6 +66,10 @@ class ActorTransactionTypeFactory {
         ttype.requestAction = tt.request.@action
         ttype.responseAction = tt.response.@action
         ttype.implementationClassName = tt.@class
+        if (tt.params) {
+            ttype.multiPart = tt.params.@multiPart == 'true'
+            ttype.soap = tt.params.@soap == 'true'
+        }
         transactionTypeMap.put(ttype.id, ttype)
         transactionTypeMap.put(ttype.code, ttype)
         transactionTypeMap.put(ttype.asyncCode, ttype)
