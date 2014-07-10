@@ -69,7 +69,7 @@ class SimUtils {
         def actorCode = builder.actorCode
         def simId = builder.simId
 
-        def simHandle = handle(simId)
+        SimHandle simHandle = handle(simId)
         def event = new EventFactory().buildEvent(SimSupport.simRepo, simHandle.eventLogAsset)
         simHandle.event = event
 

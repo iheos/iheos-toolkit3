@@ -104,16 +104,18 @@ class FullTestWithRepositoryTest extends Specification {
         when: ''
         Repository eventRepo = repoFactory.createNamedRepository('eventRepo', '', new SimpleType('eventLog'), eventLogDirName)
         Event event = new EventFactory().buildEvent(eventRepo)
+        event.init()
 
         // Setup
         String msg = 'Message'
         event.inOut.reqBody = msg.getBytes()
+        new EventDAO(event).init()
 
         // Run
         myValidatorTransaction(event)
 
         // Cleanup
-        new EventDAO().save(event)
+        event.flush()
 
         then: ''
         eventFile(event).exists()

@@ -40,6 +40,10 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>httpSoapValidator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
             <artifactId>utilities</artifactId>
         </dependency>
         <dependency>

@@ -11,7 +11,7 @@ class RunTransactionTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
     <transaction displayName="Golf" id="gf" code="gf" asyncCode="gf.as"
-       class="gov.nist.hit.ds.simSupport.utilities.RunTransactionTest">
+       class="gov.nist.hit.ds.simSupport.utilities.TransactionClass">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
     </transaction>
@@ -28,25 +28,29 @@ class RunTransactionTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
     }
 
-    // Used as the run method of the transaction implementation
-    static hasRun
-    def run(SimHandle handle) {
-        hasRun = true  // so its running can be detected
-        println "SimId is ${handle.simId}"
-    }
 
-
-    def 'Run method should get called'() {
+    def 'Run method of TransactionClass should get called'() {
         def simId = new SimId('1234')
         def simAsset = SimUtils.mkSim('golf', simId)
         def simHandle = SimUtils.handle(simId)
         def endpoint = 'http://localhost:8080/xdstools3/sim/1234/golf/gf'
 
         when:
-        hasRun = false
+        TransactionClass.hasRun = false
         SimUtils.runTransaction(endpoint, 'My Header', 'My Body'.bytes)
 
         then:
-        hasRun
+        TransactionClass.hasRun
+    }
+
+}
+class TransactionClass {
+    def handle
+    TransactionClass(SimHandle handle) { this.handle = handle }
+
+    static hasRun
+    def run() {
+        hasRun = true  // so its running can be detected
+        println "SimId is ${handle.simId}"
     }
 }
