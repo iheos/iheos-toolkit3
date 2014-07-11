@@ -26,10 +26,13 @@ public class HomeTab extends GenericTab {
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
 
+        HomeBox simulators = new HomeBox("Simulators");
+        simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");
+
         HStack hstack1 = new HStack();
         HStack hstack2 = new HStack();
         hstack1.addMembers(queriesAndRetrieves, new LayoutSpacer(), tools);
-        hstack2.addMembers(sendTestData);
+        hstack2.addMembers(sendTestData, new LayoutSpacer(), simulators);
         VStack vstack = new VStack();
         LayoutSpacer spacer = new LayoutSpacer();
         spacer.setHeight(30);
