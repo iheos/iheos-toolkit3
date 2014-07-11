@@ -1,0 +1,15 @@
+<site name="pub">
+    <home>urn:oid:1.19.6.24.109.42.1.3</home>
+    <transaction code="sq.b" name="Stored Query">
+        <secure>https://ihexds.nist.gov:12081/tf6/services/xdsregistryb</secure>
+        <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsregistryb</unsecure>
+    </transaction>
+    <transaction code="r.b" name="Register">
+        <secure>https://ihexds.nist.gov:12081/tf6/services/xdsregistryb</secure>
+        <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsregistryb</unsecure>
+    </transaction>
+    <repository uid="1.19.6.24.109.42.1.5">
+        <secure>https://ihexds.nist.gov:12081/tf6/services/xdsrepositoryb</secure>
+        <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsrepositoryb</unsecure>
+    </repository>
+</site>
