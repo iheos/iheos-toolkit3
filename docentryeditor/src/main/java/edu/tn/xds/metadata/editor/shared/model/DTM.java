@@ -1,5 +1,7 @@
 package edu.tn.xds.metadata.editor.shared.model;
 
+import com.google.gwt.i18n.shared.DateTimeFormat;
+
 import javax.annotation.MatchesPattern;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -18,22 +20,19 @@ import java.util.Date;
  * <p>
  * It contains a toString method to return the DTM in String format.
  * </p>
- *
+ * <p/>
  * <p>
  * This class also contains getters/setters.<br>
  * In addition, it has verify method to check its syntax.</br>
  * </p>
- *
+ * <p/>
  * <p>
  * <b>See below each method mentioned above.</b> <br>
  * {@link #verify() method verify}</br> {@link #toString() method toString} <br>
  * </p>
  *
- *
- *
  * @see DocumentModel class DocumentModel
  * @see ModelElement class ModelElement </p>
- *
  */
 public class DTM implements ModelElement, Serializable {
 
@@ -64,7 +63,6 @@ public class DTM implements ModelElement, Serializable {
 
 
     /**
-     *
      * <p>
      * <b>Method toString</b> <br>
      * This method will be called to build a XML file by the
@@ -73,12 +71,12 @@ public class DTM implements ModelElement, Serializable {
      * </p>
      *
      * @return String which contains the DTM
-     *
      * @see DTM class DTM
      */
     @Override
     public String toString() {
-        return dtm.toString();
+        DateTimeFormat dtf = DateTimeFormat.getFormat("yyyyMMddHHmmss");
+        return dtf.format(dtm);
     }
 
 
@@ -90,11 +88,8 @@ public class DTM implements ModelElement, Serializable {
      * </p>
      *
      * @return boolean true if the syntax is correct, else return false
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see DTM class DTM
-     *
      */
     @Override
     public boolean verify() throws String256Exception {

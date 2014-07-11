@@ -3,11 +3,9 @@ package edu.tn.xds.metadata.editor.client.editor.widgets;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.user.client.ui.Composite;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.Validator;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
-
 import edu.tn.xds.metadata.editor.shared.model.IdentifierOID;
 
 /**
@@ -18,8 +16,8 @@ import edu.tn.xds.metadata.editor.shared.model.IdentifierOID;
 public class IdentifierOIDEditorWidget extends Composite implements
         Editor<IdentifierOID> {
     VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
-    String256EditorWidget value = new String256EditorWidget();
-    OIDEditorWidget idType = new OIDEditorWidget(false);
+    OIDEditorWidget value = new OIDEditorWidget(false);
+    String256EditorWidget idType = new String256EditorWidget();
 
     public IdentifierOIDEditorWidget() {
         initWidget(vcontainer);
@@ -28,12 +26,14 @@ public class IdentifierOIDEditorWidget extends Composite implements
 
         FieldLabel idTypeLabel = new FieldLabel(idType, "ID Type (OID)");
         idTypeLabel.setLabelWidth(125);
+        idTypeLabel.setVisible(false);
 
-        vcontainer.add(valueLabel, new VerticalLayoutData(1, -1));
-        vcontainer.add(idTypeLabel, new VerticalLayoutData(1, -1));
+//        vcontainer.add(valueLabel, new VerticalLayoutData(1, -1));
+//        vcontainer.add(idTypeLabel, new VerticalLayoutData(1, -1));
+        vcontainer.add(value);
     }
 
-    public void addValueFieldValidator(Validator validator){
+    public void addValueFieldValidator(Validator validator) {
         value.addValidator(validator);
     }
 
@@ -41,10 +41,8 @@ public class IdentifierOIDEditorWidget extends Composite implements
      * This method sets the default text to display in an empty field (defaults
      * to null). It is done to help and guide the user during his input.
      *
-     * @param valueEmptyText
-     *            Default text displayed in an empty value field
-     * @param idTypeEmptyText
-     *            Default text displayed in an empty id type field
+     * @param valueEmptyText  Default text displayed in an empty value field
+     * @param idTypeEmptyText Default text displayed in an empty id type field
      */
     public void setEmptyTexts(String valueEmptyText, String idTypeEmptyText) {
         value.setEmptyText(valueEmptyText);
@@ -68,10 +66,8 @@ public class IdentifierOIDEditorWidget extends Composite implements
      * true). This will warn the user through the editor widget if he didn't
      * input anything in field which does not allow blank.
      *
-     * @param b_value
-     *            true to allow blank to the value field, false otherwise
-     * @param b_idType
-     *            true to allow blank to the idType field, false otherwise
+     * @param b_value  true to allow blank to the value field, false otherwise
+     * @param b_idType true to allow blank to the idType field, false otherwise
      */
     public void setAllowBlanks(boolean b_value, boolean b_idType) {
         value.setAllowBlank(b_value);

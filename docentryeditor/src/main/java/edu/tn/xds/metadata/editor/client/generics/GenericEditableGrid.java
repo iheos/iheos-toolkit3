@@ -33,9 +33,9 @@ import java.util.logging.Logger;
 /**
  * Generic widget for Inline Grid editing on double click.
  * For each editable field of the grid the method {@link #addColumnEditorConfig(ColumnConfig, Field) addColumnEditorConfig} should be called.
- *
+ * <p/>
  * <br/><br/>Example:
- *
+ * <p/>
  * <pre>
  * <code>
  *      InternationalStringProperties isprops = GWT.create(InternationalStringProperties.class);
@@ -63,38 +63,32 @@ import java.util.logging.Logger;
  * </pre>
  *
  * @see Grid
- *
+ * <p/>
  * Created by onh2 on 6/10/2014.
  */
 public class GenericEditableGrid<M> extends Grid<M> {
-    private final Logger logger =Logger.getLogger(this.getClass().getName());
-
-    private ContentPanel pane = new ContentPanel();
-    private VerticalLayoutContainer gridContainer = new VerticalLayoutContainer();
-    protected GridInlineEditing<M> editing;
-
-    private Class<M> clazzM;
-
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
     // Toolbar elements
     private final ToolBar toolBar = new ToolBar();
-    private ToolTipConfig helpTooltipConfig = new ToolTipConfig();
-
     private final TextButton newItemButton = new TextButton();
     private final TextButton deleteItemsButton = new TextButton();
     private final TextButton clearButton = new TextButton();
     private final TextButton helpButton = new TextButton();
-
-    private int storeMaxLength=0;
-
-    private boolean checkBoxenabled=false;
-    private boolean hasHelpButtonEnabled =false;
-    boolean isAutoShow=true;
+    protected GridInlineEditing<M> editing;
+    boolean isAutoShow = true;
+    private ContentPanel pane = new ContentPanel();
+    private VerticalLayoutContainer gridContainer = new VerticalLayoutContainer();
+    private Class<M> clazzM;
+    private ToolTipConfig helpTooltipConfig = new ToolTipConfig();
+    private int storeMaxLength = 0;
+    private boolean checkBoxenabled = false;
+    private boolean hasHelpButtonEnabled = false;
 
     // TODO check if there is not a better way to check parameterized class type.
-    public GenericEditableGrid(Class<M> parametrizedClass,String gridTitle,ListStore<M> listStore,ColumnModel<M> cm){
-        super(listStore,cm);
+    public GenericEditableGrid(Class<M> parametrizedClass, String gridTitle, ListStore<M> listStore, ColumnModel<M> cm) {
+        super(listStore, cm);
 
-        clazzM=parametrizedClass;
+        clazzM = parametrizedClass;
         pane.setHeadingText(gridTitle);
 
         this.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
@@ -133,13 +127,11 @@ public class GenericEditableGrid<M> extends Grid<M> {
     /**
      * Needs to be used to get the Grid Editable. It configures how the columns will be edited.
      *
-     * @param columnConfig
-     * Grid's Column Configuration which will be associated to a type of editable field
-     * @param field
-     * Editable field which will be used to edit the grid's Column
+     * @param columnConfig Grid's Column Configuration which will be associated to a type of editable field
+     * @param field        Editable field which will be used to edit the grid's Column
      */
-    public <N> void addColumnEditorConfig(ColumnConfig<M, N> columnConfig, Field<N> field){
-        editing.addEditor(columnConfig,field);
+    public <N> void addColumnEditorConfig(ColumnConfig<M, N> columnConfig, Field<N> field) {
+        editing.addEditor(columnConfig, field);
     }
 
     @Override
@@ -151,23 +143,25 @@ public class GenericEditableGrid<M> extends Grid<M> {
         helpButton.getToolTip().addShowHandler(new ShowEvent.ShowHandler() {
             @Override
             public void onShow(ShowEvent event) {
-                if(isAutoShow)
+                if (isAutoShow)
                     helpButton.getToolTip().hide();
             }
         });
         helpButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                if(isAutoShow) {
+                if (isAutoShow) {
                     isAutoShow = false;
                     helpButton.getToolTip().show();
-                }else{helpButton.getToolTip().hide();}
+                } else {
+                    helpButton.getToolTip().hide();
+                }
             }
         });
         helpButton.getToolTip().addHideHandler(new HideEvent.HideHandler() {
             @Override
             public void onHide(HideEvent event) {
-                isAutoShow=true;
+                isAutoShow = true;
             }
         });
     }
@@ -177,8 +171,8 @@ public class GenericEditableGrid<M> extends Grid<M> {
             @Override
             public void onSelect(SelectEvent selectEvent) {
                 // try to fire an event
-                logger.info("current list size: "+getStore().size()+"\nStore max size: "+storeMaxLength);
-                if (getStore().size() < storeMaxLength || storeMaxLength==0) {
+                logger.info("current list size: " + getStore().size() + "\nStore max size: " + storeMaxLength);
+                if (getStore().size() < storeMaxLength || storeMaxLength == 0) {
                     editing.cancelEditing();
                     M element = GWT.create(getParameteriedClass());
                     getStore().add(0, element);
@@ -189,7 +183,7 @@ public class GenericEditableGrid<M> extends Grid<M> {
                     editing.startEditing(new Grid.GridCell(getStore().indexOf(
                             element), index));
                 } else {
-                    MessageBox mb= new MessageBox("Error: list size limit reached","You can not add more items to that list. This list can contain only "+storeMaxLength+" items.");
+                    MessageBox mb = new MessageBox("Error: list size limit reached", "You can not add more items to that list. This list can contain only " + storeMaxLength + " items.");
                     mb.show();
                 }
             }
@@ -197,13 +191,13 @@ public class GenericEditableGrid<M> extends Grid<M> {
         deleteItemsButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                final ConfirmMessageBox d=new ConfirmMessageBox("Confirm delete action","Are you sure you want to delete these values?");
+                final ConfirmMessageBox d = new ConfirmMessageBox("Confirm delete action", "Are you sure you want to delete these values?");
                 d.show();
                 d.addHideHandler(new HideEvent.HideHandler() {
                     @Override
                     public void onHide(HideEvent event) {
-                        if(d.getHideButton()==d.getButtonById(Dialog.PredefinedButton.YES.name())){
-                            for(M e:getSelectionModel().getSelectedItems()){
+                        if (d.getHideButton() == d.getButtonById(Dialog.PredefinedButton.YES.name())) {
+                            for (M e : getSelectionModel().getSelectedItems()) {
                                 getStore().remove(e);
                                 getStore().commitChanges();
                             }
@@ -254,7 +248,7 @@ public class GenericEditableGrid<M> extends Grid<M> {
     /**
      * This Method enables the grid's selection checkbox column (for multiselection).
      */
-    public void setCheckBoxSelectionModel(){
+    public void setCheckBoxSelectionModel() {
         checkBoxenabled = true;
         List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
         IdentityValueProvider<M> identityValueProvider = new IdentityValueProvider<M>();
@@ -264,7 +258,7 @@ public class GenericEditableGrid<M> extends Grid<M> {
         columnsConfigs.add(selectColumn.getColumn());
         columnsConfigs.addAll(cm.getColumns());
 
-        this.cm=new ColumnModel<M>(columnsConfigs);
+        this.cm = new ColumnModel<M>(columnsConfigs);
 
         this.setSelectionModel(selectColumn);
 
@@ -297,30 +291,30 @@ public class GenericEditableGrid<M> extends Grid<M> {
         });
     }
 
-    public void setHeaderVisible(boolean visible){
+    public void setHeaderVisible(boolean visible) {
         pane.setHeaderVisible(visible);
     }
 
-    public void setStoreMaxLength(int storeMaxLength) {
+    protected void setStoreMaxLength(int storeMaxLength) {
         this.storeMaxLength = storeMaxLength;
     }
 
-    public void setToolbarWidgetHelpButton(String helpContent){
+    public void setToolbarWidgetHelpButton(String helpContent) {
         helpTooltipConfig.setBodyHtml(helpContent);
-        if(!hasHelpButtonEnabled) {
+        if (!hasHelpButtonEnabled) {
             toolBar.add(helpButton);
-            hasHelpButtonEnabled=true;
+            hasHelpButtonEnabled = true;
         }
         helpButton.setToolTipConfig(helpTooltipConfig);
         bindToolTips();
     }
 
-    public void setToolbarWidgetHelpButton(ToolTipConfig helpContent){
+    public void setToolbarWidgetHelpButtonTooltip(ToolTipConfig helpContent) {
         helpTooltipConfig.setBodyHtml(helpContent.getBodyHtml());
         helpTooltipConfig.setTitleHtml(helpContent.getTitleHtml());
-        if(!hasHelpButtonEnabled) {
+        if (!hasHelpButtonEnabled) {
             toolBar.add(helpButton);
-            hasHelpButtonEnabled=true;
+            hasHelpButtonEnabled = true;
         }
         helpButton.setToolTipConfig(helpTooltipConfig);
         bindToolTips();

@@ -12,10 +12,6 @@ import java.util.List;
 
 public class PredefinedCodesComboBox extends ComboBox<CodedTerm> {
 
-    public enum PredefinedCodes {
-        CONTENT_TYPE_CODES, CLASS_CODES, CONFIDENTIALITY_CODES, FORMAT_CODES, HEALTHCARE_FACILITY_TYPE_CODES, PRACTICE_SETTING_CODES, EVENT_CODES, TYPE_CODES;
-    }
-
     public PredefinedCodesComboBox(PredefinedCodes predefinedCodes) {
         super(new ListStore<CodedTerm>(
                 new ModelKeyProvider<CodedTerm>() {
@@ -31,7 +27,7 @@ public class PredefinedCodesComboBox extends ComboBox<CodedTerm> {
 
             @Override
             public String getLabel(CodedTerm item) {
-                return item.getDisplayName().toString();
+                return item.getCode() + " - " + item.getDisplayName().toString() + " - " + item.getCodingScheme();
             }
         });
 
@@ -47,6 +43,13 @@ public class PredefinedCodesComboBox extends ComboBox<CodedTerm> {
         setTriggerAction(ComboBoxCell.TriggerAction.ALL);
         setForceSelection(true);
         setTypeAhead(true);
+
+        setText("");
+        clear();
+    }
+
+    public enum PredefinedCodes {
+        CLASS_CODES, CONFIDENTIALITY_CODES, FORMAT_CODES, HEALTHCARE_FACILITY_TYPE_CODES, PRACTICE_SETTING_CODES, EVENT_CODES, TYPE_CODES;
     }
 
 }

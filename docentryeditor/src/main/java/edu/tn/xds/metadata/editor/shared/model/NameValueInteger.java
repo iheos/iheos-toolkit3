@@ -1,11 +1,10 @@
 package edu.tn.xds.metadata.editor.shared.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * <p>
@@ -24,105 +23,100 @@ import org.hibernate.validator.constraints.NotEmpty;
  * This class also contains getters/setters.</br> In addition, it has verify
  * method to check its syntax.
  * </p>
- * 
+ * <p/>
  * <p>
  * <b>See below each method mentioned above.</b> <br>
  * {@link #verify() method verify}</br> {@link #toXML() method toXML} <br>
  * </p>
- * 
- * 
+ *
  * @see DocumentModel
  * @see ModelElement
  */
 public class NameValueInteger implements ModelElement, Serializable {
-	private static final long serialVersionUID = -8454362856443516728L;
+    private static final long serialVersionUID = -8454362856443516728L;
 
-	/**
-	 * <b>String256 name</b> - The name of the NameValue [Mandatory].<br>
-	 * Type: {@link String256}</br>
-	 * 
-	 * @see String256
-	 * @see NameValueInteger
-	 */
-	@NotNull
-	private String256 name;
+    /**
+     * <b>String256 name</b> - The name of the NameValue [Mandatory].<br>
+     * Type: {@link String256}</br>
+     *
+     * @see String256
+     * @see NameValueInteger
+     */
+    @NotNull
+    private String256 name;
 
-	/**
-	 * <b>ArrayList(Integer) values</b> - A list of values [Mandatory].<br>
-	 * Type: ArrayList of {@link Integer}
-	 * 
-	 * @see NameValueInteger
-	 */
-	@NotNull
-	@NotEmpty
-	private ArrayList<Integer> values;
+    /**
+     * <b>ArrayList(Integer) values</b> - A list of values [Mandatory].<br>
+     * Type: ArrayList of {@link Integer}
+     *
+     * @see NameValueInteger
+     */
+    @NotNull
+    @NotEmpty
+    private ArrayList<Integer> values;
 
-	public NameValueInteger() {
-		name = new String256();
-		values = new ArrayList<Integer>();
-	}
+    public NameValueInteger() {
+        name = new String256();
+        values = new ArrayList<Integer>();
+        values.add(0);
+    }
 
-	public ArrayList<Integer> getValues() {
-		return values;
-	}
+    public ArrayList<Integer> getValues() {
+        return values;
+    }
 
-	public void setValues(ArrayList<Integer> values) {
-		this.values = values;
-	}
+    public void setValues(ArrayList<Integer> values) {
+        this.values = values;
+    }
 
-	public String256 getName() {
-		return name;
-	}
+    public String256 getName() {
+        return name;
+    }
 
-	public void setName(String256 name) {
-		this.name = name;
-	}
+    public void setName(String256 name) {
+        this.name = name;
+    }
 
-	/**
-	 * 
-	 * <p>
-	 * <b>Method toXML</b> <br>
-	 * This method will be called to build a XML file by the
-	 * {@link DocumentModel} with the information taken from the local
-	 * {@link NameValueInteger}.<br>
-	 * </p>
-	 * 
-	 * @return String which contains the NameValue in XML format
-	 * 
-	 * @see NameValueInteger
-	 */
-	public String toXML() {
-		String answer = "\t\t<namevalue>\n\t\t\t<name>" + name.toString() + "</name>\n\t\t\t<values>\n";
-		for (Integer str : values) {
-			answer = answer + "\t\t\t\t<value>" + str.toString() + "</value>\n";
-		}
-		answer = answer + "\t\t\t</values>\n\t\t</namevalue>\n";
+    /**
+     * <p>
+     * <b>Method toXML</b> <br>
+     * This method will be called to build a XML file by the
+     * {@link DocumentModel} with the information taken from the local
+     * {@link NameValueInteger}.<br>
+     * </p>
+     *
+     * @return String which contains the NameValue in XML format
+     * @see NameValueInteger
+     */
+    public String toXML() {
+        String answer = "\t\t<namevalue>\n\t\t\t<name>" + name.toString() + "</name>\n\t\t\t<values>\n";
+        for (Integer str : values) {
+            answer = answer + "\t\t\t\t<value>" + str.toString() + "</value>\n";
+        }
+        answer = answer + "\t\t\t</values>\n\t\t</namevalue>\n";
 
-		return answer;
-	}
+        return answer;
+    }
 
-	// abstract public AssertionGroup validateValueType(String256 value);
+    // abstract public AssertionGroup validateValueType(String256 value);
 
-	/**
-	 * <p>
-	 * <b>Method verify</b> <br>
-	 * This method will be called to check whether the syntax's
-	 * {@link NameValueInteger} is correct </br>
-	 * </p>
-	 * 
-	 * @return boolean true if the syntax is correct, else return false
-	 * @throws String256Exception
-	 *             if there is a String256 with more than 256 characters
-	 * 
-	 * @see NameValueInteger
-	 * 
-	 */
-	@Override
-	public boolean verify() throws String256Exception {
-		boolean answer = true;
-		answer = name.verify();
+    /**
+     * <p>
+     * <b>Method verify</b> <br>
+     * This method will be called to check whether the syntax's
+     * {@link NameValueInteger} is correct </br>
+     * </p>
+     *
+     * @return boolean true if the syntax is correct, else return false
+     * @throws String256Exception if there is a String256 with more than 256 characters
+     * @see NameValueInteger
+     */
+    @Override
+    public boolean verify() throws String256Exception {
+        boolean answer = true;
+        answer = name.verify();
 
-		return answer;
-	}
+        return answer;
+    }
 
 }

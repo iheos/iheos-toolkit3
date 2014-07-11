@@ -1,12 +1,11 @@
 package edu.tn.xds.metadata.editor.client.editor;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.LayoutRegion;
+import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData;
@@ -40,7 +39,8 @@ public class EditorActivity extends AbstractActivity {
     @Inject
     MetadataEditorEventBus eventBus;
 
-    SimpleContainer sc;BorderLayoutContainer blc;
+    SimpleContainer sc;
+    BorderLayoutContainer blc;
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
@@ -52,9 +52,15 @@ public class EditorActivity extends AbstractActivity {
         this.eventBus.fireEditNewEvent(new EditNewEvent());
     }
 
+    /**
+     * Build editor layout with borderlayoutcontainer.
+     * Made of a main panel for the editor itself and a collapsible and splittable validation panel underneath.
+     *
+     * @return widget editor container
+     */
     private Widget getContainer() {
-        sc= new SimpleContainer();
-        blc= new BorderLayoutContainer();
+        sc = new SimpleContainer();
+        blc = new BorderLayoutContainer();
 
         ContentPanel validationView = new ContentPanel();
         validationView.setHeadingText("Validation");
@@ -72,6 +78,16 @@ public class EditorActivity extends AbstractActivity {
 
         blc.setSouthWidget(validationView, southData);
 
+        ContentPanel submissionPane = new ContentPanel();
+        submissionPane.setHeadingText("Submission");
+        submissionPane.setHeaderVisible(true);
+        BorderLayoutData westData = new BorderLayoutData(350);
+        westData.setMargins(new Margins(0, 5, 5, 5));
+        westData.setCollapsible(true);
+        westData.setSplit(false);
+
+        blc.setWestWidget(submissionPane, westData);
+
         blc.collapse(LayoutRegion.SOUTH);
 
         sc.add(blc);
@@ -79,6 +95,9 @@ public class EditorActivity extends AbstractActivity {
         return sc.asWidget();
     }
 
+    /**
+     * @return
+     */
     public GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter> buildEditorMVP() {
         return new GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter>(editorView, editorPresenter);
     }

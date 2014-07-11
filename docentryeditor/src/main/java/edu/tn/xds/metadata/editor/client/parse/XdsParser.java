@@ -2,6 +2,7 @@ package edu.tn.xds.metadata.editor.client.parse;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
@@ -11,31 +12,30 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
- *
  * <b>This class parses a XML file to build the model</b>
- *
+ * <p/>
  * <p>
  * To do it, here are the following variables required
  * </p>
  * <ul>
  * <li>{@link #instance}: The parse object, this class is a singleton (Parse) ;</li>
  * <li>{@link #documentXml}: The String which contains the XML data (String) ;</li>
- * <li>{@link #myModel}: The document model which will be completed.</li>
+ * <li>{@link #xdsDocumentEntry}: The document model which will be completed.</li>
  * </ul>
  * </p>
- *
+ * <p/>
  * <p>
  * This class also contains getters/setters.<br>
  * In addition, it contains several methods such as buildMyModel, findElements,
  * getDocumentParsed, generalMethod and finally one method per element's
  * document.</br>
  * </p>
- *
+ * <p/>
  * <p>
  * <b>How it works ?</b><br>
- * The method {@link #parse(String)} return the completed model, indeed it
- * calls {@link #findElements()} whose aim is to call the appropriate method
- * parseType where Type correspond to a specific type describe in the
+ * The method {@link #parse(String)} return the completed model, indeed it calls
+ * {@link #findElements()} whose aim is to call the appropriate method parseType
+ * where Type correspond to a specific type describe in the
  * {@link DocumentModel} (InternationalString, Author ...).</br>All this method
  * throws String256Exception if there is a String256 which is larger than 256
  * characters.<br>
@@ -43,14 +43,15 @@ import java.util.logging.Logger;
  * singleton Preparse class to delete unexpected escape and to make it UTF-8
  * compatible.</br>
  * </p>
- *
- *
+ * <p/>
+ * <p/>
  * <p>
  * <b>See below each method mentioned above.</b> <br>
  * {@link #parse(String)}</br> {@link #findElements()} <br>
- * {@link #generalMethod(String)}</br> {@link #getDocumentParsed()}
+ * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+ * </br> {@link #getDocumentParsed()}
  * </p>
- *
+ * <p/>
  * <p>
  * <b>See also the parseType methods:</b><br>
  * {@link #parseArrayInternationalString(String)}<br>
@@ -68,20 +69,8 @@ import java.util.logging.Logger;
  * @see DocumentModel
  * @see PreParse
  * @see String256
- *
- *
  */
 public class XdsParser {
-    private static Logger logger = Logger.getLogger(XdsParser.class.getName());
-    /**
-     * <b>String documentXml</b> - The data taken from the XML document and send
-     * by the server, this is the String to parse.<br>
-     * Type: String</br>
-     *
-     * @see XdsParser
-     */
-    private String documentXml;
-
     /**
      * <b>Parse myParse</b> - The instance of Parse class (it's a singleton
      * class).<br>
@@ -90,7 +79,24 @@ public class XdsParser {
      * @see XdsParser
      */
     private final static XdsParser instance = new XdsParser();
-
+    private static Logger logger = Logger.getLogger(XdsParser.class.getName());
+    /**
+     * <b>DocumentModel xdsDocumentEntry</b> - The model which will be completed
+     * by buildMyModel using the data's XML file.<br>
+     * Type: {@link DocumentModel}</br> </p>
+     *
+     * @see DocumentModel
+     * @see XdsParser
+     */
+    private final DocumentModel xdsDocumentEntry = new DocumentModel();
+    /**
+     * <b>String documentXml</b> - The data taken from the XML document and send
+     * by the server, this is the String to parse.<br>
+     * Type: String</br>
+     *
+     * @see XdsParser
+     */
+    private String documentXml;
     /**
      * <b>Document document</b> - The XML file which is contained in a Document
      * so as to be parsed.<br>
@@ -100,26 +106,19 @@ public class XdsParser {
      */
     private Document document;
 
-    /**
-     * <b>DocumentModel myModel</b> - The model which will be completed by
-     * buildMyModel using the data's XML file.<br>
-     * Type: {@link DocumentModel}</br> </p>
-     *
-     * @see DocumentModel
-     * @see XdsParser
-     */
-    private final DocumentModel myModel = new DocumentModel();
+    public static XdsParser getInstance() {
+        return instance;
+    }
 
     /**
      * <b>Method parse</b> <br>
      * Firstly, it calls {@link #getDocumentParsed()} method to parse the String
      * {@link #documentXml} and to complete the {@link DocumentModel}
-     * {@link #myModel} thanks to the {@link #findElements()} method. </br>
+     * {@link #xdsDocumentEntry} thanks to the {@link #findElements()} method.
+     * </br>
      *
-     * @param newDocumentXml
-     *            - The String which contains the XML content
-     * @return myModel - The {@link DocumentModel}
-     *
+     * @param newDocumentXml - The String which contains the XML content
+     * @return xdsDocumentEntry - The {@link DocumentModel}
      * @see XdsParser
      */
     public DocumentModel parse(String newDocumentXml) {
@@ -130,15 +129,7 @@ public class XdsParser {
         } catch (String256Exception e) {
             e.printStackTrace();
         }
-        return myModel;
-    }
-
-    public static XdsParser getInstance() {
-        return instance;
-    }
-
-    private enum NodesEnum {
-        titles, comments, authors, mimetype, hash, id, classcode, confidentialitycode, creationtime, eventcode, formatcode, healthcarefacilitytype, languagecode, legalauthenticator, patientid, practicesettingcode, repositoryuniqueid, servicestarttime, servicestoptime, size, sourcepatientid, sourcepatientinfo, typecode, uniqueid, uri;
+        return xdsDocumentEntry;
     }
 
     /**
@@ -147,7 +138,6 @@ public class XdsParser {
      *
      * @see PreParse
      * @see XdsParser
-     *
      */
     public void getDocumentParsed() {
         PreParse preParse = PreParse.getInstance();
@@ -157,169 +147,115 @@ public class XdsParser {
         document = XMLParser.parse(documentXml);
     }
 
-    public DocumentModel getMyModel() {
-        return myModel;
+    public DocumentModel getXdsDocumentEntry() {
+        return xdsDocumentEntry;
     }
 
     /**
      * <b>Method findElements</b> <br>
      * It calls all parseType methods on each element from {@link DocumentModel}
-     * through {@link #generalMethod(String)}. </br>
+     * through
+     * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+     * . </br>
      *
-     *
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
-     *
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
-     *
      */
     public void findElements() throws String256Exception {
-        generalMethod("titles");
-        generalMethod("comments");
-        generalMethod("authors");
-        generalMethod("classcode");
-        generalMethod("confidentialitycode");
-        generalMethod("creationtime");
-        generalMethod("eventcode");
-        generalMethod("formatcode");
-        generalMethod("healthcarefacilitytype");
-        generalMethod("languagecode");
-        generalMethod("legalauthenticator");
-        generalMethod("patientid");
-        generalMethod("practicesettingcode");
-        generalMethod("repositoryuniqueid");
-        generalMethod("servicestarttime");
-        generalMethod("servicestoptime");
-        generalMethod("size");
-        generalMethod("sourcepatientid");
-        generalMethod("sourcepatientinfo");
-        generalMethod("typecode");
-        generalMethod("uniqueid");
-        generalMethod("uri");
-        generalMethod("mimetype");
-        generalMethod("id");
-        generalMethod("hash");
+        // generalMethod("titles"); ...
+        for (RootNodesEnum node : RootNodesEnum.values()) {
+            generalMethod(node);
+        }
     }
 
     /**
      * <b>Method generalMethod</b> <br>
      * It calls all parseMethod on each element from {@link DocumentModel}.
      *
-     * @param nodeString
-     *            (String): The first node to match.
-     *
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
-     *
+     * @param node (String): The first node to match.
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
-     *
      */
-    public void generalMethod(String nodeString) throws String256Exception {
-        NodesEnum nodesEnum = NodesEnum.valueOf(nodeString);
-        switch (nodesEnum) {
-            case titles:
-                myModel.setTitles(parseArrayInternationalString("titles"));
-                break;
-
-            case comments:
-                myModel.setComments(parseArrayInternationalString("comments"));
-                break;
-
+    public void generalMethod(RootNodesEnum node) throws String256Exception {
+        String nodeName = node.toString();
+        switch (node) {
             case authors:
+                // FIXME Why does this case not have the same code pattern as all
+                // others?
                 methodParseAuthors();
                 break;
-
             case classcode:
-                myModel.setClassCode(parseCodedTerm("classcode"));
+                xdsDocumentEntry.setClassCode(parseCodedTerm(nodeName));
                 break;
-
+            case comments:
+                xdsDocumentEntry.setComments(parseArrayInternationalString(nodeName));
+                break;
             case confidentialitycode:
-                myModel.setConfidentialityCodes(parseArrayCodedTerm("confidentialitycode"));
+                xdsDocumentEntry.setConfidentialityCodes(parseArrayCodedTerm(nodeName));
                 break;
-
             case creationtime:
-                myModel.setCreationTime(parseNameValueDTM("creationtime"));
+                xdsDocumentEntry.setCreationTime(parseNameValueDTM(nodeName));
                 break;
-
             case eventcode:
-                myModel.setEventCode(parseArrayCodedTerm("eventcode"));
+                xdsDocumentEntry.setEventCode(parseArrayCodedTerm(nodeName));
                 break;
-
             case formatcode:
-                myModel.setFormatCode(parseCodedTerm("formatcode"));
+                xdsDocumentEntry.setFormatCode(parseCodedTerm(nodeName));
                 break;
-
-            case healthcarefacilitytype:
-                myModel.setHealthcareFacilityType(parseCodedTerm("healthcarefacilitytype"));
-                break;
-
-            case languagecode:
-                myModel.setLanguageCode(LanguageCode.getValueOf(parseString256(
-                        "languagecode").getString()));
-                break;
-
-            case legalauthenticator:
-                myModel.setLegalAuthenticator(parseNameValueString256("legalauthenticator"));
-                break;
-
-            case patientid:
-                myModel.setPatientID(parseIdentifierString256("patientid"));
-                break;
-
-            case practicesettingcode:
-                myModel.setPracticeSettingCode(parseCodedTerm("practicesettingcode"));
-                break;
-
-            case repositoryuniqueid:
-                myModel.setRepoUId(parseOID("repositoryuniqueid"));
-                break;
-
-            case servicestarttime:
-                myModel.setServiceStartTime(parseNameValueDTM("servicestarttime"));
-                break;
-
-            case servicestoptime:
-                myModel.setServiceStopTime(parseNameValueDTM("servicestoptime"));
-                break;
-
-            case size:
-                myModel.setSize(parseNameValueInteger("size"));
-                break;
-
-            case sourcepatientid:
-                myModel.setSourcePatientId(parseNameValueString256("sourcepatientid"));
-                break;
-
-            case sourcepatientinfo:
-                myModel.setSourcePatientInfo(parseNameValueString256("sourcepatientinfo"));
-                break;
-
-            case typecode:
-                myModel.setTypeCode(parseCodedTerm("typecode"));
-                break;
-
-            case uniqueid:
-                myModel.setUniqueId(parseIdentifierOID("uniqueid"));
-                break;
-
-            case uri:
-                myModel.setUri(parseString256("uri"));
-                break;
-
-            case mimetype:
-                myModel.setMimeType(parseString256("mimetype"));
-                break;
-
-            case id:
-                myModel.setId(parseString256("id"));
-                break;
-
             case hash:
-                myModel.setHash(parseString256("hash"));
+                xdsDocumentEntry.setHash(parseString256(nodeName));
                 break;
-
+            case healthcarefacilitytype:
+                xdsDocumentEntry.setHealthcareFacilityType(parseCodedTerm(nodeName));
+                break;
+            case id:
+                xdsDocumentEntry.setId(parseString256(nodeName));
+                break;
+            case mimetype:
+                xdsDocumentEntry.setMimeType(parseString256(nodeName));
+                break;
+            case languagecode:
+                xdsDocumentEntry.setLanguageCode(LanguageCode.getValueOf(parseString256(nodeName).getString()));
+                break;
+            case legalauthenticator:
+                xdsDocumentEntry.setLegalAuthenticator(parseNameValueString256(nodeName));
+                break;
+            case patientid:
+                xdsDocumentEntry.setPatientID(parseIdentifierString256(nodeName));
+                break;
+            case practicesettingcode:
+                xdsDocumentEntry.setPracticeSettingCode(parseCodedTerm(nodeName));
+                break;
+            case repositoryuniqueid:
+                xdsDocumentEntry.setRepoUId(parseOID(nodeName));
+                break;
+            case servicestarttime:
+                xdsDocumentEntry.setServiceStartTime(parseNameValueDTM(nodeName));
+                break;
+            case servicestoptime:
+                xdsDocumentEntry.setServiceStopTime(parseNameValueDTM(nodeName));
+                break;
+            case size:
+                xdsDocumentEntry.setSize(parseNameValueInteger(nodeName));
+                break;
+            case sourcepatientid:
+                xdsDocumentEntry.setSourcePatientId(parseNameValueString256(nodeName));
+                break;
+            case sourcepatientinfo:
+                xdsDocumentEntry.setSourcePatientInfo(parseNameValueString256(nodeName));
+                break;
+            case titles:
+                xdsDocumentEntry.setTitles(parseArrayInternationalString(nodeName));
+                break;
+            case typecode:
+                xdsDocumentEntry.setTypeCode(parseCodedTerm(nodeName));
+                break;
+            case uniqueid:
+                xdsDocumentEntry.setUniqueId(parseIdentifierOID(nodeName));
+                break;
+            case uri:
+                xdsDocumentEntry.setUri(parseString256(nodeName));
+                break;
             default:
                 break;
         }
@@ -329,126 +265,125 @@ public class XdsParser {
     /**
      * <b>Method methodParseAuthors</b> <br>
      * To obtain the author(s) of the XML file (ArrayList of {@link Author}
-     * ).</br>Called by {@link #generalMethod(String)}.
+     * ).</br>Called by
+     * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+     * .
      *
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
-     *
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
-     *
      */
+    // TODO This methods should handle exceptions and/or fire events which could
+    // be handled in GUI.
     public void methodParseAuthors() throws String256Exception {
-        NodeList authorsNode = document.getElementsByTagName("authors");
+        NodeList authorsNode = document.getElementsByTagName(RootNodesEnum.authors.toString());
         ArrayList<Author> authors = new ArrayList<Author>();
 
-        if (!authorsNode.toString().isEmpty()) {
-            int titleLength = authorsNode.item(0).getChildNodes().getLength();
-            for (int i = 0; i < titleLength; i++) {
-                Author intern_temp = new Author();
+        if (authorsNode != null && !authorsNode.toString().isEmpty()) {
+            for (int a = 0; a < authorsNode.getLength(); a++) {
+                // int titleLength = authorsNode.item(0).getChildNodes()
+                // .getLength();
+                NodeList authorNodes = ((Element) authorsNode.item(a)).getElementsByTagName("author");
+                for (int i = 0; i < authorNodes.getLength(); i++) {
+                    Author intern_temp = new Author();
 
-                ArrayList<String256> authorInstitutions_temp = new ArrayList<String256>();
-                ArrayList<String256> authorRoles_temp = new ArrayList<String256>();
-                ArrayList<String256> authorSpecialities_temp = new ArrayList<String256>();
+                    ArrayList<String256> authorInstitutions_temp = new ArrayList<String256>();
+                    ArrayList<String256> authorRoles_temp = new ArrayList<String256>();
+                    ArrayList<String256> authorSpecialities_temp = new ArrayList<String256>();
+                    ArrayList<String256> authorTelecommunications_temp = new ArrayList<String256>();
 
-                // Set authorPerson
-                String256 authorPerson256 = new String256();
-                authorPerson256.setString(authorsNode.item(0).getChildNodes()
-                        .item(i).getChildNodes().item(0).getFirstChild()
-                        .getNodeValue());
-                intern_temp.setAuthorPerson(authorPerson256);
+                    // Set authorPerson
+                    String256 authorPerson256 = new String256();
+                    NodeList authorPersonNodes = ((Element) authorNodes.item(i))
+                            .getElementsByTagName(RootNodesEnum.SubNodesEnum.authorperson.toString());
+                    if (authorPersonNodes != null) {
+                        for (int p = 0; p < authorPersonNodes.getLength(); p++) {
+                            authorPerson256.setString(authorPersonNodes.item(p).getFirstChild().getNodeValue());
+                            intern_temp.setAuthorPerson(authorPerson256);
 
-                // Set authortelecommunication
-                String256 authorTelecommunication256 = new String256();
-                authorTelecommunication256.setString(authorsNode.item(0).getChildNodes()
-                        .item(i).getChildNodes().item(1).getFirstChild()
-                        .getNodeValue());
-                intern_temp.setAuthorTelecommunication(authorTelecommunication256);
-
-                // Set authorInstitutions
-                NodeList authorInstitutionsNodes = authorsNode.item(0)
-                        .getChildNodes().item(i).getChildNodes().item(2)
-                        .getChildNodes();
-
-                if (!authorInstitutionsNodes.toString().isEmpty()) {
-                    for (int j = 0; j < authorInstitutionsNodes.getLength(); j++) {
-                        String256 str = new String256();
-                        str.setString(authorInstitutionsNodes.item(j)
-                                .getFirstChild().getNodeValue());
-                        if (str.verify(str.getString())) {
-                            authorInstitutions_temp.add(str);
                         }
+                    } else {
+                        logger.warning("This author lacks an author person node. \nCheck your XML Document!");
                     }
-                    intern_temp.setAuthorInstitutions(authorInstitutions_temp);
-
-                } else {
-                    logger.warning("AuthorInstitutions node is empty for author named "
-                            + authorsNode.item(0).getChildNodes().item(i)
-                            .getChildNodes().item(0).getFirstChild()
-                            .getNodeValue()
-                            + "!\nCheck your XML Document");
-                }
-
-                // Set authorRoles
-                NodeList authorRolesNodes = authorsNode.item(0).getChildNodes()
-                        .item(i).getChildNodes().item(3).getChildNodes();
-
-                if (!authorRolesNodes.toString().isEmpty()) {
-                    for (int j = 0; j < authorRolesNodes.getLength(); j++) {
-                        String256 str = new String256();
-                        str.setString(authorRolesNodes.item(j).getFirstChild()
-                                .getNodeValue());
-
-                        if (str.verify(str.getString())) {
-                            authorRoles_temp.add(str);
+                    // Set authorInstitutions
+                    NodeList institutionNodes = ((Element) authorNodes.item(i))
+                            .getElementsByTagName(RootNodesEnum.SubNodesEnum.authorinstitution.toString());
+                    if (institutionNodes != null) {
+                        for (int j = 0; j < institutionNodes.getLength(); j++) {
+                            String256 str = new String256();
+                            str.setString(institutionNodes.item(j).getFirstChild().getNodeValue());
+                            if (str.verify()) {
+                                authorInstitutions_temp.add(str);
+                            }
                         }
-
+                        intern_temp.setAuthorInstitutions(authorInstitutions_temp);
+                    } else {
+                        logger.warning("AuthorInstitutions node is empty for author named " + authorPerson256
+                                + ".\nCheck your XML Document!");
                     }
-                    intern_temp.setAuthorRoles(authorRoles_temp);
-
-                } else {
-                    logger.warning("AuthorRoles node is empty for author named "
-                            + authorsNode.item(0).getChildNodes().item(i)
-                            .getChildNodes().item(0).getFirstChild()
-                            .getNodeValue()
-                            + "!\nCheck your XML Document");
-                    // TODO Fire an event for this error that could be handled
-                    // in the view
-                }
-
-                // Set authorSpecialities
-                NodeList authorSpecialitiesNodes = authorsNode.item(0)
-                        .getChildNodes().item(i).getChildNodes().item(4)
-                        .getChildNodes();
-
-                if (!authorSpecialitiesNodes.toString().isEmpty()) {
-                    for (int j = 0; j < authorSpecialitiesNodes.getLength(); j++) {
-                        String256 str = new String256();
-                        str.setString(authorSpecialitiesNodes.item(j)
-                                .getFirstChild().getNodeValue());
-                        if (str.verify(str.getString())) {
-                            authorSpecialities_temp.add(str);
+                    // Set authorRoles
+                    NodeList roleNodes = ((Element) authorNodes.item(i))
+                            .getElementsByTagName(RootNodesEnum.SubNodesEnum.authorrole.toString());
+                    if (roleNodes != null) {
+                        for (int j = 0; j < roleNodes.getLength(); j++) {
+                            String256 str = new String256();
+                            str.setString(roleNodes.item(j).getFirstChild().getNodeValue());
+                            if (str.verify()) {
+                                authorRoles_temp.add(str);
+                            }
                         }
+                        intern_temp.setAuthorRoles(authorRoles_temp);
+                    } else {
+                        logger.warning("AuthorRoles node is empty for author named " + authorPerson256
+                                + ".\nCheck your XML Document!");
+                        // TODO Fire an event for this error that could be
+                        // handled
+                        // in the view
                     }
-                    intern_temp.setAuthorSpecialties(authorSpecialities_temp);
 
-                } else {
-                    logger.warning("AuthorSpecialities node is empty for author named "
-                            + authorsNode.item(0).getChildNodes().item(i)
-                            .getChildNodes().item(0).getFirstChild()
-                            .getNodeValue()
-                            + "!\nCheck your XML Document");
-                    // TODO fire an event to handle the issue in the view
+                    // Set authorSpecialities
+                    NodeList specialtyNodes = ((Element) authorNodes.item(i))
+                            .getElementsByTagName(RootNodesEnum.SubNodesEnum.authorspecialty.toString());
+                    if (specialtyNodes != null) {
+                        for (int j = 0; j < specialtyNodes.getLength(); j++) {
+                            String256 str = new String256();
+                            str.setString(specialtyNodes.item(j).getFirstChild().getNodeValue());
+                            if (str.verify()) {
+                                authorSpecialities_temp.add(str);
+                            }
+                        }
+                        intern_temp.setAuthorSpecialties(authorSpecialities_temp);
+                    } else {
+                        logger.warning("AuthorSpecialities node is empty for author named " + authorPerson256
+                                + "!\nCheck your XML Document");
+                        // TODO fire an event to handle the issue in the view
+                    }
+                    // Set authorTelecommunications
+                    NodeList telecommunicationNodes = ((Element) authorNodes.item(i))
+                            .getElementsByTagName(RootNodesEnum.SubNodesEnum.authortelecommunication.toString());
+                    if (telecommunicationNodes != null) {
+                        for (int j = 0; j < telecommunicationNodes.getLength(); j++) {
+                            String256 str = new String256();
+                            str.setString(telecommunicationNodes.item(j).getFirstChild().getNodeValue());
+                            if (str.verify()) {
+                                authorTelecommunications_temp.add(str);
+                            }
+                        }
+                        intern_temp.setAuthorTelecommunications(authorTelecommunications_temp);
+                    } else {
+                        logger.warning("AuthorTelecommunications node is empty for author named " + authorPerson256
+                                + ".\nCheck your XML Document!");
+                        // TODO fire an event to handle the issue in the view
+                    }
+                    // Add this Element to the model
+                    authors.add(intern_temp);
+
                 }
-                // Add this Element to the model
-                authors.add(intern_temp);
-
+                // Set title to xdsDocumentEntry
+                xdsDocumentEntry.setAuthors(authors);
             }
-            // Set title to myModel
-            myModel.setAuthors(authors);
         } else {
-            myModel.setAuthors(null);
-            logger.warning("Authors node is empty!\nCheck your XML Document");
+            xdsDocumentEntry.setAuthors(null);
+            logger.warning("Authors node is empty.\nCheck your XML Document!");
             // TODO Fire an event for this error that could be handled in the
             // view
         }
@@ -457,36 +392,30 @@ public class XdsParser {
     /**
      * <b>Method parseString256</b> <br>
      * To obtain the element of type {@link String256}.</br>Called by
-     * {@link #generalMethod(String)} on each {@link String256} element.
+     * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+     * on each {@link String256} element.
      *
-     * @param node
-     *            (String): The name of the root node.
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
+     * @param node (String): The name of the root node.
      * @return {@link String256}
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
-     *
      */
     public String256 parseString256(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
         if (!nodeList.toString().isEmpty()) {
             String256 string256 = new String256();
-            if (string256.verify(nodeList.item(0).getChildNodes().item(0)
-                    .getNodeValue())) {
-                string256.setString(nodeList.item(0).getChildNodes().item(0)
-                        .getNodeValue());
-
+            string256.setString(nodeList.item(0).getFirstChild().getNodeValue());
+            if (string256.verify()) {
                 return string256;
             } else {
                 // FIXME Not sure it should be done here but maybe with the
                 // verify method which may return something
-                logger.warning(node + " node is larger than 256 characters");
+                logger.warning(node + " node is larger than 256 characters.");
                 return null;
             }
 
         } else {
-            logger.warning(node + " node is empty!\nCheck your XML Document");
+            logger.warning(node + " node is empty.\nCheck your XML Document!");
             return null;
         }
     }
@@ -494,39 +423,32 @@ public class XdsParser {
     /**
      * <b>Method parseOID</b> <br>
      * To obtain the element of type {@link OID}.</br>Called by
-     * {@link #generalMethod(String)} on each OID element.
+     * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+     * on each OID element.
      *
-     * @param node
-     *            (String): The name of the root node.
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
+     * @param node (String): The name of the root node.
      * @return {@link OID}
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
-     *
      */
     public OID parseOID(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
         if (!nodeList.toString().isEmpty()) {
-            String256 string256 = new String256();
             OID oid = new OID();
-            if (string256.verify(nodeList.item(0).getChildNodes().item(0)
-                    .getNodeValue())) {
-                string256.setString(nodeList.item(0).getChildNodes().item(0)
-                        .getNodeValue());
-                oid.setOid(string256);
+            oid.setOid(new String256().setString(nodeList.item(0).getFirstChild().getNodeValue()));
+            if (oid.verify()) {
                 return oid;
             } else {
                 // FIXME Not sure it should be done that way (abstraction issue,
                 // string256 validation check)
-                logger.warning(node + " node is larger than 256 characters");
+                logger.warning(node + " node is larger than 256 characters.");
                 return null;
             }
 
         } else {
             // TODO Fire an event for this error that could be handled in the
             // view
-            logger.warning(node + " node is empty!\nCheck your XML Document");
+            logger.warning(node + " node is empty.\nCheck your XML Document!");
             return null;
         }
     }
@@ -539,48 +461,54 @@ public class XdsParser {
      * element.
      * </p>
      *
-     * @param node
-     *            (String) : The name of the root node.
-     *
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
+     * @param node (String) : The name of the root node.
      * @return {@link IdentifierString256}
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser class Parse
-     *
      */
-    public IdentifierString256 parseIdentifierString256(String node)
-            throws String256Exception {
+    public IdentifierString256 parseIdentifierString256(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
-        String256 identifier256_value = new String256();
-        String256 identifier256_type = new String256();
-
-        IdentifierString256 identifier = new IdentifierString256();
 
         if (!nodeList.toString().isEmpty()) {
+            IdentifierString256 identifier = new IdentifierString256();
+
             // Set value
-            identifier256_value.setString(nodeList.item(0).getChildNodes()
-                    .item(0).getChildNodes().item(0).getFirstChild()
-                    .getNodeValue());
-            if (identifier256_value.verify(identifier256_value.getString())) {
+            String256 identifier256_value = new String256();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                NodeList valueNodes = ((Element) nodeList.item(i)).getElementsByTagName(RootNodesEnum.SubNodesEnum.value
+                        .toString());
+                for (int j = 0; j < valueNodes.getLength(); j++) {
+                    identifier256_value.setString(valueNodes.item(j).getFirstChild().getNodeValue());
+                }
+            }
+            if (identifier256_value.verify()) {
                 identifier.setValue(identifier256_value);
 
+            } else {
+                // FIXME should do something to raise an exception or fire event
+                return null;
             }
 
             // Set type
-            identifier256_type.setString(nodeList.item(0).getChildNodes()
-                    .item(0).getChildNodes().item(1).getFirstChild()
-                    .getNodeValue());
-
-            if (identifier256_type.verify(identifier256_type.getString())) {
-
+            String256 identifier256_type = new String256();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                NodeList valueNodes = ((Element) nodeList.item(i)).getElementsByTagName(RootNodesEnum.SubNodesEnum.idtype
+                        .toString());
+                for (int j = 0; j < valueNodes.getLength(); j++) {
+                    identifier256_type.setString(valueNodes.item(j).getFirstChild().getNodeValue());
+                }
+            }
+            if (identifier256_type.verify()) {
                 identifier.setIdType(identifier256_type);
+            } else {
+                // FIXME should do something to raise an exception or fire event
+                return null;
             }
 
-            // Set IDPatient element to myModel
+            // Set IDPatient element to xdsDocumentEntry
             return identifier;
         } else {
-            logger.warning(node + " node is empty!\nCheck your XML Document");
+            logger.warning(node + " node is empty.\nCheck your XML Document!");
             return null;
         }
     }
@@ -588,50 +516,56 @@ public class XdsParser {
     /**
      * <b>Method parseIdentifierOID</b> <br>
      * To obtain the element of type {@link IdentifierOID}.</br>Called by
-     * {@link #generalMethod(String)} on each {@link IdentifierOID} element.
-     * </p>
+     * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+     * on each {@link IdentifierOID} element. </p>
      *
-     * @param node
-     *            (String) : The name of the root node.
-     *
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
+     * @param node (String) : The name of the root node.
      * @return {@link IdentifierOID}
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
-     *
      */
-    public IdentifierOID parseIdentifierOID(String node)
-            throws String256Exception {
+    public IdentifierOID parseIdentifierOID(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
-        String256 identifier256_value = new String256();
-        String256 identifier256_type = new String256();
-        IdentifierOID identifier = new IdentifierOID();
-        OID oid_type = new OID();
 
         if (!nodeList.toString().isEmpty()) {
-            // Set value
-            identifier256_value.setString(nodeList.item(0).getChildNodes()
-                    .item(0).getChildNodes().item(0).getFirstChild()
-                    .getNodeValue());
-            if (identifier256_value.verify(identifier256_value.getString())) {
-                identifier.setValue(identifier256_value);
+            IdentifierOID identifier = new IdentifierOID();
 
+            // Set value
+            OID identifier256_value = new OID();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                NodeList valueNodes = ((Element) nodeList.item(i)).getElementsByTagName(RootNodesEnum.SubNodesEnum.value
+                        .toString());
+                for (int j = 0; j < valueNodes.getLength(); j++) {
+                    identifier256_value.setOid(new String256().setString(valueNodes.item(j).getFirstChild().getNodeValue()));
+                }
+            }
+            if (identifier256_value.verify()) {
+                identifier.setValue(identifier256_value);
+            } else {
+                // FIXME should do something to raise an exception or fire event
+                return null;
             }
 
             // Set type
-            identifier256_type.setString(nodeList.item(0).getChildNodes()
-                    .item(0).getChildNodes().item(1).getFirstChild()
-                    .getNodeValue());
-
-            if (identifier256_type.verify(identifier256_type.getString())) {
-                oid_type.setOid(identifier256_type);
-                identifier.setIdType(oid_type);
+            String256 identifier256_type = new String256();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                NodeList valueNodes = ((Element) nodeList.item(i)).getElementsByTagName(RootNodesEnum.SubNodesEnum.idtype
+                        .toString());
+                for (int j = 0; j < valueNodes.getLength(); j++) {
+                    identifier256_type.setString(valueNodes.item(j).getFirstChild().getNodeValue());
+                }
             }
-            // Set IDPatient element to myModel
+            if (identifier256_type.verify()) {
+                identifier.setIdType(identifier256_type);
+            } else {
+                // FIXME should do something to raise an exception or fire event
+                return null;
+            }
+
+            // Set IDPatient element to xdsDocumentEntry
             return identifier;
         } else {
-            logger.warning(node + " node is empty!\nCheck your XML Document");
+            logger.warning(node + " node is empty.\nCheck your XML Document!");
             return null;
         }
     }
@@ -639,20 +573,16 @@ public class XdsParser {
     /**
      * <b>Method parseArrayInternationalString</b> <br>
      * To obtain the element of type ArrayList(InternationalString) .</br>Called
-     * by {@link #generalMethod(String)} on each ArrayList(InternationalString)
-     * element.
+     * by
+     * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+     * on each ArrayList(InternationalString) element.
      *
-     * @param node
-     *            (String) : The name of the root node.
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
+     * @param node (String) : The name of the root node.
      * @return ArrayList(InternationalString)
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
-     *
      */
-    public ArrayList<InternationalString> parseArrayInternationalString(
-            String node) throws String256Exception {
+    public ArrayList<InternationalString> parseArrayInternationalString(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
         ArrayList<InternationalString> array = new ArrayList<InternationalString>();
 
@@ -661,32 +591,26 @@ public class XdsParser {
             for (int i = 0; i < nodeLength; i++) {
                 InternationalString internationalString = new InternationalString();
 
-                String256 international256_value = new String256();
-
                 // Set languageCode
-                LanguageCode international256_langCode = LanguageCode
-                        .getValueOf(nodeList.item(0).getChildNodes().item(i)
-                                .getChildNodes().item(0).getFirstChild()
-                                .getNodeValue());
-                // if
-                // (international256_langCode.verify(international256_langCode.toString()))
-                // {
+                LanguageCode international256_langCode = LanguageCode.getValueOf(((Element) nodeList.item(0).getChildNodes()
+                        .item(i)).getElementsByTagName(RootNodesEnum.SubNodesEnum.language.toString()).item(0)
+                        .getFirstChild().getNodeValue());
                 internationalString.setLangCode(international256_langCode);
-                // }
 
                 // Set information
-                international256_value.setString(nodeList.item(0)
-                        .getChildNodes().item(i).getChildNodes().item(1)
-                        .getFirstChild().getNodeValue());
-                if (international256_value.verify(international256_value
-                        .getString())) {
+                String256 international256_value = new String256();
+                international256_value.setString(((Element) nodeList.item(0).getChildNodes().item(i))
+                        .getElementsByTagName(RootNodesEnum.SubNodesEnum.information.toString()).item(0).getFirstChild()
+                        .getNodeValue());
+                if (international256_value.verify()) {
                     internationalString.setValue(international256_value);
                 }
+                // TODO else w/ exception and/or fire event
 
                 // Add this Element to the model
                 array.add(internationalString);
             }
-            // Set title to myModel
+            // Set title to xdsDocumentEntry
             return array;
         } else {
             logger.warning(node + " node is empty!\nCheck your XML Document");
@@ -697,119 +621,79 @@ public class XdsParser {
     /**
      * <b>Method parseCodedTerm</b> <br>
      * To obtain the element of type CodedTerm.</br>Called by
-     * {@link #generalMethod(String)} on each {@link CodedTerm} element. </p>
+     * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+     * on each {@link CodedTerm} element. </p>
      *
-     * @param node
-     *            (String) : The name of the root node.
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
+     * @param node (String) : The name of the root node.
      * @return {@link CodedTerm}
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
-     *
      */
     public CodedTerm parseCodedTerm(String node) throws String256Exception {
-        NodeList nodeList = document.getElementsByTagName(node);
-
-        if (!nodeList.toString().isEmpty()) {
-            CodingScheme codingScheme = new CodingScheme();
-            CodedTerm codedTerm = new CodedTerm();
-            String256 codedTerm256_name = new String256();
-            String256 codedTerm256_code = new String256();
-            String256 codedTerm256_scheme = new String256();
-
-            // Set displayName
-            codedTerm256_name.setString(nodeList.item(0).getChildNodes()
-                    .item(0).getChildNodes().item(0).getFirstChild()
-                    .getNodeValue());
-
-            if (codedTerm256_name.verify(codedTerm256_name.getString())) {
-                codedTerm.setDisplayName(codedTerm256_name);
-            }
-
-            // Set code
-            codedTerm256_code.setString(nodeList.item(0).getChildNodes()
-                    .item(0).getChildNodes().item(1).getFirstChild()
-                    .getNodeValue());
-            if (codedTerm256_code.verify(codedTerm256_code.getString())) {
-                codedTerm.setCode(codedTerm256_code);
-            }
-
-            // Set codingScheme
-            codedTerm256_scheme.setString(nodeList.item(0).getChildNodes()
-                    .item(0).getChildNodes().item(2).getFirstChild()
-                    .getNodeValue());
-            if (codedTerm256_scheme.verify(codedTerm256_scheme.getString())) {
-                codingScheme.setCodingScheme(codedTerm256_scheme);
-                codedTerm.setCodingScheme(codingScheme);
-            }
-            return codedTerm;
-
-        } else {
-            logger.warning(node + " node is empty!\nCheck your XML Document");
-            return null;
-        }
+        return parseArrayCodedTerm(node).get(0);
     }
 
     /**
      * <p>
      * <b>Method parseArrayCodedTerm</b> <br>
      * To obtain the element of type ArrayList(CodedTerm).</br>Called by
-     * {@link #generalMethod(String)} on each ArrayList(CodedTerm) element.
+     * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+     * on each ArrayList(CodedTerm) element.
      * </p>
      *
-     * @param node
-     *            (String) : The name of the root node.
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
+     * @param node (String) : The name of the root node.
      * @return ArrayList(CodedTerm)
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
-     *
      */
-    public ArrayList<CodedTerm> parseArrayCodedTerm(String node)
-            throws String256Exception {
+    public ArrayList<CodedTerm> parseArrayCodedTerm(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
-        ArrayList<CodedTerm> arrayCodedTerm = new ArrayList<CodedTerm>();
 
         if (!nodeList.toString().isEmpty()) {
-            int nodeLength = nodeList.item(0).getChildNodes().getLength();
-
-            for (int i = 0; i < nodeLength; i++) {
-                CodingScheme codingScheme = new CodingScheme();
+            ArrayList<CodedTerm> arrayCodedTerm = new ArrayList<CodedTerm>();
+            NodeList codedTermNodes = ((Element) nodeList.item(0)).getElementsByTagName(RootNodesEnum.SubNodesEnum.codedterm
+                    .toString());
+            for (int i = 0; i < codedTermNodes.getLength(); i++) {
                 CodedTerm codedTerm = new CodedTerm();
+                CodingScheme codingScheme = new CodingScheme();
                 String256 codedTerm256_name = new String256();
                 String256 codedTerm256_code = new String256();
-                String256 codedTerm256_scheme = new String256();
 
                 // Set displayName
-                codedTerm256_name.setString(nodeList.item(0).getChildNodes()
-                        .item(i).getChildNodes().item(0).getFirstChild()
+                codedTerm256_name.setString(((Element) codedTermNodes.item(i))
+                        .getElementsByTagName(RootNodesEnum.SubNodesEnum.displayname.toString()).item(0).getFirstChild()
                         .getNodeValue());
 
-                if (codedTerm256_name.verify(codedTerm256_name.getString())) {
+                if (codedTerm256_name.verify()) {
                     codedTerm.setDisplayName(codedTerm256_name);
+                } else {
+                    // TODO return problem to client view
                 }
-
                 // Set code
-                codedTerm256_code.setString(nodeList.item(0).getChildNodes()
-                        .item(i).getChildNodes().item(1).getFirstChild()
+                codedTerm256_code.setString(((Element) codedTermNodes.item(i))
+                        .getElementsByTagName(RootNodesEnum.SubNodesEnum.code.toString()).item(0).getFirstChild()
                         .getNodeValue());
-                if (codedTerm256_code.verify(codedTerm256_code.getString())) {
+                if (codedTerm256_code.verify()) {
                     codedTerm.setCode(codedTerm256_code);
+                } else {
+                    // TODO return problem to client view
                 }
-
                 // Set codingScheme
-                codedTerm256_scheme.setString(nodeList.item(0).getChildNodes()
-                        .item(i).getChildNodes().item(2).getFirstChild()
-                        .getNodeValue());
-                if (codedTerm256_scheme.verify(codedTerm256_scheme.getString())) {
-                    codingScheme.setCodingScheme(codedTerm256_scheme);
+                String test = ((Element) codedTermNodes.item(i))
+                        .getElementsByTagName(RootNodesEnum.SubNodesEnum.codingscheme.toString()).item(0).getFirstChild()
+                        .getNodeValue();
+                codingScheme.setCodingScheme(new String256().setString(test));
+                if (codingScheme.verify()) {
                     codedTerm.setCodingScheme(codingScheme);
+                } else {
+                    // TODO fire there is a problem
                 }
-
                 // Add this CodedTerm
-                arrayCodedTerm.add(codedTerm);
+                if (codedTerm.verify()) {
+                    arrayCodedTerm.add(codedTerm);
+                } else {
+                    // TODO return problem to client view
+                }
             }
 
             return arrayCodedTerm;
@@ -823,23 +707,16 @@ public class XdsParser {
     /**
      * <b>Method parseNameValueString256</b> <br>
      * To obtain the element of type {@link NameValueString256}.</br>Called by
-     * {@link #generalMethod(String)} on each {@link NameValueString256}
-     * element.
+     * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+     * on each {@link NameValueString256} element.
      *
-     * @param node
-     *            (String) : The name of the root node.
-     *
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
+     * @param node (String) : The name of the root node.
      * @return {@link NameValueString256}
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
-     *
      */
-    public NameValueString256 parseNameValueString256(String node)
-            throws String256Exception {
+    public NameValueString256 parseNameValueString256(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
-        String256 name256 = new String256();
 
         if (nodeList.toString().isEmpty()) {
             logger.warning(node + " node is empty!\nCheck your XML Document");
@@ -849,21 +726,18 @@ public class XdsParser {
             NameValueString256 nameValue = new NameValueString256();
             ArrayList<String256> values = new ArrayList<String256>();
             // Set name
-            name256.setString(nodeList.item(0).getChildNodes().item(0)
-                    .getFirstChild().getFirstChild().getNodeValue());
-            if (name256.verify(name256.getString())) {
+            String256 name256 = new String256();
+            name256.setString(((Element) nodeList.item(0)).getElementsByTagName(RootNodesEnum.SubNodesEnum.name.toString())
+                    .item(0).getFirstChild().getNodeValue());
+            if (name256.verify()) {
                 nameValue.setName(name256);
             }
-
             // Set values
-            int valuesLength = nodeList.item(0).getChildNodes().item(0)
-                    .getChildNodes().item(1).getChildNodes().getLength();
-
-            for (int i = 0; i < valuesLength; i++) {
+            NodeList valueNodes = ((Element) nodeList.item(0)).getElementsByTagName(RootNodesEnum.SubNodesEnum.value
+                    .toString());
+            for (int i = 0; i < valueNodes.getLength(); i++) {
                 String256 value256 = new String256();
-                value256.setString(nodeList.item(0).getChildNodes().item(0)
-                        .getChildNodes().item(1).getChildNodes().item(i)
-                        .getFirstChild().getNodeValue());
+                value256.setString(valueNodes.item(i).getFirstChild().getNodeValue());
                 values.add(value256);
             }
             nameValue.setValues(values);
@@ -874,124 +748,112 @@ public class XdsParser {
     /**
      * <b>Method parseNameValueInteger</b> <br>
      * To obtain the element of type {@link NameValueInteger}.</br>Called by
-     * {@link #generalMethod(String)} on each {@link NameValueInteger} element.
+     * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+     * on each {@link NameValueInteger} element.
      *
-     * @param node
-     *            (String) : The name of the root node.
-     *
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
+     * @param node (String) : The name of the root node.
      * @return {@link NameValueInteger}
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public NameValueInteger parseNameValueInteger(String node)
-            throws String256Exception {
+    public NameValueInteger parseNameValueInteger(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
-        String256 name256 = new String256();
-
         if (nodeList.toString().isEmpty()) {
-            logger.warning(node + " node is empty!\nCheck your XML Document");
+            logger.warning(node + " node is empty.\nCheck your XML Document!");
             return null;
         } else {
+            // NameValue<String256>
             NameValueInteger nameValue = new NameValueInteger();
             ArrayList<Integer> values = new ArrayList<Integer>();
-
             // Set name
-            name256.setString(nodeList.item(0).getChildNodes().item(0)
-                    .getFirstChild().getFirstChild().getNodeValue());
-            if (name256.verify(name256.getString())) {
+            String256 name256 = new String256();
+            name256.setString(((Element) nodeList.item(0)).getElementsByTagName(RootNodesEnum.SubNodesEnum.name.toString())
+                    .item(0).getFirstChild().getNodeValue());
+            if (name256.verify()) {
                 nameValue.setName(name256);
             }
-
             // Set values
-            int valuesLength = nodeList.item(0).getChildNodes().item(0)
-                    .getChildNodes().item(1).getChildNodes().getLength();
-
-            for (int i = 0; i < valuesLength; i++) {
-                String value;
-                int integer;
-
-                value = nodeList.item(0).getChildNodes().item(0)
-                        .getChildNodes().item(1).getChildNodes().item(i)
-                        .getFirstChild().getNodeValue();
-                integer = Integer.decode(value);
-                values.add(integer);
+            NodeList valueNodes = ((Element) nodeList.item(0)).getElementsByTagName(RootNodesEnum.SubNodesEnum.value
+                    .toString());
+            for (int i = 0; i < valueNodes.getLength(); i++) {
+                String value = valueNodes.item(i).getFirstChild().getNodeValue();
+                values.add(Integer.parseInt(value));
             }
             nameValue.setValues(values);
             return nameValue;
-
         }
     }
 
     /**
      * <b>Method parseNameValueDTM</b> <br>
      * To obtain the element of type {@link NameValueDTM}.</br>Called by
-     * {@link #generalMethod(String)} on each {@link NameValueDTM} element.
+     * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
+     * on each {@link NameValueDTM} element.
      *
-     * @param node
-     *            (String) : The name of the root node.
-     *
-     * @throws String256Exception
-     *             if there is a String256 with more than 256 characters
-     *
+     * @param node (String) : The name of the root node.
      * @return {@link NameValueDTM}
+     * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
-     *
      */
-    public NameValueDTM parseNameValueDTM(String node)
-            throws String256Exception {
+    public NameValueDTM parseNameValueDTM(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
-        String256 name256 = new String256();
-
         if (nodeList.toString().isEmpty()) {
-            logger.warning(node + " node is empty!\nCheck your XML Document");
+            logger.warning(node + " node is empty.\nCheck your XML Document!");
             return null;
         } else {
-
             NameValueDTM nameValue = new NameValueDTM();
             ArrayList<DTM> values = new ArrayList<DTM>();
-
             // Set name
-            name256.setString(nodeList.item(0).getChildNodes().item(0)
-                    .getFirstChild().getFirstChild().getNodeValue());
-            if (name256.verify(name256.getString())) {
+            String256 name256 = new String256();
+            name256.setString(((Element) nodeList.item(0)).getElementsByTagName(RootNodesEnum.SubNodesEnum.name.toString())
+                    .item(0).getFirstChild().getNodeValue());
+            if (name256.verify()) {
                 nameValue.setName(name256);
+            } else {
+                // TODO fire problem to view
             }
-
             // Set values
-            int valuesLength = nodeList.item(0).getChildNodes().item(0)
-                    .getChildNodes().item(1).getChildNodes().getLength();
+            // Set values
+            NodeList valueNodes = ((Element) nodeList.item(0)).getElementsByTagName(RootNodesEnum.SubNodesEnum.value
+                    .toString());
 
-            for (int i = 0; i < valuesLength; i++) {
+            for (int i = 0; i < valueNodes.getLength(); i++) {
                 String256 value256 = new String256();
                 DTM dtm = new DTM();
-
-                value256.setString(nodeList.item(0).getChildNodes().item(0)
-                        .getChildNodes().item(1).getChildNodes().item(i)
-                        .getFirstChild().getNodeValue());
-
-                String df;
-                int dateLength=value256.getString().length();
-                if(dateLength==4){
-                    df="yyyy";
-                }else if(dateLength==6){
-                    df="yyyyMM";
-                }else if(dateLength==8){
-                    df="yyyyMMdd";
-                }else if(dateLength==10){
-                    df="yyyyMMddhh";
-                }else if(dateLength==12){
-                    df="yyyyMMddhhmm";
-                }else if(dateLength==14){
-                    df="yyyyMMddhhmmss";
-                }else{
-                    MessageBox mb=new MessageBox("Date parsing error","Your "+nameValue.getName()+" date is not well formatted, this value can not be treated.");
-                    mb.show();
+                value256.setString(valueNodes.item(i).getFirstChild().getNodeValue());
+                String df = null;
+                int dateLength = value256.getString().length();
+                switch (dateLength) {
+                    case 4:
+                        df = "yyyy";
+                        break;
+                    case 6:
+                        df = "yyyyMM";
+                        break;
+                    case 8:
+                        df = "yyyyMMdd";
+                        break;
+                    case 10:
+                        df = "yyyyMMddhh";
+                        break;
+                    case 12:
+                        df = "yyyyMMddhhmm";
+                        break;
+                    case 14:
+                        df = "yyyyMMddhhmmss";
+                        break;
+                    default:
+                        // TODO change this
+                        MessageBox mb = new MessageBox("Date parsing error", "Your " + nameValue.getName()
+                                + " date is not well formatted, this value can not be treated.");
+                        mb.show();
+                        break;
+                }
+                if (df != null) {
+                    dtm.setDtm(DateTimeFormat.getFormat(df).parse(value256.getString()));
+                } else {
                     return null;
                 }
-
-                dtm.setDtm(DateTimeFormat.getFormat(df).parse(value256.getString()));
                 values.add(dtm);
             }
             nameValue.setValues(values);

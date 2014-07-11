@@ -28,63 +28,59 @@ import java.util.logging.Logger;
 
 public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentModelEditorView> {
 
-	protected static Logger logger = Logger.getLogger(DocumentModelEditorPresenter.class.getName());
+    protected static Logger logger = Logger.getLogger(DocumentModelEditorPresenter.class.getName());
+    protected DocumentModel model;
+    EditorDriver editorDriver = GWT.create(EditorDriver.class);
 
-	interface EditorDriver extends SimpleBeanEditorDriver<DocumentModel, DocumentModelEditorView> {
+    @Inject
+    MetadataEditorRequestFactory requestFactory;
 
-	}
+    @Override
+    public void init() {
+        super.init();
+        model = new DocumentModel();
+        initDriver(model);
+        requestFactory.initialize(eventBus);
+        bind();
+    }
 
-	EditorDriver editorDriver = GWT.create(EditorDriver.class);
-
-	@Inject
-	MetadataEditorRequestFactory requestFactory;
-
-	protected DocumentModel model;
-
-	@Override
-	public void init() {
-		super.init();
-		model = new DocumentModel();
-		initDriver(model);
-		requestFactory.initialize(eventBus);
-		bind();
-	}
-
-	private void initDriver(DocumentModel model) {
-		editorDriver.initialize(view);
-		getView().author.initEditorDriver();
+    private void initDriver(DocumentModel model) {
+        editorDriver.initialize(view);
+        getView().author.initEditorDriver();
 //		getView().title.initEditorDriver();
 //		getView().comment.initEditorDriver();
 //		getView().confidentialityCode.initEditorDriver();
-		editorDriver.edit(model);
-	}
+        editorDriver.edit(model);
+    }
 
-	private void bind() {
-		getEventBus().addHandler(NewFileLoadedEvent.TYPE, new NewFileLoadedHandler() {
+    private void bind() {
+        getEventBus().addHandler(NewFileLoadedEvent.TYPE, new NewFileLoadedHandler() {
 
-			@Override
-			public void onNewFileLoaded(NewFileLoadedEvent event) {
-				model = event.getDocument();
-				initDriver(model);
-			}
-		});
-		((MetadataEditorEventBus) getEventBus()).addSaveFileEventHandler(new SaveFileEventHandler() {
+            @Override
+            public void onNewFileLoaded(NewFileLoadedEvent event) {
+                model = event.getDocument();
+                initDriver(model);
+            }
+        });
+        ((MetadataEditorEventBus) getEventBus()).addSaveFileEventHandler(new SaveFileEventHandler() {
 
-			@Override
-			public void onFileSave(SaveFileEvent event) {
-				doSave();
-			}
-		});
-	}
+            @Override
+            public void onFileSave(SaveFileEvent event) {
+                doSave();
+            }
+        });
+    }
 
-	public void doSave() {
-		if (editorDriver.isDirty()) {
-			model = editorDriver.flush();
-			logger.info(model.toXML());
+    /**
+     * Method to handle edited metadata file download with editor's validation check.
+     */
+    public void doSave() {
+        if (editorDriver.isDirty()) {
+            model = editorDriver.flush();
+            logger.info(model.toXML());
 
-			if (editorDriver.hasErrors()) {
-				StringBuilder errorBuilder = new StringBuilder();
-                final ConfirmMessageBox cmb=new ConfirmMessageBox("Errors","There are errors in your editor. Are you sure you want to download a copy of these data? They may not be usable.");
+            if (editorDriver.hasErrors()) {
+                final ConfirmMessageBox cmb = new ConfirmMessageBox("Errors", "There are errors in your editor. Are you sure you want to download a copy of these data? They may not be usable.");
                 cmb.show();
                 cmb.addHideHandler(new HideEvent.HideHandler() {
                     public void onHide(HideEvent event) {
@@ -96,15 +92,16 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
                         }
                     }
                 });
+//				StringBuilder errorBuilder = new StringBuilder();
 //				for (EditorError error : editorDriver.getErrors()) {
 //					errorBuilder.append(error.getMessage() + "\n");
 //				}
 //				Window.alert(errorBuilder.toString());
-			} else {
+            } else {
                 save();
-			}
-		} else {
-            final ConfirmMessageBox cmb=new ConfirmMessageBox("Error","Data have not changed. Are you sure you want to download a copy of these data? They may not be usable.");
+            }
+        } else {
+            final ConfirmMessageBox cmb = new ConfirmMessageBox("Error", "Data have not changed. Are you sure you want to download a copy of these data? They may not be usable.");
             cmb.show();
             cmb.addHideHandler(new HideEvent.HideHandler() {
                 public void onHide(HideEvent event) {
@@ -116,12 +113,15 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
                     }
                 }
             });
-		}
-	}
+        }
+    }
 
-    private void save(){
-
-        requestFactory.saveFileRequestContext().saveAsXMLFile(model.toXML()).fire(new Receiver<String>() {
+    /**
+     * Method which actually handle saving (on server) and download for the edited metadata file.
+     */
+    private void save() {
+        String filename = model.getFileName().toString();
+        requestFactory.saveFileRequestContext().saveAsXMLFile(filename, model.toXML()).fire(new Receiver<String>() {
 
             @Override
             public void onSuccess(String response) {
@@ -149,8 +149,12 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 
     }
 
-	public DocumentModel getModel() {
-		return model;
-	}
+    public DocumentModel getModel() {
+        return model;
+    }
+
+    interface EditorDriver extends SimpleBeanEditorDriver<DocumentModel, DocumentModelEditorView> {
+
+    }
 
 }
