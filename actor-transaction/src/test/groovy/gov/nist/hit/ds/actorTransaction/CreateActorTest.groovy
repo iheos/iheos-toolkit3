@@ -39,7 +39,7 @@ class CreateActorTest extends Specification {
 '''
     def setup() {
         ActorTransactionTypeFactory.clear()
-        new ActorTransactionTypeFactory().load(config)
+        new ActorTransactionTypeFactory().loadFromString(config)
     }
 
     def 'Registry actor type exists in configuration - later tests cannot function without this'() {

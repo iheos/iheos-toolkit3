@@ -1,0 +1,5 @@
+# resType
+
+keyword=resType
+domain=asset
+description=resType desc

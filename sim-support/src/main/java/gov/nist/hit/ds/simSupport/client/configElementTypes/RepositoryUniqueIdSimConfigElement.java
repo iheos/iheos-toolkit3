@@ -16,7 +16,7 @@ public class RepositoryUniqueIdSimConfigElement extends EndpointActorSimConfigEl
     public RepositoryUniqueIdSimConfigElement(EndpointLabel label, Endpoint endpoint) {
         super(label, endpoint);
         log.debug("RepositoryUniqueIdSimConfigElement: " + label);
-
+        value = getNewValue();
     }
 
     public String getNewValue() {

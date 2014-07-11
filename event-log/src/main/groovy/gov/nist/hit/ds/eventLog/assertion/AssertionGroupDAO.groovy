@@ -1,43 +1,38 @@
-package gov.nist.hit.ds.eventLog.assertion;
+package gov.nist.hit.ds.eventLog.assertion
 
-import gov.nist.hit.ds.repository.AssetHelper;
-import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.PropertyKey;
-import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.eventLog.EventDAO
+import gov.nist.hit.ds.repository.AssetHelper
+import gov.nist.hit.ds.repository.api.Asset
+import gov.nist.hit.ds.repository.api.PropertyKey
+import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.repository.simple.SimpleType
 import gov.nist.hit.ds.utilities.csv.CSVEntry
-import gov.nist.hit.ds.utilities.csv.CSVTable;
-import org.apache.log4j.Logger;
+import gov.nist.hit.ds.utilities.csv.CSVTable
+import groovy.util.logging.Log4j
 
+@Log4j
 public class AssertionGroupDAO {
-    Asset parent;
-    Asset assertionGroupAsset
-    int counter = 1;
-    static Logger logger = Logger.getLogger(AssertionGroupDAO);
+    Asset validatorsAsset
+    int order = 1;
+    EventDAO eventDAO
 
-    public Asset init(Asset parent) throws RepositoryException {
-        this.parent = parent
-        assertionGroupAsset =  AssetHelper.createChildAsset(parent, "Validators", "", new SimpleType("simAssertions"))
-        return assertionGroupAsset
-    }
-
-    public void setAssertionGroup(AssertionGroup ag) throws RepositoryException {
-        this.ag = ag
+    void init(EventDAO eventDAO) throws RepositoryException {
+        this.eventDAO = eventDAO
     }
 
     public void save(AssertionGroup ag) throws RepositoryException {
-        logger.trace("AssertionGroup " + ag.toString());
         if (!ag.saveInLog) return;
-        Asset a = AssetHelper.createChildAsset(assertionGroupAsset, ag.getValidatorName(), "", new SimpleType("simpleType"))
-        a.setOrder(counter++)
+        assert ag.validatorName
+        if (!eventDAO.validatorsAsset) { log.debug('Not flushing'); return }
+        Asset a = AssetHelper.createChildAsset(eventDAO.validatorsAsset, ag.validatorName, "", new SimpleType("simpleType"))
+        a.setOrder(order++)
         a.setProperty(PropertyKey.STATUS, ag.getWorstStatus().name())
-        logger.debug("flushing CSVTable")
         a.setContent(asTable(ag.assertions).toString(), "text/csv")
     }
 
-    AssertionStatus getAssertionStatus() { (ag == null) ? AssertionStatus.SUCCESS : ag.getWorstStatus() }
+    AssertionStatus worstAssertionStatus() { (ag == null) ? AssertionStatus.SUCCESS : ag.getWorstStatus() }
 
-    boolean hasErrors() { getAssertionStatus().isError() }
+    boolean hasErrors() { worstAssertionStatus().isError() }
 
     def asTable(List<Assertion> assertions) {
         AssertionDAO aDao = new AssertionDAO()

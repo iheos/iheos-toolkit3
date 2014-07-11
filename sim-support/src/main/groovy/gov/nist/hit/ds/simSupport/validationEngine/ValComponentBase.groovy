@@ -51,6 +51,8 @@ public abstract class ValComponentBase implements ValComponent {
 
     ValidationEngine getValidationEngine() { return validationEngine }
 
+    void withNewAssertionGroup() { ag = new AssertionGroup() }
+
     /******************************************
      *
      * Cooperate with ValidationEngine
@@ -93,6 +95,13 @@ public abstract class ValComponentBase implements ValComponent {
     }
 
     public boolean assertEquals(String expected, String found) throws SoapFaultException {
+        Assertion a = ag.assertEquals(expected, found);
+        log.debug("Assertion: ${a}")
+        recordAssertion(a);
+        return !a.failed();
+    }
+
+    public boolean assertEquals(boolean expected, boolean found) throws SoapFaultException {
         Assertion a = ag.assertEquals(expected, found);
         log.debug("Assertion: ${a}")
         recordAssertion(a);
@@ -301,21 +310,21 @@ public abstract class ValComponentBase implements ValComponent {
 
     private void recordAssertion(Assertion a, ValidationFault vf)
             throws SoapFaultException {
-        if (validationAlreadyRecorded(vf.id())) {
-            a.setId(vf.id());
-            a.setMsg("Validator contains multiple assertions with this id");
-            String[] refs = [ ]
-            a.setReference(refs);
-            a.setExpected("");
-            a.setFound("");
-            a.setCode(FaultCode.Receiver.toString());
-            a.setStatus(AssertionStatus.INTERNALERROR);
-            throw new SoapFaultException(
-                    ag,
-                    FaultCode.Receiver,
-                    new ErrorContext("Validator contains multiple assertions with this id", "")
-            );
-        }
+//        if (validationAlreadyRecorded(vf.id())) {
+//            a.setId(vf.id());
+//            a.setMsg("Validator contains multiple assertions with this id");
+//            String[] refs = [ ]
+//            a.setReference(refs);
+//            a.setExpected("");
+//            a.setFound("");
+//            a.setCode(FaultCode.Receiver.toString());
+//            a.setStatus(AssertionStatus.INTERNALERROR);
+//            throw new SoapFaultException(
+//                    ag,
+//                    FaultCode.Receiver,
+//                    new ErrorContext("Validator contains multiple assertions with this id", "")
+//            );
+//        }
         idsAsserted.add(vf.id());
 
         a.setId(vf.id());

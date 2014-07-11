@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.eventLog
 
 import gov.nist.hit.ds.eventLog.assertion.Assertion
-import gov.nist.hit.ds.eventLog.errorRecording.RequiredOptional
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 import spock.lang.Specification
 
 /**

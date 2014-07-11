@@ -7,7 +7,7 @@ import groovy.transform.ToString;
 /**
  * Created by bill on 4/16/14.
  */
-@ToString(includeFields=true, includes="id, props")
+@ToString(includeFields=true, includes="id, implementationClassName, props")
 class TransactionType implements IsSerializable, Serializable {
     public String id
     public String name
@@ -16,7 +16,10 @@ class TransactionType implements IsSerializable, Serializable {
     public String asyncCode
     public String requestAction
     public String responseAction
-    public String simChainResourceName
+    public String implementationClassName
+    // These are used at runtime
+    transient public boolean multiPart
+    transient public boolean soap
 
     public String getCode() { return code }
     public String getName() { return name }
@@ -68,7 +71,7 @@ class TransactionType implements IsSerializable, Serializable {
         val = tt.responseAction;
         if (val == null || val.equals(""))
             throw new InvalidTransactionTypeDefinitionException("responseAction not defined");
-        val = tt.simChainResourceName;
+        val = tt.implementationClassName;
         if (val == null || val.equals(""))
             throw new InvalidTransactionTypeDefinitionException("simChainName not defined");
     }

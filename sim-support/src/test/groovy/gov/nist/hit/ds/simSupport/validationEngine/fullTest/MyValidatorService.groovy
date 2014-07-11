@@ -2,12 +2,12 @@ package gov.nist.hit.ds.simSupport.validationEngine.fullTest
 
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.EventFactory
-import gov.nist.hit.ds.simSupport.service.ServiceClass
+import gov.nist.hit.ds.simSupport.service.IServiceClass
 
 /**
  * Created by bmajur on 7/1/14.
  */
-class MyValidatorService implements ServiceClass {
+class MyValidatorService implements IServiceClass {
     void run(params) {
         // grab the necessary parms defined for the service
         String msg = params['msg']

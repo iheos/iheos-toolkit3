@@ -13,11 +13,16 @@ public class AssertionGroup  {
     AssertionStatus worstStatus = AssertionStatus.SUCCESS;
     def validatorName = "AssertionGroup";
     def saveInLog = true
+    def saved = false
 
     private static Logger logger = Logger.getLogger(AssertionGroup);
     private final static String dashes = "---";
 
     AssertionGroup() {}
+
+    boolean hasContent() { return assertions.size() > 0 }
+
+    boolean needsFlushing() { hasContent() && !saved }
 
     public String toString() { return "AssertionGroup(${worstStatus})" }
 
@@ -102,6 +107,17 @@ public class AssertionGroup  {
             status = AssertionStatus.INTERNALERROR
             msg = failureMsg
         }
+        addAssertion(a);
+        return a;
+    }
+
+    public Assertion assertEquals(boolean expectedVal, boolean foundVal) {
+        Assertion a = new Assertion();
+        a.with {
+            expected = expectedVal
+            found = foundVal
+        }
+        a.status = (expectedVal == foundVal) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
         addAssertion(a);
         return a;
     }
