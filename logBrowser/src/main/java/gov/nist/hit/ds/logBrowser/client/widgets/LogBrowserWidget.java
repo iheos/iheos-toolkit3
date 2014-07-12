@@ -727,14 +727,15 @@ public class LogBrowserWidget extends Composite {
 			    List<List<SafeHtml>> rows = new ArrayList<List<SafeHtml>>(rowLen);
 			    
 			    for (int r = 1; r < rowLen; r++) {
-			        List<String> textRow = Arrays.asList(csv[r]);
-                    if (textRow!=null) {
-                        int textRowSz = textRow.size();
+//			        List<String> textRow = Arrays.asList(csv[r]);
+                    if (csv[r]!=null) {
+                        int textRowSz =  csv[r].length;  //textRow.size();
                         if (textRowSz>0) {
                             List<SafeHtml> htmlRow = new ArrayList<SafeHtml>(textRowSz);
                             for (int cx=0; cx<textRowSz; cx++) {
                                 SafeHtmlBuilder shb = new SafeHtmlBuilder();
-                                String val =  textRow.get(cx);
+                                String val =  csv[r][cx];    //textRow.get(cx);
+                                logger.info("val LB: " + val);
                                 htmlRow.add(htmlBuilder(val).toSafeHtml());
                             }
                             rows.add(htmlRow);
@@ -761,22 +762,31 @@ public class LogBrowserWidget extends Composite {
         SafeHtmlBuilder shb = new SafeHtmlBuilder();
         if (v!=null) {
 
-            String[] values = v.split(" ");
+            if (v.toLowerCase().contains("http://") || v.toLowerCase().startsWith("https://")) {
+                String[] values = v.split(" ");
+                int cx=0;
+                for (String val : values) {
+                    cx++;
+                    if (val.toLowerCase().startsWith("http://") || v.toLowerCase().startsWith("https://")) {
+                        shb.appendHtmlConstant("<a href='"
+                                + val
+                                + "' target='_blank'>" // Open link in new tab
+                        );
+                        shb.appendEscaped(val);
+                        shb.appendHtmlConstant("</a>&nbsp;");
 
-            for (String val : values) {
-                if (val.toLowerCase().startsWith("http://") || v.toLowerCase().startsWith("https://")) {
-                    shb.appendHtmlConstant("<a href='"
-                            + val
-                            + "' target='_blank'>" // Open link in new tab
-                    );
-                    shb.appendEscaped(val);
-                    shb.appendHtmlConstant("</a>&nbsp;");
-
-                } else {
-                    shb.appendEscaped(v);
+                    } else {
+                        shb.appendEscaped(val);
+                        if (cx<values.length)
+                            shb.appendHtmlConstant("&nbsp;");
+                    }
                 }
+            } else {
+                shb.appendEscaped(v);
             }
 
+        }  else {
+            shb.appendEscaped("&nbsp;");
         }
         return  shb;
     }
