@@ -3,10 +3,12 @@ package gov.nist.hit.ds.utilities.csv;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class CSVEntry implements IEntryFactory {
 	List<String> items = new ArrayList<String>();
 	public String line;
+    private static Logger logger = Logger.getLogger(CSVEntry.class.getName());
 
 	public List<String> getItems() {
 		return items;
@@ -32,7 +34,9 @@ public class CSVEntry implements IEntryFactory {
 			char c = line.charAt(cursor);
 
 			if (isWhite(c)) {
-				
+				if (stringStart==-1 && committed) { // Previously, empty fields were lost because they were not handled 
+                    committed = false;
+                }
 			} else if (c == ',') {
 				if (stringStart == -1) {
 					if (committed)
@@ -83,6 +87,7 @@ public class CSVEntry implements IEntryFactory {
 	}
 
 	public CSVEntry add(String item) {
+        logger.info("adding item : "+ item);
 		items.add(item);
 		return this;
 	}
