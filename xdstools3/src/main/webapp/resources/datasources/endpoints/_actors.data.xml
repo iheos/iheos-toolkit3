@@ -1,10 +1,8 @@
 <sites>
     <site>
         <endpointName>pub</endpointName>
-        <parentID>root</parentID>
     </site>
     <site>
         <endpointName>connect3.3_AMAZON</endpointName>
-        <parentID>pub</parentID>
     </site>
 </sites>
