@@ -579,6 +579,15 @@ public interface Repository extends java.io.Serializable {
     public void invalidateAsset(gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
+
+    /**
+     * Retrieve an asset by its name that is under the repository root level. If more than one asset exists with the same name, only the first one is retrieved. To retrieve a child asset using a parent asset as its focus, see {@link Asset#getChildByName(String)}.
+     * @param name Name is case-sensitive. See {@link gov.nist.hit.ds.repository.simple.SimpleRepository#createNamedAsset(String, String, Type, String)}
+     *
+     */
+    public Asset getChildByName(String name) throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+
     /**
      * Get the Asset with the specified unique Id.
      *
@@ -603,6 +612,7 @@ public interface Repository extends java.io.Serializable {
      */
     public Asset getAsset(gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
+
 
     /**
      * Get the Asset with the specified unique Id that is appropriate for the
@@ -875,8 +885,25 @@ public interface Repository extends java.io.Serializable {
      * to obtain such a     license before exporting this Work.
      * </p>
      */
-    
+
+    /**
+     * Gets the repository source. See {@link gov.nist.hit.ds.repository.api.RepositorySource}
+     * @return
+     * @throws RepositoryException
+     */
     public RepositorySource getSource() throws RepositoryException;
+
+    /**
+     * Sets the repository source.
+     * @param source
+     * @throws RepositoryException
+     */
     public void setSource(RepositorySource source) throws RepositoryException;
+
+    /**
+     * Gets the root of this particular repository, which is under the repository collection root. It is not to be confused with the repository collection root or the {@code DATA} folder itself.
+     * @return
+     * @throws RepositoryException
+     */
     public File getRoot() throws RepositoryException;
 }

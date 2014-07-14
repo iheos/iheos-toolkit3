@@ -622,8 +622,8 @@ public class SimpleAsset implements Asset, Flushable {
         Asset child = new SimpleAsset(getSource());
 
         try {
-            logger.info("getAssetFileByName return 0 : " +  assetFileByName[0]);
-            logger.info("getAssetFileByName return 1 : " +  assetFileByName[1]);
+            logger.fine("getAssetFileByName return 0 : " +  assetFileByName[0]);
+            logger.fine("getAssetFileByName return 1 : " +  assetFileByName[1]);
             FolderManager.loadProps(child.getProperties(), assetFileByName[0]);
             child.setContentPath(assetFileByName[1]);
         } catch (Exception e) {

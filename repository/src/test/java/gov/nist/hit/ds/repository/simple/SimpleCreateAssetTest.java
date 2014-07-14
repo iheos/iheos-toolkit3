@@ -137,6 +137,10 @@ public class SimpleCreateAssetTest {
 
         assertTrue(p3.getChildByName("GrandChild").getProperty(PropertyKey.DESCRIPTION).equals(gc3Desc));
 
+        // Test repository root level getChildByName
+        assertTrue(repos.getChildByName("GrandChild").getName().equals("GrandChild"));
+        assertTrue(repos.getChildByName("Parent3").getName().equals("Parent3"));
+
         gc3.deleteAsset(); // Leaf asset delete
 
         p3.deleteAsset(); // Full parent folder delete
