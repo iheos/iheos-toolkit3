@@ -1,8 +1,7 @@
 package edu.tn.xds.metadata.editor.shared.model;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -79,6 +78,12 @@ public class CodedTerm implements ModelElement, Serializable {
 		code = new String256();
 		codingScheme = new CodingScheme();
 	}
+
+    public CodedTerm(String code, String displayName, String codingScheme) {
+        this.displayName = new String256().setString(displayName);
+        this.code = new String256().setString(code);
+        this.codingScheme = new CodingScheme().setCodingScheme(new String256().setString(codingScheme));
+    }
 
 	public String256 getDisplayName() {
 		return displayName;

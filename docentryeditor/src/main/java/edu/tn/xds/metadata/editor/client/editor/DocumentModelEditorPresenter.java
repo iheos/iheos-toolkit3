@@ -37,7 +37,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 
     @Override
     public void init() {
-        super.init();
+//        super.init();
         model = new DocumentModel();
         initDriver(model);
         requestFactory.initialize(eventBus);

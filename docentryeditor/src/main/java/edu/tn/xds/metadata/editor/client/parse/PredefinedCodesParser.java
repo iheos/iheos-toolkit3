@@ -4,7 +4,7 @@ import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
-import edu.tn.xds.metadata.editor.client.editor.widgets.PredefinedCodesComboBox.PredefinedCodes;
+import edu.tn.xds.metadata.editor.client.editor.widgets.PredefinedCodedTermComboBox.PredefinedCodes;
 import edu.tn.xds.metadata.editor.client.resources.AppResources;
 import edu.tn.xds.metadata.editor.shared.model.CodedTerm;
 import edu.tn.xds.metadata.editor.shared.model.CodingScheme;

@@ -1,10 +1,9 @@
 package edu.tn.xds.metadata.editor.client.generics.abstracts;
 
-import java.util.logging.Logger;
+import com.google.web.bindery.event.shared.EventBus;
 
 import javax.inject.Inject;
-
-import com.google.web.bindery.event.shared.EventBus;
+import java.util.logging.Logger;
 
 public abstract class AbstractPresenter<V extends AbstractView<?>> {
 
@@ -27,10 +26,9 @@ public abstract class AbstractPresenter<V extends AbstractView<?>> {
 
 	// abstract
 	/**
-	 * called by mvp before view.init()
-	 */
-	public void init() {
-	}
+     * called by mvp before view.init() does not necessarily need to do something
+     */
+    public abstract void init();
 
 	/**
 	 * called by mvp just before view.getDisplay()

@@ -1,13 +1,14 @@
 package edu.tn.xds.metadata.editor.client;
 
 /*Imports*/
+
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.place.shared.PlaceController;
-
 import edu.tn.xds.metadata.editor.client.editor.DocumentModelEditorMVP;
 import edu.tn.xds.metadata.editor.client.editor.EditorActivity;
+import edu.tn.xds.metadata.editor.client.editor.Submission.SubmissionPanelMVP;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
 import edu.tn.xds.metadata.editor.client.home.WelcomeActivity;
 import edu.tn.xds.metadata.editor.client.root.CenterPanel;
@@ -18,31 +19,33 @@ import edu.tn.xds.metadata.editor.client.widgets.uploader.FileUploadMVP;
 @GinModules(MetadataEditorGinModule.class)
 public interface MetadataEditorGinjector extends Ginjector {
 
-	public static MetadataEditorGinjector instance = GWT.create(MetadataEditorGinjector.class);
+    public static MetadataEditorGinjector instance = GWT.create(MetadataEditorGinjector.class);
 
-	MetadataEditorEventBus getEventBus();
+    MetadataEditorEventBus getEventBus();
 
-	PlaceController getPlaceController();
+    PlaceController getPlaceController();
 
-	// MetadataEditorRequestFactory getRequestFactory();
+    // MetadataEditorRequestFactory getRequestFactory();
 
-	// ------------------------------------------
-	// ~ Root
-	MetadataEditorAppView getMetadataEditorAppView();
+    // ------------------------------------------
+    // ~ Root
+    MetadataEditorAppView getMetadataEditorAppView();
 
-	CenterPanel getCenterPanel();
+    CenterPanel getCenterPanel();
 
-	NorthPanel getNorthPanel();
+    NorthPanel getNorthPanel();
 
-	// ------------------------------------------
-	// ~ Various widgets
-	FileUploadMVP getFileUploadMVP();
+    // ------------------------------------------
+    // ~ Various widgets
+    FileUploadMVP getFileUploadMVP();
 
-	// ------------------------------------------
-	// ~ ACTIVITIES
-	WelcomeActivity getWelcomeActivity();
+    // ------------------------------------------
+    // ~ ACTIVITIES
+    WelcomeActivity getWelcomeActivity();
 
-	EditorActivity getEditorActivity();
+    EditorActivity getEditorActivity();
 
-	DocumentModelEditorMVP getDocumentModelEditorMVP();
+    DocumentModelEditorMVP getDocumentModelEditorMVP();
+
+    SubmissionPanelMVP getSubmissionPanelMVP();
 }

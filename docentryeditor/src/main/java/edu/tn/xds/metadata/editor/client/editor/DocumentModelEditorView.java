@@ -54,11 +54,11 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
     OIDEditorWidget repoUId = new OIDEditorWidget(false);
 
     /* coded terms declaration */
-    PredefinedCodesComboBox classCode = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.CLASS_CODES);
-    PredefinedCodesComboBox formatCode = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.FORMAT_CODES);
-    PredefinedCodesComboBox healthcareFacilityType = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.HEALTHCARE_FACILITY_TYPE_CODES);
-    PredefinedCodesComboBox practiceSettingCode = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.PRACTICE_SETTING_CODES);
-    PredefinedCodesComboBox typeCode = new PredefinedCodesComboBox(PredefinedCodesComboBox.PredefinedCodes.TYPE_CODES);
+    PredefinedCodedTermComboBox classCode = new PredefinedCodedTermComboBox(PredefinedCodedTermComboBox.PredefinedCodes.CLASS_CODES);
+    PredefinedCodedTermComboBox formatCode = new PredefinedCodedTermComboBox(PredefinedCodedTermComboBox.PredefinedCodes.FORMAT_CODES);
+    PredefinedCodedTermComboBox healthcareFacilityType = new PredefinedCodedTermComboBox(PredefinedCodedTermComboBox.PredefinedCodes.HEALTHCARE_FACILITY_TYPE_CODES);
+    PredefinedCodedTermComboBox practiceSettingCode = new PredefinedCodedTermComboBox(PredefinedCodedTermComboBox.PredefinedCodes.PRACTICE_SETTING_CODES);
+    PredefinedCodedTermComboBox typeCode = new PredefinedCodedTermComboBox(PredefinedCodedTermComboBox.PredefinedCodes.TYPE_CODES);
 
     /* Identifiers declaration */
     IdentifierOIDEditorWidget uniqueId = new IdentifierOIDEditorWidget();
@@ -162,7 +162,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         mimeTypeLabel.setLabelWidth(125);
 
         // Class Code Field (required)
-        FieldLabel classCodeLabel = new FieldLabel(classCode, "Class Code");
+        FieldLabel classCodeLabel = new FieldLabel(classCode.asWidget(), "Class Code");
         classCodeLabel.setLabelWidth(125);
 
         // Format Code Field (required)
