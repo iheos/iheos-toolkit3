@@ -735,7 +735,7 @@ public class LogBrowserWidget extends Composite {
                             for (int cx=0; cx<textRowSz; cx++) {
                                 SafeHtmlBuilder shb = new SafeHtmlBuilder();
                                 String val =  csv[r][cx];    //textRow.get(cx);
-                                logger.info("val LB: " + val);
+//                                logger.info("val LB: " + val);
                                 htmlRow.add(htmlBuilder(val).toSafeHtml());
                             }
                             rows.add(htmlRow);
