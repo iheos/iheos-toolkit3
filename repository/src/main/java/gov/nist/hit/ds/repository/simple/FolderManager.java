@@ -260,6 +260,7 @@ public class FolderManager {
 		private File[] directMatch = new File[]{null,null};		
 		private boolean searchById = true; // Enable deepScan searchById by default
         private boolean searchByName = false;
+        private PropertyKey propertyKey;
 
 		/**
 		 * Returns the first matching file with the specified fileNamePart or Id
