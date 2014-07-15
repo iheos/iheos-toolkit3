@@ -80,13 +80,14 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
             logger.info(model.toXML());
 
             if (editorDriver.hasErrors()) {
-                final ConfirmMessageBox cmb = new ConfirmMessageBox("Errors", "There are errors in your editor. Are you sure you want to download a copy of these data? They may not be usable.");
+                final ConfirmMessageBox cmb = new ConfirmMessageBox("Error", "There are errors in your editor. Are you sure you want to download a copy of these data? They may not be usable.");
                 cmb.show();
                 cmb.addHideHandler(new HideEvent.HideHandler() {
                     public void onHide(HideEvent event) {
                         if (cmb.getHideButton() == cmb.getButtonById(PredefinedButton.YES.name())) {
                             // perform YES action
                             save();
+                            cmb.hide();
                         } else if (cmb.getHideButton() == cmb.getButtonById(PredefinedButton.NO.name())) {
                             // perform NO action
                         }
@@ -101,13 +102,14 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
                 save();
             }
         } else {
-            final ConfirmMessageBox cmb = new ConfirmMessageBox("Error", "Data have not changed. Are you sure you want to download a copy of these data? They may not be usable.");
+            final ConfirmMessageBox cmb = new ConfirmMessageBox("", "Data have not changed. Are you sure you want to download a copy of these data?");
             cmb.show();
             cmb.addHideHandler(new HideEvent.HideHandler() {
                 public void onHide(HideEvent event) {
                     if (cmb.getHideButton() == cmb.getButtonById(PredefinedButton.YES.name())) {
                         // perform YES action
                         save();
+                        cmb.hide();
                     } else if (cmb.getHideButton() == cmb.getButtonById(PredefinedButton.NO.name())) {
                         // perform NO action
                     }

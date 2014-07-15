@@ -69,7 +69,7 @@ public class SaveFileService implements Serializable {
         String fileName = filename;
         if (fileName == null || fileName.equals(""))
             fileName = UUID.randomUUID().toString();
-        if (!(fileName.matches("(\\.[0-9A-Za-z]+)$") || fileName.matches("\\.xml$")))
+        if (!(fileName.matches(".*(\\.[0-9A-Za-z]+)$") || fileName.matches(".*\\.xml$")))
             fileName += ".xml";
 
         // Save xml file content into "files" repository

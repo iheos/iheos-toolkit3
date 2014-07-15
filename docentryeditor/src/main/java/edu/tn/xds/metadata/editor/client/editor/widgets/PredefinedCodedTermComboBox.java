@@ -22,33 +22,35 @@ import java.util.List;
 public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
 
     public PredefinedCodedTermComboBox(PredefinedCodes predefinedCodes) {
-        super(new ListStore<CodedTerm>(
-                new ModelKeyProvider<CodedTerm>() {
+        super(new ListStore<CodedTerm>(new ModelKeyProvider<CodedTerm>() {
 
-                    @Override
-                    public String getKey(CodedTerm item) {
-                        if (item == null) {
-                            return "NULL";
-                        }
-                        return item.toString();
-                    }
-                }), new LabelProvider<CodedTerm>() {
+            @Override
+            public String getKey(CodedTerm item) {
+                if (item == null) {
+                    return "NULL";
+                }
+                return item.toString();
+            }
+        }), new LabelProvider<CodedTerm>() {
 
             @Override
             public String getLabel(CodedTerm item) {
                 String s = new String();
-                if (item.getCode() != null && !item.getCode().toString().equals(""))
-                    s += item.getCode().toString();
-                if (item.getDisplayName() != null && !item.getDisplayName().toString().equals("")) {
-                    if (item.getCode() != null && !item.getCode().toString().equals(""))
-                        s += "  -  ";
-                    s += item.getDisplayName().toString();
-                }
-                if (item.getCodingScheme() != null && !item.getCodingScheme().toString().equals("")) {
-                    if (!s.isEmpty())
-                        s += "  -  ";
-                    s += item.getCodingScheme().toString();
-                }
+                if (item.getCode() != null)
+                    if (!item.getCode().toString().equals(""))
+                        s += item.getCode().toString();
+                if (item.getDisplayName() != null)
+                    if (!item.getDisplayName().toString().equals("") && item.getCode() != null) {
+                        if (item.getCode().toString() != null && !item.getCode().toString().equals(""))
+                            s += "  -  ";
+                        s += item.getDisplayName().toString();
+                    }
+                if (item.getCodingScheme() != null)
+                    if (!item.getCodingScheme().toString().equals("")) {
+                        if (!s.isEmpty())
+                            s += "  -  ";
+                        s += item.getCodingScheme().toString();
+                    }
                 return s;
             }
         });
@@ -57,8 +59,7 @@ public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
 
         this.setEmptyText("Select a code...");
 
-        List<CodedTerm> l = PredefinedCodesParser.INSTANCE
-                .getCodes(predefinedCodes);
+        List<CodedTerm> l = PredefinedCodesParser.INSTANCE.getCodes(predefinedCodes);
 
         getStore().add(new CodedTerm("", "Custom Value", ""));
         getStore().addAll(l);
@@ -95,7 +96,6 @@ public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
                     editor.editNew();
                     editor.setAllowBlanks(false, false, false);
 
-
                     TextButton ok = new TextButton("Add ");
                     ok.setHeight(25);
                     ok.setWidth(80);
@@ -110,10 +110,11 @@ public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
                         @Override
                         public void onSelect(SelectEvent event) {
                             CodedTerm added = editor.save();
-                            if (added != null) {
+                            if (added.getCode().toString() != null && added.getCodingScheme().toString() != null
+                                    && added.getDisplayName().toString() != null) {
                                 getStore().add(added);
-                                // FIXME select does not work
                                 select(added);
+                                setValue(added);
                                 redraw(true);
                                 dialog.hide();
                             }
