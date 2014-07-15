@@ -503,7 +503,7 @@ public interface Asset {
 
 
     /**
-     * Retrieve a child using the name. If more than one child exists with the same name, only the first one is retrieved.
+     * Retrieve a child asset by its name, which is under this parent asset. If more than one child exists with the same name, only the first one is retrieved. To retrieve an asset using the repository root level as its search order scope, see {@link gov.nist.hit.ds.repository.api.Repository#getChildByName(String)}.
      * @param name Name is case-sensitive. See {@link gov.nist.hit.ds.repository.simple.SimpleRepository#createNamedAsset(String, String, Type, String)}
      *
      */

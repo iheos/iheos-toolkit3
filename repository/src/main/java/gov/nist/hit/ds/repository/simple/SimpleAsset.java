@@ -590,23 +590,42 @@ public class SimpleAsset implements Asset, Flushable {
 				,FolderManager.LOST_AND_FOUND
 		});
 
+        // This call will make the folder, if it doesn't exist yet, and move the props file
 		File[] parentFolder = new FolderManager().makeFolder(this, folderName);
-		
-		
-		File srcPropFile = asset.getPropFile();
-		File srcConFile = asset.getContentFile();			
 
-		File[] txSrc = new File[]{srcPropFile, srcConFile};		
+        File dstPropFile = new File(parentFolder[0], asset.getPropFile().getName());
+        File dstConFile = new File(parentFolder[0], asset.getContentFile().getName());
 
-		File dstPropFile = new File(parentFolder[0] + File.separator + asset.getPropFile().getName());
-		File dstConFile = new File(parentFolder[0] + File.separator + asset.getContentFile().getName());
-		File[] txDst = new File[]{dstPropFile, dstConFile};
-		
-		asset.setParentId(getPropFileRelativePart());
-		File[] loc = FolderManager.moveChildToParent(txSrc, txDst);
-		asset.setPath(loc[0]);
-		asset.setContentPath(loc[1]);
-	
+		// Take care of the child asset here
+        if (new FolderManager().doesParentAssetFolderExist(asset.getPropFile())) {
+            // Complex asset
+
+            try {
+                asset.setParentId(getId().getIdString());
+
+                FileUtils.moveDirectoryToDirectory(asset.getPropFile().getParentFile(),getPropFile().getParentFile(),false);
+                asset.setPath(dstPropFile);
+                asset.setContentPath(dstConFile);
+
+            } catch (IOException e) {
+                throw new RepositoryException(RepositoryException.IO_ERROR + " complex asset relocation failed: " + e.toString());
+            }
+        } else {
+            // Single file asset
+
+            File srcPropFile = asset.getPropFile();
+            File srcConFile = asset.getContentFile();
+
+            File[] txSrc = new File[]{srcPropFile, srcConFile};
+            File[] txDst = new File[]{dstPropFile, dstConFile};
+
+//		asset.setParentId(getPropFileRelativePart()); location based parentId is no longer used
+            asset.setParentId(getId().getIdString());
+            File[] loc = FolderManager.moveChildToParent(txSrc, txDst);
+            asset.setPath(loc[0]);
+            asset.setContentPath(loc[1]);
+        }
+
 		return asset;
 	}
 
@@ -622,8 +641,8 @@ public class SimpleAsset implements Asset, Flushable {
         Asset child = new SimpleAsset(getSource());
 
         try {
-            logger.info("getAssetFileByName return 0 : " +  assetFileByName[0]);
-            logger.info("getAssetFileByName return 1 : " +  assetFileByName[1]);
+            logger.fine("getAssetFileByName return 0 : " + assetFileByName[0]);
+            logger.fine("getAssetFileByName return 1 : " + assetFileByName[1]);
             FolderManager.loadProps(child.getProperties(), assetFileByName[0]);
             child.setContentPath(assetFileByName[1]);
         } catch (Exception e) {

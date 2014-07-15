@@ -37,7 +37,9 @@ public abstract class BaseRepository implements Repository {
      * @throws RepositoryException
      */
 	@Override
-	public File getRoot() throws RepositoryException {		
+	public File getRoot() throws RepositoryException {
+        if (root==null)
+            throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + ": Repository root is not set.");
 		return root;
 	}
 
@@ -199,10 +201,36 @@ public abstract class BaseRepository implements Repository {
 
 
     /**
-     * This method returns an asset that is primarily used for read-only operations. To update an asset return by this method, {@code setAutoFlush} to true.
+     *
+     * @param name Name is case-sensitive. See {@link gov.nist.hit.ds.repository.simple.SimpleRepository#createNamedAsset(String, String, Type, String)}
+     * @return
+     * @throws RepositoryException
+     */
+    @Override
+    public Asset getChildByName(String name) throws RepositoryException {
+        File[] assetFileByName = new FolderManager().getAssetFileByName(name, getRoot());
+        Asset asset = new SimpleAsset(getSource());
+
+        try {
+            FolderManager.loadProps(asset.getProperties(), assetFileByName[0]);
+            asset.setContentPath(assetFileByName[1]);
+        } catch (Exception e) {
+            throw new RepositoryException(RepositoryException.UNKNOWN_ID + " : " +
+                    "properties cannot be loaded: [" +
+                    (assetFileByName==null?"null":assetFileByName[0])
+                    + "]", e);
+        }
+
+        return asset;
+    }
+
+
+
+    /**
+     * This method returns an asset by the assetId.
      * @param assetId
      *
-     * @return {@code Asset}
+     * @return {@code Asset} The asset object is primarily used for read-only operations.
      * @throws RepositoryException {@code RepositoryException.UNKNOWN_REPOSITORY} is thrown when the repository could not be loaded
      */
 	@Override

@@ -51,14 +51,20 @@ public class AssetHelper {
 	 * @return
 	 */
 	static public AssetIterator getChildren(final Asset a) throws RepositoryException {
-		
-		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
-		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTO, a.getPropFileRelativePart())); // a.getId().getIdString()
+
+        String idString = "";
+
+        if (a.getId()!=null) {
+            idString = a.getId().getIdString();
+        }
+
+        SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+
+        criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTOANY, new String[]{idString, a.getPropFileRelativePart()}));
 
 		SimpleRepository repos = new SimpleRepository(a.getRepository());
 		repos.setSource(a.getSource());		
-		// new DbIndexContainer().indexRep(repos);
-				
+
 		return new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER.toString());
 		
 	}
