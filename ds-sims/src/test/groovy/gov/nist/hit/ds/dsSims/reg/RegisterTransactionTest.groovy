@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.reg
-
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
@@ -64,7 +64,6 @@ Host: localhost:9085'''
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-//        initTest()
     }
 
 
@@ -73,10 +72,22 @@ Host: localhost:9085'''
         def simId = new SimId('123')
         def endpoint = 'http://localhost:8080/tools/sim/123/reg/rb'
         SimUtils.mkSim('reg', simId)
-        def handle = SimUtils.handle(simId)
-        SimUtils.runTransaction(endpoint, header.trim(), body.trim().bytes)
+        def handle = SimUtils.runTransaction(endpoint, header.trim(), body.trim().bytes)
+        def eventAccess = new EventAccess(simId.id, handle.event)
 
         then:
-        true
+        handle
+        handle.event
+        !handle.event.hasErrors()
+
+        then:
+        eventAccess.simDir().exists()
+        eventAccess.eventLogDir().exists()
+        eventAccess.eventDir().exists()
+        eventAccess.reqBodyFile().exists()
+        eventAccess.assertionGroupFile('HttpHeaderValidator').exists()
+        eventAccess.assertionGroupFile('SoapMessageParser').exists()
+        !eventAccess.faultFile().exists()
+
     }
 }

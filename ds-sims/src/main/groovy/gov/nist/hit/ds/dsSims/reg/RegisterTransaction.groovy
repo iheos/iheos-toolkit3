@@ -27,19 +27,21 @@ class RegisterTransaction {
 
     public RegisterTransaction(SimHandle handle) { this.handle = handle }
 
-
     public void run() {
         assert handle
         assert handle.event
         log.debug('Starting RegisterTransaction')
 
-        handle.event.startNewValidator('HttpHeaderValidator')
         def httpHdrVal = new HttpHeaderValidator(handle)
         httpHdrVal.run()
 
-        handle.event.startNewValidator('SoapMessageParser')
-        new SoapMessageParser(handle, new String(httpHdrVal.body)).run()
-        handle.event.flush()
+        def soapParser = new SoapMessageParser(handle, new String(httpHdrVal.body))
+        soapParser.run()
+        OMElement soapBody = soapParser.body
+
+        def metadataProcessing = new RegisterMetadataProcessing(handle, soapBody)
+        metadataProcessing.run()
+
 
 //        // These steps are common to Registry and Update.  They operate
 //        // on the entire metadata collection in both transactions.

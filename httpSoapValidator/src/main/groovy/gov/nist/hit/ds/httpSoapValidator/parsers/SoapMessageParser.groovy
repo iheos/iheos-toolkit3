@@ -14,6 +14,8 @@ import org.apache.axiom.om.OMElement
  * @author bmajur
  *
  */
+
+// Redo based on gov.nist.toolkit.valregmsg.message.SoapMessageValidator
 public class SoapMessageParser extends ValComponentBase {
 	OMElement xml
 	String xmlMessage
@@ -35,11 +37,6 @@ public class SoapMessageParser extends ValComponentBase {
 				setPartCount(partCount);
 	}
 
-	@Override
-	public void run() throws SoapFaultException, RepositoryException {
-		runValidationEngine();
-	}
-
     @ValidationFault(id="SoapMessageParser001", required=RequiredOptional.R, msg="Parse XML", faultCode=FaultCode.Sender, ref="??")
     public void parseXML() throws SoapFaultException {
         try {
@@ -58,6 +55,11 @@ public class SoapMessageParser extends ValComponentBase {
         } catch (Exception e) {
             fail("SOAP Parse errors:\n${e.getMessage()}")
         }
+    }
+
+    @Override
+    public void run() throws SoapFaultException, RepositoryException {
+        runValidationEngine();
     }
 
     public void parse() {
