@@ -114,7 +114,7 @@ public class SimpleCreateAssetTest {
 
 
     @Test
-    public void testGrandChildNamedAsset() throws RepositoryException {
+    public void testCreateAndGetChildNamedAsset() throws RepositoryException {
         Repository repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
                 "grandChildTest",
                 "Description",
@@ -129,7 +129,7 @@ public class SimpleCreateAssetTest {
 
 
         Asset gc3 = repos.createNamedAsset("GrandChild Display Name","",new SimpleType("siteAsset"), "GrandChild");
-        String gc3Desc =  "GrandChild under Parent2";
+        String gc3Desc =  "GrandChild under Parent3";
         gc3.setProperty(PropertyKey.DESCRIPTION,gc3Desc);
         c3.addChild(gc3);
 
@@ -144,6 +144,47 @@ public class SimpleCreateAssetTest {
         gc3.deleteAsset(); // Leaf asset delete
 
         p3.deleteAsset(); // Full parent folder delete
+
+    }
+
+
+    @Test
+    public void testCreateAndGetComplexChildNamedAsset() throws RepositoryException {
+        // 1. Create test repository
+        Repository repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
+                "complexChildFolderTest",
+                "Description",
+                new SimpleType("site"),
+                "complexChildFolderTest"
+        );
+
+        // Prepare to build a complex asset
+        // 2. Create a parent asset
+        Asset parent = repos.createNamedAsset("Parent","",new SimpleType("siteAsset"), "Parent");
+        String displayName = "Child Display Name";
+
+        // 3. Add child to parent
+        Asset child = repos.createNamedAsset(displayName,"",new SimpleType("siteAsset"), "Child");
+        parent.addChild(child);
+
+        // 4. Add grandchild to child
+        Asset gc = repos.createNamedAsset("GrandChild Display Name","",new SimpleType("siteAsset"), "GrandChild");
+        String grandChildDisplayName =  "GrandChild under Child";
+        gc.setProperty(PropertyKey.DESCRIPTION, grandChildDisplayName);
+        child.addChild(gc);
+
+        // 5. Create an independent top level asset
+        Asset newParent = repos.createNamedAsset("NewParent","",new SimpleType("siteAsset"), "NewParent");
+
+        // Test case goal:
+        // 6. Add previous complex parent asset to NewParent
+        newParent.addChild(parent);
+
+        // Test relationship
+        Asset c1 = newParent.getChildByName("Parent");
+        assertTrue(c1.getName().equals("Parent"));
+        assertTrue(c1.getChildByName("Child").getName().equals("Child"));
+
 
     }
 
