@@ -59,18 +59,18 @@ public class EndpointsConfigWidget extends HLayout {
                 VLayout layout = new VLayout(5);
                 layout.setPadding(5);
 
-                final ListGrid countryGrid = new ListGrid();
-                countryGrid.setHeight(200);
-                countryGrid.setDataSource(TransactionDS.getInstance());  //getRelatedDataSource(record
-                countryGrid.fetchRelatedData(record, EndpointConfigDSNew.getInstance());
+                final ListGrid nestedGrid = new ListGrid();
+                nestedGrid.setHeight(200);
+                nestedGrid.setDataSource(TransactionDS.getInstance());  //getRelatedDataSource(record
+                nestedGrid.fetchRelatedData(record, EndpointConfigDSNew.getInstance());
 
-                countryGrid.setCanEdit(true);
-                countryGrid.setModalEditing(true);
-                countryGrid.setEditEvent(ListGridEditEvent.CLICK);
-                countryGrid.setListEndEditAction(RowEndEditAction.NEXT);
-                countryGrid.setAutoSaveEdits(false);
+                nestedGrid.setCanEdit(true);
+                nestedGrid.setModalEditing(true);
+                nestedGrid.setEditEvent(ListGridEditEvent.CLICK);
+                nestedGrid.setListEndEditAction(RowEndEditAction.NEXT);
+                nestedGrid.setAutoSaveEdits(false);
 
-                layout.addMember(countryGrid);
+                layout.addMember(nestedGrid);
 
                 HLayout hLayout = new HLayout(10);
                 hLayout.setAlign(Alignment.CENTER);
@@ -79,15 +79,25 @@ public class EndpointsConfigWidget extends HLayout {
                 saveButton.setTop(250);
                 saveButton.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        countryGrid.saveAllEdits();
+                        nestedGrid.saveAllEdits();
                     }
                 });
                 hLayout.addMember(saveButton);
 
+                IButton newButton = new IButton("New");
+                newButton.addClickHandler(new ClickHandler() {
+                    public void onClick(ClickEvent event) {
+                        ListGridRecord rec = new ListGridRecord();
+                        rec.setAttribute("name", "transaction");
+                        nestedGrid.addData(rec);
+                    }
+                });
+                hLayout.addMember(newButton);
+
                     IButton discardButton = new IButton("Discard");
                     discardButton.addClickHandler(new ClickHandler() {
                         public void onClick(ClickEvent event) {
-                            countryGrid.discardAllEdits();
+                            nestedGrid.discardAllEdits();
                         }
                     });
                     hLayout.addMember(discardButton);
@@ -99,6 +109,8 @@ public class EndpointsConfigWidget extends HLayout {
                         }
                 });
                 hLayout.addMember(closeButton);
+
+
 
                 layout.addMember(hLayout);
 

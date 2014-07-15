@@ -1,4 +1,4 @@
-<site name="pub">
+<site siteName="pub">
 <home>urn:oid:1.19.6.24.109.42.1.3</home>
 <transaction code="sq.b" name="Stored Query">
     <secure>https://ihexds.nist.gov:12081/tf6/services/xdsregistryb</secure>

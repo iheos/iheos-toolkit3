@@ -1,13 +1,12 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure;
 
-import com.smartgwt.client.data.RestDataSource;
+import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 
 /**
- * SmartGWT datasource for accessing entities over http in a RESTful manner.
- * Defines a RESTDataSource fields, operations and REST service URLs.
+ * SmartGWT datasource.
  */
-public class TransactionDS extends RestDataSource {
+public class TransactionDS extends DataSource {
 
     private static TransactionDS instance = null;
 
@@ -18,27 +17,24 @@ public class TransactionDS extends RestDataSource {
         return instance;
     }
 
-	private TransactionDS() {
+    private TransactionDS() {
         setID("transactionDS");
         setDataURL("resources/datasources/endpoints/pub-edited.data.xml");
         setRecordXPath("/site/transaction"); //the XML path of the element we want to display, in the datasource file (.data.xml)
         setClientOnly(true);
 
-        DataSourceTextField endpointName = new DataSourceTextField("name", "Endpoint Name");
-        endpointName.setValueXPath("/site/@name");
-       // System.out.println(endpointName.getValueMap());
-        //endpointName.setHidden(true);
+        DataSourceTextField endpointName = new DataSourceTextField("siteName", "Endpoint Name");
+        endpointName.setValueXPath("/site/transaction/ancestor::site/@siteName");
+        endpointName.setHidden(true);
         endpointName.setCanEdit(false);
-        endpointName.setForeignKey("endpointConfigDS.endpointName");
+        endpointName.setForeignKey("endpointConfigDSNew.endpointName");
 
-        DataSourceTextField code = new DataSourceTextField("code");
-        code.setPrimaryKey(true);
-        code.setHidden(true);
-        DataSourceTextField name = new DataSourceTextField("name", "Transaction Type", 128, true); // isRequired = true
+        DataSourceTextField name = new DataSourceTextField("name", "Transaction Type");
+        name.setPrimaryKey(true);
         DataSourceTextField tls = new DataSourceTextField("secure", "TLS Endpoint");
         DataSourceTextField notls = new DataSourceTextField("unsecure", "Non-TLS Endpoint");
 
 
-        setFields(code, name, tls, notls, endpointName);
-	}
+        setFields(name, tls, notls, endpointName);
+    }
 }
