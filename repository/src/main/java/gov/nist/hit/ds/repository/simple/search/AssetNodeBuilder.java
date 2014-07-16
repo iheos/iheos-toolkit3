@@ -3,10 +3,6 @@
  */
 package gov.nist.hit.ds.repository.simple.search;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -15,9 +11,13 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
+import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 
 /**
@@ -67,6 +67,7 @@ public class AssetNodeBuilder {
 					,a.getMimeType()
 					,a.getSource().getAccess().name());
 			parent.setParentId(a.getProperty(PropertyKey.PARENT_ID));
+            parent.setColor(a.getProperty(PropertyKey.COLOR));
 			if (a.getPath()!=null) {
 				// parent.setLocation(a.getPath().toString());
 				parent.setLocation(a.getPropFileRelativePart());
@@ -108,6 +109,7 @@ public class AssetNodeBuilder {
 						,a.getMimeType()
 						,a.getSource().getAccess().name());
 				child.setParentId(a.getProperty(PropertyKey.PARENT_ID));
+                child.setColor(a.getProperty(PropertyKey.COLOR));
 				if (a.getPath()!=null) {
 					// child.setLocation(a.getPath().toString());
 					child.setLocation(a.getPropFileRelativePart());
@@ -151,6 +153,7 @@ public class AssetNodeBuilder {
 							,a.getMimeType()
 							,a.getSource().getAccess().name());
 					parent.setParentId(a.getProperty(PropertyKey.PARENT_ID));
+                    parent.setColor(a.getProperty(PropertyKey.COLOR));
 					if (a.getPath()!=null) {
 						// child.setLocation(a.getPath().toString());
 						parent.setLocation(a.getPropFileRelativePart());
@@ -211,6 +214,7 @@ public class AssetNodeBuilder {
 						,a.getMimeType()
 						,a.getSource().getAccess().name());
 				child.setParentId(a.getProperty(PropertyKey.PARENT_ID));
+                child.setColor(a.getProperty(PropertyKey.COLOR));
 				if (a.getPath()!=null) {
 					// child.setLocation(a.getPath().toString());
 					child.setLocation(a.getPropFileRelativePart());
