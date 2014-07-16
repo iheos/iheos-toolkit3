@@ -1,6 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure;
 
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.ListGridEditEvent;
 import com.smartgwt.client.types.RowEndEditAction;
 import com.smartgwt.client.widgets.Canvas;
@@ -61,14 +62,16 @@ public class EndpointsConfigWidget extends HLayout {
 
                 final ListGrid nestedGrid = new ListGrid();
                 nestedGrid.setHeight(200);
-                nestedGrid.setDataSource(TransactionDS.getInstance());  //getRelatedDataSource(record
+                nestedGrid.setDataSource(TransactionDS.getInstance());
                 nestedGrid.fetchRelatedData(record, EndpointConfigDSNew.getInstance());
 
                 nestedGrid.setCanEdit(true);
                 nestedGrid.setModalEditing(true);
                 nestedGrid.setEditEvent(ListGridEditEvent.CLICK);
                 nestedGrid.setListEndEditAction(RowEndEditAction.NEXT);
-                nestedGrid.setAutoSaveEdits(false);
+                nestedGrid.setAutoSaveEdits(true);
+                nestedGrid.groupBy("actorName");
+                nestedGrid.setGroupStartOpen(GroupStartOpen.ALL);
 
                 layout.addMember(nestedGrid);
 
@@ -84,32 +87,30 @@ public class EndpointsConfigWidget extends HLayout {
                 });
                 hLayout.addMember(saveButton);
 
-                IButton newButton = new IButton("New");
+                IButton newButton = new IButton("Add");
                 newButton.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        ListGridRecord rec = new ListGridRecord();
-                        rec.setAttribute("name", "transaction");
-                        nestedGrid.addData(rec);
+                        nestedGrid.startEditingNew();
                     }
                 });
                 hLayout.addMember(newButton);
 
-                    IButton discardButton = new IButton("Discard");
-                    discardButton.addClickHandler(new ClickHandler() {
-                        public void onClick(ClickEvent event) {
-                            nestedGrid.discardAllEdits();
-                        }
-                    });
-                    hLayout.addMember(discardButton);
+//                    IButton discardButton = new IButton("Discard");
+//                    discardButton.addClickHandler(new ClickHandler() {
+//                        public void onClick(ClickEvent event) {
+//                            nestedGrid.discardAllEdits();
+//                        }
+//                    });
+//                    hLayout.addMember(discardButton);
 
-                    IButton closeButton = new IButton("Close");
-                    closeButton.addClickHandler(new ClickHandler() {
-                        public void onClick(ClickEvent event) {
-                            grid.collapseRecord(record);
-                        }
-                });
-                hLayout.addMember(closeButton);
-
+//                    IButton closeButton = new IButton("Close");
+//                    closeButton.addClickHandler(new ClickHandler() {
+//                        public void onClick(ClickEvent event) {
+//                            grid.collapseRecord(record);
+//                        }
+//                });
+//                hLayout.addMember(closeButton);
+//
 
 
                 layout.addMember(hLayout);
