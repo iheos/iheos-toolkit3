@@ -630,20 +630,26 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
-     * Retrieves a child by name. If there is more than one by the same name, the first one found is retrieved.
+     * Retrieves an immediate child by name. If there is more than one by the same name, the first one found is retrieved.
      * @param name see {@link gov.nist.hit.ds.repository.simple.SimpleRepository#createNamedAsset(String, String, Type, String)}
      * @return
      * @throws RepositoryException
      */
     @Override
     public Asset getChildByName(String name) throws RepositoryException {
-        File[] assetFileByName = new FolderManager().getAssetFileByName(name, getPropFile().getParentFile());
+        File[] assetFileByName = new FolderManager().getAssetFileByName(name, getPropFile().getParentFile(), getId().getIdString());
+
+        if (assetFileByName==null || (assetFileByName!=null && assetFileByName[0]==null)) {
+            throw new RepositoryException(RepositoryException.ASSET_NOT_FOUND + ": by name :" +name + ", base path: " + getPropFile().getParentFile() + ", idStr: " + getId().getIdString());
+        }
+
         Asset child = new SimpleAsset(getSource());
 
         try {
             logger.fine("getAssetFileByName return 0 : " + assetFileByName[0]);
             logger.fine("getAssetFileByName return 1 : " + assetFileByName[1]);
             FolderManager.loadProps(child.getProperties(), assetFileByName[0]);
+            child.setPath(assetFileByName[0]);
             child.setContentPath(assetFileByName[1]);
         } catch (Exception e) {
             throw new RepositoryException(RepositoryException.UNKNOWN_ID + " : " +
@@ -843,7 +849,7 @@ public class SimpleAsset implements Asset, Flushable {
 		if (assetPath[0]!=null) {
 			setPath(assetPath[0]);
 		} else {
-			throw new RepositoryException(RepositoryException.IO_ERROR + " : " + 
+			throw new RepositoryException(RepositoryException.ASSET_NOT_FOUND + " : " +
 					"File not found for assetId: [" +
 					assetId.getIdString()
 					+ "]");

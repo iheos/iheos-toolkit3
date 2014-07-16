@@ -133,12 +133,17 @@ public class SimpleCreateAssetTest {
         gc3.setProperty(PropertyKey.DESCRIPTION,gc3Desc);
         c3.addChild(gc3);
 
+        // Retrieve immediate children only
         assertTrue(p3.getChildByName("Child").getProperty(PropertyKey.DISPLAY_NAME).equals(c3DisplayName));
 
-        assertTrue(p3.getChildByName("GrandChild").getProperty(PropertyKey.DESCRIPTION).equals(gc3Desc));
+        try {
+            assertTrue(p3.getChildByName("GrandChild").getProperty(PropertyKey.DESCRIPTION).equals(gc3Desc));
+            fail("Should not be able to retrieve grand children");
+        } catch (RepositoryException re) {
+            // good
+        }
 
         // Test repository root level getChildByName
-        assertTrue(repos.getChildByName("GrandChild").getName().equals("GrandChild"));
         assertTrue(repos.getChildByName("Parent3").getName().equals("Parent3"));
 
         gc3.deleteAsset(); // Leaf asset delete
@@ -180,10 +185,17 @@ public class SimpleCreateAssetTest {
         // 6. Add previous complex parent asset to NewParent
         newParent.addChild(parent);
 
-        // Test relationship
+        // Test relationship by Name
         Asset c1 = newParent.getChildByName("Parent");
         assertTrue(c1.getName().equals("Parent"));
-        assertTrue(c1.getChildByName("Child").getName().equals("Child"));
+
+        try {
+            Asset invalidRetrieveDepth = c1.getChildByName("Child"); // Now Child becomes grandchild after moving complex Parent to NewParent
+
+        } catch (RepositoryException re) {
+            fail("child retrieve failed: " + re.toString());
+        }
+
 
 
     }

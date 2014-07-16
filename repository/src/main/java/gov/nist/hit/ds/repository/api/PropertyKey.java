@@ -31,7 +31,13 @@ public enum PropertyKey {
            public String toString() {
                return "type";
            }
-       },	        
+       },
+       COLOR(false) {
+            @Override
+            public String toString() {
+                return "color";
+            }
+        },
        CREATED_DATE(false){
            @Override
            public String toString() {

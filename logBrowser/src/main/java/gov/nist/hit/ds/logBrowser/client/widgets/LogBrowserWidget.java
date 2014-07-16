@@ -893,23 +893,33 @@ public class LogBrowserWidget extends Composite {
 	         public AssetTreeItem(AssetNode an) {
 	            // super(an.getDisplayName());
 	        	 String displayName = "" + an.getAssetId();
-	        	 
+
+
 	        	if (an.getDisplayName()!=null && !"".equals(an.getDisplayName())) {
 	        		displayName = an.getDisplayName();
 	        	}
-	            setText(displayName);
-	            
-	            String title = "";
+
+                 if (an.getColor()!=null && !"".equals(an.getColor())) {
+                     SafeHtmlBuilder nodeSafeHtml =  new SafeHtmlBuilder();
+                     nodeSafeHtml.appendHtmlConstant("<span style=\"color:" + an.getColor() + "\">"
+                             + displayName + "</span>");
+                     setHTML(nodeSafeHtml.toSafeHtml());
+                 } else {
+                     setText(displayName);
+                 }
+
+                String hoverTitle = "";
 	            
 	            if (an.getMimeType()!=null && !"".equals(an.getMimeType())) {
-	            	title += "mimeType: " + an.getMimeType();
+	            	hoverTitle += "mimeType: " + an.getMimeType();
 	            }
 	            
 	            if (an.getDescription()!=null && !"".equals(an.getDescription())) {
-	            	title += " Description: " + an.getDescription();
+	            	hoverTitle += " Description: " + an.getDescription();
 	            }
-	            setTitle(title);
-	            setUserObject(an);	            
+	            setTitle(hoverTitle);
+	            setUserObject(an);
+
 	            // setWidget(new Label(displayName));	            
 	        }
 	    
