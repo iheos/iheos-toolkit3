@@ -581,7 +581,7 @@ public interface Repository extends java.io.Serializable {
 
 
     /**
-     * Retrieve an asset by its name that is under the repository root level. If more than one asset exists with the same name, only the first one is retrieved. To retrieve a child asset using a parent asset as its focus, see {@link Asset#getChildByName(String)}.
+     * Retrieve an immediate child asset by its name that is directly under the repository root level. If more than one asset exists with the same name, only the first one is retrieved. To retrieve a child asset using a parent asset as its focus, see {@link Asset#getChildByName(String)}.
      * @param name Name is case-sensitive. See {@link gov.nist.hit.ds.repository.simple.SimpleRepository#createNamedAsset(String, String, Type, String)}
      *
      */

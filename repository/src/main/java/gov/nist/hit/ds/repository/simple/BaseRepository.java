@@ -201,14 +201,14 @@ public abstract class BaseRepository implements Repository {
 
 
     /**
-     *
+     * Retrieves an immediate child by name.
      * @param name Name is case-sensitive. See {@link gov.nist.hit.ds.repository.simple.SimpleRepository#createNamedAsset(String, String, Type, String)}
      * @return
      * @throws RepositoryException
      */
     @Override
     public Asset getChildByName(String name) throws RepositoryException {
-        File[] assetFileByName = new FolderManager().getAssetFileByName(name, getRoot());
+        File[] assetFileByName = new FolderManager().getAssetFileByName(name, getRoot(),"$topLevelAsset");
         Asset asset = new SimpleAsset(getSource());
 
         try {

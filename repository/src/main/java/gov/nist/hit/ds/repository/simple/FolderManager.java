@@ -44,8 +44,8 @@ public class FolderManager {
 	
 	/**
 	 * 
-	 * @param sa
-	 * @param folderName
+	 * @param sa SimpleAsset instance
+	 * @param folderName The folder name
 	 * @return
 	 * @throws RepositoryException
 	 */
@@ -61,7 +61,7 @@ public class FolderManager {
 		File residingFolder = assetPath.getParentFile();
 
 		// FileFilter pff = new FileFilter();
-		// pff.setFileNamePart(getAssetIdFromFilename(assetPath.toString())); 
+		// pff.setValueToMatch(getAssetIdFromFilename(assetPath.toString()));
 
 		// File[] assetPaths = getAssetPath(pff, residingFolder);
 		
@@ -187,9 +187,9 @@ public class FolderManager {
 	
 	public File[] getAssetFileById(ArtifactId id, File baseDir) throws RepositoryException {
         FileFilter pff = new FileFilter();
-        pff.setFileNamePart(id.getIdString());
+        pff.setValueToMatch(id.getIdString());
 
-        return getAssetPath(pff, baseDir);
+        return getAssetPath(pff, baseDir, null);
 
 	}
 
@@ -200,19 +200,20 @@ public class FolderManager {
      * @return
      * @throws RepositoryException
      */
-    public File[] getAssetFileByName(String name, File baseDir) throws RepositoryException {
+    public File[] getAssetFileByName(String name, File baseDir, String parentId) throws RepositoryException {
         FileFilter pff = new FileFilter();
-        pff.setFileNamePart(name);
-        pff.setSearchByName(true);
+        pff.setValueToMatch(name);
+        pff.setSearchPropertyKey(PropertyKey.ASSET_NAME);
 
-        return getAssetPath(pff, baseDir);
+
+        return getAssetPath(pff, baseDir, parentId);
     }
 	
 	
 	/**
 	 * 
-	 * @param filename
-	 * @return
+	 * @param filename The filename to extract the value from
+	 * @return The Id
 	 */
 	public static String getAssetIdFromFilename(String filename) throws RepositoryException {
 		Parameter param = new Parameter();
@@ -233,8 +234,8 @@ public class FolderManager {
 
 	/**
 	 * Provide at least one non-null value. The first non-null value will be returned as a safeName.
-	 * @param str
-	 * @return
+	 * @param str A list of potentially unsafe strings
+	 * @return A safe name
 	 * @throws RepositoryException 
 	 */
 	public static String getSafeName(String[] str) throws RepositoryException {
@@ -256,71 +257,90 @@ public class FolderManager {
 	 *
 	 */
 	private class FileFilter implements FilenameFilter {
-		private String fileNamePart = "";
+		private String valueToMatch = "";
 		private File[] directMatch = new File[]{null,null};		
-		private boolean searchById = true; // Enable deepScan searchById by default
-        private boolean searchByName = false;
-        private PropertyKey propertyKey;
+
+        private PropertyKey searchPropertyKey = PropertyKey.ASSET_ID; // Default
+
+        // Internal use only -- to be set by getAssetPath
+        private String parentId;
 
 		/**
-		 * Returns the first matching file with the specified fileNamePart or Id
+		 * Returns the first matching file with the specified valueToMatch (Ex. Id value)
 		 */
 		@Override
 		public boolean accept(File dir, String name) {
-			File f = new File(dir + File.separator + name);
-			if (!isSearchById() && name.contains(getFileNamePart())) { // File name is in GUID-string.props.txt format
-					if (name.endsWith(Configuration.PROPERTIES_FILE_EXT)) {
-						directMatch[0] = f;	// Props
-					} else 
-						directMatch[1] = f; // Content file ?					
-				return true;
-			} else { // File names uses displayName or some other property with nested properties
+			File f = new File(dir, name);
+
 				try {
-					if (f.isDirectory()) {
+
+					if (f.isDirectory() && getParentId()==null) {
 						return true;
-					} else if (isSearchById() || isSearchByName()) { // Deep scan because files use a displayName convention and the Id is embedded in the property file
+					} else if (name.endsWith(Configuration.PROPERTIES_FILE_EXT) && getSearchPropertyKey()!=null) { // Deep scan because files could use a displayName convention and the Id is embedded in the property file. It is probably more reliable this way anyways.
 						Properties props = new Properties();
 						loadProps(props, f);
-						String propVal = null;
-                        if (isSearchByName()) {
-                            propVal = props.getProperty(PropertyKey.ASSET_NAME.toString());
-                        } else if (isSearchById()) {
-                            propVal = props.getProperty(PropertyKey.ASSET_ID.toString());
-                        }
-                        if (propVal!=null && propVal.equals(getFileNamePart())) { // Id is case sensitive
-							return true;  
+						String propVal = props.getProperty(getSearchPropertyKey().toString());
+
+                        if (propVal!=null && propVal.equals(getValueToMatch())) { // Value(Id) is case sensitive
+                            if (getParentId()!=null && !"".equals(getParentId())) {
+                                if ("$topLevelAsset".equals(getParentId())) {
+                                    if  (!props.containsKey(PropertyKey.PARENT_ID.toString())) {
+                                        directMatch[0] = f;
+                                        return true;
+                                    } else
+                                        return false;
+                                }
+
+                                if (getParentId().equals(props.getProperty(PropertyKey.PARENT_ID.toString()))) {
+                                    directMatch[0] = f;
+                                    return true;
+                                } else
+                                    return false;
+                            }
+                            directMatch[0] = f;
+                            return true;
 						}						
 					}
 				} catch (Exception ex) {
 					logger.warning(ex.toString());
 				}
 				 
-			}
 				return false;
 		}
 
-		public String getFileNamePart() {
-			return fileNamePart;
+		public String getValueToMatch() {
+			return valueToMatch;
 		}
 
-		public void setFileNamePart(String fileName) {
-			this.fileNamePart = fileName;
+		public void setValueToMatch(String fileName) {
+			this.valueToMatch = fileName;
 		}
 
 		public File[] getDirectMatch() {
 			return directMatch;
 		}
 
-		public boolean isSearchById() {
-			return searchById;
-		}
 
-        public boolean isSearchByName() { return searchByName; }
+        public PropertyKey getSearchPropertyKey() {
+            return searchPropertyKey;
+        }
 
-        public void setSearchByName(boolean searchByName) { this.searchByName = searchByName; }
-	};
+        public void setSearchPropertyKey(PropertyKey searchPropertyKey) {
+            this.searchPropertyKey = searchPropertyKey;
+        }
 
-	private static File[] getAssetPath(FileFilter pff, File dir) throws RepositoryException {
+
+
+        public String getParentId() {
+            return parentId;
+        }
+
+        protected void setParentId(String parentId) {
+            this.parentId = parentId;
+        }
+    }
+
+	private static File[] getAssetPath(FileFilter pff, File dir, String parentId) throws RepositoryException {
 		
 		File[] assetFileNames = dir.listFiles(pff);
 		
@@ -330,11 +350,21 @@ public class FolderManager {
 			if (assetFileNames!=null && assetFileNames.length>0 && assetFileNames[0]!=null) {
 
                 if (assetFileNames!=null && assetFileNames.length>0) {
-                    for (File assetFileName : assetFileNames ) {
+                    for (File assetFileName : assetFileNames ) { // Not sure if this is still required after relying upon directMatch[0]
                         if (assetFileName.isFile()) {
                             return new File[]{assetFileName,null};
-                        } else if (assetFileName.isDirectory()) {
-                            File[] nestedMatch = getAssetPath(pff, assetFileName);
+                        }
+                    }
+
+                    // Scroll directories separately and give first preference to files since they are more of a direct match
+                    for (File assetFileName : assetFileNames ) {
+                        if (assetFileName.isDirectory()) {
+
+                                // This limits the search depth to immediate children or 1 level deep if applicable where the child is also a parent
+                            if (parentId!=null || !"".equals(parentId)) {
+                                pff.setParentId(parentId);
+                            }
+                            File[] nestedMatch = getAssetPath(pff, assetFileName, null);
                             if (nestedMatch!=null && nestedMatch.length>0 && nestedMatch[0]!=null)
                                 return nestedMatch;
                         }
@@ -350,7 +380,7 @@ public class FolderManager {
 	}
 
 	/**
-	 * @param assetPropFile
+	 * @param assetPropFile The property file
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
@@ -368,8 +398,8 @@ public class FolderManager {
 	}
 	
 	/**
-	 * @param src
-	 * @param dst
+	 * @param src Source path
+	 * @param dst Destination path
 	 * @throws RepositoryException
 	 */
 	public static File[] moveChildToParent(File[] src, File[] dst)
