@@ -22,7 +22,6 @@ import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer.Hor
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
-import com.sencha.gxt.widget.core.client.event.HideEvent.HideHandler;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
@@ -70,8 +69,8 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
     /*
      * List store to handle the editor on "List<String> authorInstitutions" in
 	 * Author's class. It is used in a listView widget and handle its content.
-	 * It inputs the author model authorInsitutions attribute, it is directly mapped by its
-	 * name on "authorInstitutions" in Author's class.
+	 * It inputs the author model authorInsitutions attribute, it is directly
+	 * mapped by its name on "authorInstitutions" in Author's class.
 	 */
     ListStoreEditor<String256> authorInstitutions;
     @Ignore
@@ -80,11 +79,13 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
     @Ignore
     String256EditorWidget authorInstitution = new String256EditorWidget();
 
-    //    /*
-//	 * field to input the authorTelecommunication attribute it is directly mapped by its
-//	 * name on "Telecommunication" in Author's class.
-//	 */
-//    String256EditorWidget authorTelecommunication = new String256EditorWidget();
+    // /*
+    // * field to input the authorTelecommunication attribute it is directly
+    // mapped by its
+    // * name on "Telecommunication" in Author's class.
+    // */
+    // String256EditorWidget authorTelecommunication = new
+    // String256EditorWidget();
     @Ignore
     TextButton addInstitutionButton = new TextButton("Add");
     @Ignore
@@ -93,10 +94,10 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
     // --- List of Roles
     // /////////////////////////////////
     /*
-	 * List store to handle the editor on "List<String> authorRoles" in
-	 * Author's class. It is used in a listView widget and handle its content.
-	 * It inputs the author model authorRoles attribute, it is directly mapped by its
-	 * name on "authorRoles" in Author's class.
+	 * List store to handle the editor on "List<String> authorRoles" in Author's
+	 * class. It is used in a listView widget and handle its content. It inputs
+	 * the author model authorRoles attribute, it is directly mapped by its name
+	 * on "authorRoles" in Author's class.
 	 */
     ListStoreEditor<String256> authorRoles;
     @Ignore
@@ -112,10 +113,10 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
     // --- List of Specialties
     // /////////////////////////////////
     /*
-	 * List store to handle the editor on "List<String> authorSpecialties" in
+     * List store to handle the editor on "List<String> authorSpecialties" in
 	 * Author's class. It is used in a listView widget and handle its content.
-	 * It inputs the author mode authorSpecialties attribute, it is directly mapped by its
-	 * name on "authorSpecialties" in Author's class.
+	 * It inputs the author mode authorSpecialties attribute, it is directly
+	 * mapped by its name on "authorSpecialties" in Author's class.
 	 */
     ListStoreEditor<String256> authorSpecialties;
     @Ignore
@@ -131,10 +132,11 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
     // --- List of telecommunications
     // /////////////////////////////////
     /*
-     * List store to handle the editor on "List<String> authorTelecommunications" in
-	 * Author's class. It is used in a listView widget and handle its content.
-	 * It inputs the author model authorTelecommunications attribute, it is directly mapped by its
-	 * name on "authorTelecommunications" in Author's class.
+	 * List store to handle the editor on
+	 * "List<String> authorTelecommunications" in Author's class. It is used in
+	 * a listView widget and handle its content. It inputs the author model
+	 * authorTelecommunications attribute, it is directly mapped by its name on
+	 * "authorTelecommunications" in Author's class.
 	 */
     ListStoreEditor<String256> authorTelecommunications;
     @Ignore
@@ -183,7 +185,8 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
         authorSpecialties = new ListStoreEditor<String256>(listViewAuthSpecialties.getStore());
 
         // Author TLECOMMUNICATIONS listWidget init
-        listViewAuthTelecommunications = new ListView<String256, String>(new ListStore<String256>(props.key()), props.string());
+        listViewAuthTelecommunications = new ListView<String256, String>(new ListStore<String256>(props.key()),
+                props.string());
         listViewAuthTelecommunications.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         // init telecommunications store
         authorTelecommunications = new ListStoreEditor<String256>(listViewAuthTelecommunications.getStore());
@@ -213,13 +216,13 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 
         FieldLabel institutionLabel = new FieldLabel();
         institutionLabel.setText("Institution");
-        authorInstitution.addValidator(new RegExValidator("[A-Za-z]+(\\s[A-Za-z]+)*" +
-                "((\\^{9}[0-9]+(\\.[0-9]+)+)|" +
-                "(\\^{5}&[0-9]+(\\.[0-9]+)+&ISO\\^{4}[0-9]+)){0,1}", "This value is incorrect for an author institution."));
-        authorInstitution.setToolTipConfig(new ToolTipConfig("Institution format", "Examples:<br/>" +
-                "Some Hospital<br/>" +
-                "Some Hospital^^^^^^^^^1.2.3.4.5.6.7.8.9.1789.45<br/>" +
-                "Some Hospital^^^^^&1.2.3.4.5.6.7.8.9.1789&ISO^^^^45"));
+        authorInstitution
+                .addValidator(new RegExValidator("[A-Za-z]+(\\s[A-Za-z]+)*" + "((\\^{9}[0-9]+(\\.[0-9]+)+)|"
+                        + "(\\^{5}&[0-9]+(\\.[0-9]+)+&ISO\\^{4}[0-9]+)){0,1}",
+                        "This value is incorrect for an author institution."));
+        authorInstitution.setToolTipConfig(new ToolTipConfig("Institution format", "Examples:<br/>" + "Some Hospital<br/>"
+                + "Some Hospital^^^^^^^^^1.2.3.4.5.6.7.8.9.1789.45<br/>"
+                + "Some Hospital^^^^^&1.2.3.4.5.6.7.8.9.1789&ISO^^^^45"));
 
         hcontainerInstitution.add(authorInstitution, new HorizontalLayoutData(1, 30, new Margins(0, 10, 10, 0)));
         authorInstitution.setWidth("auto");
@@ -291,7 +294,9 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
             @Override
             public List<EditorError> validate(Editor<String> editor, String value) {
                 List<EditorError> errors = null;
-                if ((!value.contains("@"))) {
+                if (value == null)
+                    value = authorTelecommunication.string.getText();
+                if (/* value == null || */!value.matches(".*@.*\\.[a-z]*$")) {
                     errors = createError(editor, "Value is not a valid telecommunication email.", value);
                 }
                 return errors;
@@ -323,12 +328,14 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 
     private void addAuthorInstitutionToListStore() {
         String s = authorInstitution.string.getText();
+
         if (s != null && !s.isEmpty()) {
             logger.info("adding new value (" + s + ") to list store");
             String256 v = new String256().setString(s);
             if (!contains(authorInstitutions.getStore(), v)) {
                 authorInstitutions.getStore().add(new String256().setString(s));
                 authorInstitution.string.clear();
+                authorInstitution.string.redraw();
             } else {
                 Info.display("Impossible to add value", "It is impossible to add this value. It already is in the list.");
             }
@@ -344,6 +351,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
             if (!contains(authorRoles.getStore(), v)) {
                 authorRoles.getStore().add(new String256().setString(s));
                 authorRole.string.clear();
+                authorRole.string.redraw();
             } else {
                 Info.display("Impossible to add value", "It is impossible to add this value. It already is in the list.");
             }
@@ -368,16 +376,20 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 
     private void addAuthorTelecommunicationToListStore() {
         String s = authorTelecommunication.string.getText();
-        if (s != null && !s.isEmpty()) {
-            logger.info("adding new value (" + s + ") to list store");
-            String256 v = new String256().setString(s);
-            if (!contains(authorTelecommunications.getStore(), v)) {
-                authorTelecommunications.getStore().add(new String256().setString(s));
-                authorTelecommunication.string.clear();
-            } else {
-                Info.display("Impossible to add value", "It is impossible to add this value. It already is in the list.");
+
+        if (authorTelecommunication.string.validate())
+            if (s != null && !s.isEmpty()) {
+                logger.info("adding new value (" + s + ") to list store");
+                String256 v = new String256().setString(s);
+                if (!contains(authorTelecommunications.getStore(), v)) {
+                    authorTelecommunications.getStore().add(new String256().setString(s));
+                    authorTelecommunication.string.clear();
+                    authorTelecommunication.string.clearInvalid();
+                    authorTelecommunication.string.redraw();
+                } else {
+                    Info.display("Impossible to add value", "It is impossible to add this value. It already is in the list.");
+                }
             }
-        }
         authorTelecommunication.string.focus();
     }
 
@@ -428,18 +440,19 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
             }
         });
         // telecommunication selection handler
-        listViewAuthTelecommunications.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<String256>() {
-            @Override
-            public void onSelectionChanged(SelectionChangedEvent<String256> event) {
-                if (listViewAuthTelecommunications.isEnabled()) {
-                    if (listViewAuthTelecommunications.getSelectionModel().getSelectedItem() != null) {
-                        deleteTelecommunicationButton.enable();
-                    } else {
-                        deleteTelecommunicationButton.disable();
+        listViewAuthTelecommunications.getSelectionModel().addSelectionChangedHandler(
+                new SelectionChangedHandler<String256>() {
+                    @Override
+                    public void onSelectionChanged(SelectionChangedEvent<String256> event) {
+                        if (listViewAuthTelecommunications.isEnabled()) {
+                            if (listViewAuthTelecommunications.getSelectionModel().getSelectedItem() != null) {
+                                deleteTelecommunicationButton.enable();
+                            } else {
+                                deleteTelecommunicationButton.disable();
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
 
         // ////////////////////////////////////////////////////
         // --- Add and delete value from lists handlers
@@ -468,15 +481,17 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 
             @Override
             public void onSelect(SelectEvent event) {
-                final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthInstitutions.getSelectionModel().getSelectedItem().getString());
+                final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthInstitutions.getSelectionModel()
+                        .getSelectedItem().getString());
                 cdd.show();
-                cdd.addHideHandler(new HideHandler() {
+                cdd.addHideHandler(new HideEvent.HideHandler() {
 
                     @Override
                     public void onHide(HideEvent event) {
                         if (cdd.getHideButton() == cdd.getButtonById(PredefinedButton.YES.name())) {
                             // perform YES action
-                            authorInstitutions.getStore().remove(listViewAuthInstitutions.getSelectionModel().getSelectedItem());
+                            authorInstitutions.getStore().remove(
+                                    listViewAuthInstitutions.getSelectionModel().getSelectedItem());
                         }
                     }
                 });
@@ -507,9 +522,10 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 
             @Override
             public void onSelect(SelectEvent event) {
-                final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthRoles.getSelectionModel().getSelectedItem().getString());
+                final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthRoles.getSelectionModel()
+                        .getSelectedItem().getString());
                 cdd.show();
-                cdd.addHideHandler(new HideHandler() {
+                cdd.addHideHandler(new HideEvent.HideHandler() {
 
                     @Override
                     public void onHide(HideEvent event) {
@@ -546,15 +562,17 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 
             @Override
             public void onSelect(SelectEvent event) {
-                final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthSpecialties.getSelectionModel().getSelectedItem().getString());
+                final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthSpecialties.getSelectionModel()
+                        .getSelectedItem().getString());
                 cdd.show();
-                cdd.addHideHandler(new HideHandler() {
+                cdd.addHideHandler(new HideEvent.HideHandler() {
 
                     @Override
                     public void onHide(HideEvent event) {
                         if (cdd.getHideButton() == cdd.getButtonById(PredefinedButton.YES.name())) {
                             // perform YES action
-                            authorSpecialties.getStore().remove(listViewAuthSpecialties.getSelectionModel().getSelectedItem());
+                            authorSpecialties.getStore().remove(
+                                    listViewAuthSpecialties.getSelectionModel().getSelectedItem());
                         }
                     }
                 });
@@ -584,17 +602,17 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
 
             @Override
             public void onSelect(SelectEvent event) {
-                final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthTelecommunications
-                        .getSelectionModel().getSelectedItem().getString());
+                final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthTelecommunications.getSelectionModel()
+                        .getSelectedItem().getString());
                 cdd.show();
-                cdd.addHideHandler(new HideHandler() {
+                cdd.addHideHandler(new HideEvent.HideHandler() {
 
                     @Override
                     public void onHide(HideEvent event) {
                         if (cdd.getHideButton() == cdd.getButtonById(PredefinedButton.YES.name())) {
                             // perform YES action
-                            authorTelecommunications.getStore().remove(listViewAuthTelecommunications
-                                    .getSelectionModel().getSelectedItem());
+                            authorTelecommunications.getStore().remove(
+                                    listViewAuthTelecommunications.getSelectionModel().getSelectedItem());
                         }
                     }
                 });
@@ -626,7 +644,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
      * @param author The Author which will be edited.
      */
     public void edit(Author author) {
-//        authorEditorDriver.getErrors().clear();
+        // authorEditorDriver.getErrors().clear();
         resetWidgets();
         setModel(author);
         authorEditorDriver.edit(author);
@@ -636,7 +654,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
      * Method to start the edition of a new Author.
      */
     public void editNew() {
-//        authorEditorDriver.getErrors().clear();
+        // authorEditorDriver.getErrors().clear();
         model = new Author();
         edit(model);
         resetWidgets();
@@ -660,7 +678,8 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
     }
 
     /**
-     * This method clears the fields to add values in lists roles, institutions and specialties.
+     * This method clears the fields to add values in lists roles, institutions
+     * and specialties.
      */
     private void resetWidgets() {
         authorTelecommunication.string.clear();
@@ -707,16 +726,20 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
         addRoleButton.setEnabled(enabled);
         addSpecialtyButton.setEnabled(enabled);
         addTelecommunicationButton.setEnabled(enabled);
-        if (listViewAuthSpecialties.getSelectionModel().getSelectedItem() != null || listViewAuthSpecialties.getSelectionModel().getSelectedItems().size() > 0) {
+        if (listViewAuthSpecialties.getSelectionModel().getSelectedItem() != null
+                || listViewAuthSpecialties.getSelectionModel().getSelectedItems().size() > 0) {
             deleteSpecialtyButton.setEnabled(enabled);
         }
-        if (listViewAuthRoles.getSelectionModel().getSelectedItem() != null || listViewAuthRoles.getSelectionModel().getSelectedItems().size() > 0) {
+        if (listViewAuthRoles.getSelectionModel().getSelectedItem() != null
+                || listViewAuthRoles.getSelectionModel().getSelectedItems().size() > 0) {
             deleteRoleButton.setEnabled(enabled);
         }
-        if (listViewAuthInstitutions.getSelectionModel().getSelectedItem() != null || listViewAuthInstitutions.getSelectionModel().getSelectedItems().size() > 0) {
+        if (listViewAuthInstitutions.getSelectionModel().getSelectedItem() != null
+                || listViewAuthInstitutions.getSelectionModel().getSelectedItems().size() > 0) {
             deleteInstitutionButton.setEnabled(enabled);
         }
-        if (listViewAuthTelecommunications.getSelectionModel().getSelectedItem() != null || listViewAuthTelecommunications.getSelectionModel().getSelectedItems().size() > 0) {
+        if (listViewAuthTelecommunications.getSelectionModel().getSelectedItem() != null
+                || listViewAuthTelecommunications.getSelectionModel().getSelectedItems().size() > 0) {
             deleteTelecommunicationButton.setEnabled(enabled);
         }
     }
@@ -756,8 +779,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
     }
 
     /**
-     * .
-     * Simple setter method for AuthorEditorWidget's model>
+     * . Simple setter method for AuthorEditorWidget's model>
      *
      * @param model author object to be edited.
      */

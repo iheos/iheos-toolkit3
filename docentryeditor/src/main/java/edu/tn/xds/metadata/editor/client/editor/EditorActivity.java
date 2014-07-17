@@ -88,13 +88,13 @@ public class EditorActivity extends AbstractActivity {
 
         blc.setSouthWidget(validationView, southData);
 
-//        SubmissionPanelView submissionPane = new SubmissionPanelView();
         BorderLayoutData westData = new BorderLayoutData(350);
         westData.setMargins(new Margins(0, 5, 5, 5));
         westData.setCollapsible(true);
         westData.setSplit(false);
 
-        blc.setWestWidget(/*submissionPane*/submissionMVP.getDisplay(), westData);
+        // FIXME add submission pane in higher view
+        blc.setWestWidget(submissionMVP.getDisplay(), westData);
 
         blc.collapse(LayoutRegion.SOUTH);
 

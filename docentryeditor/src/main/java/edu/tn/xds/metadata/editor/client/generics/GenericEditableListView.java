@@ -14,13 +14,12 @@ import java.util.List;
 /**
  * Created by onh2 on 6/11/2014.
  */
-public class GenericEditableListView<M, N> extends GenericEditableGrid<M> {
+public abstract class GenericEditableListView<M, N> extends GenericEditableGrid<M> {
     private ColumnConfig<M, N> cc1;
 
-    public GenericEditableListView(Class<M> parametrizedClass, String listTitle, ListStore<M> listStore, ValueProvider<? super M, N> valueProvider) {
-        super(parametrizedClass, listTitle, listStore, new ColumnModel<M>(new ArrayList<ColumnConfig<M, ?>>()));
+    public GenericEditableListView(/*Class<M> parametrizedClass,*/ String listTitle, ListStore<M> listStore, ValueProvider<? super M, N> valueProvider) {
+        super(/*parametrizedClass,*/ listTitle, listStore, new ColumnModel<M>(new ArrayList<ColumnConfig<M, ?>>()));
 
-        //ColumnConfig(ValueProvider<? super M, N> valueProvider, int width, String header)
         List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
         cc1 = new ColumnConfig<M, N>(valueProvider, 1000, "");
         columnsConfigs.add(cc1);

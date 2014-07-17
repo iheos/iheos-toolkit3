@@ -1,4 +1,4 @@
-package edu.tn.xds.metadata.editor.client.editor.widgets;
+package edu.tn.xds.metadata.editor.client.editor.widgets.CodedTermWidgets;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -12,6 +12,7 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.Verti
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import edu.tn.xds.metadata.editor.client.editor.EditionMode;
+import edu.tn.xds.metadata.editor.client.editor.widgets.String256EditorWidget;
 import edu.tn.xds.metadata.editor.shared.model.CodedTerm;
 
 /**
@@ -26,11 +27,11 @@ public class CodedTermEditorWidget extends Composite implements Editor<CodedTerm
     @Ignore
     EditionMode editionMode = EditionMode.NODATA;
     @Ignore
-	CodedTerm model;
-	VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
-	String256EditorWidget displayName = new String256EditorWidget();
-	String256EditorWidget code = new String256EditorWidget();
-	CodingSchemeEditorWidget codingScheme = new CodingSchemeEditorWidget();
+    CodedTerm model;
+    VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
+    String256EditorWidget displayName = new String256EditorWidget();
+    String256EditorWidget code = new String256EditorWidget();
+    CodingSchemeEditorWidget codingScheme = new CodingSchemeEditorWidget();
 
     public CodedTermEditorWidget() {
         initWidget(vcontainer);
@@ -67,12 +68,12 @@ public class CodedTermEditorWidget extends Composite implements Editor<CodedTerm
         model = new CodedTerm();
         edit(model);
         resetWidgets();
-	}
+    }
 
     private void resetWidgets() {
-        displayName.string.clear();
-        code.string.clear();
-        codingScheme.codingScheme.string.clear();
+        displayName.getField().clear();
+        code.getField().clear();
+        codingScheme.codingScheme.getField().clear();
     }
 
     public void rollbackChanges() {
@@ -87,13 +88,12 @@ public class CodedTermEditorWidget extends Composite implements Editor<CodedTerm
                 break;
         }
 
-	}
+    }
 
     private void resetEditor() {
         setEditionMode(EditionMode.NODATA);
         model = null;
         codedTermEditorDriver.edit(model);
-        // editNew();
     }
 
     public CodedTerm save() {
@@ -112,26 +112,26 @@ public class CodedTermEditorWidget extends Composite implements Editor<CodedTerm
     }
 
     protected void setWidgetEnable(boolean enabled) {
-        displayName.string.setEnabled(enabled);
-        code.string.setEnabled(enabled);
-        codingScheme.codingScheme.string.setEnabled(enabled);
+        displayName.getField().setEnabled(enabled);
+        code.getField().setEnabled(enabled);
+        codingScheme.codingScheme.getField().setEnabled(enabled);
     }
 
     /**
      * This method sets the default text to display in an empty field (defaults
      * to null). It is done to help and guide the user during his input.
      *
-     * @param dispNameEmptytext Default text displayed in an empty name field
-     * @param codeEmptyText     Default text displayed in an empty code field
-     * @param codingEmptyText   Default text displayed in an empty coding scheme text field
+     * @param displayNameEmptytext Default text displayed in an empty name field
+     * @param codeEmptyText        Default text displayed in an empty code field
+     * @param codingEmptyText      Default text displayed in an empty coding scheme text field
      */
-    public void setEmptyTexts(String dispNameEmptytext, String codeEmptyText, String codingEmptyText) {
-        displayName.setEmptyText(dispNameEmptytext);
+    public void setEmptyTexts(String displayNameEmptytext, String codeEmptyText, String codingEmptyText) {
+        displayName.setEmptyText(displayNameEmptytext);
         code.setEmptyText(codeEmptyText);
         codingScheme.setEmptyText(codingEmptyText);
     }
 
-	/**
+    /**
      * Sets the widget's tool tip with the given config
      *
      * @param configDisplayName
@@ -149,13 +149,10 @@ public class CodedTermEditorWidget extends Composite implements Editor<CodedTerm
      * true). This will warn the user through the editor widget if he didn't
      * input anything in field which does not allow blank.
      *
-     * @param b_displayName
-     *            true to allow blank to the name field, false otherwise
-     * @param b_code
-     *            true to allow blank to the code field, false otherwise
-     * @param b_codingScheme
-     *            true to allow blank to the coding scheme field, false
-     *            otherwise
+     * @param b_displayName  true to allow blank to the name field, false otherwise
+     * @param b_code         true to allow blank to the code field, false otherwise
+     * @param b_codingScheme true to allow blank to the coding scheme field, false
+     *                       otherwise
      */
     public void setAllowBlanks(boolean b_displayName, boolean b_code, boolean b_codingScheme) {
         displayName.setAllowBlank(b_displayName);

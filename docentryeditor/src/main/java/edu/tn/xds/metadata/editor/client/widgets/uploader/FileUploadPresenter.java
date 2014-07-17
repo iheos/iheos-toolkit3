@@ -14,13 +14,10 @@ public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
 
     @Inject
     PlaceController placeController;
-    // @Inject
-    // private final Parse myParse = new Parse();
-    private XdsParser xdsParser;
+    @Inject
+    XdsParser xdsParser;
 
     public void fileUploaded(String results) {
-        xdsParser = XdsParser.getInstance();
-
         // remove xml file first line (xml doctype => <?xml...>)
         logger.info("... file loaded, parsing metadata...");
 
@@ -31,9 +28,8 @@ public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
         model.setFileName(new String256().setString(results.split(";\\^;\\^;")[0]));
 
         logger.info("... file parsed.");
-//		logger.info("Metadata file: " + model.toXML());
+        // logger.info("Metadata file: " + model.toXML());
 
-        // logger.info(myModel.toXML());
         placeController.goTo(new EditorPlace());
         getEventBus().fireEvent(new NewFileLoadedEvent(model));
     }

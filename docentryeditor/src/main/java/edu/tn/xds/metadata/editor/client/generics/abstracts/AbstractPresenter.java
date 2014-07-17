@@ -7,52 +7,51 @@ import java.util.logging.Logger;
 
 public abstract class AbstractPresenter<V extends AbstractView<?>> {
 
-	protected final Logger logger = Logger.getLogger(this.getClass().getName());
+    protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
-	@Inject
-	protected EventBus eventBus;
+    @Inject
+    protected EventBus eventBus;
 
-	protected V view;
+    protected V view;
 
-	// instance
-	@Inject
-	public AbstractPresenter() {
-	}
+    // instance
+    @Inject
+    public AbstractPresenter() {
+    }
 
-	@Inject
-	public AbstractPresenter(EventBus eventBus) {
-		this.eventBus = eventBus;
-	}
+    @Inject
+    public AbstractPresenter(EventBus eventBus) {
+        this.eventBus = eventBus;
+    }
 
-	// abstract
-	/**
+    // abstract
+
+    /**
      * called by mvp before view.init() does not necessarily need to do something
      */
     public abstract void init();
 
-	/**
-	 * called by mvp just before view.getDisplay()
-	 */
-	public void start() {
-	};
+    /**
+     * called by mvp just before view.getDisplay()
+     */
+    public void start() {
+    }
 
-	// getter / setter
-	public V getView() {
-		return view;
-	}
+    // getter / setter
+    public V getView() {
+        return view;
+    }
 
-	public void setView(V view) {
-		this.view = view;
-	}
+    public void setView(V view) {
+        this.view = view;
+    }
 
-	public EventBus getEventBus() {
-		return eventBus;
-	}
+    public EventBus getEventBus() {
+        return eventBus;
+    }
 
-	public void setEventBus(EventBus eventBus) {
-		this.eventBus = eventBus;
-	}
-
-	// public abstract RequestContext getRequestContext();
+    public void setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
+    }
 
 }

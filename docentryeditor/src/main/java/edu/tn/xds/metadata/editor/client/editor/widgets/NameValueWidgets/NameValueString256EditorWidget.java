@@ -1,4 +1,4 @@
-package edu.tn.xds.metadata.editor.client.editor.widgets;
+package edu.tn.xds.metadata.editor.client.editor.widgets.NameValueWidgets;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -7,6 +7,7 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.form.Validator;
 import edu.tn.xds.metadata.editor.client.editor.properties.String256Properties;
 import edu.tn.xds.metadata.editor.client.generics.GenericEditableListView;
+import edu.tn.xds.metadata.editor.client.generics.GridModelFactory;
 import edu.tn.xds.metadata.editor.client.widgets.BoundedTextField;
 import edu.tn.xds.metadata.editor.shared.model.NameValueString256;
 import edu.tn.xds.metadata.editor.shared.model.String256;
@@ -18,7 +19,6 @@ import edu.tn.xds.metadata.editor.shared.model.String256;
  * </p>
  */
 public class NameValueString256EditorWidget extends GenericEditableListView<String256, String> implements Editor<NameValueString256> {
-    //    private static Logger logger = Logger.getLogger(NameValueString256EditorWidget.class.getName());
     private final static String256Properties props = GWT.create(String256Properties.class);
 
     ListStoreEditor<String256> values;
@@ -26,7 +26,7 @@ public class NameValueString256EditorWidget extends GenericEditableListView<Stri
     BoundedTextField tf = new BoundedTextField();
 
     public NameValueString256EditorWidget(String widgetTitle) {
-        super(String256.class, widgetTitle, new ListStore<String256>(props.key()), props.string());
+        super(widgetTitle, new ListStore<String256>(props.key()), props.string());
 
         tf.setAllowBlank(false);
         tf.setToolTip("This value is required and must unique.");
@@ -34,13 +34,9 @@ public class NameValueString256EditorWidget extends GenericEditableListView<Stri
         addEditorConfig(tf);
 
         values = new ListStoreEditor<String256>(getStore());
-
-        // init namevaluestring256 with its widgets container
-//        initWidget(listView.asWidget());
-
     }
 
-    public void addFieldValidator(Validator validator) {
+    public void addFieldValidator(Validator<String> validator) {
         tf.addValidator(validator);
     }
 
@@ -66,6 +62,11 @@ public class NameValueString256EditorWidget extends GenericEditableListView<Stri
 
     public void setListMaxSize(int maxSize) {
         setStoreMaxLength(maxSize);
+    }
+
+    @Override
+    protected GridModelFactory<String256> getModelFactory() {
+        return String256Factory.instance;
     }
 
 

@@ -16,100 +16,98 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.FileUploadField;
 import com.sencha.gxt.widget.core.client.info.Info;
-
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractView;
 
 public class FileUploadView extends AbstractView<FileUploadPresenter> {
-	private FormPanel form;
-	private FramedPanel panel;
-	private TextButton btnSubmit;
-	private TextButton btnCancel;
-	FileUploadField file;
+    FileUploadField file;
+    private FormPanel form;
+    private FramedPanel panel;
+    private TextButton btnSubmit;
+    private TextButton btnCancel;
 
-	@Override
-	public Widget asWidget() {
-		return panel.asWidget();
-	}
+    @Override
+    public Widget asWidget() {
+        return panel.asWidget();
+    }
 
-	public TextButton getBtnSubmit() {
-		return btnSubmit;
-	}
+    public TextButton getBtnSubmit() {
+        return btnSubmit;
+    }
 
-	public TextButton getBtnCancel() {
-		return btnCancel;
-	}
+    public TextButton getBtnCancel() {
+        return btnCancel;
+    }
 
-	@Override
-	protected Widget buildUI() {
-		panel = new FramedPanel();
-		panel.setHeaderVisible(false);
-		panel.setButtonAlign(BoxLayoutPack.CENTER);
-		// panel.setWidth(350);
-		panel.getElement().setMargins(2);
+    @Override
+    protected Widget buildUI() {
+        panel = new FramedPanel();
+        panel.setHeaderVisible(false);
+        panel.setButtonAlign(BoxLayoutPack.CENTER);
+        // panel.setWidth(350);
+        panel.getElement().setMargins(2);
 
-		form = new FormPanel();
-		form.setAction("ServletUpload");
-		form.setEncoding(FormPanel.ENCODING_MULTIPART);
-		form.setMethod(FormPanel.METHOD_POST);
-		panel.add(form);
+        form = new FormPanel();
+        form.setAction("ServletUpload");
+        form.setEncoding(FormPanel.ENCODING_MULTIPART);
+        form.setMethod(FormPanel.METHOD_POST);
+        panel.add(form);
 
-		VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
-		form.add(vcontainer);
+        VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
+        form.add(vcontainer);
 
-		// file = new FileUploadField();
-		file = new FileUploadField();
-		file.addChangeHandler(new ChangeHandler() {
+        file = new FileUploadField();
+        file.addChangeHandler(new ChangeHandler() {
 
-			@Override
-			public void onChange(ChangeEvent event) {
-				if (!file.getValue().matches(".*\\.xml")) {
-					Info.display("File Invalid", "XML File Required");
-					btnSubmit.disable();
-					// file.isValid();
-				} else {
-					Info.display("File Changed", "You selected " + file.getValue());
-					btnSubmit.enable();
-				}
-			}
-		});
-		file.setName("uploadedfile");
-		file.setAllowBlank(false);
-		file.setWidth(250);
+            @Override
+            public void onChange(ChangeEvent event) {
+                if (!file.getValue().matches(".*\\.xml")) {
+                    Info.display("File Invalid", "XML File Required");
+                    btnSubmit.disable();
+                    // file.isValid();
+                } else {
+                    Info.display("File Changed", "You selected " + file.getValue());
+                    btnSubmit.enable();
+                }
+            }
+        });
+        file.setName("uploadedfile");
+        file.setAllowBlank(false);
+        file.setWidth(250);
 
-		vcontainer.add(new FieldLabel(file, "File"), new VerticalLayoutData(-1,
-				-1));
+        vcontainer.add(new FieldLabel(file, "File"), new VerticalLayoutData(-1,
+                -1));
 
-		btnSubmit = new TextButton("Submit");
-		btnSubmit.disable();
-		btnCancel = new TextButton("Cancel");
+        btnSubmit = new TextButton("Submit");
+        btnSubmit.disable();
+        btnCancel = new TextButton("Cancel");
 
-		panel.addButton(btnSubmit);
-		panel.addButton(btnCancel);
+        panel.addButton(btnSubmit);
+        panel.addButton(btnCancel);
 
-		return panel;
-	}
+        return panel;
+    }
 
-	@Override
-	protected void bindUI() {
-		btnSubmit.addSelectHandler(new SelectHandler() {
+    @Override
+    protected void bindUI() {
+        btnSubmit.addSelectHandler(new SelectHandler() {
 
-			@Override
-			public void onSelect(SelectEvent event) {
-				if (file.getValue().matches(".*\\.xml")) {
-					logger.info("Loading file...");
-					form.submit();
-				}
-			}
+            @Override
+            public void onSelect(SelectEvent event) {
+                if (file.getValue().matches(".*\\.xml")) {
+                    logger.info("Loading file...");
+                    form.submit();
+                }
+            }
 
-		});
+        });
 
-		form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
+        form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
 
-			@Override
-			public void onSubmitComplete(SubmitCompleteEvent event) {
-				getPresenter().fileUploaded(event.getResults());
-			}
-		});
-	}
+            @Override
+            public void onSubmitComplete(SubmitCompleteEvent event) {
+                getPresenter().fileUploaded(event.getResults());
+            }
+        });
+    }
 
 }

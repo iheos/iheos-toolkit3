@@ -1,4 +1,4 @@
-package edu.tn.xds.metadata.editor.client.editor.widgets;
+package edu.tn.xds.metadata.editor.client.editor.widgets.InternationalStringWidgets;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -10,8 +10,9 @@ import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
-
 import edu.tn.xds.metadata.editor.client.editor.EditionMode;
+import edu.tn.xds.metadata.editor.client.editor.widgets.LanguageCodeComboBox;
+import edu.tn.xds.metadata.editor.client.editor.widgets.String256EditorWidget;
 import edu.tn.xds.metadata.editor.shared.model.InternationalString;
 
 /**
@@ -19,23 +20,14 @@ import edu.tn.xds.metadata.editor.shared.model.InternationalString;
  * To use it you must call for call for it's initEditorDriver method at a higher level (in the presenter for example).
  */
 public class InternationalStringEditorWidget extends Composite implements Editor<InternationalString> {
-    // private static Logger logger =
-    // Logger.getLogger(InternationalStringEditorWidget.class.getName());
-
-    interface InternationalStringEditorDriver extends SimpleBeanEditorDriver<InternationalString, InternationalStringEditorWidget> {
-    }
 
     // Driver for the edition of each author of authors list
     private final InternationalStringEditorDriver internationalStringEditorDriver = GWT.create(InternationalStringEditorDriver.class);
-
     private final VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
-
     LanguageCodeComboBox langCode = new LanguageCodeComboBox();
     String256EditorWidget value = new String256EditorWidget();
-
     @Ignore
     private InternationalString model;
-
     @Ignore
     private EditionMode editionMode = EditionMode.NODATA;
 
@@ -72,7 +64,7 @@ public class InternationalStringEditorWidget extends Composite implements Editor
 
     private void resetWidgets() {
         langCode.clear();
-        value.string.clear();
+        value.getField().clear();
     }
 
     public void rollbackChanges() {
@@ -112,7 +104,7 @@ public class InternationalStringEditorWidget extends Composite implements Editor
 
     protected void setWidgetEnable(boolean enabled) {
         langCode.setEnabled(enabled);
-        value.string.setEnabled(enabled);
+        value.getField().setEnabled(enabled);
     }
 
     /**
@@ -149,19 +141,6 @@ public class InternationalStringEditorWidget extends Composite implements Editor
         langCode.setAllowBlank(langCodeBlankAllowed);
     }
 
-    public void setEditionMode(EditionMode editionMode) {
-        this.editionMode = editionMode;
-        if (editionMode.equals(EditionMode.DISPLAY) || editionMode.equals(EditionMode.NODATA)) {
-            setWidgetEnable(false);
-        } else if (editionMode.equals(EditionMode.NEW) || editionMode.equals(EditionMode.EDIT)) {
-            setWidgetEnable(true);
-        }
-    }
-
-    private void setModel(InternationalString internationalString) {
-        this.model = internationalString;
-    }
-
     public void editNew() {
         model = new InternationalString();
         edit(model);
@@ -172,7 +151,23 @@ public class InternationalStringEditorWidget extends Composite implements Editor
         return editionMode;
     }
 
+    public void setEditionMode(EditionMode editionMode) {
+        this.editionMode = editionMode;
+        if (editionMode.equals(EditionMode.DISPLAY) || editionMode.equals(EditionMode.NODATA)) {
+            setWidgetEnable(false);
+        } else if (editionMode.equals(EditionMode.NEW) || editionMode.equals(EditionMode.EDIT)) {
+            setWidgetEnable(true);
+        }
+    }
+
     public InternationalString getModel() {
         return model;
+    }
+
+    private void setModel(InternationalString internationalString) {
+        this.model = internationalString;
+    }
+
+    interface InternationalStringEditorDriver extends SimpleBeanEditorDriver<InternationalString, InternationalStringEditorWidget> {
     }
 }

@@ -29,6 +29,11 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.Selecti
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import edu.tn.xds.metadata.editor.client.editor.properties.AuthorProperties;
 import edu.tn.xds.metadata.editor.client.editor.widgets.*;
+import edu.tn.xds.metadata.editor.client.editor.widgets.CodedTermWidgets.CodedTermsEditableGridWidget;
+import edu.tn.xds.metadata.editor.client.editor.widgets.InternationalStringWidgets.InternationalStringEditableGrid;
+import edu.tn.xds.metadata.editor.client.editor.widgets.NameValueWidgets.NameValueDTMEditorWidget;
+import edu.tn.xds.metadata.editor.client.editor.widgets.NameValueWidgets.NameValueIntegerEditorWidget;
+import edu.tn.xds.metadata.editor.client.editor.widgets.NameValueWidgets.NameValueString256EditorWidget;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractView;
 import edu.tn.xds.metadata.editor.client.widgets.ConfirmDeleteDialog;
 import edu.tn.xds.metadata.editor.shared.model.Author;
@@ -54,11 +59,11 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
     OIDEditorWidget repoUId = new OIDEditorWidget(false);
 
     /* coded terms declaration */
-    PredefinedCodedTermComboBox classCode = new PredefinedCodedTermComboBox(PredefinedCodedTermComboBox.PredefinedCodes.CLASS_CODES);
-    PredefinedCodedTermComboBox formatCode = new PredefinedCodedTermComboBox(PredefinedCodedTermComboBox.PredefinedCodes.FORMAT_CODES);
-    PredefinedCodedTermComboBox healthcareFacilityType = new PredefinedCodedTermComboBox(PredefinedCodedTermComboBox.PredefinedCodes.HEALTHCARE_FACILITY_TYPE_CODES);
-    PredefinedCodedTermComboBox practiceSettingCode = new PredefinedCodedTermComboBox(PredefinedCodedTermComboBox.PredefinedCodes.PRACTICE_SETTING_CODES);
-    PredefinedCodedTermComboBox typeCode = new PredefinedCodedTermComboBox(PredefinedCodedTermComboBox.PredefinedCodes.TYPE_CODES);
+    PredefinedCodedTermComboBox classCode = new PredefinedCodedTermComboBox(PredefinedCodes.CLASS_CODES);
+    PredefinedCodedTermComboBox formatCode = new PredefinedCodedTermComboBox(PredefinedCodes.FORMAT_CODES);
+    PredefinedCodedTermComboBox healthcareFacilityType = new PredefinedCodedTermComboBox(PredefinedCodes.HEALTHCARE_FACILITY_TYPE_CODES);
+    PredefinedCodedTermComboBox practiceSettingCode = new PredefinedCodedTermComboBox(PredefinedCodes.PRACTICE_SETTING_CODES);
+    PredefinedCodedTermComboBox typeCode = new PredefinedCodedTermComboBox(PredefinedCodes.TYPE_CODES);
 
     /* Identifiers declaration */
     IdentifierOIDEditorWidget uniqueId = new IdentifierOIDEditorWidget();
@@ -117,7 +122,6 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
     @Override
     protected Widget buildUI() {
-//		final HorizontalLayoutContainer container = new HorizontalLayoutContainer();
         final VerticalLayoutContainer container = new VerticalLayoutContainer();
         container.getElement().setMargins(10);
         container.setBorders(false);
@@ -132,8 +136,6 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
         // Adding required and optional fields panels to the main container of
         // editor view
-//		container.add(fp1, new HorizontalLayoutData(0.5, -1, new Margins(10, 10, 10, 10)));
-//		container.add(fp2, new HorizontalLayoutData(0.5, -1, new Margins(10, 10, 10, 10)));
         container.add(fp1, new VerticalLayoutData(1, -1, new Margins(10, 10, 10, 10)));
         container.add(fp2, new VerticalLayoutData(1, -1, new Margins(10, 10, 10, 10)));
 
@@ -247,22 +249,16 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         FieldLabel uniqueIdLabel = new FieldLabel(uniqueId, "Unique ID");
         uniqueIdLabel.setLabelWidth(125);
         simpleRequiredFieldsContainer.add(uniqueIdLabel);
-//		FieldSet fieldSet_identifier_unique = new FieldSet();
-//		fieldSet_identifier_unique.setHeadingText("Unique ID");
-//		fieldSet_identifier_unique.setCollapsible(true);
-//		fieldSet_identifier_unique.add(uniqueId);
-
 
 		/* ********************************** */
-		/* coded terms options and fieldset */
-		/* ********************************** */
+        /* coded terms options and fieldset */
+        /* ********************************** */
 
 		/* ****************************** */
 		/* name values options and fields */
 		/* ****************************** */
         // Legal Authenticator (optional)
         legalAuthenticator.setListMaxSize(1);
-//        legalAuthenticator.disableListToolbar();
 
         // Source Patient ID (optional)
         sourcePatientId.setListMaxSize(1);
@@ -276,15 +272,11 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
         // Service Stop Time (optional)
         serviceStopTime.setListMaxSize(1);
-//        serviceStopTime.disableEditing();
 
         // Size (optional)
         size.disableEditing();
 
-//		size.setAllowBlanks(true, true);
-
         // Creation Time (required)
-//        creationTime.disableEditing();
         creationTime.disableToolbar();
 
         // AUTHORS (Optional)
@@ -295,34 +287,27 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
         // TITLES (Optional)
         titlesGrid = new InternationalStringEditableGrid("Titles");
-        titles = new ListStoreEditor<InternationalString>(titlesGrid/*.getGrid()*/.getStore());
+        titles = new ListStoreEditor<InternationalString>(titlesGrid.getStore());
 
 
         // COMMENTS (Optional)
         commentsGrid = new InternationalStringEditableGrid("Comments");
-        comments = new ListStoreEditor<InternationalString>(commentsGrid/*.getGrid()*/.getStore());
+        comments = new ListStoreEditor<InternationalString>(commentsGrid.getStore());
 
         // CONFIDENTIALITY CODE (Optional)
-        confidentialityCodesGrid = new CodedTermsEditableGridWidget("Confidentiality Codes");
-        confidentialityCodes = new ListStoreEditor<CodedTerm>(confidentialityCodesGrid./*getGrid().*/getStore());
+        confidentialityCodesGrid = new CodedTermsEditableGridWidget("Confidentiality Codes", PredefinedCodes.CONFIDENTIALITY_CODES);
+        confidentialityCodes = new ListStoreEditor<CodedTerm>(confidentialityCodesGrid.getStore());
 
         // CONFIDENTIALITY CODE (Optional)
-        eventCodesGrid = new CodedTermsEditableGridWidget("Event Codes");
-        eventCode = new ListStoreEditor<CodedTerm>(eventCodesGrid./*getGrid().*/getStore());
+        eventCodesGrid = new CodedTermsEditableGridWidget("Event Codes", PredefinedCodes.EVENT_CODES);
+        eventCode = new ListStoreEditor<CodedTerm>(eventCodesGrid.getStore());
 
         // /////////////////////////////////////////////////////////
         // Adding and ordering fieldsets in REQUIRED panel
         // /////////////////////////////////////////////////////////
 		/* simple required fields added to FramedPanel container */
         requiredFields.add(fieldSet_general_fields_required);
-//		requiredFields.add(fieldSet_codedTerm_classCode);
         requiredFields.add(creationTime.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-//		requiredFields.add(fieldSet_codedTerm_formatCode);
-//		requiredFields.add(fieldSet_codedTerm_healthcareFacility);
-//		requiredFields.add(patientIdLabel,new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
-//		requiredFields.add(fieldSet_codedTerm_practiceSettingCode);
-//		requiredFields.add(fieldSet_codedTerm_typeCode);
-//		requiredFields.add(fieldSet_identifier_unique);
 
         // /////////////////////////////////////////////////////////
         // Adding and ordering fieldsets in OPTIONAL fields panel

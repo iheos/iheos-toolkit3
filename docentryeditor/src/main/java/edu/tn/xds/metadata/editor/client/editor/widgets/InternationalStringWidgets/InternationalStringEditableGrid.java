@@ -1,4 +1,4 @@
-package edu.tn.xds.metadata.editor.client.editor.widgets;
+package edu.tn.xds.metadata.editor.client.editor.widgets.InternationalStringWidgets;
 
 import com.google.gwt.core.client.GWT;
 import com.sencha.gxt.data.shared.ListStore;
@@ -6,7 +6,9 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import edu.tn.xds.metadata.editor.client.editor.properties.InternationalStringProperties;
+import edu.tn.xds.metadata.editor.client.editor.widgets.LanguageCodeComboBox;
 import edu.tn.xds.metadata.editor.client.generics.GenericEditableGrid;
+import edu.tn.xds.metadata.editor.client.generics.GridModelFactory;
 import edu.tn.xds.metadata.editor.shared.model.InternationalString;
 import edu.tn.xds.metadata.editor.shared.model.LanguageCode;
 
@@ -23,7 +25,7 @@ public class InternationalStringEditableGrid extends GenericEditableGrid<Interna
     private static ColumnConfig<InternationalString, String> titleColumnConfig;
 
     public InternationalStringEditableGrid(String gridTitle) {
-        super(InternationalString.class, gridTitle, new ListStore<InternationalString>(isprops.key()), buildColumnModel());
+        super(gridTitle, new ListStore<InternationalString>(isprops.key()), buildColumnModel());
 
         setCheckBoxSelectionModel();
 
@@ -52,4 +54,8 @@ public class InternationalStringEditableGrid extends GenericEditableGrid<Interna
     }
 
 
+    @Override
+    protected GridModelFactory<InternationalString> getModelFactory() {
+        return InternationalStringFactory.instance;
+    }
 }

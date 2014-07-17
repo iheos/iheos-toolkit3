@@ -1,4 +1,4 @@
-package edu.tn.xds.metadata.editor.client.editor.widgets;
+package edu.tn.xds.metadata.editor.client.editor.widgets.NameValueWidgets;
 
 
 import com.google.gwt.editor.client.Editor;
@@ -7,11 +7,11 @@ import com.sencha.gxt.data.client.editor.ListStoreEditor;
 import com.sencha.gxt.data.shared.Converter;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
-import com.sencha.gxt.widget.core.client.Composite;
 import com.sencha.gxt.widget.core.client.form.Field;
 import com.sencha.gxt.widget.core.client.form.NumberPropertyEditor;
 import com.sencha.gxt.widget.core.client.form.SpinnerField;
 import edu.tn.xds.metadata.editor.client.generics.GenericEditableListView;
+import edu.tn.xds.metadata.editor.client.generics.GridModelFactory;
 import edu.tn.xds.metadata.editor.shared.model.NameValueInteger;
 
 /**
@@ -20,20 +20,14 @@ import edu.tn.xds.metadata.editor.shared.model.NameValueInteger;
  * type</b> <br>
  * </p>
  */
-public class NameValueIntegerEditorWidget extends Composite implements Editor<NameValueInteger> {
-
-//	private static Logger logger = Logger.getLogger(NameValueIntegerEditorWidget.class.getName());
-
+public class NameValueIntegerEditorWidget extends GenericEditableListView<Integer, String> implements Editor<NameValueInteger> {
     ListStoreEditor<Integer> values;
-    @Ignore
-    GenericEditableListView<Integer, String> listView;
+
     @Ignore
     SpinnerField<Integer> value = new SpinnerField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
 
     public NameValueIntegerEditorWidget(String widgetTitle) {
-
-        // init list tools
-        listView = new GenericEditableListView<Integer, String>(Integer.class, widgetTitle, new ListStore<Integer>(new IntegerKeyProvider()), new IntegerValueProvider());
+        super(widgetTitle, new ListStore<Integer>(new IntegerKeyProvider()), new IntegerValueProvider());
 
         value.setAllowBlank(false);
         value.setWidth("auto");
@@ -60,31 +54,26 @@ public class NameValueIntegerEditorWidget extends Composite implements Editor<Na
             }
         };
 
-        listView.addEditorConfig(converter, (Field) value);
+        addEditorConfig(converter, (Field) value);
 
-        values = new ListStoreEditor<Integer>(listView.getStore());
-
-
-        initWidget(listView.asWidget());
-
+        values = new ListStoreEditor<Integer>(getStore());
     }
 
-    public void disableEditing() {
-        listView.disableEditing();
+    @Override
+    protected GridModelFactory<Integer> getModelFactory() {
+        return IntegerFactory.instance;
     }
 
     // Custom KeyProvider to deal with Integer
-    public class IntegerKeyProvider implements ModelKeyProvider<Integer> {
-
+    public static class IntegerKeyProvider implements ModelKeyProvider<Integer> {
         @Override
         public String getKey(Integer item) {
             return item.toString();
         }
-
     }
 
     // Custom ValueProvider to deal with Integer
-    public class IntegerValueProvider implements ValueProvider<Integer, String> {
+    public static class IntegerValueProvider implements ValueProvider<Integer, String> {
 
         @Override
         public String getValue(Integer object) {

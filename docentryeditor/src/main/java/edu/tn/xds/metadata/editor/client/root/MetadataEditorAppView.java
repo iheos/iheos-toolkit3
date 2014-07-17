@@ -7,7 +7,7 @@ import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderL
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import com.sencha.gxt.widget.core.client.container.Viewport;
-import edu.tn.xds.metadata.editor.client.MetadataEditorGinjector;
+import edu.tn.xds.metadata.editor.client.MetadataEditorGinInjector;
 
 /**
  * This class contains layout objects to handle the global interface layout,
@@ -26,7 +26,7 @@ public class MetadataEditorAppView extends Viewport {
     public MetadataEditorAppView() {
         super();
 
-        final MetadataEditorGinjector injector = MetadataEditorGinjector.instance;
+        final MetadataEditorGinInjector injector = MetadataEditorGinInjector.instance;
 
         BorderLayoutContainer con = new BorderLayoutContainer();
         con.setBorders(true);
@@ -51,26 +51,6 @@ public class MetadataEditorAppView extends Viewport {
         add(con);
 
         north.start();
-        // SOUTH
-        // south = injector.getModelValidatorMVP();
-        // south = new SouthPanel();
-        // BorderLayoutData southData = new BorderLayoutData(250);
-        // c.setSouthWidget(south, southData);
-        // southData.setMargins(new Margins(5, 0, 5, 5));
-        // southData.setCollapsible(true);
-        // southData.setSplit(true);
-        // southData.setCollapseMini(true);
-        // southData.setCollapsed(false);
-
-//		EAST
-//		west = new WestPanel();
-//		BorderLayoutData westData = new BorderLayoutData(350);
-//		westData.setMargins(new Margins(0, 5, 5, 5));
-//		// eastData.setCollapsed(true);
-//		westData.setCollapsible(true);
-//        westData.setSplit(false);
-////		westData.setCollapseMini(true);
-//		con.setWestWidget(west, westData);
     }
 
     public void setCenterDisplay(Widget display) {

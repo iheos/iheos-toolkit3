@@ -1,4 +1,4 @@
-package edu.tn.xds.metadata.editor.client.editor.widgets;
+package edu.tn.xds.metadata.editor.client.editor.widgets.NameValueWidgets;
 
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.DateCell;
@@ -11,6 +11,7 @@ import com.sencha.gxt.widget.core.client.form.DateField;
 import com.sencha.gxt.widget.core.client.form.DateTimePropertyEditor;
 import edu.tn.xds.metadata.editor.client.editor.properties.DTMProperties;
 import edu.tn.xds.metadata.editor.client.generics.GenericEditableListView;
+import edu.tn.xds.metadata.editor.client.generics.GridModelFactory;
 import edu.tn.xds.metadata.editor.shared.model.DTM;
 import edu.tn.xds.metadata.editor.shared.model.NameValueDTM;
 
@@ -22,13 +23,12 @@ import java.util.Date;
  * </p>
  */
 public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date> implements Editor<NameValueDTM> {
-    //    private static Logger logger = Logger.getLogger(NameValueDTMEditorWidget.class.getName());
     private final static DTMProperties props = GWT.create(DTMProperties.class);
 
     ListStoreEditor<DTM> values;
 
     public NameValueDTMEditorWidget(String widgetTitle) {
-        super(DTM.class, widgetTitle, new ListStore<DTM>(props.key()), props.dtm());
+        super(widgetTitle, new ListStore<DTM>(props.key()), props.dtm());
 
         DateTimeFormat dtf = DateTimeFormat.getFormat("yyyyMMddHHmmss");
 
@@ -39,20 +39,19 @@ public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date>
 
         addEditorConfig(df);
 
-//        listView.setHeaderVisible(false);
-//        listView.setOneClickToEdit();
-
         // Modifying grid cell render for a Date
         Cell c = new DateCell(DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss"));
         getColumnModel().getColumn(0).setCell(c);
 
         values = new ListStoreEditor<DTM>(getStore());
-
-//        initWidget(listView.asWidget());
     }
 
     public void setListMaxSize(int maxSize) {
         setStoreMaxLength(maxSize);
     }
 
+    @Override
+    protected GridModelFactory<DTM> getModelFactory() {
+        return DTMFactory.instance;
+    }
 }

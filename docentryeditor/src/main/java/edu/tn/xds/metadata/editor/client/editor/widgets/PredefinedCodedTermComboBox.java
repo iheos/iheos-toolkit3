@@ -14,6 +14,7 @@ import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
+import edu.tn.xds.metadata.editor.client.editor.widgets.CodedTermWidgets.CodedTermEditorWidget;
 import edu.tn.xds.metadata.editor.client.parse.PredefinedCodesParser;
 import edu.tn.xds.metadata.editor.shared.model.CodedTerm;
 
@@ -142,9 +143,4 @@ public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
             }
         });
     }
-
-    public enum PredefinedCodes {
-        CLASS_CODES, CONFIDENTIALITY_CODES, FORMAT_CODES, HEALTHCARE_FACILITY_TYPE_CODES, PRACTICE_SETTING_CODES, EVENT_CODES, TYPE_CODES;
-    }
-
 }

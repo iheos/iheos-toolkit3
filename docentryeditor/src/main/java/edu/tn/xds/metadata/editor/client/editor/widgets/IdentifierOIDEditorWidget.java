@@ -28,8 +28,6 @@ public class IdentifierOIDEditorWidget extends Composite implements
         idTypeLabel.setLabelWidth(125);
         idTypeLabel.setVisible(false);
 
-//        vcontainer.add(valueLabel, new VerticalLayoutData(1, -1));
-//        vcontainer.add(idTypeLabel, new VerticalLayoutData(1, -1));
         vcontainer.add(value);
     }
 

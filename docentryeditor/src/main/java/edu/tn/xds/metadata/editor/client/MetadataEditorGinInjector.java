@@ -17,9 +17,9 @@ import edu.tn.xds.metadata.editor.client.root.NorthPanel;
 import edu.tn.xds.metadata.editor.client.widgets.uploader.FileUploadMVP;
 
 @GinModules(MetadataEditorGinModule.class)
-public interface MetadataEditorGinjector extends Ginjector {
+public interface MetadataEditorGinInjector extends Ginjector {
 
-    public static MetadataEditorGinjector instance = GWT.create(MetadataEditorGinjector.class);
+    public static MetadataEditorGinInjector instance = GWT.create(MetadataEditorGinInjector.class);
 
     MetadataEditorEventBus getEventBus();
 
@@ -48,4 +48,5 @@ public interface MetadataEditorGinjector extends Ginjector {
     DocumentModelEditorMVP getDocumentModelEditorMVP();
 
     SubmissionPanelMVP getSubmissionPanelMVP();
+
 }

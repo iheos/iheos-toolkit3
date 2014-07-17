@@ -15,25 +15,25 @@ import javax.inject.Inject;
 
 public class MetadataEditorGinModule extends AbstractGinModule {
 
-	@Override
-	protected void configure() {
-		bind(com.google.web.bindery.event.shared.EventBus.class).to(MetadataEditorEventBus.class);
-		bind(com.google.gwt.event.shared.EventBus.class).to(MetadataEditorEventBus.class);
-		bind(MetadataEditorEventBus.class).in(Singleton.class);
+    @Override
+    protected void configure() {
+        bind(com.google.web.bindery.event.shared.EventBus.class).to(MetadataEditorEventBus.class);
+        bind(com.google.gwt.event.shared.EventBus.class).to(MetadataEditorEventBus.class);
+        bind(MetadataEditorEventBus.class).in(Singleton.class);
 
-		bind(com.google.web.bindery.requestfactory.shared.RequestFactory.class).to(MetadataEditorRequestFactory.class);
+        bind(com.google.web.bindery.requestfactory.shared.RequestFactory.class).to(MetadataEditorRequestFactory.class);
 
-		bind(com.google.gwt.place.shared.PlaceController.class).toProvider(PlaceControllerProvider.class).in(Singleton.class);
+        bind(com.google.gwt.place.shared.PlaceController.class).toProvider(PlaceControllerProvider.class).in(Singleton.class);
 
-		bind(ActivityDisplayer.class).to(MetadataEditorAppDisplayer.class).in(Singleton.class);
-		bind(MetadataEditorAppView.class).in(Singleton.class);
-	}
+        bind(ActivityDisplayer.class).to(MetadataEditorAppDisplayer.class).in(Singleton.class);
+        bind(MetadataEditorAppView.class).in(Singleton.class);
+    }
 
-	// Provider de MetadataEditorRequestFactory
+    // Provider for MetadataEditorRequestFactory
     @Provides
     MetadataEditorRequestFactory provideMetadataEditorRequestFactory() {
         MetadataEditorRequestFactory requestFactory = GWT.create(MetadataEditorRequestFactory.class);
-        requestFactory.initialize(MetadataEditorGinjector.instance.getEventBus());
+        requestFactory.initialize(MetadataEditorGinInjector.instance.getEventBus());
         return requestFactory;
     }
 
