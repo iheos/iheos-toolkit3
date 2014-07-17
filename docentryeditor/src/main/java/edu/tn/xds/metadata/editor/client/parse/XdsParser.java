@@ -8,6 +8,7 @@ import com.google.gwt.xml.client.XMLParser;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import edu.tn.xds.metadata.editor.shared.model.*;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -106,6 +107,9 @@ public class XdsParser {
      */
     private Document document;
 
+    @Inject
+    private PreParse preParse;
+
     public static XdsParser getInstance() {
         return instance;
     }
@@ -140,7 +144,6 @@ public class XdsParser {
      * @see XdsParser
      */
     public void getDocumentParsed() {
-        PreParse preParse = PreParse.getInstance();
         documentXml = preParse.doPreParseUTF8(documentXml);
 
         // parse the XML document into a DOM

@@ -77,7 +77,7 @@ public class FileUploadView extends AbstractView<FileUploadPresenter> {
         vcontainer.add(new FieldLabel(file, "File"), new VerticalLayoutData(-1,
                 -1));
 
-        btnSubmit = new TextButton("Submit");
+        btnSubmit = new TextButton("Open");
         btnSubmit.disable();
         btnCancel = new TextButton("Cancel");
 

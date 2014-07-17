@@ -17,11 +17,11 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
     final static TreeStore<SubmissionMenuData> treeStore = new TreeStore<SubmissionMenuData>(SubmissionMenuData.props.key());
     final static Tree<SubmissionMenuData, String> tree = new Tree<SubmissionMenuData, String>(treeStore, SubmissionMenuData.props.value());
     private final static SubmissionMenuData submissionSetTreeNode = new SubmissionMenuData("subSet", "Submission set");
+    private final ToolBar toolbar = new ToolBar();
     private final TextButton addDocEntryButton = new TextButton();
     private final TextButton removeDocEntryButton = new TextButton();
-    ToolBar toolbar = new ToolBar();
-    private TextButton clearDocEntriesButton = new TextButton();
-    private TextButton helpButton = new TextButton();
+    private final TextButton clearDocEntriesButton = new TextButton();
+    private final TextButton helpButton = new TextButton();
     ;
 
     @Override

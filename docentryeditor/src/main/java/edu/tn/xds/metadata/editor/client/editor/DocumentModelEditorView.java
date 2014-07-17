@@ -41,6 +41,8 @@ import edu.tn.xds.metadata.editor.shared.model.CodedTerm;
 import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
 import edu.tn.xds.metadata.editor.shared.model.InternationalString;
 
+import javax.inject.Inject;
+
 public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPresenter> implements Editor<DocumentModel> {
     private final AuthorProperties authorprops = GWT.create(AuthorProperties.class);
 
@@ -50,26 +52,38 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
     VerticalLayoutContainer optionalFields = new VerticalLayoutContainer();
 
     /* simple fields declaration */
-    String256EditorWidget id = new String256EditorWidget();
-    String256EditorWidget hash = new String256EditorWidget();
-    String256EditorWidget fileName = new String256EditorWidget();
-    String256EditorWidget uri = new String256EditorWidget();
-    LanguageCodeComboBox languageCode = new LanguageCodeComboBox();
-    MimeTypeComboBox mimeType = new MimeTypeComboBox();
+    @Inject
+    String256EditorWidget id;
+    @Inject
+    String256EditorWidget hash;
+    @Inject
+    String256EditorWidget fileName;
+    @Inject
+    String256EditorWidget uri;
+    @Inject
+    LanguageCodeComboBox languageCode;
+    @Inject
+    MimeTypeComboBox mimeType;
+
+    // Could be injected using FactoryProvider assisted inject
     OIDEditorWidget repoUId = new OIDEditorWidget(false);
 
+    /* Identifiers declaration */
+    @Inject
+    IdentifierOIDEditorWidget uniqueId;
+    @Inject
+    IdentifierString256EditorWidget patientID;
+
     /* coded terms declaration */
+    // Could be injected using FactoryProvider assisted inject
     PredefinedCodedTermComboBox classCode = new PredefinedCodedTermComboBox(PredefinedCodes.CLASS_CODES);
     PredefinedCodedTermComboBox formatCode = new PredefinedCodedTermComboBox(PredefinedCodes.FORMAT_CODES);
     PredefinedCodedTermComboBox healthcareFacilityType = new PredefinedCodedTermComboBox(PredefinedCodes.HEALTHCARE_FACILITY_TYPE_CODES);
     PredefinedCodedTermComboBox practiceSettingCode = new PredefinedCodedTermComboBox(PredefinedCodes.PRACTICE_SETTING_CODES);
     PredefinedCodedTermComboBox typeCode = new PredefinedCodedTermComboBox(PredefinedCodes.TYPE_CODES);
 
-    /* Identifiers declaration */
-    IdentifierOIDEditorWidget uniqueId = new IdentifierOIDEditorWidget();
-    IdentifierString256EditorWidget patientID = new IdentifierString256EditorWidget();
-
     /* name values declaration */
+    // Could be injected using FactoryProvider assisted inject
     NameValueString256EditorWidget legalAuthenticator = new NameValueString256EditorWidget("Legal Authenticator");
     NameValueString256EditorWidget sourcePatientId = new NameValueString256EditorWidget("Source Patient ID");
     NameValueString256EditorWidget sourcePatientInfo = new NameValueString256EditorWidget("Source Patient Info");
@@ -85,7 +99,8 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
     @Ignore
     ListView<Author, String> listViewAuthors;
     @Ignore
-    AuthorEditorWidget author = new AuthorEditorWidget();
+    @Inject
+    AuthorEditorWidget author;
     @Ignore
     TextButton newAuthorWidget = new TextButton("New entry");
     @Ignore
@@ -255,8 +270,8 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         /* ********************************** */
 
 		/* ****************************** */
-		/* name values options and fields */
-		/* ****************************** */
+        /* name values options and fields */
+        /* ****************************** */
         // Legal Authenticator (optional)
         legalAuthenticator.setListMaxSize(1);
 
@@ -582,7 +597,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 "idType is a string256 in HL7 CX format", "The required format is: " +
                 "IDNumber^^^&OIDofAssigningAuthority&ISO"));
         patientID.setAllowBlanks(false, false);
-        patientID.addValueFieldValidator(new RegExValidator("^(([A-Za-z]*)|([1-9]))[0-9A-z]+\\^{3}&[1-9][0-9]*(\\.[0-9][1-9]*)+(&ISO)$", "Value's format is not a correct. \nIt should be like this: 6578946^^^&1.3.6.1.4.1.21367.2005.3.7&ISO."));
+        patientID.addValueFieldValidator(new RegExValidator("^(([A-Za-z])|([1-9]))*[0-9A-z]+\\^{3}&[1-9][0-9]*(\\.[1-9][0-9]*)+(&ISO)$", "Value's format is not a correct. \nIt should be like this: 6578946^^^&1.3.6.1.4.1.21367.2005.3.7&ISO."));
         // pratice setting code
         practiceSettingCode.setEmptyText("Select a practice setting...");
         practiceSettingCode.clear();
