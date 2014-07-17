@@ -9,8 +9,8 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault;
 import gov.nist.hit.ds.soapSupport.FaultCode;
 import gov.nist.hit.ds.soapSupport.SoapFaultException;
 import gov.nist.hit.ds.xdsException.ExceptionUtil
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
-import org.apache.log4j.Logger
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import groovy.util.logging.Log4j;
 
 /**
  * An abstract class that makes use of the SimComponent interface easier
@@ -23,13 +23,13 @@ import org.apache.log4j.Logger
  * @author bmajur
  *
  */
+@Log4j
 public abstract class ValComponentBase implements ValComponent {
     public AssertionGroup ag;
     public Event event;
     String name;
     String description;
     ValidationEngine validationEngine;
-    static Logger logger = Logger.getLogger(ValComponentBase.class);
 
     ValComponentBase() {}
 
@@ -278,7 +278,7 @@ public abstract class ValComponentBase implements ValComponent {
         a.setReference(vr.getRef());
         a.setLocation(vr.getLocation());
 
-        logger.debug("Assertion: " + a);
+        log.debug("Assertion: " + a);
     }
 
     boolean validationAlreadyRecorded(String id) { idsAsserted.contains(id) }

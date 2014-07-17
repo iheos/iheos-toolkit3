@@ -3,6 +3,7 @@ package gov.nist.hit.ds.simSupport.transaction
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.eventLog.EventFactory
 import gov.nist.hit.ds.eventLog.Fault
+import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
@@ -11,21 +12,22 @@ import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.xdsException.ExceptionUtil
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
-
 /**
  * Created by bmajur on 7/5/14.
  */
 @Log4j
 class TransactionRunner {
     String endpoint
-    String header
-    byte[] body
+    String header = ''
+    byte[] body = ''
     SimHandle simHandle
     def transactionType
-    def implClassName
+    String implClassName
     def event
     def transCode
     def actorCode
+
+    // Production support
 
     TransactionRunner(String endpoint, String header, byte[] body) {
         this.endpoint = endpoint
@@ -41,20 +43,30 @@ class TransactionRunner {
         actorCode = builder.actorCode
         def simId = builder.simId
 
+        init(simId, transCode)
+
+        implClassName = transactionType.implementationClassName
+        log.debug("implClassName is ${implClassName}")
+    }
+
+    def init(simId, transCode) {
+        log.debug 'testinit'
+
         simHandle = SimUtils.handle(simId)
         event = new EventFactory().buildEvent(SimSupport.simRepo, simHandle.eventLogAsset)
         simHandle.event = event
 
-        // Registry inputs
+        // Register inputs
         event.inOut.reqHdr = header
         event.inOut.reqBody = body
+
         event.init()
+
         // Lookup transaction implementation class
         transactionType = new ActorTransactionTypeFactory().getTransactionType(transCode)
         simHandle.transactionType = transactionType
-        implClassName = transactionType.implementationClassName
-        log.debug("implClassName is ${implClassName}")
     }
+
 
     def run() {
         // build implementation
@@ -62,14 +74,36 @@ class TransactionRunner {
         if (!clazz) throw new ToolkitRuntimeException("Class ${implClassName} cannot be loaded.")
         Object[] params = new Object[1]
         params[0] = simHandle
-        Object<?> instance = clazz.newInstance(params)
+        Object instance = clazz.newInstance(params)
 
         // call run() method
         try {
             instance.invokeMethod('run', null)
             event.flush()
         } catch (Throwable t) {
-            def actorTrans = actorCode + '/' + transCode
+            String actorTrans = actorCode + '/' + transCode
+            event.fault = new Fault('Exception', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))
+            event.flush()
+            throw t
+        }
+    }
+
+    // Unit Test support
+
+    Closure runner
+    TransactionRunner(String transactionCode, SimId simId, Closure runner)  {
+        header = 'x'
+        body = 'x'
+        init(simId, transactionCode)
+        this.runner = runner
+    }
+
+    public void runTest() {
+        try {
+            runner(simHandle)
+            event.flush()
+        } catch (Throwable t) {
+            String actorTrans = actorCode + '/' + transCode
             event.fault = new Fault('Exception', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))
             event.flush()
             throw t

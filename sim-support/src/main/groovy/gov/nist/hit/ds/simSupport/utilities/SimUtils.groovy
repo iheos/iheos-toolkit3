@@ -1,5 +1,4 @@
 package gov.nist.hit.ds.simSupport.utilities
-
 import gov.nist.hit.ds.repository.api.ArtifactId
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.simple.SimpleId
@@ -11,7 +10,6 @@ import gov.nist.hit.ds.simSupport.site.SimSiteFactory
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.loader.SeparateSiteLoader
 import gov.nist.hit.ds.utilities.xml.OMFormatter
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 /**
@@ -26,9 +24,10 @@ class SimUtils {
     static ArtifactId configAssetId = new SimpleId(configAssetName)
     static ArtifactId eventRootId = null
 
-    // TODO: should throw error if sim already exists
+    // TODO: Make this work with already-exists logic in place
     static Asset mkSim(String actorTypeName, SimId simId) {
-        if (exists(simId)) throw new ToolkitRuntimeException("Sim ${simId.id} already exists.")
+//        if (exists(simId)) throw new ToolkitRuntimeException("Sim ${simId.id} already exists.")
+
         Asset simAsset = RepoUtils.mkAsset(simId.id, new SimpleType('sim'), SimSupport.simRepo)
         Asset eventsAsset = RepoUtils.mkChild('Events', simAsset)
         simAsset.addAsset(eventsAsset)
@@ -44,6 +43,16 @@ class SimUtils {
         return simAsset
     }
 
+    // needs to initialize eventRootId even if sim already exists
+    static Asset mkSimConditional(String actorTypeName, SimId simId) {
+//        if (exists(simId)) {
+            // load Events asset under Sim
+            // initialize eventRootId
+//            return sim(simId)
+//        }
+        return mkSim(actorTypeName, simId)
+    }
+
     static boolean exists(SimId simId) { return RepoUtils.assetIfAvailable(artifactId(simId), SimSupport.simRepo)}
 
     static Asset sim(SimId simId) {
@@ -52,6 +61,7 @@ class SimUtils {
 
     static SimHandle handle(SimId simId) {
         def simAsset = sim(simId)
+        assert simAsset
         def simHandle = new SimHandle()
         simHandle.simId = simId
         simHandle.simAsset = simAsset

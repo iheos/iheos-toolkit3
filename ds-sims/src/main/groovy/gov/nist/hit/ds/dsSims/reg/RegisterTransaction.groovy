@@ -39,8 +39,8 @@ class RegisterTransaction {
         soapParser.run()
         OMElement soapBody = soapParser.body
 
-        def metadataProcessing = new RegisterMetadataProcessing(handle, soapBody)
-        metadataProcessing.run()
+//        def metadataProcessing = new RegisterMetadataProcessing(handle, soapBody)
+//        metadataProcessing.run()
 
 
 //        // These steps are common to Registry and Update.  They operate

@@ -1,4 +1,5 @@
-package gov.nist.hit.ds.dsSims.reg
+package gov.nist.hit.ds.httpSoapValidator.parsers
+
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
@@ -7,14 +8,12 @@ import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
-import groovy.util.logging.Log4j
 import org.apache.commons.io.FileUtils
 import spock.lang.Specification
 /**
- * Created by bmajur on 7/7/14.
+ * Created by bmajur on 7/16/14.
  */
-@Log4j
-class RegisterTransactionTest extends Specification {
+class SoapMessageParserTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
     <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as"
@@ -29,13 +28,7 @@ class RegisterTransactionTest extends Specification {
     </actor>
 </ActorsTransactions>
 '''
-    def header = '''
-POST /axis2/services/registryBonedoc HTTP/1.1
-Content-Type: application/soap+xml; charset=UTF-8; action="urn:ihe:iti:2007:RegisterDocumentSet-b"
-User-Agent: Axis2
-Host: localhost:9085'''
     def body = '''
-<?xml version='1.0' encoding='UTF-8'?>
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:wsa="http://www.w3.org/2005/08/addressing">
   <soapenv:Header>
     <wsa:To>http://localhost:9085/axis2/services/registryBonedoc</wsa:To><wsa:MessageID>urn:uuid:1CF198BACD3697AB7D1203091097442</wsa:MessageID>
@@ -67,27 +60,30 @@ Host: localhost:9085'''
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
     }
 
+//    def 'runit'() {
+//        when:
+//        def tr = new TransactionRunner('rb', new SimId('123'), { println 'Hello' })
+//        tr.runTest()
+//
+//        then: true
+//    }
 
-    def 'runit'() {
-        when: ''
-        SimId simId = new SimId('123')
-        def endpoint = 'http://localhost:8080/tools/sim/123/reg/rb'
+    def 'Run SoapMessageParser'() {
+        when:
+        def simId = new SimId('123')
         SimUtils.mkSimConditional('reg', simId)
-        def transRunner = new TransactionRunner(endpoint, header.trim(), body.trim().bytes)
-        transRunner.run()
+        Closure closure = { simHandle ->
+            new SoapMessageParser(simHandle, body).run()
+        }
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        transRunner.runTest()
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
 
-        then:
-        !transRunner.handle.event.hasErrors()
 
         then:
-        eventAccess.simDir().exists()
-        eventAccess.eventLogDir().exists()
-        eventAccess.eventDir().exists()
-        eventAccess.reqBodyFile().exists()
-        eventAccess.assertionGroupFile('HttpHeaderValidator').exists()
+        !transRunner.simHandle.event.hasErrors()
         eventAccess.assertionGroupFile('SoapMessageParser').exists()
-        !eventAccess.faultFile().exists()
 
     }
+
 }
