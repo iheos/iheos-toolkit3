@@ -524,10 +524,10 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         classCode.clear();
         classCode.setAllowBlank(false);
         // comments
-        commentsGrid.setToolbarWidgetHelpButtonTooltip(new ToolTipConfig("Help on Comments?", "Comments associated with the Document. Free form text with an XDS " +
+        commentsGrid.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Comments?", "Comments associated with the Document. Free form text with an XDS " +
                 "Affinity Domain specified usage. Each comment should have the same meaning in a different language."));
         // confidentiality codes
-        confidentialityCodesGrid.setToolbarWidgetHelpButtonTooltip(new ToolTipConfig("Help on Confidentiality codes?", "The code specifying the level of confidentiality of the XDS Document." +
+        confidentialityCodesGrid.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Confidentiality codes?", "The code specifying the level of confidentiality of the XDS Document." +
                 "These codes are specific to an XDS Affinity Domain. Enforcement and " +
                 "issues related to highly sensitive documents are beyond the scope of " +
                 "XDS (see security section). These issues are expected to be addressed in " +
@@ -535,7 +535,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 "value set enforced by the Document Registry. Shall have one or more " +
                 "values. Code multiple values by creating multiple classification objects"));
         // event codes
-        eventCodesGrid.setToolbarWidgetHelpButtonTooltip(new ToolTipConfig("Help on Event codes?", "This list of codes represents the main clinical acts, such as a colonoscopy " +
+        eventCodesGrid.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Event codes?", "This list of codes represents the main clinical acts, such as a colonoscopy " +
                 "or an appendectomy, being documented. In some cases, the event is " +
                 "inherent in the typeCode, such as a \"History and Physical Report\" in " +
                 "which the procedure being documented is necessarily a \"History and " +
@@ -578,7 +578,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         legalAuthenticator.setEditingFieldToolTip("A legal authenticator is a string256 in XCN format. It should be formatted as follow: \n<b>Identifier^LastName^FirstName[^SecondName[^FurtherGivenNames]][^Suffix][^Prefix]^AssigningAuthority</b>.");
         legalAuthenticator.setEmptyTexts("ex: 11375^Welby^Marcus^J^Jr. MD^Dr^^^&1.2.840.113619.6.197&ISO");
         legalAuthenticator.addFieldValidator(new RegExValidator("^[0-9]+\\^(([A-Za-z]+\\.?\\s?)+\\^){3,7}\\^{2}&[0-9]+(\\.[0-9]+)*(&ISO)$"));
-        legalAuthenticator.setToolbarWidgetHelpButtonTooltip(new ToolTipConfig("Help about legal authenticator?", "Represents a participant who has legally authenticated or attested the" +
+        legalAuthenticator.setToolbarHelpButtonTooltip(new ToolTipConfig("Help about legal authenticator?", "Represents a participant who has legally authenticated or attested the" +
                 "document within the authorInstitution. Legal authentication implies that " +
                 "a document has been signed manually or electronically by the " +
                 "legalAuthenticator. This attribute may be absent if not applicable. If " +
@@ -610,7 +610,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         repoUId.setAllowBlank(true);
         repoUId.addValidator(new RegExValidator("^[1-9][0-9]*(\\.[1-9][0-9]*)+$", "Value is not correct. A repository unique ID is supposed to be a suite of numbers separated by periods."));
         // service start time
-        serviceStartTime.setToolbarWidgetHelpButtonTooltip(new ToolTipConfig("Help on Service start time?", "Represents the start time the service being documented took place " +
+        serviceStartTime.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Service start time?", "Represents the start time the service being documented took place " +
                 "(clinically significant, but not necessarily when the document was " +
                 "produced or approved). This may be the same as the encounter time in " +
                 "case the service was delivered during an encounter. Encounter time is not " +
@@ -619,7 +619,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 "single value. " +
                 "<br/><i>Note: Other times, such as document creation or approval are to be " +
                 "recorded, if needed, within the document.</i>"));
-        serviceStopTime.setToolbarWidgetHelpButtonTooltip(new ToolTipConfig("Help on Service stop time?",
+        serviceStopTime.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Service stop time?",
                 "Represents the stop time the service being documented took place." +
                         "This may be the same as the encounter time in " +
                         "case the service was delivered during an encounter. This time is expressed as (date/time/UTC). " +
@@ -627,7 +627,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // source patient id
         sourcePatientId.addFieldValidator(new RegExValidator("^[A-Za-z]*[0-9]+\\^{3}&[1-9][0-9]*(\\.[1-9][0-9]*)+(&ISO)$", "This value is not a correct source patient id."));
 //        sourcePatientId.setEmptyTexts("j98789^^^&1.2.3.4.343.1&ISO");
-        sourcePatientId.setToolbarWidgetHelpButtonTooltip(new ToolTipConfig("Help on Source Patient ID?", "The sourcePatientId represents the subject of care medical record " +
+        sourcePatientId.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Source Patient ID?", "The sourcePatientId represents the subject of care medical record " +
                 "Identifier (e.g., Patient Id) in the local patient Identifier Domain of the " +
                 "Document Source. It shall contain two parts:" +
                 "<ul><li>Authority Domain Id</li>" +
@@ -641,7 +641,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 "Document Consumer Actors. There can be only one Slot named " +
                 "sourcePatientId."));
         // source patient info
-        sourcePatientInfo.setToolbarWidgetHelpButtonTooltip(new ToolTipConfig("Help on Source Patient Info?", "These elements should contain demographics information of the patient to " +
+        sourcePatientInfo.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Source Patient Info?", "These elements should contain demographics information of the patient to " +
                 "whose medical record this document belongs. It is made several values and should be formatted as follow:<br/>" +
                 "<b>PID-3</b> should include the source patient identifier.<br/>" +
                 "<b>PID-5</b> should include the patient name.<br/>" +
@@ -652,7 +652,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 "PID-2, PID-4, PID-12 and PID-19 should not be used.<br/>"));
         sourcePatientInfo.addFieldValidator(new RegExValidator("^PID-(((3|5|11|2|4|12|19)\\|)|(8\\|(M|F|O|U)$)|(7\\|(((19|20)\\d\\d)(0?[1-9]|1[012])(0?[1-9]|[12][0-9]|3[01])))$)", "This value is not a correct source patient info."));
         // title
-        titlesGrid.setToolbarWidgetHelpButtonTooltip(new ToolTipConfig("Help on Titles?", "Represents the title of the document. Clinical documents often do not " +
+        titlesGrid.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Titles?", "Represents the title of the document. Clinical documents often do not " +
                 "have a title, and are collectively referred to by the display name of the " +
                 "classCode (e.g., a \"consultation\" or \"progress note\"). Where these display " +
                 "names are rendered to the clinician, or where the document has a unique " +

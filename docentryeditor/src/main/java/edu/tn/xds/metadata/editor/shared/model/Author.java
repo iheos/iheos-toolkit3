@@ -198,29 +198,37 @@ public class Author implements ModelElement, Serializable {
 
         answer += "\t\t\t<authorPerson>" + authorPerson.toString() + "</authorPerson>\n";
 
-        answer += "\t\t\t<authorInstitutions>\n";
-        for (String256 str : authorInstitutions) {
-            answer = answer + "\t\t\t\t<authorInstitution>" + str.toString() + "</authorInstitution>\n";
+        if (!authorInstitutions.isEmpty()) {
+            answer += "\t\t\t<authorInstitutions>\n";
+            for (String256 str : authorInstitutions) {
+                answer = answer + "\t\t\t\t<authorInstitution>" + str.toString() + "</authorInstitution>\n";
+            }
+            answer = answer + "\t\t\t</authorInstitutions>\n";
         }
-        answer = answer + "\t\t\t</authorInstitutions>\n";
 
-        answer += "\t\t\t<authorRoles>\n";
-        for (String256 str : authorRoles) {
-            answer = answer + "\t\t\t\t<authorRole>" + str.toString() + "</authorRole>\n";
+        if (!authorRoles.isEmpty()) {
+            answer += "\t\t\t<authorRoles>\n";
+            for (String256 str : authorRoles) {
+                answer = answer + "\t\t\t\t<authorRole>" + str.toString() + "</authorRole>\n";
+            }
+            answer = answer + "\t\t\t</authorRoles>\n";
         }
-        answer = answer + "\t\t\t</authorRoles>\n";
 
-        answer += "\t\t\t<authorSpecialties>\n";
-        for (String256 str : authorSpecialties) {
-            answer = answer + "\t\t\t\t<authorSpecialty>" + str.toString() + "</authorSpecialty>\n";
+        if (!authorSpecialties.isEmpty()) {
+            answer += "\t\t\t<authorSpecialties>\n";
+            for (String256 str : authorSpecialties) {
+                answer = answer + "\t\t\t\t<authorSpecialty>" + str.toString() + "</authorSpecialty>\n";
+            }
+            answer = answer + "\t\t\t</authorSpecialties>\n";
         }
-        answer = answer + "\t\t\t</authorSpecialties>\n";
 
-        answer = answer + "\t\t\t<authorTelecommunications>\n";
-        for (String256 str : authorTelecommunications) {
-            answer = answer + "\t\t\t\t<authorTelecommunication>" + str.toString() + "</authorTelecommunication>\n";
+        if (!authorTelecommunications.isEmpty()) {
+            answer = answer + "\t\t\t<authorTelecommunications>\n";
+            for (String256 str : authorTelecommunications) {
+                answer = answer + "\t\t\t\t<authorTelecommunication>" + str.toString() + "</authorTelecommunication>\n";
+            }
+            answer = answer + "\t\t\t</authorTelecommunications>\n";
         }
-        answer = answer + "\t\t\t</authorTelecommunications>\n";
 
         answer += "\t\t</author>\n";
 
@@ -240,6 +248,7 @@ public class Author implements ModelElement, Serializable {
      */
     @Override
     public boolean verify() throws String256Exception {
+        // FIXME I don't understand the purpose of this code
         boolean answer = true;
         answer = authorPerson.verify();
         for (String256 str256 : authorInstitutions) {

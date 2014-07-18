@@ -8,10 +8,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
  * <b>This class represents the model which have to be respected by the xml
  * document</b>
- *
+ * <p/>
  * <p>
  * An XML document should have this different parameters
  * <ul>
@@ -46,13 +45,13 @@ import java.util.ArrayList;
  * <li>{@link #uri}: An uri ({@link String256}).</li>
  * </ul>
  * </p>
- *
+ * <p/>
  * <p>
  * This class also contains getters/setters, toXml() method to return
  * information in XML format and verify method to check syntax's document.
  * </p>
- *
- *
+ * <p/>
+ * <p/>
  * <p>
  * <b> See below each type of element you can find in this model</b><br>
  * {@link Author}</br> {@link CodedTerm} <br>
@@ -62,12 +61,11 @@ import java.util.ArrayList;
  * {@link String256} </br> {@link OID}<br>
  * {@link DTM}
  * </p>
- *
+ * <p/>
  * <p>
  * <b>See below each method mentioned above.</b> <br>
  * {@link #verify() method verify}</br> {@link #toXML() method toXML} <br>
  * </p>
- *
  *
  * @see ModelElement class ModelElement
  */
@@ -114,7 +112,7 @@ public class DocumentModel implements Serializable {
      * <b>ArrayList(InternationalString) comments</b> - The comments of the
      * document [Optional].<br>
      * Type: ArrayList of {@link InternationalString}</br> </p>
-     *
+     * <p/>
      * <b>Cardinality:</b><br>
      * 0..1 </p>
      *
@@ -166,7 +164,7 @@ public class DocumentModel implements Serializable {
     /**
      * <b>String256 fileName</b> - The name of the metadata file which will be generated.
      * [Mandatory]<br/>
-     *
+     * <p/>
      * <b>Cardinality:</b><br/>
      * 1..1
      */
@@ -215,7 +213,7 @@ public class DocumentModel implements Serializable {
     /**
      * <b>String256 id</b> - The id of the document [Mandatory].<br>
      * Type: {@link String256}</br> </p>
-     *
+     * <p/>
      * <b>Cardinality:</b><br>
      * 1..1 </p>
      *
@@ -241,13 +239,13 @@ public class DocumentModel implements Serializable {
      * <b>NameValueString256 legalAuthenticator</b> - The legal authenticator of
      * the document [Optional].<br>
      * Type: {@link NameValueString256}</br> </p>
-     *
+     * <p/>
      * Represents a participant who has legally authenticated or attested the
      * document within the authorInstitution. Legal authentication implies that
      * a document has been signed manually or electronically by the
      * legalAuthenticator. This attribute may be absent if not applicable. If
      * present, shall have a single value
-     *
+     * <p/>
      * <pre>
      *     {@code
      *     <rim:Slot name="legalAuthenticator">
@@ -257,7 +255,7 @@ public class DocumentModel implements Serializable {
      *     </rim:Slot>
      *     }
      * </pre>
-     *
+     * <p/>
      * <b>Cardinality:</b><br>
      * 0..1 </p>
      *
@@ -269,7 +267,7 @@ public class DocumentModel implements Serializable {
     /**
      * <b>String256 mimeType</b> - The MIME Type of the document in the repository [Mandatory].<br>
      * Type: {@link String256}</br> </p>
-     *
+     * <p/>
      * <pre>
      *     {@code
      *        <rim:ExtrinsicObject mimeType="application/pdf"
@@ -277,10 +275,9 @@ public class DocumentModel implements Serializable {
      *              objectType="urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1">
      *     }
      * </pre>
-     *
+     * <p/>
      * <b>Cardinality:</b><br>
      * 1..1 </p>
-     *
      *
      * @see String256
      * @see DocumentModel
@@ -396,7 +393,7 @@ public class DocumentModel implements Serializable {
      * Document Consumer actors. Shall have a single value (only a single
      * sourcePatientInfo slot may be present).
      * <br/>
-     *
+     * <p/>
      * XML Representation:
      * <pre>
      *     {@code
@@ -411,7 +408,7 @@ public class DocumentModel implements Serializable {
      *     </rim:Slot>
      *     }
      * </pre>
-     *
+     * <p/>
      * PID-3 should include the source patient identifier.
      * PID-5 should include the patient name.
      * PID-8 should code the patient gender as
@@ -420,10 +417,10 @@ public class DocumentModel implements Serializable {
      * PID-7 should include the patient date of birth.
      * PID-11 should include the patient address.
      * PID-2, PID-4, PID-12 and PID-19 should not be used.
-     *
-     *
+     * <p/>
+     * <p/>
      * Type: {@link NameValueString256}</br></p>
-     *
+     * <p/>
      * <b>Cardinality:</b> 0..1</p>
      *
      * @see NameValueString256
@@ -435,7 +432,7 @@ public class DocumentModel implements Serializable {
      * <b>ArrayList(InternationalString title</b> - The title of the document
      * [Optional].<br>
      * Type: ArrayList of {@link InternationalString}</br> </p>
-     *
+     * <p/>
      * <b>Cardinality:</b><br>
      * 0..1 </p>
      *
@@ -472,7 +469,7 @@ public class DocumentModel implements Serializable {
     /**
      * <b>String256 uri</b> - The uri of the document [Optional].<br>
      * Type: {@link String256}</br></p>
-     *
+     * <p/>
      * For XDM the URI element shall point to the file containing the
      * document.
      * If present, shall have a single value.
@@ -487,7 +484,7 @@ public class DocumentModel implements Serializable {
      *      </rim:Slot>
      *      }
      * </pre>
-     *
+     * <p/>
      * If the string is more than 128 characters long, the long format shall be
      * used:
      * <pre>
@@ -501,7 +498,7 @@ public class DocumentModel implements Serializable {
      *     </rim:Slot>
      *     }
      * </pre>
-     *
+     * <p/>
      * Each Value is composed of an ordering prefix followed by a portion of
      * the actual URI string. The ordering prefix shall be sequential starting at
      * the value 1. When the long format is used, all Values shall have an
@@ -522,7 +519,7 @@ public class DocumentModel implements Serializable {
      *      </rim:Slot>
      *     }
      * </pre>
-     *
+     * <p/>
      * <b>Cardinality:</b><br>
      * 0..1</p>
      *
@@ -749,7 +746,9 @@ public class DocumentModel implements Serializable {
         this.sourcePatientId = sourcePatientId;
     }
 
-    public NameValueString256 getSourcePatientInfo(){return sourcePatientInfo;}
+    public NameValueString256 getSourcePatientInfo() {
+        return sourcePatientInfo;
+    }
 
     public void setSourcePatientInfo(NameValueString256 sourcePatientInfo) {
         this.sourcePatientInfo = sourcePatientInfo;
@@ -796,7 +795,6 @@ public class DocumentModel implements Serializable {
         System.out.println(getTitles());
         if (getTitles() != null && titles.size() > 0) {
             xml.append("\t<titles>\n");
-            // FIXME possibility for a nullPointerException
             for (InternationalString str : titles) {
                 xml.append(str.toXML());
             }

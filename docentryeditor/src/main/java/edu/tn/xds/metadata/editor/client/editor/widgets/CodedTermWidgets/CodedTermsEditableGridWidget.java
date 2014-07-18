@@ -4,10 +4,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
@@ -96,12 +94,10 @@ public class CodedTermsEditableGridWidget extends GenericEditableGrid<CodedTerm>
 
     @Override
     public Widget asWidget() {
-        VerticalLayoutContainer vc = new VerticalLayoutContainer();
         FieldLabel codedTermFL = new FieldLabel(cb, "Select a coded term to add");
         codedTermFL.setLabelWidth(200);
-        vc.add(super.asWidget(), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-        vc.add(codedTermFL, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(3, 3, 15, 5)));
-        return vc;
+        addWidget(codedTermFL);
+        return super.asWidget();
     }
 
     @Override

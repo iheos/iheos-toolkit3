@@ -1,8 +1,7 @@
 package edu.tn.xds.metadata.editor.shared.model;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -23,116 +22,104 @@ import javax.validation.constraints.NotNull;
  * This class also contains getters/setters.</br> In addition, it has verify
  * method to check its syntax.
  * </p>
- * 
+ * <p/>
  * <p>
  * <b>See below each method mentioned above.</b> <br>
  * {@link #verify() method verify}</br> {@link #toXML() method toXML} <br>
  * </p>
- * 
- * 
- * 
- * 
+ *
  * @see DocumentModel class DocumentModel
  * @see ModelElement class ModelElement <
- * 
- * 
- * 
- * 
  */
 public class IdentifierString256 implements ModelElement, Serializable {
 
-	private static final long serialVersionUID = -1717453248217705389L;
+    private static final long serialVersionUID = -1717453248217705389L;
 
-	/**
-	 * <p>
-	 * 
-	 * <b>String256 value</b> - The value of the identifier [Mandatory].<br>
-	 * Type: {@link String256}</br>
-	 * </p>
-	 * 
-	 * 
-	 * @see String256 class String256
-	 * @see IdentifierString256
-	 */
-	@NotNull
-	private String256 value;
+    /**
+     * <p>
+     * <p/>
+     * <b>String256 value</b> - The value of the identifier [Mandatory].<br>
+     * Type: {@link String256}</br>
+     * </p>
+     *
+     * @see String256 class String256
+     * @see IdentifierString256
+     */
+    @NotNull
+    private String256 value;
 
-	/**
-	 * <b>String256 idType</b> - The type of the identifier [Mandatory].<br>
-	 * Type: {@link String256}</br>
-	 * 
-	 * @see IdentifierString256
-	 */
-	@NotNull
-	private String256 idType;
+    /**
+     * <b>String256 idType</b> - The type of the identifier [Mandatory].<br>
+     * Type: {@link String256}</br>
+     *
+     * @see IdentifierString256
+     */
+    @NotNull
+    private String256 idType;
 
-	public IdentifierString256(String256 string256, String256 idString256) {
-		value = string256;
-		idType = idString256;
-	}
+    public IdentifierString256(String256 string256, String256 idString256) {
+        value = string256;
+        idType = idString256;
+    }
 
-	public IdentifierString256() {
-		value = new String256();
-		idType = new String256();
-	}
+    public IdentifierString256() {
+        value = new String256();
+        idType = new String256();
+    }
 
-	public String256 getValue() {
-		return value;
-	}
+    public String256 getValue() {
+        return value;
+    }
 
-	public void setValue(String256 value) {
-		this.value = value;
-	}
+    public void setValue(String256 value) {
+        this.value = value;
+    }
 
-	public void setIdType(String256 element) {
-		idType = element;
-	}
+    public String256 getIdType() {
+        return idType;
+    }
 
-	public String256 getIdType() {
-		return idType;
-	}
+    public void setIdType(String256 element) {
+        idType = element;
+    }
 
-	/**
-	 * 
-	 * <p>
-	 * <b>Method toXML</b> <br>
-	 * This method will be called to build a XML file by the
-	 * {@link DocumentModel} with the information taken from the local
-	 * Identifier.<br/>
-	 * </p>
-	 * 
-	 * @return String which contains the Identifier in XML format
-	 * 
-	 * @see IdentifierString256
-	 */
-	public String toXML() {
-		String answer = null;
-		answer = "\t\t<identifier>\n\t\t\t<value>" + value.getString() + "</value>\n\t\t\t<idtype>" + idType.toString()
-				+ "</idtype>\n\t\t</identifier>\n";
+    /**
+     * <p>
+     * <b>Method toXML</b> <br>
+     * This method will be called to build a XML file by the
+     * {@link DocumentModel} with the information taken from the local
+     * Identifier.<br/>
+     * </p>
+     *
+     * @return String which contains the Identifier in XML format
+     * @see IdentifierString256
+     */
+    public String toXML() {
+        String answer = null;
+        answer = "\t\t<identifier>\n\t\t\t<value>" + value.getString() + "</value>\n\t\t\t<idtype>" + idType.toString()
+                + "</idtype>\n\t\t</identifier>\n";
 
-		return answer;
-	}
+        return answer;
+    }
 
-	/**
-	 * <p>
-	 * <b>Method verify</b> <br>
-	 * This method will be called to check whether the syntax's
-	 * {@link IdentifierString256} is correct </br>
-	 * </p>
-	 * 
-	 * @return boolean true if the syntax is correct, else return false
-	 * @throws String256Exception
-	 *             if there is a String256 with more than 256 characters
-	 * 
-	 * @see IdentifierString256
-	 * 
-	 */
-	@Override
-	public boolean verify() throws String256Exception {
-		boolean answer = true;
-		answer = value.verify();
-		answer = idType.verify();
-		return answer;
-	}
+    /**
+     * <p>
+     * <b>Method verify</b> <br>
+     * This method will be called to check whether the syntax's
+     * {@link IdentifierString256} is correct </br>
+     * </p>
+     *
+     * @return boolean true if the syntax is correct, else return false
+     * @throws String256Exception if there is a String256 with more than 256 characters
+     * @see IdentifierString256
+     */
+    @Override
+    public boolean verify() throws String256Exception {
+        // FIXME I don't understand the purpose of this code
+        boolean answer = true;
+        answer = value.verify();
+        answer = idType.verify();
+        return answer;
+    }
 
 }

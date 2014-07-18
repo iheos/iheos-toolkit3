@@ -113,6 +113,7 @@ public class NameValueInteger implements ModelElement, Serializable {
      */
     @Override
     public boolean verify() throws String256Exception {
+        // FIXME I don't understand the purpose of this code, it's far incomplete
         boolean answer = true;
         answer = name.verify();
 

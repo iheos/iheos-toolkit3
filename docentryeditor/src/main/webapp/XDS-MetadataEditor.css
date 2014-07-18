@@ -44,3 +44,9 @@ span.title {
 .gwt-warning-message{
 	color : red;
 }
+
+.topBorder {
+    /*border: 0px;*/
+    padding-top: 2px;
+    border-top: 2px solid lavender;
+}

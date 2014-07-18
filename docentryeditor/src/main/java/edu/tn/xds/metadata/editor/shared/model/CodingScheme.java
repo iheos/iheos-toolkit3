@@ -52,7 +52,8 @@ public class CodingScheme implements ModelElement, Serializable {
 	 * @see CodedTerm
 	 */
 	@NotNull
-	@MatchesPattern(value = "urn:uuid:[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}")
+    // TODO Check that RegExp
+    @MatchesPattern(value = "urn:uuid:[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}")
 	private String256 codingScheme;
 
 	public CodingScheme() {
@@ -101,8 +102,8 @@ public class CodingScheme implements ModelElement, Serializable {
 	 */
 	@Override
 	public boolean verify() throws String256Exception {
-		return codingScheme.verify();
-	}
+        return codingScheme.verify();
+    }
 
     @Override
     public boolean equals(Object o) {
