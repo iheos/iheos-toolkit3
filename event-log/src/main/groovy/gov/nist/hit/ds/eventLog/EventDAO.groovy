@@ -46,7 +46,7 @@ class EventDAO {
     def addValidatorsAsset() {
         if (event.eventAsset == null) return  // in-memory only
         if (validatorsAsset) return
-        validatorsAsset =  AssetHelper.createChildAsset(event.eventAsset, "Validators", "", new SimpleType("simAssertions"))
+        validatorsAsset =  AssetHelper.createChildAsset(event.eventAsset, "Validators", "", new SimpleType("validators"))
         validatorsAsset.setOrder(3)
     }
 

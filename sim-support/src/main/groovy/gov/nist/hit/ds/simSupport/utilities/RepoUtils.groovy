@@ -18,6 +18,14 @@ class RepoUtils {
         } catch (Exception e) { return null }
     }
 
+    static Asset child(String name, Asset parent) {
+        return parent.getChildByName(name)
+    }
+
+    static Asset child(String name, Repository parent) {
+        return parent.getChildByName(name)
+    }
+
     static Asset mkAsset(String name, Type type, ArtifactId repositoryId) {
         init()
         return mkAsset(name, type, repository(repositoryId))
@@ -50,6 +58,18 @@ class RepoUtils {
         Asset a = mkAsset(name, type, parent.getRepository())
         parent.addChild(a)
         return a
+    }
+
+    // needs test
+    static Asset childWithId(Asset asset, ArtifactId aId) {
+        assert aId
+        for (AssetIterator it= asset.getAssets() ; it.hasNextAsset() ; ) {
+            def a = it.nextAsset()
+            assert a.id
+            assert a.id.idString
+            if (a.id.idString == aId.idString) { return a  }
+        }
+        return null
     }
 
     static Repository repository(ArtifactId repositoryId) {

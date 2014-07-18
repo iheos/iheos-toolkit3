@@ -2532,7 +2532,7 @@ public class Metadata {
                 }
             }
 
-            // now handle case where internal classification on RP is missing
+            // now open case where internal classification on RP is missing
             // entirely
             OMElement typeClassification = null;
 

@@ -14,6 +14,8 @@ import org.apache.axiom.om.OMElement
  * @author bmajur
  *
  */
+
+// Redo based on gov.nist.toolkit.valregmsg.message.SoapMessageValidator
 public class SoapMessageParser extends ValComponentBase {
 	OMElement xml
 	String xmlMessage
@@ -35,29 +37,48 @@ public class SoapMessageParser extends ValComponentBase {
 				setPartCount(partCount);
 	}
 
-	@Override
-	public void run() throws SoapFaultException, RepositoryException {
-		runValidationEngine();
-	}
-
-    @ValidationFault(id="SoapMessageParser001", required=RequiredOptional.R, msg="Parse XML", faultCode=FaultCode.Sender, ref="??")
+    @ValidationFault(id="SoapParserXML", required=RequiredOptional.R, msg="Parse XML", faultCode=FaultCode.Sender, ref="??")
     public void parseXML() throws SoapFaultException {
         try {
-            this.infoFound('Parsing XML')
+            infoFound('Parsing XML')
             xml = Parse.parse_xml_string(xmlMessage)
         } catch (Exception e) {
             fail("XML Parse errors:\n${e.getMessage()}")
         }
     }
 
-    @ValidationFault(id="SoapMessageParser002", required=RequiredOptional.R, msg="Parse XML", faultCode=FaultCode.Sender, ref="??", dependsOn='SoapMessageParser001')
-    public void parseSOAP() throws SoapFaultException {
+    @ValidationFault(id="SoapParserVerifyEnvelope", required=RequiredOptional.R, msg="Verify Envelope element", faultCode=FaultCode.Sender, ref="??", dependsOn='SoapParserXML')
+    public void verifySOAPEnvelopeElement() throws SoapFaultException {
+        infoFound('Verify Envelope element')
+        assertEquals('Envelope', xml.getLocalName())
+    }
+
+    @ValidationFault(id="SoapParserParseEnvelope", required=RequiredOptional.R, msg="Parse SOAP Envelope", faultCode=FaultCode.Sender, ref="??", dependsOn='SoapParserXML')
+    public void parseSOAPEnvelope() throws SoapFaultException {
         try {
-            this.infoFound('Parsing SOAP Message')
+            infoFound('Parsing SOAP Message')
             parse()
         } catch (Exception e) {
             fail("SOAP Parse errors:\n${e.getMessage()}")
         }
+    }
+
+    @ValidationFault(id="SoapParserVerifyHeader", required=RequiredOptional.R, msg="Verify Soap Header element", faultCode=FaultCode.Sender, ref="??", dependsOn='SoapParserParseEnvelope')
+    public void verifySOAPHeaderElement() throws SoapFaultException {
+        infoFound('Verify Soap Header element')
+        assertEquals('Header', header.getLocalName())
+    }
+
+    @ValidationFault(id="SoapParserVerifyBody", required=RequiredOptional.R, msg="Verify Soap Body element", faultCode=FaultCode.Sender, ref="??", dependsOn='SoapParserParseEnvelope')
+    public void verifySOAPBodyElement() throws SoapFaultException {
+        infoFound('Verify Soap Bddy element')
+        assertEquals('Body', body.getLocalName())
+    }
+
+
+    @Override
+    public void run() throws SoapFaultException, RepositoryException {
+        runValidationEngine();
     }
 
     public void parse() {

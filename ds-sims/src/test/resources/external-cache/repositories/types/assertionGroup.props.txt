@@ -1,5 +1,5 @@
-# simAssertions
+# assertionGroup
 
-keyword=simAssertions
+keyword=assertionGroup
 domain=asset
 description=simAssertions desc

@@ -24,7 +24,7 @@ public class AssertionGroupDAO {
         if (!ag.saveInLog) return;
         assert ag.validatorName
         if (!eventDAO.validatorsAsset) { log.debug('Not flushing'); return }
-        Asset a = AssetHelper.createChildAsset(eventDAO.validatorsAsset, ag.validatorName, "", new SimpleType("simpleType"))
+        Asset a = AssetHelper.createChildAsset(eventDAO.validatorsAsset, ag.validatorName, "", new SimpleType("assertionGroup"))
         a.setOrder(order++)
         a.setProperty(PropertyKey.STATUS, ag.getWorstStatus().name())
         a.setContent(asTable(ag.assertions).toString(), "text/csv")
