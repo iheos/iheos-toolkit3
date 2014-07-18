@@ -1,14 +1,20 @@
 package edu.tn.xds.metadata.editor.client.root.submission;
 
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.TreeStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import com.sencha.gxt.widget.core.client.tree.Tree;
+import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractView;
 import edu.tn.xds.metadata.editor.client.resources.AppImages;
+
+import javax.inject.Inject;
 
 /**
  * Created by onh2 on 7/11/2014.
@@ -22,7 +28,9 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
     private final TextButton removeDocEntryButton = new TextButton();
     private final TextButton clearDocEntriesButton = new TextButton();
     private final TextButton helpButton = new TextButton();
-    ;
+
+    @Inject
+    MetadataEditorEventBus eventBus;
 
     @Override
     protected Widget buildUI() {
@@ -64,7 +72,18 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
 
     @Override
     protected void bindUI() {
-
+        addDocEntryButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                presenter.createNewDocumentEntry();
+            }
+        });
+        tree.getSelectionModel().addSelectionHandler(new SelectionHandler<SubmissionMenuData>() {
+            @Override
+            public void onSelection(SelectionEvent<SubmissionMenuData> event) {
+                presenter.loadDocumentEntry(event.getSelectedItem());
+            }
+        });
     }
 
     public TreeStore<SubmissionMenuData> getTreeStore() {

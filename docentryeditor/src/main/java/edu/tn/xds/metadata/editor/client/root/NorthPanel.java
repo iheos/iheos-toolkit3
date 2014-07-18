@@ -1,7 +1,5 @@
 package edu.tn.xds.metadata.editor.client.root;
 
-import javax.inject.Inject;
-
 import com.google.gwt.place.shared.PlaceController;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.core.client.util.Padding;
@@ -14,9 +12,7 @@ import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer.HBoxLayoutAlign;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
-
 import edu.tn.xds.metadata.editor.client.editor.DocumentModelEditorMVP;
-import edu.tn.xds.metadata.editor.client.editor.EditorPlace;
 import edu.tn.xds.metadata.editor.client.event.EditNewEvent;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
 import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent;
@@ -24,9 +20,14 @@ import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent.NewFileLoadedH
 import edu.tn.xds.metadata.editor.client.event.SaveFileEvent;
 import edu.tn.xds.metadata.editor.client.widgets.uploader.FileUploadMVP;
 
+import javax.inject.Inject;
+
 public class NorthPanel extends ContentPanel {
 
-	@Inject
+    private final TextButton loadButton;
+    private final TextButton newButton;
+    private final TextButton saveButton;
+    @Inject
 	PlaceController placeController;
 	@Inject
 	FileUploadMVP fileUploadMVP;
@@ -34,14 +35,7 @@ public class NorthPanel extends ContentPanel {
 	DocumentModelEditorMVP documentModelEditorMVP;
 	@Inject
 	MetadataEditorEventBus eventBus;
-
 	private Dialog loadingDialog;
-
-	private final TextButton loadButton;
-
-	private final TextButton newButton;
-
-	private final TextButton saveButton;
 
 	public NorthPanel() {
 		setHeaderVisible(false);
@@ -116,8 +110,9 @@ public class NorthPanel extends ContentPanel {
 			@Override
 			public void onSelect(SelectEvent event) {
 				saveButton.enable();
-				placeController.goTo(new EditorPlace());
-			}
+                eventBus.fireEditNewEvent(new EditNewEvent());
+//				placeController.goTo(new EditorPlace());
+            }
 
 		});
 		saveButton.addSelectHandler(new SelectHandler() {

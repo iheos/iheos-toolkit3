@@ -16,10 +16,9 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.Verti
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import edu.tn.xds.metadata.editor.client.MetadataEditorRequestFactory;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
-import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent;
-import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent.NewFileLoadedHandler;
 import edu.tn.xds.metadata.editor.client.event.SaveFileEvent;
 import edu.tn.xds.metadata.editor.client.event.SaveFileEvent.SaveFileEventHandler;
+import edu.tn.xds.metadata.editor.client.event.StartEditXdsDocumentEvent;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractPresenter;
 import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
 
@@ -53,10 +52,10 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
     }
 
     private void bind() {
-        getEventBus().addHandler(NewFileLoadedEvent.TYPE, new NewFileLoadedHandler() {
+        getEventBus().addHandler(StartEditXdsDocumentEvent.TYPE, new StartEditXdsDocumentEvent.StartEditXdsDocumentHandler() {
 
             @Override
-            public void onNewFileLoaded(NewFileLoadedEvent event) {
+            public void onStartEditXdsDocument(StartEditXdsDocumentEvent event) {
                 model = event.getDocument();
                 initDriver(model);
             }
