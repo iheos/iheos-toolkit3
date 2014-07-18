@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -7,6 +7,7 @@
         <version>v2-maven-alpha</version>
     </parent>
     <artifactId>docentryeditor</artifactId>
+    <groupId>edu.tn.xds.metadata.editor</groupId>
     <packaging>war</packaging>
 
     <name>doc-entry-editor</name>
@@ -192,7 +193,8 @@
                     <!-- Ask GWT to create the Story of Your Compile (SOYC) (gwt:compile) -->
                     <compileReport>true</compileReport>
                     <module>edu.tn.xds.metadata.editor</module>
-                    <hostedWebapp>${webappDirectory}</hostedWebapp><!--makes file download work in dev mode-->
+                    <hostedWebapp>${webappDirectory}</hostedWebapp>
+                    <!--makes file download work in dev mode-->
                     <logLevel>INFO</logLevel>
                     <style>${gwtVersion}</style>
 

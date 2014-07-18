@@ -8,6 +8,10 @@ import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import com.sencha.gxt.widget.core.client.container.Viewport;
 import edu.tn.xds.metadata.editor.client.MetadataEditorGinInjector;
+import edu.tn.xds.metadata.editor.client.generics.GenericMVP;
+import edu.tn.xds.metadata.editor.client.root.submission.SubmissionMenuData;
+import edu.tn.xds.metadata.editor.client.root.submission.SubmissionPanelPresenter;
+import edu.tn.xds.metadata.editor.client.root.submission.SubmissionPanelView;
 
 /**
  * This class contains layout objects to handle the global interface layout,
@@ -19,6 +23,10 @@ public class MetadataEditorAppView extends Viewport {
 
     NorthPanel north; // interface for file loading and saving
     CenterPanel center; // main edtior fields
+    GenericMVP<SubmissionMenuData, SubmissionPanelView, SubmissionPanelPresenter> submissionMVP;
+
+    SubmissionPanelView submissionPanelView;
+    SubmissionPanelPresenter submissionPanelPresenter;
 
 //    WestPanel west; // interface for model validation
     // SouthPanel south; // optional editor fields
@@ -27,6 +35,9 @@ public class MetadataEditorAppView extends Viewport {
         super();
 
         final MetadataEditorGinInjector injector = MetadataEditorGinInjector.instance;
+
+        submissionPanelPresenter = injector.getSubmissionPanelPresenter();
+        submissionPanelView = injector.getSubmissionPanelView();
 
         BorderLayoutContainer con = new BorderLayoutContainer();
         con.setBorders(true);
@@ -40,11 +51,23 @@ public class MetadataEditorAppView extends Viewport {
         // CENTER
         center = new CenterPanel();
         MarginData centerData = new MarginData(0, 5, 5, 5);
-
         BorderLayoutContainer c = new BorderLayoutContainer();
         c.setCenterWidget(center, centerData);
 
         con.setCenterWidget(c);
+
+        // WEST
+        submissionMVP = buildSubmissionMVP();
+        submissionMVP.init();
+        BorderLayoutData westData = new BorderLayoutData(350);
+        westData.setMargins(new Margins(0, 5, 5, 5));
+        westData.setCollapsible(true);
+        westData.setSplit(false);
+
+        // FIXME add submission pane in higher view
+        con.setWestWidget(submissionMVP.getDisplay(), westData);
+
+
 
         SimpleContainer simple = new SimpleContainer();
         simple.add(con, new MarginData(0, 0, 100, 0));
@@ -57,6 +80,10 @@ public class MetadataEditorAppView extends Viewport {
         center.clear();
         center.add(display);
         center.forceLayout();
+    }
+
+    public GenericMVP<SubmissionMenuData, SubmissionPanelView, SubmissionPanelPresenter> buildSubmissionMVP() {
+        return new GenericMVP<SubmissionMenuData, SubmissionPanelView, SubmissionPanelPresenter>(submissionPanelView, submissionPanelPresenter);
     }
 
 }

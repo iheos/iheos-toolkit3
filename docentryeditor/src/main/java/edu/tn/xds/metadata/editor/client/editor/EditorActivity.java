@@ -5,14 +5,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.LayoutRegion;
-import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData;
 import com.sencha.gxt.widget.core.client.container.SimpleContainer;
-import edu.tn.xds.metadata.editor.client.editor.Submission.SubmissionMenuData;
-import edu.tn.xds.metadata.editor.client.editor.Submission.SubmissionPanelPresenter;
-import edu.tn.xds.metadata.editor.client.editor.Submission.SubmissionPanelView;
 import edu.tn.xds.metadata.editor.client.editor.validation.ValidationPresenter;
 import edu.tn.xds.metadata.editor.client.editor.validation.ValidationView;
 import edu.tn.xds.metadata.editor.client.event.EditNewEvent;
@@ -30,12 +26,7 @@ public class EditorActivity extends AbstractActivity {
 
     GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter> editorMVP;
     GenericMVP<DocumentModel, ValidationView, ValidationPresenter> validationMVP;
-    GenericMVP<SubmissionMenuData, SubmissionPanelView, SubmissionPanelPresenter> submissionMVP;
 
-    @Inject
-    SubmissionPanelView submissionPanelView;
-    @Inject
-    SubmissionPanelPresenter submissionPanelPresenter;
     @Inject
     DocumentModelEditorView editorView;
     @Inject
@@ -52,8 +43,7 @@ public class EditorActivity extends AbstractActivity {
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        submissionMVP = buildSubmissionMVP();
-        submissionMVP.init();
+
         editorMVP = buildEditorMVP();
         editorMVP.init();
         validationMVP = buildValidationMVP();
@@ -88,14 +78,6 @@ public class EditorActivity extends AbstractActivity {
 
         blc.setSouthWidget(validationView, southData);
 
-        BorderLayoutData westData = new BorderLayoutData(350);
-        westData.setMargins(new Margins(0, 5, 5, 5));
-        westData.setCollapsible(true);
-        westData.setSplit(false);
-
-        // FIXME add submission pane in higher view
-        blc.setWestWidget(submissionMVP.getDisplay(), westData);
-
         blc.collapse(LayoutRegion.SOUTH);
 
         sc.add(blc);
@@ -112,9 +94,5 @@ public class EditorActivity extends AbstractActivity {
 
     public GenericMVP<DocumentModel, ValidationView, ValidationPresenter> buildValidationMVP() {
         return new GenericMVP<DocumentModel, ValidationView, ValidationPresenter>(validationView, validationPresenter);
-    }
-
-    public GenericMVP<SubmissionMenuData, SubmissionPanelView, SubmissionPanelPresenter> buildSubmissionMVP() {
-        return new GenericMVP<SubmissionMenuData, SubmissionPanelView, SubmissionPanelPresenter>(submissionPanelView, submissionPanelPresenter);
     }
 }

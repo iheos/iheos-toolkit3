@@ -379,7 +379,7 @@ public class DocumentModel implements Serializable {
      * document [Optional].<br>
      * <br/>
      * This attribute should contain demographics information of the patient to
-     * whose medical record this document belongs, as the Document Source knew it at the time of Submission.
+     * whose medical record this document belongs, as the Document Source knew it at the time of submission.
      * <br/>
      * This information typically includes: the patient first and last name, sex,
      * and birth date. The Clinical XDS Affinity Domain policies may require
