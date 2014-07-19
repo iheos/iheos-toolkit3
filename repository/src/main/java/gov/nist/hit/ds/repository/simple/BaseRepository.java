@@ -213,6 +213,7 @@ public abstract class BaseRepository implements Repository {
 
         try {
             FolderManager.loadProps(asset.getProperties(), assetFileByName[0]);
+            asset.setPath(assetFileByName[0]);
             asset.setContentPath(assetFileByName[1]);
         } catch (Exception e) {
             throw new RepositoryException(RepositoryException.UNKNOWN_ID + " : " +
