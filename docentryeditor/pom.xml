@@ -1,4 +1,4 @@
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -7,7 +7,7 @@
         <version>v2-maven-alpha</version>
     </parent>
     <artifactId>docentryeditor</artifactId>
-    <groupId>edu.tn.xds.metadata.editor</groupId>
+    <groupId>edu.tn.xds.metadata</groupId>
     <packaging>war</packaging>
 
     <name>doc-entry-editor</name>
@@ -165,11 +165,11 @@
                         <artifactId>gwt-user</artifactId>
                         <version>${gwtVersion}</version>
                     </dependency>
-                    <dependency>
-                        <groupId>com.google.gwt</groupId>
-                        <artifactId>gwt-dev</artifactId>
-                        <version>${gwtVersion}</version>
-                    </dependency>
+                    <!--<dependency>-->
+                    <!--<groupId>com.google.gwt</groupId>-->
+                    <!--<artifactId>gwt-dev</artifactId>-->
+                    <!--<version>${gwtVersion}</version>-->
+                    <!--</dependency>-->
                     <dependency>
                         <groupId>com.google.gwt</groupId>
                         <artifactId>gwt-servlet</artifactId>
@@ -185,20 +185,11 @@
                         </goals>
                     </execution>
                 </executions>
-                <!-- Plugin configuration. There are many available options,
-                     see gwt-maven-plugin documentation at codehaus.org -->
                 <configuration>
-                    <!-- URL that should be automatically opened in the GWT shell (gwt:run). -->
-                    <runTarget>XDS-MetadataEditor.html</runTarget>
-                    <!-- Ask GWT to create the Story of Your Compile (SOYC) (gwt:compile) -->
-                    <compileReport>true</compileReport>
-                    <module>edu.tn.xds.metadata.editor</module>
-                    <hostedWebapp>${webappDirectory}</hostedWebapp>
-                    <!--makes file download work in dev mode-->
-                    <logLevel>INFO</logLevel>
-                    <style>${gwtVersion}</style>
-
-                    <copyWebapp>true</copyWebapp>
+                    <runTarget>MetadataEditorApp.html</runTarget>
+                    <modules>
+                        <module>${project.groupId}.editor.XDS-MetadataEditor</module>
+                    </modules>
                 </configuration>
             </plugin>
 
@@ -251,9 +242,9 @@
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
-                    <annotationProcessors>
-                        <annotationProcessor>com.google.web.bindery.requestfactory.apt.RfValidator</annotationProcessor>
-                    </annotationProcessors>
+                    <!--<annotationProcessors>-->
+                    <!--<annotationProcessor>com.google.web.bindery.requestfactory.apt.RfValidator</annotationProcessor>-->
+                    <!--</annotationProcessors>-->
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -268,20 +259,13 @@
 
         </plugins>
 
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/client/**</include>
-                    <include>**/*.gwt.xml</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>/src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>/src/main/webapp</directory>
-            </resource>
-        </resources>
+            <resources>
+                <resource>
+                    <directory>${basedir}/src/main/java</directory>
+                </resource>
+                <resource>
+                    <directory>${basedir}/src/main/resources</directory>
+                </resource>
+            </resources>
     </build>
 </project>
