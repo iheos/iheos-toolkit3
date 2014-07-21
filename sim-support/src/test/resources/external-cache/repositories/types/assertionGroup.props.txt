@@ -1,0 +1,5 @@
+# assertionGroup
+
+keyword=assertionGroup
+domain=asset
+description=simAssertions desc

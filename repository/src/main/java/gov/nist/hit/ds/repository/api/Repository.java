@@ -231,6 +231,12 @@ public interface Repository extends java.io.Serializable {
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
+     * Deletes the entire repository off the filesystem.
+     * @throws
+     */
+    void delete() throws RepositoryException;
+
+    /**
      * Get all the Assets in this Repository.  Iterators return a set, one at a
      * time.
      *
@@ -573,6 +579,15 @@ public interface Repository extends java.io.Serializable {
     public void invalidateAsset(gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
+
+    /**
+     * Retrieve an immediate child asset by its name that is directly under the repository root level. If more than one asset exists with the same name, only the first one is retrieved. To retrieve a child asset using a parent asset as its focus, see {@link Asset#getChildByName(String)}.
+     * @param name Name is case-sensitive. See {@link gov.nist.hit.ds.repository.simple.SimpleRepository#createNamedAsset(String, String, Type, String)}
+     *
+     */
+    public Asset getChildByName(String name) throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+
     /**
      * Get the Asset with the specified unique Id.
      *
@@ -597,6 +612,7 @@ public interface Repository extends java.io.Serializable {
      */
     public Asset getAsset(gov.nist.hit.ds.repository.api.ArtifactId assetId)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
+
 
     /**
      * Get the Asset with the specified unique Id that is appropriate for the
@@ -673,38 +689,6 @@ public interface Repository extends java.io.Serializable {
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
-     * Perform a search of the specified Type and get all the Assets that
-     * satisfy the SearchCriteria.  Iterators return a set, one at a time.
-     *
-     * @param searchCriteria
-     * @param searchType
-     * @param searchProperties
-     *
-     * @return AssetIterator  The order of the objects returned by the Iterator
-     *         is not guaranteed.
-     *
-     * @throws gov.nist.hit.ds.repository.api.RepositoryException An exception with one of
-     *         the following messages defined in
-     *         gov.nist.hit.ds.repository.api.RepositoryException may be thrown: {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#OPERATION_FAILED
-     *         OPERATION_FAILED}, {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#PERMISSION_DENIED
-     *         PERMISSION_DENIED}, {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#CONFIGURATION_ERROR
-     *         CONFIGURATION_ERROR}, {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#UNIMPLEMENTED
-     *         UNIMPLEMENTED}, {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#NULL_ARGUMENT
-     *         NULL_ARGUMENT}, {@link
-     *         gov.nist.hit.ds.repository.api.RepositoryException#UNKNOWN_TYPE
-     *         UNKNOWN_TYPE}
-     */
-    public AssetIterator getAssetsBySearch(
-        java.io.Serializable searchCriteria, gov.nist.hit.ds.repository.api.Type searchType,
-        Properties searchProperties)
-        throws gov.nist.hit.ds.repository.api.RepositoryException;
-
-    /**
      * Create a copy of an Asset.  The Id, AssetType, and Repository for the
      * new Asset is set by the implementation.  
      *
@@ -756,9 +740,9 @@ public interface Repository extends java.io.Serializable {
     /**
      * This method indicates whether this implementation supports Repository
      * methods: copyAsset, deleteAsset, invalidateAsset, updateDescription,
-     * updateDisplayName. Asset methods: addAsset, copyRecordStructure,
+     * updateDisplayName. Asset methods: addChild, copyRecordStructure,
      * createRecord, deleteRecord, inheritRecordStructure, removeAsset,
-     * updateContent, updateDescription, updateDisplayName,
+     * setContent, updateDescription, updateDisplayName,
      * updateEffectiveDate, updateExpirationDate. Part methods: createPart,
      * deletePart, updateDisplayName, updateValue. PartStructure methods:
      * updateDisplayName, validatePart. Record methods: createPart,
@@ -769,9 +753,9 @@ public interface Repository extends java.io.Serializable {
      *         gov.nist.hit.ds.repository.api.RepositoryException#UNIMPLEMENTED
      *         UNIMPLEMENTED}, true indicates this implementation supports
      *         Repository methods: copyAsset, deleteAsset, invalidateAsset,
-     *         updateDescription, updateDisplayName. Asset methods: addAsset,
+     *         updateDescription, updateDisplayName. Asset methods: addChild,
      *         copyRecordStructure, createRecord, deleteRecord,
-     *         inheritRecordStructure, removeAsset, updateContent,
+     *         inheritRecordStructure, removeAsset, setContent,
      *         updateDescription, updateDisplayName, updateEffectiveDate,
      *         updateExpirationDate. Part methods: createPart, deletePart,
      *         updateDisplayName, updateValue. PartStructure methods:
@@ -901,8 +885,25 @@ public interface Repository extends java.io.Serializable {
      * to obtain such a     license before exporting this Work.
      * </p>
      */
-    
+
+    /**
+     * Gets the repository source. See {@link gov.nist.hit.ds.repository.api.RepositorySource}
+     * @return
+     * @throws RepositoryException
+     */
     public RepositorySource getSource() throws RepositoryException;
+
+    /**
+     * Sets the repository source.
+     * @param source
+     * @throws RepositoryException
+     */
     public void setSource(RepositorySource source) throws RepositoryException;
+
+    /**
+     * Gets the root of this particular repository, which is under the repository collection root. It is not to be confused with the repository collection root or the {@code DATA} folder itself.
+     * @return
+     * @throws RepositoryException
+     */
     public File getRoot() throws RepositoryException;
 }

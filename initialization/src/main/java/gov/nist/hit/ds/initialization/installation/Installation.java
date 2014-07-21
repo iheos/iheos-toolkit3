@@ -43,7 +43,7 @@ public class Installation {
 	 * @throws InitializationFailedException 
 	 * @throws IOException 
 	 */
-	public void initialize() throws InitializationFailedException, IOException {
+	public void initialize() throws InitializationFailedException {
 		if (initialized == true)
 			return;
 
@@ -100,8 +100,9 @@ public class Installation {
 			initializeSimDb(ecMgr);
 			initializeActors(ecMgr);
 		} catch (IOException e) {
-			throw new InitializationFailedException("",e);
+			throw new InitializationFailedException("External Cache Failed",e);
 		}
+		logger.info("External Cache initialization complete");
 	}
 
 
@@ -121,6 +122,7 @@ public class Installation {
 		if (toolkitPropertiesFile != null) {
 			logger.debug("loading from file designator: " + toolkitPropertiesFile.toString());
 			from = toolkitPropertiesFile.toString();
+			logger.info("toolkit.properties loaded from <" + from + ">");
 			try {
 				is = Io.getInputStreamFromFile(toolkitPropertiesFile);
 			} catch (FileNotFoundException e) {
@@ -130,6 +132,7 @@ public class Installation {
 			logger.debug("Using class loader");
 			ClassLoader cl = getClass().getClassLoader();
 			URL url = cl.getResource(TOOLKIT_PROPERTIES);
+			logger.info("toolkit.properties loaded from <" + url + ">");
 			if (url == null) {
 				throw new RuntimeException("Could not load " + TOOLKIT_PROPERTIES + " file via the class loader");
 			}
@@ -147,6 +150,7 @@ public class Installation {
 
 	public File getToolkitPropertiesFile() {
 		URL url = getClass().getClassLoader().getResource("toolkit.properties");
+		logger.info("toolkit.properties loaded from <" + url + ">");
 		return new File(url.getFile());
 	}
 
@@ -186,6 +190,8 @@ public class Installation {
 	void initializeRepository(ExternalCacheManager ecMgr) {
 		File r = ecMgr.getRepositoryFile();
 		if (!r.exists()) r.mkdir();
+		File types = new File(r, "types");
+		if (!types.exists()) types.mkdir();
 	}
 
 	void initializeTkProps(ExternalCacheManager ecMgr) throws IOException, InitializationFailedException {
@@ -226,6 +232,7 @@ public class Installation {
 	}
 
 	public void setExternalCache(File externalCache) throws InitializationFailedException {
+		propertyServiceManager().getPropertyManager().setExternalCache(externalCache.toString());
 		initializeExternalCache(externalCache);
 	}
 
@@ -243,7 +250,7 @@ public class Installation {
 		return new ExternalCacheManager(externalCache);
 	}
 
-	public File getDefaultCodesFile() throws IOException {
+	public File getDefaultCodesFile()  {
 		File envFile =  getExternalCacheManager().getEnvironmentFile();
 		String defaultEnvName = getPropertyManager().getPropertyMap().get(PropertyServiceManager.DEFAULT_ENVIRONMENT);
 		File env = new File(envFile,defaultEnvName);

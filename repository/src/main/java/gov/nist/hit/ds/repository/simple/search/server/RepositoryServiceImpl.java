@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.repository.simple.search.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gov.nist.hit.ds.initialization.installation.Installation;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.repository.presentation.PresentationData;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;

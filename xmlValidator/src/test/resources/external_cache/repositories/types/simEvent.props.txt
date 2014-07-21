@@ -1,0 +1,12 @@
+# simple asset
+
+# must match filename
+keyword=simEvent
+
+# repository|asset
+domain=asset
+   
+description=The most basic repository type
+
+
+lifetime=10 days

@@ -1,0 +1,6 @@
+provideRegister
+register
+registry
+repository
+storedQuery
+update

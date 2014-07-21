@@ -68,7 +68,7 @@ public class SimpleNamedRepositoryTest {
 		a2.updateContent("My Content".getBytes());
 		ArtifactId assetId2 = a2.getId();
 		
-		a1.addAsset(a2);  // Add a child to the parent
+		a1.addChild(a2);  // Add a child to the parent
 		
 		assertFalse(assetId1.isEqual(assetId2));
 		
