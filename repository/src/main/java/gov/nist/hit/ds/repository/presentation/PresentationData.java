@@ -2,8 +2,6 @@ package gov.nist.hit.ds.repository.presentation;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.IsSerializable;
-import gov.nist.hit.ds.toolkit.installation.InitializationFailedException;
-import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
@@ -30,6 +28,7 @@ import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVParser;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
@@ -44,7 +43,6 @@ import javax.jms.QueueConnectionFactory;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -110,17 +108,16 @@ public class PresentationData implements IsSerializable, Serializable  {
 
     /**
      *
-     * @return True if the repository system has been initialized, that is to able to access the repository sources.
+     * @return True if the repository system has been initialized, that enables access the repository sources.
      * @throws RepositoryException
      */
 	public static Boolean isRepositoryConfigured() throws RepositoryException {
 		try {
 			Installation.installation().initialize();
-		} catch (InitializationFailedException e) {
-			logger.fine(e.toString());
-		} catch (IOException e) {
-			logger.fine(e.toString());
-		}		
+		} catch (Throwable t) {
+			logger.warning(t.toString());
+            throw new RepositoryException(t.toString());
+		}
 		return Configuration.configuration().isRepositorySystemInitialized();
 	}
 
