@@ -18,6 +18,8 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     PlaceController placeController;
     SubmissionMenuData currentlyEdited;
 
+    private int nextIndex = 1;
+
     @Override
     public void init() {
         bind();
@@ -40,17 +42,24 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     }
 
     public void createNewDocumentEntry() {
-        int treeSize = view.getTreeStore().getAllItemsCount();
-        currentlyEdited = new SubmissionMenuData("DocEntry" + treeSize, "Document Entry " + treeSize, new DocumentModel());
+        logger.info("Create new document entry");
+//        int treeSize = view.getTreeStore().getAllItemsCount();
+        currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, new DocumentModel());
+        nextIndex++;
         view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
         view.tree.expandAll();
         view.tree.getSelectionModel().select(currentlyEdited, false);
-        placeController.goTo(new EditorPlace());
+        if (!(placeController.getWhere() instanceof EditorPlace)) {
+            placeController.goTo(new EditorPlace());
+        }
         ((MetadataEditorEventBus) eventBus).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
     }
 
     public void loadDocumentEntry(SubmissionMenuData selectedItem) {
-        currentlyEdited = selectedItem;
-        ((MetadataEditorEventBus) eventBus).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
+        if (!selectedItem.equals(view.getSubmissionSetTreeNode())) {
+            currentlyEdited = selectedItem;
+            ((MetadataEditorEventBus) eventBus).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
+        }
     }
+
 }

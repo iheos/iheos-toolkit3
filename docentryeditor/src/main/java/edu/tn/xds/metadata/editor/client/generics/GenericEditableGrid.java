@@ -41,7 +41,7 @@ import java.util.logging.Logger;
  * <br/>
  * Example:
  * <p/>
- *
+ * <p/>
  * <pre>
  * <code>
  *      InternationalStringProperties isprops = GWT.create(InternationalStringProperties.class);
@@ -69,7 +69,7 @@ import java.util.logging.Logger;
  * </pre>
  *
  * @see Grid <p/>
- *      Created by onh2 on 6/10/2014.
+ * Created by onh2 on 6/10/2014.
  */
 public abstract class GenericEditableGrid<M> extends Grid<M> {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -137,11 +137,9 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
      * Needs to be used to get the Grid Editable. It configures how the columns
      * will be edited.
      *
-     * @param columnConfig
-     *            Grid's Column Configuration which will be associated to a type
-     *            of editable field
-     * @param field
-     *            Editable field which will be used to edit the grid's Column
+     * @param columnConfig Grid's Column Configuration which will be associated to a type
+     *                     of editable field
+     * @param field        Editable field which will be used to edit the grid's Column
      */
     public <N> void addColumnEditorConfig(ColumnConfig<M, N> columnConfig, Field<N> field) {
         editing.addEditor(columnConfig, field);
@@ -187,7 +185,8 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
                 logger.info("current list size: " + getStore().size() + "\nStore max size: " + storeMaxLength);
                 if (getStore().size() < storeMaxLength || storeMaxLength == 0) {
                     editing.cancelEditing();
-                    // M element = GWT.create(getParameteriedClass());
+                    // this method should work I don't understand why there is a problem.
+                    // M element = GWT.create(clazzM);
                     M element = getModelFactory().newInstance();
                     getStore().add(0, element);
                     int index = 0;

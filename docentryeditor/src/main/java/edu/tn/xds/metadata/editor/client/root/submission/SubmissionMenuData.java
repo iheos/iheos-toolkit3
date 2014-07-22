@@ -2,12 +2,10 @@ package edu.tn.xds.metadata.editor.client.root.submission;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.place.shared.Place;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
-import edu.tn.xds.metadata.editor.client.editor.EditorPlace;
 import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
 
 /**
@@ -17,7 +15,7 @@ public class SubmissionMenuData {
     public static final SubmissionMenuData.SubmissionMenuDataProperties props = GWT.create(SubmissionMenuData.SubmissionMenuDataProperties.class);
     private String key;
     private String value;
-    private Place place;
+    //    private Place place;
     private DocumentModel model;
 
     public SubmissionMenuData(String key, String value) {
@@ -29,7 +27,7 @@ public class SubmissionMenuData {
         this.key = key;
         this.value = value;
         this.model = model;
-        this.place = new EditorPlace();
+//        this.place = new EditorPlace();
     }
 
     public String getKey() {
@@ -48,13 +46,13 @@ public class SubmissionMenuData {
         this.value = value;
     }
 
-    public Place getPlace() {
-        return place;
-    }
-
-    public void setPlace(Place place) {
-        this.place = place;
-    }
+//    public Place getPlace() {
+//        return place;
+//    }
+//
+//    public void setPlace(Place place) {
+//        this.place = place;
+//    }
 
     public DocumentModel getModel() {
         return model;
@@ -73,7 +71,6 @@ public class SubmissionMenuData {
 
         ValueProvider<SubmissionMenuData, String> value();
 
-        ValueProvider<SubmissionMenuData, Place> place();
 
     }
 }

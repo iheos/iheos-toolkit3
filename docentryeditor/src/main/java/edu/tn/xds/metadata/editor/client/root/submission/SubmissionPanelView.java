@@ -8,6 +8,9 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.menu.Item;
+import com.sencha.gxt.widget.core.client.menu.Menu;
+import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import com.sencha.gxt.widget.core.client.tree.Tree;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
@@ -25,6 +28,12 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
     private final static SubmissionMenuData submissionSetTreeNode = new SubmissionMenuData("subSet", "Submission set");
     private final ToolBar toolbar = new ToolBar();
     private final TextButton addDocEntryButton = new TextButton();
+
+    private final Menu addMenu = new Menu();
+    private final MenuItem addEmptyDocEntry = new MenuItem("Create an empty document entry");
+    private final MenuItem addPrefilledDocEntry = new MenuItem("Create a prefilled document entry");
+    private final MenuItem loadDocEntry = new MenuItem("Load a document entry from xml file");
+
     private final TextButton removeDocEntryButton = new TextButton();
     private final TextButton clearDocEntriesButton = new TextButton();
     private final TextButton helpButton = new TextButton();
@@ -42,7 +51,11 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         VerticalLayoutContainer vlc = new VerticalLayoutContainer();
 
         addDocEntryButton.setIcon(AppImages.INSTANCE.add());
-        addDocEntryButton.setToolTip("Add a new Document Entry");
+        addDocEntryButton.setToolTip("Create a new Document Entry");
+        addMenu.add(addEmptyDocEntry);
+        addMenu.add(addPrefilledDocEntry);
+        addMenu.add(loadDocEntry);
+        addDocEntryButton.setMenu(addMenu);
         removeDocEntryButton.setIcon(AppImages.INSTANCE.delete());
         removeDocEntryButton.setToolTip("Remove this Document Entry");
         clearDocEntriesButton.setIcon(AppImages.INSTANCE.clear());
@@ -72,18 +85,38 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
 
     @Override
     protected void bindUI() {
-        addDocEntryButton.addSelectHandler(new SelectEvent.SelectHandler() {
+        addEmptyDocEntry.addSelectionHandler(new SelectionHandler<Item>() {
+            @Override
+            public void onSelection(SelectionEvent<Item> event) {
+                presenter.createNewDocumentEntry();
+            }
+        });
+        removeDocEntryButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                presenter.createNewDocumentEntry();
+                tree.getStore().remove(tree.getSelectionModel().getSelectedItem());
+                presenter.loadDocumentEntry(tree.getStore().getAll().get(1));
+            }
+        });
+        clearDocEntriesButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                tree.getStore().clear();
+                buildTreeStore();
             }
         });
         tree.getSelectionModel().addSelectionHandler(new SelectionHandler<SubmissionMenuData>() {
             @Override
             public void onSelection(SelectionEvent<SubmissionMenuData> event) {
-                presenter.loadDocumentEntry(event.getSelectedItem());
+                if (!tree.getSelectionModel().getSelectedItem().equals(submissionSetTreeNode)) {
+                    presenter.loadDocumentEntry(event.getSelectedItem());
+                }
             }
         });
+    }
+
+    public Tree<SubmissionMenuData, String> getTree() {
+        return tree;
     }
 
     public TreeStore<SubmissionMenuData> getTreeStore() {
@@ -93,4 +126,5 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
     public SubmissionMenuData getSubmissionSetTreeNode() {
         return submissionSetTreeNode;
     }
+
 }
