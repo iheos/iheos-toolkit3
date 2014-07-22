@@ -180,6 +180,12 @@ public class PresentationData implements IsSerializable, Serializable  {
 
     /**
      * Gets the asset parent chain (from the bottom up)
+     * {@code
+     *  Example:
+     *  parent1 [parent chain]
+     *      - child
+     *          -target [x]
+     * }
      * @param an The child asset.
      * @return A link up to the root parent node.
      * @throws RepositoryException
@@ -190,6 +196,30 @@ public class PresentationData implements IsSerializable, Serializable  {
 		
 		return anb.getParentChain(repos, an, true);		
 	}
+
+    /**
+     * Gets the parent chain in the context of the entire repository tree (not just the parent chain) from a target asset node.
+     * {@code
+     *  Example:
+     *  repos:  [root]
+     *  parent1 [parent chain]
+     *      - child
+     *          -target [x]
+     *  parent2
+     *  parent3
+     *  parent4
+     * }
+     * @param target
+     * @return
+     * @throws RepositoryException
+     */
+    public static List<AssetNode> getParentChainInTree(AssetNode target) throws RepositoryException {
+
+        Repository repos = composeRepositoryObject(target.getRepId(), target.getReposSrc());
+        AssetNodeBuilder anb = new AssetNodeBuilder();
+
+        return anb.getParentChainInTree(repos, target);
+    }
 
 
     /**
@@ -492,6 +522,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 					aDst.setReposSrc(aSrc.getSource().getAccess().name());
 					aDst.setParentId(aSrc.getProperty(PropertyKey.PARENT_ID));
 					aDst.setCreatedDate(aSrc.getCreatedDate());
+                    aDst.setColor(aSrc.getProperty(PropertyKey.COLOR)); // This is required for the target node to show up in the right color when the asset is clicked form the search result
 					if (aSrc.getPath()!=null) {
 						aDst.setLocation(aSrc.getPropFileRelativePart());
 						try {

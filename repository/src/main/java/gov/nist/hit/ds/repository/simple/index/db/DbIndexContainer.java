@@ -1622,13 +1622,13 @@ public class DbIndexContainer implements IndexContainer, Index {
 	
 	/**
 	 * Get a hit count of records that match the searchCriteria against the index container 
-	 * @param repos
-	 * @param searchCriteria
-	 * @param orderByStr
-	 * @return
+	 *
+     * @param repos
+     * @param searchCriteria
+     * @return
 	 * @throws RepositoryException
 	 */
-	public int getHitCount(Repository repos, SearchCriteria searchCriteria, String orderByStr) throws RepositoryException {
+	public int getHitCount(Repository repos, SearchCriteria searchCriteria) throws RepositoryException {
 		int records=0;
 		String searchCriteriaWhere = searchCriteria.toString();		
 
@@ -1692,7 +1692,7 @@ public class DbIndexContainer implements IndexContainer, Index {
                 indexRep(repos,false, null);
             }
 
-			if (getHitCount(repos, searchCriteria, orderByStr) > 0) {
+			if (getHitCount(repos, searchCriteria) > 0) {
 				fRep[cx++] = repos;
 				logger.fine("filtered repos:" + repos.getDisplayName());
 			}

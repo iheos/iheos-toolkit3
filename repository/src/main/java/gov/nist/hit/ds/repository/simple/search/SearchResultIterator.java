@@ -63,7 +63,7 @@ public class SearchResultIterator implements AssetIterator  {
 	 * 
 	 * @param repositories
 	 * @param searchCriteria
-	 * @param orderBy
+	 * @param orderBy Optional - This can be null
 	 * @throws RepositoryException
 	 */
 	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, String orderBy) throws RepositoryException {

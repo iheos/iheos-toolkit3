@@ -333,19 +333,22 @@ public class LogBrowserWidget extends Composite {
 		    eventBus.addHandler(AssetClickedEvent.TYPE, new AssetClickedEventHandler() {								
 				public void onAssetClick(AssetClickedEvent event) {
 					try {
-						final AssetNode target = event.getValue(); 
-						reposService.getParentChain(target, new AsyncCallback<AssetNode>(){
+						final AssetNode target = event.getValue();
 
-							public void onFailure(Throwable arg0) {												
-								searchLbPropsWidget.setHTML("Search result action could not be synchronized with the tree: " + arg0.toString()); 
-							}
-							public void onSuccess(AssetNode an) {
-								searchLbTreeHolder.clear();
-								List<AssetNode> topLevelAsset = new ArrayList<AssetNode>();
-								topLevelAsset.add(an);
-								searchLbTreeHolder.add(popTreeWidget(topLevelAsset,target,true, searchLbContentSetup));
+                        reposService.getParentChainInTree(target, new AsyncCallback<List<AssetNode>>() {
+
+                            public void onFailure(Throwable arg0) {
+                                searchLbPropsWidget.setHTML("Search result action could not be synchronized with the tree: " + arg0.toString());
+                            }
+
+                            public void onSuccess(List<AssetNode> topLevelAssets) {
+                                searchLbTreeHolder.clear();
+                                searchLbTreeHolder.add(popTreeWidget(topLevelAssets, target, true, searchLbContentSetup));
                                 reposService.getAssetTxtContent(target, searchLbContentSetup);
-							}});
+                            }
+                        });
+
+
 					} catch (RepositoryConfigException e) {
 						e.printStackTrace();
 					}
@@ -563,7 +566,7 @@ public class LogBrowserWidget extends Composite {
 	    }
 
 
-	  protected Widget popTreeWidget(List<AssetNode> a, AssetNode target, Boolean expandLeaf, final AsyncCallback<AssetNode> contentSetup) {
+	  protected Widget popTreeWidget(List<AssetNode> anList, AssetNode target, Boolean expandLeaf, final AsyncCallback<AssetNode> contentSetup) {
 		    Tree tree = new Tree();
 		    final PopupPanel menu = new PopupPanel(true);
 		    
@@ -691,9 +694,10 @@ public class LogBrowserWidget extends Composite {
 				}
 			});
 		    
-		    for (AssetNode an : a) {
+		    for (AssetNode an : anList) {
 		    	AssetTreeItem treeItem = createTreeItem(an, target, expandLeaf);
-		    	if (expandLeaf) {
+
+		    	if (expandLeaf && !(treeItem.getChildCount() == 1 && "HASCHILDREN".equals(treeItem.getChild(0).getText()))) {
 		    		treeItem.setState(true); // Open node
 		    		if (featureTlp.getSelectedIndex()==1 && (target!=null && an.getLocation()!=null) && an.getLocation().equals(target.getLocation())) {
 		    			try {
@@ -894,20 +898,6 @@ public class LogBrowserWidget extends Composite {
 	            // super(an.getDisplayName());
 	        	 String displayName = "" + an.getAssetId();
 
-
-	        	if (an.getDisplayName()!=null && !"".equals(an.getDisplayName())) {
-	        		displayName = an.getDisplayName();
-	        	}
-
-                 if (an.getColor()!=null && !"".equals(an.getColor())) {
-                     SafeHtmlBuilder nodeSafeHtml =  new SafeHtmlBuilder();
-                     nodeSafeHtml.appendHtmlConstant("<span style=\"color:" + an.getColor() + "\">"
-                             + displayName + "</span>");
-                     setHTML(nodeSafeHtml.toSafeHtml());
-                 } else {
-                     setText(displayName);
-                 }
-
                 String hoverTitle = "";
 	            
 	            if (an.getMimeType()!=null && !"".equals(an.getMimeType())) {
@@ -917,7 +907,23 @@ public class LogBrowserWidget extends Composite {
 	            if (an.getDescription()!=null && !"".equals(an.getDescription())) {
 	            	hoverTitle += " Description: " + an.getDescription();
 	            }
-	            setTitle(hoverTitle);
+
+
+                 if (an.getDisplayName()!=null && !"".equals(an.getDisplayName())) {
+                     displayName = an.getDisplayName();
+                 }
+
+                 if (an.getColor()!=null && !"".equals(an.getColor())) {
+                     SafeHtmlBuilder nodeSafeHtml =  new SafeHtmlBuilder();
+                     nodeSafeHtml.appendHtmlConstant("<span style=\"color:" + an.getColor() + "\">"
+                             + displayName + "</span>");
+                     setHTML(nodeSafeHtml.toSafeHtml());
+                    hoverTitle += " Color: " + an.getColor();
+                 } else {
+                     setText(displayName);
+                 }
+
+                setTitle(hoverTitle);
 	            setUserObject(an);
 
 	            // setWidget(new Label(displayName));	            

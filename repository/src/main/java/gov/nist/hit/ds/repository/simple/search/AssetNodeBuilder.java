@@ -42,19 +42,15 @@ public class AssetNodeBuilder {
 		setRetrieveDepth(depth);
 	}
 	
-	public List<AssetNode> build(Repository repos, PropertyKey key) throws RepositoryException {
-		return build(repos,key.toString());
+	public List<AssetNode> build(Repository repos, PropertyKey orderByKey) throws RepositoryException {
+		return build(repos, orderByKey.toString());
 	}
 	
-	public List<AssetNode> build(Repository repos, String orderBy) throws RepositoryException {
+	public List<AssetNode> build(Repository repos, String orderByKey) throws RepositoryException {
 			
 		List<AssetNode> topLevelAssets = new ArrayList<AssetNode>();
-	
-		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
-		
-		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTO,new String[]{null}));			
-		
-		AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, orderBy);
+
+        AssetIterator iter = getTopLevelAssetIterator(repos);
 
 		while (iter.hasNextAsset()) {
 
@@ -86,10 +82,17 @@ public class AssetNodeBuilder {
 		return topLevelAssets;
 		
 	}
-	
-	
-	
-	public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent) throws RepositoryException {
+
+    private AssetIterator getTopLevelAssetIterator(Repository repos) throws RepositoryException {
+        SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+
+        criteria.append(new SearchTerm(PropertyKey.PARENT_ID, Operator.EQUALTO,new String[]{null}));
+
+        return new SearchResultIterator(new Repository[]{repos}, criteria);
+    }
+
+
+    public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent) throws RepositoryException {
 		List<AssetNode> children = new ArrayList<AssetNode>();
 
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
@@ -126,25 +129,33 @@ public class AssetNodeBuilder {
 
 		return children;
 		
-	}	
-	
-	public AssetNode getParentChain(Repository repos, AssetNode child, boolean initial) throws RepositoryException {		
+	}
+
+    /**
+     *
+     * @param repos
+     * @param target
+     * @param initial Set to True for the initial call
+     * @return
+     * @throws RepositoryException
+     */
+	public AssetNode getParentChain(Repository repos, AssetNode target, boolean initial) throws RepositoryException {
 		SearchCriteria criteria = new SearchCriteria(Criteria.OR);
-		criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO, child.getParentId()));		
-		criteria.append(new SearchTerm(PropertyKey.LOCATION,Operator.EQUALTO, child.getParentId()));
+		criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO, target.getParentId()));
+		criteria.append(new SearchTerm(PropertyKey.LOCATION,Operator.EQUALTO, target.getParentId()));
 
  		
 		AssetIterator iter;
 		try {
 			if (initial) {
-				child.addChildren(getImmediateChildren(repos, child));
+				target.addChildren(getImmediateChildren(repos, target));
 			}
 			iter = new SearchResultIterator(new Repository[]{repos}, criteria);
 			
 			if (iter.hasNextAsset()) { // Get the first one
 				Asset a = iter.nextAsset();
 				// logger.fine("is --- " + child.getLocation() + " = " + a.getPropFileRelativePart());
-				if (!child.getLocation().equals(a.getPropFileRelativePart())) {
+				if (!target.getLocation().equals(a.getPropFileRelativePart())) {
 					AssetNode parent = new AssetNode(a.getRepository().getIdString()
 							,(a.getId()!=null)?a.getId().getIdString():null
 							,(a.getAssetType()==null)?null:a.getAssetType().toString()
@@ -163,8 +174,8 @@ public class AssetNodeBuilder {
 					List<AssetNode> children = getImmediateChildren(repos, parent);
 					List<AssetNode> childrenUpdate = new ArrayList<AssetNode>();
 					for (AssetNode c : children) {
-						if (c.getLocation()!=null && c.getLocation().equals(child.getLocation())) {
-							childrenUpdate.add(child);
+						if (c.getLocation()!=null && c.getLocation().equals(target.getLocation())) {
+							childrenUpdate.add(target);
 						} else
 							childrenUpdate.add(c);
 					}
@@ -177,13 +188,74 @@ public class AssetNodeBuilder {
 		} catch (Exception ex) {
 			logger.warning(ex.toString());
 		}
-		return child;
+		return target;
 	}
+
+    /**
+     * Gets the parent chain in the context of the entire repository tree (not just the parent chain) from a target asset node.
+     * {@code
+     *  Example:
+     *  repos:  [root]
+     *  parent1 [parent chain]
+     *      - child
+     *          -target [x]
+     *  parent2
+     *  parent3
+     *  parent4
+     * }
+     * @param repos
+     * @param target
+     * @return
+     * @throws RepositoryException
+     */
+    public List<AssetNode> getParentChainInTree(Repository repos, AssetNode target) throws RepositoryException {
+
+        // 1. Get the parent chain
+        AssetNode parentChain = getParentChain(repos, target, true);
+
+        // 2. Insert the parent chain of interest in the root context tree
+        List<AssetNode> topLevelAssets = new ArrayList<AssetNode>();
+        AssetIterator iter = getTopLevelAssetIterator(repos);
+
+        while (iter.hasNextAsset()) {
+
+            Asset a = iter.nextAsset();
+            AssetNode parent = null;
+
+            if (a.getId()!=null && a.getId().getIdString().equals(parentChain.getAssetId())) {
+                parent = parentChain;
+            } else {
+                parent = new AssetNode(a.getRepository().getIdString()
+                        ,a.getId().getIdString()
+                        ,(a.getAssetType()==null)?null:a.getAssetType().toString()
+                        ,a.getDisplayName()
+                        ,a.getDescription()
+                        ,a.getMimeType()
+                        ,a.getSource().getAccess().name());
+                parent.setParentId(a.getProperty(PropertyKey.PARENT_ID));
+                parent.setColor(a.getProperty(PropertyKey.COLOR));
+                if (a.getPath()!=null) {
+                    // parent.setLocation(a.getPath().toString());
+                    parent.setLocation(a.getPropFileRelativePart());
+                }
+                parent.setContentAvailable(a.hasContent());
+
+                addChildIndicator(repos, parent);
+
+            }
+
+            topLevelAssets.add(parent);
+        }
+
+        return topLevelAssets;
+
+
+    }
 
 	private boolean addChildIndicator(Repository repos, AssetNode potentialParent) throws RepositoryException {
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTOANY, new String[]{potentialParent.getLocation(), potentialParent.getAssetId()})); 
-		int childRecords = 	new DbIndexContainer().getHitCount(repos, criteria, "");
+		int childRecords = 	new DbIndexContainer().getHitCount(repos, criteria);
 		if (childRecords>0) {
 			logger.fine(">>> HAS children");
 			potentialParent.addChild(new AssetNode("","","","HASCHILDREN","","",""));				
