@@ -95,7 +95,8 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
             @Override
             public void onSelect(SelectEvent event) {
                 tree.getStore().remove(tree.getSelectionModel().getSelectedItem());
-                presenter.loadDocumentEntry(tree.getStore().getAll().get(1));
+                tree.getSelectionModel().select(tree.getStore().getFirstChild(getSubmissionSetTreeNode()), false);
+//                presenter.loadDocumentEntry(tree.getStore().getFirstChild(getSubmissionSetTreeNode()));
             }
         });
         clearDocEntriesButton.addSelectHandler(new SelectEvent.SelectHandler() {

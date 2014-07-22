@@ -183,8 +183,7 @@ public class XdsParser {
         String nodeName = node.toString();
         switch (node) {
             case authors:
-                // FIXME Why does this case not have the same code pattern as all
-                // others?
+                // FIXME Why does this case not have the same code pattern as all others?
                 methodParseAuthors();
                 break;
             case classcode:

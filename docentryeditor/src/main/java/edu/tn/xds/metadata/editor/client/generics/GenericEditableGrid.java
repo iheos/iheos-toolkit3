@@ -315,6 +315,11 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         pane.setHeaderVisible(visible);
     }
 
+    public void setHeight(int height) {
+        gridContainer.setHeight(height);
+        pane.setHeight(height);
+    }
+
     protected void setStoreMaxLength(int storeMaxLength) {
         this.storeMaxLength = storeMaxLength;
     }

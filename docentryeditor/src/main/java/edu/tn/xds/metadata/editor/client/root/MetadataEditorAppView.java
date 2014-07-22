@@ -64,9 +64,7 @@ public class MetadataEditorAppView extends Viewport {
         westData.setCollapsible(true);
         westData.setSplit(false);
 
-        // FIXME add submission pane in higher view
         con.setWestWidget(submissionMVP.getDisplay(), westData);
-
 
 
         SimpleContainer simple = new SimpleContainer();

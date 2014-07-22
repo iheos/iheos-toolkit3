@@ -29,21 +29,18 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
         ((MetadataEditorEventBus) getEventBus()).addFileLoadedHandler(new NewFileLoadedEvent.NewFileLoadedHandler() {
             @Override
             public void onNewFileLoaded(NewFileLoadedEvent event) {
-                int treeSize = view.getTreeStore().getAllItemsCount();
-                currentlyEdited = new SubmissionMenuData("DocEntry" + treeSize, "Document Entry " + treeSize, event.getDocument());
+                currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, event.getDocument());
+                nextIndex++;
                 view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
                 view.tree.expandAll();
                 view.tree.getSelectionModel().select(currentlyEdited, false);
-//                view.refresh();
                 getEventBus().fireEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
-//                ((MetadataEditorEventBus) eventBus).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
             }
         });
     }
 
     public void createNewDocumentEntry() {
         logger.info("Create new document entry");
-//        int treeSize = view.getTreeStore().getAllItemsCount();
         currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, new DocumentModel());
         nextIndex++;
         view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
