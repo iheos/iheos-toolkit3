@@ -118,7 +118,7 @@ public class ValidationEngine {
             if ("none".equals(dependsOnId))
                 continue
             ValidationMethod dependsOn = getValidationMethodById(dependsOnId)
-            if (!dependsOn.hasRun)
+            if (dependsOn && !dependsOn.hasRun)
                 return false
         }
         return true
