@@ -58,7 +58,7 @@ class TransactionFailureTest extends Specification {
         when: ''
         def simId = new SimId('123')
         def endpoint = 'http://localhost:8080/tools/sim/123/my/fault'
-        if (!SimUtils.exists(simId)) SimUtils.mkSim('my', simId)
+        if (!SimUtils.exists(simId)) SimUtils.create('my', simId)
         def runner = new TransactionRunner(endpoint, null, null)
         def handle = runner.simHandle
         def eventAccess = new EventAccess(simId.id, handle.event)
@@ -79,7 +79,7 @@ class TransactionFailureTest extends Specification {
         when: ''
         def simId = new SimId('123')
         def endpoint = 'http://localhost:8080/tools/sim/123/my/error'
-        if (!SimUtils.exists(simId)) SimUtils.mkSim('my', simId)
+        if (!SimUtils.exists(simId)) SimUtils.create('my', simId)
         def runner = new TransactionRunner(endpoint, null, null)
         def handle = runner.simHandle
         def eventAccess = new EventAccess(simId.id, handle.event)

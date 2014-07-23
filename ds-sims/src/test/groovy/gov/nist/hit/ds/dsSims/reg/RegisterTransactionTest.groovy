@@ -68,17 +68,17 @@ Host: localhost:9085'''
     }
 
 
-    def 'runit'() {
+    def 'Register Transaction should succeed'() {
         when: ''
         SimId simId = new SimId('123')
         def endpoint = 'http://localhost:8080/tools/sim/123/reg/rb'
-        SimUtils.mkSimConditional('reg', simId)
+        SimUtils.create('reg', simId)
         def transRunner = new TransactionRunner(endpoint, header.trim(), body.trim().bytes)
         transRunner.run()
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
 
         then:
-        !transRunner.handle.event.hasErrors()
+        !transRunner.simHandle.event.hasErrors()
 
         then:
         eventAccess.simDir().exists()

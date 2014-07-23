@@ -27,6 +27,7 @@ class TransactionRunner {
     def transCode
     def actorCode
 
+    ////////////////////////////////////////////////////////////////
     // Production support
 
     TransactionRunner(String endpoint, String header, byte[] body) {
@@ -52,7 +53,7 @@ class TransactionRunner {
     def init(simId, transCode) {
         log.debug 'testinit'
 
-        simHandle = SimUtils.handle(simId)
+        simHandle = SimUtils.open(simId)
         event = new EventFactory().buildEvent(SimSupport.simRepo, simHandle.eventLogAsset)
         simHandle.event = event
 
@@ -88,7 +89,8 @@ class TransactionRunner {
         }
     }
 
-    // Unit Test support
+    ///////////////////////////////////////////////////////////////////
+    // Unit Test support - run individual validator/simulator component
 
     Closure runner
     TransactionRunner(String transactionCode, SimId simId, Closure runner)  {

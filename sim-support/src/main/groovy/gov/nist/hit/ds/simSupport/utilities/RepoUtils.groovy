@@ -18,6 +18,14 @@ class RepoUtils {
         } catch (Exception e) { return null }
     }
 
+    static Asset child(String name, Asset parent) {
+        return parent.getChildByName(name)
+    }
+
+    static Asset child(String name, Repository parent) {
+        return parent.getChildByName(name)
+    }
+
     static Asset mkAsset(String name, Type type, ArtifactId repositoryId) {
         init()
         return mkAsset(name, type, repository(repositoryId))
@@ -48,8 +56,7 @@ class RepoUtils {
     static Asset mkChild(String name, Asset parent, Type type) {
         init()
         Asset a = mkAsset(name, type, parent.getRepository())
-        parent.addAsset(a)
-        return a
+        return parent.addChild(a)
     }
 
     // needs test

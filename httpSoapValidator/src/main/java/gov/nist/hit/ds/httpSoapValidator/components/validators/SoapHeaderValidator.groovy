@@ -1,10 +1,17 @@
-package gov.nist.hit.ds.httpSoapValidator.components.validators;
+package gov.nist.hit.ds.httpSoapValidator.components.validators
 
-import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase;
-import gov.nist.hit.ds.soapSupport.SoapFaultException;
+import gov.nist.hit.ds.repository.api.RepositoryException
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
+import gov.nist.hit.ds.soapSupport.SoapFaultException
+import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
+import org.apache.axiom.om.OMElement
 
-public class SoapHeaderValidator   extends ValComponentBase {
+public class SoapHeaderValidator  extends ValComponentBase {
+    SimHandle handle
+
+    SoapHeaderValidator(SimHandle simHandle) { handle = simHandle }
+
     @Override
     public void run() throws SoapFaultException, RepositoryException {
 
@@ -14,18 +21,18 @@ public class SoapHeaderValidator   extends ValComponentBase {
     public boolean showOutputInLogs() {
         return false;
     }
-//	OMElement header;
-//	static final String wsaddresingNamespace = "http://www.w3.org/2005/08/addressing";
-//	static final String wsaddressingRef = "http://www.w3.org/TR/ws-addr-core/";
-//	SoapEnvironment soapEnvironment;
-//	String expectedAction = null;
-//	List<OMElement> messageId;
-//	List<OMElement> relatesTo;
-//	List<OMElement> to;
-//	List<OMElement> action;
-//	List<OMElement> from;
-//	List<OMElement> replyTo;
-//	List<OMElement> faultTo;
+	OMElement header;
+	static final String wsaddresingNamespace = "http://www.w3.org/2005/08/addressing";
+	static final String wsaddressingRef = "http://www.w3.org/TR/ws-addr-core/";
+	SoapEnvironment soapEnvironment;
+	String expectedAction = null;
+	List<OMElement> messageId;
+	List<OMElement> relatesTo;
+	List<OMElement> to;
+	List<OMElement> action;
+	List<OMElement> from;
+	List<OMElement> replyTo;
+	List<OMElement> faultTo;
 //
 //	@ValidatorParameter
 //	public SoapHeaderValidator setExpectedWsAction(String expectedAction) {

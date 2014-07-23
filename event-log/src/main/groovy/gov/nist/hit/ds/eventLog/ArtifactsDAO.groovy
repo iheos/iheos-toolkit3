@@ -24,7 +24,7 @@ class ArtifactsDAO {
             logger.debug("Artifact: " + name + " = " + artifacts.artifactMap[name]);
             Asset a = AssetHelper.createChildAsset(artifactsAsset, name, "", new SimpleType("simpleType"));
             a.setOrder(counter++);
-            a.updateContent(artifacts.artifactMap[name], "text/plain");
+            a.setContent(artifacts.artifactMap[name], "text/plain");
         }
     }
 

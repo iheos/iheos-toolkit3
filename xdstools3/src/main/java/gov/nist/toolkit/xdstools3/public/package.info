@@ -1,0 +1,13 @@
+This package was created to hold the application stylesheet. It must stay in the same directory than the GWT module file
+in order to be found at compile time.
+
+Here is an example of the necessary layout:
+- com.google.gwt.sample.stockwatcher
+  + client
+  + server
+  + shared
+  - public
+      |- StockWatcher.css
+  - StockWatcher.gwt.xml
+
+When you run the app, the css file will be copied to the /war/stockwatcher directory with the other generated files.

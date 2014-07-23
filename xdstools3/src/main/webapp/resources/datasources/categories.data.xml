@@ -1,0 +1,10 @@
+<List>
+    <supplyCategory>
+        <categoryName>Office Paper Products</categoryName>
+        <parentID>root</parentID>
+    </supplyCategory>
+    <supplyCategory>
+        <categoryName>Calculator Rolls</categoryName>
+        <parentID>Office Paper Products</parentID>
+    </supplyCategory>
+</List>

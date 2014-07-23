@@ -206,6 +206,8 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
 
+
+
     /**
      * Updates the property
      * @param expirationDate in HL7 2.4 format: "YYYY[MM[DD]]"
@@ -247,12 +249,38 @@ public class SimpleAsset implements Asset, Flushable {
 		
 		if (id==null) {
 			id = new SimpleId(getProperty(PropertyKey.ASSET_ID));
+            id.setUserFriendlyName(getName());
 		} /* else if (!id.getIdString().equals(getProperty(PropertyKey.ASSET_ID))) {
 			id = new SimpleId(getProperty(PropertyKey.ASSET_ID));
 		} */
 
 		return id;
 	}
+
+    /**
+     * Gets the asset name.
+     * @return
+     * @throws RepositoryException
+     */
+    @Override
+    public String getName() throws RepositoryException {
+       return getProperty(PropertyKey.ASSET_NAME);
+    }
+
+    /**
+     * Sets the asset name.
+     *
+     * @param name
+     * @throws gov.nist.hit.ds.repository.api.RepositoryException
+     */
+    @Override
+    public void setName(String name) throws RepositoryException {
+        Parameter p = new Parameter("name");
+        p.assertNotNull(name);
+
+        setProperty(PropertyKey.ASSET_NAME, name);
+    }
+
 
     /**
      * Gets the asset domain type, as specified in the {@code types} folder in the repository source.
@@ -497,7 +525,7 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
-     *
+     * Updates the content file using the existing mimeType. Use {@link gov.nist.hit.ds.repository.simple.SimpleAsset#setContent(String, String)} to reset both the content and the mimeType.
      * @param content raw data
      *
      * @throws RepositoryException
@@ -509,16 +537,32 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
-     *
+     * Set content.
      * @param content Text content
      * @param mimeType The mimeType
      * @throws RepositoryException
      */
 	@Override
-	public void updateContent(String content, String mimeType) throws RepositoryException {
+	public void setContent(String content, String mimeType) throws RepositoryException {
 		this.content = content.getBytes();
 		setMimeType(mimeType);
 	}
+
+    	/*
+	@Override
+	public Asset addChild(Id assetId) throws RepositoryException {
+		Id repositoryId = getRepository();   // this does not support cross-repository linking
+		Repository repository = new RepositoryFactory(getSource()).getRepository(repositoryId);
+		SimpleAsset asset = (SimpleAsset) repository.getAsset(assetId);
+		if (assetId.isEqual(getId()))
+			throw new RepositoryException(RepositoryException.CIRCULAR_OPERATION + " : " +
+					"trying to create parent relationship between asset [" + assetId.getIdString() +
+					"] and itself (repository [" + repositoryId.getIdString() + "]");
+
+		return addChild(asset);
+	}
+	*/
+
 
     /**
      * Associates a child asset to the parent asset. At this point if the parent is a single-file, it is automatically converted to a folder on the filesystem. The properties of the parent are nested inside the parent folder, not at the same-level.
@@ -527,11 +571,17 @@ public class SimpleAsset implements Asset, Flushable {
      * @throws RepositoryException
      */
 	@Override
-	public Asset addAsset(Asset asset) throws RepositoryException {
+	public Asset addChild(Asset asset) throws RepositoryException {
 		
 		Parameter p = new Parameter();
 		p.setDescription("Asset");
 		p.assertNotNull(asset);
+
+        if (asset.getPropFile()!=null && asset.getPropFile().equals(getPropFile())) {
+            throw new RepositoryException(RepositoryException.CIRCULAR_OPERATION + " : " +
+                    "trying to create parent relationship between asset [" + asset.getPropFile() +
+                    "] and itself ([" + getPropFile() + "]");
+        }
 				
 		String folderName = FolderManager.getSafeName(new String[]{
 				getProperty(PropertyKey.DISPLAY_NAME)
@@ -540,69 +590,107 @@ public class SimpleAsset implements Asset, Flushable {
 				,FolderManager.LOST_AND_FOUND
 		});
 
+        // This call will make the folder, if it doesn't exist yet, and move the props file
 		File[] parentFolder = new FolderManager().makeFolder(this, folderName);
-		
-		
-		File srcPropFile = asset.getPropFile();
-		File srcConFile = asset.getContentFile();			
 
-		File[] txSrc = new File[]{srcPropFile, srcConFile};		
+        File dstPropFile = new File(parentFolder[0], asset.getPropFile().getName());
+        File dstConFile = new File(parentFolder[0], asset.getContentFile().getName());
 
-		File dstPropFile = new File(parentFolder[0] + File.separator + asset.getPropFile().getName());
-		File dstConFile = new File(parentFolder[0] + File.separator + asset.getContentFile().getName());
-		File[] txDst = new File[]{dstPropFile, dstConFile};
-		
-		asset.setParentId(getPropFileRelativePart());
-		File[] loc = FolderManager.moveChildToParent(txSrc, txDst);
-		asset.setPath(loc[0]);
-		asset.setContentPath(loc[1]);
-	
+		// Take care of the child asset here
+        if (new FolderManager().doesParentAssetFolderExist(asset.getPropFile())) {
+            // Complex asset
+
+            try {
+                asset.setParentId(getId().getIdString());
+
+                FileUtils.moveDirectoryToDirectory(asset.getPropFile().getParentFile(),getPropFile().getParentFile(),false);
+                asset.setPath(dstPropFile);
+                asset.setContentPath(dstConFile);
+
+            } catch (IOException e) {
+                throw new RepositoryException(RepositoryException.IO_ERROR + " complex asset relocation failed: " + e.toString());
+            }
+        } else {
+            // Single file asset
+
+            File srcPropFile = asset.getPropFile();
+            File srcConFile = asset.getContentFile();
+
+            File[] txSrc = new File[]{srcPropFile, srcConFile};
+            File[] txDst = new File[]{dstPropFile, dstConFile};
+
+//		asset.setParentId(getPropFileRelativePart()); location based parentId is no longer used
+            asset.setParentId(getId().getIdString());
+            File[] loc = FolderManager.moveChildToParent(txSrc, txDst);
+            asset.setPath(loc[0]);
+            asset.setContentPath(loc[1]);
+        }
+
 		return asset;
 	}
-	
-	/*
-	@Override
-	public Asset addAsset(Id assetId) throws RepositoryException {
-		Id repositoryId = getRepository();   // this does not support cross-repository linking
-		Repository repository = new RepositoryFactory(getSource()).getRepository(repositoryId);
-		SimpleAsset asset = (SimpleAsset) repository.getAsset(assetId);
-		if (assetId.isEqual(getId())) 
-			throw new RepositoryException(RepositoryException.CIRCULAR_OPERATION + " : " +
-					"trying to create parent relationship between asset [" + assetId.getIdString() + 
-					"] and itself (repository [" + repositoryId.getIdString() + "]");
-	
-		return addAsset(asset);
-	}
-	*/
 
     /**
-     * Not yet implemented.
-     * @param assetId The asset Id
-     * @param includeChildren Remove all associate children
-     *
+     * Retrieves an immediate child by name. If there is more than one by the same name, the first one found is retrieved.
+     * @param name see {@link gov.nist.hit.ds.repository.simple.SimpleRepository#createNamedAsset(String, String, Type, String)}
+     * @return
      * @throws RepositoryException
      */
-	@Override
-	public void removeAsset(ArtifactId assetId, boolean includeChildren)
-			throws RepositoryException {
-		throw new RepositoryException(RepositoryException.UNIMPLEMENTED);
-	}
+    @Override
+    public Asset getChildByName(String name) throws RepositoryException {
+        File[] assetFileByName = new FolderManager().getAssetFileByName(name, getPropFile().getParentFile(), getId().getIdString());
+
+        if (assetFileByName==null || (assetFileByName!=null && assetFileByName[0]==null)) {
+            throw new RepositoryException(RepositoryException.ASSET_NOT_FOUND + ": by name :" +name + ", base path: " + getPropFile().getParentFile() + ", idStr: " + getId().getIdString());
+        }
+
+        Asset child = new SimpleAsset(getSource());
+
+        try {
+            logger.fine("getAssetFileByName return 0 : " + assetFileByName[0]);
+            logger.fine("getAssetFileByName return 1 : " + assetFileByName[1]);
+            FolderManager.loadProps(child.getProperties(), assetFileByName[0]);
+            child.setPath(assetFileByName[0]);
+            child.setContentPath(assetFileByName[1]);
+        } catch (Exception e) {
+            throw new RepositoryException(RepositoryException.UNKNOWN_ID + " : " +
+                    "properties cannot be loaded: [" +
+                    (assetFileByName==null?"null":assetFileByName[0])
+                    + "]", e);
+        }
+
+        return child;
+    }
+	
+
 
 	/**
-	 * Simple delete of this Asset - no recursion. Not part of the API.
-	 * Removes both the property file and the content file from the repository directory.  
+	 * Deletes this Asset. If it is a parent folder, then all items in that parent folder will be deleted as well.
+	 * If the asset is a simple child asset, then it removes both the property file and the content file from the repository directory.
 	 * Supports SimpleRepository.deleteAsset(id)
 	 * @throws RepositoryException
 	 */
+    @Override
 	public void deleteAsset() throws RepositoryException {
 		File assetPropFile = getPropFile();
 		
 		if (assetPropFile.exists()) {
-			logger.fine("Deleting property file:"+ assetPropFile.toString());
-			if (!assetPropFile.delete()) {
-                logger.warning("Delete failed: " +assetPropFile.toString());
+
+            if (new FolderManager().doesParentAssetFolderExist(assetPropFile)) {
+                logger.fine("Deleting parent folder:"+ assetPropFile.toString());
+                try {
+                    File parentFolder = assetPropFile.getParentFile();
+                    FileUtils.cleanDirectory(parentFolder);
+                    parentFolder.delete();
+                } catch (IOException ioEx) {
+                    throw  new RepositoryException(RepositoryException.IO_ERROR +  ": Could not delete asset folder!" + assetPropFile.toString() + " : " + ioEx.toString());
+                }
+            } else {
+                logger.fine("Deleting property file:"+ assetPropFile.toString());
+                if (!assetPropFile.delete()) {
+                    logger.warning("Delete failed: " +assetPropFile.toString());
+                }
+                deleteContent(getContentFile());
             }
-			deleteContent(getContentFile());
 		}
 	}
 
@@ -703,10 +791,17 @@ public class SimpleAsset implements Asset, Flushable {
 		
 		if (getPath()!=null) {
 			return getPath();
-		}				
-		
+		}
+
+        String firstPrefName = getDisplayName();
+
 		// New file
-		String firstPrefName = (getId()!=null && !getId().isAutoGenerated())?getId().getIdString():getDisplayName();
+        if (getId()!=null && !(getId().getUserFriendlyName()==null)) {
+            String userFriendlyName =  getId().getUserFriendlyName();
+            if (!"".equals(userFriendlyName)) {
+                firstPrefName = userFriendlyName;
+            }
+        }
 		
 		String names[] = new String[] {firstPrefName, getDescription()};
 
@@ -754,7 +849,7 @@ public class SimpleAsset implements Asset, Flushable {
 		if (assetPath[0]!=null) {
 			setPath(assetPath[0]);
 		} else {
-			throw new RepositoryException(RepositoryException.IO_ERROR + " : " + 
+			throw new RepositoryException(RepositoryException.ASSET_NOT_FOUND + " : " +
 					"File not found for assetId: [" +
 					assetId.getIdString()
 					+ "]");

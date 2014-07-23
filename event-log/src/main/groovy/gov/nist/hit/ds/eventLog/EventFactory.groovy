@@ -27,7 +27,7 @@ public class EventFactory {
 
     Event buildEvent(Repository repository, Asset parentAsset) {
         Event event = buildEvent(repository)
-        parentAsset.addAsset(event.eventAsset)
+        parentAsset.addChild(event.eventAsset)
         return event
     }
 

@@ -27,7 +27,7 @@ public class AssertionGroupDAO {
         Asset a = AssetHelper.createChildAsset(eventDAO.validatorsAsset, ag.validatorName, "", new SimpleType("assertionGroup"))
         a.setOrder(order++)
         a.setProperty(PropertyKey.STATUS, ag.getWorstStatus().name())
-        a.updateContent(asTable(ag.assertions).toString(), "text/csv")
+        a.setContent(asTable(ag.assertions).toString(), "text/csv")
     }
 
     AssertionStatus worstAssertionStatus() { (ag == null) ? AssertionStatus.SUCCESS : ag.getWorstStatus() }

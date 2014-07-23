@@ -2,6 +2,7 @@ package gov.nist.hit.ds.dsSims.reg
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.httpSoapValidator.parsers.SoapMessageParser
 import gov.nist.hit.ds.httpSoapValidator.validators.HttpHeaderValidator
+import gov.nist.hit.ds.httpSoapValidator.validators.SoapMessageValidator
 import gov.nist.hit.ds.metadata.*
 import gov.nist.hit.ds.metadata.client.MetadataCollection
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
@@ -39,7 +40,10 @@ class RegisterTransaction {
         soapParser.run()
         OMElement soapBody = soapParser.body
 
-//        def metadataProcessing = new RegisterMetadataProcessing(handle, soapBody)
+        def soapValidator = new SoapMessageValidator(handle, soapParser)
+        soapValidator.run()
+
+//        def metadataProcessing = new RegisterMetadataProcessing(open, soapBody)
 //        metadataProcessing.run()
 
 

@@ -23,7 +23,7 @@ public class SimpleTextAssetTest {
 		String myContent = "My Content";
 		
 		Asset a = repos.createAsset("My Site", "This is my site", new SimpleType("siteAsset"));
-		a.updateContent(myContent, "text/plain");
+		a.setContent(myContent, "text/plain");
 
 		byte[] contentBytes = a.getContent();
 		String mimeType = a.getMimeType();
