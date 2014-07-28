@@ -7,23 +7,28 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
+import gov.nist.hit.ds.xdsException.MetadataException
 import org.apache.axiom.om.OMElement
 
 /**
  * Created by bmajur on 7/13/14.
  */
-class RegisterMetadataProcessing extends ValComponentBase {
+class DSMetadataProcessing extends ValComponentBase {
     OMElement soapBody
     Metadata m
 
-    RegisterMetadataProcessing(SimHandle handle, OMElement soapBody) {
+    DSMetadataProcessing(SimHandle handle, OMElement soapBody) {
         super(handle.event)
         this.soapBody = soapBody
     }
 
-    @Validation(id="RegisterMetadataProcessing001", required=RequiredOptional.R, msg="Parse XML", ref="??")
+    @Validation(id="MetadataParser001", required=RequiredOptional.R, msg="Parse Metadata", ref="??")
     public void parseMetadata() throws SoapFaultException {
-        m = MetadataParser.parse(soapBody)
+        try {
+            m = MetadataParser.parse(soapBody)
+        } catch (MetadataException e) {
+            fail(e.message)
+        }
     }
 
     @Override

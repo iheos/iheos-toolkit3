@@ -35,24 +35,25 @@ public class HttpHeaderValidator extends ValComponentBase {
 		return this;
 	}
 
-    @ValidationFault(id="HttpMessage001", required=RequiredOptional.R, msg="MTOM/SIMPLE SOAP must match transaction requirements", faultCode=FaultCode.Sender, ref="??")
+    @ValidationFault(id="HttpMessage001", required=RequiredOptional.R, msg='MTOM vs SIMPLE SOAP', faultCode=FaultCode.Sender, ref="??")
     public void mtomSimpleSoapMatches() throws SoapFaultException {
-        infoFound(" ${(httpParser.isMultipart()) ? 'MTOM' : 'SIMPLE SOAP'} found.")
-        assertEquals(handle.transactionType.multiPart, httpParser.isMultipart())
+        def expected = (handle.transactionType.multiPart) ? 'MTOM' : 'SIMPLE SOAP'
+        def found = (httpParser.isMultipart()) ? 'MTOM' : 'SIMPLE SOAP'
+        assertEquals(expected, found)
     }
 
-    @ValidationFault(id="HttpMessage002", required=RequiredOptional.R, msg="SOAP Expected", faultCode=FaultCode.Sender, ref="??")
+    @ValidationFault(id="HttpMessage002", required=RequiredOptional.R, msg="HTTP contentType", faultCode=FaultCode.Sender, ref="??")
     public void soapExpected() throws SoapFaultException {
-        infoFound((handle.transactionType.soap) ? 'SOAP expected' : 'SOAP not expected')
+//        infoFound((handle.transactionType.soap) ? 'SOAP expected' : 'SOAP not expected')
         String contentTypeString = httpParser.getHttpMessage().getHeader("content-type")
         String contentType = new HttpHeader(contentTypeString)?.getValue()?.toLowerCase()
-        infoFound("content-type is ${contentType}")
+//        infoFound("content-type is ${contentType}")
         assertEquals('application/soap+xml', contentType)
     }
 
     void run() {
-        header = handle.event.inOut.reqHdr
-        body = handle.event.inOut.reqBody
+        header = handle?.event?.inOut?.reqHdr
+        body = handle?.event?.inOut?.reqBody
 
         assert header
         assert body
@@ -60,13 +61,6 @@ public class HttpHeaderValidator extends ValComponentBase {
         httpParser = new HttpParserBa(header.getBytes())
 
         runValidationEngine()
-
-        if (httpParser.isMultipart()) {
-
-        } else {
-
-        }
-
 	}
 
 	@Override

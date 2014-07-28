@@ -79,15 +79,14 @@ Host: localhost:9085'''
 
         then:
         !transRunner.simHandle.event.hasErrors()
+        !transRunner.simHandle.event.hasFault()
+        !eventAccess.faultFile().exists()
 
         then:
-        eventAccess.simDir().exists()
-        eventAccess.eventLogDir().exists()
-        eventAccess.eventDir().exists()
-        eventAccess.reqBodyFile().exists()
         eventAccess.assertionGroupFile('HttpHeaderValidator').exists()
         eventAccess.assertionGroupFile('SoapMessageParser').exists()
-        !eventAccess.faultFile().exists()
+        eventAccess.assertionGroupFile('SoapHeaderValidator').exists()
+        eventAccess.assertionGroupFile('DSMetadataProcessing').exists()
 
     }
 }

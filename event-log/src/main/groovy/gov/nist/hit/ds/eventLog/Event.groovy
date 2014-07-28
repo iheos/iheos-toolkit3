@@ -18,6 +18,7 @@ class Event {
     Asset eventAsset
     EventDAO eventDAO
     AssertionGroupDAO aDAO
+    ArtifactsDAO artDAO
 
     Event(Asset eventAsset) {
         this.eventAsset = eventAsset
@@ -26,6 +27,7 @@ class Event {
     void init() {
         eventDAO = new EventDAO(this)
         eventDAO.init()
+        artDAO = eventDAO.artifacts
         aDAO = new AssertionGroupDAO();
         aDAO.init(eventDAO)
     }
@@ -43,6 +45,9 @@ class Event {
             allAssetionGroups << assertionGroup
             aDAO.save(assertionGroup)
             assertionGroup.saved = true
+        }
+        if (!artifacts.empty()) {
+            artDAO.save(artifacts)
         }
         if (fault) {
             def faultDAO = new FaultDAO()

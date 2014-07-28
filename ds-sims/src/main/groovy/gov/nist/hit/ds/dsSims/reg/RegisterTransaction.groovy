@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.dsSims.reg
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
-import gov.nist.hit.ds.httpSoapValidator.parsers.SoapMessageParser
+import gov.nist.hit.ds.httpSoapValidator.components.validators.SoapHeaderValidator
 import gov.nist.hit.ds.httpSoapValidator.validators.HttpHeaderValidator
-import gov.nist.hit.ds.httpSoapValidator.validators.SoapMessageValidator
+import gov.nist.hit.ds.httpSoapValidator.validators.SoapMessageParser
 import gov.nist.hit.ds.metadata.*
 import gov.nist.hit.ds.metadata.client.MetadataCollection
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
@@ -36,12 +36,16 @@ class RegisterTransaction {
         def httpHdrVal = new HttpHeaderValidator(handle)
         httpHdrVal.run()
 
-        def soapParser = new SoapMessageParser(handle, new String(httpHdrVal.body))
-        soapParser.run()
-        OMElement soapBody = soapParser.body
+        def soapMessageParser = new SoapMessageParser(handle, new String(httpHdrVal.body))
+        soapMessageParser.run()
+        def header = soapMessageParser.header
+        def body = soapMessageParser.body
 
-        def soapValidator = new SoapMessageValidator(handle, soapParser)
-        soapValidator.run()
+        def soapHeaderValidator = new SoapHeaderValidator(handle, header)
+        soapHeaderValidator.run()
+
+        def metadataParser = new DSMetadataProcessing(handle, body)
+        metadataParser.run()
 
 //        def metadataProcessing = new RegisterMetadataProcessing(open, soapBody)
 //        metadataProcessing.run()

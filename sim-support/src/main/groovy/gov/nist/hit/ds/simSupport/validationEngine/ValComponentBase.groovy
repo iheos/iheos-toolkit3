@@ -86,10 +86,22 @@ public abstract class ValComponentBase implements ValComponent {
         return true;
     }
 
+    public boolean msg(String msg) throws SoapFaultException {
+        Assertion a = ag.msg(msg);
+        recordAssertion(a);
+        return true;
+    }
+
     public boolean fail(String expected) throws SoapFaultException {
         Assertion a = ag.fail(expected);
         recordAssertion(a);
         return !a.failed();
+    }
+
+    public boolean defaultMsg() throws SoapFaultException {
+        Assertion a = ag.defaultMsg()
+        recordAssertion(a)
+        return true
     }
 
     public boolean assertIn(String[] expecteds, String value) throws SoapFaultException {
@@ -105,12 +117,13 @@ public abstract class ValComponentBase implements ValComponent {
         return !a.failed();
     }
 
-    public boolean assertEquals(boolean expected, boolean found) throws SoapFaultException {
-        Assertion a = ag.assertEquals(expected, found);
-        log.debug("Assertion: ${a}")
-        recordAssertion(a);
-        return !a.failed();
-    }
+    // produces lousy assertion messages - use string
+//    public boolean assertEquals(boolean expected, boolean found) throws SoapFaultException {
+//        Assertion a = ag.assertEquals(expected, found);
+//        log.debug("Assertion: ${a}")
+//        recordAssertion(a);
+//        return !a.failed();
+//    }
 
     public boolean assertEquals(int expected, int found) throws SoapFaultException {
         Assertion a = ag.assertEquals(expected, found);
@@ -243,12 +256,12 @@ public abstract class ValComponentBase implements ValComponent {
      */
     private void recordAssertion(Assertion a) throws SoapFaultException {
         if (validationEngine.validationFaultAnnotation != null) {
-            ValidationFault vf = validationEngine.validationFaultAnnotation;
-            recordAssertion(a, vf);
+            ValidationFault vf = validationEngine.validationFaultAnnotation
+            recordAssertion(a, vf)
         }
         else if (validationEngine.validationAnnotation != null) {
-            Validation vf = validationEngine.validationAnnotation;
-            recordAssertion(a, vf);
+            Validation vf = validationEngine.validationAnnotation
+            recordAssertion(a, vf)
         } else {
             throw new ToolkitRuntimeException("Failed to record assertion ${a}")
         }
@@ -289,22 +302,23 @@ public abstract class ValComponentBase implements ValComponent {
 
         log.debug("Recording validation ${vf.id()}")
         // if this is a duplicate assertion id
-        if (validationAlreadyRecorded(vf.id())) {
-            a.setId(vf.id());
-            a.setMsg("Validator contains multiple assertions with this id");
-            String[] refs = [ ]
-            a.setReference(refs);
-            a.setExpected("");
-            a.setFound("");
-            a.setCode(FaultCode.Receiver.toString());
-            a.setStatus(AssertionStatus.INTERNALERROR);
-            throw new SoapFaultException(
-                    ag,
-                    FaultCode.Receiver,
-                    new ErrorContext("Validator contains multiple assertions with this id", "")
-            );
-        }
+//        if (validationAlreadyRecorded(vf.id())) {
+//            a.setId(vf.id());
+//            a.setMsg("Validator contains multiple assertions with this id");
+//            String[] refs = [ ]
+//            a.setReference(refs);
+//            a.setExpected("");
+//            a.setFound("");
+//            a.setCode(FaultCode.Receiver.toString());
+//            a.setStatus(AssertionStatus.INTERNALERROR);
+//            throw new SoapFaultException(
+//                    ag,
+//                    FaultCode.Receiver,
+//                    new ErrorContext("Validator contains multiple assertions with this id", "")
+//            );
+//        }
         idsAsserted.add(vf.id());
+        ag.assertionId(a.id)
 
         String id = vf.id();
         a.setId(id);
@@ -329,18 +343,19 @@ public abstract class ValComponentBase implements ValComponent {
 //                    new ErrorContext("Validator contains multiple assertions with this id", "")
 //            );
 //        }
-        idsAsserted.add(vf.id());
+        idsAsserted.add(vf.id())
 
-        a.setId(vf.id());
-        a.setMsg(vf.msg());
-        a.setReference(vf.ref());
-        a.setCode(vf.faultCode().toString());
+        a.setId(vf.id())
+        ag.assertionId(a.id)
+        if (a.msg == null || a.msg == '') a.setMsg(vf.msg())
+        a.setReference(vf.ref())
+        a.setCode(vf.faultCode().toString())
         if (a.getStatus().isError()) {
-            a.setStatus(AssertionStatus.FAULT);
+            a.setStatus(AssertionStatus.FAULT)
             throw new SoapFaultException(
                     ag,
                     vf.faultCode(),
-                    new ErrorContext(a.getMsg(), new AssertionDAO().buildSemiDivided(vf.ref()))
+                    new ErrorContext("${a.getMsg()} - ${a.expectedFoundString()}", new AssertionDAO().buildSemiDivided(vf.ref()))
             );
         }
     }

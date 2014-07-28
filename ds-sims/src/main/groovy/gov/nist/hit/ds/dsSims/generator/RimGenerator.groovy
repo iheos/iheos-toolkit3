@@ -71,6 +71,7 @@ class RimGenerator {
     }
 
     def evalObjects(spec) {
+        println "spec is ${spec}"
             if (spec.type == 'DocumentEntry') return evalDocumentEntry(spec)
             if (spec.type == 'SubmissionSet') return evalSubmissionSet(spec)
             if (spec.type == 'Folder') return evalFolder(spec)
@@ -109,11 +110,13 @@ class RimGenerator {
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
                     }
+            labelSubmissionSet(xml, spec.id)
         } else {
             xml.RegistryPackage(id: spec.id)
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
                     }
+            labelSubmissionSet(xml, spec.id)
         }
         return writer.toString()
     }
@@ -178,6 +181,12 @@ class RimGenerator {
                 }
             }
         }
+    }
+//    <Classification classifiedObject="SubmissionSet01"
+//    classificationNode="urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd"/>
+
+    def labelSubmissionSet(xml, parentId) {
+        xml.Classification(classifiedObject: parentId, classificationNode: 'urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd') {}
     }
 
     def mkAuthor(xml, parent, spec) {

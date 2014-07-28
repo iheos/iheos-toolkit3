@@ -50,6 +50,7 @@ public class ValidationEngine {
         ValidationMethod validationMethod = getARunableValidationMethod();
         while(validationMethod) {
             logger.debug("Starting Validation ${validationMethod.method.name} on ${validationObject.class.name}");
+            validationObject.defaultMsg()
             invoke(validationMethod)
             validationMethod = getARunableValidationMethod();
         }

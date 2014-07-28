@@ -14,6 +14,7 @@ public class AssertionGroup  {
     def validatorName = "AssertionGroup";
     def saveInLog = true
     def saved = false
+    def assertionIds = [ ]  // this is used by unit tests to detect that an assertion has executed
 
     private static Logger logger = Logger.getLogger(AssertionGroup);
     private final static String dashes = "---";
@@ -31,8 +32,20 @@ public class AssertionGroup  {
     Assertion addAssertion(Assertion asser) {
         if (asser.getStatus().ordinal() > worstStatus.ordinal())
             worstStatus = asser.getStatus();
+        if (!asser.defaultMsg) removeDefaultMsg()
         assertions.add(asser);
         asser
+    }
+
+    def removeDefaultMsg() {
+        def lastIndex = assertions.size() - 1
+        if (lastIndex == -1) return
+        if (assertions[lastIndex].defaultMsg) assertions.remove(lastIndex)
+    }
+
+    boolean hasAssertion(String id) { assertionIds.contains(id)}
+    def assertionId(String id) {
+        assertionIds << id
     }
 
     Assertion getFirstFailedAssertion() { return assertions.find { it.failed() } }
@@ -90,10 +103,10 @@ public class AssertionGroup  {
     public Assertion fail(String failureMsg) {
         Assertion a = new Assertion();
         a.with {
-            expected = ""
-            found = ""
+            expected = ''
+            found = failureMsg
             status = AssertionStatus.ERROR
-            msg = failureMsg
+            //msg = failureMsg
         }
         addAssertion(a);
         return a;
@@ -144,13 +157,16 @@ public class AssertionGroup  {
         return a;
     }
 
-    public Assertion assertTrue(boolean value) {
+    public Assertion assertTrue(boolean ok) {
         Assertion a = new Assertion();
-        a.with {
-            expected = 'True'
-            found = (value) ? 'True' : 'False'
+        if (ok) {
+            a.expected = dashes
+            a.found = 'Ok'
+        } else {
+            a.expected = 'True'
+            a.found = (ok) ? 'True' : 'False'
         }
-        a.status = (value) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
+        a.status = (ok) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
         addAssertion(a);
         return a;
     }
@@ -188,4 +204,26 @@ public class AssertionGroup  {
         return a;
     }
 
+    public Assertion msg(String msg) {
+        Assertion a = new Assertion();
+        a.with {
+            expected = dashes
+            found = msg
+            status = AssertionStatus.SUCCESS
+        }
+        addAssertion(a);
+        return a;
+    }
+
+    public Assertion defaultMsg() {
+        Assertion a = new Assertion();
+        a.with {
+            expected = dashes
+            found = 'Ok'
+            status = AssertionStatus.SUCCESS
+            defaultMsg = true
+        }
+        addAssertion(a);
+        return a;
+    }
 }
