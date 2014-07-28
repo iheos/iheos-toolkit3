@@ -31,7 +31,7 @@ public abstract class ValComponentBase implements ValComponent {
     String description;
     ValidationEngine validationEngine;
 
-    ValComponentBase() {}
+//    ValComponentBase() {}
 
     ValComponentBase(Event event) {
         log.debug "ValComponentBase() - ${this.class.name}"

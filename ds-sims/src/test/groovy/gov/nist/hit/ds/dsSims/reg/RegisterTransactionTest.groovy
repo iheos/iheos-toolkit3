@@ -78,7 +78,7 @@ Host: localhost:9085'''
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
 
         then:
-        !transRunner.simHandle.event.hasErrors()
+//        !transRunner.simHandle.event.hasErrors()
         !transRunner.simHandle.event.hasFault()
         !eventAccess.faultFile().exists()
 
