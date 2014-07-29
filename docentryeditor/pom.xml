@@ -14,11 +14,7 @@
     <name>doc-entry-editor</name>
 
     <properties>
-        <!-- Convenience property to set the GWT version -->
-        <gwtVersion>2.5.1</gwtVersion>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <url>http://maven.apache.org</url>
@@ -44,7 +40,7 @@
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
-            <!--<classifier>deps</classifier>-->
+            <scope>runtime</scope>
             <version>${gwtVersion}</version>
         </dependency>
         <dependency>
@@ -53,7 +49,6 @@
             <version>${gwtVersion}</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
@@ -155,28 +150,29 @@
         <!-- Generate compiled stuff in the folder used for developing mode -->
         <!--<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>-->
         <plugins>
+
             <!-- GWT Maven Plugin-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
                 <version>${gwtVersion}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.google.gwt</groupId>
-                        <artifactId>gwt-user</artifactId>
-                        <version>${gwtVersion}</version>
-                    </dependency>
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>com.google.gwt</groupId>-->
+                        <!--<artifactId>gwt-user</artifactId>-->
+                        <!--<version>${gwtVersion}</version>-->
+                    <!--</dependency>-->
                     <!--<dependency>-->
                     <!--<groupId>com.google.gwt</groupId>-->
                     <!--<artifactId>gwt-dev</artifactId>-->
                     <!--<version>${gwtVersion}</version>-->
                     <!--</dependency>-->
-                    <dependency>
-                        <groupId>com.google.gwt</groupId>
-                        <artifactId>gwt-servlet</artifactId>
-                        <version>${gwtVersion}</version>
-                    </dependency>
-                </dependencies>
+                    <!--<dependency>-->
+                        <!--<groupId>com.google.gwt</groupId>-->
+                        <!--<artifactId>gwt-servlet</artifactId>-->
+                        <!--<version>${gwtVersion}</version>-->
+                    <!--</dependency>-->
+                <!--</dependencies>-->
                 <!-- JS is only needed in the package phase, this speeds up testing -->
                 <executions>
                     <execution>
