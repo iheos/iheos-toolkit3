@@ -31,7 +31,7 @@ import java.util.Date;
  * {@link #verify() method verify}</br> {@link #toString() method toString} <br>
  * </p>
  *
- * @see DocumentModel class DocumentModel
+ * @see XdsDocumentEntry class DocumentModel
  * @see ModelElement class ModelElement </p>
  */
 public class DTM implements ModelElement, Serializable {
@@ -42,7 +42,7 @@ public class DTM implements ModelElement, Serializable {
      * Type: {@link String256}</br>
      *
      * @see DTM
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     @MatchesPattern(value = "[0-9]{4}([0-p]{2}){4,}")// FIXME check regexp pattern I don't get it on first sight
@@ -66,7 +66,7 @@ public class DTM implements ModelElement, Serializable {
      * <p>
      * <b>Method toString</b> <br>
      * This method will be called to build a XML file by the
-     * {@link NameValueDTM} (called itself by the {@link DocumentModel}) with
+     * {@link NameValueDTM} (called itself by the {@link XdsDocumentEntry}) with
      * the information taken from the local {@link DTM}.<br>
      * </p>
      *

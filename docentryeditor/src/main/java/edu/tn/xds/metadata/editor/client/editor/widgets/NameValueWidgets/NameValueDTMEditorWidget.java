@@ -7,10 +7,8 @@ import com.google.gwt.editor.client.Editor;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.sencha.gxt.data.client.editor.ListStoreEditor;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.widget.core.client.event.CompleteEditEvent;
 import com.sencha.gxt.widget.core.client.form.DateField;
 import com.sencha.gxt.widget.core.client.form.DateTimePropertyEditor;
-import com.sencha.gxt.widget.core.client.grid.Grid;
 import edu.tn.xds.metadata.editor.client.editor.properties.DTMProperties;
 import edu.tn.xds.metadata.editor.client.generics.GenericEditableListView;
 import edu.tn.xds.metadata.editor.client.generics.GridModelFactory;
@@ -34,9 +32,7 @@ public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date>
     public NameValueDTMEditorWidget(String widgetTitle) {
         super(widgetTitle, new ListStore<DTM>(props.key()), props.dtm());
 
-        setHeight(50);
-        df.setHeight(30);
-        view.setAutoFill(false);
+//        view.setAutoFill(true);
 
         DateTimeFormat dtf = DateTimeFormat.getFormat("yyyyMMddHHmmss");
 
@@ -52,20 +48,28 @@ public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date>
 
         values = new ListStoreEditor<DTM>(getStore());
 
-        bindUI();
+        bind();
     }
 
-    private void bindUI() {
-        editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<DTM>() {
-            @Override
-            public void onCompleteEdit(CompleteEditEvent<DTM> event) {
-                df.validate();
-                if (df.getValue() == null || !df.isValid()) {
-                    editing.startEditing(new Grid.GridCell(0, 0));
-                    view.refresh(false);
-                }
-            }
-        });
+    private void bind() {
+        // FIXME not working asked a question on stackoverflow waiting for answers
+//        editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<DTM>() {
+//            @Override
+//            public void onCompleteEdit(CompleteEditEvent<DTM> event) {
+//                df.clearInvalid();
+//                df.validate();
+//                if (df.getValue() == null || !df.isValid()) {
+//                    getStore().clear();
+//                    DTM e = GWT.create(DTM.class);
+//                    getStore().add(e);
+//                    editing.startEditing(event.getEditCell());
+//                    df.forceInvalid("This date does not respect the expeted format");
+//                } else {
+////                    editing.cancelEditing();
+////                    editing.completeEditing();
+//                }
+//            }
+//        });
     }
 
     public void setListMaxSize(int maxSize) {

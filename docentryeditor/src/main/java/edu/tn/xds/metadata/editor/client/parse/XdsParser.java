@@ -37,7 +37,7 @@ import java.util.logging.Logger;
  * The method {@link #parse(String)} return the completed model, indeed it calls
  * {@link #findElements()} whose aim is to call the appropriate method parseType
  * where Type correspond to a specific type describe in the
- * {@link DocumentModel} (InternationalString, Author ...).</br>All this method
+ * {@link edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry} (InternationalString, Author ...).</br>All this method
  * throws String256Exception if there is a String256 which is larger than 256
  * characters.<br>
  * The method entitled getDocumentParsed instantiates a Preparse object from the
@@ -67,10 +67,11 @@ import java.util.logging.Logger;
  * {@link #parseString256(String)}
  * </p>
  *
- * @see DocumentModel
+ * @see edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry
  * @see PreParse
  * @see String256
  */
+// TODO change this class or create an new one to handle real xds xml file format
 public class XdsParser {
     /**
      * <b>Parse myParse</b> - The instance of Parse class (it's a singleton
@@ -84,12 +85,12 @@ public class XdsParser {
     /**
      * <b>DocumentModel xdsDocumentEntry</b> - The model which will be completed
      * by buildMyModel using the data's XML file.<br>
-     * Type: {@link DocumentModel}</br> </p>
+     * Type: {@link edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry}</br> </p>
      *
-     * @see DocumentModel
+     * @see edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry
      * @see XdsParser
      */
-    private final DocumentModel xdsDocumentEntry = new DocumentModel();
+    private final XdsDocumentEntry xdsDocumentEntry = new XdsDocumentEntry();
     /**
      * <b>String documentXml</b> - The data taken from the XML document and send
      * by the server, this is the String to parse.<br>
@@ -117,15 +118,15 @@ public class XdsParser {
     /**
      * <b>Method parse</b> <br>
      * Firstly, it calls {@link #getDocumentParsed()} method to parse the String
-     * {@link #documentXml} and to complete the {@link DocumentModel}
+     * {@link #documentXml} and to complete the {@link edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry}
      * {@link #xdsDocumentEntry} thanks to the {@link #findElements()} method.
      * </br>
      *
      * @param newDocumentXml - The String which contains the XML content
-     * @return xdsDocumentEntry - The {@link DocumentModel}
+     * @return xdsDocumentEntry - The {@link edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry}
      * @see XdsParser
      */
-    public DocumentModel parse(String newDocumentXml) {
+    public XdsDocumentEntry parse(String newDocumentXml) {
         documentXml = newDocumentXml;
         getDocumentParsed();
         try {
@@ -150,13 +151,13 @@ public class XdsParser {
         document = XMLParser.parse(documentXml);
     }
 
-    public DocumentModel getXdsDocumentEntry() {
+    public XdsDocumentEntry getXdsDocumentEntry() {
         return xdsDocumentEntry;
     }
 
     /**
      * <b>Method findElements</b> <br>
-     * It calls all parseType methods on each element from {@link DocumentModel}
+     * It calls all parseType methods on each element from {@link edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry}
      * through
      * {@link #generalMethod(edu.tn.xds.metadata.editor.client.parse.RootNodesEnum)}
      * . </br>
@@ -173,7 +174,7 @@ public class XdsParser {
 
     /**
      * <b>Method generalMethod</b> <br>
-     * It calls all parseMethod on each element from {@link DocumentModel}.
+     * It calls all parseMethod on each element from {@link edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry}.
      *
      * @param node (String): The first node to match.
      * @throws String256Exception if there is a String256 with more than 256 characters

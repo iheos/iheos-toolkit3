@@ -7,12 +7,12 @@ import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.client.editor.ListStoreEditor;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.Composite;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.ListView;
@@ -94,7 +94,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
     // --- List of Roles
     // /////////////////////////////////
     /*
-	 * List store to handle the editor on "List<String> authorRoles" in Author's
+     * List store to handle the editor on "List<String> authorRoles" in Author's
 	 * class. It is used in a listView widget and handle its content. It inputs
 	 * the author model authorRoles attribute, it is directly mapped by its name
 	 * on "authorRoles" in Author's class.
@@ -132,7 +132,7 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
     // --- List of telecommunications
     // /////////////////////////////////
     /*
-	 * List store to handle the editor on
+     * List store to handle the editor on
 	 * "List<String> authorTelecommunications" in Author's class. It is used in
 	 * a listView widget and handle its content. It inputs the author model
 	 * authorTelecommunications attribute, it is directly mapped by its name on

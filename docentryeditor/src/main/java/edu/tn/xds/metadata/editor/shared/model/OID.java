@@ -28,7 +28,7 @@ import java.io.Serializable;
  *
  * @see String256 class String256
  * @see String256Exception class String256Exception
- * @see DocumentModel class DocumentModel
+ * @see XdsDocumentEntry class DocumentModel
  * @see ModelElement class ModelElement
  */
 public class OID /*extends String256*/ implements ModelElement, Serializable {
@@ -85,7 +85,7 @@ public class OID /*extends String256*/ implements ModelElement, Serializable {
      * <b>Method toXML</b></br>
      * <p/>
      * This method will be called to build a XML file by the
-     * {@link DocumentModel} with the information taken from the local
+     * {@link XdsDocumentEntry} with the information taken from the local
      * {@link OID}.<br>
      * </p>
      *

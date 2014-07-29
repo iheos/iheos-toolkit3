@@ -15,7 +15,7 @@ import edu.tn.xds.metadata.editor.client.event.EditNewEvent;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
 import edu.tn.xds.metadata.editor.client.generics.ActivityDisplayer;
 import edu.tn.xds.metadata.editor.client.generics.GenericMVP;
-import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
+import edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry;
 
 import javax.inject.Inject;
 
@@ -24,8 +24,8 @@ public class EditorActivity extends AbstractActivity {
     @Inject
     ActivityDisplayer displayer;
 
-    GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter> editorMVP;
-    GenericMVP<DocumentModel, ValidationView, ValidationPresenter> validationMVP;
+    GenericMVP<XdsDocumentEntry, DocumentModelEditorView, DocumentModelEditorPresenter> editorMVP;
+    GenericMVP<XdsDocumentEntry, ValidationView, ValidationPresenter> validationMVP;
 
     @Inject
     DocumentModelEditorView editorView;
@@ -88,11 +88,11 @@ public class EditorActivity extends AbstractActivity {
     /**
      * @return
      */
-    public GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter> buildEditorMVP() {
-        return new GenericMVP<DocumentModel, DocumentModelEditorView, DocumentModelEditorPresenter>(editorView, editorPresenter);
+    public GenericMVP<XdsDocumentEntry, DocumentModelEditorView, DocumentModelEditorPresenter> buildEditorMVP() {
+        return new GenericMVP<XdsDocumentEntry, DocumentModelEditorView, DocumentModelEditorPresenter>(editorView, editorPresenter);
     }
 
-    public GenericMVP<DocumentModel, ValidationView, ValidationPresenter> buildValidationMVP() {
-        return new GenericMVP<DocumentModel, ValidationView, ValidationPresenter>(validationView, validationPresenter);
+    public GenericMVP<XdsDocumentEntry, ValidationView, ValidationPresenter> buildValidationMVP() {
+        return new GenericMVP<XdsDocumentEntry, ValidationView, ValidationPresenter>(validationView, validationPresenter);
     }
 }

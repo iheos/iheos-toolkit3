@@ -6,6 +6,8 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <b>This class represents the model which have to be respected by the xml
@@ -69,7 +71,7 @@ import java.util.ArrayList;
  *
  * @see ModelElement class ModelElement
  */
-public class DocumentModel implements Serializable {
+public class XdsDocumentEntry implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * <b>ArrayList(ArrayList(String)) validationErrors</b> - The error(s) which
@@ -80,7 +82,7 @@ public class DocumentModel implements Serializable {
      * This array represents (("document_variable_name", errorMessage)
      * </p>
      *
-     * @see DocumentModel class DocumentModel
+     * @see XdsDocumentEntry class DocumentModel
      */
     private final ArrayList<ArrayList<String>> validationErrors = new ArrayList<ArrayList<String>>();
     /**
@@ -92,7 +94,7 @@ public class DocumentModel implements Serializable {
      * 0..n </p>
      *
      * @see Author
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private ArrayList<Author> authors;
@@ -104,7 +106,7 @@ public class DocumentModel implements Serializable {
      * 1..1 </p>
      *
      * @see CodedTerm
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     private CodedTerm classCode;
@@ -117,7 +119,7 @@ public class DocumentModel implements Serializable {
      * 0..1 </p>
      *
      * @see InternationalString
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private ArrayList<InternationalString> comments;
@@ -130,7 +132,7 @@ public class DocumentModel implements Serializable {
      * 1..n </p>
      *
      * @see CodedTerm
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     @NotEmpty
@@ -144,7 +146,7 @@ public class DocumentModel implements Serializable {
      * 1..1 </p>
      *
      * @see NameValueDTM
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     private NameValueDTM creationTime;
@@ -157,7 +159,7 @@ public class DocumentModel implements Serializable {
      * 0..n </p>
      *
      * @see CodedTerm
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private ArrayList<CodedTerm> eventCode;
@@ -180,7 +182,7 @@ public class DocumentModel implements Serializable {
      * 1..1 </p>
      *
      * @see CodedTerm
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     private CodedTerm formatCode;
@@ -192,7 +194,7 @@ public class DocumentModel implements Serializable {
      * 0..1 </p>
      *
      * @see String256
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private String256 hash;
@@ -205,7 +207,7 @@ public class DocumentModel implements Serializable {
      * 1..n </p>
      *
      * @see CodedTerm
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     @NotEmpty
@@ -218,7 +220,7 @@ public class DocumentModel implements Serializable {
      * 1..1 </p>
      *
      * @see String256
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     private String256 id;
@@ -231,7 +233,7 @@ public class DocumentModel implements Serializable {
      * 1..1 </p>
      *
      * @see LanguageCode
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     private LanguageCode languageCode;
@@ -260,7 +262,7 @@ public class DocumentModel implements Serializable {
      * 0..1 </p>
      *
      * @see NameValueString256
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private NameValueString256 legalAuthenticator;
@@ -280,7 +282,7 @@ public class DocumentModel implements Serializable {
      * 1..1 </p>
      *
      * @see String256
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     private String256 mimeType;
@@ -293,7 +295,7 @@ public class DocumentModel implements Serializable {
      * 1..1
      *
      * @see IdentifierString256
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     private IdentifierString256 patientID;
@@ -306,7 +308,7 @@ public class DocumentModel implements Serializable {
      * 1..1
      *
      * @see CodedTerm
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     private CodedTerm practiceSettingCode;
@@ -319,7 +321,7 @@ public class DocumentModel implements Serializable {
      * 0..1 </p>
      *
      * @see OID
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private OID repoUId;
@@ -332,7 +334,7 @@ public class DocumentModel implements Serializable {
      * 0..1
      *
      * @see NameValueDTM
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private NameValueDTM serviceStartTime;
@@ -345,7 +347,7 @@ public class DocumentModel implements Serializable {
      * 0..1 </p>
      *
      * @see NameValueDTM
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private NameValueDTM serviceStopTime;
@@ -357,7 +359,7 @@ public class DocumentModel implements Serializable {
      * 0..1 </p>
      *
      * @see NameValueInteger
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private NameValueInteger size;
@@ -370,7 +372,7 @@ public class DocumentModel implements Serializable {
      * <b>Cardinality:</b> 0..1</p>
      *
      * @see NameValueString256
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private NameValueString256 sourcePatientId;
@@ -424,7 +426,7 @@ public class DocumentModel implements Serializable {
      * <b>Cardinality:</b> 0..1</p>
      *
      * @see NameValueString256
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private NameValueString256 sourcePatientInfo;
@@ -437,7 +439,7 @@ public class DocumentModel implements Serializable {
      * 0..1 </p>
      *
      * @see InternationalString
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private ArrayList<InternationalString> titles;
@@ -449,7 +451,7 @@ public class DocumentModel implements Serializable {
      * 1..1</p>
      *
      * @see CodedTerm
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     private CodedTerm typeCode;
@@ -462,7 +464,7 @@ public class DocumentModel implements Serializable {
      * 1..1</p>
      *
      * @see IdentifierOID
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @NotNull
     private IdentifierOID uniqueId;
@@ -524,12 +526,15 @@ public class DocumentModel implements Serializable {
      * 0..1</p>
      *
      * @see String256
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      */
     @Nullable
     private String256 uri;
 
-    public DocumentModel() {
+    // TODO Use a map for validation purpose (Map<String,(String|XdsError)>
+    private Map<String, String> errorsMap = new HashMap<String, String>();
+
+    public XdsDocumentEntry() {
         classCode = new CodedTerm();
         creationTime = new NameValueDTM();
         creationTime.setName(new String256().setString("creationTime"));
@@ -787,8 +792,9 @@ public class DocumentModel implements Serializable {
      * </p>
      *
      * @return String which contains the document in XML format
-     * @see DocumentModel class DocumentModel
+     * @see XdsDocumentEntry class DocumentModel
      */
+    // TODO change this method or create a translator to get real xds xml document format
     public String toXML() {
         StringBuilder xml = new StringBuilder();
         xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document>\n");
@@ -956,7 +962,7 @@ public class DocumentModel implements Serializable {
      *
      * @return boolean true if all the document is available, else return false
      * @throws String256Exception if there is a String256 with more than 256 characters
-     * @see DocumentModel
+     * @see XdsDocumentEntry
      * @see #validationErrors
      */
     public boolean verify() throws String256Exception {

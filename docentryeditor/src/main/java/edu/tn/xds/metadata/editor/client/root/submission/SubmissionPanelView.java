@@ -18,13 +18,15 @@ import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractView;
 import edu.tn.xds.metadata.editor.client.resources.AppImages;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by onh2 on 7/11/2014.
  */
 public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> {
-    final static TreeStore<SubmissionMenuData> treeStore = new TreeStore<SubmissionMenuData>(SubmissionMenuData.props.key());
-    final static Tree<SubmissionMenuData, String> tree = new Tree<SubmissionMenuData, String>(treeStore, SubmissionMenuData.props.value());
+    private final static TreeStore<SubmissionMenuData> treeStore = new TreeStore<SubmissionMenuData>(SubmissionMenuData.props.key());
+    private final static Tree<SubmissionMenuData, String> tree = new Tree<SubmissionMenuData, String>(treeStore, SubmissionMenuData.props.value());
     private final static SubmissionMenuData submissionSetTreeNode = new SubmissionMenuData("subSet", "Submission set");
     private final ToolBar toolbar = new ToolBar();
     private final TextButton addDocEntryButton = new TextButton();
@@ -40,6 +42,12 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
 
     @Inject
     MetadataEditorEventBus eventBus;
+
+    @Override
+    protected Map<String, Widget> getPathToWidgetsMap() {
+        Map<String, Widget> map = new HashMap<String, Widget>();
+        return map;
+    }
 
     @Override
     protected Widget buildUI() {
@@ -116,14 +124,30 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         });
     }
 
+    /**
+     * This method returns the submission set Tree widget.
+     *
+     * @return submission set tree
+     */
     public Tree<SubmissionMenuData, String> getTree() {
         return tree;
     }
 
+    /**
+     * This method returns the submission set TreeStore, which contains all the data.
+     *
+     * @return submission set tree store
+     */
     public TreeStore<SubmissionMenuData> getTreeStore() {
         return treeStore;
     }
 
+    /**
+     * This method returns the root node of the submissions set tree.
+     * It is actually the Submission Set Node.
+     *
+     * @return Submission Set tree node
+     */
     public SubmissionMenuData getSubmissionSetTreeNode() {
         return submissionSetTreeNode;
     }

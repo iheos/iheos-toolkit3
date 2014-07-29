@@ -18,6 +18,9 @@ import com.sencha.gxt.widget.core.client.form.FileUploadField;
 import com.sencha.gxt.widget.core.client.info.Info;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FileUploadView extends AbstractView<FileUploadPresenter> {
     FileUploadField file;
     private FormPanel form;
@@ -36,6 +39,13 @@ public class FileUploadView extends AbstractView<FileUploadPresenter> {
 
     public TextButton getBtnCancel() {
         return btnCancel;
+    }
+
+    @Override
+    protected Map<String, Widget> getPathToWidgetsMap() {
+        Map<String, Widget> map = new HashMap<String, Widget>();
+        map.put("file", file);
+        return map;
     }
 
     @Override

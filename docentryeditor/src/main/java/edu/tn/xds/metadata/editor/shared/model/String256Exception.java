@@ -7,7 +7,7 @@ package edu.tn.xds.metadata.editor.shared.model;
  * </p>
  *
  * @see String256 class String256
- * @see DocumentModel class DocumentModel
+ * @see XdsDocumentEntry class DocumentModel
  */
 @SuppressWarnings("serial")
 public class String256Exception extends Exception {

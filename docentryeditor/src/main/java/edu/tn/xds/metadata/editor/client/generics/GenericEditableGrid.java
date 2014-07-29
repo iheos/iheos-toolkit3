@@ -1,7 +1,6 @@
 package edu.tn.xds.metadata.editor.client.generics;
 
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
@@ -17,18 +16,15 @@ import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.ShowEvent;
 import com.sencha.gxt.widget.core.client.form.Field;
-import com.sencha.gxt.widget.core.client.grid.CheckBoxSelectionModel;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.editing.ClicksToEdit;
-import com.sencha.gxt.widget.core.client.grid.editing.GridInlineEditing;
+import com.sencha.gxt.widget.core.client.grid.editing.GridRowEditing;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import edu.tn.xds.metadata.editor.client.resources.AppImages;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -83,7 +79,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
     private final VerticalLayoutContainer gridContainer = new VerticalLayoutContainer();
     // private Class<M> clazzM;
     private final ToolTipConfig helpTooltipConfig = new ToolTipConfig();
-    protected GridInlineEditing<M> editing;
+    protected GridRowEditing<M> editing;
     boolean isAutoShow = true;
     private int storeMaxLength = 0;
     private boolean checkBoxEnabled = false;
@@ -95,9 +91,13 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         // clazzM = parametrizedClass;
         pane.setHeadingText(gridTitle);
 
+        // FIXME make grid fit the content panel's height
         this.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
         this.getView().setAutoFill(true);
         this.setBorders(false);
+        this.addStyleName("grid-minheight");
+        pane.addStyleName("grid-minheight");
+        gridContainer.addStyleName("grid-minheight");
 
         newItemButton.setIcon(AppImages.INSTANCE.add());
         newItemButton.setToolTip("Add an new element");
@@ -118,10 +118,16 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         helpTooltipConfig.setMouseOffsetY(0);
 
         gridContainer.add(toolBar);
-        gridContainer.add(this);
-        pane.add(gridContainer);
+        gridContainer.add(this/*,new VerticalLayoutContainer.VerticalLayoutData(1,-1)*/); // VerticalLayoutData does not work here why?
+        pane.setWidget(gridContainer);
 
         setEditable();
+
+        // some tries to make grid fit panel's height
+        this.getView().setAdjustForHScroll(true);
+        this.getView().setForceFit(true);
+        pane.forceLayout();
+        gridContainer.forceLayout();
 
         bindUI();
     }
@@ -147,6 +153,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
 
     @Override
     public Widget asWidget() {
+        pane.setResize(true);
         return pane.asWidget();
     }
 
@@ -267,29 +274,31 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         return checkBoxEnabled;
     }
 
-    /**
-     * This Method enables the grid's selection checkbox column (for
-     * multiselection).
-     */
-    public void setCheckBoxSelectionModel() {
-        checkBoxEnabled = true;
-        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
-        IdentityValueProvider<M> identityValueProvider = new IdentityValueProvider<M>();
-        CheckBoxSelectionModel<M> selectColumn = new CheckBoxSelectionModel<M>(identityValueProvider);
-        selectColumn.setSelectionMode(Style.SelectionMode.MULTI);
-        columnsConfigs.add(selectColumn.getColumn());
-        columnsConfigs.addAll(cm.getColumns());
-
-        this.cm = new ColumnModel<M>(columnsConfigs);
-
-        this.setSelectionModel(selectColumn);
-
-        setEditable();
-    }
-
+    //--------------------------------------------------------------------------------------------------------
+//    == SHOULD NOT BE USED WITH GIRD ROW EDITING, ONLY WITH GRID INLINE EDITING ==
+//    /**
+//     * This Method enables the grid's selection checkbox column (for
+//     * multiselection).
+//     */
+//    public void setCheckBoxSelectionModel() {
+//        checkBoxEnabled = true;
+//        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
+//        IdentityValueProvider<M> identityValueProvider = new IdentityValueProvider<M>();
+//        CheckBoxSelectionModel<M> selectColumn = new CheckBoxSelectionModel<M>(identityValueProvider);
+//        selectColumn.setSelectionMode(Style.SelectionMode.MULTI);
+//        columnsConfigs.add(selectColumn.getColumn());
+//        columnsConfigs.addAll(cm.getColumns());
+//
+//        this.cm = new ColumnModel<M>(columnsConfigs);
+//
+//        this.setSelectionModel(selectColumn);
+//
+//        setEditable();
+//    }
+//--------------------------------------------------------------------------------------------------------
     protected void setEditable() {
         // EDITING //
-        editing = new GridInlineEditing<M>(this);
+        editing = new GridRowEditing<M>(this);
         editing.setClicksToEdit(ClicksToEdit.TWO);
         editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<M>() {
             @Override
@@ -301,7 +310,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
 
     protected void setEditable(ClicksToEdit clicksToEdit) {
         // EDITING //
-        editing = new GridInlineEditing<M>(this);
+        editing = new GridRowEditing<M>(this);
         editing.setClicksToEdit(clicksToEdit);
         editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<M>() {
             @Override

@@ -20,6 +20,7 @@ import edu.tn.xds.metadata.editor.shared.model.CodedTerm;
  * <b>This class represents the widget which matches CodedTerm model type</b>
  * </p>
  */
+// FIXME for resize purpose I think I need to extends AbstractView in every classes that implements Editor to use pathToWidgetMap
 public class CodedTermEditorWidget extends Composite implements Editor<CodedTerm> {
 
     @Ignore

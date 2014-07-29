@@ -2,11 +2,12 @@ package edu.tn.xds.metadata.editor.client.root.submission;
 
 import com.google.gwt.place.shared.PlaceController;
 import edu.tn.xds.metadata.editor.client.editor.EditorPlace;
+import edu.tn.xds.metadata.editor.client.event.EditNewEvent;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
 import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent;
 import edu.tn.xds.metadata.editor.client.event.StartEditXdsDocumentEvent;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractPresenter;
-import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
+import edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry;
 
 import javax.inject.Inject;
 
@@ -32,26 +33,42 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, event.getDocument());
                 nextIndex++;
                 view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
-                view.tree.expandAll();
-                view.tree.getSelectionModel().select(currentlyEdited, false);
+                view.getTree().expandAll();
+                view.getTree().getSelectionModel().select(currentlyEdited, false);
                 getEventBus().fireEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
+            }
+        });
+        ((MetadataEditorEventBus) getEventBus()).addEditNewEventHandler(new EditNewEvent.EditNewHandler() {
+            @Override
+            public void onEditNew(EditNewEvent event) {
+                if (view.getTree().getStore().getChildCount(view.getSubmissionSetTreeNode()) < 1) {
+                    createNewDocumentEntry();
+                }
             }
         });
     }
 
+    /**
+     * This method creates a new Document Entry and adds it to the submissionSet tree.
+     */
     public void createNewDocumentEntry() {
         logger.info("Create new document entry");
-        currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, new DocumentModel());
+        currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, new XdsDocumentEntry());
         nextIndex++;
         view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
-        view.tree.expandAll();
-        view.tree.getSelectionModel().select(currentlyEdited, false);
+        view.getTree().expandAll();
+        view.getTree().getSelectionModel().select(currentlyEdited, false);
         if (!(placeController.getWhere() instanceof EditorPlace)) {
             placeController.goTo(new EditorPlace());
         }
         ((MetadataEditorEventBus) eventBus).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
     }
 
+    /**
+     * This method loads the editor interface with a selected document entry from the submission set tree.
+     *
+     * @param selectedItem tree selected node
+     */
     public void loadDocumentEntry(SubmissionMenuData selectedItem) {
         if (!selectedItem.equals(view.getSubmissionSetTreeNode())) {
             currentlyEdited = selectedItem;

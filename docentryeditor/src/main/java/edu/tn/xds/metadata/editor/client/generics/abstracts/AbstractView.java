@@ -1,49 +1,75 @@
 package edu.tn.xds.metadata.editor.client.generics.abstracts;
 
-import java.util.logging.Logger;
-
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 
-public abstract class AbstractView<P extends AbstractPresenter<?>> //
-		implements IsWidget {
+import java.util.Map;
+import java.util.logging.Logger;
 
-	protected final Logger logger = Logger.getLogger(this.getClass().getName());
+public abstract class AbstractView<P extends AbstractPresenter<?>> implements IsWidget {
 
-	protected P presenter;
-	protected Widget ui;
+    protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
-	// instance
-	public AbstractView() {
-	}
+    protected Widget ui;
+    protected P presenter;
+    protected Map<String, Widget> pathToWidgetsMap;
+    ContentPanel cp;
 
-	public void init() {
-		ui = buildUI();
-		bindUI();
-	}
+    // instance
+    public AbstractView() {
+    }
 
-	public void start() {
-	}
+    public void init() {
+        cp = new ContentPanel();
+        cp.setHeaderVisible(false);
+        cp.setBorders(false);
+        pathToWidgetsMap = getPathToWidgetsMap();
+        ui = buildUI();
+        cp.setWidget(ui);
+        bindUI();
 
-	// abstract
-	abstract protected Widget buildUI();
+        // FIXME find a way to resolve resizing issues with fields Map solution is supposed to work but I don't know how...
+//        ResizeHandler resizeHandler=new ResizeHandler() {
+//            @Override
+//            public void onResize(ResizeEvent event) {
+//                for(Widget w : pathToWidgetsMap.values()){
+////                    w.setWidth("200");
+//                    cp.forceLayout();
+//                    cp.setResize(true);
+//                }
+//            }
+//        };
+//        cp.addResizeHandler(resizeHandler);
+//        Window.addResizeHandler(resizeHandler);
+    }
 
-	abstract protected void bindUI();
+    protected abstract Map<String, Widget> getPathToWidgetsMap();
 
-	// impl
-	@Override
-	public Widget asWidget() {
-		if (ui == null)
-			init();
-		return ui;
-	}
 
-	// getter / setter
-	public P getPresenter() {
-		return presenter;
-	}
+    public void start() {
+    }
 
-	public void setPresenter(P presenter) {
-		this.presenter = presenter;
-	}
+    // abstract
+    abstract protected Widget buildUI();
+
+    abstract protected void bindUI();
+
+
+    // impl
+    @Override
+    public Widget asWidget() {
+        if (ui == null || cp == null)
+            init();
+        return cp;
+    }
+
+    // getter / setter
+    public P getPresenter() {
+        return presenter;
+    }
+
+    public void setPresenter(P presenter) {
+        this.presenter = presenter;
+    }
 }

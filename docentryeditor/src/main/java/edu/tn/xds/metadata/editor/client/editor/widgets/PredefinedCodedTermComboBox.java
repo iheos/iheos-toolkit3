@@ -37,14 +37,14 @@ public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
             @Override
             public String getLabel(CodedTerm item) {
                 String s = new String();
-                if (item.getCode() != null)
-                    if (!item.getCode().toString().equals(""))
-                        s += item.getCode().toString();
                 if (item.getDisplayName() != null)
-                    if (!item.getDisplayName().toString().equals("") && item.getCode() != null) {
-                        if (item.getCode().toString() != null && !item.getCode().toString().equals(""))
-                            s += "  -  ";
+                    if (!item.getDisplayName().toString().equals(""))
                         s += item.getDisplayName().toString();
+                if (item.getDisplayName() != null)
+                    if (!item.getCode().toString().equals("") && item.getDisplayName() != null) {
+                        if (item.getDisplayName().toString() != null && !item.getDisplayName().toString().equals(""))
+                            s += "  -  ";
+                        s += item.getCode().toString();
                     }
                 if (item.getCodingScheme() != null)
                     if (!item.getCodingScheme().toString().equals("")) {

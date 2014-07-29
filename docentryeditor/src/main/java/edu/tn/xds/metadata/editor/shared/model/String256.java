@@ -27,7 +27,7 @@ import java.io.Serializable;
  * </p>
  *
  * @see String256Exception class String256Exception
- * @see DocumentModel class DocumentModel
+ * @see XdsDocumentEntry class DocumentModel
  * @see ModelElement class ModelElement
  */
 public class String256 implements Serializable {
@@ -46,6 +46,12 @@ public class String256 implements Serializable {
     private String string = new String();
 
     public String256() {
+    }
+
+    public String256(String string) {
+        if (string.length() < 257) {
+            this.string = string;
+        }
     }
 
     @Deprecated

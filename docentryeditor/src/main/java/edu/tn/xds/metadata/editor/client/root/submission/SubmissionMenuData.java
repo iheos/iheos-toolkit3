@@ -6,7 +6,7 @@ import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
-import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
+import edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry;
 
 /**
  * Created by onh2 on 7/11/2014.
@@ -16,14 +16,16 @@ public class SubmissionMenuData {
     private String key;
     private String value;
     //    private Place place;
-    private DocumentModel model;
+    // FIXME this class will have to become generic and handle <M> instead of DocumentModel,
+    // thus it will be able to deal with SubmissionSet and Association also.
+    private XdsDocumentEntry model;
 
     public SubmissionMenuData(String key, String value) {
         this.value = value;
         this.key = key;
     }
 
-    public SubmissionMenuData(String key, String value, DocumentModel model) {
+    public SubmissionMenuData(String key, String value, XdsDocumentEntry model) {
         this.key = key;
         this.value = value;
         this.model = model;
@@ -54,11 +56,11 @@ public class SubmissionMenuData {
 //        this.place = place;
 //    }
 
-    public DocumentModel getModel() {
+    public XdsDocumentEntry getModel() {
         return model;
     }
 
-    public void setModel(DocumentModel model) {
+    public void setModel(XdsDocumentEntry model) {
         this.model = model;
     }
 

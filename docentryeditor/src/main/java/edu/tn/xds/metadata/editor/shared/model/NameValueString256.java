@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * {@link #verify() method verify}</br> {@link #toXML() method toXML} <br>
  * </p>
  *
- * @see DocumentModel class DocumentModel
+ * @see XdsDocumentEntry class DocumentModel
  * @see ModelElement class ModelElement
  */
 public class NameValueString256 implements ModelElement, Serializable {
@@ -82,7 +82,7 @@ public class NameValueString256 implements ModelElement, Serializable {
      * <p>
      * <b>Method toXML</b> <br>
      * This method will be called to build a XML file by the
-     * {@link DocumentModel} with the information taken from the local
+     * {@link XdsDocumentEntry} with the information taken from the local
      * {@link NameValueString256}.<br>
      * </p>
      *

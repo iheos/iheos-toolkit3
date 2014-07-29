@@ -1,28 +1,28 @@
 package edu.tn.xds.metadata.editor.client.widgets.uploader;
 
+import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractMVP;
+import edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry;
+
 import javax.inject.Inject;
 
-import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractMVP;
-import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
+public class FileUploadMVP extends AbstractMVP<XdsDocumentEntry, FileUploadView, FileUploadPresenter> {
+    @Inject
+    FileUploadView fileUploadView;
+    @Inject
+    FileUploadPresenter fileUploadPresenter;
 
-public class FileUploadMVP extends AbstractMVP<DocumentModel, FileUploadView, FileUploadPresenter> {
-	@Inject
-	FileUploadView fileUploadView;
-	@Inject
-	FileUploadPresenter fileUploadPresenter;
+    public FileUploadMVP() {
 
-	public FileUploadMVP() {
+    }
 
-	}
+    @Override
+    public FileUploadView buildView() {
+        return fileUploadView;
+    }
 
-	@Override
-	public FileUploadView buildView() {
-		return fileUploadView;
-	}
-
-	@Override
-	public FileUploadPresenter buildPresenter() {
-		return fileUploadPresenter;
-	}
+    @Override
+    public FileUploadPresenter buildPresenter() {
+        return fileUploadPresenter;
+    }
 
 }

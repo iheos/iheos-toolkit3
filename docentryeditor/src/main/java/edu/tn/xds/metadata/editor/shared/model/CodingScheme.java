@@ -32,7 +32,7 @@ import java.io.Serializable;
  *
  *
  * @see CodedTerm class CodedTerm
- * @see DocumentModel class DocumentModel
+ * @see XdsDocumentEntry class DocumentModel
  * @see ModelElement class ModelElement </p>
  *
  *
@@ -60,9 +60,18 @@ public class CodingScheme implements ModelElement, Serializable {
 		codingScheme = new String256();
 	}
 
-	public String256 getCodingScheme() {
-		return codingScheme;
-	}
+
+    public CodingScheme(String256 codingScheme) {
+        if (codingScheme.toString().length() < 257) {
+            this.codingScheme = codingScheme;
+        } else {
+            this.codingScheme = new String256();
+        }
+    }
+
+    public String256 getCodingScheme() {
+        return codingScheme;
+    }
 
 	public CodingScheme setCodingScheme(String256 codingScheme) {
 		this.codingScheme = codingScheme;return this;
@@ -73,9 +82,9 @@ public class CodingScheme implements ModelElement, Serializable {
 	 * <p>
 	 * <b>Method toString</b> <br>
 	 * This method will be called to build a XML file by the {@link CodedTerm}
-	 * (called itself by the {@link DocumentModel}) with the information taken
-	 * from the local {@link CodingScheme}.<br>
-	 * </p>
+     * (called itself by the {@link XdsDocumentEntry}) with the information taken
+     * from the local {@link CodingScheme}.<br>
+     * </p>
 	 *
 	 * @return String which contains the CodingScheme
 	 *
