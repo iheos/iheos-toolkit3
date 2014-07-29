@@ -156,23 +156,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
                 <version>${gwtVersion}</version>
-                <!--<dependencies>-->
-                    <!--<dependency>-->
-                        <!--<groupId>com.google.gwt</groupId>-->
-                        <!--<artifactId>gwt-user</artifactId>-->
-                        <!--<version>${gwtVersion}</version>-->
-                    <!--</dependency>-->
-                    <!--<dependency>-->
-                    <!--<groupId>com.google.gwt</groupId>-->
-                    <!--<artifactId>gwt-dev</artifactId>-->
-                    <!--<version>${gwtVersion}</version>-->
-                    <!--</dependency>-->
-                    <!--<dependency>-->
-                        <!--<groupId>com.google.gwt</groupId>-->
-                        <!--<artifactId>gwt-servlet</artifactId>-->
-                        <!--<version>${gwtVersion}</version>-->
-                    <!--</dependency>-->
-                <!--</dependencies>-->
                 <!-- JS is only needed in the package phase, this speeds up testing -->
                 <executions>
                     <execution>
@@ -235,7 +218,7 @@
             <!-- RequestFactory Validation jar -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>${mavenCompilerPluginVersion}</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
