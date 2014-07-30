@@ -25,7 +25,7 @@ public class PropertyResourceFactory {
         catch (Exception e) { }
         finally {
             if (in == null) {
-                String msg = "Cannot load SimChain definition from <" + propertiesPath + ">";
+                String msg = "Cannot loadFromString SimChain definition from <" + propertiesPath + ">";
                 logger.error(msg);
                 throw new ToolkitRuntimeException(msg);
             }

@@ -1,0 +1,11 @@
+<ActorsTransactions>
+    <transaction displayName="Register" id="r.b" code="r.b" asyncCode="r.as">
+        <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
+        <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
+        <simChain resource=""/>
+    </transaction>
+    <actor displayName="Document Registry" id="reg">
+        <simFactoryClass class=""/>
+        <transaction id="r.b"/>
+    </actor>
+</ActorsTransactions>

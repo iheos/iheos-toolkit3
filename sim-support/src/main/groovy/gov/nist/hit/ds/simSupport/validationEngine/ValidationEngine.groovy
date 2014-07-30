@@ -1,5 +1,4 @@
 package gov.nist.hit.ds.simSupport.validationEngine
-
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.assertion.Assertion
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
@@ -12,8 +11,6 @@ import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.ExceptionUtil
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.log4j.Logger
-
-import java.lang.reflect.InvocationTargetException
 
 public class ValidationEngine {
     ValComponentBase validationObject
@@ -64,16 +61,25 @@ public class ValidationEngine {
     def invoke(validationMethod) throws Exception {
         try {
             validationMethod.method.invoke(validationObject);
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             logException(e)
             Throwable t = e.getCause();
             throw t;
-//            if (t.class == NullPointerException) throw t
-//            if (t.class == SoapFaultException) throw t
-//            if (t.class == MissingPropertyException) throw t
-//            throw e;
+        } catch (Throwable t) {
+            logThrowable(t)
+            throw t;
         }
     }
+
+//    def invoke(validationMethod) throws Exception {
+//        try {
+//            validationMethod.method.invoke(validationObject);
+//        } catch (InvocationTargetException e) {
+//            logException(e)
+//            Throwable t = e.getCause();
+//            throw t;
+//        }
+//    }
 
     private def logException(Exception e) {
         // Force a log entry under validators even if this validator would not normally generate one
@@ -81,6 +87,16 @@ public class ValidationEngine {
         Assertion a = new Assertion()
         a.setLocation(ExceptionUtils.getStackTrace(e.getCause()))
         a.setMsg(e.getMessage())
+        a.setStatus(AssertionStatus.INTERNALERROR)
+        ag.addAssertion(a)
+    }
+
+    private def logThrowable(Throwable t) {
+        // Force a log entry under validators even if this validator would not normally generate one
+        AssertionGroup ag = validationObject.ag
+        Assertion a = new Assertion()
+        a.setLocation(ExceptionUtils.getStackTrace(t.getCause()))
+        a.setMsg(t.getMessage())
         a.setStatus(AssertionStatus.INTERNALERROR)
         ag.addAssertion(a)
     }
@@ -102,7 +118,7 @@ public class ValidationEngine {
             if ("none".equals(dependsOnId))
                 continue
             ValidationMethod dependsOn = getValidationMethodById(dependsOnId)
-            if (!dependsOn.hasRun)
+            if (dependsOn && !dependsOn.hasRun)
                 return false
         }
         return true

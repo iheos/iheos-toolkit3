@@ -42,7 +42,7 @@ class InOutMessagesDAO {
 		log.debug("Header\n" + hdr);
 		Asset a = AssetHelper.createChildAsset(inOutAsset, "Request Header", "", new SimpleType(reqHdrType));
 		a.setOrder(1);
-		a.updateContent(hdr, "text/plain");
+		a.setContent(hdr, "text/plain");
 	}
 	
 //	public String getRequestHeader() throws RepositoryException {
@@ -71,7 +71,7 @@ class InOutMessagesDAO {
 		log.debug("Response\n" + hdr);
 		Asset a = AssetHelper.createChildAsset(inOutAsset, "Response Header", "", new SimpleType(resHdrType));
 		a.setOrder(3);
-		a.updateContent(hdr, "text/plain");
+		a.setContent(hdr, "text/plain");
 	}
 
     public void putResponseBody(byte[] bytes) throws RepositoryException {

@@ -23,7 +23,7 @@ public class SeparateSiteLoader extends SiteLoader {
 
 	public Sites load(File actorsDir, Sites sites) throws Exception {
 		if (!actorsDir.isDirectory())
-			throw new Exception("Cannot load actor descriptions: " +
+			throw new Exception("Cannot loadFromString actor descriptions: " +
 					actorsDir + " is not a directory");
 		for (File file : actorsDir.listFiles()) {
 			if (!file.getName().endsWith("xml"))

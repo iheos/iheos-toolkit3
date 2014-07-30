@@ -7,7 +7,7 @@ package gov.nist.hit.ds.simSupport.service
 class ToolkitServiceRunner {
 
     def run(serviceName, paramMap) {
-        Class<ServiceClass> serviceClass = ServiceDefinitions.Services[serviceName]
+        Class<IServiceClass> serviceClass = ServiceDefinitions.Services[serviceName]
         def object = serviceClass.newInstance()
         object.invokeMethod('run', paramMap)
     }

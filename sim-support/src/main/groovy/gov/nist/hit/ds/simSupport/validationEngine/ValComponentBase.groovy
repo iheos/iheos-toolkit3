@@ -9,8 +9,8 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault;
 import gov.nist.hit.ds.soapSupport.FaultCode;
 import gov.nist.hit.ds.soapSupport.SoapFaultException;
 import gov.nist.hit.ds.xdsException.ExceptionUtil
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
-import org.apache.log4j.Logger
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import groovy.util.logging.Log4j;
 
 /**
  * An abstract class that makes use of the SimComponent interface easier
@@ -23,17 +23,21 @@ import org.apache.log4j.Logger
  * @author bmajur
  *
  */
+@Log4j
 public abstract class ValComponentBase implements ValComponent {
     public AssertionGroup ag;
     public Event event;
     String name;
     String description;
     ValidationEngine validationEngine;
-    static Logger logger = Logger.getLogger(ValComponentBase.class);
 
     ValComponentBase() {}
 
-    ValComponentBase(Event event) { validationEngine = new ValidationEngine(this, event) }
+    ValComponentBase(Event event) {
+        log.debug "ValComponentBase() - ${this.class.name}"
+        event.startNewValidator(this.class.simpleName)
+        validationEngine = new ValidationEngine(this, event)
+    }
 
     @Override void setEvent(Event event) { this.event = event }
 
@@ -50,6 +54,8 @@ public abstract class ValComponentBase implements ValComponent {
     void runValidationEngine() throws SoapFaultException, RepositoryException { validationEngine.run() }
 
     ValidationEngine getValidationEngine() { return validationEngine }
+
+    void withNewAssertionGroup() { ag = new AssertionGroup() }
 
     /******************************************
      *
@@ -93,6 +99,13 @@ public abstract class ValComponentBase implements ValComponent {
     }
 
     public boolean assertEquals(String expected, String found) throws SoapFaultException {
+        Assertion a = ag.assertEquals(expected, found);
+        log.debug("Assertion: ${a}")
+        recordAssertion(a);
+        return !a.failed();
+    }
+
+    public boolean assertEquals(boolean expected, boolean found) throws SoapFaultException {
         Assertion a = ag.assertEquals(expected, found);
         log.debug("Assertion: ${a}")
         recordAssertion(a);
@@ -266,7 +279,7 @@ public abstract class ValComponentBase implements ValComponent {
         a.setReference(vr.getRef());
         a.setLocation(vr.getLocation());
 
-        logger.debug("Assertion: " + a);
+        log.debug("Assertion: " + a);
     }
 
     boolean validationAlreadyRecorded(String id) { idsAsserted.contains(id) }
@@ -301,21 +314,21 @@ public abstract class ValComponentBase implements ValComponent {
 
     private void recordAssertion(Assertion a, ValidationFault vf)
             throws SoapFaultException {
-        if (validationAlreadyRecorded(vf.id())) {
-            a.setId(vf.id());
-            a.setMsg("Validator contains multiple assertions with this id");
-            String[] refs = [ ]
-            a.setReference(refs);
-            a.setExpected("");
-            a.setFound("");
-            a.setCode(FaultCode.Receiver.toString());
-            a.setStatus(AssertionStatus.INTERNALERROR);
-            throw new SoapFaultException(
-                    ag,
-                    FaultCode.Receiver,
-                    new ErrorContext("Validator contains multiple assertions with this id", "")
-            );
-        }
+//        if (validationAlreadyRecorded(vf.id())) {
+//            a.setId(vf.id());
+//            a.setMsg("Validator contains multiple assertions with this id");
+//            String[] refs = [ ]
+//            a.setReference(refs);
+//            a.setExpected("");
+//            a.setFound("");
+//            a.setCode(FaultCode.Receiver.toString());
+//            a.setStatus(AssertionStatus.INTERNALERROR);
+//            throw new SoapFaultException(
+//                    ag,
+//                    FaultCode.Receiver,
+//                    new ErrorContext("Validator contains multiple assertions with this id", "")
+//            );
+//        }
         idsAsserted.add(vf.id());
 
         a.setId(vf.id());

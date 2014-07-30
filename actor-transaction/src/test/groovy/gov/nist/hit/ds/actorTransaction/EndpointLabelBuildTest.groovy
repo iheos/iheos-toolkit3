@@ -41,7 +41,7 @@ public class EndpointLabelBuildTest {
     @Before
     void setup() {
         ActorTransactionTypeFactory.clear()
-        new ActorTransactionTypeFactory().load(config)
+        new ActorTransactionTypeFactory().loadFromString(config)
         actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
     }
 

@@ -54,7 +54,7 @@ class SiteFactoryTest extends Specification {
     void setup() {
         def aTfactory = new ActorTransactionTypeFactory()
         aTfactory.clear()
-        aTfactory.load(config)
+        aTfactory.loadFromString(config)
     }
 
     def 'ActorSimConfig should have 4 transactions'() {

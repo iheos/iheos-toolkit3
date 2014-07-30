@@ -25,6 +25,8 @@
         <module>../xdsException</module>
         <module>../toolkit</module>
         <module>../common-datatypes</module>
+        <module>../httpSoapValidator</module>
+        <module>../ds-sims</module>
     </modules>
     
     <dependencies>
@@ -35,6 +37,10 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>xdsException</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>httpSoapValidator</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
@@ -73,48 +79,4 @@
             <artifactId>ebxmlrr-common</artifactId>
         </dependency>
     </dependencies>
-
-
-<!--
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <artifactSet>
-                        <excludes>
-                            <exclude>junit:junit</exclude>
-                            <exclude>log4j*:*</exclude>
-                            <exclude>commons-logging*:*</exclude>
-                            <exclude>jaxen*:*</exclude>
-                            <exclude>xerces:*</exclude>
-                            <exclude>xml-apis:*</exclude>
-                            <exclude>soap:soap:*</exclude>
-                            <exclude>backport-util-concurrent*:*</exclude>
-                            <exclude>commons-collections*:*</exclude>
-                            <exclude>commons-lang*:*</exclude>
-                            <exclude>oro*:*</exclude>
-                            <exclude>org.hamcrest:*</exclude>
-                            <exclude>org.codehaus*:*</exclude>
-                            <exclude>com.sun.ebxml*:*</exclude>
-                            <exclude>edu.emory*:*</exclude>
-                            <exclude>javax*:*</exclude>
-                            <exclude>org.*:*</exclude>
-                        </excludes>
-                    </artifactSet>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-    -->
 </project>

@@ -2,6 +2,9 @@ package gov.nist.hit.ds.simSupport.client.configElementTypes;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.simSupport.client.ParamType;
+import gov.nist.hit.ds.utilities.xml.XmlUtil;
+import org.apache.axiom.om.OMAttribute;
+import org.apache.axiom.om.OMElement;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 
 import java.io.Serializable;
@@ -15,6 +18,15 @@ abstract public class AbstractActorSimConfigElement implements IsSerializable, S
 	ParamType type;
 	String  value = null;
 	boolean editable = false;
+
+    public OMElement toXML() {
+        OMElement top = XmlUtil.om_factory.createOMElement(type.toString(), null);
+        OMAttribute typeAtt = XmlUtil.om_factory.createOMAttribute("name", null, name);
+        OMAttribute valueAtt = XmlUtil.om_factory.createOMAttribute("value", null, value);
+        top.addAttribute(typeAtt);
+        top.addAttribute(valueAtt);
+        return top;
+    }
 
 	public AbstractActorSimConfigElement() {   }
 

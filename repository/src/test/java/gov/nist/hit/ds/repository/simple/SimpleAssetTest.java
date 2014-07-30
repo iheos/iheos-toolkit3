@@ -130,7 +130,7 @@ public class SimpleAssetTest {
 		a2.updateContent("My Content".getBytes());
 		ArtifactId assetId2 = a2.getId();
 		
-		a.addAsset(a2);  // make a the parent of a2
+		a.addChild(a2);  // make a the parent of a2
 		
 		assertFalse(assetId.isEqual(assetId2));
 		
@@ -139,7 +139,7 @@ public class SimpleAssetTest {
 		a3.updateContent("My Third Content".getBytes());
 		ArtifactId assetId3 = a3.getId();
 		
-		a2.addAsset(a3);  // make a the parent of a3
+		a2.addChild(a3);  // make a the parent of a3
 		
 		assertFalse(assetId3.isEqual(assetId2));
 
