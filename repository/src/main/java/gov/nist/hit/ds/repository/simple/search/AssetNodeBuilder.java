@@ -101,7 +101,7 @@ public class AssetNodeBuilder {
 		
 		AssetIterator iter;
 		try {
-			iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
+			iter = new SearchResultIterator(new Repository[]{repos}, criteria, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE} );
 			while (iter.hasNextAsset()) {
 				Asset a = iter.nextAsset();
 				AssetNode child = new AssetNode(a.getRepository().getIdString()
@@ -274,7 +274,7 @@ public class AssetNodeBuilder {
 		 		
 		AssetIterator iter;
 		try {
-			iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
+			iter = new SearchResultIterator(new Repository[]{repos}, criteria, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE});
 			
 			while (iter.hasNextAsset()) {
 				Asset a = iter.nextAsset();
