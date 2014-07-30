@@ -1,7 +1,6 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure;
 
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.ListGridEditEvent;
 import com.smartgwt.client.types.RowEndEditAction;
 import com.smartgwt.client.widgets.Canvas;
@@ -55,24 +54,12 @@ public class EndpointsConfigWidget extends HLayout {
             @Override
             protected Canvas getExpansionComponent(final ListGridRecord record) {
 
-                final ListGrid grid = this;
+                final TransactionGrid nestedGrid = new TransactionGrid();
+                nestedGrid.fetchRelatedData(record, EndpointConfigDSNew.getInstance());
+
 
                 VLayout layout = new VLayout(5);
                 layout.setPadding(5);
-
-                final ListGrid nestedGrid = new ListGrid();
-                nestedGrid.setHeight(200);
-                nestedGrid.setDataSource(TransactionDS.getInstance());
-                nestedGrid.fetchRelatedData(record, EndpointConfigDSNew.getInstance());
-
-                nestedGrid.setCanEdit(true);
-                nestedGrid.setModalEditing(true);
-                nestedGrid.setEditEvent(ListGridEditEvent.CLICK);
-                nestedGrid.setListEndEditAction(RowEndEditAction.NEXT);
-                nestedGrid.setAutoSaveEdits(true);
-                nestedGrid.groupBy("actorName");
-                nestedGrid.setGroupStartOpen(GroupStartOpen.ALL);
-
                 layout.addMember(nestedGrid);
 
                 HLayout hLayout = new HLayout(10);
@@ -83,6 +70,7 @@ public class EndpointsConfigWidget extends HLayout {
                 saveButton.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
                         nestedGrid.saveAllEdits();
+                        nestedGrid.exportAsXML();
                     }
                 });
                 hLayout.addMember(saveButton);
@@ -111,7 +99,6 @@ public class EndpointsConfigWidget extends HLayout {
 //                });
 //                hLayout.addMember(closeButton);
 //
-
 
                 layout.addMember(hLayout);
 
@@ -176,4 +163,4 @@ public class EndpointsConfigWidget extends HLayout {
 
 
 
-    }
+}

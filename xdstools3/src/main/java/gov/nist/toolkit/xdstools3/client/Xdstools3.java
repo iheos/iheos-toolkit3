@@ -4,7 +4,6 @@ package gov.nist.toolkit.xdstools3.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
@@ -51,7 +50,7 @@ public class Xdstools3 implements EntryPoint {
 		rp.add(container);
 
         // Smartgwt Console - useful for development, mainly tracking RPC calls
-        SC.showConsole();
+       // SC.showConsole();
 
         // Add listener for Open Tab eventBusUtils. The tabs called must be defined in function "openTab".
         Util.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new OpenTabEventHandler(){
@@ -72,20 +71,19 @@ public class Xdstools3 implements EntryPoint {
     public void openTab(String tabName) {
         GenericCloseableTab tab = null;
 
-        // create tab depending on parameter
         if (tabName == TabNamesUtil.getInstance().getAdminTabCode()) {
             tab = new SettingsTab();
         }
-        if (tabName == TabNamesUtil.getInstance().getEndpointsTabCode()) {
+        else if (tabName == TabNamesUtil.getInstance().getEndpointsTabCode()) {
             tab = new EndpointConfigTab();
         }
-        if (tabName == TabNamesUtil.getInstance().getFindDocumentsTabCode()) {
+        else if (tabName == TabNamesUtil.getInstance().getFindDocumentsTabCode()) {
             tab = new FindDocumentTab();
         }
-        if (tabName == TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()) {
+        else if (tabName == TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()) {
             tab = new MPQTab();
         }
-        if (tabName == TabNamesUtil.getInstance().getMessageValidatorTabCode()) {
+        else if (tabName == TabNamesUtil.getInstance().getMessageValidatorTabCode()) {
             tab = new MessageValidatorTab();
         }
         // update set of tabs

@@ -41,7 +41,6 @@ public class TransactionDS extends DataSource {
         actorName.setValueXPath("parent::actor/@actorName");
         actorName.setHidden(true); // used only for formatting
 
-
         //---- transactions -----
 
         DataSourceTextField transactionCode = new DataSourceTextField("transactionCode");
@@ -56,7 +55,11 @@ public class TransactionDS extends DataSource {
         DataSourceTextField tls = new DataSourceTextField("secure", "TLS Endpoint");
         DataSourceTextField notls = new DataSourceTextField("unsecure", "Non-TLS Endpoint");
 
+        //----- repositoryUniqueID and homeCommunityID ------
 
-        setFields(siteName, actorCode, actorName, transactionCode, transactionName, tls, notls);
+        DataSourceTextField repositoryUniqueID = new DataSourceTextField("uid");
+        repositoryUniqueID.setValueXPath("parent::actor/@uid");
+
+        setFields(siteName, actorCode, actorName, transactionCode, transactionName, tls, notls, repositoryUniqueID);
     }
 }
