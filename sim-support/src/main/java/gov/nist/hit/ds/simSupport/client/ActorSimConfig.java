@@ -4,7 +4,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.*;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.AbstractActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement;
+import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import groovy.transform.ToString;
+import org.apache.axiom.om.OMElement;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,7 +32,16 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	Object actorState = null;
 	
 	public ActorSimConfig() { }
-	
+
+    public OMElement toXML() {
+        OMElement top = XmlUtil.om_factory.createOMElement("SimConfig", null);
+        for (AbstractActorSimConfigElement ele : elements) {
+            OMElement part = ele.toXML();
+            top.addChild(part);
+        }
+        return top;
+    }
+
 	/**
 	 * Set expiration date
 	 * @param expires

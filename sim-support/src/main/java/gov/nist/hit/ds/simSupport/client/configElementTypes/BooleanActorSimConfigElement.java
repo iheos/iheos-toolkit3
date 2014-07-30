@@ -9,7 +9,7 @@ public class BooleanActorSimConfigElement extends AbstractActorSimConfigElement 
 
 	private static final long serialVersionUID = -1150340414189551656L;
 
-	public BooleanActorSimConfigElement() { }
+    public BooleanActorSimConfigElement() { }
 	
 	public BooleanActorSimConfigElement(String name, boolean value) {
 		this.name = name;

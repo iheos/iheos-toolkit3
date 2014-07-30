@@ -49,7 +49,7 @@ public class FindConfigOneEndpointTest {
     @Before
     void setup() {
         new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().load(config)
+        new ActorTransactionTypeFactory().loadFromString(config)
         startUp()
     }
 

@@ -4,11 +4,11 @@ import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
-
-import java.io.IOException;
-import java.util.Enumeration;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Enumeration;
 
 public class HttpParserBa {
 
@@ -21,6 +21,7 @@ public class HttpParserBa {
 	HttpMessageBa message = new HttpMessageBa();  // Holds the parsed message
 	MultipartParserBa multiparser;
 	boolean appendixV = true;
+    static Logger logger = Logger.getLogger(HttpParserBa.class);
 
 	public MultipartParserBa getMultipartParser() {
 		return multiparser;
@@ -59,7 +60,8 @@ public class HttpParserBa {
 	}
 
 	public boolean isMultipart() {
-		return message.multipart != null;
+        if (message.multipart == null) return false;
+		return message.multipart.getPartCount() > 0;
 	}
 
 	public MultipartMessageBa getMultipart() {
@@ -177,6 +179,7 @@ public class HttpParserBa {
 		}
 
 		String header = new String(input, from, to-from).trim();
+        logger.debug("Parsed header " + header);
 		if (header.length() > 0) {
 			message.addHeader(header);
 			to = findStartOfNextHeader();
@@ -213,8 +216,11 @@ public class HttpParserBa {
 			out[i] = in[offset + i];
 		return out;
 	}
-	
+
+
 	void parseHeadersAndBody() throws HttpParseException, ParseException  {
+        input = new String(input).trim().getBytes();
+        logger.debug("parseHeadersAndBody from:\n" + new String(input));
 		try {
 			while (true)
 				nextHeader();

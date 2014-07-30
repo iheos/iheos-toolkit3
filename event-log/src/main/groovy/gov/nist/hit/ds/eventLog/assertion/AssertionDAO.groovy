@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.eventLog.assertion
 
 import gov.nist.hit.ds.utilities.csv.CSVEntry
-import gov.nist.hit.ds.eventLog.errorRecording.RequiredOptional
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 
 /**
  * Created by bill on 4/15/14.
@@ -63,9 +63,9 @@ class AssertionDAO {
     def buildSemiDivided(List values) {
         StringBuffer buf = new StringBuffer();
 
-        if (values.size() > 0)
+        if (values?.size() > 0)
             buf.append(values[0]);
-        for (int i=1; i<values.size(); i++) {
+        for (int i=1; i<values?.size(); i++) {
             buf.append(";").append(values[i]);
         }
 

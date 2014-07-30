@@ -1,10 +1,8 @@
-package gov.nist.hit.ds.simSupport.validationEngine;
-
-import gov.nist.hit.ds.eventLog.Event;
-import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
-import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.soapSupport.SoapFaultException;
-
+package gov.nist.hit.ds.simSupport.validationEngine
+import gov.nist.hit.ds.eventLog.Event
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
+import gov.nist.hit.ds.repository.api.RepositoryException
+import gov.nist.hit.ds.soapSupport.SoapFaultException
 /**
  * Identifies a class as a valsim. 
  * @author bmajur

@@ -27,6 +27,7 @@ public class AssetNode implements IsSerializable, Serializable {
 	private String mimeType;
 	private String reposSrc;
 	private String location;
+    private String color;
 	private String createdDate;
 	
 	private boolean hasContent;
@@ -182,6 +183,14 @@ public class AssetNode implements IsSerializable, Serializable {
 
     public void setExtendedProps(Map<String, String> extendedProps) {
         this.extendedProps = extendedProps;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
 }

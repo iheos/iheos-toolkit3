@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>gov.nist.hit.ds</groupId>
@@ -11,55 +11,63 @@
     <name>toolkit3</name>
 
 
-<repositories>
-<repository>
-    <id>internal-nist-repo-releases</id>
-    <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
-</repository>
-<repository>
-    <id>internal-nist-repo-snapshots</id>
-    <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
-</repository>
-<repository>
-    <id>internal-nist-repo-maven-central</id>
-    <url>http://vm-070.nist.gov:8081/nexus/content/repositories/central/</url>
-</repository>
-<repository>
-    <id>jboss-maven2-release-repository</id>
-    <url>http://vm-070.nist.gov:8081/nexus/content/repositories/jboss-thirdparty-releases/</url>
-</repository>
-<repository>
-    <id>internal-nist-repo-third-party</id>
-    <url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>
-</repository>
+    <repositories>
+        <repository>
+            <id>internal-nist-repo-releases</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>internal-nist-repo-snapshots</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>internal-nist-repo-maven-central</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/central/</url>
+        </repository>
+        <repository>
+            <id>jboss-maven2-release-repository</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/jboss-thirdparty-releases/</url>
+        </repository>
+        <repository>
+            <id>internal-nist-repo-third-party</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>
+        </repository>
 
-<repository>
-    <id>maven-central</id>
-    <url>http://repo1.maven.org/maven2</url>
-</repository>
-<repository>
-    <id>apache-central</id>
-    <url>http://repo.maven.apache.org/maven2</url>
-</repository>
-<repository>
-    <id>codehaus</id>
-    <url>http://repository.codehaus.org/org/codehaus</url>
-</repository>
-</repositories>
-
+        <repository>
+            <id>maven-central</id>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>apache-central</id>
+            <url>http://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>codehaus</id>
+            <url>http://repository.codehaus.org/org/codehaus</url>
+        </repository>
+    </repositories>
 
 
     <properties>
+        <gwtVersion>2.5.1</gwtVersion>
+        <mavenCompilerPluginVersion>3.1</mavenCompilerPluginVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 
     <modules>
         <module>tk-core</module>
         <module>xdstools3</module>
+        <module>docentryeditor</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>httpSoapValidator</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
             <dependency>
                 <groupId>com.sun.ebxml</groupId>
                 <artifactId>ebxmlrr-common</artifactId>
@@ -120,8 +128,8 @@
             <dependency>
                 <groupId>com.google.gwt</groupId>
                 <artifactId>gwt-user</artifactId>
-                <version>2.5.1</version>
-                <scope>provided</scope>
+                <version>${gwtVersion}</version>
+                <!-- <scope>provided</scope> -->
             </dependency>
             <dependency>
                 <groupId>org.apache.velocity</groupId>
@@ -164,6 +172,11 @@
                 <artifactId>javax.servlet-api</artifactId>
                 <version>3.0.1</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>xmlunit</groupId>
+                <artifactId>xmlunit</artifactId>
+                <version>1.4</version>
             </dependency>
 
             <dependency>
@@ -253,6 +266,11 @@
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
+                <groupId>edu.tn.xds.metadata</groupId>
+                <artifactId>docentryeditor</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.axis2</groupId>
                 <artifactId>axis2-kernel</artifactId>
                 <version>1.6.2</version>
@@ -271,7 +289,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>${mavenCompilerPluginVersion}</version>
                 <configuration>
                     <compilerId>groovy-eclipse-compiler</compilerId>
                     <!-- Java version -->
@@ -292,8 +310,8 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            
-            
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>

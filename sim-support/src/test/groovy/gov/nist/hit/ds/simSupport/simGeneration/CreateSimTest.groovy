@@ -44,7 +44,7 @@ class CreateSimTest extends Specification {
     void setup() {
         def factory = new ActorTransactionTypeFactory()
         factory.clear()
-        factory.load(config)
+        factory.loadFromString(config)
     }
 
     def 'SimConfig should contain transaction configs'() {

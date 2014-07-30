@@ -676,6 +676,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 			for (CSVEntry e : parser.getTable().entries()) {
 				
 				for (String s : e.getItems()) {
+//                    logger.info("row: " + rowIdx + " colIdx:" + colIdx +1 + " val: " +s.toString());
 					records[rowIdx][colIdx++] = s; 
 				}
 				// fix row width

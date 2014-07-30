@@ -1,12 +1,12 @@
-package gov.nist.hit.ds.simSupport.validationEngine.annotation;
+package gov.nist.hit.ds.simSupport.validationEngine.annotation
 
-import gov.nist.hit.ds.eventLog.errorRecording.RequiredOptional;
-import gov.nist.hit.ds.soapSupport.FaultCode;
+import gov.nist.hit.ds.soapSupport.FaultCode
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.ElementType
+import java.lang.annotation.Retention
+import java.lang.annotation.RetentionPolicy
+import java.lang.annotation.Target
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

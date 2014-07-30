@@ -1,16 +1,5 @@
 package gov.nist.hit.ds.siteManagement.repository;
 
-import gov.nist.hit.ds.repository.api.*;
-import gov.nist.hit.ds.repository.simple.SimpleId;
-import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.siteManagement.loader.SiteLoader;
-import gov.nist.hit.ds.siteManagement.loader.Sites;
-import gov.nist.hit.ds.toolkit.installation.Installation;
-import org.apache.axiom.om.OMElement;
-
-import java.io.File;
-
-
 public class SiteRepository {
 
 	static final String mainSiteRepoId = "MainSiteRepo";
@@ -48,7 +37,7 @@ public class SiteRepository {
 //		return sites;
 //	}
 //
-//	public Sites load(OMElement conf, Sites sites) throws Exception {
+//	public Sites loadFromString(OMElement conf, Sites sites) throws Exception {
 //		SiteLoader siteLoader = new SiteLoader();
 //
 //		siteLoader.parseSite(conf);
@@ -62,14 +51,14 @@ public class SiteRepository {
 //		return sites;
 //	}
 
-//	public Sites load(Repository repos, Sites sites) throws Exception {
+//	public Sites loadFromString(Repository repos, Sites sites) throws Exception {
 //		Directory reposDirectory = new Directory();
 //
 //		AssetIterator ai = repos.getAssetsByType(reposDirectory.getActorAssetType());
 //		while (ai.hasNextAsset()) {
 //			Asset a = ai.nextAsset();
 //			OMElement ele = Parse.parse_xml_string(new String(a.getContent()));
-//			load(ele, sites);
+//			loadFromString(ele, sites);
 //		}
 //		return sites;
 //	}
@@ -88,7 +77,7 @@ public class SiteRepository {
 //				throw new ToolkitRuntimeException("Validation Errors: " + errs.toString());
 //
 //			OMElement xml = new SiteLoader().siteToXML(site);
-//			asset.updateContent(new OMFormatter(xml).toString(), "text/xml");
+//			asset.setContent(new OMFormatter(xml).toString(), "text/xml");
 //		} catch (RepositoryException e) {
 //			throw new ToolkitRuntimeException("Cannot save site <" + site.getName() + "> to repository", e);
 //		}
