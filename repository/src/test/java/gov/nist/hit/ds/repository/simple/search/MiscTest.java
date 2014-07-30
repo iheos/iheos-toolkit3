@@ -270,5 +270,19 @@ public class MiscTest {
         }
         System.out.println("concMapTest exit");
     }
-	
+
+
+    @Test
+    public void arrayTest() {
+        List<String[]> rows = new ArrayList<String[]>();
+
+        String[] row = new String[]{"ID","STATUS","MSG"};
+
+        rows.add(row);
+
+        String[][] rowArray = rows.toArray(new String[rows.size()][]);
+        System.out.println("array get" + rowArray[0][1]);
+
+        System.out.println("arrayTest exit");
+    }
 }

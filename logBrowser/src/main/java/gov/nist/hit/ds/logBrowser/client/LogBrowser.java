@@ -37,6 +37,7 @@ public class LogBrowser implements EntryPoint {
                                 //, Feature.TRANSACTION_MONITOR
 //                                , Feature.TRANSACTION_FILTER
                                 , Feature.TRANSACTION_FILTER_ADVANCED
+                                , Feature.EVENT_MESSAGE_AGGREGATOR
                                 });
 
 			} catch (RepositoryConfigException e) {
