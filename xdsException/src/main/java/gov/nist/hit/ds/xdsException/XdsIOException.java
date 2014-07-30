@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.xdsException;
 
-public class XdsIOException extends XdsInternalException {
+public class XdsIOException extends ToolkitRuntimeException {
 	/**
 	 * 
 	 */

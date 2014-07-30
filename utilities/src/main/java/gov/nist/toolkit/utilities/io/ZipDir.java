@@ -1,13 +1,9 @@
 package gov.nist.toolkit.utilities.io;
 
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+
+import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -110,7 +106,7 @@ public class ZipDir {
 		} 
 		catch(Exception e) 
 		{ 
-			System.out.println(ExceptionUtil.exception_details(e)); 
+			System.out.println(ExceptionUtil.exception_details(e));
 		} 
 
 

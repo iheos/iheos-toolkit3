@@ -1,0 +1,31 @@
+<List>
+    <supplyItem>
+        <SKU>58074602</SKU>
+        <units>Ea</units>
+        <categoryName>Office Paper Products</categoryName>
+        <name>Pens Stabiliner 808 Ballpoint Fine Black</name>
+        <unitCost>0.24</unitCost>
+        <description>Schwan Stabilo 808 ballpoint pens are a quality ballpoint with a non-slip grip zone. Long writing length due to the extra large refill with visible ink volume. Available in medium and fine point in four colours.</description>
+    </supplyItem>
+    <supplyItem>
+        <units>Ea</units>
+        <itemName>Pens Stabiliner 808 Ballpoint Fine Blue</itemName>
+        <categoryName>Office Paper Products</categoryName>
+        <SKU>58074604</SKU>
+        <unitCost>0.24</unitCost>
+    </supplyItem>
+    <supplyItem>
+        <units>Ea</units>
+        <itemName>Pens Stabiliner 808 Ballpoint Fine Red</itemName>
+        <categoryName>Office Paper Products</categoryName>
+        <SKU>58074605</SKU>
+        <unitCost>0.24</unitCost>
+    </supplyItem>
+    <supplyItem>
+        <units>Ea</units>
+        <itemName>Pens Stabiliner 808 Ballpoint Fine Green</itemName>
+        <categoryName>Office Paper Products</categoryName>
+        <SKU>58074606</SKU>
+        <unitCost>0.24</unitCost>
+    </supplyItem>
+</List>  

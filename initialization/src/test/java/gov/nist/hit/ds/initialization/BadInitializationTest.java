@@ -16,8 +16,6 @@ public class BadInitializationTest {
 			Installation.installation().initialize();
 		} catch (InitializationFailedException e) {
 			return;
-		} catch (IOException e) {
-			fail();
 		}
 		fail();
 	}

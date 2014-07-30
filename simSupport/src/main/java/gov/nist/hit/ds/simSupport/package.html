@@ -1,0 +1,44 @@
+<html>
+<body>
+Simulator definition and runtime support library.
+
+<p>First a few definitions:
+
+<p><em>Simulator (big Picture)</em> - An implementation of a IHE Actor (or similar) that starts it operation by receiving a transaction (input message). 
+The term simulator differentiates it from an implementation in two ways.  First, socially, in IHE implementations are what vendors build, bring to Connectathon
+to test and sell as products while simulators are testing artifacts.  Second, a simulator does not necessarily implement every requirement of an Actor.  It 
+implements enough to be useful as a testing tool.  Also, simulators are likely to be out-fitted with logging capability that can give
+feedback to developers testing against them.
+
+<p><em>Simulator (Java class)</em> - in memory representation of a simulator. It is linked to the SimDb by the SimId it carries.  Actually, a Simulator class
+instance carries references to multiple simulators.  This allows for the construction of composite simulators - simulators that are composed of smaller, simpler 
+simulators that somehow cooperate.  An example is the Repository/Registry simulator.  It is a composite as a convenence to implementers of Document Source
+and Document Consumer actors. They can create a single simulator and get a complete test environment.
+
+<p><em>SimulatorConfig<em> - an instance of SimulatorConfig represents a single Simulator (not a composite). It contains linkages to state (the SimId) and
+the pre-defined endpoints, option settings etc. 
+
+<p><em>SimulatorConfigElement</em> - a single configuration item inside a SimulatorConfig. A configuration item might be an endpoint definition. 
+
+<p><em>SimId</em> - a string used to identify a particular instance of a simulator.  There can be, for example, 3 instances of a Document Registry simulator
+running concurrently.  They are identified by their SimId.
+
+<p><em>EventLog</em> - within the logs maintained for a simulator, one section is set aside to store the request and resulting response messages that pass
+through the simulator instance. EventLog is a class used to maintain the input/outputs of a single transaction interaction.
+
+<p><em>Event</em> - a single transaction instance usually composed of a request message followed by a response message.
+
+<p><em>SimDb</em> - short for Simulator Database. An area set aside to maintain status, logs and state of all running simulators.  
+
+<p>There are a collection of conversions that are possible when dealing with the internals of a simulator.  The following are possible:
+
+<p>SimDb, SimId ==> Simulator
+
+<p>EventLog ==> Simulator
+
+<p>Simulator ==> SimId
+
+<p>SimId ==> SimDb instance
+
+</body>
+<html>

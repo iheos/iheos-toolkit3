@@ -145,7 +145,7 @@ public class RepositoryFactory implements RepositoryManager {
 		Parameter req = new Parameter();
 		req.assertEquals(Access.RW_EXTERNAL, this.getSource().getAccess());
 		
-		if (Configuration.repositoryExists(getSource(), repositoryId))
+		if (!Configuration.repositoryExists(getSource(), repositoryId))
 			return;
 		SimpleRepository repos = new SimpleRepository(repositoryId);
 		repos.setSource(getSource());

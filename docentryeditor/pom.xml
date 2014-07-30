@@ -2,22 +2,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>toolkit2</artifactId>
-        <groupId>gov.nist.toolkit</groupId>
-        <version>v2-maven-alpha</version>
+        <artifactId>toolkit3</artifactId>
+        <groupId>gov.nist.hit.ds</groupId>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>docentryeditor</artifactId>
     <groupId>edu.tn.xds.metadata</groupId>
+	<version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>doc-entry-editor</name>
 
     <properties>
-        <!-- Convenience property to set the GWT version -->
-        <gwtVersion>2.5.1</gwtVersion>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <url>http://maven.apache.org</url>
@@ -43,7 +40,7 @@
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
-            <!--<classifier>deps</classifier>-->
+            <scope>runtime</scope>
             <version>${gwtVersion}</version>
         </dependency>
         <dependency>
@@ -52,7 +49,6 @@
             <version>${gwtVersion}</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
@@ -154,28 +150,12 @@
         <!-- Generate compiled stuff in the folder used for developing mode -->
         <!--<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>-->
         <plugins>
+
             <!-- GWT Maven Plugin-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
                 <version>${gwtVersion}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.google.gwt</groupId>
-                        <artifactId>gwt-user</artifactId>
-                        <version>${gwtVersion}</version>
-                    </dependency>
-                    <!--<dependency>-->
-                    <!--<groupId>com.google.gwt</groupId>-->
-                    <!--<artifactId>gwt-dev</artifactId>-->
-                    <!--<version>${gwtVersion}</version>-->
-                    <!--</dependency>-->
-                    <dependency>
-                        <groupId>com.google.gwt</groupId>
-                        <artifactId>gwt-servlet</artifactId>
-                        <version>${gwtVersion}</version>
-                    </dependency>
-                </dependencies>
                 <!-- JS is only needed in the package phase, this speeds up testing -->
                 <executions>
                     <execution>
@@ -238,7 +218,7 @@
             <!-- RequestFactory Validation jar -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>${mavenCompilerPluginVersion}</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
