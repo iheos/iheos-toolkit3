@@ -78,6 +78,11 @@
         </dependency>
         <dependency>
             <groupId>com.smartgwt</groupId>
+            <artifactId>smartgwt-skins</artifactId>
+            <version>4.1p</version>
+        </dependency>
+        <dependency>
+            <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt-custom-theme</artifactId>
             <version>4.1p</version>
         </dependency>
