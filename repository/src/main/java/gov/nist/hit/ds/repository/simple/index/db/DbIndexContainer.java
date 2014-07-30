@@ -1617,7 +1617,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @throws RepositoryException 
 	 */
 	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
-		return getAssetsBySearch(repositories, searchCriteria, "", false);
+		return getAssetsBySearch(repositories, searchCriteria, null, false);
 	}
 	
 	/**
@@ -1668,7 +1668,7 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @return
      * @throws RepositoryException
      */
-    public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr) throws RepositoryException {
+    public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByStr) throws RepositoryException {
         return getAssetsBySearch(repositories,searchCriteria,orderByStr,false);
     }
 
@@ -1676,12 +1676,12 @@ public class DbIndexContainer implements IndexContainer, Index {
      *
      * @param repositories
      * @param searchCriteria
-     * @param orderByStr
+     * @param orderByPk
      * @param searchCriteriaLocationOnly
      * @return
      * @throws RepositoryException
      */
-	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String orderByStr, boolean searchCriteriaLocationOnly) throws RepositoryException {
+	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByPk, boolean searchCriteriaLocationOnly) throws RepositoryException {
 		Repository[] fRep = new Repository[repositories.length];
 		int cx=0;
         String locations[] = searchCriteria.findPropertyValue(PropertyKey.LOCATION.getPropertyName(), SearchTerm.Operator.EQUALTO);
@@ -1725,12 +1725,12 @@ public class DbIndexContainer implements IndexContainer, Index {
 			// Search needs to limit search properties to the ones supported by assets belonging to those repositories -
 			//  - to avoid searching for out-of-reach properties that do not apply to the repositories in question
 			// This needs to be independent from the syncRep call because there columns might not have fully expanded 
-			int orderBy=0;
+			int reposOrder=0;
 			for (Repository rep : fRep) {
 				if (rep==null) continue; // Nothing found by the getHitCount call above, skip to next repos
 				
 				String sqlStr = "insert into "+searchSession+"(repId,assetId,reposAcs,reposOrder,displayOrder,createdDate,propFile)"
-						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (orderBy++) + "," + displayOrder + "," + createdDate + "," + locationId + " from " + repContainerLabel 
+						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (reposOrder++) + "," + displayOrder + "," + createdDate + "," + locationId + " from " + repContainerLabel
 						+ " where " + repId + " = ? and reposAcs=? " +(!"".equals(searchCriteriaWhere)?" and( "+ searchCriteriaWhere + ")":"");
 				
 				try {					
@@ -1750,7 +1750,20 @@ public class DbIndexContainer implements IndexContainer, Index {
 					
 			// ResultSet rs = dbc.executeQuery("select * from (select repId,assetId,reposAcs,propFile,reposOrder,createdDate,row_number() over() as rownum from "+searchSession+")as tr where tr.rownum<="+ QueryParameters.MAX_RESULTS +" order by tr.reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?",tr."+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
 
-			ResultSet rs = dbc.executeQuery("select repId,assetId,reposAcs,propFile from "+searchSession+" order by reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?","+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
+            List<String> orderBy = new ArrayList<String>();
+            // Fixed order
+            orderBy.add("reposOrder");
+
+            // Append optional ordering keys
+            if (orderByPk !=null) {
+                for (String s: orderByPk) {
+                    orderBy.add(s);
+                }
+            }
+
+
+
+			ResultSet rs = dbc.executeQuery("select repId,assetId,reposAcs,propFile from "+searchSession+" order by " + SearchTerm.getValueAsCsv(orderBy.toArray(new String[orderBy.size()]))); //group by repId,assetId,reposOrder,displayOrder order
 			
 			
     		List<AssetNode> assetList = popAssetNode(rs);

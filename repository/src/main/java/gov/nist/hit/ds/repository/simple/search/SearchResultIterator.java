@@ -17,6 +17,7 @@ import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -51,13 +52,13 @@ public class SearchResultIterator implements AssetIterator  {
 	 */
 	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
 
-		init(repositories,searchCriteria,"", false);
+		init(repositories,searchCriteria,null, false);
 	}
 
     public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, boolean searchCriteriaLocationOnly, boolean loadProperties) throws RepositoryException {
 
         setLoadProperties(loadProperties);
-        init(repositories,searchCriteria,"", searchCriteriaLocationOnly);
+        init(repositories,searchCriteria,null, searchCriteriaLocationOnly);
     }
 	/**
 	 * 
@@ -66,18 +67,30 @@ public class SearchResultIterator implements AssetIterator  {
 	 * @param orderBy Optional - This can be null
 	 * @throws RepositoryException
 	 */
-	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, String orderBy) throws RepositoryException {
+	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, String[] orderBy) throws RepositoryException {
 
 		init(repositories,searchCriteria,orderBy, false);
 	}
 	
-	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, PropertyKey key) throws RepositoryException {
+	public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, PropertyKey[] orderByKeys) throws RepositoryException {
 
-		init(repositories,searchCriteria,key.toString(), false);
+        String[] orderKeys = null;
+		if (orderByKeys!=null) {
+            List<String> orderBy = new ArrayList<String>(orderByKeys.length);
+
+            for (PropertyKey pk : orderByKeys) {
+                orderBy.add(pk.toString());
+            }
+
+            orderKeys = orderBy.toArray(new String[orderBy.size()]);
+
+        }
+        init(repositories,searchCriteria,orderKeys, false);
+
 	}
 		
 	private void init(Repository[] repositories, SearchCriteria searchCriteria,
-			String orderBy, boolean searchCriteriaLocationOnly) throws RepositoryException {
+			String[] orderBy, boolean searchCriteriaLocationOnly) throws RepositoryException {
 		DbIndexContainer dbc = new DbIndexContainer();
 		
 		crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy, searchCriteriaLocationOnly);
