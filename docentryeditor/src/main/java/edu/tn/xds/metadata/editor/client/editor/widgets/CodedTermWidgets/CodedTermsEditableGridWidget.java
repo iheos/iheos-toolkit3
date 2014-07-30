@@ -40,7 +40,7 @@ public class CodedTermsEditableGridWidget extends GenericEditableGrid<CodedTerm>
         cb = new PredefinedCodedTermComboBox(predefinedCode);
         cb.getStore().remove(0);
 
-        setCheckBoxSelectionModel();
+//        setCheckBoxSelectionModel();
 
         // Editing widgets
         TextField displayNameTF = new TextField();

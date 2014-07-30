@@ -1,7 +1,7 @@
 package edu.tn.xds.metadata.editor.client.editor.widgets;
 
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.user.client.ui.Composite;
+import com.sencha.gxt.widget.core.client.Composite;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.form.Validator;
@@ -17,15 +17,10 @@ import edu.tn.xds.metadata.editor.shared.model.String256;
 public class String256EditorWidget extends Composite implements Editor<String256> {
 
     BoundedTextField string = new BoundedTextField();
-//    int initWindowWidth;
 
     public String256EditorWidget() {
         VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
         initWidget(vcontainer);
-        // string.setWidth(400);
-//        initWindowWidth=Window.getClientWidth();
-
-        string.setWidth("auto");
         string.setMaxLength(256);
         vcontainer.add(string, new VerticalLayoutData(1, -1));
     }

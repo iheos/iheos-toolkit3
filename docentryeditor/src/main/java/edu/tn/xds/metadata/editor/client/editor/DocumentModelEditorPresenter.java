@@ -20,7 +20,7 @@ import edu.tn.xds.metadata.editor.client.event.SaveFileEvent;
 import edu.tn.xds.metadata.editor.client.event.SaveFileEvent.SaveFileEventHandler;
 import edu.tn.xds.metadata.editor.client.event.StartEditXdsDocumentEvent;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractPresenter;
-import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
+import edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry;
 
 import javax.inject.Inject;
 import java.util.logging.Logger;
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentModelEditorView> {
 
     protected static Logger logger = Logger.getLogger(DocumentModelEditorPresenter.class.getName());
-    protected DocumentModel model;
+    protected XdsDocumentEntry model;
     EditorDriver editorDriver = GWT.create(EditorDriver.class);
 
     @Inject
@@ -36,13 +36,13 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 
     @Override
     public void init() {
-        model = new DocumentModel();
+        model = new XdsDocumentEntry();
         initDriver(model);
         requestFactory.initialize(eventBus);
         bind();
     }
 
-    private void initDriver(DocumentModel model) {
+    private void initDriver(XdsDocumentEntry model) {
         editorDriver.initialize(view);
         getView().author.initEditorDriver();
 //		getView().title.initEditorDriver();
@@ -149,11 +149,11 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 
     }
 
-    public DocumentModel getModel() {
+    public XdsDocumentEntry getModel() {
         return model;
     }
 
-    interface EditorDriver extends SimpleBeanEditorDriver<DocumentModel, DocumentModelEditorView> {
+    interface EditorDriver extends SimpleBeanEditorDriver<XdsDocumentEntry, DocumentModelEditorView> {
 
     }
 

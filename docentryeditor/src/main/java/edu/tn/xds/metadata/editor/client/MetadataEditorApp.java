@@ -55,8 +55,8 @@ public class MetadataEditorApp implements EntryPoint {
 //        appView.addResizeHandler(new ResizeHandler() {
 //            @Override
 //            public void onResize(ResizeEvent event) {
-//                appView.setWidth(event.getWidth()-25);
-//                appView.setHeight(event.getHeight());
+//                appView.forceLayout();
+//                appView.setResize(true);
 //            }
 //        });
     }

@@ -39,7 +39,7 @@ import java.util.List;
  * {@link #toString() method toString}
  * </p>
  *
- * @see DocumentModel class DocumentModel
+ * @see XdsDocumentEntry class DocumentModel
  * @see ModelElement class ModelElement </p>
  */
 public class Author implements ModelElement, Serializable {
@@ -185,7 +185,7 @@ public class Author implements ModelElement, Serializable {
      * <p>
      * <b>Method toXML</b> <br>
      * This method will be called to build a XML file by the
-     * {@link DocumentModel} with the information taken from the local Author.
+     * {@link XdsDocumentEntry} with the information taken from the local Author.
      * </br>
      * </p>
      *

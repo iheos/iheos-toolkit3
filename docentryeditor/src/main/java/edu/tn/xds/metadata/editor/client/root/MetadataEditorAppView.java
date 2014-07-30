@@ -28,9 +28,6 @@ public class MetadataEditorAppView extends Viewport {
     SubmissionPanelView submissionPanelView;
     SubmissionPanelPresenter submissionPanelPresenter;
 
-//    WestPanel west; // interface for model validation
-    // SouthPanel south; // optional editor fields
-
     public MetadataEditorAppView() {
         super();
 
@@ -59,14 +56,12 @@ public class MetadataEditorAppView extends Viewport {
         // WEST
         submissionMVP = buildSubmissionMVP();
         submissionMVP.init();
-        BorderLayoutData westData = new BorderLayoutData(350);
+        BorderLayoutData westData = new BorderLayoutData(300);
         westData.setMargins(new Margins(0, 5, 5, 5));
         westData.setCollapsible(true);
         westData.setSplit(false);
 
-        // FIXME add submission pane in higher view
         con.setWestWidget(submissionMVP.getDisplay(), westData);
-
 
 
         SimpleContainer simple = new SimpleContainer();

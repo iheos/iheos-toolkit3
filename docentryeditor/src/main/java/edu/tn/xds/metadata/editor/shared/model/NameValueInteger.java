@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * {@link #verify() method verify}</br> {@link #toXML() method toXML} <br>
  * </p>
  *
- * @see DocumentModel
+ * @see XdsDocumentEntry
  * @see ModelElement
  */
 public class NameValueInteger implements ModelElement, Serializable {
@@ -81,7 +81,7 @@ public class NameValueInteger implements ModelElement, Serializable {
      * <p>
      * <b>Method toXML</b> <br>
      * This method will be called to build a XML file by the
-     * {@link DocumentModel} with the information taken from the local
+     * {@link XdsDocumentEntry} with the information taken from the local
      * {@link NameValueInteger}.<br>
      * </p>
      *

@@ -2,13 +2,13 @@ package edu.tn.xds.metadata.editor.client.editor.widgets.InternationalStringWidg
 
 import com.google.gwt.core.client.GWT;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import edu.tn.xds.metadata.editor.client.editor.properties.InternationalStringProperties;
 import edu.tn.xds.metadata.editor.client.editor.widgets.LanguageCodeComboBox;
 import edu.tn.xds.metadata.editor.client.generics.GenericEditableGrid;
 import edu.tn.xds.metadata.editor.client.generics.GridModelFactory;
+import edu.tn.xds.metadata.editor.client.widgets.BoundedTextField;
 import edu.tn.xds.metadata.editor.shared.model.InternationalString;
 import edu.tn.xds.metadata.editor.shared.model.LanguageCode;
 
@@ -27,12 +27,13 @@ public class InternationalStringEditableGrid extends GenericEditableGrid<Interna
     public InternationalStringEditableGrid(String gridTitle) {
         super(gridTitle, new ListStore<InternationalString>(isprops.key()), buildColumnModel());
 
-        setCheckBoxSelectionModel();
+//        setCheckBoxSelectionModel();
 
         LanguageCodeComboBox languageCodeComboBox = new LanguageCodeComboBox();
         languageCodeComboBox.setAllowBlank(false);
         languageCodeComboBox.setToolTip("The translation language's code is required. It can not be null. Please select one or delete the row.");
-        TextField tf = new TextField();
+        BoundedTextField tf = new BoundedTextField();
+        tf.setMaxLength(256);
         tf.setToolTip("This is the translation corresponding to the selected language. This field is required. It can not be null.");
         tf.setAllowBlank(false);
         addColumnEditorConfig(languageCodeColumnConfig, languageCodeComboBox);

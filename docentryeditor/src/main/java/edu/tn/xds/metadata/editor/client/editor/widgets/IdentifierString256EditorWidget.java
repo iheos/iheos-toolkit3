@@ -1,7 +1,7 @@
 package edu.tn.xds.metadata.editor.client.editor.widgets;
 
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.user.client.ui.Composite;
+import com.sencha.gxt.widget.core.client.Composite;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
@@ -25,7 +25,7 @@ public class IdentifierString256EditorWidget extends Composite implements Editor
         vcontainer.add(value, new VerticalLayoutData(1, -1));
     }
 
-    public void addValueFieldValidator(Validator validator) {
+    public void addValueFieldValidator(Validator<String> validator) {
         value.addValidator(validator);
     }
 

@@ -26,13 +26,16 @@ public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date>
     private final static DTMProperties props = GWT.create(DTMProperties.class);
 
     ListStoreEditor<DTM> values;
+    @Ignore
+    private DateField df = new DateField();
 
     public NameValueDTMEditorWidget(String widgetTitle) {
         super(widgetTitle, new ListStore<DTM>(props.key()), props.dtm());
 
+//        view.setAutoFill(true);
+
         DateTimeFormat dtf = DateTimeFormat.getFormat("yyyyMMddHHmmss");
 
-        DateField df = new DateField();
         df.setPropertyEditor(new DateTimePropertyEditor(dtf));
         df.setToolTip("This value is required. The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59");
         df.setEmptyText("YYYY[MM[DD[hh[mm[ss]]]]] (ex: 201103160830)");
@@ -44,6 +47,29 @@ public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date>
         getColumnModel().getColumn(0).setCell(c);
 
         values = new ListStoreEditor<DTM>(getStore());
+
+        bind();
+    }
+
+    private void bind() {
+        // FIXME not working asked a question on stackoverflow waiting for answers
+//        editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<DTM>() {
+//            @Override
+//            public void onCompleteEdit(CompleteEditEvent<DTM> event) {
+//                df.clearInvalid();
+//                df.validate();
+//                if (df.getValue() == null || !df.isValid()) {
+//                    getStore().clear();
+//                    DTM e = GWT.create(DTM.class);
+//                    getStore().add(e);
+//                    editing.startEditing(event.getEditCell());
+//                    df.forceInvalid("This date does not respect the expeted format");
+//                } else {
+////                    editing.cancelEditing();
+////                    editing.completeEditing();
+//                }
+//            }
+//        });
     }
 
     public void setListMaxSize(int maxSize) {

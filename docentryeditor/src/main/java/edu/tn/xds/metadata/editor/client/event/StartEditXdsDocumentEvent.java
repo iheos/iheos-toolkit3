@@ -2,7 +2,7 @@ package edu.tn.xds.metadata.editor.client.event;
 
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
-import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
+import edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry;
 
 /**
  * Created by onh2 on 7/18/2014.
@@ -10,9 +10,9 @@ import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
 public class StartEditXdsDocumentEvent extends GwtEvent<StartEditXdsDocumentEvent.StartEditXdsDocumentHandler> {
 
     public static Type<StartEditXdsDocumentHandler> TYPE = new Type<StartEditXdsDocumentHandler>();
-    private DocumentModel fileContent;
+    private XdsDocumentEntry fileContent;
 
-    public StartEditXdsDocumentEvent(DocumentModel fileContent) {
+    public StartEditXdsDocumentEvent(XdsDocumentEntry fileContent) {
         this.fileContent = fileContent;
     }
 
@@ -26,7 +26,7 @@ public class StartEditXdsDocumentEvent extends GwtEvent<StartEditXdsDocumentEven
         handler.onStartEditXdsDocument(this);
     }
 
-    public DocumentModel getDocument() {
+    public XdsDocumentEntry getDocument() {
         return fileContent;
     }
 

@@ -34,12 +34,28 @@ public class NameValueString256EditorWidget extends GenericEditableListView<Stri
         addEditorConfig(tf);
 
         values = new ListStoreEditor<String256>(getStore());
+
+        bindUI();
     }
 
     public void addFieldValidator(Validator<String> validator) {
         tf.addValidator(validator);
     }
 
+    private void bindUI() {
+//        editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<String256>() {
+//            @Override
+//            public void onCompleteEdit(CompleteEditEvent<String256> event) {
+//                tf.validate();
+//                if (tf.getValue() == null || !tf.isValid()) {
+//                    tf.clear();
+//                    editing.startEditing(event.getEditCell());
+////                    editing.cancelEditing();
+////                    view.refresh(false);
+//                }
+//            }
+//        });
+    }
 
     /**
      * Sets the widget's tool tip with the given config

@@ -2,6 +2,8 @@ package edu.tn.xds.metadata.editor.client.editor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
@@ -38,12 +40,14 @@ import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractView;
 import edu.tn.xds.metadata.editor.client.widgets.ConfirmDeleteDialog;
 import edu.tn.xds.metadata.editor.shared.model.Author;
 import edu.tn.xds.metadata.editor.shared.model.CodedTerm;
-import edu.tn.xds.metadata.editor.shared.model.DocumentModel;
 import edu.tn.xds.metadata.editor.shared.model.InternationalString;
+import edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
-public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPresenter> implements Editor<DocumentModel> {
+public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPresenter> implements Editor<XdsDocumentEntry> {
     private final AuthorProperties authorprops = GWT.create(AuthorProperties.class);
 
     private final VerticalLayoutContainer form = new VerticalLayoutContainer();
@@ -136,6 +140,20 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
     CodedTermsEditableGridWidget eventCodesGrid;
 
     @Override
+    protected Map<String, Widget> getPathToWidgetsMap() {
+        Map<String, Widget> map = new HashMap<String, Widget>();
+        map.put("id", id);
+        map.put("fileName", fileName);
+        map.put("hash", hash);
+        map.put("patientID", patientID);
+        map.put("uniqueId", uniqueId);
+        map.put("uri", uri);
+        map.put("repoUId", repoUId);
+        map.put("author", author);
+        return map;
+    }
+
+    @Override
     protected Widget buildUI() {
         final VerticalLayoutContainer container = new VerticalLayoutContainer();
         container.getElement().setMargins(10);
@@ -146,6 +164,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
         fp1.add(requiredFields);
         fp2.add(optionalFields);
+
         fp1.setHeadingText("Required Fields");
         fp2.setHeadingText("Optional Fields");
 
@@ -246,7 +265,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         FieldSet fieldSet_repoAttributes = new FieldSet();
         fieldSet_repoAttributes.setHeadingText("Repository attributes");
         fieldSet_repoAttributes.setCollapsible(true);
-        fieldSet_repoAttributes.add(repositoryAttributesFieldsContainer);
+        fieldSet_repoAttributes.add(repositoryAttributesFieldsContainer, new VerticalLayoutData(1, -1));
 
         // //////////////////////////////////////////////////////
         // Other fields and options (init)
@@ -258,12 +277,12 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // Patient ID Fields (required)
         FieldLabel patientIdLabel = new FieldLabel(patientID, "Patient ID");
         patientIdLabel.setLabelWidth(125);
-        simpleRequiredFieldsContainer.add(patientIdLabel);
+        simpleRequiredFieldsContainer.add(patientIdLabel, new VerticalLayoutData(1, -1));
 
         // Unique ID Fieds (required)
         FieldLabel uniqueIdLabel = new FieldLabel(uniqueId, "Unique ID");
         uniqueIdLabel.setLabelWidth(125);
-        simpleRequiredFieldsContainer.add(uniqueIdLabel);
+        simpleRequiredFieldsContainer.add(uniqueIdLabel, new VerticalLayoutData(1, -1));
 
 		/* ********************************** */
         /* coded terms options and fieldset */
@@ -320,14 +339,14 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // /////////////////////////////////////////////////////////
         // Adding and ordering fieldsets in REQUIRED panel
         // /////////////////////////////////////////////////////////
-		/* simple required fields added to FramedPanel container */
+        /* simple required fields added to FramedPanel container */
         requiredFields.add(fieldSet_general_fields_required);
         requiredFields.add(creationTime.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         // /////////////////////////////////////////////////////////
         // Adding and ordering fieldsets in OPTIONAL fields panel
         // /////////////////////////////////////////////////////////
-		/* simple optional fields added to FramedPanel container */
+        /* simple optional fields added to FramedPanel container */
         optionalFields.add(fieldSet_fileProperties);
         optionalFields.add(fieldSet_repoAttributes);
         optionalFields.add(titlesGrid.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
@@ -345,6 +364,8 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
         form.setScrollMode(ScrollMode.AUTO);
         form.add(container);
+
+        form.forceLayout();
 
         return form;
     }
@@ -448,6 +469,12 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                     author.setEditionMode(EditionMode.DISPLAY);
                     enableAuthorButtonWidgets(EditionMode.DISPLAY);
                 }
+            }
+        });
+        form.addResizeHandler(new ResizeHandler() {
+            @Override
+            public void onResize(ResizeEvent event) {
+                form.forceLayout();
             }
         });
     }

@@ -1,7 +1,7 @@
 package edu.tn.xds.metadata.editor.client.editor.widgets;
 
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.user.client.ui.Composite;
+import com.sencha.gxt.widget.core.client.Composite;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.Validator;
@@ -28,7 +28,7 @@ public class IdentifierOIDEditorWidget extends Composite implements
         idTypeLabel.setLabelWidth(125);
         idTypeLabel.setVisible(false);
 
-        vcontainer.add(value);
+        vcontainer.add(value, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
     }
 
     public void addValueFieldValidator(Validator validator) {
