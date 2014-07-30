@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.nestedGridTest;
 
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.fields.*;
