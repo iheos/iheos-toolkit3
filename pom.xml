@@ -57,8 +57,7 @@
 
     <modules>
         <module>tk-core</module>
-        <module>xdstools3</module>
-        <module>docentryeditor</module>
+        <module>gui-core</module>
     </modules>
 
     <dependencyManagement>

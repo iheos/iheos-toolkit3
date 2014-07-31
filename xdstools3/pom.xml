@@ -14,7 +14,6 @@
     <!-- <version>3.0.0dev</version>  -->
     <packaging>war</packaging>
     <groupId>gov.nist.toolkit</groupId>
-    <name>xdstools3</name>
 
 
     <properties>
