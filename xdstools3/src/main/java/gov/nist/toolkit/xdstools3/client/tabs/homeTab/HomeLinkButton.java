@@ -32,6 +32,8 @@ public class HomeLinkButton extends IButton {
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()));
                 else if (title == "Message Validator")
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getMessageValidatorTabCode()));
+                else if (title == "Document Metadata Editor")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });

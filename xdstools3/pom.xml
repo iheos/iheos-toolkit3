@@ -15,6 +15,8 @@
     <packaging>war</packaging>
     <groupId>gov.nist.toolkit</groupId>
     <name>xdstools3</name>
+
+
     <properties>
         <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.5.1</gwtVersion>
@@ -22,6 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+
 
     <repositories>
         <repository>
@@ -48,6 +51,25 @@
 
 
     <dependencies>
+
+        <!-- External dependencies -->
+        <dependency>
+            <groupId>com.sencha.gxt</groupId>
+            <artifactId>gxt</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt.inject</groupId>
+            <artifactId>gin</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.tn.xds.metadata</groupId>
+            <artifactId>docentryeditor</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>

@@ -22,6 +22,7 @@ public class HomeTab extends GenericTab {
         HomeBox tools = new HomeBox("Tools");
         tools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         tools.addItem("Message Validator");
+        tools.addItem("Document Metadata Editor");
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
