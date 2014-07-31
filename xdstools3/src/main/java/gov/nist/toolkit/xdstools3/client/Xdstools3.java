@@ -8,12 +8,12 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
-import edu.tn.xds.metadata.editor.client.MetadataEditorAppStandaloneEP;
 import gov.nist.toolkit.xdstools3.client.customWidgets.Toolbar;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
 import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
+import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
@@ -72,25 +72,25 @@ public class Xdstools3 implements EntryPoint {
     public void openTab(String tabName) {
         GenericCloseableTab tab = null;
 
-        if (tabName == TabNamesUtil.getInstance().getAdminTabCode()) {
+        if (tabName.equals(TabNamesUtil.getInstance().getAdminTabCode())) {
             tab = new SettingsTab();
         }
-        else if (tabName == TabNamesUtil.getInstance().getEndpointsTabCode()) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getEndpointsTabCode())) {
             tab = new EndpointConfigTab();
         }
-        else if (tabName == TabNamesUtil.getInstance().getFindDocumentsTabCode()) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getFindDocumentsTabCode())) {
             tab = new FindDocumentTab();
         }
-        else if (tabName == TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getMpqFindDocumentsTabCode())) {
             tab = new MPQTab();
         }
-        else if (tabName == TabNamesUtil.getInstance().getMessageValidatorTabCode()) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getMessageValidatorTabCode())) {
             tab = new MessageValidatorTab();
         }
-        else if (tabName == TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode()) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode())) {
            // create Metadata Editor tab
            // tab = new GenericCloseableTab("Document Metadata Editor");
-            MetadataEditorAppStandaloneEP app = new MetadataEditorAppStandaloneEP();
+            tab = new DocEntryEditorTab();
            //Window.open("http://ihexds.nist.gov:12080/xdstools/pidallocate", "", "");
         }
         // update set of tabs

@@ -18,7 +18,7 @@ public class MetadataEditorAppStandaloneEP implements EntryPoint {
     @SuppressWarnings("deprecation")
     @Override
     public void onModuleLoad() {
-        RootPanel.get("editorAppContainer").add((com.google.gwt.user.client.ui.IsWidget) new MetadataEditorApp());
+        RootPanel.get("editorAppContainer").add(new MetadataEditorApp().asWidget());
         //        RootLayoutPanel.get().add(activityPanel);
         logger.info("Application Started!");
     }
