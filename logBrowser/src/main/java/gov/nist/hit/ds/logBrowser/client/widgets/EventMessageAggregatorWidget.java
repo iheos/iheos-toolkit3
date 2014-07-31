@@ -3,13 +3,14 @@ package gov.nist.hit.ds.logBrowser.client.widgets;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.DataGrid;
+import com.google.gwt.user.cellview.client.DefaultCellTableBuilder;
 import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import gov.nist.hit.ds.logBrowser.client.CsvTableFactory;
@@ -31,19 +32,36 @@ import java.util.logging.Logger;
 
 /**
  * This widget builds an aggregate view of the messages, which are embedded in CSV formatted content files, logged by toolkit components.
+ * The following asset structure is required:
+ *
+ *  (Events)
+ *      - 'Date' - Event Id (required)
+ *          - 'Validations' type=validators (required)
+ *             - Assertions type=assertions (required) -- This is where the widget scans for the CSV files.
  */
 public class EventMessageAggregatorWidget extends Composite {
 
     public static final int FIXED_HEADER_LAST_IDX = 1;
     private static Logger logger = Logger.getLogger(EventMessageAggregatorWidget.class.getName());
-    private ScrollPanel contentPanel = new ScrollPanel();
+
+    public SimpleLayoutPanel getContentPanel() {
+        return contentPanel;
+    }
+
+    public void setContentPanel(SimpleLayoutPanel contentPanel) {
+        this.contentPanel = contentPanel;
+    }
+
+    //    private ScrollPanel contentPanel = new ScrollPanel();
+    private SimpleLayoutPanel contentPanel = new SimpleLayoutPanel();
     private SimpleEventBus eventBus;
     private String eventAssetId;
     private String assetType;
     private String externalRepositoryId;
     private String[] displayColumns;
     final private RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
-    private CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>(300); // new CsvTableFactory().createCellTable(rows.toArray(new String[rows.size()][]));
+//    private CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>(300); // new CsvTableFactory().createCellTable(rows.toArray(new String[rows.size()][]));
+    private DataGrid<List<SafeHtml>> table = new DataGrid<List<SafeHtml>>(300);
     private ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
 
 //    private DataGrid<List<SafeHtml>> table = new DataGrid<List<SafeHtml>>(5);
@@ -72,7 +90,7 @@ public class EventMessageAggregatorWidget extends Composite {
 
    }
 
-    protected ScrollPanel setupLayout() {
+    protected Widget setupLayout() {
         logger.log(Level.FINE, "initializing aggregator...");
         setSize("52%", "20%"); // Default size
 
@@ -119,9 +137,6 @@ public class EventMessageAggregatorWidget extends Composite {
                                       }
                                 }
 
-
-
-
                             }
                         });
 
@@ -141,7 +156,7 @@ public class EventMessageAggregatorWidget extends Composite {
         //                                List<List<SafeHtml>> rowList = dataProvider.getList();
 
 
-//        table.setTableBuilder(new DefaultCellTableBuilder<List<SafeHtml>>(table));
+        table.setTableBuilder(new DefaultCellTableBuilder<List<SafeHtml>>(table));
 
         //txTable.setWidth("100%", true);
 //        table.setWidth("50%");
@@ -164,6 +179,8 @@ public class EventMessageAggregatorWidget extends Composite {
         logger.info("updating rows:" + dataRows.size());
         dataProvider.setList(dataRows);
         dataProvider.addDataDisplay(table);
+
+        getContentPanel().setSize("52%","20%");
         getContentPanel().add(table);
 
 
@@ -336,13 +353,7 @@ public class EventMessageAggregatorWidget extends Composite {
     public void setExternalRepositoryId(String externalRepositoryId) {
         this.externalRepositoryId = externalRepositoryId;
     }
-    public ScrollPanel getContentPanel() {
-        return contentPanel;
-    }
 
-    public void setContentPanel(ScrollPanel contentPanel) {
-        this.contentPanel = contentPanel;
-    }
 
 
     public String[] getDisplayColumns() {

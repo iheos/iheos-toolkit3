@@ -32,12 +32,12 @@ public class LogBrowser implements EntryPoint {
 			try {
 				logBrowserWidget = new LogBrowserWidget(eventBus,
                         new Feature[]{
-                                Feature.BROWSE
-                                , Feature.SEARCH
+//                                Feature.BROWSE
+//                                , Feature.SEARCH
                                 //, Feature.TRANSACTION_MONITOR
 //                                , Feature.TRANSACTION_FILTER
-                                , Feature.TRANSACTION_FILTER_ADVANCED
-                                , Feature.EVENT_MESSAGE_AGGREGATOR
+//                                , Feature.TRANSACTION_FILTER_ADVANCED
+                                 Feature.EVENT_MESSAGE_AGGREGATOR
                                 });
 
 			} catch (RepositoryConfigException e) {
