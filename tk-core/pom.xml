@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>gov.nist.hit.ds</groupId>
+    <!-- no groupId because it is inherited from the parent -->
     <version>3.0.0-SNAPSHOT</version>
     <artifactId>tk-core</artifactId>
     <packaging>pom</packaging>
