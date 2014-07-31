@@ -22,8 +22,8 @@
 
     <!-- Inherits other local GWT modules -->
     <!-- this doesnt work -->
-        <inherits name="com.sencha.gxt.ui.GXT"/>
-        <inherits name="com.google.gwt.inject.Inject"/>
+        <!--<inherits name="com.sencha.gxt.ui.GXT"/>-->
+        <!--<inherits name="com.google.gwt.inject.Inject"/>-->
         <inherits name="edu.tn.xds.metadata.editor.XDS-MetadataEditor"/>
 
         <!-- Specify the app entry point class. -->

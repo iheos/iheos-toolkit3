@@ -8,7 +8,7 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
-import edu.tn.xds.metadata.editor.client.MetadataEditorApp;
+import edu.tn.xds.metadata.editor.client.MetadataEditorAppStandaloneEP;
 import gov.nist.toolkit.xdstools3.client.customWidgets.Toolbar;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
@@ -38,7 +38,7 @@ public class Xdstools3 implements EntryPoint {
         VLayout mainLayout = new VLayout();
 		mainLayout.addMembers(configBar, topTabSet);
         mainLayout.setStyleName("mainLayout");
-		
+
 		// Attach the contents to the RootLayoutPanel
 		HLayout container = new HLayout();
         container.setAlign(Alignment.CENTER);
@@ -90,7 +90,7 @@ public class Xdstools3 implements EntryPoint {
         else if (tabName == TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode()) {
            // create Metadata Editor tab
            // tab = new GenericCloseableTab("Document Metadata Editor");
-            MetadataEditorApp app = new MetadataEditorApp();
+            MetadataEditorAppStandaloneEP app = new MetadataEditorAppStandaloneEP();
            //Window.open("http://ihexds.nist.gov:12080/xdstools/pidallocate", "", "");
         }
         // update set of tabs
