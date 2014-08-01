@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>gov.nist.hit.ds</groupId>
+    <groupId>gov.nist.toolkit</groupId>
     <version>3.0.0-SNAPSHOT</version>
     <artifactId>ds-sims</artifactId>
 
