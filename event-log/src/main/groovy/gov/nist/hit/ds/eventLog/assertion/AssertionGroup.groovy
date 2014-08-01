@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.eventLog.assertion
 
+import gov.nist.hit.ds.repository.api.Asset
 import org.apache.log4j.Logger
 /**
  * Collection of Assertion outputs (execution status of assertion)
@@ -15,6 +16,7 @@ public class AssertionGroup  {
     def saveInLog = true
     def saved = false
     def assertionIds = [ ]  // this is used by unit tests to detect that an assertion has executed
+    Asset asset = null   // this gets set when saved - changes behaviour from create to update
 
     private static Logger logger = Logger.getLogger(AssertionGroup);
     private final static String dashes = "---";
@@ -23,7 +25,10 @@ public class AssertionGroup  {
 
     boolean hasContent() { return assertions.size() > 0 }
 
-    boolean needsFlushing() { hasContent() && !saved }
+    boolean needsFlushing() { (hasContent() || hasWarnings()) && !saved }
+
+    def setErrorStatus(AssertionStatus status) { if (status > worstStatus) worstStatus = status }
+    AssertionStatus status() { return worstStatus }
 
     public String toString() { return "AssertionGroup(${worstStatus})" }
 
@@ -63,6 +68,8 @@ public class AssertionGroup  {
         getFailedAssertions().each { msgs << it.msg }
         msgs
     }
+
+    boolean hasWarnings() { return worstStatus >= AssertionStatus.WARNING }
 
     boolean hasErrors() { return worstStatus >= AssertionStatus.ERROR }
 

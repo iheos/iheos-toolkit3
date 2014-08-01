@@ -53,6 +53,10 @@ public abstract class ValComponentBase implements ValComponent {
 
     void runValidationEngine() throws SoapFaultException, RepositoryException { validationEngine.run() }
 
+    @Override public boolean showOutputInLogs() { return true }
+
+    public void run() throws SoapFaultException, RepositoryException { runValidationEngine() }
+
     ValidationEngine getValidationEngine() { return validationEngine }
 
     void withNewAssertionGroup() { ag = new AssertionGroup() }
