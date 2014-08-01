@@ -5,9 +5,6 @@ import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.inspector.MetadataEditorTab;
 import gov.nist.toolkit.xdstools2.client.tabs.actorConfigTab.ActorConfigTab;
-import gov.nist.toolkit.xdstools2.client.tabs.directRegistrationTab.DirectRegistrationTab;
-import gov.nist.toolkit.xdstools2.client.tabs.directSenderTab.DirectSenderTab;
-import gov.nist.toolkit.xdstools2.client.tabs.directStatusTab.DirectStatusTab;
 import gov.nist.toolkit.xdstools2.client.tabs.messageValidator.MessageValidatorTab;
 import gov.nist.toolkit.xdstools2.client.tabs.simulatorControlTab.SimulatorControlTab;
 
@@ -116,12 +113,12 @@ public class TabLauncher implements ClickHandler {
 			new SimulatorControlTab().onAbstractTabLoad(container, true, null);
 		else if (tabType.equals(toolConfigTabLabel)) 
 			new ToolConfigTab().onAbstractTabLoad(container, true, null);
-		else if (tabType.equals(directRegistrationTabLabel)) 
-			new DirectRegistrationTab().onAbstractTabLoad(container, true, null);
-		else if (tabType.equals(directSendTabLabel)) 
-			new DirectSenderTab().onAbstractTabLoad(container, true, null);
-		else if (tabType.equals(directViewTabLabel)) 
-			new DirectStatusTab().onAbstractTabLoad(container, true, null);
+//		else if (tabType.equals(directRegistrationTabLabel))
+//			new DirectRegistrationTab().onAbstractTabLoad(container, true, null);
+//		else if (tabType.equals(directSendTabLabel))
+//			new DirectSenderTab().onAbstractTabLoad(container, true, null);
+//		else if (tabType.equals(directViewTabLabel))
+//			new DirectStatusTab().onAbstractTabLoad(container, true, null);
 		else if (tabType.equals(mesaTabLabel)) 
 			new MesaTestTab().onAbstractTabLoad(container, true, "Pre-Con Tests");
 		else if (tabType.equals(testRunnerTabLabel)) 

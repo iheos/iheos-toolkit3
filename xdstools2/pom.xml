@@ -1,225 +1,249 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>gov.nist.toolkit</groupId>
-		<artifactId>toolkit2</artifactId>
-		<version>v2-maven-alpha</version>
-	</parent>
-
-	<artifactId>xdstools2</artifactId>
-	<packaging>war</packaging>
-	<name>xdstools2 Maven Webapp</name>
-
-
-	<properties>
-		<!-- Convenience property to set the GWT version -->
-		<gwtVersion>2.5.1</gwtVersion>
-		<!-- GWT needs at least java 1.5 -->
-		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
-	<dependencies>
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-servlet</artifactId>
-			<version>2.5.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.ws.commons.axiom</groupId>
-			<artifactId>axiom-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ws.commons.axiom</groupId>
-			<artifactId>axiom-impl</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.0.0.GA</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.0.0.GA</version>
-			<classifier>sources</classifier>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>sim-common</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>xdstest-gui</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>xdstest2</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>site-management</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>validators-support</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>validators-registry-message</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>error-recording</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>registry-metadata</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>common-datatypes</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>actortransaction</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>direct-sim</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>tk</artifactId>
-			<version>v2-maven-alpha</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>results</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>actorfactory</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>http</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>direct</artifactId>
-			<version>v2-maven-alpha</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun.ebxml</groupId>
-			<artifactId>ebxmlrr-common</artifactId>
-			<version>1.0</version>
-		</dependency>
-	</dependencies>
-
-	<build>
-		<!-- Generate compiled stuff in the folder used for developing mode -->
-		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
-		<plugins>
-
-			<!-- GWT Maven Plugin -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.5.1</version>
-				<executions>
-					<execution>
-						<id>compilation_profile</id>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-						<configuration>
-							<!-- copyWebapp: Copies the contents of warSourceDirectory to hostedWebapp. -->
-							<!-- warSourceDirectory : Location of the web application static resources 
-								(same as maven-war-plugin parameter) Default value is: ${basedir}/src/main/webapp. -->
-							<!-- hostedWebapp: Location of the hosted-mode web application structure. 
-								Default: ${project.build.directory}/${project.build.finalName} -->
-							<copyWebapp>true</copyWebapp>
-							<!-- no optimization takes place. Good for development -->
-							<optimizationLevel>0</optimizationLevel>
-						</configuration>
-					</execution>
-				</executions>
-				
-				<configuration>
-					<runTarget>Xdstools2.html</runTarget>
-					<module>${project.groupId}.xdstools2.Xdstools2</module>
-				</configuration>
-
-			</plugin>
-
-			<!-- Maven WAR plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<!-- configured to be the same as for the gwt plugin -->
-					<webappDirectory>${webappDirectory}</webappDirectory>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<!-- create an exploded version of the war in webappDirectory. Ideal 
-								for development -->
-							<goal>exploded</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+    <parent>
+        <groupId>gov.nist.hit.ds</groupId>
+        <artifactId>toolkit3</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <groupId>gov.nist.toolkit</groupId>
+    <artifactId>xdstools2</artifactId>
+    <packaging>war</packaging>
 
 
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<!-- <path>/xdstools2</path> <warFile>${project.build.directory}/xdstools3-v2-maven-alpha.war</warFile> 
-						<tomcatLoggingFile>${project.build.directory}/log.txt</tomcatLoggingFile> -->
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <properties>
+        <gwtVersion>2.5.1</gwtVersion>
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+
+        <!-- Local dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>sim-common</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xdstest-gui</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>xdstest2</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>site-management</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>validators-support</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>validators-registry-message</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>error-recording</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>registry-metadata</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>common-datatypes</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>actortransaction</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>direct-sim</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>tk</artifactId>
+            <version>v2-maven-alpha</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>results</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>actorfactory</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>http</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>installation</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>session</artifactId>
+            <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>xdsException</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+        </dependency>
+
+
+
+        <!-- External dependencies -->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
+            <version>${gwtVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+            <version>${gwtVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-api</artifactId>
+            <version>1.2.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-impl</artifactId>
+            <version>1.2.14</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+            <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.ebxml</groupId>
+            <artifactId>ebxmlrr-common</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- Generate compiled stuff in the folder used for developing mode -->
+        <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+        <plugins>
+
+            <!-- GWT Maven Plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwtVersion}</version>
+                <executions>
+                    <execution>
+                        <id>compilation_profile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <optimizationLevel>0</optimizationLevel>
+                        </configuration>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <runTarget>Xdstools2.html</runTarget>
+                    <module>${project.groupId}.xdstools2.Xdstools2</module>
+                </configuration>
+
+            </plugin>
+
+            <!-- Maven WAR plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <!-- configured to be the same as for the gwt plugin -->
+                    <webappDirectory>${webappDirectory}</webappDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <!-- create an exploded version of the war in webappDirectory. Ideal
+                                for development -->
+                            <goal>exploded</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <!-- <path>/xdstools2</path> <warFile>${project.build.directory}/xdstools3-v2-maven-alpha.war</warFile>
+                        <tomcatLoggingFile>${project.build.directory}/log.txt</tomcatLoggingFile> -->
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-idea-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <dependenciesAsLibraries>true</dependenciesAsLibraries>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>

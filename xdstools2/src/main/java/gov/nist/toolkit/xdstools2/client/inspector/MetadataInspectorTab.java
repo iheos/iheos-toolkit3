@@ -1,13 +1,12 @@
 package gov.nist.toolkit.xdstools2.client.inspector;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.*;
 import gov.nist.toolkit.registrymetadata.client.ObjectRefs;
-import gov.nist.toolkit.results.client.AssertionResult;
-import gov.nist.toolkit.results.client.AssertionResults;
-import gov.nist.toolkit.results.client.Result;
-import gov.nist.toolkit.results.client.SiteSpec;
-import gov.nist.toolkit.results.client.StepResult;
-import gov.nist.toolkit.results.client.TestLog;
-import gov.nist.toolkit.results.client.TestLogs;
+import gov.nist.toolkit.results.client.*;
 import gov.nist.toolkit.xdstools2.client.PopupMessage;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.TabbedWindow;
@@ -15,17 +14,6 @@ import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.Tree;
-import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MetadataInspectorTab extends TabbedWindow {
 
@@ -350,12 +338,12 @@ public class MetadataInspectorTab extends TabbedWindow {
 	}
 
 	void buildLogMenu(StepResult stepResult, TreeItem stepTreeItem) {
-		TreeItem logsItem = new TreeItem("logs");
+		TreeItem logsItem = new TreeItem(SafeHtmlUtils.fromString("logs"));
 		stepTreeItem.addItem(logsItem);
 
 		TestLog stepLog = stepResult.getTestLog();
 
-		logsItem.addItem(new TreeItem("status : " + ((stepLog.status) ? "pass" : "<font color=\"#FF0000\">fail</font>")));
+		logsItem.addItem(new TreeItem(SafeHtmlUtils.fromString("status : " + ((stepLog.status) ? "pass" : "<font color=\"#FF0000\">fail</font>"))));
 		logsItem.addItem(new TreeItem(HyperlinkFactory.link("endpoint", new TextDisplay(this, stepLog.endpoint))));
 		logsItem.addItem(new TreeItem(HyperlinkFactory.link("request", new TextDisplay(this, stepLog.inputMetadata))));
 		logsItem.addItem(new TreeItem(HyperlinkFactory.link("response", new TextDisplay(this, stepLog.result))));
@@ -367,12 +355,12 @@ public class MetadataInspectorTab extends TabbedWindow {
 	}
 
 	void expandLogMenu(StepResult stepResult, TreeItem loadLogsTreeItem) {
-		TreeItem logsItem = new TreeItem("logs");
+		TreeItem logsItem = new TreeItem(SafeHtmlUtils.fromString("logs"));
 		//		stepTreeItem.addItem(logsItem);
 
 		TestLog stepLog = stepResult.getTestLog();
 
-		logsItem.addItem(new TreeItem("status : " + ((stepLog.status) ? "pass" : "<font color=\"#FF0000\">fail</font>")));
+		logsItem.addItem(new TreeItem(SafeHtmlUtils.fromString("status : " + ((stepLog.status) ? "pass" : "<font color=\"#FF0000\">fail</font>"))));
 		logsItem.addItem(new TreeItem(HyperlinkFactory.link("endpoint", new TextDisplay(this, stepLog.endpoint))));
 		logsItem.addItem(new TreeItem(HyperlinkFactory.link("request", new TextDisplay(this, stepLog.inputMetadata))));
 		logsItem.addItem(new TreeItem(HyperlinkFactory.link("response", new TextDisplay(this, stepLog.result))));

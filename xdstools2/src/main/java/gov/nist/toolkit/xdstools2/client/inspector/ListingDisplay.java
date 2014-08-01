@@ -1,16 +1,10 @@
 package gov.nist.toolkit.xdstools2.client.inspector;
 
-import gov.nist.toolkit.registrymetadata.client.Association;
-import gov.nist.toolkit.registrymetadata.client.Document;
-import gov.nist.toolkit.registrymetadata.client.DocumentEntry;
-import gov.nist.toolkit.registrymetadata.client.Folder;
-import gov.nist.toolkit.registrymetadata.client.ObjectRef;
-import gov.nist.toolkit.registrymetadata.client.ObjectRefs;
-import gov.nist.toolkit.registrymetadata.client.SubmissionSet;
-import gov.nist.toolkit.xdstools2.client.TabContainer;
-
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TreeItem;
+import gov.nist.toolkit.registrymetadata.client.*;
+import gov.nist.toolkit.xdstools2.client.TabContainer;
 
 public class ListingDisplay {
 	MetadataInspectorTab tab;
@@ -82,7 +76,7 @@ public class ListingDisplay {
 
 		TreeItem orItem = null;
 		if (data.combinedMetadata.objectRefs.size() > 0) {
-			orItem = new TreeItem(Integer.toString(data.combinedMetadata.objectRefs.size()) + " ObjectRefs");
+			orItem = new TreeItem(SafeHtmlUtils.fromString(Integer.toString(data.combinedMetadata.objectRefs.size()) + " ObjectRefs"));
 			root.addItem(orItem);
 
 			for (ObjectRef o : data.combinedMetadata.objectRefs) {

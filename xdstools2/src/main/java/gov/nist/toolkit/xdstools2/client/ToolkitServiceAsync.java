@@ -1,20 +1,13 @@
 package gov.nist.toolkit.xdstools2.client;
 
-import gov.nist.direct.client.MessageLog;
-import gov.nist.direct.client.config.SigningCertType;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import gov.nist.toolkit.actorfactory.client.Simulator;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
-import gov.nist.toolkit.directsim.client.ContactRegistrationData;
-import gov.nist.toolkit.directsim.client.DirectRegistrationData;
 import gov.nist.toolkit.registrymetadata.client.AnyIds;
 import gov.nist.toolkit.registrymetadata.client.ObjectRef;
 import gov.nist.toolkit.registrymetadata.client.ObjectRefs;
 import gov.nist.toolkit.registrymetadata.client.Uids;
-import gov.nist.toolkit.results.client.CodesResult;
-import gov.nist.toolkit.results.client.Result;
-import gov.nist.toolkit.results.client.SiteSpec;
-import gov.nist.toolkit.results.client.TestLogs;
-import gov.nist.toolkit.results.client.XdstestLogId;
+import gov.nist.toolkit.results.client.*;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.sitemanagement.client.TransactionOfferings;
 import gov.nist.toolkit.tk.client.TkProps;
@@ -25,21 +18,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 public interface ToolkitServiceAsync {
 	
-	void getAvailableDirectSigningCerts(AsyncCallback<List<SigningCertType>> callback);
-	void directRegistration(DirectRegistrationData reg, AsyncCallback<DirectRegistrationData> callback);
-	void contactRegistration(ContactRegistrationData reg, AsyncCallback<ContactRegistrationData> callback);
-	void loadDirectRegistration(String contact, AsyncCallback<ContactRegistrationData> callback);	
-	void deleteDirect(ContactRegistrationData contact, DirectRegistrationData direct, AsyncCallback<ContactRegistrationData> callback); 
-	void toolkitPubCert(AsyncCallback<String> cert);
-	void saveCertFromUpload(ContactRegistrationData reg, String directAddr, AsyncCallback<ContactRegistrationData> callback);
-	void directSend(Map<String, String> parms, AsyncCallback<List<Result>> callback);
-	void getEncryptionCertDomains(AsyncCallback<List<String>> asyncCallback);
-	void getDirectMsgIds(String user, AsyncCallback<List<String>> callback);
-	void getDirectOutgoingMsgStatus(String user, AsyncCallback<List<MessageLog>> callback);
+//	void getAvailableDirectSigningCerts(AsyncCallback<List<SigningCertType>> callback);
+//	void directRegistration(DirectRegistrationData reg, AsyncCallback<DirectRegistrationData> callback);
+//	void contactRegistration(ContactRegistrationData reg, AsyncCallback<ContactRegistrationData> callback);
+//	void loadDirectRegistration(String contact, AsyncCallback<ContactRegistrationData> callback);
+//	void deleteDirect(ContactRegistrationData contact, DirectRegistrationData direct, AsyncCallback<ContactRegistrationData> callback);
+//	void toolkitPubCert(AsyncCallback<String> cert);
+//	void saveCertFromUpload(ContactRegistrationData reg, String directAddr, AsyncCallback<ContactRegistrationData> callback);
+//	void directSend(Map<String, String> parms, AsyncCallback<List<Result>> callback);
+//	void getEncryptionCertDomains(AsyncCallback<List<String>> asyncCallback);
+//	void getDirectMsgIds(String user, AsyncCallback<List<String>> callback);
+//	void getDirectOutgoingMsgStatus(String user, AsyncCallback<List<MessageLog>> callback);
 
 	void getTkProps(AsyncCallback<TkProps> callback);
 	void getTestResults(List<String> testIds, String testSession, AsyncCallback<Map<String, Result>> callback);

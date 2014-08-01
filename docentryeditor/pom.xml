@@ -5,7 +5,9 @@
         <artifactId>toolkit3</artifactId>
         <groupId>gov.nist.hit.ds</groupId>
         <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+
     <artifactId>docentryeditor</artifactId>
     <groupId>edu.tn.xds.metadata</groupId>
 	<version>1.0.0-SNAPSHOT</version>
