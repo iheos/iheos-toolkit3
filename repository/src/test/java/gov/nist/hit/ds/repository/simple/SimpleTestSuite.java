@@ -1,12 +1,12 @@
 package gov.nist.hit.ds.repository.simple;
 
-import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.index.BulkLoadTest;
 import gov.nist.hit.ds.repository.simple.index.CreateContainerTest;
 import gov.nist.hit.ds.repository.simple.index.ExpandContainerTest;
 import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilderTest;
 import gov.nist.hit.ds.repository.simple.search.SearchTest;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 import org.apache.commons.io.FileUtils;
 import org.junit.ClassRule;
 import org.junit.rules.ExternalResource;
@@ -32,7 +32,7 @@ import java.io.File;
 		,SimpleRepositoryIteratorTest.class
 		,SimpleRepositoryTest.class
 		,SimpleTextAssetTest.class
-		,SimpleTypeIteratorTest.class 
+		,SimpleTypeIteratorTest.class
 		,SearchTest.class
 		,AssetNodeBuilderTest.class
 		,BulkLoadTest.class

@@ -96,7 +96,8 @@ public class SimpleCreateAssetTest {
 
         Asset p1 = repos.createNamedAsset("Parent1","",new SimpleType("siteAsset"), "Parent1");
         Asset c1 = repos.createNamedAsset("Child Display Name","",new SimpleType("siteAsset"), "Child");
-        c1.setContent("child text content","text/plain");
+        c1.setContent("child text content".getBytes(),"text/plain");
+
         p1.addChild(c1);
 
         Asset p2 = repos.createNamedAsset("Parent2","",new SimpleType("siteAsset"), "Parent2");
