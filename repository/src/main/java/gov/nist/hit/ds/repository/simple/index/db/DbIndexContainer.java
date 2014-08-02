@@ -105,6 +105,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * Set E is the difference between set B - A. These are the stale assets, a byproduct of assets that were once indexed but later removed from the file system. These assets will be removed from the database.
 	 *
 	 * @param repos
+     * @param indexOnlyNewAssets When false, a full scan/reindex is performed.
+     * @param locations
 	 * @return An int value of the number of assets updated or added to the database
 	 * @throws RepositoryException
 	 */
@@ -1684,12 +1686,12 @@ public class DbIndexContainer implements IndexContainer, Index {
 	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByPk, boolean searchCriteriaLocationOnly) throws RepositoryException {
 		Repository[] fRep = new Repository[repositories.length];
 		int cx=0;
-        String locations[] = searchCriteria.findPropertyValue(PropertyKey.LOCATION.getPropertyName(), SearchTerm.Operator.EQUALTO);
+        String locations[] = searchCriteria.getPropertyValue(PropertyKey.LOCATION.getPropertyName(), SearchTerm.Operator.EQUALTO);
 		for (Repository repos : repositories) {
             if (searchCriteriaLocationOnly) {
                 indexRep(repos, false, locations);
             } else {
-                indexRep(repos,false, null);
+                indexRep(repos,false, null); // false=full scan/reindex
             }
 
 			if (getHitCount(repos, searchCriteria) > 0) {
@@ -1763,7 +1765,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 
 
 
-			ResultSet rs = dbc.executeQuery("select repId,assetId,reposAcs,propFile from "+searchSession+" order by " + SearchTerm.getValueAsCsv(orderBy.toArray(new String[orderBy.size()]))); //group by repId,assetId,reposOrder,displayOrder order
+			ResultSet rs = dbc.executeQuery("select repId,assetId,reposAcs,propFile from "+searchSession+" order by " + SearchTerm.getValueAsCsv(orderBy.toArray(new String[orderBy.size()]),false)); //group by repId,assetId,reposOrder,displayOrder order
 			
 			
     		List<AssetNode> assetList = popAssetNode(rs);

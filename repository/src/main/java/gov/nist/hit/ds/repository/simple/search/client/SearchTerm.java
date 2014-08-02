@@ -217,7 +217,13 @@ public class SearchTerm implements IsSerializable, Serializable {
 		return userInput;
 	}
 
-    public static String getValueAsCsv(String[] items) {
+    /**
+     *
+     * @param items
+     * @param quoted Wrap values with a single quote
+     * @return
+     */
+    public static String getValueAsCsv(String[] items, boolean quoted) {
 
         String csv = "";
 
@@ -225,9 +231,10 @@ public class SearchTerm implements IsSerializable, Serializable {
             return csv;
 
         int valueLen =  items.length;
+        String wrapper = (quoted)?"'":"";
 
         for (int cx=0; cx<valueLen; cx++) {
-            csv += "'" + safeValue(items[cx]) + "'" + ((cx<valueLen-1) ?",":"");
+            csv += wrapper + safeValue(items[cx]) + wrapper + ((cx<valueLen-1) ?",":"");
         }
 
         return csv;
@@ -235,7 +242,7 @@ public class SearchTerm implements IsSerializable, Serializable {
 
 	private String getValueAsCsv() {
 
-		return "(" + getValueAsCsv(getValues())  + ")";
+		return "(" + getValueAsCsv(getValues(),true)  + ")";
 	}
 
 	public boolean isDeleted() {
