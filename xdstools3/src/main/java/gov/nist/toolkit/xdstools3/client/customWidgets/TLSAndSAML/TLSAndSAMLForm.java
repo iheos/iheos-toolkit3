@@ -14,5 +14,6 @@ public class TLSAndSAMLForm extends DynamicForm {
         SAMLComboBox saml = new SAMLComboBox(); saml.setEndRow(true);
         SpacerItem space = new SpacerItem();
         setFields(new FormItem[]{tls, space, saml});
+        setCellPadding(10);
     }
 }

@@ -4,9 +4,8 @@ package gov.nist.toolkit.xdstools3.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.Side;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
+import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.Toolbar;
@@ -15,66 +14,43 @@ import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
 import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
+import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
 public class Xdstools3 implements EntryPoint {
 
-
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
-
-	private static final String WINDOW_WIDTH = "994px"; // fits 1024 px res for all browsers with a little extra room
-	private static final int WINDOW_WIDTH_TO_INTEGER = 994;
-	private static final String WINDOW_HEIGHT = "700px";
-	private static final String TOOLBAR_HEIGHT = "35px"; 	
-	private static final String TEST_RESULT_SUMMARY_HEIGHT = "100px"; 	
-
-
-	// sizes for Dock Panel Layout - units are arbitrary numbers, not pixels or percentages
-	private static final double DOCKPANEL_TOOLBAR_HEIGHT = 7;
-	private static final double DOCKPANEL_WEST_WIDTH = 25;
-	private static final double DOCKPANEL_SOUTH_HEIGHT = 20;
-	
-	private static final String APP_TITLE_IHE = "XDS Toolkit";
-
     private GenericTabSet topTabSet;
 
 
-
 	public void onModuleLoad() {
-
 
 		// Toolbar
 		Toolbar configBar = new Toolbar();
 
 		// Tabs
 		topTabSet = new GenericTabSet();
-        topTabSet.setTabBarPosition(Side.TOP);
-        topTabSet.setTabBarAlign(Alignment.CENTER);
         Tab homeTab = new HomeTab("Home");
-		GenericCloseableTab findDocsTab = new FindDocumentTab();
-        GenericCloseableTab mpqTab = new MPQTab();
         topTabSet.addTab(homeTab);
-        topTabSet.addTab(findDocsTab);
-        topTabSet.addTab(mpqTab);
 
         // Main layout
         VLayout mainLayout = new VLayout();
-		mainLayout.setHeight100();
-        mainLayout.setAlign(Alignment.CENTER);
 		mainLayout.addMembers(configBar, topTabSet);
+        mainLayout.setStyleName("mainLayout");
 		
 		// Attach the contents to the RootLayoutPanel
 		HLayout container = new HLayout();
-		container.setHeight100();
-		container.setWidth100();
-		container.setAlign(Alignment.CENTER); 
-		container.addMember(mainLayout);
+        container.setAlign(Alignment.CENTER);
+        container.setWidth100();
+        container.setHeight100();
+        container.addMembers(new LayoutSpacer(), mainLayout, new LayoutSpacer());
+        mainLayout.setWidth(900); // width has to be set here after use of LayoutSpacers, not in CSS, else it will not work.
+
 		RootLayoutPanel rp = RootLayoutPanel.get();
 		rp.add(container);
 
-        SC.showConsole();
+        // Smartgwt Console - useful for development, mainly tracking RPC calls
+       // SC.showConsole();
 
         // Add listener for Open Tab eventBusUtils. The tabs called must be defined in function "openTab".
         Util.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new OpenTabEventHandler(){
@@ -87,19 +63,28 @@ public class Xdstools3 implements EntryPoint {
 
     /**
      * Opens a given tab defined by its name. Updates the display to add this new tab and to bring it into focus.
+     * This function must be updated when new tabs are added to the application, as well as its related classes.
+     *
      * @param tabName the name of the tab to open.
+     * @see TabNamesUtil, OpenTabEvent
      */
     public void openTab(String tabName) {
         GenericCloseableTab tab = null;
 
-        // create tab depending on parameter
-        if (tabName == "ADMIN") {
-            GenericCloseableTab adminTab = new SettingsTab();
-            tab = adminTab;
+        if (tabName == TabNamesUtil.getInstance().getAdminTabCode()) {
+            tab = new SettingsTab();
         }
-        if (tabName == "ENDPOINTS") {
-            GenericCloseableTab endpointsTab = new EndpointConfigTab();
-            tab = endpointsTab;
+        else if (tabName == TabNamesUtil.getInstance().getEndpointsTabCode()) {
+            tab = new EndpointConfigTab();
+        }
+        else if (tabName == TabNamesUtil.getInstance().getFindDocumentsTabCode()) {
+            tab = new FindDocumentTab();
+        }
+        else if (tabName == TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()) {
+            tab = new MPQTab();
+        }
+        else if (tabName == TabNamesUtil.getInstance().getMessageValidatorTabCode()) {
+            tab = new MessageValidatorTab();
         }
         // update set of tabs
         if (tab != null) {
@@ -107,9 +92,5 @@ public class Xdstools3 implements EntryPoint {
             topTabSet.selectTab(tab);
         }
     }
-
-	public static int getWindowWidth() {
-		return WINDOW_WIDTH_TO_INTEGER;
-	}
 
 }

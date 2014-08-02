@@ -256,9 +256,9 @@ public class EventMessageAggregatorWidget extends Composite {
                                     extractedRowValuesTemp[0] = extractedRowValues;
                                     csvFactory.updateList(0, extractedRowValuesTemp, dataProvider.getList());
                                     logger.fine("total rows:" + rows.size());
-                                    dataProvider.flush();
-                                    dataProvider.refresh();
-                                    table.redraw();
+//                                    dataProvider.flush();
+//                                    dataProvider.refresh();
+//                                    table.redraw();
                                     break;
                                 }
                             }

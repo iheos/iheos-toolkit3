@@ -9,13 +9,13 @@ import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
-import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.toolbar.RibbonBar;
 import com.smartgwt.client.widgets.toolbar.RibbonGroup;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
 import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
 import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.LoginDialogWidget;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
 import java.util.LinkedHashMap;
@@ -24,8 +24,9 @@ public class Toolbar extends RibbonBar {
 
     public Toolbar() {
 
-        setMembersMargin(10);
+        setMembersMargin(20);
         setAlign(Alignment.CENTER);
+        setStyleName("navbar");
 
         // Menu group: Session
         RibbonGroup sessionGroup = createRibbonGroup("Session");
@@ -57,21 +58,16 @@ public class Toolbar extends RibbonBar {
         ComboBoxItem cbItem = new ComboBoxItem();
         cbItem.setShowTitle(false);
         cbItem.setDefaultToFirstOption(true);
-        cbItem.setWidth(200);
+        cbItem.setWidth(480);
         cbItem.setType("comboBox");
         cbItem.setValueMap("Select test session", "Test session 1", "Add new test session...");
 
         // create form
         DynamicForm form = new DynamicForm();
         form.setFields(listBox, cbItem);
-        form.setPadding(5);
-
+        form.setCellPadding(10);
 
         sessionGroup.addControls(form);
-
-        LayoutSpacer spacer = new LayoutSpacer();
-        spacer.setWidth("360");
-
 
         // Menu group: Site / Actors
         IconButton endpointButton = getIconButton("View / Configure Endpoints", "icons/user_24x24.png", true);
@@ -81,12 +77,13 @@ public class Toolbar extends RibbonBar {
         // IF not logged in yet. Then follows to the link initially requested.
         IconButton adminButton = getIconButton("Admin Settings", "icons/glyphicons/glyphicons_136_cogwheel.png", true);
 
+
         // Listeners
         endpointButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                     // Display the Endpoint Settings tab
-                    Util.EVENT_BUS.fireEvent(new OpenTabEvent("ENDPOINTS"));
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getEndpointsTabCode()));
         }});
 
 
@@ -96,11 +93,11 @@ public class Toolbar extends RibbonBar {
                 // if not logged in
                 if (!Util.getInstance().getLoggedAsAdminStatus()) {
                     // ask user to log in
-                    LoginDialogWidget dialog = new LoginDialogWidget("ADMIN");
+                    LoginDialogWidget dialog = new LoginDialogWidget(TabNamesUtil.getInstance().getAdminTabCode());
                     dialog.show();
                 } else {
                     // Display the Admin Settings tab if logged in
-                    Util.EVENT_BUS.fireEvent(new OpenTabEvent("ADMIN"));
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getAdminTabCode()));
                 }
             }
         });
@@ -108,7 +105,7 @@ public class Toolbar extends RibbonBar {
 
 
     // Add menu groups to menu bar
-    this.addMembers(sessionGroup, spacer, endpointButton, adminButton);
+    this.addMembers(sessionGroup, endpointButton, adminButton);
     draw();
 }
 

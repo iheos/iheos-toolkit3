@@ -4,6 +4,7 @@ import com.google.gwt.event.shared.GwtEvent;
 
 /**
  * To be used in GWT Eventbus. Opens a new tab. Takes as argument the name of the tab to open.
+ * Example of use:  Util.EVENT_BUS.fireEvent(new OpenTabEvent("ENDPOINTS"));
  */
 public class OpenTabEvent extends GwtEvent<OpenTabEventHandler> {
 	public static Type<OpenTabEventHandler> TYPE = new Type<OpenTabEventHandler>();

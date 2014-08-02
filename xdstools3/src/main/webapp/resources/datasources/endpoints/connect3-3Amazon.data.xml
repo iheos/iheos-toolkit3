@@ -1,0 +1,33 @@
+   <site name="connect3.3_AMAZON">
+      <home>1.1</home>
+      <transaction name="r.b" secure="1"/>
+      <transaction name="r.b" secure="0"/>
+      <transaction name="sq.b" secure="1"/>
+      <transaction name="sq.b" secure="0"/>
+      <transaction name="update.b" secure="1"/>
+      <transaction name="update.b" secure="0"/>
+      <transaction name="mpq" secure="1"/>
+      <transaction name="mpq" secure="0"/>
+      <transaction name="ret.b" secure="0"/>
+      <transaction name="ret.b" secure="1"/>
+      <transaction name="pr.b" secure="1"/>
+      <transaction name="pr.b" secure="0"/>
+      <transaction name="odds" secure="1"/>
+      <transaction name="odds" secure="0"/>
+      <transaction name="isr" secure="1"/>
+      <transaction name="isr" secure="0"/>
+      <transaction name="xdrpr" secure="1">https://connect3.clinovations.org:9892/Gateway/DocumentSubmission/2_0/DocumentRepositoryXDR_Service</transaction>
+      <transaction name="xdrpr" secure="0"/>
+      <transaction name="xcq" secure="1">https://connect3.clinovations.org:9892/Gateway/DocumentQuery/2_0/NhinService/RespondingGateway_Query_Service/DocQuery</transaction>
+      <transaction name="xcq" secure="0"/>
+      <transaction name="xcr" secure="1">https://connect3.clinovations.org:9892/Gateway/DocumentRetrieve/2_0/NhinService/RespondingGateway_Retrieve_Service/DocRetrieve</transaction>
+      <transaction name="xcr" secure="0"/>
+      <transaction name="xcpd" secure="1">https://connect3.clinovations.org:9892/Gateway/PatientDiscovery/1_0/NhinService/NhinPatientDiscovery</transaction>
+      <transaction name="xcpd" secure="0"/>
+      <transaction name="igq" secure="1"/>
+      <transaction name="igq" secure="0"/>
+      <transaction name="igr" secure="1"/>
+      <transaction name="igr" secure="0"/>
+      <transaction name="direct" secure="1"/>
+      <transaction name="direct" secure="0"/>
+   </site>

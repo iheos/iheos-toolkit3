@@ -34,6 +34,7 @@ public abstract class ValComponentBase implements ValComponent {
     ValComponentBase() {}
 
     ValComponentBase(Event event) {
+        log.debug "ValComponentBase() - ${this.class.name}"
         event.startNewValidator(this.class.simpleName)
         validationEngine = new ValidationEngine(this, event)
     }

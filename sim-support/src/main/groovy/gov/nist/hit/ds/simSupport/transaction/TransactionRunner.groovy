@@ -27,6 +27,7 @@ class TransactionRunner {
     def transCode
     def actorCode
 
+    ////////////////////////////////////////////////////////////////
     // Production support
 
     TransactionRunner(String endpoint, String header, byte[] body) {
@@ -88,7 +89,8 @@ class TransactionRunner {
         }
     }
 
-    // Unit Test support
+    ///////////////////////////////////////////////////////////////////
+    // Unit Test support - run individual validator/simulator component
 
     Closure runner
     TransactionRunner(String transactionCode, SimId simId, Closure runner)  {

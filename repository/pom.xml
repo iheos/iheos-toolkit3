@@ -136,11 +136,13 @@
 
 
 	<build>
+        <!--
         <testResources>
             <testResource>
                 <directory>${project.basedir}/src/test/resources</directory>
             </testResource>
         </testResources>
+        -->
 		<plugins>		
 			<!-- This is for the empty test DATA resource folder <plugin> <groupId>org.apache.maven.plugins</groupId> 
 				<artifactId>maven-resources-plugin</artifactId> <version>2.4</version> <configuration> 

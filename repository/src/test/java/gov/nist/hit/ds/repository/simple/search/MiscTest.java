@@ -144,7 +144,7 @@ public class MiscTest {
 		p.setProperty("y", "3");
 		p.setProperty("l", "4");
 
-		
+
 		System.out.println("******" + PresentationData.getSortedMapString(p));
 
 	}
@@ -168,7 +168,12 @@ public class MiscTest {
             // good!
         }
 
-
+        String val = p.getProperty("nonExistentKey");
+        if (val==null) {
+            // good
+        } else {
+            fail("Value cannot be non-null for non existent key");
+        }
 
         try {
             p.getProperty(null);

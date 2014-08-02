@@ -1,0 +1,25 @@
+<!-- current example -->
+
+<site siteName="pub">
+<home>urn:oid:1.19.6.24.109.42.1.3</home>
+    <actor actorCode="reg" actorName="Document Registry">
+        <transaction transactionCode="sq.b" transactionName="Stored Query">
+            <secure>https://ihexds.nist.gov:12081/tf6/services/xdsregistryb</secure>
+            <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsregistryb</unsecure>
+        </transaction>
+        <transaction transactionCode="r.b" transactionName="Register">
+            <secure>https://ihexds.nist.gov:12081/tf6/services/xdsregistryb</secure>
+            <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsregistryb</unsecure>
+        </transaction>
+    </actor>
+    <actor actorCode="rep" actorName="Document Repository" uid="1.2.134.123.12">
+        <transaction transactionCode="pr.b" transactionName="Provide and Register">
+            <secure>https://ihexds.nist.gov:12081/tf6/services/xdsregistryb</secure>
+            <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsregistryb</unsecure>
+        </transaction>
+        <transaction transactionCode="ret.b" transactionName="Retrieve">
+            <secure>https://ihexds.nist.gov:12081/tf6/services/xdsregistryb</secure>
+            <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsregistryb</unsecure>
+        </transaction>
+    </actor>
+</site>

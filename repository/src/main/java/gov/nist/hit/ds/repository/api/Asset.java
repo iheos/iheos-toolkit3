@@ -154,7 +154,12 @@ public interface Asset {
      */
     void setCreatedDate(String createdDate)
             throws gov.nist.hit.ds.repository.api.RepositoryException;
-    
+
+    /**
+     *
+     * @param path
+     * @throws RepositoryException
+     */
     void setContentPath(File path) throws RepositoryException;
     
     /**
@@ -440,7 +445,7 @@ public interface Asset {
      *         gov.nist.hit.ds.repository.api.RepositoryException#NULL_ARGUMENT
      *         NULL_ARGUMENT}
      */
-	public void setContent(String content, String mimeType)
+	public void setContent(byte[] content, String mimeType)
 	        throws gov.nist.hit.ds.repository.api.RepositoryException;
 	
 	

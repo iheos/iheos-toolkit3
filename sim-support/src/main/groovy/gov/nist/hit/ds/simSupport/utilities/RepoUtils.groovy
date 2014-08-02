@@ -56,8 +56,7 @@ class RepoUtils {
     static Asset mkChild(String name, Asset parent, Type type) {
         init()
         Asset a = mkAsset(name, type, parent.getRepository())
-        parent.addChild(a)
-        return a
+        return parent.addChild(a)
     }
 
     // needs test
