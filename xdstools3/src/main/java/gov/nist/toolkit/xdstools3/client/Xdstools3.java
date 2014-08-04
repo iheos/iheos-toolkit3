@@ -47,8 +47,10 @@ public class Xdstools3 implements EntryPoint {
         container.addMembers(new LayoutSpacer(), mainLayout, new LayoutSpacer());
         mainLayout.setWidth(900); // width has to be set here after use of LayoutSpacers, not in CSS, else it will not work.
 
-		RootLayoutPanel rp = RootLayoutPanel.get();
-		rp.add(container);
+//		RootLayoutPanel rp = RootLayoutPanel.get();
+//		rp.add(container);
+
+        container.draw();
 
         // Smartgwt Console - useful for development, mainly tracking RPC calls
        // SC.showConsole();
