@@ -1,7 +1,6 @@
 package gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab;
 
 import com.google.gwt.user.client.ui.Widget;
-import com.smartgwt.client.widgets.Canvas;
 import edu.tn.xds.metadata.editor.client.MetadataEditorApp;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 

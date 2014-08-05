@@ -18,6 +18,7 @@ public class TabNamesUtil {
     public static final String messageValidatorTabCode = "MESSAGE_VALIDATOR";
     public static final String adminTabCode = "ADMIN";
     public static final String endpointsTabCode = "ENDPOINTS";
+    public static final String preConnectathonTestsTabCode = "PRE_CONNECTATHON";
     public static final String documentMetadataEditorTabCode = "METADATA_EDITOR";
 
     public static String getFindDocumentsTabCode() {
@@ -39,4 +40,5 @@ public class TabNamesUtil {
     public static String getMessageValidatorTabCode() { return messageValidatorTabCode; }
 
     public static String getDocumentMetadataEditorTabCode() { return documentMetadataEditorTabCode; }
+    public static String getPreConnectathonTestsTabCode() { return preConnectathonTestsTabCode; }
 }
