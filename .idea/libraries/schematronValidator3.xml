@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="schematronValidator3">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/xdstools2/src/main/webapp/toolkitx/schematron/xcpd/schematronValidator.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
