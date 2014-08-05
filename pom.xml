@@ -265,11 +265,6 @@
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>edu.tn.xds.metadata</groupId>
-                <artifactId>docentryeditor</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.axis2</groupId>
                 <artifactId>axis2-kernel</artifactId>
                 <version>1.6.2</version>

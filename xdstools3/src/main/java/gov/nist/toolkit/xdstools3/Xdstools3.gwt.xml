@@ -20,7 +20,13 @@
     <!-- <script src='showcase/sc/modules/ISC_Drawing.js'></script> -->
     <!--<script src='isomorphic/DataSourceLoader?dataSource=server/data/datasources/toolkit_config.xml'></script>-->
 
-    <!-- Specify the app entry point class. -->
+    <!-- Inherits other local GWT modules -->
+    <!-- this doesnt work -->
+        <!--<inherits name="com.sencha.gxt.ui.GXT"/>-->
+        <!--<inherits name="com.google.gwt.inject.Inject"/>-->
+        <inherits name="edu.tn.xds.metadata.editor.XDS-MetadataEditor"/>
+
+        <!-- Specify the app entry point class. -->
     <entry-point class='gov.nist.toolkit.xdstools3.client.Xdstools3' />
 
 

@@ -174,7 +174,6 @@
 								(same as maven-war-plugin parameter) Default value is: ${basedir}/src/main/webapp. -->
 							<!-- hostedWebapp: Location of the hosted-mode web application structure. 
 								Default: ${project.build.directory}/${project.build.finalName} -->
-							<copyWebapp>true</copyWebapp>
 							<!-- no optimization takes place. Good for development -->
 							<optimizationLevel>0</optimizationLevel>
 						</configuration>

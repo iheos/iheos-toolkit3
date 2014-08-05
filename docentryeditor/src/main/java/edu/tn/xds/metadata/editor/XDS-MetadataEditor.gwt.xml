@@ -62,6 +62,6 @@
     <source path="shared"/>
 
     <!-- ****************************** *** Entry point ****************************** -->
-    <entry-point class='edu.tn.xds.metadata.editor.client.MetadataEditorApp'/>
+    <!--<entry-point class='edu.tn.xds.metadata.editor.client.MetadataEditorApp'/>-->
 
 </module>
