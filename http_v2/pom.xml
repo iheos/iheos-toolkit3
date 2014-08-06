@@ -57,7 +57,13 @@
 			<artifactId>backport-util-concurrent</artifactId>
 			<version>3.1</version>
 		</dependency>
-						<dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-api</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+
+        <dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>error-recording</artifactId>
 			<version>v2-maven-alpha</version>

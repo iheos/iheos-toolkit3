@@ -11,26 +11,13 @@ import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.XmlUtil;
 import gov.nist.toolkit.xdsexception.HttpCodeException;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import org.apache.axiom.om.util.Base64;
+import org.apache.soap.util.mime.ByteArrayDataSource;
+import org.apache.xml.serialize.DOMSerializer;
+import org.apache.xml.serialize.OutputFormat;
+import org.apache.xml.serialize.XML11Serializer;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 import javax.activation.DataSource;
 import javax.mail.MessagingException;
@@ -42,18 +29,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.axiom.om.util.Base64;
-import org.apache.soap.util.mime.ByteArrayDataSource;
-import org.apache.xml.serialize.DOMSerializer;
-import org.apache.xml.serialize.OutputFormat;
-import org.apache.xml.serialize.XML11Serializer;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 //import com.sun.tools.javac.resources.javac;
 
@@ -304,7 +282,7 @@ public class HttpClient implements HostnameVerifier {
 
 	static public String generateAuthorization(String username_password) {
 //		return  "Basic " + new sun.misc.BASE64Encoder().encode(username_password.getBytes());
-		return "Basic " + Base64.encode(username_password.getBytes());
+		return "Basic " + org.apache.axiom.om.util.Base64.encode(username_password.getBytes());
 	}
 
 	/****************************************************************************
