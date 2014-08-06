@@ -1,0 +1,5 @@
+#!/bin/sh
+
+mvn install:install-file -Dfile=ebxmlrr-common-1.0.jar -DgroupId=com.sun.ebxml -DartifactId=ebxmlrr-common -Dversion=1.0 -Dpackaging=jar
+
+mvn install:install-file -Dfile=commons-io-2.4.jar -DgroupId=org.apache.commons.io -DartifactId=commons-io -Dversion=2.4 -Dpackaging=jar

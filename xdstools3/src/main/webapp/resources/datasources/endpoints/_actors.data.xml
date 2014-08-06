@@ -1,0 +1,8 @@
+<sites>
+    <site>
+        <endpointName>pub</endpointName>
+    </site>
+    <site>
+        <endpointName>connect3.3_AMAZON</endpointName>
+    </site>
+</sites>

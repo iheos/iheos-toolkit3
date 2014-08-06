@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file documents code that the xdstest2 project, based on GWT
+  can translate into JavaScript to use client side -->
+<module rename-to='validatorsSupport'>
+    <inherits name='com.google.gwt.user.User' /> 
+    <source path="client" />
+</module>
