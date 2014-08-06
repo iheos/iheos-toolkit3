@@ -7,10 +7,11 @@
     <inherits name="com.smartgwt.SmartGwt"/>
     <inherits name="com.smartgwt.tools.SmartGwtTools"/>
 
-    <!--  <inherits name="com.smartgwt.SmartGwtNoTheme"/>-->
-   <!--   <inherits name="com.smartclient.theme.xdstoolstheme.XdstoolsTheme" /> -->
-    <!--  <inherits name="com.smartclient.theme.silverwave.SilverWave" />  -->
-    <!-- <inherits name="com.smartclient.theme.enterprise.Enterprise"/>-->    <!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
+    <inherits name="com.smartgwt.SmartGwtNoTheme"/>
+    <!--   <inherits name="com.smartclient.theme.xdstoolstheme.XdstoolsTheme" /> -->
+    <!--  <inherits name="com.smartclient.theme.silverwave.SilverWave" /> -->
+    <inherits name="com.smartclient.theme.enterprise.Enterprise"/>
+    <!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
 
     <inherits name="com.google.gwt.resources.Resources" />
     <!--   <inherits name="org.gwtbootstrap3.GwtBootstrap3"/> -->

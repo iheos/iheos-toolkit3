@@ -56,10 +56,9 @@
 
 
     <modules>
-        <module>docentryeditor</module>
         <module>repository-tools</module>
         <module>tk-core</module>
-        <module>xdstools3</module>
+        <module>gui-core</module>
 		<module>toolkit2-build</module>
     </modules>
 

@@ -14,7 +14,8 @@
     <!-- <version>3.0.0dev</version>  -->
     <packaging>war</packaging>
     <groupId>gov.nist.toolkit</groupId>
-    <name>xdstools3</name>
+
+
     <properties>
         <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.5.1</gwtVersion>
@@ -22,6 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+
 
     <repositories>
         <repository>
@@ -74,6 +76,11 @@
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt</artifactId>
+            <version>4.1p</version>
+        </dependency>
+        <dependency>
+            <groupId>com.smartgwt</groupId>
+            <artifactId>smartgwt-skins</artifactId>
             <version>4.1p</version>
         </dependency>
         <dependency>
