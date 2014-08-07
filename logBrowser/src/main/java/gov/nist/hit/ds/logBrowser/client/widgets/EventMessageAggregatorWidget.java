@@ -6,11 +6,12 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.DefaultCellTableBuilder;
 import com.google.gwt.user.cellview.client.TextHeader;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimpleLayoutPanel;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import gov.nist.hit.ds.logBrowser.client.CsvTableFactory;
@@ -35,7 +36,7 @@ import java.util.logging.Logger;
  * The following asset structure is required:
  *
  *  (Events)
- *      - 'Date' - Event Id (required)
+ *      - 'Date' - Event Id type=event (required)
  *          - 'Validations' type=validators (required)
  *             - Assertions type=assertions (required) -- This is where the widget scans for the CSV files.
  */
@@ -44,23 +45,18 @@ public class EventMessageAggregatorWidget extends Composite {
     public static final int FIXED_HEADER_LAST_IDX = 1;
     private static Logger logger = Logger.getLogger(EventMessageAggregatorWidget.class.getName());
 
-    public SimpleLayoutPanel getContentPanel() {
-        return contentPanel;
-    }
-
-    public void setContentPanel(SimpleLayoutPanel contentPanel) {
-        this.contentPanel = contentPanel;
-    }
-
     //    private ScrollPanel contentPanel = new ScrollPanel();
-    private SimpleLayoutPanel contentPanel = new SimpleLayoutPanel();
+    private SplitLayoutPanel contentPanel = new SplitLayoutPanel();
     private SimpleEventBus eventBus;
     private String eventAssetId;
     private String assetType;
     private String externalRepositoryId;
     private String[] displayColumns;
     final private RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
-//    private CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>(300); // new CsvTableFactory().createCellTable(rows.toArray(new String[rows.size()][]));
+
+
+
+    //    private CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>(300); // new CsvTableFactory().createCellTable(rows.toArray(new String[rows.size()][]));
     private DataGrid<List<SafeHtml>> table = new DataGrid<List<SafeHtml>>(300);
     private ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
 
@@ -78,21 +74,32 @@ public class EventMessageAggregatorWidget extends Composite {
      * @param assetType The type of assets to aggregate under the upper-level Events asset.
      * @param csvColumnNames The column row values to aggregate and display in the table. Column names are case-sensitive.
      */
-   public EventMessageAggregatorWidget(SimpleEventBus eventBus, String externalRepositoryId, String eventAssetId, String assetType, String[] csvColumnNames) {
+   public EventMessageAggregatorWidget(SimpleEventBus eventBus, String externalRepositoryId, String eventAssetId, String assetType, String[] csvColumnNames) throws RepositoryConfigException {
        setEventBus(eventBus);
        setExternalRepositoryId(externalRepositoryId);
        setEventAssetId(eventAssetId);
        setAssetType(assetType);
        setDisplayColumns(csvColumnNames);
 
-     // All composites must call initWidget() in their constructors.
-     initWidget(setupLayout());
+       reposService.isRepositoryConfigured(new AsyncCallback<Boolean>() {
+           public void onFailure(Throwable arg0) {
+               Window.alert("EventMessageAggregatorWidget: The repository system configuration is not available: " + arg0.toString());
+           }
+
+           public void onSuccess(Boolean rs) {
+               setupLayout();
+           }
+       });
+
+       // All composites must call initWidget() in their constructors.
+       initWidget(getContentPanel());
+
 
    }
 
     protected Widget setupLayout() {
         logger.log(Level.FINE, "initializing aggregator...");
-        setSize("52%", "20%"); // Default size
+//        setSize("52%", "20%"); // Default size
 
 //        CellTable<List<SafeHtml>> table = new CsvTable().createCellTable(an.getCsv());
 //        contentPanel.add(table);
@@ -166,6 +173,8 @@ public class EventMessageAggregatorWidget extends Composite {
 //        table.setSkipRowHoverStyleUpdate(true);
 //        txTable.setStyleName("txDataGridNoTableSpacing");
 
+        table.setAutoHeaderRefreshDisabled(false);
+        table.setFocus(false);
 
 
         // Create table columns
@@ -180,7 +189,7 @@ public class EventMessageAggregatorWidget extends Composite {
         dataProvider.setList(dataRows);
         dataProvider.addDataDisplay(table);
 
-        getContentPanel().setSize("52%","20%");
+//        getContentPanel().setSize("52%","20%");
         getContentPanel().add(table);
 
 
@@ -234,12 +243,17 @@ public class EventMessageAggregatorWidget extends Composite {
                         String[] extractedRowValues = new String[columnNames.length];
                         String[][] extractedRowValuesTemp = new String[1][];
 
+                        String previousSection = "";
                         // Extract values
                         for (int rowIdx=1 /* skip header */; rowIdx < rowLen; rowIdx++) {
 
-                            Anchor a = new Anchor(result.getDisplayName(),"javascript:void(0)");
-
-                            extractedRowValues[0] = "$htmlConstant" +  a.getElement().getString();
+                            if (!previousSection.equals(result.getDisplayName())) {
+                                Anchor a = new Anchor(result.getDisplayName(),"javascript:void(0)");
+                                extractedRowValues[0] = "$htmlConstant" +  a.getElement().getString();
+                            } else {
+                                extractedRowValues[0] = "";
+                            }
+                            previousSection = result.getDisplayName();
 
                             for (int col=FIXED_HEADER_LAST_IDX; col < columnNames.length; col++) {
                                 if (colIdxMap.containsKey(columnNames[col])) {
@@ -256,9 +270,6 @@ public class EventMessageAggregatorWidget extends Composite {
                                     extractedRowValuesTemp[0] = extractedRowValues;
                                     csvFactory.updateList(0, extractedRowValuesTemp, dataProvider.getList());
                                     logger.fine("total rows:" + rows.size());
-//                                    dataProvider.flush();
-//                                    dataProvider.refresh();
-//                                    table.redraw();
                                     break;
                                 }
                             }
@@ -370,5 +381,15 @@ public class EventMessageAggregatorWidget extends Composite {
 
     }
 
+    public SplitLayoutPanel getContentPanel() {
+        return contentPanel;
+    }
+
+    public void setContentPanel(SplitLayoutPanel contentPanel) {
+        this.contentPanel = contentPanel;
+    }
+    public DataGrid<List<SafeHtml>> getTable() {
+        return table;
+    }
 
 }

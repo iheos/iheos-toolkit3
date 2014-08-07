@@ -511,6 +511,16 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
+     *
+     * @param content The asset content
+     * @throws RepositoryException
+     */
+    @Override
+    public void updateContent(String content) throws RepositoryException {
+        updateContent(content.getBytes());
+    }
+
+    /**
      * Set content.
      * @param content The asset content
      * @param mimeType The mimeType
@@ -521,6 +531,17 @@ public class SimpleAsset implements Asset, Flushable {
         setMimeType(mimeType);
 		updateContent(content);
 	}
+
+    /**
+     *
+     * @param content The asset content
+     * @param mimeType The mimeType
+     * @throws RepositoryException
+     */
+    @Override
+    public void setContent(String content, String mimeType) throws RepositoryException {
+        setContent(content.getBytes(),mimeType);
+    }
 
     	/*
 	@Override
@@ -714,9 +735,8 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
+     * @deprecated replaced by {@link BaseRepository#getAssets()}
      *
-     * @return AssetIterator
-     * @throws RepositoryException
      */
 	@Override
 	public AssetIterator getAssets() throws RepositoryException {
@@ -728,7 +748,7 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
-     *
+     * @deprecated replaced by {@link BaseRepository#getAssetsByType(gov.nist.hit.ds.repository.api.Type)}
      * @param assetType The asset type
      * @return AssetIterator
      * @throws RepositoryException
