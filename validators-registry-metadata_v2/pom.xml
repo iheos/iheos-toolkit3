@@ -29,42 +29,42 @@
 		</dependency>
 				<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>error-recording</artifactId>
+			<artifactId>error-recording_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 					<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>http</artifactId>
+			<artifactId>http_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 					<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>registry-metadata</artifactId>
+			<artifactId>registry-metadata_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 					<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>registry-msg-formats</artifactId>
+			<artifactId>registry-msg-formats_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 					<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>registry-support</artifactId>
+			<artifactId>registry-support_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 					<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>utilities</artifactId>
+			<artifactId>utilities_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 					<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>validators-support</artifactId>
+			<artifactId>validators-support_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 					<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>xds-exceptions</artifactId>
+			<artifactId>xds-exceptions_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>

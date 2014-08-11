@@ -8,7 +8,7 @@
 		<version>v2-maven-alpha</version>
 	</parent>
 
-	<artifactId>message-dispatch</artifactId>
+	<artifactId>message-dispatch_v2</artifactId>
 
 	<dependencies>
 		<dependency>

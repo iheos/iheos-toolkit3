@@ -24,7 +24,7 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>site-management</artifactId>
+			<artifactId>site-management_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 	</dependencies>

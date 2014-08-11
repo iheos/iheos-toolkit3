@@ -103,10 +103,9 @@
 
         <!-- Bootstrap3 CSS dependencies -->
         <dependency>
-            <groupId>org.gwtbootstrap3</groupId>
-            <artifactId>gwtbootstrap3</artifactId>
-            <version>0.6</version>
-            <scope>provided</scope>
+                <groupId>gov.nist.toolkit</groupId>
+                <artifactId>session</artifactId>
+                <version>v2-maven-alpha</version>
         </dependency>
     </dependencies>
 

@@ -34,22 +34,22 @@
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>common-datatypes</artifactId>
+			<artifactId>common-datatypes_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 									<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>error-recording</artifactId>
+			<artifactId>error-recording_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 									<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>registry-metadata</artifactId>
+			<artifactId>registry-metadata_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 									<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>xds-exceptions</artifactId>
+			<artifactId>xds-exceptions_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		

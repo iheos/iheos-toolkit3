@@ -28,7 +28,7 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>tk</artifactId>
+			<artifactId>tk_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 	</dependencies>

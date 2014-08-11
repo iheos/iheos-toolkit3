@@ -29,7 +29,7 @@
 		</dependency>
 						<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>actortransaction</artifactId>
+			<artifactId>actortransaction_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 	</dependencies>

@@ -25,32 +25,32 @@
 		</dependency>
 				<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>direct</artifactId>
+			<artifactId>direct_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 				<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>error-recording</artifactId>
+			<artifactId>error-recording_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 				<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>message-validator-factory</artifactId>
+			<artifactId>message-validator-factory_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 				<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>utilities</artifactId>
+			<artifactId>utilities_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 				<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>validators-registry-message</artifactId>
+			<artifactId>validators-registry-message_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 				<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>validators-support</artifactId>
+			<artifactId>validators-support_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 	</dependencies>

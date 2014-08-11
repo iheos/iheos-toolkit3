@@ -48,122 +48,122 @@
 </dependency>
 					<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>actorfactory</artifactId>
+			<artifactId>actorfactory_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>actortransaction</artifactId>
+			<artifactId>actortransaction_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>common</artifactId>
+			<artifactId>common_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>common-datatypes</artifactId>
+			<artifactId>common-datatypes_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>direct</artifactId>
+			<artifactId>direct_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>direct-support</artifactId>
+			<artifactId>direct-support_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>docref</artifactId>
+			<artifactId>docref_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>error-recording</artifactId>
+			<artifactId>error-recording_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>http</artifactId>
+			<artifactId>http_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>installation</artifactId>
+			<artifactId>installation_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>registry-metadata</artifactId>
+			<artifactId>registry-metadata_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>registry-msg-formats</artifactId>
+			<artifactId>registry-msg-formats_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>registry-support</artifactId>
+			<artifactId>registry-support_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>results</artifactId>
+			<artifactId>results_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>security-common</artifactId>
+			<artifactId>security-common_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>site-management</artifactId>
+			<artifactId>site-management_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>soap</artifactId>
+			<artifactId>soap_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>testkit-utilities</artifactId>
+			<artifactId>testkit-utilities_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>utilities</artifactId>
+			<artifactId>utilities_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>validators-registry-message</artifactId>
+			<artifactId>validators-registry-message_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>validators-registry-metadata</artifactId>
+			<artifactId>validators-registry-metadata_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>validators-support</artifactId>
+			<artifactId>validators-support_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>xds-exceptions</artifactId>
+			<artifactId>xds-exceptions_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 							<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>xdstest2-logging</artifactId>
+			<artifactId>xdstest2-logging_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 	</dependencies>

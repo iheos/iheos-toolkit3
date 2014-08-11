@@ -8,7 +8,7 @@
 		<version>v2-maven-alpha</version>
 	</parent>
 
-	<artifactId>testkit-utilities</artifactId>
+	<artifactId>testkit-utilities_v2</artifactId>
 
 
   <dependencies>
@@ -30,17 +30,17 @@
 		</dependency>
 						<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>registry-support</artifactId>
+			<artifactId>registry-support_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>utilities</artifactId>
+			<artifactId>utilities_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 						<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>xds-exceptions</artifactId>
+			<artifactId>xds-exceptions_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 

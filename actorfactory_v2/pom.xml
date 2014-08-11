@@ -28,62 +28,62 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>actortransaction</artifactId>
+			<artifactId>actortransaction_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>env-settings</artifactId>
+			<artifactId>env-settings_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>http</artifactId>
+			<artifactId>http_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>installation</artifactId>
+			<artifactId>installation_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>registry-metadata</artifactId>
+			<artifactId>registry-metadata_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>results</artifactId>
+			<artifactId>results_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>sim-common</artifactId>
+			<artifactId>sim-common_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>site-management</artifactId>
+			<artifactId>site-management_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>tk</artifactId>
+			<artifactId>tk_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>utilities</artifactId>
+			<artifactId>utilities_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>validators-support</artifactId>
+			<artifactId>validators-support_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>xds-exceptions</artifactId>
+			<artifactId>xds-exceptions_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 	</dependencies>

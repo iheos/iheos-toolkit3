@@ -24,22 +24,22 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>direct-sim</artifactId>
+			<artifactId>direct-sim_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>http</artifactId>
+			<artifactId>http_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>timer</artifactId>
+			<artifactId>timer_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>utilities</artifactId>
+			<artifactId>utilities_v2</artifactId>
 			<version>v2-maven-alpha</version>
 		</dependency>
 	</dependencies>
