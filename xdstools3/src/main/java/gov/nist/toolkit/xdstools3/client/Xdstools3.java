@@ -25,7 +25,7 @@ public class Xdstools3 implements EntryPoint {
     private GenericTabSet topTabSet;
 
 
-	public void onModuleLoad() {
+    public void onModuleLoad() {
 
 		// Toolbar
 		Toolbar configBar = new Toolbar();
