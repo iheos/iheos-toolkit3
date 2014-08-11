@@ -64,7 +64,7 @@ public class CsvTableFactory {
         return table;
     }
 
-    private SafeHtmlBuilder htmlBuilder(String v) {
+    public SafeHtmlBuilder htmlBuilder(String v) {
         SafeHtmlBuilder shb = new SafeHtmlBuilder();
         if (v!=null) {
 

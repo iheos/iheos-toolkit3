@@ -80,10 +80,10 @@ public enum PropertyKey {
                return "indexSession";
            }
        },
-        LAST_ACCESS_TIME(true) {
+        LAST_MODIFIED_TIME(true) {
             @Override
             public String toString() {
-                return "lastAccessTime";
+                return "lastModifiedTime";
             }
         },
         LOCATION(true) {

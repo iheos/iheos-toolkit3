@@ -427,7 +427,7 @@ public interface Asset {
     public String[] getContentExtension();
     
     /**
-     * Update an Asset's content, saving in the specified mimeType.
+     * Update an Asset's content using a {@code byte[]}.
      *
      * @param content
      *
@@ -447,8 +447,18 @@ public interface Asset {
      */
 	public void setContent(byte[] content, String mimeType)
 	        throws gov.nist.hit.ds.repository.api.RepositoryException;
-	
-	
+
+
+    /**
+     * Set content using a {@link java.lang.String}.
+     * @param content
+     * @param mimeType
+     * @throws gov.nist.hit.ds.repository.api.RepositoryException
+     */
+    public void setContent(String content, String mimeType)
+            throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+
     /**
      * Update an Asset's content.
      *
@@ -470,6 +480,15 @@ public interface Asset {
      */
     public void updateContent(byte[] content)
         throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+    /**
+     * Update content using a String.
+     * @param content
+     * @throws gov.nist.hit.ds.repository.api.RepositoryException
+     */
+    public void updateContent(String content)
+            throws gov.nist.hit.ds.repository.api.RepositoryException;
+
 
     /**
      * Add an Asset to this Asset.
@@ -550,6 +569,8 @@ public interface Asset {
     public void deleteAsset() throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
+     * @deprecated replaced by {@link gov.nist.hit.ds.repository.simple.BaseRepository#getAssets()}
+     *
      * Get all the Assets in this Asset.  Iterators return a set, one at a
      * time.
      *
@@ -571,6 +592,7 @@ public interface Asset {
     AssetIterator getAssets() throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
+     * @deprecated replaced by {@link gov.nist.hit.ds.repository.simple.BaseRepository#getAssetsByType(Type)}
      * Get all the Assets of the specified AssetType in this Repository.
      * Iterators return a set, one at a time.
      *

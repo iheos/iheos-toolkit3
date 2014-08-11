@@ -47,7 +47,8 @@ public class SimpleAsset implements Asset, Flushable {
      */
 	public SimpleAsset(RepositorySource source) throws RepositoryException {
 		super();
-		setCreatedDate(new Hl7Date().now());
+        if (getCreatedDate()==null)
+		    setCreatedDate(new Hl7Date().now());
 		setSource(source);
 	}
 
@@ -511,6 +512,16 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
+     *
+     * @param content The asset content
+     * @throws RepositoryException
+     */
+    @Override
+    public void updateContent(String content) throws RepositoryException {
+        updateContent(content.getBytes());
+    }
+
+    /**
      * Set content.
      * @param content The asset content
      * @param mimeType The mimeType
@@ -521,6 +532,17 @@ public class SimpleAsset implements Asset, Flushable {
         setMimeType(mimeType);
 		updateContent(content);
 	}
+
+    /**
+     *
+     * @param content The asset content
+     * @param mimeType The mimeType
+     * @throws RepositoryException
+     */
+    @Override
+    public void setContent(String content, String mimeType) throws RepositoryException {
+        setContent(content.getBytes(),mimeType);
+    }
 
     	/*
 	@Override
@@ -714,9 +736,8 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
+     * @deprecated replaced by {@link BaseRepository#getAssets()}
      *
-     * @return AssetIterator
-     * @throws RepositoryException
      */
 	@Override
 	public AssetIterator getAssets() throws RepositoryException {
@@ -728,7 +749,7 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
-     *
+     * @deprecated replaced by {@link BaseRepository#getAssetsByType(gov.nist.hit.ds.repository.api.Type)}
      * @param assetType The asset type
      * @return AssetIterator
      * @throws RepositoryException
@@ -921,14 +942,14 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
-     * Updates the file on disk.
+     * Updates the asset property file on disk.
      * @param propFile The property file
      * @throws RepositoryException
      */
 	@Override
 	public void flush(File propFile) throws RepositoryException {					
 		if (!getSource().getLocation().exists())
-		throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
+		    throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
 				"source directory [" + getSource().getLocation().toString() + "] does not exist");
 
 		try {			
@@ -939,7 +960,9 @@ public class SimpleAsset implements Asset, Flushable {
 			properties.store(writer, "");
 			writer.close();
 
-		} catch (IOException e) {
+            BaseRepository.setLastModified(getReposDir());
+
+        } catch (IOException e) {
 			throw new RepositoryException(RepositoryException.IO_ERROR, e);
 		}
 	}

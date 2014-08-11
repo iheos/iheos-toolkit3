@@ -5,6 +5,7 @@ import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.Parameter;
+import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.api.Type;
 
@@ -27,6 +28,17 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 	public SimpleRepository(ArtifactId id) throws RepositoryException {
 		super(id);
 	}
+
+    /**
+     *
+     * @param id
+     * @param source
+     * @throws RepositoryException
+     */
+    public SimpleRepository(ArtifactId id, RepositorySource source) throws RepositoryException {
+        super(id);
+        setSource(source);
+    }
 
 	/**
 	 * Create new Repository.

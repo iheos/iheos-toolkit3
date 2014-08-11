@@ -5,7 +5,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
-import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -74,7 +73,8 @@ public class LogBrowserWidget extends Composite {
 	private static Logger logger = Logger.getLogger(LogBrowserWidget.class.getName());
 	private static final int WESTERNBAR = 545;	
 	private static final int CONTEXTMENU_XOFFSET = 10;
-	TabLayoutPanel featureTlp = new TabLayoutPanel(20, Unit.PX);
+    TabLayoutPanel multiContentTabPanel = new TabLayoutPanel(20, Unit.PX);
+    TabLayoutPanel featureTlp = new TabLayoutPanel(20, Unit.PX);
 	LayoutPanel featureLp = new LayoutPanel();
 	
 	VerticalPanel treePanel = new VerticalPanel();
@@ -94,6 +94,7 @@ public class LogBrowserWidget extends Composite {
     HTML tabTitle = new HTML(Feature.TRANSACTION_MONITOR.toString());
     int txMonTab = -1;
     final VerticalPanel treeHolder = new VerticalPanel();
+    Image refreshTreeImg = new Image();
 
     final AsyncCallback<AssetNode> contentSetup = new AsyncCallback<AssetNode>() {
         public void onFailure(Throwable arg0) {
@@ -113,26 +114,26 @@ public class LogBrowserWidget extends Composite {
             Window.alert(a.toString());
         }
 
-    public void onSuccess(List<AssetNode> a) {
-        treeHolder.clear();
-        treeHolder.add(popTreeWidget(a,null,false, contentSetup));
+        public void onSuccess(List<AssetNode> a) {
+            treeHolder.clear();
+            treeHolder.add(popTreeWidget(a,null,false, contentSetup));
 
-        // populate repository props here
-        propsWidget.setHTML("");
-        SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
-        int idx = reposLbx.getSelectedIndex();
-        String propsTxt = reposProps.get(reposLbx.getValue(idx)); // use getItemText for display text
-        if (propsTxt!=null) {
-            // margin-top:0px;margin-left:3px;
-            propsContent.appendHtmlConstant("<div style='margin:3px;'>Repository Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
-            propsContent.appendHtmlConstant("</div>");
-            // propsWidget.setWidth("250px");
-            propsWidget.setHTML(propsContent.toSafeHtml());
+            // populate repository props here
+            propsWidget.setHTML("");
+            SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
+            int idx = reposLbx.getSelectedIndex();
+            String propsTxt = reposProps.get(reposLbx.getValue(idx)); // use getItemText for display text
+            if (propsTxt!=null) {
+                // margin-top:0px;margin-left:3px;
+                propsContent.appendHtmlConstant("<div style='margin:3px;'>Repository Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
+                propsContent.appendHtmlConstant("</div>");
+                // propsWidget.setWidth("250px");
+                propsWidget.setHTML(propsContent.toSafeHtml());
+            }
+            refreshTreeImg.getElement().setAttribute("disabled","false");
         }
 
-    }
-
-};
+    };
 
     SimpleEventBus eventBus;
 
@@ -180,7 +181,6 @@ public class LogBrowserWidget extends Composite {
 		reposService.isRepositoryConfigured(new AsyncCallback<Boolean>(){
 
 			public void onFailure(Throwable arg0) {
-				
 				Window.alert("The repository system configuration is not available: " + arg0.toString());
 			}
 
@@ -190,11 +190,19 @@ public class LogBrowserWidget extends Composite {
                         int cx=0;
 						for (Feature f : features) {
 
-
                             if (Feature.TRANSACTION_MONITOR.equals(f)) {
                                 txMonTab = cx;
-                            }
-                            featureTlp.add(setupFeature(f),f.toString());
+                            } else if (Feature.EVENT_MESSAGE_AGGREGATOR.equals(f)) {
+                                final EventMessageAggregatorWidget eventAggregatorWidget = (EventMessageAggregatorWidget)setupFeature(f);
+                                featureTlp.add(eventAggregatorWidget,f.toString());
+                                featureTlp.getTabWidget(cx).addDomHandler(new ClickHandler() {
+                                    @Override
+                                    public void onClick(ClickEvent event) {
+                                        eventAggregatorWidget.getTable().redraw(); // This is required to force redraw on the table that is otherwise empty (headers are present but no data). Only an issue when the widget is embedded in tabs -- but not in a single-page view.
+                                    }
+                                }, ClickEvent.getType());
+                            } else
+                                featureTlp.add(setupFeature(f),f.toString());
                             cx++;
 
 						}		 				    				 					
@@ -234,19 +242,20 @@ public class LogBrowserWidget extends Composite {
         } else if (Feature.TRANSACTION_FILTER_ADVANCED==f) {
             return setupTxFilterAdvanced();
         }  else if (Feature.EVENT_MESSAGE_AGGREGATOR==f) {
-            return setupEventMessagesWidget();
+            String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
+            String type = "validators";
+            String[] displayColumns = new String[]{"ID","STATUS","MSG"};
+
+            return setupEventMessagesWidget(id,type,displayColumns);
         }
 		return null;
 	}
 
-    protected Widget setupEventMessagesWidget() {
+    protected Widget setupEventMessagesWidget(String id, String type, String[] displayColumns) {
         try {
             /* manual setup:
             1) change also the assertionGroup type in event widget.
              */
-            String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
-            String type = "validators";
-            String[] displayColumns = new String[]{"ID","STATUS","MSG"};
 
             EventMessageAggregatorWidget eventMessageAggregatorWidget = new EventMessageAggregatorWidget(eventBus,"Sim",id,type,displayColumns);
 
@@ -450,23 +459,23 @@ public class LogBrowserWidget extends Composite {
 
 //							grid.setWidget(2, 0, reposLbx);
 
-                            Image img = new Image();
-                            img.setUrl(GWT.getModuleBaseForStaticFiles() + "images/refresh-sm.png");
-                            img.setHeight("16px");
-                            img.setWidth("16px");
-                            img.setAltText("Refresh");
-                            img.setTitle("Refresh");
-                            img.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.MIDDLE);
+
+                            refreshTreeImg.setUrl(GWT.getModuleBaseForStaticFiles() + "images/refresh-sm.png");
+                            refreshTreeImg.setHeight("16px");
+                            refreshTreeImg.setWidth("16px");
+                            refreshTreeImg.setAltText("Refresh");
+                            refreshTreeImg.setTitle("Refresh");
+                            refreshTreeImg.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.MIDDLE);
 //                            Anchor refAnchor = new Anchor();
 //                            refAnchor.set
-                            img.addClickHandler(new ClickHandler() {
+                            refreshTreeImg.addClickHandler(new ClickHandler() {
                                 @Override
                                 public void onClick(ClickEvent event) {
                                     refreshTree();
                                 }
                             });
                             hpLbx.add(new HTML("&nbsp;"));
-                            hpLbx.add(img);
+                            hpLbx.add(refreshTreeImg);
                             hpLbx.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
                             grid.setWidget(2,0,hpLbx);
 
@@ -489,6 +498,7 @@ public class LogBrowserWidget extends Composite {
 							// treePanel.add(new HTML("&nbsp;"));
 							//final VerticalPanel treeHolder = new VerticalPanel();
 							treeHolder.add(new HTML("&nbsp;Loading..."));
+                            refreshTreeImg.getElement().setAttribute("disabled","true");
 							treePanel.add(treeHolder);
 							ScrollPanel sp = new ScrollPanel(treePanel);									
 							westContent.add(sp); // added to north: Math.round(0.7 * Window.getClientHeight())
@@ -499,9 +509,9 @@ public class LogBrowserWidget extends Composite {
 							// before tab: splitPanel.add(centerPanel);
 							
 						    centerPanel.getElement().getStyle()
-					        .setProperty("border", "none");					   						    
-						    
-						    splitPanel.add(centerPanel);						   
+					        .setProperty("border", "none");
+
+						    splitPanel.add(centerPanel);
 							
 							// RootLayoutPanel.get().add(splitPanel);
 							
@@ -561,6 +571,7 @@ public class LogBrowserWidget extends Composite {
 	  }
 
     protected void refreshTree() {
+        refreshTreeImg.getElement().setAttribute("disabled","true");
         treeHolder.clear();
         treeHolder.add(new HTML("&nbsp;Loading..."));
         centerPanel.clear();
@@ -617,7 +628,7 @@ public class LogBrowserWidget extends Composite {
 								    	AssetTreeItem treeItem = createTreeItem(an, null, false);
 								    	item.addItem(treeItem);
 								    	item.setState(true); // Open node
-								    }									
+								    }
 								}
 								
 							};
@@ -666,13 +677,71 @@ public class LogBrowserWidget extends Composite {
 					
 					try {
 						AssetNode an =  null;
+                        AssetNode parentNode = null;
 						try {
 							// Browse method
-							an =  (AssetNode)((Tree)event.getSource()).getSelectedItem().getUserObject();														
+							an =  (AssetNode)((Tree)event.getSource()).getSelectedItem().getUserObject();
 						} catch (Exception ex) {
 							// Search method
 							an = treeItemTarget.getAssetNode(); // ((AssetTreeItem)((Tree)event.getSource()).getSelectedItem()).getAssetNode();								
-						}						
+						}
+
+                        // Browse method only
+                        // TODO: Add Show Summary link here.
+                        try {
+                            parentNode = (AssetNode)((Tree)event.getSource()).getSelectedItem().getParentItem().getUserObject();
+
+                            if ("validators".equals(an.getType()) && parentNode!=null && "event".equals(parentNode.getType())) {
+
+                                final String id = parentNode.getAssetId();
+                                final String type = "validators";
+                                final String[] displayColumns = new String[]{"ID","STATUS","MSG"};
+
+                                Anchor summaryLink = new Anchor("Show validation summary");
+
+                                summaryLink.addClickHandler(new ClickHandler() {
+                                    @Override
+                                    public void onClick(ClickEvent event) {
+
+                                        splitPanel.remove(centerPanel);
+
+                                        multiContentTabPanel.clear();
+
+                                        EventMessageAggregatorWidget eventMessageAggregatorWidget =  (EventMessageAggregatorWidget)setupEventMessagesWidget(id,type,displayColumns);
+                                        multiContentTabPanel.add(eventMessageAggregatorWidget,"Validation Summary");
+                                        eventMessageAggregatorWidget.setSize("98%","98%");
+                                        eventMessageAggregatorWidget.getTable().redraw();
+
+                                        multiContentTabPanel.add(centerPanel,"Content Viewer");
+                                        addContentViewerTabPanelOption(centerPanel, 0);
+                                        splitPanel.add(multiContentTabPanel);
+
+                                        // This handler is specific to the widget launch from the log browser tree context menu
+                                        eventBus.addHandler(AssetClickedEvent.TYPE, new AssetClickedEventHandler() {
+                                            public void onAssetClick(AssetClickedEvent event) {
+                                                try {
+                                                    final AssetNode target = event.getValue();
+
+                                                    reposService.getParentChainInTree(target, treeSetup);
+
+
+                                                } catch (RepositoryConfigException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                            }
+                                        });
+
+
+                                    }
+                                });
+
+                                menuItemPanel.add(summaryLink);
+                            }
+                        } catch (Exception ex) {
+                            // Fine
+                        }
+
 
 						if (an.isContentAvailable()) {
 							menuItemPanel.add(new Anchor("Download content"
@@ -713,7 +782,7 @@ public class LogBrowserWidget extends Composite {
 					// Window.alert(((AssetTreeItem)treeItem.getSelectedItem()).getAssetId());
 					AssetNode an = ((AssetTreeItem)treeItem.getSelectedItem()).getAssetNode();
 
-					reposService.getAssetTxtContent(an, contentSetup); 					
+				    reposService.getAssetTxtContent(an, contentSetup);
 				}
 			});
 		    
@@ -740,7 +809,13 @@ public class LogBrowserWidget extends Composite {
 
 
     protected void displayAssetContent(AssetNode an, ScrollPanel contentPanel, HTML propsWidget) {
-		  contentPanel.clear();
+
+            if (contentPanel.getElement().getId().equals(an.getAssetId()))
+                return;
+
+            contentPanel.getElement().setId(an.getAssetId());
+
+		    contentPanel.clear();
 			//// splitPanel.remove(centerPanel);
 			
 			// HTML safeHtml = new HTML(SafeHtmlUtils.fromString(an.getTxtContent()));
@@ -784,27 +859,97 @@ public class LogBrowserWidget extends Composite {
 					contentPanel.add(new HTML(an.getTxtContent()));	
 				} 
 			} else {	
-				if (an.getMimeType()!=null) { // Mime-type exists, but no content file
-					  StyleInjector.inject(".centerImg{position:relative;top:250px;left:50%;}");
+
+//					  StyleInjector.inject(".centerImg{position:relative;top:250px;left:50%;}");
 
 					VerticalPanel imgPanel = new VerticalPanel(); // ;
+//                    imgPanel.setWidth("50%");
+//                    imgPanel.setHeight("50%");
+                    Label imgText = new Label();
 					imgPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 					imgPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 					imgPanel.setStyleName("centerImg");
 					Image img = new Image();					
 					img.setUrl(GWT.getModuleBaseForStaticFiles() + "images/nocontent.png");
-					img.setAltText("Content not available: a mimeType is specified but the corresponding data file could not be found.");
+                    if (an.getMimeType()!=null) { // Mime-type exists, but no content file
+                        imgText.setText("The content file is missing.");
+                        imgText.setStyleName("serverResponseLabelError");
+                    } else {
+                        imgText.setText("No mimeType.");
+                        imgText.setStyleName("grayText");
+                    }
+                    img.setAltText(imgText.getText());
 					imgPanel.add(img);
+                    imgPanel.add(imgText);
 					contentPanel.add(imgPanel); // "There is no content for the selected asset."
 					// new HTML("<img height=" src='" + GWT.getModuleBaseForStaticFiles() + "images/nocontent.gif'>")
-				}
-			}		        		 
-			
-			//// splitPanel.add(centerPanel);		
+
+			}
+
+        addContentViewerTabPanelOption(contentPanel, 1);
+
+
+        //// splitPanel.add(centerPanel);
 
 	  }
-	  	  	  
-	  protected AssetTreeItem createTreeItem(AssetNode an, AssetNode target, Boolean expandLeaf) {
+
+    private void addContentViewerTabPanelOption(final ScrollPanel contentPanel, int activeTabIdx) {
+        try {
+            if (multiContentTabPanel.getWidgetCount() > 1 && multiContentTabPanel.getTabWidget(activeTabIdx) !=null) {
+                multiContentTabPanel.selectTab(activeTabIdx);
+
+                final PopupPanel tabMenu = new PopupPanel(true);
+
+                multiContentTabPanel.getTabWidget(0).addDomHandler(new ContextMenuHandler() {
+                    @Override
+                    public void onContextMenu(ContextMenuEvent event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        tabMenu.addDomHandler(new ClickHandler() {
+
+                            public void onClick(ClickEvent arg0) {
+                                tabMenu.hide();
+                            }
+                        }, ClickEvent.getType());
+                        tabMenu.addDomHandler(new MouseOutHandler() {
+
+                            public void onMouseOut(MouseOutEvent arg0) {
+                                tabMenu.hide();
+
+                            }
+                        }, MouseOutEvent.getType());
+
+                        // Window.alert(((Tree)event.getSource()).getSelectedItem().getText());
+
+                        VerticalPanel menuItemPanel = new VerticalPanel();
+
+                        Label option = new Label("Close");
+                        option.addClickHandler(new ClickHandler() {
+                            @Override
+                            public void onClick(ClickEvent event) {
+
+                                int selectedIdx = multiContentTabPanel.getSelectedIndex();
+                                multiContentTabPanel.getTabWidget(selectedIdx).removeFromParent();
+
+                            }
+                        });
+
+                        menuItemPanel.add(option);
+
+                        tabMenu.setWidget(menuItemPanel);
+                        tabMenu.setPopupPosition(event.getNativeEvent().getClientX()+CONTEXTMENU_XOFFSET, event.getNativeEvent().getClientY());
+                        tabMenu.show();
+                    }
+                }, ContextMenuEvent.getType());
+            }
+
+        } catch (Exception ex) {
+            // Fine
+        }
+    }
+
+    protected AssetTreeItem createTreeItem(AssetNode an, AssetNode target, Boolean expandLeaf) {
 	        AssetTreeItem item = new AssetTreeItem(an);
 
 	        for (AssetNode child : an.getChildren()) {
