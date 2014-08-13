@@ -93,7 +93,8 @@ public class Installation {
             logger.debug("External Cache location is <" + externalCache + ">");
 		}
 
-		initializeExternalCache(externalCache);
+
+        initializeExternalCache(externalCache);
 
 		initialized = true;
 	}
@@ -107,7 +108,7 @@ public class Installation {
 				if (!f.isDirectory()) throw new InitializationFailedException("External Cache location <" + f + "> is not a directory");
 				if (!f.canWrite()) throw new InitializationFailedException("External Cache location <" + f + "> is not writable");
 			} else {
-				throw new InitializationFailedException("External Cache directory <" + externalCache + "> does not exist");
+				throw new InitializationFailedException("External Cache directory <" + externalCache + "> does not exist; it is specified by the following toolkit.properties file: <" + getToolkitPropertiesFile().toString() + ">. If the application is running in a development environment, please edit the toolkit.properties file in the src/main/resources instead of the path shown in the previous statement.");
 			}
 			ExternalCacheManager ecMgr = new ExternalCacheManager(f);
 			initializeRepository(ecMgr);

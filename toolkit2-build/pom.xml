@@ -1,0 +1,219 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>gov.nist.hit.ds</groupId>
+        <artifactId>toolkit3</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>gov.nist.toolkit</groupId>
+    <artifactId>toolkit2</artifactId>
+    <version>2.7.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+
+    <name>toolkit2</name>
+
+    <repositories>
+        <repository>
+            <id>internal-nist-repo-releases</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>internal-nist-repo-third-party</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>
+        </repository>
+        <repository>
+            <id>internal-nist-repo-snapshots</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>internal-nist-repo-maven-central</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/central/</url>
+        </repository>
+        <repository>
+            <id>codehaus</id>
+            <url>http://repository.codehaus.org/org/codehaus</url>
+        </repository>
+    </repositories>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
+        <maven-release-plugin.version>2.5</maven-release-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.2</nexus-staging-maven-plugin.version>
+    </properties>
+
+    <modules>
+        <module>../actorfactory_v2</module>
+        <module>../actortransaction_v2</module>
+        <module>../common_v2</module>
+        <module>../common-datatypes_v2</module>
+        <module>../direct_v2</module>
+        <module>../direct-listener_v2</module>
+        <module>../direct-sim_v2</module>
+        <module>../direct-support_v2</module>
+        <module>../dns_v2</module>
+        <module>../docref_v2</module>
+        <module>../dsig_v2</module>
+        <module>../dst_v2</module>
+        <module>../email_v2</module>
+        <module>../env-settings_v2</module>
+        <module>../error-recording_v2</module>
+        <module>../http_v2</module>
+        <module>../installation_v2</module>
+        <module>../message-dispatch_v2</module>
+        <module>../message-validator-factory_v2</module>
+        <module>../registry-metadata_v2</module>
+        <module>../registry-msg-formats_v2</module>
+        <module>../registry-support_v2</module>
+        <module>../rest_v2</module>
+        <module>../results_v2</module>
+        <module>../security-common_v2</module>
+        <module>../session_v2</module>
+        <module>../sim-common_v2</module>
+        <module>../simulators_v2</module>
+        <module>../site-management_v2</module>
+        <module>../soap_v2</module>
+        <module>../testkit_v2</module>
+        <module>../testkit-utilities_v2</module>
+        <module>../timer_v2</module>
+        <module>../tk_v2</module>
+        <module>../utilities_v2</module>
+        <module>../validators-ccda_v2</module>
+        <module>../validators-direct-factory_v2</module>
+        <module>../validators-registry-message_v2</module>
+        <module>../validators-registry-metadata_v2</module>
+        <module>../validators-support_v2</module>
+        <module>../xds-exceptions_v2</module>
+        <module>../xdstest-gui_v2</module>
+        <module>../xdstest2_v2</module>
+        <module>../xdstest2-logging_v2</module>
+        <module>../xdstools2_v2</module>
+    </modules>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>internal-nist-repo-snapshots</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>internal-nist-repo-releases</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
+
+    <scm>
+        <connection>scm:hg:https://bitbucket.org/iheos/toolkit</connection>
+    </scm>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-user</artifactId>
+                <version>2.5.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>2.1.8</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>2.0-beta-1</version>
+                    <configuration>
+                        <warSourceDirectory>${basedir}/target/xdstools2-v2-maven-alpha</warSourceDirectory>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.5.1</version>
+                    <configuration>
+                        <!-- Bind Groovy Eclipse Compiler -->
+                        <compilerId>groovy-eclipse-compiler</compilerId>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                    <dependencies>
+                        <!-- Define dependency to Groovy Eclipse Compiler (as it's referred
+                            in compilerId) -->
+                        <dependency>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-eclipse-compiler</artifactId>
+                            <version>2.7.0-01</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <!-- Maven Release plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${maven-release-plugin.version}</version>
+                    <configuration>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
+                        <autoVersionSubmodules>false</autoVersionSubmodules>
+                        <releaseProfiles>internal-nist-repo-releases</releaseProfiles>
+                    </configuration>
+                </plugin>
+
+
+                <!-- Deactivating the Maven Deploy plugin to use nexus-staging plugin instead -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
+                    <!-- skip true prepares the jar but does not deploy it
+                    <configuration>
+                       <skip>true</skip>
+                    </configuration> -->
+                </plugin>
+
+
+                <!-- Nexus Staging Maven plugin for auto deployment -->
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>${nexus-staging-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>default-deploy</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>deploy</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <serverId>internal-nist-repo-releases</serverId>
+                        <nexusUrl>http://vm-070.nist.gov:8081/nexus</nexusUrl>
+                        <skipStaging>true</skipStaging> <!-- not needed to deploy only snapshots -->
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

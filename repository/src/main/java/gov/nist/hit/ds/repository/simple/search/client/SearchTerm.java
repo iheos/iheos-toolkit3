@@ -1,11 +1,10 @@
 package gov.nist.hit.ds.repository.simple.search.client;
 
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 
 import java.io.Serializable;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 public class SearchTerm implements IsSerializable, Serializable {
@@ -210,22 +209,40 @@ public class SearchTerm implements IsSerializable, Serializable {
 		}		
 	}
 	
-	private String safeValue(String userInput) {
+	private static String safeValue(String userInput) {
 		if (userInput!=null && !"".equals(userInput)) {
 			String safeStr = userInput.replaceAll("'", "");
 			return safeStr.replaceAll("\"", "");			
 		}
 		return userInput;
 	}
-	
+
+    /**
+     *
+     * @param items
+     * @param quoted Wrap values with a single quote
+     * @return
+     */
+    public static String getValueAsCsv(String[] items, boolean quoted) {
+
+        String csv = "";
+
+        if (items==null)
+            return csv;
+
+        int valueLen =  items.length;
+        String wrapper = (quoted)?"'":"";
+
+        for (int cx=0; cx<valueLen; cx++) {
+            csv += wrapper + safeValue(items[cx]) + wrapper + ((cx<valueLen-1) ?",":"");
+        }
+
+        return csv;
+    }
+
 	private String getValueAsCsv() {
-		String csv = "";
-		int valueLen =  getValues().length;
-		
-		for (int cx=0; cx<valueLen; cx++) {
-			csv += "'" + safeValue(values[cx]) + "'" + ((cx<valueLen-1) ?",":"");
-		}
-		return "(" + csv + ")";
+
+		return "(" + getValueAsCsv(getValues(),true)  + ")";
 	}
 
 	public boolean isDeleted() {

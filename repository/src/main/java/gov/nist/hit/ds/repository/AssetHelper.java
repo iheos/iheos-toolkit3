@@ -65,7 +65,7 @@ public class AssetHelper {
 		SimpleRepository repos = new SimpleRepository(a.getRepository());
 		repos.setSource(a.getSource());		
 
-		return new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER.toString());
+		return new SearchResultIterator(new Repository[]{repos}, criteria, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE });
 		
 	}
 
