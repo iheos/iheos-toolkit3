@@ -88,7 +88,7 @@ public class AssetNodeBuilder {
 
         criteria.append(new SearchTerm(PropertyKey.PARENT_ID, Operator.EQUALTO,new String[]{null}));
 
-        return new SearchResultIterator(new Repository[]{repos}, criteria);
+        return new SearchResultIterator(new Repository[]{repos}, criteria, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE});
     }
 
 
