@@ -89,6 +89,8 @@ public class DbContext {
 		if (connection!=null) {
 			Statement statement = connection.createStatement();
 			status = statement.execute(sqlStr);
+            if (!status && statement.getUpdateCount()>0)
+                status = true;
 			statement.close();
 		}  else {
 			throw new SQLException("No connection.");
