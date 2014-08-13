@@ -101,11 +101,16 @@
             <version>1.9</version>
         </dependency>
 
-        <!-- Bootstrap3 CSS dependencies -->
+        <!-- Local dependencies -->
         <dependency>
                 <groupId>gov.nist.toolkit</groupId>
                 <artifactId>session</artifactId>
                 <version>v2-maven-alpha</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>xdstools2</artifactId>
+            <version>v2-maven-alpha</version>
         </dependency>
     </dependencies>
 

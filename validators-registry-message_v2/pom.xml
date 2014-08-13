@@ -5,7 +5,8 @@
 	<parent>
 		<groupId>gov.nist.toolkit</groupId>
 		<artifactId>toolkit2</artifactId>
-		<version>v2-maven-alpha</version>
+		<version>2.7.0-SNAPSHOT</version>
+        <relativePath>../toolkit2-build/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>validators-registry-message_v2</artifactId>
@@ -51,72 +52,72 @@
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>common_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>docref_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>error-recording_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>http_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>message-validator-factory_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>registry-metadata_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>registry-msg-formats_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>registry-support_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>soap_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>utilities_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>validators-ccda_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>validators-registry-metadata_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>validators-support_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
 			<artifactId>xds-exceptions_v2</artifactId>
-			<version>v2-maven-alpha</version>
+			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
