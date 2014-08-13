@@ -575,6 +575,8 @@ public class LogBrowserWidget extends Composite {
         treeHolder.clear();
         treeHolder.add(new HTML("&nbsp;Loading..."));
         centerPanel.clear();
+        closeSummaryTab();
+
 
 
 
@@ -704,6 +706,7 @@ public class LogBrowserWidget extends Composite {
                                     public void onClick(ClickEvent event) {
 
                                         splitPanel.remove(centerPanel);
+                                        splitPanel.remove(multiContentTabPanel);
 
                                         multiContentTabPanel.clear();
 
@@ -875,7 +878,7 @@ public class LogBrowserWidget extends Composite {
                         imgText.setText("The content file is missing.");
                         imgText.setStyleName("serverResponseLabelError");
                     } else {
-                        imgText.setText("No mimeType.");
+                        imgText.setText("No mimeType");
                         imgText.setStyleName("grayText");
                     }
                     img.setAltText(imgText.getText());
@@ -928,9 +931,8 @@ public class LogBrowserWidget extends Composite {
                         option.addClickHandler(new ClickHandler() {
                             @Override
                             public void onClick(ClickEvent event) {
-
-                                int selectedIdx = multiContentTabPanel.getSelectedIndex();
-                                multiContentTabPanel.getTabWidget(selectedIdx).removeFromParent();
+                                closeSummaryTab();
+                                tabMenu.hide();
 
                             }
                         });
@@ -947,6 +949,13 @@ public class LogBrowserWidget extends Composite {
         } catch (Exception ex) {
             // Fine
         }
+    }
+
+    private void closeSummaryTab() {
+        //                                int selectedIdx = multiContentTabPanel.getSelectedIndex();
+        if (multiContentTabPanel.getWidgetCount()>1)
+            multiContentTabPanel.getTabWidget(0).removeFromParent();
+
     }
 
     protected AssetTreeItem createTreeItem(AssetNode an, AssetNode target, Boolean expandLeaf) {
@@ -983,7 +992,6 @@ public class LogBrowserWidget extends Composite {
 	            if (an.getDescription()!=null && !"".equals(an.getDescription())) {
 	            	hoverTitle += " Description: " + an.getDescription();
 	            }
-
 
                  if (an.getDisplayName()!=null && !"".equals(an.getDisplayName())) {
                      displayName = an.getDisplayName();
