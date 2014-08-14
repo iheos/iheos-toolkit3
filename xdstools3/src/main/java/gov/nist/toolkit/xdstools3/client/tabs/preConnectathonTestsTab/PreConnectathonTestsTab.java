@@ -1,6 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.widgets.HTMLFlow;
 import com.smartgwt.client.widgets.HTMLPane;
@@ -12,13 +13,14 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
  * Created by onh2 on 8/5/2014.
  */
 public class PreConnectathonTestsTab extends GenericCloseableTab {
-    final protected ToolkitServiceAsync toolkitService = GWT
+    private final static ToolkitServiceAsync toolkitService = GWT
             .create(ToolkitService.class);
 
     static final Logger logger= Logger.getLogger(PreConnectathonTestsTab.class.getName());
@@ -80,17 +82,17 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
         final LinkedHashMap<String,String> map=new LinkedHashMap<String,String>();
         if (toolkitService==null)
             logger.info("SERVICE NULL");
-//        toolkitService.getCollectionNames("actorcollections",new AsyncCallback<Map<String, String>>() {
-//            @Override
-//            public void onFailure(Throwable caught) {
-//                logger.warning(caught.getMessage());
-//            }
-//
-//            @Override
-//            public void onSuccess(Map<String, String> result) {
-//                map.putAll(result);
-//            }
-//        });
+        toolkitService.getCollectionNames("actorcollections",new AsyncCallback<Map<String, String>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                logger.warning(caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(Map<String, String> result) {
+                map.putAll(result);
+            }
+        });
         return map;
     }
 

@@ -1,20 +1,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>toolkit3</artifactId>
-        <groupId>gov.nist.hit.ds</groupId>
-        <version>3.0.0-SNAPSHOT</version>
-    </parent>
+    <!--<parent>-->
+    <!--<artifactId>toolkit3</artifactId>-->
+    <!--<groupId>gov.nist.hit.ds</groupId>-->
+    <!--<version>3.0.0-SNAPSHOT</version>-->
+    <!--</parent>-->
     <artifactId>docentryeditor</artifactId>
     <groupId>edu.tn.xds.metadata</groupId>
-	<version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>doc-entry-editor</name>
 
     <properties>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+        <gwtVersion>2.5.1</gwtVersion>
+        <mavenCompilerPluginVersion>3.1</mavenCompilerPluginVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <url>http://maven.apache.org</url>
@@ -25,12 +28,12 @@
         </repository>
     </repositories>
 
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+            <version>4.11</version>
         </dependency>
         <dependency>
             <groupId>com.sencha.gxt</groupId>
@@ -168,7 +171,7 @@
                 <configuration>
                     <runTarget>MetadataEditorApp.html</runTarget>
                     <modules>
-                        <module>${project.groupId}.editor.XDS-MetadataEditor</module>
+                        <module>${project.groupId}.editor.XDS-MetadataEditorStandalone</module>
                     </modules>
                 </configuration>
             </plugin>
@@ -239,13 +242,13 @@
 
         </plugins>
 
-            <resources>
-                <resource>
-                    <directory>${basedir}/src/main/java</directory>
-                </resource>
-                <resource>
-                    <directory>${basedir}/src/main/resources</directory>
-                </resource>
-            </resources>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/java</directory>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
 </project>

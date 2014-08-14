@@ -120,8 +120,8 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
      * Method which actually handle saving (on server) and download for the edited metadata file.
      */
     private void save() {
-        String filename = model.getFileName().toString();
-        requestFactory.saveFileRequestContext().saveAsXMLFile(filename, model.toXML()).fire(new Receiver<String>() {
+//        String filename = model.getFileName().toString();
+        requestFactory.saveFileRequestContext().saveAsXMLFile(/*filename, */model.toXML()).fire(new Receiver<String>() {
 
             @Override
             public void onSuccess(String response) {
