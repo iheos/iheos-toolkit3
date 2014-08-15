@@ -3,6 +3,7 @@ package edu.tn.xds.metadata.editor.client;
 /* Imports */
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import java.util.logging.Logger;
@@ -18,7 +19,7 @@ public class MetadataEditorAppStandaloneEP implements EntryPoint {
     @SuppressWarnings("deprecation")
     @Override
     public void onModuleLoad() {
-        RootPanel.get("editorAppContainer").add(new MetadataEditorApp().asWidget());
+        RootLayoutPanel.get(/*"editorAppContainer"*/).add(new MetadataEditorApp().asWidget());
         //        RootLayoutPanel.get().add(activityPanel);
         logger.info("Application Started!");
     }

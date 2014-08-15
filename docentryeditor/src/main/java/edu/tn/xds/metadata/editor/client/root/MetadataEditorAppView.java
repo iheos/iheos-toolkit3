@@ -65,7 +65,7 @@ public class MetadataEditorAppView extends Viewport {
 
 
         SimpleContainer simple = new SimpleContainer();
-        simple.add(con, new MarginData(0, 0, 100, 0));
+        simple.add(con, new MarginData(0, 0, /*10*/0, 0));
         add(con);
 
         north.start();
