@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -22,6 +21,8 @@
     </properties>
 
     <dependencies>
+
+        <!-- External dependencies -->
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
@@ -48,90 +49,92 @@
             <version>1.0.0.GA</version>
             <classifier>sources</classifier>
         </dependency>
+
+        <!-- Local dependencies -->
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
+            <groupId>gov.nist.hit.ds</groupId> <!-- this one is not among the packages, seems to be on server -->
             <artifactId>ihetools</artifactId>
             <version>2.0</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>simcommon</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>sim-common_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xdstestgui</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>xdstest-gui_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xdstest2</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>xdstest2_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>sitemanagement</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>site-management_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>validatorsupport</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>validators-support_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>registrymessageformats</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>registry-msg-formats_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>errorrecording</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>error-recording_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>registrymetadata</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>registry-metadata_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>commondatatypes</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>common-datatypes_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>actortransaction</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>actortransaction_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>directsim</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>direct-sim_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>tk</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>tk_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>results</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>results_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>actorfactory</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>actorfactory_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>http</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>http_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>direct</artifactId>
-            <version>2.0</version>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>direct_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
