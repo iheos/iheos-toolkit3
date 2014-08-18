@@ -61,7 +61,7 @@ class Event {
         result.assertionGroup.validatorName = validatorName
         resultsStack << result
     }
-    ValidatorResults currentResults() { assert !resultsStack.empty; return resultsStack.last() }
+    ValidatorResults currentResults() { assert resultsStack.size() > 0; return resultsStack.last() }
 
     def addPeerResults(validatorName) {
         assert !resultsStack.empty

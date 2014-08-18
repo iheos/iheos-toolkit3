@@ -54,9 +54,9 @@ public class ValidationEngine {
             invoke(validationMethod)
             validationMethod = getARunableValidationMethod();
         }
-        def moreToRun = validationMethods.find { it.runable() }
-        if (moreToRun)
-            throw new ValidationEngineException("Validator ${targetClass.name} has circular dependencies");
+//        ValidationMethod moreToRun = validationMethods.find { it.runable() && evalGuard(it)}
+//        if (moreToRun)
+//            throw new ValidationEngineException("Validator ${validationObject.class.name} - method ${moreToRun.method.name} cannot be run.");
     }
 
     def invoke(validationMethod) throws Exception {
@@ -71,16 +71,6 @@ public class ValidationEngine {
             throw t;
         }
     }
-
-//    def invoke(validationMethod) throws Exception {
-//        try {
-//            validationMethod.method.invoke(validationObject);
-//        } catch (InvocationTargetException e) {
-//            logException(e)
-//            Throwable t = e.getCause();
-//            throw t;
-//        }
-//    }
 
     private def logException(Exception e) {
         // Force a log entry under validators even if this validator would not normally generate one
@@ -103,7 +93,9 @@ public class ValidationEngine {
     }
 
     private def getARunableValidationMethod() {
-        def valMethod = validationMethods.find { it.runable() && dependenciesSatisfied(it.dependsOnId) }
+        def valMethod = validationMethods.find {
+            it.runable() && dependenciesSatisfied(it.dependsOnId) && evalGuard(it)
+        }
         if (valMethod) {
             validationAnnotation = valMethod.validationAnnotation
             validationFaultAnnotation = valMethod.validationFaultAnnotation
@@ -112,6 +104,15 @@ public class ValidationEngine {
             return valMethod
         }
         return null
+    }
+
+    private boolean evalGuard(ValidationMethod validationMethod) {
+        if (validationMethod.guardMethodName == null) return true
+        try {
+            return validationObject."${validationMethod.guardMethodName}"()
+        } catch (Exception e) {
+            println "Guard: ${e.class.name}: ${e.message}"
+        }
     }
 
     private def dependenciesSatisfied(List<String> dependsOnIds) {

@@ -70,4 +70,27 @@ class MetadataMessageValidatorTest extends Specification {
         !transRunner.simHandle.event.hasErrors()
         eventAccess.assertionGroupFile('DSMetadataProcessing').exists()
     }
+
+    def 'SubmissionSet passes metadata validator'() {
+        def id = 'SS1'
+        def submissionSpec =     [    [
+                                              type: 'SubmissionSet',
+                                              'id': id,
+                                              attributes: []
+                                      ] ]
+        def ssXml = new RimGenerator().toRimXml(submissionSpec,'SubmitObjectsRequest')
+
+        when:
+        OMElement xml = Parse.parse_xml_string(ssXml)
+        Closure closure = { simHandle ->
+            new MetadataMessageValidator(simHandle, xml, null).run()
+        }
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        transRunner.simHandle.event.addArtifact('Metadata', ssXml)
+        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        transRunner.runTest()
+
+        then:
+        !transRunner.simHandle.event.hasErrors()
+    }
 }

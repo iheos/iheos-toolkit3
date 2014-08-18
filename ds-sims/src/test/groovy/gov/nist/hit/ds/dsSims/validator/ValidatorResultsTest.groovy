@@ -41,11 +41,10 @@ class ValidatorResultsTest extends Specification {
         SimUtils.create('reg', simId)
     }
 
-    def 'Sequential validators should validate'() {
+    def 'Basic guard test'() {
         when:
         Closure closure = { simHandle ->
-            new TestValidator1(simHandle.event).run()
-            new TestValidator2(simHandle.event).run()
+            new TestValidatorWithGuard(simHandle.event).run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
@@ -57,52 +56,4 @@ class ValidatorResultsTest extends Specification {
         eventAccess.assertionGroupFile('TestValidator2').exists()
     }
 
-    def 'Validator with child should validate'() {
-        when:
-        Closure closure = { simHandle ->
-            new TestValidator1WithSub(simHandle.event).run()
-        }
-        def transRunner = new TransactionRunner('rb', simId, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
-        transRunner.runTest()
-
-        then:
-        !transRunner.simHandle.event.hasErrors()
-        eventAccess.assertionGroupFile('TestValidator1WithSub', ['TestValidator1WithSub']).exists()
-        eventAccess.assertionGroupFile('TestValidatorSub1', ['TestValidator1WithSub']).exists()
-    }
-    def 'Error should propagate up tree'() {
-        when:
-        Closure closure = { simHandle ->
-            new TestValidator1ErrorWithSub(simHandle.event).run()
-        }
-        def transRunner = new TransactionRunner('rb', simId, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
-        transRunner.runTest()
-
-        then:  '''correct files are created'''
-        transRunner.simHandle.event.hasErrors()
-        eventAccess.assertionGroupFile('TestValidator1ErrorWithSub', ['TestValidator1ErrorWithSub']).exists()
-        eventAccess.assertionGroupFile('TestValidatorErrorSub1', ['TestValidator1ErrorWithSub']).exists()
-        eventAccess.propertiesFile('TestValidator1ErrorWithSub.parent', ['TestValidator1ErrorWithSub']).exists()
-        eventAccess.propertiesFile('TestValidatorErrorSub1', ['TestValidator1ErrorWithSub']).exists()
-
-        when: 'load child properties'
-        Properties childProperties = new Properties()
-        eventAccess.propertiesFile('TestValidatorErrorSub1', ['TestValidator1ErrorWithSub']).withReader {
-            childProperties.load(it)
-        }
-
-        then: 'verify child is labeled with error'
-        childProperties.getProperty('status') == 'ERROR'
-
-        when: 'load parent properties'
-        Properties parentProperties = new Properties()
-        eventAccess.propertiesFile('TestValidator1ErrorWithSub.parent', ['TestValidator1ErrorWithSub']).withReader {
-            parentProperties.load(it)
-        }
-
-        then: 'verify error has propogated up to parent'
-        parentProperties.getProperty('status') == 'ERROR'
-    }
 }

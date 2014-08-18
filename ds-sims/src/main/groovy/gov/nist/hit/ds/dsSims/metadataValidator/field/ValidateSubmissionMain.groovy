@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.field
 
 import gov.nist.hit.ds.dsSims.client.ValidationContext
+import gov.nist.hit.ds.dsSims.metadataValidator.engine.MetadataValidator
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.TextErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode

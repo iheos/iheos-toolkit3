@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.dsSims.metadataValidator
-
-import gov.nist.hit.ds.dsSims.metadataValidator.field.MetadataValidator
+import gov.nist.hit.ds.dsSims.metadataValidator.engine.MetadataValidator
 import gov.nist.hit.ds.eventLog.assertion.annotations.Validation
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
@@ -18,17 +17,10 @@ import org.apache.axiom.om.OMElement
 public class MetadataMessageValidator extends ValComponentBase {
 	OMElement xml
 	Metadata m = null
-//	ErrorRecorderBuilder erBuilder
-//	MessageValidatorEngine mvc
 	RegistryValidationInterface rvi
     SimHandle handle
 
 	public Metadata getMetadata() { return m; }
-
-//	public MetadataMessageValidator(ValidationContext vc, OMElement xml) {
-//		super(vc);
-//		this.xml = xml;
-//	}
 
     MetadataMessageValidator(SimHandle handle, OMElement xml, RegistryValidationInterface rvi) {
         super(handle.event)
@@ -36,15 +28,6 @@ public class MetadataMessageValidator extends ValComponentBase {
         this.xml = xml
         this.rvi = rvi;
     }
-
-//    public MetadataMessageValidator(ValidationContext vc, OMElement xml, ErrorRecorderBuilder erBuilder,
-//                                    MessageValidatorEngine mvc, RegistryValidationInterface rvi) {
-//		super(vc);
-//		this.erBuilder = erBuilder;
-//		this.mvc = mvc;
-//		this.xml = xml;
-//		this.rvi = rvi;
-//	}
 
     @Validation(id="MetaParse001", required=RequiredOptional.R, msg="Parse Metadata", ref="??")
     def metaParse001() throws SoapFaultException {
@@ -55,6 +38,14 @@ public class MetadataMessageValidator extends ValComponentBase {
             fail(e.getMessage())
         }
     }
+
+    @Override
+    void run() throws SoapFaultException, RepositoryException {
+        runValidationEngine()
+        event.addChildResults('MetadataValidation')
+        new MetadataValidator(event, m, rvi).run()
+    }
+
 
     public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
 		this.er = er;
@@ -91,10 +82,10 @@ public class MetadataMessageValidator extends ValComponentBase {
 	
 	String contentSummary() {
         StringBuffer buf = new StringBuffer()
-		buf.append(m.getSubmissionSetIds().size()).append(" SubmissionSets")
-        buf.append(m.getExtrinsicObjectIds().size()).append(" DocumentEntries")
-        buf.append(m.getFolderIds().size()).append(" Folders")
-        buf.append(m.getAssociationIds().size()).append(" Associations")
+		buf.append(m.getSubmissionSetIds().size()).append(" SubmissionSets  ")
+        buf.append(m.getExtrinsicObjectIds().size()).append(" DocumentEntries  ")
+        buf.append(m.getFolderIds().size()).append(" Folders  ")
+        buf.append(m.getAssociationIds().size()).append(" Associations  ")
 		if (m.getSubmissionSetIds().size() == 0 &&
 				m.getExtrinsicObjectIds().size() == 0 &&
 				m.getFolderIds().size() == 0 &&
@@ -103,9 +94,4 @@ public class MetadataMessageValidator extends ValComponentBase {
         return buf.toString()
 	}
 
-    @Override
-    void run() throws SoapFaultException, RepositoryException { runValidationEngine() }
-
-    @Override
-    boolean showOutputInLogs() { return true }
 }

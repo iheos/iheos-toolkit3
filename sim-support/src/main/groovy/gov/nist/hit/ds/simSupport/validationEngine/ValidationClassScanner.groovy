@@ -44,7 +44,9 @@ public class ValidationClassScanner {
                 throw new Exception("Validation <" + targetClass.getName() + "#" + method.getName() + "> : a validation method accepts no parameters")
             RunType type = RunType.ERROR
             String[] dependsOnId = validationAnnotation.dependsOn()
-            validationMethods.add(new ValidationMethod(method, type, dependsOnId, validationAnnotation))
+            String guardMethod = validationAnnotation.guard()
+            if (guardMethod == 'null') guardMethod = null
+            validationMethods.add(new ValidationMethod(method, type, dependsOnId, validationAnnotation, guardMethod))
         }
     }
 }

@@ -86,7 +86,7 @@ class SoapHeaderValidatorTest extends Specification {
         transRunner.simHandle.event.hasFault()
         eventAccess.assertionGroupFile('SoapHeaderValidator').exists()
         thrown SoapFaultException
-        transRunner.simHandle.event.assertionGroup.hasAssertion('WSA011')
+        transRunner.simHandle.event.allAssetionGroups.find { it.hasAssertion('WSA011') }
     }
 
 

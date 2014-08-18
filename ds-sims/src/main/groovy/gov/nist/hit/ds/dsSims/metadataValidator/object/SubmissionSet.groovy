@@ -4,6 +4,7 @@ import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.DtmFormat
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.XonXcnXtnFormat
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
+import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.xdsException.XdsInternalException

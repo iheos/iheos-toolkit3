@@ -16,4 +16,5 @@ public @interface Validation {
 	String id() default "[unassigned]"; 
 	String[] ref() default {"none"};
 	String[] dependsOn() default {"none"};
+    String guard() default "null";
 }
