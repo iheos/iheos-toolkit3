@@ -56,7 +56,7 @@ public class MetadataEditorAppView extends Viewport {
         // WEST
         submissionMVP = buildSubmissionMVP();
         submissionMVP.init();
-        BorderLayoutData westData = new BorderLayoutData(300);
+        BorderLayoutData westData = new BorderLayoutData(250);
         westData.setMargins(new Margins(0, 5, 5, 5));
         westData.setCollapsible(true);
         westData.setSplit(false);
@@ -65,7 +65,7 @@ public class MetadataEditorAppView extends Viewport {
 
 
         SimpleContainer simple = new SimpleContainer();
-        simple.add(con, new MarginData(0, 0, 100, 0));
+        simple.add(con, new MarginData(0, 0, /*10*/0, 0));
         add(con);
 
         north.start();

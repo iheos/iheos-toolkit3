@@ -65,7 +65,7 @@ public class SearchCriteria implements IsSerializable, Serializable {
 		this.searchCriteria.add(sc);
 	}
 
-    public String[] findPropertyValue(String propertyKey, SearchTerm.Operator op) {
+    public String[] getPropertyValue(String propertyKey, SearchTerm.Operator op) {
         ArrayList<String> values = new ArrayList<String>();
         for (SearchTerm st: getSearchTerms()) {
             if (st.getPropName()!=null && st.getPropName().equals(propertyKey)) {
@@ -78,7 +78,7 @@ public class SearchCriteria implements IsSerializable, Serializable {
         }
         if (getSearchCriteria()!=null) {
             for (SearchCriteria sc : getSearchCriteria()) {
-                String valueArray[] = sc.findPropertyValue(propertyKey, op);
+                String valueArray[] = sc.getPropertyValue(propertyKey, op);
                 for (String s : valueArray) {
                     values.add(s);
                 }

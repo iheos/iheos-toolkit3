@@ -137,6 +137,17 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         gridContainer.add(widget, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(0, 4, 1, 4)));
     }
 
+    protected void addWidgets(Widget...widgets){
+        boolean firstDone=false;
+        for(Widget w:widgets){
+            if(firstDone==false){
+                w.addStyleName("topBorder");
+                firstDone=true;
+            }
+            gridContainer.add(w, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(0, 4, 1, 4)));
+        }
+    }
+
     protected abstract GridModelFactory<M> getModelFactory();
 
     /**

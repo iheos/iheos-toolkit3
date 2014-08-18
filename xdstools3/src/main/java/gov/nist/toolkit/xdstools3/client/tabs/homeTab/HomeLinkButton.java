@@ -26,12 +26,17 @@ public class HomeLinkButton extends IButton {
 
         addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
+                // FIXME unsafe code if refactored
                 if (title == "Find Documents")
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFindDocumentsTabCode()));
                 else if (title == "MPQ Find Documents")
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()));
                 else if (title == "Message Validator")
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getMessageValidatorTabCode()));
+                else if (title == "Document Metadata Editor")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode()));
+                else if (title == "Pre-Connectathon Tests")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getPreConnectathonTestsTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });

@@ -1,18 +1,20 @@
 package gov.nist.toolkit.xdstools3.client.tabs;
 
+import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.design.Formatter;
 import gov.nist.toolkit.xdstools3.client.customWidgets.design.IconLabel;
 
-public class GenericTab extends Tab implements TabInterface {
+public abstract class GenericTab extends Tab implements TabInterface {
     private VLayout panel = new VLayout(10);
 
-    public GenericTab(String s){
-        setTitle(s);
+    public GenericTab(String header){
+        setTitle(header);
+        setHeader(header);
+        setContents(createContents());
     }
 
     public VLayout getPanel() {
@@ -29,7 +31,7 @@ public class GenericTab extends Tab implements TabInterface {
     }
 
     public IconLabel createSubtitle1(String s){
-       return Formatter.createSubtitle1(s); // TODO May need to be transformed into direct call inside each tab
+        return Formatter.createSubtitle1(s); // TODO May need to be transformed into direct call inside each tab
     }
 
 
@@ -37,11 +39,13 @@ public class GenericTab extends Tab implements TabInterface {
      * Sets a tab contents
      * @param pane The tab contents
      */
-    public void setContents(Canvas pane){
+    public void setContents(Widget pane){
         panel.addMember(pane);
         setPane(panel);
         getPane().setAlign(Alignment.CENTER);
     }
+
+    protected abstract Widget createContents();
 
 
 }

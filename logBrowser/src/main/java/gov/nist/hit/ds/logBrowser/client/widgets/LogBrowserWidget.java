@@ -1,7 +1,6 @@
 package gov.nist.hit.ds.logBrowser.client.widgets;
 
 
-import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
@@ -23,8 +22,6 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -47,7 +44,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.ListDataProvider;
+import gov.nist.hit.ds.logBrowser.client.CsvTableFactory;
 import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
 import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEventHandler;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEvent;
@@ -62,7 +59,6 @@ import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -166,8 +162,14 @@ public class LogBrowserWidget extends Composite {
         } , TRANSACTION_FILTER_ADVANCED() {
             @Override
             public String toString() {
-                return "Messages";
+                return "Proxy Monitor";
             }
+        } , EVENT_MESSAGE_AGGREGATOR() {
+            @Override
+            public String toString() {
+                return "Event Messages";
+            }
+
         }
 
 	};
@@ -231,9 +233,30 @@ public class LogBrowserWidget extends Composite {
             return setupTxFilter();
         } else if (Feature.TRANSACTION_FILTER_ADVANCED==f) {
             return setupTxFilterAdvanced();
+        }  else if (Feature.EVENT_MESSAGE_AGGREGATOR==f) {
+            return setupEventMessagesWidget();
         }
 		return null;
 	}
+
+    protected Widget setupEventMessagesWidget() {
+        try {
+            /* manual setup:
+            1) change also the assertionGroup type in event widget.
+             */
+            String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
+            String type = "validators";
+            String[] displayColumns = new String[]{"ID","STATUS","MSG"};
+
+            EventMessageAggregatorWidget eventMessageAggregatorWidget = new EventMessageAggregatorWidget(eventBus,"Sim",id,type,displayColumns);
+
+            return eventMessageAggregatorWidget;
+
+        } catch (Exception ex) {
+            Window.alert(ex.toString());
+        }
+        return null;
+    }
 
     protected Widget setupTxFilterAdvanced() {
         TransactionMonitorFilterAdvancedWidget txFilter = new TransactionMonitorFilterAdvancedWidget(eventBus);
@@ -333,19 +356,22 @@ public class LogBrowserWidget extends Composite {
 		    eventBus.addHandler(AssetClickedEvent.TYPE, new AssetClickedEventHandler() {								
 				public void onAssetClick(AssetClickedEvent event) {
 					try {
-						final AssetNode target = event.getValue(); 
-						reposService.getParentChain(target, new AsyncCallback<AssetNode>(){
+						final AssetNode target = event.getValue();
 
-							public void onFailure(Throwable arg0) {												
-								searchLbPropsWidget.setHTML("Search result action could not be synchronized with the tree: " + arg0.toString()); 
-							}
-							public void onSuccess(AssetNode an) {
-								searchLbTreeHolder.clear();
-								List<AssetNode> topLevelAsset = new ArrayList<AssetNode>();
-								topLevelAsset.add(an);
-								searchLbTreeHolder.add(popTreeWidget(topLevelAsset,target,true, searchLbContentSetup));
+                        reposService.getParentChainInTree(target, new AsyncCallback<List<AssetNode>>() {
+
+                            public void onFailure(Throwable arg0) {
+                                searchLbPropsWidget.setHTML("Search result action could not be synchronized with the tree: " + arg0.toString());
+                            }
+
+                            public void onSuccess(List<AssetNode> topLevelAssets) {
+                                searchLbTreeHolder.clear();
+                                searchLbTreeHolder.add(popTreeWidget(topLevelAssets, target, true, searchLbContentSetup));
                                 reposService.getAssetTxtContent(target, searchLbContentSetup);
-							}});
+                            }
+                        });
+
+
 					} catch (RepositoryConfigException e) {
 						e.printStackTrace();
 					}
@@ -563,7 +589,7 @@ public class LogBrowserWidget extends Composite {
 	    }
 
 
-	  protected Widget popTreeWidget(List<AssetNode> a, AssetNode target, Boolean expandLeaf, final AsyncCallback<AssetNode> contentSetup) {
+	  protected Widget popTreeWidget(List<AssetNode> anList, AssetNode target, Boolean expandLeaf, final AsyncCallback<AssetNode> contentSetup) {
 		    Tree tree = new Tree();
 		    final PopupPanel menu = new PopupPanel(true);
 		    
@@ -691,9 +717,10 @@ public class LogBrowserWidget extends Composite {
 				}
 			});
 		    
-		    for (AssetNode an : a) {
+		    for (AssetNode an : anList) {
 		    	AssetTreeItem treeItem = createTreeItem(an, target, expandLeaf);
-		    	if (expandLeaf) {
+
+		    	if (expandLeaf && !(treeItem.getChildCount() == 1 && "HASCHILDREN".equals(treeItem.getChild(0).getText()))) {
 		    		treeItem.setState(true); // Open node
 		    		if (featureTlp.getSelectedIndex()==1 && (target!=null && an.getLocation()!=null) && an.getLocation().equals(target.getLocation())) {
 		    			try {
@@ -711,85 +738,6 @@ public class LogBrowserWidget extends Composite {
 		    return tree;
 	  }
 
-    /**
-     *
-     * @param csv
-     * @return
-     */
-		private CellTable<List<SafeHtml>> createCellTable(String [][]csv) {
-			// Create a CellTable (based on Stack ans. 15122103).
-			 // CellTable<List<String>> table = new CellTable<List<String>>();
-            CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>();
-			 
-			 // Get the rows as List
-			    int rowLen = csv.length;
-			    int colLen = csv[0].length;
-			    List<List<SafeHtml>> rows = new ArrayList<List<SafeHtml>>(rowLen);
-			    
-			    for (int r = 1; r < rowLen; r++) {
-//			        List<String> textRow = Arrays.asList(csv[r]);
-                    if (csv[r]!=null) {
-                        int textRowSz =  csv[r].length;  //textRow.size();
-                        if (textRowSz>0) {
-                            List<SafeHtml> htmlRow = new ArrayList<SafeHtml>(textRowSz);
-                            for (int cx=0; cx<textRowSz; cx++) {
-                                SafeHtmlBuilder shb = new SafeHtmlBuilder();
-                                String val =  csv[r][cx];    //textRow.get(cx);
-//                                logger.info("val LB: " + val);
-                                htmlRow.add(htmlBuilder(val).toSafeHtml());
-                            }
-                            rows.add(htmlRow);
-                        }
-                    }
-
-			    }  
-
-			    // Create table columns
-			    for (int c = 0; c < colLen; c++) {
-			        table.addColumn(new IndexedColumn(c), 
-			              new TextHeader(csv[0][c]));
-			    }
-			    
-			    // Create a list data provider.
-			    final ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
-			    dataProvider.setList(rows);
-			    
-			    dataProvider.addDataDisplay(table);
-			return table;
-		}
-
-    private SafeHtmlBuilder htmlBuilder(String v) {
-        SafeHtmlBuilder shb = new SafeHtmlBuilder();
-        if (v!=null) {
-
-            if (v.toLowerCase().contains("http://") || v.toLowerCase().startsWith("https://")) {
-                String[] values = v.split(" ");
-                int cx=0;
-                for (String val : values) {
-                    cx++;
-                    if (val.toLowerCase().startsWith("http://") || v.toLowerCase().startsWith("https://")) {
-                        shb.appendHtmlConstant("<a href='"
-                                + val
-                                + "' target='_blank'>" // Open link in new tab
-                        );
-                        shb.appendEscaped(val);
-                        shb.appendHtmlConstant("</a>&nbsp;");
-
-                    } else {
-                        shb.appendEscaped(val);
-                        if (cx<values.length)
-                            shb.appendHtmlConstant("&nbsp;");
-                    }
-                }
-            } else {
-                shb.appendEscaped(v);
-            }
-
-        }  else {
-            shb.appendEscaped("&nbsp;");
-        }
-        return  shb;
-    }
 
     protected void displayAssetContent(AssetNode an, ScrollPanel contentPanel, HTML propsWidget) {
 		  contentPanel.clear();
@@ -821,7 +769,7 @@ public class LogBrowserWidget extends Composite {
 			// westContent.add(propsWidget);
 			if (an.isContentAvailable()) {
 				if ("text/csv".equals(an.getMimeType())) {
-					   CellTable<List<SafeHtml>> table = createCellTable(an.getCsv());
+					   CellTable<List<SafeHtml>> table = new CsvTableFactory().createCellTable(an.getCsv());
 					   contentPanel.add(table);							    
 				} else if ("text/xml".equals(an.getMimeType()) || "application/soap+xml".equals(an.getMimeType())) {
 					String xmlStr = an.getTxtContent().replace("<br/>", "\r\n");
@@ -873,40 +821,13 @@ public class LogBrowserWidget extends Composite {
 	        }	        
 	        return item;
 	    }
-	  
-	  class IndexedColumn extends Column<List<SafeHtml>, SafeHtml> {
-		    private final int index;
-		    public IndexedColumn(int index) {
-		        // For use with String:
-		        // super(new TextCell());
-                super(new SafeHtmlCell());
-		        this.index = index;
-		    }
-		    @Override
-		    public SafeHtml getValue(List<SafeHtml> object) {
-		        return object.get(this.index);
-		    }
-	  }
+
 	  
 	  protected class AssetTreeItem extends TreeItem {
 		     
 	         public AssetTreeItem(AssetNode an) {
 	            // super(an.getDisplayName());
 	        	 String displayName = "" + an.getAssetId();
-
-
-	        	if (an.getDisplayName()!=null && !"".equals(an.getDisplayName())) {
-	        		displayName = an.getDisplayName();
-	        	}
-
-                 if (an.getColor()!=null && !"".equals(an.getColor())) {
-                     SafeHtmlBuilder nodeSafeHtml =  new SafeHtmlBuilder();
-                     nodeSafeHtml.appendHtmlConstant("<span style=\"color:" + an.getColor() + "\">"
-                             + displayName + "</span>");
-                     setHTML(nodeSafeHtml.toSafeHtml());
-                 } else {
-                     setText(displayName);
-                 }
 
                 String hoverTitle = "";
 	            
@@ -917,7 +838,23 @@ public class LogBrowserWidget extends Composite {
 	            if (an.getDescription()!=null && !"".equals(an.getDescription())) {
 	            	hoverTitle += " Description: " + an.getDescription();
 	            }
-	            setTitle(hoverTitle);
+
+
+                 if (an.getDisplayName()!=null && !"".equals(an.getDisplayName())) {
+                     displayName = an.getDisplayName();
+                 }
+
+                 if (an.getColor()!=null && !"".equals(an.getColor())) {
+                     SafeHtmlBuilder nodeSafeHtml =  new SafeHtmlBuilder();
+                     nodeSafeHtml.appendHtmlConstant("<span style=\"color:" + an.getColor() + "\">"
+                             + displayName + "</span>");
+                     setHTML(nodeSafeHtml.toSafeHtml());
+                    hoverTitle += " Color: " + an.getColor();
+                 } else {
+                     setText(displayName);
+                 }
+
+                setTitle(hoverTitle);
 	            setUserObject(an);
 
 	            // setWidget(new Label(displayName));	            

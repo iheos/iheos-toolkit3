@@ -23,20 +23,13 @@ public class FindDocumentTab extends GenericCloseableTab {
 
     public FindDocumentTab() {
         super(header);
-
-        // Set tab header
-        setHeader(header);
-
-        VStack stack = createContents();
-
-        // calls a custom function that sets the contents and keeps the titles
-        setContents(stack);
     }
 
     /**
      * Creates and sets the contents of the FindDocuments Tab
      */
-    private VStack createContents(){
+    @Override
+    protected VStack createContents(){
         // layout
         final VStack findDocsPanel = new VStack();
 
@@ -51,7 +44,7 @@ public class FindDocumentTab extends GenericCloseableTab {
         includeOnDemand.setTitle("Include On-Demand document entries");
         SpacerItem space = new SpacerItem();
         DynamicForm options = new DynamicForm();
-        options.setFields(new FormItem[]{tls, space, saml, includeOnDemand});
+        options.setFields(tls, space, saml, includeOnDemand);
         options.setCellPadding(10);
 
         Label l3 = createSubtitle1("Step 3: Select Endpoint");
@@ -84,7 +77,7 @@ public class FindDocumentTab extends GenericCloseableTab {
         return findDocsPanel;
     }
 
-
+    // FIXME Unused is that normal?
     private void updateRunButtonState(){
         runButtonState = !runButtonState;
     }
@@ -93,5 +86,4 @@ public class FindDocumentTab extends GenericCloseableTab {
 
     }
 
-
-}  
+}

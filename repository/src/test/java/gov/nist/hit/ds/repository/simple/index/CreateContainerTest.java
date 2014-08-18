@@ -6,17 +6,24 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.IdFactory;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class CreateContainerTest  {
-	
 
-	
-	@Test
-	public void removeContainerTest() {
+    @BeforeClass
+    static public void initialize() throws RepositoryException {
+
+            removeContainer();
+            createIndexContainer();
+
+    }
+
+
+	static public void removeContainer() {
 		System.out.println("Running testRemoveContainer...");
 		DbIndexContainer dbc = new DbIndexContainer();
 		try {
@@ -25,12 +32,12 @@ public class CreateContainerTest  {
 		} catch (RepositoryException e) {
 			e.printStackTrace();
 			fail("removeContainer failed!");
-		
+
 		}
 	}
-	
-	@Test
-	public void createIndexContainerTest() {
+
+
+	static private void createIndexContainer() {
 		System.out.println("Running testIndexContainer...");
 		DbIndexContainer dbc = new DbIndexContainer();
 		try {

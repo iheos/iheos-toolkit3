@@ -1,7 +1,7 @@
 package edu.tn.xds.metadata.editor.client.event;
 
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
+import com.google.web.bindery.event.shared.SimpleEventBus;
 import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent.NewFileLoadedHandler;
 import edu.tn.xds.metadata.editor.client.event.SaveFileEvent.SaveFileEventHandler;
 

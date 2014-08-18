@@ -98,7 +98,18 @@ RepositoryService {
 		}
 	}
 
-	@Override
+    @Override
+    public List<AssetNode> getParentChainInTree(AssetNode an)
+            throws RepositoryConfigException {
+        try {
+            return PresentationData.getParentChainInTree(an);
+        } catch (Exception re) {
+            throw new RepositoryConfigException(re.toString());
+        }
+    }
+
+
+    @Override
 	public Boolean isRepositoryConfigured() throws RepositoryConfigException {
 		try {
 			return PresentationData.isRepositoryConfigured();	
