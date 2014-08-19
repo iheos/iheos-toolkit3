@@ -1,6 +1,5 @@
 package gov.nist.toolkit.xdstools2.client.inspector;
 
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import gov.nist.toolkit.registrymetadata.client.Association;
 import gov.nist.toolkit.registrymetadata.client.Document;
 import gov.nist.toolkit.registrymetadata.client.DocumentEntry;
@@ -83,7 +82,7 @@ public class ListingDisplay {
 
 		TreeItem orItem = null;
 		if (data.combinedMetadata.objectRefs.size() > 0) {
-			orItem = new TreeItem(SafeHtmlUtils.fromString(Integer.toString(data.combinedMetadata.objectRefs.size()) + " ObjectRefs"));
+			orItem = new TreeItem(Integer.toString(data.combinedMetadata.objectRefs.size()) + " ObjectRefs");
 			root.addItem(orItem);
 
 			for (ObjectRef o : data.combinedMetadata.objectRefs) {

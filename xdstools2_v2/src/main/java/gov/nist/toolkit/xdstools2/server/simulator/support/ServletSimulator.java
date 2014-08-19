@@ -7,14 +7,26 @@ import gov.nist.toolkit.http.HttpParseException;
 import gov.nist.toolkit.http.ParseException;
 import gov.nist.toolkit.valsupport.client.MessageValidationResults;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionContext;
 
 
 /**
@@ -236,42 +248,7 @@ public class ServletSimulator  {
 			return 0;
 		}
 
-        @Override
-        public ServletContext getServletContext() {
-            return null;
-        }
-
-        @Override
-        public AsyncContext startAsync() throws IllegalStateException {
-            return null;
-        }
-
-        @Override
-        public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) throws IllegalStateException {
-            return null;
-        }
-
-        @Override
-        public boolean isAsyncStarted() {
-            return false;
-        }
-
-        @Override
-        public boolean isAsyncSupported() {
-            return false;
-        }
-
-        @Override
-        public AsyncContext getAsyncContext() {
-            return null;
-        }
-
-        @Override
-        public DispatcherType getDispatcherType() {
-            return null;
-        }
-
-        public Locale getLocale() {
+		public Locale getLocale() {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -479,32 +456,7 @@ public class ServletSimulator  {
 			return false;
 		}
 
-        @Override
-        public boolean authenticate(HttpServletResponse httpServletResponse) throws IOException, ServletException {
-            return false;
-        }
-
-        @Override
-        public void login(String s, String s2) throws ServletException {
-
-        }
-
-        @Override
-        public void logout() throws ServletException {
-
-        }
-
-        @Override
-        public Collection<Part> getParts() throws IOException, ServletException {
-            return null;
-        }
-
-        @Override
-        public Part getPart(String s) throws IOException, ServletException {
-            return null;
-        }
-
-        public boolean isRequestedSessionIdValid() {
+		public boolean isRequestedSessionIdValid() {
 			// TODO Auto-generated method stub
 			return false;
 		}
@@ -675,28 +627,8 @@ public class ServletSimulator  {
 			// TODO Auto-generated method stub
 			
 		}
-
-        @Override
-        public int getStatus() {
-            return 0;
-        }
-
-        @Override
-        public String getHeader(String s) {
-            return null;
-        }
-
-        @Override
-        public Collection<String> getHeaders(String s) {
-            return null;
-        }
-
-        @Override
-        public Collection<String> getHeaderNames() {
-            return null;
-        }
-
-    }
+		
+	}
 	
 	class ServletOutputStreamImpl extends ServletOutputStream {
 		StringBuffer buf = new StringBuffer();

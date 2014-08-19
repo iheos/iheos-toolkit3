@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.servlet.*;
 import javax.servlet.descriptor.JspConfigDescriptor;
 
-@SuppressWarnings("NonJREEmulationClassesInClientCode")
 public class MockServletContext {
 	private static String basePath = "";
 	
@@ -75,7 +74,7 @@ public class MockServletContext {
 			}
 
 			@Override
-			public URL getResource(String path) {
+			public URL getResource(String path) throws MalformedURLException {
 				// TODO Auto-generated method stub
 				return null;
 			}
