@@ -68,6 +68,7 @@
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
+            <version>${gwtVersion}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -140,8 +141,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
-                <!-- FIXME I think we should be using ${gwtVersion} here. -->
-                <version>2.5.1</version>
+                <version>${gwtVersion}</version>
                 <executions>
                     <execution>
                         <id>compilation_profile</id>
