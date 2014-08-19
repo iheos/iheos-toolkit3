@@ -141,7 +141,6 @@ public class PreParse {
 	 *
 	 */
 	private void allowUTF8() {
-
 		// For the UTF-8 caracters : replace by their ASCII number
 		StringBuilder xmlEscaped = new StringBuilder();
 		for (int i = 0; i < documentXml.toString().length(); i++) {
@@ -158,7 +157,7 @@ public class PreParse {
 									.charAt(i + 1) == 's')) {
 						i = i + 1;
 					} else {
-						// caracter TAB LF VT
+						// character TAB LF VT
 						if (!(c == 9 || c == 10 || c == 11)){
 							xmlEscaped.append(c);
 						}

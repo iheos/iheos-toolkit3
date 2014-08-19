@@ -1,5 +1,8 @@
 package edu.tn.xds.metadata.editor.server;
 
+import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
+
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,7 +22,20 @@ public class SaveFileService implements Serializable {
 
     private final Logger logger = Logger.getLogger(SaveFileService.class.getName());
 
-    private final String FILE_REPOSITORY = "files";
+    private static File FILE_REPOSITORY;
+
+    public SaveFileService(){
+        String rootDirPath=RequestFactoryServlet.getThreadLocalServletContext().getRealPath("/");
+        logger.info(rootDirPath);
+        File fileFolder=new File(new File(rootDirPath),"/files/");
+        if(!fileFolder.exists()) {
+            logger.info("Create storage folder 'files''");
+            fileFolder.mkdir();
+            logger.info("... storage folder 'files' created.");
+        }
+        FILE_REPOSITORY=fileFolder;
+        logger.info("New storage folder is: "+FILE_REPOSITORY.getAbsolutePath());
+    }
 
     /**
      * Distant method that save a String into a generated xml file in the
@@ -37,21 +53,10 @@ public class SaveFileService implements Serializable {
         // Save xml file content into "files" repository
         logger.info("Metadata xml file creation...");
 
-        FileOutputStream out;
-
-        try {
-            out = new FileOutputStream(new File(FILE_REPOSITORY, filename));
-
-            out.write(fileContent.getBytes());
-            out.close();
-        } catch (IOException e) {
-            logger.warning("Error when writing metadata file on server.\n" + e.getMessage());
-            e.printStackTrace();
-        }
-        logger.fine("... temporary file created: " + FILE_REPOSITORY + "/" + filename);
-
         // return created file's name
-        return filename;
+        return saveAsXMLFile(filename,fileContent);
+
+//        return filename;
     }
 
     /**
@@ -79,7 +84,7 @@ public class SaveFileService implements Serializable {
 
         try {
             out = new FileOutputStream(new File(FILE_REPOSITORY, fileName));
-
+            logger.info("... writing file ("+fileName+") in "+FILE_REPOSITORY.getAbsolutePath()+"...");
             out.write(fileContent.getBytes());
             out.close();
         } catch (IOException e) {
