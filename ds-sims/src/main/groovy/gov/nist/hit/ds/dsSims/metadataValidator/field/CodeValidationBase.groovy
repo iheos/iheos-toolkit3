@@ -1,15 +1,14 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.field
-
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.object.Classification
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.metadata.MetadataSupport
-import gov.nist.hit.ds.xdsException.ExceptionUtil
+import gov.nist.hit.ds.toolkit.installation.Installation
+import gov.nist.hit.ds.utilities.xml.XmlUtil
 import gov.nist.hit.ds.xdsException.MetadataException
 import gov.nist.hit.ds.xdsException.XdsInternalException
-import gov.nist.toolkit.http.httpclient.HttpClient
 import gov.nist.toolkit.utilities.io.Io
 import gov.nist.toolkit.utilities.xml.Util
 import org.apache.axiom.om.OMContainer
@@ -17,6 +16,7 @@ import org.apache.axiom.om.OMElement
 import org.apache.log4j.Logger
 
 import javax.xml.namespace.QName
+
 
 public class CodeValidationBase {
 	Metadata m;
@@ -41,71 +41,95 @@ public class CodeValidationBase {
 		this.vc = vc;
 		loadCodes();
 	}
+
+    void loadDefaultCodes() {
+        File externalCache = Installation.installation().getExternalCache()
+        File codesFile = new File(new File(new File(externalCache, 'environment'), 'default'), 'codes.xml')
+        String codesString = Io.getStringFromInputStream(new FileInputStream(codesFile))
+        loadCodes(codesString)
+    }
+
+    void loadCodes(String codesString) {
+        codes = Util.parse_xml(codesString);
+        if (codes == null)
+            throw new XdsInternalException("CodeValidation: cannot parse code configuration file");
+
+        assigning_authorities = new ArrayList<String>();
+        for (OMElement aa_ele : XmlUtil.childrenWithLocalName(codes, "AssigningAuthority"))
+        {
+            this.assigning_authorities.add(aa_ele.getAttributeValue(MetadataSupport.id_qname));
+        }
+
+        build_mime_map();
+
+    }
 	
 	void loadCodes() throws XdsInternalException {
 		if (codes != null)
 			return;
-		System.out.println("Loading Codes");
-		String fileCodesLocation = null;
-		
-		if (vc != null)
-			fileCodesLocation = vc.getCodesFilename();
-		if (fileCodesLocation == null)
-			fileCodesLocation = System.getenv("XDSCodesFile");
-		if (fileCodesLocation == null)
-			fileCodesLocation = System.getProperty("XDSCodesFile");
-		
-		String localCodesLocation = "http://localhost:9080/xdsref/codes/codes.xml";
-		String globalCodesLocation = "http://ihexds.nist.gov:9080/xdsref/codes/codes.xml";
-		
-		String codes_string = null;
-		String from = null;
+        loadDefaultCodes()
 
-		if (fileCodesLocation != null) {
-			try {
-				codes_string = Io.getStringFromInputStream(new FileInputStream(new File(fileCodesLocation)));
-				from = fileCodesLocation;
-			}
-			catch (Exception e) {
-				throw new XdsInternalException("codes.xml file cannot be loaded from " + fileCodesLocation, e);
-			}
-		}
-		else {
-
-			try {
-				codes_string = HttpClient.httpGet(localCodesLocation);
-				from = localCodesLocation;
-			}
-			catch (Exception e1) {
-				logger.warn("Cannot contact localhost: " + ExceptionUtil.exception_details(e1));
-				try {
-					codes_string = HttpClient.httpGet(globalCodesLocation);
-					from = globalCodesLocation;
-				}
-				catch (Exception e) {
-					throw new XdsInternalException("CodeValidation: Unable to retrieve code configuration file " + globalCodesLocation +
-							"\n" + e.getMessage());
-				}
-			}
-		}
-		if (codes_string == null) 
-			throw new XdsInternalException("CodeValidation.init(): GET codes.xml returned NULL from " + from);
-		if (codes_string.equals("")) 
-			throw new XdsInternalException("CodeValidation.init(): GET codes.xml returned enpty from " + from);
-
-		logger.info("Codes loaded from " + from);
-		
-		codes = Util.parse_xml(codes_string);
-		if (codes == null)
-			throw new XdsInternalException("CodeValidation: cannot parse code configuration file from " + from);
-
-		assigning_authorities = new ArrayList<String>();
-		for (OMElement aa_ele : MetadataSupport.childrenWithLocalName(codes, "AssigningAuthority")) 
-		{
-			this.assigning_authorities.add(aa_ele.getAttributeValue(MetadataSupport.id_qname));
-		}
-
-		build_mime_map();
+//		System.out.println("Loading Codes");
+//		String fileCodesLocation = null;
+//
+//		if (vc != null)
+//			fileCodesLocation = vc.getCodesFilename();
+//		if (fileCodesLocation == null)
+//			fileCodesLocation = System.getenv("XDSCodesFile");
+//		if (fileCodesLocation == null)
+//			fileCodesLocation = System.getProperty("XDSCodesFile");
+//
+//		String localCodesLocation = "http://localhost:9080/xdsref/codes/codes.xml";
+//		String globalCodesLocation = "http://ihexds.nist.gov:9080/xdsref/codes/codes.xml";
+//
+//		String codes_string = null;
+//		String from = null;
+//
+//		if (fileCodesLocation != null) {
+//			try {
+//				codes_string = Io.getStringFromInputStream(new FileInputStream(new File(fileCodesLocation)));
+//				from = fileCodesLocation;
+//			}
+//			catch (Exception e) {
+//				throw new XdsInternalException("codes.xml file cannot be loaded from " + fileCodesLocation, e);
+//			}
+//		}
+//		else {
+//
+//			try {
+//				codes_string = HttpClient.httpGet(localCodesLocation);
+//				from = localCodesLocation;
+//			}
+//			catch (Exception e1) {
+//				logger.warn("Cannot contact localhost: " + ExceptionUtil.exception_details(e1));
+//				try {
+//					codes_string = HttpClient.httpGet(globalCodesLocation);
+//					from = globalCodesLocation;
+//				}
+//				catch (Exception e) {
+//					throw new XdsInternalException("CodeValidation: Unable to retrieve code configuration file " + globalCodesLocation +
+//							"\n" + e.getMessage());
+//				}
+//			}
+//		}
+//		if (codes_string == null)
+//			throw new XdsInternalException("CodeValidation.init(): GET codes.xml returned NULL from " + from);
+//		if (codes_string.equals(""))
+//			throw new XdsInternalException("CodeValidation.init(): GET codes.xml returned enpty from " + from);
+//
+//		logger.info("Codes loaded from " + from);
+//
+//		codes = Util.parse_xml(codes_string);
+//		if (codes == null)
+//			throw new XdsInternalException("CodeValidation: cannot parse code configuration file from " + from);
+//
+//		assigning_authorities = new ArrayList<String>();
+//		for (OMElement aa_ele : XmlUtil.childrenWithLocalName(codes, "AssigningAuthority"))
+//		{
+//			this.assigning_authorities.add(aa_ele.getAttributeValue(MetadataSupport.id_qname));
+//		}
+//
+//		build_mime_map();
 	}
 
 	void build_mime_map() throws XdsInternalException {
@@ -328,14 +352,14 @@ public class CodeValidationBase {
 			cannotValidate(er, cl);
 			return;
 		}
-		for (OMElement code_type : MetadataSupport.childrenWithLocalName(codes, "CodeType")) {
+		for (OMElement code_type : XmlUtil.childrenWithLocalName(codes, "CodeType")) {
 			String class_scheme = code_type.getAttributeValue(MetadataSupport.classscheme_qname);
 
 			// some codes don't have classScheme in their definition
 			if (class_scheme != null && !class_scheme.equals(classification_scheme))
 				continue;
 
-			for (OMElement code_ele : MetadataSupport.childrenWithLocalName(code_type, "Code")) {
+			for (OMElement code_ele : XmlUtil.childrenWithLocalName(code_type, "Code")) {
 				String code_name = code_ele.getAttributeValue(MetadataSupport.code_qname);
 				String code_scheme = code_ele.getAttributeValue(MetadataSupport.codingscheme_qname);
 				if ( 	code_name.equals(code) && 

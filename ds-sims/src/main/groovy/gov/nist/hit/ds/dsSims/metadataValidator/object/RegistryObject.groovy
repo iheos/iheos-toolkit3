@@ -6,7 +6,7 @@ import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import org.apache.axiom.om.OMElement
 
-public class RegistryObject extends AbstractRegistryObject {
+public class RegistryObject extends AbstractRegistryObjectValidator {
 
 	public RegistryObject(Metadata m, OMElement ro) throws XdsInternalException  {
 		super(m, ro);

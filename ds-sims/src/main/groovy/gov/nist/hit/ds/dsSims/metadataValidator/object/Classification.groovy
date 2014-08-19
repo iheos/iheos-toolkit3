@@ -8,7 +8,7 @@ import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import org.apache.axiom.om.OMElement
 
-public class Classification extends AbstractRegistryObject {
+public class Classification extends AbstractRegistryObjectValidator {
 	String classification_scheme = "";
 	String code_value = "";
 	//String code_display_name = "";

@@ -8,7 +8,7 @@ import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import org.apache.axiom.om.OMElement
 
-public class ExternalIdentifier extends AbstractRegistryObject {
+public class ExternalIdentifier extends AbstractRegistryObjectValidator {
 	String identificationScheme = "";
 	String value = "";
 	OMElement owner;

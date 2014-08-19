@@ -7,7 +7,7 @@ import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import org.apache.axiom.om.OMElement
 
-public class InternalClassification extends AbstractRegistryObject {
+public class InternalClassification extends AbstractRegistryObjectValidator {
 	String classifiedObjectId;
 	String classificationNode;
 	

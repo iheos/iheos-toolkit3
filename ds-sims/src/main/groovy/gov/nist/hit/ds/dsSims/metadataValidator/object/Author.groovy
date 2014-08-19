@@ -9,7 +9,7 @@ import gov.nist.hit.ds.xdsException.MetadataException
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import org.apache.axiom.om.OMElement
 
-public class Author extends AbstractRegistryObject {
+public class Author extends AbstractRegistryObjectValidator {
 	String classificationScheme = null;
 
 	public Author(String id, String person) {

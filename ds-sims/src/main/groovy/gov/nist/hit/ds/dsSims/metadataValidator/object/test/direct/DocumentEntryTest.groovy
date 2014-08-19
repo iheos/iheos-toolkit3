@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object.test.direct
 
 import gov.nist.hit.ds.dsSims.client.ValidationContext
-import gov.nist.hit.ds.dsSims.metadataValidator.object.DocumentEntry
+import gov.nist.hit.ds.dsSims.metadataValidator.object.DocumentEntryValidator
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.TextErrorRecorder
 import gov.nist.hit.ds.metadata.Metadata
@@ -33,7 +33,7 @@ class DocumentEntryTest {
 		Metadata m = MetadataParser.parseNonSubmission(xml)
 		OMElement o = m.getExtrinsicObject(0)
 		assertFalse (o == null)
-		DocumentEntry de = new DocumentEntry(m, o)
+		DocumentEntryValidator de = new DocumentEntryValidator(m, o)
 		ValidationContext vc = new ValidationContext()
 		vc.isXDRMinimal = true
 		ErrorRecorder er = new TextErrorRecorder();

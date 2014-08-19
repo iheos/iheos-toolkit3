@@ -4,11 +4,9 @@ import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.RegistryValidationInterface
 import gov.nist.hit.ds.dsSims.metadataValidator.field.CodeValidation
 import gov.nist.hit.ds.dsSims.metadataValidator.field.SubmissionStructure
-import gov.nist.hit.ds.dsSims.metadataValidator.object.Association
-import gov.nist.hit.ds.dsSims.metadataValidator.object.DocumentEntry
-import gov.nist.hit.ds.dsSims.metadataValidator.object.Folder
-import gov.nist.hit.ds.dsSims.metadataValidator.object.SubmissionSet
+import gov.nist.hit.ds.dsSims.metadataValidator.object.*
 import gov.nist.hit.ds.eventLog.Event
+import gov.nist.hit.ds.eventLog.EventErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.Metadata
@@ -24,6 +22,7 @@ public class MetadataValidator extends ValComponentBase {
     Event event
 	RegistryValidationInterface rvi
     ValidationContext vc
+    ErrorRecorder er
 
 	public MetadataValidator(Event event, Metadata m, ValidationContext vc, RegistryValidationInterface rvi) {
         super(event)
@@ -31,11 +30,12 @@ public class MetadataValidator extends ValComponentBase {
         this.m = m
         this.vc = vc
         this.rvi = rvi
+        this.er = new EventErrorRecorder(event)
 	}
 
     @Override
     void run() throws SoapFaultException, RepositoryException {
-        runValidationEngine()
+       // runValidationEngine()
 
 		runObjectStructureValidation()
 		runCodeValidation(er);
@@ -53,9 +53,10 @@ public class MetadataValidator extends ValComponentBase {
 
         for (OMElement ssEle : m.getSubmissionSets()) {
             er.sectionHeading("SubmissionSet(" + ssEle.getAttributeValue(MetadataSupport.id_qname) + ")");
-            SubmissionSet s = null;
+            SubmissionSetValidator s = null;
+            SubmissionSetModel ssModel = new SubmissionSetModel(m, ssEle)
             try {
-                s = new SubmissionSet(m, ssEle);
+                s = new SubmissionSetValidator(ssModel);
             } catch (XdsInternalException e) {
                 er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
                 continue;
@@ -65,9 +66,10 @@ public class MetadataValidator extends ValComponentBase {
 
         for (OMElement deEle : m.getExtrinsicObjects() ) {
             er.sectionHeading("DocumentEntry(" + deEle.getAttributeValue(MetadataSupport.id_qname) + ")");
-            DocumentEntry de = null;
+            DocumentEntryValidator de = null;
+            DocumentEntryModel deModel = new DocumentEntryModel(m, deEle)
             try {
-                de = new DocumentEntry(m, deEle);
+                de = new DocumentEntryValidator(deModel);
             } catch (XdsInternalException e) {
                 er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
                 continue;
@@ -77,9 +79,10 @@ public class MetadataValidator extends ValComponentBase {
 
         for (OMElement fEle : m.getFolders()) {
             er.sectionHeading("Folder(" + fEle.getAttributeValue(MetadataSupport.id_qname) + ")");
-            Folder f = null;
+            FolderValidator f = null;
+            FolderModel fModel = new FolderModel(m, fEle)
             try {
-                f = new Folder(m, fEle);
+                f = new FolderValidator(fModel);
             } catch (XdsInternalException e) {
                 er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
                 continue;
@@ -89,9 +92,10 @@ public class MetadataValidator extends ValComponentBase {
 
         for (OMElement aEle : m.getAssociations()) {
             er.sectionHeading("Association(" + aEle.getAttributeValue(MetadataSupport.id_qname) + ")");
-            Association a = null;
+            AssociationValidator a = null;
+            AssociationModel aModel = new AssociationModel(m, aEle)
             try {
-                a = new Association(m, aEle, vc);
+                a = new AssociationValidator(aModel, vc);
             } catch (XdsInternalException e) {
                 er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
                 continue;

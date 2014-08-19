@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object.test.direct
 
 import gov.nist.hit.ds.dsSims.client.ValidationContext
-import gov.nist.hit.ds.dsSims.metadataValidator.object.SubmissionSet
+import gov.nist.hit.ds.dsSims.metadataValidator.object.SubmissionSetValidator
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.TextErrorRecorder
 import gov.nist.hit.ds.metadata.Metadata
@@ -60,7 +60,7 @@ class SubmissionSetTest {
 		Metadata m = MetadataParser.parse(xml)
 		OMElement ss = m.getSubmissionSet()
 		assertFalse (ss == null)
-		SubmissionSet sso = new SubmissionSet(m, ss)
+		SubmissionSetValidator sso = new SubmissionSetValidator(m, ss)
 		ValidationContext vc = new ValidationContext()
 		vc.isXDRMinimal = true
 		ErrorRecorder er = new TextErrorRecorder();

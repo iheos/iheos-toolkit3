@@ -3,7 +3,9 @@ package gov.nist.hit.ds.dsSims.metadataValidator.field
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.RegistryValidationInterface
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
+import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.Metadata
+import gov.nist.hit.ds.metadata.MetadataSupport
 import org.apache.axiom.om.OMElement
 
 public class SubmissionStructure {
