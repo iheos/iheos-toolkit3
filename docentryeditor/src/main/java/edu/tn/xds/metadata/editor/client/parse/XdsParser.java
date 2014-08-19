@@ -149,7 +149,6 @@ public class XdsParser {
 
         // parse the XML document into a DOM
         document = XMLParser.parse(documentXml);
-        logger.info(document.toString());
     }
 
     public XdsDocumentEntry getXdsDocumentEntry() {
@@ -596,8 +595,6 @@ public class XdsParser {
                 InternationalString internationalString = new InternationalString();
 
                 // Set languageCode
-                logger.info(nodeList.item(0).getChildNodes()
-                        .item(i).toString());
                 LanguageCode international256_langCode = LanguageCode.getValueOf(((Element) nodeList.item(0).getChildNodes()
                         .item(i)).getElementsByTagName(RootNodesEnum.SubNodesEnum.language.toString()).item(0)
                         .getFirstChild().getNodeValue());

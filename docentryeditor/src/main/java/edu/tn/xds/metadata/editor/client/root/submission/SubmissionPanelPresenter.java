@@ -26,7 +26,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     XdsParser xdsParser;
 
     private SubmissionMenuData currentlyEdited;
-    private final static TextResource prefillData = AppResources.INSTANCE.xdsPrefill();
+//    private final static TextResource prefillData = AppResources.INSTANCE.xdsPrefill();
     private int nextIndex = 1;
 
     @Override
@@ -85,7 +85,18 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     }
 
     public void createPrefilledDocumentEntry() {
-        XdsDocumentEntry model = xdsParser.parse(PreParse.getInstance().doPreParse(prefillData.getText()));
+        XdsDocumentEntry model = xdsParser.parse(PreParse.getInstance().doPreParse(AppResources.INSTANCE.xdsPrefill().getText()));
         model.setFileName(new String256("new-doc-entry"));
+        //------------------------------------------- MIGHT CHANGE
+        logger.info("Create new document entry");
+        currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, model);
+        nextIndex++;
+        view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
+        view.getTree().expandAll();
+        view.getTree().getSelectionModel().select(currentlyEdited, false);
+        if (!(placeController.getWhere() instanceof EditorPlace)) {
+            placeController.goTo(new EditorPlace());
+        }
+        ((MetadataEditorEventBus) eventBus).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
     }
 }
