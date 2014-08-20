@@ -1,13 +1,10 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
-
 import gov.nist.hit.ds.metadata.Metadata
-import gov.nist.hit.ds.metadata.MetadataParser
 import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.utilities.xml.XmlUtil
 import gov.nist.hit.ds.xdsException.MetadataException
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import org.apache.axiom.om.OMElement
-
 /**
  * Created by bmajur on 8/18/14.
  */
@@ -16,13 +13,13 @@ class RegistryObjectModel {
 
 //    abstract public OMElement toXml() throws XdsInternalException;
 
-    List<Slot> slots = new ArrayList<Slot>();
+    List<SlotModel> slots = new ArrayList<SlotModel>();
     String name = "";
     String description = "";
-    List<Classification> classifications = new ArrayList<Classification>();
-    List<InternalClassification> internalClassifications = new ArrayList<InternalClassification>();
-    List<Author> authors = new ArrayList<Author>();
-    List<ExternalIdentifier> externalIdentifiers = new ArrayList<ExternalIdentifier>();
+    List<ClassificationModel> classifications = new ArrayList<ClassificationModel>();
+    List<InternalClassificationModel> internalClassifications = new ArrayList<InternalClassificationModel>();
+    List<AuthorModel> authors = new ArrayList<AuthorModel>();
+    List<ExternalIdentifierModel> externalIdentifiers = new ArrayList<ExternalIdentifierModel>();
     String version = "1.1";
     String status = null;
     String home = null;
@@ -32,12 +29,17 @@ class RegistryObjectModel {
     Metadata m;
     OMElement owner = null;
 
-    public RegistryObjectModel(String id) {
+     RegistryObjectModel(String id) {
         ro = null;
         this.id = id;
     }
 
-    public RegistryObjectModel(Metadata m, OMElement ro) throws XdsInternalException  {
+    RegistryObjectModel() {
+        ro = null
+        m = null
+    }
+
+     RegistryObjectModel(Metadata m, OMElement ro) throws XdsInternalException  {
         this.m = m;
         this.ro = ro;
 
@@ -54,7 +56,7 @@ class RegistryObjectModel {
         home = ro.getAttributeValue(MetadataSupport.home_qname);
 
         for (OMElement slotEle : XmlUtil.childrenWithLocalName(ro, "Slot")) {
-            Slot s = new Slot(slotEle);
+            SlotModel s = new SlotModel(m, slotEle);
             slots.add(s);
         }
 
@@ -68,19 +70,20 @@ class RegistryObjectModel {
             version = vinfo.getAttributeValue(MetadataSupport.versionname_qname);
 
         for (OMElement clEle : XmlUtil.childrenWithLocalName(ro, "Classification")) {
-            if (Author.isAuthorClassification(clEle)) {
-                Author a = new Author(m, clEle);
-                authors.add(a);
-            } else if (InternalClassification.isInternalClassification(clEle)) {
-                internalClassifications.add(new InternalClassification(m, clEle));
+            if (AuthorModel.isAuthorClassification(clEle)) {
+                AuthorModel aModel = new AuthorModel(m, clEle)
+                AuthorValidator a = new AuthorValidator(aModel);
+                authors.add(aModel);
+            } else if (InternalClassificationModel.isInternalClassification(clEle)) {
+                internalClassifications.add(new InternalClassificationModel(m, clEle));
             } else {
-                Classification c = new Classification(m, clEle);
+                ClassificationModel c = new ClassificationModel(m, clEle);
                 classifications.add(c);
             }
         }
 
         for (OMElement eiEle : XmlUtil.childrenWithLocalName(ro, "ExternalIdentifier")) {
-            ExternalIdentifier ei = new ExternalIdentifier(m, eiEle);
+            ExternalIdentifierModel ei = new ExternalIdentifierModel(m, eiEle);
             externalIdentifiers.add(ei);
         }
     }
@@ -119,10 +122,10 @@ class RegistryObjectModel {
         return m.getSlots(getId());
     }
 
-    public List<Slot> getSlots() { return slots; }
+    public List<SlotModel> getSlots() { return slots; }
 
-    public Slot getSlot(String name) {
-        for (Slot slot : slots) {
+    public SlotModel getSlot(String name) {
+        for (SlotModel slot : slots) {
             if (name.equals(slot.getName()))
                 return slot;
         }
@@ -137,40 +140,42 @@ class RegistryObjectModel {
         this.home = home;
     }
 
-    public List<Classification> getClassificationsByClassificationScheme(String classificationScheme) {
-        List<Classification> cls = new ArrayList<Classification>();
-        for (Classification c : classifications) {
+    public List<ClassificationModel> getClassificationsByClassificationScheme(String classificationScheme) {
+        List<ClassificationModel> cls = new ArrayList<ClassificationModel>();
+        for (ClassificationModel c : classifications) {
             if (c.getClassificationScheme().equals(classificationScheme))
                 cls.add(c);
         }
         return cls;
     }
 
-    public List<Classification> getClassifications() {
+    public List<ClassificationModel> getClassifications() {
         return classifications;
     }
 
-    public List<Author> getAuthors() {
+    public List<AuthorModel> getAuthors() {
         return authors;
     }
 
-    public List<ExternalIdentifier> getExternalIdentifiers() {
+    public List<ExternalIdentifierModel> getExternalIdentifiers() {
         return externalIdentifiers;
     }
 
-    public ExternalIdentifier getExternalIdentifier(String identificationScheme) {
-        for (ExternalIdentifier ei : externalIdentifiers) {
-            if (ei.getIdentificationScheme().equals(identificationScheme))
-                return ei;
+    public List<ExternalIdentifierModel> getExternalIdentifiers(String identificationScheme) {
+        List<ExternalIdentifierModel> eis = new ArrayList<ExternalIdentifierModel>()
+        for (ExternalIdentifierModel ei : externalIdentifiers) {
+            if (ei.getIdentificationScheme().equals(identificationScheme)) {
+                eis.add(ei)
+            }
         }
-        return null;
+        return eis;
     }
 
 
-    public void updateDone() throws XdsInternalException, MetadataException  {
-        ro = toXml();
-        m = MetadataParser.parseObject(ro);
-    }
+//    public void updateDone() throws XdsInternalException, MetadataException  {
+//        ro = toXml();
+//        m = MetadataParser.parseObject(ro);
+//    }
 
     String getLocalizedString(OMElement attEle) {
         if (attEle != null) {
@@ -233,41 +238,41 @@ class RegistryObjectModel {
 
         return true;
     }
-    public OMElement getElement() {
+     OMElement getElement() {
         return ro;
     }
 
-    public Metadata getMetadata() {
+     Metadata getMetadata() {
         return m;
     }
 
-    public boolean isClassifiedAs(String uuid) {
-        for (InternalClassification ic : internalClassifications) {
+     boolean isClassifiedAs(String uuid) {
+        for (InternalClassificationModel ic : internalClassifications) {
             if (ic.getClassificationNode().equals(uuid))
                 return true;
         }
         return false;
     }
-    public void addSlot(Slot s) {
+     void addSlot(SlotModel s) {
         slots.add(s);
     }
 
-    public Slot addSlot(String name, String value) {
-        Slot s = new Slot(name);
+     SlotModel addSlot(String name, String value) {
+        SlotModel s = new SlotModel(name);
         s.addValue(value);
         addSlot(s);
         return s;
     }
 
-    public void addClassification(Classification c) {
+     void addClassification(ClassificationModel c) {
         classifications.add(c);
     }
 
-    public void addAuthor(Author a) {
+     void addAuthor(AuthorModel a) {
         authors.add(a);
     }
 
-    public void addExternalIdentifier(ExternalIdentifier e) {
+     void addExternalIdentifier(ExternalIdentifierModel e) {
         externalIdentifiers.add(e);
     }
 
@@ -279,7 +284,7 @@ class RegistryObjectModel {
         return "ExternalIdentifier(" + eiScheme + ")(" + desc.names.get(eiScheme) + ")";
     }
 
-    public String identifyingString() {
+     String identifyingString() {
         return "RegistryObject(" + getId() + ")";
     }
 

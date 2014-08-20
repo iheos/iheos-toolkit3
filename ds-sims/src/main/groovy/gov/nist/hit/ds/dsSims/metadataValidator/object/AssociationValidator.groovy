@@ -5,7 +5,7 @@ import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.MetadataSupport
 
 @groovy.transform.TypeChecked
-public class AssociationValidator extends AbstractRegistryObjectValidator implements TopLevelObject {
+class AssociationValidator extends AbstractRegistryObjectValidator {
 	ValidationContext vc;
     AssociationModel model
 
@@ -15,7 +15,7 @@ public class AssociationValidator extends AbstractRegistryObjectValidator implem
         this.vc = vc
     }
 
-	public void validate(ErrorRecorder er, ValidationContext vc,
+     void validate(ErrorRecorder er, ValidationContext vc,
 			Set<String> knownIds) {
 		if (vc.skipInternalStructure)
 			return;
@@ -41,11 +41,11 @@ public class AssociationValidator extends AbstractRegistryObjectValidator implem
 	}
 
 
-	public void validateClassifications(ErrorRecorder er, ValidationContext vc) {
+	 void validateClassifications(ErrorRecorder er, ValidationContext vc) {
 
 		er.challenge("Classifications present are legal");
 
-		List<Classification> c = model.getClassificationsByClassificationScheme(MetadataSupport.XDSAssociationDocumentation_uuid);
+		List<ClassificationModel> c = model.getClassificationsByClassificationScheme(MetadataSupport.XDSAssociationDocumentation_uuid);
 		if (c.size() == 0)
         {}
 		else if (c.size() > 1)
@@ -65,7 +65,7 @@ public class AssociationValidator extends AbstractRegistryObjectValidator implem
 	}
 	
 
-	public void validateTopAtts(ErrorRecorder er, ValidationContext vc) {
+	 void validateTopAtts(ErrorRecorder er, ValidationContext vc) {
 		validateId(er, vc, "entryUUID", model.id, null);
 
 		validateId(er, vc, "sourceObject", model.source, null);
@@ -88,27 +88,15 @@ public class AssociationValidator extends AbstractRegistryObjectValidator implem
 		
 		else if (!model.assocTypes.contains(model.type))
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": associationType " + model.type + " unknown. Known assocationTypes are " + model.assocTypes, this, "ITI TF-3 Table 4.1-2.1");
-
-		
 	}
 
-	public void validateRequiredSlotsPresent(ErrorRecorder er,
+	 void validateRequiredSlotsPresent(ErrorRecorder er,
 			ValidationContext vc) {
-//		Metadata m = getMetadata();
-//		if (type.equals(MetadataSupport.assoctype_has_member) &&
-//				m.isSubmissionSet(source) &&
-//				m.isDocument(target)) {
-//			if (getSlot(MetadataSupport.assoc_slot_submission_set_status) == null)
-//				er.err(identifyingString() + ": SubmissionSet to DocumentEntry HasMember association must have a SubmissionSetStatus Slot", "ITI TF-3: 4.1.4.1");
-//		} else {
-//			
-//		}
-
 	}
 
-	public void validateSlotsCodedCorrectly(ErrorRecorder er,
+	 void validateSlotsCodedCorrectly(ErrorRecorder er,
 			ValidationContext vc) {
-		Slot s = model.getSlot(MetadataSupport.assoc_slot_submission_set_status);
+		SlotModel s = model.getSlot(MetadataSupport.assoc_slot_submission_set_status);
 		if (s == null)
 			return;
 		if (s.getValues().size() == 1) {
@@ -122,7 +110,7 @@ public class AssociationValidator extends AbstractRegistryObjectValidator implem
 		}
 	}
 
-	public void validateSlotsLegal(ErrorRecorder er) {
+	 void validateSlotsLegal(ErrorRecorder er) {
 		// work done by validateRequiredSlotsPresent
 	}
 

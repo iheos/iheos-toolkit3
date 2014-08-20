@@ -17,7 +17,8 @@ import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import org.apache.axiom.om.OMElement
 
-public class MetadataValidator extends ValComponentBase {
+@groovy.transform.TypeChecked
+class MetadataValidator extends ValComponentBase {
 	Metadata m
     Event event
 	RegistryValidationInterface rvi

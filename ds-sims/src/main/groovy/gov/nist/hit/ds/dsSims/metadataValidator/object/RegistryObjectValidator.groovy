@@ -1,7 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.CxFormat
-import gov.nist.hit.ds.dsSims.metadataValidator.datatype.FormatValidator
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.OidFormat
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.UuidFormat
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
@@ -9,48 +8,23 @@ import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.utilities.xml.XmlUtil
 import org.apache.axiom.om.OMElement
-
+/**
+ * Created by bmajur on 8/4/14.
+ */
 @groovy.transform.TypeChecked
-public abstract class AbstractRegistryObjectValidator {
+abstract class RegistryObjectValidator extends AbstractRegistryObjectValidator {
     RegistryObjectModel model
 
-//	abstract public String identifyingString();
-	abstract public void validateSlotsLegal(ErrorRecorder er);
-	abstract public void validateRequiredSlotsPresent(ErrorRecorder er, ValidationContext vc);
-	abstract public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc);
+    RegistryObjectValidator(RegistryObjectModel model) { super(model); this.model = model }
 
-    public AbstractRegistryObjectValidator(RegistryObjectModel model) { this.model = model }
-
-	public List<ExternalIdentifierModel> getExternalIdentifiers(String identificationScheme) {
-		List<ExternalIdentifierModel> eis = new ArrayList<ExternalIdentifierModel>();
-		for (ExternalIdentifierModel ei : model.externalIdentifiers) {
-			if (ei.getIdentificationScheme().equals(identificationScheme))
-				eis.add(ei);
-		}
-		return eis;
-	}
-
-	protected int count(List<String> strings, String target) {
-		int i=0;
-	
-		for (String s : strings)
-			if (s.equals(target))
-				i++;
-	
-		return i;
-	}
-
-// TODO: remove since copied to RegistryObjectValidator.groovy
-
-    // should be utility called by validators
-    public void validateSlot(ErrorRecorder er, String slotName, boolean multivalue, FormatValidator validator, String resource) {
-        SlotModel slot = model.getSlot(slotName);
-        if (slot == null) {
-            return;
-        }
-
-        new SlotValidator(slot).validate(er, multivalue, validator, resource);
-    }
+//    public void validateSlot(ErrorRecorder er, String slotName, boolean multivalue, FormatValidator validator, String resource) {
+//        SlotModel slot = model.getSlot(slotName);
+//        if (slot == null) {
+//            return;
+//        }
+//
+//        slot.validate(er, multivalue, validator, resource);
+//    }
 
     public void validateTopAtts(ErrorRecorder er, ValidationContext vc, String tableRef, List<String> statusValues) {
         validateId(er, vc, "entryUUID", model.id, null);
@@ -76,9 +50,7 @@ public abstract class AbstractRegistryObjectValidator {
 
         }
     }
-
-    // break up into validateId (utility), class, author, EI
-    public void validateId(ErrorRecorder er, ValidationContext vc, String attName, String attValue, String resource) {
+     void validateId(ErrorRecorder er, ValidationContext vc, String attName, String attValue, String resource) {
         String defaultResource = "ITI TF-3: 4.1.12.3";
         if (attValue == null || attValue.equals("")) {
             er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + attName + " attribute empty or missing", this, (resource!=null) ? resource : defaultResource);
@@ -90,8 +62,8 @@ public abstract class AbstractRegistryObjectValidator {
             }
         }
 
-        for (ClassificationModel cModel : model.classifications)
-            new ClassificationValidator(cModel).validateId(er, vc, "entryUUID", cModel.getId(), resource);
+        for (ClassificationModel c : model.classifications)
+            new ClassificationValidator(c).validateId(er, vc, "entryUUID", c.getId(), resource);
 
         for (AuthorModel a : model.authors)
             new AuthorValidator(a).validateId(er, vc, "entryUUID", a.getId(), resource);
@@ -100,7 +72,8 @@ public abstract class AbstractRegistryObjectValidator {
             new ExternalIdentifierValidator(ei).validateId(er, vc, "entryUUID", ei.getId(), resource);
 
     }
-    public void verifyIdsUnique(ErrorRecorder er, Set<String> knownIds) {
+
+     void verifyIdsUnique(ErrorRecorder er, Set<String> knownIds) {
         if (model.id != null) {
             if (knownIds.contains(model.id))
                 er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": entryUUID " + model.id + "  identifies multiple objects", this, "ITI TF-3: 4.1.12.3 and ebRS 5.1.2");
@@ -117,8 +90,7 @@ public abstract class AbstractRegistryObjectValidator {
             new ExternalIdentifierValidator(ei).verifyIdsUnique(er, knownIds);
     }
 
-    // guarded
-    public void validateHome(ErrorRecorder er, String resource) {
+     void validateHome(ErrorRecorder er, String resource) {
         if (model.home == null)
             er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": homeCommunityId attribute must be present", this, resource);
         else {
@@ -131,13 +103,14 @@ public abstract class AbstractRegistryObjectValidator {
             new OidFormat(er, model.identifyingString() + " homeCommunityId", resource).validate(parts[parts.length-1]);
         }
     }
-    public void validateClassificationsLegal(ErrorRecorder er, ClassAndIdDescription desc, String resource) {
+
+     void validateClassificationsLegal(ErrorRecorder er, ClassAndIdDescription desc, String resource) {
         List<String> cSchemes = new ArrayList<String>();
 
-        for (ClassificationModel c : model.getClassifications()) {
-            String cScheme = c.getClassificationScheme();
+        for (ClassificationModel cModel : model.getClassifications()) {
+            String cScheme = cModel.getClassificationScheme();
             if (cScheme == null || cScheme.equals("") || !desc.definedSchemes.contains(cScheme)) {
-                er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + c.identifyingString() + " has an unknown classificationScheme attribute value: " + cScheme, this, resource);
+                er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + cModel.identifyingString() + " has an unknown classificationScheme attribute value: " + cScheme, this, resource);
             } else {
                 cSchemes.add(cScheme);
             }
@@ -150,12 +123,13 @@ public abstract class AbstractRegistryObjectValidator {
                 er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + model.classificationDescription(desc, cScheme) + " is specified multiple times, only one allowed", this, resource);
         }
     }
-    public void validateClassificationsCodedCorrectly(ErrorRecorder er, ValidationContext vc) {
-        for (ClassificationModel c : model.getClassifications())
-            new ClassificationValidator(c).validateStructure(er, vc);
 
-        for (AuthorModel a : model.getAuthors())
-            new AuthorValidator(a).validateStructure(er, vc);
+    void validateClassificationsCodedCorrectly(ErrorRecorder er, ValidationContext vc) {
+        for (ClassificationModel cModel : model.getClassifications())
+            new ClassificationValidator(cModel).validateStructure(er, vc);
+
+        for (AuthorModel aModel : model.getAuthors())
+            new AuthorValidator(aModel).validateStructure(er, vc);
     }
 
     public void validateClassifications(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
@@ -177,21 +151,21 @@ public abstract class AbstractRegistryObjectValidator {
     }
 
     public void validateExternalIdentifiersCodedCorrectly(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
-        for (ExternalIdentifierModel ei : model.getExternalIdentifiers()) {
-            new ExternalIdentifierValidator(ei).validateStructure(er, vc);
-            if (MetadataSupport.XDSDocumentEntry_uniqueid_uuid.equals(ei.getIdentificationScheme())) {
-                String[] parts = ei.getValue().split("\\^");
-                new OidFormat(er, model.identifyingString() + ": " + ei.identifyingString(), model.externalIdentifierDescription(desc, ei.getIdentificationScheme()))
+        for (ExternalIdentifierModel eiModel : model.getExternalIdentifiers()) {
+            new ExternalIdentifierValidator(eiModel).validateStructure(er, vc);
+            if (MetadataSupport.XDSDocumentEntry_uniqueid_uuid.equals(eiModel.getIdentificationScheme())) {
+                String[] parts = eiModel.getValue().split("\\^");
+                new OidFormat(er, model.identifyingString() + ": " + eiModel.identifyingString(), model.externalIdentifierDescription(desc, eiModel.getIdentificationScheme()))
                         .validate(parts[0]);
                 if (parts[0].length() > 64)
-                    er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + ei.identifyingString() + " OID part of DocumentEntry uniqueID is limited to 64 digits", this, resource);
+                    er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + eiModel.identifyingString() + " OID part of DocumentEntry uniqueID is limited to 64 digits", this, resource);
                 if (parts.length > 1 && parts[1].length() > 16) {
-                    er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + ei.identifyingString() + " extension part of DocumentEntry uniqueID is limited to 16 characters", this, resource);
+                    er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + eiModel.identifyingString() + " extension part of DocumentEntry uniqueID is limited to 16 characters", this, resource);
                 }
 
-            } else if (MetadataSupport.XDSDocumentEntry_patientid_uuid.equals(ei.getIdentificationScheme())){
-                new CxFormat(er, model.identifyingString() + ": " + ei.identifyingString(), "ITI TF-3: Table 4.1.7")
-                        .validate(ei.getValue());
+            } else if (MetadataSupport.XDSDocumentEntry_patientid_uuid.equals(eiModel.getIdentificationScheme())){
+                new CxFormat(er, model.identifyingString() + ": " + eiModel.identifyingString(), "ITI TF-3: Table 4.1.7")
+                        .validate(eiModel.getValue());
             }
         }
     }
@@ -200,7 +174,7 @@ public abstract class AbstractRegistryObjectValidator {
 
     public void validateRequiredExternalIdentifiersPresent(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
         for (String idScheme : desc.requiredSchemes) {
-            List<ExternalIdentifierModel> eis = getExternalIdentifiers(idScheme);
+            List<ExternalIdentifierModel> eis = model.getExternalIdentifiers(idScheme);
             if (eis.size() == 0)
                 er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + model.externalIdentifierDescription(desc, idScheme) + " is required but missing", this, resource);
             if (eis.size() > 1)
@@ -217,7 +191,7 @@ public abstract class AbstractRegistryObjectValidator {
         }
     }
 
-    public void validateSlots(ErrorRecorder er, ValidationContext vc) {
+    void validateSlots(ErrorRecorder er, ValidationContext vc) {
         er.challenge("Validating that Slots present are legal");
         validateSlotsLegal(er);
         er.challenge("Validating required Slots present");
@@ -249,7 +223,4 @@ public abstract class AbstractRegistryObjectValidator {
         }
         return ok;
     }
-
-
-
 }

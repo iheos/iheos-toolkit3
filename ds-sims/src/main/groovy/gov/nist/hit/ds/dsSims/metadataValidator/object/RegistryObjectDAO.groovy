@@ -40,32 +40,32 @@ class RegistryObjectDAO {
     }
 
     public void addSlotsXml(OMElement parent) {
-        for (Slot s : model.slots) {
+        for (SlotValidator s : model.slots) {
             parent.addChild(s.toXML());
         }
     }
 
     public void addClassificationsXml(OMElement parent) throws XdsInternalException  {
-        for (Classification c : model.classifications) {
+        for (ClassificationValidator c : model.classifications) {
             OMElement cl = c.toXml(parent);
             parent.addChild(cl);
 
         }
         if (model.internalClassifications != null) {
-            for (InternalClassification ic : model.internalClassifications)
+            for (InternalClassificationValidator ic : model.internalClassifications)
                 parent.addChild(ic.toXml());
         }
     }
 
     public void addAuthorsXml(OMElement parent) throws XdsInternalException  {
-        for (Author a : model.authors) {
+        for (AuthorValidator a : model.authors) {
             OMElement ele = a.toXml(parent);
             parent.addChild(ele);
         }
     }
 
     public void addExternalIdentifiersXml(OMElement parent) throws XdsInternalException  {
-        for (ExternalIdentifier ei : model.externalIdentifiers) {
+        for (ExternalIdentifierValidator ei : model.externalIdentifiers) {
             OMElement ele = ei.toXml(parent);
             parent.addChild(ele);
         }

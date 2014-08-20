@@ -161,7 +161,7 @@ class RimGenerator {
     }
 
     def mkSlot(xml, spec) {
-        xml.Slot(name: spec.name) {
+        xml.SlotValidator(name: spec.name) {
             ValueList {
                 spec.values.each { Value(it) }
             }
@@ -175,7 +175,7 @@ class RimGenerator {
             Name {
                 LocalizedString(value: spec.display)
             }
-            Slot(name: 'codingScheme') {
+            SlotValidator(name: 'codingScheme') {
                 ValueList {
                     Value(spec.system)
                 }
@@ -198,7 +198,7 @@ class RimGenerator {
                 objectType: 'urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification',
                 nodeRepresentation: '') {
             if (spec.person) {
-                xml.Slot(name: 'authorPerson') {
+                xml.SlotValidator(name: 'authorPerson') {
                     ValueList {
                         Value {
                             spec.person
@@ -207,7 +207,7 @@ class RimGenerator {
                 }
             }
             if (spec.institutions) {
-                xml.Slot(name: 'authorInstitution') {
+                xml.SlotValidator(name: 'authorInstitution') {
                     ValueList {
                         spec.institutions.each {
                             Value { it }
@@ -216,7 +216,7 @@ class RimGenerator {
                 }
             }
             if (spec.role) {
-                xml.Slot(name: 'authorRole') {
+                xml.SlotValidator(name: 'authorRole') {
                     ValueList {
                         spec.role.each {
                             Value { it }
@@ -225,7 +225,7 @@ class RimGenerator {
                 }
             }
             if (spec.specialty) {
-                xml.Slot(name: 'authorSpecialty') {
+                xml.SlotValidator(name: 'authorSpecialty') {
                     ValueList {
                         spec.specialty.each {
                             Value { it }
@@ -234,7 +234,7 @@ class RimGenerator {
                 }
             }
             if (spec.telecom) {
-                xml.Slot(name: 'authorTelecommunication') {
+                xml.SlotValidator(name: 'authorTelecommunication') {
                     ValueList {
                         Value {
                             spec.telecom

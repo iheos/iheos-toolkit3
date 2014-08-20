@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.field
 import gov.nist.hit.ds.dsSims.client.ValidationContext
-import gov.nist.hit.ds.dsSims.metadataValidator.object.Classification
+import gov.nist.hit.ds.dsSims.metadataValidator.object.ClassificationValidator
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.Metadata
@@ -242,7 +242,7 @@ public class CodeValidationBase {
 		}
 	}
 
-	void cannotValidate(ErrorRecorder er, Classification c) {
+	void cannotValidate(ErrorRecorder er, ClassificationValidator c) {
 		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, c.identifyingString() + ": cannot validate code - error parsing Classification", this, "ebRIM section 4.3");
 	}
 
@@ -269,9 +269,9 @@ public class CodeValidationBase {
 	
 			for (OMElement cl_ele : classifications) {
 	
-				Classification cl = null;
+				ClassificationValidator cl = null;
 				try {
-					cl = new Classification(m, cl_ele);
+					cl = new ClassificationValidator(m, cl_ele);
 				} catch (XdsInternalException e) {
 					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
 					continue;
@@ -296,7 +296,7 @@ public class CodeValidationBase {
 
 	// if classified object is an Association, only some types of Associations can
 	// accept an associationDocumenation classification
-	void validateAssocClassifications(ErrorRecorder er, Classification cl) {
+	void validateAssocClassifications(ErrorRecorder er, ClassificationValidator cl) {
 
 		String classification_type = cl.getClassificationScheme();
 
@@ -326,7 +326,7 @@ public class CodeValidationBase {
 		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, objectDescription(assoc_ele) + ": Association Type " + assoc_type + " cannot have an associationDocumentation classification", this, "ITI TF-3: 4.1.6.1");
 	}
 	
-	void validate(ErrorRecorder er, Classification cl) {
+	void validate(ErrorRecorder er, ClassificationValidator cl) {
 		String classification_scheme = cl.getClassificationScheme();
 
 		if (classification_scheme == null) {

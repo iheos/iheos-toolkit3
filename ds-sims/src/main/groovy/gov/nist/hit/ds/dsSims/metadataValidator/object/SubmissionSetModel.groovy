@@ -162,7 +162,7 @@ class SubmissionSetModel extends RegistryObjectModel {
 
     public SubmissionSetModel(String id) {
         super(id);
-        internalClassifications.add(new InternalClassification("cl" + id, id, MetadataSupport.XDSSubmissionSet_classification_uuid));
+        internalClassifications.add(new InternalClassificationModel("cl" + id, id, MetadataSupport.XDSSubmissionSet_classification_uuid));
     }
 
     public boolean equals(SubmissionSetValidator s)  {

@@ -5,7 +5,7 @@ import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 
 @groovy.transform.TypeChecked
-public class FolderValidator extends AbstractRegistryObjectValidator implements TopLevelObject {
+public class FolderValidator extends AbstractRegistryObjectValidator {
 	static public String table417 = "ITI TF-3: Table 4.1-7";
     FolderModel model
 
@@ -59,7 +59,7 @@ public class FolderValidator extends AbstractRegistryObjectValidator implements 
 
 	public void validateSlotsLegal(ErrorRecorder er)  {
 		verifySlotsUnique(er);
-		for (Slot slot : model.getSlots()) {
+		for (SlotModel slot : model.getSlots()) {
 			if ( ! legal_slot_name(slot.getName()))
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + slot.getName() + " is not a legal slot name for a SubmissionSet",  this,  table417);
 

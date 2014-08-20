@@ -1,17 +1,13 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
-
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.*
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
-import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.xdsException.MetadataException
-import gov.nist.hit.ds.xdsException.XdsInternalException
-import org.apache.axiom.om.OMElement
 
 @groovy.transform.TypeChecked
-public class DocumentEntryValidator extends AbstractRegistryObjectValidator implements TopLevelObject {
+public class DocumentEntryValidator extends AbstractRegistryObjectValidator {
     DocumentEntryModel model
 
     DocumentEntryValidator(DocumentEntryModel model) {
@@ -91,7 +87,7 @@ public class DocumentEntryValidator extends AbstractRegistryObjectValidator impl
 	 */
 	public void validateSlotsLegal(ErrorRecorder er)  {
 		verifySlotsUnique(er);
-		for (Slot slot : model.getSlots()) {
+		for (SlotModel slot : model.getSlots()) {
 			if ( ! legal_slot_name(slot.getName()))
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + slot.getName() + " is not a legal slot name for a DocumentEntry",   this, table415);
 
@@ -122,13 +118,13 @@ public class DocumentEntryValidator extends AbstractRegistryObjectValidator impl
 
 		if ( model.getSlot("URI") != null ) {
 			try {
-				m.getURIAttribute(ro, !vc.isXDM);
+				model.m.getURIAttribute(model.ro, !vc.isXDM);
 			} catch (MetadataException e) {
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "Slot URI: " + e.getMessage(), this, table415);
 			}
 		} 
 		
-		Slot docAvail = model.getSlot("documentAvailability");
+		SlotModel docAvail = model.getSlot("documentAvailability");
 		if (docAvail != null) {
 			if (docAvail.getValues().size() > 1)
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "Slot documentAvailability shall have a single value", this, table415);
@@ -151,7 +147,7 @@ public class DocumentEntryValidator extends AbstractRegistryObjectValidator impl
 
 	public void validateTopAtts(ErrorRecorder er, ValidationContext vc) {
 		if (!MetadataSupport.XDSDocumentEntry_objectType_uuid.equals(model.objectType))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": objectType must be " + MetadataSupport.XDSDocumentEntry_objectType_uuid + " (found " + objectType + ")", this, table415);
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": objectType must be " + MetadataSupport.XDSDocumentEntry_objectType_uuid + " (found " + model.objectType + ")", this, table415);
 
 		if (model.mimeType == null || model.mimeType.equals(""))
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": mimeType attribute missing or empty", this, table415);

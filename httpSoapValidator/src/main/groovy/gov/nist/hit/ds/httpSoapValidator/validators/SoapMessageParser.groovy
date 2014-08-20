@@ -47,7 +47,7 @@ public class SoapMessageParser extends ValComponentBase {
         }
     }
 
-    @ValidationFault(id="SoapParseEnvelope", dependsOn='SoapParserXML', required=RequiredOptional.R, msg="Parse SOAP Envelope", faultCode=FaultCode.Sender, ref="??")
+    @ValidationFault(id="SoapParseEnvelope", dependsOn='SoapParseXML', required=RequiredOptional.R, msg="Parse SOAP Envelope", faultCode=FaultCode.Sender, ref="??")
     public void parseSOAPEnvelope() throws SoapFaultException {
         defaultMsg()
         try {
@@ -69,9 +69,9 @@ public class SoapMessageParser extends ValComponentBase {
     @ValidationFault(id="SoapVerifyPartCount", dependsOn='SoapParseEnvelope', msg="Envelope must have 2 children", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
     public void validatePartCount() throws SoapFaultException { assertEquals(2, partCount) }
 
-	@ValidationFault(id="SoapEnvelopeNamespace", dependsOn="SOAP010", msg="Correct Envelope Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+	@ValidationFault(id="SoapEnvelopeNamespace", dependsOn="SoapParseEnvelope", msg="Correct Envelope Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateSOAPEnvelopeNamespace() throws SoapFaultException {
-		OMNamespace ns = root.getNamespace();
+		OMNamespace ns = root?.getNamespace();
 		if (ns != null)
 			assertEquals(soapNamespaceName, ns.getNamespaceURI());
 		else
@@ -80,7 +80,7 @@ public class SoapMessageParser extends ValComponentBase {
 
 	@ValidationFault(id="SoapHeaderNamespace", dependsOn="SoapParseEnvelope", msg="Correct Header Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateSOAPHeaderNamespace() throws SoapFaultException {
-		OMNamespace ns = header.getNamespace();
+		OMNamespace ns = header?.getNamespace();
 		if (ns != null)
 			assertEquals(soapNamespaceName, ns.getNamespaceURI());
 		else
@@ -89,7 +89,7 @@ public class SoapMessageParser extends ValComponentBase {
 
 	@ValidationFault(id="SoapBodyNamespace", dependsOn="SoapParseEnvelope", msg="Correct Body Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateSOAPBodyNamespace() throws SoapFaultException {
-		OMNamespace ns = body.getNamespace();
+		OMNamespace ns = body?.getNamespace();
 		if (ns != null)
 			assertEquals(soapNamespaceName, ns.getNamespaceURI());
 		else

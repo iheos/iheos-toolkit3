@@ -5,20 +5,19 @@ import gov.nist.hit.ds.xdsException.XdsInternalException
 import org.apache.axiom.om.OMElement
 
 /**
- * Created by bmajur on 8/18/14.
+ * Created by bmajur on 8/19/14.
  */
-
 @groovy.transform.TypeChecked
-class DocumentEntryDAO {
-    DocumentEntryModel model
+class InternalClassificationDAO {
+    InternalClassificationModel model
     RegistryObjectDAO roDAO
 
     public OMElement toXml() throws XdsInternalException  {
-        model.ro = MetadataSupport.om_factory.createOMElement(MetadataSupport.extrinsicobject_qnamens);
+        model.ro = MetadataSupport.om_factory.createOMElement(MetadataSupport.classification_qnamens);
         model.ro.addAttribute("id", model.id, null);
-        model.ro.addAttribute("mimeType", model.mimeType, null);
-        if (model.status != null)
-            model.ro.addAttribute("status", model.status, null);
+        model.ro.addAttribute("classifiedObject", model.classifiedObjectId, null);
+        model.ro.addAttribute("classificationNode", model.classificationNode, null);
+
         if (model.home != null)
             model.ro.addAttribute("home", model.home, null);
 
@@ -29,10 +28,11 @@ class DocumentEntryDAO {
         roDAO.addAuthorsXml(model.ro);
         roDAO.addExternalIdentifiersXml(model.ro);
 
+
         return model.ro;
     }
 
-    DocumentEntryDAO(DocumentEntryModel model) {
+    InternalClassificationDAO(InternalClassificationModel model) {
         this.model = model
         roDAO = new RegistryObjectDAO(model)
     }

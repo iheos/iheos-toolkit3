@@ -102,7 +102,7 @@ class FolderModel extends RegistryObjectModel {
 
     public FolderModel(String id) {
         super(id);
-        internalClassifications.add(new InternalClassification("cl" + id, id, MetadataSupport.XDSFolder_classification_uuid));
+        internalClassifications.add(new InternalClassificationModel("cl" + id, id, MetadataSupport.XDSFolder_classification_uuid));
 
     }
 

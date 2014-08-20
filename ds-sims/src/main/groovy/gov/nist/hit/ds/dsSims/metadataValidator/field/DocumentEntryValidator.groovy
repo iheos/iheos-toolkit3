@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.field
 
-import gov.nist.hit.ds.dsSims.metadataValidator.object.ExternalIdentifier
+import gov.nist.hit.ds.dsSims.metadataValidator.object.ExternalIdentifierValidator
 import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.xdsException.MetadataException
 import gov.nist.hit.ds.xdsException.XdsInternalException
@@ -107,7 +107,7 @@ public class DocumentEntryValidator extends ValidatorCommon {
 				List<OMElement> ext_ids = m.getExternalIdentifiers(id);
 				
 				for (OMElement extid : ext_ids) {
-					ExternalIdentifier ei = new ExternalIdentifier(m, extid);
+					ExternalIdentifierValidator ei = new ExternalIdentifierValidator(m, extid);
 					if (!doc_externalIdentifiers.contains(ei.getIdentificationScheme()))
 						err("DocumentEntry(" + id + ") contains unidentified ExternalIdentifier with identificationScheme of " + ei.getIdentificationScheme());
 				}
