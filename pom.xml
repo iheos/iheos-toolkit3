@@ -284,12 +284,6 @@
                 <version>1.6.2</version>
             </dependency>
 
-            <dependency>
-                <groupId>gov.nist.toolkit</groupId>
-                <version>v2-maven-alpha</version>
-                <artifactId>direct</artifactId>
-            </dependency>
-
             <!--<dependency>-->
                 <!--<groupId>gov.nist.toolkit</groupId>-->
                 <!--<artifactId>session_v2</artifactId>-->
