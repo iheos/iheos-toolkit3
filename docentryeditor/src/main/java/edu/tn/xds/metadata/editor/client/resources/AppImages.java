@@ -28,4 +28,7 @@ public interface AppImages extends ClientBundle {
     @Source("baseResources/file.png")
     ImageResource file();
 
+    @Source("baseResources/save.png")
+    ImageResource save();
+
 }
