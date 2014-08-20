@@ -38,4 +38,12 @@ public class MetadataEditorEventBus extends SimpleEventBus {
     public void fireStartEditXdsDocumentEvent(StartEditXdsDocumentEvent event) {
         fireEvent(event);
     }
+
+    public HandlerRegistration addSaveCurrentlyEditedDocumentHandler(SaveCurrentlyEditedDocumentEvent.SaveCurrentlyEditedDocumentEventHandler handler) {
+        return addHandler(SaveCurrentlyEditedDocumentEvent.TYPE, handler);
+    }
+
+    public void fireSaveCurrentlyEditedDocumentEvent(SaveCurrentlyEditedDocumentEvent event) {
+        fireEvent(event);
+    }
 }

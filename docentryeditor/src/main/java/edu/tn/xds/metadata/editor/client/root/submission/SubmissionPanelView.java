@@ -42,6 +42,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
     private final TextButton addDocEntryButton = new TextButton();
     private final TextButton removeDocEntryButton = new TextButton();
     private final TextButton clearDocEntriesButton = new TextButton();
+    private final TextButton saveDocEntriesButton = new TextButton();
     private final TextButton helpButton = new TextButton();
 
     private Dialog loadingDialog;
@@ -76,11 +77,14 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         removeDocEntryButton.setToolTip("Remove this Document Entry");
         clearDocEntriesButton.setIcon(AppImages.INSTANCE.clear());
         clearDocEntriesButton.setToolTip("Clear submission set from all document entries");
+        saveDocEntriesButton.setIcon(AppImages.INSTANCE.save());
+        saveDocEntriesButton.setToolTip("Download xml file with document entries");
         helpButton.setIcon(AppImages.INSTANCE.help());
         helpButton.setToolTip("Help");
         toolbar.add(addDocEntryButton);
         toolbar.add(removeDocEntryButton);
         toolbar.add(clearDocEntriesButton);
+        toolbar.add(saveDocEntriesButton);
         toolbar.add(helpButton);
         vlc.add(toolbar);
         buildTreeStore();
@@ -156,6 +160,12 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
                 loadingDialog.show();
             }
 
+        });
+        saveDocEntriesButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent selectEvent) {
+                presenter.doSave();
+            }
         });
         eventBus.addFileLoadedHandler(new NewFileLoadedEvent.NewFileLoadedHandler() {
 
