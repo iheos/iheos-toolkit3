@@ -1,5 +1,4 @@
 package gov.nist.hit.ds.eventLog.assertion
-
 import gov.nist.hit.ds.repository.AssetHelper
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.PropertyKey
@@ -13,11 +12,6 @@ import groovy.util.logging.Log4j
 public class AssertionGroupDAO {
     Asset parentAsset
     int order = 1;
-//    EventDAO eventDAO
-
-//    void init(EventDAO eventDAO) throws RepositoryException {
-//        this.eventDAO = eventDAO
-//    }
 
     def init(Asset parentAsset) { this.parentAsset = parentAsset }
 
@@ -48,7 +42,7 @@ public class AssertionGroupDAO {
 
     boolean hasErrors() { worstAssertionStatus().isError() }
 
-    def asTable(List<Assertion> assertions) {
+    CSVTable asTable(List<Assertion> assertions) {
         AssertionDAO aDao = new AssertionDAO()
         CSVTable assertionTable = new CSVTable()
         addRow(assertionTable, aDao.columnNames)
@@ -64,6 +58,18 @@ public class AssertionGroupDAO {
             entry.set(i, values.get(i))
         }
         assertionTable.add(entry)
+    }
+
+    List<Assertion> load(Asset a) {
+        String table = a.getContent().toString()
+        def entries = []
+        table.eachLine { line ->
+            entries << new CSVEntry(line)
+        }
+        entries = entries[1..entries.size()-1]
+
+        AssertionDAO dao = new AssertionDAO()
+        return entries.collect { dao.asAssertion(it) }
     }
 
 }

@@ -1,37 +1,26 @@
 package gov.nist.hit.ds.simSupport.validationEngine
 import edu.emory.mathcs.backport.java.util.Arrays
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault
+import gov.nist.hit.ds.soapSupport.FaultCode
 
 import java.lang.reflect.Method
 
 public class ValidationMethod {
 	Method method;
-	ValidationFault validationFaultAnnotation;
 	Validation validationAnnotation;
-	RunType type;
+	RunType type = RunType.ERROR
+    FaultCode faultCode = FaultCode.DataEncodingUnknown // irrelevant until type == Fault
 	boolean hasRun;
-	List<String> dependsOnId;
+	List<String> dependsOnId = []
 	String id;
-    String guardMethodName
+    List<String> guardMethodNames = []
+    boolean required = true
 
-	ValidationMethod(Method method, RunType type, String[] dependsOnId, ValidationFault validationFaultAnnotation) {
-		this.id = validationFaultAnnotation.id();
-		this.method = method;
-		this.type = type;
-		this.dependsOnId = Arrays.asList(dependsOnId);
-		this.validationFaultAnnotation = validationFaultAnnotation;
-		this.validationAnnotation = null;
-	}
-
-//	ValidationMethod(Method method, RunType type, String[] dependsOnId, Validation validationAnnotation) {
-//		this.id = validationAnnotation.id();
-//		this.method = method;
-//		this.type = type;
-//		this.dependsOnId = Arrays.asList(dependsOnId);
-//		this.validationFaultAnnotation = null;
-//		this.validationAnnotation = validationAnnotation;
-//	}
+    ValidationMethod(Method method, Validation validationAnnotation) {
+        this.id = validationAnnotation.id()
+        this.method = method
+        this.validationAnnotation = validationAnnotation
+    }
 
     ValidationMethod(Method method, RunType type, String[] dependsOnId, Validation validationAnnotation, String guardMethodName) {
         this.id = validationAnnotation.id();
@@ -50,4 +39,10 @@ public class ValidationMethod {
 	void markHasBeenRun() {
 		this.hasRun = true;
 	}
+
+    def addDependsOn(String[] ids) {
+        for (int i=0; i<ids.length; i++) { if (ids[i] != 'none') dependsOnId.add(ids[i]) }
+    }
+
+    def addGuardMethod(String[] methodNames) { for (int i=0; i<methodNames.length; i++) if (methodNames[i] != 'null') guardMethodNames.add(methodNames[i]) }
 }

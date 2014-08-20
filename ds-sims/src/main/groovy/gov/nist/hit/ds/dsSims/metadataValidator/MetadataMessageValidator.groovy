@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.dsSims.metadataValidator
 import gov.nist.hit.ds.dsSims.metadataValidator.engine.MetadataValidator
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.Metadata
@@ -10,8 +9,8 @@ import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.SoapFaultException
-import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 import org.apache.axiom.om.OMElement
 
 public class MetadataMessageValidator extends ValComponentBase {
@@ -29,7 +28,7 @@ public class MetadataMessageValidator extends ValComponentBase {
         this.rvi = rvi;
     }
 
-    @Validation(id="MetaParse001", required=RequiredOptional.R, msg="Parse Metadata", ref="??")
+    @Validation(id="MetaParse001", msg="Parse Metadata", ref="??")
     def metaParse001() throws SoapFaultException {
         try {
             m = MetadataParser.parseNonSubmission(xml);

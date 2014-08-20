@@ -1,16 +1,14 @@
 package gov.nist.hit.ds.httpSoapValidator.validators
-
 import gov.nist.hit.ds.http.parser.HttpHeader
 import gov.nist.hit.ds.http.parser.HttpParserBa
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Fault
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
-import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import groovy.util.logging.Log4j
-
 /**
  * Validate HTTP message.  Launches either MtomMessageValidator or SimpleSoapMessageValidator as appropriate.
  * @author bill
@@ -35,19 +33,19 @@ public class HttpHeaderValidator extends ValComponentBase {
 		return this;
 	}
 
-    @ValidationFault(id="HttpMessage001", required=RequiredOptional.R, msg='MTOM vs SIMPLE SOAP', faultCode=FaultCode.Sender, ref="??")
+    @Fault(code=FaultCode.Sender)
+    @Validation(id="HttpMessage001", msg='MTOM vs SIMPLE SOAP', ref="??")
     public void mtomSimpleSoapMatches() throws SoapFaultException {
         def expected = (handle.transactionType.multiPart) ? 'MTOM' : 'SIMPLE SOAP'
         def found = (httpParser.isMultipart()) ? 'MTOM' : 'SIMPLE SOAP'
         assertEquals(expected, found)
     }
 
-    @ValidationFault(id="HttpMessage002", required=RequiredOptional.R, msg="HTTP contentType", faultCode=FaultCode.Sender, ref="??")
+    @Fault(code=FaultCode.Sender)
+    @Validation(id="HttpMessage002", msg="HTTP contentType", ref="??")
     public void soapExpected() throws SoapFaultException {
-//        infoFound((handle.transactionType.soap) ? 'SOAP expected' : 'SOAP not expected')
         String contentTypeString = httpParser.getHttpMessage().getHeader("content-type")
         String contentType = new HttpHeader(contentTypeString)?.getValue()?.toLowerCase()
-//        infoFound("content-type is ${contentType}")
         assertEquals('application/soap+xml', contentType)
     }
 

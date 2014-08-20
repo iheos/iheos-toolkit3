@@ -16,6 +16,7 @@ public class AssertionGroup  {
     def saveInLog = true
     def saved = false
     def assertionIds = [ ]  // this is used by unit tests to detect that an assertion has executed
+                    // doesnt seem to work
     Asset asset = null   // this gets set when saved - changes behaviour from create to update
 
     private static Logger logger = Logger.getLogger(AssertionGroup);
@@ -30,15 +31,16 @@ public class AssertionGroup  {
     def setErrorStatus(AssertionStatus status) { if (status > worstStatus) worstStatus = status }
     AssertionStatus status() { return worstStatus }
 
-    public String toString() { return "AssertionGroup(${worstStatus})" }
+    public String toString() { return "AssertionGroup(${validatorName} - ${worstStatus})" }
 
     public int size() { return assertions.size(); }
 
-    Assertion addAssertion(Assertion asser) {
-        if (asser.getStatus().ordinal() > worstStatus.ordinal())
+    Assertion addAssertion(Assertion asser, boolean required) {
+        if (required && asser.getStatus().ordinal() > worstStatus.ordinal())
             worstStatus = asser.getStatus();
         if (!asser.defaultMsg) removeDefaultMsg()
         assertions.add(asser);
+        assertionIds << asser.id
         asser
     }
 
@@ -48,9 +50,8 @@ public class AssertionGroup  {
         if (assertions[lastIndex].defaultMsg) assertions.remove(lastIndex)
     }
 
-    boolean hasAssertion(String id) { assertionIds.contains(id)}
-    def assertionId(String id) {
-        assertionIds << id
+    boolean hasAssertion(String id) {
+        return assertions.find { it.id == id }
     }
 
     Assertion getFirstFailedAssertion() { return assertions.find { it.failed() } }
@@ -62,6 +63,8 @@ public class AssertionGroup  {
         }
         failedAssertions
     }
+
+    boolean assertionFailed(String id) { return getFailedAssertions().find { it.failed() } }
 
     List<String> getErrorMessages() {
         def msgs = []
@@ -98,16 +101,16 @@ public class AssertionGroup  {
      *
      *************************************************************/
 
-    public Assertion assertIn(String[] expecteds, String found) {
+    public Assertion assertIn(String[] expecteds, String found, boolean required) {
         Assertion a = new Assertion();
         a.expected = expecteds.toString();
         a.found = found;
         for (int i=0; i<expecteds.length; i++) if (expecteds[i] == found) return addAssertion(a)
         a.status = AssertionStatus.ERROR
-        addAssertion(a);
+        addAssertion(a, required);
     }
 
-    public Assertion fail(String failureMsg) {
+    public Assertion fail(String failureMsg, boolean required) {
         Assertion a = new Assertion();
         a.with {
             expected = ''
@@ -115,7 +118,7 @@ public class AssertionGroup  {
             status = AssertionStatus.ERROR
             //msg = failureMsg
         }
-        addAssertion(a);
+        addAssertion(a, required);
         return a;
     }
 
@@ -127,44 +130,44 @@ public class AssertionGroup  {
             status = AssertionStatus.INTERNALERROR
             msg = failureMsg
         }
-        addAssertion(a);
+        addAssertion(a, true);
         return a;
     }
 
-    public Assertion assertEquals(boolean expectedVal, boolean foundVal) {
+    public Assertion assertEquals(boolean expectedVal, boolean foundVal, boolean required) {
         Assertion a = new Assertion();
         a.with {
             expected = expectedVal
             found = foundVal
         }
         a.status = (expectedVal == foundVal) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
-        addAssertion(a);
+        addAssertion(a, required);
         return a;
     }
 
-    public Assertion assertEquals(String expectedVal, String foundVal) {
+    public Assertion assertEquals(String expectedVal, String foundVal, boolean required) {
         Assertion a = new Assertion();
         a.with {
             expected = expectedVal
             found = foundVal
         }
         a.status = (expectedVal == foundVal) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
-        addAssertion(a);
+        addAssertion(a, required);
         return a;
     }
 
-    public Assertion assertEquals(int expectedVal, int foundVal) {
+    public Assertion assertEquals(int expectedVal, int foundVal, boolean required) {
         Assertion a = new Assertion();
         a.with {
             expected = expectedVal
             found = foundVal
         }
         a.status = (expectedVal == foundVal) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
-        addAssertion(a);
+        addAssertion(a, required);
         return a;
     }
 
-    public Assertion assertTrue(boolean ok) {
+    public Assertion assertTrue(boolean ok, boolean required) {
         Assertion a = new Assertion();
         if (ok) {
             a.expected = dashes
@@ -174,18 +177,18 @@ public class AssertionGroup  {
             a.found = (ok) ? 'True' : 'False'
         }
         a.status = (ok) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
-        addAssertion(a);
+        addAssertion(a, required);
         return a;
     }
 
-    public Assertion assertNotNull(Object value) {
+    public Assertion assertNotNull(Object value, boolean required) {
         Assertion a = new Assertion();
         a.with {
             expected = 'Present'
             found = (value) ? 'Found' : 'Missing'
             status = (value) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
         }
-        addAssertion(a);
+        addAssertion(a, required);
         return a;
     }
 
@@ -196,7 +199,7 @@ public class AssertionGroup  {
             found = (foundVal) ? 'True' : 'False'
             status = AssertionStatus.INFO
         }
-        addAssertion(a);
+        addAssertion(a, true);
         return a;
     }
 
@@ -207,7 +210,7 @@ public class AssertionGroup  {
             found = foundVal
             status = AssertionStatus.INFO
         }
-        addAssertion(a);
+        addAssertion(a, false);
         return a;
     }
 
@@ -218,7 +221,7 @@ public class AssertionGroup  {
             found = msg
             status = AssertionStatus.SUCCESS
         }
-        addAssertion(a);
+        addAssertion(a, false);
         return a;
     }
 
@@ -230,7 +233,7 @@ public class AssertionGroup  {
             status = AssertionStatus.SUCCESS
             defaultMsg = true
         }
-        addAssertion(a);
+        addAssertion(a, false);
         return a;
     }
 }

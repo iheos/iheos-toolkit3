@@ -3,9 +3,8 @@ import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.assertion.Assertion
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.ExceptionUtil
@@ -15,8 +14,8 @@ import org.apache.log4j.Logger
 public class ValidationEngine {
     ValComponentBase validationObject
     List<ValidationMethod> validationMethods  // taken from validationObject
-    // only one of these is non-null indicating what kind of assertion is being tested
-    public ValidationFault validationFaultAnnotation
+    ValidationMethod currentValidationMethod
+        // only one of these is non-null indicating what kind of assertion is being tested
     public Validation validationAnnotation
     static Logger logger = Logger.getLogger(ValidationEngine)
 
@@ -47,16 +46,13 @@ public class ValidationEngine {
     }
 
     public void runValidationMethods() throws Exception {
-        ValidationMethod validationMethod = getARunableValidationMethod();
-        while(validationMethod) {
-            logger.debug("Starting Validation ${validationMethod.method.name} on ${validationObject.class.name}");
+        currentValidationMethod = getARunableValidationMethod();
+        while(currentValidationMethod) {
+            logger.debug("Starting Validation ${currentValidationMethod.method.name} on ${validationObject.class.name}");
             validationObject.defaultMsg()
-            invoke(validationMethod)
-            validationMethod = getARunableValidationMethod();
+            invoke(currentValidationMethod)
+            currentValidationMethod = getARunableValidationMethod();
         }
-//        ValidationMethod moreToRun = validationMethods.find { it.runable() && evalGuard(it)}
-//        if (moreToRun)
-//            throw new ValidationEngineException("Validator ${validationObject.class.name} - method ${moreToRun.method.name} cannot be run.");
     }
 
     def invoke(validationMethod) throws Exception {
@@ -79,7 +75,7 @@ public class ValidationEngine {
         a.setLocation(ExceptionUtils.getStackTrace(e.getCause()))
         a.setMsg(e.getMessage())
         a.setStatus(AssertionStatus.INTERNALERROR)
-        ag.addAssertion(a)
+        ag.addAssertion(a, true)
     }
 
     private def logThrowable(Throwable t) {
@@ -89,7 +85,7 @@ public class ValidationEngine {
         a.setLocation(ExceptionUtils.getStackTrace(t.getCause()))
         a.setMsg(t.getMessage())
         a.setStatus(AssertionStatus.INTERNALERROR)
-        ag.addAssertion(a)
+        ag.addAssertion(a, true)
     }
 
     private def getARunableValidationMethod() {
@@ -98,8 +94,7 @@ public class ValidationEngine {
         }
         if (valMethod) {
             validationAnnotation = valMethod.validationAnnotation
-            validationFaultAnnotation = valMethod.validationFaultAnnotation
-            assert validationAnnotation || validationFaultAnnotation
+            assert validationAnnotation
             valMethod.markHasBeenRun()
             return valMethod
         }
@@ -107,12 +102,18 @@ public class ValidationEngine {
     }
 
     private boolean evalGuard(ValidationMethod validationMethod) {
-        if (validationMethod.guardMethodName == null) return true
-        try {
-            return validationObject."${validationMethod.guardMethodName}"()
-        } catch (Exception e) {
-            println "Guard: ${e.class.name}: ${e.message}"
+        validationMethod.guardMethodNames.findResult(true) { guardMethodName ->
+            validationObject."${guardMethodName}"()
         }
+//        validationMethod.guardMethodNames.each { guardMethodName ->
+//            def ok = true
+//            try {
+//                ok = validationObject."${guardMethodName}"()
+//            } catch (Exception e) {
+//                println "Guard: ${e.class.name}: ${e.message}"
+//            }
+//        }
+//        if (validationMethod.guardMethodName == null) return true
     }
 
     private def dependenciesSatisfied(List<String> dependsOnIds) {

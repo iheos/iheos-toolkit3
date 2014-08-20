@@ -12,9 +12,9 @@ class TestValidatorSub1 extends ValComponentBase {
         super(event)
     }
 
-    @Validation(id="TV301", required=RequiredOptional.R, msg="A test Validation", ref="??")
+    @Validation(id="TV301",  msg="A test Validation", ref="??")
     def val1() { }
 
-    @Validation(id="TV302", required=RequiredOptional.R, msg="A test Validation", ref="??")
+    @Validation(id="TV302",  msg="A test Validation", ref="??")
     def val2() { }
 }

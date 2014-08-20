@@ -13,7 +13,7 @@ import groovy.util.logging.Log4j
 class Event {
     InOutMessages inOut = new InOutMessages()
     Artifacts artifacts = new Artifacts();
-    def allAssetionGroups = []
+    List<AssertionGroup> allAssetionGroups = []
     Fault fault = null
     Asset eventAsset
     EventDAO eventDAO
@@ -144,4 +144,7 @@ class Event {
 
     InOutMessages getInOutMessages() { return inOut }
     AssertionGroup getAssertionGroup() { return currentResults().assertionGroup }
+    AssertionGroup getAssertionGroup(String validatorName) {
+        return allAssetionGroups.find { it.validatorName == validatorName }
+    }
 }

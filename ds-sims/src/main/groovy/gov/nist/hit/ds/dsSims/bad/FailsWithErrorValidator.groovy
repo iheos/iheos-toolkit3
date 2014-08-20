@@ -1,9 +1,8 @@
 package gov.nist.hit.ds.dsSims.bad
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.SoapFaultException
-import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 import groovy.util.logging.Log4j
 /**
  * Created by bmajur on 7/12/14.
@@ -18,7 +17,7 @@ class FailsWithErrorValidator extends ValComponentBase {
         setName(getClass().getSimpleName());
     }
 
-    @Validation(id="Failing001", required=RequiredOptional.R, msg="This shall fail", ref="??")
+    @Validation(id="Failing001", msg="This shall fail", ref="??")
     public void validationStep() throws SoapFaultException {
         assertEquals('a', 'b')
     }

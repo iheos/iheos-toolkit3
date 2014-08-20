@@ -2,7 +2,9 @@ package gov.nist.hit.ds.httpSoapValidator.components.validators
 import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.DependsOn
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Fault
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.utilities.xml.XmlUtil
@@ -31,7 +33,8 @@ public class SoapHeaderValidator  extends ValComponentBase {
         expectedAction = handle.transactionType.requestAction
     }
 
-    @ValidationFault(id="WSAparse", msg="Parsing WSA header fields", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @Fault(code=FaultCode.Sender)
+    @Validation(id="WSAparse", msg="Parsing WSA header fields", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void parseWSAddressingFields() throws SoapFaultException {
 		messageId = XmlUtil.childrenWithLocalName(header, "MessageID")
 		relatesTo = XmlUtil.childrenWithLocalName(header, "RelatesTo")
@@ -42,7 +45,9 @@ public class SoapHeaderValidator  extends ValComponentBase {
 		faultTo = XmlUtil.childrenWithLocalName(header, "FaultTo")
 	}
 
-	@ValidationFault(id="WSA011", dependsOn="WSAparse", msg="Validate MessageId Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.Sender)
+	@Validation(id="WSA011", msg="Validate MessageId Namespace", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateMessageIdNamespace() throws SoapFaultException {
 		if (messageId.size() == 0)
 			return;
@@ -52,7 +57,9 @@ public class SoapHeaderValidator  extends ValComponentBase {
 		assertEquals(wsaddresingNamespace, nsuri);
 	}
 
-	@ValidationFault(id="WSA021", dependsOn="WSAparse", msg="Validate RelatesTo Namespace if present", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.Sender)
+	@Validation(id="WSA021", msg="Validate RelatesTo Namespace if present", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateRelatesToNamespace() throws SoapFaultException {
 		if (relatesTo.size() == 0) { msg('Not present'); return }
 		OMElement ele = relatesTo.get(0);
@@ -61,7 +68,9 @@ public class SoapHeaderValidator  extends ValComponentBase {
 		assertEquals(wsaddresingNamespace, nsuri);
 	}
 
-	@ValidationFault(id="WSA030", dependsOn="WSAparse", msg="Validate To namespace if present", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.Sender)
+	@Validation(id="WSA030", msg="Validate To namespace if present", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateToNamespace() throws SoapFaultException {
 		if (to.size() == 0)
 			return;
@@ -71,13 +80,17 @@ public class SoapHeaderValidator  extends ValComponentBase {
 		assertEquals(wsaddresingNamespace, nsuri);
 	}
 
-	@ValidationFault(id="WSA290", dependsOn="WSAparse", msg="Validate Action Value", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.Sender)
+	@Validation(id="WSA290", msg="Validate Action Value", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateActionValue() throws SoapFaultException {
 		if (action.size() == 0) { fail('Not present') }
 		assertEquals(expectedAction, action.get(0).getText());
 	}
 
-	@ValidationFault(id="WSA040", dependsOn="WSAparse", msg="Validate Action Namespace", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.Sender)
+	@Validation(id="WSA040", msg="Validate Action Namespace", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateActionNamespace() throws SoapFaultException {
         if (action.size() == 0) { fail('Not present') }
 		OMElement ele = action.get(0);
@@ -86,7 +99,9 @@ public class SoapHeaderValidator  extends ValComponentBase {
 		assertEquals(wsaddresingNamespace, nsuri);
 	}
 
-	@ValidationFault(id="WSA050", dependsOn="WSAparse", msg="Validate From namespace if present", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.Sender)
+	@Validation(id="WSA050", msg="Validate From namespace if present", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateFromNamespace() throws SoapFaultException {
 		if (from.size() == 0) { msg('Not present'); return }
 		OMElement ele = from.get(0);
@@ -95,7 +110,9 @@ public class SoapHeaderValidator  extends ValComponentBase {
 		assertEquals(wsaddresingNamespace, nsuri);
 	}
 
-	@ValidationFault(id="WSA060", dependsOn="WSAparse", msg="Validate ReplyTo namespace if present", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.Sender)
+	@Validation(id="WSA060", msg="Validate ReplyTo namespace if present", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateReplyToNamespace() throws SoapFaultException {
 		if (replyTo.size() == 0) { msg('Not present'); return }
 		OMElement ele = replyTo.get(0);
@@ -104,7 +121,9 @@ public class SoapHeaderValidator  extends ValComponentBase {
 		assertEquals(wsaddresingNamespace, nsuri);
 	}
 
-	@ValidationFault(id="WSA070", dependsOn="WSAparse", msg="Validate FaultTo namespace if present", faultCode=FaultCode.Sender, ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.Sender)
+	@Validation(id="WSA070", msg="Validate FaultTo namespace if present", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateFaultToNamespace() throws SoapFaultException {
 		if (faultTo.size() == 0) { msg('Not present'); return }
 		OMElement ele = faultTo.get(0);
@@ -113,37 +132,51 @@ public class SoapHeaderValidator  extends ValComponentBase {
 		assertEquals(wsaddresingNamespace, nsuri);
 	}
 
-	@ValidationFault(id="WSA080", dependsOn="WSAparse", msg="Multiple WS-Addressing To headers are not allowed", faultCode=FaultCode.InvalidAddressingHeader, ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.InvalidAddressingHeader)
+	@Validation(id="WSA080", msg="Multiple WS-Addressing To headers are not allowed", ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
 	public void validateToRequired() throws SoapFaultException {
 		assertFalse(to.size() > 1);
 	}
 
-	@ValidationFault(id="WSA090", dependsOn="WSAparse", msg="Multiple WS-Addressing From headers are not allowed", faultCode=FaultCode.InvalidAddressingHeader, ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.InvalidAddressingHeader)
+	@Validation(id="WSA090", msg="Multiple WS-Addressing From headers are not allowed", ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
 	public void validateFromRequired() throws SoapFaultException {
 		assertFalse(from.size() > 1);
 	}
 
-	@ValidationFault(id="WSA100", dependsOn="WSAparse", msg="Multiple WS-Addressing ReplyTo headers are not allowed", faultCode=FaultCode.InvalidAddressingHeader, ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.InvalidAddressingHeader)
+	@Validation(id="WSA100", msg="Multiple WS-Addressing ReplyTo headers are not allowed", ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
 	public void validateReplyToRequired() throws SoapFaultException {
 		assertFalse(replyTo.size() > 1);
 	}
 
-	@ValidationFault(id="WSA110", dependsOn="WSAparse", msg="Multiple WS-Addressing FaultTo headers are not allowed", faultCode=FaultCode.InvalidAddressingHeader, ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.InvalidAddressingHeader)
+	@Validation(id="WSA110", msg="Multiple WS-Addressing FaultTo headers are not allowed", ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
 	public void validateFaultToRequired() throws SoapFaultException {
 		assertFalse(faultTo.size() > 1);
 	}
 
-	@ValidationFault(id="WSA120", dependsOn="WSAparse", msg="A Single WS-Addressing Action header is required", faultCode=FaultCode.InvalidAddressingHeader, ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.InvalidAddressingHeader)
+	@Validation(id="WSA120", msg="A Single WS-Addressing Action header is required", ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
 	public void validateSingleActionRequired() throws SoapFaultException {
 		assertEquals(1, action.size());
 	}
 
-	@ValidationFault(id="WSA130", dependsOn="WSAparse", msg="Multiple WS-Addressing MessageId headers are not allowed", faultCode=FaultCode.InvalidAddressingHeader, ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.InvalidAddressingHeader)
+	@Validation(id="WSA130", msg="Multiple WS-Addressing MessageId headers are not allowed", ref="http://www.w3.org/TR/ws-addr-core#msgaddrpropsinfoset")
 	public void validateMessageIdRequired() throws SoapFaultException {
 		assertFalse(messageId.size() > 1);
 	}
 
-	@ValidationFault(id="WSA140", dependsOn="WSAparse", msg="At least one WS-Addressing SOAP header element must have a soapenv:mustUnderstand=\"true\"", faultCode=FaultCode.MustUnderstand, ref="http://www.w3.org/TR/soap12-part0/#L4697")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.MustUnderstand)
+	@Validation(id="WSA140", msg="At least one WS-Addressing SOAP header element must have a soapenv:mustUnderstand=\"true\"", ref="http://www.w3.org/TR/soap12-part0/#L4697")
 	public void validateMustUnderstand() throws SoapFaultException {
 		List<OMElement> hdrs = new ArrayList<OMElement> ();
 		hdrs.addAll(messageId);
@@ -168,17 +201,23 @@ public class SoapHeaderValidator  extends ValComponentBase {
 		assertTrue(mufound);
 	}
 
-	@ValidationFault(id="WSA150", dependsOn="WSAparse", msg="Validate ReplyTo must be an Endpoint Reference", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core#abstractmaps")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA150", msg="Validate ReplyTo must be an Endpoint Reference", ref="http://www.w3.org/TR/ws-addr-core#abstractmaps")
 	public void validateReplyToHttpStyle() throws SoapFaultException {
 		validateEndpointReference(replyTo);
 	}
 
-	@ValidationFault(id="WSA160", dependsOn="WSAparse", msg="Validate From must be an Endpoint Reference", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core#abstractmaps")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA160", msg="Validate From must be an Endpoint Reference", ref="http://www.w3.org/TR/ws-addr-core#abstractmaps")
 	public void validateFromHttpStyle() throws SoapFaultException {
 		validateEndpointReference(from);
 	}
 
-	@ValidationFault(id="WSA170", dependsOn="WSAparse", msg="Validate FaultTo must be an Endpoint Reference", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core#abstractmaps")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA170", msg="Validate FaultTo must be an Endpoint Reference", ref="http://www.w3.org/TR/ws-addr-core#abstractmaps")
 	public void validateFaultToHttpStyle() throws SoapFaultException {
 		validateEndpointReference(faultTo);
 	}
@@ -189,26 +228,34 @@ public class SoapHeaderValidator  extends ValComponentBase {
 	OMElement fromEndpoint = null;
 	String fromEndpointValue = null;
 
-	@ValidationFault(id="FromEndpointParse", dependsOn="WSAparse", msg="Parse From endpoint", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="FromEndpointParse", msg="Parse From endpoint", ref="http://www.w3.org/TR/ws-addr-core")
 	public void parseFromEndpoint() throws SoapFaultException {
 		fromEndpoint = getFirst(from);
 		if (fromEndpoint != null)
 			fromEndpointValue = fromEndpoint.getText();
 	}
 
-	@ValidationFault(id="WSA180", dependsOn="FromEndpointParse", msg="From endpoint element name must be Address if present", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["FromEndpointParse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA180",  msg="From endpoint element name must be Address if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateFromElementIsAddress() throws SoapFaultException {
 		if (fromEndpoint == null) { msg('Not present'); return }
 		assertEquals("Address", fromEndpoint.getLocalName());
 	}
 
-	@ValidationFault(id="WSA190", dependsOn="FromEndpointParse", msg="Parse From endpoint element namespace if present", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["FromEndpointParse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA190", msg="Parse From endpoint element namespace if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateFromElementNamespace() throws SoapFaultException {
 		if (fromEndpoint == null) { msg('Not present'); return }
 		assertEquals(wsaddresingNamespace, fromEndpoint.getNamespace().getNamespaceURI());
 	}
 
-	@ValidationFault(id="WSA200", dependsOn="FromEndpointParse", msg="From endpoint must have http prefix if present", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["FromEndpointParse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA200", msg="From endpoint must have http prefix if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateFromValuePrefix() throws SoapFaultException {
 		if (fromEndpointValue == null) { msg('Not present'); return }
         infoFound(fromEndpointValue)
@@ -223,7 +270,9 @@ public class SoapHeaderValidator  extends ValComponentBase {
 	OMElement replyToEndpoint = null;
 	String replyToEndpointValue = null;
 
-	@ValidationFault(id="ReplyToEndpointParse", dependsOn="WSAparse", msg="Parse ReplyTo endpoint if present", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="ReplyToEndpointParse", msg="Parse ReplyTo endpoint if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void parseReplyToEndpoint() throws SoapFaultException {
 		replyToEndpoint = getFirst(replyTo);
 		if (replyToEndpoint != null)
@@ -231,19 +280,25 @@ public class SoapHeaderValidator  extends ValComponentBase {
         else msg('Not present')
 	}
 
-	@ValidationFault(id="WSA210", dependsOn="ReplyToEndpointParse", msg="ReplyTo endpoint element name must be Address if present", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["ReplyToEndpointParse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA210", msg="ReplyTo endpoint element name must be Address if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateReplyToElementIsAddress() throws SoapFaultException {
 		if (replyToEndpoint == null) { msg('Not present'); return }
 		assertEquals("Address", replyToEndpoint.getLocalName());
 	}
 
-	@ValidationFault(id="WSA220", dependsOn="ReplyToEndpointParse", msg="Verify ReplyTo endpoint element namespace if present", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["ReplyToEndpointParse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA220", msg="Verify ReplyTo endpoint element namespace if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateReplyToElementNamespace() throws SoapFaultException {
 		if (replyToEndpoint == null) { msg('Not present'); return }
 		assertEquals(wsaddresingNamespace, replyToEndpoint.getNamespace().getNamespaceURI());
 	}
 
-	@ValidationFault(id="WSA230", dependsOn="ReplyToEndpointParse", msg="Verify ReplyTo endpoint value prefix if present", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["ReplyToEndpointParse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA230", msg="Verify ReplyTo endpoint value prefix if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateReplyToValuePrefix() throws SoapFaultException {
 		if (replyToEndpointValue == null) { msg('Not present'); return }
         infoFound(replyToEndpoint)
@@ -256,26 +311,34 @@ public class SoapHeaderValidator  extends ValComponentBase {
 	OMElement faultToEndpoint = null;
 	String faultToEndpointValue = null;
 
-	@ValidationFault(id="FaultToEndpointParse", dependsOn="WSAparse", msg="Parse FaultTo endpoint", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="FaultToEndpointParse", msg="Parse FaultTo endpoint", ref="http://www.w3.org/TR/ws-addr-core")
 	public void parseFaultToEndpoint() throws SoapFaultException {
 		faultToEndpoint = getFirst(faultTo);
 		if (faultToEndpoint != null)
 			faultToEndpointValue = faultToEndpoint.getText();
 	}
 
-	@ValidationFault(id="WSA240", dependsOn="FaultToEndpointParse", msg="FaultTo endpoint element name must be Address if present", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["FaultToEndpointParse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA240", msg="FaultTo endpoint element name must be Address if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateFaultToElementIsAddress() throws SoapFaultException {
 		if (faultToEndpoint == null) { msg('Not present'); return }
 		assertEquals("Address", faultToEndpoint.getLocalName());
 	}
 
-	@ValidationFault(id="WSA250", dependsOn="FaultToEndpointParse", msg="Verify FaultTo endpoint element namespace if present", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["FaultToEndpointParse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA250", msg="Verify FaultTo endpoint element namespace if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateFaultToElementNamespace() throws SoapFaultException {
 		if (faultToEndpoint == null) { msg('Not present'); return }
 		assertEquals(wsaddresingNamespace, faultToEndpoint.getNamespace().getNamespaceURI());
 	}
 
-	@ValidationFault(id="WSA260", dependsOn="FaultToEndpointParse", msg="Verify FaultTo endpoint has http prefix if present", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["FaultToEndpointParse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA260", msg="Verify FaultTo endpoint has http prefix if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateFaultToValuePrefix() throws SoapFaultException {
 		if (faultToEndpointValue == null) { msg('Not present'); return }
         infoFound(faultToEndpoint)
@@ -288,14 +351,18 @@ public class SoapHeaderValidator  extends ValComponentBase {
 	OMElement toEndpoint = null;
 	String toEndpointValue = null;
 
-	@ValidationFault(id="ToEndpointParse", dependsOn="WSAparse", msg="Parse To endpoint", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["WSAparse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="ToEndpointParse", msg="Parse To endpoint", ref="http://www.w3.org/TR/ws-addr-core")
 	public void parseToEndpoint() throws SoapFaultException {
 		toEndpoint = getFirst(to);
 		if (toEndpoint != null)
 			toEndpointValue = toEndpoint.getText();
 	}
 
-	@ValidationFault(id="WSA270", dependsOn="ToEndpointParse", msg="Verify To endpoint has http prefix if present", faultCode=FaultCode.EndpointUnavailable, ref="http://www.w3.org/TR/ws-addr-core")
+    @DependsOn(ids=["ToEndpointParse"])
+    @Fault(code=FaultCode.EndpointUnavailable)
+	@Validation(id="WSA270", msg="Verify To endpoint has http prefix if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateToValuePrefix() throws SoapFaultException {
         if (toEndpointValue == null) { msg('Not present'); return }
         infoFound(toEndpointValue)

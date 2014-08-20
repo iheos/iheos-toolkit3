@@ -75,7 +75,7 @@ public class SoapFaultException extends Exception {
         a.setStatus(AssertionStatus.FAULT);
         a.setMsg(errorContext.getMsg());
         a.setReference(errorContext.getResource());
-        ag.addAssertion(a);
+        ag.addAssertion(a, true);
         this.faultCode = faultCode;
         this.faultString = errorContext.getMsg();
         this.faultDetail = errorContext.getResource();
@@ -87,7 +87,7 @@ public class SoapFaultException extends Exception {
         a.setFound(faultCode.name());
         a.setStatus(AssertionStatus.FAULT);
         a.setMsg(msg);
-        ag.addAssertion(a);
+        ag.addAssertion(a, true);
         this.faultCode = faultCode;
         this.faultString = msg;
     }

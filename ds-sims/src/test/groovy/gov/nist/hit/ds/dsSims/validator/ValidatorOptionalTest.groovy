@@ -11,7 +11,7 @@ import spock.lang.Specification
 /**
  * Created by bmajur on 7/30/14.
  */
-class ValidatorResultsTest extends Specification {
+class ValidatorOptionalTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
     <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as"
@@ -41,19 +41,17 @@ class ValidatorResultsTest extends Specification {
         SimUtils.create('reg', simId)
     }
 
-    def 'Basic guard test'() {
+    def 'Failing optional validation should not fail test'() {
         when:
         Closure closure = { simHandle ->
-            new TestValidatorWithGuard(simHandle.event).run()
+            new OptionalTestValidator(simHandle.event).run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 
-        then:
+        then: 'Even though validation fails - it is optional so it does not fail the overall test'
         !transRunner.simHandle.event.hasErrors()
-        eventAccess.assertionGroupFile('TestValidator1').exists()
-        eventAccess.assertionGroupFile('TestValidator2').exists()
     }
 
 }

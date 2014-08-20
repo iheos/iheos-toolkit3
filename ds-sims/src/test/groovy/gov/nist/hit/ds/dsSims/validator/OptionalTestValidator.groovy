@@ -1,18 +1,18 @@
 package gov.nist.hit.ds.dsSims.validator
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Optional
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 /**
  * Created by bmajur on 7/30/14.
  */
-class TestValidator2 extends ValComponentBase {
-    TestValidator2(Event event) {
+class OptionalTestValidator extends ValComponentBase {
+    OptionalTestValidator(Event event) {
         super(event)
     }
 
-    @Validation(id="TV201", msg="A test Validation", ref="??")
-    def val1() { }
+    @Optional
+    @Validation(id="TV101", msg="A test Validation", ref="??")
+    def val1() { fail('oops') }
 
-    @Validation(id="TV202", msg="A test Validation", ref="??")
-    def val2() { }
 }

@@ -11,7 +11,7 @@ import spock.lang.Specification
 /**
  * Created by bmajur on 7/30/14.
  */
-class ValidatorGuardTest extends Specification {
+class NestedValidatorTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
     <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as"

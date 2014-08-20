@@ -15,10 +15,10 @@ class TestValidator1ErrorWithSub extends ValComponentBase {
         this.event = event
     }
 
-    @Validation(id="TV401", required=RequiredOptional.R, msg="A test Validation", ref="??")
+    @Validation(id="TV401", msg="A test Validation", ref="??")
     def val1() { }
 
-    @Validation(id="TV402", required=RequiredOptional.R, msg="A test Validation", ref="??")
+    @Validation(id="TV402",  msg="A test Validation", ref="??")
     def val2() { }
 
     @Override
