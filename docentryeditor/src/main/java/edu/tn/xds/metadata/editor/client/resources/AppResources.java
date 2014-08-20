@@ -10,4 +10,6 @@ public interface AppResources extends ClientBundle {
     @Source("codes.xml")
     TextResource codes();
 
+    @Source("xds-prefill.xml")
+    TextResource xdsPrefill();
 }

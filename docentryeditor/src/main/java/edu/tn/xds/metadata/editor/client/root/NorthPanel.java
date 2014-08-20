@@ -95,14 +95,18 @@ public class NorthPanel extends ContentPanel {
 
 			@Override
 			public void onNewFileLoaded(NewFileLoadedEvent event) {
-				loadingDialog.hide();
-				saveButton.enable();
+                if(loadingDialog!=null) {
+                    loadingDialog.hide();
+                    saveButton.enable();
+                }
 			}
 		});
         eventBus.addEditNewEventHandler(new EditNewEvent.EditNewHandler() {
             @Override
             public void onEditNew(EditNewEvent event) {
-                saveButton.enable();
+                if(saveButton!=null) {
+                    saveButton.enable();
+                }
             }
         });
 		newButton.addSelectHandler(new SelectHandler() {

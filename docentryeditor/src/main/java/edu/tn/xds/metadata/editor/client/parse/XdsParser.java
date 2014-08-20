@@ -144,7 +144,7 @@ public class XdsParser {
      * @see PreParse
      * @see XdsParser
      */
-    public void getDocumentParsed() {
+    private void getDocumentParsed() {
         documentXml = preParse.doPreParseUTF8(documentXml);
 
         // parse the XML document into a DOM
@@ -165,7 +165,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public void findElements() throws String256Exception {
+    private void findElements() throws String256Exception {
         // generalMethod("titles"); ...
         for (RootNodesEnum node : RootNodesEnum.values()) {
             generalMethod(node);
@@ -180,7 +180,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public void generalMethod(RootNodesEnum node) throws String256Exception {
+    private void generalMethod(RootNodesEnum node) throws String256Exception {
         String nodeName = node.toString();
         switch (node) {
             case authors:
@@ -277,7 +277,7 @@ public class XdsParser {
      */
     // TODO This methods should handle exceptions and/or fire events which could
     // be handled in GUI.
-    public void methodParseAuthors() throws String256Exception {
+    private void methodParseAuthors() throws String256Exception {
         NodeList authorsNode = document.getElementsByTagName(RootNodesEnum.authors.toString());
         ArrayList<Author> authors = new ArrayList<Author>();
 
@@ -403,7 +403,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public String256 parseString256(String node) throws String256Exception {
+    private String256 parseString256(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
         if (!nodeList.toString().isEmpty()) {
             String256 string256 = new String256();
@@ -434,7 +434,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public OID parseOID(String node) throws String256Exception {
+    private OID parseOID(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
         if (!nodeList.toString().isEmpty()) {
             OID oid = new OID();
@@ -469,7 +469,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser class Parse
      */
-    public IdentifierString256 parseIdentifierString256(String node) throws String256Exception {
+    private IdentifierString256 parseIdentifierString256(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
 
         if (!nodeList.toString().isEmpty()) {
@@ -527,7 +527,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public IdentifierOID parseIdentifierOID(String node) throws String256Exception {
+    private IdentifierOID parseIdentifierOID(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
 
         if (!nodeList.toString().isEmpty()) {
@@ -585,7 +585,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public ArrayList<InternationalString> parseArrayInternationalString(String node) throws String256Exception {
+    private ArrayList<InternationalString> parseArrayInternationalString(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
         ArrayList<InternationalString> array = new ArrayList<InternationalString>();
 
@@ -632,7 +632,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public CodedTerm parseCodedTerm(String node) throws String256Exception {
+    private CodedTerm parseCodedTerm(String node) throws String256Exception {
         return parseArrayCodedTerm(node).get(0);
     }
 
@@ -649,7 +649,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public ArrayList<CodedTerm> parseArrayCodedTerm(String node) throws String256Exception {
+    private ArrayList<CodedTerm> parseArrayCodedTerm(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
 
         if (!nodeList.toString().isEmpty()) {
@@ -718,7 +718,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public NameValueString256 parseNameValueString256(String node) throws String256Exception {
+    private NameValueString256 parseNameValueString256(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
 
         if (nodeList.toString().isEmpty()) {
@@ -759,7 +759,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public NameValueInteger parseNameValueInteger(String node) throws String256Exception {
+    private NameValueInteger parseNameValueInteger(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
         if (nodeList.toString().isEmpty()) {
             logger.warning(node + " node is empty.\nCheck your XML Document!");
@@ -798,7 +798,7 @@ public class XdsParser {
      * @throws String256Exception if there is a String256 with more than 256 characters
      * @see XdsParser
      */
-    public NameValueDTM parseNameValueDTM(String node) throws String256Exception {
+    private NameValueDTM parseNameValueDTM(String node) throws String256Exception {
         NodeList nodeList = document.getElementsByTagName(node);
         if (nodeList.toString().isEmpty()) {
             logger.warning(node + " node is empty.\nCheck your XML Document!");
