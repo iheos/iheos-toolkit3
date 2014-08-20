@@ -3,7 +3,7 @@ import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.assertion.Assertion
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus
-import gov.nist.hit.ds.eventLog.assertion.annotations.Validation
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault
 import gov.nist.hit.ds.soapSupport.FaultCode

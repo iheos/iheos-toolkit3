@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator
 import gov.nist.hit.ds.dsSims.metadataValidator.engine.MetadataValidator
-import gov.nist.hit.ds.eventLog.assertion.annotations.Validation
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.Metadata

@@ -1,5 +1,5 @@
 package gov.nist.hit.ds.dsSims.bad
-import gov.nist.hit.ds.eventLog.assertion.annotations.Validation
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.soapSupport.SoapFaultException

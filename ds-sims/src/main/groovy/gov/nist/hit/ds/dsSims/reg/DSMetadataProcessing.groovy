@@ -1,5 +1,5 @@
 package gov.nist.hit.ds.dsSims.reg
-import gov.nist.hit.ds.eventLog.assertion.annotations.Validation
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.metadata.MetadataParser
 import gov.nist.hit.ds.repository.api.RepositoryException

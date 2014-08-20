@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.simSupport.validationEngine
 import edu.emory.mathcs.backport.java.util.Arrays
-import gov.nist.hit.ds.eventLog.assertion.annotations.Validation
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault
 
 import java.lang.reflect.Method

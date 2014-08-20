@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.eventLog.assertion.annotations;
+package gov.nist.hit.ds.simSupport.validationEngine.annotation;
 
 import gov.nist.hit.ds.utilities.datatypes.RequiredOptional;
 
@@ -14,7 +14,7 @@ public @interface Validation {
 	RequiredOptional required() default RequiredOptional.R;
 	String msg();
 	String id() default "[unassigned]"; 
-	String[] ref() default {"none"};
-	String[] dependsOn() default {"none"};
+	String[] ref() default ["none"];
+	String[] dependsOn() default ["none"];
     String guard() default "null";
 }
