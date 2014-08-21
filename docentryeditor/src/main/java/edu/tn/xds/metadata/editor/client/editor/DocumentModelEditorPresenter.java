@@ -43,6 +43,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
     }
 
     private void initDriver(XdsDocumentEntry model) {
+        this.model = model;
         editorDriver.initialize(view);
         getView().author.initEditorDriver();
 //		getView().title.initEditorDriver();
@@ -56,8 +57,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 
             @Override
             public void onStartEditXdsDocument(StartEditXdsDocumentEvent event) {
-                model = event.getDocument();
-                initDriver(model);
+                initDriver(event.getDocument());
             }
         });
         ((MetadataEditorEventBus) getEventBus()).addSaveFileEventHandler(new SaveFileEvent.SaveFileEventHandler() {

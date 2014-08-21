@@ -13,14 +13,15 @@ import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer.HBoxLayou
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import edu.tn.xds.metadata.editor.client.editor.DocumentModelEditorMVP;
-import edu.tn.xds.metadata.editor.client.event.EditNewEvent;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
 import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent;
 import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent.NewFileLoadedHandler;
 import edu.tn.xds.metadata.editor.client.event.SaveFileEvent;
+import edu.tn.xds.metadata.editor.client.event.XdsEditorLoadedEvent;
 import edu.tn.xds.metadata.editor.client.widgets.uploader.FileUploadMVP;
 
 import javax.inject.Inject;
+import java.util.logging.Logger;
 
 public class NorthPanel extends ContentPanel {
 
@@ -87,8 +88,8 @@ public class NorthPanel extends ContentPanel {
 			@Override
 			public void onSelect(SelectEvent event) {
 				loadingDialog.hide();
-
-			}
+                Logger.getLogger(this.getClass().getName()).info("Dialog Hided");
+            }
 
 		});
 		eventBus.addFileLoadedHandler(new NewFileLoadedHandler() {
@@ -101,12 +102,10 @@ public class NorthPanel extends ContentPanel {
                 }
 			}
 		});
-        eventBus.addEditNewEventHandler(new EditNewEvent.EditNewHandler() {
+        eventBus.addXdsEditorLoadedEventtHandler(new XdsEditorLoadedEvent.XdsEditorLoadedEventHandler() {
             @Override
-            public void onEditNew(EditNewEvent event) {
-                if(saveButton!=null) {
-                    saveButton.enable();
-                }
+            public void onXdsEditorLoaded(XdsEditorLoadedEvent event) {
+                saveButton.enable();
             }
         });
 		newButton.addSelectHandler(new SelectHandler() {
@@ -114,7 +113,7 @@ public class NorthPanel extends ContentPanel {
 			@Override
 			public void onSelect(SelectEvent event) {
 				saveButton.enable();
-                eventBus.fireEditNewEvent(new EditNewEvent());
+//                eventBus.fireEditNewEvent(new EditNewEvent());
 //				placeController.goTo(new EditorPlace());
             }
 

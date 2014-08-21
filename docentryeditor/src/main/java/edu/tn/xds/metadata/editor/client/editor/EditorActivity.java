@@ -11,8 +11,8 @@ import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderL
 import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import edu.tn.xds.metadata.editor.client.editor.validation.ValidationPresenter;
 import edu.tn.xds.metadata.editor.client.editor.validation.ValidationView;
-import edu.tn.xds.metadata.editor.client.event.EditNewEvent;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
+import edu.tn.xds.metadata.editor.client.event.XdsEditorLoadedEvent;
 import edu.tn.xds.metadata.editor.client.generics.ActivityDisplayer;
 import edu.tn.xds.metadata.editor.client.generics.GenericMVP;
 import edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry;
@@ -49,7 +49,8 @@ public class EditorActivity extends AbstractActivity {
         validationMVP = buildValidationMVP();
         validationMVP.init();
         displayer.display(getContainer(), panel, eventBus);
-        this.eventBus.fireEditNewEvent(new EditNewEvent());
+//        this.eventBus.fireEditNewEvent(new EditNewEvent());
+        this.eventBus.fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
     }
 
     /**
