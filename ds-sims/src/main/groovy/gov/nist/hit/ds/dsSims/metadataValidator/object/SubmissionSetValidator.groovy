@@ -2,33 +2,61 @@ package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.DtmFormat
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.XonXcnXtnFormat
+import gov.nist.hit.ds.dsSims.metadataValidator.field.TopAttsSubValidator
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
-
-@groovy.transform.TypeChecked
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Setup
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
+//@groovy.transform.TypeChecked
 public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
     SubmissionSetModel model
+    Set<String> knownIds
+    ValidationContext vc
+    SimHandle simHandle
 
 	static public String table416 = "ITI TF-3: Table 4.1-6";
 
 
 
-    SubmissionSetValidator(SubmissionSetModel model) { super(model); this.model = model }
+    SubmissionSetValidator(SimHandle simHandle, SubmissionSetModel model, ValidationContext vc, Set<String> knownIds) {
+        super(simHandle.event, model);
+        this.simHandle = simHandle
+        this.model = model
+        this.vc = vc
+        this.knownIds = knownIds
+    }
 
-	public void validate(ErrorRecorder er, ValidationContext vc,
+    @Override
+    void run() {
+        if (vc.isXDR)
+            vc.isXDRLimited = model.isMetadataLimited();
+
+        runValidationEngine()
+    }
+
+    // Guards
+    def xdrLimited() { vc.isXDRLimited }
+
+    @Setup
+    @Validation(id='Setup', msg='Setup', ref='')
+    def setup() {
+        if (vc.isXDRLimited)
+            msg("Labeled as Limited Metadata");
+        else if (vc.isXDRMinimal)
+            msg("Labeled as Minimal Metadata (Direct)");
+        else
+            msg ('Labeled as Full Metadata')
+    }
+
+    @Validation(id='Top', msg='Top attributes', ref='')
+    def validateTopAtts() {
+        new TopAttsSubValidator(this, model, vc, SubmissionSetModel.statusValues).run()
+    }
+
+
+    public void validate(ErrorRecorder er, ValidationContext vc,
 			Set<String> knownIds) {
-
-		if (vc.skipInternalStructure)
-			return;
-
-		if (vc.isXDR)
-			vc.isXDRLimited = model.isMetadataLimited();
-
-		if (vc.isXDRLimited)
-			er.sectionHeading("is labeled as Limited Metadata");
-
-		if (vc.isXDRMinimal)
-			er.sectionHeading("is labeled as Minimal Metadata (Direct)");
 
 		validateTopAtts(er, vc);
 
@@ -98,9 +126,6 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
 		return SubmissionSetModel.definedSlots.contains(name);
 	}
 
-	public void validateTopAtts(ErrorRecorder er, ValidationContext vc) {
-		validateTopAtts(er, vc, table416, SubmissionSetModel.statusValues);
-	}
 
 
 }

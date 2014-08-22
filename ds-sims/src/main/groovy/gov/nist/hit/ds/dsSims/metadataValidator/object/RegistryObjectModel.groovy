@@ -8,7 +8,9 @@ import org.apache.axiom.om.OMElement
 /**
  * Created by bmajur on 8/18/14.
  */
-@groovy.transform.TypeChecked
+
+// TODO: Still includes some validator code
+//@groovy.transform.TypeChecked
 class RegistryObjectModel {
 
 //    abstract public OMElement toXml() throws XdsInternalException;

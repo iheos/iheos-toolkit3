@@ -1,17 +1,18 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.*
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.xdsException.MetadataException
 
-@groovy.transform.TypeChecked
+//@groovy.transform.TypeChecked
 public class DocumentEntryValidator extends AbstractRegistryObjectValidator {
     DocumentEntryModel model
 
-    DocumentEntryValidator(DocumentEntryModel model) {
-        super(model)
+    DocumentEntryValidator(Event event, DocumentEntryModel model) {
+        super(event, model)
         this.model = model
     }
 
@@ -113,7 +114,7 @@ public class DocumentEntryValidator extends AbstractRegistryObjectValidator {
 		validateSlot(er, 	"hash",			 	   false, 	new HashFormat(er, "Slot hash",   null), 		        table415);
 		validateSlot(er, 	"size",				   false, 	new IntFormat(er, "Slot size",   table415),             table415);
 		validateSlot(er, 	"URI",				   true, 	new AnyFormat(er, "Slot URI",   table415),   table415);
-		validateSlot(er, 	"repositoryUniqueId",	false, 	new OidFormat(er, "Slot repositoryUniqueId",   table415),   table415);
+		validateSlot(er, 	"repositoryUniqueId",	false, 	new OidFormat(this, "Slot repositoryUniqueId"),   table415);
 
 
 		if ( model.getSlot("URI") != null ) {

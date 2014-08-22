@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.MetadataSupport
@@ -9,8 +10,8 @@ import org.apache.axiom.om.OMElement
 public class ExternalIdentifierValidator extends AbstractRegistryObjectValidator {
     ExternalIdentifierModel model
 
-    ExternalIdentifierValidator(ExternalIdentifierModel model) {
-        super(model)
+    ExternalIdentifierValidator(Event event, ExternalIdentifierModel model) {
+        super(event, model)
         this.model = model
     }
 

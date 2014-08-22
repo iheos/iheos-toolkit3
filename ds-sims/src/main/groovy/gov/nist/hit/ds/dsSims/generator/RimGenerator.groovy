@@ -157,6 +157,7 @@ class RimGenerator {
         if (name in authors) return mkAuthor(xml, parent, spec)
         if (name == 'description') return mkDescription(xml, spec)
         if (name == 'name') return mkName(xml, spec)
+        if (name == 'version') return mkVersion(xml, spec)
         throw new ToolkitRuntimeException("Cannot eval ${name}.")
     }
 
@@ -265,6 +266,10 @@ class RimGenerator {
         xml.Name {
             LocalizedString(value: spec.values[0])
         }
+    }
+
+    def mkVersion(xml, spec) {
+        xml.VersionInfo(versionName: spec.version)
     }
 
     def id = 1

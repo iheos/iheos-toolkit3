@@ -122,6 +122,18 @@ public class AssertionGroup  {
         return a;
     }
 
+    public Assertion fail(String failureMsg, String _found, boolean required) {
+        Assertion a = new Assertion();
+        a.with {
+            expected = failureMsg
+            found = _found
+            status = AssertionStatus.ERROR
+            //msg = failureMsg
+        }
+        addAssertion(a, required);
+        return a;
+    }
+
     public Assertion internalError(String failureMsg) {
         Assertion a = new Assertion();
         a.with {

@@ -4,22 +4,29 @@ import gov.nist.hit.ds.dsSims.metadataValidator.datatype.CxFormat
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.FormatValidator
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.OidFormat
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.UuidFormat
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.MetadataSupport
+import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.utilities.xml.XmlUtil
 import org.apache.axiom.om.OMElement
 
-@groovy.transform.TypeChecked
-public abstract class AbstractRegistryObjectValidator {
+//@groovy.transform.TypeChecked
+public abstract class AbstractRegistryObjectValidator extends ValComponentBase {
     RegistryObjectModel model
+    Event event
 
 //	abstract public String identifyingString();
 	abstract public void validateSlotsLegal(ErrorRecorder er);
 	abstract public void validateRequiredSlotsPresent(ErrorRecorder er, ValidationContext vc);
 	abstract public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc);
 
-    public AbstractRegistryObjectValidator(RegistryObjectModel model) { this.model = model }
+    public AbstractRegistryObjectValidator(Event event, RegistryObjectModel model) {
+        super(event)
+        this.event = event
+        this.model = model
+    }
 
 	public List<ExternalIdentifierModel> getExternalIdentifiers(String identificationScheme) {
 		List<ExternalIdentifierModel> eis = new ArrayList<ExternalIdentifierModel>();
@@ -40,8 +47,6 @@ public abstract class AbstractRegistryObjectValidator {
 		return i;
 	}
 
-// TODO: remove since copied to RegistryObjectValidator.groovy
-
     // should be utility called by validators
     public void validateSlot(ErrorRecorder er, String slotName, boolean multivalue, FormatValidator validator, String resource) {
         SlotModel slot = model.getSlot(slotName);
@@ -52,7 +57,7 @@ public abstract class AbstractRegistryObjectValidator {
         new SlotValidator(slot).validate(er, multivalue, validator, resource);
     }
 
-    public void validateTopAtts(ErrorRecorder er, ValidationContext vc, String tableRef, List<String> statusValues) {
+    public void validateTopAtts(ValComponentBase base, ValidationContext vc, String tableRef, List<String> statusValues) {
         validateId(er, vc, "entryUUID", model.id, null);
 
         if (vc.isSQ && vc.isResponse) {
@@ -90,14 +95,18 @@ public abstract class AbstractRegistryObjectValidator {
             }
         }
 
+        // TODO: These three checks make no sense here - find new home
+        // handled by
+        // validateClassifications, validateExternalIdentifiers
+        // Author still necessary
         for (ClassificationModel cModel : model.classifications)
-            new ClassificationValidator(cModel).validateId(er, vc, "entryUUID", cModel.getId(), resource);
+            new ClassificationValidator(event, cModel).validateId(er, vc, "entryUUID", cModel.getId(), resource);
 
         for (AuthorModel a : model.authors)
-            new AuthorValidator(a).validateId(er, vc, "entryUUID", a.getId(), resource);
+            new AuthorValidator(event, a).validateId(er, vc, "entryUUID", a.getId(), resource);
 
         for (ExternalIdentifierModel ei : model.externalIdentifiers)
-            new ExternalIdentifierValidator(ei).validateId(er, vc, "entryUUID", ei.getId(), resource);
+            new ExternalIdentifierValidator(event, ei).validateId(er, vc, "entryUUID", ei.getId(), resource);
 
     }
     public void verifyIdsUnique(ErrorRecorder er, Set<String> knownIds) {
@@ -108,13 +117,13 @@ public abstract class AbstractRegistryObjectValidator {
         }
 
         for (ClassificationModel c : model.classifications)
-            new ClassificationValidator(c).verifyIdsUnique(er, knownIds);
+            new ClassificationValidator(event, c).verifyIdsUnique(er, knownIds);
 
         for (AuthorModel a : model.authors)
-            new AuthorValidator(a).verifyIdsUnique(er, knownIds);
+            new AuthorValidator(event, a).verifyIdsUnique(er, knownIds);
 
         for (ExternalIdentifierModel ei : model.externalIdentifiers)
-            new ExternalIdentifierValidator(ei).verifyIdsUnique(er, knownIds);
+            new ExternalIdentifierValidator(event, ei).verifyIdsUnique(er, knownIds);
     }
 
     // guarded
@@ -152,10 +161,10 @@ public abstract class AbstractRegistryObjectValidator {
     }
     public void validateClassificationsCodedCorrectly(ErrorRecorder er, ValidationContext vc) {
         for (ClassificationModel c : model.getClassifications())
-            new ClassificationValidator(c).validateStructure(er, vc);
+            new ClassificationValidator(event, c).validateStructure(er, vc);
 
         for (AuthorModel a : model.getAuthors())
-            new AuthorValidator(a).validateStructure(er, vc);
+            new AuthorValidator(event, a).validateStructure(er, vc);
     }
 
     public void validateClassifications(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
@@ -178,7 +187,7 @@ public abstract class AbstractRegistryObjectValidator {
 
     public void validateExternalIdentifiersCodedCorrectly(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
         for (ExternalIdentifierModel ei : model.getExternalIdentifiers()) {
-            new ExternalIdentifierValidator(ei).validateStructure(er, vc);
+            new ExternalIdentifierValidator(event, ei).validateStructure(er, vc);
             if (MetadataSupport.XDSDocumentEntry_uniqueid_uuid.equals(ei.getIdentificationScheme())) {
                 String[] parts = ei.getValue().split("\\^");
                 new OidFormat(er, model.identifyingString() + ": " + ei.identifyingString(), model.externalIdentifierDescription(desc, ei.getIdentificationScheme()))

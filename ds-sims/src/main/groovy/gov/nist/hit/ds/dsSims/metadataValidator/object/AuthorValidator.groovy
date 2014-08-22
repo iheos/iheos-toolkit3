@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.MetadataSupport
@@ -10,8 +11,8 @@ import org.apache.axiom.om.OMElement
 public class AuthorValidator extends AbstractRegistryObjectValidator {
     AuthorModel model
 
-	public AuthorValidator(AuthorModel model) {
-		super(model);
+	public AuthorValidator(Event event, AuthorModel model) {
+		super(event, model);
         this.model = model
 //		model.addSlot("authorPerson", person);   // ??????
 	}

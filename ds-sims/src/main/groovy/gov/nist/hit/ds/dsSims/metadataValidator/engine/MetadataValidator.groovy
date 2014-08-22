@@ -1,46 +1,48 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.engine
-
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.RegistryValidationInterface
 import gov.nist.hit.ds.dsSims.metadataValidator.field.CodeValidation
 import gov.nist.hit.ds.dsSims.metadataValidator.field.SubmissionStructure
 import gov.nist.hit.ds.dsSims.metadataValidator.object.*
-import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.EventErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.repository.api.RepositoryException
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import org.apache.axiom.om.OMElement
 
-@groovy.transform.TypeChecked
+//@groovy.transform.TypeChecked
 class MetadataValidator extends ValComponentBase {
 	Metadata m
-    Event event
+    SimHandle simHandle
 	RegistryValidationInterface rvi
     ValidationContext vc
     ErrorRecorder er
 
-	public MetadataValidator(Event event, Metadata m, ValidationContext vc, RegistryValidationInterface rvi) {
-        super(event)
-        this.event = event
+	public MetadataValidator(SimHandle simHandle, Metadata m, ValidationContext vc, RegistryValidationInterface rvi) {
+        super(simHandle.event)
+        this.simHandle = simHandle
         this.m = m
         this.vc = vc
         this.rvi = rvi
-        this.er = new EventErrorRecorder(event)
+        this.er = new EventErrorRecorder(simHandle.event)
 	}
 
     @Override
     void run() throws SoapFaultException, RepositoryException {
        // runValidationEngine()
 
-		runObjectStructureValidation()
-		runCodeValidation(er);
-		runSubmissionStructureValidation(er);
+        simHandle.event.addChildResults('MetadataValidator')
+        new ObjectStructureValidator(simHandle, m, vc, rvi).run()
+
+//        runObjectStructureValidation()
+//		runCodeValidation(er);
+//		runSubmissionStructureValidation(er);
 	}
 
     def runObjectStructureValidation()   {

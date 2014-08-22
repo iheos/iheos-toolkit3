@@ -1,12 +1,14 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 
+@groovy.transform.TypeChecked
 public class InternalClassificationValidator extends AbstractRegistryObjectValidator {
     ClassificationModel model
 
-    InternalClassificationValidator(ClassificationModel model) {
-        super(model)
+    InternalClassificationValidator(Event event, ClassificationModel model) {
+        super(event, model)
         this.model = model
     }
 

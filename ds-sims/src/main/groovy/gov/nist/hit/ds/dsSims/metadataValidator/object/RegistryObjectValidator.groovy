@@ -3,6 +3,7 @@ import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.CxFormat
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.OidFormat
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.UuidFormat
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.MetadataSupport
@@ -11,11 +12,16 @@ import org.apache.axiom.om.OMElement
 /**
  * Created by bmajur on 8/4/14.
  */
-@groovy.transform.TypeChecked
+//@groovy.transform.TypeChecked
 abstract class RegistryObjectValidator extends AbstractRegistryObjectValidator {
     RegistryObjectModel model
+    Event event
 
-    RegistryObjectValidator(RegistryObjectModel model) { super(model); this.model = model }
+    RegistryObjectValidator(Event event, RegistryObjectModel model) {
+        super(event, model);
+        this.event = event
+        this.model = model
+    }
 
 //    public void validateSlot(ErrorRecorder er, String slotName, boolean multivalue, FormatValidator validator, String resource) {
 //        SlotModel slot = model.getSlot(slotName);
@@ -63,13 +69,13 @@ abstract class RegistryObjectValidator extends AbstractRegistryObjectValidator {
         }
 
         for (ClassificationModel c : model.classifications)
-            new ClassificationValidator(c).validateId(er, vc, "entryUUID", c.getId(), resource);
+            new ClassificationValidator(event, c).validateId(er, vc, "entryUUID", c.getId(), resource);
 
         for (AuthorModel a : model.authors)
-            new AuthorValidator(a).validateId(er, vc, "entryUUID", a.getId(), resource);
+            new AuthorValidator(event, a).validateId(er, vc, "entryUUID", a.getId(), resource);
 
         for (ExternalIdentifierModel ei : model.externalIdentifiers)
-            new ExternalIdentifierValidator(ei).validateId(er, vc, "entryUUID", ei.getId(), resource);
+            new ExternalIdentifierValidator(event, ei).validateId(er, vc, "entryUUID", ei.getId(), resource);
 
     }
 
@@ -81,13 +87,13 @@ abstract class RegistryObjectValidator extends AbstractRegistryObjectValidator {
         }
 
         for (ClassificationModel c : model.classifications)
-            new ClassificationValidator(c).verifyIdsUnique(er, knownIds);
+            new ClassificationValidator(event, c).verifyIdsUnique(er, knownIds);
 
         for (AuthorModel a : model.authors)
-            new AuthorValidator(a).verifyIdsUnique(er, knownIds);
+            new AuthorValidator(event, a).verifyIdsUnique(er, knownIds);
 
         for (ExternalIdentifierModel ei : model.externalIdentifiers)
-            new ExternalIdentifierValidator(ei).verifyIdsUnique(er, knownIds);
+            new ExternalIdentifierValidator(event, ei).verifyIdsUnique(er, knownIds);
     }
 
      void validateHome(ErrorRecorder er, String resource) {
@@ -126,10 +132,10 @@ abstract class RegistryObjectValidator extends AbstractRegistryObjectValidator {
 
     void validateClassificationsCodedCorrectly(ErrorRecorder er, ValidationContext vc) {
         for (ClassificationModel cModel : model.getClassifications())
-            new ClassificationValidator(cModel).validateStructure(er, vc);
+            new ClassificationValidator(event, cModel).validateStructure(er, vc);
 
         for (AuthorModel aModel : model.getAuthors())
-            new AuthorValidator(aModel).validateStructure(er, vc);
+            new AuthorValidator(event, aModel).validateStructure(er, vc);
     }
 
     public void validateClassifications(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource)  {
@@ -152,7 +158,7 @@ abstract class RegistryObjectValidator extends AbstractRegistryObjectValidator {
 
     public void validateExternalIdentifiersCodedCorrectly(ErrorRecorder er, ValidationContext vc, ClassAndIdDescription desc, String resource) {
         for (ExternalIdentifierModel eiModel : model.getExternalIdentifiers()) {
-            new ExternalIdentifierValidator(eiModel).validateStructure(er, vc);
+            new ExternalIdentifierValidator(event, eiModel).validateStructure(er, vc);
             if (MetadataSupport.XDSDocumentEntry_uniqueid_uuid.equals(eiModel.getIdentificationScheme())) {
                 String[] parts = eiModel.getValue().split("\\^");
                 new OidFormat(er, model.identifyingString() + ": " + eiModel.identifyingString(), model.externalIdentifierDescription(desc, eiModel.getIdentificationScheme()))

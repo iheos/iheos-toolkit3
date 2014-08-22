@@ -32,12 +32,20 @@ public class ValidationClassScanner {
         if (validationAnnotation) {
             ValidationMethod vMethod = new ValidationMethod(method, validationAnnotation)
             validationMethods.add(vMethod)
+
             Fault fault = method.getAnnotation(Fault)
             if (fault) {
                 vMethod.type = RunType.FAULT
                 vMethod.faultCode = fault.code()
             }
+
             if (method.getAnnotation(Optional)) vMethod.required = false
+
+            def errorCode = method.getAnnotation(ErrorCode)
+            if (errorCode) vMethod.errorCode = errorCode.code()
+
+            if (method.getAnnotation(Setup)) vMethod.setup = true
+
             DependsOn dependsOn = method.getAnnotation(DependsOn)
             if (dependsOn) {
                 def dependsOnIds = dependsOn.ids() as List
@@ -47,6 +55,7 @@ public class ValidationClassScanner {
                 }
                 vMethod.addDependsOn(dependsOn.ids())
             }
+
             Guard guard = method.getAnnotation(Guard)
             if (guard) {
                 def guardNames = guard.methodNames() as List

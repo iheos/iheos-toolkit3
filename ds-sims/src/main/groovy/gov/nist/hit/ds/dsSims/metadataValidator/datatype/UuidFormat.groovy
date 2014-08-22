@@ -1,19 +1,17 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.datatype
 
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
-
+import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 
 public class UuidFormat extends FormatValidator {
 
-	public UuidFormat(ErrorRecorder er, String context, String resource) {
-		super(er, context, resource);
+	public UuidFormat(ValComponentBase base) {
+		super(base);
 	}
 
 	public void validate(String input) {
-		if (!isUuid(input)) {
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, context + ": " + input + " is not in UUID format", this, getResource("ITI TF-3: Table 4.1-3 and section 4.1.12.3"));
-		}
+		if (!isUuid(input)) { base.fail('UUID format', input) }
+//			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, context + ": " + input + " is not in UUID format", this, getResource("ITI TF-3: Table 4.1-3 and section 4.1.12.3"));
+//		}
 	}
 
 	// example: urn:uuid:488705e6-91e6-47f8-b567-8c06f8472e74

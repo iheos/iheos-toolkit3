@@ -1,16 +1,17 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.DtmFormat
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 
-@groovy.transform.TypeChecked
+//@groovy.transform.TypeChecked
 public class FolderValidator extends AbstractRegistryObjectValidator {
 	static public String table417 = "ITI TF-3: Table 4.1-7";
     FolderModel model
 
-    FolderValidator(FolderModel model) {
-        super(model)
+    FolderValidator(Event event, FolderModel model) {
+        super(event, model)
         this.model = model
     }
 

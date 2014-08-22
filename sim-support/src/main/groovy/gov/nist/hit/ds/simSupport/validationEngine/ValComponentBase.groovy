@@ -97,8 +97,14 @@ public abstract class ValComponentBase implements ValComponent {
         return true;
     }
 
-    public boolean fail(String expected) throws SoapFaultException {
-        Assertion a = ag.fail(expected, currentValidationMethod().required);
+    public boolean fail(String msg) throws SoapFaultException {
+        Assertion a = ag.fail(msg, currentValidationMethod().required);
+        recordAssertion(a);
+        return !a.failed();
+    }
+
+    public boolean fail(String msg, String found) throws SoapFaultException {
+        Assertion a = ag.fail(msg, found, currentValidationMethod().required);
         recordAssertion(a);
         return !a.failed();
     }

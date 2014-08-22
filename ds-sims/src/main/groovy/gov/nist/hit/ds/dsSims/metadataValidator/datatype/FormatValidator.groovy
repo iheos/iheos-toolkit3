@@ -1,39 +1,34 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.datatype
 
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
+import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import org.apache.axiom.om.OMElement
 
 public abstract class FormatValidator {
-	ErrorRecorder er;
-	String context;
-	String resource;
-	
-	public FormatValidator(ErrorRecorder er, String context, String resource) {
-		this.er = er;
-		this.context = context;
-		this.resource = resource;
+    ValComponentBase base
+
+	public FormatValidator(ValComponentBase base) {
+		this.base = base;
 	}
 	
-	public void validate(String input) throws FormatValidatorCalledIncorrectlyException {
-		throw new FormatValidatorCalledIncorrectlyException("Called incorrectly");
+	public void validate(String input) {
+        base.fail('FormatValidatorCalledIncorrectly')
 	}
 	
 	public void validate(OMElement input) throws FormatValidatorCalledIncorrectlyException {
-		throw new FormatValidatorCalledIncorrectlyException("Called incorrectly");
+        base.fail('FormatValidatorCalledIncorrectly')
 	}
 	
-	protected String getResource(String specialResource) {
-		if (resource == null)
-			return specialResource;
-		else if (specialResource == null)
-			return resource;
-		else
-			return resource + " and " + specialResource;
-
-	}
-	
-	protected void err(String input, String error, String additionalResource) {
-		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, context + ": " + input + " : " + error, this, getResource(additionalResource));
-	}
+//	protected String getResource(String specialResource) {
+//		if (resource == null)
+//			return specialResource;
+//		else if (specialResource == null)
+//			return resource;
+//		else
+//			return resource + " and " + specialResource;
+//
+//	}
+//
+//	protected void err(String input, String error, String additionalResource) {
+//		er.err(XdsErrorCode.Code.XDSRegistryMetadataError, context + ": " + input + " : " + error, this, getResource(additionalResource));
+//	}
 }

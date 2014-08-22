@@ -15,6 +15,8 @@ public class ValidationMethod {
 	String id;
     List<String> guardMethodNames = []
     boolean required = true
+    boolean setup = false
+    String errorCode
 
     ValidationMethod(Method method, Validation validationAnnotation) {
         this.id = validationAnnotation.id()

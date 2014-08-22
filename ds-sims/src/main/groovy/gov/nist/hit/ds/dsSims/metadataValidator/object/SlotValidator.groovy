@@ -13,20 +13,20 @@ public class SlotValidator {
         this.model = model
     }
 
-	public void validate(ErrorRecorder er, boolean multivalue, FormatValidator validator, String resource) {
+	public void validate(ErrorRecorder er, boolean multivalue, FormatValidator formatValidator, String resource) {
 		if (!multivalue && values.size() > 1)
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, getOwnerType() + "(" + getOwnerId() + ") has Slot " + name + " which is required to have a single value, " + values.size() + "  values found", this, resource);
 		try {
 			for (String value : values) {
-				validator.validate(value);
+				formatValidator.validate(value);
 			}
 		} catch (FormatValidatorCalledIncorrectlyException e) {
 			// oops - can't call with individual slot values, needs Slot
 			try {
-				validator.validate(myElement);
+				formatValidator.validate(myElement);
 			} catch (FormatValidatorCalledIncorrectlyException e1) {
 				// hmmm - I guess we give up here
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new XdsInternalException("Slot#validate: the validator " + validator.getClass().getName() + " implements no validate methods"));
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, new XdsInternalException("Slot#validate: the validator " + formatValidator.getClass().getName() + " implements no validate methods"));
 			}
 		}
 	}

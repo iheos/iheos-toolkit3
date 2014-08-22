@@ -4,7 +4,7 @@ import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.xdsException.MetadataException
 import org.apache.axiom.om.OMElement
 
-public class SubmissionSetValidator extends ValidatorCommon {
+public class ObsoleteSubmissionSetValidator extends ValidatorCommon {
 
 	static final List<String> ss_slots =
 		Arrays.asList(
@@ -25,7 +25,7 @@ public class SubmissionSetValidator extends ValidatorCommon {
 				MetadataSupport.XDSSubmissionSet_contentTypeCode_uuid
 		);
 
-	public SubmissionSetValidator(ValidatorCommon vc)  {
+	public ObsoleteSubmissionSetValidator(ValidatorCommon vc)  {
 		cloneEnvironment(vc);
 	}
 

@@ -8,9 +8,11 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.ExceptionUtil
+import groovy.util.logging.Log4j
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.log4j.Logger
 
+@Log4j
 public class ValidationEngine {
     ValComponentBase validationObject
     List<ValidationMethod> validationMethods  // taken from validationObject
@@ -48,7 +50,7 @@ public class ValidationEngine {
     public void runValidationMethods() throws Exception {
         currentValidationMethod = getARunableValidationMethod();
         while(currentValidationMethod) {
-            logger.debug("Starting Validation ${currentValidationMethod.method.name} on ${validationObject.class.name}");
+            logger.debug("...Running Validation ${currentValidationMethod.id} on ${validationObject.class.name}");
             validationObject.defaultMsg()
             invoke(currentValidationMethod)
             currentValidationMethod = getARunableValidationMethod();
@@ -89,31 +91,35 @@ public class ValidationEngine {
     }
 
     private def getARunableValidationMethod() {
-        def valMethod = validationMethods.find {
-            it.runable() && dependenciesSatisfied(it.dependsOnId) && evalGuard(it)
+        def runFirst = validationMethods.find { it.setup && it.runable() }
+        if (runFirst) { setupRunable(runFirst); return runFirst }
+        def valMethod = validationMethods.find { validationMethod ->
+            if (!(validationMethod.runable() && dependenciesSatisfied(validationMethod.dependsOnId))) return false
+            log.debug("For ${validationMethod.id}...")
+            evalGuard(validationMethod)
         }
-        if (valMethod) {
-            validationAnnotation = valMethod.validationAnnotation
-            assert validationAnnotation
-            valMethod.markHasBeenRun()
-            return valMethod
-        }
+        if (valMethod) { setupRunable(valMethod); return valMethod }
+//            validationAnnotation = valMethod.validationAnnotation
+//            assert validationAnnotation
+//            valMethod.markHasBeenRun()
+//            return valMethod
+//        }
         return null
     }
 
+    private setupRunable(def valMethod) {
+        validationAnnotation = valMethod.validationAnnotation
+        assert validationAnnotation
+        valMethod.markHasBeenRun()
+    }
+
     private boolean evalGuard(ValidationMethod validationMethod) {
-        validationMethod.guardMethodNames.findResult(true) { guardMethodName ->
-            validationObject."${guardMethodName}"()
+        for (def guardMethodName in validationMethod.guardMethodNames) {
+            def guardValue = validationObject."${guardMethodName}"()
+            log.debug("Guard ${guardMethodName}? ${guardValue}")
+            if (!guardValue) return false
         }
-//        validationMethod.guardMethodNames.each { guardMethodName ->
-//            def ok = true
-//            try {
-//                ok = validationObject."${guardMethodName}"()
-//            } catch (Exception e) {
-//                println "Guard: ${e.class.name}: ${e.message}"
-//            }
-//        }
-//        if (validationMethod.guardMethodName == null) return true
+        return true
     }
 
     private def dependenciesSatisfied(List<String> dependsOnIds) {

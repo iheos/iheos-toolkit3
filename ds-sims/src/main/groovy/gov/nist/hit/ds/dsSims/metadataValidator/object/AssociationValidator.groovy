@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.MetadataSupport
@@ -9,8 +10,8 @@ class AssociationValidator extends AbstractRegistryObjectValidator {
 	ValidationContext vc;
     AssociationModel model
 
-    AssociationValidator(AssociationModel model, ValidationContext vc) {
-        super(model)
+    AssociationValidator(Event event, AssociationModel model, ValidationContext vc) {
+        super(event, model)
         this.model = model
         this.vc = vc
     }
