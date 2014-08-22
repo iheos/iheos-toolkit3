@@ -93,11 +93,11 @@ public class CodedTermsEditableGridWidget extends GenericEditableGrid<CodedTerm>
     }
 
     @Override
-    public Widget asWidget() {
+    public Widget getDisplay() {
         FieldLabel codedTermFL = new FieldLabel(cb, "Select a coded term to add");
         codedTermFL.setLabelWidth(200);
         addWidget(codedTermFL);
-        return super.asWidget();
+        return super.getDisplay();
     }
 
     @Override

@@ -250,7 +250,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // //////////////////////////////////////////////////////////
         VerticalLayoutContainer filePropertiesFieldsContainer = new VerticalLayoutContainer();
         filePropertiesFieldsContainer.add(hashLabel, new VerticalLayoutData(1, -1));
-        filePropertiesFieldsContainer.add(size.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        filePropertiesFieldsContainer.add(size.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         VerticalLayoutContainer repositoryAttributesFieldsContainer = new VerticalLayoutContainer();
         repositoryAttributesFieldsContainer.add(uriLabel, new VerticalLayoutData(1, -1));
@@ -341,7 +341,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // /////////////////////////////////////////////////////////
         /* simple required fields added to FramedPanel container */
         requiredFields.add(fieldSet_general_fields_required);
-        requiredFields.add(creationTime.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        requiredFields.add(creationTime.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         // /////////////////////////////////////////////////////////
         // Adding and ordering fieldsets in OPTIONAL fields panel
@@ -349,16 +349,16 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         /* simple optional fields added to FramedPanel container */
         optionalFields.add(fieldSet_fileProperties);
         optionalFields.add(fieldSet_repoAttributes);
-        optionalFields.add(titlesGrid.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(commentsGrid.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(titlesGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(commentsGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         optionalFields.add(fieldSet_authors);
-        optionalFields.add(legalAuthenticator.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(sourcePatientId.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(sourcePatientInfo.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(confidentialityCodesGrid.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(eventCodesGrid.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(serviceStartTime.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(serviceStopTime.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(legalAuthenticator.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(sourcePatientId.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(sourcePatientInfo.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(confidentialityCodesGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(eventCodesGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(serviceStartTime.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(serviceStopTime.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         setWidgetsInfo();
 

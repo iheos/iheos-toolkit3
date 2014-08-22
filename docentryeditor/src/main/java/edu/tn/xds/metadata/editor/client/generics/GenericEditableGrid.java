@@ -118,13 +118,13 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         helpTooltipConfig.setMouseOffsetY(0);
 
         gridContainer.add(toolBar);
-        gridContainer.add(this/*,new VerticalLayoutContainer.VerticalLayoutData(1,-1)*/); // VerticalLayoutData does not work here why?
+        gridContainer.add(super.asWidget(), new VerticalLayoutContainer.VerticalLayoutData(1, 1)); // VerticalLayoutData does not work here why?
         pane.setWidget(gridContainer);
 
         setEditable();
 
         // some tries to make grid fit panel's height
-        this.getView().setAdjustForHScroll(true);
+        this.getView().setAdjustForHScroll(false);
         this.getView().setForceFit(true);
         pane.forceLayout();
         gridContainer.forceLayout();
@@ -162,8 +162,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         editing.addEditor(columnConfig, field);
     }
 
-    @Override
-    public Widget asWidget() {
+    public Widget getDisplay() {
         pane.setResize(true);
         return pane.asWidget();
     }
@@ -286,7 +285,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
     }
 
     //--------------------------------------------------------------------------------------------------------
-//    == SHOULD NOT BE USED WITH GIRD ROW EDITING, ONLY WITH GRID INLINE EDITING ==
+//  //----  SHOULD NOT BE USED WITH GIRD ROW EDITING, ONLY WITH GRID INLINE EDITING
 //    /**
 //     * This Method enables the grid's selection checkbox column (for
 //     * multiselection).

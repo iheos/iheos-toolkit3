@@ -20,17 +20,15 @@ import java.util.logging.Logger;
  * Created by onh2 on 8/5/2014.
  */
 public class PreConnectathonTestsTab extends GenericCloseableTab {
+    static final Logger logger = Logger.getLogger(PreConnectathonTestsTab.class.getName());
     private final static ToolkitServiceAsync toolkitService = GWT
             .create(ToolkitService.class);
-
-    static final Logger logger= Logger.getLogger(PreConnectathonTestsTab.class.getName());
-
     private static String header = "Pre-Connectathon Tests";
 
     private DynamicForm form;
     private HTMLPane htmlReadme;
 
-    public PreConnectathonTestsTab(){
+    public PreConnectathonTestsTab() {
         super(header);
     }
 
@@ -41,21 +39,21 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
 
         SelectItem selectActor = new SelectItem();
         selectActor.setTitle("Select Actor");
-        LinkedHashMap<String,String> actorsMap = loadActorsMap();
+        LinkedHashMap<String, String> actorsMap = loadActorsMap();
         selectActor.setValueMap(actorsMap);
         selectActor.setWidth(400);
 
         SelectItem selectTest = new SelectItem();
         selectTest.setTitle("Select Test");
-        LinkedHashMap<String,String> testsMap = loadTestsMap();
+        LinkedHashMap<String, String> testsMap = loadTestsMap();
         selectTest.setValueMap(testsMap);
         selectTest.setWidth(400);
 
         HTMLFlow beforeReadme = new HTMLFlow("<hr/>");
         htmlReadme = new HTMLPane();
         htmlReadme.setShowEdges(true);
-        htmlReadme.setContents("<div style='padding-left:20px'>"+
-                "<h3>README</h3>"  +
+        htmlReadme.setContents("<div style='padding-left:20px'>" +
+                "<h3>README</h3>" +
                 "Initialize XDS.b for Registry testing<br/>" +
                 "<br/>" +
                 "This test data is suitable for Stored Query testing only. It uses Register.b to load the Registry.<br/>" +
@@ -63,26 +61,26 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
                 "</div>");
         HTMLFlow afterReadme = new HTMLFlow("<hr/>");
 
-        form.setFields(selectActor,selectTest);
+        form.setFields(selectActor, selectTest);
 
-        PatientIDWidget patientID=new PatientIDWidget();
+        PatientIDWidget patientID = new PatientIDWidget();
         TLSAndSAMLForm tLSAndSAMLForm = new TLSAndSAMLForm();
 
-        vStack.addMembers(form, beforeReadme, htmlReadme,afterReadme,patientID,tLSAndSAMLForm);
+        vStack.addMembers(form, beforeReadme, htmlReadme, afterReadme, patientID, tLSAndSAMLForm);
         return vStack;
     }
 
     private LinkedHashMap<String, String> loadTestsMap() {
-        final LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
+        final LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
 
         return map;
     }
 
     private LinkedHashMap<String, String> loadActorsMap() {
-        final LinkedHashMap<String,String> map=new LinkedHashMap<String,String>();
-        if (toolkitService==null)
+        final LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+        if (toolkitService == null)
             logger.info("SERVICE NULL");
-        toolkitService.getCollectionNames("actorcollections",new AsyncCallback<Map<String, String>>() {
+        toolkitService.getCollectionNames("actorcollections", new AsyncCallback<Map<String, String>>() {
             @Override
             public void onFailure(Throwable caught) {
                 logger.warning(caught.getMessage());
@@ -90,7 +88,9 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
 
             @Override
             public void onSuccess(Map<String, String> result) {
-                map.putAll(result);
+                if (result != null) {
+                    map.putAll(result);
+                }
             }
         });
         return map;
