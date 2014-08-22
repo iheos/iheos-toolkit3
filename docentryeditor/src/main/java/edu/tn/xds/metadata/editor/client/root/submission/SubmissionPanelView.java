@@ -5,7 +5,6 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.TreeStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -14,12 +13,10 @@ import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import com.sencha.gxt.widget.core.client.tree.Tree;
-import edu.tn.xds.metadata.editor.client.event.EditNewEvent;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
-import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractView;
 import edu.tn.xds.metadata.editor.client.resources.AppImages;
-import edu.tn.xds.metadata.editor.client.widgets.uploader.FileUploadMVP;
+import edu.tn.xds.metadata.editor.client.widgets.uploader.FileUploadDialog;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -42,14 +39,13 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
     private final TextButton addDocEntryButton = new TextButton();
     private final TextButton removeDocEntryButton = new TextButton();
     private final TextButton clearDocEntriesButton = new TextButton();
+    private final TextButton saveDocEntriesButton = new TextButton();
     private final TextButton helpButton = new TextButton();
-
-    private Dialog loadingDialog;
 
     @Inject
     MetadataEditorEventBus eventBus;
     @Inject
-    FileUploadMVP fileUploadMVP;
+    FileUploadDialog fileUploadDialog;
 
     @Override
     protected Map<String, Widget> getPathToWidgetsMap() {
@@ -76,11 +72,14 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         removeDocEntryButton.setToolTip("Remove this Document Entry");
         clearDocEntriesButton.setIcon(AppImages.INSTANCE.clear());
         clearDocEntriesButton.setToolTip("Clear submission set from all document entries");
+        saveDocEntriesButton.setIcon(AppImages.INSTANCE.save());
+        saveDocEntriesButton.setToolTip("Download xml file with document entries");
         helpButton.setIcon(AppImages.INSTANCE.help());
         helpButton.setToolTip("Help");
         toolbar.add(addDocEntryButton);
         toolbar.add(removeDocEntryButton);
         toolbar.add(clearDocEntriesButton);
+        toolbar.add(saveDocEntriesButton);
         toolbar.add(helpButton);
         vlc.add(toolbar);
         buildTreeStore();
@@ -90,9 +89,6 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         vlc.add(tree);
 
         cp.setWidget(vlc);
-
-        fileUploadMVP.init();
-        fileUploadMVP.start();
 
         return cp;
     }
@@ -144,35 +140,18 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
 
             @Override
             public void onSelection(SelectionEvent<Item> event) {
-                loadingDialog = new Dialog();
-                loadingDialog.setBodyBorder(false);
-                loadingDialog.setHeadingText("File Upload");
-                loadingDialog.setHideOnButtonClick(true);
-                loadingDialog.add(fileUploadMVP.getDisplay());
-
-                // delete the default button
-                loadingDialog.getButtonBar().remove(0);
-                loadingDialog.setModal(true);
-                loadingDialog.show();
+                fileUploadDialog.init();
+                fileUploadDialog.show();
             }
 
         });
-        eventBus.addFileLoadedHandler(new NewFileLoadedEvent.NewFileLoadedHandler() {
-
+        saveDocEntriesButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
-            public void onNewFileLoaded(NewFileLoadedEvent event) {
-                if(loadingDialog!=null) {
-                    loadingDialog.hide();
-//                    saveButton.enable();
-                }
+            public void onSelect(SelectEvent selectEvent) {
+                presenter.doSave();
             }
         });
-        eventBus.addEditNewEventHandler(new EditNewEvent.EditNewHandler() {
-            @Override
-            public void onEditNew(EditNewEvent event) {
-//                saveButton.enable();
-            }
-        });
+
     }
 
     /**

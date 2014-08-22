@@ -23,19 +23,32 @@ public class MetadataEditorEventBus extends SimpleEventBus {
         fireEvent(event);
     }
 
-    public HandlerRegistration addEditNewEventHandler(EditNewEvent.EditNewHandler handler) {
-        return addHandler(EditNewEvent.TYPE, handler);
-    }
 
-    public void fireEditNewEvent(EditNewEvent event) {
+//    public void fireEditNewEvent(EditNewEvent event) {
+//        fireEvent(event);
+//    }
+//
+//    public HandlerRegistration addStartEditXdsDocumentHandler(StartEditXdsDocumentEvent.StartEditXdsDocumentHandler handler) {
+//        return addHandler(StartEditXdsDocumentEvent.TYPE, handler);
+//    }
+
+    public void fireStartEditXdsDocumentEvent(StartEditXdsDocumentEvent event) {
         fireEvent(event);
     }
 
-    public HandlerRegistration addStartEditXdsDocumentHandler(StartEditXdsDocumentEvent.StartEditXdsDocumentHandler handler) {
-        return addHandler(StartEditXdsDocumentEvent.TYPE, handler);
+    public HandlerRegistration addSaveCurrentlyEditedDocumentHandler(SaveCurrentlyEditedDocumentEvent.SaveCurrentlyEditedDocumentEventHandler handler) {
+        return addHandler(SaveCurrentlyEditedDocumentEvent.TYPE, handler);
     }
 
-    public void fireStartEditXdsDocumentEvent(StartEditXdsDocumentEvent event) {
+    public void fireSaveCurrentlyEditedDocumentEvent(SaveCurrentlyEditedDocumentEvent event) {
+        fireEvent(event);
+    }
+
+    public HandlerRegistration addXdsEditorLoadedEventtHandler(XdsEditorLoadedEvent.XdsEditorLoadedEventHandler handler) {
+        return addHandler(XdsEditorLoadedEvent.TYPE, handler);
+    }
+
+    public void fireXdsEditorLoadedEvent(XdsEditorLoadedEvent event) {
         fireEvent(event);
     }
 }
