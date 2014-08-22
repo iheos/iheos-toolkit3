@@ -241,7 +241,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
 		/* REQUIRED container added to a fieldset */
         FieldSet fieldSet_general_fields_required = new FieldSet();
-        fieldSet_general_fields_required.setHeadingText("General required");
+        fieldSet_general_fields_required.setHeadingText("General details");
         fieldSet_general_fields_required.setCollapsible(true);
         fieldSet_general_fields_required.add(simpleRequiredFieldsContainer);
 
