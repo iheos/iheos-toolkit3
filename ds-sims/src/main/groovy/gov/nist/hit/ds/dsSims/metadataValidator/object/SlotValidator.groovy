@@ -5,6 +5,7 @@ import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.xdsException.XdsInternalException
 
+@Deprecated
 public class SlotValidator {
     SlotModel model
 

@@ -51,7 +51,7 @@ class MetadataValidatorTest extends Specification {
         def submissionSpec =     [    [
                                               type: 'SubmissionSet',
                                               'id': id,
-                                              attributes: []
+                                              attributes: [[name:'submissionTime', values:['2004']]]
                                       ] ]
         def ssXml = new RimGenerator().toRimXml(submissionSpec,'SubmitObjectsRequest')
         Metadata metadata = MetadataParser.parseNonSubmission(ssXml)
@@ -61,7 +61,7 @@ class MetadataValidatorTest extends Specification {
 
         when:
         Closure closure = { simHandle ->
-            new MetadataValidator(simHandle.event, metadata, vc, null).run()
+            new MetadataValidator(simHandle, metadata, vc, null).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.simHandle.event.addArtifact('Metadata', ssXml)

@@ -84,14 +84,14 @@ class RimGenerator {
         def xml = new MarkupBuilder(writer)
         def status = (spec.status) ? "urn:oasis:names:tc:ebxml-regrep:StatusType:${spec.status}" : null
         if (status) {
-            xml.ExtrinsicObject(id: spec.id, mimeType: spec.mimeType,
+            xml.ExtrinsicObject(id: spec.id, mimeType: spec.mimeType, lid: spec.lid,
                     'status': status,
                     objectType: 'urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
                     }
         } else {
-            xml.ExtrinsicObject(id: spec.id, mimeType: spec.mimeType,
+            xml.ExtrinsicObject(id: spec.id, mimeType: spec.mimeType, lid: spec.lid,
                     objectType: 'urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
@@ -105,14 +105,14 @@ class RimGenerator {
         def xml = new MarkupBuilder(writer)
         def status = (spec.status) ? "urn:oasis:names:tc:ebxml-regrep:StatusType:${spec.status}" : null
         if (status) {
-            xml.RegistryPackage(id: spec.id,
+            xml.RegistryPackage(id: spec.id, lid: spec.lid,
                     status: "urn:oasis:names:tc:ebxml-regrep:StatusType:${spec.status}")
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
                     }
             labelSubmissionSet(xml, spec.id)
         } else {
-            xml.RegistryPackage(id: spec.id)
+            xml.RegistryPackage(id: spec.id, lid: spec.lid,)
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
                     }
@@ -126,12 +126,12 @@ class RimGenerator {
         def xml = new MarkupBuilder(writer)
         def status = (spec.status) ? "urn:oasis:names:tc:ebxml-regrep:StatusType:${spec.status}" : null
         if (status) {
-            xml.RegistryPackage(id: spec.id,
+            xml.RegistryPackage(id: spec.id, lid: spec.lid,
                     status: "urn:oasis:names:tc:ebxml-regrep:StatusType:${spec.status}") {
                 spec.attributes.each { evalAttribute(xml, spec.id, it) }
             }
         } else {
-            xml.RegistryPackage(id: spec.id) {
+            xml.RegistryPackage(id: spec.id, lid: spec.lid,) {
                 spec.attributes.each { evalAttribute(xml, spec.id, it) }
             }
         }
@@ -162,7 +162,7 @@ class RimGenerator {
     }
 
     def mkSlot(xml, spec) {
-        xml.SlotValidator(name: spec.name) {
+        xml.Slot(name: spec.name) {
             ValueList {
                 spec.values.each { Value(it) }
             }
@@ -269,7 +269,7 @@ class RimGenerator {
     }
 
     def mkVersion(xml, spec) {
-        xml.VersionInfo(versionName: spec.version)
+        xml.VersionInfo(versionName: spec.value)
     }
 
     def id = 1

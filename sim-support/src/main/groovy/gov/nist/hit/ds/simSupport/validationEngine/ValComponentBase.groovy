@@ -30,12 +30,42 @@ public abstract class ValComponentBase implements ValComponent {
     String description;
     ValidationEngine validationEngine;
 
+    enum Relation { NONE, PEER, CHILD, SELF}
+    Relation parentRelation = Relation.NONE
+
     ValComponentBase() {}
 
-    ValComponentBase(Event event) {
+    ValComponentBase(Event _event) {
+        event = _event
         log.debug "ValComponentBase() - ${this.class.name}"
-        event.startNewValidator(this.class.simpleName)
+//        _event.addPeerResults(this.class.simpleName)
+//        validationEngine = new ValidationEngine(this, _event)
+    }
+
+    ValComponentBase asPeer() { parentRelation = Relation.PEER; return this }
+    ValComponentBase asChild() { parentRelation = Relation.CHILD; return this }
+    ValComponentBase asSelf() { parentRelation = Relation.SELF; return this }
+
+    void runValidationEngine() throws SoapFaultException, RepositoryException {
+        String name = this.class.simpleName
+        log.debug("Running ${parentRelation} ${name}")
+        log.debug("resultsStack before init: ${event.resultsStack}")
+        if (parentRelation == Relation.NONE) throw new ToolkitRuntimeException("Validation ${name} has no established relationhip to parent")
+        if (parentRelation == Relation.PEER) event.addPeerResults(name)
+        else if (parentRelation == Relation.CHILD) event.addChildResults(name)
+        else if (parentRelation == Relation.SELF) event.addSelfResults(name)
+        log.debug("resultsStack after init: ${event.resultsStack}")
+        runBefore()
+        event.flush()
         validationEngine = new ValidationEngine(this, event)
+        validationEngine.run()
+        log.debug("Flushing ${parentRelation} ${name}")
+        event.flush()
+        runAfter()
+        event.flush()
+         log.debug("Closing ${parentRelation} ${name}")
+        if (parentRelation != Relation.SELF)
+            event.close()
     }
 
     ValidationMethod currentValidationMethod() { return validationEngine.currentValidationMethod }
@@ -52,11 +82,12 @@ public abstract class ValComponentBase implements ValComponent {
 
     @Override void setDescription(String description) { this.description = description }
 
-    void runValidationEngine() throws SoapFaultException, RepositoryException { validationEngine.run() }
-
     @Override public boolean showOutputInLogs() { return true }
 
     public void run() throws SoapFaultException, RepositoryException { runValidationEngine() }
+
+    void runBefore() {}
+    void runAfter() {}
 
     ValidationEngine getValidationEngine() { return validationEngine }
 
@@ -97,16 +128,16 @@ public abstract class ValComponentBase implements ValComponent {
         return true;
     }
 
-    public boolean fail(String msg) throws SoapFaultException {
+    public Assertion fail(String msg) throws SoapFaultException {
         Assertion a = ag.fail(msg, currentValidationMethod().required);
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
-    public boolean fail(String msg, String found) throws SoapFaultException {
+    public Assertion fail(String msg, String found) throws SoapFaultException {
         Assertion a = ag.fail(msg, found, currentValidationMethod().required);
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
     public boolean defaultMsg() throws SoapFaultException {
@@ -115,17 +146,17 @@ public abstract class ValComponentBase implements ValComponent {
         return true
     }
 
-    public boolean assertIn(String[] expecteds, String value) throws SoapFaultException {
+    public Assertion assertIn(String[] expecteds, String value) throws SoapFaultException {
         Assertion a = ag.assertIn(expecteds, value, currentValidationMethod().required);
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
-    public boolean assertEquals(String expected, String found) throws SoapFaultException {
+    public Assertion assertEquals(String expected, String found) throws SoapFaultException {
         Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
         log.debug("Assertion: ${a}")
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
     // produces lousy assertion messages - use string
@@ -136,17 +167,17 @@ public abstract class ValComponentBase implements ValComponent {
 //        return !a.failed();
 //    }
 
-    public boolean assertEquals(int expected, int found) throws SoapFaultException {
+    public Assertion assertEquals(int expected, int found) throws SoapFaultException {
         Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
         log.debug("Assertion: ${a}")
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
-    public boolean assertTrue(boolean value) throws SoapFaultException {
+    public Assertion assertTrue(boolean value) throws SoapFaultException {
         Assertion a = ag.assertTrue(value, currentValidationMethod().required);
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
     public boolean assertTrueNoLog(boolean value) throws SoapFaultException {
@@ -155,16 +186,16 @@ public abstract class ValComponentBase implements ValComponent {
         return true;
     }
 
-    public boolean assertFalse(boolean value) throws SoapFaultException {
+    public Assertion assertFalse(boolean value) throws SoapFaultException {
         Assertion a = ag.assertTrue(!value, currentValidationMethod().required);
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
-    public boolean assertNotNull(Object value) throws SoapFaultException {
+    public Assertion assertNotNull(Object value) throws SoapFaultException {
         Assertion a = ag.assertNotNull(value, currentValidationMethod().required);
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
     public boolean assertNotNullNoLog(Object value) throws SoapFaultException {

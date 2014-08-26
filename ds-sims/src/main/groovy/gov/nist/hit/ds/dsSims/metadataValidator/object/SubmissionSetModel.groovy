@@ -3,12 +3,14 @@ package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.xdsException.XdsInternalException
+import groovy.transform.ToString
 import org.apache.axiom.om.OMElement
 
 /**
  * Created by bmajur on 8/18/14.
  */
 @groovy.transform.TypeChecked
+@ToString(includeNames=true,includeSuper=true)
 class SubmissionSetModel extends RegistryObjectModel {
     static List<String> statusValues =
             Arrays.asList(

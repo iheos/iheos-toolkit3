@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.eventLog.assertion
 
 import gov.nist.hit.ds.repository.api.Asset
+import groovy.util.logging.Log4j
 import org.apache.log4j.Logger
 /**
  * Collection of Assertion outputs (execution status of assertion)
@@ -9,6 +10,7 @@ import org.apache.log4j.Logger
  * @author bmajur
  *
  */
+@Log4j
 public class AssertionGroup  {
     List<Assertion> assertions = []
     AssertionStatus worstStatus = AssertionStatus.SUCCESS;
@@ -39,8 +41,10 @@ public class AssertionGroup  {
         if (required && asser.getStatus().ordinal() > worstStatus.ordinal())
             worstStatus = asser.getStatus();
         if (!asser.defaultMsg) removeDefaultMsg()
+        log.debug("...adding assertion to ${toString()}")
         assertions.add(asser);
         assertionIds << asser.id
+        if (asser.failed()) log.debug("...Failed (${(required) ? '' : 'not '} required)")
         asser
     }
 

@@ -55,6 +55,7 @@ class SlotModel extends RegistryObjectModel {
 
      String getName() { return name; }
      List<String> getValues() { return values; }
+    int size() { values.size() }
 
      String getValue(int index) throws  XdsInternalException {
         if (values.size() <= index)

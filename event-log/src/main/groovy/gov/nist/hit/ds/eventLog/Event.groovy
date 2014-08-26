@@ -13,7 +13,7 @@ import groovy.util.logging.Log4j
 class Event {
     InOutMessages inOut = new InOutMessages()
     Artifacts artifacts = new Artifacts();
-    List<AssertionGroup> allAssetionGroups = []
+    Set<AssertionGroup> allAssetionGroups = []
     Fault fault = null
     Asset eventAsset
     EventDAO eventDAO
@@ -32,29 +32,36 @@ class Event {
         AssertionGroupDAO aDAO
         AssertionGroup assertionGroup = new AssertionGroup()
         Asset parentAsset
+        String validatorName
 
-        ValidatorResults(Asset parentAsset) {
+        ValidatorResults(Asset parentAsset, String validatorName) {
             this.parentAsset = parentAsset
+            this.validatorName = validatorName
             aDAO = new AssertionGroupDAO()
             aDAO.init(parentAsset)
         }
         AssertionStatus getStatus() { return assertionGroup.status() }
         def setStatus(AssertionStatus status) { assertionGroup.setErrorStatus(status) }
+
         Asset flush(FlushStatus flushStatus) {
             log.debug("Flushing ${assertionGroup.validatorName} AG")
             if (flushStatus == FlushStatus.Force || assertionGroup?.needsFlushing()) {
                 allAssetionGroups << assertionGroup
-                assertionGroup.saved = true
+//                assertionGroup.saved = true
                 def asset = aDAO.save(assertionGroup)
                 return asset
             }
             return null
         }
+
+        String toString() { "Results:${validatorName}"}
     }
     List<ValidatorResults> resultsStack = []
+
     // Init results collection
     def initResults(Asset parentAsset, validatorName) {
-        def result = new ValidatorResults(parentAsset)
+        if (!parentAsset) parentAsset = eventDAO.validatorsAsset
+        def result = new ValidatorResults(parentAsset, validatorName)
         result.aDAO = new AssertionGroupDAO();
         result.aDAO.init(parentAsset)
         result.assertionGroup = new AssertionGroup()
@@ -64,19 +71,27 @@ class Event {
     ValidatorResults currentResults() { assert resultsStack.size() > 0; return resultsStack.last() }
 
     def addPeerResults(validatorName) {
-        assert !resultsStack.empty
+//        if (resultsStack.empty) { initResults(eventDAO.validatorsAsset, 'TopLevel'); return}
         log.debug("Creating ${validatorName} AG")
-        def result = resultsStack.last()
-        result.flush(FlushStatus.NoForce)
-        def parentAsset = result.parentAsset
-        resultsStack.pop()  // remove item to be replaced
-        initResults(parentAsset, validatorName)
+        Asset parent = (resultsStack.empty) ? eventDAO.validatorsAsset : resultsStack.last().parentAsset
+//        resultsStack.pop()  // remove item to be replaced
+        initResults(parent, validatorName)
+        resultsStack.last().flush(FlushStatus.Force)
     }
     def addChildResults(childName) {
         assert !resultsStack.empty
         def result = resultsStack.last()
-        Asset parent = result.flush(FlushStatus.Force)
-        initResults(parent, childName)
+        initResults(result.parentAsset, childName)
+        result.flush(FlushStatus.Force)
+    }
+    def addSelfResults(validatorName) {
+        if (resultsStack.empty) init()
+    }
+
+    def close() {
+        assert !resultsStack.empty
+        def result = resultsStack.pop()
+        result.flush(FlushStatus.Force)
     }
     def popChildResults() {
         println 'Popping'
@@ -115,13 +130,13 @@ class Event {
         initResults(eventDAO.validatorsAsset, 'TopLevel')
     }
 
-    // start a new peer Validator
-    void startNewValidator(validatorName) { addPeerResults(validatorName) }
-
-    // Called by TransactionRunner when trying to flush an
+    // Called by TransactionRunner when trying to flushAll an
     // entire event.
-    void flush() {
+    void flushAll() {
         flushAllResultsForExit()
+    }
+    void flush() {
+        resultsStack.last().flush(FlushStatus.Force)
         if (!artifacts.empty()) {
             artDAO.save(artifacts)
         }

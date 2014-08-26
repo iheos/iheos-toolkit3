@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
-import gov.nist.hit.ds.dsSims.metadataValidator.datatype.DtmFormat
-import gov.nist.hit.ds.dsSims.metadataValidator.datatype.XonXcnXtnFormat
+import gov.nist.hit.ds.dsSims.metadataValidator.datatype.DtmSubValidator
+import gov.nist.hit.ds.dsSims.metadataValidator.datatype.XonXcnXtnSubValidator
+import gov.nist.hit.ds.dsSims.metadataValidator.field.IdSubValidator
+import gov.nist.hit.ds.dsSims.metadataValidator.field.LidSubValidator
 import gov.nist.hit.ds.dsSims.metadataValidator.field.TopAttsSubValidator
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
@@ -27,12 +29,16 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
         this.knownIds = knownIds
     }
 
-    @Override
-    void run() {
+    void runBefore() {
         if (vc.isXDR)
             vc.isXDRLimited = model.isMetadataLimited();
+    }
 
-        runValidationEngine()
+    void runAfter() {
+        new IdSubValidator(this, model, vc).asSelf().run()
+        new LidSubValidator(this, model, vc).asSelf().run()
+
+        new SubmissionSetSlotsValidator(simHandle, model).asPeer().run()
     }
 
     // Guards
@@ -51,7 +57,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
 
     @Validation(id='Top', msg='Top attributes', ref='')
     def validateTopAtts() {
-        new TopAttsSubValidator(this, model, vc, SubmissionSetModel.statusValues).run()
+        new TopAttsSubValidator(this, model, vc, SubmissionSetModel.statusValues).asSelf().run()
     }
 
 
@@ -84,16 +90,16 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
 			validateDirectSlotsCodedCorrectly(er, vc);
 		} else {
 			//                    name				   multi	format                                                  resource
-			validateSlot(er, 	"submissionTime", 	   false, 	new DtmFormat(er, "Slot submissionTime",            table416),  table416);
-			validateSlot(er, 	"intendedRecipient",   true, 	new XonXcnXtnFormat(er, "Slot intendedRecipient",      table416),  table416);
+			validateSlot(er, 	"submissionTime", 	   false, 	new DtmSubValidator(er, "Slot submissionTime",            table416),  table416);
+			validateSlot(er, 	"intendedRecipient",   true, 	new XonXcnXtnSubValidator(er, "Slot intendedRecipient",      table416),  table416);
 		}
 	}
 
 	public void validateDirectSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
 
 		//                    name				   multi	format                                                  resource
-		validateSlot(er, 	"submissionTime", 	   false, 	new DtmFormat(er, "Slot submissionTime",            table416),  table416);
-		validateSlot(er, 	"intendedRecipient",   true, 	new XonXcnXtnFormat(er, "Slot intendedRecipient",     table416),  table416);
+		validateSlot(er, 	"submissionTime", 	   false, 	new DtmSubValidator(er, "Slot submissionTime",            table416),  table416);
+		validateSlot(er, 	"intendedRecipient",   true, 	new XonXcnXtnSubValidator(er, "Slot intendedRecipient",     table416),  table416);
 	}
 
 	public void validateRequiredSlotsPresent(ErrorRecorder er, ValidationContext vc) {

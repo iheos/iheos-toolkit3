@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
-import gov.nist.hit.ds.dsSims.metadataValidator.datatype.CxFormat
+import gov.nist.hit.ds.dsSims.metadataValidator.datatype.CxSubValidator
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.FormatValidator
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.OidFormat
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.UuidFormat
@@ -9,9 +9,6 @@ import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
-import gov.nist.hit.ds.utilities.xml.XmlUtil
-import org.apache.axiom.om.OMElement
-
 //@groovy.transform.TypeChecked
 public abstract class AbstractRegistryObjectValidator extends ValComponentBase {
     RegistryObjectModel model
@@ -57,30 +54,30 @@ public abstract class AbstractRegistryObjectValidator extends ValComponentBase {
         new SlotValidator(slot).validate(er, multivalue, validator, resource);
     }
 
-    public void validateTopAtts(ValComponentBase base, ValidationContext vc, String tableRef, List<String> statusValues) {
-        validateId(er, vc, "entryUUID", model.id, null);
-
-        if (vc.isSQ && vc.isResponse) {
-            if (model.status == null)
-                er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": availabilityStatus attribute (status attribute in XML) must be present", this, tableRef);
-            else {
-                if (!statusValues.contains(model.status))
-                    er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": availabilityStatus attribute must take on one of these values: " + statusValues + ", found " + model.status, this, "ITI TF-2a: 3.18.4.1.2.3.6");
-            }
-
-            validateId(er, vc, "lid", model.lid, null);
-
-            List<OMElement> versionInfos = XmlUtil.childrenWithLocalName(model.ro, "VersionInfo");
-            if (versionInfos.size() == 0) {
-                er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": VersionInfo attribute missing", this, "ebRIM Section 2.5.1");
-            }
-        }
-
-        if (vc.isSQ && vc.isXC && vc.isResponse) {
-            validateHome(er, tableRef);
-
-        }
-    }
+//    public void validateTopAtts(ValComponentBase base, ValidationContext vc, String tableRef, List<String> statusValues) {
+//        validateId(er, vc, "entryUUID", model.id, null);
+//
+//        if (vc.isSQ && vc.isResponse) {
+//            if (model.status == null)
+//                er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": availabilityStatus attribute (status attribute in XML) must be present", this, tableRef);
+//            else {
+//                if (!statusValues.contains(model.status))
+//                    er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": availabilityStatus attribute must take on one of these values: " + statusValues + ", found " + model.status, this, "ITI TF-2a: 3.18.4.1.2.3.6");
+//            }
+//
+//            validateId(er, vc, "lid", model.lid, null);
+//
+//            List<OMElement> versionInfos = XmlUtil.childrenWithLocalName(model.ro, "VersionInfo");
+//            if (versionInfos.size() == 0) {
+//                er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": VersionInfo attribute missing", this, "ebRIM Section 2.5.1");
+//            }
+//        }
+//
+//        if (vc.isSQ && vc.isXC && vc.isResponse) {
+//            validateHome(er, tableRef);
+//
+//        }
+//    }
 
     // break up into validateId (utility), class, author, EI
     public void validateId(ErrorRecorder er, ValidationContext vc, String attName, String attValue, String resource) {
@@ -199,7 +196,7 @@ public abstract class AbstractRegistryObjectValidator extends ValComponentBase {
                 }
 
             } else if (MetadataSupport.XDSDocumentEntry_patientid_uuid.equals(ei.getIdentificationScheme())){
-                new CxFormat(er, model.identifyingString() + ": " + ei.identifyingString(), "ITI TF-3: Table 4.1.7")
+                new CxSubValidator(er, model.identifyingString() + ": " + ei.identifyingString(), "ITI TF-3: Table 4.1.7")
                         .validate(ei.getValue());
             }
         }

@@ -80,11 +80,11 @@ class TransactionRunner {
         // call run() method
         try {
             instance.invokeMethod('run', null)
-            event.flush()
+            event.flushAll()
         } catch (Throwable t) {
             String actorTrans = actorCode + '/' + transCode
             event.fault = new Fault('Exception', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))
-            event.flush()
+            event.flushAll()
             throw t
         }
     }
@@ -103,11 +103,11 @@ class TransactionRunner {
     public void runTest() {
         try {
             runner(simHandle)
-            event.flush()
+            event.flushAll()
         } catch (Throwable t) {
             String actorTrans = actorCode + '/' + transCode
             event.fault = new Fault('Exception', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))
-            event.flush()
+            event.flushAll()
             throw t
         }
     }

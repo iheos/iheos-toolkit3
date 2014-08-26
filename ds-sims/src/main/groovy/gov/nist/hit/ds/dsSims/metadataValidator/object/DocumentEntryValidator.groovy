@@ -104,13 +104,13 @@ public class DocumentEntryValidator extends AbstractRegistryObjectValidator {
 	public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
 
 		//                    name				   multi	format                                                  resource
-		validateSlot(er, 	"creationTime", 	   false, 	new DtmFormat(er, "Slot creationTime",      table415),  table415);
+		validateSlot(er, 	"creationTime", 	   false, 	new DtmSubValidator(er, "Slot creationTime",      table415),  table415);
 		validateSlot(er, 	"languageCode",		   false, 	new Rfc3066Format(er, "Slot languageCode",      table415),  table415);
-		validateSlot(er, 	"legalAuthenticator",  false, 	new XcnFormat(er, "Slot legalAuthenticator",table415),  table415);
-		validateSlot(er, 	"serviceStartTime",	   false, 	new DtmFormat(er, "Slot serviceStartTime",  table415),  table415);
-		validateSlot(er, 	"serviceStopTime",	   false, 	new DtmFormat(er, "Slot serviceStopTime",   table415),  table415);
+		validateSlot(er, 	"legalAuthenticator",  false, 	new XcnSubValidator(er, "Slot legalAuthenticator",table415),  table415);
+		validateSlot(er, 	"serviceStartTime",	   false, 	new DtmSubValidator(er, "Slot serviceStartTime",  table415),  table415);
+		validateSlot(er, 	"serviceStopTime",	   false, 	new DtmSubValidator(er, "Slot serviceStopTime",   table415),  table415);
 		validateSlot(er, 	"sourcePatientInfo",   true, 	new SourcePatientInfoFormat(er, "Slot sourcePatientInfo", table415),  table415);
-		validateSlot(er, 	"sourcePatientId",     false, 	new CxFormat(er, "Slot sourcePatientId",   table415),  table415);
+		validateSlot(er, 	"sourcePatientId",     false, 	new CxSubValidator(er, "Slot sourcePatientId",   table415),  table415);
 		validateSlot(er, 	"hash",			 	   false, 	new HashFormat(er, "Slot hash",   null), 		        table415);
 		validateSlot(er, 	"size",				   false, 	new IntFormat(er, "Slot size",   table415),             table415);
 		validateSlot(er, 	"URI",				   true, 	new AnyFormat(er, "Slot URI",   table415),   table415);

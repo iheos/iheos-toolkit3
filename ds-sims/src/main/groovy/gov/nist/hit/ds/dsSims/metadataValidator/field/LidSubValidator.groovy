@@ -12,12 +12,12 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 /**
  * Created by bmajur on 8/22/14.
  */
-class IdSubValidator extends ValComponentBase {
+class LidSubValidator extends ValComponentBase {
     ValComponentBase base
     RegistryObjectModel model
     ValidationContext vc
 
-    IdSubValidator(ValComponentBase base, RegistryObjectModel model, ValidationContext vc) {
+    LidSubValidator(ValComponentBase base, RegistryObjectModel model, ValidationContext vc) {
         super(base.event)
         this.base = base
         this.model = model
@@ -27,21 +27,22 @@ class IdSubValidator extends ValComponentBase {
     // Guards
     def sqResponse() { vc.isSQ && vc.isResponse }
     def notSqResponse() { !sqResponse() }
-    def hasId() { model.id != null &&  !model.id.equals("") }
-    def isUUID() { model.id.startsWith("urn:uuid:") }
+    def hasLid() { model.lid != null && !model.lid.equals("") }
+    def isUUID() { model.lid.startsWith("urn:uuid:") }
 
+    @Guard(methodNames = ['sqResponse'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'Id001', msg = 'id must be present', ref='ITI TF-3: 4.1.12.3')
-    def idExistsCheck() { if (!hasId()) fail('Not present') }
+    @Validation(id = 'Lid001', msg = 'lid must be present', ref='ITI TF-3: 4.1.12.3')
+    def lidExistsCheck() { if (!hasLid()) fail('Not present') }
 
-    @Guard(methodNames = ['hasId', 'sqResponse'])
+    @Guard(methodNames = ['sqResponse'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'Id002', msg = 'Response id must be UUID', ref='ITI TF-3: 4.1.12.3')
-    def responseIdIsUUIDCheck() { new UuidFormat(this).validate(model.id) }
+    @Validation(id = 'Lid002', msg = 'Response lid must be UUID', ref='ITI TF-3: 4.1.12.3')
+    def responseLidIsUUIDCheck() { new UuidFormat(this).validate(model.lid) }
 
-    @Guard(methodNames = ['hasId', 'notSqResponse', 'isUUID'])
+    @Guard(methodNames = ['hasLid', 'notSqResponse', 'isUUID'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'Id003', msg = 'UUID has valid format', ref='ITI TF-3: 4.1.12.3')
-    def ifUUIDUUIDCheck() { new UuidFormat(this).validate(model.id) }
+    @Validation(id = 'Lid003', msg = 'UUID has valid format', ref='ITI TF-3: 4.1.12.3')
+    def ifUUIDUUIDCheck() { new UuidFormat(this).validate(model.lid) }
 
 }

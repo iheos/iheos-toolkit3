@@ -11,6 +11,8 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.utilities.xml.XmlUtil
 import org.apache.axiom.om.OMElement
 
+import javax.xml.namespace.QName
+
 /**
  * Created by bmajur on 8/21/14.
  */
@@ -28,6 +30,8 @@ class TopAttsSubValidator extends ValComponentBase {
         this.vc = vc
         this.statusValues = statusValues
         this.model = model
+        println "TopAtts"
+        println model.toString()
     }
 
     @Override
@@ -44,7 +48,7 @@ class TopAttsSubValidator extends ValComponentBase {
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='Top001', msg='availabilityStatus must exist and be properly coded', ref="ITI TF-3: Table 4.1-6")
     def statusCheck() {
-        if (model.status == null) fail('Not found')
+        if (model.status == null) fail('Attribute not found')
         else if (!statusValues.contains(model.status)) fail('Bad value', statusValues.toString())
     }
 
@@ -54,13 +58,17 @@ class TopAttsSubValidator extends ValComponentBase {
     def versionInfoCheck() {
         List<OMElement> versionInfos = XmlUtil.childrenWithLocalName(model.ro, "VersionInfo");
         if (versionInfos.size() == 0) {
-            fail('Missing')
+            fail('Attribute missing')
+        } else {
+            def value = versionInfos[0].getAttribute(new QName('versionName'))
+            if (value == null || value  == '')
+                fail('No value found')
         }
     }
 
     @Guard(methodNames = ['sqResponse', 'xc'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='Top003', msg='homeCommunityId must be coded', ref="ITI TF-3: Table 4.1-6")
+    @Validation(id='Top004', msg='homeCommunityId must be coded', ref="ITI TF-3: Table 4.1-6")
     def homeCheck() {
         if (!hasHome())
             fail('Missing')
@@ -68,7 +76,7 @@ class TopAttsSubValidator extends ValComponentBase {
 
     @Guard(methodNames = ['sqResponse', 'xc', 'hasHome'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='Top004', msg='homeCommunityId length <= 64', ref="ITI TF-3: Table 4.1-6")
+    @Validation(id='Top005', msg='homeCommunityId length <= 64', ref="ITI TF-3: Table 4.1-6")
     def homeSizeCheck() {
         if (model.home.length() > 64)
             fail('Too long (max 64 chars', "Found ${model.home.length()}")
@@ -76,7 +84,7 @@ class TopAttsSubValidator extends ValComponentBase {
 
     @Guard(methodNames = ['sqResponse', 'xc', 'hasHome'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='Top005', msg='homeCommunityId must OID based URN', ref="ITI TF-3: Table 4.1-6")
+    @Validation(id='Top006', msg='homeCommunityId must OID based URN', ref="ITI TF-3: Table 4.1-6")
     def homeOIDCheck() {
         String[] parts = model.home.split(":")
         if (parts.length < 3 || !parts[0].equals("urn") || !parts[1].equals("oid"))

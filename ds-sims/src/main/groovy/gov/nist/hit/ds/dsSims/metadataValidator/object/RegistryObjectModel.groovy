@@ -4,6 +4,7 @@ import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.utilities.xml.XmlUtil
 import gov.nist.hit.ds.xdsException.MetadataException
 import gov.nist.hit.ds.xdsException.XdsInternalException
+import groovy.transform.ToString
 import org.apache.axiom.om.OMElement
 /**
  * Created by bmajur on 8/18/14.
@@ -11,10 +12,14 @@ import org.apache.axiom.om.OMElement
 
 // TODO: Still includes some validator code
 //@groovy.transform.TypeChecked
+@ToString(includeNames=true, excludes="ro, m, owner")
 class RegistryObjectModel {
 
 //    abstract public OMElement toXml() throws XdsInternalException;
 
+    String id = "";
+    String status = null;
+    String home = null;
     List<SlotModel> slots = new ArrayList<SlotModel>();
     String name = "";
     String description = "";
@@ -23,9 +28,6 @@ class RegistryObjectModel {
     List<AuthorModel> authors = new ArrayList<AuthorModel>();
     List<ExternalIdentifierModel> externalIdentifiers = new ArrayList<ExternalIdentifierModel>();
     String version = "1.1";
-    String status = null;
-    String home = null;
-    String id = "";
     String lid;
     OMElement ro;
     Metadata m;

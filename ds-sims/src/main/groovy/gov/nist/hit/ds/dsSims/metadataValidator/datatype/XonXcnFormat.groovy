@@ -21,9 +21,9 @@ public class XonXcnFormat extends FormatValidator {
 			err(input, "Either Organization Name (XON format) or Extended Person Name (XCN) shall be present", xresource);
 
 		if (!parts[0].equals(""))
-			new XonFormat(er, context + ": intendedRecipient(Organization Name)", resource).validate(parts[0]);
+			new XonSubValidator(er, context + ": intendedRecipient(Organization Name)", resource).validate(parts[0]);
 		
 		if (parts.length > 1 && !parts[1].equals(""))
-			new XcnFormat(er, context + ": intendedRecipient(Extended Person Name)", resource).validate(parts[1]);
+			new XcnSubValidator(er, context + ": intendedRecipient(Extended Person Name)", resource).validate(parts[1]);
 	}
 }

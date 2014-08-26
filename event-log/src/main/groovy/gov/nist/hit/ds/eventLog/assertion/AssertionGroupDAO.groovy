@@ -18,7 +18,7 @@ public class AssertionGroupDAO {
     // return AssertionGroup (csv file) Asset
     public Asset save(AssertionGroup ag) throws RepositoryException {
         if (!ag.saveInLog) return null;
-        assert ag.validatorName
+        if (!ag.validatorName) return null
         if (!parentAsset) { log.debug('Not flushing'); return null }
         if (ag.asset) {
             // update

@@ -55,7 +55,7 @@ class SoapHeaderValidatorTest extends Specification {
         when:
         OMElement xml = Parse.parse_xml_string(header)
         Closure closure = { simHandle ->
-            new SoapHeaderValidator(simHandle, xml).run()
+            new SoapHeaderValidator(simHandle, xml).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
@@ -76,7 +76,7 @@ class SoapHeaderValidatorTest extends Specification {
         when:
         OMElement xml = Parse.parse_xml_string(header)
         Closure closure = { simHandle ->
-            new SoapHeaderValidator(simHandle, xml).run()
+            new SoapHeaderValidator(simHandle, xml).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)

@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.dsSims.metadataValidator
 
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.generator.RimGenerator
 import gov.nist.hit.ds.dsSims.reg.DSMetadataProcessing
 import gov.nist.hit.ds.eventLog.testSupport.EventAccess
@@ -59,7 +60,7 @@ class MetadataMessageValidatorTest extends Specification {
         when:
         OMElement xml = Parse.parse_xml_string(ssXml)
         Closure closure = { simHandle ->
-            new DSMetadataProcessing(simHandle, xml).run()
+            new DSMetadataProcessing(simHandle, xml).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.simHandle.event.addArtifact('Metadata', ssXml)
@@ -76,14 +77,17 @@ class MetadataMessageValidatorTest extends Specification {
         def submissionSpec =     [    [
                                               type: 'SubmissionSet',
                                               'id': id,
-                                              attributes: []
+                                              attributes: [[name:'submissionTime', values:['2004']]]
                                       ] ]
         def ssXml = new RimGenerator().toRimXml(submissionSpec,'SubmitObjectsRequest')
 
         when:
         OMElement xml = Parse.parse_xml_string(ssXml)
+        ValidationContext vc = new ValidationContext()
+        vc.isR = true
+        vc.isRequest = true
         Closure closure = { simHandle ->
-            new MetadataMessageValidator(simHandle, xml, null).run()
+            new MetadataMessageValidator(simHandle, xml, vc, null).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.simHandle.event.addArtifact('Metadata', ssXml)

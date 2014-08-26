@@ -43,6 +43,7 @@ class Assertion {
     }
 
     public String getMsg() { msg }
+    void msg(String value) { msg = value }
     public String getFound() { found }
     public String getExpected() { expected }
 }

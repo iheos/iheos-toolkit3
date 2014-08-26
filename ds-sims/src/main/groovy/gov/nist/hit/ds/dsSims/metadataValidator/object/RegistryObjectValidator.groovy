@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
-import gov.nist.hit.ds.dsSims.metadataValidator.datatype.CxFormat
+import gov.nist.hit.ds.dsSims.metadataValidator.datatype.CxSubValidator
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.OidFormat
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.UuidFormat
 import gov.nist.hit.ds.eventLog.Event
@@ -170,7 +170,7 @@ abstract class RegistryObjectValidator extends AbstractRegistryObjectValidator {
                 }
 
             } else if (MetadataSupport.XDSDocumentEntry_patientid_uuid.equals(eiModel.getIdentificationScheme())){
-                new CxFormat(er, model.identifyingString() + ": " + eiModel.identifyingString(), "ITI TF-3: Table 4.1.7")
+                new CxSubValidator(er, model.identifyingString() + ": " + eiModel.identifyingString(), "ITI TF-3: Table 4.1.7")
                         .validate(eiModel.getValue());
             }
         }

@@ -1,4 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator
+
+import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.engine.MetadataValidator
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
@@ -18,14 +20,16 @@ public class MetadataMessageValidator extends ValComponentBase {
 	Metadata m = null
 	RegistryValidationInterface rvi
     SimHandle handle
+    ValidationContext vc
 
 	public Metadata getMetadata() { return m; }
 
-    MetadataMessageValidator(SimHandle handle, OMElement xml, RegistryValidationInterface rvi) {
+    MetadataMessageValidator(SimHandle handle, OMElement xml, ValidationContext vc, RegistryValidationInterface rvi) {
         super(handle.event)
         this.handle = handle
         this.xml = xml
         this.rvi = rvi;
+        this.vc = vc
     }
 
     @Validation(id="MetaParse001", msg="Parse Metadata", ref="??")
@@ -42,7 +46,7 @@ public class MetadataMessageValidator extends ValComponentBase {
     void run() throws SoapFaultException, RepositoryException {
         runValidationEngine()
         event.addChildResults('MetadataValidation')
-        new MetadataValidator(event, m, rvi).run()
+        new MetadataValidator(handle, m, vc, rvi).asPeer().run()
     }
 
 
@@ -65,7 +69,7 @@ public class MetadataMessageValidator extends ValComponentBase {
 			
 //			contentSummary(er, m);
 			
-			MetadataValidator mv = new MetadataValidator(m, vc, rvi);
+			MetadataValidator mv = new MetadataValidator(handle, m, vc, rvi);
 			mv.runObjectStructureValidation(er);
 			mv.runCodeValidation(er);
 			mv.runSubmissionStructureValidation(er);

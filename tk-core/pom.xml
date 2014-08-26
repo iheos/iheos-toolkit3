@@ -27,6 +27,7 @@
         <module>../common-datatypes</module>
         <module>../httpSoapValidator</module>
         <module>../ds-sims</module>
+        <module>../tk-apis</module>
     </modules>
     
     <dependencies>

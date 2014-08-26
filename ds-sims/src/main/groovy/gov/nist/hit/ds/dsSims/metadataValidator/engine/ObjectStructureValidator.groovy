@@ -4,11 +4,9 @@ import gov.nist.hit.ds.dsSims.metadataValidator.RegistryValidationInterface
 import gov.nist.hit.ds.dsSims.metadataValidator.object.SubmissionSetModel
 import gov.nist.hit.ds.dsSims.metadataValidator.object.SubmissionSetValidator
 import gov.nist.hit.ds.metadata.Metadata
-import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import org.apache.axiom.om.OMElement
-
 /**
  * Created by bmajur on 8/4/14.
  */
@@ -30,16 +28,13 @@ class ObjectStructureValidator extends ValComponentBase {
         this.rvi = rvi
     }
 
-    @Override
     void run() {
         if (vc.skipInternalStructure)
             return;
-        runValidationEngine()
 
         for (OMElement ssEle : m.getSubmissionSets()) {
             SubmissionSetModel ssModel = new SubmissionSetModel(m, ssEle)
-            simHandle.event.addChildResults('SubmissionSet(' + ssEle.getAttributeValue(MetadataSupport.id_qname) + ")")
-            new SubmissionSetValidator(simHandle, ssModel, vc, knownIds).run()
+            new SubmissionSetValidator(simHandle, ssModel, vc, knownIds).asPeer().run()
         }
     }
 }

@@ -61,7 +61,7 @@ class SoapMessageParserTest extends Specification {
 '''
         when:
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.runTest()
@@ -89,7 +89,7 @@ class SoapMessageParserTest extends Specification {
 </soapenv:Envelope'''
         when:
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
@@ -109,7 +109,7 @@ class SoapMessageParserTest extends Specification {
 '''
         when:
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
@@ -138,7 +138,7 @@ class SoapMessageParserTest extends Specification {
 '''
         when:
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
@@ -171,7 +171,7 @@ class SoapMessageParserTest extends Specification {
 '''
         when:
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
@@ -197,7 +197,7 @@ class SoapMessageParserTest extends Specification {
 '''
         when:
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
@@ -230,7 +230,7 @@ class SoapMessageParserTest extends Specification {
 '''
         when:
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
@@ -262,7 +262,7 @@ class SoapMessageParserTest extends Specification {
 '''
         when:
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
@@ -294,7 +294,7 @@ class SoapMessageParserTest extends Specification {
 '''
         when:
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)

@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
-import gov.nist.hit.ds.dsSims.metadataValidator.datatype.DtmFormat
+import gov.nist.hit.ds.dsSims.metadataValidator.datatype.DtmSubValidator
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
@@ -47,7 +47,7 @@ public class FolderValidator extends AbstractRegistryObjectValidator {
 	public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
 
 		//                    name				   multi	format                                                  resource
-		validateSlot(er, 	"lastUpdateTime", 	   false, 	new DtmFormat(er, "Slot lastUpdateTime",            table417),  table417);
+		validateSlot(er, 	"lastUpdateTime", 	   false, 	new DtmSubValidator(er, "Slot lastUpdateTime",            table417),  table417);
 	}
 
 	public void validateRequiredSlotsPresent(ErrorRecorder er, ValidationContext vc) {
