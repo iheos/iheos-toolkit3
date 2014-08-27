@@ -32,7 +32,7 @@ class IdSubValidator extends ValComponentBase {
 
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id = 'Id001', msg = 'id must be present', ref='ITI TF-3: 4.1.12.3')
-    def idExistsCheck() { if (!hasId()) fail('Not present') }
+    def idExistsCheck() { assertHasValue(model.id) }
 
     @Guard(methodNames = ['hasId', 'sqResponse'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)

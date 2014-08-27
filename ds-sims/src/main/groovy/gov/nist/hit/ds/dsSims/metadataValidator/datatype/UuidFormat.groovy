@@ -9,9 +9,8 @@ public class UuidFormat extends FormatValidator {
 	}
 
 	public void validate(String input) {
-		if (!isUuid(input)) { base.fail('UUID format', input) }
-//			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, context + ": " + input + " is not in UUID format", this, getResource("ITI TF-3: Table 4.1-3 and section 4.1.12.3"));
-//		}
+//		if (!isUuid(input)) { base.fail('UUID format', input) }
+        base.assertTrue(isUuid(input), input)
 	}
 
 	// example: urn:uuid:488705e6-91e6-47f8-b567-8c06f8472e74

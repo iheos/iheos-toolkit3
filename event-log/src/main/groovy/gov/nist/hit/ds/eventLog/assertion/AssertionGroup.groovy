@@ -105,11 +105,20 @@ public class AssertionGroup  {
      *
      *************************************************************/
 
+    public Assertion assertIn(List<String> expecteds, String found, boolean required) {
+        Assertion a = new Assertion();
+        a.expected = expecteds.toString();
+        a.found = found;
+        for (String value : expecteds) if (value == found) return addAssertion(a, required)
+        a.status = AssertionStatus.ERROR
+        addAssertion(a, required);
+    }
+
     public Assertion assertIn(String[] expecteds, String found, boolean required) {
         Assertion a = new Assertion();
         a.expected = expecteds.toString();
         a.found = found;
-        for (int i=0; i<expecteds.length; i++) if (expecteds[i] == found) return addAssertion(a)
+        for (int i=0; i<expecteds.length; i++) if (expecteds[i] == found) return addAssertion(a, required)
         a.status = AssertionStatus.ERROR
         addAssertion(a, required);
     }
@@ -183,11 +192,36 @@ public class AssertionGroup  {
         return a;
     }
 
+    public Assertion assertHasValue(String value, boolean required) {
+        Assertion a = new Assertion();
+        a.with {
+            expected = 'Non-empty string'
+            found = value
+        }
+        a.status = (value != null && value.size() > 0) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
+        addAssertion(a, required);
+        return a;
+    }
+
     public Assertion assertTrue(boolean ok, boolean required) {
         Assertion a = new Assertion();
         if (ok) {
             a.expected = dashes
             a.found = 'Ok'
+        } else {
+            a.expected = 'True'
+            a.found = (ok) ? 'True' : 'False'
+        }
+        a.status = (ok) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
+        addAssertion(a, required);
+        return a;
+    }
+
+    public Assertion assertTrue(boolean ok, String found, boolean required) {
+        Assertion a = new Assertion();
+        if (ok) {
+            a.expected = dashes
+            a.found = found
         } else {
             a.expected = 'True'
             a.found = (ok) ? 'True' : 'False'

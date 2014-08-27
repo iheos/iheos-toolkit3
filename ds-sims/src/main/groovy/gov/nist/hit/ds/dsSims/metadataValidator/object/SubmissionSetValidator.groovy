@@ -53,12 +53,13 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
             msg("Labeled as Minimal Metadata (Direct)");
         else
             msg ('Labeled as Full Metadata')
-    }
-
-    @Validation(id='Top', msg='Top attributes', ref='')
-    def validateTopAtts() {
         new TopAttsSubValidator(this, model, vc, SubmissionSetModel.statusValues).asSelf().run()
     }
+
+//    @Validation(id='Top', msg='Top attributes', ref='')
+//    def validateTopAtts() {
+//        new TopAttsSubValidator(this, model, vc, SubmissionSetModel.statusValues).asSelf().run()
+//    }
 
 
     public void validate(ErrorRecorder er, ValidationContext vc,

@@ -116,10 +116,10 @@ public abstract class ValComponentBase implements ValComponent {
         return true;
     }
 
-    public boolean infoFound(String found) throws SoapFaultException {
+    public Assertion infoFound(String found) throws SoapFaultException {
         Assertion a = ag.infoFound(found);
         recordAssertion(a);
-        return true;
+        return a;
     }
 
     public boolean msg(String msg) throws SoapFaultException {
@@ -152,6 +152,12 @@ public abstract class ValComponentBase implements ValComponent {
         return a
     }
 
+    public Assertion assertIn(List<String> expecteds, String value) throws SoapFaultException {
+        Assertion a = ag.assertIn(expecteds, value, currentValidationMethod().required);
+        recordAssertion(a);
+        return a
+    }
+
     public Assertion assertEquals(String expected, String found) throws SoapFaultException {
         Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
         log.debug("Assertion: ${a}")
@@ -174,8 +180,21 @@ public abstract class ValComponentBase implements ValComponent {
         return a
     }
 
+    public Assertion assertHasValue(String value) throws SoapFaultException {
+        Assertion a = ag.assertHasValue(value, currentValidationMethod().required);
+        log.debug("Assertion: ${a}")
+        recordAssertion(a);
+        return a
+    }
+
     public Assertion assertTrue(boolean value) throws SoapFaultException {
         Assertion a = ag.assertTrue(value, currentValidationMethod().required);
+        recordAssertion(a);
+        return a
+    }
+
+    public Assertion assertTrue(boolean value, String found) throws SoapFaultException {
+        Assertion a = ag.assertTrue(value, found, currentValidationMethod().required);
         recordAssertion(a);
         return a
     }
