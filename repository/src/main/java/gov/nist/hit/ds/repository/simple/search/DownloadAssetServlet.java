@@ -1,9 +1,5 @@
 package gov.nist.hit.ds.repository.simple.search;
 
-import gov.nist.hit.ds.toolkit.installation.PropertyServiceManager;
-import gov.nist.hit.ds.toolkit.installation.Installation;
-
-
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.PropertyKey;
@@ -17,17 +13,18 @@ import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Properties;
+import gov.nist.hit.ds.toolkit.installation.Installation;
+import gov.nist.hit.ds.toolkit.installation.PropertyServiceManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Properties;
 
 /**
  * @author Sunil.Bhaskarla 
@@ -116,7 +113,7 @@ public class DownloadAssetServlet extends HttpServlet {
 						SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 						criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO,assetId));
 						
-						AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, PropertyKey.DISPLAY_ORDER);
+						AssetIterator iter = new SearchResultIterator(new Repository[]{repos}, criteria, new PropertyKey[]{PropertyKey.DISPLAY_ORDER});
 						
 						if (iter.hasNextAsset()) {
 							a = iter.nextAsset();

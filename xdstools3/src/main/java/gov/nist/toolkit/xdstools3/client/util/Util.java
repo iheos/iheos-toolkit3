@@ -1,6 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.util;
 
-import com.google.gwt.event.shared.SimpleEventBus;
+
+import com.google.web.bindery.event.shared.SimpleEventBus;
 
 /** Stores static variables & variables common to the application. This is a singleton.
  *
@@ -9,13 +10,14 @@ public class Util {
     private static Util instance = null;
 
     // Static variables
-    public static final SimpleEventBus EVENT_BUS =  new SimpleEventBus();
+    public static final SimpleEventBus EVENT_BUS = new SimpleEventBus();
 
     // Variables accessed by getter
     private boolean isLoggedAsAdmin =  false;
 
     // Singleton constructor
-    private Util(){}
+    private Util(){
+    }
 
     public static Util getInstance(){
         if (instance == null) {

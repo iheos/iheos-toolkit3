@@ -144,7 +144,7 @@ public class MiscTest {
 		p.setProperty("y", "3");
 		p.setProperty("l", "4");
 
-		
+
 		System.out.println("******" + PresentationData.getSortedMapString(p));
 
 	}
@@ -168,7 +168,12 @@ public class MiscTest {
             // good!
         }
 
-
+        String val = p.getProperty("nonExistentKey");
+        if (val==null) {
+            // good
+        } else {
+            fail("Value cannot be non-null for non existent key");
+        }
 
         try {
             p.getProperty(null);
@@ -270,5 +275,19 @@ public class MiscTest {
         }
         System.out.println("concMapTest exit");
     }
-	
+
+
+    @Test
+    public void arrayTest() {
+        List<String[]> rows = new ArrayList<String[]>();
+
+        String[] row = new String[]{"ID","STATUS","MSG"};
+
+        rows.add(row);
+
+        String[][] rowArray = rows.toArray(new String[rows.size()][]);
+        System.out.println("array get" + rowArray[0][1]);
+
+        System.out.println("arrayTest exit");
+    }
 }

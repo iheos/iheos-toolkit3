@@ -863,7 +863,7 @@ public class XdsDocumentEntry implements Serializable {
             xml.append("</hash>\n");
         }
 
-        if (healthcareFacilityType.getCode().getString().equals("")) {
+        if (!healthcareFacilityType.getCode().getString().equals("")) {
             xml.append("\t<healthcarefacilitytype>\n");
             xml.append(healthcareFacilityType.toXML());
             xml.append("\t</healthcarefacilitytype>\n");

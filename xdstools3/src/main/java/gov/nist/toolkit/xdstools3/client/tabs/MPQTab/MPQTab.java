@@ -18,17 +18,10 @@ public class MPQTab extends GenericCloseableTab {
 
     public MPQTab() {
         super(header);
-
-        // Set tab header
-        setHeader(header);
-
-        VStack stack = createContents();
-
-        // calls a custom function that sets the contents and keeps the titles
-        setContents(stack);
     }
 
-    public VStack createContents(){
+    @Override
+    protected VStack createContents(){
         // layout
         final VStack mpqPanel = new VStack();
 

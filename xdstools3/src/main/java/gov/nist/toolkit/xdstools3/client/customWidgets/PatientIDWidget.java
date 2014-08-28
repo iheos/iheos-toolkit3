@@ -11,9 +11,9 @@ import com.smartgwt.client.widgets.layout.HStack;
  * @author dazais
  *
  */
-public class PatientIDWidget extends HStack {
-    private DynamicForm form;
-	
+public class PatientIDWidget extends DynamicForm {
+//    private DynamicForm form;
+
 	private String tooltip = "Ex.: 2729f2aca58d47f^^^&1.3.6.1.4.1.21367.2005.3.7&ISO";
     private boolean pidValueEntered = false; //monitors the state of the PID field (value is required).
 
@@ -27,15 +27,15 @@ public class PatientIDWidget extends HStack {
 	     pid.setTooltip(tooltip);
 
         // adds to form
-        form = new DynamicForm();
-        form.setFields(pid);
+//        form = new DynamicForm();
+/*        form.*/setFields(pid);
 
         // adds to canvas
-        addMember(form);
+//        addMember(form);
 
         // add listeners
         // listen to changes in field value
-       form.addItemChangedHandler(new ItemChangedHandler() {
+  /*     form.*/addItemChangedHandler(new ItemChangedHandler() {
 
         public void onItemChanged(ItemChangedEvent event) {
             if (event.getNewValue() != null) pidValueEntered = true;
@@ -48,9 +48,9 @@ public class PatientIDWidget extends HStack {
 }
 
 
-    public DynamicForm getForm() {
-        return form;
-    }
+//    public DynamicForm getForm() {
+//        return form;
+//    }
 
     public boolean isPidValueEntered() {
         return pidValueEntered;

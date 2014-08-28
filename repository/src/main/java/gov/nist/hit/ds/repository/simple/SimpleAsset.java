@@ -351,33 +351,7 @@ public class SimpleAsset implements Asset, Flushable {
 		setProperty(PropertyKey.DISPLAY_ORDER,Integer.toString(order));
 	}
 
-    /**
-     * When the mimeType changes, the previous content file is removed from the repository.
-     * @param mimeType The mimeType
-     * @throws RepositoryException
-     */
-	@Override
-	public void setMimeType(String mimeType) throws RepositoryException {
-		
-		// Cleanup any previous content file to avoid confusion from the old content file based on previous (or the lack of) mimeType value
-		File oldContentFile = getContentFile();
-		String oldMimeType = getMimeType();
-		
-		if (mimeType==null) {
-			
-			// Case 1. mimeType can be null			
-			setProperty(PropertyKey.MIME_TYPE, null);
-			
-		} else if (oldMimeType==null || !mimeType.equalsIgnoreCase(oldMimeType)) { 
-		
-			// Case 2. non-null mimeType
-			setProperty(PropertyKey.MIME_TYPE, mimeType.toLowerCase());			
-		}
-		
-		// Remove OLD content file in both cases
-		deleteContent(oldContentFile);
 
-	}
 
     /**
      * Gets the display order of the asset.
@@ -445,7 +419,7 @@ public class SimpleAsset implements Asset, Flushable {
 		File initialContentFile = null;
 		File finalContentFile = null;
 		
-		 if (part == null && getContentPath()!=null) {
+		if (part == null && getContentPath()!=null) {
 			 initialContentFile = getContentPath();
 		} 
 		if (part!=null) {
@@ -525,27 +499,27 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
-     * Updates the content file using the existing mimeType. Use {@link gov.nist.hit.ds.repository.simple.SimpleAsset#setContent(String, String)} to reset both the content and the mimeType.
-     * @param content raw data
+     * Updates the content file using the existing mimeType. Use {@link gov.nist.hit.ds.repository.simple.SimpleAsset#setContent(byte[], String)} to reset both the content and the mimeType.
+     * @param content The asset content
      *
      * @throws RepositoryException
      */
 	@Override
 	public void updateContent(byte[] content) throws RepositoryException {
 		this.content = content;
-		if (autoFlush) flush(getContentFile()); // getPropFile()
+		if (autoFlush) flushContent(getContentFile());
 	}
 
     /**
      * Set content.
-     * @param content Text content
+     * @param content The asset content
      * @param mimeType The mimeType
      * @throws RepositoryException
      */
 	@Override
-	public void setContent(String content, String mimeType) throws RepositoryException {
-		this.content = content.getBytes();
-		setMimeType(mimeType);
+	public void setContent(byte[] content, String mimeType) throws RepositoryException {
+        setMimeType(mimeType);
+		updateContent(content);
 	}
 
     	/*
@@ -563,6 +537,34 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 	*/
 
+    /**
+     * When the mimeType changes, the previous content file is removed from the repository.
+     * @param mimeType The mimeType, must be a valid type and not null. The string value will be converted to lower-case.
+     * @throws RepositoryException
+     */
+    @Override
+    public void setMimeType(String mimeType) throws RepositoryException {
+        Parameter p = new Parameter();
+        p.setDescription("mimeType");
+        p.assertNotNull(mimeType);
+
+        if (getMimeType()!=null) {
+
+            if (getMimeType().equalsIgnoreCase(mimeType)) {
+
+                // Mime type did not change
+                return;
+            } else {
+
+                // New mime type, delete the old content file
+                deleteContentIfExists(getContentFile());
+
+            }
+        }
+
+        // Set mime type
+        setProperty(PropertyKey.MIME_TYPE, mimeType.toLowerCase());
+    }
 
     /**
      * Associates a child asset to the parent asset. At this point if the parent is a single-file, it is automatically converted to a folder on the filesystem. The properties of the parent are nested inside the parent folder, not at the same-level.
@@ -689,7 +691,7 @@ public class SimpleAsset implements Asset, Flushable {
                 if (!assetPropFile.delete()) {
                     logger.warning("Delete failed: " +assetPropFile.toString());
                 }
-                deleteContent(getContentFile());
+                deleteContentIfExists(getContentFile());
             }
 		}
 	}
@@ -699,12 +701,14 @@ public class SimpleAsset implements Asset, Flushable {
      * @param assetContentFile The content file
      * @throws RepositoryException
      */
-	private void deleteContent(File assetContentFile) throws RepositoryException {
+	private void deleteContentIfExists(File assetContentFile) throws RepositoryException {
 
 		if (assetContentFile!=null && assetContentFile.exists()) {
 			logger.fine("Deleting content file:"+ assetContentFile.toString());
 			if (!assetContentFile.delete()) {
                 logger.warning("File delete failed:" +assetContentFile.toString());
+            } else {
+                setContentPath(null);
             }
 		}		
 	}
@@ -900,7 +904,7 @@ public class SimpleAsset implements Asset, Flushable {
 			}
 			
 		} else {
-			sPart[2] = Configuration.CONTENT_FILE_EXT;
+			sPart[2] = Configuration.CONTENT_FILE_EXT; // The default extension for asset content without a mimeType
 		}
 		return sPart;
 	}
@@ -927,10 +931,6 @@ public class SimpleAsset implements Asset, Flushable {
 		throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
 				"source directory [" + getSource().getLocation().toString() + "] does not exist");
 
-//		if (getProperty(PropertyKey.UPDATED_DATE)==null) {
-//			assertUniqueName(propFile);
-//		}
-				
 		try {			
 			setPropertyTemp(PropertyKey.UPDATED_DATE, new Hl7Date().now());	
 			setExipration();		
@@ -938,21 +938,29 @@ public class SimpleAsset implements Asset, Flushable {
 			FileWriter writer = new FileWriter(propFile);
 			properties.store(writer, "");
 			writer.close();
-			if (content != null) {
-				File contentFile = getContentFile();
-				String[] ext = getContentExtension();
-				if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {					
-					Io.stringToFile(contentFile, new String(content));
-				} else {
-					OutputStream os = new FileOutputStream(contentFile);
-					os.write(content);
-					os.close();
-				}
-			}
+
 		} catch (IOException e) {
 			throw new RepositoryException(RepositoryException.IO_ERROR, e);
 		}
 	}
+
+    private void flushContent(File contentFile) throws RepositoryException {
+        if (getContent() != null) {
+            try {
+                String[] ext = getContentExtension();
+                if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {
+                    Io.stringToFile(contentFile, new String(content));
+                } else {
+                    OutputStream os = new FileOutputStream(contentFile);
+                    os.write(content);
+                    os.close();
+                }
+            } catch (IOException e) {
+                throw new RepositoryException(RepositoryException.IO_ERROR, e);
+            }
+        }
+        return;
+    }
 
 	/**
 	 * @param propFile

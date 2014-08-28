@@ -1,14 +1,12 @@
 package edu.tn.xds.metadata.editor.client;
 
-/* Imports */
-
 import com.google.gwt.activity.shared.ActivityManager;
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
 import edu.tn.xds.metadata.editor.client.home.WelcomePlace;
 import edu.tn.xds.metadata.editor.client.root.MetadataEditorAppView;
@@ -16,21 +14,16 @@ import edu.tn.xds.metadata.editor.client.root.MetadataEditorAppView;
 import java.util.logging.Logger;
 
 /**
- * This is the XDS Metadata Editor Application EntryPoint. That's the first
- * class loaded, which instantiate the different object global to the
- * application.
+ * This is the class to use
  */
-public class MetadataEditorApp implements EntryPoint {
-
+public class MetadataEditorApp implements IsWidget {
     private final static MetadataEditorGinInjector injector = MetadataEditorGinInjector.instance;
     protected static Logger logger = Logger.getLogger(MetadataEditorApp.class.getName());
     private final MetadataEditorEventBus eventBus = injector.getEventBus();
     private final SimplePanel activityPanel = new SimplePanel();
     private MetadataEditorAppView appView;
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onModuleLoad() {
+    public MetadataEditorApp(){
         appView = injector.getMetadataEditorAppView();
 
         PlaceController placeController = injector.getPlaceController();
@@ -46,12 +39,7 @@ public class MetadataEditorApp implements EntryPoint {
 
         activityPanel.add(appView.asWidget());
 
-        RootPanel.get("editorAppContainer").add(activityPanel);
-
-        logger.info("Application Started!");
-
         historyHandler.handleCurrentHistory();
-
 //        appView.addResizeHandler(new ResizeHandler() {
 //            @Override
 //            public void onResize(ResizeEvent event) {
@@ -61,5 +49,16 @@ public class MetadataEditorApp implements EntryPoint {
 //        });
     }
 
+    @Override
+    public Widget asWidget() {
+        return activityPanel;
+    }
 
+    public static MetadataEditorGinInjector getInjector() {
+        return injector;
+    }
+
+    public MetadataEditorEventBus getEventBus() {
+        return eventBus;
+    }
 }

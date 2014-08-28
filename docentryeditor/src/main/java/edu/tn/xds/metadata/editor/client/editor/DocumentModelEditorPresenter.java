@@ -16,8 +16,8 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.Verti
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import edu.tn.xds.metadata.editor.client.MetadataEditorRequestFactory;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
+import edu.tn.xds.metadata.editor.client.event.SaveCurrentlyEditedDocumentEvent;
 import edu.tn.xds.metadata.editor.client.event.SaveFileEvent;
-import edu.tn.xds.metadata.editor.client.event.SaveFileEvent.SaveFileEventHandler;
 import edu.tn.xds.metadata.editor.client.event.StartEditXdsDocumentEvent;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractPresenter;
 import edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry;
@@ -43,6 +43,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
     }
 
     private void initDriver(XdsDocumentEntry model) {
+        this.model = model;
         editorDriver.initialize(view);
         getView().author.initEditorDriver();
 //		getView().title.initEditorDriver();
@@ -56,15 +57,15 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 
             @Override
             public void onStartEditXdsDocument(StartEditXdsDocumentEvent event) {
-                model = event.getDocument();
-                initDriver(model);
+                initDriver(event.getDocument());
             }
         });
-        ((MetadataEditorEventBus) getEventBus()).addSaveFileEventHandler(new SaveFileEventHandler() {
+        ((MetadataEditorEventBus) getEventBus()).addSaveFileEventHandler(new SaveFileEvent.SaveFileEventHandler() {
 
             @Override
             public void onFileSave(SaveFileEvent event) {
                 doSave();
+                ((MetadataEditorEventBus) eventBus).fireSaveCurrentlyEditedDocumentEvent(new SaveCurrentlyEditedDocumentEvent(model));
             }
         });
     }

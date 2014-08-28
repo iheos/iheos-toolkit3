@@ -10,10 +10,10 @@ public class HomeTab extends GenericTab {
 
     public HomeTab(String s) {
         super(s);
-        setContents();
     }
 
-    private void setContents(){
+    @Override
+    protected VStack createContents(){
         HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
         queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
         queriesAndRetrieves.addItem("Find Documents");
@@ -22,6 +22,8 @@ public class HomeTab extends GenericTab {
         HomeBox tools = new HomeBox("Tools");
         tools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         tools.addItem("Message Validator");
+        tools.addItem("Document Metadata Editor");
+        tools.addItem("Pre-Connectathon Tests");
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
@@ -37,7 +39,7 @@ public class HomeTab extends GenericTab {
         LayoutSpacer spacer = new LayoutSpacer();
         spacer.setHeight(30);
         vstack.addMembers(hstack1, spacer, hstack2);
-        setContents(vstack);
+        return vstack;
     }
 
 

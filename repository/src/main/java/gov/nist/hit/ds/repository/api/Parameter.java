@@ -73,23 +73,23 @@ public class Parameter {
 				String valStr = (String)value;
 				if (!((String)param).equals(valStr)) {
 					throw new RepositoryException(getDiagnostic(RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL
-							+ "Provided value ["+ valStr.toString() +"] does not match requirements."));		
+							+ "Provided value ["+ valStr.toString() +"] does not match <" + valStr + ">"));
 				}
 			} else if (value instanceof Boolean) {
 				boolean val = ((Boolean)value).booleanValue();
 				if (new Boolean(param.toString()).booleanValue()!=val) {
-					throw new RepositoryException(getDiagnostic(RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL
-							+ ": Boolean does not match"));
+					throw new RepositoryException(RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL + ": "
+							+ ((!isNullish(getDescription()))?getDescription():" Boolean ") + " is not " + val);
 				}
 			} else {
                 if (!param.equals(value)) {
-                    throw new RepositoryException(getDiagnostic(RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL
-                            + ": Parameter does not match the value provided"));
+                    throw new RepositoryException(RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL + ": "
+                            + ((!isNullish(getDescription()))?getDescription():" Parameter ") +  " does equal to the value provided " + value.toString());
                 }
             }
 		} else {
-			throw new NullPointerException(getDiagnostic(RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL
-					+ ": A null pointer exception has been caught."));
+			throw new NullPointerException(RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL + ": "
+                    + ((!isNullish(getDescription()))?getDescription():"") + ": A null pointer exception has been caught.");
 		}
 		
 	}
@@ -101,13 +101,18 @@ public class Parameter {
      */
 	public void assertParam(Object param) throws RepositoryException {
 		if (param==null) {
-			throw new RepositoryException(getDiagnostic(RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL
-					+  ": Provided param cannot be null."));
+            String expStr = RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL
+                    +  ": Provided param cannot be null.";
+            if (!isNullish(getDescription())) {
+                expStr = RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL
+                        +  ": " + getDescription() + " cannot be null.";
+            }
+			throw new RepositoryException(expStr);
 		}
 		if (param instanceof String) {
 			if ("".equals(((String) param))) {
-				throw new RepositoryException(getDiagnostic(RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL
-						+  ": Provided param cannot be empty."));
+				throw new RepositoryException(RepositoryException.REPOSITORY_API_REQUIREMENT_FAIL
+						+  ": "+ ((!isNullish(getDescription()))?getDescription():"Param ") + " may not be an empty string.");
 			}
 		}
 	}

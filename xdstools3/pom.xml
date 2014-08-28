@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>toolkit3</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>xdstools3</artifactId>
@@ -22,11 +23,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-
-    <scm>
-        <developerConnection>scm:hg:http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</developerConnection>
-      <tag>v3.0.0</tag>
-  </scm>
 
 
     <repositories>
@@ -54,6 +50,11 @@
 
 
     <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>edu.tn.xds.metadata</groupId>-->
+            <!--<artifactId>docentryeditor</artifactId>-->
+            <!--<version>1.0.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -106,13 +107,18 @@
             <version>1.9</version>
         </dependency>
 
-        <!-- Bootstrap3 CSS dependencies -->
-        <dependency>
-            <groupId>org.gwtbootstrap3</groupId>
-            <artifactId>gwtbootstrap3</artifactId>
-            <version>0.6</version>
-            <scope>provided</scope>
-        </dependency>
+        <!-- Local dependencies -->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.toolkit</groupId>-->
+            <!--<artifactId>session_v2</artifactId>-->
+            <!--<version>2.7.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.toolkit</groupId>-->
+            <!--<artifactId>xdstools2</artifactId>-->
+            <!--<version>2.7.0-SNAPSHOT</version>-->
+            <!--<classifier>classes</classifier> &lt;!&ndash; maps to the sources packaged along with the xdstools2 war file &ndash;&gt;-->
+        <!--</dependency>-->
     </dependencies>
 
 
@@ -135,7 +141,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>${gwtVersion}</version>
                 <executions>
                     <execution>
                         <id>compilation_profile</id>
@@ -167,9 +173,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.4.1</version>
-                <configuration>
-                    <tagNameFormat>v@{project.version}</tagNameFormat>
-                </configuration>
             </plugin>
 
             <!-- Maven WAR plugin -->

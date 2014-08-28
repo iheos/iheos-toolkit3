@@ -1,8 +1,7 @@
 package edu.tn.xds.metadata.editor.client.widgets.uploader;
 
-import com.google.gwt.place.shared.PlaceController;
-import edu.tn.xds.metadata.editor.client.editor.EditorPlace;
 import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent;
+import edu.tn.xds.metadata.editor.client.event.StartEditXdsDocumentEvent;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractPresenter;
 import edu.tn.xds.metadata.editor.client.parse.XdsParser;
 import edu.tn.xds.metadata.editor.shared.model.String256;
@@ -12,8 +11,6 @@ import javax.inject.Inject;
 
 public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
 
-    @Inject
-    PlaceController placeController;
     @Inject
     XdsParser xdsParser;
 
@@ -30,13 +27,13 @@ public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
         logger.info("... file parsed.");
         // logger.info("Metadata file: " + model.toXML());
 
-        if (!(placeController.getWhere() instanceof EditorPlace)) {
-            placeController.goTo(new EditorPlace());
-        }
         getEventBus().fireEvent(new NewFileLoadedEvent(model));
+        //  This is the only way I found to make it work
+        getEventBus().fireEvent(new StartEditXdsDocumentEvent(model));
     }
 
     @Override
     public void init() {
+        // don't need to do anything in that particular case
     }
 }

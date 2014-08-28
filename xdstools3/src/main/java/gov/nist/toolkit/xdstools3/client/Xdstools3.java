@@ -13,8 +13,10 @@ import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
 import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
+import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
+import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
@@ -23,7 +25,7 @@ public class Xdstools3 implements EntryPoint {
     private GenericTabSet topTabSet;
 
 
-	public void onModuleLoad() {
+    public void onModuleLoad() {
 
 		// Toolbar
 		Toolbar configBar = new Toolbar();
@@ -37,7 +39,7 @@ public class Xdstools3 implements EntryPoint {
         VLayout mainLayout = new VLayout();
 		mainLayout.addMembers(configBar, topTabSet);
         mainLayout.setStyleName("mainLayout");
-		
+
 		// Attach the contents to the RootLayoutPanel
 		HLayout container = new HLayout();
         container.setAlign(Alignment.CENTER);
@@ -46,8 +48,10 @@ public class Xdstools3 implements EntryPoint {
         container.addMembers(new LayoutSpacer(), mainLayout, new LayoutSpacer());
         mainLayout.setWidth(900); // width has to be set here after use of LayoutSpacers, not in CSS, else it will not work.
 
-		RootLayoutPanel rp = RootLayoutPanel.get();
-		rp.add(container);
+//		RootLayoutPanel rp = RootLayoutPanel.get();
+//		rp.add(container);
+
+        container.draw();
 
         // Smartgwt Console - useful for development, mainly tracking RPC calls
        // SC.showConsole();
@@ -71,20 +75,29 @@ public class Xdstools3 implements EntryPoint {
     public void openTab(String tabName) {
         GenericCloseableTab tab = null;
 
-        if (tabName == TabNamesUtil.getInstance().getAdminTabCode()) {
+        if (tabName.equals(TabNamesUtil.getInstance().getAdminTabCode())) {
             tab = new SettingsTab();
         }
-        else if (tabName == TabNamesUtil.getInstance().getEndpointsTabCode()) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getEndpointsTabCode())) {
             tab = new EndpointConfigTab();
         }
-        else if (tabName == TabNamesUtil.getInstance().getFindDocumentsTabCode()) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getFindDocumentsTabCode())) {
             tab = new FindDocumentTab();
         }
-        else if (tabName == TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getMpqFindDocumentsTabCode())) {
             tab = new MPQTab();
         }
-        else if (tabName == TabNamesUtil.getInstance().getMessageValidatorTabCode()) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getMessageValidatorTabCode())) {
             tab = new MessageValidatorTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getPreConnectathonTestsTabCode())) {
+            tab = new PreConnectathonTestsTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode())) {
+           // create Metadata Editor tab
+           // tab = new GenericCloseableTab("Document Metadata Editor");
+            tab = new DocEntryEditorTab();
+           //Window.open("http://ihexds.nist.gov:12080/xdstools/pidallocate", "", "");
         }
         // update set of tabs
         if (tab != null) {

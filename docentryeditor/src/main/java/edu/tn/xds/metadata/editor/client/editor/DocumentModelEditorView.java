@@ -477,6 +477,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 form.forceLayout();
             }
         });
+//        ((MetadataEditorEventBus) presenter.getEventBus()).fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
     }
 
     /**
@@ -692,6 +693,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // unique id
         uniqueId.setAllowBlanks(false, false);
         uniqueId.addValueFieldValidator(new RegExValidator("^[1-9][0-9]*(\\.[1-9][0-9]*)+(\\^[1-9][0-9]+)?$", "Value's format is not a correct. It is supposed to be a suite of figures separated by periods."));
+
         uniqueId.setEmptyTexts("ex: 2008.8.1.35447^5846", "ex: 2008.8.1.35447");
         uniqueId.setToolTipConfigs(
                 new ToolTipConfig("Unique ID is an OID", "As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)<br/>Unique ID format is \"[1-9](\\.[0-9]+)*]\""),

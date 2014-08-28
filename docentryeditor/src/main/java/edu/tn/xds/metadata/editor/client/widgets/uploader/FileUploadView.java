@@ -110,7 +110,6 @@ public class FileUploadView extends AbstractView<FileUploadPresenter> {
             }
 
         });
-
         form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
 
             @Override
