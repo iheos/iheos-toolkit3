@@ -25,23 +25,12 @@ public class InternationalStringEditableGrid extends GenericEditableGrid<Interna
     private static ColumnConfig<InternationalString, String> titleColumnConfig;
 
     public InternationalStringEditableGrid(String gridTitle) {
-        super(gridTitle, new ListStore<InternationalString>(isprops.key()), buildColumnModel());
-
+        super(gridTitle, new ListStore<InternationalString>(isprops.key())/*, buildColumnModel()*/);
 //        setCheckBoxSelectionModel();
-
-        LanguageCodeComboBox languageCodeComboBox = new LanguageCodeComboBox();
-        languageCodeComboBox.setAllowBlank(false);
-        languageCodeComboBox.setToolTip("The translation language's code is required. It can not be null. Please select one or delete the row.");
-        BoundedTextField tf = new BoundedTextField();
-        tf.setMaxLength(256);
-        tf.setToolTip("This is the translation corresponding to the selected language. This field is required. It can not be null.");
-        tf.setAllowBlank(false);
-        addColumnEditorConfig(languageCodeColumnConfig, languageCodeComboBox);
-        addColumnEditorConfig(titleColumnConfig, tf);
-
     }
 
-    private static ColumnModel<InternationalString> buildColumnModel() {
+    @Override
+    protected ColumnModel<InternationalString> buildColumnModel() {
         List<ColumnConfig<InternationalString, ?>> columnsConfigs = new ArrayList<ColumnConfig<InternationalString, ?>>();
 
         languageCodeColumnConfig = new ColumnConfig<InternationalString, LanguageCode>(
@@ -52,6 +41,19 @@ public class InternationalStringEditableGrid extends GenericEditableGrid<Interna
         columnsConfigs.add(titleColumnConfig);
         return new ColumnModel<InternationalString>(
                 columnsConfigs);
+    }
+
+    @Override
+    protected void buildEditingFields() {
+        LanguageCodeComboBox languageCodeComboBox = new LanguageCodeComboBox();
+        languageCodeComboBox.setAllowBlank(false);
+        languageCodeComboBox.setToolTip("The translation language's code is required. It can not be null. Please select one or delete the row.");
+        BoundedTextField tf = new BoundedTextField();
+        tf.setMaxLength(256);
+        tf.setToolTip("This is the translation corresponding to the selected language. This field is required. It can not be null.");
+        tf.setAllowBlank(false);
+        addColumnEditorConfig(languageCodeColumnConfig, languageCodeComboBox);
+        addColumnEditorConfig(titleColumnConfig, tf);
     }
 
 

@@ -5,6 +5,7 @@ import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.client.editor.ListStoreEditor;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.form.DateField;
@@ -27,24 +28,13 @@ public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date>
 
     ListStoreEditor<DTM> values;
     @Ignore
-    private DateField df = new DateField();
+    private DateField df;
 
     public NameValueDTMEditorWidget(String widgetTitle) {
         super(widgetTitle, new ListStore<DTM>(props.key()), props.dtm());
 
 //        view.setAutoFill(true);
-
-        DateTimeFormat dtf = DateTimeFormat.getFormat("yyyyMMddHHmmss");
-
-        df.setPropertyEditor(new DateTimePropertyEditor(dtf));
-        df.setToolTip("This value is required. The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59");
-        df.setEmptyText("YYYY[MM[DD[hh[mm[ss]]]]] (ex: 201103160830)");
-
-        addEditorConfig(df);
-
-        // Modifying grid cell render for a Date
-        Cell c = new DateCell(DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss"));
-        getColumnModel().getColumn(0).setCell(c);
+//        this.setHeight(75);
 
         values = new ListStoreEditor<DTM>(getStore());
 
@@ -77,7 +67,28 @@ public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date>
     }
 
     @Override
+    protected void buildEditingFields() {
+        DateTimeFormat dtf = DateTimeFormat.getFormat("yyyyMMddHHmmss");
+
+        df = new DateField();
+        df.setPropertyEditor(new DateTimePropertyEditor(dtf));
+        df.setToolTip("This value is required. The format of these values is defined as following: YYYY[MM[DD[hh[mm[ss]]]]]; YYYY is the four digit year (ex: 2014); MM is the two digit month 01-12, where January is 01, December is 12; DD is the two digit day of the month 01-31; HH is the two digit hour, 00-23, where 00 is midnight, 01 is 1 am, 12 is noon, 13 is 1 pm; mm is the two digit minute, 00-59; ss is the two digit seconds, 00-59");
+        df.setEmptyText("YYYY[MM[DD[hh[mm[ss]]]]] (ex: 201103160830)");
+
+        addEditorConfig(df);
+
+        // Modifying grid cell render for a Date
+        Cell c = new DateCell(DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss"));
+        getColumnModel().getColumn(0).setCell(c);
+    }
+
+    @Override
     protected GridModelFactory<DTM> getModelFactory() {
         return DTMFactory.instance;
+    }
+
+    @Override
+    protected ValueProvider<DTM, Date> getValueProvider() {
+        return props.dtm();
     }
 }

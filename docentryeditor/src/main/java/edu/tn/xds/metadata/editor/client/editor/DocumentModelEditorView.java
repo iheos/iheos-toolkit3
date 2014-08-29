@@ -308,10 +308,12 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         serviceStopTime.setListMaxSize(1);
 
         // Size (optional)
-        size.disableEditing();
+//        size.disableEditing();
+        size.setListMaxSize(1);
 
         // Creation Time (required)
         creationTime.disableToolbar();
+        creationTime.setListMaxSize(1);
 
         // AUTHORS (Optional)
         FieldSet fieldSet_authors = new FieldSet();
@@ -510,7 +512,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
         VerticalLayoutContainer vcon = new VerticalLayoutContainer();
         vcon.add(listViewAuthors, new VerticalLayoutData(1, 150));
-        vcon.add(authorFS, new VerticalLayoutData(0.999, -1, new Margins(10, 0, 0, 0)));
+        vcon.add(authorFS, new VerticalLayoutData(0.99, -1, new Margins(10, 0, 0, 0)));
         vcon.add(authorCP, new VerticalLayoutData(-1, 30));
         return vcon;
     }
@@ -597,14 +599,15 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         id.setEmptyText("ex: 123456789");
         id.setToolTipConfig(new ToolTipConfig("ID is a string", "It should contain less than 256 characters"));
         id.setAllowBlank(false);
-        id.addValidator(new RegExValidator("[1-9][0-9]+", "Value is not correct. It is supposed to be a number."));
+//        id.addValidator(new RegExValidator("[1-9][0-9]+", "Value is not correct. It is supposed to be a number."));
+        id.addValidator(new UuidFormatClientValidator());
         // language code
         languageCode.setAllowBlank(false);
         languageCode.setEmptyText("Select a language...");
         languageCode.setToolTipConfig(new ToolTipConfig("LanguageCode from RFC3066", "Language code format is \"[a-z](2)-[A-Z](2)\""));
         // legal authenticator
         legalAuthenticator.setEditingFieldToolTip("A legal authenticator is a string256 in XCN format. It should be formatted as follow: \n<b>Identifier^LastName^FirstName[^SecondName[^FurtherGivenNames]][^Suffix][^Prefix]^AssigningAuthority</b>.");
-        legalAuthenticator.setEmptyTexts("ex: 11375^Welby^Marcus^J^Jr. MD^Dr^^^&1.2.840.113619.6.197&ISO");
+//        legalAuthenticator.setEmptyTexts("ex: 11375^Welby^Marcus^J^Jr. MD^Dr^^^&1.2.840.113619.6.197&ISO");
         legalAuthenticator.addFieldValidator(new RegExValidator("^[0-9]+\\^(([A-Za-z]+\\.?\\s?)+\\^){3,7}\\^{2}&[0-9]+(\\.[0-9]+)*(&ISO)$"));
         legalAuthenticator.setToolbarHelpButtonTooltip(new ToolTipConfig("Help about legal authenticator?", "Represents a participant who has legally authenticated or attested the" +
                 "document within the authorInstitution. Legal authentication implies that " +

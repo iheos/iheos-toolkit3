@@ -18,37 +18,62 @@ import java.util.List;
  * Created by onh2 on 6/11/2014.
  */
 public abstract class GenericEditableListView<M, N> extends GenericEditableGrid<M> {
-    private ColumnConfig<M, N> cc1;
+    private final ValueProvider<? super M, N> valueProvider;
+    protected ColumnConfig<M, N> cc1;
+
 
     public GenericEditableListView(/*Class<M> parametrizedClass,*/ String listTitle, ListStore<M> listStore, ValueProvider<? super M, N> valueProvider) {
-        super(/*parametrizedClass,*/ listTitle, listStore, new ColumnModel<M>(new ArrayList<ColumnConfig<M, ?>>()));
+        super(/*parametrizedClass,*/ listTitle, listStore);
 
-        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
-        cc1 = new ColumnConfig<M, N>(valueProvider, 1000);
-        columnsConfigs.add(cc1);
+        this.valueProvider = valueProvider;
 
-        this.cm = new ColumnModel<M>(columnsConfigs);
-
-        this.setEditable();
+//        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
+//        cc1 = new ColumnConfig<M, N>(valueProvider, 1000);
+//        columnsConfigs.add(cc1);
+//
+//        this.cm = new ColumnModel<M>(columnsConfigs);
+//        this.setEditable();
 
         this.setHideHeaders(true);
     }
 
+    protected abstract ValueProvider<? super M, N> getValueProvider();
+
+    @Override
+    protected ColumnModel<M> buildColumnModel() {
+        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
+        cc1 = new ColumnConfig<M, N>(getValueProvider(), 1000);
+        columnsConfigs.add(cc1);
+
+        return new ColumnModel<M>(columnsConfigs);
+//        return this.cm;
+    }
+
     public void addEditorConfig(Field<N> field) {
-        editing.addEditor(cc1, field);
         field.addHandler(new KeyDownHandler() {
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                     // TODO try to override completeEditing on enter key after a validation failure
-//                    editing.completeEditing();
+                    editing.completeEditing();
                 }
 
             }
         }, KeyDownEvent.getType());
+        editing.addEditor(cc1, field);
     }
 
     public <O> void addEditorConfig(Converter<N, O> converter, final Field<O> field) {
+        field.addHandler(new KeyDownHandler() {
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    // TODO try to override completeEditing on enter key after a validation failure
+                    editing.completeEditing();
+                }
+
+            }
+        }, KeyDownEvent.getType());
         editing.addEditor(cc1, converter, field);
     }
 
@@ -62,20 +87,6 @@ public abstract class GenericEditableListView<M, N> extends GenericEditableGrid<
     @Override
     public <N> void addColumnEditorConfig(ColumnConfig<M, N> columnConfig, final Field<N> field) {
         super.addColumnEditorConfig(columnConfig, field);
-        field.addHandler(new KeyDownHandler() {
-            @Override
-            public void onKeyDown(KeyDownEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    field.validate();
-                    if (field.isValid()) {
-                        editing.completeEditing();
-                        editing.completeEditing();
-                        editing.completeEditing();
-                    }
-                }
-
-            }
-        }, KeyDownEvent.getType());
     }
 
     public void setOneClickToEdit() {

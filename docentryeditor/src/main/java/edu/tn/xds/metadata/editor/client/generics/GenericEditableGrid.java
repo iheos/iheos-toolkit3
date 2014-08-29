@@ -25,6 +25,7 @@ import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import edu.tn.xds.metadata.editor.client.resources.AppImages;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -69,35 +70,43 @@ import java.util.logging.Logger;
  */
 public abstract class GenericEditableGrid<M> extends Grid<M> {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-    // Toolbar elements
+    // private Class<M> clazzM;
+
+    private final VerticalLayoutContainer gridContainer = new VerticalLayoutContainer();
     private final ToolBar toolBar = new ToolBar();
     private final TextButton newItemButton = new TextButton();
     private final TextButton deleteItemsButton = new TextButton();
     private final TextButton clearButton = new TextButton();
     private final TextButton helpButton = new TextButton();
     private final ContentPanel pane = new ContentPanel();
-    private final VerticalLayoutContainer gridContainer = new VerticalLayoutContainer();
-    // private Class<M> clazzM;
     private final ToolTipConfig helpTooltipConfig = new ToolTipConfig();
     protected GridRowEditing<M> editing;
     boolean isAutoShow = true;
+    // Toolbar elements
+    private boolean hasToolbar = true;
     private int storeMaxLength = 0;
+
     private boolean checkBoxEnabled = false;
     private boolean hasHelpButtonEnabled = false;
+    private boolean hasExtraWidget = false;
 
-    public GenericEditableGrid(/* Class<M> parametrizedClass, */String gridTitle, ListStore<M> listStore, ColumnModel<M> cm) {
-        super(listStore, cm);
+    public GenericEditableGrid(/* Class<M> parametrizedClass, */String gridTitle, ListStore<M> listStore) {
+        super(listStore, new ColumnModel<M>(new ArrayList<ColumnConfig<M, ?>>()));
+
+        this.cm = buildColumnModel();
 
         // clazzM = parametrizedClass;
         pane.setHeadingText(gridTitle);
 
-        // FIXME make grid fit the content panel's height
         this.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
+
         this.getView().setAutoFill(true);
         this.setBorders(false);
+
         this.addStyleName("grid-minheight");
-        pane.addStyleName("grid-minheight");
-        gridContainer.addStyleName("grid-minheight");
+        this.setHeight(200);
+//        pane.addStyleName("grid-minheight");
+//        gridContainer.addStyleName("grid-minheight");
 
         newItemButton.setIcon(AppImages.INSTANCE.add());
         newItemButton.setToolTip("Add an new element");
@@ -121,7 +130,9 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         gridContainer.add(super.asWidget(), new VerticalLayoutContainer.VerticalLayoutData(1, 1)); // VerticalLayoutData does not work here why?
         pane.setWidget(gridContainer);
 
+
         setEditable();
+        buildEditingFields();
 
         // some tries to make grid fit panel's height
         this.getView().setAdjustForHScroll(false);
@@ -132,12 +143,18 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         bindUI();
     }
 
+    protected abstract ColumnModel<M> buildColumnModel();
+
+    protected abstract void buildEditingFields();
+
     protected void addWidget(Widget widget) {
+        hasExtraWidget = true;
         widget.addStyleName("topBorder");
         gridContainer.add(widget, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(0, 4, 1, 4)));
     }
 
     protected void addWidgets(Widget...widgets){
+        hasExtraWidget = true;
         boolean firstDone=false;
         for(Widget w:widgets){
             if(firstDone==false){
@@ -272,6 +289,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
     }
 
     public void disableToolbar() {
+        hasToolbar = false;
         toolBar.disable();
         toolBar.setVisible(false);
     }
@@ -341,6 +359,13 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
 
     protected void setStoreMaxLength(int storeMaxLength) {
         this.storeMaxLength = storeMaxLength;
+        if (storeMaxLength == 1) {
+            this.setHeight(70 + (hasToolbar == true ? 25 : 0));
+        } else {
+            if (storeMaxLength < 11) {
+                this.setHeight((28 * storeMaxLength) + (hasExtraWidget == true ? 20 : 0));
+            }
+        }
     }
 
     public void setToolbarHelpButton(String helpContent) {
