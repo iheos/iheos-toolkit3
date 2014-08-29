@@ -8,8 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <!-- no groupId because it is inherited from the parent -->
-    <version>3.0.0-SNAPSHOT</version>
+
     <artifactId>gui-core</artifactId>
     <packaging>pom</packaging>
 
@@ -18,6 +17,30 @@
         <module>../xdstools3</module>
         <module>../docentryeditor</module>
     </modules>
+
+
+    <repositories>
+        <repository>
+            <id>internal-nist-repo-third-party</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>
+        </repository>
+        <repository>
+            <id>internal-nist-repo-snapshots</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>smartgwt</id>
+            <url>http://www.smartclient.com/maven2</url>
+        </repository>
+        <repository>
+            <id>apache-central</id>
+            <url>http://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>codehaus</id>
+            <url>http://repository.codehaus.org/org/codehaus</url>
+        </repository>
+    </repositories>
 
     <dependencies>
 
