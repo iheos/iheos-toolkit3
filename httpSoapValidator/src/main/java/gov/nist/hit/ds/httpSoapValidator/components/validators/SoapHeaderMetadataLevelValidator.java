@@ -14,6 +14,8 @@ public class SoapHeaderMetadataLevelValidator extends ValComponentBase {
 	OMElement metadataLevelEle = null;
 	OMNamespace namespace = null;
 
+    public SoapHeaderMetadataLevelValidator() { super(null); }
+
     @Override
     public void run() throws SoapFaultException, RepositoryException {
 

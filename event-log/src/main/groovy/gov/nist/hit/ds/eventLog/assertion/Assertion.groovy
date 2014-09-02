@@ -15,6 +15,12 @@ class Assertion {
     def location = "";
     RequiredOptional requiredOptional = RequiredOptional.R;
     def saved = false
+    def defaultMsg = false   // overwritten by real message
+
+    String expectedFoundString() {
+        if (expected == '' && found == '') return ''
+        return "Expected: ${expected}; Found: ${found}"
+    }
 
     boolean failed() { return status.isError(); }
 
@@ -37,6 +43,7 @@ class Assertion {
     }
 
     public String getMsg() { msg }
+    void msg(String value) { msg = value }
     public String getFound() { found }
     public String getExpected() { expected }
 }

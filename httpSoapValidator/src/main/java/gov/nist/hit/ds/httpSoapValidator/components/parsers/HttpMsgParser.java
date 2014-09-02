@@ -17,6 +17,9 @@ public class HttpMsgParser extends ValComponentBase {
 	byte[] body;
 	HttpParserBa hparser = null;
 
+    public HttpMsgParser() {
+        super(null);
+    }
 	public HttpMsgParser setMessageContent(HttpMessageContent content) {
 		this.header = content.getHeader();
 		this.body = content.getBody();

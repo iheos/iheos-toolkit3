@@ -127,7 +127,7 @@ public class HttpSoapValTest {
 //		try {
 //			engine.run();
 //		} catch (SimEngineException e) {
-//			System.out.flush();
+//			System.out.flushAll();
 //			e.printStackTrace();
 //			fail();
 //		} catch (RepositoryException e) {

@@ -1,12 +1,11 @@
 package gov.nist.hit.ds.simSupport.transaction
-
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.eventLog.EventFactory
 import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
-import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.xdsException.ExceptionUtil
@@ -17,44 +16,64 @@ import groovy.util.logging.Log4j
  */
 @Log4j
 class TransactionRunner {
-    String endpoint
+//    String endpoint
+    EndpointBuilder endpointBuilder
     String header = ''
     byte[] body = ''
+    SimId simId
     SimHandle simHandle
     def transactionType
     String implClassName
     def event
     def transCode
-    def actorCode
+//    def actorCode
+    def repoName
 
     ////////////////////////////////////////////////////////////////
     // Production support
 
-    TransactionRunner(String endpoint, String header, byte[] body) {
-        this.endpoint = endpoint
+    TransactionRunner(EndpointBuilder _endpointBuilder, String _repoName, String header, byte[] body) {
+        endpointBuilder = _endpointBuilder
+//        this.endpoint = endpoint
+        this.transCode = endpointBuilder.transCode
         this.header = header
         this.body = body
+        repoName = _repoName
         init()
     }
 
-    def init() {
-        def builder = new EndpointBuilder()
-        builder.parse(endpoint)
-        transCode = builder.transCode
-        actorCode = builder.actorCode
-        def simId = builder.simId
-
-        init(simId, transCode)
-
+    TransactionRunner(SimId _simId, String repositoryName, TransactionType _transactionType, String _header, byte[] _body) {
+        header = _header
+        body = _body
+        transactionType = _transactionType
+        simId = _simId
+        repoName = repositoryName
         implClassName = transactionType.implementationClassName
         log.debug("implClassName is ${implClassName}")
+        init2(simId, repositoryName, transactionType.code)
+    }
+    ////////////////////////////////////////////////////////////////
+
+    def init() {
+//        def builder = new EndpointBuilder()
+//        builder.parse(endpoint)
+        transCode = endpointBuilder.transCode
+//        actorCode = endpointBuilder.actorCode
+        def simId = endpointBuilder.simId
+
+        assert repoName
+        assert simId
+        assert transCode
+        init2(simId, transCode, repoName)
+
+        implClassName = transactionType.implementationClassName
+        log.debug("transactionClassName is ${implClassName}")
     }
 
-    def init(simId, transCode) {
-        log.debug 'testinit'
-
-        simHandle = SimUtils.open(simId)
-        event = new EventFactory().buildEvent(SimSupport.simRepo, simHandle.eventLogAsset)
+    private init2(simId, transactionCode, repositoryName) {
+        log.debug("TransactionRunner using repo ${repositoryName}")
+        simHandle = SimUtils.open(simId, repositoryName)
+        event = new EventFactory().buildEvent(simHandle.repository, simHandle.eventLogAsset)
         simHandle.event = event
 
         // Register inputs
@@ -64,14 +83,17 @@ class TransactionRunner {
         event.init()
 
         // Lookup transaction implementation class
-        transactionType = new ActorTransactionTypeFactory().getTransactionType(transCode)
+        transactionType = new ActorTransactionTypeFactory().getTransactionType(transactionCode)
         simHandle.transactionType = transactionType
     }
 
+    def validateRequest() {runAMethod('validateRequest')}
+    def validateResponse() {runAMethod('validateResponse')}
+    def run() { runAMethod('run')}
 
-    def run() {
+    def runAMethod(methodName) {
         // build implementation
-        Class<?> clazz = new SimUtils().class.classLoader.loadClass(implClassName)
+        Class<?> clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
         if (!clazz) throw new ToolkitRuntimeException("Class ${implClassName} cannot be loaded.")
         Object[] params = new Object[1]
         params[0] = simHandle
@@ -79,12 +101,12 @@ class TransactionRunner {
 
         // call run() method
         try {
-            instance.invokeMethod('run', null)
-            event.flush()
+            instance.invokeMethod(methodName, null)
+            event.flushAll()
         } catch (Throwable t) {
-            String actorTrans = actorCode + '/' + transCode
+            String actorTrans = transCode
             event.fault = new Fault('Exception', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))
-            event.flush()
+            event.flushAll()
             throw t
         }
     }
@@ -93,22 +115,25 @@ class TransactionRunner {
     // Unit Test support - run individual validator/simulator component
 
     Closure runner
-    TransactionRunner(String transactionCode, SimId simId, Closure runner)  {
+    TransactionRunner(String transactionCode, SimId simId, repositoryName, Closure runner)  {
         header = 'x'
-        body = 'x'
-        init(simId, transactionCode)
+        body = 'x'.getBytes()
+        repoName = repositoryName
+        transactionType = new ActorTransactionTypeFactory().getTransactionType(transactionCode)
+        init2(simId, transactionCode, repositoryName)
         this.runner = runner
     }
 
     public void runTest() {
         try {
             runner(simHandle)
-            event.flush()
+            event.flushAll()
         } catch (Throwable t) {
-            String actorTrans = actorCode + '/' + transCode
+            String actorTrans = transCode
             event.fault = new Fault('Exception', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))
-            event.flush()
+            event.flushAll()
             throw t
         }
     }
+    ////////////////////////////////////////////////////////////////
 }
