@@ -50,6 +50,6 @@ public interface MessageValidator {
      *                      tree needs to be documented!!!
      * @return results in the form of repository references
      */
-    ValidateBundleResponse validateTransaction(String validatorName, AssetId repositoryId, AssetId transactionAssetId);
+    ValidateTransactionResponse validateTransaction(String validatorName, AssetId repositoryId, AssetId transactionAssetId);
 
 }

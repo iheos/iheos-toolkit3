@@ -7,8 +7,8 @@ import gov.nist.hit.ds.httpSoapValidator.components.parsers.SoapMessageParser
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.tkapis.AssetId
 import gov.nist.hit.ds.tkapis.validation.MessageValidator
-import gov.nist.hit.ds.tkapis.validation.ValidateBundleResponse
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
+import gov.nist.hit.ds.tkapis.validation.ValidateTransactionResponse
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 
 /**
@@ -69,7 +69,7 @@ class ValidatorManager implements MessageValidator {
     }
 
     @Override
-    ValidateBundleResponse validateTransaction(String validatorName, AssetId repositoryId, AssetId transactionAssetId) {
+    ValidateTransactionResponse validateTransaction(String validatorName, AssetId repositoryId, AssetId transactionAssetId) {
         return null
     }
 }
