@@ -31,25 +31,6 @@ public class EventFactory {
         return event
     }
 
-//	public Event buildEvent(SimId simId, String actorShortName, String transactionShortName) throws RepositoryException {
-//		Event event = null;
-//			RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-//			Repository repos = fact.createNamedRepository(
-//					"SimLogs",
-//					"SimLogs",
-//					new SimpleType("eventRepos"),               // repository type
-//					actorShortName + "-" + simId    // repository name
-//					);
-//			Asset eventAsset = repos.createAsset(
-//					nowAsFilenameBase(),
-//					transactionShortName + " Event",
-//					new SimpleType("simEvent"));
-//			event = new Event(eventAsset);
-//			logger.debug("New Event asset <" + eventAsset.getId() + ">");
-//		return event;
-//
-//	}
-
     String nowAsFilenameBase() {
         Date date = new Date();
 

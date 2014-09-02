@@ -19,6 +19,8 @@ public class SimpleSoapEnvironmentValidator extends ValComponentBase {
 	byte[] bodyBytes;
 	String charset = null;
 
+    public SimpleSoapEnvironmentValidator() { super(null); }
+
     @Override
     public void run() throws SoapFaultException, RepositoryException {
 

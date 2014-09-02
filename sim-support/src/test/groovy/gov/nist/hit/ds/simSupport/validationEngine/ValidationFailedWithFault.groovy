@@ -1,7 +1,8 @@
 package gov.nist.hit.ds.simSupport.validationEngine
 
 import gov.nist.hit.ds.repository.api.RepositoryException
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Fault
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 
@@ -14,7 +15,8 @@ class ValidationFailedWithFault extends ValComponentBase{
         runValidationEngine()
     }
 
-    @ValidationFault(id="VAL1", faultCode=FaultCode.ActionNotSupported, msg="One must equal one", ref=["First Grade"])
+    @Fault(code=FaultCode.ActionNotSupported)
+    @Validation(id="VAL1", msg="One must equal one", ref=["First Grade"])
     public void validationTest() throws SoapFaultException {
         assertEquals(1,2);
     }

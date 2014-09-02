@@ -47,6 +47,10 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>tk-apis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
             <artifactId>soap-support</artifactId>
         </dependency>
         <dependency>

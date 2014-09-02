@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.httpSoapValidator.datatypes;
 
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 import org.apache.axiom.om.OMElement;
 
 public class SoapMessage {
@@ -7,7 +8,7 @@ public class SoapMessage {
 	OMElement body;
 	OMElement root;
 	int partCount;
-	
+
 	public int getPartCount() {
 		return partCount;
 	}
@@ -40,6 +41,15 @@ public class SoapMessage {
 		this.body = body;
 		return this;
 	}
+
+    public String getSoapAction() {
+        if (header == null) throw new ToolkitRuntimeException("No SOAP Header");
+        try {
+            return ((OMElement) header.getChildrenWithLocalName("Action").next()).getText();
+        } catch (NullPointerException e) {
+            throw new ToolkitRuntimeException("No SOAP Action");
+        }
+    }
 	
 	
 }

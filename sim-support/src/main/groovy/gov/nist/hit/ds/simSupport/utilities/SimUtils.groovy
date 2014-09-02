@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.utilities
 import gov.nist.hit.ds.repository.api.ArtifactId
 import gov.nist.hit.ds.repository.api.Asset
+import gov.nist.hit.ds.repository.api.Repository
 import gov.nist.hit.ds.repository.simple.SimpleId
 import gov.nist.hit.ds.repository.simple.SimpleType
 import gov.nist.hit.ds.simSupport.client.SimId
@@ -22,10 +23,10 @@ class SimUtils {
     static final eventsAssetName = 'Events'
 
     // TODO: if already exists - verify actorTypeName
-    static SimHandle create(String actorTypeName, SimId simId) {
-        if (exists(simId)) {
+    static SimHandle create(String actorTypeName, SimId simId, String repositoryName) {
+        if (exists(simId, repositoryName)) {
             log.debug("Sim ${simId.id} exists.")
-            return open(simId)
+            return open(simId, repositoryName)
         }
         log.debug("Creating sim ${simId.id}")
         Asset simAsset = RepoUtils.mkAsset(simId.id, new SimpleType('sim'), SimSupport.simRepo)
@@ -39,11 +40,12 @@ class SimUtils {
 
         RepoUtils.mkChild(eventsAssetName, simAsset)
 
-        return open(simId)
+        return open(simId, repositoryName)
     }
 
-    static SimHandle open(SimId simId) {
-        Asset simAsset = sim(simId)
+    static SimHandle open(SimId simId, String repositoryName) {
+        Repository repository = RepoUtils.getRepository(repositoryName)
+        Asset simAsset = sim(simId, repository)
         if (!simAsset) return null
         def simHandle = new SimHandle()
         simHandle.simId = simId
@@ -51,19 +53,25 @@ class SimUtils {
         simHandle.siteAsset = RepoUtils.child(siteAssetName, simAsset)
         simHandle.configAsset = RepoUtils.child(configAssetName, simAsset)
         simHandle.eventLogAsset = RepoUtils.child(eventsAssetName, simAsset)
+        simHandle.repository = repository
 
         return simHandle
     }
 
-    private static boolean exists(SimId simId) {
+    static boolean exists(SimId simId, String repositoryName) {
+        Repository repository = RepoUtils.getRepository(repositoryName)
         try {
-            if (!sim(simId)) return false
+            if (!sim(simId, repository)) return false
             return true
         } catch (Exception e) { return false }
     }
 
-    private static Asset sim(SimId simId) {
-        return RepoUtils.child(simId.id, SimSupport.simRepo)
+//    private static Asset sim(SimId simId) {
+//        return sim(simId, SimSupport.simRepo)
+//    }
+
+    private static Asset sim(SimId simId, Repository repository) {
+        return RepoUtils.child(simId.id, repository)
     }
 
     private static ArtifactId artifactId(SimId simId) { return new SimpleId(simId.id) }

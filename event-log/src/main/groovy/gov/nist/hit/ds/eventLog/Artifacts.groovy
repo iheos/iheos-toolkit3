@@ -9,4 +9,6 @@ public class Artifacts {
         artifactOrder << name
     }
 
+    def empty() { artifactOrder.size() == 0 }
+
 }

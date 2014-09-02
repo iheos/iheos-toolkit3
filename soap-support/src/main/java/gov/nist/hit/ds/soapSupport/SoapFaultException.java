@@ -16,7 +16,7 @@ public class SoapFaultException extends Exception {
     private static final long serialVersionUID = 1L;
     FaultCode faultCode;
     String faultString;
-    String faultActor;
+    String faultTransaction;
     String faultDetail;
 
     public FaultCode getFaultCode() {
@@ -27,8 +27,8 @@ public class SoapFaultException extends Exception {
         return faultString;
     }
 
-    public String getFaultActor() {
-        return faultActor;
+    public String getFaultTransaction() {
+        return faultTransaction;
     }
 
     public String getFaultDetail() {
@@ -39,7 +39,7 @@ public class SoapFaultException extends Exception {
         Fault f = new Fault();
         f.setFaultCode((faultCode == null) ? "" : faultCode.toString());
         f.setFaultMsg(faultString);
-        f.setFaultActor(faultActor);
+        f.setFaultTransaction(faultTransaction);
         f.setFaultDetail(faultDetail);
         return f;
     }
@@ -50,11 +50,11 @@ public class SoapFaultException extends Exception {
      *
      ***************************************************/
 
-    public SoapFaultException(IAssertionGroup er, FaultCode faultCode, String faultString, String faultActor, String faultDetail) {
+    public SoapFaultException(IAssertionGroup er, FaultCode faultCode, String faultString, String faultTransaction, String faultDetail) {
         super(faultCode.toString() + ": " + faultString);
         this.faultCode = faultCode;
         this.faultString = faultString;
-        this.faultActor = faultActor;
+        this.faultTransaction = faultTransaction;
         this.faultDetail = faultDetail;
         if (er != null)
             er.err(XdsErrorCode.Code.SoapFault, this);
@@ -75,7 +75,7 @@ public class SoapFaultException extends Exception {
         a.setStatus(AssertionStatus.FAULT);
         a.setMsg(errorContext.getMsg());
         a.setReference(errorContext.getResource());
-        ag.addAssertion(a);
+        ag.addAssertion(a, true);
         this.faultCode = faultCode;
         this.faultString = errorContext.getMsg();
         this.faultDetail = errorContext.getResource();
@@ -87,7 +87,7 @@ public class SoapFaultException extends Exception {
         a.setFound(faultCode.name());
         a.setStatus(AssertionStatus.FAULT);
         a.setMsg(msg);
-        ag.addAssertion(a);
+        ag.addAssertion(a, true);
         this.faultCode = faultCode;
         this.faultString = msg;
     }
@@ -103,8 +103,8 @@ public class SoapFaultException extends Exception {
         if (faultCode != null)
             buf.append(faultCode.toString());
         buf.append(": ").append(faultString);
-        if (faultActor != null)
-            buf.append("\nactor: ").append(faultActor);
+        if (faultTransaction != null)
+            buf.append("\nactor: ").append(faultTransaction);
         if (faultDetail != null)
             buf.append("\ndetail: ").append(faultDetail);
 
