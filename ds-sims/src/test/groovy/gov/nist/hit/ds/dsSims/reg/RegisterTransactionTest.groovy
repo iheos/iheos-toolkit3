@@ -4,6 +4,7 @@ import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -73,7 +74,7 @@ Host: localhost:9085'''
         SimId simId = new SimId('123')
         def endpoint = 'http://localhost:8080/tools/sim/123/reg/rb'
         SimUtils.create('reg', simId)
-        def transRunner = new TransactionRunner(endpoint, header.trim(), body.trim().bytes)
+        def transRunner = new TransactionRunner(new EndpointBuilder(endpoint), header.trim(), body.trim().bytes)
         transRunner.run()
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
 

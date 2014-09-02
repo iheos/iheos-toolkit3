@@ -13,6 +13,7 @@ import org.apache.axiom.om.OMElement;
  * @author bill
  *
  */
+@Deprecated
 abstract public class MessageValidator {
 	protected ValidationContext vc;
 	public ErrorRecorder er;

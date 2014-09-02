@@ -1,11 +1,14 @@
 package gov.nist.hit.ds.dsSims.reg
+import gov.nist.hit.ds.dsSims.Transaction
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.httpSoapValidator.components.validators.SoapHeaderValidator
 import gov.nist.hit.ds.httpSoapValidator.validators.HttpHeaderValidator
 import gov.nist.hit.ds.httpSoapValidator.validators.SoapMessageParser
 import gov.nist.hit.ds.metadata.*
 import gov.nist.hit.ds.metadata.client.MetadataCollection
+import gov.nist.hit.ds.metadata.store.RegistryFactory
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.tkapis.validation.ValidationStatus
 import gov.nist.hit.ds.xdsException.MetadataException
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import groovy.util.logging.Log4j
@@ -15,7 +18,7 @@ import org.apache.axiom.om.OMElement
  * Created by bmajur on 7/7/14.
  */
 @Log4j
-class RegisterTransaction {
+class RegisterTransaction implements Transaction {
     protected Metadata m = null;
     public MetadataCollection mc;
     public MetadataCollection delta;
@@ -25,14 +28,10 @@ class RegisterTransaction {
     Map<String, String> symbolicToUUID = null;
     List<String> submittedUUIDs;
 
+    RegisterTransaction(SimHandle _simHandle) { simhandle = _simHandle }
 
-    public RegisterTransaction(SimHandle handle) { this.handle = handle }
-
-    public void run() {
-        assert handle
-        assert handle.event
-        log.debug('Starting RegisterTransaction')
-
+    ValidationStatus validateRequest() {
+        handle = _handle
         def httpHdrVal = new HttpHeaderValidator(handle)
         httpHdrVal.run()
 
@@ -46,6 +45,26 @@ class RegisterTransaction {
 
         def metadataParser = new DSMetadataProcessing(handle, body)
         metadataParser.run()
+    }
+
+    @Override
+    ValidationStatus validateResponse() {
+        return null
+    }
+
+    @Override
+    ValidationStatus run() {
+        return null
+    }
+
+    ValidationStatus validateResponse(SimHandle _handle) { handle = _handle}
+
+    ValidationStatus run(SimHandle _handle) {
+        handle = _handle
+        assert handle
+        assert handle.event
+        log.debug('Starting RegisterTransaction')
+
 
 //        def metadataProcessing = new RegisterMetadataProcessing(open, soapBody)
 //        metadataProcessing.run()
@@ -302,5 +321,6 @@ class RegisterTransaction {
             er.err(XdsErrorCode.Code.XDSRegistryError, e1);
         }
     }
+
 }
 

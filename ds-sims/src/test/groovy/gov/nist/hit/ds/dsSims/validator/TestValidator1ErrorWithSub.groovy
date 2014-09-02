@@ -19,10 +19,7 @@ class TestValidator1ErrorWithSub extends ValComponentBase {
     @Validation(id="TV402",  msg="A test Validation", ref="??")
     def val2() { }
 
-    @Override
-    public void run() {
-        runValidationEngine()
-        event.addChildResults('TestValidatorErrorSub1')
-        new TestValidatorErrorSub1(event).run()
+    void runAfter() {
+        new TestValidatorErrorSub1(event).asChild().run()
     }
 }

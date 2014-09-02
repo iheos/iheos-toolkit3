@@ -1,15 +1,16 @@
-package gov.nist.hit.ds.simSupport.validationEngine;
+package gov.nist.hit.ds.simSupport.validationEngine
 
-import gov.nist.hit.ds.eventLog.Event;
-import gov.nist.hit.ds.eventLog.assertion.*;
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation;
+import gov.nist.hit.ds.eventLog.Event
+import gov.nist.hit.ds.eventLog.Fault
+import gov.nist.hit.ds.eventLog.assertion.*
+import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext
 import gov.nist.hit.ds.repository.api.RepositoryException
-import gov.nist.hit.ds.soapSupport.FaultCode;
-import gov.nist.hit.ds.soapSupport.SoapFaultException;
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
+import gov.nist.hit.ds.soapSupport.FaultCode
+import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.ExceptionUtil
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
-import groovy.util.logging.Log4j;
+import groovy.util.logging.Log4j
 
 /**
  * An abstract class that makes use of the SimComponent interface easier
@@ -22,6 +23,8 @@ import groovy.util.logging.Log4j;
  * @author bmajur
  *
  */
+
+// TODO: Needs refactoring - non assert methods should be delegated
 @Log4j
 public abstract class ValComponentBase implements ValComponent {
     public AssertionGroup ag;
@@ -31,7 +34,7 @@ public abstract class ValComponentBase implements ValComponent {
     ValidationEngine validationEngine;
 
     enum Relation { NONE, PEER, CHILD, SELF}
-    Relation parentRelation = Relation.NONE
+    Relation parentRelation = Relation.PEER
 
     ValComponentBase() {}
 
@@ -359,13 +362,20 @@ public abstract class ValComponentBase implements ValComponent {
 
         log.debug("Recording validation ${vf.id()}")
         idsAsserted.add(vf.id());
+        ValidationMethod validationMethod = currentValidationMethod()
 
         String id = vf.id();
         a.setId(id);
         a.setMsg(vf.msg());
         a.setReference(vf.ref());
-        if (a.getStatus().isError() && currentValidationMethod().type == RunType.FAULT) {
+        if (a.getStatus().isError() && validationMethod.type == RunType.FAULT) {
+            a.setCode(validationMethod.faultCode.toString())
             a.setStatus(AssertionStatus.FAULT)
+
+            Fault f = new Fault(vf.msg(), validationMethod.faultCode.toString(), '??', '')
+            event.fault = f
+            event.flush()
+
             throw new SoapFaultException(
                     ag,
                     currentValidationMethod().faultCode,

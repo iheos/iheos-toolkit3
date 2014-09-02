@@ -11,12 +11,19 @@ import groovy.util.logging.Log4j
 @Log4j
 public class AssertionGroupDAO {
     Asset parentAsset
+    AssertionGroup ag
     int order = 1;
 
-    def init(Asset parentAsset) { this.parentAsset = parentAsset }
+    AssertionGroupDAO(AssertionGroup _ag, Asset _parentAsset) {
+        ag = _ag
+        parentAsset = _parentAsset
+    }
+//    def init(Asset parentAsset) { this.parentAsset = parentAsset }
+
+    Asset getAsset() { ag.asset }
 
     // return AssertionGroup (csv file) Asset
-    public Asset save(AssertionGroup ag) throws RepositoryException {
+    public Asset save() throws RepositoryException {
         if (!ag.saveInLog) return null;
         if (!ag.validatorName) return null
         if (!parentAsset) { log.debug('Not flushing'); return null }

@@ -13,5 +13,12 @@
     <groupId>gov.nist.hit.ds</groupId>
     <artifactId>tk-apis</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>repository</artifactId>
+        </dependency>
+    </dependencies>
+
 
 </project>

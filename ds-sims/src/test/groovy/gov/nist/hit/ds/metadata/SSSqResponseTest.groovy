@@ -36,6 +36,7 @@ class SSSqResponseTest extends Specification {
     File repoDataDir
     RepositorySource repoSource
     SimId simId
+    def repoName = 'Sim'
 
     def setup() {
         SimSupport.initialize()
@@ -44,7 +45,7 @@ class SSSqResponseTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('123')
-        SimUtils.create('reg', simId)
+        SimUtils.create('reg', simId, repoName)
     }
 
     def ssModel(spec) {
@@ -61,7 +62,7 @@ class SSSqResponseTest extends Specification {
         Closure closure = { simHandle ->
             new SubmissionSetValidator(simHandle, model, vc, [] as Set).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
         transRunner.simHandle.event.addArtifact('Metadata', ssXml)
         transRunner
     }
@@ -105,7 +106,7 @@ class SSSqResponseTest extends Specification {
         vc.isResponse = true
         def transRunner = run(submissionSpec, vc)
         transRunner.runTest()
-        def assertionGroup = transRunner.simHandle.event.getAssertionGroup('DtmSubValidator')
+        def assertionGroup = transRunner.simHandle.event.getAssertionGroup('SubmissionSetSlotsValidator')
 
         then:
         transRunner.simHandle.event.hasErrors()

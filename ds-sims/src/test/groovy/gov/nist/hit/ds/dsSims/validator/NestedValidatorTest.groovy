@@ -30,6 +30,7 @@ class NestedValidatorTest extends Specification {
     File repoDataDir
     RepositorySource repoSource
     SimId simId
+    String repoName = 'sim'
 
     def setup() {
         SimSupport.initialize()
@@ -38,16 +39,16 @@ class NestedValidatorTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('123')
-        SimUtils.create('reg', simId)
+        SimUtils.create('reg', simId, repoName)
     }
 
     def 'Sequential validators should validate'() {
         when:
         Closure closure = { simHandle ->
-            new TestValidator1(simHandle.event).run()
-            new TestValidator2(simHandle.event).run()
+            new TestValidator1(simHandle.event).asPeer().run()
+            new TestValidator2(simHandle.event).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repoName,  closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 
@@ -60,23 +61,24 @@ class NestedValidatorTest extends Specification {
     def 'Validator with child should validate'() {
         when:
         Closure closure = { simHandle ->
-            new TestValidator1WithSub(simHandle.event).run()
+            new TestValidator1WithSub(simHandle.event).asPeer().asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repoName,  closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
         !transRunner.simHandle.event.hasErrors()
-        eventAccess.assertionGroupFile('TestValidator1WithSub', ['TestValidator1WithSub']).exists()
-        eventAccess.assertionGroupFile('TestValidatorSub1', ['TestValidator1WithSub']).exists()
+        eventAccess.assertionGroupFile('TestValidator1WithSub', []).exists()
+        eventAccess.assertionGroupFile('TestValidatorSub1', []).exists()
     }
+
     def 'Error should propagate up tree'() {
         when:
         Closure closure = { simHandle ->
-            new TestValidator1ErrorWithSub(simHandle.event).run()
+            new TestValidator1ErrorWithSub(simHandle.event).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 

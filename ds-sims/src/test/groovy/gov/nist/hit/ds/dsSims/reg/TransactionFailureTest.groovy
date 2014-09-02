@@ -4,6 +4,7 @@ import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -38,6 +39,7 @@ class TransactionFailureTest extends Specification {
 
     File repoDataDir
     def repoSource
+    def repoName = 'Sim'
 
     def initTest() {
         if (repoDataDir.exists()) {
@@ -57,9 +59,8 @@ class TransactionFailureTest extends Specification {
     def 'Should fail with fault'() {
         when: ''
         def simId = new SimId('123')
-        def endpoint = 'http://localhost:8080/tools/sim/123/my/fault'
-        if (!SimUtils.exists(simId)) SimUtils.create('my', simId)
-        def runner = new TransactionRunner(endpoint, null, null)
+        if (!SimUtils.exists(simId, repoName)) SimUtils.create('my', simId, repoName)
+        def runner = new TransactionRunner(new EndpointBuilder().parse('http://localhost:8080/tools/sim/123/act/fault'), repoName, null, null)
         def handle = runner.simHandle
         def eventAccess = new EventAccess(simId.id, handle.event)
         runner.run()
@@ -79,8 +80,8 @@ class TransactionFailureTest extends Specification {
         when: ''
         def simId = new SimId('123')
         def endpoint = 'http://localhost:8080/tools/sim/123/my/error'
-        if (!SimUtils.exists(simId)) SimUtils.create('my', simId)
-        def runner = new TransactionRunner(endpoint, null, null)
+        if (!SimUtils.exists(simId, repoName)) SimUtils.create('my', simId, repoName)
+        def runner = new TransactionRunner(new EndpointBuilder().parse('http://localhost:8080/tk/sim/123/act/error'), repoName, null, null)
         def handle = runner.simHandle
         def eventAccess = new EventAccess(simId.id, handle.event)
         runner.run()

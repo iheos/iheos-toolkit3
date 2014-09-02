@@ -37,6 +37,7 @@ class MetadataMessageValidatorTest extends Specification {
     File repoDataDir
     RepositorySource repoSource
     SimId simId
+    def repoName = 'Sim'
 
     def setup() {
         SimSupport.initialize()
@@ -45,7 +46,7 @@ class MetadataMessageValidatorTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('123')
-        SimUtils.create('reg', simId)
+        SimUtils.create('reg', simId, repoName)
     }
 
     def 'SubmissionSet passes metadata parser'() {
@@ -62,7 +63,7 @@ class MetadataMessageValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new DSMetadataProcessing(simHandle, xml).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
         transRunner.simHandle.event.addArtifact('Metadata', ssXml)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
@@ -89,7 +90,7 @@ class MetadataMessageValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new MetadataMessageValidator(simHandle, xml, vc, null).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
         transRunner.simHandle.event.addArtifact('Metadata', ssXml)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()

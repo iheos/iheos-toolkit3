@@ -44,7 +44,7 @@ class SubmissionSetSlotsValidator extends ValComponentBase {
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='SSSlot002', msg='submissionTime must be DTM format', ref="ITI TF-3: Table 4.1-6")
     def submissionTimeSlotFormat() {
-        new DtmSubValidator(this, model.getSlot('submissionTime').getValue(0)).asSelf()run()
+        new DtmSubValidator(this, model.getSlot('submissionTime').getValue(0)).asSelf().run()
     }
 
     // TODO: When is intendedRecipient required

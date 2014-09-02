@@ -8,98 +8,51 @@ import groovy.util.logging.Log4j
  */
 @Log4j
 class ActorTransactionTypeFactory {
-    private static Map<String, TransactionType> transactionTypeMap
-    private static Map<String, ActorType> actorTypeMap
+    private static Map<String, TransactionType> transactionByName
+    private static Map<String, ActorType> actorByName
+    private static Map<String, TransactionType> transactionByRequestAction
+    private static Map<String, TransactionType> transactionByResponseAction
 
     ActorTransactionTypeFactory() { init() }
 
     def clear() {
-        transactionTypeMap.clear()
-        actorTypeMap.clear()
+        transactionByName.clear()
+        actorByName.clear()
+        transactionByRequestAction.clear()
+        transactionByResponseAction.clear()
     }
 
     static def init() {
-        if (actorTypeMap) return
-        transactionTypeMap = new HashMap<String, TransactionType>()
-        actorTypeMap = new HashMap<String, ActorType>()
+        if (actorByName) return
+        transactionByName = new HashMap<String, TransactionType>()
+        actorByName = new HashMap<String, ActorType>()
+        transactionByRequestAction = new HashMap<String, TransactionType>()
+        transactionByResponseAction = new HashMap<String, TransactionType>()
     }
 
-    ActorType getActorTypeIfAvailable(String type) { return actorTypeMap.get(type) }
+    ActorType getActorTypeIfAvailable(String type) { return actorByName.get(type) }
 
-    TransactionType getTransactionTypeIfAvailable(String type) { return transactionTypeMap.get(type) }
+    TransactionType getTransactionTypeIfAvailable(String type) { return transactionByName.get(type) }
 
     ActorType getActorType(String type) {
-        ActorType actorType = actorTypeMap.get(type)
+        ActorType actorType = actorByName.get(type)
         if (actorType) return actorType
         throw new ToolkitRuntimeException("ActorType ${type} does not exist.")
     }
 
     TransactionType getTransactionType(String type) {
-        TransactionType transactionType = transactionTypeMap.get(type)
+        TransactionType transactionType = transactionByName.get(type)
         if (transactionType) return transactionType
-        throw new ToolkitRuntimeException("TransactionType ${type} does not exist.")
+        throw new ToolkitRuntimeException("TransactionType ${type} does not exist. Types ${transactionByName.keySet()} are defined")
     }
 
-    Collection<TransactionType> getTransactionTypes() { return transactionTypeMap.values() }
+    Collection<TransactionType> getTransactionTypes() { return transactionByName.values() }
 
-    List<String> getActorTypeNames() { return actorTypeMap.keySet() }
+    List<String> getActorTypeNames() { return actorByName.keySet() }
 
-    void loadFromResource(String resourceName) {
-        loadFromString(this.class.getClassLoader().getResourceAsStream(resourceName).text)
-    }
+    TransactionType getTransactionTypeFromRequestAction(String action) { return transactionByRequestAction.get(action)}
+    TransactionType getTransactionTypeFromResponseAction(String action) { return transactionByResponseAction.get(action)}
 
-    void loadFromString(String config) {
-        def records = new XmlSlurper().parseText(config)
-        def transactions = records.transaction
-        def actors = records.actor
-        transactions.each { parseTransactionType(it) }
-        actors.each { parseActorType(it) }
-    }
-
-    void parseTransactionType(tt) {
-        TransactionType ttype = new TransactionType()
-        ttype.id = tt.@id
-        ttype.shortName = tt.@id
-        ttype.name = tt.@id
-        ttype.code = tt.@code
-        ttype.asyncCode = tt.@asyncCode
-        ttype.requestAction = tt.request.@action
-        ttype.responseAction = tt.response.@action
-        ttype.implementationClassName = tt.@class
-        if (tt.params) {
-            ttype.multiPart = tt.params.@multiPart == 'true'
-            ttype.soap = tt.params.@soap == 'true'
-        }
-        transactionTypeMap.put(ttype.id, ttype)
-        transactionTypeMap.put(ttype.code, ttype)
-        transactionTypeMap.put(ttype.asyncCode, ttype)
-        tt.property.each {
-            String name = it.@name.text()
-            String value = it.@value.text()
-            ttype.putTransactionProperty(name, value)
-        }
-        log.debug("Loading ${ttype}")
-    }
-
-    void parseActorType(at) {
-        ActorType atype = new ActorType()
-        atype.name = at.@displayName
-        atype.shortName = at.@id
-        atype.actorSimFactoryClassName = at.simFactoryClass.@class
-        at.transaction.each { trans ->
-            def ttid = trans.@id
-            def tt = transactionTypeMap.get(ttid.text())
-            if (!tt)
-                throw new ToolkitRuntimeException("Transaction ${ttid} not defined - ${transactionTypeMap.keySet()}")
-            atype.getTransactionTypes().add(tt)
-        }
-        at.property.each {
-            String name = it.@name.text()
-            String value = it.@value.text()
-            atype.putActorProperty(name, value)
-        }
-        actorTypeMap.put(atype.getShortName(), atype)
-        log.debug("Loading ${atype}")
-    }
-
+    void loadFromResource(String resourceName) { new ActorTransactionTypeDAO(this).loadFromResource(resourceName) }
+    void loadFromString(String config) { new ActorTransactionTypeDAO(this).loadFromString(config)}
 }

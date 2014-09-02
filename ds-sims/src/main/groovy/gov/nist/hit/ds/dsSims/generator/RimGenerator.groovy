@@ -176,7 +176,7 @@ class RimGenerator {
             Name {
                 LocalizedString(value: spec.display)
             }
-            SlotValidator(name: 'codingScheme') {
+            Slot(name: 'codingScheme') {
                 ValueList {
                     Value(spec.system)
                 }
@@ -199,47 +199,43 @@ class RimGenerator {
                 objectType: 'urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification',
                 nodeRepresentation: '') {
             if (spec.person) {
-                xml.SlotValidator(name: 'authorPerson') {
+                xml.Slot(name: 'authorPerson') {
                     ValueList {
-                        Value {
-                            spec.person
-                        }
+                        Value ( spec.person )
                     }
                 }
             }
             if (spec.institutions) {
-                xml.SlotValidator(name: 'authorInstitution') {
+                xml.Slot(name: 'authorInstitution') {
                     ValueList {
                         spec.institutions.each {
-                            Value { it }
+                            Value ( it )
                         }
                     }
                 }
             }
-            if (spec.role) {
-                xml.SlotValidator(name: 'authorRole') {
+            if (spec.roles) {
+                xml.Slot(name: 'authorRole') {
                     ValueList {
-                        spec.role.each {
-                            Value { it }
+                        spec.roles.each {
+                            Value ( it )
                         }
                     }
                 }
             }
             if (spec.specialty) {
-                xml.SlotValidator(name: 'authorSpecialty') {
+                xml.Slot(name: 'authorSpecialty') {
                     ValueList {
                         spec.specialty.each {
-                            Value { it }
+                            Value ( it )
                         }
                     }
                 }
             }
             if (spec.telecom) {
-                xml.SlotValidator(name: 'authorTelecommunication') {
+                xml.Slot(name: 'authorTelecommunication') {
                     ValueList {
-                        Value {
-                            spec.telecom
-                        }
+                        Value ( spec.telecom )
                     }
                 }
             }

@@ -37,8 +37,8 @@ class Event {
         ValidatorResults(Asset parentAsset, String validatorName) {
             this.parentAsset = parentAsset
             this.validatorName = validatorName
-            aDAO = new AssertionGroupDAO()
-            aDAO.init(parentAsset)
+            aDAO = new AssertionGroupDAO(assertionGroup, parentAsset)
+//            aDAO.init(parentAsset)
         }
         AssertionStatus getStatus() { return assertionGroup.status() }
         def setStatus(AssertionStatus status) { assertionGroup.setErrorStatus(status) }
@@ -48,7 +48,7 @@ class Event {
             if (flushStatus == FlushStatus.Force || assertionGroup?.needsFlushing()) {
                 allAssetionGroups << assertionGroup
 //                assertionGroup.saved = true
-                def asset = aDAO.save(assertionGroup)
+                def asset = aDAO.save()
                 return asset
             }
             return null
@@ -62,26 +62,25 @@ class Event {
     def initResults(Asset parentAsset, validatorName) {
         if (!parentAsset) parentAsset = eventDAO.validatorsAsset
         def result = new ValidatorResults(parentAsset, validatorName)
-        result.aDAO = new AssertionGroupDAO();
-        result.aDAO.init(parentAsset)
         result.assertionGroup = new AssertionGroup()
         result.assertionGroup.validatorName = validatorName
+        result.aDAO = new AssertionGroupDAO(result.assertionGroup, parentAsset);
+//        result.aDAO.init(parentAsset)
         resultsStack << result
     }
     ValidatorResults currentResults() { assert resultsStack.size() > 0; return resultsStack.last() }
 
     def addPeerResults(validatorName) {
-//        if (resultsStack.empty) { initResults(eventDAO.validatorsAsset, 'TopLevel'); return}
         log.debug("Creating ${validatorName} AG")
         Asset parent = (resultsStack.empty) ? eventDAO.validatorsAsset : resultsStack.last().parentAsset
-//        resultsStack.pop()  // remove item to be replaced
         initResults(parent, validatorName)
         resultsStack.last().flush(FlushStatus.Force)
     }
     def addChildResults(childName) {
         assert !resultsStack.empty
         def result = resultsStack.last()
-        initResults(result.parentAsset, childName)
+//        initResults(result.parentAsset, childName)
+        initResults(result.getaDAO().getAsset(), childName)
         result.flush(FlushStatus.Force)
     }
     def addSelfResults(validatorName) {
@@ -90,29 +89,44 @@ class Event {
 
     def close() {
         assert !resultsStack.empty
+        println "Closing from ${resultsStack}"
         def result = resultsStack.pop()
+        if (!resultsStack.empty)
+            propagateStatus(result, resultsStack.last())
         result.flush(FlushStatus.Force)
     }
     def popChildResults() {
-        println 'Popping'
+        println "Popping from ${resultsStack}"
         assert !resultsStack.empty
         def result = resultsStack.pop()
         if (!resultsStack.empty) {
             def parentResult = resultsStack.last()
-            println 'Has Parent'
-            println "status is ${result.getStatus()}"
-            if (result.getStatus() >= AssertionStatus.WARNING) {
-                parentResult.setStatus(result.getStatus())
-                println "parent status is now ${parentResult.getStatus()}"
-                result.flush(FlushStatus.Force)
-                return
-            }
+            propagateStatus(result, parentResult)
+//            log.debug("Propagate status from ${result.validatorName} to ${parentResult.validatorName}?")
+//            println 'Has Parent'
+//            println "status is ${result.getStatus()}"
+//            if (result.getStatus() >= AssertionStatus.WARNING) {
+//                parentResult.setStatus(result.getStatus())
+//                println "parent status is now ${parentResult.getStatus()}"
+//                result.flush(FlushStatus.Force)
+//                return
+//            }
         }
         if (result.getStatus() >= AssertionStatus.WARNING)
             result.flush(FlushStatus.Force)
         else
             result.flush(FlushStatus.NoForce)
     }
+
+    def propagateStatus(ValidatorResults from, ValidatorResults to) {
+        log.debug("Propagate status from ${from.validatorName} to ${to.validatorName}?")
+        println "status is ${from.getStatus()}"
+        if (from.getStatus() >= AssertionStatus.WARNING) {
+            to.setStatus(from.getStatus())
+            println "parent status is now ${to.getStatus()}"
+        }
+    }
+
     def flushAllResultsForExit() {
         // it is important that this be done bottom up so errors can
         // propagate up

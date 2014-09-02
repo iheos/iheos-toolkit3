@@ -32,6 +32,7 @@ class SoapMessageParserTest extends Specification {
     File repoDataDir
     RepositorySource repoSource
     SimId simId
+    def repName = 'Sim'
 
     def setup() {
         SimSupport.initialize()
@@ -40,7 +41,7 @@ class SoapMessageParserTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('123')
-        SimUtils.create('reg', simId)
+        SimUtils.create('reg', simId, repName)
     }
 
     def 'SoapMessageParser should succeed'() {
@@ -63,7 +64,7 @@ class SoapMessageParserTest extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repName, closure)
         transRunner.runTest()
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
 
@@ -91,7 +92,7 @@ class SoapMessageParserTest extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repName, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 
@@ -111,7 +112,7 @@ class SoapMessageParserTest extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repName, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 
@@ -140,7 +141,7 @@ class SoapMessageParserTest extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repName, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 
@@ -173,7 +174,7 @@ class SoapMessageParserTest extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repName, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 
@@ -199,7 +200,7 @@ class SoapMessageParserTest extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repName, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 
@@ -232,7 +233,7 @@ class SoapMessageParserTest extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repName, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 
@@ -264,7 +265,7 @@ class SoapMessageParserTest extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repName, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 
@@ -296,7 +297,7 @@ class SoapMessageParserTest extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageParser(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repName, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 

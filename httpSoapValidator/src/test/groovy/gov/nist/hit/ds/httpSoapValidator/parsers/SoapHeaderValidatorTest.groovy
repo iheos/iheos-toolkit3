@@ -34,6 +34,7 @@ class SoapHeaderValidatorTest extends Specification {
     File repoDataDir
     RepositorySource repoSource
     SimId simId
+    def repoName = 'Sim'
 
     def setup() {
         SimSupport.initialize()
@@ -42,7 +43,7 @@ class SoapHeaderValidatorTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('123')
-        SimUtils.create('reg', simId)
+        SimUtils.create('reg', simId, repoName)
     }
 
     def 'SoapHeaderValidator should succeed'() {
@@ -57,7 +58,7 @@ class SoapHeaderValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new SoapHeaderValidator(simHandle, xml).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 
@@ -78,7 +79,7 @@ class SoapHeaderValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new SoapHeaderValidator(simHandle, xml).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
         transRunner.runTest()
 

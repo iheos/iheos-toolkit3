@@ -130,7 +130,7 @@ class RimParserTest extends Specification {
     }
 
     def 'Parse ExternalIdentifier in EO'() {
-        def rim = '''
+        String rim = '''
 <wrapper xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0">
   <rim:ExtrinsicObject id="eo1">
         <rim:ExternalIdentifier identificationScheme="urn:uuid:2e82c1f6-a085-4c72-9da3-8640a32e42ab"

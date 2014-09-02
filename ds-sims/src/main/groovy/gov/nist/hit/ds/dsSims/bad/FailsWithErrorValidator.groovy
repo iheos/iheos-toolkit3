@@ -17,13 +17,10 @@ class FailsWithErrorValidator extends ValComponentBase {
         setName(getClass().getSimpleName());
     }
 
+//    @Fault(code=FaultCode.Sender)
     @Validation(id="Failing001", msg="This shall fail", ref="??")
     public void validationStep() throws SoapFaultException {
         assertEquals('a', 'b')
-    }
-
-    void run() {
-        runValidationEngine()
     }
 
     @Override

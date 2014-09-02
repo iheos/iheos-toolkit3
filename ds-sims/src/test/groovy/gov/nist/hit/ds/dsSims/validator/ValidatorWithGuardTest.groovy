@@ -29,6 +29,7 @@ class ValidatorWithGuardTest extends Specification {
     File repoDataDir
     RepositorySource repoSource
     SimId simId
+    def repoName = 'Sim'
 
     def setup() {
         SimSupport.initialize()
@@ -37,20 +38,20 @@ class ValidatorWithGuardTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('123')
-        SimUtils.create('reg', simId)
+        SimUtils.create('reg', simId, repoName)
     }
 
     def 'Basic guard test'() {
         when:
         Closure closure = { simHandle ->
-            new TestValidatorWithGuard(simHandle.event).run()
+            new TestValidatorWithGuard(simHandle.event).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
         transRunner.runTest()
         def assertionGroup = transRunner.simHandle.event.getAssertionGroup('TestValidatorWithGuard')
         println transRunner.simHandle.event.allAssetionGroups
-        transRunner.simHandle.event.allAssetionGroups[0].assertions.each { println it }
-        transRunner.simHandle.event.allAssetionGroups[0].assertionIds.each { println it }
+//        transRunner.simHandle.event.allAssetionGroups[0].assertions.each { println it }
+//        transRunner.simHandle.event.allAssetionGroups[0].assertionIds.each { println it }
 
         then:
         !transRunner.simHandle.event.hasErrors()
@@ -61,14 +62,14 @@ class ValidatorWithGuardTest extends Specification {
     def 'Two guard test'() {
         when:
         Closure closure = { simHandle ->
-            new TestValidatorWithGuard(simHandle.event).run()
+            new TestValidatorWithGuard(simHandle.event).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
         transRunner.runTest()
         def assertionGroup = transRunner.simHandle.event.getAssertionGroup('TestValidatorWithGuard')
         println transRunner.simHandle.event.allAssetionGroups
-        transRunner.simHandle.event.allAssetionGroups[0].assertions.each { println it }
-        transRunner.simHandle.event.allAssetionGroups[0].assertionIds.each { println it }
+//        transRunner.simHandle.event.allAssetionGroups[0].assertions.each { println it }
+//        transRunner.simHandle.event.allAssetionGroups[0].assertionIds.each { println it }
 
         then:
         !transRunner.simHandle.event.hasErrors()
@@ -81,14 +82,14 @@ class ValidatorWithGuardTest extends Specification {
     def 'Guard with late trigger test'() {
         when:
         Closure closure = { simHandle ->
-            new TestValidatorWithGuard3(simHandle.event).run()
+            new TestValidatorWithGuard3(simHandle.event).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, closure)
+        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
         transRunner.runTest()
         def assertionGroup = transRunner.simHandle.event.getAssertionGroup('TestValidatorWithGuard3')
         println transRunner.simHandle.event.allAssetionGroups
-        transRunner.simHandle.event.allAssetionGroups[0].assertions.each { println it }
-        transRunner.simHandle.event.allAssetionGroups[0].assertionIds.each { println it }
+//        transRunner.simHandle.event.allAssetionGroups[0].assertions.each { println it }
+//        transRunner.simHandle.event.allAssetionGroups[0].assertionIds.each { println it }
 
         then:
         !transRunner.simHandle.event.hasErrors()

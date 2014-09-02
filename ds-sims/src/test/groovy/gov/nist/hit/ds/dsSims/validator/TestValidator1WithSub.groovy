@@ -22,7 +22,6 @@ class TestValidator1WithSub extends ValComponentBase {
     @Override
     public void run() {
         runValidationEngine()
-        event.addChildResults('TestValidatorSub1')
-        new TestValidatorSub1(event).run()
+        new TestValidatorSub1(event).asPeer().run()
     }
 }
