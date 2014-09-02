@@ -223,7 +223,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 
 
     /**
-     * Gets immediate children of the parent but not the grandchildren, however, there is an indicator {@code HASCHILDREN} of the presence of children attached to the child node.
+     * Gets the immediate children of the parent but not the grandchildren, however, there is an indicator {@code HASCHILDREN} of the presence of children attached to the child node.
      * @param an The parent node.
      * @return Children
      * @throws RepositoryException
@@ -241,7 +241,27 @@ public class PresentationData implements IsSerializable, Serializable  {
 				
 	}
 
-	
+
+    /**
+     * Gets the children of the parent.
+     * @param an The parent node.
+     * @return Parent with children.
+     * @throws RepositoryException
+     */
+    public static AssetNode getChildren(AssetNode an) throws RepositoryException {
+        Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
+
+        AssetNodeBuilder anb = new AssetNodeBuilder(Depth.CHILDREN);
+        try {
+            anb.getChildren(repos, an);
+            return an;
+        } catch (RepositoryException re) {
+            logger.warning(re.toString());
+        }
+        return null;
+
+    }
+
 	/**
      * Gets a repository object array from {@code String} array.
 	 * @param repos repository array
@@ -407,22 +427,33 @@ public class PresentationData implements IsSerializable, Serializable  {
 	 * @throws RepositoryException
 	 */
 	private static Repository getCannedQueryRepos() throws RepositoryException {
-		RepositoryFactory reposFact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-		ArtifactId id = new SimpleId("saved-queries");
-		
-		Repository repos = null;
-		try {
-			repos = reposFact.getRepository(id);	
-		} catch (RepositoryException re) {
-			repos = reposFact.createNamedRepository(
-					id.getIdString(),
-					"repository search query",
-					new SimpleType("savedQueryRepos"),
-					id.getIdString()
-					);			
-		}
-		return repos;
+
+
+        Access accessType = Access.RW_EXTERNAL;
+        Repository repos = null;
+        ArtifactId id = new SimpleId("saved-queries");
+        try {
+            repos = getRepositoryByName(accessType,id);
+        } catch (RepositoryException re) {
+            RepositoryFactory reposFact = new RepositoryFactory(Configuration.getRepositorySrc(accessType));
+            repos = reposFact.createNamedRepository(
+                    id.getIdString(),
+                    "repository search query",
+                    new SimpleType("savedQueryRepos"),
+                    id.getIdString()
+            );
+        }
+
+        return repos;
 	}
+
+    private static Repository getRepositoryByName(Access accessType, ArtifactId id)  throws RepositoryException {
+        RepositoryFactory reposFact = new RepositoryFactory(Configuration.getRepositorySrc(accessType));
+
+        Repository repos = reposFact.getRepository(id);
+
+        return repos;
+    }
 
     /**
      * Gets a list of asset nodes from the specified repository.
@@ -581,6 +612,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 		aDst.setDisplayName(aSrc.getDisplayName());
 		aDst.setMimeType(aSrc.getMimeType());
 		aDst.setReposSrc(aSrc.getSource().getAccess().name());
+        aDst.setExtendedProps(an.getExtendedProps()); // This is from the original assetNode
+
 		if (aSrc.getPath()!=null)
 			aDst.setLocation(aSrc.getPath().toString());
 
@@ -735,6 +768,29 @@ public class PresentationData implements IsSerializable, Serializable  {
 		return repos;
 	}
 
+    public static String getJmsHostAddress() {
+
+        String localJms = "tcp://localhost:10002";
+        try {
+            Repository repos = getRepositoryByName(Access.RW_EXTERNAL, new SimpleId("transactions-cap"));
+
+            String jmsHostAddress = repos.getProperties().getProperty("jmsHostAddress");
+            if (jmsHostAddress!=null && !"".equals(jmsHostAddress)) {
+                return jmsHostAddress;
+            } else {
+                return localJms;
+            }
+
+        } catch (RepositoryException re) {
+            // Ok, default to local JMS port
+            logger.fine(re.toString());
+        }
+
+        return localJms;
+
+    }
+
+
     /**
      * Gets updates from the JMS queue.
      * @param queue The JMS queue.
@@ -746,6 +802,7 @@ public class PresentationData implements IsSerializable, Serializable  {
         //ArrayList<AssetNode> result = new ArrayList<AssetNode>();
         Map<String,AssetNode> result =  new HashMap<String,AssetNode>();
 
+        String jmsHostAddress = getJmsHostAddress();
         MessageConsumer consumer = null;
         javax.jms.QueueSession session = null;
         javax.jms.QueueConnection connection = null;
@@ -765,7 +822,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 
             Hashtable<String,String> env = new Hashtable<String, String>();
             env.put(Context.INITIAL_CONTEXT_FACTORY, FFMQConstants.JNDI_CONTEXT_FACTORY);
-            env.put(Context.PROVIDER_URL, "tcp://localhost:10002");
+//            env.put(Context.PROVIDER_URL, "tcp://localhost:10002");
+            env.put(Context.PROVIDER_URL, jmsHostAddress);
             Context context = new InitialContext(env);
 
             // Lookup a connection factory in the context
@@ -852,6 +910,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                     headerMsg.getExtendedProps().put("fromIp",fromIp);
                     headerMsg.getExtendedProps().put("toIp",toIp);
                     headerMsg.getExtendedProps().put("type",msgType);
+
 
                     if (bodyLoc!=null) {
                         AssetNode bodyMsg = new AssetNode();

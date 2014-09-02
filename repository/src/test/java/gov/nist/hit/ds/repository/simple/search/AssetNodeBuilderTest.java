@@ -82,20 +82,50 @@ public class AssetNodeBuilderTest {
 			
 			System.out.println("*** chain test ***");
 			AssetNode chain = anb.getParentChain(repos, grandchild, true);
-			chainTest(chain);
+			chainTest(chain, "builderTest");
 			
 		} catch (Exception ex) {
 			fail("builder test failed.");
 		}
 	}
 	
-	private void chainTest(AssetNode an) {
+	private void chainTest(AssetNode an, String prefix) {
 		for (AssetNode child : an.getChildren()) {
-			System.out.println(child.getLocation());
+			System.out.println(prefix + " chain test: " + child.getLocation());
 			if (child.getChildren()!=null) {
-				chainTest(child);
+				chainTest(child, prefix);
 			}
 		}
 	
 	}
+
+
+    @Test
+    public void getParentChildrenTest() {
+        try {
+            AssetNodeBuilder anb = new AssetNodeBuilder(AssetNodeBuilder.Depth.PARENT_ONLY);
+            List<AssetNode> tree = anb.build(repos, PropertyKey.CREATED_DATE);
+            System.out.println(tree.toString());
+            // Inspect the tree here
+
+            AssetNode parentNode = tree.get(0);
+            assertTrue("parent".equals(parentNode.getDisplayName()));
+
+            try {
+
+                chainTest(parentNode, "*** before ");
+                AssetNode parentChildren =  anb.getChildren(repos, parentNode);
+
+                chainTest(parentChildren, "***");
+
+                chainTest(parentNode, "***");
+
+            } catch (RepositoryException re) {
+                fail(re.toString());
+            }
+
+        } catch (Exception ex) {
+            fail("builder test failed.");
+        }
+    }
 }

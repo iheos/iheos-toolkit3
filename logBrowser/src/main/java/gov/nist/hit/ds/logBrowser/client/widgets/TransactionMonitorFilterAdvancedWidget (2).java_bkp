@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
@@ -26,13 +27,14 @@ import gov.nist.hit.ds.logBrowser.client.event.ListenerStatusEvent;
 import gov.nist.hit.ds.logBrowser.client.event.ListenerStatusEventHandler;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEvent;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEventHandler;
-import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.properties.PropertyKey;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
 import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
 
+import java.lang.Override;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -96,100 +98,24 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
     }
 
     private Widget createFilteredMonitorPanel() {
-        TransactionMonitorAdvancedWidget txMonitorFilter = new TransactionMonitorAdvancedWidget(eventBus,false,false,true);
-        txMonitorFilter.setAutoShowFirstMessage(true);
-        txMonitorFilter.getElement().getStyle()
+        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus,false,false,true);
+        txMonitor.setAutoShowFirstMessage(true);
+        txMonitor.getElement().getStyle()
                 .setProperty("border", "none");
 
-        setTxFilter(txMonitorFilter);
+        setTxFilter(txMonitor);
 
         StackLayoutPanel stackPanel = new StackLayoutPanel(Style.Unit.EM);
         //stackPanel.setHeight("100%");
         stackPanel.setWidth("100%");
 
-
-        ///////////////////// Add filter section
-        stackPanel.add(createFilterWidget(), createPanelHeader("", createCriteriaOptions(), null), HEADER_SIZE); // Not the filter monitor but the filter selection
-
-        // filterSplitPanel.addWest(stackPanel, Math.round(.3 * Window.getClientWidth()));
-        // stackPanel = new StackLayoutPanel(Style.Unit.EM);
-        // stackPanel.setWidth("100%");
-
-
-        // This is the filtered results section
-        stackPanel.add(txMonitorFilter, createPanelHeader("",createFilterHeaderOptions(),null), HEADER_SIZE);
-
-        stackPanel.showWidget(1); // Show the filter results section
+        stackPanel.add(txMonitor, createPanelHeader("",createFilterHeaderOptions(),null), HEADER_SIZE);
 
         return stackPanel;
 
     }
 
 
-
-    /** backup code with different stack panel layout
-    private Widget setupFilterSelectionAndMonitorPanel() {
-
-        // SplitLayoutPanel filterSplitPanel = new SplitLayoutPanel(2);
-
-        // Create a new stack layout panel.
-        StackLayoutPanel stackPanel = new StackLayoutPanel(Style.Unit.EM);
-        //stackPanel.setHeight("100%");
-        stackPanel.setWidth("100%");
-
-        // Add filter section
-        stackPanel.add(createFilterWidget(), createPanelHeader("", createCriteriaOptions(), null), HEADER_SIZE); // Not the filter monitor but the filter selection
-
-        // filterSplitPanel.addWest(stackPanel, Math.round(.3 * Window.getClientWidth()));
-        // stackPanel = new StackLayoutPanel(Style.Unit.EM);
-        // stackPanel.setWidth("100%");
-
-        // Add live monitor section
-        setTxMonitorLive(createLiveTxMonitorWidget());
-
-
-        // eventBus.addHandler(BackendFilteredMessageEvent.TYPE
-
-        eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
-            @Override
-            public void onNewTxMessage(NewTxMessageEvent event) {
-
-                // no longer needed with built-in pager control
-                // getLiveCounterTxt().setText("("+ (event.getMessageCount()) + ")");
-                filter(event.getAnMap());
-                // getTxFilter().popTx(event.getAnMap());
-            }
-        });
-
-        eventBus.addHandler(ListenerStatusEvent.TYPE, new ListenerStatusEventHandler() {
-            @Override
-            public void onListenerStatus(ListenerStatusEvent event) {
-                updateListenerStatusIndicator(event.getListening());
-            }
-        });
-
-
-//
-//        Use this for backend (fixed) filtering -- does not take on the fly updates to filter
-//
-//        eventBus.addHandler(FilterSelectedEvent.TYPE, new FilterSelectedEventHandler() {
-//            @Override
-//            public void onFilterSelected(FilterSelectedEvent event) {
-//                getTxMonitorLive().setFilterEnabled(true);
-//                getTxMonitorLive().setFilterLocation(event.getFilterLocation());
-//            }
-//        });
-//
-
-
-                stackPanel.add(getTxMonitorLive(), createPanelHeader("", createMonitorHeaderOptions(), null), HEADER_SIZE);
-
-        // filterSplitPanel.add(stackPanel);
-
-        return stackPanel;
-    }
-
-    */
 
 
     private Widget setupFilterSelectionAndMonitorPanel() {
@@ -245,10 +171,15 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
         // filterSplitPanel.add(stackPanel);
 
 
+        ///////////////////// Add filter section
+        stackPanel.add(createFilterWidget(), createPanelHeader("", createCriteriaOptions(), null), HEADER_SIZE); // Not the filter monitor but the filter selection
+
+        // filterSplitPanel.addWest(stackPanel, Math.round(.3 * Window.getClientWidth()));
+        // stackPanel = new StackLayoutPanel(Style.Unit.EM);
+        // stackPanel.setWidth("100%");
 
         return stackPanel;
     }
-
 
     private List<Widget> createCriteriaOptions() {
         List<Widget> options = new ArrayList<Widget>();
@@ -308,10 +239,10 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
         if (on) {
             statusImg = "ok";
-            statusImgText = "The monitor is connected to the JMS queue at "+  getTxMonitorLive().getJmsHostAddress()  +".";
+            statusImgText = "Ready to receive messages from the proxy";
         } else {
             statusImg = "error";
-            statusImgText = "The monitor cannot receive messages from the JMS queue at "+  getTxMonitorLive().getJmsHostAddress()  +". Are both the FFMQ service and the proxy running?";
+            statusImgText = "Cannot receive messages from the proxy: Is the FFMQ service running?";
         }
 
         getListenerStatusIndicator().setHTML(("<span style=\"width:32px;height:32px;\"><img height=16 width=16 src='" + GWT.getModuleBaseForStaticFiles() + "images/environment_"
@@ -358,6 +289,30 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
         });
         options.add(optClear);
 
+        HTML lblShowTrans = new HTML("&nbsp;&nbsp;Select message timespan: ");
+        lblShowTrans.setStyleName("stackPanelHeaderLabelText");
+        options.add(lblShowTrans);
+
+        ListBox tranSelector = new ListBox();
+        tranSelector.addItem("");
+        tranSelector.addItem("1 day");
+        tranSelector.addItem("2 days");
+        tranSelector.addItem("3 days");
+        tranSelector.addItem("All");
+        tranSelector.setStyleName("stackPanelHeaderLabelText");
+        tranSelector.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+
+                // This is required in case the panel is collapsed and a click on the listbox causes panel to expand while leaving the options dropdown separated.
+                event.stopPropagation();
+            }
+        });
+         options.add(tranSelector);
+
+//        HTML lblTransactions = new HTML("transactions");
+//        lblTransactions.setStyleName("stackPanelHeaderLabelText");
+//        options.add(lblTransactions);
 
         return options;
     }
@@ -401,9 +356,9 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
         // Add the image and text to a horizontal panel
         HorizontalPanel hPanel = new HorizontalPanel();
-        //hPanel.setWidth("100%");
+//        hPanel.setWidth("100%");
         hPanel.setSpacing(0);
-        hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE); //ALIGN_MIDDLE
         hPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 
         if (icon!=null) {

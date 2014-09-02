@@ -45,7 +45,8 @@ public class AssetNodeBuilder {
 	public List<AssetNode> build(Repository repos, PropertyKey orderByKey) throws RepositoryException {
 		return build(repos, orderByKey.toString());
 	}
-	
+
+
 	public List<AssetNode> build(Repository repos, String orderByKey) throws RepositoryException {
 			
 		List<AssetNode> topLevelAssets = new ArrayList<AssetNode>();
@@ -264,9 +265,9 @@ public class AssetNodeBuilder {
 	}
 	
 	
-	private void getChildren(Repository repos, AssetNode parent) {
-		if (parent.getAssetId()==null)
-			return;
+	public AssetNode getChildren(Repository repos, AssetNode parent) throws RepositoryException {
+//		if (parent!=null && parent.getAssetId()==null)
+//			return null;
 		
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 
@@ -301,7 +302,7 @@ public class AssetNodeBuilder {
 			logger.warning(e.toString());
 		}
 
-
+        return parent;
 	}
 
 	public Depth getRetrieveDepth() {

@@ -29,6 +29,7 @@ public interface RepositoryService extends RemoteService  {
 	public List<AssetNode> getAssetTree(String[][] repos) throws RepositoryConfigException;
 	public AssetNode getAssetTxtContent(AssetNode an) throws RepositoryConfigException;
 	public List<AssetNode> getImmediateChildren(AssetNode an) throws RepositoryConfigException;
+    public AssetNode getChildren(AssetNode an) throws RepositoryConfigException;
 	public AssetNode getParentChain(AssetNode an) throws RepositoryConfigException;
     public List<AssetNode> getParentChainInTree(AssetNode an) throws RepositoryConfigException;
 	public Boolean isRepositoryConfigured() throws RepositoryConfigException;
@@ -37,4 +38,5 @@ public interface RepositoryService extends RemoteService  {
 	public AssetNode saveSearchCriteria(QueryParameters qp) throws RepositoryConfigException;
 	public List<AssetNode> getSavedQueries(String id, String acs) throws RepositoryConfigException;
     public Map<String,AssetNode> getTxUpdates(String queue, String filterLocation) throws RepositoryConfigException;
+    public String getJmsHostAddress() throws RepositoryConfigException;
 }

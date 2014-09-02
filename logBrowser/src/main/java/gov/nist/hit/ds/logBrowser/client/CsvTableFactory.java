@@ -5,6 +5,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +39,12 @@ public class CsvTableFactory {
         }
     }
 
-    public CellTable<List<SafeHtml>> createCellTable(String [][]csv) {
+    public CellTable<List<SafeHtml>> createCellTable(ListDataProvider<List<SafeHtml>> dataProvider , String [][]csv) {
         // Create a CellTable (based on Stack ans. 15122103).
         // CellTable<List<String>> table = new CellTable<List<String>>();
-        CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>();
+        CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>(256); // FIXME: set pager, limit to first 256
+
+        table.setSelectionModel(new SingleSelectionModel<List<SafeHtml>>());
 
         // Get the rows as List
         int rowLen = csv.length;
@@ -56,8 +59,7 @@ public class CsvTableFactory {
                     new TextHeader(csv[0][c]));
         }
 
-        // Create a list data provider.
-        final ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
+
         dataProvider.setList(rows);
 
         dataProvider.addDataDisplay(table);

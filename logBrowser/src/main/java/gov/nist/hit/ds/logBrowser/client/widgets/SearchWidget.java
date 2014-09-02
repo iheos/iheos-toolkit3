@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
+import gov.nist.hit.ds.logBrowser.client.event.asset.SearchResultAssetClickedEvent;
 import gov.nist.hit.ds.logBrowser.client.event.FilterSelectedEvent;
 import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
@@ -270,7 +270,7 @@ public class SearchWidget extends Composite {
 							assetLnk.addClickHandler(new ClickHandler() {
 								
 								public void onClick(ClickEvent event) {
-									eventBus.fireEvent(new AssetClickedEvent(an)); // Need to use AssetNode									
+									eventBus.fireEvent(new SearchResultAssetClickedEvent(an)); // Need to use AssetNode
 								}
 							});
 							resultFt.setWidget(row,2, assetLnk);

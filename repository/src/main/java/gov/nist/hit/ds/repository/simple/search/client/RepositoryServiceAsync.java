@@ -16,6 +16,7 @@ public interface RepositoryServiceAsync {
 	void getAssetTree(String[][] repos, AsyncCallback<List<AssetNode>> callback);
 	void getAssetTxtContent(AssetNode an, AsyncCallback<AssetNode> callback);
 	void getImmediateChildren(AssetNode an, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
+    void getChildren(AssetNode an, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
 	void getParentChain(AssetNode an, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
     void getParentChainInTree(AssetNode an, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
 	void isRepositoryConfigured(AsyncCallback<Boolean> callback) throws RepositoryConfigException;
@@ -24,5 +25,6 @@ public interface RepositoryServiceAsync {
 	void saveSearchCriteria(QueryParameters qp, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
 	void getSavedQueries(String id, String acs, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
     void getTxUpdates(String queue, String filterLocation, AsyncCallback<Map<String,AssetNode>> callback) throws RepositoryConfigException;
+    void getJmsHostAddress(AsyncCallback<String> callback) throws RepositoryConfigException;
 }
 

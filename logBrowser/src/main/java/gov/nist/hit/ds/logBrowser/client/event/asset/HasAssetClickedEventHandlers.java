@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.logBrowser.client.event;
+package gov.nist.hit.ds.logBrowser.client.event.asset;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;

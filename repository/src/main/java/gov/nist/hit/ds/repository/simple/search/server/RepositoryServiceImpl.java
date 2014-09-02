@@ -88,7 +88,16 @@ RepositoryService {
 		}
 	}
 
-	@Override
+    @Override
+    public AssetNode getChildren(AssetNode an) throws RepositoryConfigException {
+        try {
+            return PresentationData.getChildren(an);
+        } catch (Exception re) {
+            throw new RepositoryConfigException(re.toString());
+        }
+    }
+
+    @Override
 	public AssetNode getParentChain(AssetNode an)
 			throws RepositoryConfigException {
 		try {
@@ -142,6 +151,15 @@ RepositoryService {
     public Map<String,AssetNode> getTxUpdates(String queue, String filterLocation) throws RepositoryConfigException {
         try {
             return PresentationData.getLiveUpdates(queue,filterLocation);
+        } catch (Exception re) {
+            throw new RepositoryConfigException(re.toString());
+        }
+    }
+
+    @Override
+    public String getJmsHostAddress() throws RepositoryConfigException {
+        try {
+            return PresentationData.getJmsHostAddress();
         } catch (Exception re) {
             throw new RepositoryConfigException(re.toString());
         }
