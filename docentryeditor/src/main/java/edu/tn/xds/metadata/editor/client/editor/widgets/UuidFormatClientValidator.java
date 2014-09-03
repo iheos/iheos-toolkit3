@@ -43,56 +43,62 @@ public class UuidFormatClientValidator extends AbstractValidator<String> {
 
     @Override
     public List<EditorError> validate(Editor<String> editor, String value) {
-        List<EditorError> errors = null;
-        logger.info("Validate.");
         if (value == null)
-            errors = createError(editor, "Can not be null", value);
-        else if (!value.startsWith("urn:uuid:"))
-            errors = createError(editor, "Value does not start with urn:uuid. It should.", value);
-        else if (value.length() != 45)
-            errors = createError(editor, "Value does not have the right number of characters. It should be 45.", value);
-        else {
-            logger.info("else");
-            String rest;
-            rest = value.substring(9);
+            return createError(editor, "Can not be null", value);
+        else if (!value.startsWith("urn:uuid:")) {
+            String tmp = value;
+            if (isLCHexString(tmp.replaceAll("-", ""))) {
+                return createError(editor, "Value is not a correct UUID. It does not have the right number of characters. It should be 45 and start with 'urn:uuid:'.", value);
+            }
+//            return createError(editor, "Value does not start with 'urn:uuid:'. It should.", value);
+        } else {
+            if (value.length() != 45) {
+                String tmp = value;
+                if (isLCHexString(tmp.replaceAll("-", ""))) {
+                    return createError(editor, "Value is not a correct UUID. It does not have the right number of characters. It should be 45 and start with 'urn:uuid:'.", value);
+                }
+            } else {
+                logger.info("else");
+                String rest;
+                rest = value.substring(9);
 
-            if (!isLCHexString(rest.substring(0, 8)))
-                errors = createError(editor, "Value should be Hexadecimal.", value);
-            rest = rest.substring(8);
+                if (!isLCHexString(rest.substring(0, 8)))
+                    return createError(editor, "Value should be Hexadecimal.", value);
+                rest = rest.substring(8);
 
-            if (!(rest.charAt(0) == '-'))
-                errors = createError(editor, "Value's 10th character should be a dash (-).", value);
-            rest = rest.substring(1);
+                if (!(rest.charAt(0) == '-'))
+                    return createError(editor, "Value's 10th character should be a dash (-).", value);
+                rest = rest.substring(1);
 
-            if (!isLCHexString(rest.substring(0, 4)))
-                errors = createError(editor, "Value should be Hexadecimal.", value);
-            rest = rest.substring(4);
+                if (!isLCHexString(rest.substring(0, 4)))
+                    return createError(editor, "Value should be Hexadecimal.", value);
+                rest = rest.substring(4);
 
-            if (!(rest.charAt(0) == '-'))
-                errors = createError(editor, "Value's 15th character should be a dash (-).", value);
+                if (!(rest.charAt(0) == '-'))
+                    return createError(editor, "Value's 15th character should be a dash (-).", value);
 
-            rest = rest.substring(1);
-            if (!isLCHexString(rest.substring(0, 4)))
-                errors = createError(editor, "Value should be Hexadecimal.", value);
-            rest = rest.substring(4);
+                rest = rest.substring(1);
+                if (!isLCHexString(rest.substring(0, 4)))
+                    return createError(editor, "Value should be Hexadecimal.", value);
+                rest = rest.substring(4);
 
-            if (!(rest.charAt(0) == '-'))
-                errors = createError(editor, "Value's 20th character should be a dash (-).", value);
+                if (!(rest.charAt(0) == '-'))
+                    return createError(editor, "Value's 20th character should be a dash (-).", value);
 
-            rest = rest.substring(1);
-            if (!isLCHexString(rest.substring(0, 4)))
-                errors = createError(editor, "Value should be Hexadecimal.", value);
-            rest = rest.substring(4);
+                rest = rest.substring(1);
+                if (!isLCHexString(rest.substring(0, 4)))
+                    return createError(editor, "Value should be Hexadecimal.", value);
+                rest = rest.substring(4);
 
-            if (!(rest.charAt(0) == '-'))
-                errors = createError(editor, "Value's 25th character should be a dash (-).", value);
+                if (!(rest.charAt(0) == '-'))
+                    return createError(editor, "Value's 25th character should be a dash (-).", value);
 
-            rest = rest.substring(1);
-            if (!isLCHexString(rest.substring(0, 12)))
-                errors = createError(editor, "Value should be Hexadecimal.", value);
+                rest = rest.substring(1);
+                if (!isLCHexString(rest.substring(0, 12)))
+                    return createError(editor, "Value should be Hexadecimal.", value);
+            }
         }
-        logger.info("errors: " + errors.isEmpty());
-        return errors;
+        return null;
     }
 
 }

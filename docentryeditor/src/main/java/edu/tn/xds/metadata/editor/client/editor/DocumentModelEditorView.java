@@ -309,6 +309,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
         // Size (optional)
 //        size.disableEditing();
+        size.disableToolbar();
         size.setListMaxSize(1);
 
         // Creation Time (required)
@@ -395,10 +396,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
             @Override
             public void onSelect(SelectEvent event) {
-                listViewAuthors.getSelectionModel().deselectAll();
-                author.setEditionMode(EditionMode.NEW);
-                author.editNew();
-                enableAuthorButtonWidgets(EditionMode.NEW);
+                editNewAuthor();
             }
         });
         editAuthorWidget.addSelectHandler(new SelectHandler() {
@@ -515,6 +513,13 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         vcon.add(authorFS, new VerticalLayoutData(0.99, -1, new Margins(10, 0, 0, 0)));
         vcon.add(authorCP, new VerticalLayoutData(-1, 30));
         return vcon;
+    }
+
+    public void editNewAuthor() {
+        listViewAuthors.getSelectionModel().deselectAll();
+        author.setEditionMode(EditionMode.NEW);
+        author.editNew();
+        enableAuthorButtonWidgets(EditionMode.NEW);
     }
 
     private void enableAuthorButtonWidgets(EditionMode editionMode) {

@@ -228,6 +228,9 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
                         index = 1;
                     }
                     editing.startEditing(new Grid.GridCell(getStore().indexOf(element), index));
+                    if (getStore().size() >= storeMaxLength) {
+                        disableNewButton();
+                    }
                 } else {
                     MessageBox mb = new MessageBox("Error: list size limit reached",
                             "You can not add more items to that list. This list can contain only " + storeMaxLength
@@ -247,6 +250,9 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
                     public void onHide(HideEvent event) {
                         if (d.getHideButton() == d.getButtonById(Dialog.PredefinedButton.YES.name())) {
                             deleteItemAction();
+                            if (getStore().size() < storeMaxLength) {
+                                enableNewButton();
+                            }
                         }
                     }
                 });
@@ -263,6 +269,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
                     public void onHide(HideEvent event) {
                         if (d.getHideButton() == d.getButtonById(Dialog.PredefinedButton.YES.name())) {
                             clearStoreAction();
+                            enableNewButton();
                         }
                     }
                 });
@@ -288,10 +295,18 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         editing.clearEditors();
     }
 
+    public void disableNewButton() {
+        newItemButton.disable();
+    }
+
     public void disableToolbar() {
         hasToolbar = false;
         toolBar.disable();
         toolBar.setVisible(false);
+    }
+
+    public void enableNewButton() {
+        newItemButton.enable();
     }
 
     public ToolBar getToolbar() {
@@ -360,10 +375,10 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
     protected void setStoreMaxLength(int storeMaxLength) {
         this.storeMaxLength = storeMaxLength;
         if (storeMaxLength == 1) {
-            this.setHeight(70 + (hasToolbar == true ? 25 : 0));
+            this.setHeight(70 + (hasToolbar == true ? 25 : 0) + (hasExtraWidget == true ? 20 : 0));
         } else {
             if (storeMaxLength < 11) {
-                this.setHeight((28 * storeMaxLength) + (hasExtraWidget == true ? 20 : 0));
+                this.setHeight((20 * storeMaxLength) + (hasToolbar == true ? 20 : 0) + (hasExtraWidget == true ? 20 : 0));
             }
         }
     }
@@ -391,5 +406,9 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         Draggable d = new Draggable(helpButton.getToolTip());
         d.setUseProxy(false);
         bindToolTips();
+    }
+
+    public int getStoreMaxSize() {
+        return storeMaxLength;
     }
 }

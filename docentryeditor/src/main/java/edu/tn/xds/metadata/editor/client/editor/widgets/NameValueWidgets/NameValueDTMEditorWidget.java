@@ -33,9 +33,6 @@ public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date>
     public NameValueDTMEditorWidget(String widgetTitle) {
         super(widgetTitle, new ListStore<DTM>(props.key()), props.dtm());
 
-//        view.setAutoFill(true);
-//        this.setHeight(75);
-
         values = new ListStoreEditor<DTM>(getStore());
 
         bind();
