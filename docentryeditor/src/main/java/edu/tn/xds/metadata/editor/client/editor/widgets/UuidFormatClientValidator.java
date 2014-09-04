@@ -46,9 +46,12 @@ public class UuidFormatClientValidator extends AbstractValidator<String> {
         if (value == null)
             return createError(editor, "Can not be null", value);
         else if (!value.startsWith("urn:uuid:")) {
-            String tmp = value;
-            if (isLCHexString(tmp.replaceAll("-", ""))) {
-                return createError(editor, "Value is not a correct UUID. It does not have the right number of characters. It should be 45 and start with 'urn:uuid:'.", value);
+            if (value.length() == 36) {
+                String tmp = value;
+                tmp.replaceAll("-", "");
+                if (isLCHexString(tmp)) {
+                    return createError(editor, "Value is not a correct UUID. It does not have the right number of characters. It should be 45 and start with 'urn:uuid:'.", value);
+                }
             }
 //            return createError(editor, "Value does not start with 'urn:uuid:'. It should.", value);
         } else {

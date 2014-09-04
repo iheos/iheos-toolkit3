@@ -198,23 +198,23 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         mimeTypeLabel.setLabelWidth(125);
 
         // Class Code Field (required)
-        FieldLabel classCodeLabel = new FieldLabel(classCode.asWidget(), "Class Code");
+        FieldLabel classCodeLabel = new FieldLabel(classCode.getDisplay(), "Class Code");
         classCodeLabel.setLabelWidth(125);
 
         // Format Code Field (required)
-        FieldLabel formatCodeLabel = new FieldLabel(formatCode, "Format Code");
+        FieldLabel formatCodeLabel = new FieldLabel(formatCode.getDisplay(), "Format Code");
         formatCodeLabel.setLabelWidth(125);
 
         // practiceSettingCode Field (required)
-        FieldLabel healthcareFacilityTypeLabel = new FieldLabel(healthcareFacilityType, "Healthcare Facility");
+        FieldLabel healthcareFacilityTypeLabel = new FieldLabel(healthcareFacilityType.getDisplay(), "Healthcare Facility");
         healthcareFacilityTypeLabel.setLabelWidth(125);
 
         // healthcare facility Code Field (required)
-        FieldLabel practiceSettingCodeLabel = new FieldLabel(practiceSettingCode, "Practice Setting Code");
+        FieldLabel practiceSettingCodeLabel = new FieldLabel(practiceSettingCode.getDisplay(), "Practice Setting Code");
         practiceSettingCodeLabel.setLabelWidth(125);
 
         // type Code Field (required)
-        FieldLabel typeCodeLabel = new FieldLabel(typeCode, "Type Code");
+        FieldLabel typeCodeLabel = new FieldLabel(typeCode.getDisplay(), "Type Code");
         typeCodeLabel.setLabelWidth(125);
 
         // Repository Unique ID Field (optional)
@@ -233,11 +233,11 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         simpleRequiredFieldsContainer.add(idLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(languageCodeLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(mimeTypeLabel, new VerticalLayoutData(1, -1));
-        simpleRequiredFieldsContainer.add(classCodeLabel, new VerticalLayoutData(1, -1));
-        simpleRequiredFieldsContainer.add(formatCodeLabel, new VerticalLayoutData(1, -1));
-        simpleRequiredFieldsContainer.add(healthcareFacilityTypeLabel, new VerticalLayoutData(1, -1));
-        simpleRequiredFieldsContainer.add(practiceSettingCodeLabel, new VerticalLayoutData(1, -1));
-        simpleRequiredFieldsContainer.add(typeCodeLabel, new VerticalLayoutData(1, -1));
+        simpleRequiredFieldsContainer.add(classCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        simpleRequiredFieldsContainer.add(formatCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        simpleRequiredFieldsContainer.add(healthcareFacilityTypeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        simpleRequiredFieldsContainer.add(practiceSettingCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        simpleRequiredFieldsContainer.add(typeCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
 		/* REQUIRED container added to a fieldset */
         FieldSet fieldSet_general_fields_required = new FieldSet();
@@ -385,7 +385,9 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 if (listViewAuthors.getSelectionModel().getSelectedItem() != null) {
                     author.setEditionMode(EditionMode.DISPLAY);
                     author.edit(listViewAuthors.getSelectionModel().getSelectedItem());
-                    enableAuthorButtonWidgets(EditionMode.DISPLAY);
+//                    enableAuthorButtonWidgets(EditionMode.DISPLAY);
+                    author.setEditionMode(EditionMode.EDIT);
+                    enableAuthorButtonWidgets(EditionMode.EDIT);
                 } else {
                     author.setEditionMode(EditionMode.NODATA);
                     enableAuthorButtonWidgets(EditionMode.NODATA);

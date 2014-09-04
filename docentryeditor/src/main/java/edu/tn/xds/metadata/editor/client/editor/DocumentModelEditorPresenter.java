@@ -50,7 +50,6 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 //		getView().comment.initEditorDriver();
 //		getView().confidentialityCode.initEditorDriver();
         editorDriver.edit(model);
-        getView().editNewAuthor();
         refreshGridButtonsDisplay();
     }
 
@@ -60,6 +59,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
             @Override
             public void onStartEditXdsDocument(StartEditXdsDocumentEvent event) {
                 initDriver(event.getDocument());
+                getView().editNewAuthor();
             }
         });
         ((MetadataEditorEventBus) getEventBus()).addSaveFileEventHandler(new SaveFileEvent.SaveFileEventHandler() {
