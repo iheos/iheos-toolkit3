@@ -96,14 +96,13 @@ public class ValidationEngine {
         def valMethod = validationMethods.find { validationMethod ->
             if (!(validationMethod.runable() && dependenciesSatisfied(validationMethod.dependsOnId))) return false
             log.debug("For ${validationMethod.id}...")
-            evalGuard(validationMethod)
+            evalGuard(validationMethod)// determines FOUND status
         }
-        if (valMethod) { setupRunable(valMethod); return valMethod }
-//            validationAnnotation = valMethod.validationAnnotation
-//            assert validationAnnotation
-//            valMethod.markHasBeenRun()
-//            return valMethod
-//        }
+        if (valMethod) {
+            setupRunable(valMethod)
+            valMethod.required = !evalOptional(valMethod)
+            return valMethod
+        }
         return null
     }
 
@@ -117,6 +116,15 @@ public class ValidationEngine {
         for (def guardMethodName in validationMethod.guardMethodNames) {
             def guardValue = validationObject."${guardMethodName}"()
             log.debug("Guard ${guardMethodName}? ${guardValue}")
+            if (!guardValue) return false
+        }
+        return true
+    }
+
+    private boolean evalOptional(ValidationMethod validationMethod) {
+        for (def guardMethodName in validationMethod.optionalGuardMethodNames) {
+            def guardValue = validationObject."${guardMethodName}"()
+            log.debug("Optional Guard ${guardMethodName}? ${guardValue}")
             if (!guardValue) return false
         }
         return true

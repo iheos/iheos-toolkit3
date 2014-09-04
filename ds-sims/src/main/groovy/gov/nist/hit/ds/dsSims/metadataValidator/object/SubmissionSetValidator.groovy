@@ -10,7 +10,9 @@ import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Setup
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
-//@groovy.transform.TypeChecked
+import groovy.util.logging.Log4j
+
+@Log4j
 public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
     SubmissionSetModel model
     Set<String> knownIds
@@ -35,10 +37,12 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
     }
 
     void runAfter() {
+        new TopAttsSubValidator(this, model, vc, SubmissionSetModel.statusValues).asSelf().run()
         new IdSubValidator(this, model, vc).asSelf().run()
         new LidSubValidator(this, model, vc).asSelf().run()
 
         new SubmissionSetSlotsValidator(simHandle, model).asPeer().run()
+        new SubmissionSetClassificationsValidator(simHandle, model).asPeer().run()
     }
 
     // Guards
@@ -53,7 +57,6 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
             msg("Labeled as Minimal Metadata (Direct)");
         else
             msg ('Labeled as Full Metadata')
-        new TopAttsSubValidator(this, model, vc, SubmissionSetModel.statusValues).asSelf().run()
     }
 
 //    @Validation(id='Top', msg='Top attributes', ref='')
@@ -65,7 +68,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
     public void validate(ErrorRecorder er, ValidationContext vc,
 			Set<String> knownIds) {
 
-		validateTopAtts(er, vc);
+//		validateTopAtts(er, vc);
 
 		validateSlots(er, vc);
 

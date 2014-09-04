@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.field
 import gov.nist.hit.ds.dsSims.client.ValidationContext
-import gov.nist.hit.ds.dsSims.metadataValidator.datatype.OidFormat
+import gov.nist.hit.ds.dsSims.metadataValidator.datatype.OidValidator
 import gov.nist.hit.ds.dsSims.metadataValidator.object.RegistryObjectModel
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
@@ -30,11 +30,6 @@ class TopAttsSubValidator extends ValComponentBase {
         this.model = model
         println "TopAtts"
         println model.toString()
-    }
-
-    @Override
-    void run() {
-        runValidationEngine()
     }
 
     // Guards
@@ -98,6 +93,6 @@ class TopAttsSubValidator extends ValComponentBase {
         String[] parts = model.home.split(":")
         if (parts.length < 3 || !parts[0].equals("urn") || !parts[1].equals("oid"))
             fail('homeCommunityId must begin with urn:oid: prefix', model.home)
-        new OidFormat(this).validate(parts[parts.length-1])
+        new OidValidator(this).validate(parts[parts.length-1])
     }
 }

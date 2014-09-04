@@ -13,11 +13,6 @@ public class CxSubValidator extends ValComponentBase  {
         this.input = input
 	}
 
-    @Override
-    void run() {
-        runValidationEngine()
-    }
-
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id = 'CX001', msg = 'XCN - Either name or an identifier shall be present', ref = "ITI TF-3: Table 4.1-3 (XCN)")
     def nameCheck() {

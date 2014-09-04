@@ -32,11 +32,16 @@ public class DtmSubValidator  extends ValComponentBase {
     def lengthCheck() {
         int size = input.length();
         assertTrue(size == 4 || size == 6 || size == 8 || size == 10 || size == 12 || size == 14)
+        infoFound("${size} characters")
     }
 
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id = 'DTM002', msg = 'HL7 V2 DateTime format - all digits', ref = "ITI TF-3: Table 4.1-6")
     def formatCheck() {
         assertTrue(ValidatorCommon.isInt(input))
+    }
+    @Validation(id = 'DTM003', msg = 'HL7 V2 DateTime value', ref = "ITI TF-3: Table 4.1-6")
+    def content() {
+        infoFound(input)
     }
 }
