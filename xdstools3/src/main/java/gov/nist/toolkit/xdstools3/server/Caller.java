@@ -1,21 +1,24 @@
 package gov.nist.toolkit.xdstools3.server;
 
+import gov.nist.toolkit.xdstools3.server.demo.DataHelper;
+
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Singleton class that acts as a directory of all calls to server-side packages. All calls must go through this class in order to
  * develop and build easily on top of this application.
- * 
+ *
  * @author dazais
  *
  */
 public class Caller implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -6431109235310163158L;
 	private static Caller instance = null;
-	
+
 	protected Caller(){
 	}
 
@@ -58,4 +61,15 @@ public class Caller implements Serializable {
         return null;
     }
 
+    public Map<String, String> getCollectionNames(String collectionSetName) throws Exception  {
+        return DataHelper.instance.getCollectionNames(collectionSetName);
+    }
+
+    public Map<String, String> getCollection(String collectionSetName, String collectionName) {
+        return DataHelper.instance.getCollection(collectionSetName,collectionName);
+    }
+
+    public String getTestReadme(String test) {
+        return DataHelper.instance.getTestReadme(test);
+    }
 }

@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client;
+package gov.nist.toolkit.xdstools3.client.customWidgets.toolbar;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -6,13 +6,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * Client side of the GWT RPC mechanism. This is the asynchronous interface.
  * 
  * @author dazais
- * @see InterfaceClientServer
+ * @see ToolbarService
  *
  */
 
-public interface InterfaceClientServerAsync {
-
-	public void logMeIn(String username, String password, AsyncCallback<Void> callback);
+public interface ToolbarServiceAsync {
 
     void retrieveEnvironments(AsyncCallback<String[]> async);
 

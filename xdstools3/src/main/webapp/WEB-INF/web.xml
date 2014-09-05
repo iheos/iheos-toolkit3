@@ -5,10 +5,9 @@
 <web-app>
     <display-name>Document Sharing Toolkit</display-name>
 
-    <!-- The filter is necessary so the simulator response headers can be captured
-        for the message log. Add filters and servlets here later (cf older versions of toolkit for
-        how-to) -->
 
+
+    <!-- ============== Jersey import for REST ============== -->
     <servlet>
         <servlet-name>jersey</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -22,31 +21,51 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
+
+
+    <!-- ============== Application servlet classes ============== -->
     <servlet>
-        <servlet-name>gov.nist.toolkit.xdstools3.Xdstools3 InterfaceClientServer</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.InterfaceClientServerImpl</servlet-class>
+        <servlet-name>preConnectathonTabServlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.PreConnectathonTabServiceImpl</servlet-class>
     </servlet>
+
     <servlet>
-        <servlet-name>toolkitServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.ToolkitServiceImpl</servlet-class>
+        <servlet-name>loginServlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.LoginServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>toolbarServlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.ToolbarServiceImpl</servlet-class>
     </servlet>
 
 
+
+    <!-- ============== Servlet mappings ============== -->
     <servlet-mapping>
         <servlet-name>jersey</servlet-name>
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
-        <servlet-name>gov.nist.toolkit.xdstools3.Xdstools3 InterfaceClientServer</servlet-name>
-        <url-pattern>/xdstools3/service</url-pattern>
+        <servlet-name>preConnectathonTabServlet</servlet-name>
+        <url-pattern>/xdstools3/preconnectathon-tab</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
-        <servlet-name>toolkitServlet</servlet-name>
-        <url-pattern>/xdstools3/toolkit</url-pattern>
+        <servlet-name>loginServlet</servlet-name>
+        <url-pattern>/xdstools3/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>toolbarServlet</servlet-name>
+        <url-pattern>/xdstools3/toolbar</url-pattern>
     </servlet-mapping>
 
 
-    <!-- Default page to serve -->
+
+    <!-- ============== Default page to serve ============== -->
     <welcome-file-list>
         <welcome-file>Xdstools3.html</welcome-file>
     </welcome-file-list>

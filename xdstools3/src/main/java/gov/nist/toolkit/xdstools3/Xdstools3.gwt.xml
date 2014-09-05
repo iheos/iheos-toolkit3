@@ -20,15 +20,8 @@
     <!-- <script src='showcase/sc/modules/ISC_Drawing.js'></script> -->
     <!--<script src='isomorphic/DataSourceLoader?dataSource=server/data/datasources/toolkit_config.xml'></script>-->
 
-    <!-- Inherits other local GWT modules -->
-    <!-- this doesnt work -->
-        <!--<inherits name="com.sencha.gxt.ui.GXT"/>-->
-        <!--<inherits name="com.google.gwt.inject.Inject"/>-->
-        <!--<inherits name="edu.tn.xds.metadata.editor.XDS-MetadataEditor"/>-->
-
-        <!-- Specify the app entry point class. -->
+    <!-- Specify the app entry point class. -->
     <entry-point class='gov.nist.toolkit.xdstools3.client.Xdstools3' />
-
 
     <!-- Uncomment this line to force GWT compiler to only generate javascript
         for Safari/Chrome browsers -->
@@ -37,6 +30,11 @@
     <!-- Uncomment this line to force GWT compiler to only generate javascript
         for Firefox browsers -->
     <!-- <set-property name="user.agent" value="gecko1_8" /> -->
+
+    <inherits name="com.google.gwt.logging.Logging"/>
+    <set-property name="gwt.logging.logLevel" value="INFO"/>
+    <set-property name="gwt.logging.enabled" value="TRUE"/>
+    <set-property name="gwt.logging.popupHandler" value="DISABLED" />
 
 </module>
 
