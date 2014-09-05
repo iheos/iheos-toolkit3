@@ -1,13 +1,10 @@
 package gov.nist.toolkit.xdstools3.server.demo;
 
-import gov.nist.toolkit.utilities.io.Io;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Created by onh2 on 8/26/2014.
