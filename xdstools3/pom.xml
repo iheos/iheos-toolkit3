@@ -51,9 +51,9 @@
 
     <dependencies>
         <!--<dependency>-->
-            <!--<groupId>edu.tn.xds.metadata</groupId>-->
-            <!--<artifactId>docentryeditor</artifactId>-->
-            <!--<version>1.0.0-SNAPSHOT</version>-->
+        <!--<groupId>edu.tn.xds.metadata</groupId>-->
+        <!--<artifactId>docentryeditor</artifactId>-->
+        <!--<version>1.0.0-SNAPSHOT</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>log4j</groupId>
@@ -108,16 +108,21 @@
         </dependency>
 
         <!-- Local dependencies -->
+        <dependency>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>session_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>gov.nist.toolkit</groupId>-->
-            <!--<artifactId>session_v2</artifactId>-->
+            <!--<artifactId>testkit</artifactId>-->
             <!--<version>2.7.0-SNAPSHOT</version>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>gov.nist.toolkit</groupId>-->
-            <!--<artifactId>xdstools2</artifactId>-->
-            <!--<version>2.7.0-SNAPSHOT</version>-->
-            <!--<classifier>classes</classifier> &lt;!&ndash; maps to the sources packaged along with the xdstools2 war file &ndash;&gt;-->
+        <!--<groupId>gov.nist.toolkit</groupId>-->
+        <!--<artifactId>xdstools2</artifactId>-->
+        <!--<version>2.7.0-SNAPSHOT</version>-->
+        <!--<classifier>classes</classifier> --> <!-- maps to the sources packaged along with the xdstools2 war file -->
         <!--</dependency>-->
     </dependencies>
 
@@ -147,6 +152,7 @@
                         <id>compilation_profile</id>
                         <goals>
                             <goal>compile</goal>
+                            <goal>resources</goal>
                         </goals>
                         <configuration>
                             <!-- copyWebapp: Copies the contents of warSourceDirectory to hostedWebapp. -->
@@ -229,6 +235,21 @@
                 </configuration>
             </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.2-beta-2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
 
     </build>
 </project>
