@@ -51,17 +51,17 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 nextIndex++;
                 view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
                 view.getTree().expandAll();
-                view.getTree().getSelectionModel().select(currentlyEdited, false);
                 if (!(placeController.getWhere() instanceof EditorPlace)) {
                     placeController.goTo(new EditorPlace());
                 }
+                view.getTree().getSelectionModel().select(currentlyEdited, false);
             }
         });
         ((MetadataEditorEventBus) getEventBus()).addXdsEditorLoadedEventtHandler(new XdsEditorLoadedEvent.XdsEditorLoadedEventHandler() {
             @Override
             public void onXdsEditorLoaded(XdsEditorLoadedEvent event) {
                 if (currentlyEdited != null) {
-                    startEditing();
+//                    startEditing();
                 } else {
                     logger.info("No Document Entry in Submission Set");
                     createNewDocumentEntry();
@@ -79,10 +79,10 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
         nextIndex++;
         view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
         view.getTree().expandAll();
-        view.getTree().getSelectionModel().select(currentlyEdited, false);
         if (!(placeController.getWhere() instanceof EditorPlace)) {
             placeController.goTo(new EditorPlace());
         }
+        view.getTree().getSelectionModel().select(currentlyEdited, false);
     }
 
     /**
@@ -108,10 +108,11 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
         nextIndex++;
         view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
         view.getTree().expandAll();
-        view.getTree().getSelectionModel().select(currentlyEdited, false);
         if (!(placeController.getWhere() instanceof EditorPlace)) {
             placeController.goTo(new EditorPlace());
         }
+        view.getTree().getSelectionModel().select(currentlyEdited, false);
+
     }
 
     public void doSave() {

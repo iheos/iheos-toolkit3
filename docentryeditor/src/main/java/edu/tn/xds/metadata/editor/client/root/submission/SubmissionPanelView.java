@@ -33,7 +33,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
 
     private final Menu addMenu = new Menu();
     private final MenuItem addEmptyDocEntry = new MenuItem("Create an empty document entry");
-    private final MenuItem addPrefilledDocEntry = new MenuItem("Create a prefilled document entry");
+    private final MenuItem addPrefilledDocEntry = new MenuItem("Create a pre-filled document entry");
     private final MenuItem loadDocEntry = new MenuItem("Load a document entry from xml file");
 
     private final TextButton addDocEntryButton = new TextButton();

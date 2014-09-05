@@ -33,7 +33,7 @@ public class CodedTermsEditableGridWidget extends GenericEditableGrid<CodedTerm>
     private PredefinedCodedTermComboBox cb;
 
     public CodedTermsEditableGridWidget(String gridTitle, PredefinedCodes predefinedCode) {
-        super(gridTitle, new ListStore<CodedTerm>(isprops.key()), buildColumnModel());
+        super(gridTitle, new ListStore<CodedTerm>(isprops.key())/*, buildColumnModel()*/);
 
         ((TextButton) getToolbar().getWidget(0)).setToolTip("Add a custom value");
 
@@ -42,24 +42,11 @@ public class CodedTermsEditableGridWidget extends GenericEditableGrid<CodedTerm>
 
 //        setCheckBoxSelectionModel();
 
-        // Editing widgets
-        TextField displayNameTF = new TextField();
-        displayNameTF.setAllowBlank(false);
-//        displayNameTF.setToolTip("This fields is required.");
-        TextField codeTF = new TextField();
-        codeTF.setAllowBlank(false);
-        codeTF.setToolTip("This field is required.");
-        TextField codingSchemeTF = new TextField();
-        codingSchemeTF.setAllowBlank(false);
-//        codingSchemeTF.setToolTip("This is required.");
-        addColumnEditorConfig(displayNameColumnConfig, displayNameTF);
-        addColumnEditorConfig(codeColumnConfig, codeTF);
-        addColumnEditorConfig(codingSchemeColumnConfig, codingSchemeTF);
-
         bindUI();
     }
 
-    private static ColumnModel<CodedTerm> buildColumnModel() {
+    @Override
+    protected ColumnModel<CodedTerm> buildColumnModel() {
         List<ColumnConfig<CodedTerm, ?>> columnsConfigs = new ArrayList<ColumnConfig<CodedTerm, ?>>();
 
         displayNameColumnConfig = new ColumnConfig<CodedTerm, String>(
@@ -74,6 +61,23 @@ public class CodedTermsEditableGridWidget extends GenericEditableGrid<CodedTerm>
         columnsConfigs.add(codingSchemeColumnConfig);
 
         return new ColumnModel<CodedTerm>(columnsConfigs);
+    }
+
+    @Override
+    protected void buildEditingFields() {
+        // Editing widgets
+        TextField displayNameTF = new TextField();
+        displayNameTF.setAllowBlank(false);
+//        displayNameTF.setToolTip("This fields is required.");
+        TextField codeTF = new TextField();
+        codeTF.setAllowBlank(false);
+        codeTF.setToolTip("This field is required.");
+        TextField codingSchemeTF = new TextField();
+        codingSchemeTF.setAllowBlank(false);
+//        codingSchemeTF.setToolTip("This is required.");
+        addColumnEditorConfig(displayNameColumnConfig, displayNameTF);
+        addColumnEditorConfig(codeColumnConfig, codeTF);
+        addColumnEditorConfig(codingSchemeColumnConfig, codingSchemeTF);
     }
 
     private void bindUI() {
@@ -93,11 +97,11 @@ public class CodedTermsEditableGridWidget extends GenericEditableGrid<CodedTerm>
     }
 
     @Override
-    public Widget asWidget() {
+    public Widget getDisplay() {
         FieldLabel codedTermFL = new FieldLabel(cb, "Select a coded term to add");
         codedTermFL.setLabelWidth(200);
         addWidget(codedTermFL);
-        return super.asWidget();
+        return super.getDisplay();
     }
 
     @Override
