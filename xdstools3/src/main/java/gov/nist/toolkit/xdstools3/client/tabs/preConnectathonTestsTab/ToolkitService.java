@@ -13,7 +13,8 @@ public interface ToolkitService extends RemoteService  {
 
 	/* Test management */
 	public Map<String, String> getCollectionNames(String collectionSetName) throws Exception;
-//	public Map<String, String> getCollection(String collectionSetName, String collectionName) throws Exception;
+	public Map<String, String> getCollection(String collectionSetName,String collectionName) throws Exception;
+	public String getTestReadme(String test) throws Exception;
 //	public String getTestReadme(String test) throws Exception;
 	/* Simulator Management */
 //	public List<String> getActorTypeNames() throws Exception ;

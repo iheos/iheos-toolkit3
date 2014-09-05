@@ -4,6 +4,7 @@ package gov.nist.toolkit.xdstools3.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
@@ -53,8 +54,8 @@ public class Xdstools3 implements EntryPoint {
 
         container.draw();
 
-        // Smartgwt Console - useful for development, mainly tracking RPC calls
-       // SC.showConsole();
+//        Smartgwt Console - useful for development, mainly tracking RPC calls
+//       SC.showConsole();
 
         // Add listener for Open Tab eventBusUtils. The tabs called must be defined in function "openTab".
         Util.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new OpenTabEventHandler(){
