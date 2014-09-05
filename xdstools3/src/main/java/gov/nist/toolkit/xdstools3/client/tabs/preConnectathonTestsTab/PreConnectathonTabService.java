@@ -1,15 +1,14 @@
 package gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab;
 
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import java.util.Map;
 
-@RemoteServiceRelativePath("toolkit")
-public interface ToolkitService extends RemoteService  {
+
+@RemoteServiceRelativePath("preconnectathon-tab")
+public interface PreConnectathonTabService extends RemoteService  {
 
 	/* Test management */
 	public Map<String, String> getCollectionNames(String collectionSetName) throws Exception;

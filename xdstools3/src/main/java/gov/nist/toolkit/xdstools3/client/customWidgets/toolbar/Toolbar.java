@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets;
+package gov.nist.toolkit.xdstools3.client.customWidgets.toolbar;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -11,8 +11,6 @@ import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.toolbar.RibbonBar;
 import com.smartgwt.client.widgets.toolbar.RibbonGroup;
-import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
-import gov.nist.toolkit.xdstools3.client.InterfaceClientServerAsync;
 import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.LoginDialogWidget;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
@@ -117,7 +115,7 @@ public class Toolbar extends RibbonBar {
         String[] environments;
         String[] sessions;
 
-        InterfaceClientServerAsync intf = GWT.create(InterfaceClientServer.class);
+        ToolbarServiceAsync intf = GWT.create(ToolbarService.class);
         AsyncCallback<String[]> envCallback = new AsyncCallback<String[]>() {
             public void onFailure(Throwable caught) {
                 // TODO: Do something with errors.

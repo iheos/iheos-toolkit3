@@ -21,8 +21,8 @@ import java.util.logging.Logger;
  * Created by onh2 on 8/5/2014.
  */
 public class PreConnectathonTestsTab extends GenericCloseableTab {
-    private final static ToolkitServiceAsync toolkitService = GWT
-            .create(ToolkitService.class);
+    private final static PreConnectathonTabServiceAsync toolkitService = GWT
+            .create(PreConnectathonTabService.class);
 
     static final Logger logger= Logger.getLogger(PreConnectathonTestsTab.class.getName());
 
