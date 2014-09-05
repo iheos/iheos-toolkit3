@@ -21,11 +21,11 @@ import java.util.logging.Logger;
  * Created by onh2 on 8/5/2014.
  */
 public class PreConnectathonTestsTab extends GenericCloseableTab {
+    static final Logger logger = Logger.getLogger(PreConnectathonTestsTab.class.getName());
     private final static PreConnectathonTabServiceAsync toolkitService = GWT
             .create(PreConnectathonTabService.class);
 
-    static final Logger logger= Logger.getLogger(PreConnectathonTestsTab.class.getName());
-
+   
     private static String header = "Pre-Connectathon Tests";
 
     private DynamicForm form;
@@ -42,7 +42,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
     private HTMLFlow beforeReadme;
     private HTMLFlow afterReadme;
 
-    public PreConnectathonTestsTab(){
+    public PreConnectathonTestsTab() {
         super(header);
     }
 
@@ -104,9 +104,10 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
         htmlReadme = new HTMLPane();
         htmlReadme.setHeight(300);
         htmlReadme.setShowEdges(true);
-        htmlReadme.setContents("<div style='padding-left:20px'>"+
-                "<h3>README</h3>"  +
+        htmlReadme.setContents("<div style='padding-left:20px'>" +
+               "<h3>README</h3>" +
                 "</div>");
+        afterReadme = new HTMLFlow("<hr/>");
         afterReadme = new HTMLFlow("<hr/>");
 
         form.setFields(selectActor, selectTest);
@@ -136,7 +137,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
         sectionPanel = new VStack();
         sectionPanel.addMembers(f,viewTestPlan);
 
-        PatientIDWidget patientID=new PatientIDWidget();
+        PatientIDWidget patientID = new PatientIDWidget();
         TLSAndSAMLForm tLSAndSAMLForm = new TLSAndSAMLForm();
 
         vStack.addMembers(form, beforeReadme, htmlReadme, afterReadme,sectionPanel,patientID,tLSAndSAMLForm);
@@ -161,6 +162,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
 
     private void loadTestsForActor(String selectedActor) {
         toolkitService.getCollection("actorcollections",selectedActor,new AsyncCallback<Map<String, String>>() {
+            
             @Override
             public void onFailure(Throwable caught) {
                 logger.warning(caught.getMessage());
@@ -169,7 +171,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
             @Override
             public void onSuccess(Map<String, String> result) {
                 final LinkedHashMap<String,String> map=new LinkedHashMap<String,String>();
-                map.putAll(result);
+                    map.putAll(result);
                 if (map==null||map.isEmpty()){
                     selectTest.setEmptyDisplayValue(" -- NO DATA -- ");
                 }else{
@@ -179,6 +181,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
                 form.getField("testItem").setValueMap(map);
             }
         });
+        
     }
 
     void loadSectionNames(String selectedTest) {
