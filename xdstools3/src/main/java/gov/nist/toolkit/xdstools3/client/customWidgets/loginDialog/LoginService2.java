@@ -7,11 +7,11 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  * Client side of the GWT RPC mechanism. This is the service class.
  * 
  * @author dazais
- * @see LoginServiceAsync
+ * @see LoginService2Async
  *
  */
 @RemoteServiceRelativePath("login")
-public interface LoginService extends RemoteService {
+public interface LoginService2 extends RemoteService {
 
 	public void logMeIn(String username, String password);
 
