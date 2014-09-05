@@ -13,8 +13,6 @@ import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.ToolbarService;
-import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.ToolbarServiceAsync;
 import gov.nist.toolkit.xdstools3.client.RPCUtils.OpenEndpointTabCallback;
 import gov.nist.toolkit.xdstools3.client.RPCUtils.OpenSettingsTabCallback;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericCancelButton;
@@ -102,13 +100,13 @@ public class LoginDialogWidget extends Window {
      */
     protected void logMeIn(){
         // call to server to log the user
-        ToolbarServiceAsync intf = GWT.create(ToolbarService.class);
+        LoginService intf = GWT.create(LoginService.class);
 
         // The callback depends on which tab we want to open
         AsyncCallback callback;
         if (protectedTab == "ADMIN") {callback = new OpenSettingsTabCallback();}
         else {callback = new OpenEndpointTabCallback();} // ENDPOINTS
-        intf.logMeIn("", "", callback);
+        intf.logMeIn("", "");
         close();
     }
 
