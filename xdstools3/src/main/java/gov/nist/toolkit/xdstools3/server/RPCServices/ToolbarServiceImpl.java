@@ -1,24 +1,22 @@
-package gov.nist.toolkit.xdstools3.server;
+package gov.nist.toolkit.xdstools3.server.RPCServices;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import gov.nist.toolkit.xdstools3.client.InterfaceClientServer;
+import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.ToolbarService;
+import gov.nist.toolkit.xdstools3.server.Caller;
 
 /**
  * Server side of the GWT RPC mechanism. 
  * 
  * @author dazais
- * @see InterfaceClientServer
+ * @see gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.ToolbarService
  *
  */
-public class InterfaceClientServerImpl extends RemoteServiceServlet implements InterfaceClientServer {
+public class ToolbarServiceImpl extends RemoteServiceServlet implements ToolbarService {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-    // Login functions
-	public void logMeIn(String username, String password){Caller.getInstance().logMeIn(username, password);}
 
     public String[] retrieveEnvironments(){  return Caller.getInstance().retrieveEnvironments();}
     public String[] retrieveTestSessions(){  return Caller.getInstance().retrieveTestSessions();}

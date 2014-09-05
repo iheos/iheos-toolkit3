@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface ToolkitServiceAsync {
+public interface PreConnectathonTabServiceAsync {
 
 
 //	void getActorNames(AsyncCallback<List<String>> callback);

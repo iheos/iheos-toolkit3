@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.server;
+package gov.nist.toolkit.xdstools3.server.RPCServices;
 
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -8,20 +8,16 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 //import gov.nist.toolkit.session.server.Session;
 //import gov.nist.toolkit.utilities.xml.SchemaValidation;
 //import gov.nist.toolkit.valregmsg.validation.factories.MessageValidatorFactory;
-//import gov.nist.toolkit.xdstools3.client.NoServletSessionException;
-import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.ToolkitService;
+//import gov.nist.toolkit.xdstools3.client.exception.NoServletSessionException;
+import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTabService;
 import org.apache.log4j.Logger;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.util.Map;
 
 @SuppressWarnings("serial")
-public class ToolkitServiceImpl extends RemoteServiceServlet implements ToolkitService {
+public class PreConnectathonTabServiceImpl extends RemoteServiceServlet implements PreConnectathonTabService {
 
-    static Logger logger = Logger.getLogger(ToolkitServiceImpl.class);
+    static Logger logger = Logger.getLogger(PreConnectathonTabServiceImpl.class);
 
 //    ServletContext context = null;
 //    public SiteServiceManager siteServiceManager;
@@ -31,7 +27,7 @@ public class ToolkitServiceImpl extends RemoteServiceServlet implements ToolkitS
 //    String sessionID = null;
 //
 //
-    public ToolkitServiceImpl() {
+    public PreConnectathonTabServiceImpl() {
 //        siteServiceManager = SiteServiceManager.getSiteServiceManager();   // One copy shared between sessions
 //        System.out.println("MessageValidatorFactory()");
 //        if (MessageValidatorFactoryFactory.messageValidatorFactory2I == null) {
