@@ -18,6 +18,7 @@ public class HomeTab extends GenericTab {
         queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
         queriesAndRetrieves.addItem("Find Documents");
         queriesAndRetrieves.addItem("MPQ Find Documents");
+        queriesAndRetrieves.addItem("Get Documents");
 
         HomeBox tools = new HomeBox("Tools");
         tools.setIcon("icons/glyphicons/glyphicons_280_settings.png");

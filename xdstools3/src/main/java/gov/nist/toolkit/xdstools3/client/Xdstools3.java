@@ -16,6 +16,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTa
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
+import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetDocumentsTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
@@ -91,6 +92,9 @@ public class Xdstools3 implements EntryPoint {
         }
         else if (tabName.equals(TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode())) {
             tab = new DocEntryEditorTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getGetDocumentsCode())) {
+            tab = new GetDocumentsTab();
         }
 
         // update set of tabs
