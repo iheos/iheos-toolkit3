@@ -40,6 +40,11 @@
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.ToolbarServiceImpl</servlet-class>
     </servlet>
 
+    <!-- v2 legacy servlets -->
+    <servlet>
+        <servlet-name>toolkit2Servlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl</servlet-class>
+    </servlet>
 
 
     <!-- ============== Servlet mappings ============== -->
@@ -61,6 +66,12 @@
     <servlet-mapping>
         <servlet-name>toolbarServlet</servlet-name>
         <url-pattern>/xdstools3/toolbar</url-pattern>
+    </servlet-mapping>
+
+    <!-- v2 legacy servlets -->
+    <servlet-mapping>
+        <servlet-name>toolkit2Servlet</servlet-name>
+        <url-pattern>/xdstools3/toolkit2</url-pattern>
     </servlet-mapping>
 
 

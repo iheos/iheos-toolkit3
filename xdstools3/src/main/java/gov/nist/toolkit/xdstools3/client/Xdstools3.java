@@ -2,11 +2,17 @@ package gov.nist.toolkit.xdstools3.client;
 
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
+import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.tabs.EnvironmentState;
+import gov.nist.toolkit.xdstools2.client.tabs.QueryState;
+import gov.nist.toolkit.xdstools2.client.tabs.TestSessionState;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
@@ -16,10 +22,12 @@ import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTa
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
+import gov.nist.toolkit.xdstools3.client.tabs.v2.v2TabExample;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
-public class Xdstools3 implements EntryPoint {
+// TabContainer was added for v2-v3 integration purposes
+public class Xdstools3 implements EntryPoint, TabContainer {
 
     private GenericTabSet topTabSet;
 
@@ -69,8 +77,9 @@ public class Xdstools3 implements EntryPoint {
      * @see TabNamesUtil, OpenTabEvent
      */
     public void openTab(String tabName) {
-        GenericCloseableTab tab = null;
+        Tab tab = null;
 
+        // ---------- v3 tabs --------
         if (tabName.equals(TabNamesUtil.getInstance().getAdminTabCode())) {
             tab = new SettingsTab();
         }
@@ -93,6 +102,11 @@ public class Xdstools3 implements EntryPoint {
             tab = new DocEntryEditorTab();
         }
 
+        // ---------- legacy v2 tabs --------
+        else if (tabName.equals(TabNamesUtil.getInstance().getv2TabCode())) {
+            tab = new v2TabExample(this);
+        }
+
         // update set of tabs
         if (tab != null) {
             topTabSet.addTab(tab);
@@ -100,4 +114,30 @@ public class Xdstools3 implements EntryPoint {
         }
     }
 
+
+    // ------- Added for v2-v3 integration purposes -----
+    @Override
+    public void addTab(VerticalPanel w, String title, boolean select) {
+
+    }
+
+    @Override
+    public TabPanel getTabPanel() {
+        return null;
+    }
+
+    @Override
+    public QueryState getQueryState() {
+        return null;
+    }
+
+    @Override
+    public EnvironmentState getEnvironmentState() {
+        return null;
+    }
+
+    @Override
+    public TestSessionState getTestSessionState() {
+        return null;
+    }
 }

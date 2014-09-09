@@ -3,8 +3,8 @@ package gov.nist.toolkit.xdstools2.client.inspector;
 import gov.nist.toolkit.registrymetadata.client.Author;
 import gov.nist.toolkit.registrymetadata.client.DocumentEntry;
 import gov.nist.toolkit.registrymetadata.client.RegistryObject;
-import gov.nist.toolkit.xdstools2.client.ToolkitService;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.Toolkit2Service;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.List;
 
@@ -28,8 +28,8 @@ public class EditDisplay {
 	RegistryObject currentObject;
 	VerticalPanel buttonPanel;
 	
-	final protected ToolkitServiceAsync toolkitService = GWT
-	.create(ToolkitService.class);
+	final protected Toolkit2ServiceAsync toolkitService = GWT
+	.create(Toolkit2Service.class);
 
 
 	public EditDisplay(VerticalPanel detailPanel, VerticalPanel buttonPanel, MetadataEditorTab it) {

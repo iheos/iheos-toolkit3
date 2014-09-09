@@ -20,6 +20,7 @@ public class TabNamesUtil {
     public static final String endpointsTabCode = "ENDPOINTS";
     public static final String preConnectathonTestsTabCode = "PRE_CONNECTATHON";
     public static final String documentMetadataEditorTabCode = "METADATA_EDITOR";
+    public static final String v2TabCode = "v2_TAB";
 
     public static String getFindDocumentsTabCode() {
         return findDocumentsTabCode;
@@ -41,4 +42,5 @@ public class TabNamesUtil {
 
     public static String getDocumentMetadataEditorTabCode() { return documentMetadataEditorTabCode; }
     public static String getPreConnectathonTestsTabCode() { return preConnectathonTestsTabCode; }
+    public static String getv2TabCode() { return v2TabCode; }
 }

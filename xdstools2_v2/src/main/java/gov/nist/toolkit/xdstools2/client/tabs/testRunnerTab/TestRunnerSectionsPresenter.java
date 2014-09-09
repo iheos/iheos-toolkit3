@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs.testRunnerTab;
 
 import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 import gov.nist.toolkit.xdstools2.client.tabs.testRunnerTab.TestRunnerSectionsView.ViewLogButton;
 
 import java.util.ArrayList;
@@ -15,12 +15,12 @@ public class TestRunnerSectionsPresenter {
 	}
 	
 	SectionsDisplay display;
-	ToolkitServiceAsync toolkitService;
+	Toolkit2ServiceAsync toolkitService;
 	TabContainer container;
 	String selectedTest;
 	List<String> sections = new ArrayList<String>();
 	
-	TestRunnerSectionsPresenter(TabContainer container, SectionsDisplay d, ToolkitServiceAsync toolkitService, String selectedTest) {
+	TestRunnerSectionsPresenter(TabContainer container, SectionsDisplay d, Toolkit2ServiceAsync toolkitService, String selectedTest) {
 		display = d;
 		this.toolkitService = toolkitService;
 		this.container = container;

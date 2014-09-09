@@ -27,7 +27,7 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface ToolkitServiceAsync {
+public interface Toolkit2ServiceAsync {
 	
 	void getAvailableDirectSigningCerts(AsyncCallback<List<SigningCertType>> callback);
 	void directRegistration(DirectRegistrationData reg, AsyncCallback<DirectRegistrationData> callback);
