@@ -15,4 +15,8 @@ public class NoServletSessionException extends Exception  implements IsSerializa
 
 	public NoServletSessionException() {}
 
+    public NoServletSessionException(Throwable caught) {
+        super(caught.getMessage());
+    }
+
 }

@@ -3,6 +3,8 @@ package gov.nist.toolkit.xdstools3.client.customWidgets.toolbar;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import java.util.ArrayList;
+
 /**
  * Client side of the GWT RPC mechanism. This is the service class.
  * 
@@ -13,8 +15,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("toolbar")
 public interface ToolbarService extends RemoteService {
 
-    public String[] retrieveEnvironments();
-    public String[] retrieveTestSessions();
+    public ArrayList<String> retrieveEnvironments();
+    public ArrayList<String> retrieveTestSessions();
 
 
 	

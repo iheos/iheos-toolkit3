@@ -16,8 +16,6 @@ import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
-import java.util.LinkedHashMap;
-
 public class Toolbar extends RibbonBar {
 
     public Toolbar() {
@@ -34,24 +32,15 @@ public class Toolbar extends RibbonBar {
         listBox.setShowOptionsFromDataSource(false);
         listBox.setWidth("150");
         listBox.setDefaultToFirstOption(true);
-        LinkedHashMap<String, String> valueMap = new LinkedHashMap<String, String>();
-        valueMap.put("US1", "NA2014");
-        valueMap.put("EU1", "EURO2011");
-        valueMap.put("EU2", "EURO2012");
-        valueMap.put("US2", "NwHIN");
-        listBox.setValueMap(valueMap);
-        // This is a workaround for the  LinkedHashMap, which normally accepts unique elements only, to display the
-        // flags although several are redundant.
-        LinkedHashMap<String, String> valueIcons = new LinkedHashMap<String, String>();
-        valueIcons.put("US1", "US");
-        valueIcons.put("EU1", "EU");
-        valueIcons.put("US2", "US");
-        valueIcons.put("EU2", "EU");
-        listBox.setValueIcons(valueIcons);
 
-        // sets flag icons
-        listBox.setImageURLPrefix("icons/flags/16/");
-        listBox.setImageURLSuffix(".png");
+        // populate the environment drop-down
+        EnvironmentsMap env = new EnvironmentsMap();
+        listBox.setValueMap(env.getValueMap());
+        listBox.setValueIcons(env.getIconsMap());
+
+        // sets paths for flag icons
+        listBox.setImageURLPrefix(env.getIconURLPrefix());
+        listBox.setImageURLSuffix(env.getIconURLSuffix());
 
         ComboBoxItem cbItem = new ComboBoxItem();
         cbItem.setShowTitle(false);

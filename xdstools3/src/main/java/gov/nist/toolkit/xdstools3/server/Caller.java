@@ -3,6 +3,7 @@ package gov.nist.toolkit.xdstools3.server;
 import gov.nist.toolkit.xdstools3.server.demo.DataHelper;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -49,7 +50,7 @@ public class Caller implements Serializable {
      * Set the list of environments
      * @return the list of available environments
      */
-   public String[] retrieveEnvironments(){
+   public ArrayList<String> retrieveEnvironments(){
         return null;
    }
 
@@ -57,7 +58,7 @@ public class Caller implements Serializable {
      * Set the list of test sessions
      * @return the list of test sessions
      */
-    public String[]  retrieveTestSessions(){
+    public ArrayList<String>  retrieveTestSessions(){
         return null;
     }
 
