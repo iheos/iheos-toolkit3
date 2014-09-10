@@ -19,6 +19,7 @@ public class HomeTab extends GenericTab {
         queriesAndRetrieves.addItem("Find Documents");
         queriesAndRetrieves.addItem("MPQ Find Documents");
         queriesAndRetrieves.addItem("Get Documents");
+        queriesAndRetrieves.addItem("Get Related Documents");
         queriesAndRetrieves.addItem("Retrieve Document");
         queriesAndRetrieves.addItem("Find Folders");
         queriesAndRetrieves.addItem("Get Folders");

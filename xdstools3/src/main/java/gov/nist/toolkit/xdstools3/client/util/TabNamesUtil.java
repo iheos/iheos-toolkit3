@@ -26,6 +26,7 @@ public class TabNamesUtil {
     private static final String getFolderAndContentsCode="GET_FOLDER_AND_CONTENTS";
     public static final String retrieveDocumentCode = "RETRIEVE_DOCUMENT";
     public static final String getSubmissionSetAndContentsCode = "GET_SUB_SET_AND_CONTENTS";
+    public static final String getRelatedDocuments = "GET_RELATED_DOCUMENTS";
 
 
     public static String getFindDocumentsTabCode() {
@@ -54,4 +55,5 @@ public class TabNamesUtil {
     public static String getGetFoldersAndContentsCode() {return getFolderAndContentsCode;}
     public static String getRetrieveDocumentCode() { return retrieveDocumentCode; }
     public static String getGetSubmissionSetAndContentsCode(){return getSubmissionSetAndContentsCode;}
+    public static String getGetRelatedDocumentsCode(){return getRelatedDocuments;}
 }

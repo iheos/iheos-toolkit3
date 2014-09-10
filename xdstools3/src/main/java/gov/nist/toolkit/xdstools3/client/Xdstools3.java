@@ -111,6 +111,9 @@ public class Xdstools3 implements EntryPoint {
         else if (tabName.equals(TabNamesUtil.getInstance().getGetSubmissionSetAndContentsCode())) {
             tab = new GetSubmissionSetAndContents();
         }
+        else if (tabName.equals(TabNamesUtil.getInstance().getGetRelatedDocumentsCode())) {
+            tab = new GetRelatedDocuments();
+        }
 
         // update set of tabs
         if (tab != null) {
