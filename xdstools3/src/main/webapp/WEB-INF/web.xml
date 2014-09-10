@@ -41,7 +41,6 @@
     </servlet>
 
 
-
     <!-- ============== Servlet mappings ============== -->
     <servlet-mapping>
         <servlet-name>jersey</servlet-name>
@@ -62,7 +61,6 @@
         <servlet-name>toolbarServlet</servlet-name>
         <url-pattern>/xdstools3/toolbar</url-pattern>
     </servlet-mapping>
-
 
 
     <!-- ============== Default page to serve ============== -->

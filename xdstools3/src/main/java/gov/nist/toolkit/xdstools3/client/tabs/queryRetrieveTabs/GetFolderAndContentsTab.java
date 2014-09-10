@@ -1,6 +1,5 @@
 package gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Label;
@@ -18,16 +17,15 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.Endpoint
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 
 /**
- * Created by onh2 on 9/8/2014.
+ * Created by onh2 on 9/9/2014.
  */
-public class GetDocumentsTab extends GenericCloseableTab {
-
-    private static final String header="Get Documents";
-    private GenericTextItemWithTooltipWidget docEntryUUID;
+public class GetFolderAndContentsTab extends GenericCloseableTab{
+    private static final String header="Get Folder and Contents";
+    private GenericTextItemWithTooltipWidget folderUUID;
     private EndpointWidget sites;
     private Button runBtn;
 
-    public GetDocumentsTab() {
+    public GetFolderAndContentsTab() {
         super(header);
     }
 
@@ -35,14 +33,14 @@ public class GetDocumentsTab extends GenericCloseableTab {
     protected Widget createContents() {
         VStack vStack=new VStack();
 
-        Label l1=createSubtitle1("1. Enter Document Entry UUID or UID");
-        DynamicForm docEntryUUIDForm = new DynamicForm();
-        docEntryUUID = new GenericTextItemWithTooltipWidget();
-        docEntryUUID.setTitle("Document Entry UUID or UID");
-        docEntryUUID.setWidth(400);
-        docEntryUUIDForm.setFields(docEntryUUID);
+        Label l1=createSubtitle1("1. Enter Folder UUID or UID");
+        DynamicForm docUIDForm = new DynamicForm();
+        folderUUID = new GenericTextItemWithTooltipWidget();
+        folderUUID.setTitle("Folder UUID or UID");
+        folderUUID.setWidth(400);
+        docUIDForm.setFields(folderUUID);
 
-        Label l2=createSubtitle1("2. Select site");
+        Label l2=createSubtitle1("2. Select Site");
         sites = new EndpointWidget();
 //        sites.isEndpointValueSelected()
 
@@ -52,7 +50,7 @@ public class GetDocumentsTab extends GenericCloseableTab {
         runBtn=new Button("Run");
         runBtn.disable();
 
-        vStack.addMembers(l1,docEntryUUIDForm,l2, sites,l3,tlsAndSAMLForm,runBtn);
+        vStack.addMembers(l1,docUIDForm,l2, sites,l3,tlsAndSAMLForm,runBtn);
 
         bindUI();
 
@@ -60,12 +58,12 @@ public class GetDocumentsTab extends GenericCloseableTab {
     }
 
     private void bindUI() {
-        docEntryUUID.addBlurHandler(new BlurHandler() {
+        folderUUID.addBlurHandler(new BlurHandler() {
             @Override
             public void onBlur(BlurEvent blurEvent) {
-                if (!docEntryUUID.getValueAsString().isEmpty() && sites.isEndpointValueSelected()){
+                if (!folderUUID.getValueAsString().isEmpty() && sites.isEndpointValueSelected()) {
                     runBtn.enable();
-                }else{
+                } else {
                     runBtn.disable();
                 }
             }
@@ -73,7 +71,7 @@ public class GetDocumentsTab extends GenericCloseableTab {
         sites.addSelectionChangedHandler(new SelectionChangedHandler() {
             @Override
             public void onSelectionChanged(SelectionEvent selectionEvent) {
-                if (docEntryUUID.getValue() != null && sites.isEndpointValueSelected()) {
+                if (folderUUID.getValue() != null && sites.isEndpointValueSelected()) {
                     runBtn.enable();
                 } else {
                     runBtn.disable();

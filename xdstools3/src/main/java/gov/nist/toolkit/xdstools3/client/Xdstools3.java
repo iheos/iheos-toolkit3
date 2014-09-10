@@ -16,7 +16,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTa
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetDocumentsTab;
+import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
@@ -95,6 +95,21 @@ public class Xdstools3 implements EntryPoint {
         }
         else if (tabName.equals(TabNamesUtil.getInstance().getGetDocumentsCode())) {
             tab = new GetDocumentsTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getFindFoldersCode())) {
+            tab = new FindFoldersTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getGetFoldersCode())) {
+            tab = new GetFoldersTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getRetrieveDocumentCode())) {
+            tab = new RetrieveDocumentsTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getGetFoldersAndContentsCode())) {
+            tab = new GetFolderAndContentsTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getGetSubmissionSetAndContentsCode())) {
+            tab = new GetSubmissionSetAndContents();
         }
 
         // update set of tabs
