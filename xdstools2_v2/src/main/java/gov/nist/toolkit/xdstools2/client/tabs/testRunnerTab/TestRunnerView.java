@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs.testRunnerTab;
 
 import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class TestRunnerView implements TestRunnerPresenter.TestDisplay {
 	TestRunnerSectionsView sectionsView;
 
 		
-	void build(String eventName, boolean select, TabContainer container, VerticalPanel topPanel, ToolkitServiceAsync toolkitService) {
+	void build(String eventName, boolean select, TabContainer container, VerticalPanel topPanel, Toolkit2ServiceAsync toolkitService) {
 		this.topPanel = topPanel;
 		
 		HTML title = new HTML();

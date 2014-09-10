@@ -6,10 +6,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class LoadGazelleConfigs  {
 	TabContainer container;
-	ToolkitServiceAsync toolkitService;
+	Toolkit2ServiceAsync toolkitService;
 	String type;
 	
-	public LoadGazelleConfigs(ToolkitServiceAsync toolkitService, TabContainer container, String type) {
+	public LoadGazelleConfigs(Toolkit2ServiceAsync toolkitService, TabContainer container, String type) {
 		this.toolkitService = toolkitService;
 		this.container = container;
 		this.type = type;  // System name or ALL

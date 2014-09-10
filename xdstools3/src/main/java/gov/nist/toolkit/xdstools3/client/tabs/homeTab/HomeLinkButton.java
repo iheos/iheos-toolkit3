@@ -51,6 +51,9 @@ public class HomeLinkButton extends IButton {
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getGetSubmissionSetAndContentsCode()));
                else if (title == "Get Related Documents")
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getGetRelatedDocumentsCode()));
+                 else if (title == "v2 Tab Example")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getv2TabCode()));
+
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });
