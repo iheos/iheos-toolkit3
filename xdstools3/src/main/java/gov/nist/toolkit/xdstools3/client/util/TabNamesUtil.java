@@ -20,7 +20,15 @@ public class TabNamesUtil {
     public static final String endpointsTabCode = "ENDPOINTS";
     public static final String preConnectathonTestsTabCode = "PRE_CONNECTATHON";
     public static final String documentMetadataEditorTabCode = "METADATA_EDITOR";
+    public static final String getDocumentsCode = "GET_DOCUMENTS";
     public static final String v2TabCode = "v2_TAB";
+    public static final String findFoldersCode = "FIND_FOLDERS";
+    public static final String getFoldersCode = "GET_FOLDERS";
+    private static final String getFolderAndContentsCode="GET_FOLDER_AND_CONTENTS";
+    public static final String retrieveDocumentCode = "RETRIEVE_DOCUMENT";
+    public static final String getSubmissionSetAndContentsCode = "GET_SUB_SET_AND_CONTENTS";
+    public static final String getRelatedDocuments = "GET_RELATED_DOCUMENTS";
+
 
     public static String getFindDocumentsTabCode() {
         return findDocumentsTabCode;
@@ -42,5 +50,13 @@ public class TabNamesUtil {
 
     public static String getDocumentMetadataEditorTabCode() { return documentMetadataEditorTabCode; }
     public static String getPreConnectathonTestsTabCode() { return preConnectathonTestsTabCode; }
-    public static String getv2TabCode() { return v2TabCode; }
+    public static String getGetDocumentsCode() { return getDocumentsCode; }
+    public static String getFindFoldersCode() { return findFoldersCode; }
+    public static String getGetFoldersCode() { return getFoldersCode; }
+    public static String getGetFoldersAndContentsCode() {return getFolderAndContentsCode;}
+    public static String getRetrieveDocumentCode() { return retrieveDocumentCode; }
+    public static String getGetSubmissionSetAndContentsCode(){return getSubmissionSetAndContentsCode;}
+    public static String getGetRelatedDocumentsCode(){return getRelatedDocuments;}
+     public static String getv2TabCode() { return v2TabCode; }
+
 }

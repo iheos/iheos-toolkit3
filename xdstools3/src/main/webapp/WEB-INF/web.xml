@@ -46,7 +46,6 @@
         <servlet-class>gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl</servlet-class>
     </servlet>
 
-
     <!-- ============== Servlet mappings ============== -->
     <servlet-mapping>
         <servlet-name>jersey</servlet-name>
@@ -73,7 +72,6 @@
         <servlet-name>toolkit2Servlet</servlet-name>
         <url-pattern>/xdstools3/toolkit2</url-pattern>
     </servlet-mapping>
-
 
 
     <!-- ============== Default page to serve ============== -->

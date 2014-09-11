@@ -37,8 +37,23 @@ public class HomeLinkButton extends IButton {
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode()));
                 else if (title == "Pre-Connectathon Tests")
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getPreConnectathonTestsTabCode()));
-                else if (title == "v2 Tab Example")
+                else if (title == "Get Documents")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getGetDocumentsCode()));
+               else if (title == "Find Folders")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFindFoldersCode()));
+               else if (title == "Get Folders")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getGetFoldersCode()));
+               else if (title == "Get Folder and Contents")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getGetFoldersAndContentsCode()));
+               else if (title == "Retrieve Document")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getRetrieveDocumentCode()));
+               else if (title == "Get Submission Set and Contents")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getGetSubmissionSetAndContentsCode()));
+               else if (title == "Get Related Documents")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getGetRelatedDocumentsCode()));
+                 else if (title == "v2 Tab Example")
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getv2TabCode()));
+
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });

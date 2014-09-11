@@ -18,6 +18,13 @@ public class HomeTab extends GenericTab {
         queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
         queriesAndRetrieves.addItem("Find Documents");
         queriesAndRetrieves.addItem("MPQ Find Documents");
+        queriesAndRetrieves.addItem("Get Documents");
+        queriesAndRetrieves.addItem("Get Related Documents");
+        queriesAndRetrieves.addItem("Retrieve Document");
+        queriesAndRetrieves.addItem("Find Folders");
+        queriesAndRetrieves.addItem("Get Folders");
+        queriesAndRetrieves.addItem("Get Folder and Contents");
+        queriesAndRetrieves.addItem("Get Submission Set and Contents");
 
         HomeBox tools = new HomeBox("Tools");
         tools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
