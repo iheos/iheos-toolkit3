@@ -3,7 +3,7 @@ package gov.nist.toolkit.xdstools2.client.selectors;
 import gov.nist.toolkit.xdstools2.client.CookieManager;
 import gov.nist.toolkit.xdstools2.client.Panel;
 import gov.nist.toolkit.xdstools2.client.PopupMessage;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class PatientIdSelector {
 	HorizontalPanel patientIdPanel = new HorizontalPanel();
 	ListBox patientIdListBox = new ListBox();
 	TextBox patientIdTextBox = new TextBox();
-	ToolkitServiceAsync toolkitService;
+	Toolkit2ServiceAsync toolkitService;
 	boolean isPrivateTesting = false;
 	Panel menuPanel;
 
@@ -34,7 +34,7 @@ public class PatientIdSelector {
 	static List<PatientIdSelector> instances = new ArrayList<PatientIdSelector>();
 	static String defaultAssigningAuthority = null;
 
-	public static PatientIdSelector getInstance(ToolkitServiceAsync toolkitService, Panel menuPanel) {
+	public static PatientIdSelector getInstance(Toolkit2ServiceAsync toolkitService, Panel menuPanel) {
 		for (PatientIdSelector sel : instances) {
 			if (sel.menuPanel == menuPanel) 
 				return sel;
@@ -71,7 +71,7 @@ public class PatientIdSelector {
 	
 	
 
-	PatientIdSelector(ToolkitServiceAsync toolkitService, Panel menuPanel) {
+	PatientIdSelector(Toolkit2ServiceAsync toolkitService, Panel menuPanel) {
 		this.toolkitService = toolkitService;
 		this.menuPanel = menuPanel;
 		

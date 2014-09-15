@@ -1,6 +1,8 @@
 package gov.nist.toolkit.xdstools2.client;
 
 
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import gov.nist.direct.client.MessageLog;
 import gov.nist.direct.client.config.SigningCertType;
 import gov.nist.toolkit.actorfactory.client.Simulator;
@@ -11,11 +13,7 @@ import gov.nist.toolkit.registrymetadata.client.AnyIds;
 import gov.nist.toolkit.registrymetadata.client.ObjectRef;
 import gov.nist.toolkit.registrymetadata.client.ObjectRefs;
 import gov.nist.toolkit.registrymetadata.client.Uids;
-import gov.nist.toolkit.results.client.CodesResult;
-import gov.nist.toolkit.results.client.Result;
-import gov.nist.toolkit.results.client.SiteSpec;
-import gov.nist.toolkit.results.client.TestLogs;
-import gov.nist.toolkit.results.client.XdstestLogId;
+import gov.nist.toolkit.results.client.*;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.sitemanagement.client.TransactionOfferings;
 import gov.nist.toolkit.tk.client.TkProps;
@@ -26,12 +24,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-
-@RemoteServiceRelativePath("toolkit")
-public interface ToolkitService extends RemoteService  {
+@RemoteServiceRelativePath("toolkit2")
+public interface Toolkit2Service extends RemoteService  {
 	
 	// Direct services
 	DirectRegistrationData directRegistration(DirectRegistrationData reg ) throws NoServletSessionException, Exception ;

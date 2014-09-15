@@ -8,7 +8,7 @@ import gov.nist.toolkit.sitemanagement.client.TransactionOfferings;
 import gov.nist.toolkit.xdstools2.client.CoupledTransactions;
 import gov.nist.toolkit.xdstools2.client.PopupMessage;
 import gov.nist.toolkit.xdstools2.client.StringSort;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class SiteSelectionWidget extends Composite   {
 	CoupledTransactions couplings;
 	ActorType actorType;
 	TransactionOfferings transactionOfferings;
-	ToolkitServiceAsync toolkitService;
+	Toolkit2ServiceAsync toolkitService;
 	
 	boolean samlSelected = false;
 	boolean tlsSelected = true;
@@ -56,7 +56,7 @@ public class SiteSelectionWidget extends Composite   {
 	 * @param actorType
 	 */
 	public SiteSelectionWidget(CoupledTransactions couplings, ActorType actorType,
-			ToolkitServiceAsync toolkitService
+			Toolkit2ServiceAsync toolkitService
 			) {
 		this.couplings = couplings;
 		this.actorType = actorType;

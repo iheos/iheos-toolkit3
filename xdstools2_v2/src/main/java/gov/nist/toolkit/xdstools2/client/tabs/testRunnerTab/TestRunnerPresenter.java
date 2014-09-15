@@ -8,7 +8,7 @@ import gov.nist.toolkit.xdstools2.client.CoupledTransactions;
 import gov.nist.toolkit.xdstools2.client.PopupMessage;
 import gov.nist.toolkit.xdstools2.client.StringSort;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 import gov.nist.toolkit.xdstools2.client.inspector.MetadataInspectorTab;
 import gov.nist.toolkit.xdstools2.client.tabs.testRunnerTab.TestDetailsModel.Status;
 import gov.nist.toolkit.xdstools2.client.tabs.testRunnerTab.TestRunnerView.RunButton;
@@ -55,7 +55,7 @@ public class TestRunnerPresenter {
 	}
 			
 	TestDisplay display;
-	ToolkitServiceAsync toolkitService;
+	Toolkit2ServiceAsync toolkitService;
 	TabContainer container;
 	SiteSelectionWidget siteSelectionWidget = null;
 	/**
@@ -70,7 +70,7 @@ public class TestRunnerPresenter {
 	String currentActorCode = null;
 	String currentActorDescription = null;
 	
-	TestRunnerPresenter(TabContainer container, TestDisplay d, ToolkitServiceAsync toolkitService) {
+	TestRunnerPresenter(TabContainer container, TestDisplay d, Toolkit2ServiceAsync toolkitService) {
 		display = d;
 		this.toolkitService = toolkitService;
 		this.container = container;

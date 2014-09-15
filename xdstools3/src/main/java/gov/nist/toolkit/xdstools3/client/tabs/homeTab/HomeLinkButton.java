@@ -59,6 +59,9 @@ public class HomeLinkButton extends IButton {
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getLifecycleValidationTabCode()));
                else if (title == "XDS.b Registry Folder Handling")
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFolderValidationTabCode()));
+                       else if (title == "v2 Tab Example")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getv2TabCode()));
+
                else if (title == "XDS.b Repository Do This First")
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getSubmitRetrieveTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");

@@ -4,8 +4,7 @@ import gov.nist.toolkit.xdstools2.client.CookieManager;
 import gov.nist.toolkit.xdstools2.client.Panel;
 import gov.nist.toolkit.xdstools2.client.PopupMessage;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
-import gov.nist.toolkit.xdstools2.client.selectors.TestSessionSelector.AddTestSessionClickHandler;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 import gov.nist.toolkit.xdstools2.client.tabs.TestSessionState;
 
 import java.util.List;
@@ -24,7 +23,7 @@ import com.google.gwt.user.client.ui.TextBox;
 
 public class TestSessionManager {
 	TabContainer tabContainer;
-	ToolkitServiceAsync toolkitService;
+	Toolkit2ServiceAsync toolkitService;
 	TestSessionState testSessionState;
 	Panel menuPanel;
 	HorizontalPanel testSessionPanel = new HorizontalPanel();
@@ -35,7 +34,7 @@ public class TestSessionManager {
 	TestSessionManager testSessionManager;  // really this
 	static String testSession = null;
 	
-	public TestSessionManager(TabContainer tabContainer, ToolkitServiceAsync toolkitService, Panel menuPanel) {
+	public TestSessionManager(TabContainer tabContainer, Toolkit2ServiceAsync toolkitService, Panel menuPanel) {
 		this.tabContainer = tabContainer;
 		this.toolkitService = toolkitService;
 		this.testSessionState = tabContainer.getTestSessionState();

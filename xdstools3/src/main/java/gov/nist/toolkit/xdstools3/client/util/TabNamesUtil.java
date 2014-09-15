@@ -21,6 +21,7 @@ public class TabNamesUtil {
     public static final String preConnectathonTestsTabCode = "PRE_CONNECTATHON";
     public static final String documentMetadataEditorTabCode = "METADATA_EDITOR";
     public static final String getDocumentsCode = "GET_DOCUMENTS";
+    public static final String v2TabCode = "v2_TAB";
     public static final String findFoldersCode = "FIND_FOLDERS";
     public static final String getFoldersCode = "GET_FOLDERS";
     private static final String getFolderAndContentsCode="GET_FOLDER_AND_CONTENTS";
@@ -66,4 +67,5 @@ public class TabNamesUtil {
     public static String getLifecycleValidationTabCode() {return lifecycleValidationTabCode;}
     public static String getFolderValidationTabCode() {return folderValidationTabCode;}
     public static String getSubmitRetrieveTabCode() { return submitRetrieveTabCode; }
+     public static String getv2TabCode() { return v2TabCode; }
 }
