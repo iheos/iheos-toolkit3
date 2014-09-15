@@ -27,6 +27,11 @@ public class TabNamesUtil {
     public static final String retrieveDocumentCode = "RETRIEVE_DOCUMENT";
     public static final String getSubmissionSetAndContentsCode = "GET_SUB_SET_AND_CONTENTS";
     public static final String getRelatedDocuments = "GET_RELATED_DOCUMENTS";
+    public static final String sourceStoresDocumentValidationCode = "SOURCE_STORES_DOC_VALIDATION";
+    public static final String registerAndQueryTabCode= "REGISTER_AND_QUERY";
+    public static final String lifecycleValidationTabCode = "LIFECYCLE_VALIDATION";
+    public static final String folderValidationTabCode = "FOLDER_VALIDATION";
+    public static final String submitRetrieveTabCode="SUBMIT_RETRIEVE";
 
 
     public static String getFindDocumentsTabCode() {
@@ -56,4 +61,9 @@ public class TabNamesUtil {
     public static String getRetrieveDocumentCode() { return retrieveDocumentCode; }
     public static String getGetSubmissionSetAndContentsCode(){return getSubmissionSetAndContentsCode;}
     public static String getGetRelatedDocumentsCode(){return getRelatedDocuments;}
+    public static String getSourceStoresDocumentValidationCode(){return sourceStoresDocumentValidationCode;}
+    public static String getRegisterAndQueryTabCode() { return registerAndQueryTabCode;}
+    public static String getLifecycleValidationTabCode() {return lifecycleValidationTabCode;}
+    public static String getFolderValidationTabCode() {return folderValidationTabCode;}
+    public static String getSubmitRetrieveTabCode() { return submitRetrieveTabCode; }
 }

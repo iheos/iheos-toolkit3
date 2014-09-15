@@ -12,6 +12,7 @@ import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
 import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
@@ -109,10 +110,25 @@ public class Xdstools3 implements EntryPoint {
             tab = new GetFolderAndContentsTab();
         }
         else if (tabName.equals(TabNamesUtil.getInstance().getGetSubmissionSetAndContentsCode())) {
-            tab = new GetSubmissionSetAndContents();
+            tab = new GetSubmissionSetAndContentsTab();
         }
         else if (tabName.equals(TabNamesUtil.getInstance().getGetRelatedDocumentsCode())) {
-            tab = new GetRelatedDocuments();
+            tab = new GetRelatedDocumentsTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getSourceStoresDocumentValidationCode())) {
+            tab = new SourcesStoresDocumentValidationTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getRegisterAndQueryTabCode())) {
+            tab = new RegisterAndQueryTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getLifecycleValidationTabCode())) {
+            tab = new LifecycleValidationTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getFolderValidationTabCode())) {
+            tab = new FolderValidationTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getSubmitRetrieveTabCode())) {
+            tab = new SubmitRetrieveTab();
         }
 
         // update set of tabs

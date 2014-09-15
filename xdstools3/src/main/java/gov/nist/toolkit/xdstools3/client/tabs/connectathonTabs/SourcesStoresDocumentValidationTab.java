@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.widgets.Button;
@@ -16,18 +16,13 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 
-/**
- * Created by onh2 on 9/10/2014.
- */
-public class GetSubmissionSetAndContents extends GenericCloseableTab {
-
-    private static final String header="Get Submission Set And Contents";
-
+public class SourcesStoresDocumentValidationTab extends GenericCloseableTab {
+    private final static String header = "Sources Stores Document Validation";
     private GenericTextItemWithTooltipWidget subSetUUID;
     private EndpointWidget sites;
     private Button runBtn;
 
-    public GetSubmissionSetAndContents() {
+    public SourcesStoresDocumentValidationTab() {
         super(header);
     }
 
@@ -35,14 +30,14 @@ public class GetSubmissionSetAndContents extends GenericCloseableTab {
     protected Widget createContents() {
         VStack vStack=new VStack();
 
-        Label l1=createSubtitle1("1. Enter Submission Set UUID or UID");
-        DynamicForm subSetUUIDForm = new DynamicForm();
+        Label l1=createSubtitle1("1. Enter Submission Set Unique ID or UUID");
+        DynamicForm docEntryUUIDForm = new DynamicForm();
         subSetUUID = new GenericTextItemWithTooltipWidget();
         subSetUUID.setTitle("Submission Set UUID or UID");
         subSetUUID.setWidth(400);
-        subSetUUIDForm.setFields(subSetUUID);
+        docEntryUUIDForm.setFields(subSetUUID);
 
-        Label l2=createSubtitle1("2. Select site");
+        Label l2=createSubtitle1("2. Select Registry");
         sites = new EndpointWidget();
 //        sites.isEndpointValueSelected()
 
@@ -52,7 +47,7 @@ public class GetSubmissionSetAndContents extends GenericCloseableTab {
         runBtn=new Button("Run");
         runBtn.disable();
 
-        vStack.addMembers(l1,subSetUUIDForm,l2, sites,l3,tlsAndSAMLForm,runBtn);
+        vStack.addMembers(l1,docEntryUUIDForm,l2, sites,l3,tlsAndSAMLForm,runBtn);
 
         bindUI();
 
@@ -63,9 +58,9 @@ public class GetSubmissionSetAndContents extends GenericCloseableTab {
         subSetUUID.addBlurHandler(new BlurHandler() {
             @Override
             public void onBlur(BlurEvent blurEvent) {
-                if (!subSetUUID.getValueAsString().isEmpty() && sites.isEndpointValueSelected()) {
+                if (!subSetUUID.getValueAsString().isEmpty() && sites.isEndpointValueSelected()){
                     runBtn.enable();
-                } else {
+                }else{
                     runBtn.disable();
                 }
             }

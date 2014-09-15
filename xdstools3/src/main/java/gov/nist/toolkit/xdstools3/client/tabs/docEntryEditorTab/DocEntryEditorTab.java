@@ -6,8 +6,6 @@ import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLPane;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 
-/**
- */
 public class DocEntryEditorTab extends GenericCloseableTab {
     static String header = "Document Metadata Editor";
 //    final static MetadataEditorApp app = new MetadataEditorApp();

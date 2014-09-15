@@ -10,6 +10,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.design.IconLabel;
 
 public abstract class GenericTab extends Tab implements TabInterface {
     private VLayout panel = new VLayout(10);
+    private Label headerLabel = new Label();
 
     public GenericTab(String header){
         setTitle(header);
@@ -23,10 +24,9 @@ public abstract class GenericTab extends Tab implements TabInterface {
 
     // main header
     public void setHeader(String s){
-        Label l = new Label();
-        l.setContents(s);
-        l.setStyleName("h3");
-        panel.addMember(l);
+        headerLabel.setContents(s);
+        headerLabel.setStyleName("h3");
+        panel.addMember(headerLabel);
         setPane(panel);
     }
 

@@ -51,6 +51,16 @@ public class HomeLinkButton extends IButton {
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getGetSubmissionSetAndContentsCode()));
                else if (title == "Get Related Documents")
                     Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getGetRelatedDocumentsCode()));
+               else if (title == "XDS.b Doc Source Stores Document")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getSourceStoresDocumentValidationCode()));
+               else if (title == "XDS.b Registry Do This First")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getRegisterAndQueryTabCode()));
+               else if (title == "XDS.b Lifecycle")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getLifecycleValidationTabCode()));
+               else if (title == "XDS.b Registry Folder Handling")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFolderValidationTabCode()));
+               else if (title == "XDS.b Repository Do This First")
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getSubmitRetrieveTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });

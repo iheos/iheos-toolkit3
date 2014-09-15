@@ -16,14 +16,15 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 
-public class RetrieveDocumentsTab extends GenericCloseableTab {
+public class GetSubmissionSetAndContentsTab extends GenericCloseableTab {
 
-    private static final String header="Retrieve Documents";
-    private GenericTextItemWithTooltipWidget docUID;
-    private EndpointWidget repositories;
+    private static final String header="Get Submission Set And Contents";
+
+    private GenericTextItemWithTooltipWidget subSetUUID;
+    private EndpointWidget sites;
     private Button runBtn;
 
-    public RetrieveDocumentsTab() {
+    public GetSubmissionSetAndContentsTab() {
         super(header);
     }
 
@@ -31,16 +32,16 @@ public class RetrieveDocumentsTab extends GenericCloseableTab {
     protected Widget createContents() {
         VStack vStack=new VStack();
 
-        Label l1=createSubtitle1("1. Enter Document UID");
-        DynamicForm docUIDForm = new DynamicForm();
-        docUID = new GenericTextItemWithTooltipWidget();
-        docUID.setTitle("Document UID");
-        docUID.setWidth(400);
-        docUIDForm.setFields(docUID);
+        Label l1=createSubtitle1("1. Enter Submission Set UUID or UID");
+        DynamicForm subSetUUIDForm = new DynamicForm();
+        subSetUUID = new GenericTextItemWithTooltipWidget();
+        subSetUUID.setTitle("Submission Set UUID or UID");
+        subSetUUID.setWidth(400);
+        subSetUUIDForm.setFields(subSetUUID);
 
-        Label l2=createSubtitle1("2. Select Repository");
-        repositories = new EndpointWidget();
-//        repositories.isEndpointValueSelected()
+        Label l2=createSubtitle1("2. Select site");
+        sites = new EndpointWidget();
+//        sites.isEndpointValueSelected()
 
         Label l3=createSubtitle1("3. Select SAML and TLS options");
         TLSAndSAMLForm tlsAndSAMLForm=new TLSAndSAMLForm();
@@ -48,7 +49,7 @@ public class RetrieveDocumentsTab extends GenericCloseableTab {
         runBtn=new Button("Run");
         runBtn.disable();
 
-        vStack.addMembers(l1,docUIDForm,l2, repositories,l3,tlsAndSAMLForm,runBtn);
+        vStack.addMembers(l1,subSetUUIDForm,l2, sites,l3,tlsAndSAMLForm,runBtn);
 
         bindUI();
 
@@ -56,20 +57,20 @@ public class RetrieveDocumentsTab extends GenericCloseableTab {
     }
 
     private void bindUI() {
-        docUID.addBlurHandler(new BlurHandler() {
+        subSetUUID.addBlurHandler(new BlurHandler() {
             @Override
             public void onBlur(BlurEvent blurEvent) {
-                if (!docUID.getValueAsString().isEmpty() && repositories.isEndpointValueSelected()) {
+                if (!subSetUUID.getValueAsString().isEmpty() && sites.isEndpointValueSelected()) {
                     runBtn.enable();
                 } else {
                     runBtn.disable();
                 }
             }
         });
-        repositories.addSelectionChangedHandler(new SelectionChangedHandler() {
+        sites.addSelectionChangedHandler(new SelectionChangedHandler() {
             @Override
             public void onSelectionChanged(SelectionEvent selectionEvent) {
-                if (docUID.getValue() != null && repositories.isEndpointValueSelected()) {
+                if (subSetUUID.getValue() != null && sites.isEndpointValueSelected()) {
                     runBtn.enable();
                 } else {
                     runBtn.disable();

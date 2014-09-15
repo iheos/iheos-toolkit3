@@ -16,9 +16,6 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 
-/**
- * Created by onh2 on 9/8/2014.
- */
 public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab {
     private static final String header="Find Folders";
     private PatientIDWidget patientIDWidget;
@@ -39,7 +36,6 @@ public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Gener
 
         Label l2=createSubtitle1("2. Select site");
         sites = new EndpointWidget();
-//        sites.isEndpointValueSelected()
 
         Label l3=createSubtitle1("3. Select SAML and TLS options");
         TLSAndSAMLForm tlsAndSAMLForm=new TLSAndSAMLForm();

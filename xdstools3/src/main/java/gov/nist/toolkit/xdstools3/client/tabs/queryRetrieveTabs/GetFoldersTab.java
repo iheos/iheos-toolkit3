@@ -15,14 +15,11 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithToolti
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 
-/**
- * Created by onh2 on 9/8/2014.
- */
 public class GetFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab {
     private static final String header="Get Folders";
-    private EndpointWidget sites;
-    private Button runBtn;
-    private GenericTextItemWithTooltipWidget folderUUID;
+    protected EndpointWidget sites;
+    protected Button runBtn;
+    protected GenericTextItemWithTooltipWidget folderUUID;
 
     public GetFoldersTab() {
         super(header);

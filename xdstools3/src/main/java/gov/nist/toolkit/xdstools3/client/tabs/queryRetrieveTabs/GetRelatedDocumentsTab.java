@@ -22,10 +22,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Created by onh2 on 9/10/2014.
- */
-public class GetRelatedDocuments extends GenericCloseableTab {
+public class GetRelatedDocumentsTab extends GenericCloseableTab {
     private static final String header="Get Related Documents";
 
     private GenericTextItemWithTooltipWidget docEntryUUID;
@@ -33,7 +30,7 @@ public class GetRelatedDocuments extends GenericCloseableTab {
     private EndpointWidget sites;
     private Button runBtn;
 
-    public GetRelatedDocuments() {
+    public GetRelatedDocumentsTab() {
         super(header);
     }
 
