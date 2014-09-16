@@ -37,7 +37,14 @@
     <set-property name='gwt.logging.popupHandler' value='DISABLED'/>
     <!--<set-property name='gwt.logging.enabled' value='FALSE'/>-->
 
-    <inherits name='gov.nist.hit.ds.repository.Repository' />
+    <!-- old -->
+    <!--<inherits name='gov.nist.hit.ds.repository.Repository' />-->
+    <!-- old -->
+
+    <!-- new -->
+    <inherits name='gov.nist.hit.ds.repository.RepositoryRpc' />
+    <inherits name='gov.nist.hit.ds.repository.RepositoryShared' />
+    <!-- new -->
 
 	<!-- Specify the app entry point class. -->
 	<entry-point class='gov.nist.hit.ds.logBrowser.client.LogBrowser' />

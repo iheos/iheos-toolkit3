@@ -2,17 +2,17 @@ package gov.nist.hit.ds.repository;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SearchCriteria.Criteria;
+import gov.nist.hit.ds.repository.shared.SearchTerm;
+import gov.nist.hit.ds.repository.shared.SearchTerm.Operator;
 
 import java.util.logging.Logger;
 
@@ -29,8 +29,8 @@ public class AssetHelper {
 		logger.info("Created <" + a.getId() + ">");
 		a.setProperty(PropertyKey.PARENT_ID , parent.getId().getIdString());
 
-		parent.addChild(a);
-		return a;
+		return parent.addChild(a);
+//		return a;
 	}
 	
 	/*

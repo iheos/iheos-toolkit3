@@ -54,9 +54,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-
     <modules>
-        <module>docentryeditor</module>
+        <!--put back after figuring out the jdk 1.7 issue soapHttpValidator <module>docentryeditor</module>-->
         <module>repository-tools</module>
         <module>tk-core</module>
         <module>xdstools3</module>

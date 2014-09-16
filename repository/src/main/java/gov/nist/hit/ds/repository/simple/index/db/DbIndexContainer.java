@@ -3,7 +3,7 @@ package gov.nist.hit.ds.repository.simple.index.db;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Parameter;
-import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
@@ -17,10 +17,10 @@ import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
 import gov.nist.hit.ds.repository.simple.index.Index;
 import gov.nist.hit.ds.repository.simple.index.IndexContainer;
 import gov.nist.hit.ds.repository.simple.index.db.IndexerThread.IndexStatus;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
+import gov.nist.hit.ds.repository.shared.AssetNode;
+import gov.nist.hit.ds.repository.shared.PnIdentifier;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SearchTerm;
 import gov.nist.hit.ds.utilities.io.Hash;
 
 import java.io.File;
@@ -673,7 +673,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 				
 				try {
 					
-					String index = "create unique index \"repAssetUniqueIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " (" + SearchTerm.getValueAsCsv(new String[]{"repositoryIndexId"},false) + ")";  // ,"+ repId +"," +  assetId +" These may not be unique anymore with multiple rep sources
+					String index = "create unique index \"repAssetUniqueIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " (" + SearchTerm.getValueAsCsv(new String[]{"repositoryIndexId"}, false) + ")";  // ,"+ repId +"," +  assetId +" These may not be unique anymore with multiple rep sources
 					dbc.internalCmd(index);
 
 //					index = "create index \"repAssetIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ repId +"," +  assetId +"," + assetType +",reposAcs,hash,"+ locationId + "," + parentId + ")";

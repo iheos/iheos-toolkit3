@@ -1,27 +1,27 @@
 package gov.nist.hit.ds.repository.simple.index;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.shared.AssetNode;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class BulkLoadTest {
 

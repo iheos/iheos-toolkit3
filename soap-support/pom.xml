@@ -42,10 +42,6 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>event-log</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
             <artifactId>actor-transaction</artifactId>
         </dependency>
         <dependency>

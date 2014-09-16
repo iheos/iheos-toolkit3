@@ -7,7 +7,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import gov.nist.hit.ds.logBrowser.client.widgets.LogBrowserWidget;
 import gov.nist.hit.ds.logBrowser.client.widgets.LogBrowserWidget.Feature;
-import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 
 import java.util.logging.Logger;
 

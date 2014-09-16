@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;

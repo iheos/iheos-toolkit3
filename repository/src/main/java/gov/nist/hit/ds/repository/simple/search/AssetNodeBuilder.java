@@ -5,15 +5,15 @@ package gov.nist.hit.ds.repository.simple.search;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
+import gov.nist.hit.ds.repository.shared.AssetNode;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SearchTerm;
+import gov.nist.hit.ds.repository.shared.SearchTerm.Operator;
+import gov.nist.hit.ds.repository.shared.SearchCriteria.Criteria;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class AssetNodeBuilder {
 	 public static enum Depth {		 
 			CHILDREN,
 			PARENT_ONLY
-	};	 
+	}
 	private Depth retrieveDepth;
 	
 	public AssetNodeBuilder() {
@@ -98,7 +98,7 @@ public class AssetNodeBuilder {
 
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 
-		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTOANY, new String[]{parent.getLocation(), parent.getAssetId()})); 
+		criteria.append(new SearchTerm(PropertyKey.PARENT_ID, Operator.EQUALTOANY, new String[]{parent.getLocation(), parent.getAssetId()}));
 		
 		AssetIterator iter;
 		try {
@@ -142,7 +142,7 @@ public class AssetNodeBuilder {
      */
 	public AssetNode getParentChain(Repository repos, AssetNode target, boolean initial) throws RepositoryException {
 		SearchCriteria criteria = new SearchCriteria(Criteria.OR);
-		criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO, target.getParentId()));
+		criteria.append(new SearchTerm(PropertyKey.ASSET_ID, Operator.EQUALTO, target.getParentId()));
 		criteria.append(new SearchTerm(PropertyKey.LOCATION,Operator.EQUALTO, target.getParentId()));
 
  		

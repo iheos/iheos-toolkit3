@@ -2,7 +2,7 @@ package gov.nist.hit.ds.logBrowser.client.event.asset;
 
 
 import com.google.gwt.event.shared.GwtEvent;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
+import gov.nist.hit.ds.repository.shared.AssetNode;
 
 /**
  * Out of context refers to a mode where a repository tree is not immediately available.

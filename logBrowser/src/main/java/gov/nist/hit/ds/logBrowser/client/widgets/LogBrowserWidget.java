@@ -64,11 +64,11 @@ import gov.nist.hit.ds.logBrowser.client.event.asset.SearchResultAssetClickedEve
 import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
 import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
 import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
-import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.repository.shared.AssetNode;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryTag;
+import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
