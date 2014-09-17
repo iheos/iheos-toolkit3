@@ -4,8 +4,8 @@
   can translate into JavaScript to use client side -->
 <module>
     <inherits name='com.google.gwt.user.User' />
-    <inherits name="gov.nist.toolkit.simcommon.simCommon"/>
-    <inherits name="gov.nist.toolkit.sitemanagement.siteManagement"/>
-    <inherits name="gov.nist.toolkit.valsupport.validatorsSupport"/>
+    <!--<inherits name="gov.nist.toolkit.simcommon.simCommon"/>-->
+    <!--<inherits name="gov.nist.toolkit.sitemanagement.siteManagement"/>-->
+    <!--<inherits name="gov.nist.toolkit.valsupport.validatorsSupport"/>-->
         <source path="client" />
 </module>
