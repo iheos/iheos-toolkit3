@@ -19,6 +19,7 @@ class RegistryObjectModel {
 
     String id = "";
     String status = null;
+    // TODO - conflict - accessor does not reference or update
     String home = null;
     List<SlotModel> slots = new ArrayList<SlotModel>();
     String name = "";
@@ -64,6 +65,7 @@ class RegistryObjectModel {
             slots.add(s);
         }
 
+         // TODO not ready for this yet
         name = getLocalizedString(XmlUtil.firstChildWithLocalName(ro, "Name"));
         if (name == null) name = "";
         description = getLocalizedString(XmlUtil.firstChildWithLocalName(ro, "Description"));
@@ -76,7 +78,7 @@ class RegistryObjectModel {
         for (OMElement clEle : XmlUtil.childrenWithLocalName(ro, "Classification")) {
             if (AuthorModel.isAuthorClassification(clEle)) {
                 AuthorModel aModel = new AuthorModel(m, clEle)
-                AuthorValidator a = new AuthorValidator(aModel);
+//                AuthorValidator a = new AuthorValidator(aModel);
                 authors.add(aModel);
             } else if (InternalClassificationModel.isInternalClassification(clEle)) {
                 internalClassifications.add(new InternalClassificationModel(m, clEle));

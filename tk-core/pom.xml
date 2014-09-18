@@ -14,20 +14,34 @@
     <packaging>pom</packaging>
     
     <modules>
-        <module>../repository</module>
-        <module>../http</module>
-        <module>../soap-support</module>
-        <module>../site-management</module>
-        <module>../actor-transaction</module>
-        <module>../event-log</module>
-        <module>../sim-support</module>
-        <module>../utilities</module>
-        <module>../xdsException</module>
         <module>../toolkit</module>
         <module>../common-datatypes</module>
+        <module>../utilities</module>
+        <module>../http</module>
+        <module>../soap-support</module>
+        <module>../actor-transaction</module>
+        <module>../site-management</module>
+        <module>../event-log</module>
+        <module>../sim-support</module>
+        <module>../xdsException</module>
         <module>../httpSoapValidator</module>
-        <module>../ds-sims</module>
+        <!-- Leave in core if possible
+            These APIs are internal connections - not the external services offered
+            Enables modularity within toolkit
+        -->
         <module>../tk-apis</module>
+        
+        <!-- 
+            Move out of core 
+        -->
+        <!-- Make separate -->
+        <module>../repository</module>
+        <!-- Split into 
+             ds-base - Document Sharing core functionality
+                        includes schema, validation
+             ds-sims - Simulators
+        -->
+        <module>../ds-sims</module>
     </modules>
     
     <dependencies>

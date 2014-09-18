@@ -42,7 +42,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
         new LidSubValidator(this, model, vc).asSelf().run()
 
         new SubmissionSetSlotsValidator(simHandle, model).asPeer().run()
-        new SubmissionSetClassificationsValidator(simHandle, model).asPeer().run()
+//        new SubmissionSetClassificationsValidator(simHandle, model).asPeer().run()
     }
 
     // Guards

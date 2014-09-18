@@ -36,7 +36,7 @@ public class Rfc3066Validator extends ValComponentBase {
 	static String alphas = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='RFC3066001', msg='Value', ref="ITI TF-3: Table 4.1-6")
+    @Validation(id='RFC3066001', msg='must be RFC 3066 format', ref="ITI TF-3: Table 4.1-6")
     def validate() {
 		if (input == null || input.equals("")) { fail('Field is empty'); return }
 		String[] parts = input.split("-");
@@ -50,8 +50,8 @@ public class Rfc3066Validator extends ValComponentBase {
 	}
 
 	boolean allAlphas(String st) {
-		for (int i=0; i<stlength(); i++) {
-			char c = st.charAt(i);
+		for (int i=0; i<st.length(); i++) {
+			String c = st.charAt(i);
 			if (alphas.indexOf(c) == -1)
 				return false;
 		}
@@ -59,7 +59,7 @@ public class Rfc3066Validator extends ValComponentBase {
 	}
 	boolean allAlphasAndDigits(String st) {
 		for (int i=0; i<st.length(); i++) {
-			char c = st.charAt(i);
+			String c = st.charAt(i);
 			if (digits.indexOf(c) == -1 && alphas.indexOf(c) == -1)
 				return false;
 		}

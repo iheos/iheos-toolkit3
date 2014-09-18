@@ -33,14 +33,14 @@ public class SoapMessageParser extends ValComponentBase {
 
     // TODO:  This needs a Do-This-First annotation similar to dependsOn.  It should run first because we label it so not because it has no dependencies.
     @Fault(code=FaultCode.Sender)
-    @Validation(id="SoapHTTPBodyPresent",  msg="HTTP Body Present", ref="??")
+    @Validation(id="Soap001",  msg="HTTP Body Present", ref="??")
     public void bodyPresent() throws SoapFaultException {
         assertNotNull xmlMessage
     }
 
     @Fault(code=FaultCode.Sender)
-    @DependsOn(ids=['SoapHTTPBodyPresent'])
-    @Validation(id="SoapParseXML", msg="Parsing XML", ref="??")
+    @DependsOn(ids=['Soap001'])
+    @Validation(id="Soap002", msg="Parsing XML", ref="??")
     public void parseXML() throws SoapFaultException {
         defaultMsg()
         try {
@@ -51,8 +51,8 @@ public class SoapMessageParser extends ValComponentBase {
     }
 
     @Fault(code=FaultCode.Sender)
-    @DependsOn(ids=['SoapParseXML'])
-    @Validation(id="SoapParseEnvelope", msg="Parse SOAP Envelope", ref="??")
+    @DependsOn(ids=['Soap002'])
+    @Validation(id="Soap003", msg="Parse SOAP Envelope", ref="??")
     public void parseSOAPEnvelope() throws SoapFaultException {
         defaultMsg()
         try {
@@ -63,28 +63,28 @@ public class SoapMessageParser extends ValComponentBase {
     }
 
     @Fault(code=FaultCode.Sender)
-    @DependsOn(ids=['SoapParseEnvelope'])
-    @Validation(id="SoapVerifyEnvelope", msg="Top element must be Envelope", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=['Soap003'])
+    @Validation(id="Soap004", msg="Top element must be Envelope", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
     public void verifySOAPEnvelopeElement() throws SoapFaultException { assertEquals('Envelope', root?.getLocalName()) }
 
     @Fault(code=FaultCode.Sender)
-    @DependsOn(ids=['SoapParseEnvelope'])
-    @Validation(id="SoapVerifyHeaderPresent", msg="Header must be present and be first child of Envelope", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=['Soap003'])
+    @Validation(id="Soap005", msg="Header must be present and be first child of Envelope", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
     public void verifySOAPHeaderElement() throws SoapFaultException { assertEquals('Header', header?.getLocalName()) }
 
     @Fault(code=FaultCode.Sender)
-    @DependsOn(ids=['SoapParseEnvelope'])
-    @Validation(id="SoapParserVerifyBodyPresent", msg="Body must be present, must be second child of Envelope", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=['Soap003'])
+    @Validation(id="Soap006", msg="Body must be present, must be second child of Envelope", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
     public void verifySOAPBodyElement() throws SoapFaultException { assertEquals('Body', body?.getLocalName()) }
 
     @Fault(code=FaultCode.Sender)
-    @DependsOn(ids=['SoapParseEnvelope'])
-    @Validation(id="SoapVerifyPartCount", msg="Envelope must have 2 children", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=['Soap003'])
+    @Validation(id="Soap007", msg="Envelope must have 2 children", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
     public void validatePartCount() throws SoapFaultException { assertEquals(2, partCount) }
 
     @Fault(code=FaultCode.Sender)
-    @DependsOn(ids=['SoapParseEnvelope'])
-	@Validation(id="SoapEnvelopeNamespace", msg="Correct Envelope Namespace", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=['Soap003'])
+	@Validation(id="Soap008", msg="Correct Envelope Namespace", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateSOAPEnvelopeNamespace() throws SoapFaultException {
 		OMNamespace ns = root?.getNamespace();
 		if (ns != null)
@@ -94,8 +94,8 @@ public class SoapMessageParser extends ValComponentBase {
 	}
 
     @Fault(code=FaultCode.Sender)
-    @DependsOn(ids=['SoapParseEnvelope'])
-	@Validation(id="SoapHeaderNamespace", msg="Correct Header Namespace", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=['Soap003'])
+	@Validation(id="Soap009", msg="Correct Header Namespace", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateSOAPHeaderNamespace() throws SoapFaultException {
 		OMNamespace ns = header?.getNamespace();
 		if (ns != null)
@@ -105,8 +105,8 @@ public class SoapMessageParser extends ValComponentBase {
 	}
 
     @Fault(code=FaultCode.Sender)
-    @DependsOn(ids=['SoapParseEnvelope'])
-	@Validation(id="SoapBodyNamespace", msg="Correct Body Namespace", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
+    @DependsOn(ids=['Soap003'])
+	@Validation(id="Soap010", msg="Correct Body Namespace", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
 	public void validateSOAPBodyNamespace() throws SoapFaultException {
 		OMNamespace ns = body?.getNamespace();
 		if (ns != null)

@@ -2,6 +2,7 @@ package gov.nist.hit.ds.dsSims.metadataValidator.object
 
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.*
+import gov.nist.hit.ds.dsSims.metadataValidator.field.ValidatorCommon
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
@@ -26,7 +27,6 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
     }
 
     // Guards
-    def optional() { true }
 
     // /////////////////////////////////////////////////////////
     // creationTime
@@ -46,14 +46,18 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
     @Validation(id = 'DESlot002', msg = 'creationTime must have single value', ref = "ITI TF-3: Table 4.1-5")
     def creationTimeSingleValue() {
         assertEquals(1, model.getSlot('creationTime').size())
-        for (int i = 0; i < model.getSlot('creationTime').size(); i++) {
-            infoFound(model.getSlot('creationTime').getValue(i))
-        }
     }
 
     @Guard(methodNames = ['hasCreationTime'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'DESlot003', msg = 'creationTime must be DTM format', ref = "ITI TF-3: Table 4.1-5")
+    @Validation(id = 'DESlot003', msg = 'creationTime value', ref = "ITI TF-3: Table 4.1-5")
+    def creationTimeValue() {
+        infoFound(model.getSlot('creationTime').getValue(0))
+    }
+
+    @Guard(methodNames = ['hasCreationTime'])
+    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
+    @Validation(id = 'DESlot004', msg = 'creationTime format validation follows', ref = "ITI TF-3: Table 4.1-5")
     def creationTimeFormat() {
         new DtmSubValidator(this, model.getSlot('creationTime').getValue(0)).asSelf().run()
     }
@@ -76,6 +80,12 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
     @Validation(id = 'DESlot012', msg = 'languageCode must have single value', ref = "ITI TF-3: Table 4.1-5")
     def languageCodeSingleValue() {
         assertEquals(1, model.getSlot('languageCode').size())
+    }
+
+    @Guard(methodNames = ['hasLanguageCode'])
+    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
+    @Validation(id = 'DESlot013', msg = 'languageCode value', ref = "ITI TF-3: Table 4.1-5")
+    def languageCodeValue() {
         for (int i = 0; i < model.getSlot('languageCode').size(); i++) {
             infoFound(model.getSlot('languageCode').getValue(i))
         }
@@ -83,7 +93,7 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
 
     @Guard(methodNames = ['hasLanguageCode'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'DESlot013', msg = 'languageCode must be DTM format', ref = "ITI TF-3: Table 4.1-5")
+    @Validation(id = 'DESlot014', msg = 'languageCode format validation follows', ref = "ITI TF-3: Table 4.1-5")
     def languageCodeFormat() {
         new Rfc3066Validator(simHandle, model.getSlot('languageCode').getValue(0)).asSelf().run()
     }
@@ -106,6 +116,12 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
     @Validation(id = 'DESlot022', msg = 'sourcePatientId must have single value', ref = "ITI TF-3: Table 4.1-5")
     def sourcePatientIdSingleValue() {
         assertEquals(1, model.getSlot('sourcePatientId').size())
+    }
+
+    @Guard(methodNames = ['hasSourcePatientId'])
+    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
+    @Validation(id = 'DESlot023', msg = 'sourcePatientId value', ref = "ITI TF-3: Table 4.1-5")
+    def sourcePatientIdValue() {
         for (int i = 0; i < model.getSlot('sourcePatientId').size(); i++) {
             infoFound(model.getSlot('sourcePatientId').getValue(i))
         }
@@ -113,53 +129,25 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
 
     @Guard(methodNames = ['hasSourcePatientId'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'DESlot023', msg = 'sourcePatientId must be DTM format', ref = "ITI TF-3: Table 4.1-5")
+    @Validation(id = 'DESlot024', msg = 'sourcePatientId must be CX format', ref = "ITI TF-3: Table 4.1-5")
     def sourcePatientIdFormat() {
-        new CxSubValidator(this, model.getSlot('sourcePatientId').getValue(0)).asSelf().run()
-    }
-
-    // /////////////////////////////////////////////////////////
-    // sourcePatientInfo
-    //
-
-    def hasSourcePatientInfo() { model.getSlot('sourcePatientInfo')?.size() }
-
-    def notHasSourcePatientInfo() { !model.getSlot('sourcePatientInfo')?.size() }
-
-    @Optional(methodNames = ['notHasSourcePatientInfo'])
-    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'DESlot031', msg = 'sourcePatientInfo is present', ref = "ITI TF-3: Table 4.1-5")
-    def sourcePatientInfoPresent() {
-        if (!hasSourcePatientInfo())
-            fail('No value')
-    }
-
-    @Guard(methodNames = ['hasSourcePatientInfo'])
-    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'DESlot032', msg = 'sourcePatientInfo must have single value', ref = "ITI TF-3: Table 4.1-5")
-    def sourcePatientInfoSingleValue() {
-        assertEquals(1, model.getSlot('sourcePatientInfo').size())
-        for (int i = 0; i < model.getSlot('sourcePatientInfo').size(); i++) {
-            infoFound(model.getSlot('sourcePatientInfo').getValue(i))
-        }
-    }
-
-    @Guard(methodNames = ['hasSourcePatientInfo'])
-    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'DESlot033', msg = 'sourcePatientInfo must be CX format', ref = "ITI TF-3: Table 4.1-5")
-    def sourcePatientInfoFormat() {
-        new SourcePatientInfoValidator(simHandle, model.getSlot('sourcePatientInfo')).asSelf().run()
+        String input = model.getSlot('sourcePatientId').getValue(0)
+        String error = ValidatorCommon.validate_CX_datatype(input);
+        if (error != null)
+            fail(error, input)
     }
 
     // /////////////////////////////////////////////////////////
     // legalAuthenticator
     //
 
-    def haslegalAuthenticator() { model.getSlot('legalAuthenticator')?.size() }
+    def hasLegalAuthenticator() { model.getSlot('legalAuthenticator')?.size() }
 
-    def notHaslegalAuthenticator() { !model.getSlot('legalAuthenticator')?.size() }
+    def notHasLegalAuthenticator() { !model.getSlot('legalAuthenticator')?.size() }
 
-    @Optional(methodNames = ['notHasLegalAuthenticator'])
+    def trueFunction() { true }
+
+    @Optional(methodNames = ['trueFunction'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id = 'DESlot031', msg = 'legalAuthenticator is present', ref = "ITI TF-3: Table 4.1-5")
     def legalAuthenticatorPresent() {
@@ -167,7 +155,7 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
             fail('No value')
     }
 
-    @Guard(methodNames = ['hasSourcePatientInfo'])
+    @Guard(methodNames = ['hasLegalAuthenticator'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id = 'DESlot032', msg = 'legalAuthenticator must have single value', ref = "ITI TF-3: Table 4.1-5")
     def legalAuthenticatorSingleValue() {
@@ -177,7 +165,7 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
         }
     }
 
-    @Guard(methodNames = ['hasSourcePatientInfo'])
+    @Guard(methodNames = ['hasLegalAuthenticator'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id = 'DESlot033', msg = 'legalAuthenticator must be XCN format', ref = "ITI TF-3: Table 4.1-5")
     def legalAuthenticatorFormat() {
@@ -399,5 +387,39 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
     def documentAvailabilityFormat() {
         assertIn(['urn:ihe:iti:2010:DocumentAvailability:Online', 'urn:ihe:iti:2010:DocumentAvailability:Offline'], model.getSlot('documentAvailability').getValue(0))
     }
+
+    // /////////////////////////////////////////////////////////
+    // sourcePatientInfo
+    //
+
+    def hasSourcePatientInfo() { model.getSlot('sourcePatientInfo')?.size() }
+
+    def notHasSourcePatientInfo() { !model.getSlot('sourcePatientInfo')?.size() }
+
+    @Optional(methodNames = ['notHasSourcePatientInfo'])
+    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
+    @Validation(id = 'DESlot111', msg = 'sourcePatientInfo is present', ref = "ITI TF-3: Table 4.1-5")
+    def sourcePatientInfoPresent() {
+        if (!hasSourcePatientInfo())
+            fail('No value')
+    }
+
+    @Guard(methodNames = ['hasSourcePatientInfo'])
+    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
+    @Validation(id = 'DESlot112', msg = 'sourcePatientInfo must have single value', ref = "ITI TF-3: Table 4.1-5")
+    def sourcePatientInfoSingleValue() {
+        assertEquals(1, model.getSlot('sourcePatientInfo').size())
+        for (int i = 0; i < model.getSlot('sourcePatientInfo').size(); i++) {
+            infoFound(model.getSlot('sourcePatientInfo').getValue(i))
+        }
+    }
+
+    @Guard(methodNames = ['hasSourcePatientInfo'])
+    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
+    @Validation(id = 'DESlot113', msg = 'sourcePatientInfo must be CX format', ref = "ITI TF-3: Table 4.1-5")
+    def sourcePatientInfoFormat() {
+        new SourcePatientInfoValidator(simHandle, model.getSlot('sourcePatientInfo')).asSelf().run()
+    }
+
 
 }

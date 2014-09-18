@@ -93,14 +93,22 @@ public class ValidationEngine {
     private def getARunableValidationMethod() {
         def runFirst = validationMethods.find { it.setup && it.runable() }
         if (runFirst) { setupRunable(runFirst); return runFirst }
-        def valMethod = validationMethods.find { validationMethod ->
-            if (!(validationMethod.runable() && dependenciesSatisfied(validationMethod.dependsOnId))) return false
-            log.debug("For ${validationMethod.id}...")
-            evalGuard(validationMethod)// determines FOUND status
+        def runableMethods = validationMethods.findAll() { validationMethod ->
+            validationMethod.runable() && dependenciesSatisfied(validationMethod.dependsOnId)
         }
+        if (!runableMethods) return null
+        def valMethod = runableMethods.sort { it.id }.find { validationMethod ->
+            evalGuard(validationMethod)
+        }
+
+//        def valMethod = validationMethods.find { validationMethod ->
+//            if (!(validationMethod.runable() && dependenciesSatisfied(validationMethod.dependsOnId))) return false
+//            log.debug("For ${validationMethod.id}...")
+//            evalGuard(validationMethod)// determines FOUND status
+//        }
         if (valMethod) {
             setupRunable(valMethod)
-            valMethod.required = !evalOptional(valMethod)
+            valMethod.required = !isOptional(valMethod)
             return valMethod
         }
         return null
@@ -121,7 +129,9 @@ public class ValidationEngine {
         return true
     }
 
-    private boolean evalOptional(ValidationMethod validationMethod) {
+    // If any @Optional guard are true then the valiation is optional
+    // and we return true here
+    private boolean isOptional(ValidationMethod validationMethod) {
         for (def guardMethodName in validationMethod.optionalGuardMethodNames) {
             def guardValue = validationObject."${guardMethodName}"()
             log.debug("Optional Guard ${guardMethodName}? ${guardValue}")

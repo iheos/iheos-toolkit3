@@ -977,6 +977,7 @@ public class Metadata {
         addExternalId(ele, MetadataSupport.XDSFolder_uniqueid_uuid, id);
     }
 
+    @Deprecated
     public void addExternalId(OMElement ele, String uuid, String id) {
         OMElement e = MetadataSupport.om_factory.createOMElement(MetadataSupport.externalidentifier_qnamens);
         ele.addChild(e);
@@ -989,6 +990,25 @@ public class Metadata {
         if (myid.startsWith("urn:uuid:"))
             e.addAttribute("lid", myid, null);
         e.addAttribute("registryObject", ele.getAttributeValue(MetadataSupport.id_qname), null);
+
+        addVersionInfo(e, "1.1");
+
+    }
+
+    public void addExternalId(OMElement ele, String uuid, String id, String name) {
+        OMElement e = MetadataSupport.om_factory.createOMElement(MetadataSupport.externalidentifier_qnamens);
+        ele.addChild(e);
+
+        String myid = allocate_id();
+        e.addAttribute("id", myid, null);
+        e.addAttribute("objectType", "urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier", null);
+        e.addAttribute("identificationScheme", uuid, null);
+        e.addAttribute("value", id, null);
+        if (myid.startsWith("urn:uuid:"))
+            e.addAttribute("lid", myid, null);
+        e.addAttribute("registryObject", ele.getAttributeValue(MetadataSupport.id_qname), null);
+
+        addName(e, name);
 
         addVersionInfo(e, "1.1");
 
@@ -1034,6 +1054,15 @@ public class Metadata {
         ele.addChild(e);
 
         e.addAttribute("versionName", version, null);
+    }
+
+    void addName(OMElement ele, String value) {
+        OMElement e = MetadataSupport.om_factory.createOMElement(MetadataSupport.name_qnamens);
+        ele.addChild(e);
+
+        OMElement ls = MetadataSupport.om_factory.createOMElement(MetadataSupport.localizedstring_qnamens);
+        e.addChild(ls);
+        ls.addAttribute("value", value, null);
     }
 
     public void addLid(OMElement ele, String lid) {

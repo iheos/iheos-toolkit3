@@ -40,8 +40,4 @@ public class DtmSubValidator  extends ValComponentBase {
     def formatCheck() {
         assertTrue(ValidatorCommon.isInt(input))
     }
-    @Validation(id = 'DTM003', msg = 'HL7 V2 DateTime value', ref = "ITI TF-3: Table 4.1-6")
-    def content() {
-        infoFound(input)
-    }
 }
