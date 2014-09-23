@@ -64,7 +64,7 @@ import gov.nist.hit.ds.logBrowser.client.event.asset.SearchResultAssetClickedEve
 import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
 import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
 import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.shared.AssetNode;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryTag;
@@ -353,6 +353,10 @@ public class LogBrowserWidget extends Composite {
         } else if (Feature.TRANSACTION_FILTER_ADVANCED==f) {
             return setupTxFilterAdvanced();
         }  else if (Feature.EVENT_MESSAGE_AGGREGATOR==f) {
+            /**
+             * local test only
+             * C:\e\artrep_test_resources\Installation\IHE-Testing\xdstools2_environment\repositories\data\Sim\123\Events\2014_07_29_13_17_30_089
+             */
             String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
             String type = "validators";
             String[] displayColumns = new String[]{"ID","STATUS","MSG"};

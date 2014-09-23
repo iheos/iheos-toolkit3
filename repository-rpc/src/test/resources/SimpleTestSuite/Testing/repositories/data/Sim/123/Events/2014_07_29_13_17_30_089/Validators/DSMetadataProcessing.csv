@@ -1,0 +1,2 @@
+ID, STATUS, R/O, EXPECTED, FOUND, MSG, CODE, LOCATION, REFERENCE, 
+MetadataParser001, ERROR, R, , Metadata: No Submission Set found: no RegistryPackage object found with a Classification (classificationNode= urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd) or an ExternalIdentifier with correct identificationScheme for uniqueID; patientID or sourceID attribute, Parse Metadata, , , ??, 

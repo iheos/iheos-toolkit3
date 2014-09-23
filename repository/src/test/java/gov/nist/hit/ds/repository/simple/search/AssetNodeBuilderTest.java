@@ -9,7 +9,7 @@ import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.repository.shared.AssetNode;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

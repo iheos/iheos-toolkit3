@@ -5,7 +5,7 @@ import gov.nist.hit.ds.dsSims.Transaction
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.httpSoapValidator.components.parsers.SoapMessageParser
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
-import gov.nist.hit.ds.tkapis.AssetId
+import gov.nist.hit.ds.repository.shared.id.AssetId
 import gov.nist.hit.ds.tkapis.validation.MessageValidator
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
 import gov.nist.hit.ds.tkapis.validation.ValidateTransactionResponse

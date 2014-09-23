@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import gov.nist.hit.ds.logBrowser.client.event.asset.SearchResultAssetClickedEvent;
 import gov.nist.hit.ds.logBrowser.client.event.FilterSelectedEvent;
 import gov.nist.hit.ds.repository.shared.PropertyKey;
-import gov.nist.hit.ds.repository.shared.AssetNode;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.rpc.search.client.ContextSupplement;
 import gov.nist.hit.ds.repository.shared.PnIdentifier;
 import gov.nist.hit.ds.repository.rpc.search.client.QueryParameters;

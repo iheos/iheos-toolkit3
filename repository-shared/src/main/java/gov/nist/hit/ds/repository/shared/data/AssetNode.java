@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.repository.shared;
+package gov.nist.hit.ds.repository.shared.data;
 
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -87,9 +87,19 @@ public class AssetNode implements IsSerializable, Serializable {
 	public void setAssetId(String assetId) {
 		this.assetId = assetId;
 	}
+
+    /**
+     *
+     * @return The type keyword.
+     */
 	public String getType() {
 		return type;
 	}
+
+    /**
+     * The type keyword.
+     * @param type
+     */
 	public void setType(String type) {
 		this.type = type;
 	}

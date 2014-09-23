@@ -42,7 +42,7 @@ public class CsvTableFactory {
     public CellTable<List<SafeHtml>> createCellTable(ListDataProvider<List<SafeHtml>> dataProvider , String [][]csv) {
         // Create a CellTable (based on Stack ans. 15122103).
         // CellTable<List<String>> table = new CellTable<List<String>>();
-        CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>(256); // FIXME: set pager, limit to first 256
+        CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>(500); // FIXME: set pager, limit the number of rows displayed to first 500
 
         table.setSelectionModel(new SingleSelectionModel<List<SafeHtml>>());
 

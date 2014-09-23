@@ -9,7 +9,7 @@ import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
-import gov.nist.hit.ds.repository.shared.AssetNode;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
 import gov.nist.hit.ds.repository.shared.SearchTerm;
 import gov.nist.hit.ds.repository.shared.SearchTerm.Operator;
@@ -92,13 +92,27 @@ public class AssetNodeBuilder {
         return new SearchResultIterator(new Repository[]{repos}, criteria, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE});
     }
 
-
     public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent) throws RepositoryException {
+        return getImmediateChildren(repos, parent, null);
+    }
+
+    public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent, SearchCriteria detailCriteria) throws RepositoryException {
 		List<AssetNode> children = new ArrayList<AssetNode>();
 
-		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+        SearchCriteria parentCriteria = new SearchCriteria(Criteria.AND);
+        parentCriteria.append(new SearchTerm(PropertyKey.PARENT_ID, Operator.EQUALTOANY, new String[]{parent.getLocation(), parent.getAssetId()}));
 
-		criteria.append(new SearchTerm(PropertyKey.PARENT_ID, Operator.EQUALTOANY, new String[]{parent.getLocation(), parent.getAssetId()}));
+
+        SearchCriteria criteria = null;
+
+        if (detailCriteria!=null) {
+            criteria = new SearchCriteria(Criteria.AND);
+            criteria.append(parentCriteria);
+            criteria.append(detailCriteria);
+        } else {
+            criteria = parentCriteria;
+        }
+
 		
 		AssetIterator iter;
 		try {

@@ -7,7 +7,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.NoServletSessionException;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
-import gov.nist.hit.ds.repository.shared.AssetNode;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
 
 import java.util.List;

@@ -25,7 +25,7 @@ import gov.nist.hit.ds.logBrowser.client.CsvTableFactory;
 import gov.nist.hit.ds.logBrowser.client.event.asset.InContextAssetClickedEvent;
 import gov.nist.hit.ds.logBrowser.client.event.asset.OutOfContextAssetClickedEvent;
 import gov.nist.hit.ds.repository.shared.PropertyKey;
-import gov.nist.hit.ds.repository.shared.AssetNode;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
@@ -82,7 +82,7 @@ public class EventMessageAggregatorWidget extends Composite {
     private List<String[]> rows = new ArrayList<String[]>();
 
 
-    private DataGrid<List<EventMessageCell>> table = new DataGrid<List<EventMessageCell>>(300); // TODO: add pager
+    private DataGrid<List<EventMessageCell>> table = new DataGrid<List<EventMessageCell>>(500); // TODO: add pager
     private ListDataProvider<List<EventMessageCell>> dataProvider  = new ListDataProvider<List<EventMessageCell>>();
     private List<List<EventMessageCell>> dataRows = new ArrayList<List<EventMessageCell>>();
 

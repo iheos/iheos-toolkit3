@@ -146,7 +146,7 @@ public class SearchTerm implements IsSerializable, Serializable {
 		this.operator = op;
 		this.values = new String[]{value};
 	}
-		
+
 	
 	public String getAssetType() {
 		return assetType;

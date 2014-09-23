@@ -15,7 +15,7 @@ public class SimpleType extends Type {
 	 * 
 	 */
 	private static final long serialVersionUID = 5856958238533928287L;
-	// Create Domain enum here
+	// TODO: Create Domain enum here
 	public static final String ASSET = "asset";
 	public static final String REPOSITORY = "repository";
 
@@ -26,7 +26,14 @@ public class SimpleType extends Type {
 			throw new RepositoryException(RepositoryException.NULL_ARGUMENT + " : " +
 					"Type keyword cannot be empty");
 	}
-	
+
+    /**
+     *
+     * @param domain The type domain. Some values are: asset or domain.
+     * @param keyword The identifier of the type.
+     * @param description A type description.
+     * @throws RepositoryException
+     */
 	public SimpleType(String domain, String keyword, String description) throws RepositoryException {
 		super("", domain, keyword, description);
 		

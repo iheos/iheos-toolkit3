@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.repository.rpc.search.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import gov.nist.hit.ds.repository.shared.AssetNode;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 

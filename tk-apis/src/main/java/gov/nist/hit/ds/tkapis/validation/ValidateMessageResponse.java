@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.tkapis.validation;
 
-import gov.nist.hit.ds.tkapis.AssetId;
+import gov.nist.hit.ds.repository.shared.id.AssetId;
 
 /**
 * Created by bmajur on 8/28/14.
