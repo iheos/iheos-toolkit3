@@ -42,6 +42,35 @@ public class RestApp {
             if (response.getStatus() != 200) {
                 throw new RuntimeException("Failed : HTTP error code : "
                         + response.getStatus());
+                // TODO response error code needs to be handled better
+            }
+
+            // Retrieve the entity passed over REST
+            return response.getEntity(String.class);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+
+
+    /**
+     * Retrieves an empty String through the REST API to check error handling mechanism.
+     */
+    public static String getEmptyString() {
+
+        try {
+            // Send out the request
+            ClientResponse response = Client.create().resource("http://localhost:8080/rest/rest/apistrings/v1/string/readempty").get(ClientResponse.class);
+
+            // Check server response
+            if (response.getStatus() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + response.getStatus());
+                // TODO response error code needs to be handled better
             }
 
             // Retrieve the entity passed over REST
