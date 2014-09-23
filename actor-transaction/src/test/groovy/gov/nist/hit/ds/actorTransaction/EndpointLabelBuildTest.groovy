@@ -54,7 +54,7 @@ public class EndpointLabelBuildTest {
 				TlsType.TLS,
 				AsyncType.ASYNC
 				);
-		assertEquals("", "Register_TLS_ASYNC", label.get());
+		assertEquals("", "Register_TLS_ASYNC", label.label());
 		assertTrue(label.isTls());
 		assertTrue(label.isAsync());
 		assertEquals("", register, label.getTransType());
@@ -64,7 +64,7 @@ public class EndpointLabelBuildTest {
 				TlsType.NOTLS,
 				AsyncType.ASYNC
 				);
-		assertEquals("", "Register_ASYNC", label.get());
+		assertEquals("", "Register_ASYNC", label.label());
 		assertFalse(label.isTls());
 		assertTrue(label.isAsync());
 		assertEquals("", register, label.getTransType());
@@ -74,7 +74,7 @@ public class EndpointLabelBuildTest {
 				TlsType.TLS,
 				AsyncType.SYNC
 				);
-		assertEquals("", "Register_TLS", label.get());
+		assertEquals("", "Register_TLS", label.label());
 		assertTrue(label.isTls());
 		assertFalse(label.isAsync());
 		assertEquals("", register, label.getTransType());
@@ -84,7 +84,7 @@ public class EndpointLabelBuildTest {
 				TlsType.NOTLS,
 				AsyncType.SYNC
 				);
-		assertEquals("", "Register", label.get());
+		assertEquals("", "Register", label.label());
 		assertFalse(label.isTls());
 		assertFalse(label.isAsync());
 		assertEquals("", register, label.getTransType());

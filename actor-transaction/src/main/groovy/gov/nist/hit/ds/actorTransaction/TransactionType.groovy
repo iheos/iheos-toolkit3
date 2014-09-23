@@ -23,6 +23,7 @@ class TransactionType implements IsSerializable, Serializable {
 
     public String getCode() { return code }
     public String getName() { return name }
+    public String setName(String name) { this.name = name; }
     public String getShortName() { return shortName }
     Map<String, String> props = new HashMap<String, String>()
 

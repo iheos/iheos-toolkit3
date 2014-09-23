@@ -17,8 +17,7 @@ public class TimeActorSimConfigElement extends AbstractActorSimConfigElement imp
 	
 	public TimeActorSimConfigElement() { }
 	
-	public TimeActorSimConfigElement setName(String name) {
+	public void setName(String name) {
 		this.name = name;
-		return this;
 	}
 }

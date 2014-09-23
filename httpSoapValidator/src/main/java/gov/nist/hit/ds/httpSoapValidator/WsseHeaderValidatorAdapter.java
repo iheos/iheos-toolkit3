@@ -76,7 +76,7 @@ public class WsseHeaderValidatorAdapter /* extends MessageValidator */ {
 //			logMainVal.addAppender(wsseLogApp);
 //
 //			SecurityContext context = SecurityContextFactory.getInstance();
-//			// TODO need to check how to get information to put in the context!!
+//			// TODO need to check how to label information to put in the context!!
 //			// patientId, homeCommunityId, endpoint url..
 //
 //			val.validate(header, context);

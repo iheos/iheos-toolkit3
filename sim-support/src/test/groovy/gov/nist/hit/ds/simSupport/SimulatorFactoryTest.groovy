@@ -1,15 +1,12 @@
-package gov.nist.hit.ds.actorTransaction;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-
-public class EndpointLabelSetGetTest {
-
-	TransactionType register;
-    ActorType actorType;
-
+package gov.nist.hit.ds.simSupport
+import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.simSupport.service.SimService
+import gov.nist.hit.ds.simSupport.utilities.SimSupport
+import spock.lang.Specification
+/**
+ * Created by bmajur on 9/22/14.
+ */
+class SimulatorFactoryTest extends Specification {
     static String config = '''
 <ActorsTransactions>
     <transaction displayName="Stored Query" id="sq" code="sq" asyncCode="sq.as">
@@ -29,7 +26,7 @@ public class EndpointLabelSetGetTest {
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
     </transaction>
     <actor displayName="Document Registry" id="reg">
-        <simFactoryClass class="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
+        <simFactoryClass class="gov.nist.hit.ds.simSupport.factories.DocumentRegistryActorFactory"/>
         <transaction id="rb"/>
         <transaction id="sq"/>
         <transaction id="update"/>
@@ -41,34 +38,34 @@ public class EndpointLabelSetGetTest {
     </actor>
 </ActorsTransactions>
 '''
-    @Before
+    def factory = new ActorTransactionTypeFactory()
+    def simId = '1234'
+    def actorType = 'reg'
+
     void setup() {
-        ActorTransactionTypeFactory.clear()
-        new ActorTransactionTypeFactory().loadFromString(config)
-        actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
-        register = new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb')
+        SimSupport.initialize()
+        factory.clear()
+        factory.loadFromString(config)
     }
 
-	@Test
-	public void setGetTest()  {
-		EndpointLabel label = new EndpointLabel(actorType, "REGISTER");
+    def 'Create'() {
+        when:
+        new SimService().create(simId, actorType)
 
-		assertEquals("", register, label.getTransType());
-		
-		label.setTransType(register);
-		assertEquals("", register, label.getTransType());
-		
-		label.setAsync(AsyncType.ASYNC);
-		assertEquals("", AsyncType.ASYNC, label.getAsyncType());
-	
-		label.setAsync(AsyncType.SYNC);
-		assertEquals("", AsyncType.SYNC, label.getAsyncType());
-	
-		label.setTls(TlsType.TLS);
-		assertEquals("", TlsType.TLS, label.getTlsType());
+        then: true
+    }
 
-		label.setTls(TlsType.NOTLS);
-		assertEquals("", TlsType.NOTLS, label.getTlsType());
-}
-	
+    def 'Load'() {
+        when:
+        def sim = new SimService().load(simId)
+
+        then: sim
+    }
+
+    def 'Delete'() {
+        when:
+        new SimService().delete(simId)
+
+        then: true
+    }
 }

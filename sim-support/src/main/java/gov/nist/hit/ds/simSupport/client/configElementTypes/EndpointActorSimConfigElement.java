@@ -5,7 +5,6 @@ import gov.nist.hit.ds.actorTransaction.EndpointLabel;
 import gov.nist.hit.ds.simSupport.client.ParamType;
 import gov.nist.hit.ds.simSupport.endpoint.Endpoint;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 
@@ -20,10 +19,15 @@ public class EndpointActorSimConfigElement extends
 	private static final long serialVersionUID = 532031604752465534L;
 
 	public EndpointActorSimConfigElement() { }
+    public EndpointActorSimConfigElement(String name) { this.name = name;  }
 
-    public String getName() {
-        throw new ToolkitRuntimeException("EndpointActorSimConfigElement.getName() should not be used.");
-    }
+    public void setTransactionName(String transactionName) { this.transactionName = transactionName; }
+
+//    public String getName() {
+//        // messes up serializer
+//        //throw new ToolkitRuntimeException("EndpointActorSimConfigElement.getName() should not be used.");
+//        return name;
+//    }
 
     // The name attribute is used as the transaction name which is contained
     // in the EndpointLabel
@@ -51,7 +55,8 @@ public class EndpointActorSimConfigElement extends
     public EndpointLabel getEndpointLabel() { return endpointLabel; }
 	
 	public EndpointActorSimConfigElement setName(EndpointLabel label) {
-		this.name = label.getTransType().getName();
+        if (label != null && label.getTransType() != null)
+		    this.name = label.getTransType().getName();
 		return this;
 	}
 

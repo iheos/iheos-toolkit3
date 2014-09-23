@@ -12,9 +12,11 @@ import org.apache.log4j.Logger;
  */
 public class EndpointLabel {
 	TransactionType transType;
-	boolean tls;
-	boolean async;
+	TlsType tls;
+	AsyncType async;
     static Logger logger = Logger.getLogger(EndpointLabel.class);
+
+    public EndpointLabel() {}
 
     public EndpointLabel(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
         if (transType == null) {
@@ -22,8 +24,8 @@ public class EndpointLabel {
             throw new ToolkitRuntimeException("TransactionType is null");
         }
 		this.transType = transType;
-		this.tls = tlsType == TlsType.TLS;
-		this.async = asyncType == AsyncType.ASYNC;
+		this.tls = tlsType;
+		this.async = asyncType;
 	}
 
     public String toString() {
@@ -37,8 +39,8 @@ public class EndpointLabel {
 	public EndpointLabel(ActorType actorType, String label)  {
         if (actorType == null) throw new ToolkitRuntimeException("ActorType is null");
 		String[] parts = label.split("_");
-		tls = false;
-		async = false;
+		tls = TlsType.NOTLS;
+		async = AsyncType.SYNC;
 		if (parts == null || parts.length <= 1)  {
 			transType = actorType.find(label);
 			return;
@@ -46,13 +48,13 @@ public class EndpointLabel {
 		transType = actorType.find(parts[0]);
 		
 		int i=1;
-		tls = i < parts.length && "TLS".equalsIgnoreCase(parts[i]);
-		if (tls) i++;
-		async = i < parts.length && "ASYNC".equalsIgnoreCase(parts[i]);
+		tls = (i < parts.length && "TLS".equalsIgnoreCase(parts[i])) ? TlsType.TLS : TlsType.NOTLS;
+		if (isTls()) i++;
+		async = (i < parts.length && "ASYNC".equalsIgnoreCase(parts[i])) ? AsyncType.ASYNC : AsyncType.SYNC;
 	}
 	
-	public String get() {
-		return transType.getName() + ((tls) ? "_TLS" : "") + ((async) ? "_ASYNC" : "");
+	public String label() {
+		return transType.getName() + ((isTls()) ? "_TLS" : "") + ((isAsync()) ? "_ASYNC" : "");
 	}
 
 	public TransactionType getTransType() {
@@ -65,25 +67,25 @@ public class EndpointLabel {
 	}
 
 	public boolean isTls() {
-		return tls;
+		return tls == TlsType.TLS;
 	}
 
-	public EndpointLabel setTls(boolean tls) {
+	public EndpointLabel setTls(TlsType tls) {
 		this.tls = tls;
 		return this;
 	}
 
 	public boolean isAsync() {
-		return async;
+		return async == AsyncType.ASYNC;
 	}
 
-	public EndpointLabel setAsync(boolean async) {
+	public EndpointLabel setAsync(AsyncType async) {
 		this.async = async;
 		return this;
 	}
 	
-	public TlsType getTlsType() { return (tls) ? TlsType.TLS : TlsType.NOTLS; }
+	public TlsType getTlsType() { return tls; }
 	
-	public AsyncType getAsyncType() { return (async) ? AsyncType.ASYNC : AsyncType.SYNC; }
+	public AsyncType getAsyncType() { return async; }
 	
 }

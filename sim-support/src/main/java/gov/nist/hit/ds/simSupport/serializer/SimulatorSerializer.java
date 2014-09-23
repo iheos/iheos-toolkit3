@@ -2,12 +2,10 @@ package gov.nist.hit.ds.simSupport.serializer;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
-import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
-
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.codehaus.jackson.annotate.JsonMethod;
@@ -48,12 +46,14 @@ public class SimulatorSerializer {
 		try {
 			// Find existing asset (must already exist)
 //			Asset asset = simRepository.getAsset(new SimpleId(sim.getId().getId()));
-			Asset asset = simRepository.createAsset(sim.getSimId().getId(), "Simulator", new SimpleType("simulator"));
+//			Asset asset = simRepository.createAsset(sim.getSimId().getId(), "Simulator", new SimpleType("simulator"));
+            Asset asset = simRepository.createNamedAsset(sim.getSimId().getId(), "Simulator", new SimpleType("simulator"), sim.getSimId().getId());
 
 			// translate sim to JSON and save as asset document
-			asset.updateContent(mapper.writeValueAsBytes(sim));
-			// set the mime type on the asset
-			asset.setMimeType("text/json");
+            asset.setContent(mapper.writeValueAsString(sim), "text/json");
+//			asset.updateContent(mapper.writeValueAsString(sim));
+//			// set the mime type on the asset
+//			asset.setMimeType("text/json");
             return asset;
 		} catch (Exception e) {
 			throw new ToolkitRuntimeException("Cannot serialize the Simulator", e);
@@ -71,7 +71,7 @@ public class SimulatorSerializer {
 			throw new ToolkitRuntimeException("Repository not set");
 		try {
 			// Find existing asset (must already exist)
-			Asset asset = simRepository.getAsset(new SimpleId(simId.getId()));
+			Asset asset = simRepository.getChildByName(simId.getId());
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
 

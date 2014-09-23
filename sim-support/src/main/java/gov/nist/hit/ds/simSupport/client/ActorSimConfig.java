@@ -4,6 +4,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.*;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.AbstractActorSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement;
+import gov.nist.hit.ds.utilities.xml.OMFormatter;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import groovy.transform.ToString;
 import org.apache.axiom.om.OMElement;
@@ -40,6 +41,10 @@ public class ActorSimConfig implements IsSerializable, Serializable {
             top.addChild(part);
         }
         return top;
+    }
+
+    public String toXMLString() {
+        return new OMFormatter(toXML()).toString();
     }
 
 	/**

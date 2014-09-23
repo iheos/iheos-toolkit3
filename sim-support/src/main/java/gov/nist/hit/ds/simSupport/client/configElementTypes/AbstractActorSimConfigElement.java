@@ -28,7 +28,7 @@ abstract public class AbstractActorSimConfigElement implements IsSerializable, S
         return top;
     }
 
-	public AbstractActorSimConfigElement() {   }
+    public AbstractActorSimConfigElement() {   }
 
 	public AbstractActorSimConfigElement setType(ParamType type) {
 		this.type = type;
@@ -45,6 +45,7 @@ abstract public class AbstractActorSimConfigElement implements IsSerializable, S
 	public ParamType getType() { return type; }
 	public String getValue() { return value; }
 	public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
 	public Boolean asBoolean() { 
 		return Boolean.valueOf(value);

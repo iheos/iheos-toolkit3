@@ -257,7 +257,7 @@ public class RegistryErrorListGenerator implements ErrorRecorder {
 //			if (log_message != null) {
 //				HashMap<String, String> err = getErrorDetails(registry_error);
 //				try {
-//					log_message.addErrorParam("Error", err.get("codeContext"));
+//					log_message.addErrorParam("Error", err.label("codeContext"));
 //				} catch (LoggerException e) {
 //					throw new XdsInternalException(ExceptionUtil.exception_details(e));
 //				}

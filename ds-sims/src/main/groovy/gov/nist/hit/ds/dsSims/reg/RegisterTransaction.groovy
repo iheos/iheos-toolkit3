@@ -237,7 +237,7 @@ class RegisterTransaction implements Transaction {
 
     // check for Extra Metadata
     void extraMetadataCheck(Metadata m) {
-//        SimulatorConfigElement extraMetadataASCE = asc.get(ActorFactory.extraMetadataSupported);
+//        SimulatorConfigElement extraMetadataASCE = asc.label(ActorFactory.extraMetadataSupported);
         boolean isExtraMetadataSupported = true  //extraMetadataASCE.asBoolean();
 
         for (OMElement ele : m.getMajorObjects()) {

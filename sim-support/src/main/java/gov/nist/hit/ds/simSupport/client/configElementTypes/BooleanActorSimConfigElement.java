@@ -17,9 +17,8 @@ public class BooleanActorSimConfigElement extends AbstractActorSimConfigElement 
 		this.setValue(value);
 	}
 
-	public BooleanActorSimConfigElement setName(String name) {
+	public void setName(String name) {
 		this.name = name;
-		return this;
 	}
 
 	public AbstractActorSimConfigElement setValue(Boolean o) { 

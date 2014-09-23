@@ -1,27 +1,23 @@
-package gov.nist.hit.ds.simSupport.factory;
-
-import gov.nist.hit.ds.actorTransaction.ActorType;
-import gov.nist.hit.ds.actorTransaction.AsyncType;
-import gov.nist.hit.ds.actorTransaction.TlsType;
-import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.Repository;
-import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.api.RepositoryFactory;
-import gov.nist.hit.ds.repository.api.RepositorySource.Access;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.SimpleId;
-import gov.nist.hit.ds.repository.simple.SimpleType;
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
-import gov.nist.hit.ds.simSupport.client.SimId;
-import gov.nist.hit.ds.simSupport.client.Simulator;
-import gov.nist.hit.ds.simSupport.serializer.SimulatorSerializer;
-import gov.nist.hit.ds.siteManagement.client.Site;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
-import org.apache.log4j.Logger;
-
-import java.util.List;
-
+package gov.nist.hit.ds.simSupport.factory
+import gov.nist.hit.ds.actorTransaction.ActorType
+import gov.nist.hit.ds.actorTransaction.AsyncType
+import gov.nist.hit.ds.actorTransaction.TlsType
+import gov.nist.hit.ds.actorTransaction.TransactionType
+import gov.nist.hit.ds.repository.api.Asset
+import gov.nist.hit.ds.repository.api.Repository
+import gov.nist.hit.ds.repository.api.RepositoryException
+import gov.nist.hit.ds.repository.api.RepositoryFactory
+import gov.nist.hit.ds.repository.api.RepositorySource.Access
+import gov.nist.hit.ds.repository.simple.Configuration
+import gov.nist.hit.ds.repository.simple.SimpleId
+import gov.nist.hit.ds.repository.simple.SimpleType
+import gov.nist.hit.ds.simSupport.client.ActorSimConfig
+import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.Simulator
+import gov.nist.hit.ds.simSupport.serializer.SimulatorSerializer
+import gov.nist.hit.ds.siteManagement.client.Site
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import org.apache.log4j.Logger
 /**
  * Build a simulator.
  *
@@ -49,8 +45,10 @@ public class SimulatorFactory {
     int actorSimsAdded = 0;
 
     // Default settings
-    TlsType[] tlsTypes = new TlsType[] { TlsType.NOTLS, TlsType.TLS };
-    AsyncType[] asyncTypes = new AsyncType[] { AsyncType.SYNC, AsyncType.ASYNC };
+//    TlsType[] tlsTypes = new TlsType[] { TlsType.NOTLS, TlsType.TLS };
+    def tlsTypes = [  TlsType.NOTLS, TlsType.TLS ]
+//    AsyncType[] asyncTypes = new AsyncType[] { AsyncType.SYNC, AsyncType.ASYNC };
+    def asyncTypes = [ AsyncType.SYNC, AsyncType.ASYNC ]
 
     /**
      * Initialize the simulator.  SimId can be created with:
@@ -72,7 +70,7 @@ public class SimulatorFactory {
      * @throws RepositoryException
      * @throws Exception
      */
-    public SimulatorFactory addActorSim(ActorType actorType)  {
+    public ActorSimConfig addActorSim(ActorType actorType)  {
         // has its own asc field - shows up in printed output not but in actor def
         GenericActorSimBuilder genericBuilder = new GenericActorSimBuilder(simId).buildGenericConfiguration(actorType);
 
@@ -81,14 +79,17 @@ public class SimulatorFactory {
         // installRepositoryLinkage actor simulator
         actorFactory.initializeActorSim(genericBuilder, simId);
 
-        List<TransactionType> incomingTransactions = actorFactory.getIncomingTransactions();
+//        List<TransactionType> incomingTransactions = actorFactory.getIncomingTransactions();
+        List<TransactionType> incomingTransactions = actorType.getTransactionTypes();
 
         // Request the ActorFactory define endpoints for these
         // types. A particular ActorFactory may not support all of them.
-        for (int i=0; i<asyncTypes.length; i++) {
-            AsyncType async = asyncTypes[i];
-            for (int j = 0; j<tlsTypes.length; j++) {
-                TlsType tls = tlsTypes[j];
+        for (AsyncType async : asyncTypes) {
+//        for (int i=0; i<asyncTypes.length; i++) {
+//            AsyncType async = asyncTypes[i];
+        for (TlsType tls : tlsTypes) {
+//            for (int j = 0; j<tlsTypes.length; j++) {
+//                TlsType tls = tlsTypes[j];
                 for (TransactionType transType : incomingTransactions) {
                     genericBuilder.addEndpoint(actorType.getShortName(),
                             transType,
@@ -103,7 +104,7 @@ public class SimulatorFactory {
         actorFactory.loadActorSite(asc, site);
 
         actorSimsAdded++;
-        return this;
+        return asc;
     }
 
     /**
@@ -174,6 +175,11 @@ public class SimulatorFactory {
         SimulatorSerializer simser = new SimulatorSerializer();
         simser.setSimRepository(getSimulatorRepository());
         return simser.load(simId);
+    }
+
+    public static void delete(SimId simId) throws RepositoryException {
+        Repository simRepository = getSimulatorRepository();
+        simRepository.deleteAsset(new SimpleId(simId.getId()));
     }
 
     private static Repository getSimulatorRepository()  {

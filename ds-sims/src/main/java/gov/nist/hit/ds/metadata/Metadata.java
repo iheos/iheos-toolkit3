@@ -2800,7 +2800,7 @@ public class Metadata {
         hash_list.add(hash);
     }
 
-    // get map of uid ==> ArrayList of hashes
+    // label map of uid ==> ArrayList of hashes
     // for folder and ss, hash is null
     // Some docs may not have a hash either, depending on where this use used
     public HashMap<String, List<String>> getUidHashMap()

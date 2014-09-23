@@ -61,7 +61,7 @@ public class GenericActorSimBuilder {
     @Deprecated
 	public GenericActorSimBuilder addEndpoint(String actorShortName, TransactionType transType, TlsType tls, AsyncType async) {
 
-		String contextName = Installation.installation().tkProps.get("toolkit.servlet.context", "xdstools3");
+		String contextName = "xdstools3"; //Installation.installation().tkProps.label("toolkit.servlet.context", "xdstools3");
 
 		Endpoint endpoint =  new Endpoint("http"
 				+ ((tls.isTls()) ? "s" : "")
