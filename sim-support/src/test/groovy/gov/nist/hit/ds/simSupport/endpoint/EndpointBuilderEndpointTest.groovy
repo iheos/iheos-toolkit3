@@ -2,7 +2,8 @@ package gov.nist.hit.ds.simSupport.endpoint
 
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.AsyncType
-import gov.nist.hit.ds.actorTransaction.EndpointLabel
+import gov.nist.hit.ds.actorTransaction.EndpointType
+import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.actorTransaction.TlsType
 import gov.nist.hit.ds.simSupport.client.SimId
 import spock.lang.Specification
@@ -51,7 +52,7 @@ class EndpointBuilderEndpointTest extends Specification {
         when:
         def builder = new EndpointBuilder('localhost', '8080', 'xdstools2/sims', new SimId('123'))
         def transType = new ActorTransactionTypeFactory().getTransactionType('rb')
-        def elabel = new EndpointLabel(transType, TlsType.NOTLS, AsyncType.SYNC)
+        def elabel = new EndpointType(transType, TlsType.NOTLS, AsyncType.SYNC)
         def endpoint = builder.makeEndpoint('reg', elabel)
 
         then:

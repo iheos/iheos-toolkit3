@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.endpoint
 
-import gov.nist.hit.ds.actorTransaction.EndpointLabel
+import gov.nist.hit.ds.actorTransaction.EndpointType
+import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.client.SimId
 import groovy.util.logging.Log4j
 
@@ -25,7 +26,7 @@ class EndpointBuilder {
         this.simId = simId
     }
 
-    Endpoint makeEndpoint(String actor, EndpointLabel endpointLabel) {
+    EndpointValue makeEndpoint(String actor, EndpointType endpointLabel) {
         server = clean(server)
         port = clean(port)
         base = clean(base)
@@ -33,7 +34,7 @@ class EndpointBuilder {
         def secure = (endpointLabel.tls) ? 's' : ''
         String val;
         val = "http${secure}://${server}:${port}/${base}/${simId.getId()}/${actor}/${endpointLabel.transType.code}"
-        return new Endpoint(val)
+        return new EndpointValue(val)
     }
 
     String clean(String val) {

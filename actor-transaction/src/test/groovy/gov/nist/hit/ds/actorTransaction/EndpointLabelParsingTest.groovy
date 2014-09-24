@@ -46,7 +46,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointLabel(actorType, "Register_TLS_ASYNC");
+        def label = new EndpointType(actorType, "Register_TLS_ASYNC");
 
         then:
         register == label.getTransType()
@@ -58,7 +58,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointLabel(actorType, "Register_TLS_SYNC");
+        def label = new EndpointType(actorType, "Register_TLS_SYNC");
 
         then:
         register == label.getTransType()
@@ -70,7 +70,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointLabel(actorType, "Register_ASYNC");
+        def label = new EndpointType(actorType, "Register_ASYNC");
 
         then:
         register == label.getTransType()
@@ -82,7 +82,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointLabel(actorType, "Register");
+        def label = new EndpointType(actorType, "Register");
 
         then:
         register == label.getTransType()

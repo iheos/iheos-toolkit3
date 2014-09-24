@@ -10,15 +10,15 @@ import org.apache.log4j.Logger;
  * @author bill
  *
  */
-public class EndpointLabel {
+public class EndpointType {
 	TransactionType transType;
 	TlsType tls;
 	AsyncType async;
-    static Logger logger = Logger.getLogger(EndpointLabel.class);
+    static Logger logger = Logger.getLogger(EndpointType.class);
 
-    public EndpointLabel() {}
+    public EndpointType() {}
 
-    public EndpointLabel(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
+    public EndpointType(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
         if (transType == null) {
             logger.error("TransactionType is null");
             throw new ToolkitRuntimeException("TransactionType is null");
@@ -36,7 +36,7 @@ public class EndpointLabel {
 	 * Parse a display lqbel for an endpoint. An example is:  Register_TLS_ASYNC
 	 * @param label
 	 */
-	public EndpointLabel(ActorType actorType, String label)  {
+	public EndpointType(ActorType actorType, String label)  {
         if (actorType == null) throw new ToolkitRuntimeException("ActorType is null");
 		String[] parts = label.split("_");
 		tls = TlsType.NOTLS;
@@ -61,7 +61,7 @@ public class EndpointLabel {
 		return transType;
 	}
 
-	public EndpointLabel setTransType(TransactionType transType) {
+	public EndpointType setTransType(TransactionType transType) {
 		this.transType = transType;
 		return this;
 	}
@@ -70,7 +70,7 @@ public class EndpointLabel {
 		return tls == TlsType.TLS;
 	}
 
-	public EndpointLabel setTls(TlsType tls) {
+	public EndpointType setTls(TlsType tls) {
 		this.tls = tls;
 		return this;
 	}
@@ -79,7 +79,7 @@ public class EndpointLabel {
 		return async == AsyncType.ASYNC;
 	}
 
-	public EndpointLabel setAsync(AsyncType async) {
+	public EndpointType setAsync(AsyncType async) {
 		this.async = async;
 		return this;
 	}

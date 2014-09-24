@@ -7,6 +7,7 @@ import gov.nist.hit.ds.actorTransaction.TlsType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.repository.api.*;
 import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.simSupport.endpoint.EndpointValue;
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.Serializable;
@@ -26,6 +27,8 @@ public class Simulator implements Serializable, IsSerializable {
     private static final long serialVersionUID = 8914156242225793229L;
     private List<ActorSimConfig> configs = new ArrayList<ActorSimConfig>();
     private SimId simId;
+
+    // TODO: move these to DAO class
     private Asset simAsset = null;
     private ArtifactId repositoryId = null;
 
@@ -100,9 +103,9 @@ public class Simulator implements Serializable, IsSerializable {
 
     public ActorSimConfig getConfig(int i) { return configs.get(i); }
 
-    public String getEndpoint(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
+    public EndpointValue getEndpoint(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
         for (ActorSimConfig config : configs) {
-            String endpoint = config.getEndpoint(transType, tlsType, asyncType);
+            EndpointValue endpoint = config.getEndpoint(transType, tlsType, asyncType);
             if (endpoint != null)
                 return endpoint;
         }

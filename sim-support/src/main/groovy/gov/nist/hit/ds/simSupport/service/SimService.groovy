@@ -4,6 +4,8 @@ import gov.nist.hit.ds.actorTransaction.ActorType
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.Simulator
 import gov.nist.hit.ds.simSupport.factory.SimulatorFactory
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+
 /**
  * Created by bmajur on 9/22/14.
  */
@@ -12,6 +14,7 @@ class SimService {
     def create(String simIdStr, String actorTypeName) {
         def atfactory = new ActorTransactionTypeFactory()
         SimId simId = new SimId(simIdStr)
+        if (SimulatorFactory.exists(simId)) throw new ToolkitRuntimeException("Simulator ${simIdStr} already exists.")
         ActorType actorType = atfactory.getActorType(actorTypeName)
         SimulatorFactory factory = new SimulatorFactory()
         factory.initializeSimulator(simId)
@@ -28,4 +31,6 @@ class SimService {
         SimId simId = new SimId(simIdStr)
         SimulatorFactory.delete(simId)
     }
+
+    def exists(String simIdStr) { return SimulatorFactory.exists(new SimId(simIdStr))}
 }

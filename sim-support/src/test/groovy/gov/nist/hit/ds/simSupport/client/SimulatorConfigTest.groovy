@@ -2,11 +2,11 @@ package gov.nist.hit.ds.simSupport.client
 
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.AsyncType
-import gov.nist.hit.ds.actorTransaction.EndpointLabel
+import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.actorTransaction.TlsType
-import gov.nist.hit.ds.simSupport.client.configElementTypes.AbstractActorSimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement
-import gov.nist.hit.ds.simSupport.endpoint.Endpoint
+import gov.nist.hit.ds.simSupport.client.configElementTypes.SimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointSimConfigElement
+import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import org.junit.Before
 import org.junit.Test
 
@@ -60,23 +60,23 @@ public class SimulatorConfigTest {
 	public void findTest2() {
 		ActorSimConfig sConfig = new ActorSimConfig(new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg"));
 		sConfig.
-				add(new EndpointActorSimConfigElement(
-						new EndpointLabel(
+				add(new EndpointSimConfigElement(
+						new EndpointType(
 								new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb"),
 								TlsType.NOTLS,
 								AsyncType.ASYNC
 								),
-								new Endpoint("http://example.com/async"))
+								new EndpointValue("http://example.com/async"))
 						);
-		sConfig.add(new EndpointActorSimConfigElement(
-								new EndpointLabel(
+		sConfig.add(new EndpointSimConfigElement(
+								new EndpointType(
 										new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb"),
 										TlsType.TLS,
 										AsyncType.ASYNC
 										),
-										new Endpoint("https://example.com/async"))
+										new EndpointValue("https://example.com/async"))
 						);
-		List<AbstractActorSimConfigElement> cEles = sConfig.findConfigs(
+		List<SimConfigElement> cEles = sConfig.findConfigs(
 				[ new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb") ],
 				[  TlsType.TLS ],
 				[ AsyncType.ASYNC ]);

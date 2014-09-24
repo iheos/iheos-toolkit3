@@ -51,7 +51,7 @@ public class EndpointLabelSetGetTest {
 
 	@Test
 	public void setGetTest()  {
-		EndpointLabel label = new EndpointLabel(actorType, "REGISTER");
+		EndpointType label = new EndpointType(actorType, "REGISTER");
 
 		assertEquals("", register, label.getTransType());
 		

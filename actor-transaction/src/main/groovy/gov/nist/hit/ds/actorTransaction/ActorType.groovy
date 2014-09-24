@@ -56,10 +56,10 @@ class ActorType implements IsSerializable, Serializable {
             throw new InvalidActorTypeDefinitionException("${typeName}: must define at least one transaction");
     }
 
-    List<EndpointLabel> endpointLabels() {
+    List<EndpointType> endpointLabels() {
         return transactionTypes.collect { ttype ->
-           [ new EndpointLabel(ttype, TlsType.NOTLS, AsyncType.SYNC) ,
-             new EndpointLabel(ttype, TlsType.TLS, AsyncType.SYNC) ]
+           [ new EndpointType(ttype, TlsType.NOTLS, AsyncType.SYNC) ,
+             new EndpointType(ttype, TlsType.TLS, AsyncType.SYNC) ]
         }.flatten()
     }
 

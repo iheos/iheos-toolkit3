@@ -3,9 +3,9 @@ package gov.nist.hit.ds.simSupport.endpoint
 /**
  * Created by bmajur on 6/6/14.
  */
-class Endpoint {
+class EndpointValue {
     String value
 
-    Endpoint(String value) { this.value = value }
+    EndpointValue(String value) { this.value = value }
     String getValue() { return value }
 }

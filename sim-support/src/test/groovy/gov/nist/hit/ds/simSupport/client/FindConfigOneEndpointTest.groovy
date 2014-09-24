@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.simSupport.client
 
 import gov.nist.hit.ds.actorTransaction.*
-import gov.nist.hit.ds.simSupport.client.configElementTypes.AbstractActorSimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement
-import gov.nist.hit.ds.simSupport.endpoint.Endpoint
+import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.SimConfigElement
+import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import org.junit.Before
 import org.junit.Test
 
@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals
 public class FindConfigOneEndpointTest {
 	ActorSimConfig sConfig;
     ActorType actorType;
-	List<AbstractActorSimConfigElement> cEles;
+	List<SimConfigElement> cEles;
 
 
     static String config = '''
@@ -56,13 +56,13 @@ public class FindConfigOneEndpointTest {
 	public void startUp() {
 		sConfig = new ActorSimConfig(new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg")).
 				add(
-						new EndpointActorSimConfigElement(
-								new EndpointLabel(
+						new EndpointSimConfigElement(
+								new EndpointType(
 										new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb"),
 										TlsType.TLS,
 										AsyncType.ASYNC
 										),
-										new Endpoint("https://example.com/async")
+										new EndpointValue("https://example.com/async")
 								)
 						);
         actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");

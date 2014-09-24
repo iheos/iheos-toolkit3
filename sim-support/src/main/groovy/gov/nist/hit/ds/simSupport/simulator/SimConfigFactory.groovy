@@ -3,7 +3,7 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.ActorType
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
@@ -36,7 +36,7 @@ class SimConfigFactory {
             if (it.transType.hasTransactionProperty('RepositoryUniqueId')) {
                 actorSimConfig.add(new RepositoryUniqueIdSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
             } else {
-                actorSimConfig.add(new EndpointActorSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
+                actorSimConfig.add(new EndpointSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
             }
         }
         return actorSimConfig

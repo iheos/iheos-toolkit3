@@ -177,9 +177,20 @@ public class SimulatorFactory {
         return simser.load(simId);
     }
 
-    public static void delete(SimId simId) throws RepositoryException {
+    public static void delete(SimId simId) {
         Repository simRepository = getSimulatorRepository();
-        simRepository.deleteAsset(new SimpleId(simId.getId()));
+        try {
+            Asset a = simRepository.getChildByName(simId.getId())
+            simRepository.deleteAsset(a.id);
+        } catch (RepositoryException e) {}
+    }
+
+    public static boolean exists(SimId simId) {
+        Repository simRepository = getSimulatorRepository();
+        try {
+            Asset a = simRepository.getChildByName(simId.getId())
+            return true
+        } catch (RepositoryException e) { return false }
     }
 
     private static Repository getSimulatorRepository()  {

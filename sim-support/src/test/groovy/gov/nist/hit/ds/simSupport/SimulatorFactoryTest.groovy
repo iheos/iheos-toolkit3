@@ -2,6 +2,7 @@ package gov.nist.hit.ds.simSupport
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.simSupport.service.SimService
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import spock.lang.Specification
 /**
  * Created by bmajur on 9/22/14.
@@ -48,24 +49,46 @@ class SimulatorFactoryTest extends Specification {
         factory.loadFromString(config)
     }
 
-    def 'Create'() {
-        when:
-        new SimService().create(simId, actorType)
+    def create() { new SimService().create(simId, actorType) }
+    def load() { return new SimService().load(simId) }
+    def delete() { new SimService().delete(simId) }
+    def exists() { new SimService().exists(simId)}
 
-        then: true
+    def 'Delete of missing sim should pass'() {
+        when: delete()
+
+        then:  !exists()
+
+        when: delete()
+
+        then: !exists()
     }
 
-    def 'Load'() {
-        when:
-        def sim = new SimService().load(simId)
+    def 'Create should create sim'() {
+        when: create()
 
-        then: sim
+        then: exists()
+
+        when: delete()
+
+        then: !exists()
     }
 
-    def 'Delete'() {
-        when:
-        new SimService().delete(simId)
-
-        then: true
+    def 'Sim should be loadable'() {
+        when: create()
+        then: exists()
+        then: load()
+        when: delete()
+        then: !exists()
     }
+
+    def 'Create second copy of sim should fail'() {
+        when: create()
+        then: exists()
+        when: create()
+        then: thrown ToolkitRuntimeException
+        when: delete()
+        then: !exists()
+    }
+
 }

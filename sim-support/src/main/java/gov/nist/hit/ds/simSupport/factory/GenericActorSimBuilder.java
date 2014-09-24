@@ -3,11 +3,11 @@ package gov.nist.hit.ds.simSupport.factory;
 import gov.nist.hit.ds.actorTransaction.*;
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
 import gov.nist.hit.ds.simSupport.client.SimId;
-import gov.nist.hit.ds.simSupport.client.configElementTypes.BooleanActorSimConfigElement;
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement;
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TextActorSimConfigElement;
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TimeActorSimConfigElement;
-import gov.nist.hit.ds.simSupport.endpoint.Endpoint;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.BooleanSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TextSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TimeSimConfigElement;
+import gov.nist.hit.ds.simSupport.endpoint.EndpointValue;
 import gov.nist.hit.ds.simSupport.simrepo.SimDb;
 import gov.nist.hit.ds.toolkit.installation.Installation;
 
@@ -37,18 +37,17 @@ public class GenericActorSimBuilder {
 	 * @throws ToolkitRuntimeException 
 	 */
 	public GenericActorSimBuilder buildGenericConfiguration(ActorType actorType)  {
-		sConfig = new ActorSimConfig(actorType).
-				setExpiration(SimDb.getNewExpiration(ActorSimConfig.class));
+		sConfig = new ActorSimConfig(actorType);
 		configureBaseElements();
 		return this;
 	}	
 
 	void configureBaseElements() {
 		sConfig.add(
-				new TimeActorSimConfigElement(ATConfigLabels.creationTime, new Date().toString())
+				new TimeSimConfigElement(ATConfigLabels.creationTime, new Date().toString())
 				);
 		sConfig.add(
-				new TextActorSimConfigElement(ATConfigLabels.name, simId.getId()).setEditable(true)
+				new TextSimConfigElement(ATConfigLabels.name, simId.getId()).setEditable(true)
 				);
 	}
 	
@@ -63,7 +62,7 @@ public class GenericActorSimBuilder {
 
 		String contextName = "xdstools3"; //Installation.installation().tkProps.label("toolkit.servlet.context", "xdstools3");
 
-		Endpoint endpoint =  new Endpoint("http"
+		EndpointValue endpoint =  new EndpointValue("http"
 				+ ((tls.isTls()) ? "s" : "")
 				+ "://" 
 				+ Installation.installation().propertyServiceManager().getToolkitHost() 
@@ -78,20 +77,20 @@ public class GenericActorSimBuilder {
 				+ "/" 
 				+ transType.getCode());
 		sConfig.add(
-				new EndpointActorSimConfigElement(new EndpointLabel(transType,tls, async), endpoint).setEditable(true)
+				new EndpointSimConfigElement(new EndpointType(transType,tls, async), endpoint).setEditable(true)
 				);
 		return this;
 	}
 	
 	public GenericActorSimBuilder addConfig(String confName, boolean value) {
 		sConfig.add(
-				new BooleanActorSimConfigElement(confName, value).setEditable(true));
+				new BooleanSimConfigElement(confName, value).setEditable(true));
 		return this;
 	}
 
 	public GenericActorSimBuilder addConfig(String confName, String value) {
 		sConfig.add(
-				new TextActorSimConfigElement(confName, value).setEditable(true));
+				new TextSimConfigElement(confName, value).setEditable(true));
 		return this;
 	}
 	

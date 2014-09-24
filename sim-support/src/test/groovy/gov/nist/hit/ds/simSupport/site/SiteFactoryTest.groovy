@@ -63,7 +63,7 @@ class SiteFactoryTest extends Specification {
         def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorTypeName)
 
         when:
-        def endpoints = actorSimConfig.getAll().findAll { it.type == ParamType.ENDPOINT }
+        def endpoints = actorSimConfig.getElements().findAll { it.type == ParamType.ENDPOINT }
 
         then:
         endpoints.size() == 4
@@ -75,7 +75,7 @@ class SiteFactoryTest extends Specification {
         def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorTypeName)
 
         when:
-        def repositories = actorSimConfig.getAll().findAll {
+        def repositories = actorSimConfig.getElements().findAll {
             it.type == ParamType.ENDPOINT && (it instanceof RepositoryUniqueIdSimConfigElement)
         }
 

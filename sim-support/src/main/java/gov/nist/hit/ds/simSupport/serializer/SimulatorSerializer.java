@@ -50,7 +50,8 @@ public class SimulatorSerializer {
             Asset asset = simRepository.createNamedAsset(sim.getSimId().getId(), "Simulator", new SimpleType("simulator"), sim.getSimId().getId());
 
 			// translate sim to JSON and save as asset document
-            asset.setContent(mapper.writeValueAsString(sim), "text/json");
+
+            asset.setContent(new SimulatorDAO().toXML(sim), "text/xml");
 //			asset.updateContent(mapper.writeValueAsString(sim));
 //			// set the mime type on the asset
 //			asset.setMimeType("text/json");
@@ -72,11 +73,12 @@ public class SimulatorSerializer {
 		try {
 			// Find existing asset (must already exist)
 			Asset asset = simRepository.getChildByName(simId.getId());
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
-
-			// read asset document, convert JSON to Simulator instance
-			return mapper.readValue(asset.getContent(), Simulator.class);
+            return new SimulatorDAO().toModel(new String(asset.getContent()));
+//			ObjectMapper mapper = new ObjectMapper();
+//			mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
+//
+//			// read asset document, convert JSON to Simulator instance
+//			return mapper.readValue(asset.getContent(), Simulator.class);
 		} catch (Exception e) {
 			throw new ToolkitRuntimeException("Cannot loadFromPropertyBasedResource Simulator <" + simId + ">", e);
 		}

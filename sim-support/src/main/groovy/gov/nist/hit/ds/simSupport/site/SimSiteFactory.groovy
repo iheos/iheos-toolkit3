@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.simSupport.site
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.actorTransaction.EndpointLabel
+import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
@@ -15,25 +15,25 @@ class SimSiteFactory {
     Site buildSite(ActorSimConfig actorSimConfig, String name) {
         println(actorSimConfig)
         Site site = new Site(name)
-        actorSimConfig.getAll().each {
-            if (!(it instanceof EndpointActorSimConfigElement)) return
+        actorSimConfig.getElements().each {
+            if (!(it instanceof EndpointSimConfigElement)) return
             if (it instanceof RepositoryUniqueIdSimConfigElement) return
 
-            EndpointActorSimConfigElement endpointASCE = (EndpointActorSimConfigElement)it
+            EndpointSimConfigElement endpointASCE = (EndpointSimConfigElement)it
             String transactionName = endpointASCE.getTransactionName()
             String endpoint = endpointASCE.value
-            EndpointLabel endpointLabel = endpointASCE.getEndpointLabel()
+            EndpointType endpointLabel = endpointASCE.getEndpointType()
             TransactionType ttype = new ActorTransactionTypeFactory().getTransactionType(transactionName);
             site.addTransaction(new TransactionBean(ttype, TransactionBean.RepositoryType.NONE, endpoint, endpointLabel.isTls(), endpointLabel.isAsync()))
         }
-        actorSimConfig.getAll().each {
+        actorSimConfig.getElements().each {
             if (!(it instanceof RepositoryUniqueIdSimConfigElement)) return
 
             RepositoryUniqueIdSimConfigElement repUidEle = (RepositoryUniqueIdSimConfigElement) it
-            EndpointActorSimConfigElement endpointASCE = (EndpointActorSimConfigElement)it
+            EndpointSimConfigElement endpointASCE = (EndpointSimConfigElement)it
             def repuid = repUidEle.newValue
             String endpoint = endpointASCE.value
-            EndpointLabel endpointLabel = endpointASCE.getEndpointLabel()
+            EndpointType endpointLabel = endpointASCE.getEndpointType()
             site.addRepository(repuid, TransactionBean.RepositoryType.REPOSITORY, endpoint, endpointLabel.isTls(), endpointLabel.isAsync())
         }
         return site

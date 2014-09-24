@@ -48,8 +48,8 @@ public class EndpointLabelBuildTest {
 	@Test
 	public void buildTest()  {
 		TransactionType register = actorType.find("register");
-		EndpointLabel label;
-		label = new EndpointLabel(
+		EndpointType label;
+		label = new EndpointType(
 				register,
 				TlsType.TLS,
 				AsyncType.ASYNC
@@ -59,7 +59,7 @@ public class EndpointLabelBuildTest {
 		assertTrue(label.isAsync());
 		assertEquals("", register, label.getTransType());
 
-		label = new EndpointLabel(
+		label = new EndpointType(
 				register,
 				TlsType.NOTLS,
 				AsyncType.ASYNC
@@ -69,7 +69,7 @@ public class EndpointLabelBuildTest {
 		assertTrue(label.isAsync());
 		assertEquals("", register, label.getTransType());
 
-		label = new EndpointLabel(
+		label = new EndpointType(
 				register,
 				TlsType.TLS,
 				AsyncType.SYNC
@@ -79,7 +79,7 @@ public class EndpointLabelBuildTest {
 		assertFalse(label.isAsync());
 		assertEquals("", register, label.getTransType());
 
-		label = new EndpointLabel(
+		label = new EndpointType(
 				register,
 				TlsType.NOTLS,
 				AsyncType.SYNC
