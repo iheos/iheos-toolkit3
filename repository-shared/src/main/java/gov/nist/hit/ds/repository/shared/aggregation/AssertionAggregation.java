@@ -14,6 +14,7 @@ public class AssertionAggregation extends CSVRowAggregation {
 
     private Map<AssetId,AssetNode> assetNodeMap = new HashMap<AssetId,AssetNode>();
 
+
     public Map<AssetId, AssetNode> getAssetNodeMap() {
         return assetNodeMap;
     }

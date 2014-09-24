@@ -10,6 +10,8 @@ import java.util.List;
  * Created by skb1 on 9/16/14.
  */
 public abstract class CSVRowAggregation {
+
+    private CSVRow header;
     private List<CSVRow> rows = new ArrayList<CSVRow>();
 
     public List<CSVRow> getRows() {
@@ -18,6 +20,13 @@ public abstract class CSVRowAggregation {
 
     public void setRows(List<CSVRow> rows) {
         this.rows = rows;
+    }
+    public CSVRow getHeader() {
+        return header;
+    }
+
+    public void setHeader(CSVRow header) {
+        this.header = header;
     }
 
 

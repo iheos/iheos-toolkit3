@@ -214,7 +214,10 @@ public class RepositoryRpcTest {
     }
 
     private void aggregateAssertions(String eventId, SearchCriteria criteria) throws RepositoryException {
+
         AssertionAggregation assertionAggregation =  PresentationData.aggregateAssertions(new RepositoryId("Sim"), new AssetId(eventId), criteria);
+
+        printHeader(assertionAggregation);
 
         List<CSVRow> rows =  assertionAggregation.getRows();
 
@@ -223,13 +226,21 @@ public class RepositoryRpcTest {
             if (row.getRowNumber()==1) {
                 System.out.println("assetId: " + row.getAssetId());
             }
-            System.out.print("rowNum: "  + row.getRowNumber());
+            System.out.print("rowNum: " + row.getRowNumber());
             for (String col : row.getColumns()) {
                 System.out.print(" " + col + " ");
             }
             System.out.println("");
 
         }
+    }
+
+    private void printHeader(AssertionAggregation assertionAggregation) {
+        System.out.println("Printing column headers: ");
+        for (String col : assertionAggregation.getHeader().getColumns()) {
+            System.out.print(" " + col + " ");
+        }
+
     }
 
 

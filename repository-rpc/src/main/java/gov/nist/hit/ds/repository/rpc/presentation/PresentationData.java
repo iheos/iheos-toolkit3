@@ -1203,15 +1203,31 @@ public class PresentationData implements IsSerializable, Serializable  {
             if (columnNames!=null && columnNames.length>0) {
                 columnSelectionLength = columnNames.length;
             }
-
-
             boolean subsetSelection = (columnSelectionLength!=colLen);
+
+
+            // Populate the header
+            if (assertionAggregation.getHeader()==null) {
+                CSVRow headerRow = new CSVRow(columnSelectionLength);
+                for (int col=0; col < columnSelectionLength; col++) { // Pick the first one, since we assume that all assertions are of the same type and have same column headers
+                    int colIdx = col;
+                    if (subsetSelection) {
+                        colIdx = colIdxMap.get(columnNames[col]);
+                    }
+                    String value = csv[0][colIdx];
+                    headerRow.setColumnValueByIndex(col,value);
+                }
+                assertionAggregation.setHeader(headerRow);
+            }
+
+
+
+
 
             assertionAggregation.getAssetNodeMap().put(new AssetId(resultNode.getAssetId()), resultNode); // Having it in a map doesn't necessary mean that all rows will be projected
 
-
-            String previousSection = "";
                 // Extract values
+                // Populate the data rows
 
                 boolean hasData = false;
                 for (int rowNumber=1 /* skip header */; rowNumber < rowLen; rowNumber++) {
