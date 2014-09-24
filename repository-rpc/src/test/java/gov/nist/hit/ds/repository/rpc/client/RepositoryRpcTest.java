@@ -176,16 +176,7 @@ public class RepositoryRpcTest {
          try {
 
 
-              AssertionAggregation assertionAggregation =  PresentationData.aggregateAssertions(new RepositoryId("Sim"), new AssetId(eventId), null);
-
-             List<CSVRow> rows =  assertionAggregation.getRows();
-
-             for (CSVRow row : rows) {
-                 for (String col : row.getColumns()) {
-                     System.out.print(col + " ");
-                 }
-                 System.out.println("assetId: " + row.getAssetId() + " rowNum: "  + row.getRowNumber());
-             }
+             aggregateAssertions(eventId, null);
 
          } catch (Exception ex) {
                 fail(ex.toString());
@@ -213,22 +204,32 @@ public class RepositoryRpcTest {
             criteria.append(new SearchTerm(PropertyKey.STATUS, Operator.EQUALTO, "ERROR"));
 
 
-            AssertionAggregation assertionAggregation =  PresentationData.aggregateAssertions(new RepositoryId("Sim"), new AssetId(eventId), criteria);
-
-            List<CSVRow> rows =  assertionAggregation.getRows();
-
-            for (CSVRow row : rows) {
-                for (String col : row.getColumns()) {
-                    System.out.print(col + " ");
-                }
-                System.out.println("assetId: " + row.getAssetId() + " rowNum: "  + row.getRowNumber());
-            }
+            aggregateAssertions(eventId, criteria);
 
         } catch (Exception ex) {
             fail(ex.toString());
         }
 
 
+    }
+
+    private void aggregateAssertions(String eventId, SearchCriteria criteria) throws RepositoryException {
+        AssertionAggregation assertionAggregation =  PresentationData.aggregateAssertions(new RepositoryId("Sim"), new AssetId(eventId), criteria);
+
+        List<CSVRow> rows =  assertionAggregation.getRows();
+
+
+        for (CSVRow row : rows) {
+            if (row.getRowNumber()==1) {
+                System.out.println("assetId: " + row.getAssetId());
+            }
+            System.out.print("rowNum: "  + row.getRowNumber());
+            for (String col : row.getColumns()) {
+                System.out.print(" " + col + " ");
+            }
+            System.out.println("");
+
+        }
     }
 
 
