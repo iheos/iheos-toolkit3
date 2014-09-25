@@ -28,6 +28,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -204,7 +205,9 @@ public class RepositoryRpcTest {
             criteria.append(new SearchTerm(PropertyKey.STATUS, Operator.EQUALTO, "ERROR"));
 
 
-            aggregateAssertions(eventId, criteria);
+            AssertionAggregation assertionAggregation =  aggregateAssertions(eventId, criteria);
+
+            assertEquals(assertionAggregation.getRows().size(),1); // Should be only one record in this data
 
         } catch (Exception ex) {
             fail(ex.toString());
@@ -213,7 +216,36 @@ public class RepositoryRpcTest {
 
     }
 
-    private void aggregateAssertions(String eventId, SearchCriteria criteria) throws RepositoryException {
+    @Test
+    public void testAssertionAggregationByAnyValueMatchCriteria()  {
+        /**
+         * local test only
+         * C:\e\artrep_test_resources\Installation\IHE-Testing\xdstools2_environment\repositories\data\Sim\123\Events\2014_07_29_13_17_30_089
+         */
+        String eventId = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
+        String type = "validators";
+//        String[] displayColumns = new String[]{"ID","STATUS","MSG"};
+
+        try {
+
+
+            SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+
+            criteria.append(new SearchTerm(PropertyKey.DISPLAY_NAME, Operator.EQUALTOANY, new String[]{"DSMetadataProcessing","HttpHeaderValidator"} ));
+
+
+            AssertionAggregation assertionAggregation =  aggregateAssertions(eventId, criteria);
+
+            assertEquals(assertionAggregation.getRows().size(),3); // Should be a total of three combined records in this data set
+
+        } catch (Exception ex) {
+            fail(ex.toString());
+        }
+
+
+    }
+
+    private AssertionAggregation aggregateAssertions(String eventId, SearchCriteria criteria) throws RepositoryException {
 
         AssertionAggregation assertionAggregation =  PresentationData.aggregateAssertions(new RepositoryId("Sim"), new AssetId(eventId), criteria);
 
@@ -226,21 +258,27 @@ public class RepositoryRpcTest {
             if (row.getRowNumber()==1) {
                 System.out.println("assetId: " + row.getAssetId());
             }
+
             System.out.print("rowNum: " + row.getRowNumber());
-            for (String col : row.getColumns()) {
-                System.out.print(" " + col + " ");
-            }
+            printRow(row.getColumns());
             System.out.println("");
 
+
         }
+
+        return assertionAggregation;
     }
 
     private void printHeader(AssertionAggregation assertionAggregation) {
         System.out.println("Printing column headers: ");
-        for (String col : assertionAggregation.getHeader().getColumns()) {
+        printRow(assertionAggregation.getHeader().getColumns());
+
+    }
+
+    private void printRow(String[] row) {
+        for (String col : row) {
             System.out.print(" " + col + " ");
         }
-
     }
 
 
