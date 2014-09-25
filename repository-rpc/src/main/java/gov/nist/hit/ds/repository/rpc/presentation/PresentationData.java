@@ -1154,7 +1154,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                     if (parentAssetType.getKeyword().equals(child.getType())) { // validators
                         logger.info("processing..." + parentAssetType + " id:" + child.getAssetId());
                         try {
-                            aggregateMessage(child, detailAssetType , assertionAggregation, detailAssetFilterCriteria, null); // "assertionGroup"
+                            aggregateMessage(child, detailAssetType , assertionAggregation, detailAssetFilterCriteria, displayColumns); // "assertionGroup"
                         } catch (RepositoryException rce) {
                             logger.warning(rce.toString());
                         }

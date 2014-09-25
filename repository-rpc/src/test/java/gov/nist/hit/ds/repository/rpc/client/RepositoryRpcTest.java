@@ -177,7 +177,7 @@ public class RepositoryRpcTest {
          try {
 
 
-             aggregateAssertions(eventId, null);
+             aggregateAssertions(eventId, null, null);
 
          } catch (Exception ex) {
                 fail(ex.toString());
@@ -205,7 +205,7 @@ public class RepositoryRpcTest {
             criteria.append(new SearchTerm(PropertyKey.STATUS, Operator.EQUALTO, "ERROR"));
 
 
-            AssertionAggregation assertionAggregation =  aggregateAssertions(eventId, criteria);
+            AssertionAggregation assertionAggregation =  aggregateAssertions(eventId, criteria, null);
 
             assertEquals(assertionAggregation.getRows().size(),1); // Should be only one record in this data
 
@@ -234,7 +234,7 @@ public class RepositoryRpcTest {
             criteria.append(new SearchTerm(PropertyKey.DISPLAY_NAME, Operator.EQUALTOANY, new String[]{"DSMetadataProcessing","HttpHeaderValidator"} ));
 
 
-            AssertionAggregation assertionAggregation =  aggregateAssertions(eventId, criteria);
+            AssertionAggregation assertionAggregation =  aggregateAssertions(eventId, criteria, null);
 
             assertEquals(assertionAggregation.getRows().size(),3); // Should be a total of three combined records in this data set
 
@@ -245,9 +245,42 @@ public class RepositoryRpcTest {
 
     }
 
-    private AssertionAggregation aggregateAssertions(String eventId, SearchCriteria criteria) throws RepositoryException {
+    @Test
+    public void testAssertionAggregationBySelectColumns()  {
+        /**
+         * local test only
+         * C:\e\artrep_test_resources\Installation\IHE-Testing\xdstools2_environment\repositories\data\Sim\123\Events\2014_07_29_13_17_30_089
+         */
+        String eventId = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
+        String type = "validators";
+        String[] displayColumns = new String[]{"ID","STATUS","MSG"};
 
-        AssertionAggregation assertionAggregation =  PresentationData.aggregateAssertions(new RepositoryId("Sim"), new AssetId(eventId), criteria);
+        try {
+
+
+            SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+
+            criteria.append(new SearchTerm(PropertyKey.DISPLAY_NAME, Operator.EQUALTOANY, new String[]{"HttpHeaderValidator"} ));
+
+
+            AssertionAggregation assertionAggregation =  aggregateAssertions(eventId, criteria, displayColumns);
+
+            assertEquals(assertionAggregation.getRows().size(),2); // Should be a total of two records in this data set
+
+            assertEquals(assertionAggregation.getHeader().getColumns().length,displayColumns.length);
+            assertEquals(assertionAggregation.getRows().get(0).getColumns().length,displayColumns.length);
+
+        } catch (Exception ex) {
+            fail(ex.toString());
+        }
+
+
+    }
+
+    private AssertionAggregation aggregateAssertions(String eventId, SearchCriteria criteria, String[] displayColumns) throws RepositoryException {
+
+        // There are more simplified function signatures to pick from, this one has the most parameters
+        AssertionAggregation assertionAggregation =  PresentationData.aggregateAssertions(new RepositoryId("Sim"), new AssetId(eventId), new SimpleType("validators") , new SimpleType("assertionGroup"), criteria, displayColumns);
 
         printHeader(assertionAggregation);
 
