@@ -21,7 +21,7 @@ class SimSiteFactory {
 
             EndpointSimConfigElement endpointASCE = (EndpointSimConfigElement)it
             String transactionName = endpointASCE.getTransactionName()
-            String endpoint = endpointASCE.value
+            String endpoint = endpointASCE.endpointValue.value
             EndpointType endpointLabel = endpointASCE.getEndpointType()
             TransactionType ttype = new ActorTransactionTypeFactory().getTransactionType(transactionName);
             site.addTransaction(new TransactionBean(ttype, TransactionBean.RepositoryType.NONE, endpoint, endpointLabel.isTls(), endpointLabel.isAsync()))
@@ -32,7 +32,7 @@ class SimSiteFactory {
             RepositoryUniqueIdSimConfigElement repUidEle = (RepositoryUniqueIdSimConfigElement) it
             EndpointSimConfigElement endpointASCE = (EndpointSimConfigElement)it
             def repuid = repUidEle.newValue
-            String endpoint = endpointASCE.value
+            String endpoint = endpointASCE.endpointValue.value
             EndpointType endpointLabel = endpointASCE.getEndpointType()
             site.addRepository(repuid, TransactionBean.RepositoryType.REPOSITORY, endpoint, endpointLabel.isTls(), endpointLabel.isAsync())
         }

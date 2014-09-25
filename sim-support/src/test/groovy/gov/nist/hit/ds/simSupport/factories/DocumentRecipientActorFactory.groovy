@@ -6,9 +6,9 @@ import gov.nist.hit.ds.simSupport.factory.ActorFactory
 import gov.nist.hit.ds.simSupport.factory.GenericActorSimBuilder
 import gov.nist.hit.ds.siteManagement.client.Site
 /**
- * Created by bmajur on 9/22/14.
+ * Created by bmajur on 9/24/14.
  */
-class DocumentRegistryActorFactory extends ActorFactory {
+class DocumentRecipientActorFactory extends ActorFactory {
     @Override
     Site loadActorSite(ActorSimConfig asc, Site site) {
         return null

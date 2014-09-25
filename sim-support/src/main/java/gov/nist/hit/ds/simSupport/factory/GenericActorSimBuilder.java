@@ -19,7 +19,7 @@ import java.util.Date;
  * @author bmajur
  *
  */
-@Deprecated
+
 public class GenericActorSimBuilder {
 	ActorSimConfig sConfig;   // elements being constructed
 	SimId simId;  // needed to build endpoints

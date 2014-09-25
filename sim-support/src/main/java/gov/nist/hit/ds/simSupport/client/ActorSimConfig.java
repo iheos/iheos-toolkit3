@@ -10,7 +10,6 @@ import groovy.transform.ToString;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,35 +24,10 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 
 	private static final long serialVersionUID = -736965164284950123L;
 	public ActorType actorType;
-//	Date expires;  // not used
-//	boolean isExpired = false;  // not used
 	public List<SimConfigElement> elements  = new ArrayList<SimConfigElement>();
-//	Object actorState = null;  // not used
-	
+
 	public ActorSimConfig() { }
 
-	/**
-	 * Set expiration date
-	 * @param expires
-	 * @return
-	 */
-//	public ActorSimConfig setExpiration(Date expires) {
-//		this.expires = expires;
-//		return this;
-//	}
-//	public boolean isExpired() { return isExpired; }
-//
-//	public void setExpired(boolean is) { isExpired = is; }
-//
-//	public boolean hasExpired() {
-//		Date now = new Date();
-//		if (now.after(expires))
-//			isExpired = true;
-//		else
-//			isExpired = false;
-//		return isExpired;
-//	}
-	
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		
@@ -241,7 +215,4 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		return actorType.equals(actorType2);
 	}
 	
-//	public Object getActorState() {
-//		return actorState;
-//	}
 }

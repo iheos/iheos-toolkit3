@@ -51,6 +51,14 @@ class RepoUtils {
         } catch (RepositoryException e) {}
     }
 
+    static rmAsset(String name, Repository repository) {
+        init()
+        try {
+            Asset a = repository.getChildByName(name)
+            if (a) repository.deleteAsset(a.getId())
+        } catch (RepositoryException e) {}
+    }
+
     static Asset mkChild(String name, Asset parent) {
         init()
         return mkChild(name, parent, new SimpleType('simpleType'))

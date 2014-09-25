@@ -33,7 +33,7 @@ class ActorTransactionTypeDAO {
         ttype.asyncCode = tt.@asyncCode
         ttype.requestAction = tt.request.@action
         ttype.responseAction = tt.response.@action
-        ttype.implementationClassName = tt.@class
+        ttype.implementationClassName = tt.implClass.@value
         if (tt.params) {
             ttype.multiPart = tt.params.@multiPart == 'true'
             ttype.soap = tt.params.@soap == 'true'

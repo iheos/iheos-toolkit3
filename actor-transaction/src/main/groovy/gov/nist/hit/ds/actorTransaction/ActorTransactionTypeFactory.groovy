@@ -46,7 +46,7 @@ class ActorTransactionTypeFactory {
         throw new ToolkitRuntimeException("TransactionType ${type} does not exist. Types ${transactionByName.keySet()} are defined")
     }
 
-    Collection<TransactionType> getTransactionTypes() { return transactionByName.values() }
+    List<TransactionType> getTransactionTypes() { return transactionByName.values() as List}
 
     List<String> getActorTypeNames() { return actorByName.keySet() }
 

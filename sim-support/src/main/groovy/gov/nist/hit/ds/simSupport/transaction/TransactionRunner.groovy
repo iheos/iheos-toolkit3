@@ -50,7 +50,7 @@ class TransactionRunner {
         repoName = repositoryName
         implClassName = transactionType.implementationClassName
         log.debug("implClassName is ${implClassName}")
-        init2(simId, repositoryName, transactionType.code)
+        init2(simId, transactionType.code, repositoryName)
     }
     ////////////////////////////////////////////////////////////////
 

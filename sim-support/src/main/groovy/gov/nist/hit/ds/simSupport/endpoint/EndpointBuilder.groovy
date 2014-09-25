@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.simSupport.endpoint
 
 import gov.nist.hit.ds.actorTransaction.EndpointType
-import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.soapSupport.core.Endpoint
 import groovy.util.logging.Log4j
 
 /**
@@ -43,6 +43,11 @@ class EndpointBuilder {
         x = (x.charAt(0) == '/') ? clean(x.substring(1)) : x
         x = (x.charAt(x.size()-1) == '/') ? clean(x.substring(0, x.size()-1)) : x
         return x
+    }
+
+    EndpointBuilder parse(Endpoint endpoint) {
+        parse(endpoint.endpoint)
+        return this
     }
 
     EndpointBuilder parse(String endpoint) {
