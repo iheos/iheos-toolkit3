@@ -4,6 +4,7 @@ import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.Repository
+import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
 
 /**
@@ -18,4 +19,5 @@ class SimHandle {
     Event event
     TransactionType transactionType
     Repository repository
+    ActorSimConfig actorSimConfig
 }

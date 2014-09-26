@@ -3,7 +3,7 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
@@ -16,10 +16,10 @@ class SimSiteFactory {
         println(actorSimConfig)
         Site site = new Site(name)
         actorSimConfig.getElements().each {
-            if (!(it instanceof EndpointSimConfigElement)) return
+            if (!(it instanceof TransactionSimConfigElement)) return
             if (it instanceof RepositoryUniqueIdSimConfigElement) return
 
-            EndpointSimConfigElement endpointASCE = (EndpointSimConfigElement)it
+            TransactionSimConfigElement endpointASCE = (TransactionSimConfigElement)it
             String transactionName = endpointASCE.getTransactionName()
             String endpoint = endpointASCE.endpointValue.value
             EndpointType endpointLabel = endpointASCE.getEndpointType()
@@ -30,7 +30,7 @@ class SimSiteFactory {
             if (!(it instanceof RepositoryUniqueIdSimConfigElement)) return
 
             RepositoryUniqueIdSimConfigElement repUidEle = (RepositoryUniqueIdSimConfigElement) it
-            EndpointSimConfigElement endpointASCE = (EndpointSimConfigElement)it
+            TransactionSimConfigElement endpointASCE = (TransactionSimConfigElement)it
             def repuid = repUidEle.newValue
             String endpoint = endpointASCE.endpointValue.value
             EndpointType endpointLabel = endpointASCE.getEndpointType()

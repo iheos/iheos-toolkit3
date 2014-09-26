@@ -2,8 +2,8 @@ package gov.nist.hit.ds.simSupport.client;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.*;
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.SimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement;
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue;
 import groovy.transform.ToString;
 
@@ -32,9 +32,8 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		StringBuffer buf = new StringBuffer();
 		
 		buf.append("ActorSimulatorConfig:");
-		buf.append("\n\telements=[");
 		for (SimConfigElement asce : elements) {
-			buf.append("\n\t\t").append(asce);
+			buf.append("\n\t").append(asce);
 		}
 		
 		return buf.toString();
@@ -128,7 +127,7 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	 * @return endpoint or null if no endpoint matches the type information.
 	 */
 	public EndpointValue getEndpoint(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
-        List<EndpointSimConfigElement> configs = findConfigs(
+        List<TransactionSimConfigElement> configs = findConfigs(
                 new ArrayList<TransactionType>(Arrays.asList(transType)),
                 new ArrayList<TlsType>(Arrays.asList(tlsType)),
                 new ArrayList<AsyncType>(Arrays.asList(asyncType)));
@@ -144,8 +143,8 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	 * @param asyncTypes
 	 * @return
 	 */
-    public List<EndpointSimConfigElement> findConfigs(List<TransactionType> transTypes, List<TlsType> tlsTypes, List<AsyncType> asyncTypes)  {
-        List<EndpointSimConfigElement> simEles = new ArrayList<EndpointSimConfigElement>();
+    public List<TransactionSimConfigElement> findConfigs(List<TransactionType> transTypes, List<TlsType> tlsTypes, List<AsyncType> asyncTypes)  {
+        List<TransactionSimConfigElement> simEles = new ArrayList<TransactionSimConfigElement>();
 
         class Tls {
             List<TlsType> tlsTypes;
@@ -185,8 +184,8 @@ public class ActorSimConfig implements IsSerializable, Serializable {
         Async async = new Async(asyncTypes);
 
         for (SimConfigElement ele : getElements()) {
-            if (!(ele instanceof EndpointSimConfigElement)) continue;
-            EndpointSimConfigElement endp = (EndpointSimConfigElement) ele;
+            if (!(ele instanceof TransactionSimConfigElement)) continue;
+            TransactionSimConfigElement endp = (TransactionSimConfigElement) ele;
             EndpointType elabel = endp.getEndpointType();
             if (!tTypes.has(elabel.getTransType())) continue;
             if (!tls.has(elabel.getTlsType())) continue;

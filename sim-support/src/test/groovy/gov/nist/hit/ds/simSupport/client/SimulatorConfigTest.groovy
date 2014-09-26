@@ -5,7 +5,7 @@ import gov.nist.hit.ds.actorTransaction.AsyncType
 import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.actorTransaction.TlsType
 import gov.nist.hit.ds.simSupport.client.configElementTypes.SimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import org.junit.Before
 import org.junit.Test
@@ -60,7 +60,7 @@ public class SimulatorConfigTest {
 	public void findTest2() {
 		ActorSimConfig sConfig = new ActorSimConfig(new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg"));
 		sConfig.
-				add(new EndpointSimConfigElement(
+				add(new TransactionSimConfigElement(
 						new EndpointType(
 								new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb"),
 								TlsType.NOTLS,
@@ -68,7 +68,7 @@ public class SimulatorConfigTest {
 								),
 								new EndpointValue("http://example.com/async"))
 						);
-		sConfig.add(new EndpointSimConfigElement(
+		sConfig.add(new TransactionSimConfigElement(
 								new EndpointType(
 										new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb"),
 										TlsType.TLS,

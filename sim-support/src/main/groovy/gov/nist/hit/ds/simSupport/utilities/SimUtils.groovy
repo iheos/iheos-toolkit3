@@ -76,6 +76,8 @@ class SimUtils {
         simHandle.configAsset = RepoUtils.child(configAssetName, simAsset)
         simHandle.eventLogAsset = RepoUtils.child(eventsAssetName, simAsset)
         simHandle.repository = repository
+        simHandle.actorSimConfig = loadConfig(simHandle.configAsset)
+        println "Open ActorSimConfig: ${simHandle.actorSimConfig}"
 
         return simHandle
     }
@@ -121,5 +123,8 @@ class SimUtils {
         def a = RepoUtils.mkChild(name, parent)
         a.setContent(xmlEle, 'text/xml')
     }
+
+    private static ActorSimConfig loadConfig(Asset a) { new SimulatorDAO().toModel(load(a))}
+    private static String load(Asset a) { new String(a.content) }
 
 }

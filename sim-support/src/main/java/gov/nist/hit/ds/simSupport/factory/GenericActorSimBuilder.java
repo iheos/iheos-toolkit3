@@ -4,9 +4,10 @@ import gov.nist.hit.ds.actorTransaction.*;
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.BooleanSimConfigElement;
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.TextSimConfigElement;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.TimeSimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement;
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue;
 import gov.nist.hit.ds.simSupport.simrepo.SimDb;
 import gov.nist.hit.ds.toolkit.installation.Installation;
@@ -77,7 +78,7 @@ public class GenericActorSimBuilder {
 				+ "/" 
 				+ transType.getCode());
 		sConfig.add(
-				new EndpointSimConfigElement(new EndpointType(transType,tls, async), endpoint).setEditable(true)
+				new TransactionSimConfigElement(new EndpointType(transType,tls, async), endpoint).setEditable(true)
 				);
 		return this;
 	}

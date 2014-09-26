@@ -3,8 +3,9 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.ActorType
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
@@ -18,7 +19,10 @@ class SimConfigFactory {
         log.debug("SimConfigFactory: actorType ${actorTypeName}")
         ActorType actorType= new ActorTransactionTypeFactory().getActorType(actorTypeName)
         ActorSimConfig actorSimConfig = new ActorSimConfig(actorType)
+
         EndpointBuilder endpointBuilder = new EndpointBuilder(server, port, base, simId)
+
+        // Not clear that properties are being used at the moment
         actorType.props.each { name, value ->
             log.debug("SimConfigFactory: property ${name}")
             // I should use reflection to do fancy stuff here.  Maybe later.
@@ -31,12 +35,13 @@ class SimConfigFactory {
                 throw new ToolkitRuntimeException(msg)
             }
         }
-        actorType.endpointLabels().each {
+
+        actorType.endpointTypes().each {
             log.debug("SimConfigFactory: endpoint ${it}")
             if (it.transType.hasTransactionProperty('RepositoryUniqueId')) {
-                actorSimConfig.add(new RepositoryUniqueIdSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
+                actorSimConfig.add(new RepositoryUniqueIdSimConfigElement())
             } else {
-                actorSimConfig.add(new EndpointSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
+                actorSimConfig.add(new TransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
             }
         }
         return actorSimConfig
