@@ -69,7 +69,7 @@ class PnrTest extends Specification {
 
     def 'Test2'() {
         when:
-        SimUtils.runTransaction(endpoint, header, body, repoName)
+        SimHandle simHandle = SimUtils.runTransaction(endpoint, header, body, repoName)
 
         then:
         true

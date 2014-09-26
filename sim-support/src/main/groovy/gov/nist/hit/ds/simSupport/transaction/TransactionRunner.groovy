@@ -89,7 +89,7 @@ class TransactionRunner {
 
     def validateRequest() {runAMethod('validateRequest')}
     def validateResponse() {runAMethod('validateResponse')}
-    def run() { runAMethod('run')}
+    SimHandle run() { runAMethod('run'); return simHandle }
 
     def runAMethod(methodName) {
         // build implementation

@@ -101,11 +101,11 @@ class SimUtils {
         } catch (Exception e) { return false }
     }
 
-    static def runTransaction(Endpoint endpoint, String header, byte[] body, repositoryName) {
+    static SimHandle runTransaction(Endpoint endpoint, String header, byte[] body, repositoryName) {
         def endp = new EndpointBuilder().parse(endpoint)
         def transactionType = new ActorTransactionTypeFactory().getTransactionType(endp.transCode)
         def simId = endp.simId
-        new TransactionRunner(simId, repositoryName, transactionType, header, body).run()
+        return new TransactionRunner(simId, repositoryName, transactionType, header, body).run()
     }
 
     private static Asset sim(SimId simId, Repository repository) {
