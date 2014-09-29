@@ -29,7 +29,7 @@ public class v2TabExample extends Tab {
         System.out.println("tabContainer == null?: " +(tabContainer==null));
         tabv2.onTabLoad(tabContainer, true, null); //(TabContainer container, boolean select, String eventName) );
 
-        // FIXME here is want through the error: A widget that has an existing parent widget may not be added to the detach list
+        // FIXME: A widget that has an existing parent widget may not be added to the detach list
         VLayout panel = new VLayout(10);
         panel.addMember(tabv2.getTopPanel());
         this.setPane(panel);
