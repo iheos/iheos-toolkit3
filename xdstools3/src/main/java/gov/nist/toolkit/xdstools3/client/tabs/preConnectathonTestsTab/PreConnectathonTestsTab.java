@@ -12,6 +12,7 @@ import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -139,6 +140,11 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
 
         vStack.addMembers(form, beforeReadme, htmlReadme, afterReadme,sectionPanel,patientID,tLSAndSAMLForm);
         return vStack;
+    }
+
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getPreConnectathonTestsTabCode();
     }
 
     private void loadActorsMap() {

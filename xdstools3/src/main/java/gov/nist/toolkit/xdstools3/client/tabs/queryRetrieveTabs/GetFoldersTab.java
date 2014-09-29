@@ -14,6 +14,7 @@ import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithTooltipWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 public class GetFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab {
     private static final String header="Get Folders";
@@ -51,6 +52,11 @@ public class GetFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Generi
         bindUI();
 
         return vStack;
+    }
+
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getGetFoldersTabCode();
     }
 
     private void bindUI() {

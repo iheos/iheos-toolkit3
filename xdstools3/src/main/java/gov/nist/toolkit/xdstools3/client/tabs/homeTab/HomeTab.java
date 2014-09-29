@@ -5,6 +5,7 @@ import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 public class HomeTab extends GenericTab {
 
@@ -61,6 +62,11 @@ public class HomeTab extends GenericTab {
         spacer.setHeight(30);
         vstack.addMembers(hstack1, spacer, hstack2,spacer,hStack3);
         return vstack;
+    }
+
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getHomeTabCode();
     }
 
 

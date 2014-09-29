@@ -15,6 +15,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithToolti
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab {
     private static final String header="Find Folders";
@@ -48,6 +49,11 @@ public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Gener
         bindUI();
 
         return vStack;
+    }
+
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getFindFoldersCode();
     }
 
     private void bindUI() {

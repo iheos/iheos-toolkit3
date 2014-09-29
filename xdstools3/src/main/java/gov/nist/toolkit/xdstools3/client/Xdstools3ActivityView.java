@@ -1,14 +1,15 @@
 package gov.nist.toolkit.xdstools3.client;
 
 
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.user.client.ui.*;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
+import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
+import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.tabs.EnvironmentState;
 import gov.nist.toolkit.xdstools2.client.tabs.QueryState;
@@ -28,14 +29,20 @@ import gov.nist.toolkit.xdstools3.client.tabs.v2.v2TabExample;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
+import java.util.logging.Logger;
+
+
 // TabContainer was added for v2-v3 integration purposes
-public class Xdstools3 implements EntryPoint, TabContainer {
+public class Xdstools3ActivityView extends AbstractActivity implements TabContainer, AcceptsOneWidget {
 
     private GenericTabSet topTabSet;
 
+    private HLayout container;
+    private String tabId;
+    private String currentPlace=TabNamesUtil.getHomeTabCode();
 
-    public void onModuleLoad() {
 
+    public void run() {
         // Toolbar
         Toolbar configBar = new Toolbar();
 
@@ -50,14 +57,14 @@ public class Xdstools3 implements EntryPoint, TabContainer {
         mainLayout.setStyleName("mainLayout");
 
         // Attach the contents to the RootLayoutPanel
-        HLayout container = new HLayout();
+        container = new HLayout();
         container.setAlign(Alignment.CENTER);
         container.setWidth100();
         container.setHeight100();
         container.addMembers(new LayoutSpacer(), mainLayout, new LayoutSpacer());
         mainLayout.setWidth(900); // width has to be set here after use of LayoutSpacers, not in CSS, else it will not work.
-
         container.draw();
+
 
         // Smartgwt Console - useful for development, mainly tracking RPC calls
         // SC.showConsole();
@@ -66,6 +73,19 @@ public class Xdstools3 implements EntryPoint, TabContainer {
         Util.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new OpenTabEventHandler(){
             public void onEvent(OpenTabEvent event) {
                 openTab(event.getTabName());
+            }
+        });
+
+        topTabSet.addTabSelectedHandler(new TabSelectedHandler() {
+            @Override
+            public void onTabSelected(TabSelectedEvent tabSelectedEvent) {
+                String tabName;
+                if(tabSelectedEvent.getTab() instanceof v2TabExample){
+                    tabName=((v2TabExample) tabSelectedEvent.getTab()).getTabName();
+                }else{
+                    tabName=((GenericTab) tabSelectedEvent.getTab()).getTabName();
+                }
+                Xdstools3GinInjector.injector.getPlaceController().goTo(new TabPlace(tabName));
             }
         });
 
@@ -82,7 +102,10 @@ public class Xdstools3 implements EntryPoint, TabContainer {
         Tab tab = null;
 
         // ---------- v3 tabs --------
-        if (tabName.equals(TabNamesUtil.getInstance().getAdminTabCode())) {
+        if (tabName.equals(TabNamesUtil.getInstance().getHomeTabCode())){
+            tab = new HomeTab("Home");
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getAdminTabCode())) {
             tab = new SettingsTab();
         }
         else if (tabName.equals(TabNamesUtil.getInstance().getEndpointsTabCode())) {
@@ -103,22 +126,22 @@ public class Xdstools3 implements EntryPoint, TabContainer {
         else if (tabName.equals(TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode())) {
             tab = new DocEntryEditorTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getGetDocumentsCode())) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getGetDocumentsTabCode())) {
             tab = new GetDocumentsTab();
         }
         else if (tabName.equals(TabNamesUtil.getInstance().getFindFoldersCode())) {
             tab = new FindFoldersTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getGetFoldersCode())) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getGetFoldersTabCode())) {
             tab = new GetFoldersTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getRetrieveDocumentCode())) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getRetrieveDocumentTabCode())) {
             tab = new RetrieveDocumentsTab();
         }
         else if (tabName.equals(TabNamesUtil.getInstance().getGetFoldersAndContentsCode())) {
             tab = new GetFolderAndContentsTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getGetSubmissionSetAndContentsCode())) {
+        else if (tabName.equals(TabNamesUtil.getInstance().getGetSubmissionSetAndContentsTabCode())) {
             tab = new GetSubmissionSetAndContentsTab();
         }
         else if (tabName.equals(TabNamesUtil.getInstance().getGetRelatedDocumentsCode())) {
@@ -145,10 +168,30 @@ public class Xdstools3 implements EntryPoint, TabContainer {
             tab = new v2TabExample(this);
         }
 
+        else{
+            System.out.println("Unknown tab");
+            topTabSet.selectTab(0); // todo we can create a 404
+            currentPlace=TabNamesUtil.getHomeTabCode();
+        }
+
         // update set of tabs
         if (tab != null) {
-            topTabSet.addTab(tab);
-            topTabSet.selectTab(tab);
+            boolean found=false;
+            for (Tab t:topTabSet.getTabs())
+                if (t.getTitle().equals(tab.getTitle())) {
+                    topTabSet.selectTab(t);
+                    found=true;
+                    break;
+                }
+            // Remove second part of the condition if you want to reopen a closed tab on browser history back navigation
+            if(found==false && TabNamesUtil.getHomeTabCode().equals(currentPlace)){
+                topTabSet.addTab(tab);
+                topTabSet.selectTab(tab);
+            }
+            if(tab instanceof GenericTab)
+                currentPlace=((GenericTab) tab).getTabName();
+            else if (tab instanceof v2TabExample)
+                currentPlace=((v2TabExample) tab).getTabName();
         }
     }
 
@@ -177,5 +220,26 @@ public class Xdstools3 implements EntryPoint, TabContainer {
     @Override
     public TestSessionState getTestSessionState() {
         return null;
+    }
+
+    @Override
+    public void start(AcceptsOneWidget acceptsOneWidget, com.google.gwt.event.shared.EventBus eventBus) {
+        if(tabId!=null ) {
+            System.out.println("eventBus ? null: "+(Util.EVENT_BUS==null));
+            Util.EVENT_BUS.fireEvent(new OpenTabEvent(tabId));
+        }
+    }
+
+    public void setTabId(String tabId) {
+        this.tabId = tabId;
+    }
+
+    public HLayout getDisplay(){
+        return container;
+    }
+
+    @Override
+    public void setWidget(IsWidget w) {
+        container.addMember(w.asWidget());
     }
 }
