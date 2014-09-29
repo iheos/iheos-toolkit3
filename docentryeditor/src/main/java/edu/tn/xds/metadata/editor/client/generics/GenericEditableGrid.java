@@ -153,13 +153,13 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         gridContainer.add(widget, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(0, 4, 1, 4)));
     }
 
-    protected void addWidgets(Widget...widgets){
+    protected void addWidgets(Widget... widgets) {
         hasExtraWidget = true;
-        boolean firstDone=false;
-        for(Widget w:widgets){
-            if(firstDone==false){
+        boolean firstDone = false;
+        for (Widget w : widgets) {
+            if (firstDone == false) {
                 w.addStyleName("topBorder");
-                firstDone=true;
+                firstDone = true;
             }
             gridContainer.add(w, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(0, 4, 1, 4)));
         }
@@ -216,7 +216,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
             @Override
             public void onSelect(SelectEvent selectEvent) {
                 // try to fire an event
-                logger.info("current list size: " + getStore().size() + "\nStore max size: " + storeMaxLength);
+//                logger.info("current list size: " + getStore().size() + "\nStore max size: " + storeMaxLength);
                 if (getStore().size() < storeMaxLength || storeMaxLength == 0) {
                     editing.cancelEditing();
                     // this method should work I don't understand why there is a problem.
@@ -228,7 +228,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
                         index = 1;
                     }
                     editing.startEditing(new Grid.GridCell(getStore().indexOf(element), index));
-                    if (getStore().size() >= storeMaxLength) {
+                    if (getStore().size() >= storeMaxLength && storeMaxLength != 0) {
                         disableNewButton();
                     }
                 } else {
@@ -250,7 +250,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
                     public void onHide(HideEvent event) {
                         if (d.getHideButton() == d.getButtonById(Dialog.PredefinedButton.YES.name())) {
                             deleteItemAction();
-                            if (getStore().size() < storeMaxLength) {
+                            if (getStore().size() < storeMaxLength && storeMaxLength != 0) {
                                 enableNewButton();
                             }
                         }
