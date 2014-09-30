@@ -14,6 +14,8 @@ public class MtomMessageValidator extends ValComponentBase {
 	byte[] bodyBytes;
 	Event event;
 
+    public MtomMessageValidator() { super(null); }
+
     @Override
     public void run() throws SoapFaultException, RepositoryException {
 

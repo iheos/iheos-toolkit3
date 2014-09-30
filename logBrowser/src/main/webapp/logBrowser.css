@@ -49,3 +49,11 @@ h1 {
 .txDataGridSelectedRow {
     background-color: LightGoldenRodYellow; /* #FFFFCC */
 }
+
+.centerImg{
+    position:relative;top:250px;left:50%;
+}
+
+.grayText {
+    color:gray;
+}

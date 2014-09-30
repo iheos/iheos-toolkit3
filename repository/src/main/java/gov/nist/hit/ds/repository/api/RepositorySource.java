@@ -12,7 +12,7 @@ public class RepositorySource {
 
     /**
      *
-     * @param location The repository root directory.
+     * @param location The root directory of the entire repositories collection.
      */
 	public RepositorySource(File location) {
 		super();
@@ -21,7 +21,7 @@ public class RepositorySource {
 
     /**
      *
-     * @param location The repository root directory.
+     * @param location The root directory of the entire repositories collection.
      * @param access The application access to the repository source.
      */
 	public RepositorySource(File location, Access access) {

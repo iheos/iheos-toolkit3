@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.simSupport.validationEngine
-import gov.nist.hit.ds.eventLog.assertion.annotations.Validation
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.*
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import org.apache.log4j.Logger
 
 import java.lang.reflect.Method
@@ -21,30 +21,63 @@ public class ValidationClassScanner {
     }
 
     public List<ValidationMethod> scan() throws Exception {
-        targetClass.methods.each { addValidationMethod(it) }
+        def validationIds = getAllValidationIds()
+        targetClass.methods.each { addValidationMethod(it, validationIds) }
         return validationMethods
     }
 
     // Any method can be passed in.  If no appropriate annotation then nothing will be scheduled.
-    void addValidationMethod(Method method) throws Exception {
-        ValidationFault validationFaultAnnotation = method.getAnnotation(ValidationFault)
-        if (validationFaultAnnotation) {
-            Class<?>[] subParamTypes = method.parameterTypes
-            if (subParamTypes?.length > 0)
-                throw new Exception("Validation <" + targetClass.getName() + "#" + method.getName() + "> : a validation method accepts no parameters")
-            RunType type = RunType.FAULT
-            String[] dependsOnId = validationFaultAnnotation.dependsOn()
-            validationMethods.add(new ValidationMethod(method, type, dependsOnId, validationFaultAnnotation))
-        }
-
+    def addValidationMethod(Method method, validationIds) {
         Validation validationAnnotation = method.getAnnotation(Validation)
         if (validationAnnotation) {
-            Class<?>[] subParamTypes = method.getParameterTypes()
-            if (subParamTypes != null && subParamTypes.length > 0)
-                throw new Exception("Validation <" + targetClass.getName() + "#" + method.getName() + "> : a validation method accepts no parameters")
-            RunType type = RunType.ERROR
-            String[] dependsOnId = validationAnnotation.dependsOn()
-            validationMethods.add(new ValidationMethod(method, type, dependsOnId, validationAnnotation))
+            ValidationMethod vMethod = new ValidationMethod(method, validationAnnotation)
+            validationMethods.add(vMethod)
+
+            Fault fault = method.getAnnotation(Fault)
+            if (fault) {
+                vMethod.type = RunType.FAULT
+                vMethod.faultCode = fault.code()
+            }
+
+            if (method.getAnnotation(Optional)) vMethod.required = false
+
+            def errorCode = method.getAnnotation(ErrorCode)
+            if (errorCode) vMethod.errorCode = errorCode.code()
+
+            if (method.getAnnotation(Setup)) vMethod.setup = true
+
+            DependsOn dependsOn = method.getAnnotation(DependsOn)
+            if (dependsOn) {
+                def dependsOnIds = dependsOn.ids() as List
+                dependsOnIds.each {
+                    if (!validationIds.contains(it))
+                        throw new ToolkitRuntimeException("Validation method: ${method.name} depends on id ${it} which is not defined.")
+                }
+                vMethod.addDependsOn(dependsOn.ids())
+            }
+
+            Guard guard = method.getAnnotation(Guard)
+            if (guard) {
+                def guardNames = guard.methodNames() as List
+                guardNames.each {
+                    if (!getMethodByName(it))
+                        throw new ToolkitRuntimeException("Validation method: ${method.name} depends on guard method ${it} which is not defined.")
+                }
+                vMethod.addGuardMethod(guard.methodNames())
+            }
         }
+    }
+
+    Method getMethodByName(String methodName) {
+        return targetClass.getMethod(methodName)
+    }
+
+    def getAllValidationIds() {
+        def ids = []
+        targetClass.methods.each {
+            Validation val = it.getAnnotation(Validation)
+            if (val) ids << val.id()
+        }
+        return ids
     }
 }

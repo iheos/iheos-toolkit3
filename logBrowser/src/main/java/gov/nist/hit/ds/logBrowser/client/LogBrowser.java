@@ -31,13 +31,13 @@ public class LogBrowser implements EntryPoint {
 					
 			try {
 				logBrowserWidget = new LogBrowserWidget(eventBus,
-                        new Feature[]{
+                        new Feature[] {
                                 Feature.BROWSE
                                  , Feature.SEARCH
-//                                , Feature.TRANSACTION_MONITOR
-//                                , Feature.TRANSACTION_FILTER
+//                                , Feature.TRANSACTION_MONITOR // old
+//                                , Feature.TRANSACTION_FILTER // old
                                 , Feature.TRANSACTION_FILTER_ADVANCED
-//                                  , Feature.EVENT_MESSAGE_AGGREGATOR
+                                  , Feature.EVENT_MESSAGE_AGGREGATOR
                                 });
 
 			} catch (RepositoryConfigException e) {

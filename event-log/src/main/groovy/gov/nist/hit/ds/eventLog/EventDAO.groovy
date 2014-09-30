@@ -10,6 +10,7 @@ import gov.nist.hit.ds.repository.simple.SimpleType
 class EventDAO {
     def validatorsAsset = null
     Event event
+    def artifacts
 
     def EventDAO(event) { this.event = event }
 
@@ -23,7 +24,7 @@ class EventDAO {
         a.setOrder(1)
         inOut.save(event.inOutMessages)
 
-        def artifacts = new ArtifactsDAO()
+        artifacts = new ArtifactsDAO()
         a = artifacts.init(event.eventAsset)
         a.setOrder(2)
         artifacts.save(event.artifacts)
