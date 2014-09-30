@@ -8,6 +8,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.GenericCheckboxWithToolti
 import gov.nist.toolkit.xdstools3.client.customWidgets.UploadItemWithTooltipWidget;
 
 import gov.nist.toolkit.xdstools3.client.customWidgets.forms.GenericForm;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 public class SettingsTab extends GenericCloseableTab {
 	private static String title = "Settings";
@@ -85,5 +86,10 @@ public class SettingsTab extends GenericCloseableTab {
 
 //        getPanel().addMember(form);
         return form;
+    }
+
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getAdminTabCode();
     }
 }

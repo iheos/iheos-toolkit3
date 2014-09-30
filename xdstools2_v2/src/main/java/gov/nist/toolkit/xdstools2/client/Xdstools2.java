@@ -129,12 +129,12 @@ public class Xdstools2 implements EntryPoint, TabContainer {
 
         // buildWrapper();
 
-        ht.onTabLoad(this, false, null);
+       // ht.onTabLoad(this, false, null);
 
         //		new MessageValidatorTab().onTabLoad(this, false);
 
 
-        new TabManager().reset();
+       // new TabManager().reset();
 
         // only one panel, it's all done in tabs
         //tabPanel.selectTab(0);

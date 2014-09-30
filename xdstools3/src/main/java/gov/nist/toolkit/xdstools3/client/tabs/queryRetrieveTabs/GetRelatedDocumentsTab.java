@@ -18,14 +18,12 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithToolti
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Created by onh2 on 9/10/2014.
- */
-public class GetRelatedDocuments extends GenericCloseableTab {
+public class GetRelatedDocumentsTab extends GenericCloseableTab {
     private static final String header="Get Related Documents";
 
     private GenericTextItemWithTooltipWidget docEntryUUID;
@@ -33,7 +31,7 @@ public class GetRelatedDocuments extends GenericCloseableTab {
     private EndpointWidget sites;
     private Button runBtn;
 
-    public GetRelatedDocuments() {
+    public GetRelatedDocumentsTab() {
         super(header);
     }
 
@@ -74,6 +72,11 @@ public class GetRelatedDocuments extends GenericCloseableTab {
         bindUI();
 
         return vStack;
+    }
+
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getGetRelatedDocumentsCode();
     }
 
     private void loadAssociationTypesMap() {

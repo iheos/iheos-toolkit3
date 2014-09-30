@@ -1,50 +1,45 @@
-package gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.events.BlurEvent;
 import com.smartgwt.client.widgets.form.fields.events.BlurHandler;
 import com.smartgwt.client.widgets.grid.events.SelectionChangedHandler;
 import com.smartgwt.client.widgets.grid.events.SelectionEvent;
 import com.smartgwt.client.widgets.layout.VStack;
-import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithTooltipWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 
-/**
- * Created by onh2 on 9/10/2014.
- */
-public class GetSubmissionSetAndContents extends GenericCloseableTab {
-
-    private static final String header="Get Submission Set And Contents";
-
-    private GenericTextItemWithTooltipWidget subSetUUID;
+public abstract class AbstractRegistryAndRepositoryTab extends GenericCloseableTab {
+    private PatientIDWidget patientIDWidget;
     private EndpointWidget sites;
     private Button runBtn;
 
-    public GetSubmissionSetAndContents() {
-        super(header);
+    protected abstract String setHeaderTitle();
+    protected abstract void configureEndpoint();
+
+    protected AbstractRegistryAndRepositoryTab() {
+        super("");
+        setTitle(setHeaderTitle());
+        setHeader(setHeaderTitle());
     }
+
 
     @Override
     protected Widget createContents() {
         VStack vStack=new VStack();
 
-        Label l1=createSubtitle1("1. Enter Submission Set UUID or UID");
-        DynamicForm subSetUUIDForm = new DynamicForm();
-        subSetUUID = new GenericTextItemWithTooltipWidget();
-        subSetUUID.setTitle("Submission Set UUID or UID");
-        subSetUUID.setWidth(400);
-        subSetUUIDForm.setFields(subSetUUID);
+        Label l1=createSubtitle1("1. Enter Patient ID");
+        patientIDWidget = new PatientIDWidget();
+        patientIDWidget.setWidth(400);
 
-        Label l2=createSubtitle1("2. Select site");
+        Label l2=createSubtitle1("2. Select Registry");
         sites = new EndpointWidget();
-//        sites.isEndpointValueSelected()
 
         Label l3=createSubtitle1("3. Select SAML and TLS options");
         TLSAndSAMLForm tlsAndSAMLForm=new TLSAndSAMLForm();
@@ -52,7 +47,7 @@ public class GetSubmissionSetAndContents extends GenericCloseableTab {
         runBtn=new Button("Run");
         runBtn.disable();
 
-        vStack.addMembers(l1,subSetUUIDForm,l2, sites,l3,tlsAndSAMLForm,runBtn);
+        vStack.addMembers(l1,patientIDWidget,l2, sites,l3,tlsAndSAMLForm,runBtn);
 
         bindUI();
 
@@ -60,10 +55,10 @@ public class GetSubmissionSetAndContents extends GenericCloseableTab {
     }
 
     private void bindUI() {
-        subSetUUID.addBlurHandler(new BlurHandler() {
+        patientIDWidget.getField("patientID").addBlurHandler(new BlurHandler() {
             @Override
             public void onBlur(BlurEvent blurEvent) {
-                if (!subSetUUID.getValueAsString().isEmpty() && sites.isEndpointValueSelected()) {
+                if (patientIDWidget.isPidValueEntered() && sites.isEndpointValueSelected()) {
                     runBtn.enable();
                 } else {
                     runBtn.disable();
@@ -73,7 +68,7 @@ public class GetSubmissionSetAndContents extends GenericCloseableTab {
         sites.addSelectionChangedHandler(new SelectionChangedHandler() {
             @Override
             public void onSelectionChanged(SelectionEvent selectionEvent) {
-                if (subSetUUID.getValue() != null && sites.isEndpointValueSelected()) {
+                if (patientIDWidget.isPidValueEntered() && sites.isEndpointValueSelected()) {
                     runBtn.enable();
                 } else {
                     runBtn.disable();
@@ -86,5 +81,16 @@ public class GetSubmissionSetAndContents extends GenericCloseableTab {
                 // TODO
             }
         });
+    }
+    protected Button getRunButton(){
+        return runBtn;
+    }
+
+    protected PatientIDWidget getPatientIDWidget(){
+        return patientIDWidget;
+    }
+
+    protected EndpointWidget getRegistryWidget(){
+        return sites;
     }
 }

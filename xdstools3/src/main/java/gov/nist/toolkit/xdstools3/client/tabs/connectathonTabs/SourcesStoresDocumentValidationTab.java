@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.widgets.Button;
@@ -12,18 +12,18 @@ import com.smartgwt.client.widgets.grid.events.SelectionChangedHandler;
 import com.smartgwt.client.widgets.grid.events.SelectionEvent;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithTooltipWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
-public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab {
-    private static final String header="Find Folders";
-    private PatientIDWidget patientIDWidget;
+public class SourcesStoresDocumentValidationTab extends GenericCloseableTab {
+    private final static String header = "Sources Stores Document Validation";
+    private GenericTextItemWithTooltipWidget subSetUUID;
     private EndpointWidget sites;
     private Button runBtn;
 
-    public FindFoldersTab() {
+    public SourcesStoresDocumentValidationTab() {
         super(header);
     }
 
@@ -31,12 +31,16 @@ public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Gener
     protected Widget createContents() {
         VStack vStack=new VStack();
 
-        Label l1=createSubtitle1("1. Enter Patient ID");
-        patientIDWidget = new PatientIDWidget();
-        patientIDWidget.setWidth(400);
+        Label l1=createSubtitle1("1. Enter Submission Set Unique ID or UUID");
+        DynamicForm docEntryUUIDForm = new DynamicForm();
+        subSetUUID = new GenericTextItemWithTooltipWidget();
+        subSetUUID.setTitle("Submission Set UUID or UID");
+        subSetUUID.setWidth(400);
+        docEntryUUIDForm.setFields(subSetUUID);
 
-        Label l2=createSubtitle1("2. Select site");
+        Label l2=createSubtitle1("2. Select Registry");
         sites = new EndpointWidget();
+//        sites.isEndpointValueSelected()
 
         Label l3=createSubtitle1("3. Select SAML and TLS options");
         TLSAndSAMLForm tlsAndSAMLForm=new TLSAndSAMLForm();
@@ -44,7 +48,7 @@ public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Gener
         runBtn=new Button("Run");
         runBtn.disable();
 
-        vStack.addMembers(l1,patientIDWidget,l2, sites,l3,tlsAndSAMLForm,runBtn);
+        vStack.addMembers(l1,docEntryUUIDForm,l2, sites,l3,tlsAndSAMLForm,runBtn);
 
         bindUI();
 
@@ -53,16 +57,16 @@ public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Gener
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getFindFoldersCode();
+        return TabNamesUtil.getSourceStoresDocumentValidationCode();
     }
 
     private void bindUI() {
-        patientIDWidget.getField("patientID").addBlurHandler(new BlurHandler() {
+        subSetUUID.addBlurHandler(new BlurHandler() {
             @Override
             public void onBlur(BlurEvent blurEvent) {
-                if (patientIDWidget.isPidValueEntered() && sites.isEndpointValueSelected()) {
+                if (!subSetUUID.getValueAsString().isEmpty() && sites.isEndpointValueSelected()){
                     runBtn.enable();
-                } else {
+                }else{
                     runBtn.disable();
                 }
             }
@@ -70,7 +74,7 @@ public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Gener
         sites.addSelectionChangedHandler(new SelectionChangedHandler() {
             @Override
             public void onSelectionChanged(SelectionEvent selectionEvent) {
-                if (patientIDWidget.isPidValueEntered() && sites.isEndpointValueSelected()) {
+                if (subSetUUID.getValue() != null && sites.isEndpointValueSelected()) {
                     runBtn.enable();
                 } else {
                     runBtn.disable();

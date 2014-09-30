@@ -1,6 +1,5 @@
 package gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Label;
@@ -16,10 +15,8 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithToolti
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
-/**
- * Created by onh2 on 9/8/2014.
- */
 public class GetDocumentsTab extends GenericCloseableTab {
 
     private static final String header="Get Documents";
@@ -44,7 +41,6 @@ public class GetDocumentsTab extends GenericCloseableTab {
 
         Label l2=createSubtitle1("2. Select site");
         sites = new EndpointWidget();
-//        sites.isEndpointValueSelected()
 
         Label l3=createSubtitle1("3. Select SAML and TLS options");
         TLSAndSAMLForm tlsAndSAMLForm=new TLSAndSAMLForm();
@@ -57,6 +53,11 @@ public class GetDocumentsTab extends GenericCloseableTab {
         bindUI();
 
         return vStack;
+    }
+
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getGetDocumentsTabCode();
     }
 
     private void bindUI() {

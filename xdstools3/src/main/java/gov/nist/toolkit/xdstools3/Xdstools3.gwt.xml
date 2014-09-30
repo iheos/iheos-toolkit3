@@ -20,10 +20,13 @@
 
     <!-- ================= Inherit v2 legacy modules ================= -->
     <inherits name="gov.nist.toolkit.xdstools2.Xdstools2"/>
+    <inherits name="com.google.gwt.inject.Inject"/>
+    <inherits name="com.google.gwt.activity.Activity"/>
+    <inherits name='com.google.gwt.place.Place' />
 
 
     <!-- ============ Specify the app entry point class ============== -->
-    <entry-point class='gov.nist.toolkit.xdstools3.client.Xdstools3' />
+    <entry-point class='gov.nist.toolkit.xdstools3.client.Xdstools3EP' />
 
 
     <!-- Uncomment this line to force GWT compiler to only generate javascript
@@ -37,10 +40,10 @@
 
 
     <!-- ======================= GWT logging ======================= -->
-    <!-- <inherits name="com.google.gwt.logging.Logging"/> -->
-    <!--  <set-property name="gwt.logging.logLevel" value="INFO"/>
+     <inherits name="com.google.gwt.logging.Logging"/>
+      <set-property name="gwt.logging.logLevel" value="INFO"/>
      <set-property name="gwt.logging.enabled" value="TRUE"/>
-     <set-property name="gwt.logging.popupHandler" value="DISABLED" /> -->
+     <set-property name="gwt.logging.popupHandler" value="ENABLED" />
 
  </module>
 
