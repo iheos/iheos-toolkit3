@@ -47,19 +47,31 @@
         </repository>
     </repositories>
 
+    <scm>
+        <connection>scm:hg:https://bitbucket.org/iheos/toolkit</connection>
+    </scm>
+
 
     <properties>
+        <jdk.version>1.7</jdk.version>
         <gwtVersion>2.5.1</gwtVersion>
         <mavenCompilerPluginVersion>3.1</mavenCompilerPluginVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin.version>1.7</maven-compiler-plugin.version>
+        <maven-source-plugin.version>2.3</maven-source-plugin.version>
+        <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
+        <maven-release-plugin.version>2.5</maven-release-plugin.version>
+        <maven-war-plugin.version>2.4</maven-war-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.2</nexus-staging-maven-plugin.version>
+        <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
     </properties>
 
 
     <modules>
-        <module>docentryeditor</module>
         <module>repository-tools</module>
         <module>tk-core</module>
-        <module>xdstools3</module>
+        <module>gui-core</module>
+        <module>toolkit2-build</module>
     </modules>
 
     <dependencyManagement>
@@ -273,23 +285,24 @@
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>edu.tn.xds.metadata</groupId>
-                <artifactId>docentryeditor</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.axis2</groupId>
                 <artifactId>axis2-kernel</artifactId>
                 <version>1.6.2</version>
             </dependency>
 
-            <dependency>
-                <groupId>gov.nist.toolkit</groupId>
-                <version>v2-maven-alpha</version>
-                <artifactId>direct</artifactId>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>gov.nist.toolkit</groupId>-->
+                <!--<artifactId>session_v2</artifactId>-->
+                <!--<version>2.7.0-SNAPSHOT</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>gov.nist.toolkit</groupId>-->
+                <!--<artifactId>utilities_v2</artifactId>-->
+                <!--<version>2.7.0-SNAPSHOT</version>-->
+            <!--</dependency>-->
         </dependencies>
     </dependencyManagement>
+
 
     <build>
         <plugins>
@@ -299,9 +312,8 @@
                 <version>${mavenCompilerPluginVersion}</version>
                 <configuration>
                     <compilerId>groovy-eclipse-compiler</compilerId>
-                    <!-- Java version -->
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -322,6 +334,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -332,14 +345,41 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <releaseProfiles>releases</releaseProfiles>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.0-beta-1</version>
+                <version>${tomcat7-maven-plugin.version}</version>
                 <configuration>
                     <warSourceDirectory>${basedir}/target/xdstools2-v2-maven-alpha</warSourceDirectory>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwtVersion}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
+
+
+
         <pluginManagement>
             <plugins>
                 <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
@@ -375,4 +415,36 @@
             </plugins>
         </pluginManagement>
     </build>
+
+
+    <profiles>
+        <profile>
+            <id>releases</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>${nexus-staging-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <serverId>internal-nist-repo-releases</serverId>
+                            <nexusUrl>http://vm-070.nist.gov:8081/nexus</nexusUrl>
+                            <skipStaging>true</skipStaging>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
 </project>

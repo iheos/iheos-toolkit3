@@ -7,7 +7,6 @@ import com.sencha.gxt.data.client.editor.ListStoreEditor;
 import com.sencha.gxt.data.shared.Converter;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
-import com.sencha.gxt.widget.core.client.form.Field;
 import com.sencha.gxt.widget.core.client.form.NumberPropertyEditor;
 import com.sencha.gxt.widget.core.client.form.SpinnerField;
 import edu.tn.xds.metadata.editor.client.generics.GenericEditableListView;
@@ -24,13 +23,19 @@ public class NameValueIntegerEditorWidget extends GenericEditableListView<Intege
     ListStoreEditor<Integer> values;
 
     @Ignore
-    SpinnerField<Integer> value = new SpinnerField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
+    SpinnerField<Integer> value;
 
     public NameValueIntegerEditorWidget(String widgetTitle) {
         super(widgetTitle, new ListStore<Integer>(new IntegerKeyProvider()), new IntegerValueProvider());
+        values = new ListStoreEditor<Integer>(getStore());
+    }
 
+    @Override
+    protected void buildEditingFields() {
+        value = new SpinnerField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
         value.setAllowBlank(false);
         value.setWidth("auto");
+//        this.setHeight(75);
         value.setMinValue(1);
         value.setIncrement(5);
 
@@ -54,14 +59,21 @@ public class NameValueIntegerEditorWidget extends GenericEditableListView<Intege
             }
         };
 
-        addEditorConfig(converter, (Field) value);
-
-        values = new ListStoreEditor<Integer>(getStore());
+        addEditorConfig(converter, value);
     }
 
     @Override
     protected GridModelFactory<Integer> getModelFactory() {
         return IntegerFactory.instance;
+    }
+
+    public void setListMaxSize(int listMaxSize) {
+        this.setStoreMaxLength(listMaxSize);
+    }
+
+    @Override
+    protected ValueProvider<? super Integer, String> getValueProvider() {
+        return new IntegerValueProvider();
     }
 
     // Custom KeyProvider to deal with Integer

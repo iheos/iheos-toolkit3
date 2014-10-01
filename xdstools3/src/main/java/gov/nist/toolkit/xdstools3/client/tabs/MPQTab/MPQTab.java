@@ -9,6 +9,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButtonN
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.healthcareCodes.HealthcareCodeWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 /**
  * Created by dazais on 5/14/2014.
@@ -18,17 +19,10 @@ public class MPQTab extends GenericCloseableTab {
 
     public MPQTab() {
         super(header);
-
-        // Set tab header
-        setHeader(header);
-
-        VStack stack = createContents();
-
-        // calls a custom function that sets the contents and keeps the titles
-        setContents(stack);
     }
 
-    public VStack createContents(){
+    @Override
+    protected VStack createContents(){
         // layout
         final VStack mpqPanel = new VStack();
 
@@ -58,6 +52,11 @@ public class MPQTab extends GenericCloseableTab {
         // Add listeners
 
         return mpqPanel;
+    }
+
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getMpqFindDocumentsTabCode();
     }
 
 }

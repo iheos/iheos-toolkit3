@@ -7,24 +7,18 @@ import com.smartgwt.client.types.SortDirection;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointDS;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 public class MessageValidatorTab extends GenericCloseableTab {
-    String title = "Message Validator";
+    private static String title = "Message Validator";
 
 
     public MessageValidatorTab() {
-
-        // Teb name
-        super("Message Validator");
-
-        // Set title and subtitles
-        setHeader(title);
-
-        createEndpointGrid();
-
+        super(title);
     }
 
-    public ListGrid createEndpointGrid() {
+    @Override
+    protected ListGrid createContents() {
         // Create the DataSource
         RestDataSource dataSource = new EndpointDS();
 
@@ -50,5 +44,9 @@ public class MessageValidatorTab extends GenericCloseableTab {
         return grid;
     }
 
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getMessageValidatorTabCode();
+    }
 
 }

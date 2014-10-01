@@ -16,6 +16,7 @@ import com.sencha.gxt.widget.core.client.tree.Tree;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractView;
 import edu.tn.xds.metadata.editor.client.resources.AppImages;
+import edu.tn.xds.metadata.editor.client.widgets.uploader.FileUploadDialog;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -29,19 +30,22 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
     private final static Tree<SubmissionMenuData, String> tree = new Tree<SubmissionMenuData, String>(treeStore, SubmissionMenuData.props.value());
     private final static SubmissionMenuData submissionSetTreeNode = new SubmissionMenuData("subSet", "Submission set");
     private final ToolBar toolbar = new ToolBar();
-    private final TextButton addDocEntryButton = new TextButton();
 
     private final Menu addMenu = new Menu();
     private final MenuItem addEmptyDocEntry = new MenuItem("Create an empty document entry");
-    private final MenuItem addPrefilledDocEntry = new MenuItem("Create a prefilled document entry");
+    private final MenuItem addPrefilledDocEntry = new MenuItem("Create a pre-filled document entry");
     private final MenuItem loadDocEntry = new MenuItem("Load a document entry from xml file");
 
+    private final TextButton addDocEntryButton = new TextButton();
     private final TextButton removeDocEntryButton = new TextButton();
     private final TextButton clearDocEntriesButton = new TextButton();
+    private final TextButton saveDocEntriesButton = new TextButton();
     private final TextButton helpButton = new TextButton();
 
     @Inject
     MetadataEditorEventBus eventBus;
+    @Inject
+    FileUploadDialog fileUploadDialog;
 
     @Override
     protected Map<String, Widget> getPathToWidgetsMap() {
@@ -68,11 +72,14 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         removeDocEntryButton.setToolTip("Remove this Document Entry");
         clearDocEntriesButton.setIcon(AppImages.INSTANCE.clear());
         clearDocEntriesButton.setToolTip("Clear submission set from all document entries");
+        saveDocEntriesButton.setIcon(AppImages.INSTANCE.save());
+        saveDocEntriesButton.setToolTip("Download xml file with document entries");
         helpButton.setIcon(AppImages.INSTANCE.help());
         helpButton.setToolTip("Help");
         toolbar.add(addDocEntryButton);
         toolbar.add(removeDocEntryButton);
         toolbar.add(clearDocEntriesButton);
+        toolbar.add(saveDocEntriesButton);
         toolbar.add(helpButton);
         vlc.add(toolbar);
         buildTreeStore();
@@ -82,6 +89,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         vlc.add(tree);
 
         cp.setWidget(vlc);
+
         return cp;
     }
 
@@ -122,6 +130,28 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
                 }
             }
         });
+        addPrefilledDocEntry.addSelectionHandler(new SelectionHandler<Item>() {
+            @Override
+            public void onSelection(SelectionEvent<Item> itemSelectionEvent) {
+                getPresenter().createPrefilledDocumentEntry();
+            }
+        });
+        loadDocEntry.addSelectionHandler(new SelectionHandler<Item>() {
+
+            @Override
+            public void onSelection(SelectionEvent<Item> event) {
+                fileUploadDialog.init();
+                fileUploadDialog.show();
+            }
+
+        });
+        saveDocEntriesButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent selectEvent) {
+                presenter.doSave();
+            }
+        });
+
     }
 
     /**

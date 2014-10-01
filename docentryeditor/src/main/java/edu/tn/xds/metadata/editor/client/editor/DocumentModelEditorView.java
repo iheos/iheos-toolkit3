@@ -198,23 +198,23 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         mimeTypeLabel.setLabelWidth(125);
 
         // Class Code Field (required)
-        FieldLabel classCodeLabel = new FieldLabel(classCode.asWidget(), "Class Code");
+        FieldLabel classCodeLabel = new FieldLabel(classCode.getDisplay(), "Class Code");
         classCodeLabel.setLabelWidth(125);
 
         // Format Code Field (required)
-        FieldLabel formatCodeLabel = new FieldLabel(formatCode, "Format Code");
+        FieldLabel formatCodeLabel = new FieldLabel(formatCode.getDisplay(), "Format Code");
         formatCodeLabel.setLabelWidth(125);
 
         // practiceSettingCode Field (required)
-        FieldLabel healthcareFacilityTypeLabel = new FieldLabel(healthcareFacilityType, "Healthcare Facility");
+        FieldLabel healthcareFacilityTypeLabel = new FieldLabel(healthcareFacilityType.getDisplay(), "Healthcare Facility");
         healthcareFacilityTypeLabel.setLabelWidth(125);
 
         // healthcare facility Code Field (required)
-        FieldLabel practiceSettingCodeLabel = new FieldLabel(practiceSettingCode, "Practice Setting Code");
+        FieldLabel practiceSettingCodeLabel = new FieldLabel(practiceSettingCode.getDisplay(), "Practice Setting Code");
         practiceSettingCodeLabel.setLabelWidth(125);
 
         // type Code Field (required)
-        FieldLabel typeCodeLabel = new FieldLabel(typeCode, "Type Code");
+        FieldLabel typeCodeLabel = new FieldLabel(typeCode.getDisplay(), "Type Code");
         typeCodeLabel.setLabelWidth(125);
 
         // Repository Unique ID Field (optional)
@@ -233,15 +233,15 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         simpleRequiredFieldsContainer.add(idLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(languageCodeLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(mimeTypeLabel, new VerticalLayoutData(1, -1));
-        simpleRequiredFieldsContainer.add(classCodeLabel, new VerticalLayoutData(1, -1));
-        simpleRequiredFieldsContainer.add(formatCodeLabel, new VerticalLayoutData(1, -1));
-        simpleRequiredFieldsContainer.add(healthcareFacilityTypeLabel, new VerticalLayoutData(1, -1));
-        simpleRequiredFieldsContainer.add(practiceSettingCodeLabel, new VerticalLayoutData(1, -1));
-        simpleRequiredFieldsContainer.add(typeCodeLabel, new VerticalLayoutData(1, -1));
+        simpleRequiredFieldsContainer.add(classCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        simpleRequiredFieldsContainer.add(formatCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        simpleRequiredFieldsContainer.add(healthcareFacilityTypeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        simpleRequiredFieldsContainer.add(practiceSettingCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        simpleRequiredFieldsContainer.add(typeCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
 		/* REQUIRED container added to a fieldset */
         FieldSet fieldSet_general_fields_required = new FieldSet();
-        fieldSet_general_fields_required.setHeadingText("General required");
+        fieldSet_general_fields_required.setHeadingText("General details");
         fieldSet_general_fields_required.setCollapsible(true);
         fieldSet_general_fields_required.add(simpleRequiredFieldsContainer);
 
@@ -250,7 +250,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // //////////////////////////////////////////////////////////
         VerticalLayoutContainer filePropertiesFieldsContainer = new VerticalLayoutContainer();
         filePropertiesFieldsContainer.add(hashLabel, new VerticalLayoutData(1, -1));
-        filePropertiesFieldsContainer.add(size.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        filePropertiesFieldsContainer.add(size.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         VerticalLayoutContainer repositoryAttributesFieldsContainer = new VerticalLayoutContainer();
         repositoryAttributesFieldsContainer.add(uriLabel, new VerticalLayoutData(1, -1));
@@ -308,10 +308,13 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         serviceStopTime.setListMaxSize(1);
 
         // Size (optional)
-        size.disableEditing();
+//        size.disableEditing();
+        size.disableToolbar();
+        size.setListMaxSize(1);
 
         // Creation Time (required)
         creationTime.disableToolbar();
+        creationTime.setListMaxSize(1);
 
         // AUTHORS (Optional)
         FieldSet fieldSet_authors = new FieldSet();
@@ -341,7 +344,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // /////////////////////////////////////////////////////////
         /* simple required fields added to FramedPanel container */
         requiredFields.add(fieldSet_general_fields_required);
-        requiredFields.add(creationTime.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        requiredFields.add(creationTime.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         // /////////////////////////////////////////////////////////
         // Adding and ordering fieldsets in OPTIONAL fields panel
@@ -349,16 +352,16 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         /* simple optional fields added to FramedPanel container */
         optionalFields.add(fieldSet_fileProperties);
         optionalFields.add(fieldSet_repoAttributes);
-        optionalFields.add(titlesGrid.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(commentsGrid.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(titlesGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(commentsGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         optionalFields.add(fieldSet_authors);
-        optionalFields.add(legalAuthenticator.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(sourcePatientId.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(sourcePatientInfo.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(confidentialityCodesGrid.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(eventCodesGrid.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(serviceStartTime.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(serviceStopTime.asWidget(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(legalAuthenticator.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(sourcePatientId.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(sourcePatientInfo.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(confidentialityCodesGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(eventCodesGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(serviceStartTime.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(serviceStopTime.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         setWidgetsInfo();
 
@@ -382,7 +385,9 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 if (listViewAuthors.getSelectionModel().getSelectedItem() != null) {
                     author.setEditionMode(EditionMode.DISPLAY);
                     author.edit(listViewAuthors.getSelectionModel().getSelectedItem());
-                    enableAuthorButtonWidgets(EditionMode.DISPLAY);
+//                    enableAuthorButtonWidgets(EditionMode.DISPLAY);
+                    author.setEditionMode(EditionMode.EDIT);
+                    enableAuthorButtonWidgets(EditionMode.EDIT);
                 } else {
                     author.setEditionMode(EditionMode.NODATA);
                     enableAuthorButtonWidgets(EditionMode.NODATA);
@@ -393,10 +398,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
             @Override
             public void onSelect(SelectEvent event) {
-                listViewAuthors.getSelectionModel().deselectAll();
-                author.setEditionMode(EditionMode.NEW);
-                author.editNew();
-                enableAuthorButtonWidgets(EditionMode.NEW);
+                editNewAuthor();
             }
         });
         editAuthorWidget.addSelectHandler(new SelectHandler() {
@@ -477,6 +479,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 form.forceLayout();
             }
         });
+//        ((MetadataEditorEventBus) presenter.getEventBus()).fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
     }
 
     /**
@@ -509,9 +512,16 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
         VerticalLayoutContainer vcon = new VerticalLayoutContainer();
         vcon.add(listViewAuthors, new VerticalLayoutData(1, 150));
-        vcon.add(authorFS, new VerticalLayoutData(0.999, -1, new Margins(10, 0, 0, 0)));
+        vcon.add(authorFS, new VerticalLayoutData(0.99, -1, new Margins(10, 0, 0, 0)));
         vcon.add(authorCP, new VerticalLayoutData(-1, 30));
         return vcon;
+    }
+
+    public void editNewAuthor() {
+        listViewAuthors.getSelectionModel().deselectAll();
+        author.setEditionMode(EditionMode.NEW);
+        author.editNew();
+        enableAuthorButtonWidgets(EditionMode.NEW);
     }
 
     private void enableAuthorButtonWidgets(EditionMode editionMode) {
@@ -596,14 +606,15 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         id.setEmptyText("ex: 123456789");
         id.setToolTipConfig(new ToolTipConfig("ID is a string", "It should contain less than 256 characters"));
         id.setAllowBlank(false);
-        id.addValidator(new RegExValidator("[1-9][0-9]+", "Value is not correct. It is supposed to be a number."));
+//        id.addValidator(new RegExValidator("[1-9][0-9]+", "Value is not correct. It is supposed to be a number."));
+        id.addValidator(new UuidFormatClientValidator());
         // language code
         languageCode.setAllowBlank(false);
         languageCode.setEmptyText("Select a language...");
         languageCode.setToolTipConfig(new ToolTipConfig("LanguageCode from RFC3066", "Language code format is \"[a-z](2)-[A-Z](2)\""));
         // legal authenticator
         legalAuthenticator.setEditingFieldToolTip("A legal authenticator is a string256 in XCN format. It should be formatted as follow: \n<b>Identifier^LastName^FirstName[^SecondName[^FurtherGivenNames]][^Suffix][^Prefix]^AssigningAuthority</b>.");
-        legalAuthenticator.setEmptyTexts("ex: 11375^Welby^Marcus^J^Jr. MD^Dr^^^&1.2.840.113619.6.197&ISO");
+//        legalAuthenticator.setEmptyTexts("ex: 11375^Welby^Marcus^J^Jr. MD^Dr^^^&1.2.840.113619.6.197&ISO");
         legalAuthenticator.addFieldValidator(new RegExValidator("^[0-9]+\\^(([A-Za-z]+\\.?\\s?)+\\^){3,7}\\^{2}&[0-9]+(\\.[0-9]+)*(&ISO)$"));
         legalAuthenticator.setToolbarHelpButtonTooltip(new ToolTipConfig("Help about legal authenticator?", "Represents a participant who has legally authenticated or attested the" +
                 "document within the authorInstitution. Legal authentication implies that " +
@@ -692,6 +703,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // unique id
         uniqueId.setAllowBlanks(false, false);
         uniqueId.addValueFieldValidator(new RegExValidator("^[1-9][0-9]*(\\.[1-9][0-9]*)+(\\^[1-9][0-9]+)?$", "Value's format is not a correct. It is supposed to be a suite of figures separated by periods."));
+
         uniqueId.setEmptyTexts("ex: 2008.8.1.35447^5846", "ex: 2008.8.1.35447");
         uniqueId.setToolTipConfigs(
                 new ToolTipConfig("Unique ID is an OID", "As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)<br/>Unique ID format is \"[1-9](\\.[0-9]+)*]\""),

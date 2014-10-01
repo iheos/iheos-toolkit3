@@ -1,0 +1,2 @@
+serviceClass: gov.nist.toolkit.xdstools2.client.PidAllocateService
+path: 68D96C22621C1F6236615CA94087118B.gwt.rpc

@@ -182,6 +182,10 @@ public class CodedTermEditorWidget extends Composite implements Editor<CodedTerm
         this.model = codedTerm;
     }
 
+    public void setFocus() {
+        displayName.focus();
+    }
+
     interface CodedTermEditorDriver extends SimpleBeanEditorDriver<CodedTerm, CodedTermEditorWidget> {
     }
 

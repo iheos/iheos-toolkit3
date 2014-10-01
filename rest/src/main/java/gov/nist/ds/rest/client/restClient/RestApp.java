@@ -4,7 +4,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import gov.nist.ds.rest.client.restService.StringEntity;
-import org.apache.log4j.Logger;
 
 import java.util.List;
 
@@ -12,17 +11,8 @@ import java.util.List;
  * Created by dazais on 9/11/2014.
  */
 public class RestApp {
-    static Logger logger;
-
 
     public static void main(String[] args) {
-        // setup Log4j logger
-        logger = Logger.getLogger(RestApp.class);
-        org.apache.log4j.BasicConfigurator.configure();
-        logger.info("testinfo");
-
-        logger.debug("testdebug");
-
 
         // Example: Retrieve a String
         if (!getString().isEmpty()) {
@@ -80,6 +70,7 @@ public class RestApp {
             if (response.getStatus() != 200) {
                 throw new RuntimeException("Failed : HTTP error code : "
                         + response.getStatus());
+                // TODO response error code needs to be handled better
             }
 
             // Retrieve the entity passed over REST

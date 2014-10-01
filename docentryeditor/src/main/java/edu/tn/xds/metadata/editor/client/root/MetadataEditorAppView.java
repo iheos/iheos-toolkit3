@@ -40,10 +40,10 @@ public class MetadataEditorAppView extends Viewport {
         con.setBorders(true);
 
         // NORTH
-        north = injector.getNorthPanel();
-        BorderLayoutData northData = new BorderLayoutData(35);
-        northData.setMargins(new Margins(5, 5, 5, 5));
-        con.setNorthWidget(north, northData);
+//        north = injector.getNorthPanel();
+//        BorderLayoutData northData = new BorderLayoutData(35);
+//        northData.setMargins(new Margins(5, 5, 5, 5));
+//        con.setNorthWidget(north, northData);
 
         // CENTER
         center = new CenterPanel();
@@ -56,7 +56,7 @@ public class MetadataEditorAppView extends Viewport {
         // WEST
         submissionMVP = buildSubmissionMVP();
         submissionMVP.init();
-        BorderLayoutData westData = new BorderLayoutData(300);
+        BorderLayoutData westData = new BorderLayoutData(200);
         westData.setMargins(new Margins(0, 5, 5, 5));
         westData.setCollapsible(true);
         westData.setSplit(false);
@@ -65,10 +65,11 @@ public class MetadataEditorAppView extends Viewport {
 
 
         SimpleContainer simple = new SimpleContainer();
-        simple.add(con, new MarginData(0, 0, 100, 0));
+        simple.add(con, new MarginData(0, 0, /*10*/0, 0));
         add(con);
 
-        north.start();
+//        north.start();
+        submissionMVP.start();
     }
 
     public void setCenterDisplay(Widget display) {

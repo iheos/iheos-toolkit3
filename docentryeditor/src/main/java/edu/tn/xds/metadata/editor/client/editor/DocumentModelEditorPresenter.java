@@ -16,8 +16,8 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.Verti
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import edu.tn.xds.metadata.editor.client.MetadataEditorRequestFactory;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
+import edu.tn.xds.metadata.editor.client.event.SaveCurrentlyEditedDocumentEvent;
 import edu.tn.xds.metadata.editor.client.event.SaveFileEvent;
-import edu.tn.xds.metadata.editor.client.event.SaveFileEvent.SaveFileEventHandler;
 import edu.tn.xds.metadata.editor.client.event.StartEditXdsDocumentEvent;
 import edu.tn.xds.metadata.editor.client.generics.abstracts.AbstractPresenter;
 import edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry;
@@ -43,12 +43,14 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
     }
 
     private void initDriver(XdsDocumentEntry model) {
+        this.model = model;
         editorDriver.initialize(view);
         getView().author.initEditorDriver();
 //		getView().title.initEditorDriver();
 //		getView().comment.initEditorDriver();
 //		getView().confidentialityCode.initEditorDriver();
         editorDriver.edit(model);
+        refreshGridButtonsDisplay();
     }
 
     private void bind() {
@@ -56,15 +58,16 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 
             @Override
             public void onStartEditXdsDocument(StartEditXdsDocumentEvent event) {
-                model = event.getDocument();
-                initDriver(model);
+                initDriver(event.getDocument());
+                getView().editNewAuthor();
             }
         });
-        ((MetadataEditorEventBus) getEventBus()).addSaveFileEventHandler(new SaveFileEventHandler() {
+        ((MetadataEditorEventBus) getEventBus()).addSaveFileEventHandler(new SaveFileEvent.SaveFileEventHandler() {
 
             @Override
             public void onFileSave(SaveFileEvent event) {
                 doSave();
+                ((MetadataEditorEventBus) eventBus).fireSaveCurrentlyEditedDocumentEvent(new SaveCurrentlyEditedDocumentEvent(model));
             }
         });
     }
@@ -116,6 +119,65 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
         }
     }
 
+    public XdsDocumentEntry getModel() {
+        return model;
+    }
+
+    private void refreshGridButtonsDisplay() {
+        if (getView().serviceStartTime.getStoreMaxSize() != 0 && getView().serviceStartTime.getStore().size() >= getView().serviceStartTime.getStoreMaxSize()) {
+            getView().serviceStartTime.disableNewButton();
+        } else {
+            getView().serviceStartTime.enableNewButton();
+        }
+        if (getView().serviceStopTime.getStoreMaxSize() != 0 && getView().serviceStopTime.getStore().size() >= getView().serviceStopTime.getStoreMaxSize()) {
+            getView().serviceStopTime.disableNewButton();
+        } else {
+            getView().serviceStopTime.enableNewButton();
+        }
+        if (getView().commentsGrid != null)
+            if (getView().commentsGrid.getStoreMaxSize() != 0 && getView().commentsGrid.getStore().size() >= getView().commentsGrid.getStoreMaxSize()) {
+                getView().commentsGrid.disableNewButton();
+            } else {
+                getView().commentsGrid.enableNewButton();
+            }
+        if (getView().confidentialityCodesGrid != null)
+            if (getView().confidentialityCodesGrid.getStoreMaxSize() != 0 && getView().confidentialityCodesGrid.getStore().size() >= getView().confidentialityCodesGrid.getStoreMaxSize()) {
+                getView().confidentialityCodesGrid.disableNewButton();
+            } else {
+                getView().confidentialityCodesGrid.enableNewButton();
+            }
+        if (getView().eventCodesGrid != null)
+            if (getView().eventCodesGrid.getStoreMaxSize() != 0 && getView().eventCodesGrid.getStore().size() >= getView().eventCodesGrid.getStoreMaxSize()) {
+                getView().eventCodesGrid.disableNewButton();
+            } else {
+                getView().eventCodesGrid.enableNewButton();
+            }
+        if (getView().legalAuthenticator != null)
+            if (getView().legalAuthenticator.getStoreMaxSize() != 0 && getView().legalAuthenticator.getStore().size() >= getView().legalAuthenticator.getStoreMaxSize()) {
+                getView().legalAuthenticator.disableNewButton();
+            } else {
+                getView().legalAuthenticator.enableNewButton();
+            }
+        if (getView().sourcePatientId != null)
+            if (getView().sourcePatientId.getStoreMaxSize() != 0 && getView().sourcePatientId.getStore().size() >= getView().sourcePatientId.getStoreMaxSize()) {
+                getView().sourcePatientId.disableNewButton();
+            } else {
+                getView().sourcePatientId.enableNewButton();
+            }
+        if (getView().sourcePatientInfo != null)
+            if (getView().sourcePatientInfo.getStoreMaxSize() != 0 && getView().sourcePatientInfo.getStore().size() >= getView().sourcePatientInfo.getStoreMaxSize()) {
+                getView().sourcePatientInfo.disableNewButton();
+            } else {
+                getView().sourcePatientInfo.enableNewButton();
+            }
+        if (getView().titlesGrid != null)
+            if (getView().titlesGrid.getStoreMaxSize() != 0 && getView().titlesGrid.getStore().size() >= getView().titlesGrid.getStoreMaxSize()) {
+                getView().titlesGrid.disableNewButton();
+            } else {
+                getView().titlesGrid.enableNewButton();
+            }
+    }
+
     /**
      * Method which actually handle saving (on server) and download for the edited metadata file.
      */
@@ -147,10 +209,6 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
         });
 
 
-    }
-
-    public XdsDocumentEntry getModel() {
-        return model;
     }
 
     interface EditorDriver extends SimpleBeanEditorDriver<XdsDocumentEntry, DocumentModelEditorView> {

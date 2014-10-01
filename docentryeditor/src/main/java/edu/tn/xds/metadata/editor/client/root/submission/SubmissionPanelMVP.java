@@ -24,4 +24,5 @@ public class SubmissionPanelMVP extends AbstractMVP<SubmissionMenuData, Submissi
     public SubmissionPanelPresenter buildPresenter() {
         return submissionPanelPresenter;
     }
+
 }

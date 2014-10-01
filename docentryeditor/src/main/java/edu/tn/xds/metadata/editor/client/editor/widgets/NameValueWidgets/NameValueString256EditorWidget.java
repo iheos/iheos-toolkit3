@@ -2,6 +2,7 @@ package edu.tn.xds.metadata.editor.client.editor.widgets.NameValueWidgets;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
+import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.client.editor.ListStoreEditor;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.form.Validator;
@@ -23,18 +24,11 @@ public class NameValueString256EditorWidget extends GenericEditableListView<Stri
 
     ListStoreEditor<String256> values;
     @Ignore
-    BoundedTextField tf = new BoundedTextField();
+    BoundedTextField tf;
 
     public NameValueString256EditorWidget(String widgetTitle) {
         super(widgetTitle, new ListStore<String256>(props.key()), props.string());
-
-        tf.setAllowBlank(false);
-        tf.setToolTip("This value is required and must unique.");
-        tf.setEmptyText("ex: 58642j65s^^^5.8.4");
-        addEditorConfig(tf);
-
         values = new ListStoreEditor<String256>(getStore());
-
         bindUI();
     }
 
@@ -81,8 +75,22 @@ public class NameValueString256EditorWidget extends GenericEditableListView<Stri
     }
 
     @Override
+    protected void buildEditingFields() {
+        tf = new BoundedTextField();
+        tf.setAllowBlank(false);
+        tf.setToolTip("This value is required and must unique.");
+        tf.setEmptyText("ex: 58642j65s^^^5.8.4");
+        addEditorConfig(tf);
+    }
+
+    @Override
     protected GridModelFactory<String256> getModelFactory() {
         return String256Factory.instance;
+    }
+
+    @Override
+    protected ValueProvider<? super String256, String> getValueProvider() {
+        return props.string();
     }
 
 
