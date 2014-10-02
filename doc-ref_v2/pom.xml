@@ -9,7 +9,7 @@
         <relativePath>../toolkit2-build/pom.xml</relativePath>
 	</parent>
 
-	<artifactId>docref_v2</artifactId>
+	<artifactId>doc-ref_v2</artifactId>
 
   <dependencies>
     <dependency>
