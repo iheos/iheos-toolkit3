@@ -47,7 +47,7 @@
 
     <modules>
         <module>../actorfactory_v2</module>
-        <module>../actortransaction_v2</module>
+        <module>../actor-transaction_v2</module>
         <module>../common_v2</module>
         <module>../common-datatypes_v2</module>
         <module>../direct_v2</module>
@@ -55,7 +55,7 @@
         <module>../direct-sim_v2</module>
         <module>../direct-support_v2</module>
         <module>../dns</module>
-        <module>../docref_v2</module> <!-- looks like it is not used -->
+        <module>../doc-ref_v2</module> <!-- looks like it is not used -->
         <module>../dsig_v2</module>
         <!--  <module>../dst_v2</module> -->
       <!--    <module>../email_v2</module> -->

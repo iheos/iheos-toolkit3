@@ -22,10 +22,10 @@
         <module>../event-log</module>
         <module>../sim-support</module>
         <module>../utilities</module>
-        <module>../xdsException</module>
+        <module>../xds-exceptions</module>
         <module>../toolkit</module>
         <module>../common-datatypes</module>
-        <module>../httpSoapValidator</module>
+        <module>../http-soap-validator</module>
         <module>../ds-sims</module>
         <module>../tk-apis</module>
     </modules>
@@ -37,11 +37,13 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xdsException</artifactId>
+            <artifactId>xds-exceptions</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>httpSoapValidator</artifactId>
+            <artifactId>http-soap-validator</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>

@@ -11,9 +11,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>gov.nist.hit.ds</groupId>
-    <artifactId>httpSoapValidator</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <artifactId>http-soap-validator</artifactId>
 
     <dependencies>
         <dependency>
