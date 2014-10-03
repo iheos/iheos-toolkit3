@@ -119,4 +119,25 @@ public class IdentifierOID implements ModelElement, Serializable {
         return answer;
     }
 
+    @Override
+    public String toString() {
+        return "IdentifierOID{" +
+                "value=" + value +
+                ", idType=" + idType +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IdentifierOID)) return false;
+
+        IdentifierOID that = (IdentifierOID) o;
+
+        if (idType != null ? !idType.equals(that.idType) : that.idType != null) return false;
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
+
+        return true;
+    }
+
 }

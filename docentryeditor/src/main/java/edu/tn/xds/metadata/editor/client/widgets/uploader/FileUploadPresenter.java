@@ -18,9 +18,7 @@ public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
         // remove xml file first line (xml doctype => <?xml...>)
         logger.info("... file loaded, parsing metadata...");
 
-        results = results.replaceAll("&lt;", "<");
-        results = results.replaceAll("&gt;", ">");
-        results = results.replaceAll("&amp;", "&");
+
         XdsDocumentEntry model = xdsParser.parse(results.split(";\\^;\\^;")[1]);
         model.setFileName(new String256().setString(results.split(";\\^;\\^;")[0]));
 

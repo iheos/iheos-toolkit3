@@ -24,9 +24,9 @@
     <!--<inherits name="com.google.gwt.user.theme.dark.Dark"/>-->
     <!--<inherits name='com.google.gwt.user.theme.clean.Clean'/>  -->
 
-    <inherits name="com.sencha.gxt.theme.base.Base"/>
+    <!--<inherits name="com.sencha.gxt.theme.base.Base"/>-->
     <!--<inherits name='com.sencha.gxt.theme.blue.Blue'/>-->
-    <!--<inherits name='com.sencha.gxt.theme.gray.Gray' />-->
+    <inherits name='com.sencha.gxt.theme.gray.Gray'/>
     <!--<inherits name="com.sencha.gxt.theme.neptune.Theme" />-->
 
     <!--<stylesheet src="XDS-MetadataEditor.css"/>-->
