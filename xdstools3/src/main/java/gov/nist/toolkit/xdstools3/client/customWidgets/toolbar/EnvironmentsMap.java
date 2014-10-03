@@ -33,33 +33,35 @@ public class EnvironmentsMap {
      */
     private void createValueMap(){
         ToolbarServiceAsync service = GWT.create(ToolbarService.class);
+
+        // Defines the callback function for retrieval of the environments from the server
         AsyncCallback<ArrayList<String>> envCallback = new AsyncCallback<ArrayList<String>>() {
             public void onFailure(Throwable caught) {
-                new NoServletSessionException(caught);
+                new NoServletSessionException();
+                // TODO this needs work
             }
             @Override
             public void onSuccess(ArrayList<String> result) {
-                String key = "";
-                int counterEU = 0;
-                int counterUS = 0;
-                valueMap = new LinkedHashMap<>();
-                for (String envName:result){
-                    if (envName.contains("EURO")){
-                        counterEU++;
-                        key = "EU" + Integer.toString(counterEU);
-                        valueMap.put(key, envName);
+                if (result.isEmpty()) valueMap.put("--", "No environmnent to load");
+                else {
+                    String key = "";
+                    int counterEU = 0;
+                    int counterUS = 0;
+                    valueMap = new LinkedHashMap<String, String>(); /* Not specifying types here does not work at GWT compile */
+                    for (String envName : result) {
+                        if (envName.contains("EURO")) {
+                            counterEU++;
+                            key = "EU" + Integer.toString(counterEU);
+                            valueMap.put(key, envName);
+                        } else {
+                            counterUS++;
+                            key = "US" + Integer.toString(counterUS);
+                            valueMap.put(key, envName);
+                        }
                     }
-                    else {
-                        counterUS++;
-                        key = "US" + Integer.toString(counterUS);
-                        valueMap.put(key, envName);
-                    }
-                }
-                valueMap.put("US1", "NA2014");
-                valueMap.put("EU1", "EURO2011");
-                valueMap.put("EU2", "EURO2012");
-                valueMap.put("US2", "NwHIN");
-            }
+                } // end else
+
+            } // end onSuccess
         };
         service.retrieveEnvironments(envCallback);
 
@@ -69,7 +71,7 @@ public class EnvironmentsMap {
     private void createIconsMap() {
         // This is a workaround for the  LinkedHashMap, which normally accepts unique elements only, to display the
         // flags although several are redundant.
-        iconsMap = new LinkedHashMap<>();
+        iconsMap = new LinkedHashMap<String, String>(); /* Not specifying types here does not work at GWT compile */
         iconsMap.put("US1", "US");
         iconsMap.put("EU1", "EU");
         iconsMap.put("US2", "US");

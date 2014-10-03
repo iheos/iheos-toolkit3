@@ -51,7 +51,12 @@ public class Caller implements Serializable {
      * @return the list of available environments
      */
    public ArrayList<String> retrieveEnvironments(){
-        return null;
+       ArrayList<String> envs = new ArrayList<String>();
+       envs.add("NA2014");
+       envs.add("EURO2011");
+       envs.add("EURO2012");
+       envs.add("NwHIN");
+       return envs;
    }
 
     /**

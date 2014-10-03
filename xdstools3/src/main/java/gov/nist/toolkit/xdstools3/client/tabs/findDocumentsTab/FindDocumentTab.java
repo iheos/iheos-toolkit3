@@ -15,6 +15,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButtonN
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 
 public class FindDocumentTab extends GenericCloseableTab {
@@ -75,6 +76,11 @@ public class FindDocumentTab extends GenericCloseableTab {
 
 
         return findDocsPanel;
+    }
+
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getFindDocumentsTabCode();
     }
 
     // FIXME Unused is that normal?

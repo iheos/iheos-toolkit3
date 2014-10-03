@@ -16,6 +16,8 @@ import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
+import java.util.ArrayList;
+
 public class Toolbar extends RibbonBar {
 
     public Toolbar() {
@@ -105,21 +107,23 @@ public class Toolbar extends RibbonBar {
         String[] sessions;
 
         ToolbarServiceAsync intf = GWT.create(ToolbarService.class);
-        AsyncCallback<String[]> envCallback = new AsyncCallback<String[]>() {
+        AsyncCallback<ArrayList<String>> envCallback = new AsyncCallback<ArrayList<String>>() {
             public void onFailure(Throwable caught) {
                 // TODO: Do something with errors.
             }
+
             @Override
-            public void onSuccess(String[] result) {
-                // setEnvironments(result);
+            public void onSuccess(ArrayList<String> strings) {
+
             }
+
         };
-        AsyncCallback<String[]> sessionCallback = new AsyncCallback<String[]>() {
+        AsyncCallback<ArrayList<String>> sessionCallback = new AsyncCallback<ArrayList<String>>() {
             public void onFailure(Throwable caught) {
                 // TODO: Do something with errors.
             }
             @Override
-            public void onSuccess(String[] result) {
+            public void onSuccess(ArrayList<String> result) {
                 // setSessions(result);
             }
         };
