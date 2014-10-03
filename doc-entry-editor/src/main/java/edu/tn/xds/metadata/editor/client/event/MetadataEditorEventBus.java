@@ -23,6 +23,15 @@ public class MetadataEditorEventBus extends SimpleEventBus {
         fireEvent(event);
     }
 
+
+//    public void fireEditNewEvent(EditNewEvent event) {
+//        fireEvent(event);
+//    }
+//
+//    public HandlerRegistration addStartEditXdsDocumentHandler(StartEditXdsDocumentEvent.StartEditXdsDocumentHandler handler) {
+//        return addHandler(StartEditXdsDocumentEvent.TYPE, handler);
+//    }
+
     public void fireStartEditXdsDocumentEvent(StartEditXdsDocumentEvent event) {
         fireEvent(event);
     }

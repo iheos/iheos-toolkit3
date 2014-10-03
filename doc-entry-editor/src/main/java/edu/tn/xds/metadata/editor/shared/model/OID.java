@@ -49,10 +49,6 @@ public class OID /*extends String256*/ implements ModelElement, Serializable {
         oid = new String256();
     }
 
-    public OID(String256 oid) {
-        this.oid = oid;
-    }
-
     public String256 getOid() {
         return oid;
     }
@@ -100,17 +96,4 @@ public class OID /*extends String256*/ implements ModelElement, Serializable {
     public String toString() {
         return oid.toString();
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OID)) return false;
-
-        OID oid1 = (OID) o;
-
-        if (oid != null ? !oid.equals(oid1.oid) : oid1.oid != null) return false;
-
-        return true;
-    }
-
 }

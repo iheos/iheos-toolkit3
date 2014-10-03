@@ -124,30 +124,4 @@ public class NameValueString256 implements ModelElement, Serializable {
         return answer;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof NameValueString256)) return false;
-
-        NameValueString256 that = (NameValueString256) o;
-
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (values != null && values.size() == that.getValues().size()) {
-            for (int i = 0; i < values.size(); i++) {
-                if (!values.get(i).equals(that.getValues().get(i))) {
-                    return false;
-                }
-            }
-        } else return false;
-
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "NameValueString256{" +
-                "name=" + name +
-                ", values=" + values +
-                '}';
-    }
 }

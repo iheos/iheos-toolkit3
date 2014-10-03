@@ -267,25 +267,4 @@ public class Author implements ModelElement, Serializable {
         }
         return answer;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Author)) return false;
-
-        Author author = (Author) o;
-
-        if (authorInstitutions != null ? !authorInstitutions.equals(author.authorInstitutions) : author.authorInstitutions != null)
-            return false;
-        if (authorPerson != null ? !authorPerson.equals(author.authorPerson) : author.authorPerson != null)
-            return false;
-        if (authorRoles != null ? !authorRoles.equals(author.authorRoles) : author.authorRoles != null) return false;
-        if (authorSpecialties != null ? !authorSpecialties.equals(author.authorSpecialties) : author.authorSpecialties != null)
-            return false;
-        if (authorTelecommunications != null ? !authorTelecommunications.equals(author.authorTelecommunications) : author.authorTelecommunications != null)
-            return false;
-
-        return true;
-    }
-
 }

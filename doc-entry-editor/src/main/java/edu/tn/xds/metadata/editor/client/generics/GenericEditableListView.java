@@ -27,6 +27,13 @@ public abstract class GenericEditableListView<M, N> extends GenericEditableGrid<
 
         this.valueProvider = valueProvider;
 
+//        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
+//        cc1 = new ColumnConfig<M, N>(valueProvider, 1000);
+//        columnsConfigs.add(cc1);
+//
+//        this.cm = new ColumnModel<M>(columnsConfigs);
+//        this.setEditable();
+
         this.setHideHeaders(true);
     }
 
