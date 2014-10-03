@@ -1,10 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
 import gov.nist.toolkit.results.client.Result;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
-import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.ToolkitService;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.*;
 import gov.nist.toolkit.xdstools2.client.inspector.MetadataInspectorTab;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
@@ -25,8 +22,8 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TestLogListingTab extends GenericQueryTab {
-	final protected ToolkitServiceAsync toolkitService = GWT
-	.create(ToolkitService.class);
+	final protected Toolkit2ServiceAsync toolkitService = GWT
+	.create(Toolkit2Service.class);
 
 	FlexTable grid = new FlexTable();
 	HorizontalPanel testSessionPanel = new HorizontalPanel();

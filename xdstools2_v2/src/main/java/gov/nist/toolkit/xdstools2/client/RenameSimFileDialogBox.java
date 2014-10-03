@@ -14,8 +14,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class RenameSimFileDialogBox extends DialogBox {
-	final protected ToolkitServiceAsync toolkitService = GWT
-	.create(ToolkitService.class);
+	final protected Toolkit2ServiceAsync toolkitService = GWT
+	.create(Toolkit2Service.class);
 	TextBox newNameBox;
 	String oldSimFileSpec;
 	AsyncCallback afterRename;

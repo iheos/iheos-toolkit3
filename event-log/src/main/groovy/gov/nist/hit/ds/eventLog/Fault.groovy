@@ -9,21 +9,21 @@ import groovy.util.logging.Log4j
 class Fault {
     String faultMsg = null
     String faultCode = null
-    String faultActor = null
+    String faultTransaction = null
     String faultDetail = null
 
     def Fault() {}
 
-    def Fault(String msg, String code, String actor, String detail) {
+    def Fault(String msg, String code, String transaction, String detail) {
         faultMsg = msg
         faultCode = code
-        faultActor = actor
+        faultTransaction = transaction
         faultDetail = detail
 
         log.debug("Fault: ${toString()}")
     }
 
     String toString() {
-        "Actor=${faultActor}\nCode=${faultCode}\nMsg=${faultMsg}\nDetail=${faultDetail}"
+        "Transaction=${faultTransaction}\nCode=${faultCode}\nMsg=${faultMsg}\nDetail=${faultDetail}"
     }
 }

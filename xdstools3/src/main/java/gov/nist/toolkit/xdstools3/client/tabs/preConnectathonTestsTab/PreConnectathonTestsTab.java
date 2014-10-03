@@ -12,20 +12,18 @@ import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-/**
- * Created by onh2 on 8/5/2014.
- */
 public class PreConnectathonTestsTab extends GenericCloseableTab {
     static final Logger logger = Logger.getLogger(PreConnectathonTestsTab.class.getName());
     private final static PreConnectathonTabServiceAsync toolkitService = GWT
             .create(PreConnectathonTabService.class);
 
-   
+
     private static String header = "Pre-Connectathon Tests";
 
     private DynamicForm form;
@@ -144,6 +142,11 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
         return vStack;
     }
 
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getPreConnectathonTestsTabCode();
+    }
+
     private void loadActorsMap() {
         toolkitService.getCollectionNames("actorcollections",new AsyncCallback<Map<String, String>>() {
             @Override
@@ -162,7 +165,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
 
     private void loadTestsForActor(String selectedActor) {
         toolkitService.getCollection("actorcollections",selectedActor,new AsyncCallback<Map<String, String>>() {
-            
+
             @Override
             public void onFailure(Throwable caught) {
                 logger.warning(caught.getMessage());
@@ -181,7 +184,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
                 form.getField("testItem").setValueMap(map);
             }
         });
-        
+
     }
 
     void loadSectionNames(String selectedTest) {

@@ -33,11 +33,7 @@ import gov.nist.toolkit.utilities.xml.SchemaValidation;
 import gov.nist.toolkit.valregmsg.validation.factories.MessageValidatorFactory;
 import gov.nist.toolkit.valsupport.client.MessageValidationResults;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdstools2.client.EnvironmentNotSelectedClientException;
-import gov.nist.toolkit.xdstools2.client.NoServletSessionException;
-import gov.nist.toolkit.xdstools2.client.RegistryStatus;
-import gov.nist.toolkit.xdstools2.client.RepositoryStatus;
-import gov.nist.toolkit.xdstools2.client.ToolkitService;
+import gov.nist.toolkit.xdstools2.client.*;
 import gov.nist.toolkit.xdstools2.server.serviceManager.DashboardServiceManager;
 import gov.nist.toolkit.xdstools2.server.serviceManager.GazelleServiceManager;
 import gov.nist.toolkit.xdstools2.server.serviceManager.SimulatorServiceManager;
@@ -62,7 +58,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
 public class ToolkitServiceImpl extends RemoteServiceServlet implements
-ToolkitService {
+        Toolkit2Service {
 	static String schematronHome = null;
 	ServletContext context = null;
 //	static File warHome = null;

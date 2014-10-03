@@ -294,9 +294,9 @@ public abstract class BaseRepository implements Repository {
 	@Override
 	public AssetIterator getAssets() throws RepositoryException {
 		
-		SimpleRepository repos = new SimpleRepository(getId());
-		repos.setSource(getSource());
-		return new SimpleAssetIterator(repos);
+//		SimpleRepository repos = new SimpleRepository(getId());
+//		repos.setSource(getSource());
+		return new SimpleAssetIterator(this);
 	}
 
     /**
@@ -308,7 +308,10 @@ public abstract class BaseRepository implements Repository {
 	@Override
 	public AssetIterator getAssetsByType(Type assetType)
 			throws RepositoryException {
-		throw new RepositoryException(RepositoryException.UNIMPLEMENTED);
+//        SimpleRepository repos = new SimpleRepository(getRepository());
+//        repos.setSource(getSource());
+
+        return new SimpleAssetIterator(this, assetType);
 	}
 
     /**

@@ -29,8 +29,8 @@ public abstract class TabbedWindow {
 	boolean testSesMgrEnabled = true;
 	TabContainer tabContainer;
 
-	final public ToolkitServiceAsync toolkitService = GWT
-			.create(ToolkitService.class);
+	final public Toolkit2ServiceAsync toolkitService = GWT
+			.create(Toolkit2Service.class);
 
 	public TabbedWindow() {
 	}

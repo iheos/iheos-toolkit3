@@ -1,13 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
 import gov.nist.toolkit.http.client.HtmlMarkup;
-import gov.nist.toolkit.xdstools2.client.Panel;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
-import gov.nist.toolkit.xdstools2.client.RadioButtonGroup;
-import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.TabbedWindow;
-import gov.nist.toolkit.xdstools2.client.ToolkitService;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.*;
 
 import java.util.List;
 import java.util.Map;
@@ -36,8 +30,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class SimulatorMessageViewTab extends TabbedWindow {
 	protected TabContainer myContainer;
 
-	final protected ToolkitServiceAsync toolkitService = GWT
-	.create(ToolkitService.class);
+	final protected Toolkit2ServiceAsync toolkitService = GWT
+	.create(Toolkit2Service.class);
 
 	HorizontalPanel simDisplayPanel = new HorizontalPanel();
 	VerticalPanel simControlPanel = new VerticalPanel();

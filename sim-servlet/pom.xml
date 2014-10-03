@@ -6,39 +6,43 @@
     <version>3.0.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>gov.nist.hit.ds</groupId>
-  <version>3.0.0-SNAPSHOT</version>
-  <artifactId>simServlet</artifactId>
+  <artifactId>sim-servlet</artifactId>
 
   <dependencies>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
           <artifactId>http</artifactId>
+          <version>3.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
-          <version>3.0.0-SNAPSHOT</version>
           <artifactId>soap-support</artifactId>
+          <version>3.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
           <artifactId>sim-support</artifactId>
+          <version>3.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
           <artifactId>toolkit</artifactId>
+          <version>3.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
           <artifactId>actor-transaction</artifactId>
+          <version>3.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>xdsException</artifactId>
+          <artifactId>xds-exceptions</artifactId>
+          <version>3.0.0-SNAPSHOT</version>
       </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
           <artifactId>event-log</artifactId>
+          <version>3.0.0-SNAPSHOT</version>
       </dependency>
   </dependencies>
 </project>

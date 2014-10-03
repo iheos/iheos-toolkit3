@@ -2,7 +2,6 @@ package gov.nist.hit.ds.eventLog.errorRecording;
 
 import gov.nist.hit.ds.eventLog.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
-import gov.nist.hit.ds.eventLog.errorRecording.factories.ErrorRecorderBuilder;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
  * @author bill
  *
  */
-public interface ErrorRecorder extends ErrorRecorderBuilder {
+public interface ErrorRecorder  {
 	public void err(XdsErrorCode.Code code, String msg, String location, String resource,
                     Object /* LogMessage */ log_message);
 	public void err(XdsErrorCode.Code code, String msg, String location, String resource);
@@ -37,7 +36,7 @@ public interface ErrorRecorder extends ErrorRecorderBuilder {
 	public void concat(IAssertionGroup er);
 	public List<ValidatorErrorItem> getErrMsgs();
 	
-	public IAssertionGroup buildNewErrorRecorder();  // some code only accepts ErrorRecorder.  This gets around this
-	public IAssertionGroup getErrorRecorderBuilder();
+//	public IAssertionGroup buildNewErrorRecorder();  // some code only accepts ErrorRecorder.  This gets around this
+//	public IAssertionGroup getErrorRecorderBuilder();
 
 }

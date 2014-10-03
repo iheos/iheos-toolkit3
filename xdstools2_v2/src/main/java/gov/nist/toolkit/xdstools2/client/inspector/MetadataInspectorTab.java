@@ -11,7 +11,7 @@ import gov.nist.toolkit.results.client.TestLogs;
 import gov.nist.toolkit.xdstools2.client.PopupMessage;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.TabbedWindow;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +58,11 @@ public class MetadataInspectorTab extends TabbedWindow {
 	
 	HorizontalPanel hpanel;
 	
-	ToolkitServiceAsync toolkitService;
+	Toolkit2ServiceAsync toolkitService;
 	List<Result> results;
 	SiteSpec siteSpec;
 	
-	public void setToolkitService(ToolkitServiceAsync tsa) { toolkitService = tsa; }
+	public void setToolkitService(Toolkit2ServiceAsync tsa) { toolkitService = tsa; }
 	public void setResults(List<Result> results) { this.results = results; }
 	public void setSiteSpec(SiteSpec ss) { siteSpec = ss; }
 

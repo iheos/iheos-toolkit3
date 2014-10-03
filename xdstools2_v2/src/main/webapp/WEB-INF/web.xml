@@ -73,7 +73,7 @@
 	</listener>
  
 	<servlet>
-		<servlet-name>toolkitServlet</servlet-name>
+		<servlet-name>toolkit2Servlet</servlet-name>
 		<servlet-class>gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl</servlet-class>
 	</servlet>
 
@@ -93,18 +93,13 @@
 	</servlet>
 	
 	<servlet>
-		<servlet-name>simulatorServlet2</servlet-name>
-		<servlet-class>gov.nist.toolkit.xdstools2.server.simulator.support.SimServlet</servlet-class>
-	</servlet>
-	
-	<servlet>
 		<servlet-name>messageServlet</servlet-name>
 		<servlet-class>gov.nist.toolkit.xdstools2.server.simulator.support.SimServlet</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>toolkitServlet</servlet-name>
-		<url-pattern>/xdstools2/toolkit</url-pattern>
+		<servlet-name>toolkit2Servlet</servlet-name>
+		<url-pattern>/xdstools2/toolkit2</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>

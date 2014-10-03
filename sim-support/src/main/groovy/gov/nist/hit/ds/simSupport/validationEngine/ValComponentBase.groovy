@@ -1,16 +1,16 @@
-package gov.nist.hit.ds.simSupport.validationEngine;
+package gov.nist.hit.ds.simSupport.validationEngine
 
-import gov.nist.hit.ds.eventLog.Event;
-import gov.nist.hit.ds.eventLog.assertion.*;
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
-import gov.nist.hit.ds.eventLog.assertion.annotations.Validation;
+import gov.nist.hit.ds.eventLog.Event
+import gov.nist.hit.ds.eventLog.Fault
+import gov.nist.hit.ds.eventLog.assertion.*
+import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext
 import gov.nist.hit.ds.repository.api.RepositoryException
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.ValidationFault;
-import gov.nist.hit.ds.soapSupport.FaultCode;
-import gov.nist.hit.ds.soapSupport.SoapFaultException;
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
+import gov.nist.hit.ds.soapSupport.FaultCode
+import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.ExceptionUtil
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
-import groovy.util.logging.Log4j;
+import groovy.util.logging.Log4j
 
 /**
  * An abstract class that makes use of the SimComponent interface easier
@@ -23,6 +23,8 @@ import groovy.util.logging.Log4j;
  * @author bmajur
  *
  */
+
+// TODO: Needs refactoring - non assert methods should be delegated
 @Log4j
 public abstract class ValComponentBase implements ValComponent {
     public AssertionGroup ag;
@@ -31,13 +33,45 @@ public abstract class ValComponentBase implements ValComponent {
     String description;
     ValidationEngine validationEngine;
 
+    enum Relation { NONE, PEER, CHILD, SELF}
+    Relation parentRelation = Relation.PEER
+
     ValComponentBase() {}
 
-    ValComponentBase(Event event) {
+    ValComponentBase(Event _event) {
+        event = _event
         log.debug "ValComponentBase() - ${this.class.name}"
-        event.startNewValidator(this.class.simpleName)
-        validationEngine = new ValidationEngine(this, event)
+//        _event.addPeerResults(this.class.simpleName)
+//        validationEngine = new ValidationEngine(this, _event)
     }
+
+    ValComponentBase asPeer() { parentRelation = Relation.PEER; return this }
+    ValComponentBase asChild() { parentRelation = Relation.CHILD; return this }
+    ValComponentBase asSelf() { parentRelation = Relation.SELF; return this }
+
+    void runValidationEngine() throws SoapFaultException, RepositoryException {
+        String name = this.class.simpleName
+        log.debug("Running ${parentRelation} ${name}")
+        log.debug("resultsStack before init: ${event.resultsStack}")
+        if (parentRelation == Relation.NONE) throw new ToolkitRuntimeException("Validation ${name} has no established relationhip to parent")
+        if (parentRelation == Relation.PEER) event.addPeerResults(name)
+        else if (parentRelation == Relation.CHILD) event.addChildResults(name)
+        else if (parentRelation == Relation.SELF) event.addSelfResults(name)
+        log.debug("resultsStack after init: ${event.resultsStack}")
+        runBefore()
+        event.flush()
+        validationEngine = new ValidationEngine(this, event)
+        validationEngine.run()
+        log.debug("Flushing ${parentRelation} ${name}")
+        event.flush()
+        runAfter()
+        event.flush()
+         log.debug("Closing ${parentRelation} ${name}")
+        if (parentRelation != Relation.SELF)
+            event.close()
+    }
+
+    ValidationMethod currentValidationMethod() { return validationEngine.currentValidationMethod }
 
     @Override void setEvent(Event event) { this.event = event }
 
@@ -51,7 +85,12 @@ public abstract class ValComponentBase implements ValComponent {
 
     @Override void setDescription(String description) { this.description = description }
 
-    void runValidationEngine() throws SoapFaultException, RepositoryException { validationEngine.run() }
+    @Override public boolean showOutputInLogs() { return true }
+
+    public void run() throws SoapFaultException, RepositoryException { runValidationEngine() }
+
+    void runBefore() {}
+    void runAfter() {}
 
     ValidationEngine getValidationEngine() { return validationEngine }
 
@@ -80,49 +119,87 @@ public abstract class ValComponentBase implements ValComponent {
         return true;
     }
 
-    public boolean infoFound(String found) throws SoapFaultException {
+    public Assertion infoFound(String found) throws SoapFaultException {
         Assertion a = ag.infoFound(found);
+        recordAssertion(a);
+        return a;
+    }
+
+    public boolean msg(String msg) throws SoapFaultException {
+        Assertion a = ag.msg(msg);
         recordAssertion(a);
         return true;
     }
 
-    public boolean fail(String expected) throws SoapFaultException {
-        Assertion a = ag.fail(expected);
+    public Assertion fail(String msg) throws SoapFaultException {
+        Assertion a = ag.fail(msg, currentValidationMethod().required);
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
-    public boolean assertIn(String[] expecteds, String value) throws SoapFaultException {
-        Assertion a = ag.assertIn(expecteds, value);
+    public Assertion fail(String msg, String found) throws SoapFaultException {
+        Assertion a = ag.fail(msg, found, currentValidationMethod().required);
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
-    public boolean assertEquals(String expected, String found) throws SoapFaultException {
-        Assertion a = ag.assertEquals(expected, found);
+    public boolean defaultMsg() throws SoapFaultException {
+        Assertion a = ag.defaultMsg()
+        recordAssertion(a)
+        return true
+    }
+
+    public Assertion assertIn(String[] expecteds, String value) throws SoapFaultException {
+        Assertion a = ag.assertIn(expecteds, value, currentValidationMethod().required);
+        recordAssertion(a);
+        return a
+    }
+
+    public Assertion assertIn(List<String> expecteds, String value) throws SoapFaultException {
+        Assertion a = ag.assertIn(expecteds, value, currentValidationMethod().required);
+        recordAssertion(a);
+        return a
+    }
+
+    public Assertion assertEquals(String expected, String found) throws SoapFaultException {
+        Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
         log.debug("Assertion: ${a}")
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
-    public boolean assertEquals(boolean expected, boolean found) throws SoapFaultException {
-        Assertion a = ag.assertEquals(expected, found);
+    // produces lousy assertion messages - use string
+//    public boolean assertEquals(boolean expected, boolean found) throws SoapFaultException {
+//        Assertion a = ag.assertEquals(expected, found);
+//        log.debug("Assertion: ${a}")
+//        recordAssertion(a);
+//        return !a.failed();
+//    }
+
+    public Assertion assertEquals(int expected, int found) throws SoapFaultException {
+        Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
         log.debug("Assertion: ${a}")
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
-    public boolean assertEquals(int expected, int found) throws SoapFaultException {
-        Assertion a = ag.assertEquals(expected, found);
+    public Assertion assertHasValue(String value) throws SoapFaultException {
+        Assertion a = ag.assertHasValue(value, currentValidationMethod().required);
         log.debug("Assertion: ${a}")
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
-    public boolean assertTrue(boolean value) throws SoapFaultException {
-        Assertion a = ag.assertTrue(value);
+    public Assertion assertTrue(boolean value) throws SoapFaultException {
+        Assertion a = ag.assertTrue(value, currentValidationMethod().required);
         recordAssertion(a);
-        return !a.failed();
+        return a
+    }
+
+    public Assertion assertTrue(boolean value, String found) throws SoapFaultException {
+        Assertion a = ag.assertTrue(value, found, currentValidationMethod().required);
+        recordAssertion(a);
+        return a
     }
 
     public boolean assertTrueNoLog(boolean value) throws SoapFaultException {
@@ -131,16 +208,16 @@ public abstract class ValComponentBase implements ValComponent {
         return true;
     }
 
-    public boolean assertFalse(boolean value) throws SoapFaultException {
-        Assertion a = ag.assertTrue(!value);
+    public Assertion assertFalse(boolean value) throws SoapFaultException {
+        Assertion a = ag.assertTrue(!value, currentValidationMethod().required);
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
-    public boolean assertNotNull(Object value) throws SoapFaultException {
-        Assertion a = ag.assertNotNull(value);
+    public Assertion assertNotNull(Object value) throws SoapFaultException {
+        Assertion a = ag.assertNotNull(value, currentValidationMethod().required);
         recordAssertion(a);
-        return !a.failed();
+        return a
     }
 
     public boolean assertNotNullNoLog(Object value) throws SoapFaultException {
@@ -166,37 +243,37 @@ public abstract class ValComponentBase implements ValComponent {
     }
 
     public boolean fail(String expected, ValidationRef vr) {
-        Assertion a = ag.fail(expected);
+        Assertion a = ag.fail(expected, currentValidationMethod().required);
         recordAssertion(a, vr);
         return !a.failed();
     }
 
     public boolean fail(ValidationRef vr) {
-        Assertion a = ag.fail("");
+        Assertion a = ag.fail("", currentValidationMethod().required);
         recordAssertion(a, vr);
         return !a.failed();
     }
 
     public boolean assertIn(String[] expecteds, String value, ValidationRef vr) {
-        Assertion a = ag.assertIn(expecteds, value);
+        Assertion a = ag.assertIn(expecteds, value, currentValidationMethod().required);
         recordAssertion(a, vr);
         return !a.failed();
     }
 
     public boolean assertEquals(String expected, String found, ValidationRef vr) {
-        Assertion a = ag.assertEquals(expected, found);
+        Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
         recordAssertion(a, vr);
         return !a.failed();
     }
 
     public boolean assertEquals(int expected, int found, ValidationRef vr) {
-        Assertion a = ag.assertEquals(expected, found);
+        Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
         recordAssertion(a, vr);
         return !a.failed();
     }
 
     public boolean assertTrue(boolean value, ValidationRef vr) {
-        Assertion a = ag.assertTrue(value);
+        Assertion a = ag.assertTrue(value, currentValidationMethod().required);
         recordAssertion(a, vr);
         return !a.failed();
     }
@@ -208,13 +285,13 @@ public abstract class ValComponentBase implements ValComponent {
     }
 
     public boolean assertFalse(boolean value, ValidationRef vr) {
-        Assertion a = ag.assertTrue(!value);
+        Assertion a = ag.assertTrue(!value, currentValidationMethod().required);
         recordAssertion(a, vr);
         return !a.failed();
     }
 
     public boolean assertNotNull(Object value, ValidationRef vr) {
-        Assertion a = ag.assertNotNull(value);
+        Assertion a = ag.assertNotNull(value, currentValidationMethod().required);
         recordAssertion(a, vr);
         return !a.failed();
     }
@@ -242,13 +319,9 @@ public abstract class ValComponentBase implements ValComponent {
      * @throws SoapFaultException
      */
     private void recordAssertion(Assertion a) throws SoapFaultException {
-        if (validationEngine.validationFaultAnnotation != null) {
-            ValidationFault vf = validationEngine.validationFaultAnnotation;
-            recordAssertion(a, vf);
-        }
-        else if (validationEngine.validationAnnotation != null) {
-            Validation vf = validationEngine.validationAnnotation;
-            recordAssertion(a, vf);
+        if (validationEngine.validationAnnotation != null) {
+            Validation vf = validationEngine.validationAnnotation
+            recordAssertion(a, vf)
         } else {
             throw new ToolkitRuntimeException("Failed to record assertion ${a}")
         }
@@ -288,59 +361,25 @@ public abstract class ValComponentBase implements ValComponent {
             throws SoapFaultException {
 
         log.debug("Recording validation ${vf.id()}")
-        // if this is a duplicate assertion id
-        if (validationAlreadyRecorded(vf.id())) {
-            a.setId(vf.id());
-            a.setMsg("Validator contains multiple assertions with this id");
-            String[] refs = [ ]
-            a.setReference(refs);
-            a.setExpected("");
-            a.setFound("");
-            a.setCode(FaultCode.Receiver.toString());
-            a.setStatus(AssertionStatus.INTERNALERROR);
-            throw new SoapFaultException(
-                    ag,
-                    FaultCode.Receiver,
-                    new ErrorContext("Validator contains multiple assertions with this id", "")
-            );
-        }
         idsAsserted.add(vf.id());
+        ValidationMethod validationMethod = currentValidationMethod()
 
         String id = vf.id();
         a.setId(id);
         a.setMsg(vf.msg());
         a.setReference(vf.ref());
-    }
+        if (a.getStatus().isError() && validationMethod.type == RunType.FAULT) {
+            a.setCode(validationMethod.faultCode.toString())
+            a.setStatus(AssertionStatus.FAULT)
 
-    private void recordAssertion(Assertion a, ValidationFault vf)
-            throws SoapFaultException {
-//        if (validationAlreadyRecorded(vf.id())) {
-//            a.setId(vf.id());
-//            a.setMsg("Validator contains multiple assertions with this id");
-//            String[] refs = [ ]
-//            a.setReference(refs);
-//            a.setExpected("");
-//            a.setFound("");
-//            a.setCode(FaultCode.Receiver.toString());
-//            a.setStatus(AssertionStatus.INTERNALERROR);
-//            throw new SoapFaultException(
-//                    ag,
-//                    FaultCode.Receiver,
-//                    new ErrorContext("Validator contains multiple assertions with this id", "")
-//            );
-//        }
-        idsAsserted.add(vf.id());
+            Fault f = new Fault(vf.msg(), validationMethod.faultCode.toString(), '??', '')
+            event.fault = f
+            event.flush()
 
-        a.setId(vf.id());
-        a.setMsg(vf.msg());
-        a.setReference(vf.ref());
-        a.setCode(vf.faultCode().toString());
-        if (a.getStatus().isError()) {
-            a.setStatus(AssertionStatus.FAULT);
             throw new SoapFaultException(
                     ag,
-                    vf.faultCode(),
-                    new ErrorContext(a.getMsg(), new AssertionDAO().buildSemiDivided(vf.ref()))
+                    currentValidationMethod().faultCode,
+                    new ErrorContext("${a.getMsg()} - ${a.expectedFoundString()}", new AssertionDAO().buildSemiDivided(vf.ref()))
             );
         }
     }

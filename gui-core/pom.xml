@@ -8,33 +8,14 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <!-- no groupId because it is inherited from the parent -->
-    <version>3.0.0-SNAPSHOT</version>
+
     <artifactId>gui-core</artifactId>
     <packaging>pom</packaging>
 
 
     <modules>
         <module>../xdstools3</module>
-        <module>../docentryeditor</module>
+        <module>../doc-entry-editor</module>
     </modules>
-
-    <dependencies>
-
-        <!-- Local dependencies -->
-        <dependency>
-            <groupId>edu.tn.xds.metadata</groupId>
-            <artifactId>docentryeditor</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.toolkit</groupId>
-            <artifactId>xdstools3</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
-        </dependency>
-
-        <!-- External dependencies -->
-
-    </dependencies>
 
 </project>

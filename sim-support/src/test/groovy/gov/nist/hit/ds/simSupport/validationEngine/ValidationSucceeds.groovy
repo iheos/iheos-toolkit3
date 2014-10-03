@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.simSupport.validationEngine
 
-import gov.nist.hit.ds.eventLog.assertion.annotations.Validation
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 

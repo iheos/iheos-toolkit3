@@ -3,7 +3,7 @@ package gov.nist.toolkit.xdstools2.client.selectors;
 import gov.nist.toolkit.xdstools2.client.CookieManager;
 import gov.nist.toolkit.xdstools2.client.Panel;
 import gov.nist.toolkit.xdstools2.client.PopupMessage;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class TestSessionSelector {
 	HorizontalPanel testSessionPanel = new HorizontalPanel();
 	ListBox testSessionListBox = new ListBox();
 	TextBox testSessionTextBox = new TextBox();
-	ToolkitServiceAsync toolkitService;
+	Toolkit2ServiceAsync toolkitService;
 	boolean isPrivateTesting = false;
 	Panel menuPanel;
 
@@ -33,7 +33,7 @@ public class TestSessionSelector {
 	static String testSession = null;
 	static List<TestSessionSelector> instances = new ArrayList<TestSessionSelector>();
 
-	public static TestSessionSelector getInstance(ToolkitServiceAsync toolkitService, Panel menuPanel) {
+	public static TestSessionSelector getInstance(Toolkit2ServiceAsync toolkitService, Panel menuPanel) {
 		for (TestSessionSelector sel : instances) {
 			if (sel.menuPanel == menuPanel) 
 				return sel;
@@ -61,7 +61,7 @@ public class TestSessionSelector {
 	
 	
 
-	TestSessionSelector(ToolkitServiceAsync toolkitService, Panel menuPanel) {
+	TestSessionSelector(Toolkit2ServiceAsync toolkitService, Panel menuPanel) {
 		this.toolkitService = toolkitService;
 		this.menuPanel = menuPanel;
 		

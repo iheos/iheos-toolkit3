@@ -1,10 +1,8 @@
 package gov.nist.toolkit.xdstools2.client.tabs.directStatusTab;
 
 import gov.nist.direct.client.MessageLog;
-import gov.nist.direct.logger.UserLog;
 import gov.nist.toolkit.xdstools2.client.PopupMessage;
-import gov.nist.toolkit.xdstools2.client.SmtpMessageStatus;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.List;
 
@@ -12,9 +10,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class MessageLoader  {
 	MessageStatusView view;
-	ToolkitServiceAsync toolkitService;
+	Toolkit2ServiceAsync toolkitService;
 	
-	public MessageLoader(ToolkitServiceAsync toolkitService, MessageStatusView view) {
+	public MessageLoader(Toolkit2ServiceAsync toolkitService, MessageStatusView view) {
 		this.view = view;
 		this.toolkitService = toolkitService;
 	}

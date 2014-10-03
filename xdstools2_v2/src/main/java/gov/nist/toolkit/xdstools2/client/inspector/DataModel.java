@@ -5,7 +5,7 @@ import gov.nist.toolkit.registrymetadata.client.MetadataCollection;
 import gov.nist.toolkit.results.client.Result;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.results.client.StepResult;
-import gov.nist.toolkit.xdstools2.client.ToolkitServiceAsync;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class DataModel {
 
 	SiteSpec siteSpec = null;
 	
-	ToolkitServiceAsync toolkitService = null;
+	Toolkit2ServiceAsync toolkitService = null;
 
 	List<Document> allDocs = null;
 	Map<String, Document> docMap = null;  //key is uid

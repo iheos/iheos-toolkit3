@@ -2,10 +2,12 @@ package gov.nist.hit.ds.simSupport.endpoint
 
 import gov.nist.hit.ds.actorTransaction.EndpointLabel
 import gov.nist.hit.ds.simSupport.client.SimId
+import groovy.util.logging.Log4j
 
 /**
  * Created by bmajur on 6/6/14.
  */
+@Log4j
 class EndpointBuilder {
     String server
     String port
@@ -42,10 +44,17 @@ class EndpointBuilder {
         return x
     }
 
-    def parse(String endpoint) {
+    EndpointBuilder parse(String endpoint) {
+        // http, serverport are actually wrong
         def (http, serverPort, basePart, simStr, simid, actor, trans) = endpoint.tokenize('/')
+        log.debug(endpoint.tokenize('/'))
+        assert endpoint.tokenize('/').size() == 7
         simId = new SimId(simid)
         actorCode = actor
         transCode = trans
+        assert simId
+        assert actorCode
+        assert transCode
+        return this
     }
 }

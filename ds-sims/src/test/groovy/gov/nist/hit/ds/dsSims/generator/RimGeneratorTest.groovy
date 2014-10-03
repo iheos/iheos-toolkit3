@@ -135,7 +135,7 @@ x = [['name': 'languageCode', 'values':['en-us']]]
         def spec = '''
 [
     [type: 'DocumentEntry',
-         id: 'Document1', mimeType: 'text/xml', status:'Approved',
+         id: 'Document1', lid: '', mimeType: 'text/xml', status:'Approved',
     attributes:
         [
             [name: 'description', values: ['hello']]
@@ -145,7 +145,7 @@ x = [['name': 'languageCode', 'values':['en-us']]]
 '''
 
         def rimm = '''
-<ExtrinsicObject id='Document1' mimeType='text/xml'
+<ExtrinsicObject id='Document1' lid='' mimeType='text/xml'
     status='urn:oasis:names:tc:ebxml-regrep:StatusType:Approved'
     objectType='urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1'>
 <Description>
@@ -207,53 +207,53 @@ x = [['name': 'languageCode', 'values':['en-us']]]
         def spec3 = '''
 [
     [   name: 'de.author',
-        person: 'D12398^Doe^John^^^^^^&1.2.3.4.5.6.7.8. 9.1789.45.1&ISO'
-        telecom: '^^Internet^john.doe@healthcare.example.org\'
-        institutions: [' Some Hospital^^^^^^^^^1.2.3.4.5.6.7.8.9.1789.45']
-        roles: ['name of role']
+        person: 'D12398^Doe^John^^^^^^&1.2.3.4.5.6.7.8. 9.1789.45.1&ISO',
+        telecom: '^^Internet^john.doe@healthcare.example.org',
+        institutions: ['Some Hospital^^^^^^^^^1.2.3.4.5.6.7.8.9.1789.45'],
+        roles: ['name of role'],
         specialty: ['specialty of author']
     ]
 ]
 '''
 
         def rim3 = '''
-<rim:Classification classificationScheme="urn:uuid:93606bcf-9494-43ec-9b4e-a7748d1a838d"
-    classifiedObject="theDocument" id="ID_045"
+<Classification classificationScheme="urn:uuid:93606bcf-9494-43ec-9b4e-a7748d1a838d"
+    classifiedObject="theDocument" id="ID-1"
     objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
-    nodeRepresentation="" xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0">
+    nodeRepresentation="" >
     <!-- nodeRepresentation intentionally left blank -->
-    <rim:Slot name="authorPerson">
+    <Slot name="authorPerson">
         <!-- shall be single valued, includes
 optional ID -->
-        <rim:ValueList>
-            <rim:Value>D12398^Doe^John^^^^^^&amp;1.2.3.4.5.6.7.8. 9.1789.45.1&amp;ISO</rim:Value>
-        </rim:ValueList>
-    </rim:Slot>
-    <rim:Slot name="authorInstitution">
+        <ValueList>
+            <Value>D12398^Doe^John^^^^^^&amp;1.2.3.4.5.6.7.8. 9.1789.45.1&amp;ISO</Value>
+        </ValueList>
+    </Slot>
+    <Slot name="authorInstitution">
         <!-- may be multivalued -->
-        <rim:ValueList>
-            <rim:Value>Some Hospital^^^^^^^^^1.2.3.4.5.6.7.8.9.1789.45</rim:Value>
-        </rim:ValueList>
-    </rim:Slot>
-    <rim:Slot name="authorRole">
+        <ValueList>
+            <Value>Some Hospital^^^^^^^^^1.2.3.4.5.6.7.8.9.1789.45</Value>
+        </ValueList>
+    </Slot>
+    <Slot name="authorRole">
         <!-- may be multivalued -->
-        <rim:ValueList>
-            <rim:Value>name of role</rim:Value>
-        </rim:ValueList>
-    </rim:Slot>
-    <rim:Slot name="authorSpecialty">
+        <ValueList>
+            <Value>name of role</Value>
+        </ValueList>
+    </Slot>
+    <Slot name="authorSpecialty">
         <!-- may be multivalued -->
-        <rim:ValueList>
-            <rim:Value>specialty of author</rim:Value>
-        </rim:ValueList>
-    </rim:Slot>
-    <rim:Slot name="authorTelecommunication">
+        <ValueList>
+            <Value>specialty of author</Value>
+        </ValueList>
+    </Slot>
+    <Slot name="authorTelecommunication">
         <!-- shall be single valued -->
-        <rim:ValueList>
-            <rim:Value>^^Internet^john.doe@healthcare.example .org</rim:Value>
-        </rim:ValueList>
-    </rim:Slot>
-</rim:Classification>
+        <ValueList>
+            <Value>^^Internet^john.doe@healthcare.example.org</Value>
+        </ValueList>
+    </Slot>
+</Classification>
 '''
         when:
         def writer = new StringWriter()

@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.simSupport.loader;
 
+import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
 import gov.nist.hit.ds.http.parser.HttpParseException;
@@ -28,6 +29,10 @@ public abstract class AbstractLogLoader extends ValComponentBase {
 	String header = null;
 	byte[] body = null;
 	static Logger logger = Logger.getLogger(AbstractLogLoader.class);
+
+    public AbstractLogLoader() {
+        super(new Event(null));
+    }
 
 	@Override
 	public void run() {
