@@ -1,8 +1,10 @@
 package gov.nist.hit.ds.repository.rpc.presentation;
 
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.dsSims.factories.MessageValidatorFactory;
+import gov.nist.hit.ds.repository.AssetHelper;
+import gov.nist.hit.ds.repository.ContentHelper;
+import gov.nist.hit.ds.repository.RepositoryHelper;
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
@@ -19,15 +21,10 @@ import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigEx
 import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
 import gov.nist.hit.ds.repository.shared.SearchTerm;
-import gov.nist.hit.ds.repository.shared.aggregation.AssertionAggregation;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
-import gov.nist.hit.ds.repository.shared.data.CSVRow;
-import gov.nist.hit.ds.repository.shared.id.AssetId;
-import gov.nist.hit.ds.repository.shared.id.RepositoryId;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
 import gov.nist.hit.ds.repository.simple.SimpleId;
-import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
 import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder;
@@ -35,9 +32,6 @@ import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder.Depth;
 import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse;
 import gov.nist.hit.ds.toolkit.installation.Installation;
-import gov.nist.hit.ds.utilities.csv.CSVEntry;
-import gov.nist.hit.ds.utilities.csv.CSVParser;
-import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 import net.timewalker.ffmq3.FFMQConstants;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -54,11 +48,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.logging.Logger;
 
 /**
@@ -70,7 +61,7 @@ public class PresentationData implements IsSerializable, Serializable  {
     private static final int FIXED_HEADER_LAST_IDX = 1;
     private static final int START_ROW_ZERO = 0;
 
-    public static final int MAX_RESULTS = 500;
+
     public static final String TXMON_QUEUE = "txmon";
 
 	private static final long serialVersionUID = 4939311135239253727L;
@@ -105,7 +96,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 					while (it.hasNextRepository()) {
 						r = it.nextRepository();
 						
-						rtList.add(new RepositoryTag(r.getId().getIdString(), r.getType().getKeyword(),  acs.name(), r.getDisplayName(), getSortedMapString(r.getProperties())));						
+						rtList.add(new RepositoryTag(r.getId().getIdString(), r.getType().getKeyword(),  acs.name(), r.getDisplayName(), ContentHelper.getSortedMapString(r.getProperties())));
 					}
 				} catch (RepositoryException ex) {
 					logger.warning(ex.toString());
@@ -166,7 +157,7 @@ public class PresentationData implements IsSerializable, Serializable  {
      */
 	public static List<AssetNode> getTree(String[][] reposData) {
 		
-		Repository[] reposList = getReposList(reposData);
+		Repository[] reposList = RepositoryHelper.getReposList(reposData);
 		
 		ArrayList<AssetNode> result = new ArrayList<AssetNode>();
 		List<AssetNode> tmp = null;
@@ -203,7 +194,7 @@ public class PresentationData implements IsSerializable, Serializable  {
      * @throws RepositoryException
      */
 	public static AssetNode getParentChain(AssetNode an) throws RepositoryException {
-		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
+		Repository repos = RepositoryHelper.composeRepositoryObject(an.getRepId(), an.getReposSrc());
 		AssetNodeBuilder anb = new AssetNodeBuilder();
 		
 		return anb.getParentChain(repos, an, true);		
@@ -227,91 +218,18 @@ public class PresentationData implements IsSerializable, Serializable  {
      */
     public static List<AssetNode> getParentChainInTree(AssetNode target) throws RepositoryException {
 
-        Repository repos = composeRepositoryObject(target.getRepId(), target.getReposSrc());
+        Repository repos = RepositoryHelper.composeRepositoryObject(target.getRepId(), target.getReposSrc());
         AssetNodeBuilder anb = new AssetNodeBuilder();
 
         return anb.getParentChainInTree(repos, target);
     }
-
-
-    /**
-     * Gets the immediate children of the parent but not the grandchildren, however, there is an indicator {@code HASCHILDREN} of the presence of children attached to the child node.
-     * @param an The parent node.
-     * @return Children
-     * @throws RepositoryException
-     */
-	public static List<AssetNode> getImmediateChildren(AssetNode an) throws RepositoryException {
-		return getImmediateChildren(an,null);
-				
-	}
-
-
-    private static List<AssetNode> getImmediateChildren(AssetNode an, SearchCriteria searchCriteria) throws RepositoryException {
-        Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
-
-        AssetNodeBuilder anb = new AssetNodeBuilder();
-        try {
-            return anb.getImmediateChildren(repos, an, searchCriteria);
-        } catch (RepositoryException re) {
-            logger.warning(re.toString());
-        }
-        return null;
-
-    }
-
-
-    /**
-     * Gets the children of the parent.
-     * @param an The parent node.
-     * @return Parent with children.
-     * @throws RepositoryException
-     */
-    public static AssetNode getChildren(AssetNode an) throws RepositoryException {
-        Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
-
-        AssetNodeBuilder anb = new AssetNodeBuilder(Depth.CHILDREN);
-        try {
-            anb.getChildren(repos, an);
-            return an;
-        } catch (RepositoryException re) {
-            logger.warning(re.toString());
-        }
-        return null;
-
-    }
-
-	/**
-     * Gets a repository object array from {@code String} array.
-	 * @param repos repository array
-	 */
-	private static Repository[] getReposList(String[][] repos) {
-		
-		Repository[] reposList = null;
-		try {
-		
-		int reposCt = repos.length;
-		reposList = new Repository[reposCt];
-		
-			for (int cx=0; cx<reposCt; cx++) {
-				try {					
-					reposList[cx] = composeRepositoryObject(repos[cx][0], repos[cx][1]); 					
-				} catch (RepositoryException e) {
-					e.printStackTrace();
-					; // incorrect or missing data repository config file 
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return reposList;	
-	}
 
     /**
      * Gets a previously saved search criteria, or a canned query, from the file location that only exists within the Canned Query repository.
      * @param queryLoc The relative path to load the criteria from.
      * @return The query parameters that can be directly executed by the {@code search} method.
      * @throws RepositoryException
-     * @see #search(String[][], gov.nist.hit.ds.repository.shared.SearchCriteria)
+     * @see  gov.nist.hit.ds.repository.AssetHelper#search(String[][], gov.nist.hit.ds.repository.shared.SearchCriteria)
      */
 	public static QueryParameters getSearchCriteria(String queryLoc)  throws RepositoryException {
 		Parameter param = new Parameter();		
@@ -342,7 +260,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 		param.setDescription("queryLoc");
 		param.assertNotNull(queryLoc);
 		
-		Repository repos = composeRepositoryObject(id, acs);		
+		Repository repos = RepositoryHelper.composeRepositoryObject(id, acs);
 		Asset a = repos.getAssetByRelativePath(new File(queryLoc));
 			
 		return getQueryParams(a);				
@@ -482,7 +400,7 @@ public class PresentationData implements IsSerializable, Serializable  {
      */
 	public static List<AssetNode> getSavedQueries(String id, String acs) throws RepositoryException {
 		ArrayList<AssetNode> result = new ArrayList<AssetNode>();
-		Repository repos = composeRepositoryObject(id, acs);
+		Repository repos = RepositoryHelper.composeRepositoryObject(id, acs);
 		SimpleAssetIterator iter = new SimpleAssetIterator(repos);
  		
 		while (iter.hasNextAsset()) {
@@ -519,7 +437,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 
             try {
 
-                Repository[] reposList = getReposList(reposData);
+                Repository[] reposList = RepositoryHelper.getReposList(reposData);
 
                 AssetIterator iter = null;
 
@@ -537,255 +455,7 @@ public class PresentationData implements IsSerializable, Serializable  {
         return Boolean.FALSE;
     }
 
-    /**
-     * Searches for the criteria in the specified repositories.
-     * @param reposData An array of repositories.
-     * @param sc The search criteria.
-     * @return List of asset nodes containing the search results.
-     */
-	public static List<AssetNode> search(String[][] reposData, SearchCriteria sc) {
-		
-		ArrayList<AssetNode> result = new ArrayList<AssetNode>();
-		
-		try {
-		
-		Repository[] reposList = getReposList(reposData);
 
-		AssetIterator iter = null;
-		
-			iter = new SearchResultIterator(reposList, sc);
-		
-			int recordCt = 0;
-			if (iter!=null && recordCt++ <= MAX_RESULTS) { // hard limit for now
-				
-				while (iter.hasNextAsset()) {
-					gov.nist.hit.ds.repository.api.Asset aSrc = iter.nextAsset();
-					
-					AssetNode aDst = new AssetNode();
-			
-					aDst.setRepId(aSrc.getRepository().getIdString());
-					aDst.setAssetId(aSrc.getId().getIdString());
-					aDst.setDescription(aSrc.getDescription());
-					aDst.setDisplayName(aSrc.getDisplayName());
-					aDst.setMimeType(aSrc.getMimeType());
-					aDst.setReposSrc(aSrc.getSource().getAccess().name());
-					aDst.setParentId(aSrc.getProperty(PropertyKey.PARENT_ID));
-					aDst.setCreatedDate(aSrc.getCreatedDate());
-                    aDst.setColor(aSrc.getProperty(PropertyKey.COLOR)); // This is required for the target node to show up in the right color when the asset is clicked form the search result
-					if (aSrc.getPath()!=null) {
-						aDst.setLocation(aSrc.getPropFileRelativePart());
-						try {
-							if (aSrc.getContentFile()!=null && aSrc.getContentFile().exists()) {
-								aDst.setContentAvailable(true);
-							}							
-						} catch (Exception ex) {
-							logger.warning("Content file not found?" + ex.toString());
-						}
-					}
-					result.add(aDst);
-				}
-			}
-
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-		
-	}
-
-    /**
-     * Gets the text content of an asset.
-     * @param an The asset node.
-     * @return A new asset node with possible text content.
-     * @throws RepositoryException
-     */
-	public static AssetNode getContent(AssetNode an) throws RepositoryException {
-		Repository repos = composeRepositoryObject(an.getRepId(), an.getReposSrc());
-		
-		Asset aSrc = null;
-		if (an.getLocation()!=null) {
-			// aSrc = repos.getAssetByPath(new File(an.getLocation()));
-			aSrc = repos.getAssetByRelativePath(new File(an.getLocation()));
-			if (aSrc==null) {
-				throw new RepositoryException(RepositoryException.IO_ERROR + "Asset not found by relative location: " + an.getLocation());
-			}
-		}
-		
-		
-		/* this should not be required 
-		 * else if (an.getAssetId()!=null) {
-		 
-			aSrc = repos.getAsset(new SimpleId(an.getAssetId()));	
-		}
-		*/
-		
-		AssetNode aDst = new AssetNode();
-		
-		aDst.setRepId(aSrc.getRepository().getIdString());
-		aDst.setAssetId(aSrc.getId().getIdString());
-        if (aSrc.getAssetType()!=null)
-            aDst.setType(aSrc.getAssetType().getKeyword());
-		aDst.setDescription(aSrc.getDescription());
-		aDst.setDisplayName(aSrc.getDisplayName());
-		aDst.setMimeType(aSrc.getMimeType());
-		aDst.setReposSrc(aSrc.getSource().getAccess().name());
-        aDst.setExtendedProps(an.getExtendedProps()); // This is from the original assetNode
-
-		if (aSrc.getPath()!=null)
-			aDst.setLocation(aSrc.getPath().toString());
-
-         if (aSrc.getContent()!=null) {
-             logger.fine("*** has got content" + an.getType() + " aSrc.getMimeType():" + aSrc.getMimeType());
-			try {
-				String content = new String(aSrc.getContent());
-                aDst.setRawContent(aSrc.getContent());
-                if (an.getType()!=null && an.getType().startsWith("raw")) {
-                    content = SafeHtmlUtils.fromString(content).asString();
-                    aDst.setTxtContent(content);
-                } else if ("text/xml".equals(aSrc.getMimeType()) || "application/soap+xml".equals(aSrc.getMimeType())) {
-					aDst.setTxtContent(XmlFormatter.htmlize(content));			
-				} else if ("text/csv".equals(aSrc.getMimeType())) {
-					aDst.setCsv(processCsvContent(content));
-				} else if ("text/json".equals(aSrc.getMimeType())) {
-					aDst.setTxtContent(prettyPrintJson(content));
-				} else {
-					content = SafeHtmlUtils.fromString(content).asString();
-					aDst.setTxtContent(content);
-				}
-				aDst.setContentAvailable(true);
-			} catch (Exception e) {
-				logger.info("No content found for <"+ aDst.getAssetId() +">: May not have any content (which is okay for top-level assets): " + e.toString());
-			}			
-		} else {
-             logger.fine("*** getContent -- noContent" + an.getType() + " aSrc.getMimeType():" + aSrc.getMimeType());
-         }
-
-		try {
-			// aDst.setProps(FileUtils.readFileToString(aSrc.getPropFile()));
-						 
-			 aDst.setProps(getSortedMapString(aSrc.getProperties()));
-			
-		} catch (Exception e) {
-			aDst.setProps(aSrc.getPropFile() + " could not be loaded.");
-			logger.warning(e.toString());
-		}
-
-		return aDst;
-	}
-	
-	
-	/**
-	 * Sorts the properties map into text format.
-	 * @param p The properties object.
-	 * @return The sorted String.
-	 */
-	public static String getSortedMapString(java.util.Properties p) {
-		
-		if (p==null) return "";
-		
-		StringBuffer sb = new StringBuffer();
-		
-		 SortedMap<String, String> smap = new TreeMap<String,String>();
-		 
-		 for (String key : p.stringPropertyNames()) {
-			 smap.put(key, p.getProperty(key));
-		 }
-		 
-		 Iterator<String> iterator =  smap.keySet().iterator();
-			while (iterator.hasNext()) {
-				String propName = (String) iterator.next();
-				sb.append(propName + "=" + p.getProperty(propName) + System.getProperty("line.separator"));
-			}
-		return sb.toString();
-	}
-
-
-    /**
-     * Pretty prints JSON text format.
-     * @param content The JSON text.
-     * @return The formatted text.
-     */
-	private static String prettyPrintJson(String content) {
-
-//	   JSONValue jsonValue = JSONParser.parseStrict(content);
-//
-//       if (jsonValue != null) {
-    	   try {
-    		   
-	    	   ObjectMapper mapper = new ObjectMapper();
-	    	   
-	    	   Object json = mapper.readValue(content, Object.class);
-	    	      	   
-	    	   String pretty = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-	    	   
-	    	   return pretty;
-    	   
-    	   } catch (Exception ex) {
-    		   return content;
-    	   }
-    	       	   
-//         } else {
-//           throw new RepositoryException(RepositoryException.IO_ERROR + "Could not parse JSON"); 
-//         }			
-//
-	}
-
-
-    /**
-     * Realigns CSV structure to fix missing column headers or short rows.
-     * @param content The content.
-     * @return Realigned arrays.
-     */
-	private static String[][] processCsvContent(String content) {
-		CSVParser parser = new CSVParser(content);
-		int sz = parser.size(); 
-		
-		if (sz>0) {
-			int maxCol = 0;
-			// fix missing headers by finding the widest row
-			for (int cx=0; cx<sz; cx++) {
-				int rowItemSz = parser.get(cx).getItems().size();
-				maxCol = (maxCol>rowItemSz?maxCol:rowItemSz);
-			}
-			
-			// copy to array
-			String[][] records = new String[parser.size()][maxCol];
-			int rowIdx =0;
-			int colIdx =0;
-			for (CSVEntry e : parser.getTable().entries()) {
-				
-				for (String s : e.getItems()) {
-//                    logger.info("row: " + rowIdx + " colIdx:" + colIdx +1 + " val: " +s.toString());
-					records[rowIdx][colIdx++] = s; 
-				}
-				// fix row width
-				while (colIdx<maxCol) {
-					records[rowIdx][colIdx++] = "";
-				}
-				rowIdx++;
-				colIdx=0;
-			}
-			return records;
-		} else {
-			 return new String[][]{{"No data to display: CSV parser returned zero records."}};
-		}
-	}
-
-    /**
-     * Composes a repository object.
-     * @param id The repository Id.
-     * @param src The repository source.
-     * @return The repository object.
-     * @throws RepositoryException
-     */
-	public static Repository composeRepositoryObject(String id, String src) throws RepositoryException {
-		SimpleRepository repos 
-							= new SimpleRepository(new SimpleId(id));
-		repos.setSource(Configuration.getRepositorySrc(Access.valueOf(src)));
-		
-		return repos;
-	}
 
     public static String getJmsHostAddress() {
 
@@ -924,7 +594,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                     logger.info("*** setting repos src:" + acs);
                     headerMsg.setReposSrc(acs);
                     headerMsg.setLocation(headerLoc);
-                    headerMsg.setCsv(processCsvContent(txDetail));
+                    headerMsg.setCsv(ContentHelper.processCsvContent(txDetail));
                     //headerMsg.setProps(proxyDetail);
                     headerMsg.getExtendedProps().put("proxyDetail",proxyDetail);
                     headerMsg.getExtendedProps().put("fromIp",fromIp);
@@ -1016,7 +686,7 @@ public class PresentationData implements IsSerializable, Serializable  {
         try {
 
             logger.info("before first getIm-children");
-            List<AssetNode> children = getImmediateChildren(transaction); // Input/output level children = // Request/response
+            List<AssetNode> children = AssetHelper.getImmediateChildren(transaction); // Input/output level children = // Request/response
             logger.info("after getIm-children");
 
             String messageHeader = null;
@@ -1026,13 +696,13 @@ public class PresentationData implements IsSerializable, Serializable  {
 
             for (AssetNode child : children) {
                 logger.info("child=" + child.getDisplayName() + " type="+ child.getType());
-                List<AssetNode> artifacts = getImmediateChildren(child);
+                List<AssetNode> artifacts = AssetHelper.getImmediateChildren(child);
                 for (AssetNode artifact : artifacts) {
                     logger.info("artifact=" + artifact.getDisplayName() + " type="+ artifact.getType()); /*
                     [ERROR] Sep 09, 2014 4:38:30 PM gov.nist.hit.ds.repository.rpc.presentation.PresentationData validateMessage
 [ERROR] INFO: artifact=Request type=reqType
 */
-                    AssetNode an = getContent(artifact);
+                    AssetNode an = ContentHelper.getContent(artifact);
                     if (artifact.getType().endsWith("HdrType")) {
                         messageHeader =  an.getTxtContent();
                     } else if (artifact.getType().endsWith("BodyType")) {
@@ -1077,203 +747,6 @@ public class PresentationData implements IsSerializable, Serializable  {
     return result;
 
     }
-
-    /**
-     *
-     * @param repositoryId An external repository Id.
-     * @param eventId The event id (usually the dated event).
-     * @param parentAssetType The parent asset type.
-     * @param detailAssetType The detail asset type.
-     * @param detailAssetFilterCriteria A criteria to filter detail assets. For example, a criteria can be built to represent to mean filter by "status=ERROR." An empty criteria or a null value signifies no special restriction.
-     * @return
-     * @throws RepositoryException
-     */
-    public AssertionAggregation aggregateAssertions(RepositoryId repositoryId, AssetId eventId, SimpleType parentAssetType, SimpleType detailAssetType, SearchCriteria detailAssetFilterCriteria) throws RepositoryException {
-        return aggregateAssertions(repositoryId, eventId,parentAssetType, detailAssetType, detailAssetFilterCriteria,null);
-    }
-
-    /**
-     * This method defaults to the 'validators' parent type and 'assertionGroup' detail type.
-     * @param repositoryId An external repository Id.
-     * @param eventId The event id (usually the dated event).
-     * @param detailAssetFilterCriteria A criteria to filter detail assets. For example, a criteria can be built to represent to mean filter by "status=ERROR." An empty criteria or a null value signifies no special restriction.
-     * @return
-     * @throws RepositoryException
-     */
-    public static AssertionAggregation aggregateAssertions(RepositoryId repositoryId, AssetId eventId, SearchCriteria detailAssetFilterCriteria) throws RepositoryException {
-        return aggregateAssertions(repositoryId, eventId, new SimpleType("validators") , new SimpleType("assertionGroup"), detailAssetFilterCriteria,null);
-    }
-
-    /**
-     *
-     * @param repositoryId An external repository Id.
-     * @param eventId The event id (usually the dated event).
-     * @param parentAssetType The parent asset type.
-     * @param detailAssetType The detail asset type.
-     * @param detailAssetFilterCriteria A criteria to filter detail assets. For example, a criteria can be built to represent to mean filter by "status=ERROR." An empty criteria or a null value signifies no special restriction.
-     * @param displayColumns Select the columns to display. No value can indicate to display all columns.
-     * @return
-     * @throws RepositoryException
-     */
-    public static AssertionAggregation aggregateAssertions(RepositoryId repositoryId, AssetId eventId, SimpleType parentAssetType, SimpleType detailAssetType, SearchCriteria detailAssetFilterCriteria, String[] displayColumns) throws RepositoryException {
-        Parameter p = new Parameter("eventId");
-        p.assertNotNull(eventId);
-        p.setDescription("Id");
-        p.assertNotNull(eventId.getId());
-        p.setDescription("Repository");
-        p.assertNotNull(repositoryId);
-        p.setDescription("Id");
-        p.assertNotNull(repositoryId.getId());
-
-        AssertionAggregation assertionAggregation = new AssertionAggregation();
-
-        logger.fine("entering agg main event " + eventId);
-
-        SearchCriteria searchCriteria = new SearchCriteria(SearchCriteria.Criteria.AND);
-        searchCriteria.append(new SearchTerm(PropertyKey.ASSET_ID, SearchTerm.Operator.EQUALTO, eventId.getId()));
-
-        String[][] repository = new String[][]{{repositoryId.getId(), "RW_EXTERNAL"}};
-
-        List<AssetNode> result = search(repository, searchCriteria);
-
-        String resultSz = ((result==null)?"null":""+result.size());
-        logger.fine("agg main event find success" + eventId + " result sz: " + resultSz);
-        if (result.size()==1) { // Only one is expected
-            AssetNode an = result.get(0);
-            logger.fine("agg main event size match by Id success");
-
-            List<AssetNode> children = getImmediateChildren(an);
-
-                /* Events
-                      -> child1
-                      -> child2
-                */
-                logger.fine("Processing nodes... size:" + children.size());
-
-                for (AssetNode child : children) {
-                    if (parentAssetType.getKeyword().equals(child.getType())) { // validators
-                        logger.info("processing..." + parentAssetType + " id:" + child.getAssetId());
-                        try {
-                            aggregateMessage(child, detailAssetType , assertionAggregation, detailAssetFilterCriteria, displayColumns); // "assertionGroup"
-                        } catch (RepositoryException rce) {
-                            logger.warning(rce.toString());
-                        }
-
-                    }
-                }
-         } else {
-            logger.severe("Event assetId did not match the expected size=1, got <" + resultSz + ">: Id:" + eventId);
-        }
-          
-        return assertionAggregation;
-    }
-
-
-    private static void aggregateMessage(final AssetNode an, final SimpleType detailAssetType, final AssertionAggregation assertionAggregation, SearchCriteria detailAssetFilterCriteria, final String[] columnNames) throws RepositoryException {
-
-        logger.fine("entering aggregateMessage: an displayName:" + an.getDisplayName() + " an type:" + an.getType() + " search type:" + detailAssetType + " mimeType:" + an.getMimeType() + " hasContent:" + an.isContentAvailable() +  " csv:" + (an.getCsv()!=null));
-        if (detailAssetType.getKeyword().equals(an.getType()) && "text/csv".equals(an.getMimeType()) && an.isContentAvailable() && an.getCsv()==null) {
-
-            AssetNode resultNode = getContent(an);
-
-            logger.fine("retrieved content for:" + resultNode.getAssetId());
-            String[][] csv = resultNode.getCsv();
-            int rowLen = csv.length;
-            int colLen = csv[0].length;
-
-            Map<String,Integer> colIdxMap = new HashMap<String, Integer>();
-
-            if (columnNames!=null) {
-                // Index the column list
-                for (int colNameIdx = 0; colNameIdx < colLen; colNameIdx++) {
-                    for (int displayColIdx = 0; displayColIdx < columnNames.length; displayColIdx++) {
-                        if ((!colIdxMap.containsKey(columnNames[displayColIdx]) && columnNames[displayColIdx].equals(csv[0][colNameIdx]))) {
-                            colIdxMap.put(columnNames[displayColIdx],colNameIdx);
-                        }
-                    }
-                }
-            }
-
-            logger.fine("indexed column size:" + colIdxMap.size());
-
-//                String[][] aggregateList = new String[][];
-
-
-            int columnSelectionLength =  colLen;
-            if (columnNames!=null && columnNames.length>0) {
-                columnSelectionLength = columnNames.length;
-            }
-            boolean subsetSelection = (columnSelectionLength!=colLen);
-
-
-            // Populate the header
-            if (assertionAggregation.getHeader()==null) {
-                CSVRow headerRow = new CSVRow(columnSelectionLength);
-                for (int col=0; col < columnSelectionLength; col++) { // Pick the first one, since we assume that all assertions are of the same type and have same column headers
-                    int colIdx = col;
-                    if (subsetSelection) {
-                        colIdx = colIdxMap.get(columnNames[col]);
-                    }
-                    String value = csv[0][colIdx];
-                    headerRow.setColumnValueByIndex(col,value);
-                }
-                assertionAggregation.setHeader(headerRow);
-            }
-
-
-
-
-
-            assertionAggregation.getAssetNodeMap().put(new AssetId(resultNode.getAssetId()), resultNode); // Having it in a map doesn't necessary mean that all rows will be projected
-
-                // Extract values
-                // Populate the data rows
-
-                boolean hasData = false;
-                for (int rowNumber=1 /* skip header */; rowNumber < rowLen; rowNumber++) {
-                    CSVRow rowData = new CSVRow(columnSelectionLength);
-
-                    for (int col=0; col < columnSelectionLength; col++) {
-                        hasData = true;
-                        int colIdx = col;
-                        if (subsetSelection) {
-                            colIdx = colIdxMap.get(columnNames[col]);
-                        }
-                        String value = csv[rowNumber][colIdx];
-                        rowData.setColumnValueByIndex(col,value);
-                    }
-                    rowData.setRowNumber(rowNumber);
-                    rowData.setAssetId(resultNode.getAssetId());
-                    assertionAggregation.getRows().add(rowData);
-
-                }
-                logger.fine(resultNode.getAssetId() +  ": projected rows:" + rowLen);
-
-
-        }
-
-
-        if (an.getChildren().size() == 1 && "HASCHILDREN".equals(an.getChildren().get(0).getDisplayName())) {
-
-            List<AssetNode> children = getImmediateChildren(an, detailAssetFilterCriteria);
-
-                for (AssetNode child : children) {
-                    try {
-                        aggregateMessage(child, detailAssetType, assertionAggregation, detailAssetFilterCriteria, columnNames);
-                    } catch (Exception ex) {
-                        logger.warning(ex.toString());
-                    }
-                }
-
-        }
-
-        return;
-    }
-
-
-
-//    ValidateMessageResponse
-
 
         /**
          *

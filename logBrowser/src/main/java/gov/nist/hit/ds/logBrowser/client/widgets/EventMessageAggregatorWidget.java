@@ -148,6 +148,7 @@ public class EventMessageAggregatorWidget extends Composite {
        setAssetType(assetType);
        setDisplayColumns(csvColumnNames);
 
+       Window.alert("This widget is obsolete, please use EventAggregatorWidget.");
        reposService.isRepositoryConfigured(new AsyncCallback<Boolean>() {
            public void onFailure(Throwable arg0) {
                Window.alert("EventMessageAggregatorWidget: The repository system configuration is not available: " + arg0.toString());
@@ -489,7 +490,7 @@ public class EventMessageAggregatorWidget extends Composite {
                         */
                         rowNumber = (startRow==START_ROW_ZERO)?rowNumber-1:rowNumber;  // r is always zero?
 //                        logger.info("EventMessageCell rowNumber: " + rowNumber);
-                        htmlRow.add(new EventMessageCell(an,csvFactory.htmlBuilder(val).toSafeHtml(),rowNumber));
+                        htmlRow.add(new EventMessageCell(an,csvFactory.htmlBuilder(val, false).toSafeHtml(),rowNumber));
 
                     }
                     rows.add(htmlRow);

@@ -143,8 +143,7 @@ public class LogBrowserWidget extends Composite {
         }
 
         public void onSuccess(AssetNode an) {
-            boolean reload =  (an.getExtendedProps().get("rowNumberToHighlight")!=null);
-            displayAssetContent(an, centerPanel, propsWidget,reload);
+            displayAssetContent(an, centerPanel, propsWidget);
         }
 
     };
@@ -252,7 +251,7 @@ public class LogBrowserWidget extends Composite {
                             txMonTab = cx;
                         } else if (Feature.EVENT_MESSAGE_AGGREGATOR.equals(f)) {
 
-                            final EventMessageAggregatorWidget eventAggregatorWidget = (EventMessageAggregatorWidget)setupFeature(f,null);
+                            final EventAggregatorWidget eventAggregatorWidget = (EventAggregatorWidget)setupFeature(f,null);
                             featureTlp.add(eventAggregatorWidget,f.toString());
                             featureTlp.getTabWidget(cx).addDomHandler(new ClickHandler() {
                             @Override
@@ -326,7 +325,8 @@ public class LogBrowserWidget extends Composite {
                                 lbTree.getSelectedItem().setSelected(false);
                                 treeItemTarget.setSelected(true);
                                 target.getExtendedProps().put("rowNumberToHighlight",rowNumberToHighlightStr);
-                                reposService.getAssetTxtContent(target, contentSetup);
+//                                reposService.getAssetTxtContent(target, contentSetup);
+                                displayAssetContent(target, centerPanel, propsWidget);
                                 break;
                             }
                         }
@@ -336,6 +336,7 @@ public class LogBrowserWidget extends Composite {
 
                     } catch (Throwable t) {
                         logger.warning("InContextAssetClickedEvent:" + t.toString());
+                        t.printStackTrace();
                     }
 
                 }
@@ -382,7 +383,7 @@ public class LogBrowserWidget extends Composite {
             });
 
 
-            return setupEventMessagesWidget(EventMessageAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT , "Sim", id,type,displayColumns);
+            return setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT , "Sim", id,type,displayColumns);
         } else if (Feature.LOGGING_CONTROL==f) {
             canvas = Canvas.createIfSupported();
             backBuffer = Canvas.createIfSupported();
@@ -494,13 +495,13 @@ public class LogBrowserWidget extends Composite {
 
     /* end */
 
-    protected Widget setupEventMessagesWidget(EventMessageAggregatorWidget.ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
+    protected Widget setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
         try {
             /* manual setup:
             1) change also the assertionGroup type in event widget.
              */
 
-            EventMessageAggregatorWidget eventMessageAggregatorWidget = new EventMessageAggregatorWidget(eventBus, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
+            EventAggregatorWidget eventMessageAggregatorWidget = new EventAggregatorWidget(eventBus, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
 
             return eventMessageAggregatorWidget;
 
@@ -598,7 +599,7 @@ public class LogBrowserWidget extends Composite {
 
 				public void onSuccess(AssetNode an) {
 					searchLbSplitPanel.getElement().getStyle().setVisibility(Visibility.VISIBLE);
-					displayAssetContent(an, searchLbCenterPanel, searchLbPropsWidget, false);
+					displayAssetContent(an, searchLbCenterPanel, searchLbPropsWidget);
 				}
 				
 			};
@@ -1190,7 +1191,7 @@ public class LogBrowserWidget extends Composite {
 
         multiContentTabPanel.clear();
 
-        EventMessageAggregatorWidget eventMessageAggregatorWidget =  (EventMessageAggregatorWidget)setupEventMessagesWidget(EventMessageAggregatorWidget.ASSET_CLICK_EVENT.IN_CONTEXT, externalRepositoryId, eventAssetId,type,displayColumns);
+        EventAggregatorWidget eventMessageAggregatorWidget =  (EventAggregatorWidget)setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.IN_CONTEXT, externalRepositoryId, eventAssetId,type,displayColumns);
         multiContentTabPanel.add(eventMessageAggregatorWidget,"Validation Summary");
         eventMessageAggregatorWidget.setSize("98%", "98%");
         eventMessageAggregatorWidget.getTable().redraw();
@@ -1202,7 +1203,7 @@ public class LogBrowserWidget extends Composite {
 
 
     private AssetTreeItem locateAndOpenTreeItem(final AssetTreeItem assetTreeItem, final AssetNode an) {
-//        logger.info("entering locateAndOpenTreeItem: " + assetTreeItem.getAssetNode().getDisplayName());
+        logger.info("entering locateAndOpenTreeItem: " + ((assetTreeItem != null) ? assetTreeItem.getAssetNode().getDisplayName() : "null") + " an: " + (an != null));
         if (assetTreeItem.getChildCount()>0) {
 
             if ("validators".equals(assetTreeItem.getAssetNode().getType()) &&  (assetTreeItem.getChildCount() == 1 && "HASCHILDREN".equals(assetTreeItem.getChild(0).getText()))) {
@@ -1213,6 +1214,7 @@ public class LogBrowserWidget extends Composite {
                 int childCt = assetTreeItem.getChildCount();
                 for (int cx = 0; cx < childCt; cx++) {
                     AssetTreeItem child = (AssetTreeItem)assetTreeItem.getChild(cx);
+//                    logger.info("an.getParentId()" + (an.getParentId()!=null) + "; child exists?" + (child!=null));
                     if (an.getParentId().equals(child.getAssetNode().getAssetId())) {
 //                        logger.info("** opening " + child.getAssetNode().getDisplayName());
                         assetTreeItem.setState(true);
@@ -1242,7 +1244,9 @@ public class LogBrowserWidget extends Composite {
         return null;
     }
 
-    protected void displayAssetContent(AssetNode an, ScrollPanel contentPanel, HTML propsWidget, boolean reload) {
+    protected void displayAssetContent(AssetNode an, ScrollPanel contentPanel, HTML propsWidget) {
+
+            boolean reload =  (an.getExtendedProps().get("rowNumberToHighlight")!=null);
 
             // Optimization block to prevent reloading of the same block
             if (!reload && contentPanel.getElement().getId().equals(an.getAssetId()))
@@ -1283,7 +1287,7 @@ public class LogBrowserWidget extends Composite {
                        final ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
 					   CellTable<List<SafeHtml>> table = new CsvTableFactory().createCellTable(dataProvider, an.getCsv());
                        if (an.getExtendedProps()!=null && an.getExtendedProps().get("rowNumberToHighlight")!=null) {
-                           int rowNumberToHighlight = Integer.parseInt(an.getExtendedProps().get("rowNumberToHighlight"));
+                           int rowNumberToHighlight = Integer.parseInt(an.getExtendedProps().get("rowNumberToHighlight")) - 1; /* the rowNumberToHighlight starts with 1, so compensate for the zero-based get */
                            if (rowNumberToHighlight>-1) {
                                logger.fine("rowNumberToHighlight: " + rowNumberToHighlight + " isnull?" + new Boolean(dataProvider.getList().get(rowNumberToHighlight) == null) + " isnull2:" + new Boolean(table.getSelectionModel() == null));
                                table.getSelectionModel().setSelected(dataProvider.getList().get(rowNumberToHighlight), true);

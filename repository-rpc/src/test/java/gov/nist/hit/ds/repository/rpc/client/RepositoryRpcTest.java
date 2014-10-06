@@ -1,6 +1,8 @@
 package gov.nist.hit.ds.repository.rpc.client;
 
 import gov.nist.hit.ds.dsSims.factories.MessageValidatorFactory;
+import gov.nist.hit.ds.repository.AssetHelper;
+import gov.nist.hit.ds.repository.ContentHelper;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -17,6 +19,7 @@ import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.shared.data.CSVRow;
 import gov.nist.hit.ds.repository.shared.id.AssetId;
 import gov.nist.hit.ds.repository.shared.id.RepositoryId;
+import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleType;
@@ -68,7 +71,7 @@ public class RepositoryRpcTest {
 		p.setProperty("l", "4");
 
 
-		System.out.println("******" + PresentationData.getSortedMapString(p));
+		System.out.println("******" + ContentHelper.getSortedMapString(p));
 
 	}
 
@@ -280,7 +283,7 @@ public class RepositoryRpcTest {
     private AssertionAggregation aggregateAssertions(String eventId, SearchCriteria criteria, String[] displayColumns) throws RepositoryException {
 
         // There are more simplified function signatures to pick from, this one has the most parameters
-        AssertionAggregation assertionAggregation =  PresentationData.aggregateAssertions(new RepositoryId("Sim"), new AssetId(eventId), new SimpleType("validators") , new SimpleType("assertionGroup"), criteria, displayColumns);
+        AssertionAggregation assertionAggregation =  AssetHelper.aggregateAssertions(new RepositoryId("Sim"), new AssetId(eventId), new SimpleTypeId("validators"), new SimpleTypeId("assertionGroup"), criteria, displayColumns);
 
         printHeader(assertionAggregation);
 

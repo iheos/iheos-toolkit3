@@ -1,9 +1,13 @@
 package gov.nist.hit.ds.repository.rpc.search.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import gov.nist.hit.ds.repository.shared.data.AssetNode;
-import gov.nist.hit.ds.repository.shared.SearchCriteria;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.aggregation.AssertionAggregation;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.shared.id.AssetId;
+import gov.nist.hit.ds.repository.shared.id.RepositoryId;
+import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 
 import java.util.List;
 import java.util.Map;
@@ -30,5 +34,6 @@ public interface RepositoryServiceAsync {
     void getJmsHostAddress(AsyncCallback<String> callback) throws RepositoryConfigException;
     void getValidatorNames(AsyncCallback<List<String>> callback);
     void validateMessage(String validatorName, AssetNode transaction, AsyncCallback<Map<String,AssetNode>> callback) throws RepositoryConfigException;
+    void aggregateAssertions(RepositoryId repositoryId, AssetId eventId, SimpleTypeId parentAssetType, SimpleTypeId detailAssetType, SearchCriteria detailAssetFilterCriteria, String[] displayColumns , AsyncCallback<AssertionAggregation> callback) throws RepositoryConfigException;
 }
 

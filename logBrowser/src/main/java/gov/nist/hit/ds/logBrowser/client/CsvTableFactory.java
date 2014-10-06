@@ -30,7 +30,7 @@ public class CsvTableFactory {
 //                        SafeHtmlBuilder shb = new SafeHtmlBuilder();
                         String val =  csv[r][cx];    //textRow.get(cx);
 //                                logger.info("val LB: " + val);
-                        htmlRow.add(htmlBuilder(val).toSafeHtml());
+                        htmlRow.add(htmlBuilder(val, false).toSafeHtml());
                     }
                     rows.add(htmlRow);
                 }
@@ -66,12 +66,18 @@ public class CsvTableFactory {
         return table;
     }
 
-    public SafeHtmlBuilder htmlBuilder(String v) {
+    /**
+     *
+     * @param v The text to be SafeHtmlBuilder
+     * @param constant Keep text as-is (no URL-link scanning or other enhancements)
+     * @return
+     */
+    public SafeHtmlBuilder htmlBuilder(String v, boolean constant) {
         SafeHtmlBuilder shb = new SafeHtmlBuilder();
         if (v!=null) {
 
-            if (v.startsWith("$htmlConstant")) {
-                shb.appendHtmlConstant(v.substring("$htmlConstant".length()));
+            if (constant) {
+                shb.appendHtmlConstant(v);
             } else if (v.toLowerCase().contains("http://") || v.toLowerCase().startsWith("https://")) {
                 String[] values = v.split(" ");
                 int cx=0;

@@ -1,16 +1,22 @@
 package gov.nist.hit.ds.repository.rpc.search.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gov.nist.hit.ds.toolkit.installation.Installation;
+import gov.nist.hit.ds.repository.AssetHelper;
+import gov.nist.hit.ds.repository.ContentHelper;
 import gov.nist.hit.ds.repository.rpc.presentation.PresentationData;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.rpc.search.client.QueryParameters;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryTag;
-import gov.nist.hit.ds.repository.shared.SearchCriteria;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.NoServletSessionException;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.aggregation.AssertionAggregation;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.shared.id.AssetId;
+import gov.nist.hit.ds.repository.shared.id.RepositoryId;
+import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
+import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 
 import java.util.List;
 import java.util.Map;
@@ -52,7 +58,7 @@ RepositoryService {
 
 	@Override
 	public List<AssetNode> search(String[][] reposData, SearchCriteria sc) {
-		return PresentationData.search(reposData, sc);
+		return AssetHelper.search(reposData, sc);
 	}
 
     @Override
@@ -71,7 +77,7 @@ RepositoryService {
 	public AssetNode getAssetTxtContent(AssetNode an)
 			throws RepositoryConfigException {
 		try {
-			return PresentationData.getContent(an);
+			return ContentHelper.getContent(an);
 		} catch (Exception re) {
 			throw new RepositoryConfigException(re.toString());
 		}
@@ -82,7 +88,7 @@ RepositoryService {
 	public List<AssetNode> getImmediateChildren(AssetNode an)
 			throws RepositoryConfigException {
 		try {
-			return PresentationData.getImmediateChildren(an);	
+			return AssetHelper.getImmediateChildren(an);
 		} catch (Exception re) {
 			throw new RepositoryConfigException(re.toString());
 		}
@@ -91,7 +97,7 @@ RepositoryService {
     @Override
     public AssetNode getChildren(AssetNode an) throws RepositoryConfigException {
         try {
-            return PresentationData.getChildren(an);
+            return AssetHelper.getChildren(an);
         } catch (Exception re) {
             throw new RepositoryConfigException(re.toString());
         }
@@ -176,6 +182,15 @@ RepositoryService {
     }
 
     @Override
+    public AssertionAggregation aggregateAssertions(RepositoryId repositoryId, AssetId eventId, SimpleTypeId parentAssetType, SimpleTypeId detailAssetType, SearchCriteria detailAssetFilterCriteria, String[] displayColumns) throws RepositoryConfigException {
+        try {
+            return AssetHelper.aggregateAssertions(repositoryId,eventId, parentAssetType, detailAssetType, detailAssetFilterCriteria, displayColumns);
+        } catch (Exception re) {
+            throw new RepositoryConfigException(re.toString());
+        }
+    }
+
+    @Override
 	public QueryParameters getSearchCriteria(String id, String acs,
 			String queryLoc) throws RepositoryConfigException {
 		try {
@@ -196,10 +211,5 @@ RepositoryService {
 		}
 
 	}
-
-
-	
-
-
 
 }
