@@ -215,7 +215,7 @@ class DocumentEntryModel extends RegistryObjectModel {
         externalIdentifiers.find { ExternalIdentifierModel it -> it.identificationScheme == MetadataSupport.XDSDocumentEntry_patientid_uuid}
     }
 
-    List<ClassificationModel> authors() {
+    Collection<ClassificationModel> authors() {
         classifications.findAll { ClassificationModel it -> it.classification_scheme == MetadataSupport.XDSDocumentEntry_author_uuid}
     }
 
@@ -223,11 +223,11 @@ class DocumentEntryModel extends RegistryObjectModel {
         classifications.find { ClassificationModel it -> it.classification_scheme ==  MetadataSupport.XDSDocumentEntry_classCode_uuid}
     }
 
-    List<ClassificationModel> confCodes() {
+    Collection<ClassificationModel> confCodes() {
         classifications.findAll { ClassificationModel it -> it.classification_scheme ==  MetadataSupport.XDSDocumentEntry_formatCode_uuid}
     }
 
-    List<ClassificationModel> eventCodes() {
+    Collection<ClassificationModel> eventCodes() {
         classifications.findAll { ClassificationModel it -> it.classification_scheme == MetadataSupport.XDSDocumentEntry_eventCode_uuid}
     }
 

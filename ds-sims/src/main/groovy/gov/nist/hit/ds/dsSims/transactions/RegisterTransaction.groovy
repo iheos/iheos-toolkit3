@@ -1,5 +1,6 @@
-package gov.nist.hit.ds.dsSims.reg
+package gov.nist.hit.ds.dsSims.transactions
 import gov.nist.hit.ds.dsSims.Transaction
+import gov.nist.hit.ds.dsSims.reg.DSMetadataProcessing
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.httpSoapValidator.components.validators.SoapHeaderValidator
 import gov.nist.hit.ds.httpSoapValidator.validators.HttpHeaderValidator

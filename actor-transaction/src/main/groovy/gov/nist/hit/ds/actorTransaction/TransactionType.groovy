@@ -1,14 +1,12 @@
 package gov.nist.hit.ds.actorTransaction
 
-import com.google.gwt.user.client.rpc.IsSerializable
 import gov.nist.hit.ds.actorTransaction.exceptions.InvalidTransactionTypeDefinitionException
-import groovy.transform.ToString;
-
+import groovy.transform.ToString
 /**
  * Created by bill on 4/16/14.
  */
 @ToString(includeFields=true, includes="id, implementationClassName, props")
-class TransactionType implements IsSerializable, Serializable {
+class TransactionType /* implements IsSerializable, Serializable */ {
     public String id
     public String name
     public String shortName
@@ -21,11 +19,14 @@ class TransactionType implements IsSerializable, Serializable {
     transient public boolean multiPart
     transient public boolean soap
 
+    public String getId() { return id; }
     public String getCode() { return code }
     public String getName() { return name }
     public String setName(String name) { this.name = name; }
     public String getShortName() { return shortName }
     Map<String, String> props = new HashMap<String, String>()
+
+    public static final String retrieveTransactionTypeCode = 'ret.b'
 
     String getTransactionProperty(String key) { return props.get(key) }
     boolean hasTransactionProperty(String key) { return props.containsKey(key) }

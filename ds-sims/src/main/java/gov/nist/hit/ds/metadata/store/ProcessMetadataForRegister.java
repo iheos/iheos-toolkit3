@@ -3,42 +3,42 @@ package gov.nist.hit.ds.metadata.store;
 import gov.nist.hit.ds.metadata.Metadata;
 
 public class ProcessMetadataForRegister implements ProcessMetadataInterface {
-    @Override
+    
     public void checkUidUniqueness(Metadata m) {
 
     }
 
-    @Override
+    
     public void setLidToId(Metadata m) {
 
     }
 
-    @Override
+    
     public void setInitialVersion(Metadata m) {
 
     }
 
-    @Override
+    
     public void setNewFolderTimes(Metadata m) {
 
     }
 
-    @Override
+    
     public void updateExistingFolderTimes(Metadata m) {
 
     }
 
-    @Override
+    
     public void verifyAssocReferences(Metadata m) {
 
     }
 
-    @Override
+    
     public void doRPLCDeprecations(Metadata m) {
 
     }
 
-    @Override
+    
     public void updateExistingFoldersWithReplacedDocs(Metadata m) {
 
     }

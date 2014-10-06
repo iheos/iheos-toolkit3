@@ -8,6 +8,8 @@ import groovy.xml.MarkupBuilder
 /**
  * Created by bmajur on 9/23/14.
  */
+
+// TODO: needs unit tests
 class SimulatorDAO {
 
     String toXML(ActorSimConfig config) {
@@ -62,38 +64,23 @@ class SimulatorDAO {
         actor.boolean.each { actorSimConfig.add(new BooleanSimConfigElement(it.@name as String, it.@value as Boolean)) }
         actor.callback.each { actorSimConfig.add(new CallbackSimConfigElement(it.@name as String, it.@transaction as String, it.@restUrl as String))}
         actor.transaction.each { trans ->
-            println "transaction ${trans.@name as String}"
             def endpointString = trans.endpoint.@value as String
-            println "endpoint ${endpointString}"
             def setting = [ : ]
             trans.settings.boolean.each { settings ->
                 setting[settings.@name as String] = bool(settings.@value as String)
             }
-            println "settings ${setting}"
             trans.webService.each { ws ->
                 def label = ws.@value as String
-                println "label ${label}"
                 EndpointType etype = new EndpointType(actorSimConfig.actorType, label)
                 TransactionSimConfigElement transactionSimConfigElement = new TransactionSimConfigElement(etype, new EndpointValue(endpointString))
                 setting.each { type, value -> transactionSimConfigElement.setBool(type, value)}
                 actorSimConfig.add(transactionSimConfigElement)
             }
 
-//                EndpointType type = new EndpointType(actorSimConfig.actorType, e.@type as String)
-//                EndpointValue endpoint = new EndpointValue(e.@value as String)
-//                transactionSimConfigElement = new TransactionSimConfigElement(type, endpoint)
-//                actorSimConfig.add(transactionSimConfigElement)
-
-//            if (!transactionSimConfigElement) throw new ToolkitRuntimeException("Loading config.xml: <endpoint> required inside <transaction>")
-//            trans.settings.boolean.each {
-//                transactionSimConfigElement.setBool(it.@name as String, bool(it.@value as String))
-//            }
         }
         actor.repositoryUid.each { actorSimConfig.add(new RepositoryUniqueIdSimConfigElement(it.@value as String)) }
         actor.text.each { actorSimConfig.add(new TextSimConfigElement(it.@name as String, it.@value as String))}
         actor.time.each { actorSimConfig.add(new TimeSimConfigElement(it.@name as String, it.@value as String))}
-
-        println "toModel ${actorSimConfig}"
 
         return actorSimConfig
     }

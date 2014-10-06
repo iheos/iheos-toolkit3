@@ -1,4 +1,5 @@
 package gov.nist.hit.ds.metadata
+
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.generator.RimGenerator
@@ -21,7 +22,7 @@ class SSSqResponseTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
     <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as"
-       class="gov.nist.hit.ds.dsSims.reg.RegisterTransaction">
+       class="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>

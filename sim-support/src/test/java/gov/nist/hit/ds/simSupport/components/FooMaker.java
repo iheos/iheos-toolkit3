@@ -13,46 +13,38 @@ public class FooMaker implements ValComponent {
 	}
 
 
-	@Override
 	public String getName() {
 		return this.getClass().getSimpleName();
 	}
 
 
-	@Override
-	public void setAssertionGroup(AssertionGroup er) {		
+	public void setAssertionGroup(AssertionGroup er) {
 	}
 
 
-	@Override
 	public void run() {
 		foo = new Foo("Fubar");
 	}
 
 
-	@Override
 	public String getDescription() {
 		return null;
 	}
 
 
-	@Override
 	public void setName(String name) {
 	}
 
 
-	@Override
 	public void setDescription(String description) {
 	}
 
 
-	@Override
 	public void setEvent(Event event) {
 		this.event = event;
 	}
 
 
-	@Override
 	public boolean showOutputInLogs() {
 		return false;
 	}

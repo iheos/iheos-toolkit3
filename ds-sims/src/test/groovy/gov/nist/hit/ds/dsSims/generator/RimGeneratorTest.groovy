@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.dsSims.generator
 
 import groovy.xml.MarkupBuilder
+import org.custommonkey.xmlunit.Diff
+import org.custommonkey.xmlunit.XMLUnit
 import spock.lang.Specification
-import org.custommonkey.xmlunit.*
-
 /**
  * Created by bmajur on 7/13/14.
  */

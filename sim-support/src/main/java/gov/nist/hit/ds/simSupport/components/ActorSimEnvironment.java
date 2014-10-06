@@ -29,38 +29,30 @@ public class ActorSimEnvironment  implements ValComponent {
 		return simId;
 	}
 
-	@Override
 	public void setAssertionGroup(AssertionGroup ag) {
 	}
 
-	@Override
 	public void setEvent(Event event) {
 	}
 
-	@Override
 	public String getName() {
 		return null;
 	}
 
-	@Override
 	public void setName(String name) {
 	}
 
-	@Override
 	public String getDescription() {
 		return null;
 	}
 
-	@Override
 	public void setDescription(String description) {
 	}
 
-	@Override
 	public void run() throws SoapFaultException,
 			RepositoryException {
 	}
 
-	@Override
 	public boolean showOutputInLogs() {
 		return false;
 	}

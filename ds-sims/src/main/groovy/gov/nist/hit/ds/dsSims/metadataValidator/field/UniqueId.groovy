@@ -1,16 +1,15 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.field
 
-import gov.nist.hit.ds.dsSims.generator.RegistryErrorListGenerator
 import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.metadata.MetadataSupport
 import gov.nist.hit.ds.xdsException.MetadataException
 
 public class UniqueId {
 	Metadata m;
-	RegistryErrorListGenerator rel;
+	//RegistryErrorListGenerator rel;
 	boolean xds_b;
 
-	public UniqueId(Metadata m, RegistryErrorListGenerator rel, boolean xds_b) {
+	public UniqueId(Metadata m, Object rel, boolean xds_b) {
 		this.m = m;
 		this.rel = rel;
 		this.xds_b = xds_b;

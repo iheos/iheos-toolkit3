@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import spock.lang.Specification
@@ -47,6 +48,7 @@ class SimulatorFactoryTest extends Specification {
     def simId = new SimId('1234')
     def actorType = 'docrec'
     def repoName = 'Sim'
+    def ss = new SimSystemConfig()
 
     void setup() {
         SimSupport.initialize()

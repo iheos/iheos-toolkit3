@@ -4,6 +4,7 @@ import gov.nist.hit.ds.actorTransaction.AsyncType
 import gov.nist.hit.ds.actorTransaction.TlsType
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import gov.nist.hit.ds.simSupport.simulator.SimConfigFactory
 import spock.lang.Specification
 /**
@@ -75,12 +76,12 @@ class CreateSimTest extends Specification {
         when:
         SimConfigFactory factory = new SimConfigFactory()
         ActorSimConfig actorSimConfig = factory.buildSim(server, port, base, simId, actorTypeName)
-        String endpoint = actorSimConfig.getEndpoint(
+        EndpointValue endpoint = actorSimConfig.getEndpoint(
                 new ActorTransactionTypeFactory().getTransactionType("rb"),
                 TlsType.TLS,
                 AsyncType.SYNC)
 
         then:
-        endpoint == 'https://localhost:8080/xdstools3/sim/123/reg/rb'
+        endpoint.value == 'https://localhost:8080/xdstools3/sim/123/reg/rb'
     }
 }

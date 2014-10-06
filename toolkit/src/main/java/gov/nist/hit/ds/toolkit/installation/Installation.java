@@ -1,8 +1,6 @@
 package gov.nist.hit.ds.toolkit.installation;
 
 
-import gov.nist.hit.ds.toolkit.tkProps.TkLoader;
-import gov.nist.hit.ds.toolkit.tkProps.client.TkProps;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.string.StringUtil;
 import org.apache.log4j.Logger;
@@ -22,7 +20,7 @@ public class Installation {
 	static public final String TOOLKIT_PROPERTIES = "toolkit.properties";
 	
 	String sep = File.separator;
-	public TkProps tkProps;
+//	public TkProps tkProps;
 	PropertyServiceManager propertyServiceMgr = null;
 	static Logger logger = Logger.getLogger(Installation.class);
 	static Installation me = null;
@@ -102,7 +100,7 @@ public class Installation {
 	void initializeExternalCache(File externalCache) throws InitializationFailedException {
 		this.externalCache = externalCache;
 		logger.info("Initializing external cache to <" + externalCache + "> ");
-		try {
+//		try {
 			File f = externalCache; 
 			if (f.exists()) {
 				if (!f.isDirectory()) throw new InitializationFailedException("External Cache location <" + f + "> is not a directory");
@@ -112,13 +110,13 @@ public class Installation {
 			}
 			ExternalCacheManager ecMgr = new ExternalCacheManager(f);
 			initializeRepository(ecMgr);
-			initializeTkProps(ecMgr);
+//			initializeTkProps(ecMgr);
 			initializeEnvironments(ecMgr);
 			initializeSimDb(ecMgr);
 			initializeActors(ecMgr);
-		} catch (IOException e) {
-			throw new InitializationFailedException("",e);
-		}
+//		} catch (IOException e) {
+//			throw new InitializationFailedException("",e);
+//		}
 	}
 
 
@@ -205,12 +203,12 @@ public class Installation {
 		if (!r.exists()) r.mkdir();
 	}
 
-	void initializeTkProps(ExternalCacheManager ecMgr) throws IOException, InitializationFailedException {
-		File r = ecMgr.getTkPropsFile();
-		if (!r.exists())
-			r.createNewFile();
-		tkProps = TkLoader.tkProps(ecMgr.getTkPropsFile()); 
-	}
+//	void initializeTkProps(ExternalCacheManager ecMgr) throws IOException, InitializationFailedException {
+//		File r = ecMgr.getTkPropsFile();
+//		if (!r.exists())
+//			r.createNewFile();
+//		tkProps = TkLoader.tkProps(ecMgr.getTkPropsFile());
+//	}
 
 	void initializeEnvironments(ExternalCacheManager ecMgr) {
 		File e = ecMgr.getEnvironmentFile();

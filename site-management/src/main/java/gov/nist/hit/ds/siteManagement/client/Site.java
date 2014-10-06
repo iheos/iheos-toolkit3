@@ -5,6 +5,7 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
+import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,6 +32,18 @@ public class Site  implements IsSerializable, Serializable {
 
 	public String pidAllocateURI = null;
 	transient public boolean changed = false;
+    static Logger log = Logger.getLogger(Site.class);
+
+
+    public String toStringAll() {
+        StringBuffer buf = new StringBuffer();
+        buf.append(name).append(" : ");
+        buf.append(transactions.toString());
+        buf.append(repositories.toString());
+        buf.append("home = " + home);
+
+        return buf.toString();
+    }
 	
 	public boolean equals(Site s) {
 		return
@@ -151,6 +164,7 @@ public class Site  implements IsSerializable, Serializable {
     // endpoint is for retrieve
 	public void addRepository(String repositoryUniqueId, RepositoryType repositoryType, String endpoint, boolean isSecure, boolean isAsync) {
 		TransactionBean bean = new TransactionBean(repositoryUniqueId, repositoryType, endpoint, isSecure, isAsync);
+        log.debug("Adding repository to Site " + name + ": " + bean);
 		addRepository(bean);
 	}
 
@@ -186,8 +200,11 @@ public class Site  implements IsSerializable, Serializable {
 	 */
 	public int repositoryBCount() {
 		int cnt = 0;
+        log.debug("Transactions: " + transactions.transactions);
+        log.debug("Repositories: " + repositories.transactions);
 		if (name != null && name.equals("allRepositories")) return 0;
 		for (TransactionBean b : repositories.transactions) {
+            log.debug("TransactionBean: " + b.toString());
 			if (b.repositoryType == RepositoryType.REPOSITORY)
 				cnt++;
 		}

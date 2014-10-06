@@ -2,6 +2,7 @@ package gov.nist.hit.ds.simSupport.client.configElementTypes;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.EndpointType;
+import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue;
 
 import java.io.Serializable;
@@ -65,6 +66,7 @@ public class TransactionSimConfigElement extends
         return true;
     }
 
+    public TransactionType getTransactionType() { return endpointType.getTransType(); }
     public String getTransactionName() { return endpointType.getTransType().getName(); }
     public EndpointType getEndpointType() { return endpointType; }
     public EndpointValue getEndpointValue() { return endpointValue; }

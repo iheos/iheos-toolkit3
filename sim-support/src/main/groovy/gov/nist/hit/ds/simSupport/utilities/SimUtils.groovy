@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.utilities
 
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.eventLog.EventFactory
 import gov.nist.hit.ds.repository.api.ArtifactId
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.Repository
@@ -34,52 +35,80 @@ class SimUtils {
 
     // TODO: if already exists - verify actorTypeName
 
-    // Some tests rely on this - has hard coded values
-    static SimHandle create(String actorTypeName, SimId simId) {
-        def eConfig = new SimSystemConfig()
-        eConfig.host = 'localhost'
-        eConfig.port = '8080'
-        eConfig.service = 'simwar'
-        return create(actorTypeName, simId, eConfig)
+    /**
+     * Create simulator instance with no registered actor  (really just an isolated Event log)
+     * @param simId - Simulator ID
+     * @return SimHandle
+     */
+
+    static SimHandle create(SimId simId) {
+        return create(null, simId, SimSystemConfig.repoName)
     }
 
-    static SimHandle create(String actorTypeName, SimId simId, SimSystemConfig simEndpointConfig) {
-        Repository repo = buildRepository(simEndpointConfig.repoName)
-        if (exists(simId, simEndpointConfig.repoName)) {
+    static SimHandle create(String actorTypeName, SimId simId) {
+        return create(actorTypeName, simId, SimSystemConfig.repoName)
+    }
+
+    static SimHandle create(String actorTypeName, SimId simId, String repoName) {
+        SimSystemConfig simSystemConfig = new SimSystemConfig()
+        Repository repo = buildRepository(repoName)
+        if (exists(simId, repoName)) {
             log.debug("Sim ${simId.id} exists.")
-            return open(simId, simEndpointConfig.repoName)
+            return open(simId.id, repoName)
         }
         log.debug("Creating sim ${simId.id}")
 
         Asset simAsset = RepoUtils.mkAsset(simId.id, new SimpleType('sim'), repo)
 
-        ActorSimConfig actorSimConfig = new SimConfigFactory().buildSim(simEndpointConfig.host, simEndpointConfig.port, simEndpointConfig.service, simId, actorTypeName)
-        storeConfig(new SimulatorDAO().toXML(actorSimConfig), simAsset)
-
-        Site site = new SimSiteFactory().buildSite(actorSimConfig, simId.id)
-        OMElement siteEle = new SeparateSiteLoader().siteToXML(site)
-        storeSite(new OMFormatter(siteEle).toString(), simAsset)
+        if (actorTypeName) {
+            ActorSimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, simId, actorTypeName)
+            storeConfig(new SimulatorDAO().toXML(actorSimConfig), simAsset)
+            Site site = new SimSiteFactory().buildSite(actorSimConfig, simId.id)
+            OMElement siteEle = new SeparateSiteLoader().siteToXML(site)
+            storeSite(new OMFormatter(siteEle).toString(), simAsset)
+        }
 
         RepoUtils.mkChild(eventsAssetName, simAsset)
 
-        return open(simId, simEndpointConfig.repoName)
+        return open(simId.id, repoName)
     }
 
-    static SimHandle open(SimId simId, String repositoryName) {
+    static SimHandle open(SimId simId) {
+        return open(simId.id, SimSystemConfig.repoName)
+    }
+
+    static SimHandle open(String simId, String repositoryName) {
         Repository repository = RepoUtils.getRepository(repositoryName)
+        return open(new SimId(simId), repository)
+    }
+
+
+    static SimHandle open(SimId simId, Repository repository) {
         Asset simAsset = sim(simId, repository)
         if (!simAsset) return null
         def simHandle = new SimHandle()
         simHandle.simId = simId
         simHandle.simAsset = simAsset
-        simHandle.siteAsset = RepoUtils.child(siteAssetName, simAsset)
-        simHandle.configAsset = RepoUtils.child(configAssetName, simAsset)
+        try {
+            simHandle.siteAsset = RepoUtils.child(siteAssetName, simAsset)
+        } catch (RepositoryException e) {}
+        try {
+            simHandle.configAsset = RepoUtils.child(configAssetName, simAsset)
+        } catch (RepositoryException e) {}
         simHandle.eventLogAsset = RepoUtils.child(eventsAssetName, simAsset)
         simHandle.repository = repository
-        simHandle.actorSimConfig = loadConfig(simHandle.configAsset)
+        if (simHandle.configAsset)
+            simHandle.actorSimConfig = loadConfig(simHandle.configAsset)
         println "Open ActorSimConfig: ${simHandle.actorSimConfig}"
 
+        def event = new EventFactory().buildEvent(simHandle.repository, simHandle.eventLogAsset)
+        simHandle.event = event
+        event.init()
         return simHandle
+    }
+
+    static def close(SimHandle simHandle) {
+        simHandle.event.flushAll()
     }
 
     static def delete(SimId simId, String repositoryName) {
@@ -101,10 +130,13 @@ class SimUtils {
         } catch (Exception e) { return false }
     }
 
-    static SimHandle runTransaction(Endpoint endpoint, String header, byte[] body, repositoryName) {
+    // used in unit tests only
+    static SimHandle runTransaction(Endpoint endpoint, String header, byte[] body, String repositoryName) {
+        log.debug("Inside runTransaction")
         def endp = new EndpointBuilder().parse(endpoint)
+        log.debug("runTransaction: endpoint = ${endp}")
         def transactionType = new ActorTransactionTypeFactory().getTransactionType(endp.transCode)
-        def simId = endp.simId
+        SimId simId = endp.simId
         return new TransactionRunner(simId, repositoryName, transactionType, header, body).run()
     }
 

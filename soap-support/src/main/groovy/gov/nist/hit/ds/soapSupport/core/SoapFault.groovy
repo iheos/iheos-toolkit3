@@ -1,12 +1,8 @@
-package gov.nist.hit.ds.soapSupport;
+package gov.nist.hit.ds.soapSupport.core
 
-import gov.nist.hit.ds.soapSupport.core.SoapEnvironment;
-import gov.nist.hit.ds.soapSupport.core.SoapResponseGenerator;
-import gov.nist.hit.ds.soapSupport.core.SoapUtil;
-import gov.nist.hit.ds.utilities.xml.XmlUtil;
-
-import org.apache.axiom.om.OMElement;
-
+import gov.nist.hit.ds.soapSupport.SoapFaultException
+import gov.nist.hit.ds.utilities.xml.XmlUtil
+import org.apache.axiom.om.OMElement
 /**
  * Generate and send a SOAP Fault.
  * TODO: comply with reference: http://www.w3.org/TR/2005/CR-ws-addr-soap-20050817
@@ -32,6 +28,15 @@ public class SoapFault {
         if (soapEnv != null)
 		    soapEnv.setResponseAction("http://www.w3.org/2005/08/addressing/fault");
 	}
+
+//    String asXml() {
+//        def writer = new StringWriter()
+//        def xml = new MarkupBuilder(writer)
+//
+//
+//
+//        return writer.toString()
+//    }
 	
 	OMElement getXML() {
 		OMElement root = XmlUtil.om_factory.createOMElement(SoapUtil.fault_qnamens);
@@ -53,10 +58,4 @@ public class SoapFault {
 		return root;
 	}
 	
-	public String send() throws Exception {
-		SoapResponseGenerator gen = new SoapResponseGenerator(soapEnv, getXML());
-		return gen.send();
-	}
-
-
 }

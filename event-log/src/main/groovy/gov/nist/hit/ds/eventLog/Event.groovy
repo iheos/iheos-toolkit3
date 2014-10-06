@@ -130,7 +130,9 @@ class Event {
     def flushAllResultsForExit() {
         // it is important that this be done bottom up so errors can
         // propagate up
+        log.debug("Flushing results: empty? = ${resultsStack.empty}")
         while (!resultsStack.empty) { popChildResults() }
+        flush()
     }
 
     Event(Asset eventAsset) {
@@ -149,16 +151,19 @@ class Event {
     void flushAll() {
         flushAllResultsForExit()
     }
+
     void flush() {
-        resultsStack.last().flush(FlushStatus.Force)
-        if (!artifacts.empty()) {
-            artDAO.save(artifacts)
-        }
-        if (fault) {
-            def faultDAO = new FaultDAO()
-            faultDAO.init(eventAsset)
-            faultDAO.add(fault)
-        }
+        if (!resultsStack.empty)
+            resultsStack.last().flush(FlushStatus.Force)
+        eventDAO.save()
+//        if (!artifacts.empty()) {
+//            artDAO.save(artifacts)
+//        }
+//        if (fault) {
+//            def faultDAO = new FaultDAO()
+//            faultDAO.init(eventAsset)
+//            faultDAO.add(fault)
+//        }
     }
 
     boolean hasFault() { fault }

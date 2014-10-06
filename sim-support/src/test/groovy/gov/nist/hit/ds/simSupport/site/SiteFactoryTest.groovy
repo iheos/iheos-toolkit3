@@ -1,16 +1,14 @@
 package gov.nist.hit.ds.simSupport.site
-
 import gov.nist.hit.ds.actorTransaction.*
-import gov.nist.hit.ds.simSupport.client.ParamType
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.simulator.SimConfigFactory
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.loader.SeparateSiteLoader
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import org.apache.axiom.om.OMElement
 import spock.lang.Specification
-
 /**
  * Created by bmajur on 6/8/14.
  */
@@ -63,24 +61,25 @@ class SiteFactoryTest extends Specification {
         def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorTypeName)
 
         when:
-        def endpoints = actorSimConfig.getElements().findAll { it.type == ParamType.ENDPOINT }
+        def endpoints = actorSimConfig.getElements().findAll { it instanceof TransactionSimConfigElement }
+        println endpoints
 
         then:
-        endpoints.size() == 4
+        endpoints.size() == 4  // two pr.b and two ret.b
     }
 
-    def 'ActorSimConfig should have 2 Repository Declarations'() {
+    def 'ActorSimConfig should have 1 Repository Declarations'() {
         given:
         def actorTypeName = 'rep'
         def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorTypeName)
 
         when:
         def repositories = actorSimConfig.getElements().findAll {
-            it.type == ParamType.ENDPOINT && (it instanceof RepositoryUniqueIdSimConfigElement)
+            it instanceof RepositoryUniqueIdSimConfigElement
         }
 
         then:
-        repositories.size() == 2
+        repositories.size() == 1
     }
 
     def 'Constructed Site should include pr.b transaction'() {
@@ -97,7 +96,7 @@ class SiteFactoryTest extends Specification {
 
         then:
         site.getEndpoint(transType, false, false) ==
-                actorSimConfig.getEndpoint(transType, TlsType.NOTLS, AsyncType.SYNC)
+                actorSimConfig.getEndpoint(transType, TlsType.NOTLS, AsyncType.SYNC).value
     }
 
     def 'Constructed Site should include repositoryUniqueId'() {
@@ -110,6 +109,7 @@ class SiteFactoryTest extends Specification {
 
         when: ''
         Site site = siteFactory.buildSite(actorSimConfig, 'mysite')
+        println site.toStringAll()
         def repositoryUniqueId = site.getRepositoryUniqueId()
         OMElement ele = new SeparateSiteLoader().siteToXML(site)
         println new OMFormatter(ele).toString()

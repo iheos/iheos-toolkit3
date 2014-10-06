@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+	<!--<servlet>-->
+		<!--<servlet-name>toolkitServlet</servlet-name>-->
+		<!--<servlet-class>gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl</servlet-class>-->
+	<!--</servlet>-->
+
+	<servlet>
+		<servlet-name>simulatorServlet</servlet-name>
+		<servlet-class>gov.nist.hit.ds.simServlet.SimServlet</servlet-class>
+	</servlet>
+
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>toolkitServlet</servlet-name>-->
+		<!--<url-pattern>/xdstools2/toolkit</url-pattern>-->
+	<!--</servlet-mapping>-->
+
+	<servlet-mapping>
+		<servlet-name>simulatorServlet</servlet-name>
+		<url-pattern>/sim/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Xdstools3.html</welcome-file>
+	</welcome-file-list>
+
+</web-app>

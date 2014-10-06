@@ -24,5 +24,5 @@ public class RepositoryUniqueIdSimConfigElement extends SimConfigElement {
         return repositoryUniqueIdBase + repositoryUniqueIdIncr++;
     }
     public static String getRepositoryUniqueIdBase() { return repositoryUniqueIdBase; }
-
+    public String getValue() { return value; }
 }

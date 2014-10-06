@@ -1,10 +1,8 @@
 package gov.nist.hit.ds.simSupport.endpoint
-
 import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import groovy.util.logging.Log4j
-
 /**
  * Created by bmajur on 6/6/14.
  */
@@ -13,11 +11,12 @@ class EndpointBuilder {
     String server
     String port
     String base
-    SimId simId
+    SimId simId = null
     String actorCode
     String transCode
+    boolean isValid = true
 
-    EndpointBuilder() {}
+    EndpointBuilder() { log.debug("EndpointBuilder")}
 
     EndpointBuilder(String server, String port, String base, SimId simId) {
         this.server = server
@@ -25,6 +24,8 @@ class EndpointBuilder {
         this.base = base
         this.simId = simId
     }
+
+    public String toString() { [server: server, port: port, base: base, simId: simId?.id, actorCode: actorCode, transCode: transCode].toString() }
 
     EndpointValue makeEndpoint(String actor, EndpointType endpointLabel) {
         server = clean(server)
@@ -53,14 +54,12 @@ class EndpointBuilder {
     EndpointBuilder parse(String endpoint) {
         // http, serverport are actually wrong
         def (http, serverPort, basePart, simStr, simid, actor, trans) = endpoint.tokenize('/')
-        log.debug(endpoint.tokenize('/'))
-        assert endpoint.tokenize('/').size() == 7
-        simId = new SimId(simid)
+        if (!simid || !actor || !trans) isValid = false
+        log.debug("endpoint parser : ${toString()}")
+        if (isValid)
+            simId = new SimId(simid)
         actorCode = actor
         transCode = trans
-        assert simId
-        assert actorCode
-        assert transCode
         return this
     }
 }

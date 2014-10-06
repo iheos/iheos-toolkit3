@@ -15,4 +15,6 @@ public class Endpoint {
 	public String getEndpoint() {
 		return endpoint;
 	}
+
+    public String toString() { return endpoint; }
 }

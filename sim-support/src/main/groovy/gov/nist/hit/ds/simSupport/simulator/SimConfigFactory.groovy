@@ -3,7 +3,6 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.ActorType
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
@@ -39,7 +38,10 @@ class SimConfigFactory {
         actorType.endpointTypes().each {
             log.debug("SimConfigFactory: endpoint ${it}")
             if (it.transType.hasTransactionProperty('RepositoryUniqueId')) {
-                actorSimConfig.add(new RepositoryUniqueIdSimConfigElement())
+                actorSimConfig.add(new TransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
+                def repUIDElement = actorSimConfig.elements.find { it instanceof RepositoryUniqueIdSimConfigElement}
+                if (!repUIDElement)   // only need one
+                    actorSimConfig.add(new RepositoryUniqueIdSimConfigElement())
             } else {
                 actorSimConfig.add(new TransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
             }

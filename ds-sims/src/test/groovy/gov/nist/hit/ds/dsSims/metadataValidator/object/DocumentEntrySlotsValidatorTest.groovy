@@ -6,6 +6,7 @@ import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -19,7 +20,7 @@ class DocumentEntrySlotsValidatorTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
     <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as"
-       class="gov.nist.hit.ds.dsSims.reg.RegisterTransaction">
+       class="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>
@@ -51,7 +52,7 @@ class DocumentEntrySlotsValidatorTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('123')
-        SimUtils.create('reg', simId, repoName)
+        SimUtils.create('reg', simId, new SimSystemConfig())
         pnrText = this.getClass().classLoader.getResource('PnR1Doc.xml').getText()
         vc = new ValidationContext()
         vc.isRequest = true

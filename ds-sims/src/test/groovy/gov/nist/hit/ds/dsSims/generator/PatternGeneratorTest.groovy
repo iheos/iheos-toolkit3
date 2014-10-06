@@ -3,7 +3,6 @@ package gov.nist.hit.ds.dsSims.generator
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLUnit
 import spock.lang.Specification
-
 /**
  * Created by bmajur on 7/14/14.
  */

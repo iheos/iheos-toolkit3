@@ -1,4 +1,5 @@
 package gov.nist.hit.ds.metadata
+
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.dsSims.generator.RimGenerator
 import gov.nist.hit.ds.dsSims.reg.DSMetadataProcessing
@@ -12,7 +13,6 @@ import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.utilities.xml.Parse
 import org.apache.axiom.om.OMElement
 import spock.lang.Specification
-
 /**
  * Created by bmajur on 7/27/14.
  */
@@ -20,7 +20,7 @@ class MetadataParserTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
     <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as"
-       class="gov.nist.hit.ds.dsSims.reg.RegisterTransaction">
+       class="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>

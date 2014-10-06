@@ -1,16 +1,14 @@
 package gov.nist.hit.ds.actorTransaction
 
-import com.google.gwt.user.client.rpc.IsSerializable
 import gov.nist.hit.ds.actorTransaction.exceptions.InvalidActorTypeDefinitionException
 import groovy.transform.ToString
 import groovy.util.logging.Log4j
-
 /**
  * Created by bill on 4/16/14.
  */
 @Log4j
 @ToString(includeFields=true, includes="shortName, transactionTypes, props")
-class ActorType implements IsSerializable, Serializable {
+class ActorType /* implements IsSerializable, Serializable */{
     String name
     String shortName
     String actorSimFactoryClassName

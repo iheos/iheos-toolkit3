@@ -16,7 +16,6 @@ class RimParser {
 
     def parse(xmlString) {
         def xml = new XmlSlurper().parseText(xmlString)
-        log.debug("Parsed xml is ${xml}")
         labelAllRegistryPackages(xml)
         parseToplevel(xml)
     }
@@ -87,10 +86,8 @@ class RimParser {
     }
 
     def parseName(xml) {
-        log.debug("xml is ${xml}")
         def attributes = []
-        xml.'Name'.each { name ->
-            log.debug("Found Name")
+        xml.Name.each { name ->
             def atts = [name: 'name']
             def values = [name.LocalizedString.@value]
             atts['values'] = values
@@ -101,7 +98,7 @@ class RimParser {
 
     def parseDescription(xml) {
         def attributes = []
-        xml."*:Description".each { name ->
+        xml.Description.each { name ->
             def atts = [name: 'description']
             def values = [name.LocalizedString.@value]
             atts['values'] = values
@@ -112,11 +109,11 @@ class RimParser {
 
     def parseSlots(xml) {
         def attributes = []
-        xml."*:Slot".each { slot ->
+        xml.Slot.each { slot ->
             def atts = [ : ]
             atts['name'] = slot.@name
             def values = []
-            slot."*:ValueList"."*:Value".each { value ->
+            slot.ValueList.Value.each { value ->
                 values << value.text()
             }
             atts['values'] = values
@@ -127,15 +124,15 @@ class RimParser {
 
     def parseClassifications(xml) {
         def attributes = []
-        xml."*:Classification".each { classification ->
+        xml.Classification.each { classification ->
             String classScheme = classification.@classificationScheme
             def classType = rimGenerator.classSchemesReverse[classScheme]
             if (!classType) throw new ToolkitRuntimeException("Classification scheme ${classScheme} unknown.")
             def atts = [ : ]
             atts['name'] = classType
             atts['code'] = classification.@nodeRepresentation
-            atts['system'] = classification."*:Slot"."*:ValueList"."*:Value".text()
-            atts['display'] = classification."*:Name"."*:LocalizedString".@value
+            atts['system'] = classification.Slot.ValueList.Value.text()
+            atts['display'] = classification.Name.LocalizedString.@value
             attributes << atts
         }
         return attributes
@@ -143,7 +140,7 @@ class RimParser {
 
     def parseExternalIdentifiers(xml) {
         def attributes = []
-        xml."*:ExternalIdentifier".each { identifier ->
+        xml.ExternalIdentifier.each { identifier ->
             String eiScheme = identifier.@identificationScheme
             def idType = rimGenerator.eiSchemesReverse[eiScheme]
             if (!idType) throw new ToolkitRuntimeException("ExternalIdentifier scheme ${eiScheme} unknown.")
@@ -168,10 +165,10 @@ class RimParser {
 
     def labelRegistryPackages(xml, classification) {
         def rpClassifications = []
-        rpClassifications << xml."*:Classification".findAll {
+        rpClassifications << xml.Classification.findAll {
             it.@classificationNode == classification
         }.collect { it.@classifiedObject }
-        rpClassifications << xml."*:RegistryPackage"."*:Classification".findAll {
+        rpClassifications << xml.RegistryPackage.Classification.findAll {
             it.@classificationNode == classification
         }.collect { it.@classifiedObject }
         return rpClassifications.flatten()

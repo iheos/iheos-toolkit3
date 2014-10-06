@@ -1,21 +1,19 @@
 package gov.nist.hit.ds.utilities.xml;
 
 import gov.nist.hit.ds.xdsException.XMLParserException;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Iterator;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMException;
+import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMException;
-import org.apache.axiom.om.impl.builder.StAXOMBuilder;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Iterator;
 
 public class Parse {
 	static public OMElement parse_xml_file(String filename) throws FactoryConfigurationError, XMLParserException {
@@ -58,7 +56,7 @@ public class Parse {
 //		get the root element (in this case the envelope)
 		OMElement documentElement =  builder.getDocumentElement();
 		for (@SuppressWarnings("unchecked")
-		Iterator<OMElement> it = documentElement.getChildElements(); it.hasNext(); ) {
+             Iterator<OMElement> it = documentElement.getChildElements(); it.hasNext(); ) {
 			it.next();
 		}
 

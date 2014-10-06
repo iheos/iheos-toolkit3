@@ -10,13 +10,14 @@ class SimSystemConfig {
     def port
     def tlsPort
     def service
-    def repoName
+    static repoName = null
 
     def SimSystemConfig() {
         host = Installation.installation().propertyServiceManager().getToolkitHost()
         port = Installation.installation().propertyServiceManager().getToolkitPort()
         tlsPort = Installation.installation().propertyServiceManager().getToolkitTlsPort()
         service = 'xdstools3/sim'
-        repoName = 'Sim'
+        if (!repoName)
+            repoName = 'Sim'
     }
 }

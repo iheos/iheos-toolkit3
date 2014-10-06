@@ -1,13 +1,11 @@
 package gov.nist.hit.ds.simSupport.client;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.*;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.SimConfigElement;
 import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement;
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue;
 import groovy.transform.ToString;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +18,7 @@ import java.util.List;
  *
  */
 @ToString(excludes="serialVersionUID, expires, isExpired, actorState")
-public class ActorSimConfig implements IsSerializable, Serializable {
+public class ActorSimConfig {
 
 	private static final long serialVersionUID = -736965164284950123L;
 	public ActorType actorType;
