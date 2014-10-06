@@ -57,11 +57,6 @@ public class InternationalString implements ModelElement, Serializable {
         value = new String256();
     }
 
-    public InternationalString(LanguageCode langCode, String256 value) {
-        this.langCode = langCode;
-        this.value = value;
-    }
-
     public LanguageCode getLangCode() {
         return langCode;
     }
@@ -110,18 +105,4 @@ public class InternationalString implements ModelElement, Serializable {
     public boolean verify() throws String256Exception {
         return value.verify();
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof InternationalString)) return false;
-
-        InternationalString that = (InternationalString) o;
-
-        if (langCode != that.langCode) return false;
-        if (value != null ? !value.equals(that.value) : that.value != null) return false;
-
-        return true;
-    }
-
 }

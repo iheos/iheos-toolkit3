@@ -10,7 +10,6 @@ import edu.tn.xds.metadata.editor.client.editor.DocumentModelEditorMVP;
 import edu.tn.xds.metadata.editor.client.editor.EditorActivity;
 import edu.tn.xds.metadata.editor.client.event.MetadataEditorEventBus;
 import edu.tn.xds.metadata.editor.client.home.WelcomeActivity;
-import edu.tn.xds.metadata.editor.client.parse.XdsParser;
 import edu.tn.xds.metadata.editor.client.root.CenterPanel;
 import edu.tn.xds.metadata.editor.client.root.MetadataEditorAppView;
 import edu.tn.xds.metadata.editor.client.root.NorthPanel;
@@ -28,7 +27,7 @@ public interface MetadataEditorGinInjector extends Ginjector {
 
     PlaceController getPlaceController();
 
-    MetadataEditorRequestFactory getRequestFactory();
+    // MetadataEditorRequestFactory getRequestFactory();
 
     // ------------------------------------------
     // ~ Root
@@ -56,6 +55,4 @@ public interface MetadataEditorGinInjector extends Ginjector {
     SubmissionPanelView getSubmissionPanelView();
 
     SubmissionPanelPresenter getSubmissionPanelPresenter();
-
-    XdsParser getXdsParser();
 }

@@ -127,7 +127,7 @@ public class XdsParser {
      * @see XdsParser
      */
     public XdsDocumentEntry parse(String newDocumentXml) {
-        documentXml = preParse.doPreParse(newDocumentXml);
+        documentXml = newDocumentXml;
         getDocumentParsed();
         try {
             findElements();
@@ -145,18 +145,15 @@ public class XdsParser {
      * @see XdsParser
      */
     private void getDocumentParsed() {
-        documentXml = documentXml.replaceAll("&lt;", "<");
-        documentXml = documentXml.replaceAll("&gt;", ">");
-        documentXml = documentXml.replaceAll("&amp;", "&");
         documentXml = preParse.doPreParseUTF8(documentXml);
 
         // parse the XML document into a DOM
         document = XMLParser.parse(documentXml);
     }
 
-//    public XdsDocumentEntry getXdsDocumentEntry() {
-//        return xdsDocumentEntry;
-//    }
+    public XdsDocumentEntry getXdsDocumentEntry() {
+        return xdsDocumentEntry;
+    }
 
     /**
      * <b>Method findElements</b> <br>
@@ -384,7 +381,6 @@ public class XdsParser {
                     authors.add(intern_temp);
 
                 }
-
                 // Set title to xdsDocumentEntry
                 xdsDocumentEntry.setAuthors(authors);
             }

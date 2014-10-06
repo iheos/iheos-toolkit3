@@ -122,15 +122,6 @@ public class CodedTerm implements ModelElement, Serializable {
         return answer;
     }
 
-    @Override
-    public String toString() {
-        return "CodedTerm{" +
-                "displayName=" + displayName +
-                ", code=" + code +
-                ", codingScheme=" + codingScheme +
-                '}';
-    }
-
     /**
      * <p>
      * <b>Method verify</b> <br>

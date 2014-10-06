@@ -123,31 +123,4 @@ public class NameValueDTM implements ModelElement, Serializable {
         return answer;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof NameValueDTM)) return false;
-
-        NameValueDTM that = (NameValueDTM) o;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (values != null && values.size() == that.getValues().size()) {
-            for (int i = 0; i < values.size(); i++) {
-                if (!values.get(i).getDtm().equals(that.getValues().get(i).getDtm())) {
-                    return false;
-                }
-            }
-        } else
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "NameValueDTM{" +
-                "name=" + name +
-                ", values=" + values +
-                '}';
-    }
-
 }
