@@ -4,6 +4,7 @@ package gov.nist.toolkit.xdstools3.client;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.user.client.ui.*;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.widgets.HTMLFlow;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
@@ -53,8 +54,37 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
 
         // Main layout
         VLayout mainLayout = new VLayout();
-        mainLayout.addMembers(configBar, topTabSet);
+        HTMLFlow header = new HTMLFlow();
+        header.setContents("<header id='appheader'>" +
+                "<div id='apptitle'>Document Sharing Test Tools</div>" +
+                "<div id='appversion'>Version 3.0.1</div>" +
+                "<div id='appsubtitle'>IHE USA Chicago Connectathon Jan. 2014</div>" +
+                "</header>" +
+                "<nav class='navbar-inner'>" +
+                "<ul>" +
+                "<li><a href='#'>Home</a></li>" +
+                "<li><a href='#'>Queries & Retrieves</a>" +
+                "<ul>" +
+                "<li><a href='#'>Find Document</a></li>" +
+                "<li><a href='#'>Get Documents</a></li>" +
+                "</ul>" +
+                "</li>" +
+                "</ul>" +
+                "</nav>;");
+        HTMLFlow footer = new HTMLFlow();
+        footer.setContents("<footer>\n" +
+                "        <ul>\n" +
+                "            <li>\n" +
+                "                <a href=\"http://www.nist.gov\">NIST homepage</a>\n" +
+                "            </li>\n" +
+                "            <li>\n" +
+                "                <a href=\"#\">NIST Displamer</a>\n" +
+                "            </li>\n" +
+                "        </ul>\n" +
+                "    </footer>");
+        mainLayout.addMembers(header,configBar, topTabSet,footer);
         mainLayout.setStyleName("mainLayout");
+        topTabSet.setStyleName("tabSetLayout");
 
         // Attach the contents to the RootLayoutPanel
         container = new HLayout();
