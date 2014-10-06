@@ -1203,7 +1203,7 @@ public class LogBrowserWidget extends Composite {
 
 
     private AssetTreeItem locateAndOpenTreeItem(final AssetTreeItem assetTreeItem, final AssetNode an) {
-        logger.info("entering locateAndOpenTreeItem: " + ((assetTreeItem != null) ? assetTreeItem.getAssetNode().getDisplayName() : "null") + " an: " + (an != null));
+//        logger.info("entering locateAndOpenTreeItem: " + ((assetTreeItem != null) ? assetTreeItem.getAssetNode().getDisplayName() : "null") + " an: " + (an != null));
         if (assetTreeItem.getChildCount()>0) {
 
             if ("validators".equals(assetTreeItem.getAssetNode().getType()) &&  (assetTreeItem.getChildCount() == 1 && "HASCHILDREN".equals(assetTreeItem.getChild(0).getText()))) {
