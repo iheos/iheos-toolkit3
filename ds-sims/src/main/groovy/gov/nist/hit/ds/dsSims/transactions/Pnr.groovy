@@ -22,5 +22,7 @@ class Pnr implements Transaction {
         return null
     }
 
-    ValidationStatus run() {  println("Running PnR transaction")}
+    ValidationStatus run() {
+        println("Running PnR transaction")
+    }
 }

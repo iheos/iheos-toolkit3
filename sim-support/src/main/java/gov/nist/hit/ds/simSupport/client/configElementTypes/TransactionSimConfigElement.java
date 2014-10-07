@@ -12,9 +12,10 @@ import java.util.List;
 public class TransactionSimConfigElement extends
         SimConfigElement implements IsSerializable, Serializable {
 
-    private static final String SCHEMACHECK = "schemaCheck";
-    private static final String MODELCHECK = "modelCheck";
-    private static final String CODINGCHECK = "codingCheck";
+    public static final String SCHEMACHECK = "schemaCheck";
+    public static final String MODELCHECK = "modelCheck";
+    public static final String CODINGCHECK = "codingCheck";
+    public static final String SOAPCHECK = "soapCheck";
 
     public EndpointValue endpointValue;
     public EndpointType endpointType;
@@ -32,6 +33,7 @@ public class TransactionSimConfigElement extends
         if (!hasBool(SCHEMACHECK)) addBool(SCHEMACHECK, true);
         if (!hasBool(MODELCHECK)) addBool(MODELCHECK, true);
         if (!hasBool(CODINGCHECK)) addBool(CODINGCHECK, true);
+        if (!hasBool(SOAPCHECK)) addBool(SOAPCHECK, true);
 	}
 
     private BooleanSimConfigElement addBool(String name, boolean value) {
@@ -74,12 +76,14 @@ public class TransactionSimConfigElement extends
     public boolean isSchemaCheck() { return getCheck(SCHEMACHECK); }
     public boolean isModelCheck() { return getCheck(MODELCHECK); }
     public boolean isCodingCheck() { return getCheck(CODINGCHECK); }
+    public boolean isSoapCheck() { return getCheck(SOAPCHECK); }
 
     public String toString() {
         return endpointType.label() + " : " + endpointValue.getValue() + " "
                 + SCHEMACHECK + "=" + isSchemaCheck() + " "
                 + MODELCHECK + "=" + isModelCheck() + " "
-                + CODINGCHECK + "=" + isCodingCheck()
+                + CODINGCHECK + "=" + isCodingCheck() + " "
+                + SOAPCHECK + "=" + isSoapCheck()
                 ;
     }
 

@@ -133,6 +133,13 @@ public class ActorSimConfig {
 			return null;
 		return configs.get(0).getEndpointValue();
 	}
+
+    public SimConfigElement getByClass(Class claz) {
+        for (SimConfigElement e : elements) {
+            if (e.getClass().getName().equals(claz.getName())) return e;
+        }
+        return null;
+    }
 	
 	/**
 	 * Get config elements that match all the parameters.

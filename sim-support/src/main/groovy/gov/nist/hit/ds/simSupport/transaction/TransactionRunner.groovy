@@ -39,7 +39,7 @@ class TransactionRunner {
     TransactionRunner() {}
 
     TransactionRunner(SimId _simId, String repositoryName, TransactionType _transactionType) {
-        log.debug("TransactionRunner")
+        log.debug("TransactionRunner: transactionType is ${_transactionType}")
         transactionType = _transactionType
         simId = _simId
         repoName = repositoryName
@@ -49,7 +49,10 @@ class TransactionRunner {
     }
 
     TransactionRunner(SimHandle _simHandle) {
+        log.debug("TransactionRunner: transactionType is ${transactionType}")
         simHandle = _simHandle
+        event = simHandle.event
+        implClassName = simHandle.transactionType.implementationClassName
     }
     ////////////////////////////////////////////////////////////////
 
@@ -105,7 +108,13 @@ class TransactionRunner {
 
     def runPMethod(String methodName) {
         // build implementation
-        Class<?> clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
+        Class<?> clazz
+        try {
+            clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
+        } catch (Throwable t) {
+            simHandle.event.fault = new Fault("Configuration Error - cannot load transaction class ${implClassName}", FaultCode.Receiver.toString(), simHandle.transactionType?.code, "Transaction implementation class ${implClassName} does not exist.")
+            return
+        }
         if (!clazz) {
             simHandle.event.fault = new Fault('Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType.code, "Transaction implementation class ${implClassName} does not exist.")
             return

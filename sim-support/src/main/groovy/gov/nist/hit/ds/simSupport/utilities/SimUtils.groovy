@@ -1,7 +1,5 @@
 package gov.nist.hit.ds.simSupport.utilities
-
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.eventLog.EventFactory
 import gov.nist.hit.ds.repository.api.ArtifactId
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.Repository
@@ -23,7 +21,6 @@ import gov.nist.hit.ds.soapSupport.core.Endpoint
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
-
 /**
  * Created by bmajur on 7/4/14.
  */
@@ -101,14 +98,21 @@ class SimUtils {
             simHandle.actorSimConfig = loadConfig(simHandle.configAsset)
         println "Open ActorSimConfig: ${simHandle.actorSimConfig}"
 
-        def event = new EventFactory().buildEvent(simHandle.repository, simHandle.eventLogAsset)
-        simHandle.event = event
-        event.init()
+        // Made event creation lazy so that creating Sim does not create an empty event
+//        def event = new EventFactory().buildEvent(simHandle.repository, simHandle.eventLogAsset)
+//        simHandle.event = event
+//        event.init()
         return simHandle
     }
 
     static def close(SimHandle simHandle) {
+        assert simHandle.open
+        simHandle.open = false
         simHandle.event.flushAll()
+    }
+
+    static def delete(SimId simId) {
+        delete(simId, SimSystemConfig.repoName)
     }
 
     static def delete(SimId simId, String repositoryName) {
