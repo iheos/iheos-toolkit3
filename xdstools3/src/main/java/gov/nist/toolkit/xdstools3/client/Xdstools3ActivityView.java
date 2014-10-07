@@ -2,7 +2,10 @@ package gov.nist.toolkit.xdstools3.client;
 
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.HTMLFlow;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -30,8 +33,6 @@ import gov.nist.toolkit.xdstools3.client.tabs.v2.v2TabExample;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 
-import java.util.logging.Logger;
-
 
 // TabContainer was added for v2-v3 integration purposes
 public class Xdstools3ActivityView extends AbstractActivity implements TabContainer, AcceptsOneWidget {
@@ -46,9 +47,15 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
     public void run() {
         // Toolbar
         Toolbar configBar = new Toolbar();
+        configBar.addStyleName("app-padding");
+
 
         // Tabs
         topTabSet = new GenericTabSet();
+        HLayout tabsetStack = new HLayout();
+        tabsetStack.setLayoutBottomMargin(27);
+        tabsetStack.addMembers(new LayoutSpacer(), topTabSet,new LayoutSpacer());
+        topTabSet.setWidth(1024);
         Tab homeTab = new HomeTab("Home");
         topTabSet.addTab(homeTab);
 
@@ -60,39 +67,40 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                 "<div id='appversion'>Version 3.0.1</div>" +
                 "<div id='appsubtitle'>IHE USA Chicago Connectathon Jan. 2014</div>" +
                 "</header>" +
-                "<nav class='navbar-inner'>" +
+                "<nav class='navbar'>" +
+                "<div class='app-padding navbar-inner'>" +
                 "<ul>" +
                 "<li><a href='#'>Home</a></li>" +
                 "<li><a href='#'>Queries & Retrieves</a>" +
                 "<ul>" +
-                "<li><a href='#'>Find Document</a></li>" +
+                "<li><a href='#TabPlace:FIND_DOCUMENTS'>Find Document</a></li>" +
                 "<li><a href='#'>Get Documents</a></li>" +
                 "</ul>" +
                 "</li>" +
                 "</ul>" +
-                "</nav>;");
+                "</div>" +
+                "</nav>");
         HTMLFlow footer = new HTMLFlow();
-        footer.setContents("<footer>\n" +
-                "        <ul>\n" +
-                "            <li>\n" +
-                "                <a href=\"http://www.nist.gov\">NIST homepage</a>\n" +
-                "            </li>\n" +
-                "            <li>\n" +
-                "                <a href=\"#\">NIST Displamer</a>\n" +
-                "            </li>\n" +
-                "        </ul>\n" +
-                "    </footer>");
-        mainLayout.addMembers(header,configBar, topTabSet,footer);
+        footer.setContents("<footer>" +
+                "    <ul>" +
+                "         <li>" +
+                "            <a href=\"http://www.nist.gov\">NIST homepage</a>" +
+                "         </li>" +
+                "         <li>" +
+                "            <a href=\"http://www.nist.gov/public_affairs/disclaimer.cfm\">NIST Disclaimer</a>" +
+                "         </li>" +
+                "    </ul>" +
+                "</footer>");
+
+        mainLayout.addMembers(header, configBar, tabsetStack, footer);
         mainLayout.setStyleName("mainLayout");
-        topTabSet.setStyleName("tabSetLayout");
 
         // Attach the contents to the RootLayoutPanel
         container = new HLayout();
         container.setAlign(Alignment.CENTER);
         container.setWidth100();
         container.setHeight100();
-        container.addMembers(new LayoutSpacer(), mainLayout, new LayoutSpacer());
-        mainLayout.setWidth(900); // width has to be set here after use of LayoutSpacers, not in CSS, else it will not work.
+        container.addMembers(mainLayout);
         container.draw();
 
 
