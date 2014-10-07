@@ -1,31 +1,58 @@
 package gov.nist.toolkit.xdstools3.client.tabs;
 
+import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.form.fields.SectionItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import gov.nist.toolkit.xdstools3.client.customWidgets.GenericCheckboxWithTooltipWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.UploadItemWithTooltipWidget;
 
-import com.smartgwt.client.widgets.form.fields.FormItem;
 import gov.nist.toolkit.xdstools3.client.customWidgets.forms.GenericForm;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 public class SettingsTab extends GenericCloseableTab {
-	String title = "Settings";
-	String propertiesTitle = "Properties";
+	private static String title = "Settings";
+    // FIXME Why is this title never used?
+	private static String propertiesTitle = "Properties";
 
 
 	public SettingsTab() {
+        super(title);
+	}
 
-        // Teb name
-        super("Settings");
+	public TextItem createField(String name, String title, String hint, int width) {
+		TextItem item = new TextItem();
+		item.setName(name);
+		item.setTitle(title);
+        item.setHint(hint);
+        item.setShowHintInField(true);
+		item.setWidth(width);
+		return item;
+	}
 
-        // load default or example config parameters
+    // FIXME Unused is that normal?
+	public GenericCheckboxWithTooltipWidget createCheckBox(String name, String title, String tooltip, int width) {
+		GenericCheckboxWithTooltipWidget item = new GenericCheckboxWithTooltipWidget();
+		item.setName(name);
+		item.setTitle(title);
+		item.setTooltip(tooltip);
+		item.setWidth(width);
+		return item;
+	}
 
-		// Set title and subtitles
-		setHeader(title);
+    // FIXME Unsued is that normal?
+	public UploadItemWithTooltipWidget createUploadItem(String name, String title, String tooltip, int width) {
+		UploadItemWithTooltipWidget item = new UploadItemWithTooltipWidget();
+		item.setName(name);
+		item.setTitle(title);
+		item.setTooltip(tooltip);
+		item.setWidth(width);
+		return item;
+	}
 
 
-		// Contents
+    @Override
+    protected Widget createContents() {
         GenericForm form = new GenericForm();
 
 
@@ -35,6 +62,7 @@ public class SettingsTab extends GenericCloseableTab {
         TextItem cache = createField("cache", "External cache", "Ex.: C:\\Workspace\\external_cache", 400);
         TextItem environment = createField("environment", "Default environment	", "Ex.: MU2014, NA2014...", 400);
         TextItem gazelle = createField("gazelle", "Gazelle config URL", "", 400);
+        // password is never used is that normal?
         TextItem password = createField("password", "Admin password", "", 400);
 
 
@@ -49,46 +77,19 @@ public class SettingsTab extends GenericCloseableTab {
         section2.setSectionExpanded(false);
         section2.setItemIds("gazelle");
 
-        form.setFields(new FormItem[] {
-                section1, host, port, tls_port, cache, environment, section2, gazelle
-        });
+        form.setFields(section1, host, port, tls_port, cache, environment, section2, gazelle);
 
         // formatting
         form.setWidth(600);
         form.setLayoutAlign(Alignment.CENTER);
         form.setMinColWidth(400);
 
-		getPanel().addMember(form);
+//        getPanel().addMember(form);
+        return form;
+    }
 
-	}  
-
-	public TextItem createField(String name, String title, String hint, int width) {
-		TextItem item = new TextItem();
-		item.setName(name);
-		item.setTitle(title);
-        item.setHint(hint);
-        item.setShowHintInField(true);
-		item.setWidth(width);
-		return item;
-	}
-
-	public GenericCheckboxWithTooltipWidget createCheckBox(String name, String title, String tooltip, int width) {
-		GenericCheckboxWithTooltipWidget item = new GenericCheckboxWithTooltipWidget();
-		item.setName(name);
-		item.setTitle(title);
-		item.setTooltip(tooltip);
-		item.setWidth(width);
-		return item;
-	}
-
-	public UploadItemWithTooltipWidget createUploadItem(String name, String title, String tooltip, int width) {
-		UploadItemWithTooltipWidget item = new UploadItemWithTooltipWidget();
-		item.setName(name);
-		item.setTitle(title);
-		item.setTooltip(tooltip);
-		item.setWidth(width);
-		return item;
-	}
-
-
-}  
+    @Override
+    protected String setTabName() {
+        return TabNamesUtil.getAdminTabCode();
+    }
+}

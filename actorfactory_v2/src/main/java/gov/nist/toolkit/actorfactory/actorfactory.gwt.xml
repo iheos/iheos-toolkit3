@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file documents code that the xdstest2 project, based on GWT
+  can translate into JavaScript to use client side -->
+<module>
+    <!-- FIXME These modules are needed for the application to work correctly, but the maven build breaks when I import them. -->
+    <!--<inherits name="gov.nist.toolkit.simcommon.simCommon"/>-->
+    <!--<inherits name="gov.nist.toolkit.sitemanagement.siteManagement"/>-->
+    <!--<inherits name="gov.nist.toolkit.valsupport.validatorsSupport"/>-->
+ 
+            <source path="client" />
+    </module>
