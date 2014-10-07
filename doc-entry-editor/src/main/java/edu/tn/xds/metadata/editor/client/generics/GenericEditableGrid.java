@@ -1,6 +1,7 @@
 package edu.tn.xds.metadata.editor.client.generics;
 
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
@@ -16,16 +17,19 @@ import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.ShowEvent;
 import com.sencha.gxt.widget.core.client.form.Field;
+import com.sencha.gxt.widget.core.client.grid.CheckBoxSelectionModel;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.editing.ClicksToEdit;
 import com.sencha.gxt.widget.core.client.grid.editing.GridRowEditing;
+import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import edu.tn.xds.metadata.editor.client.resources.AppImages;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -323,22 +327,30 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
 //     * This Method enables the grid's selection checkbox column (for
 //     * multiselection).
 //     */
-//    public void setCheckBoxSelectionModel() {
-//        checkBoxEnabled = true;
-//        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
-//        IdentityValueProvider<M> identityValueProvider = new IdentityValueProvider<M>();
-//        CheckBoxSelectionModel<M> selectColumn = new CheckBoxSelectionModel<M>(identityValueProvider);
-//        selectColumn.setSelectionMode(Style.SelectionMode.MULTI);
-//        columnsConfigs.add(selectColumn.getColumn());
-//        columnsConfigs.addAll(cm.getColumns());
-//
-//        this.cm = new ColumnModel<M>(columnsConfigs);
-//
-//        this.setSelectionModel(selectColumn);
-//
-//        setEditable();
-//    }
-//--------------------------------------------------------------------------------------------------------
+    public void setCheckBoxSelectionModel() {
+        checkBoxEnabled = true;
+        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
+        IdentityValueProvider<M> identityValueProvider = new IdentityValueProvider<M>();
+        CheckBoxSelectionModel<M> selectColumn = new CheckBoxSelectionModel<M>(identityValueProvider);
+        selectColumn.setSelectionMode(Style.SelectionMode.MULTI);
+        columnsConfigs.add(selectColumn.getColumn());
+        columnsConfigs.addAll(cm.getColumns());
+
+        this.cm = new ColumnModel<M>(columnsConfigs);
+
+        this.setSelectionModel(selectColumn);
+
+        this.getSelectionModel().addSelectionChangedHandler(new SelectionChangedEvent.SelectionChangedHandler<M>() {
+            @Override
+            public void onSelectionChanged(SelectionChangedEvent<M> event) {
+                // TODO whatever you have to do
+            }
+        });
+
+        setEditable();
+    }
+
+    //--------------------------------------------------------------------------------------------------------
     protected void setEditable() {
         // EDITING //
         editing = new GridRowEditing<M>(this);
