@@ -1,8 +1,5 @@
 package gov.nist.hit.ds.repository.simple.search;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
@@ -13,28 +10,28 @@ import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
-import gov.nist.hit.ds.repository.presentation.PresentationData;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SearchCriteria.Criteria;
+import gov.nist.hit.ds.repository.shared.SearchTerm;
+import gov.nist.hit.ds.repository.shared.SearchTerm.Operator;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleRepository;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import org.junit.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 public class SearchTest {
@@ -49,68 +46,7 @@ public class SearchTest {
 		System.out.println(p.toString());
 	}
 
-	@Test
-	public void multipleBaseCriteriaTest() throws RepositoryException {		 		
 
-		/* All Search criteria constructions are based on bottom-up approach
-		 * Idea is to build parts and assemble them together
-		 * Example: 
-		 build sub criteria A
-		 build sub criteria B
-		 build final criteria based on A and B
-		 */		
-				
-		
-		SearchCriteria subCriteriaA = new SearchCriteria(Criteria.AND);
-		
-		subCriteriaA.append(new SearchTerm("patientId",Operator.EQUALTOANY,new String[]{"101","102"}));
-		subCriteriaA.append(new SearchTerm("documentType",Operator.EQUALTO,"C32"));
-
-		subCriteriaA.append(new SearchTerm("status",Operator.EQUALTOANY,new String[]{"Pending","Unknown"}));		
-					
-		subCriteriaA.append(new SearchTerm("startDate",Operator.GREATERTHAN,"20070101"));
-		subCriteriaA.append(new SearchTerm("startDate",Operator.LESSTHANOREQUALTO,"20080101"));
-		
-		
-		SearchCriteria subCriteriaB = new SearchCriteria(Criteria.AND);
-		subCriteriaB.append(new SearchTerm("patientId",Operator.EQUALTOANY,new String[]{"103","104","105"}));
-		subCriteriaB.append(new SearchTerm("documentType",Operator.EQUALTO,"C64"));
-		
-		SearchCriteria criteria = new SearchCriteria(Criteria.OR);
-		criteria.append(subCriteriaA);
-		criteria.append(subCriteriaB);
-				
-		System.out.println(criteria.toString());
-		
-		
-		final Access acs = Access.RW_EXTERNAL;
-		
-		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(acs));
-		Repository repos = fact.createNamedRepository(
-				"repos-search-target",
-				"Description",
-				new SimpleType("simpleRepos"),
-				"repos-search-target"
-				);
-
-		
-		String[][] selectedRepos = new String[1][2];
-		selectedRepos[0][0] = repos.getId().getIdString();
-		selectedRepos[0][1] = acs.name();
-		
-		QueryParameters qp = new QueryParameters(selectedRepos,criteria);
-		qp.setName("firstTest");
-		
-		AssetNode an = PresentationData.saveSearchCriteria(qp);
-
-		System.out.println(an.getAssetId());
-		
-		QueryParameters qp2 = PresentationData.getSearchCriteria(an.getRepId(),an.getReposSrc(), an.getLocation());
-		
-		assertTrue(qp.getSelectedRepos().length==qp2.getSelectedRepos().length);
-		assertTrue(qp.getSearchCriteria().toString().equals(qp2.getSearchCriteria().toString()));
-		
-	}
 	
 	@Test
 	public void criteriaTestL1() {

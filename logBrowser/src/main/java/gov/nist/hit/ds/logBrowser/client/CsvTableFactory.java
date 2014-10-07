@@ -5,6 +5,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class CsvTableFactory {
 //                        SafeHtmlBuilder shb = new SafeHtmlBuilder();
                         String val =  csv[r][cx];    //textRow.get(cx);
 //                                logger.info("val LB: " + val);
-                        htmlRow.add(htmlBuilder(val).toSafeHtml());
+                        htmlRow.add(htmlBuilder(val, false).toSafeHtml());
                     }
                     rows.add(htmlRow);
                 }
@@ -38,10 +39,12 @@ public class CsvTableFactory {
         }
     }
 
-    public CellTable<List<SafeHtml>> createCellTable(String [][]csv) {
+    public CellTable<List<SafeHtml>> createCellTable(ListDataProvider<List<SafeHtml>> dataProvider , String [][]csv) {
         // Create a CellTable (based on Stack ans. 15122103).
         // CellTable<List<String>> table = new CellTable<List<String>>();
-        CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>();
+        CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>(500); // FIXME: set pager, limit the number of rows displayed to first 500
+
+        table.setSelectionModel(new SingleSelectionModel<List<SafeHtml>>());
 
         // Get the rows as List
         int rowLen = csv.length;
@@ -56,20 +59,25 @@ public class CsvTableFactory {
                     new TextHeader(csv[0][c]));
         }
 
-        // Create a list data provider.
-        final ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
+
         dataProvider.setList(rows);
 
         dataProvider.addDataDisplay(table);
         return table;
     }
 
-    private SafeHtmlBuilder htmlBuilder(String v) {
+    /**
+     *
+     * @param v The text to be SafeHtmlBuilder
+     * @param constant Keep text as-is (no URL-link scanning or other enhancements)
+     * @return
+     */
+    public SafeHtmlBuilder htmlBuilder(String v, boolean constant) {
         SafeHtmlBuilder shb = new SafeHtmlBuilder();
         if (v!=null) {
 
-            if (v.startsWith("$htmlConstant")) {
-                shb.appendHtmlConstant(v.substring("$htmlConstant".length()));
+            if (constant) {
+                shb.appendHtmlConstant(v);
             } else if (v.toLowerCase().contains("http://") || v.toLowerCase().startsWith("https://")) {
                 String[] values = v.split(" ");
                 int cx=0;

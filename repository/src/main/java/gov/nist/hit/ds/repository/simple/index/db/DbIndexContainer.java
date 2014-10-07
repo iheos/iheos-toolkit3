@@ -2,12 +2,14 @@ package gov.nist.hit.ds.repository.simple.index.db;
 
 
 import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.api.Parameter;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
+import gov.nist.hit.ds.repository.simple.BaseRepository;
 import gov.nist.hit.ds.repository.simple.IdFactory;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
 import gov.nist.hit.ds.repository.simple.SimpleType;
@@ -15,10 +17,10 @@ import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
 import gov.nist.hit.ds.repository.simple.index.Index;
 import gov.nist.hit.ds.repository.simple.index.IndexContainer;
 import gov.nist.hit.ds.repository.simple.index.db.IndexerThread.IndexStatus;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.shared.PnIdentifier;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SearchTerm;
 import gov.nist.hit.ds.utilities.io.Hash;
 
 import java.io.File;
@@ -61,14 +63,14 @@ public class DbIndexContainer implements IndexContainer, Index {
 	private static final String parentId = PnIdentifier.getQuotedIdentifer(PropertyKey.PARENT_ID);
 	private static final String createdDate =  PnIdentifier.getQuotedIdentifer(PropertyKey.CREATED_DATE);
 	private static final String hash = PropertyKey.HASH.toString();
-    private static final String lastAccessTime = PropertyKey.LAST_ACCESS_TIME.toString();
+    private static final String lastModifiedTime = PropertyKey.LAST_MODIFIED_TIME.toString();
 	private static final String reposAcs = PropertyKey.REPOSITORY_ACCESS.toString();
 	private static final String indexSession = PropertyKey.INDEX_SESSION.toString();
 
-    private static final String[] commonAssetPropertyIndex = {assetId,locationId,assetType,repId,displayOrder,parentId,createdDate,hash,reposAcs,indexSession}; // Transform to an enum as needed in future
+    private static final String[] commonAssetPropertyIndex = {assetId,locationId,assetType,repId,displayOrder,parentId,createdDate,hash,lastModifiedTime,reposAcs,indexSession}; // Transform to an enum as needed in future
 	
 	private static final String CACHED_SESSION = "CACHED";
-	private static final String CONTAINER_VERSION = "2014-05-29";
+	private static final String CONTAINER_VERSION = "2014-08-12";
 	private static final String CONTAINER_VERSION_ID = "VERSION";
 	private static final String BYPASS_VERSION = "BYPASS";
 
@@ -90,10 +92,35 @@ public class DbIndexContainer implements IndexContainer, Index {
 	+ parentId +  " varchar(512),"									/* The parent asset Id. A null-value indicates top-level asset and no children */
 	+ assetType + " varchar(32)," 									/* Asset type - usually same as the keyword property */ 
 	+ hash + " varchar(64),"										/* (Internal use) The hash of the property file */
-    + lastAccessTime + " varchar(64),"							/* (Internal use) The last access or index time */
+    + lastModifiedTime + " bigint,"							        /* (Internal use) The modified time of the repository */
 	+ reposAcs + " varchar(40),"									/* (Internal use) src enum string */
 	+ displayOrder + " int,"         						    	/* This is a reserved keyword for sorting purpose */
-	+ indexSession +" varchar(64))";								/* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */
+	+ indexSession +" varchar(64)"                                  /* (Internal use) Stores the indexer repository session id -- later used for removal of stale assets */
+    + ")";
+
+
+
+    /**
+     * Offers a quick high level date comparison indicator, which does not necessarily serve the purpose of indicating the content status of the repository.
+     * @param repos
+     * @return
+     * @throws RepositoryException
+     */
+    public boolean isIndexOutOfDate(Repository repos) throws RepositoryException {
+        Parameter p = new Parameter("Repository");
+        p.assertNotNull(repos);
+        p.assertNotNull(repos.getId());
+
+        Map<String,Object> reposData = getReposDbIndexProperties(repos);
+        if (reposData!=null) {
+            long reposLastModifiedDate = ((Long)reposData.get(lastModifiedTime)).longValue();
+            if (BaseRepository.getLastModified(repos.getRoot()) ==  reposLastModifiedDate) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 	/**
 	 * Index a repository on the file system. This wrapper method eventually calls an internal method that uses two internal logical data sets to identify assets that are to be indexed, refreshed, or marked as stale.  
@@ -111,17 +138,20 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @throws RepositoryException
 	 */
 	public int indexRep(Repository repos, boolean indexOnlyNewAssets, String[] locations) throws RepositoryException {
-		SimpleAssetIterator iter = null;
+        Parameter p = new Parameter("Repository");
+        p.assertNotNull(repos);
+        p.assertNotNull(repos.getId());
 
-		if (repos==null || repos.getId()==null) {
-			logger.warning("Null repository or repository id");
-			return -1; 
-		}		
+
+
+        SimpleAssetIterator iter = null;
+
+//		if (repos==null || repos.getId()==null) {
+//			logger.warning("Null repository or repository id");
+//			return -1;
+//		}
 		
-		if (!doesIndexContainerExist()) {
-			createIndexContainer();
-			logger.fine("New index container created.");
-		}
+
 		
 		String reposId = repos.getId().getIdString();
 
@@ -162,6 +192,23 @@ public class DbIndexContainer implements IndexContainer, Index {
             reposIndexMap.put(reposId, intArray[reposIndexMap.size()]);
         }
         synchronized (reposIndexMap.get(reposId)) { // repos
+
+            try {
+                if (!doesIndexContainerExist()) {
+                    createIndexContainer();
+                    logger.fine("New index container created.");
+                }
+            } catch (RepositoryException re) {
+                logger.info("Index container exception: " + re.toString());
+                // Fine if it already exists by the time we got a chance to create it
+            }
+
+
+            if (!isIndexOutOfDate(repos)) {
+                logger.fine("Repository " + repos.getId() + " is already up to date.");
+                return -1;
+            }
+
             try {
 
                 if (locations!=null) {
@@ -344,10 +391,6 @@ public class DbIndexContainer implements IndexContainer, Index {
 
         }
 
-        String previousTime = getReposDbIndexProperties(repos)[2];
-        logger.fine("previousTime: " + previousTime);
-//        setReposTime(repos, new Hl7Date().now(), previousTime != null);
-
 
         logger.fine("Leaving indexOnlyNewAssets");
         return totalAssetsIndexed;
@@ -383,10 +426,10 @@ public class DbIndexContainer implements IndexContainer, Index {
 				Map<String, String> reposFsIndex = new HashMap<String,String>();
 				String fullIndex = getFsHash(repos, iter, assetMap, reposFsIndex);								
 				
-				String[] reposData = getReposDbIndexProperties(repos);
+				Map<String,Object> reposData = getReposDbIndexProperties(repos);
 				if (fullIndex!=null && !"".equals(fullIndex)) {
 					if (reposData != null) {
-						if (fullIndex.equals(reposData[1])) {
+						if (fullIndex.equals(reposData.get(hash))) {
 							repositorySynced = true; 	
 						} else {
 							repositorySynced = false; 
@@ -504,6 +547,10 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 */
 	@Override
 	public String getIndexContainerDefinition() {
+        return getIndexContainerDefinitionDb();
+    }
+
+    public static String getIndexContainerDefinitionDb() {
 		String repContainerHead = 
 		"create table " + repContainerLabel;				/* This is the master container for all indexable asset properties */
 	
@@ -557,7 +604,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 		DbContext dbc = new DbContext();
 		dbc.setConnection(DbConnection.getInstance().getConnection());
 
-		String sqlStr = "select hash from " + repContainerLabel 
+		String sqlStr = "select "+ hash + " from " + repContainerLabel
 				+" where " + repId + "=? ";
 		
 		ResultSet rs = null;
@@ -612,21 +659,36 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * Create the master index container in the database 
 	 */
 	@Override
-	public void createIndexContainer() throws RepositoryException {
+    public void createIndexContainer() throws RepositoryException {
+        createIndexContainerDb();
+    }
+
+	public static synchronized void createIndexContainerDb() throws RepositoryException {
 		DbContext dbc = new DbContext();
 			try {
 
 				dbc.setConnection(DbConnection.getInstance().getConnection());
-				dbc.internalCmd(getIndexContainerDefinition());
+				dbc.internalCmd(getIndexContainerDefinitionDb());
 				dbc.internalCmd("insert into " + repContainerLabel + "("+ repId +",hash) values('" + CONTAINER_VERSION_ID +"','"+ CONTAINER_VERSION + "')");
 				
 				try {
 					
-					String index = "create unique index \"repAssetUniqueIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " (repositoryIndexId,indexSession)";  // ,"+ repId +"," +  assetId +" These may not be unique anymore with multiple rep sources 
-					dbc.internalCmd(index);					
-					index = "create index \"repAssetIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ repId +"," +  assetId +"," + assetType +",reposAcs,hash,"+ locationId + "," + parentId + ")";
+					String index = "create unique index \"repAssetUniqueIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " (" + SearchTerm.getValueAsCsv(new String[]{"repositoryIndexId"}, false) + ")";  // ,"+ repId +"," +  assetId +" These may not be unique anymore with multiple rep sources
 					dbc.internalCmd(index);
-					
+
+//					index = "create index \"repAssetIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ repId +"," +  assetId +"," + assetType +",reposAcs,hash,"+ locationId + "," + parentId + ")";
+//					dbc.internalCmd(index);
+
+                    index = "create index \"repAcsIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{assetId, locationId, indexSession, createdDate, displayOrder},false)  + ")";
+                    dbc.internalCmd(index);
+
+                    index = "create index \"repAcsIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{repId, reposAcs, parentId},false)  + ")";
+                    dbc.internalCmd(index);
+
+                    index = "create unique index \"repStatusIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{"repositoryIndexId", hash, lastModifiedTime},false)  + ")";
+                    dbc.internalCmd(index);
+
+
 				} catch (SQLException e) {
 					logger.fine("index probably exists.");
 				}
@@ -909,8 +971,15 @@ public class DbIndexContainer implements IndexContainer, Index {
         logger.fine(colId + " is to-be-indexed");
 
         // Can only add one at a time
-        sqlStr = "alter table "+ repContainerLabel + " add column " + colId + " varchar(128)";
-        dbc.internalCmd(sqlStr);
+        sqlStr = "alter table "+ repContainerLabel + " add column " + colId + " varchar(512)";
+
+        if (dbc.internalCmd(sqlStr)) {
+            sqlStr = "create index \"prop_" + colId.hashCode() + "\" on " + repContainerLabel + " ("+ colId  + ")";
+            dbc.internalCmd(sqlStr);
+
+        }
+
+
     }
 
 
@@ -1311,13 +1380,22 @@ public class DbIndexContainer implements IndexContainer, Index {
 				dbc.setConnection(DbConnection.getInstance().getConnection());
 				
 				if (update) {
-					String sqlStr = "update "+ repContainerLabel + " set hash =? where " + DbIndexContainer.repId + "=? and indexSession=?";
-					int rsData = dbc.executePrepared(sqlStr, new String[]{hash, compositeId, CACHED_SESSION});
-					logger.fine("rows affected" + rsData);
+					String sqlStr = "update "+ repContainerLabel + " set "
+                            + DbIndexContainer.hash + "='"+ hash +"', "
+                            + lastModifiedTime + "="+ BaseRepository.getLastModified(repos.getRoot())
+                            + " where " + DbIndexContainer.repId + "= '"+ compositeId+"' and "+ indexSession +"='"+ CACHED_SESSION + "'";
+                    boolean status = dbc.internalCmd(sqlStr);
+					logger.fine("update "+ compositeId +" status: " + status);
+
 				} else {
-					String sqlStr = "insert into "+ repContainerLabel  +"(hash," + DbIndexContainer.repId + ",indexSession) values(?,?,?)";
-					int[] id = dbc.executePreparedId(sqlStr, new String[]{hash, compositeId, CACHED_SESSION});
-					logger.fine("Inserted hash "  + hash + " key "  + id[1] +  " for " + compositeId);
+					String sqlStr = "insert into "+ repContainerLabel
+                            +"("+ DbIndexContainer.hash +"," + lastModifiedTime + "," + DbIndexContainer.repId + ","+ indexSession +") "
+                            +"values('"+ hash +"',"
+                            + BaseRepository.getLastModified(repos.getRoot()) +",'"
+                            + compositeId +"','"
+                            + CACHED_SESSION +"')";
+                    boolean status = dbc.internalCmd(sqlStr);
+                    logger.fine("insert "+ compositeId +" status: " + status);
 				}
 
 			} catch (SQLException e) {
@@ -1330,41 +1408,15 @@ public class DbIndexContainer implements IndexContainer, Index {
 		return true;
 	}
 
-    private boolean setReposTime(Repository repos, String time, boolean update) throws RepositoryException {
-        if (repos!=null) {
-            DbContext dbc = new DbContext();
-            try {
-                String reposId = repos.getId().getIdString();
-                String compositeId = reposId + "_" +  repos.getSource().getAccess().name();
-                dbc.setConnection(DbConnection.getInstance().getConnection());
 
-                if (update) {
-                    String sqlStr = "update "+ repContainerLabel + " set "+ lastAccessTime +" =? where " + DbIndexContainer.repId + "=? and indexSession=?";
-                    int rsData = dbc.executePrepared(sqlStr, new String[]{time, compositeId, CACHED_SESSION});
-                    logger.fine("rows affected" + rsData);
-                } else {
-                    String sqlStr = "insert into "+ repContainerLabel  +"("+ lastAccessTime +"," + DbIndexContainer.repId + ",indexSession) values(?,?,?)";
-                    int[] id = dbc.executePreparedId(sqlStr, new String[]{time, compositeId, CACHED_SESSION});
-                    logger.fine("Inserted time "  + lastAccessTime + " key "  + id[1] +  " for " + compositeId);
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
-            } finally {
-                dbc.close();
-            }
-        }
-        return true;
-    }
 
 	/**
 	 * 
 	 * @param repos
-	 * @return
+	 * @return Null if repository has not been indexed at all
 	 */
-	private String[] getReposDbIndexProperties(Repository repos) {
-		String[] rsData = null;
+	private Map<String,Object> getReposDbIndexProperties(Repository repos) {
+        Map<String,Object> rsData =  null;
 		DbContext dbc = new DbContext();
 
 		try {
@@ -1372,14 +1424,20 @@ public class DbIndexContainer implements IndexContainer, Index {
 			String compositeId = reposId + "_" +  repos.getSource().getAccess().name();			
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 
-			String sqlStr = "select repositoryIndexId,hash from " + repContainerLabel
+			String sqlStr = "select repositoryIndexId,"
+                    + hash +","
+                    + lastModifiedTime
+                    + " from " + repContainerLabel
 					+" where " + DbIndexContainer.repId + "=? and indexSession=?";
 							
 			ResultSet rs = dbc.executeQuery(sqlStr, new String[]{compositeId, CACHED_SESSION});
 
 			if (rs!=null) {
 				if (rs.next()) {
-					 rsData = new String[]{new Integer(rs.getInt(1)).toString(), rs.getString(2)};
+                    rsData = new HashMap<String,Object>();
+                    rsData.put("id", new Integer(rs.getInt(1)));
+                    rsData.put(hash, rs.getString(2));
+                    rsData.put(lastModifiedTime, new Long(rs.getLong(3)));
 				}
 				rs.close();
 			}
@@ -1722,7 +1780,6 @@ public class DbIndexContainer implements IndexContainer, Index {
 				; // Ignore if it does not exist
 			}
 			dbc.internalCmd("create table "+searchSession+"(repId varchar(64),assetId varchar(64), reposAcs varchar(40), reposOrder int, displayOrder int, createdDate varchar(64), propFile varchar(512))");
-			
 			
 			// Search needs to limit search properties to the ones supported by assets belonging to those repositories -
 			//  - to avoid searching for out-of-reach properties that do not apply to the repositories in question

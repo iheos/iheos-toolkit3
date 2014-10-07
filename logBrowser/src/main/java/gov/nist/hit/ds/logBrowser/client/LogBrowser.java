@@ -7,7 +7,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import gov.nist.hit.ds.logBrowser.client.widgets.LogBrowserWidget;
 import gov.nist.hit.ds.logBrowser.client.widgets.LogBrowserWidget.Feature;
-import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 
 import java.util.logging.Logger;
 
@@ -34,10 +34,11 @@ public class LogBrowser implements EntryPoint {
                         new Feature[] {
                                 Feature.BROWSE
                                  , Feature.SEARCH
-//                                , Feature.TRANSACTION_MONITOR // old
-//                                , Feature.TRANSACTION_FILTER // old
+//                                , Feature.TRANSACTION_MONITOR // Old
+//                                , Feature.TRANSACTION_FILTER // Old
                                 , Feature.TRANSACTION_FILTER_ADVANCED
-                                  , Feature.EVENT_MESSAGE_AGGREGATOR
+//                                  , Feature.EVENT_MESSAGE_AGGREGATOR
+//                                 Feature.LOGGING_CONTROL  // Experimental
                                 });
 
 			} catch (RepositoryConfigException e) {

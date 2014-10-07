@@ -45,12 +45,15 @@ public class SimpleTextAssetTest {
             fail("update content failed");
         }
 
+        a.setMimeType(null); // Will not set the property
+        /*
         try {
             a.setMimeType(null);
             fail("Should not be able to set a null mimeType");
         } catch (RepositoryException re) {
             // good
         }
+        */
 
 
         File oldContentFile = a.getContentFile();

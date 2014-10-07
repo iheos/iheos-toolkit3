@@ -9,18 +9,18 @@
 <!--  begin repository tools -->
 	<servlet>
 		<servlet-name>searchServlet</servlet-name>
-		<servlet-class>gov.nist.hit.ds.repository.simple.search.SearchServlet</servlet-class>
+		<servlet-class>gov.nist.hit.ds.repository.rpc.search.SearchServlet</servlet-class>
 	</servlet>
 	
 	<servlet>
 		<servlet-name>downloadAssetServlet</servlet-name>
-		<servlet-class>gov.nist.hit.ds.repository.simple.search.DownloadAssetServlet</servlet-class>
+		<servlet-class>gov.nist.hit.ds.repository.rpc.search.DownloadAssetServlet</servlet-class>
 	</servlet>
 	<!--  end repository tools -->
 	<!--  this is for the gwt rpc -->
 	<servlet>
 		<servlet-name>repositoryServlet</servlet-name>
-		<servlet-class>gov.nist.hit.ds.repository.simple.search.server.RepositoryServiceImpl</servlet-class>
+		<servlet-class>gov.nist.hit.ds.repository.rpc.search.server.RepositoryServiceImpl</servlet-class>
 	</servlet>
 	<servlet>
   <servlet-name>jUnitHostImpl</servlet-name>

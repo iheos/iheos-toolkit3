@@ -26,12 +26,12 @@ import gov.nist.hit.ds.logBrowser.client.event.ListenerStatusEvent;
 import gov.nist.hit.ds.logBrowser.client.event.ListenerStatusEventHandler;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEvent;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEventHandler;
-import gov.nist.hit.ds.repository.api.PropertyKey;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SearchTerm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,18 +96,30 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
     }
 
     private Widget createFilteredMonitorPanel() {
-        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus,false,false,true);
-        txMonitor.setAutoShowFirstMessage(true);
-        txMonitor.getElement().getStyle()
+        TransactionMonitorAdvancedWidget txMonitorFilter = new TransactionMonitorAdvancedWidget(eventBus,false,false,true);
+        txMonitorFilter.setAutoShowFirstMessage(true);
+        txMonitorFilter.getElement().getStyle()
                 .setProperty("border", "none");
 
-        setTxFilter(txMonitor);
+        setTxFilter(txMonitorFilter);
 
         StackLayoutPanel stackPanel = new StackLayoutPanel(Style.Unit.EM);
         //stackPanel.setHeight("100%");
         stackPanel.setWidth("100%");
 
-        stackPanel.add(txMonitor, createPanelHeader("",createFilterHeaderOptions(),null), HEADER_SIZE);
+
+        ///////////////////// Add filter section
+        stackPanel.add(createFilterWidget(), createPanelHeader("", createCriteriaOptions(), null), HEADER_SIZE); // Not the filter monitor but the filter selection
+
+        // filterSplitPanel.addWest(stackPanel, Math.round(.3 * Window.getClientWidth()));
+        // stackPanel = new StackLayoutPanel(Style.Unit.EM);
+        // stackPanel.setWidth("100%");
+
+
+        // This is the filtered results section
+        stackPanel.add(txMonitorFilter, createPanelHeader("",createFilterHeaderOptions(),null), HEADER_SIZE);
+
+        stackPanel.showWidget(1); // Show the filter results section
 
         return stackPanel;
 
@@ -115,7 +127,7 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
 
 
-
+    /** backup code with different stack panel layout
     private Widget setupFilterSelectionAndMonitorPanel() {
 
         // SplitLayoutPanel filterSplitPanel = new SplitLayoutPanel(2);
@@ -157,6 +169,64 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
         });
 
 
+//
+//        Use this for backend (fixed) filtering -- does not take on the fly updates to filter
+//
+//        eventBus.addHandler(FilterSelectedEvent.TYPE, new FilterSelectedEventHandler() {
+//            @Override
+//            public void onFilterSelected(FilterSelectedEvent event) {
+//                getTxMonitorLive().setFilterEnabled(true);
+//                getTxMonitorLive().setFilterLocation(event.getFilterLocation());
+//            }
+//        });
+//
+
+
+                stackPanel.add(getTxMonitorLive(), createPanelHeader("", createMonitorHeaderOptions(), null), HEADER_SIZE);
+
+        // filterSplitPanel.add(stackPanel);
+
+        return stackPanel;
+    }
+
+    */
+
+
+    private Widget setupFilterSelectionAndMonitorPanel() {
+
+        // SplitLayoutPanel filterSplitPanel = new SplitLayoutPanel(2);
+
+        // Create a new stack layout panel.
+        StackLayoutPanel stackPanel = new StackLayoutPanel(Style.Unit.EM);
+        //stackPanel.setHeight("100%");
+        stackPanel.setWidth("100%");
+
+
+        // Add live monitor section
+        setTxMonitorLive(createLiveTxMonitorWidget());
+
+
+        // eventBus.addHandler(BackendFilteredMessageEvent.TYPE
+
+        eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
+            @Override
+            public void onNewTxMessage(NewTxMessageEvent event) {
+
+                // no longer needed with built-in pager control
+                // getLiveCounterTxt().setText("("+ (event.getMessageCount()) + ")");
+                filter(event.getAnMap());
+                // getTxFilter().popTx(event.getAnMap());
+            }
+        });
+
+        eventBus.addHandler(ListenerStatusEvent.TYPE, new ListenerStatusEventHandler() {
+            @Override
+            public void onListenerStatus(ListenerStatusEvent event) {
+                updateListenerStatusIndicator(event.getListening());
+            }
+        });
+
+
         /*
         Use this for backend (fixed) filtering -- does not take on the fly updates to filter
 
@@ -169,13 +239,16 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
         });
         */
 
-
-                stackPanel.add(getTxMonitorLive(), createPanelHeader("", createMonitorHeaderOptions(), null), HEADER_SIZE);
+        // Live-Monitor panel
+        stackPanel.add(getTxMonitorLive(), createPanelHeader("", createMonitorHeaderOptions(), null), HEADER_SIZE);
 
         // filterSplitPanel.add(stackPanel);
 
+
+
         return stackPanel;
     }
+
 
     private List<Widget> createCriteriaOptions() {
         List<Widget> options = new ArrayList<Widget>();
@@ -235,10 +308,10 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
         if (on) {
             statusImg = "ok";
-            statusImgText = "Ready to receive messages from the proxy";
+            statusImgText = "The monitor is connected to the JMS queue at "+  getTxMonitorLive().getJmsHostAddress()  +".";
         } else {
             statusImg = "error";
-            statusImgText = "Cannot receive messages from the proxy: Is the FFMQ service running?";
+            statusImgText = "The monitor cannot receive messages from the JMS queue at "+  getTxMonitorLive().getJmsHostAddress()  +". Are both the FFMQ service and the proxy running?";
         }
 
         getListenerStatusIndicator().setHTML(("<span style=\"width:32px;height:32px;\"><img height=16 width=16 src='" + GWT.getModuleBaseForStaticFiles() + "images/environment_"

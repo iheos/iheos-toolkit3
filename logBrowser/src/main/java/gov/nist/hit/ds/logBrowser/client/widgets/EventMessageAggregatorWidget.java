@@ -1,8 +1,15 @@
 package gov.nist.hit.ds.logBrowser.client.widgets;
 
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.DefaultCellTableBuilder;
 import com.google.gwt.user.cellview.client.TextHeader;
@@ -15,19 +22,22 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import gov.nist.hit.ds.logBrowser.client.CsvTableFactory;
-import gov.nist.hit.ds.logBrowser.client.IndexedColumn;
-import gov.nist.hit.ds.repository.api.PropertyKey;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
-import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.logBrowser.client.event.asset.InContextAssetClickedEvent;
+import gov.nist.hit.ds.logBrowser.client.event.asset.OutOfContextAssetClickedEvent;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SearchTerm;
+import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,44 +53,102 @@ import java.util.logging.Logger;
 public class EventMessageAggregatorWidget extends Composite {
 
     public static final int FIXED_HEADER_LAST_IDX = 1;
+    public static final int START_ROW_ZERO = 0;
     private static Logger logger = Logger.getLogger(EventMessageAggregatorWidget.class.getName());
 
     //    private ScrollPanel contentPanel = new ScrollPanel();
     private SplitLayoutPanel contentPanel = new SplitLayoutPanel();
     private SimpleEventBus eventBus;
+    private ASSET_CLICK_EVENT assetClickEvent;
     private String eventAssetId;
     private String assetType;
     private String externalRepositoryId;
     private String[] displayColumns;
     final private RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
 
+    public static enum ASSET_CLICK_EVENT {
+        IN_CONTEXT,
+        OUT_OF_CONTEXT
+    };
 
 
     //    private CellTable<List<SafeHtml>> table = new CellTable<List<SafeHtml>>(300); // new CsvTableFactory().createCellTable(rows.toArray(new String[rows.size()][]));
-    private DataGrid<List<SafeHtml>> table = new DataGrid<List<SafeHtml>>(300);
-    private ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
 
+//    private DataGrid<List<SafeHtml>> table = new DataGrid<List<SafeHtml>>(300); // TODO: add pager
+//    private ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
 //    private DataGrid<List<SafeHtml>> table = new DataGrid<List<SafeHtml>>(5);
     private CsvTableFactory csvFactory = new CsvTableFactory();
-
-    private List<List<SafeHtml>> dataRows = new ArrayList<List<SafeHtml>>();
+//    private List<List<SafeHtml>> dataRows = new ArrayList<List<SafeHtml>>();
     private List<String[]> rows = new ArrayList<String[]>();
+
+
+    private DataGrid<List<EventMessageCell>> table = new DataGrid<List<EventMessageCell>>(500); // TODO: add pager
+    private ListDataProvider<List<EventMessageCell>> dataProvider  = new ListDataProvider<List<EventMessageCell>>();
+    private List<List<EventMessageCell>> dataRows = new ArrayList<List<EventMessageCell>>();
+
+    private class EventMessageCell {
+        private AssetNode an;
+        private SafeHtml cellValue;
+        private int rowNumber;
+
+        private EventMessageCell() {
+            super();
+        }
+
+        private EventMessageCell(AssetNode an, SafeHtml cellValue, int rowNumber) {
+            this.an = an;
+            this.cellValue = cellValue;
+            this.rowNumber = rowNumber;
+        }
+
+        private EventMessageCell(SafeHtml cellValue) {
+            this.cellValue = cellValue;
+        }
+
+        public AssetNode getAn() {
+            return an;
+        }
+
+        public void setAn(AssetNode an) {
+            this.an = an;
+        }
+
+        public SafeHtml getCellValue() {
+            return cellValue;
+        }
+
+        public void setCellValue(SafeHtml cellValue) {
+            this.cellValue = cellValue;
+        }
+
+        public int getRowNumber() {
+            return rowNumber;
+        }
+
+        public void setRowNumber(int rowNumber) {
+            this.rowNumber = rowNumber;
+        }
+
+    }
 
     /**
      * Builds a tabular data display based on an aggregate view of the event messages.
      * @param eventBus The event bus to receive asset click event (to display in the log browser for instance).
+     * @param assetClickEvent The type of event to fire.
      * @param externalRepositoryId The Id of the external repository containing the asset Id.
      * @param eventAssetId The Id of the upper-level Events asset.
      * @param assetType The type of assets to aggregate under the upper-level Events asset.
      * @param csvColumnNames The column row values to aggregate and display in the table. Column names are case-sensitive.
      */
-   public EventMessageAggregatorWidget(SimpleEventBus eventBus, String externalRepositoryId, String eventAssetId, String assetType, String[] csvColumnNames) throws RepositoryConfigException {
+   public EventMessageAggregatorWidget(SimpleEventBus eventBus, ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String assetType, String[] csvColumnNames) throws RepositoryConfigException {
        setEventBus(eventBus);
+       setAssetClickEvent(assetClickEvent);
        setExternalRepositoryId(externalRepositoryId);
        setEventAssetId(eventAssetId);
        setAssetType(assetType);
        setDisplayColumns(csvColumnNames);
 
+       Window.alert("This widget is obsolete, please use EventAggregatorWidget.");
        reposService.isRepositoryConfigured(new AsyncCallback<Boolean>() {
            public void onFailure(Throwable arg0) {
                Window.alert("EventMessageAggregatorWidget: The repository system configuration is not available: " + arg0.toString());
@@ -98,7 +166,7 @@ public class EventMessageAggregatorWidget extends Composite {
    }
 
     protected Widget setupLayout() {
-        logger.log(Level.FINE, "initializing aggregator...");
+        logger.log(Level.FINE, "In setupLayout of the event aggregator widget...");
 //        setSize("52%", "20%"); // Default size
 
 //        CellTable<List<SafeHtml>> table = new CsvTable().createCellTable(an.getCsv());
@@ -129,13 +197,12 @@ public class EventMessageAggregatorWidget extends Composite {
                                       -> child1
                                       -> child2
                                 */
-                                logger.info("Processing nodes... size:" + children.size());
+                                logger.fine("Processing nodes... size:" + children.size());
 
                                 for (AssetNode child : children) {
                                       if (getAssetType().equals(child.getType())) {
                                           logger.log(Level.INFO,"processing..." + getAssetType() + " id:" + child.getAssetId());
                                           try {
-
                                               aggregateMessage(child, "assertionGroup", rows, getDisplayColumns());
                                           } catch (RepositoryConfigException rce) {
                                               logger.warning(rce.toString());
@@ -151,7 +218,7 @@ public class EventMessageAggregatorWidget extends Composite {
                         setError("getImmediateChildren call failed: " + ex.toString());
                     }
                 } else {
-                    setError("Event assetId did not match the expected size=1: Id:" + getEventAssetId());
+                    setError("Event assetId did not match the expected size=1, got <"+ result.size() +">: Id:" + getEventAssetId());
                 }
 
             }
@@ -159,11 +226,11 @@ public class EventMessageAggregatorWidget extends Composite {
 
         //                                Window.alert("row sz: " + rows.size() + " rows[0][1]" + rows.get(0)[1]);
 
-        logger.info("Aggregated rows: " +table.getRowCount());
+        logger.fine("Aggregated rows: " +table.getRowCount());
         //                                List<List<SafeHtml>> rowList = dataProvider.getList();
 
 
-        table.setTableBuilder(new DefaultCellTableBuilder<List<SafeHtml>>(table));
+        table.setTableBuilder(new DefaultCellTableBuilder<List<EventMessageCell>>(table));
 
         //txTable.setWidth("100%", true);
 //        table.setWidth("50%");
@@ -185,7 +252,7 @@ public class EventMessageAggregatorWidget extends Composite {
 
         rows.add(getDisplayColumns()); // Header row
 
-        logger.info("updating rows:" + dataRows.size());
+        logger.fine("updating rows:" + dataRows.size());
         dataProvider.setList(dataRows);
         dataProvider.addDataDisplay(table);
 
@@ -206,9 +273,64 @@ public class EventMessageAggregatorWidget extends Composite {
         return getContentPanel();
     }
 
-    private void aggregateMessage(AssetNode an, final String assetType, final List<String[]> rows, final String[] columnNames) throws RepositoryConfigException {
+    private class IndexedColumn extends Column<List<EventMessageCell>, SafeHtml> { // Column<List<SafeHtml>, SafeHtml>
+        private final int index;
+        public IndexedColumn(int index) {
+            // For use with String:
+            // super(new TextCell());
 
-            logger.info("entering aggregateMessage: an displayName:" + an.getDisplayName() + " an type:" + an.getType() + " search type:" + assetType + " mimeType:" + an.getMimeType() + " hasContent:" + an.isContentAvailable() +  " csv:" + (an.getCsv()!=null));
+            super(new SafeHtmlCell() {
+                @Override
+                public Set<String> getConsumedEvents() {
+//                    return super.getConsumedEvents();
+                    HashSet<String> events = new HashSet<String>();
+                    events.add(ClickEvent.getType().getName());
+                    return events;
+                }
+            });
+            this.index = index;
+        }
+        @Override
+        public SafeHtml getValue(List<EventMessageCell> object) {
+            return object.get(this.index).getCellValue();
+        }
+
+        /**
+         * Handle a browser event that took place within the column.
+         *
+         * @param context the cellValue context
+         * @param elem    the parent Element
+         * @param object  the base object to be updated
+         * @param event   the native browser event
+         */
+        @Override
+        public void onBrowserEvent(Cell.Context context, Element elem, List<EventMessageCell> object, NativeEvent event) {
+            super.onBrowserEvent(context, elem, object, event);
+//            Window.alert(ClickEvent.getType().getName() + " " + this.index);
+            if (this.index==0 && ClickEvent.getType().getName().equals(event.getType()) ) {
+                AssetNode an = object.get(this.index).getAn();
+                int rowNumber = object.get(this.index).getRowNumber();
+
+//                Window.alert(an.getLocation() + ">>" + elem.getTagName()  + " asset: " + an.getAssetId() +  " row num:" + rowNumber);
+                if (an!=null) {
+                    switch (getAssetClickEvent()) {
+                        case IN_CONTEXT: eventBus.fireEvent(new InContextAssetClickedEvent(an,rowNumber));
+                            break;
+                        case OUT_OF_CONTEXT: eventBus.fireEvent(new OutOfContextAssetClickedEvent(an,rowNumber));
+                            break;
+                    }
+                }
+
+
+            }
+        }
+
+
+    }
+
+    private void aggregateMessage(final AssetNode an, final String assetType, final List<String[]> rows, final String[] columnNames) throws RepositoryConfigException {
+
+            logger.fine("entering aggregateMessage: an displayName:" + an.getDisplayName() + " an type:" + an.getType() + " search type:" + assetType + " mimeType:" + an.getMimeType() + " hasContent:" + an.isContentAvailable() +  " csv:" + (an.getCsv()!=null));
             if (assetType.equals(an.getType()) && "text/csv".equals(an.getMimeType()) && an.isContentAvailable() && an.getCsv()==null) {
                 reposService.getAssetTxtContent(an, new AsyncCallback<AssetNode>() {
                     @Override
@@ -217,9 +339,9 @@ public class EventMessageAggregatorWidget extends Composite {
                     }
 
                     @Override
-                    public void onSuccess(AssetNode result) {
-                        logger.info("retrieved content for:" + result.getAssetId());
-                        String[][] csv = result.getCsv();
+                    public void onSuccess(final AssetNode resultNode) {
+                        logger.fine("retrieved content for:" + resultNode.getAssetId());
+                        String[][] csv = resultNode.getCsv();
                         int rowLen = csv.length;
                         int colLen = csv[0].length;
 
@@ -235,7 +357,7 @@ public class EventMessageAggregatorWidget extends Composite {
 
                         }
 
-                        logger.info("indexed column size:" + colIdxMap.size());
+                        logger.fine("indexed column size:" + colIdxMap.size());
 
 //                String[][] aggregateList = new String[][];
 
@@ -247,13 +369,37 @@ public class EventMessageAggregatorWidget extends Composite {
                         // Extract values
                         for (int rowIdx=1 /* skip header */; rowIdx < rowLen; rowIdx++) {
 
-                            if (!previousSection.equals(result.getDisplayName())) {
-                                Anchor a = new Anchor(result.getDisplayName(),"javascript:void(0)");
-                                extractedRowValues[0] = "$htmlConstant" +  a.getElement().getString();
+                            if (!previousSection.equals(resultNode.getDisplayName())) {
+                                Anchor anchor = new Anchor(); // result.getDisplayName(),"javascript:void(0)"
+                                String colorStr = "";
+
+                                if (resultNode.getColor()!=null && !"".equals(resultNode.getColor())) {
+                                    colorStr = "style=\"color:" + resultNode.getColor() + "\"";
+                                }
+
+                                SafeHtmlBuilder nodeSafeHtml =  new SafeHtmlBuilder();
+                                nodeSafeHtml.appendHtmlConstant("<span "+ colorStr + " >"
+                                        + resultNode.getDisplayName() + "</span>");
+                                anchor.setHref("javascript:void(0)");
+                                anchor.setHTML(nodeSafeHtml.toSafeHtml());
+
+
+                                /* This option is not suitable for the csv translation table method.
+                                anchor.addClickHandler(new ClickHandler() {
+
+                                    public void onClick(ClickEvent event) {
+                                        Window.alert("clicked!");
+                                        eventBus.fireEvent(new AssetClickedEvent(resultNode)); // Need to use AssetNode
+                                    }
+                                });
+                                */
+//                                anchor.setText(resultNode.getDisplayName() + " -- " + anchor.getHref());
+
+                                extractedRowValues[0] = "$htmlConstant" +  anchor.getElement().getString();
                             } else {
                                 extractedRowValues[0] = "";
                             }
-                            previousSection = result.getDisplayName();
+                            previousSection = resultNode.getDisplayName();
 
                             for (int col=FIXED_HEADER_LAST_IDX; col < columnNames.length; col++) {
                                 if (colIdxMap.containsKey(columnNames[col])) {
@@ -262,17 +408,24 @@ public class EventMessageAggregatorWidget extends Composite {
                                 }
                             }
 
-                            // Add row only if not empty value
+                            /* Add row only if not empty value -- this may cause the row order to break
                             for (int col=FIXED_HEADER_LAST_IDX; col < columnNames.length; col++) {
                                 String val = extractedRowValues[col];
                                 if (val!=null && !"".equals(val)) {
-                                    rows.add(extractedRowValues);
-                                    extractedRowValuesTemp[0] = extractedRowValues;
-                                    csvFactory.updateList(0, extractedRowValuesTemp, dataProvider.getList());
-                                    logger.fine("total rows:" + rows.size());
-                                    break;
+                                ...
+                                break;
                                 }
                             }
+                            */
+
+                            rows.add(extractedRowValues);
+                            extractedRowValuesTemp[0] = extractedRowValues;
+                            // Set row marker which is to be used for highlighting the clicked row
+//                            logger.info("rowIndex:" + rowIdx );
+                            updateList(START_ROW_ZERO, rowIdx, extractedRowValuesTemp, dataProvider.getList(), an);
+                            logger.fine("total rows:" + rows.size());
+
+
                         }
 
 
@@ -306,6 +459,46 @@ public class EventMessageAggregatorWidget extends Composite {
         return;
     }
 
+    /**
+     *
+     * @param startRow
+     * @param csv
+     * @param rows The aggregate list.
+     * @param an
+     */
+    private void updateList(int startRow, int rowNumber, String [][]csv, List<List<EventMessageCell>> rows, AssetNode an) {
+
+        int rowLen = csv.length;
+        int colLen = csv[0].length;
+
+        for (int r = startRow; r < rowLen; r++) {
+//			        List<String> textRow = Arrays.asList(csv[r]);
+            if (csv[r]!=null) {
+                int textRowSz =  csv[r].length;  //textRow.size();
+                if (textRowSz>0) {
+                    List<EventMessageCell> htmlRow = new ArrayList<EventMessageCell>(textRowSz);
+                    for (int cx=0; cx<textRowSz; cx++) {
+//                        SafeHtmlBuilder shb = new SafeHtmlBuilder();
+                        String val =  csv[r][cx];    //textRow.get(cx);
+//                                logger.info("val LB: " + val);
+                        /* This will only attach the asset node object where the text is non-empty
+                        if (!"".equals(csv[r][0])) {
+                            htmlRow.add(new EventMessageCell(an,csvFactory.htmlBuilder(val).toSafeHtml()));
+                        } else {
+                            htmlRow.add(new EventMessageCell(csvFactory.htmlBuilder(val).toSafeHtml()));
+                        }
+                        */
+                        rowNumber = (startRow==START_ROW_ZERO)?rowNumber-1:rowNumber;  // r is always zero?
+//                        logger.info("EventMessageCell rowNumber: " + rowNumber);
+                        htmlRow.add(new EventMessageCell(an,csvFactory.htmlBuilder(val, false).toSafeHtml(),rowNumber));
+
+                    }
+                    rows.add(htmlRow);
+                }
+            }
+
+        }
+    }
 
 
     public void setError(String msg) {
@@ -388,8 +581,17 @@ public class EventMessageAggregatorWidget extends Composite {
     public void setContentPanel(SplitLayoutPanel contentPanel) {
         this.contentPanel = contentPanel;
     }
-    public DataGrid<List<SafeHtml>> getTable() {
+    public DataGrid<List<EventMessageCell>> getTable() {
         return table;
+    }
+
+
+    public ASSET_CLICK_EVENT getAssetClickEvent() {
+        return assetClickEvent;
+    }
+
+    public void setAssetClickEvent(ASSET_CLICK_EVENT assetClickEvent) {
+        this.assetClickEvent = assetClickEvent;
     }
 
 }

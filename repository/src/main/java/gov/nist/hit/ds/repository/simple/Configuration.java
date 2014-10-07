@@ -58,8 +58,14 @@ public class Configuration {
 		} catch (NullPointerException npe) {
 			logger.info("No resident repository source found in WAR/" + REPOSITORY_SOURCE_DIRNAME);
 		}
-				
-		String ecDir = Installation.installation().getExternalCache().toString();
+
+        String ecDir = null;
+        try {
+            ecDir = Installation.installation().getExternalCache().toString();
+        } catch (Exception ex) {
+            logger.warning(ex.toString());
+        }
+
         System.out.println("EC = " + ecDir);
 		
 		f = new File( ecDir + File.separator + REPOSITORY_SOURCE_DIRNAME); 

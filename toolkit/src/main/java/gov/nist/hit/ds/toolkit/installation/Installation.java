@@ -96,7 +96,6 @@ public class Installation {
 
         initializeExternalCache(externalCache);
 
-		initialized = true;
 	}
 	
 	void initializeExternalCache(File externalCache) throws InitializationFailedException {
@@ -116,6 +115,8 @@ public class Installation {
 			initializeEnvironments(ecMgr);
 			initializeSimDb(ecMgr);
 			initializeActors(ecMgr);
+            // Only set flag when everything above has been initialized without exceptions
+            initialized = true;
 		} catch (IOException e) {
 			throw new InitializationFailedException("",e);
 		}
