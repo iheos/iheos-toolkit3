@@ -26,6 +26,7 @@ public class CSVEntry implements IEntryFactory {
 		this.line = line;
 		int stringStart = -1;
 		boolean committed;
+        boolean quotedText = false; // This will distinguish plain quoted text from quotes in non-quoted text. Example: ...,mustUnderstand="true",...
 
 		committed = false;
 		for (int cursor=0; cursor < line.length(); cursor++) {
@@ -47,13 +48,15 @@ public class CSVEntry implements IEntryFactory {
 					committed = true;
 				}
 			} else if (c == '"') {
-				if (stringStart == -1)
+				if (stringStart == -1) {
+                    quotedText = true;
 					stringStart = cursor + 1;
-				else {
+                } else if (quotedText) {
 					String contents = line.substring(stringStart, cursor).trim(); 
 					add(contents);
 					stringStart = -1;
 					committed = true;
+                    quotedText = false;
 				}
 			} else {
 				if (stringStart == -1)
