@@ -52,6 +52,10 @@ public class DTM implements ModelElement, Serializable {
         dtm = new Date();
     }
 
+    public DTM(Date date) {
+        dtm = date;
+    }
+
     public Date getDtm() {
         return dtm;
     }

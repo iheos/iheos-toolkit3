@@ -683,9 +683,9 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 "whose medical record this document belongs. It is made several values and should be formatted as follow:<br/>" +
                 "<b>PID-3</b> should include the source patient identifier.<br/>" +
                 "<b>PID-5</b> should include the patient name.<br/>" +
+                "<b>PID-7</b> should include the patient date of birth.<br/>" +
                 "<b>PID-8</b> should code the patient gender as <br/>" +
                 "<center><i>M Male - F Female - O Other - U Unknown</i></center>" +
-                "<b>PID-7</b> should include the patient date of birth.<br/>" +
                 "<b>PID-11</b> should include the patient address.<br/>" +
                 "PID-2, PID-4, PID-12 and PID-19 should not be used.<br/>"));
         sourcePatientInfo.addFieldValidator(new RegExValidator("^PID-(((3|5|11|2|4|12|19)\\|)|(8\\|(M|F|O|U)$)|(7\\|(((19|20)\\d\\d)(0?[1-9]|1[012])(0?[1-9]|[12][0-9]|3[01])))$)", "This value is not a correct source patient info."));

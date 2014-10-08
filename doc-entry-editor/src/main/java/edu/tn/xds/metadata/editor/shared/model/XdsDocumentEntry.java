@@ -966,7 +966,7 @@ public class XdsDocumentEntry implements Serializable {
      * @see #validationErrors
      */
     public boolean verify() throws String256Exception {
-        // FIXME verification issue answer isn't well assigned along the process
+        // FIXME verification issue answer isn't well assigned along the process, this algorithm is horrible and wrong
         boolean answer = true;
         int total = 0;
         for (InternationalString is : titles) {
@@ -1027,12 +1027,33 @@ public class XdsDocumentEntry implements Serializable {
 
     @Override
     public String toString() {
-        return "Model [Class Code= Code: " + classCode.getCode().toString()
-                + "Display Name: " + classCode.getDisplayName().toString()
-                + "CodingScheme: "
-                + classCode.getCodingScheme().getCodingScheme().toString()
-                + ", Patient ID= ID Type: " + patientID.getIdType().toString()
-                + "Value: " + patientID.getValue().toString() + "]";
+        return "XdsDocumentEntry{" +
+                "authors=" + authors +
+                ", classCode=" + classCode +
+                ", comments=" + comments +
+                ", confidentialityCodes=" + confidentialityCodes +
+                ", creationTime=" + creationTime +
+                ", eventCode=" + eventCode +
+                ", fileName=" + fileName +
+                ", formatCode=" + formatCode +
+                ", hash=" + hash +
+                ", healthcareFacilityType=" + healthcareFacilityType +
+                ", id=" + id +
+                ", languageCode=" + languageCode +
+                ", legalAuthenticator=" + legalAuthenticator +
+                ", mimeType=" + mimeType +
+                ", patientID=" + patientID +
+                ", practiceSettingCode=" + practiceSettingCode +
+                ", repoUId=" + repoUId +
+                ", serviceStartTime=" + serviceStartTime +
+                ", serviceStopTime=" + serviceStopTime +
+                ", size=" + size +
+                ", sourcePatientId=" + sourcePatientId +
+                ", sourcePatientInfo=" + sourcePatientInfo +
+                ", titles=" + titles +
+                ", typeCode=" + typeCode +
+                ", uniqueId=" + uniqueId +
+                ", uri=" + uri +
+                '}';
     }
-
 }
