@@ -8,8 +8,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>gov.nist.hit.ds</groupId>
-    <version>3.0.0-SNAPSHOT</version>
     <artifactId>ds-sims</artifactId>
 
     <dependencies>
@@ -23,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>httpSoapValidator</artifactId>
+            <artifactId>http-soap-validator</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
@@ -31,7 +29,7 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xdsException</artifactId>
+            <artifactId>xds-exceptions</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>

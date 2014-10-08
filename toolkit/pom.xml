@@ -9,9 +9,8 @@
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>gov.nist.hit.ds</groupId>
+
     <artifactId>toolkit</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
@@ -34,7 +33,7 @@
             </dependency>
           <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <artifactId>xdsException</artifactId>
+                <artifactId>xds-exceptions</artifactId>
             </dependency>
           <dependency>
                 <groupId>gov.nist.hit.ds</groupId>

@@ -83,6 +83,7 @@
         <dependency>
             <groupId>com.sun.ebxml</groupId>
             <artifactId>ebxmlrr-common</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 
