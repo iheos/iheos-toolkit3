@@ -4,11 +4,11 @@ import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.Parameter;
-import gov.nist.hit.ds.repository.api.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
 import gov.nist.hit.ds.utilities.io.Io;
 import org.apache.commons.io.FileUtils;
@@ -47,7 +47,8 @@ public class SimpleAsset implements Asset, Flushable {
      */
 	public SimpleAsset(RepositorySource source) throws RepositoryException {
 		super();
-		setCreatedDate(new Hl7Date().now());
+        if (getCreatedDate()==null)
+		    setCreatedDate(new Hl7Date().now());
 		setSource(source);
 	}
 
@@ -90,7 +91,7 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
-     * Set a property using the {@link gov.nist.hit.ds.repository.api.PropertyKey} enumeration using the Java Properties API.
+     * Set a property using the {@link gov.nist.hit.ds.repository.shared.PropertyKey} enumeration using the Java Properties API.
      * @param key The property key
      * @param value The value
      * @throws RepositoryException
@@ -98,12 +99,18 @@ public class SimpleAsset implements Asset, Flushable {
 	@Override
 	public void setProperty(PropertyKey key, String value) throws RepositoryException {
         Parameter p = new Parameter();
-        p.setDescription("key");
-        p.assertNotNull(key);
-        p.setDescription("value");
-        p.assertNotNull(value);
 
-        setProperty(key.toString(), value);
+        try {
+            p.setDescription("key");
+            p.assertNotNull(key);
+            p.setDescription("value");
+            p.assertNotNull(value);
+
+            setProperty(key.toString(), value);
+
+        } catch (RepositoryException re) {
+            logger.warning(re.toString());
+        }
 	}
 
 	/**
@@ -114,13 +121,19 @@ public class SimpleAsset implements Asset, Flushable {
      */
 	public void setProperty(String key, String value) throws RepositoryException {
         Parameter p = new Parameter();
-        p.setDescription("key");
-        p.assertNotNull(key);
-        p.setDescription("value");
-        p.assertNotNull(value);
 
-        properties.setProperty(key, value);
-        if (autoFlush) flush(getPropFile());
+        try {
+            p.setDescription("key");
+            p.assertNotNull(key);
+            p.setDescription("value");
+            p.assertNotNull(value);
+
+            properties.setProperty(key, value);
+            if (autoFlush) flush(getPropFile());
+
+        } catch (RepositoryException re)  {
+            logger.warning(re.toString());
+        }
 	}
 
     /**
@@ -276,9 +289,15 @@ public class SimpleAsset implements Asset, Flushable {
     @Override
     public void setName(String name) throws RepositoryException {
         Parameter p = new Parameter("name");
-        p.assertNotNull(name);
 
-        setProperty(PropertyKey.ASSET_NAME, name);
+        try {
+            p.assertNotNull(name);
+
+            setProperty(PropertyKey.ASSET_NAME, name);
+
+        } catch (RepositoryException re) {
+            logger.warning(re.toString());
+        }
     }
 
 
@@ -566,25 +585,31 @@ public class SimpleAsset implements Asset, Flushable {
     @Override
     public void setMimeType(String mimeType) throws RepositoryException {
         Parameter p = new Parameter();
-        p.setDescription("mimeType");
-        p.assertNotNull(mimeType);
 
-        if (getMimeType()!=null) {
+        try {
+            p.setDescription("mimeType");
+            p.assertNotNull(mimeType);
 
-            if (getMimeType().equalsIgnoreCase(mimeType)) {
+            if (getMimeType()!=null) {
 
-                // Mime type did not change
-                return;
-            } else {
+                if (getMimeType().equalsIgnoreCase(mimeType)) {
 
-                // New mime type, delete the old content file
-                deleteContentIfExists(getContentFile());
+                    // Mime type did not change
+                    return;
+                } else {
 
+                    // New mime type, delete the old content file
+                    deleteContentIfExists(getContentFile());
+
+                }
             }
+
+            // Set mime type
+            setProperty(PropertyKey.MIME_TYPE, mimeType.toLowerCase());
+        } catch (RepositoryException re) {
+            logger.warning(re.toString());
         }
 
-        // Set mime type
-        setProperty(PropertyKey.MIME_TYPE, mimeType.toLowerCase());
     }
 
     /**
@@ -941,14 +966,14 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     /**
-     * Updates the file on disk.
+     * Updates the asset property file on disk.
      * @param propFile The property file
      * @throws RepositoryException
      */
 	@Override
 	public void flush(File propFile) throws RepositoryException {					
 		if (!getSource().getLocation().exists())
-		throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
+		    throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
 				"source directory [" + getSource().getLocation().toString() + "] does not exist");
 
 		try {			
@@ -959,7 +984,9 @@ public class SimpleAsset implements Asset, Flushable {
 			properties.store(writer, "");
 			writer.close();
 
-		} catch (IOException e) {
+            BaseRepository.setLastModified(getReposDir());
+
+        } catch (IOException e) {
 			throw new RepositoryException(RepositoryException.IO_ERROR, e);
 		}
 	}

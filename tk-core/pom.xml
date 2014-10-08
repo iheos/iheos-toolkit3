@@ -15,6 +15,7 @@
     
     <modules>
         <module>../repository</module>
+        <module>../repository-shared</module>
         <module>../http</module>
         <module>../soap-support</module>
         <module>../site-management</module>
@@ -31,6 +32,7 @@
     </modules>
     
     <dependencies>
+        <!--
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>actor-transaction</artifactId>
@@ -77,9 +79,11 @@
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository</artifactId>
         </dependency>
+        -->
         <dependency>
             <groupId>com.sun.ebxml</groupId>
             <artifactId>ebxmlrr-common</artifactId>
         </dependency>
     </dependencies>
+
 </project>

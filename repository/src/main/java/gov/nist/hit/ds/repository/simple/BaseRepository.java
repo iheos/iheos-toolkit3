@@ -5,7 +5,7 @@ import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
 import gov.nist.hit.ds.repository.api.LongValueIterator;
 import gov.nist.hit.ds.repository.api.PropertiesIterator;
-import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
@@ -14,6 +14,7 @@ import gov.nist.hit.ds.repository.api.TypeIterator;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.Calendar;
 import java.util.Properties;
 
 /**
@@ -525,7 +526,24 @@ public abstract class BaseRepository implements Repository {
 	}
 
 
-	
+    /**
+     * Sets the last modified time on the repository folder as an indicator of asset update, which is not otherwise immediately visible at the root level.
+     * @return
+     */
+    public static boolean setLastModified(File root) {
+        if (root!=null) {
+            return root.setLastModified(Calendar.getInstance().getTimeInMillis());
+        } else
+            return false;
+    }
 
+    /**
+     *
+     * @param root
+     * @return
+     */
+    public static long getLastModified(File root) {
+        return root.lastModified();
+    }
 
 }

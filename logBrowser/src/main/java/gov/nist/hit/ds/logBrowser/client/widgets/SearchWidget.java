@@ -31,22 +31,22 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import gov.nist.hit.ds.logBrowser.client.event.AssetClickedEvent;
+import gov.nist.hit.ds.logBrowser.client.event.asset.SearchResultAssetClickedEvent;
 import gov.nist.hit.ds.logBrowser.client.event.FilterSelectedEvent;
-import gov.nist.hit.ds.repository.api.PropertyKey;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.ContextSupplement;
-import gov.nist.hit.ds.repository.simple.search.client.PnIdentifier;
-import gov.nist.hit.ds.repository.simple.search.client.QueryParameters;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryTag;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
-import gov.nist.hit.ds.repository.simple.search.client.SimpleData;
-import gov.nist.hit.ds.repository.simple.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.rpc.search.client.ContextSupplement;
+import gov.nist.hit.ds.repository.shared.PnIdentifier;
+import gov.nist.hit.ds.repository.rpc.search.client.QueryParameters;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryTag;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SearchCriteria.Criteria;
+import gov.nist.hit.ds.repository.shared.SearchTerm;
+import gov.nist.hit.ds.repository.shared.SearchTerm.Operator;
+import gov.nist.hit.ds.repository.rpc.search.client.SimpleData;
+import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -270,7 +270,7 @@ public class SearchWidget extends Composite {
 							assetLnk.addClickHandler(new ClickHandler() {
 								
 								public void onClick(ClickEvent event) {
-									eventBus.fireEvent(new AssetClickedEvent(an)); // Need to use AssetNode									
+									eventBus.fireEvent(new SearchResultAssetClickedEvent(an)); // Need to use AssetNode
 								}
 							});
 							resultFt.setWidget(row,2, assetLnk);

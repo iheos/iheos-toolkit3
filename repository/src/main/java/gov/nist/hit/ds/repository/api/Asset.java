@@ -1,7 +1,6 @@
 package gov.nist.hit.ds.repository.api;
 
-import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 
 import java.io.File;
 

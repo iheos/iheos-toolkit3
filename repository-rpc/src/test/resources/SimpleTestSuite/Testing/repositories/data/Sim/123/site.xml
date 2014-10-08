@@ -1,0 +1,5 @@
+
+<site name="123">
+   <transaction name="rb" secure="0">http://localhost:8080/simwar/123/reg/rb</transaction>
+   <transaction name="rb" secure="1">https://localhost:8080/simwar/123/reg/rb</transaction>
+</site>

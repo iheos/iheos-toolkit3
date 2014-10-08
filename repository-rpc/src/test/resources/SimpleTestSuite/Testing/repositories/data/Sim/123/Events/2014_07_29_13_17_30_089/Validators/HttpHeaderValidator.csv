@@ -1,0 +1,3 @@
+ID, STATUS, R/O, EXPECTED, FOUND, MSG, CODE, LOCATION, REFERENCE, 
+HttpMessage001, SUCCESS, R, SIMPLE SOAP, SIMPLE SOAP, MTOM vs SIMPLE SOAP, Sender, , ??, 
+HttpMessage002, SUCCESS, R, application/soap+xml, application/soap+xml, HTTP contentType, Sender, , ??, 

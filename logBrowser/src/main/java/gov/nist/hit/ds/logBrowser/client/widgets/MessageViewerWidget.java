@@ -1,17 +1,10 @@
 package gov.nist.hit.ds.logBrowser.client.widgets;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class MessageViewerWidget extends Composite {
@@ -22,6 +15,8 @@ public class MessageViewerWidget extends Composite {
     private SimpleEventBus eventBus;
     private String caption;
     private String ioHeaderId;
+    private String repId;
+    private String repositorySrc;
 
 
     /**
@@ -68,5 +63,21 @@ public class MessageViewerWidget extends Composite {
         messagePanel.add(w);
 
     }
- 
+
+    public String getRepId() {
+        return repId;
+    }
+
+    public void setRepId(String repId) {
+        this.repId = repId;
+    }
+
+    public String getRepositorySrc() {
+        return repositorySrc;
+    }
+
+    public void setRepositorySrc(String repositorySrc) {
+        this.repositorySrc = repositorySrc;
+    }
+
 }

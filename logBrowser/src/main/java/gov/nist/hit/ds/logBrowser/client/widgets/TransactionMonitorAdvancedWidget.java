@@ -10,6 +10,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.builder.shared.TableCellBuilder;
 import com.google.gwt.dom.builder.shared.TableRowBuilder;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.ContextMenuHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -25,12 +31,15 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
@@ -39,11 +48,11 @@ import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import gov.nist.hit.ds.logBrowser.client.event.ListenerStatusEvent;
 import gov.nist.hit.ds.logBrowser.client.event.NewTxMessageEvent;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryService;
-import gov.nist.hit.ds.repository.simple.search.client.RepositoryServiceAsync;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
+import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 
-import java.lang.Boolean;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -105,8 +114,10 @@ public class TransactionMonitorAdvancedWidget extends Composite {
     private final String COLUMN_HEADER_SEARCH_HIT_IND = " ";
     private final String COLUMN_HEADER_ROW_MESSAGE_FROM = "Message From";
     private final String COLUMN_HEADER_ROW_FORWARDED_TO = "Forwarded To";
+    private final String COLUMN_HEADER_VALIDATION = "Validation";
+    private final String COLUMN_HEADER_CONTENT_TYPE = "Content Type";
 
-    final String[] columns = {COLUMN_HEADER_SEARCH_HIT_IND,"Timestamp","Status","Artifact",COLUMN_HEADER_ROW_MESSAGE_FROM,COLUMN_HEADER_PROXY,COLUMN_HEADER_ROW_FORWARDED_TO,"Path","ContentType","Method","Length",COLUMN_HEADER_RESPONSE_TIME_MS};
+    final String[] columns = {COLUMN_HEADER_SEARCH_HIT_IND,"Timestamp","Status","Artifact",COLUMN_HEADER_ROW_MESSAGE_FROM,COLUMN_HEADER_PROXY,COLUMN_HEADER_ROW_FORWARDED_TO,"Path",COLUMN_HEADER_CONTENT_TYPE,"Method","Length",COLUMN_HEADER_RESPONSE_TIME_MS,COLUMN_HEADER_VALIDATION};
     private MessageViewerWidget requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
     private MessageViewerWidget responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
     //Map<Integer, String> txRowParentId = new HashMap<Integer, String>();
@@ -115,6 +126,8 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
 
     private String filterLocation;
+    private String jmsHostAddress;
+    private List<String> validatorNames = new ArrayList<String>();
 
     private final AsyncCallback<AssetNode> contentSetup = new AsyncCallback<AssetNode>() {
         public void onFailure(Throwable arg0) {
@@ -163,6 +176,10 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         @Override
         public void onSuccess(Map<String,AssetNode> anMap) {
             logger.finest("good connection");
+            if (getJmsHostAddress()==null || "".equals(jmsHostAddress)) {
+                if (anMap.get("parentLoc")!=null)
+                    setJmsHostAddress(anMap.get("parentLoc").getExtendedProps().get("jmsHostAddress"));
+            }
             popTx(anMap,null);
             getTxTable().redraw();
             eventBus.fireEvent(new ListenerStatusEvent(getListening()));
@@ -215,6 +232,8 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                             if (getAutoShowFirstMessage()
                                     || (an.getParentId().equals(requestViewerWidget.getIoHeaderId()) && an.getParentId().equals(responseViewerWidget.getIoHeaderId()))) {
                                 requestViewerWidget.setIoHeaderId(an.getParentId());
+                                requestViewerWidget.setRepId(an.getRepId());
+                                requestViewerWidget.setRepositorySrc(an.getReposSrc());
                                 responseViewerWidget.setIoHeaderId(an.getParentId());
                                 reposService.getAssetTxtContent(an, contentSetup);
 
@@ -402,6 +421,41 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
 
     private Widget setupMonitor() {
+
+        try {
+            reposService.getJmsHostAddress(new AsyncCallback<String>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    setJmsHostAddress(null);
+                }
+
+                @Override
+                public void onSuccess(String result) {
+                    setJmsHostAddress(result);
+                }
+            });
+
+        } catch (RepositoryConfigException rce) {
+            logger.warning(rce.toString());
+            // Need to troubleshoot, manually
+        }
+
+        try {
+            reposService.getValidatorNames(new AsyncCallback<List<String>>() {
+                @Override
+                public void onFailure(Throwable caught) {
+
+                }
+
+                @Override
+                public void onSuccess(List<String> result) {
+                    validatorNames = result;
+                }
+            });
+        } catch (Throwable t) {
+            logger.warning(t.toString());
+        }
+
         requestViewerWidget.getElement().getStyle()
                 .setProperty("border", "none");
         responseViewerWidget.getElement().getStyle()
@@ -425,6 +479,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
         txMonitorMainSplitPanel.add(setupTable(centerPanel));
 
+
         return txMonitorMainSplitPanel;
 
     }
@@ -433,12 +488,20 @@ public class TransactionMonitorAdvancedWidget extends Composite {
     public void clear() {
 
         requestViewerWidget.setIoHeaderId(null);
+        requestViewerWidget.setRepId(null);
+        requestViewerWidget.setRepositorySrc(null);
+
+
         requestViewerWidget.setHeaderContent(new HTML(""));
         requestViewerWidget.setMessageContent(new HTML(""));
 
         responseViewerWidget.setIoHeaderId(null);
         responseViewerWidget.setHeaderContent(new HTML(""));
         responseViewerWidget.setMessageContent(new HTML(""));
+
+        responseViewerWidget.setRepId(null);
+        responseViewerWidget.setRepositorySrc(null);
+
 
 //        getTxRowParentId().clear();
 //        getTxRowAssetNode().clear();
@@ -554,6 +617,11 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                     this.renderCell(responseCell, createContext(11), new MessageDetailCell("response",11), rowValue);
                 responseCell.endTD();
 
+                // Render validation cell
+                TableCellBuilder validationCell = row.startTD();
+                validationCell.endTD();
+
+
                 // End Row
                 row.endTR();
 
@@ -615,10 +683,24 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                         }
                     } else  if (COLUMN_HEADER_RESPONSE_TIME_MS.equals(columns[index])) {
                         return formatResponseTime(o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index));
-                    } else {
+                    }  else if (COLUMN_HEADER_VALIDATION.equals(columns[index])) {
+
+
+                        String validationDetail = o.getMessageDetailMap().get(getMessageKey()).getAnMap().get("header").getExtendedProps().get("validationDetail");
+                        shb.appendHtmlConstant("<span title='" + ((validationDetail!=null)?validationDetail:"")  + "'>");
+                        shb.appendEscaped(o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index));
+                        shb.appendHtmlConstant("</span>");
+
+                    }  /* else if (COLUMN_HEADER_ROW_FORWARDED_TO.equals(columns[index])) {
+                        shb.appendEscaped(o.getMessageDetailMap().get(getMessageKey()).getAnMap().get("header").getExtendedProps().get("toIp"));
+                    } */ else {
 
                         try {
-                            shb.appendEscaped(o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index));
+//                            String val = o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index);
+//                            if (val!=null || (val!=null && !"null".equals(val)))
+                                shb.appendEscaped(o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index));
+//                            else
+//                                shb.appendEscaped("");
                         } catch (Throwable t) {
                             logger.info(t.toString());
                         }
@@ -700,7 +782,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 // Render timestamp cell
                 TableCellBuilder timestampCell = row.startTD();
-                this.renderCell(timestampCell, createContext(1), txTable.getColumn(1), rowValue);
+//                this.renderCell(timestampCell, createContext(1), txTable.getColumn(1), rowValue); /* Having this cell blank will create a grouping effect by the standard row */
                 timestampCell.endTD();
 
                 // Render Status cell
@@ -759,6 +841,11 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                 TableCellBuilder responseCell = row.startTD();
                 this.renderCell(responseCell, createContext(11), new MessageDetailCell(messageKey,11), rowValue);
                 responseCell.endTD();
+
+                TableCellBuilder validationCell = row.startTD();
+                this.renderCell(validationCell, createContext(12), new MessageDetailCell(messageKey,12), rowValue);
+                validationCell.endTD();
+
 
                 // End Row
                 row.endTR();
@@ -981,6 +1068,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             // Add a selection model to handle user selection.
             final SingleSelectionModel<TxMessageBundle> selectionModel = new SingleSelectionModel<TxMessageBundle>();
             txTable.setSelectionModel(selectionModel);
+
             selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
                 public void onSelectionChange(SelectionChangeEvent event) {
 
@@ -997,6 +1085,103 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             //sp.add(txTable);
 
 
+            final PopupPanel menu = new PopupPanel(true);
+
+
+
+            txTable.addDomHandler(new ContextMenuHandler() {
+                @Override
+                public void onContextMenu(ContextMenuEvent event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    if (requestViewerWidget.getIoHeaderId()==null)
+                        return;
+
+                    menu.addDomHandler(new ClickHandler() {
+
+                        public void onClick(ClickEvent arg0) {
+                            menu.hide();
+                        }
+                    }, ClickEvent.getType());
+                    menu.addDomHandler(new MouseOutHandler() {
+
+                        public void onMouseOut(MouseOutEvent arg0) {
+                            menu.hide();
+
+                        }
+                    }, MouseOutEvent.getType());
+
+                    // Window.alert(((Tree)event.getSource()).getSelectedItem().getText());
+
+                    VerticalPanel menuItemPanel = new VerticalPanel();
+
+
+                    for (final String valName : validatorNames) {
+                        Anchor validatorAnchor = new Anchor("Validate " + valName);
+                        validatorAnchor.addClickHandler(new ClickHandler() {
+                            @Override
+                            public void onClick(ClickEvent event) {
+                                if (requestViewerWidget.getIoHeaderId() != null) {
+                                    AssetNode transaction = new AssetNode();
+                                    transaction.setRepId(requestViewerWidget.getRepId());
+                                    transaction.setReposSrc(requestViewerWidget.getRepositorySrc());
+                                    transaction.setAssetId(requestViewerWidget.getIoHeaderId());
+//                                    Window.alert(transaction.getAssetId() + " src:" + transaction.getReposSrc());
+                                    try {
+                                        reposService.validateMessage(valName,transaction, new AsyncCallback<Map<String, AssetNode>>() {
+                                            @Override
+                                            public void onFailure(Throwable caught) {
+                                                String msg = caught.toString();
+                                                Window.alert(msg);
+                                                setValidationResponseResult("request", "RPC Fail", msg);
+                                                setValidationResponseResult("response", "RPC Fail", msg);
+                                            }
+
+                                            @Override
+                                            public void onSuccess(Map<String, AssetNode> result) {
+//                                                Window.alert((result==null)?"null":""+result.size()  +  " req rs:" + result.get("Request").getExtendedProps().get("result") );
+                                                if (result!=null && result.size()==0) {
+                                                    Window.alert("No validation response was received.");
+                                                    setValidationResponseResult("request", "No data", "Empty set");
+                                                    setValidationResponseResult("response", "No data", "Empty set");
+                                                }
+                                                if (result!=null) {
+//                                                    Window.alert(result.get("resType").getExtendedProps().get("result"));
+                                                    if (result.get("Request")!=null) {
+                                                        String resultStr = result.get("Request").getExtendedProps().get("result");
+                                                        String validationDetail = result.get("Request").getExtendedProps().get("validationDetail");
+                                                        setValidationResponseResult("request", resultStr , validationDetail);
+                                                    }
+                                                    if (result.get("Response")!=null) {
+                                                        String resultStr = result.get("Response").getExtendedProps().get("result");
+                                                        String validationDetail = result.get("Response").getExtendedProps().get("validationDetail");
+                                                        setValidationResponseResult("response", resultStr , validationDetail);
+                                                    }
+                                                }
+                                                getTxTable().redraw();
+                                            }
+                                        });
+
+                                    } catch (Throwable t) {
+                                        logger.warning(t.toString());
+                                    }
+
+                                }
+                            }
+                        });
+                        menuItemPanel.add(validatorAnchor);
+                    }
+
+                    menu.setWidget(menuItemPanel);
+                    menu.setPopupPosition(event.getNativeEvent().getClientX(), event.getNativeEvent().getClientY());
+                    menu.show();
+
+
+                }
+            }, ContextMenuEvent.getType());
+
+
             getPager().getElement().getStyle().setMarginTop(0, Style.Unit.PX);
             //getPager().setHeight("50%");
             getPager().getElement().getStyle().setVerticalAlign(Style.VerticalAlign.MIDDLE);
@@ -1007,6 +1192,20 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             logger.warning(t.toString());
         }
         return  null;
+    }
+
+    private void setValidationResponseResult(String rowStr, String resultStr, String validationDetail) {
+        TxMessageBundle txMessageBundle = findTxMessageBundle(requestViewerWidget.getIoHeaderId());
+        AssetNode an = txMessageBundle.getMessageDetailMap().get(rowStr).getAnMap().get("header");
+
+        if (an!=null) {
+            if (an.getCsv() !=null) {
+                String[][] csvData = an.getCsv();
+                csvData[0][12] = resultStr; // TODO: make constant
+                an.setCsv(csvData);
+                an.getExtendedProps().put("validationDetail",validationDetail);
+            }
+        }
     }
 
     public TxMessageBundle findTxMessageBundle(String parentId) {
@@ -1071,7 +1270,13 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
 
                         requestViewerWidget.setIoHeaderId(an.getParentId());
+                        requestViewerWidget.setRepId(an.getRepId());
+                        requestViewerWidget.setRepositorySrc(an.getReposSrc());
+
                         responseViewerWidget.setIoHeaderId(an.getParentId());
+                        responseViewerWidget.setRepId(an.getRepId());
+                        responseViewerWidget.setRepositorySrc(an.getReposSrc());
+
 
                         reposService.getAssetTxtContent(an, contentSetup);
 
@@ -1171,7 +1376,43 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
 
         }
-*/           @Override
+*/
+
+        /**
+
+
+        @Override
+        public void onBrowserEvent(Cell.Context context, Element elem, TxMessageBundle object, NativeEvent event) {
+            super.onBrowserEvent(context, elem, object, event);
+
+            Window.alert(event.getType());
+            if (ContextMenuEvent.getType().getName().equals(event.getType())) {
+                final PopupPanel menu = new PopupPanel(true);
+
+                VerticalPanel menuItemPanel = new VerticalPanel();
+
+                Anchor validateSoapAction = new Anchor("Validate SoapAction");
+                validateSoapAction.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+
+                    }
+                });
+
+                menuItemPanel.add(validateSoapAction);
+                menuItemPanel.add(new Anchor("Validate Header"));
+
+                menu.setWidget(menuItemPanel);
+                menu.setPopupPosition(event.getClientX(), event.getClientY());
+                menu.show();
+
+            }
+
+        }
+
+         */
+
+        @Override
         public SafeHtml getValue(TxMessageBundle o) {
             SafeHtmlBuilder shb = new SafeHtmlBuilder();
             try {
@@ -1193,8 +1434,8 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 } else if (COLUMN_HEADER_ROW_FORWARDED_TO.equals(columns[this.index])) {
 
-                    shb.appendHtmlConstant("<span title='" + headerMsg.getExtendedProps().get("toIp")  + "'>"); // .getProps()
-                    shb.appendEscaped(o.getCsvData().get(this.index));
+                    shb.appendHtmlConstant("<span title='" + o.getCsvData().get(this.index)  + "'>"); // .getProps()
+                    shb.appendEscaped(headerMsg.getExtendedProps().get("toIp"));
                     shb.appendHtmlConstant("</span>");
 
                 } else if (COLUMN_HEADER_RESPONSE_TIME_MS.equals(columns[this.index])) {
@@ -1223,8 +1464,13 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                     } else
                         shb.appendHtmlConstant("<span style=\"width:32px;height:32px;\">&nbsp;</span>");
-                } else {
+                }  else if (COLUMN_HEADER_VALIDATION.equals(columns[index])) {
+                    String validationDetail = headerMsg.getExtendedProps().get("validationDetail");
+                    shb.appendHtmlConstant("<span title='" + ((validationDetail!=null)?validationDetail:"")  + "'>");
                     shb.appendEscaped(o.getCsvData().get(this.index));
+                    shb.appendHtmlConstant("</span>");
+                }  else {
+                        shb.appendEscaped(o.getCsvData().get(this.index));
                 }
 
 
@@ -1237,6 +1483,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
             return shb.toSafeHtml();
         }
+
 
 
         /*
@@ -1354,4 +1601,13 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             dialogBox.show();
         }
     }
+
+    public String getJmsHostAddress() {
+        return jmsHostAddress;
+    }
+
+    public void setJmsHostAddress(String jmsHostAddress) {
+        this.jmsHostAddress = jmsHostAddress;
+    }
+
 }

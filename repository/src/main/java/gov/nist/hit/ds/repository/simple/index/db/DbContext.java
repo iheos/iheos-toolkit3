@@ -82,18 +82,21 @@ public class DbContext {
 	 * @return
 	 * @throws SQLException
 	 */
-	public void internalCmd(String sqlStr) throws SQLException {
-		
+	public boolean internalCmd(String sqlStr) throws SQLException {
+		boolean status = false;
 		logger.fine("IndexContainer SQL: " +sqlStr);
 		
 		if (connection!=null) {
 			Statement statement = connection.createStatement();
-			statement.execute(sqlStr);
+			status = statement.execute(sqlStr);
+            if (!status && statement.getUpdateCount()>0)
+                status = true;
 			statement.close();
 		}  else {
 			throw new SQLException("No connection.");
 		}
 
+        return status;
 	}
 	
 

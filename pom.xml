@@ -57,7 +57,7 @@
         <gwtVersion>2.5.1</gwtVersion>
         <mavenCompilerPluginVersion>3.1</mavenCompilerPluginVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-compiler-plugin.version>1.7</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
         <maven-source-plugin.version>2.3</maven-source-plugin.version>
         <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
         <maven-release-plugin.version>2.5</maven-release-plugin.version>
@@ -66,8 +66,10 @@
         <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
     </properties>
 
-
     <modules>
+
+        <!-- For some reason there seems to be an issue compiling the soapHttpValidator module with JDK 1.7, which is required by the editor module -->
+
         <module>repository-tools</module>
         <module>tk-core</module>
         <module>gui-core</module>

@@ -1,0 +1,12 @@
+#
+#Tue Jul 29 13:17:31 EDT 2014
+displayOrder=2
+mimeType=text/csv
+id=a0de0ef4-cfec-4067-a334-bdaafa7f9264
+status=SUCCESS
+parentId=806b4dd0-f9f1-4d96-883c-9ecd2645c2cd
+repositoryId=Sim
+type=assertionGroup
+displayName=SoapMessageParser
+createdDate=20140729131731
+updatedDate=20140729131731

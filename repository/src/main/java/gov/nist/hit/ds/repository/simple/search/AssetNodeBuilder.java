@@ -5,15 +5,15 @@ package gov.nist.hit.ds.repository.simple.search;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.AssetIterator;
-import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.index.db.DbIndexContainer;
-import gov.nist.hit.ds.repository.simple.search.client.AssetNode;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchCriteria.Criteria;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm;
-import gov.nist.hit.ds.repository.simple.search.client.SearchTerm.Operator;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SearchTerm;
+import gov.nist.hit.ds.repository.shared.SearchTerm.Operator;
+import gov.nist.hit.ds.repository.shared.SearchCriteria.Criteria;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class AssetNodeBuilder {
 	 public static enum Depth {		 
 			CHILDREN,
 			PARENT_ONLY
-	};	 
+	}
 	private Depth retrieveDepth;
 	
 	public AssetNodeBuilder() {
@@ -45,7 +45,8 @@ public class AssetNodeBuilder {
 	public List<AssetNode> build(Repository repos, PropertyKey orderByKey) throws RepositoryException {
 		return build(repos, orderByKey.toString());
 	}
-	
+
+
 	public List<AssetNode> build(Repository repos, String orderByKey) throws RepositoryException {
 			
 		List<AssetNode> topLevelAssets = new ArrayList<AssetNode>();
@@ -88,16 +89,30 @@ public class AssetNodeBuilder {
 
         criteria.append(new SearchTerm(PropertyKey.PARENT_ID, Operator.EQUALTO,new String[]{null}));
 
-        return new SearchResultIterator(new Repository[]{repos}, criteria);
+        return new SearchResultIterator(new Repository[]{repos}, criteria, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE});
     }
 
-
     public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent) throws RepositoryException {
+        return getImmediateChildren(repos, parent, null);
+    }
+
+    public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent, SearchCriteria detailCriteria) throws RepositoryException {
 		List<AssetNode> children = new ArrayList<AssetNode>();
 
-		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+        SearchCriteria parentCriteria = new SearchCriteria(Criteria.AND);
+        parentCriteria.append(new SearchTerm(PropertyKey.PARENT_ID, Operator.EQUALTOANY, new String[]{parent.getLocation(), parent.getAssetId()}));
 
-		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTOANY, new String[]{parent.getLocation(), parent.getAssetId()})); 
+
+        SearchCriteria criteria = null;
+
+        if (detailCriteria!=null) {
+            criteria = new SearchCriteria(Criteria.AND);
+            criteria.append(parentCriteria);
+            criteria.append(detailCriteria);
+        } else {
+            criteria = parentCriteria;
+        }
+
 		
 		AssetIterator iter;
 		try {
@@ -141,7 +156,7 @@ public class AssetNodeBuilder {
      */
 	public AssetNode getParentChain(Repository repos, AssetNode target, boolean initial) throws RepositoryException {
 		SearchCriteria criteria = new SearchCriteria(Criteria.OR);
-		criteria.append(new SearchTerm(PropertyKey.ASSET_ID,Operator.EQUALTO, target.getParentId()));
+		criteria.append(new SearchTerm(PropertyKey.ASSET_ID, Operator.EQUALTO, target.getParentId()));
 		criteria.append(new SearchTerm(PropertyKey.LOCATION,Operator.EQUALTO, target.getParentId()));
 
  		
@@ -264,9 +279,9 @@ public class AssetNodeBuilder {
 	}
 	
 	
-	private void getChildren(Repository repos, AssetNode parent) {
-		if (parent.getAssetId()==null)
-			return;
+	public AssetNode getChildren(Repository repos, AssetNode parent) throws RepositoryException {
+//		if (parent!=null && parent.getAssetId()==null)
+//			return null;
 		
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 
@@ -301,7 +316,7 @@ public class AssetNodeBuilder {
 			logger.warning(e.toString());
 		}
 
-
+        return parent;
 	}
 
 	public Depth getRetrieveDepth() {

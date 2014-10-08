@@ -2,9 +2,10 @@ package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.ArtifactId;
-import gov.nist.hit.ds.repository.api.PropertyKey;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.Parameter;
+import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.api.Type;
 
@@ -27,6 +28,17 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 	public SimpleRepository(ArtifactId id) throws RepositoryException {
 		super(id);
 	}
+
+    /**
+     *
+     * @param id
+     * @param source
+     * @throws RepositoryException
+     */
+    public SimpleRepository(ArtifactId id, RepositorySource source) throws RepositoryException {
+        super(id);
+        setSource(source);
+    }
 
 	/**
 	 * Create new Repository.
@@ -136,9 +148,12 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 
 		/* fixed: this caused a bug when more than one asset is created with the same name */
 
-        /* Normally, in this situation, the name is the file name. */
+        /* Normally, in this situation, the name is the file name.
 
         a.setId(new IdFactory().getNewId(name));
+        */
+
+        a.setId(new IdFactory().getNewId());
         a.setName(name);
 
 		a.updateDisplayName(displayName);

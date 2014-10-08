@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * A view of a {@link ContentWidget}.
+ * A view of a {@link gov.nist.hit.ds.logBrowser.client.ContentWidgetView}.
  */
 public class ContentWidgetView extends ResizeComposite {
 

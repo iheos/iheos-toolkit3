@@ -2,7 +2,6 @@ package gov.nist.hit.ds.repository.simple.search;
 
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
-import gov.nist.hit.ds.repository.presentation.PresentationData;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 import org.junit.Test;
 
@@ -134,20 +133,6 @@ public class MiscTest {
 	}
 	
 	
-	@Test
-	public void sortMapTest() {
-		
-		Properties p = new Properties();
-		
-		p.setProperty("x", "1");
-		p.setProperty("a", "2");
-		p.setProperty("y", "3");
-		p.setProperty("l", "4");
-
-
-		System.out.println("******" + PresentationData.getSortedMapString(p));
-
-	}
 
     @Test
     public void propertyKeyValueTest() {
