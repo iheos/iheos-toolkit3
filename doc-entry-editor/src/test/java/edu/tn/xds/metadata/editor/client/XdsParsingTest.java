@@ -78,14 +78,6 @@ public class XdsParsingTest extends GWTTestCase {
         MetadataEditorGinInjector injector = MetadataEditorGinInjector.instance;
         XdsParser xdsParser = injector.getXdsParser();
         XdsDocumentEntry model = xdsParser.parse(PreParse.getInstance().doPreParse(docentry));
-//        injector.getRequestFactory().saveFileRequestContext().saveAsXMLFile("test.xml",model.toXML()).fire(new Receiver<String>() {
-//            @Override
-//            public void onSuccess(String response) {
-//                assertNotNull("filename return from server is null",response);
-//                assertTrue("File is not xml file, file extension is wrong", response.contains(".xml"));
-//                String uri=GWT.getHostPageBaseURL() + "files/" + response;
-//            }
-//        });
     }
 
 
