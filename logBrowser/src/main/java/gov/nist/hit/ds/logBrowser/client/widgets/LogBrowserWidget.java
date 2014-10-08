@@ -27,7 +27,8 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.DataGrid;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -42,6 +43,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -63,12 +65,12 @@ import gov.nist.hit.ds.logBrowser.client.event.asset.SearchResultAssetClickedEve
 import gov.nist.hit.ds.logBrowser.client.event.asset.SearchResultAssetClickedEventHandler;
 import gov.nist.hit.ds.logBrowser.client.sh.BrushFactory;
 import gov.nist.hit.ds.logBrowser.client.sh.SyntaxHighlighter;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.simple.Configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,7 +94,7 @@ public class LogBrowserWidget extends Composite {
 	
 	VerticalPanel treePanel = new VerticalPanel();
 	SplitLayoutPanel splitPanel = new SplitLayoutPanel(5);
-	ScrollPanel centerPanel = new ScrollPanel();
+	LayoutPanel centerPanel = new LayoutPanel();
 	SplitLayoutPanel westContent = new SplitLayoutPanel(2);
 	ListBox reposLbx = new ListBox();
 	
@@ -1244,7 +1246,7 @@ public class LogBrowserWidget extends Composite {
         return null;
     }
 
-    protected void displayAssetContent(AssetNode an, ScrollPanel contentPanel, HTML propsWidget) {
+    protected void displayAssetContent(AssetNode an, Panel contentPanel, HTML propsWidget) {
 
             boolean reload =  (an.getExtendedProps().get("rowNumberToHighlight")!=null);
 
@@ -1285,7 +1287,9 @@ public class LogBrowserWidget extends Composite {
 				if ("text/csv".equals(an.getMimeType())) {
                     // Create a list data provider.
                        final ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
-					   CellTable<List<SafeHtml>> table = new CsvTableFactory().createCellTable(dataProvider, an.getCsv());
+//					   CellTable<List<SafeHtml>> table = new CsvTableFactory().createCellTable(dataProvider, an.getCsv());
+                        DataGrid<List<SafeHtml>> table = new CsvTableFactory().createDataGrid(dataProvider, an.getCsv());
+
                        if (an.getExtendedProps()!=null && an.getExtendedProps().get("rowNumberToHighlight")!=null) {
                            int rowNumberToHighlight = Integer.parseInt(an.getExtendedProps().get("rowNumberToHighlight")) - 1; /* the rowNumberToHighlight starts with 1, so compensate for the zero-based get */
                            if (rowNumberToHighlight>-1) {
@@ -1294,18 +1298,29 @@ public class LogBrowserWidget extends Composite {
 
                            }
                        }
-					   contentPanel.add(table);
+
+
+                    SplitLayoutPanel layoutPanel = new SplitLayoutPanel(0);
+
+                    SimplePager pager = CsvTableFactory.getPager();
+                    pager.setDisplay(table);
+
+                    layoutPanel.addSouth(pager, 26);
+                    layoutPanel.add(table);
+
+                    contentPanel.add(layoutPanel);
+
 				} else if ("text/xml".equals(an.getMimeType()) || "application/soap+xml".equals(an.getMimeType())) {
 					String xmlStr = an.getTxtContent().replace("<br/>", "\r\n");
 					String shStr = SyntaxHighlighter.highlight(xmlStr, BrushFactory.newXmlBrush() , false);
-					contentPanel.add(new HTML(shStr));
+					contentPanel.add(new ScrollPanel(new HTML(shStr)));
 				} else if ("text/json".equals(an.getMimeType())) {
 					String shStr = SyntaxHighlighter.highlight(an.getTxtContent(), BrushFactory.newCssBrush() , false);
-					contentPanel.add(new HTML(shStr));
+					contentPanel.add(new ScrollPanel(new HTML(shStr)));
 				} else if ("text/plain".equals(an.getMimeType())) {
-                    contentPanel.add(new HTML("<pre style='margin-top:0px;'>" + an.getTxtContent() + "</pre>"));
+                    contentPanel.add(new ScrollPanel(new HTML("<pre style='margin-top:0px;'>" + an.getTxtContent() + "</pre>")));
                 } else {
-					contentPanel.add(new HTML(an.getTxtContent()));	
+					contentPanel.add(new ScrollPanel(new HTML(an.getTxtContent())));
 				} 
 			} else {	
 
@@ -1330,7 +1345,7 @@ public class LogBrowserWidget extends Composite {
                     img.setAltText(imgText.getText());
 					imgPanel.add(img);
                     imgPanel.add(imgText);
-					contentPanel.add(imgPanel); // "There is no content for the selected asset."
+					contentPanel.add(new ScrollPanel(imgPanel)); // "There is no content for the selected asset."
 					// new HTML("<img height=" src='" + GWT.getModuleBaseForStaticFiles() + "images/nocontent.gif'>")
 
 			}
@@ -1342,7 +1357,7 @@ public class LogBrowserWidget extends Composite {
 
 	  }
 
-    private void addContentViewerTabPanelOption(final ScrollPanel contentPanel, int activeTabIdx) {
+    private void addContentViewerTabPanelOption(final Panel contentPanel, int activeTabIdx) {
         try {
             if (multiContentTabPanel.getWidgetCount() > 1 && multiContentTabPanel.getTabWidget(activeTabIdx) !=null) {
                 multiContentTabPanel.selectTab(activeTabIdx);

@@ -330,7 +330,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                 txMonitorMainSplitPanel.setWidgetSize(southPanel, messageDetailViewerHeight);
                 southPanel.setWidgetSize(requestViewerWidget, Math.round(.5 * containerWidth));
             } else {
-                logger.info("parent is " + (txMonitorMainSplitPanel.getParent()==null) + " or no detail showing:  detail: " + getShowTxDetail());
+                logger.fine("parent is " + (txMonitorMainSplitPanel.getParent()==null) + " or no detail showing:  detail: " + getShowTxDetail());
             }
 
         } catch (Throwable t) {
