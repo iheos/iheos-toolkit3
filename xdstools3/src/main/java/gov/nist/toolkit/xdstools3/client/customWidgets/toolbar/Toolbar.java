@@ -24,7 +24,6 @@ public class Toolbar extends RibbonBar {
 
         setMembersMargin(20);
         setAlign(Alignment.CENTER);
-        setStyleName("navbar");
 
         // Menu group: Session
         RibbonGroup sessionGroup = createRibbonGroup("Session");
@@ -56,7 +55,7 @@ public class Toolbar extends RibbonBar {
         ComboBoxItem cbItem = new ComboBoxItem();
         cbItem.setShowTitle(false);
         cbItem.setDefaultToFirstOption(true);
-        cbItem.setWidth(480);
+        cbItem.setWidth(603);
         cbItem.setType("comboBox");
         cbItem.setValueMap("Select test session", "Test session 1", "Add new test session...");
 

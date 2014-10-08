@@ -9,7 +9,7 @@
 
     <!-- ****************************** *** Modules ****************************** -->
     <!-- Inherit the core Web Toolkit stuff. -->
-    <inherits name="edu.tn.xds.metadata.editor.XDS-MetadataEditor"/>
+    <inherits name="edu.tn.xds.metadata.editor.XDSMetadataEditor"/>
 
     <!-- ****************************** *** Entry point ****************************** -->
     <entry-point class='edu.tn.xds.metadata.editor.client.MetadataEditorAppStandaloneEP'/>
