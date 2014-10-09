@@ -73,10 +73,48 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                 "<li><a href='#'>Home</a></li>" +
                 "<li><a href='#'>Queries & Retrieves</a>" +
                 "<ul>" +
-                "<li><a href='#TabPlace:FIND_DOCUMENTS'>Find Document</a></li>" +
-                "<li><a href='#'>Get Documents</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getFindDocumentsTabCode()+"'>Find Document</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getMpqFindDocumentsTabCode()+"'>MPQ Find Documents</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getGetDocumentsTabCode()+"'>Get Documents</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getGetRelatedDocumentsCode()+"'>Get Related Documents</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getRetrieveDocumentTabCode()+"'>Retrieve Document</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getFindFoldersCode()+"'>Find Folders</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getGetFoldersTabCode()+"'>Get Folders</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getGetFoldersAndContentsCode()+"'>Get Folders and Contents</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getGetSubmissionSetAndContentsTabCode()+"'>Get Submission Set and Contents</a></li>" +
                 "</ul>" +
                 "</li>" +
+                "<li><a href='#'>Tools</a>" +
+                "<ul>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getMessageValidatorTabCode()+"'>Message Validator</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getDocumentMetadataEditorTabCode()+"'>Document Metadata Editor</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getPreConnectathonTestsTabCode()+"'>Pre-Connectathon Tests</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getv2TabCode()+"'>v2 Tab Example</a></li>" +
+                "</ul>" +
+                "</li>" +
+                "<li><a href='#'>Send Test Data</a>" +
+                "<ul>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getv2TabCode()+"'>v2 Tab Example</a></li>" +
+                "</ul>" +
+                "</li>" +
+                "<li><a href='#'>Simulators</a>" +
+                "<ul>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getv2TabCode()+"'>v2 Tab Example</a></li>" +
+                "</ul>" +
+                "</li>" +
+                "<li><a href='#'>Connectathon Tools</a>" +
+                "<ul>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getSourceStoresDocumentValidationCode()+"'>XDS.b Doc Source Stores Document</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getRegisterAndQueryTabCode()+"'>XDS.b Register and Query</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getLifecycleValidationTabCode()+"'>XDS.b Lifecycle Validation</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getFolderValidationTabCode()+"'>XDS.b Registry Folder Validation</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getSubmitRetrieveTabCode()+"'>XDS.b Submit/Retrieve</a></li>" +
+                "</ul>" +
+                "</li>" +
+                "<div style='float:right'>" +
+                "<li><a href='#'><i class=\"fa fa-download\"></i> Download</a></li>" +
+                "<li><a href='#'><i class=\"fa fa-question-circle\"></i> Help</a></li>" +
+                "</div>" +
                 "</ul>" +
                 "</div>" +
                 "</nav>");
@@ -207,7 +245,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
         }
 
         else{
-            System.out.println("Unknown tab");
+            // unknown tab
             topTabSet.selectTab(0); // todo we can create a 404
             currentPlace=TabNamesUtil.getHomeTabCode();
         }
@@ -221,8 +259,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                     found=true;
                     break;
                 }
-            // Remove second part of the condition if you want to reopen a closed tab on browser history back navigation
-            if(found==false && TabNamesUtil.getHomeTabCode().equals(currentPlace)){
+            // Remove comment on second part of the condition if you do not want to reopen
+            // a closed tab on browser history back navigation
+            if(found==false /*&& TabNamesUtil.getHomeTabCode().equals(currentPlace)*/){
                 topTabSet.addTab(tab);
                 topTabSet.selectTab(tab);
             }
@@ -263,7 +302,6 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
     @Override
     public void start(AcceptsOneWidget acceptsOneWidget, com.google.gwt.event.shared.EventBus eventBus) {
         if(tabId!=null ) {
-            System.out.println("eventBus ? null: "+(Util.EVENT_BUS==null));
             Util.EVENT_BUS.fireEvent(new OpenTabEvent(tabId));
         }
     }

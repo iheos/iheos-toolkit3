@@ -42,4 +42,10 @@ public class TabPlace extends Place{
     public int hashCode() {
         return tabId.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Place: "+this.getClass().getName() +
+                ":'" + tabId +" loaded.";
+    }
 }

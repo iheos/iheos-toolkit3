@@ -14,8 +14,6 @@ import java.util.logging.Logger;
  * Created by onh2 on 9/22/2014.
  */
 public class Xdstools3ActivityMapper implements ActivityMapper {
-//    @Inject
-    EventBus eventBus= Util.EVENT_BUS;
 
     @Inject
     public Xdstools3ActivityMapper() {
@@ -24,13 +22,9 @@ public class Xdstools3ActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-//        PlaceController placeController=Xdstools3EP.injector.getPlaceController();
         Xdstools3ActivityView xdstools3ActivityView =Xdstools3GinInjector.injector.getXdstools3();
         //TODO check if place name exists otherwise redirect to home
-//        if (!placeController.getWhere().equals("home")) {
-            xdstools3ActivityView.setTabId(((TabPlace) place).getTabId());
-//            eventBus.fireEvent(new OpenTabEvent(((TabPlace) place).getTabId()));
-//        }
+        xdstools3ActivityView.setTabId(((TabPlace) place).getTabId());
         return xdstools3ActivityView;
     }
 }
