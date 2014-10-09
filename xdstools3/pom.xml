@@ -17,7 +17,6 @@
 
 
     <properties>
-        <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.5.1</gwtVersion>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,6 +68,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
@@ -216,7 +216,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <!-- <path>/xdstools2</path> <warFile>${project.build.directory}/xdstools3-v2-maven-alpha.war</warFile>
+                    <!-- <path>/xdstools2</path> <warFile>${project.build.directory}/xdstools3.war</warFile>
                         <tomcatLoggingFile>${project.build.directory}/log.txt</tomcatLoggingFile> -->
                 </configuration>
             </plugin>
