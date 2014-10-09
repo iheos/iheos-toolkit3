@@ -9,8 +9,6 @@
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>gov.nist.hit.ds</groupId>
-    <version>3.0.0-SNAPSHOT</version>
     <artifactId>site-management</artifactId>
 
     <!--
@@ -35,10 +33,6 @@
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>actor-transaction</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
@@ -108,15 +102,12 @@
                                             gwt-maven-plugin
                                         </artifactId>
                                         <versionRange>
-                                            [2.6.0-rc3,)
+                                            [2.5.1,)
                                         </versionRange>
                                         <goals>
                                             <goal>resources</goal>
                                         </goals>
                                     </pluginExecutionFilter>
-                                    <action>
-                                        <ignore></ignore>
-                                    </action>
                                 </pluginExecution>
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
