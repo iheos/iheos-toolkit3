@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Editable Grid handling InternationalString elements.
  */
 public class InternationalStringEditableGrid extends GenericEditableGrid<InternationalString> {
     private final static InternationalStringProperties isprops

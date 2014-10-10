@@ -92,23 +92,4 @@ public class NameValueString256EditorWidget extends GenericEditableListView<Stri
     protected ValueProvider<? super String256, String> getValueProvider() {
         return props.string();
     }
-
-
-    //	/**
-//	 * Sets whether a field is valid when its value length = 0 (default to
-//	 * true). This will warn the user through the editor widget if he didn't
-//	 * input anything in field which does not allow blank.
-//	 *
-//	 * @param nameAllowsBlank
-//	 *            true to allow blank to the name field, false otherwise
-//	 * @param valueAllowsBlank
-//	 *            true to allow blank to the value field, false otherwise
-//	 *
-//	 */
-//	public void setAllowBlanks(boolean nameAllowsBlank, boolean valueAllowsBlank) {
-//		name.setAllowBlank(nameAllowsBlank);
-//		value.setAllowBlank(valueAllowsBlank);
-//	}
-
-
 }
