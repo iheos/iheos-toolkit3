@@ -1,6 +1,14 @@
 package gov.nist.toolkit.xdstools3.client.util;
 
-/** Stores static variables & variables common to the application. This is a singleton.
+/**
+ * Stores static variables & variables common to the application. This is a singleton.
+ * The values set here are the Tabs codes used in TabSet to identify the different tabs
+ * and to set the different TabPlaces tokens for the URLs.
+ *
+ * URLs will be http://app-main-url#TabPlace:XXXXXX
+ *
+ * where XXXXXX is a value defined underneath such as HOME, ADMIN, GET_DOCUMENTS
+ * or GET_FOLDERS...
  *
  */
 public class TabNamesUtil {

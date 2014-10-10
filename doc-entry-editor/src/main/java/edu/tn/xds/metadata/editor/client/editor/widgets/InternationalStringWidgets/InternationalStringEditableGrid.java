@@ -25,8 +25,7 @@ public class InternationalStringEditableGrid extends GenericEditableGrid<Interna
     private static ColumnConfig<InternationalString, String> titleColumnConfig;
 
     public InternationalStringEditableGrid(String gridTitle) {
-        super(gridTitle, new ListStore<InternationalString>(isprops.key())/*, buildColumnModel()*/);
-//        setCheckBoxSelectionModel();
+        super(gridTitle, new ListStore<InternationalString>(isprops.key()));
     }
 
     @Override

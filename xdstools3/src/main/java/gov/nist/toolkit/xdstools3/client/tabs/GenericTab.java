@@ -59,7 +59,15 @@ public abstract class GenericTab extends Tab implements TabInterface {
         return tabName;
     }
 
+    /**
+     * Abstract method that builds the tab's widget content.
+     * @return tab's content widget
+     */
     protected abstract Widget createContents();
 
+    /**
+     * Method that sets the tab's name.
+     * @return tab's name
+     */
     protected abstract String setTabName();
 }

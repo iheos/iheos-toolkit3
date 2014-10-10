@@ -40,6 +40,8 @@ public class MetadataEditorApp implements IsWidget {
         activityPanel.add(appView.asWidget());
 
         historyHandler.handleCurrentHistory();
+
+        // the following can contribute to a good resizing of the web app within the browser, but it does not work perfectly
 //        appView.addResizeHandler(new ResizeHandler() {
 //            @Override
 //            public void onResize(ResizeEvent event) {

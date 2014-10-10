@@ -22,9 +22,6 @@ import edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry;
 
 import javax.inject.Inject;
 
-/**
- * Created by onh2 on 7/11/2014.
- */
 public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelView> {
     @Inject
     PlaceController placeController;
@@ -44,6 +41,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     }
 
     private void bind() {
+        // file loaded event handler
         ((MetadataEditorEventBus) getEventBus()).addFileLoadedHandler(new NewFileLoadedEvent.NewFileLoadedHandler() {
             @Override
             public void onNewFileLoaded(NewFileLoadedEvent event) {
@@ -57,6 +55,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 view.getTree().getSelectionModel().select(currentlyEdited, false);
             }
         });
+        // load editor event handler
         ((MetadataEditorEventBus) getEventBus()).addXdsEditorLoadedEventtHandler(new XdsEditorLoadedEvent.XdsEditorLoadedEventHandler() {
             @Override
             public void onXdsEditorLoaded(XdsEditorLoadedEvent event) {
@@ -75,6 +74,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
      */
     public void createNewDocumentEntry() {
         logger.info("Create new document entry");
+        // set item currently in edition
         currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, new XdsDocumentEntry());
         nextIndex++;
         view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
@@ -92,11 +92,15 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
      */
     public void loadDocumentEntry(SubmissionMenuData selectedItem) {
         if (!selectedItem.equals(view.getSubmissionSetTreeNode())) {
+            // set item currently edited
             currentlyEdited = selectedItem;
             startEditing();
         }
     }
 
+    /**
+     * This method creates a new Document Entry pre-filled with data from a configuration file on server.
+     */
     public void createPrefilledDocumentEntry() {
         if (prefilledDocEntry==null) {
             prefilledDocEntry = xdsParser.parse(PreParse.getInstance().doPreParse(AppResources.INSTANCE.xdsPrefill().getText()));
@@ -115,6 +119,9 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
 
     }
 
+    /**
+     * Method to save input data into an XML file on server
+     */
     public void doSave() {
         ((MetadataEditorEventBus) eventBus).fireSaveFileEvent(new SaveFileEvent());
         ((MetadataEditorEventBus) eventBus).addSaveCurrentlyEditedDocumentHandler(new SaveCurrentlyEditedDocumentEvent.SaveCurrentlyEditedDocumentEventHandler() {
@@ -126,17 +133,10 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
         });
     }
 
+    /**
+     * Method that performs file save on server
+     */
     private void save() {
-//        String xmlFileContent=new String();
-//        for (SubmissionMenuData submissionMenuData:view.getTreeStore().getAll()){
-//            if (submissionMenuData.getValue().startsWith("Document")){
-//                xmlFileContent+=submissionMenuData.getModel().toXML()+"\n";
-//                logger.info(xmlFileContent);
-//            }
-//        }
-//        xmlFileContent.replaceAll("<\\?xml version=\"1\\.0\" encoding=\"UTF-8\"\\?>"," ");
-//        logger.info(xmlFileContent);
-//        if (!xmlFileContent.isEmpty()) {
         requestFactory.saveFileRequestContext().saveAsXMLFile(currentlyEdited.getModel().getFileName().toString(), currentlyEdited.getModel().toXML()).fire(new Receiver<String>() {
 
             @Override
@@ -161,9 +161,11 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 d.show();
             }
         });
-//        }
     }
 
+    /**
+     * Method to start the edition of selected doc entry
+     */
     private void startEditing() {
         logger.info("Start editing selected document entry");
         ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));

@@ -53,7 +53,6 @@ public class FileUploadView extends AbstractView<FileUploadPresenter> {
         panel = new FramedPanel();
         panel.setHeaderVisible(false);
         panel.setButtonAlign(BoxLayoutPack.CENTER);
-        // panel.setWidth(350);
         panel.getElement().setMargins(2);
 
         form = new FormPanel();

@@ -8,6 +8,13 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 
 /**
+ * Application Client's Factory. Ginjector type can be used to bootstrap injection.
+ * It is similar to GWT bundles (image or text). You just create a method for each object
+ * you want to instantiate and Gin will generate it for you.
+ *
+ * See how Gin and Guice works: https://code.google.com/p/google-gin/wiki/GinTutorial
+ *                              https://github.com/google/guice/wiki/Motivation
+ *
  * Created by onh2 on 9/22/2014.
  */
 @GinModules(Xdstools3GinModule.class)

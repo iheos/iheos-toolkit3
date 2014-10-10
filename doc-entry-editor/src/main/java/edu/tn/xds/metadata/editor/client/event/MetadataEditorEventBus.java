@@ -5,6 +5,9 @@ import com.google.web.bindery.event.shared.SimpleEventBus;
 import edu.tn.xds.metadata.editor.client.event.NewFileLoadedEvent.NewFileLoadedHandler;
 import edu.tn.xds.metadata.editor.client.event.SaveFileEvent.SaveFileEventHandler;
 
+/**
+ * Class to declare the different events and handlers of the application in the eventbus
+ */
 public class MetadataEditorEventBus extends SimpleEventBus {
     // TODO personalized handlers
     public HandlerRegistration addFileLoadedHandler(NewFileLoadedHandler handler) {

@@ -69,7 +69,7 @@ public class MetadataEditorAppView extends Viewport {
         add(con);
 
 //        north.start();
-        submissionMVP.start();
+//        submissionMVP.start();
     }
 
     public void setCenterDisplay(Widget display) {

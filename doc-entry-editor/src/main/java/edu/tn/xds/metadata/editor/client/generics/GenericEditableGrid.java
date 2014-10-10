@@ -45,27 +45,34 @@ import java.util.logging.Logger;
  * <p/>
  * <pre>
  * <code>
- *      InternationalStringProperties isprops = GWT.create(InternationalStringProperties.class);
+ *     public class InternationalStringEditableGrid extends GenericEditableGrid<InternationalString> {
  *
- *      List<ColumnConfig<InternationalString, ?>> columnsConfigs = new ArrayList<ColumnConfig<InternationalString, ?>>();
- *      ColumnConfig<InternationalString, LanguageCode> cc1 = new ColumnConfig<InternationalString, LanguageCode>(isprops.langCode(), 15, "Language Code");
- *      ColumnConfig<InternationalString, String> cc2 = new ColumnConfig<InternationalString, String>(isprops.value(), 85, "Title");
- *      columnsConfigs.add(cc1);
- *      columnsConfigs.add(cc2);
- *      ColumnModel<InternationalString> columnModel = new ColumnModel<InternationalString>(columnsConfigs);
+ *          InternationalStringProperties isprops = GWT.create(InternationalStringProperties.class);
  *
- *      GenericEditableGrid<InternationalString> grid=new GenericEditableGrid<InternationalString>(InternationalString.class,"Title",new ListStore<InternationalString>(isprops.key()), columnModel);
- *      // grid.setCheckBoxSelectionModel();
- *
- *      LanguageCodeComboBox languageCodeComboBox = new LanguageCodeComboBox();
- *      languageCodeComboBox.setAllowBlank(false);
- *      // languageCodeComboBox.setToolTip("...");
- *      TextField tf = new TextField();
- *      tf.setAllowBlank(false);
- *      // tf.setToolTip("...");
- *
- *      grid.addColumnEditorConfig(cc1,languageCodeComboBox);
- *      grid.addColumnEditorConfig(cc2,tf);
+ *          public InternationalStringEditableGrid(String gridTitle) {
+ *              super(gridTitle, new ListStore<InternationalString>(isprops.key()));
+ *          }
+ *          @Override
+ *          protected ColumnModel<InternationalString> buildColumnModel() {
+ *              List<ColumnConfig<InternationalString, ?>> columnsConfigs = new ArrayList<ColumnConfig<InternationalString, ?>>();
+ *              languageCodeColumnConfig = new ColumnConfig<InternationalString, LanguageCode>(isprops.langCode(), 15, "Language Code");
+ *              titleColumnConfig = new ColumnConfig<InternationalString, String>(isprops.value(), 85, "Title");
+ *              columnsConfigs.add(languageCodeColumnConfig);
+ *              columnsConfigs.add(titleColumnConfig);
+ *              return new ColumnModel<InternationalString>(columnsConfigs);
+ *          }
+ *          @Override
+ *          protected void buildEditingFields() {
+ *              LanguageCodeComboBox languageCodeComboBox = new LanguageCodeComboBox();
+ *              BoundedTextField tf = new BoundedTextField();
+ *              addColumnEditorConfig(languageCodeColumnConfig, languageCodeComboBox);
+ *              addColumnEditorConfig(titleColumnConfig, tf);
+ *          }
+ *          @Override
+ *          protected GridModelFactory<InternationalString> getModelFactory() {
+ *              return InternationalStringFactory.instance;
+ *          }
+ *      }
  * </code>
  * </pre>
  *
@@ -94,6 +101,13 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
     private boolean hasHelpButtonEnabled = false;
     private boolean hasExtraWidget = false;
 
+    /**
+     * Grid constructor.
+     * <code>new GenericEditableGrid("gridTitle", new ListStore<InternationalString>(GWT.create(InternationalStringProperties.class).key()));</code>
+     *
+     * @param gridTitle Grid's panel title
+     * @param listStore Grid's ListStore
+     */
     public GenericEditableGrid(/* Class<M> parametrizedClass, */String gridTitle, ListStore<M> listStore) {
         super(listStore, new ColumnModel<M>(new ArrayList<ColumnConfig<M, ?>>()));
 
@@ -109,8 +123,6 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
 
         this.addStyleName("grid-minheight");
         this.setHeight(200);
-//        pane.addStyleName("grid-minheight");
-//        gridContainer.addStyleName("grid-minheight");
 
         newItemButton.setIcon(AppImages.INSTANCE.add());
         newItemButton.setToolTip("Add an new element");
@@ -134,7 +146,6 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         gridContainer.add(super.asWidget(), new VerticalLayoutContainer.VerticalLayoutData(1, 1)); // VerticalLayoutData does not work here why?
         pane.setWidget(gridContainer);
 
-
         setEditable();
         buildEditingFields();
 
@@ -147,16 +158,86 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         bindUI();
     }
 
+    /**
+     * Abstract method that need to be implemented in childs to build the Grid's
+     * ColumnModel.
+     * For instance:
+     * <code>
+     *     private static ColumnConfig<InternationalString, LanguageCode> languageCodeColumnConfig;
+     *     private static ColumnConfig<InternationalString, String> titleColumnConfig;
+     *     @Override
+     *     protected ColumnModel<InternationalString> buildColumnModel() {
+     *          List<ColumnConfig<InternationalString, ?>> columnsConfigs = new ArrayList<ColumnConfig<InternationalString, ?>>();
+     *          languageCodeColumnConfig = new ColumnConfig<InternationalString, LanguageCode>(isprops.langCode(), 15, "Language Code");
+     *          titleColumnConfig = new ColumnConfig<InternationalString, String>(isprops.value(), 85, "Title");
+     *          columnsConfigs.add(languageCodeColumnConfig);
+     *          columnsConfigs.add(titleColumnConfig);
+     *          return new ColumnModel<InternationalString>(columnsConfigs);
+     *     }
+     * </code>
+     * @return Grid's ColumnModel<M>
+     */
     protected abstract ColumnModel<M> buildColumnModel();
 
+    /**
+     * Abstract method that is supposed to build, and to each desired ColomnConfig
+     * a Field widget to edit the column content in edition mode. This must be
+     * implemented in childs classes.
+     *
+     * For instance:
+     * <code>
+     *     private static ColumnConfig<InternationalString, LanguageCode> languageCodeColumnConfig;
+     *     private static ColumnConfig<InternationalString, String> titleColumnConfig;
+     *     @Override
+     *     protected void buildEditingFields() {
+     *          LanguageCodeComboBox languageCodeComboBox = new LanguageCodeComboBox();
+     *          BoundedTextField tf = new BoundedTextField();
+     *          addColumnEditorConfig(languageCodeColumnConfig, languageCodeComboBox);
+     *          addColumnEditorConfig(titleColumnConfig, tf);
+     *     }
+     * </code>
+     */
     protected abstract void buildEditingFields();
 
+    /**
+     * Abstract method to get the right GridModelFactory for the EditableGrid.
+     * <code>
+     *     @Override
+     *     protected GridModelFactory<InternationalString> getModelFactory() {
+     *          return InternationalStringFactory.instance;
+     *     }
+     * </code>
+     * @return GridModelFactory<M>
+     */
+    protected abstract GridModelFactory<M> getModelFactory();
+
+    /**
+     * Method to add a new widget to the EditbleGrid widget.
+     * For exemple:
+     * <code>
+     *     @Override
+     *     public Widget getDisplay() {
+     *          FieldLabel codedTermFL = new FieldLabel(cb, "Select a coded term to add");
+     *          codedTermFL.setLabelWidth(200);
+     *          addWidget(codedTermFL);
+     *          return super.getDisplay();
+     *     }
+     * </code>
+     * @param widget
+     */
     protected void addWidget(Widget widget) {
         hasExtraWidget = true;
         widget.addStyleName("topBorder");
         gridContainer.add(widget, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(0, 4, 1, 4)));
     }
 
+    /**
+     * Method to add several widget to the EditableGrid widget.
+     * It's the similar to addWidget(Widget widget) method but
+     * with the possiblity to add more than one widget in parameter.
+     *
+     * @param widgets
+     */
     protected void addWidgets(Widget... widgets) {
         hasExtraWidget = true;
         boolean firstDone = false;
@@ -169,8 +250,6 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         }
     }
 
-    protected abstract GridModelFactory<M> getModelFactory();
-
     /**
      * Needs to be used to get the Grid Editable. It configures how the columns
      * will be edited.
@@ -179,15 +258,24 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
      *                     of editable field
      * @param field        Editable field which will be used to edit the grid's Column
      */
-    public <N> void addColumnEditorConfig(ColumnConfig<M, N> columnConfig, Field<N> field) {
+    protected  <N> void addColumnEditorConfig(ColumnConfig<M, N> columnConfig, Field<N> field) {
         editing.addEditor(columnConfig, field);
     }
 
+    /**
+     * Method that return the entire EditableGrid widget's UI. It should be used as asWidget()
+     * method and have been added to avoid an behavior error due to asWidget() use elsewhere.
+     *
+     * @return entire EditableGrid widget's UI
+     */
     public Widget getDisplay() {
         pane.setResize(true);
         return pane.asWidget();
     }
 
+    /**
+     * Method that bind the tooltips ui with custom actions
+     */
     private void bindToolTips() {
         helpButton.getToolTip().addShowHandler(new ShowEvent.ShowHandler() {
             @Override
@@ -215,12 +303,15 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         });
     }
 
+    /**
+     * Method that binds the UI with the right actions (button click handlers, event handlers,...)
+     */
     private void bindUI() {
+        // NEW BUTTON CLICK HANDLER
         newItemButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent selectEvent) {
                 // try to fire an event
-//                logger.info("current list size: " + getStore().size() + "\nStore max size: " + storeMaxLength);
                 if (getStore().size() < storeMaxLength || storeMaxLength == 0) {
                     editing.cancelEditing();
                     // this method should work I don't understand why there is a problem.
@@ -243,6 +334,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
                 }
             }
         });
+        // DELETE BUTTON CLICK HANDLER
         deleteItemsButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
@@ -262,6 +354,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
                 });
             }
         });
+        // CLEAR BUTTON CLICK HANDLER
         clearButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
@@ -281,11 +374,17 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         });
     }
 
+    /**
+     * Method that performs the entire deletion of the grid's store.
+     */
     protected void clearStoreAction() {
         getStore().clear();
         getStore().commitChanges();
     }
 
+    /**
+     * Method that performs the deletion of selected items in the grid's store.
+     */
     protected void deleteItemAction() {
         for (M e : getSelectionModel().getSelectedItems()) {
             getStore().remove(e);
@@ -293,64 +392,89 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         }
     }
 
+    /**
+     * Method to disable the edition mode on the grid.
+     * (not sure it is useful)
+     */
     public void disableEditing() {
         disableToolbar();
-        // this.disable();
         editing.clearEditors();
     }
 
+    /**
+     * Method to disable NEW button in toolbar.
+     */
     public void disableNewButton() {
         newItemButton.disable();
     }
 
+    /**
+     * Method that disable and hide the entire grid's toolbar.
+     */
     public void disableToolbar() {
         hasToolbar = false;
         toolBar.disable();
         toolBar.setVisible(false);
     }
 
+    /**
+     * Method that enables the NEW button
+     */
     public void enableNewButton() {
         newItemButton.enable();
     }
 
+    /**
+     * Getter for the Grid's toolbar
+     * @return grid's toolbar widget
+     */
     public ToolBar getToolbar() {
         return toolBar;
     }
 
+    /**
+     * Method telling if the checkbox selection model have been enabled for the grid or not.
+     * @return
+     * true - if checkbox selection model is enabled
+     * false - otherwise
+     */
     public boolean isCheckBoxEnabled() {
         return checkBoxEnabled;
     }
 
     //--------------------------------------------------------------------------------------------------------
-//  //----  SHOULD NOT BE USED WITH GIRD ROW EDITING, ONLY WITH GRID INLINE EDITING
+    //----  SHOULD NOT BE USED WITH GIRD ROW EDITING, ONLY WITH GRID INLINE EDITING
 //    /**
 //     * This Method enables the grid's selection checkbox column (for
 //     * multiselection).
 //     */
-    public void setCheckBoxSelectionModel() {
-        checkBoxEnabled = true;
-        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
-        IdentityValueProvider<M> identityValueProvider = new IdentityValueProvider<M>();
-        CheckBoxSelectionModel<M> selectColumn = new CheckBoxSelectionModel<M>(identityValueProvider);
-        selectColumn.setSelectionMode(Style.SelectionMode.MULTI);
-        columnsConfigs.add(selectColumn.getColumn());
-        columnsConfigs.addAll(cm.getColumns());
-
-        this.cm = new ColumnModel<M>(columnsConfigs);
-
-        this.setSelectionModel(selectColumn);
-
-        this.getSelectionModel().addSelectionChangedHandler(new SelectionChangedEvent.SelectionChangedHandler<M>() {
-            @Override
-            public void onSelectionChanged(SelectionChangedEvent<M> event) {
-                // TODO whatever you have to do
-            }
-        });
-
-        setEditable();
-    }
-
+//    public void setCheckBoxSelectionModel() {
+//        checkBoxEnabled = true;
+//        List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
+//        IdentityValueProvider<M> identityValueProvider = new IdentityValueProvider<M>();
+//        CheckBoxSelectionModel<M> selectColumn = new CheckBoxSelectionModel<M>(identityValueProvider);
+//        selectColumn.setSelectionMode(Style.SelectionMode.MULTI);
+//        columnsConfigs.add(selectColumn.getColumn());
+//        columnsConfigs.addAll(cm.getColumns());
+//
+//        this.cm = new ColumnModel<M>(columnsConfigs);
+//
+//        this.setSelectionModel(selectColumn);
+//
+//        this.getSelectionModel().addSelectionChangedHandler(new SelectionChangedEvent.SelectionChangedHandler<M>() {
+//            @Override
+//            public void onSelectionChanged(SelectionChangedEvent<M> event) {
+//                // TODO whatever you have to do
+//            }
+//        });
+//
+//        setEditable();
+//    }
     //--------------------------------------------------------------------------------------------------------
+
+    /**
+     * Method to make the grid editable on double click.
+     */
     protected void setEditable() {
         // EDITING //
         editing = new GridRowEditing<M>(this);
@@ -363,6 +487,10 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         });
     }
 
+    /**
+     * Method to make the grid editable on a specific number of clicks.
+     * @param clicksToEdit number of clicks to enter the grid's edition mode.
+     */
     protected void setEditable(ClicksToEdit clicksToEdit) {
         // EDITING //
         editing = new GridRowEditing<M>(this);
@@ -375,17 +503,31 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         });
     }
 
+    /**
+     * Method to make the grid's header visible.
+     * @param visible true - header visible
+     *                false - header invisible
+     */
     public void setHeaderVisible(boolean visible) {
         pane.setHeaderVisible(visible);
     }
 
+    /**
+     * Method to give a custom height the grid.
+     * @param height custom height in pixels
+     */
     public void setHeight(int height) {
         gridContainer.setHeight(height);
         pane.setHeight(height);
     }
 
+    /**
+     * Method to set the maximum number of elements that can be stored in the grid.
+     * @param storeMaxLength number of elements that can be stored in the grid
+     */
     protected void setStoreMaxLength(int storeMaxLength) {
         this.storeMaxLength = storeMaxLength;
+        // calculate custom height based on the number of elements the grid can store
         if (storeMaxLength == 1) {
             this.setHeight(70 + (hasToolbar == true ? 25 : 0) + (hasExtraWidget == true ? 20 : 0));
         } else {
@@ -395,6 +537,10 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         }
     }
 
+    /**
+     * Set help content for the grid widget toolbar help button
+     * @param helpContent
+     */
     public void setToolbarHelpButton(String helpContent) {
         helpTooltipConfig.setBodyHtml(helpContent);
         if (!hasHelpButtonEnabled) {
@@ -407,6 +553,10 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         bindToolTips();
     }
 
+    /**
+     * Set help content for the grid widget toolbar help button
+     * @param helpContent
+     */
     public void setToolbarHelpButtonTooltip(ToolTipConfig helpContent) {
         helpTooltipConfig.setBodyHtml(helpContent.getBodyHtml());
         helpTooltipConfig.setTitleHtml(helpContent.getTitleHtml());
@@ -420,6 +570,10 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         bindToolTips();
     }
 
+    /**
+     * Getter that return the maximum number of elements the grid can store.
+     * @return maximum number of elements the grid can store.
+     */
     public int getStoreMaxSize() {
         return storeMaxLength;
     }
