@@ -14,7 +14,6 @@ class EndpointBuilder {
     SimId simId = null
     String actorCode
     String transCode
-    boolean isValid = true
 
     EndpointBuilder() { log.debug("EndpointBuilder")}
 
@@ -54,9 +53,8 @@ class EndpointBuilder {
     EndpointBuilder parse(String endpoint) {
         // http, serverport are actually wrong
         def (http, serverPort, basePart, simStr, simid, actor, trans) = endpoint.tokenize('/')
-        if (!simid || !actor || !trans) isValid = false
         log.debug("endpoint parser : ${toString()}")
-        if (isValid)
+        if (simid)
             simId = new SimId(simid)
         actorCode = actor
         transCode = trans

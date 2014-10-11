@@ -15,9 +15,8 @@ class TransactionType /* implements IsSerializable, Serializable */ {
     public String requestAction
     public String responseAction
     public String implementationClassName
-    // These are used at runtime
-    transient public boolean multiPart
-    transient public boolean soap
+    public boolean multiPart
+    public boolean soap
 
     public String getId() { return id; }
     public String getCode() { return code }
@@ -27,6 +26,8 @@ class TransactionType /* implements IsSerializable, Serializable */ {
     Map<String, String> props = new HashMap<String, String>()
 
     public static final String retrieveTransactionTypeCode = 'ret.b'
+
+    TransactionType() {}
 
     String getTransactionProperty(String key) { return props.get(key) }
     boolean hasTransactionProperty(String key) { return props.containsKey(key) }

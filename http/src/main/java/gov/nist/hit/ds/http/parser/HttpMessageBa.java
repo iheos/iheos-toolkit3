@@ -31,7 +31,7 @@ public class HttpMessageBa implements HttpServletRequest {
 		Header() {}
 		Header(String name, String value) {
 			this.name = name.trim();
-			this.lcname = name.toLowerCase();
+			this.lcname = this.name.toLowerCase();
 			this.value = value.trim();
 		}
 		

@@ -9,7 +9,7 @@ import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.http.environment.HttpEnvironment;
 import gov.nist.hit.ds.http.parser.HttpParseException;
 import gov.nist.hit.ds.http.parser.ParseException;
-import gov.nist.hit.ds.httpSoapValidator.testSupport.HttpServletResponseMock;
+import gov.nist.hit.ds.httpSoap.testSupport.HttpServletResponseMock;
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;

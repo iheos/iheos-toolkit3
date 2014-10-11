@@ -2,9 +2,9 @@ package gov.nist.hit.ds.dsSims.transactions
 import gov.nist.hit.ds.dsSims.Transaction
 import gov.nist.hit.ds.dsSims.reg.DSMetadataProcessing
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
-import gov.nist.hit.ds.httpSoapValidator.components.validators.SoapHeaderValidator
-import gov.nist.hit.ds.httpSoapValidator.validators.HttpHeaderValidator
-import gov.nist.hit.ds.httpSoapValidator.validators.SoapMessageParser
+import gov.nist.hit.ds.httpSoap.components.validators.SoapHeaderValidator
+import gov.nist.hit.ds.httpSoap.validators.HttpHeaderValidator
+import gov.nist.hit.ds.httpSoap.validators.SoapMessageParser
 import gov.nist.hit.ds.metadata.*
 import gov.nist.hit.ds.metadata.client.MetadataCollection
 import gov.nist.hit.ds.metadata.store.RegistryFactory

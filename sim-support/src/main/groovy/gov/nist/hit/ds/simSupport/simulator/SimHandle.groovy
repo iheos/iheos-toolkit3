@@ -2,6 +2,7 @@ package gov.nist.hit.ds.simSupport.simulator
 import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.EventFactory
+import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.Repository
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig
@@ -26,6 +27,7 @@ class SimHandle {
     SoapEnvironment soapEnvironment
     boolean open = true
     def options = []
+    boolean complete = false
 
     // Event creation is lazy so create doesn't build unused event
     Event getEvent() {
@@ -38,4 +40,10 @@ class SimHandle {
     }
 
     boolean hasOption(String option) { options.contains(option)}
+
+    SimHandle fault(Fault fault) {
+        event.fault = fault
+        complete = true
+        return this
+    }
 }

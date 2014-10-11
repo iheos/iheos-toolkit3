@@ -2,7 +2,7 @@ package gov.nist.hit.ds.registrySim.transactions;
 
 import gov.nist.hit.ds.errorRecording.client.XdsErrorCode.Code;
 import gov.nist.hit.ds.eventLog.assertion.ValidationRef;
-import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
+import gov.nist.hit.ds.httpSoap.datatypes.SoapMessage;
 import gov.nist.hit.ds.registryMetadata.IdParser;
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registryMetadata.MetadataParser;
@@ -27,7 +27,6 @@ import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -5,6 +5,7 @@ import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.dsSims.msgModels.RegistryResponse;
 import gov.nist.hit.ds.dsSims.msgs.RegistryResponseGenerator;
 import gov.nist.hit.ds.eventLog.Fault;
+import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder;
 import gov.nist.hit.ds.simSupport.simulator.SimHandle;
@@ -14,6 +15,7 @@ import gov.nist.hit.ds.simSupport.utilities.SimSupport;
 import gov.nist.hit.ds.simSupport.utilities.SimUtils;
 import gov.nist.hit.ds.soapSupport.FaultCode;
 import gov.nist.hit.ds.soapSupport.core.*;
+import gov.nist.hit.ds.utilities.html.HttpMessageContent;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import org.apache.axiom.om.OMElement;
@@ -26,7 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -85,7 +87,7 @@ public class SimServlet extends HttpServlet {
     }
 
     protected SimHandle runPost(SimId simId, String header, byte[] body, List<String> options, HttpServletResponse response) {
-        SimHandle simHandle = runPost2(simId, header, body, options, response);
+        SimHandle simHandle = runPost2(simId, new HttpMessageContent(header, body), options, response);
         Fault fault = simHandle.getEvent().getFault();
         if (fault == null) {
             OMElement responseEle = new RegistryResponseGenerator(new RegistryResponse()).toXml();
@@ -105,66 +107,45 @@ public class SimServlet extends HttpServlet {
     // Surface errors
     //    invalid endpoint
     //    sim does not exist
-    protected SimHandle runPost2(SimId simId, String header, byte[] body, List<String> options, HttpServletResponse response) {
-        logger.debug("Building SimHandle");
-        SoapHeader soapHeader = new SoapHeaderParser(new String(body)).parse();
+    protected SimHandle runPost2(SimId simId, HttpMessageContent content, List<String> options, HttpServletResponse response) {
+        byte[] soapEnvelopeBytes = new HttpSoapParser(content).getSoapEnvelope();
+        SoapHeader soapHeader = new SoapHeaderParser(new String(soapEnvelopeBytes)).parse();
         String to = soapHeader.getTo();
         SoapEnvironment soapEnvironment = buildSoapEnvironment(soapHeader, response);
+        if (to == null || to.equals(""))
+            return sendFault(simId, "No To endpoint found in SOAP header", FaultCode.Sender, soapEnvironment, content);
         EndpointBuilder endpointBuilder = new EndpointBuilder().parse(to);
         SimId toSimId = endpointBuilder.getSimId();
+        if (toSimId == null)
+            return sendFault(new SimId(errorSimId), "Could not parse To endpoint found in SOAP header. Endpoint is [" + to + "]", FaultCode.Sender, soapEnvironment, content);
         if (!toSimId.getId().equals(simId.getId())) {
             // SimId mismatch between URI and SOAP Header To field
             String msg = "SimId mismatch: URI has " + simId.getId() + " and To Header has " + toSimId.getId();
             logger.debug(msg);
             // This is going into a special simulator log for collecting addressing errors
-            simId = new SimId(errorSimId);
-            SimHandle simHandle = SimUtils.create(simId);
-            simHandle.setSoapEnvironment(soapEnvironment);
-            simHandle.getEvent().setFault(new Fault(msg, FaultCode.Sender.toString(), "Unknown", ""));
-            logRequest(simHandle, header, body);
-            return simHandle;
+            return sendFault(new SimId(errorSimId), msg, FaultCode.Sender, soapEnvironment, content);
         }
-        boolean simIdValid = endpointBuilder.getIsValid();
         SimHandle simHandle;
-        if (simIdValid) {
-            simHandle = SimUtils.open(simId);
-            if (simHandle == null) {
-                // Sim does not exist
-                String badSimId = simId.getId();
-                simId = new SimId(errorSimId);
-                simHandle = SimUtils.create(simId);
-                simHandle.setSoapEnvironment(soapEnvironment);
-                simHandle.getEvent().setFault(new Fault("Simulator with ID [" + badSimId + "] does not exist.", FaultCode.Sender.toString(), "Unknown", ""));
-                logRequest(simHandle, header, body);
-                return simHandle;
-            }
-        } else {
-            String sid = "null";
-            if (simId != null) sid = simId.getId();
-            logger.debug("SimId " + sid + " not valid");
-            // This is going into a special simulator log for collecting addressing errors
-            simId = new SimId(errorSimId);
-            simHandle = SimUtils.create(simId);
-            simHandle.setSoapEnvironment(soapEnvironment);
-            simHandle.getEvent().setFault(new Fault("Invalid endpoint: " + to, FaultCode.Sender.toString(), "Unknown", ""));
-            logRequest(simHandle, header, body);
-            return simHandle;
+        simHandle = SimUtils.open(simId);
+        if (simHandle == null) {
+            // Sim does not exist
+            return sendFault(new SimId(errorSimId), "Simulator with ID [" + simId.getId() + "] does not exist.", FaultCode.Sender, soapEnvironment, content);
         }
         simHandle.setSoapEnvironment(soapEnvironment);
         simHandle.setEndpointBuilder(endpointBuilder);
         TransactionType transactionType = factory.getTransactionTypeFromRequestAction(soapHeader.getAction());
         if (transactionType == null) {
             simHandle.getEvent().setFault(new Fault("Unknown wsa:Action [" + soapHeader.getAction() + "]", FaultCode.Sender.toString(), "Unknown", ""));
-            logRequest(simHandle, header, body);
+            logRequest(simHandle, content);
             return simHandle;
         }
         simHandle.setOptions(options);
         simHandle.setTransactionType(transactionType);
-        logRequest(simHandle, header, body);
+        logRequest(simHandle, content);
 
         if (simHandle.hasOption("fault")) {
             simHandle.getEvent().setFault(new Fault("Forced Fault", FaultCode.Sender.toString(), "Unknown", ""));
-            logRequest(simHandle, header, body);
+            logRequest(simHandle, content);
             return simHandle;
         }
 
@@ -172,9 +153,17 @@ public class SimServlet extends HttpServlet {
         return simHandle;
     }
 
-    void logRequest(SimHandle simHandle, String header, byte[] body) {
-        simHandle.getEvent().getInOut().setReqHdr(header);
-        simHandle.getEvent().getInOut().setReqBody(body);
+    SimHandle sendFault(SimId simId, String faultMsg, FaultCode code, SoapEnvironment soapEnvironment, HttpMessageContent content) {
+        SimHandle simHandle = SimUtils.create(simId);
+        simHandle.setSoapEnvironment(soapEnvironment);
+        simHandle.getEvent().setFault(new Fault(faultMsg, code.toString(), "Unknown", ""));
+        logRequest(simHandle, content);
+        return simHandle;
+    }
+
+    void logRequest(SimHandle simHandle, HttpMessageContent content) {
+        simHandle.getEvent().getInOut().setReqHdr(content.getHeader());
+        simHandle.getEvent().getInOut().setReqBody(content.getBody());
     }
 
     private void runTransaction(SimHandle simHandle) {
@@ -193,12 +182,8 @@ public class SimServlet extends HttpServlet {
 
     // xdstools3/sim/simid/option1/option2
     List<String> parseOptionsFromURI(String uri) {
-        List<String> options = new ArrayList<String>();
         String[] parts = uri.split("/");
-        for (int i=3; i< parts.length; i++) {
-            options.add(parts[i]);
-        }
-        return options;
+        return Arrays.asList(parts).subList(3, parts.length-1);
     }
 
     SimId parseSimIdFromURI(String uri) {

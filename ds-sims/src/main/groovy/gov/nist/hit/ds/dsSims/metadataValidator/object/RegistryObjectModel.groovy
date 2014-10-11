@@ -11,6 +11,7 @@ import org.apache.axiom.om.OMElement
  */
 
 // TODO: Still includes some validator code
+// TODO: Should be declared abstract
 //@groovy.transform.TypeChecked
 @ToString(includeNames=true, excludes="ro, m, owner")
 class RegistryObjectModel {

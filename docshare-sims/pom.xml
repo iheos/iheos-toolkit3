@@ -21,7 +21,7 @@
     </properties>
 
     <modules>
-        <module>../httpSoapValidator</module>
+        <module>../httpSoap</module>
         <module>../sim-servlet</module>
         <module>../ds-sims</module>
     </modules>

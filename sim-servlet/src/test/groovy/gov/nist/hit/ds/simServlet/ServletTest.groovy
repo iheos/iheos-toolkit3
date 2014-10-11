@@ -46,6 +46,22 @@ Host: localhost:9085'''
     </soapenv:Body>
 </soapenv:Envelope>'''
 
+    def noSimEndpointBody = '''
+<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:wsa="http://www.w3.org/2005/08/addressing">
+    <soapenv:Header>
+        <wsa:To soapenv:mustUnderstand="true">http://localhost:9085/xdstools3/sim/NoSim/docrec/pnr</wsa:To>
+        <wsa:MessageID>urn:uuid:806D8FD2D542EDCC2C1199332890651</wsa:MessageID>
+        <wsa:Action>urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b</wsa:Action>
+    </soapenv:Header>
+    <soapenv:Body>
+        <xdsb:ProvideAndRegisterDocumentSetRequest xmlns:xdsb="urn:ihe:iti:xds-b:2007">
+            <lcm:SubmitObjectsRequest xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0">
+            </lcm:SubmitObjectsRequest>
+        </xdsb:ProvideAndRegisterDocumentSetRequest>
+    </soapenv:Body>
+</soapenv:Envelope>'''
+
     def realEndpointBody = '''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope"
     xmlns:wsa="http://www.w3.org/2005/08/addressing">
@@ -99,24 +115,10 @@ Host: localhost:9085'''
 //        SimUtils.delete(realSimId)
     }
 
-    def 'Header with bad To address should fail'() {
+
+    def 'Message to non-existant sim should report'() {
         when:
-        def simHandle = simServlet.runPost(realSimId, header, badEndpointBody.getBytes(), [], null)
-        def fault = simHandle.getEvent().getFault()
-        def eventAccess = new EventAccess(simHandle.simId.id, simHandle.event)
-
-        then:
-        fault != null
-        eventAccess.faultFile().exists()
-        eventAccess.reqBodyFile().exists()
-        eventAccess.respBodyFile().exists()
-        fault.faultMsg.contains('Invalid endpoint')
-    }
-
-
-    def 'Header with good To address should report no such sim'() {
-        when:
-        def simHandle = simServlet.runPost(realSimId, header, goodEndpointBody.getBytes(), [], null)
+        def simHandle = simServlet.runPost(new SimId('NoSim'), header, noSimEndpointBody.getBytes(), [], null)
         def fault = simHandle.getEvent().getFault()
         def eventAccess = new EventAccess(simHandle.simId.id, simHandle.event)
 
