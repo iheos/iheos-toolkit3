@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client;
+package gov.nist.toolkit.xdstools3.client.util.injection;
 
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.GWT;
@@ -6,6 +6,7 @@ import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
+import gov.nist.toolkit.xdstools3.client.Xdstools3ActivityView;
 
 /**
  * Application Client's Factory. Ginjector type can be used to bootstrap injection.

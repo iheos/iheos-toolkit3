@@ -18,6 +18,7 @@ import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.tabs.EnvironmentState;
 import gov.nist.toolkit.xdstools2.client.tabs.QueryState;
 import gov.nist.toolkit.xdstools2.client.tabs.TestSessionState;
+import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
@@ -32,6 +33,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.v2.v2TabExample;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
+import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
 
 /**
  * Main class of the application which is the Activity for Activity-Places design, the view and a bit of a controller.

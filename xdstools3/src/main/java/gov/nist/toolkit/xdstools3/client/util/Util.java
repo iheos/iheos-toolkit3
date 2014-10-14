@@ -3,9 +3,7 @@ package gov.nist.toolkit.xdstools3.client.util;
 
 import com.google.gwt.core.client.GWT;
 import com.google.web.bindery.event.shared.EventBus;
-import gov.nist.toolkit.xdstools3.client.Xdstools3GinInjector;
-
-import javax.inject.Inject;
+import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
 
 /** Stores static variables & variables common to the application. This is a singleton.
  *

@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client;
+package gov.nist.toolkit.xdstools3.client.RPCUtils;
 
 import com.google.gwt.core.client.GWT;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.ToolbarService;

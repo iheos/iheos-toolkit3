@@ -1,20 +1,18 @@
-package gov.nist.toolkit.xdstools3.client;
+package gov.nist.toolkit.xdstools3.client.activitiesAndPlaces;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceController;
-import com.google.web.bindery.event.shared.EventBus;
-import gov.nist.toolkit.xdstools3.client.util.Util;
+import gov.nist.toolkit.xdstools3.client.Xdstools3ActivityView;
+import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
 
 import javax.inject.Inject;
-import java.util.logging.Logger;
 
 /**
  * Finds the activity to run for a given Place, used to configure an ActivityManager.
  * It binds the Places with the right Activities.
  *
- * @see gov.nist.toolkit.xdstools3.client.TabPlace
+ * @see TabPlace
  * @see com.google.gwt.activity.shared.ActivityManager
  *
  * Created by onh2 on 9/22/2014.
@@ -37,7 +35,7 @@ public class Xdstools3ActivityMapper implements ActivityMapper {
      */
     @Override
     public Activity getActivity(Place place) {
-        Xdstools3ActivityView xdstools3ActivityView =Xdstools3GinInjector.injector.getXdstools3();
+        Xdstools3ActivityView xdstools3ActivityView = Xdstools3GinInjector.injector.getXdstools3();
         //TODO check if place name exists otherwise redirect to home
         xdstools3ActivityView.setTabId(((TabPlace) place).getTabId());
         return xdstools3ActivityView;
