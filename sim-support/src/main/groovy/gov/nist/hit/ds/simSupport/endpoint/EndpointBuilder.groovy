@@ -1,4 +1,6 @@
 package gov.nist.hit.ds.simSupport.endpoint
+
+import gov.nist.hit.ds.actorTransaction.ActorType
 import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.soapSupport.core.Endpoint
@@ -15,6 +17,7 @@ class EndpointBuilder {
     String actorCode
     String transCode
 
+
     EndpointBuilder() { log.debug("EndpointBuilder")}
 
     EndpointBuilder(String server, String port, String base, SimId simId) {
@@ -26,14 +29,14 @@ class EndpointBuilder {
 
     public String toString() { [server: server, port: port, base: base, simId: simId?.id, actorCode: actorCode, transCode: transCode].toString() }
 
-    EndpointValue makeEndpoint(String actor, EndpointType endpointLabel) {
+    EndpointValue makeEndpoint(ActorType actor, EndpointType endpointLabel) {
         server = clean(server)
         port = clean(port)
         base = clean(base)
-        actor = clean(actor)
+        def actorName = clean(actor.name)
         def secure = (endpointLabel.tls) ? 's' : ''
         String val;
-        val = "http${secure}://${server}:${port}/${base}/${simId.getId()}/${actor}/${endpointLabel.transType.code}"
+        val = "http${secure}://${server}:${port}/${base}/${simId.getId()}/${actorName}/${endpointLabel.transType.code}"
         return new EndpointValue(val)
     }
 
@@ -53,11 +56,11 @@ class EndpointBuilder {
     EndpointBuilder parse(String endpoint) {
         // http, serverport are actually wrong
         def (http, serverPort, basePart, simStr, simid, actor, trans) = endpoint.tokenize('/')
-        log.debug("endpoint parser : ${toString()}")
         if (simid)
             simId = new SimId(simid)
         actorCode = actor
         transCode = trans
+        log.debug("endpoint parser : ${toString()}")
         return this
     }
 }

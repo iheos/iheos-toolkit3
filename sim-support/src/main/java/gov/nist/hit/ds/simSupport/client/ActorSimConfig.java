@@ -102,7 +102,7 @@ public class ActorSimConfig {
 	}
 	
 	/**
-	 * Get the config element based on its name. 
+	 * Get the config element based on its displayName.
 	 * @param name
 	 * @return config element or null if not defined.
 	 */
@@ -202,7 +202,7 @@ public class ActorSimConfig {
     }
 
 	/**
-	 * Delete the config element based on its name.
+	 * Delete the config element based on its displayName.
 	 * @param name
 	 */
 	public void deleteByName(String name) {

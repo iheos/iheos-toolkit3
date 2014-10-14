@@ -169,7 +169,7 @@ public class HttpSoapValTest {
 //		}
 //
 //		@Override
-//		public void setName(String name) {
+//		public void setName(String displayName) {
 //
 //		}
 //

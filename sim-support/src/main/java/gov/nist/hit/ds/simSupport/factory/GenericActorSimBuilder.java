@@ -57,31 +57,31 @@ public class GenericActorSimBuilder {
 		return sConfig;
 	}
 
-    // There is new code that generates endpoints.  I forget where.
-    @Deprecated
-	public GenericActorSimBuilder addEndpoint(String actorShortName, TransactionType transType, TlsType tls, AsyncType async) {
-
-		String contextName = "xdstools3"; //Installation.installation().tkProps.label("toolkit.servlet.context", "xdstools3");
-
-		EndpointValue endpoint =  new EndpointValue("http"
-				+ ((tls.isTls()) ? "s" : "")
-				+ "://" 
-				+ Installation.installation().propertyServiceManager().getToolkitHost() 
-				+ ":" 
-				+ ((tls.isTls()) ? Installation.installation().propertyServiceManager().getToolkitTlsPort() : Installation.installation().propertyServiceManager().getToolkitPort()) 
-				+ "/"  
-				+ contextName  
-				+ "/sim/" 
-				+ simId 
-				+ "/" +
-				actorShortName    
-				+ "/" 
-				+ transType.getCode());
-		sConfig.add(
-				new TransactionSimConfigElement(new EndpointType(transType,tls, async), endpoint).setEditable(true)
-				);
-		return this;
-	}
+    // There is new code that generates endpoints in SimConfigFactory
+//    @Deprecated
+//	public GenericActorSimBuilder addEndpoint(String actorShortName, TransactionType transType, TlsType tls, AsyncType async) {
+//
+//		String contextName = "xdstools3"; //Installation.installation().tkProps.label("toolkit.servlet.context", "xdstools3");
+//
+//		EndpointValue endpoint =  new EndpointValue("http"
+//				+ ((tls.isTls()) ? "s" : "")
+//				+ "://"
+//				+ Installation.installation().propertyServiceManager().getToolkitHost()
+//				+ ":"
+//				+ ((tls.isTls()) ? Installation.installation().propertyServiceManager().getToolkitTlsPort() : Installation.installation().propertyServiceManager().getToolkitPort())
+//				+ "/"
+//				+ contextName
+//				+ "/sim/"
+//				+ simId
+//				+ "/" +
+//				actorShortName
+//				+ "/"
+//				+ transType.getCode());
+//		sConfig.add(
+//				new TransactionSimConfigElement(new EndpointType(transType,tls, async), endpoint).setEditable(true)
+//				);
+//		return this;
+//	}
 	
 	public GenericActorSimBuilder addConfig(String confName, boolean value) {
 		sConfig.add(

@@ -25,7 +25,7 @@ public class XcnSubValidator extends ValComponentBase {
     def hasIdAA() { (!id().equals("") && !aa().equals("")) }
 
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'XCN001', msg = 'XCN - Either name or an identifier shall be present', ref = "ITI TF-3: Table 4.1-3 (XCN)")
+    @Validation(id = 'XCN001', msg = 'XCN - Either displayName or an identifier shall be present', ref = "ITI TF-3: Table 4.1-3 (XCN)")
     def nameCheck() {
         assertFalse((id().equals("") && ( lastName().equals("")  || firstName().equals(""))))
     }
@@ -42,7 +42,7 @@ public class XcnSubValidator extends ValComponentBase {
 //		parts = input.split("\\^");
 //
 //		if ((id().equals("") && ( lastName().equals("")  || firstName().equals(""))))
-//			err(input, "Either name or an identifier shall be present", xresource);
+//			err(input, "Either displayName or an identifier shall be present", xresource);
 //
 //		if ((!id().equals("") && !aa().equals(""))) {
 //			new CxSubValidator(this, id() + "^^^" + aa()).asSelf().run()

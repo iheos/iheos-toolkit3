@@ -43,7 +43,7 @@ public class FindConfigOneEndpointTest {
     <actor displayName="Document Repository" id="rep">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="prb"/>
-        <property name="repositoryUniqueId" value="1.2.3.4"/>
+        <property displayName="repositoryUniqueId" value="1.2.3.4"/>
     </actor>
 </ActorsTransactions>
 '''

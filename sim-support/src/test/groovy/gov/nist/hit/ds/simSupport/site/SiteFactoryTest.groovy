@@ -2,9 +2,11 @@ package gov.nist.hit.ds.simSupport.site
 import gov.nist.hit.ds.actorTransaction.*
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.RetrieveTransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.simulator.SimConfigFactory
 import gov.nist.hit.ds.siteManagement.client.Site
+import gov.nist.hit.ds.siteManagement.client.TransactionBean
 import gov.nist.hit.ds.siteManagement.loader.SeparateSiteLoader
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import org.apache.axiom.om.OMElement
@@ -15,24 +17,23 @@ import spock.lang.Specification
 class SiteFactoryTest extends Specification {
     static String config = '''
 <ActorsTransactions>
-    <transaction displayName="Stored Query" id="sq.b" code="sq." asyncCode="sq.as">
+    <transaction name="Stored Query" code="sq.b" asyncCode="sq.as">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
     </transaction>
-    <transaction displayName="Register" id="r.b" code="r.b" asyncCode="r.as">
+    <transaction name="Register" code="r.b" asyncCode="r.as">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
     </transaction>
-    <transaction displayName="Provide and Register" id="pr.b" code="pr.b" asyncCode="pr.as">
+    <transaction name="Provide and Register" code="pr.b" asyncCode="pr.as">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
     </transaction>
-    <transaction displayName="Retrieve" id="ret.b" code="ret.b" asyncCode="ret.as">
+    <transaction name="Retrieve" code="ret.b" asyncCode="ret.as" isRetrieve="true">
         <request action="urn:ihe:iti:2007:RetrieveDocumentSet"/>
         <response action="urn:ihe:iti:2007:RetrieveDocumentSetResponse"/>
-        <property name="RepositoryUniqueId" value="1.2.3"/>
     </transaction>
-    <transaction displayName="Update" id="update" code="update" asyncCode="update.as">
+    <transaction name="Update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
     </transaction>
@@ -49,16 +50,19 @@ class SiteFactoryTest extends Specification {
     </actor>
 </ActorsTransactions>
 '''
+    ActorTransactionTypeFactory atFactory
+
     void setup() {
-        def aTfactory = new ActorTransactionTypeFactory()
-        aTfactory.clear()
-        aTfactory.loadFromString(config)
+        atFactory = new ActorTransactionTypeFactory()
+        atFactory.clear()
+        atFactory.loadFromString(config)
     }
+
 
     def 'ActorSimConfig should have 4 transactions'() {
         given:
-        def actorTypeName = 'rep'
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorTypeName)
+        def actorType = atFactory.getActorType('rep')
+        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
 
         when:
         def endpoints = actorSimConfig.getElements().findAll { it instanceof TransactionSimConfigElement }
@@ -70,25 +74,24 @@ class SiteFactoryTest extends Specification {
 
     def 'ActorSimConfig should have 1 Repository Declarations'() {
         given:
-        def actorTypeName = 'rep'
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorTypeName)
+        def actorType = atFactory.getActorType('rep')
+        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
 
         when:
         def repositories = actorSimConfig.getElements().findAll {
-            it instanceof RepositoryUniqueIdSimConfigElement
+            it instanceof RetrieveTransactionSimConfigElement
         }
 
         then:
-        repositories.size() == 1
+        repositories.size() == 2   // TLS and non-TLS
     }
 
     def 'Constructed Site should include pr.b transaction'() {
         given:
         def siteFactory = new SimSiteFactory()
         def aTfactory = new ActorTransactionTypeFactory()
-        def actorTypeName = 'rep'
-        ActorType actorType = aTfactory.getActorType(actorTypeName)
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorTypeName)
+        def actorType = atFactory.getActorType('rep')
+        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
 
         when:
         Site site = siteFactory.buildSite(actorSimConfig, 'mysite')
@@ -102,20 +105,25 @@ class SiteFactoryTest extends Specification {
     def 'Constructed Site should include repositoryUniqueId'() {
         given: ''
         def siteFactory = new SimSiteFactory()
-        def aTfactory = new ActorTransactionTypeFactory()
-        def actorTypeName = 'rep'
-        ActorType actorType = aTfactory.getActorType(actorTypeName)
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorTypeName)
+        def actorType = atFactory.getActorType('rep')
+//        ActorType actorType = aTfactory.getActorType(actorTypeName)
+        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
 
         when: ''
         Site site = siteFactory.buildSite(actorSimConfig, 'mysite')
         println site.toStringAll()
+        TransactionBean transBean = site.getRepositoryBean(false)
+
+        then:
+        transBean
+
+        when:
         def repositoryUniqueId = site.getRepositoryUniqueId()
         OMElement ele = new SeparateSiteLoader().siteToXML(site)
         println new OMFormatter(ele).toString()
 
         then:
-        repositoryUniqueId.startsWith(RepositoryUniqueIdSimConfigElement.getRepositoryUniqueIdBase())
+        repositoryUniqueId
     }
 
 }

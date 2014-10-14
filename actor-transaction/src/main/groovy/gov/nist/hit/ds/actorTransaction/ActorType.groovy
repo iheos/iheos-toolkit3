@@ -34,7 +34,7 @@ class ActorType /* implements IsSerializable, Serializable */{
     }
 
 //    String toString() {
-//        return "ActorType: ${name} (${shortName} with ${properties.keySet()})"
+//        return "ActorType: ${displayName} (${shortName} with ${properties.keySet()})"
 //    }
 
     void check() throws InvalidActorTypeDefinitionException {
@@ -43,7 +43,7 @@ class ActorType /* implements IsSerializable, Serializable */{
 
         val = name;
         if (val == null || val.equals(""))
-            throw new InvalidActorTypeDefinitionException("${typeName}: name not defined");
+            throw new InvalidActorTypeDefinitionException("${typeName}: displayName not defined");
         val = shortName;
         if (val == null || val.equals(""))
             throw new InvalidActorTypeDefinitionException("${typeName}: shortName not defined");

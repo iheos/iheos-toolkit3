@@ -113,7 +113,7 @@ public class DocumentEntryValidator extends ValidatorCommon {
 				}
 
 
-				//											name							identificationScheme                    OID required
+				//											displayName							identificationScheme                    OID required
 				validate_ext_id_present("DocumentEntry", id, ext_ids, "XDSDocumentEntry.patientId", MetadataSupport.XDSDocumentEntry_patientid_uuid, false);
 				// the oid^ext format is tested in UniqueId.java?
 				validate_ext_id_present("DocumentEntry", id, ext_ids, "XDSDocumentEntry.uniqueId", MetadataSupport.XDSDocumentEntry_uniqueid_uuid,  false);

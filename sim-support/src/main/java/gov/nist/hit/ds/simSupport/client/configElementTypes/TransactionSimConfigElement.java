@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransactionSimConfigElement extends
-        SimConfigElement implements IsSerializable, Serializable {
+public class TransactionSimConfigElement extends SimConfigElement
+        implements IsSerializable, Serializable {
 
     public static final String SCHEMACHECK = "schemaCheck";
     public static final String MODELCHECK = "modelCheck";
@@ -23,7 +23,7 @@ public class TransactionSimConfigElement extends
 
 	private static final long serialVersionUID = 532031604752465534L;
 
-    // The name attribute is used as the transaction name which is contained
+    // The displayName attribute is used as the transaction displayName which is contained
     // in the EndpointLabel
 	public TransactionSimConfigElement(EndpointType type, EndpointValue endpoint) {
 		this.name = type.getTransType().getName();
@@ -69,7 +69,7 @@ public class TransactionSimConfigElement extends
     }
 
     public TransactionType getTransactionType() { return endpointType.getTransType(); }
-    public String getTransactionName() { return endpointType.getTransType().getName(); }
+    public String getTransactionName() { return endpointType.getTransType().code; }
     public EndpointType getEndpointType() { return endpointType; }
     public EndpointValue getEndpointValue() { return endpointValue; }
 

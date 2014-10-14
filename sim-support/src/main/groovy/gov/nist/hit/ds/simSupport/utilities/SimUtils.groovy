@@ -19,6 +19,7 @@ import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.loader.SeparateSiteLoader
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import gov.nist.hit.ds.utilities.xml.OMFormatter
+import gov.nist.hit.ds.xdsException.ToolkitException
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 /**
@@ -43,7 +44,7 @@ class SimUtils {
     }
 
     static SimHandle create(String actorTypeName, SimId simId) {
-        return create(actorTypeName, simId, SimSystemConfig.repoName)
+        return create(actorTypeName, simId, new SimSystemConfig().repoName)
     }
 
     static SimHandle create(String actorTypeName, SimId simId, String repoName) {
@@ -58,7 +59,7 @@ class SimUtils {
         Asset simAsset = RepoUtils.mkAsset(simId.id, new SimpleType('sim'), repo)
 
         if (actorTypeName) {
-            ActorSimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, simId, actorTypeName)
+            ActorSimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
             storeConfig(new SimulatorDAO().toXML(actorSimConfig), simAsset)
             Site site = new SimSiteFactory().buildSite(actorSimConfig, simId.id)
             OMElement siteEle = new SeparateSiteLoader().siteToXML(site)
@@ -86,6 +87,9 @@ class SimUtils {
         def simHandle = new SimHandle()
         simHandle.simId = simId
         simHandle.simAsset = simAsset
+        if (simHandle.open)
+            throw new ToolkitException("Sim ${simId.id} already open.")
+        simHandle.open = true
         try {
             simHandle.siteAsset = RepoUtils.child(siteAssetName, simAsset)
         } catch (RepositoryException e) {}

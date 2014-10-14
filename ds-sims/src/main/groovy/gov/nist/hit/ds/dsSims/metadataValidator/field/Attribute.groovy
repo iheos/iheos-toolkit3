@@ -166,7 +166,7 @@ public class Attribute extends ValidatorCommon {
 //							validate_author_institution(slot);
 //						} else {
 //							err(classified_object_type + " " + classified_object_id + " has a author type classification (classificationScheme=" +
-//									class_scheme + ") with an unknown type of slot with name " + slot_name + ".  Only XDS prescribed slots are allowed inside this classification"	);
+//									class_scheme + ") with an unknown type of slot with displayName " + slot_name + ".  Only XDS prescribed slots are allowed inside this classification"	);
 //
 //						}
 //					}

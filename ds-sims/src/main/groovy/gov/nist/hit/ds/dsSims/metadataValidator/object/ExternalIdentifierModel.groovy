@@ -17,10 +17,10 @@ class ExternalIdentifierModel extends RegistryObjectModel {
         value = ro.getAttributeValue(MetadataSupport.value_att_qname);
     }
 
-//    public ExternalIdentifierValidator(String id, String identificationScheme, String name, String value) {
+//    public ExternalIdentifierValidator(String id, String identificationScheme, String displayName, String value) {
 //        super(id);
 //        this.identificationScheme = identificationScheme;
-//        this.name = name;
+//        this.displayName = displayName;
 //        this.value = value;
 //    }
 

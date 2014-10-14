@@ -108,9 +108,9 @@ class PatternGeneratorTest extends Specification {
     def 'Build DE submission'() {
         def expected = '''
 <wrapper>
-    <RegistryPackage id="ss" lid=""/>
+    <RegistryPackage id="ss"/>
     <Classification classifiedObject='ss' classificationNode='urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd' />
-    <ExtrinsicObject id="de" lid="" mimeType="text/xml"
+    <ExtrinsicObject id="de" mimeType="text/xml"
         objectType="urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1"/>
     <Association id="assoc"
         associationType="urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember"

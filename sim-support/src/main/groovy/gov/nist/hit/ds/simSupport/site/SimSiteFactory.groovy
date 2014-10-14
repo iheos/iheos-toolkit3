@@ -3,6 +3,7 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig
+import gov.nist.hit.ds.simSupport.client.configElementTypes.RetrieveTransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
 import gov.nist.hit.ds.siteManagement.client.Site
@@ -22,12 +23,13 @@ class SimSiteFactory {
 
         // This code depends on the rule that a Site can have only a single Repository
 
-        def transactions = actorSimConfig.getElements().findAll { it instanceof TransactionSimConfigElement }
-        def retrieveTransactions = transactions.findAll { println "TransTypeId is ${it.getTransactionType().getId()}"; it.getTransactionType().getId() == TransactionType.retrieveTransactionTypeCode }
+        def allTransactions = actorSimConfig.getElements().findAll { it instanceof TransactionSimConfigElement }
+        def retrieveTransactions = allTransactions.findAll { it instanceof  RetrieveTransactionSimConfigElement }
+        def notRetrieveTransactions = allTransactions.findAll { !(it instanceof  RetrieveTransactionSimConfigElement) }
 
         // Add transactions
 
-        transactions.each { TransactionSimConfigElement transaction ->
+        notRetrieveTransactions.each { TransactionSimConfigElement transaction ->
             String transactionName = transaction.getTransactionName()
             String endpoint = transaction.endpointValue.value
             EndpointType endpointLabel = transaction.getEndpointType()
@@ -36,20 +38,12 @@ class SimSiteFactory {
         }
 
         // add repositories
-
-        if (retrieveTransactions == null) return site
-        def repUIDElements = actorSimConfig.getElements().findAll { it instanceof RepositoryUniqueIdSimConfigElement }
-        if (retrieveTransactions && !repUIDElements) throw new ToolkitRuntimeException("Site ${name} defines a Retrieve transaction but no repositoryUniqueId")
-
-        if (repUIDElements.size() > 0) {
-            def repuid = repUIDElements.first().value
-
             retrieveTransactions.each { retrieveTransaction ->
+                def repuid = retrieveTransaction.repositoryUniqueId
                 String endpoint = retrieveTransaction.endpointValue.value
                 EndpointType endpointType = retrieveTransaction.getEndpointType()
                 site.addRepository(repuid, TransactionBean.RepositoryType.REPOSITORY, endpoint, endpointType.isTls(), endpointType.isAsync())
             }
-        }
         return site
     }
 }

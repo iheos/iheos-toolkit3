@@ -33,12 +33,12 @@ class EndpointLabelParsingTest extends Specification {
     <actor displayName="Document Repository" id="rep">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="prb"/>
-        <property name="repositoryUniqueId" value="1.2.3.4"/>
+        <property displayName="repositoryUniqueId" value="1.2.3.4"/>
     </actor>
 </ActorsTransactions>
 '''
     def setup() {
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().loadFromString(config)
     }
 
@@ -46,7 +46,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointType(actorType, "Register_TLS_ASYNC");
+        def label = new EndpointType(actorType, "rb_TLS_ASYNC");
 
         then:
         register == label.getTransType()
@@ -58,7 +58,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointType(actorType, "Register_TLS_SYNC");
+        def label = new EndpointType(actorType, "rb_TLS_SYNC");
 
         then:
         register == label.getTransType()
@@ -70,7 +70,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointType(actorType, "Register_ASYNC");
+        def label = new EndpointType(actorType, "rb_ASYNC");
 
         then:
         register == label.getTransType()
@@ -82,7 +82,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointType(actorType, "Register");
+        def label = new EndpointType(actorType, "rb");
 
         then:
         register == label.getTransType()

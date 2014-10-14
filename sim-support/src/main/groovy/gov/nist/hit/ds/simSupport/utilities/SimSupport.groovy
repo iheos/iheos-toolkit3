@@ -41,8 +41,8 @@ class SimSupport {
     }
 
     static initActors() {
-        new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().loadFromResource('at.xml')
+//        new ActorTransactionTypeFactory().clear()
+//        new ActorTransactionTypeFactory().loadFromResource('at.xml')
     }
 
     static initFactories() {

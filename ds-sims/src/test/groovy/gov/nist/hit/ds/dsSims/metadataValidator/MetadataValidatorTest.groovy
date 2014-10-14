@@ -46,7 +46,7 @@ class MetadataValidatorTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('123')
-        SimUtils.create('reg', simId, new SimSystemConfig())
+        SimUtils.create('reg', simId, new SimSystemConfig().repoName)
     }
 
     def 'Submission passes metadata validator'() {

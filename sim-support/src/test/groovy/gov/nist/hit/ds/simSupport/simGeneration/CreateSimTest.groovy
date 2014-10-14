@@ -13,39 +13,41 @@ import spock.lang.Specification
 class CreateSimTest extends Specification {
     static String config = '''
 <ActorsTransactions>
-    <transaction displayName="Stored Query" id="sq" code="sq" asyncCode="sq.as">
+    <transaction name="Stored Query" code="sq" asyncCode="sq.as">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
     </transaction>
-    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as">
+    <transaction name="Register" code="rb" asyncCode="r.as">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
     </transaction>
-    <transaction displayName="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
+    <transaction name="Provide and Register" code="prb" asyncCode="pr.as">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
     </transaction>
-    <transaction displayName="Update" id="update" code="update" asyncCode="update.as">
+    <transaction name="Update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
     </transaction>
-    <actor displayName="Document Registry" id="reg">
+    <actor name="Document Registry" id="reg">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
         <transaction id="rb"/>
         <transaction id="sq"/>
         <transaction id="update"/>
     </actor>
-    <actor displayName="Document Repository" id="rep">
+    <actor name="Document Repository" id="rep">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="prb"/>
-        <property name="repositoryUniqueId" value="1.2.3.4"/>
     </actor>
 </ActorsTransactions>
 '''
+
+    ActorTransactionTypeFactory atFactory
+
     void setup() {
-        def factory = new ActorTransactionTypeFactory()
-        factory.clear()
-        factory.loadFromString(config)
+        atFactory = new ActorTransactionTypeFactory()
+        atFactory.clear()
+        atFactory.loadFromString(config)
     }
 
     def 'SimConfig should contain transaction configs'() {
@@ -58,7 +60,7 @@ class CreateSimTest extends Specification {
 
         when:
         SimConfigFactory factory = new SimConfigFactory()
-        ActorSimConfig actorSimConfig = factory.buildSim(server, port, base, simId, actorTypeName)
+        ActorSimConfig actorSimConfig = factory.buildSim(server, port, base, simId, atFactory.getActorType(actorTypeName))
 
         then:
         actorSimConfig
@@ -75,7 +77,7 @@ class CreateSimTest extends Specification {
 
         when:
         SimConfigFactory factory = new SimConfigFactory()
-        ActorSimConfig actorSimConfig = factory.buildSim(server, port, base, simId, actorTypeName)
+        ActorSimConfig actorSimConfig = factory.buildSim(server, port, base, simId, atFactory.getActorType(actorTypeName))
         EndpointValue endpoint = actorSimConfig.getEndpoint(
                 new ActorTransactionTypeFactory().getTransactionType("rb"),
                 TlsType.TLS,

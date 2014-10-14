@@ -137,7 +137,7 @@ public class ValidationEngine {
             log.debug("Optional Guard ${guardMethodName}? ${guardValue}")
             if (!guardValue) return false
         }
-        return true
+        return false
     }
 
     private def dependenciesSatisfied(List<String> dependsOnIds) {

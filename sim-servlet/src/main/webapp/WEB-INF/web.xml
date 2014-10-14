@@ -6,7 +6,7 @@
 <web-app>
 
 	<!--<servlet>-->
-		<!--<servlet-name>toolkitServlet</servlet-name>-->
+		<!--<servlet-displayName>toolkitServlet</servlet-displayName>-->
 		<!--<servlet-class>gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl</servlet-class>-->
 	<!--</servlet>-->
 
@@ -16,7 +16,7 @@
 	</servlet>
 
 	<!--<servlet-mapping>-->
-		<!--<servlet-name>toolkitServlet</servlet-name>-->
+		<!--<servlet-displayName>toolkitServlet</servlet-displayName>-->
 		<!--<url-pattern>/xdstools2/toolkit</url-pattern>-->
 	<!--</servlet-mapping>-->
 

@@ -107,7 +107,7 @@ public class MetadataSupport {
 
     public static QName return_type_qname = new QName("returnType");
 
-    public static QName slot_name_qname = new QName("name");
+    public static QName slot_name_qname = new QName("displayName");
 
     public static QName identificationscheme_qname = new QName("identificationScheme");
 

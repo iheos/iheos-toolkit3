@@ -239,7 +239,7 @@ public class SoapHeaderValidator  extends ValComponentBase {
 
     @DependsOn(ids=["FromEndpointParse"])
     @Fault(code=FaultCode.EndpointUnavailable)
-	@Validation(id="WSA180",  msg="From endpoint element name must be Address if present", ref="http://www.w3.org/TR/ws-addr-core")
+	@Validation(id="WSA180",  msg="From endpoint element displayName must be Address if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateFromElementIsAddress() throws SoapFaultException {
 		if (fromEndpoint == null) { msg('Not present'); return }
 		assertEquals("Address", fromEndpoint.getLocalName());
@@ -282,7 +282,7 @@ public class SoapHeaderValidator  extends ValComponentBase {
 
     @DependsOn(ids=["ReplyToEndpointParse"])
     @Fault(code=FaultCode.EndpointUnavailable)
-	@Validation(id="WSA210", msg="ReplyTo endpoint element name must be Address if present", ref="http://www.w3.org/TR/ws-addr-core")
+	@Validation(id="WSA210", msg="ReplyTo endpoint element displayName must be Address if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateReplyToElementIsAddress() throws SoapFaultException {
 		if (replyToEndpoint == null) { msg('Not present'); return }
 		assertEquals("Address", replyToEndpoint.getLocalName());
@@ -322,7 +322,7 @@ public class SoapHeaderValidator  extends ValComponentBase {
 
     @DependsOn(ids=["FaultToEndpointParse"])
     @Fault(code=FaultCode.EndpointUnavailable)
-	@Validation(id="WSA240", msg="FaultTo endpoint element name must be Address if present", ref="http://www.w3.org/TR/ws-addr-core")
+	@Validation(id="WSA240", msg="FaultTo endpoint element displayName must be Address if present", ref="http://www.w3.org/TR/ws-addr-core")
 	public void validateFaultToElementIsAddress() throws SoapFaultException {
 		if (faultToEndpoint == null) { msg('Not present'); return }
 		assertEquals("Address", faultToEndpoint.getLocalName());

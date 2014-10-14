@@ -93,7 +93,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
 		if (vc.isXDRMinimal) { 
 			validateDirectSlotsCodedCorrectly(er, vc);
 		} else {
-			//                    name				   multi	format                                                  resource
+			//                    displayName				   multi	format                                                  resource
 			validateSlot(er, 	"submissionTime", 	   false, 	new DtmSubValidator(er, "Slot submissionTime",            table416),  table416);
 			validateSlot(er, 	"intendedRecipient",   true, 	new XonXcnXtnSubValidator(er, "Slot intendedRecipient",      table416),  table416);
 		}
@@ -101,7 +101,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
 
 	public void validateDirectSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
 
-		//                    name				   multi	format                                                  resource
+		//                    displayName				   multi	format                                                  resource
 		validateSlot(er, 	"submissionTime", 	   false, 	new DtmSubValidator(er, "Slot submissionTime",            table416),  table416);
 		validateSlot(er, 	"intendedRecipient",   true, 	new XonXcnXtnSubValidator(er, "Slot intendedRecipient",     table416),  table416);
 	}
@@ -125,7 +125,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
 		verifySlotsUnique(er);
 		for (SlotModel slot : model.getSlots()) {
 			if ( ! legal_slot_name(slot.getName()))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + slot.getName() + " is not a legal slot name for a SubmissionSet",  this,  table416);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + slot.getName() + " is not a legal slot displayName for a SubmissionSet",  this,  table416);
 
 		}
 	}

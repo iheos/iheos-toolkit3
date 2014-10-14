@@ -4,6 +4,7 @@ import gov.nist.hit.ds.actorTransaction.ActorType
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.RetrieveTransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
@@ -14,9 +15,8 @@ import groovy.util.logging.Log4j
 @Log4j
 class SimConfigFactory {
 
-    ActorSimConfig buildSim(String server, String port, String base, SimId simId, String actorTypeName) {
-        log.debug("SimConfigFactory: actorType ${actorTypeName}")
-        ActorType actorType= new ActorTransactionTypeFactory().getActorType(actorTypeName)
+    ActorSimConfig buildSim(String server, String port, String base, SimId simId, ActorType actorType) {
+        log.debug("SimConfigFactory: actorType ${actorType.name}")
         ActorSimConfig actorSimConfig = new ActorSimConfig(actorType)
 
         EndpointBuilder endpointBuilder = new EndpointBuilder(server, port, base, simId)
@@ -37,13 +37,10 @@ class SimConfigFactory {
 
         actorType.endpointTypes().each {
             log.debug("SimConfigFactory: endpoint ${it}")
-            if (it.transType.hasTransactionProperty('RepositoryUniqueId')) {
-                actorSimConfig.add(new TransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
-                def repUIDElement = actorSimConfig.elements.find { it instanceof RepositoryUniqueIdSimConfigElement}
-                if (!repUIDElement)   // only need one
-                    actorSimConfig.add(new RepositoryUniqueIdSimConfigElement())
+            if (it.transType.isRetrieve) {
+                actorSimConfig.add(new RetrieveTransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorType, it)))
             } else {
-                actorSimConfig.add(new TransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
+                actorSimConfig.add(new TransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorType, it)))
             }
         }
         return actorSimConfig

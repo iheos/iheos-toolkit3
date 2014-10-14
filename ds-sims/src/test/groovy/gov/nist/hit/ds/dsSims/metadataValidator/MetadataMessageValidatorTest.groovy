@@ -22,8 +22,8 @@ import spock.lang.Specification
 class MetadataMessageValidatorTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
-    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as"
-       class="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction">
+    <transaction name="Register" code="rb" asyncCode="r.as">
+       <implClass value="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>
@@ -47,7 +47,7 @@ class MetadataMessageValidatorTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('123')
-        SimUtils.create('reg', simId, new SimSystemConfig())
+        SimUtils.create('reg', simId, new SimSystemConfig().repoName)
     }
 
     def 'SubmissionSet passes metadata parser'() {
@@ -82,6 +82,7 @@ class MetadataMessageValidatorTest extends Specification {
                                               attributes: [[name:'submissionTime', values:['2004']]]
                                       ] ]
         def ssXml = new RimGenerator().toRimXml(submissionSpec,'SubmitObjectsRequest')
+        println ssXml
 
         when:
         OMElement xml = Parse.parse_xml_string(ssXml)

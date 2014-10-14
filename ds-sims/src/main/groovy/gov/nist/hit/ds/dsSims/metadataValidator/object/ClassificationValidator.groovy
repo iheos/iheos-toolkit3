@@ -21,7 +21,7 @@ public class ClassificationValidator extends AbstractRegistryObjectValidator {
 //		code_value = code;
 //		addSlot("codingScheme", codingScheme);
 //		//coding_scheme = codingScheme;
-//		name = displayName;
+//		displayName = displayName;
 //	}
 
 
@@ -46,7 +46,7 @@ public class ClassificationValidator extends AbstractRegistryObjectValidator {
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": nodeRepresentation attribute is missing or empty", this, "ebRIM 3.0 section 4.3.1");
 
 		if (model.getCodeDisplayName().equals(""))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": no name attribute", this, "ITI TF-3: 4.1.12.2");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": no displayName attribute", this, "ITI TF-3: 4.1.12.2");
 
 		if (model.getCodeScheme().equals(""))
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": no codingScheme Slot", this, "ITI TF-3: 4.1.12.2");

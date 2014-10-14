@@ -10,6 +10,12 @@ import java.util.List;
 
 public abstract class ActorFactory {
 	abstract public Site loadActorSite(ActorSimConfig asc, Site site);
+
+    /**
+     * Once of the responsibilities is to fill in the default properties of the actor type.
+     * @param genericBuilder
+     * @param simId
+     */
 	abstract public void initializeActorSim(GenericActorSimBuilder genericBuilder, SimId simId);
     abstract public boolean supportsAsync();
 

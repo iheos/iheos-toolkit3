@@ -1,4 +1,7 @@
+package gov.nist.toolkit.sitemanagement
+
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import org.junit.Before
@@ -12,19 +15,19 @@ import static org.junit.Assert.*
 class TransactionBeanTest {
     static String config = '''
 <ActorsTransactions>
-    <transaction displayName="Stored Query" id="sq" code="sq" asyncCode="sq.as">
+    <transaction name="Stored Query" code="sq" asyncCode="sq.as">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
     </transaction>
-    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as">
+    <transaction name="Register" code="rb" asyncCode="r.as">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
     </transaction>
-    <transaction displayName="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
+    <transaction name="Provide and Register" code="prb" asyncCode="pr.as">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
     </transaction>
-    <transaction displayName="Update" id="update" code="update" asyncCode="update.as">
+    <transaction name="Update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
     </transaction>
@@ -124,14 +127,23 @@ class TransactionBeanTest {
 
     ///////////////////////////////////////////////////////////
     @Test
+    public void testGetType() {
+        TransactionType tt = new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb')
+        assertNotNull(tt)
+        assertEquals('rb', tt.code)
+        assertEquals('Register', tt.name)
+    }
+
+    ///////////////////////////////////////////////////////////
+    @Test
     public void testGetName() {
         TransactionBean b = new TransactionBean(new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb'),
                 TransactionBean.RepositoryType.NONE,
                 'http://fooo:40/bar',
                 false,
                 false)
-        assertEquals(b.getName(), new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb').name)
-        assertEquals(b.getName(), "rb")
+        assertEquals('Register', b.getName())
+        assertEquals(b.getName(), new ActorTransactionTypeFactory().getTransactionTypeIfAvailable('rb').getName())
     }
 
     ///////////////////////////////////////////////////////////
@@ -140,7 +152,7 @@ class TransactionBeanTest {
     // have to fix users first
     // Have to use String as first parameter since that is whre repUid is passed in
     // Should have to use special type RepUid which wraps repUid to avoid confusion
-    // RepositoryType and name should be consistent
+    // RepositoryType and displayName should be consistent
     @Test
     public void testIsRetrieve() {
         TransactionBean b = new TransactionBean('1.2.3',

@@ -25,16 +25,17 @@ class TransactionRunner {
     def transCode
     def repoName
 
-    ////////////////////////////////////////////////////////////////
-    // Production support
-
-    TransactionRunner(EndpointBuilder _endpointBuilder, String _repoName) {
-        endpointBuilder = _endpointBuilder
-//        this.endpoint = endpoint
-        this.transCode = endpointBuilder.transCode
-        repoName = _repoName
-        init()
-    }
+//    ////////////////////////////////////////////////////////////////
+//    // generates two events - don't use
+//
+//    @Deprecated
+//    TransactionRunner(EndpointBuilder _endpointBuilder, String _repoName) {
+//        endpointBuilder = _endpointBuilder
+////        this.endpoint = endpoint
+//        this.transCode = endpointBuilder.transCode
+//        repoName = _repoName
+//        init()
+//    }
 
     TransactionRunner() {}
 
@@ -49,10 +50,11 @@ class TransactionRunner {
     }
 
     TransactionRunner(SimHandle _simHandle) {
-        log.debug("TransactionRunner: transactionType is ${transactionType}")
         simHandle = _simHandle
         event = simHandle.event
-        implClassName = simHandle.transactionType.implementationClassName
+        transactionType = simHandle.transactionType
+        implClassName = simHandle.transactionType?.implementationClassName
+        log.debug("TransactionRunner: transactionType is ${simHandle.transactionType} implClass is ${implClassName}")
     }
     ////////////////////////////////////////////////////////////////
 
@@ -88,8 +90,18 @@ class TransactionRunner {
     // TODO - may be closing sim too early - good for unit tests, bad for servlet access
     def runAMethod(methodName) {
         // build implementation
-        Class<?> clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
-        if (!clazz) throw new ToolkitRuntimeException("Class ${implClassName} cannot be loaded.")
+        log.debug("Running transaction class ${implClassName}")
+
+        Class<?> clazz
+        try {
+            clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
+        } catch (ClassNotFoundException e) {
+            throw new ToolkitRuntimeException("Class [${implClassName}] cannot be loaded.")
+            String actorTrans = transCode
+            event.fault = new Fault("Class [${implClassName}] cannot be loaded.", FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(e))
+            SimUtils.close(simHandle)
+            throw e
+        }
         Object[] params = new Object[1]
         params[0] = simHandle
         Object instance = clazz.newInstance(params)
@@ -97,7 +109,7 @@ class TransactionRunner {
         // call run() method
         try {
             instance.invokeMethod(methodName, null)
-            SimUtils.close(simHandle)
+//            SimUtils.close(simHandle)
         } catch (Throwable t) {
             String actorTrans = transCode
             event.fault = new Fault('Exception', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))
@@ -106,8 +118,10 @@ class TransactionRunner {
         }
     }
 
+    // Used for production
     def runPMethod(String methodName) {
         // build implementation
+        log.debug("Running transaction class ${implClassName}")
         Class<?> clazz
         try {
             clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)

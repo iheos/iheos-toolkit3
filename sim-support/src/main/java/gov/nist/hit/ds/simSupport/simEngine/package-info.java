@@ -22,9 +22,9 @@
  *  response then the collection is a simulator.  If no response is generated then the collection is called
  *  a validator.
  *  
- *  A collection of components is called a SimChain and is defined by the class with this name.
+ *  A collection of components is called a SimChain and is defined by the class with this displayName.
  *  Many types of parsing and validation must take into consideration nested items.  The SimEngine
- *  does not model this behavior. A collection of components is an ordered list (thus the name Chain
+ *  does not model this behavior. A collection of components is an ordered list (thus the displayName Chain
  *  instead of tree) which indicates the order of execution.
  *  
  *  A SimChain is an in-memory list of class instances to execute. Each of these classes implements
@@ -58,37 +58,37 @@
  *  validation is:
  *  <pre>
 element1.class=gov.nist.hit.ds.simSupport.transaction.LogLoader
-element1.name=Log Loader
+element1.displayName=Log Loader
 element1.description=Load incoming HTTP header and body from logs
 element1.source=src/test/resources/simple
 
 element2.class=gov.nist.hit.ds.httpSoap.validators.HttpMsgParser
-element2.name=HTTP Message Parser/Validator
+element2.displayName=HTTP Message Parser/Validator
 
 element3.class=gov.nist.hit.ds.httpSoap.validators.SimpleSoapEnvironmentValidator
-element3.name=Verify HTTP environment describes SIMPLE SOAP
+element3.displayName=Verify HTTP environment describes SIMPLE SOAP
 element3.description=Verify not multipart and correct content-type
 
 element4.class=gov.nist.hit.ds.xmlValidator.XmlParser
-element4.name=XML Parser
+element4.displayName=XML Parser
 
 element5.class=gov.nist.hit.ds.httpSoap.validators.SoapParser
-element5.name=SOAP Parser
+element5.displayName=SOAP Parser
 element5.description=Parses XML into SOAP Header and SOAP Body
 
 element6.class=gov.nist.hit.ds.httpSoap.validators.SoapHeaderValidator
-element6.name=SOAP Header Validator
+element6.displayName=SOAP Header Validator
 element6.expectedWsAction=urn:ihe:iti:2007:RegisterDocumentSet-b
  *  </pre>
  *  
  *  Each component is identified by an elementX property prefix.  The compponents are executed in the order
- *  imposed by X. The primary properties of a component are: class - the fully qualified class name of the 
- *  component to be injectAll; name - a name to be used in displays; description - a fuller description of the
- *  component than provided by the name (description is optional).  Properties beyond this are initialization 
+ *  imposed by X. The primary properties of a component are: class - the fully qualified class displayName of the
+ *  component to be injectAll; displayName - a displayName to be used in displays; description - a fuller description of the
+ *  component than provided by the displayName (description is optional).  Properties beyond this are initialization
  *  properties. A SimComponent is created from this configuration by:
  *  <ol>
  *  <li>Create instance of indicated class
- *  <li>SimComponentInject name and description (setName(String) and setDescription(String))
+ *  <li>SimComponentInject displayName and description (setName(String) and setDescription(String))
  *  <li>SimComponentInject configured properties. Looking at element1 above, component.setSource("src/test/resources/simple")
  *  is called. A runtime error is thrown if the setSource(String) method is not defined on the component.  
  *  Note that the SimComponent interface does not generate/require this method, it comes from the 

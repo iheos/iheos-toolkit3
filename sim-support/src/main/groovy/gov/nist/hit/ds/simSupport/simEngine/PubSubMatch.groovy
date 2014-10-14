@@ -21,7 +21,7 @@ public class PubSubMatch {
 		return new StringBuffer()
 				.append("..takes ")
 				.append("<")
-//				.append(subMethod.name)
+//				.append(subMethod.displayName)
 				.append(ptype)
 				.append("> ")
 				.append("from <")

@@ -104,7 +104,7 @@ public class ValidatorCommon  {
 			if ( slot_name == null || !slot_name.equals(name))
 				continue;
 			if (found)
-				err(type + " " + id + " has multiple slots with name " + name);
+				err(type + " " + id + " has multiple slots with displayName " + name);
 			found = true;
 			OMElement value_list = MetadataSupport.firstChildWithLocalName(slot, "ValueList");
 			int value_count = 0;
@@ -160,7 +160,7 @@ public class ValidatorCommon  {
 
 			OMElement name_ele = MetadataSupport.firstChildWithLocalName(classif, "Name") ;
 			if (name_ele == null) 
-				err(type + " " + id + " : Classification of type " + classification_scheme + " ( " + class_name + " ) the name attribute is missing");
+				err(type + " " + id + " : Classification of type " + classification_scheme + " ( " + class_name + " ) the displayName attribute is missing");
 
 			OMElement slot_ele = MetadataSupport.firstChildWithLocalName(classif, "Slot") ;
 			if (slot_ele == null) {

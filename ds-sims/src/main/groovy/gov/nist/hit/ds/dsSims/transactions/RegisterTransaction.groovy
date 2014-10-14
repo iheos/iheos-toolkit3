@@ -23,47 +23,57 @@ class RegisterTransaction implements Transaction {
     protected Metadata m = null;
     public MetadataCollection mc;
     public MetadataCollection delta;
-    SimHandle handle
+    SimHandle simHandle
 
     public Map<String, String> UUIDToSymbolic = null;
     Map<String, String> symbolicToUUID = null;
     List<String> submittedUUIDs;
 
-    RegisterTransaction(SimHandle _simHandle) { simhandle = _simHandle }
+    RegisterTransaction(SimHandle _simHandle) { simHandle = _simHandle }
 
     ValidationStatus validateRequest() {
-        handle = _handle
-        def httpHdrVal = new HttpHeaderValidator(handle)
-        httpHdrVal.run()
+        log.debug('In RegisterTransaction#validateRequest')
+        new HttpHeaderValidator(simHandle).asChild().run()
 
-        def soapMessageParser = new SoapMessageParser(handle, new String(httpHdrVal.body))
+        def soapMessageParser = new SoapMessageParser(simHandle, httpHdrVal.body)
         soapMessageParser.run()
         def header = soapMessageParser.header
         def body = soapMessageParser.body
 
-        def soapHeaderValidator = new SoapHeaderValidator(handle, header)
-        soapHeaderValidator.run()
+        new SoapHeaderValidator(simHandle, header).asChild().run()
 
-        def metadataParser = new DSMetadataProcessing(handle, body)
-        metadataParser.run()
+        new DSMetadataProcessing(simHandle, body).asChild().run()
     }
 
     @Override
     ValidationStatus validateResponse() {
+        log.debug('In RegisterTransaction#validateResponse')
         return null
     }
 
     @Override
     ValidationStatus run() {
+        log.debug('In RegisterTransaction#run')
+        new HttpHeaderValidator(simHandle).asChild().run()
+
+        def soapMessageParser = new SoapMessageParser(simHandle, new String(simHandle.event.inOut.reqBody))
+        soapMessageParser.asPeer().run()
+        def header = soapMessageParser.header
+        def body = soapMessageParser.body
+
+        new SoapHeaderValidator(simHandle, header).asPeer().run()
+
+        new DSMetadataProcessing(simHandle, body).asPeer().run()
         return null
     }
 
-    ValidationStatus validateResponse(SimHandle _handle) { handle = _handle}
+    ValidationStatus validateResponse(SimHandle _handle) { simHandle = _handle}
 
     ValidationStatus run(SimHandle _handle) {
-        handle = _handle
-        assert handle
-        assert handle.event
+        assert true // not actually used
+        simHandle = _handle
+        assert simHandle
+        assert simHandle.event
         log.debug('Starting RegisterTransaction')
 
 
@@ -252,7 +262,7 @@ class RegisterTransaction implements Transaction {
                         continue;
                     if (slotName.startsWith("urn:ihe:")) {
                         // there are no slots defined by ihe with this prefix - reserved for future
-                        er.err(XdsErrorCode.Code.XDSRegistryError, "Illegal Slot name - " + slotName, "RegRSim.java", MetadataSupport.error_severity, "ITI-TF3:4.1.14");
+                        er.err(XdsErrorCode.Code.XDSRegistryError, "Illegal Slot displayName - " + slotName, "RegRSim.java", MetadataSupport.error_severity, "ITI-TF3:4.1.14");
                         continue;
                     }
                     if (!isExtraMetadataSupported) {

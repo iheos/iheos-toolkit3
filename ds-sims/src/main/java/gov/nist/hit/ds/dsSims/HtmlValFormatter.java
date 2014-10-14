@@ -250,12 +250,12 @@ public class HtmlValFormatter implements ValFormatter {
 //	}
 //
 //	// Name Column
-//	public void setName(String name) {
-//		addCell(name, 0);
+//	public void setName(String displayName) {
+//		addCell(displayName, 0);
 //	}
 //
-//	public void name(String name) {
-//		setStatus(name);
+//	public void displayName(String displayName) {
+//		setStatus(displayName);
 //	}
 //
 //	// Expected column

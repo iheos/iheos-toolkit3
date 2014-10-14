@@ -31,7 +31,7 @@ public class SimulatorConfigTest {
     <transaction displayName="Retrieve" id="ret" code="ret" asyncCode="ret.as">
         <request action="urn:ihe:iti:2007:RetrieveDocumentSet"/>
         <response action="urn:ihe:iti:2007:RetrieveDocumentSetResponse"/>
-        <property name="repositoryUniqueId" value=""/>
+        <property displayName="repositoryUniqueId" value=""/>
     </transaction>
     <transaction displayName="Update" id="update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>

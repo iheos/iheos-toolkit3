@@ -19,11 +19,11 @@ public class HttpHeaderValidator extends ValComponentBase {
 	String header = null;
 	byte[] body;
 	HttpParserBa httpParser = null;
-    SimHandle handle
+    SimHandle simHandle
 
 	public HttpHeaderValidator(SimHandle handle) {
         super(handle.event)
-        this.handle = handle
+        this.simHandle = handle
 		setName(getClass().getSimpleName());
 	}
 	
@@ -36,7 +36,7 @@ public class HttpHeaderValidator extends ValComponentBase {
     @Fault(code=FaultCode.Sender)
     @Validation(id="HttpMessage001", msg='MTOM vs SIMPLE SOAP', ref="??")
     public void mtomSimpleSoapMatches() throws SoapFaultException {
-        def expected = (handle.transactionType.multiPart) ? 'MTOM' : 'SIMPLE SOAP'
+        def expected = (simHandle.transactionType.multiPart) ? 'MTOM' : 'SIMPLE SOAP'
         def found = (httpParser.isMultipart()) ? 'MTOM' : 'SIMPLE SOAP'
         assertEquals(expected, found)
     }
@@ -50,8 +50,8 @@ public class HttpHeaderValidator extends ValComponentBase {
     }
 
     void run() {
-        header = handle?.event?.inOut?.reqHdr
-        body = handle?.event?.inOut?.reqBody
+        header = simHandle?.event?.inOut?.reqHdr
+        body = simHandle?.event?.inOut?.reqBody
 
         assert header
         assert body

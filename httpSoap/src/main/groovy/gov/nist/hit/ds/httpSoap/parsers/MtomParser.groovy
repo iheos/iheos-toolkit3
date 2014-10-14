@@ -17,7 +17,7 @@ class MtomParser {
     }
 
     byte[] getSoapEnvelope() throws Exception {
-        MultipartParserBa mp = hp.getMultipartParser()
+        MultipartParserBa mp = httpParserBa.getMultipartParser()
         if (mp.getPartCount() == 0) throw new Exception('No parts found in multipart when parsing MTOM format')
 //        def partIds = []
 //        for (int i=0; i<mp.getPartCount(); i++)

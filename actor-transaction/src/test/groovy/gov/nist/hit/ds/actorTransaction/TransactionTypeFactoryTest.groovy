@@ -34,13 +34,13 @@ public class TransactionTypeFactoryTest {
     <actor displayName="Document Repository" id="rep">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="prb"/>
-        <property name="repositoryUniqueId" value="1.2.3.4"/>
+        <property displayName="repositoryUniqueId" value="1.2.3.4"/>
     </actor>
 </ActorsTransactions>
 '''
     @Before
     void setup() {
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().loadFromString(config)
     }
 
@@ -59,8 +59,7 @@ public class TransactionTypeFactoryTest {
 	@Test
 	public void verifyFieldsTest()   {
 		TransactionType tt = new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb");
-		assertTrue(tt.name.equals("Register"));
-		assertTrue(tt.shortName.equals("rb"));
+        println tt
 		assertTrue(tt.code.equals("rb"));
 		assertTrue(tt.asyncCode.equals("r.as"));
 		assertTrue(tt.requestAction.equals("urn:ihe:iti:2007:RegisterDocumentSet-b"));

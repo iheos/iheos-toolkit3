@@ -32,7 +32,7 @@ abstract public class EbrsRootValidator implements ValComponent {
 //
 //	@Override
 //	public String getDescription() {
-//		return "Verify root element name";
+//		return "Verify root element displayName";
 //	}
 //
 //	@Override

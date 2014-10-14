@@ -5,11 +5,9 @@ import groovy.transform.ToString
 /**
  * Created by bill on 4/16/14.
  */
-@ToString(includeFields=true, includes="id, implementationClassName, props")
+@ToString(includeFields=true, includes="name, code, implementationClassName, props, isRetrieve")
 class TransactionType /* implements IsSerializable, Serializable */ {
-    public String id
     public String name
-    public String shortName
     public String code
     public String asyncCode
     public String requestAction
@@ -17,15 +15,14 @@ class TransactionType /* implements IsSerializable, Serializable */ {
     public String implementationClassName
     public boolean multiPart
     public boolean soap
+    public boolean isRetrieve
+    Map<String, String> props = new HashMap<String, String>()
+    public static final String retrieveTransactionTypeCode = 'ret.b'   // why?
 
-    public String getId() { return id; }
     public String getCode() { return code }
     public String getName() { return name }
     public String setName(String name) { this.name = name; }
-    public String getShortName() { return shortName }
-    Map<String, String> props = new HashMap<String, String>()
 
-    public static final String retrieveTransactionTypeCode = 'ret.b'
 
     TransactionType() {}
 
@@ -34,37 +31,29 @@ class TransactionType /* implements IsSerializable, Serializable */ {
     void putTransactionProperty(String key, String value) { props.put(key, value) }
 
     boolean equals(TransactionType tt) {
-        tt.name.equalsIgnoreCase(name)
+        tt.code.equalsIgnoreCase(code)
     }
 
     int hashCode() {
-        name.toLowerCase().hashCode()
+        code.toLowerCase().hashCode()
     }
     boolean identifiedBy(String s) {
-        s.equalsIgnoreCase(name) ||
-                s.equalsIgnoreCase(shortName) ||
                 s.equalsIgnoreCase(code) ||
                 s.equalsIgnoreCase(asyncCode)
     }
 
-//    String toString() { return name }
+//    String toString() { return displayName }
 
     void check()  {
         String val;
         TransactionType tt = this;
 
-        val = tt.id;
-        if (val == null || val.equals(""))
-            throw new InvalidTransactionTypeDefinitionException("id not defined");
-        val = tt.name;
-        if (val == null || val.equals(""))
-            throw new InvalidTransactionTypeDefinitionException("name not defined");
-        val = tt.shortName;
-        if (val == null || val.equals(""))
-            throw new InvalidTransactionTypeDefinitionException("shortName not defined");
         val = tt.code;
         if (val == null || val.equals(""))
             throw new InvalidTransactionTypeDefinitionException("code not defined");
+        val = tt.name;
+        if (val == null || val.equals(""))
+            throw new InvalidTransactionTypeDefinitionException("name not defined");
         val = tt.asyncCode;
         if (val == null || val.equals(""))
             throw new InvalidTransactionTypeDefinitionException("asyncCode not defined");

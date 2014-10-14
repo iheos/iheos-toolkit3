@@ -115,6 +115,7 @@ class RimGenerator {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
                     }
         }
+        xml.Classification(classifiedObject:spec.id, classificationNode:"urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd")
         return writer.toString()
     }
 
@@ -181,6 +182,7 @@ class RimGenerator {
     }
 
     def mkAuthor(xml, parent, spec) {
+        println "person is ${spec.person}"
         def scheme = authorSchemes.get(spec.name)
         if (scheme == null) throw new ToolkitRuntimeException("No Classification Scheme defined for ${spec.name}.")
         xml.Classification(id: newId(),
@@ -191,9 +193,7 @@ class RimGenerator {
             if (spec.person) {
                 xml.Slot(name: 'authorPerson') {
                     ValueList {
-                        Value {
-                            spec.person
-                        }
+                        Value(spec.person)
                     }
                 }
             }
@@ -201,16 +201,16 @@ class RimGenerator {
                 xml.Slot(name: 'authorInstitution') {
                     ValueList {
                         spec.institutions.each {
-                            Value { it }
+                            Value(it)
                         }
                     }
                 }
             }
-            if (spec.role) {
+            if (spec.roles) {
                 xml.Slot(name: 'authorRole') {
                     ValueList {
-                        spec.role.each {
-                            Value { it }
+                        spec.roles.each {
+                            Value ( it )
                         }
                     }
                 }
@@ -219,7 +219,7 @@ class RimGenerator {
                 xml.Slot(name: 'authorSpecialty') {
                     ValueList {
                         spec.specialty.each {
-                            Value { it }
+                            Value ( it )
                         }
                     }
                 }
@@ -227,9 +227,7 @@ class RimGenerator {
             if (spec.telecom) {
                 xml.Slot(name: 'authorTelecommunication') {
                     ValueList {
-                        Value {
-                            spec.telecom
-                        }
+                        Value (spec.telecom)
                     }
                 }
             }

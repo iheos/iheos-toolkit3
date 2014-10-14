@@ -39,13 +39,16 @@ class EndpointBuilderEndpointTest extends Specification {
     <actor displayName="Document Repository" id="rep">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="prb"/>
-        <property name="repositoryUniqueId" value="1.2.3.4"/>
+        <property displayName="repositoryUniqueId" value="1.2.3.4"/>
     </actor>
 </ActorsTransactions>
 '''
+    ActorTransactionTypeFactory atFactory
+
     void setup() {
-        new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().loadFromString(config)
+        atFactory = new ActorTransactionTypeFactory()
+        atFactory.clear()
+        atFactory.loadFromString(config)
     }
 
     def 'Build simple endpoint'() {
@@ -53,7 +56,7 @@ class EndpointBuilderEndpointTest extends Specification {
         def builder = new EndpointBuilder('localhost', '8080', 'xdstools2/sims', new SimId('123'))
         def transType = new ActorTransactionTypeFactory().getTransactionType('rb')
         def elabel = new EndpointType(transType, TlsType.NOTLS, AsyncType.SYNC)
-        def endpoint = builder.makeEndpoint('reg', elabel)
+        def endpoint = builder.makeEndpoint(atFactory.getActorType('reg'), elabel)
 
         then:
         endpoint.value == 'http://localhost:8080/xdstools2/sims/123/reg/rb'

@@ -25,7 +25,7 @@ class SimHandle {
     ActorSimConfig actorSimConfig
     EndpointBuilder endpointBuilder
     SoapEnvironment soapEnvironment
-    boolean open = true
+    boolean open = false
     def options = []
     boolean complete = false
 

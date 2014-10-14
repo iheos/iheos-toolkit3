@@ -70,7 +70,7 @@ public class SoapFaultThrower implements ValComponent {
 //	}
 //
 //	
-//	public void setName(String name) {
+//	public void setName(String displayName) {
 //
 //	}
 //

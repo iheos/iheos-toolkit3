@@ -101,7 +101,7 @@ public abstract class ValComponentBase implements ValComponent {
      * Cooperate with ValidationEngine
      *
      * These assert calls are wrappers for the calls of the same
-     * name(s) in AssertionGroup where the actual comparisons are made.
+     * displayName(s) in AssertionGroup where the actual comparisons are made.
      *
      * The AssertionGroup calls make the actual comparisons and record
      * the assertions in the AssertionGroup.  The recordAssertion

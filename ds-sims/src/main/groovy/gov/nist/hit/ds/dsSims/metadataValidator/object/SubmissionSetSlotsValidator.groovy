@@ -31,7 +31,7 @@ class SubmissionSetSlotsValidator extends ValComponentBase {
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='SSSlot001', msg='submissionTime must be present', ref="ITI TF-3: Table 4.1-6")
     def submissionTimeSlotPresent() {
-        if (!model.getSlot('submissionTime')?.size())
+        if (model.getSlot('submissionTime')?.size() == 0)
             fail('No value')
     }
 

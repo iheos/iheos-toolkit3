@@ -54,7 +54,7 @@ public class EndpointType {
 	}
 	
 	public String label() {
-		return transType.getName() + ((isTls()) ? "_TLS" : "") + ((isAsync()) ? "_ASYNC" : "");
+		return transType.code + ((isTls()) ? "_TLS" : "") + ((isAsync()) ? "_ASYNC" : "");
 	}
 
 	public TransactionType getTransType() {

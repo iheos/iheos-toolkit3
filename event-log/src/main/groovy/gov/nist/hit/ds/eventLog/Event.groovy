@@ -71,12 +71,13 @@ class Event {
     ValidatorResults currentResults() { assert resultsStack.size() > 0; return resultsStack.last() }
 
     def addPeerResults(validatorName) {
-        log.debug("Creating ${validatorName} AG")
+        log.debug("Add peer results ${validatorName} AG")
         Asset parent = (resultsStack.empty) ? eventDAO.validatorsAsset : resultsStack.last().parentAsset
         initResults(parent, validatorName)
         resultsStack.last().flush(FlushStatus.Force)
     }
     def addChildResults(childName) {
+        log.debug("Add child results ${childName} AG")
         assert !resultsStack.empty
         def result = resultsStack.last()
 //        initResults(result.parentAsset, childName)
@@ -84,10 +85,12 @@ class Event {
         result.flush(FlushStatus.Force)
     }
     def addSelfResults(validatorName) {
+        log.debug("Add self results ${validatorName} AG")
         if (resultsStack.empty) init()
     }
 
     def close() {
+        println "Closing ${resultsStack}"
         assert !resultsStack.empty
         println "Closing from ${resultsStack}"
         def result = resultsStack.pop()

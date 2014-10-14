@@ -82,7 +82,7 @@ public class SimServlet extends HttpServlet {
         try {
             response.getWriter().print(simHandle.getEvent().getInOut().getRespBody());
         } catch (IOException e) {
-                // give up - cannot handle this
+                // give up - cannot simHandle this
         }
     }
 
@@ -354,7 +354,7 @@ public class SimServlet extends HttpServlet {
 //			//					"Event_Repository",
 //			//					"Event Repository",
 //			//					new SimpleType("simEventRepository"),               // repository type
-//			//					ActorType.findActor(simEndpoint.getActor()).getShortName() + "-" + simId    // repository name
+//			//					ActorType.findActor(simEndpoint.getActor()).getShortName() + "-" + simId    // repository displayName
 //			//					);
 //			//			Asset eventAsset = repos.createAsset(
 //			//					db.nowAsFilenameBase(),
@@ -389,12 +389,12 @@ public class SimServlet extends HttpServlet {
 //		buf.append(request.getMethod() + " " + request.getRequestURI() + " " + request.getProtocol() + "\r\n");
 //		for (@SuppressWarnings("unchecked")
 //		Enumeration<String> en=request.getHeaderNames(); en.hasMoreElements(); ) {
-//			String name = en.nextElement();
-//			String value = request.getHeader(name);
-//			if (name.equals("Transfer-Encoding"))
+//			String displayName = en.nextElement();
+//			String value = request.getHeader(displayName);
+//			if (displayName.equals("Transfer-Encoding"))
 //				continue;  // log will not include transfer encoding so don't include this
-//			headers.put(name.toLowerCase(), value);
-//			buf.append(name).append(": ").append(value).append("\r\n");
+//			headers.put(displayName.toLowerCase(), value);
+//			buf.append(displayName).append(": ").append(value).append("\r\n");
 //		}
 //
 //		buf.append("\r\n");

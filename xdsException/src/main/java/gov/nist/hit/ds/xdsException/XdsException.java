@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.xdsException;
 
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class XdsException extends Exception implements IsSerializable {
