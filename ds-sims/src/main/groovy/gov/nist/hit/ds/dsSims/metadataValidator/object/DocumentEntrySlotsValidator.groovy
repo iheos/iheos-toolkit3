@@ -32,7 +32,14 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
     // creationTime
     //
 
-    def hasCreationTime() { model.getSlot('creationTime')?.size() }
+    def hasCreationTime() {
+        println "DE model is ${model}"
+        SlotModel sm = model.getSlot('creationTime')
+        println "Slot Model for creationTime is ${sm}"
+        sm?.size()
+    }
+
+    def repositoryUniqueIdRequired() { return false }
 
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id = 'DESlot001', msg = 'creationTime must be present', ref = "ITI TF-3: Table 4.1-5")
@@ -147,13 +154,13 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
 
     def trueFunction() { true }
 
-    @Optional(methodNames = ['trueFunction'])
-    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'DESlot031', msg = 'legalAuthenticator is present', ref = "ITI TF-3: Table 4.1-5")
-    def legalAuthenticatorPresent() {
-        if (!hasLegalAuthenticator())
-            fail('No value')
-    }
+//    @Optional(methodNames = ['trueFunction'])
+//    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
+//    @Validation(id = 'DESlot031', msg = 'legalAuthenticator is present', ref = "ITI TF-3: Table 4.1-5")
+//    def legalAuthenticatorPresent() {
+//        if (!hasLegalAuthenticator())
+//            fail('No value')
+//    }
 
     @Guard(methodNames = ['hasLegalAuthenticator'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
@@ -304,12 +311,12 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
 
     def hasURI() { model.getSlot('URI')?.size() }
 
-    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'DESlot081', msg = 'URI is present', ref = "ITI TF-3: Table 4.1-5")
-    def uriPresent() {
-        if (!hasURI())
-            fail('No value')
-    }
+//    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
+//    @Validation(id = 'DESlot081', msg = 'URI is present', ref = "ITI TF-3: Table 4.1-5")
+//    def uriPresent() {
+//        if (!hasURI())
+//            fail('No value')
+//    }
 
     @Guard(methodNames = ['hasURI'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
@@ -334,6 +341,7 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
 
     def hasRepositoryUniqueId() { model.getSlot('repositoryUniqueId')?.size() }
 
+    @Guard(methodNames = ['repositoryUniqueIdRequired'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id = 'DESlot091', msg = 'repositoryUniqueId is present', ref = "ITI TF-3: Table 4.1-5")
     def repositoryUniqueIdPresent() {
@@ -364,12 +372,12 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
 
     def hasDocumentAvailability() { model.getSlot('documentAvailability')?.size() }
 
-    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'DESlot101', msg = 'documentAvailability is present', ref = "ITI TF-3: Table 4.1-5")
-    def documentAvailabilityPresent() {
-        if (!hasDocumentAvailability())
-            fail('No value')
-    }
+//    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
+//    @Validation(id = 'DESlot101', msg = 'documentAvailability is present', ref = "ITI TF-3: Table 4.1-5")
+//    def documentAvailabilityPresent() {
+//        if (!hasDocumentAvailability())
+//            fail('No value')
+//    }
 
     @Guard(methodNames = ['hasDocumentAvailability'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
@@ -404,15 +412,15 @@ class DocumentEntrySlotsValidator extends ValComponentBase {
             fail('No value')
     }
 
-    @Guard(methodNames = ['hasSourcePatientInfo'])
-    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id = 'DESlot112', msg = 'sourcePatientInfo must have single value', ref = "ITI TF-3: Table 4.1-5")
-    def sourcePatientInfoSingleValue() {
-        assertEquals(1, model.getSlot('sourcePatientInfo').size())
-        for (int i = 0; i < model.getSlot('sourcePatientInfo').size(); i++) {
-            infoFound(model.getSlot('sourcePatientInfo').getValue(i))
-        }
-    }
+//    @Guard(methodNames = ['hasSourcePatientInfo'])
+//    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
+//    @Validation(id = 'DESlot112', msg = 'sourcePatientInfo must have single value', ref = "ITI TF-3: Table 4.1-5")
+//    def sourcePatientInfoSingleValue() {
+//        assertEquals(1, model.getSlot('sourcePatientInfo').size())
+//        for (int i = 0; i < model.getSlot('sourcePatientInfo').size(); i++) {
+//            infoFound(model.getSlot('sourcePatientInfo').getValue(i))
+//        }
+//    }
 
     @Guard(methodNames = ['hasSourcePatientInfo'])
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)

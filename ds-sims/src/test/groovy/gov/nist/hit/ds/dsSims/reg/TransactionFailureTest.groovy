@@ -23,7 +23,7 @@ class TransactionFailureTest extends Specification {
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>
     </transaction>
-    <transaction name="Error" id="error" code="error" asyncCode="errof.as">
+    <transaction name="Error" code="error" asyncCode="errof.as">
        <implClass value="gov.nist.hit.ds.dsSims.bad.FailsWithErrorValidator"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
@@ -41,6 +41,7 @@ class TransactionFailureTest extends Specification {
     def repoSource
     def repoName = 'Sim'
     ActorTransactionTypeFactory factory
+    def simIdStr = 'TransactionFailureTest'
 
     def initTest() {
         if (repoDataDir.exists()) {
@@ -60,7 +61,7 @@ class TransactionFailureTest extends Specification {
 
     def 'Should fail with fault'() {
         when: ''
-        def simId = new SimId('123')
+        def simId = new SimId(simIdStr)
         def simHandle = SimUtils.create('reg', simId, repoName)
         def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tools/sim/123/act/fault')
         simHandle.transactionType = factory.getTransactionType(endpointBuilder.transCode)
@@ -86,7 +87,7 @@ class TransactionFailureTest extends Specification {
 
     def 'Should fail with error'() {
         when: ''
-        def simId = new SimId('123')
+        def simId = new SimId(simIdStr)
         def simHandle = SimUtils.create('reg', simId, repoName)
         def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tk/sim/123/reg/error')
         simHandle.transactionType = factory.getTransactionType(endpointBuilder.transCode)

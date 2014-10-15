@@ -11,7 +11,7 @@ import spock.lang.Specification
  */
 class PnrSoapTest extends Specification {
     def header = '''
-POST /sim/PnrSoapTest HTTP/1.1
+POST /sim/PnrSoapTest/docrec/pnr HTTP/1.1
 Content-Type: multipart/related; boundary=MIMEBoundaryurn_uuid_806D8FD2D542EDCC2C1199332890718; type="application/xop+xml"; start="0.urn:uuid:806D8FD2D542EDCC2C1199332890719@apache.org"; start-info="application/soap+xml"; action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"
 User-Agent: Axis2
 Host: localhost:9085'''

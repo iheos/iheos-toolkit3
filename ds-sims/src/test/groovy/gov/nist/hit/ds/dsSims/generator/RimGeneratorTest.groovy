@@ -146,7 +146,7 @@ class RimGeneratorTest extends Specification {
 
         def rimm = '''
 <ExtrinsicObject id='Document1' mimeType='text/xml'
-    status='urn:oasis:names:tc:ebxml-regrep:StatusType:Approved'
+    status='urn:oasis:names:tc:ebxml-regrep:StatusType:Approved' lid=''
     objectType='urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1'>
 <Description>
   <LocalizedString value="hello"/>

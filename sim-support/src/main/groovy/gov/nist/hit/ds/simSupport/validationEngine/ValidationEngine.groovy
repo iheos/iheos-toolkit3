@@ -50,7 +50,6 @@ public class ValidationEngine {
     public void runValidationMethods() throws Exception {
         currentValidationMethod = getARunableValidationMethod();
         while(currentValidationMethod) {
-            logger.debug("...Running Validation ${currentValidationMethod.id} on ${validationObject.class.name}");
             validationObject.defaultMsg()
             invoke(currentValidationMethod)
             currentValidationMethod = getARunableValidationMethod();
@@ -58,6 +57,8 @@ public class ValidationEngine {
     }
 
     def invoke(validationMethod) throws Exception {
+        logger.debug("Running Validation ${currentValidationMethod.id} on ${validationObject.class.name}");
+        log.debug("...Validation Method is ${validationMethod}")
         try {
             validationMethod.method.invoke(validationObject);
         } catch (Exception e) {
@@ -135,7 +136,7 @@ public class ValidationEngine {
         for (def guardMethodName in validationMethod.optionalGuardMethodNames) {
             def guardValue = validationObject."${guardMethodName}"()
             log.debug("Optional Guard ${guardMethodName}? ${guardValue}")
-            if (!guardValue) return false
+            if (guardValue) return true
         }
         return false
     }

@@ -16,35 +16,40 @@ public class SimulatorConfigTest {
 
     static String config = '''
 <ActorsTransactions>
-    <transaction displayName="Stored Query" id="sq" code="sq" asyncCode="sq.as">
+    <transaction name="Stored Query" id="sq" code="sq" asyncCode="sq.as">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as">
+    <transaction name="Register" id="rb" code="rb" asyncCode="r.as">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
+    <transaction name="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Retrieve" id="ret" code="ret" asyncCode="ret.as">
+    <transaction name="Retrieve" id="ret" code="ret" asyncCode="ret.as">
         <request action="urn:ihe:iti:2007:RetrieveDocumentSet"/>
         <response action="urn:ihe:iti:2007:RetrieveDocumentSetResponse"/>
         <property displayName="repositoryUniqueId" value=""/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Update" id="update" code="update" asyncCode="update.as">
+    <transaction name="Update" id="update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <actor displayName="Document Registry" id="reg">
-        <simFactoryClass class="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
+    <actor name="Document Registry" id="reg">
+        <implClass value="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
         <transaction id="rb"/>
         <transaction id="sq"/>
         <transaction id="update"/>
     </actor>
-    <actor displayName="Document Repository" id="rep">
-        <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
+    <actor name="Document Repository" id="rep">
+        <implClass value="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="prb"/>
         <transaction id="ret"/>
     </actor>

@@ -19,6 +19,10 @@ public class ValidationMethod {
     boolean required = true
     String errorCode
 
+    public String toString() {
+        return "${method} required ${required} depends on ${dependsOnId} guards ${guardMethodNames} optionals ${optionalGuardMethodNames}"
+    }
+
     ValidationMethod(Method method, Validation validationAnnotation) {
         this.id = validationAnnotation.id()
         this.method = method

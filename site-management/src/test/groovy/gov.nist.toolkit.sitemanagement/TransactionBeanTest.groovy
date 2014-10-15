@@ -18,26 +18,30 @@ class TransactionBeanTest {
     <transaction name="Stored Query" code="sq" asyncCode="sq.as">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
+        <implClass value="unused"/>
     </transaction>
     <transaction name="Register" code="rb" asyncCode="r.as">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
     <transaction name="Provide and Register" code="prb" asyncCode="pr.as">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
     <transaction name="Update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <actor displayName="Document Registry" id="reg">
+    <actor name="Document Registry" id="reg">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
         <transaction id="rb"/>
         <transaction id="sq"/>
         <transaction id="update"/>
     </actor>
-    <actor displayName="Document Repository" id="rep">
+    <actor name="Document Repository" id="rep">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="prb"/>
         <property name="repositoryUniqueId" value="1.2.3.4"/>

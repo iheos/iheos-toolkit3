@@ -54,9 +54,9 @@ class TransactionType /* implements IsSerializable, Serializable */ {
         val = tt.name;
         if (val == null || val.equals(""))
             throw new InvalidTransactionTypeDefinitionException("name not defined");
-        val = tt.asyncCode;
-        if (val == null || val.equals(""))
-            throw new InvalidTransactionTypeDefinitionException("asyncCode not defined");
+//        val = tt.asyncCode;
+//        if (val == null || val.equals(""))
+//            throw new InvalidTransactionTypeDefinitionException("asyncCode not defined");
         val = tt.requestAction;
         if (val == null || val.equals(""))
             throw new InvalidTransactionTypeDefinitionException("requestAction not defined");
@@ -65,7 +65,7 @@ class TransactionType /* implements IsSerializable, Serializable */ {
             throw new InvalidTransactionTypeDefinitionException("responseAction not defined");
         val = tt.implementationClassName;
         if (val == null || val.equals(""))
-            throw new InvalidTransactionTypeDefinitionException("simChainName not defined");
+            throw new InvalidTransactionTypeDefinitionException("implClass not defined");
     }
 
 

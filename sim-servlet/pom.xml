@@ -27,7 +27,7 @@
         </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>httpSoapValidator</artifactId>
+          <artifactId>httpSoap</artifactId>
       </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>

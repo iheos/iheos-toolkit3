@@ -116,7 +116,7 @@ class SimUtils {
     }
 
     static def delete(SimId simId) {
-        delete(simId, SimSystemConfig.repoName)
+        delete(simId, new SimSystemConfig().repoName)
     }
 
     static def delete(SimId simId, String repositoryName) {

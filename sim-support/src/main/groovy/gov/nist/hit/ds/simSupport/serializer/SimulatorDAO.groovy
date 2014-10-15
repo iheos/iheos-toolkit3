@@ -72,6 +72,7 @@ class SimulatorDAO {
             trans.webService.each { ws ->
                 def label = ws.@value as String
                 EndpointType etype = new EndpointType(actorSimConfig.actorType, label)
+                assert etype.transType
                 TransactionSimConfigElement transactionSimConfigElement = new TransactionSimConfigElement(etype, new EndpointValue(endpointString))
                 setting.each { type, value -> transactionSimConfigElement.setBool(type, value)}
                 actorSimConfig.add(transactionSimConfigElement)

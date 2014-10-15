@@ -16,7 +16,7 @@ public class HttpSoapParser {
         if (hparser.isMultipart()) {
             return new MtomParser(hparser, content).getSoapEnvelope()
         } else {
-            new SimpleSoapParser(hparser, content).getSoapEnvelope()
+            return new SimpleSoapParser(hparser, content).getSoapEnvelope()
         }
     }
 

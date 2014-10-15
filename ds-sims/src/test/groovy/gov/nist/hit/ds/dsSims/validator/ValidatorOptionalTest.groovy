@@ -14,14 +14,14 @@ import spock.lang.Specification
 class ValidatorOptionalTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
-    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as"
-       class="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction">
+    <transaction name="Register" id="rb" code="rb" asyncCode="r.as">
+       <implClass value="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>
     </transaction>
-    <actor displayName="Document Registry" id="reg"
-      class="">
+    <actor name="Document Registry" id="reg">
+      <implClass value=""/>
         <transaction id="rb"/>
     </actor>
 </ActorsTransactions>
@@ -38,7 +38,7 @@ class ValidatorOptionalTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('123')
+        simId = new SimId('ValidatorOptionalTest')
         SimUtils.create('reg', simId, repoName)
     }
 

@@ -87,14 +87,15 @@ public class SimServlet extends HttpServlet {
     }
 
     protected SimHandle runPost(SimId simId, String header, byte[] body, List<String> options, HttpServletResponse response) {
-        SimHandle simHandle = runPost2(simId, new HttpMessageContent(header, body), options, response);
+        SimHandle simHandle;
+        simHandle = runPost2(simId, new HttpMessageContent(header, body), options, response);
         Fault fault = simHandle.getEvent().getFault();
         if (fault == null) {
             OMElement responseEle = new RegistryResponseGenerator(new RegistryResponse()).toXml();
             String responseBody = new SoapResponseGenerator(simHandle.getSoapEnvironment(), responseEle).getEnvelopeAsString();
             simHandle.getEvent().getInOut().setRespBody(responseBody.getBytes());
         } else {
-            logger.debug("Sending Fault");
+            logger.debug(ExceptionUtil.here("Sending Fault"));
             SoapEnvironment soapEnvironment = simHandle.getSoapEnvironment();
             OMElement faultEle = new SoapFaultGenerator(soapEnvironment, fault).getXML();
             String responseBody = new SoapResponseGenerator(simHandle.getSoapEnvironment(), faultEle).getEnvelopeAsString();
@@ -108,10 +109,20 @@ public class SimServlet extends HttpServlet {
     //    invalid endpoint
     //    sim does not exist
     protected SimHandle runPost2(SimId simId, HttpMessageContent content, List<String> options, HttpServletResponse response) {
-        byte[] soapEnvelopeBytes = new HttpSoapParser(content).getSoapEnvelope();
-        SoapHeader soapHeader = new SoapHeaderParser(new String(soapEnvelopeBytes)).parse();
-        String to = soapHeader.getTo();
-        SoapEnvironment soapEnvironment = buildSoapEnvironment(soapHeader, response);
+        byte[] soapEnvelopeBytes;
+        SoapHeader soapHeader;
+        String to;
+        SoapEnvironment soapEnvironment;
+
+        try {
+            soapEnvelopeBytes = new HttpSoapParser(content).getSoapEnvelope();
+            soapHeader = new SoapHeaderParser(new String(soapEnvelopeBytes)).parse();
+            to = soapHeader.getTo();
+        } catch (Throwable t) {
+            soapEnvironment = buildSoapEnvironment(response);
+            return sendFault(simId, "Internal Error parsing SOAP Header\n" + ExceptionUtil.exception_details(t), FaultCode.Receiver, soapEnvironment, content);
+        }
+        soapEnvironment = buildSoapEnvironment(soapHeader, response);
         if (to == null || to.equals(""))
             return sendFault(simId, "No To endpoint found in SOAP header", FaultCode.Sender, soapEnvironment, content);
         EndpointBuilder endpointBuilder = new EndpointBuilder().parse(to);
@@ -204,6 +215,22 @@ public class SimServlet extends HttpServlet {
         }
         soapEnvironment.setMessageId(soapHeader.getMessageId());
         soapEnvironment.setTo(soapHeader.getTo());
+        soapEnvironment.setResponse(response);
+        return soapEnvironment;
+    }
+
+    // for error handling - SOAP header not availble.  Build SOAP environment from defaults
+    SoapEnvironment buildSoapEnvironment(HttpServletResponse response) {
+        SoapEnvironment soapEnvironment = new SoapEnvironment();
+        soapEnvironment.setRequestAction("Unknown");
+        TransactionType transactionType = factory.getTransactionTypeFromRequestAction(soapEnvironment.getRequestAction());
+        if (transactionType == null) {
+            soapEnvironment.setResponseAction(null);
+        } else {
+            soapEnvironment.setResponseAction(transactionType.responseAction);
+        }
+        soapEnvironment.setMessageId("Unknown");
+        soapEnvironment.setTo("Unknown");
         soapEnvironment.setResponse(response);
         return soapEnvironment;
     }

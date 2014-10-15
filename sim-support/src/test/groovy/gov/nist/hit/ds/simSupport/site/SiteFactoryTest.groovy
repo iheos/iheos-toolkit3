@@ -20,31 +20,36 @@ class SiteFactoryTest extends Specification {
     <transaction name="Stored Query" code="sq.b" asyncCode="sq.as">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
+        <implClass value="unused"/>
     </transaction>
     <transaction name="Register" code="r.b" asyncCode="r.as">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
     <transaction name="Provide and Register" code="pr.b" asyncCode="pr.as">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
     <transaction name="Retrieve" code="ret.b" asyncCode="ret.as" isRetrieve="true">
         <request action="urn:ihe:iti:2007:RetrieveDocumentSet"/>
         <response action="urn:ihe:iti:2007:RetrieveDocumentSetResponse"/>
+        <implClass value="unused"/>
     </transaction>
     <transaction name="Update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <actor displayName="Document Registry" id="reg">
-        <simFactoryClass class="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
+    <actor name="Document Registry" id="reg">
+        <implClass value="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
         <transaction id="r.b"/>
         <transaction id="sq.b"/>
         <transaction id="update"/>
     </actor>
-    <actor displayName="Document Repository" id="rep">
-        <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
+    <actor name="Document Repository" id="rep">
+        <implClass value="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="pr.b"/>
         <transaction id="ret.b"/>
     </actor>

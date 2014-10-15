@@ -16,19 +16,19 @@ import spock.lang.Specification
 class PnrTest extends Specification {
     static String config = '''
 <ActorsTransactions>
-    <transaction displayName="Provide and Register" id="prb" code="prb">
+    <transaction name="Provide and Register" id="prb" code="prb">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
         <implClass value="gov.nist.hit.ds.dsSims.transactions.Pnr"/>
     </transaction>
-    <actor displayName="Document Recipient" id="docrec">
-        <simFactoryClass class="gov.nist.hit.ds.simSupport.factories.DocumentRecipientActorFactory"/>
+    <actor name="Document Recipient" id="docrec">
+        <implClass value="gov.nist.hit.ds.simSupport.factories.DocumentRecipientActorFactory"/>
         <transaction id="prb"/>
     </actor>
 </ActorsTransactions>
 '''
     def factory = new ActorTransactionTypeFactory()
-    def simId = new SimId('1234')
+    def simId = new SimId('PnrTest')
     def actorType = 'docrec'
     def transactionName = 'prb'
     def repoName = 'Sim'
@@ -45,7 +45,7 @@ class PnrTest extends Specification {
         factory.loadFromString(config)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simHandle = SimUtils.create(actorType, simId, new SimSystemConfig())
+        simHandle = SimUtils.create(actorType, simId)
     }
 
     // TODO: How to pass in options/selections???
@@ -59,17 +59,11 @@ class PnrTest extends Specification {
         def header = 'x'
         def body = 'y'.getBytes()
         def transactionType = factory.getTransactionType(transactionName)
+        simHandle.event.inOut.reqHdr = header
+        simHandle.event.inOut.reqBody = body
         when:
-        def runner = new TransactionRunner(simId, repoName, transactionType, header, body)
+        def runner = new TransactionRunner(simId, repoName, transactionType)
         runner.run()
-
-        then:
-        true
-    }
-
-    def 'Test2'() {
-        when:
-        SimHandle simHandle = SimUtils.runTransaction(endpoint, header, body, repoName)
 
         then:
         true

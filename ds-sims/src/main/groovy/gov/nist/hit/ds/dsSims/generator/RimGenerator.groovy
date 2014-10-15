@@ -83,14 +83,14 @@ class RimGenerator {
         def xml = new MarkupBuilder(writer)
         def status = (spec.status) ? "urn:oasis:names:tc:ebxml-regrep:StatusType:${spec.status}" : null
         if (status) {
-            xml.ExtrinsicObject(id: spec.id, mimeType: spec.mimeType,
+            xml.ExtrinsicObject(id: spec.id, mimeType: spec.mimeType, lid: spec.lid,
                     'status': status,
                     objectType: 'urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
                     }
         } else {
-            xml.ExtrinsicObject(id: spec.id, mimeType: spec.mimeType,
+            xml.ExtrinsicObject(id: spec.id, mimeType: spec.mimeType, lid: spec.lid,
                     objectType: 'urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
@@ -104,13 +104,13 @@ class RimGenerator {
         def xml = new MarkupBuilder(writer)
         def status = (spec.status) ? "urn:oasis:names:tc:ebxml-regrep:StatusType:${spec.status}" : null
         if (status) {
-            xml.RegistryPackage(id: spec.id,
+            xml.RegistryPackage(id: spec.id, lid: spec.lid,
                     status: "urn:oasis:names:tc:ebxml-regrep:StatusType:${spec.status}")
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
                     }
         } else {
-            xml.RegistryPackage(id: spec.id)
+            xml.RegistryPackage(id: spec.id, lid: spec.lid,)
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
                     }
@@ -155,6 +155,7 @@ class RimGenerator {
         if (name in authors) return mkAuthor(xml, parent, spec)
         if (name == 'description') return mkDescription(xml, spec)
         if (name == 'name') return mkName(xml, spec)
+        if (name == 'version') return mkVersion(xml, spec)
         throw new ToolkitRuntimeException("Cannot eval ${name}.")
     }
 
@@ -164,6 +165,10 @@ class RimGenerator {
                 spec.values.each { Value(it) }
             }
         }
+    }
+
+    def mkVersion(xml, spec) {
+        xml.VersionInfo(versionName: spec.value)
     }
 
     def mkClassification(xml, parent, spec) {

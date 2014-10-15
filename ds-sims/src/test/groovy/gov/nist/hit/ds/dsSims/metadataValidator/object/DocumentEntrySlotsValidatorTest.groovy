@@ -19,8 +19,8 @@ import spock.lang.Specification
 class DocumentEntrySlotsValidatorTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
-    <transaction name="Register" id="rb" code="rb" asyncCode="r.as"
-       class="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction">
+    <transaction name="Register" id="rb" code="rb" asyncCode="r.as">
+       <implClass value="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>
@@ -51,7 +51,7 @@ class DocumentEntrySlotsValidatorTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('123')
+        simId = new SimId('DocumentEntrySlotsValidatorTest')
         SimUtils.create('reg', simId, new SimSystemConfig().repoName)
         pnrText = this.getClass().classLoader.getResource('PnR1Doc.xml').getText()
         vc = new ValidationContext()

@@ -19,18 +19,11 @@ class MtomParser {
     byte[] getSoapEnvelope() throws Exception {
         MultipartParserBa mp = httpParserBa.getMultipartParser()
         if (mp.getPartCount() == 0) throw new Exception('No parts found in multipart when parsing MTOM format')
-//        def partIds = []
-//        for (int i=0; i<mp.getPartCount(); i++)
-//            partIds << mp.getPart(i).getContentId()
-//        msg("Part IDs found are ${partIds}")
         PartBa startPart = mp.getStartPart();
-//        msg("Start part is ${startPart?.getContentId()}")
 
         if (startPart == null) throw new Exception("Start part [${mp.getStartPartId()}] not found")
 
         return startPart.getBody()
-
-        // See V2 SoapMessageValidator.java
     }
 
 }

@@ -73,7 +73,7 @@ Host: localhost:9085'''
 
     def 'Register Transaction should succeed'() {
         when: ''
-        SimId simId = new SimId('123')
+        SimId simId = new SimId('RegisterTransactionTest')
         String endpoint = 'http://localhost:8080/tools/sim/123/reg/rb'
         SimHandle simHandle = SimUtils.create('reg', simId)
         simHandle.transactionType = new ActorTransactionTypeFactory().getTransactionType('rb')
