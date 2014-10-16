@@ -4,9 +4,10 @@ import gov.nist.direct.client.config.SigningCertType;
 import gov.nist.toolkit.results.client.AssertionResult;
 import gov.nist.toolkit.results.client.Result;
 import gov.nist.toolkit.tk.client.PropertyNotFoundException;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.Xdstools2;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.BaseSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.NullSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.tabs.directSenderTab.view.DirectSenderView;
@@ -70,7 +71,7 @@ implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
 	public void onTabLoad(TabContainer container, boolean select,
 			String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 		display = new DirectSenderView(topPanel, this);
 		
 		try {
@@ -98,7 +99,7 @@ implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
 
 					  
 					public void onFailure(Throwable arg0) {
-						new PopupMessage("Error: " + arg0.getMessage());
+						new PopupMessageV3("Error: " + arg0.getMessage());
 					}
 
 					  
@@ -132,7 +133,7 @@ implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler {
 
 			  
 			public void onFailure(Throwable caught) {
-				new PopupMessage("Error loading available signing certs: " + caught.getMessage());
+				new PopupMessageV3("Error loading available signing certs: " + caught.getMessage());
 			}
 
 			  

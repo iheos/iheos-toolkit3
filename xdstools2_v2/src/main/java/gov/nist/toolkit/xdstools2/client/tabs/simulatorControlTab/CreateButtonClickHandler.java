@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools2.client.tabs.simulatorControlTab;
 
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -16,7 +16,7 @@ class CreateButtonClickHandler implements ClickHandler {
 		int actorTypeIndex = simulatorControlTab.actorSelectListBox.getSelectedIndex();
 		String actorTypeName = simulatorControlTab.actorSelectListBox.getItemText(actorTypeIndex);
 		if (actorTypeName == null || actorTypeName.equals("")) {
-			new PopupMessage("Select actor type first");
+			new PopupMessageV3("Select actor type first");
 			return;
 		}
 		simulatorControlTab.getNewSimulator(actorTypeName);

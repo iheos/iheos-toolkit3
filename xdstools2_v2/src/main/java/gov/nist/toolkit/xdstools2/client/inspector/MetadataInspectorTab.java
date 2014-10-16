@@ -8,7 +8,7 @@ import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.results.client.StepResult;
 import gov.nist.toolkit.results.client.TestLog;
 import gov.nist.toolkit.results.client.TestLogs;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.TabbedWindow;
 import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 
 public class MetadataInspectorTab extends TabbedWindow {
 
@@ -77,7 +78,7 @@ public class MetadataInspectorTab extends TabbedWindow {
 			data.enableActions = false;
 
 		data.toolkitService = toolkitService;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 		container.addTab(topPanel, "Inspector", select);
 		topPanel.setWidth("100%");
 		addCloseButton(container,topPanel, null, siteSpec);
@@ -410,7 +411,7 @@ public class MetadataInspectorTab extends TabbedWindow {
 			String stepName = testLog.stepName;
 			StepResult stepResult = result.findStep(stepName);
 			if (stepResult == null) {
-				new PopupMessage("Received log for step " + stepName + " which does not exist in client");
+				new PopupMessageV3("Received log for step " + stepName + " which does not exist in client");
 				return;
 			}
 			stepResult.setTestLog(testLog);

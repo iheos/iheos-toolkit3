@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs.actorConfigTab;
 
 import gov.nist.toolkit.sitemanagement.client.Site;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -24,7 +24,7 @@ class SiteChoose implements ClickHandler {
 
 	public void onClick(ClickEvent event) {
 		if (actorConfigTab.currentEditSite != null && actorConfigTab.currentEditSite.changed == true && currentSelection != -1) {
-			new PopupMessage("Current Site has been edited. Save or Forget changes before selecting a different site");
+			new PopupMessageV3("Current Site has been edited. Save or Forget changes before selecting a different site");
 			actorConfigTab.siteSelector.setSelectedIndex(currentSelection);
 			return;
 		}
@@ -38,7 +38,7 @@ class SiteChoose implements ClickHandler {
 	protected AsyncCallback<Site> loadSiteCallback = new AsyncCallback<Site>() {
 
 		public void onFailure(Throwable caught) {
-			new PopupMessage(caught.getMessage());
+			new PopupMessageV3(caught.getMessage());
 		}
 
 		public void onSuccess(Site result) {

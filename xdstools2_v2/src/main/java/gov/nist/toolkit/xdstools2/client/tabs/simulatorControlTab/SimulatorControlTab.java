@@ -1,28 +1,23 @@
 package gov.nist.toolkit.xdstools2.client.tabs.simulatorControlTab;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.*;
 import gov.nist.toolkit.actorfactory.client.Simulator;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
 import gov.nist.toolkit.http.client.HtmlMarkup;
 import gov.nist.toolkit.sitemanagement.client.Site;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.BaseSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.FindDocumentsSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
 
 import java.util.Collection;
 import java.util.List;
-
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class SimulatorControlTab extends GenericQueryTab {
 
@@ -46,7 +41,7 @@ public class SimulatorControlTab extends GenericQueryTab {
 
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 
 		container.addTab(topPanel, "Sim Control", select);
 		addCloseButton(container,topPanel, null);
@@ -150,7 +145,7 @@ public class SimulatorControlTab extends GenericQueryTab {
 		toolkitService.getNewSimulator(actorTypeName, new AsyncCallback<Simulator>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("Error creating new simulator: " + caught.getMessage());
+				new PopupMessageV3("Error creating new simulator: " + caught.getMessage());
 			}
 
 			public void onSuccess(Simulator sconfigs) {
@@ -169,7 +164,7 @@ public class SimulatorControlTab extends GenericQueryTab {
 		toolkitService.getActorTypeNames(new AsyncCallback<List<String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getActorTypeNames:" + caught.getMessage());
+				new PopupMessageV3("getActorTypeNames:" + caught.getMessage());
 			}
 
 			public void onSuccess(List<String> result) {

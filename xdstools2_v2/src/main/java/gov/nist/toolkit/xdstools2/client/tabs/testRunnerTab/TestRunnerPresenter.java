@@ -5,7 +5,7 @@ import gov.nist.toolkit.results.client.AssertionResult;
 import gov.nist.toolkit.results.client.Result;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.xdstools2.client.CoupledTransactions;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.StringSort;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
@@ -159,7 +159,7 @@ public class TestRunnerPresenter {
 				pid = pid.trim();
 				parms.put("$patientid$", pid);
 			} else {
-				new PopupMessage("Patient ID must be entered");
+				new PopupMessageV3("Patient ID must be entered");
 				return;
 			}
 			
@@ -167,7 +167,7 @@ public class TestRunnerPresenter {
 			
 			SiteSpec siteSpec = getSelectedSiteSpec();
 			if (siteSpec == null) {
-				new PopupMessage("Site must be selected");
+				new PopupMessageV3("Site must be selected");
 				return;
 			}
 			siteSpec.isTls = siteSelectionWidget.isTlsSelected();
@@ -180,7 +180,7 @@ public class TestRunnerPresenter {
 		protected AsyncCallback<List<Result>> queryCallback = new AsyncCallback<List<Result>> () {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage(caught.getMessage());
+				new PopupMessageV3(caught.getMessage());
 //				resultPanel.clear();
 //				resultPanel.add(addHTML("<font color=\"#FF0000\">" + "Error running validation: " + caught.getMessage() + "</font>"));
 			}
@@ -263,7 +263,7 @@ public class TestRunnerPresenter {
 		toolkitService.getCollectionNames("actorcollections", new AsyncCallback<Map<String, String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getCollectionNames: " + caught.getMessage());
+				new PopupMessageV3("getCollectionNames: " + caught.getMessage());
 			}
 
 			public void onSuccess(Map<String, String> actorCollectionMap) {
@@ -308,7 +308,7 @@ public class TestRunnerPresenter {
 		toolkitService.getCollection("actorcollections", currentActorCode, new AsyncCallback<Map<String, String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getCollection(actorcollections): " + currentActorCode + " -----  " + caught.getMessage());
+				new PopupMessageV3("getCollection(actorcollections): " + currentActorCode + " -----  " + caught.getMessage());
 			}
 
 			public void onSuccess(Map<String, String> result) {
@@ -322,7 +322,7 @@ public class TestRunnerPresenter {
 
 					  
 					public void onFailure(Throwable caught) {
-						new PopupMessage("getTestResults(): " + caught.getMessage());
+						new PopupMessageV3("getTestResults(): " + caught.getMessage());
 					}
 
 					  
@@ -395,7 +395,7 @@ public class TestRunnerPresenter {
 		toolkitService.getTestIndex(testName, new AsyncCallback<List<String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getTestIndex: " + caught.getMessage());
+				new PopupMessageV3("getTestIndex: " + caught.getMessage());
 			}
 
 			public void onSuccess(List<String> sections) {

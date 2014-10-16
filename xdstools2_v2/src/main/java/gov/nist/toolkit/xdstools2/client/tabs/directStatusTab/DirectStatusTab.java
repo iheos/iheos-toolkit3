@@ -1,8 +1,9 @@
 package gov.nist.toolkit.xdstools2.client.tabs.directStatusTab;
 
 import gov.nist.direct.client.MessageLog;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.BaseSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.NullSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
@@ -39,7 +40,7 @@ public class DirectStatusTab  extends GenericQueryTab {
 	public void onTabLoad(TabContainer container, boolean select,
 			String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 		display = new MessageStatusView(topPanel, this);
 
 		container.addTab(topPanel, "DirectStatus", select);
@@ -58,7 +59,7 @@ public class DirectStatusTab  extends GenericQueryTab {
 		public void onClick(ClickEvent event) {
 			user = testSessionManager.getCurrentSelection();
 			if (user.equals("")) 
-				new PopupMessage("Select TestSession");
+				new PopupMessageV3("Select TestSession");
 			else
 				new MessageLoader(toolkitService, display).run(user);
 		}

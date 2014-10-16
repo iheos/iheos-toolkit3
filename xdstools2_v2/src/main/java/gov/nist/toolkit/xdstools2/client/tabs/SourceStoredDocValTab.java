@@ -3,8 +3,9 @@ package gov.nist.toolkit.xdstools2.client.tabs;
 import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.xdstools2.client.CoupledTransactions;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
 
@@ -60,7 +61,7 @@ public class SourceStoredDocValTab extends GenericQueryTab {
 	
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 		container.addTab(topPanel, "SourceStoresDocVal", select);
 		addCloseButton(container,topPanel, help);
 
@@ -97,7 +98,7 @@ public class SourceStoredDocValTab extends GenericQueryTab {
 				return;
 
 			if (ssid.getValue() == null || ssid.getValue().equals("")) {
-				new PopupMessage("You must enter a Submission Set id first");
+				new PopupMessageV3("You must enter a Submission Set id first");
 				return;
 			}
 			addStatusBox();

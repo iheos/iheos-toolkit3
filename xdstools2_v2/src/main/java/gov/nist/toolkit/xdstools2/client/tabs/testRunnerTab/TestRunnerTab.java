@@ -1,35 +1,25 @@
 package gov.nist.toolkit.xdstools2.client.tabs.testRunnerTab;
 
-import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
-import gov.nist.toolkit.results.client.SiteSpec;
-import gov.nist.toolkit.xdstools2.client.*;
-import gov.nist.toolkit.xdstools2.client.selectors.TestSessionManager;
-import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
-import gov.nist.toolkit.xdstools2.client.tabs.TextViewerTab;
-import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
+import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
+import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
+import gov.nist.toolkit.results.client.SiteSpec;
+import gov.nist.toolkit.xdstools2.client.*;
+import gov.nist.toolkit.xdstools2.client.Panel;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
+import gov.nist.toolkit.xdstools2.client.selectors.TestSessionManager;
+import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
+import gov.nist.toolkit.xdstools2.client.tabs.TextViewerTab;
+import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
+
+import java.util.*;
 
 public class TestRunnerTab extends GenericQueryTab {
 	final protected Toolkit2ServiceAsync toolkitService = GWT
@@ -64,7 +54,7 @@ public class TestRunnerTab extends GenericQueryTab {
 
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 		
 
 		container.addTab(topPanel, eventName, select);
@@ -162,7 +152,7 @@ public class TestRunnerTab extends GenericQueryTab {
 			toolkitService.getTestplanAsText(selectedTest, selectedSection, new AsyncCallback<String>() {
 
 				public void onFailure(Throwable caught) {
-					new PopupMessage("getTestplanAsText: " + caught.getMessage());
+					new PopupMessageV3("getTestplanAsText: " + caught.getMessage());
 				}
 
 				public void onSuccess(String result) {
@@ -178,7 +168,7 @@ public class TestRunnerTab extends GenericQueryTab {
 		toolkitService.getTestIndex(selectedTest, new AsyncCallback<List<String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getTestIndex: " + caught.getMessage());
+				new PopupMessageV3("getTestIndex: " + caught.getMessage());
 			}
 
 			public void onSuccess(List<String> result) {
@@ -230,7 +220,7 @@ public class TestRunnerTab extends GenericQueryTab {
 		toolkitService.getTestReadme(selectedTest, new AsyncCallback<String>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getTestReadme: " + caught.getMessage());
+				new PopupMessageV3("getTestReadme: " + caught.getMessage());
 			}
 
 			public void onSuccess(String result) {
@@ -294,7 +284,7 @@ public class TestRunnerTab extends GenericQueryTab {
 		toolkitService.getCollection("actorcollections", selectedActor, new AsyncCallback<Map<String, String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getCollection(actorcollections): " + selectedActor + " -----  " + caught.getMessage());
+				new PopupMessageV3("getCollection(actorcollections): " + selectedActor + " -----  " + caught.getMessage());
 			}
 
 			public void onSuccess(Map<String, String> result) {
@@ -322,7 +312,7 @@ public class TestRunnerTab extends GenericQueryTab {
 		toolkitService.getCollectionNames("actorcollections", new AsyncCallback<Map<String, String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getCollectionNames: " + caught.getMessage());
+				new PopupMessageV3("getCollectionNames: " + caught.getMessage());
 			}
 
 			public void onSuccess(Map<String, String> result) {
@@ -346,18 +336,18 @@ public class TestRunnerTab extends GenericQueryTab {
 			resultPanel.clear();
 			
 			if (!myContainer.getTestSessionState().isValid()) {
-				new PopupMessage("Test Session must be selected");
+				new PopupMessageV3("Test Session must be selected");
 				return;
 			}
 
 			SiteSpec siteSpec = queryBoilerplate.getSiteSelection();
 			if (siteSpec == null) {
-				new PopupMessage("Site must be selected");
+				new PopupMessageV3("Site must be selected");
 				return;
 			}
 			
 			if (selectedTest == null) {
-				new PopupMessage("Test must be selected");
+				new PopupMessageV3("Test must be selected");
 				return;
 			}
 

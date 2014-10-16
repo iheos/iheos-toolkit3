@@ -45,6 +45,10 @@
         <servlet-name>toolkit2Servlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>uploadServlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools2.server.upload.UploadServlet</servlet-class>
+    </servlet>
 
     <!-- ============== Servlet mappings ============== -->
     <servlet-mapping>
@@ -71,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>toolkit2Servlet</servlet-name>
         <url-pattern>/xdstools3/toolkit2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>uploadServlet</servlet-name>
+        <url-pattern>/xdstools3/upload</url-pattern>
     </servlet-mapping>
 
 

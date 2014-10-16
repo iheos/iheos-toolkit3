@@ -1,36 +1,26 @@
 package gov.nist.toolkit.xdstools2.client.tabs.actorConfigTab;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.*;
 import gov.nist.toolkit.actortransaction.client.ATFactory.ActorType;
 import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
 import gov.nist.toolkit.http.client.HtmlMarkup;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.sitemanagement.client.TransactionBean;
-import gov.nist.toolkit.sitemanagement.client.TransactionCollection;
 import gov.nist.toolkit.sitemanagement.client.TransactionBean.RepositoryType;
+import gov.nist.toolkit.sitemanagement.client.TransactionCollection;
 import gov.nist.toolkit.xdstools2.client.PasswordManagement;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
 import gov.nist.toolkit.xdstools2.client.StringSort;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.NullSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ActorConfigTab extends GenericQueryTab {
 	ListBox siteSelector;
@@ -51,7 +41,7 @@ public class ActorConfigTab extends GenericQueryTab {
 
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 
 		container.addTab(topPanel, "ActorConfig", select);
 		addCloseButton(container,topPanel, null);
@@ -138,7 +128,7 @@ public class ActorConfigTab extends GenericQueryTab {
 		final AsyncCallback<Boolean> gazelleConfigEnabledCallback = new AsyncCallback<Boolean> () {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage(caught.getMessage());
+				new PopupMessageV3(caught.getMessage());
 			}
 
 			public void onSuccess(Boolean enabled) {
@@ -174,7 +164,7 @@ public class ActorConfigTab extends GenericQueryTab {
 
 		final AsyncCallback<List<String>> loadSiteNamesCallback = new AsyncCallback<List<String>>() {
 			public void onFailure(Throwable caught) {
-				new PopupMessage(caught.getMessage());
+				new PopupMessageV3(caught.getMessage());
 			}
 
 			public void onSuccess(List<String> result) {
@@ -406,14 +396,14 @@ public class ActorConfigTab extends GenericQueryTab {
 		final AsyncCallback<String> saveSiteCallback = new AsyncCallback<String>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("Error saving site configuration: " + caught.getMessage());
+				new PopupMessageV3("Error saving site configuration: " + caught.getMessage());
 			}
 
 			public void onSuccess(String ignore) {
 				currentEditSite.changed = false;
 				toolkitService.getSiteNames(true, showSims.getValue(), new AsyncCallback<List<String>>() {
 					public void onFailure(Throwable caught) {
-						new PopupMessage(caught.getMessage());
+						new PopupMessageV3(caught.getMessage());
 					}
 
 					public void onSuccess(List<String> result) {
@@ -430,7 +420,7 @@ public class ActorConfigTab extends GenericQueryTab {
 
 		final AsyncCallback<List<String>> loadSiteNamesCallback = new AsyncCallback<List<String>>() {
 			public void onFailure(Throwable caught) {
-				new PopupMessage(caught.getMessage());
+				new PopupMessageV3(caught.getMessage());
 			}
 
 			public void onSuccess(List<String> result) {

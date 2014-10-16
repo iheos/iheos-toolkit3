@@ -2,7 +2,7 @@ package gov.nist.toolkit.xdstools2.client.selectors;
 
 import gov.nist.toolkit.xdstools2.client.CookieManager;
 import gov.nist.toolkit.xdstools2.client.Panel;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class PatientIdSelector {
 		if (instances.isEmpty()) {
 			toolkitService.getDefaultAssigningAuthority(new AsyncCallback<String>() {
 
-				public void onFailure(Throwable caught) { new PopupMessage("getDefaultAssigningAuthority(): " + caught.getMessage()); }
+				public void onFailure(Throwable caught) { new PopupMessageV3("getDefaultAssigningAuthority(): " + caught.getMessage()); }
 
 				public void onSuccess(String result) { defaultAssigningAuthority = result; }
 				

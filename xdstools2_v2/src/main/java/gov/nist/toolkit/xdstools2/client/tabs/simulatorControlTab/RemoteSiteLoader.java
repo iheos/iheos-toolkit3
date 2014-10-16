@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs.simulatorControlTab;
 
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ class RemoteSiteLoader {
 		simulatorControlTab.toolkitService.getSiteNamesWithRG(new AsyncCallback<List<String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getSiteNamesWithRG:" + caught.getMessage());
+				new PopupMessageV3("getSiteNamesWithRG:" + caught.getMessage());
 			}
 
 			public void onSuccess(List<String> siteNames) {
@@ -64,7 +64,7 @@ class RemoteSiteLoader {
 				if (!obsolete.isEmpty()) {
 					for (String ob : obsolete)
 						config.getRemoteSiteNames().remove(ob);
-					new PopupMessage("The following sites are no longer part of the actors configuration " +
+					new PopupMessageV3("The following sites are no longer part of the actors configuration " +
 							"and have been removed from the simulator configuration: " + obsolete
 							);
 				}

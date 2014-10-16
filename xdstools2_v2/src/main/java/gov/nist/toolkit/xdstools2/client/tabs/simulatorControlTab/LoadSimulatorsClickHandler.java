@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs.simulatorControlTab;
 
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ class LoadSimulatorsClickHandler implements ClickHandler {
 		simulatorControlTab.toolkitService.getSimConfigs(ids, new AsyncCallback<List<SimulatorConfig>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getSimConfigs:" + caught.getMessage());
+				new PopupMessageV3("getSimConfigs:" + caught.getMessage());
 			}
 
 			public void onSuccess(List<SimulatorConfig> configs) {

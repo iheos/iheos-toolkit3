@@ -1,22 +1,17 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
-import gov.nist.toolkit.http.client.HtmlMarkup;
-import gov.nist.toolkit.sitemanagement.client.Site;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
-import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.siteActorManagers.NullSiteActorManager;
-import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import gov.nist.toolkit.http.client.HtmlMarkup;
+import gov.nist.toolkit.sitemanagement.client.Site;
+import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
+import gov.nist.toolkit.xdstools2.client.siteActorManagers.NullSiteActorManager;
+import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
+
+import java.util.*;
 
 public class RepositoryListingTab extends GenericQueryTab {
 	FlexTable byNameTable = new FlexTable();
@@ -35,7 +30,7 @@ public class RepositoryListingTab extends GenericQueryTab {
 
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 
 
 		container.addTab(topPanel, "Rep List", select);
@@ -76,7 +71,7 @@ public class RepositoryListingTab extends GenericQueryTab {
 	AsyncCallback<Collection<Site>> loadSitesCallback = new AsyncCallback<Collection<Site>>() {
 
 		public void onFailure(Throwable caught) {
-			new PopupMessage("GetAllSites() failed: " + caught.getMessage());
+			new PopupMessageV3("GetAllSites() failed: " + caught.getMessage());
 		}
 
 		public void onSuccess(Collection<Site> result) {

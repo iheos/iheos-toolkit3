@@ -2,7 +2,7 @@ package gov.nist.toolkit.xdstools2.client.tabs.actorConfigTab;
 
 import gov.nist.toolkit.xdstools2.client.AdminPasswordDialogBox;
 import gov.nist.toolkit.xdstools2.client.PasswordManagement;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -24,7 +24,7 @@ class DeleteSite implements ClickHandler {
 
 	public void onClick(ClickEvent event) {
 		if (this.actorConfigTab.currentEditSite == null) {
-			new PopupMessage("Must choose site first");
+			new PopupMessageV3("Must choose site first");
 			return;
 		}
 		if (PasswordManagement.isSignedIn) {
@@ -69,7 +69,7 @@ class DeleteSite implements ClickHandler {
 	protected AsyncCallback<String> deleteSiteCallback = new AsyncCallback<String>() {
 
 		public void onFailure(Throwable caught) {
-			new PopupMessage(caught.getMessage());
+			new PopupMessageV3(caught.getMessage());
 		}
 
 		public void onSuccess(String result) {
