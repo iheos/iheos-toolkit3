@@ -39,7 +39,7 @@ class InOutMessagesDAO {
     }
 
 	public void putRequestHeader(String hdr) throws RepositoryException {
-		log.debug("Header\n" + hdr);
+//		log.debug("Header\n" + hdr);
 		Asset a = AssetHelper.createChildAsset(inOutAsset, "Request Header", "", new SimpleType(reqHdrType));
 		a.setOrder(1);
 		a.setContent(hdr, "text/plain");
@@ -53,7 +53,7 @@ class InOutMessagesDAO {
 //	}
 
 	public void putRequestBody(byte[] bytes) throws RepositoryException {
-		log.debug("Body\n" + new String(bytes));
+//		log.debug("Body\n" + new String(bytes));
 		Asset a = AssetHelper.createChildAsset(inOutAsset, "Request Body", "", new SimpleType(reqBodyType));
 		a.setOrder(2);
         a.setMimeType("application/octet-stream");
@@ -75,7 +75,7 @@ class InOutMessagesDAO {
 	}
 
     public void putResponseBody(byte[] bytes) throws RepositoryException {
-        log.debug("Body\n" + new String(bytes));
+//        log.debug("Body\n" + new String(bytes));
         Asset a = AssetHelper.createChildAsset(inOutAsset, "Response Body", "", new SimpleType(resBodyType));
         a.setOrder(2);
         a.setMimeType("application/octet-stream");

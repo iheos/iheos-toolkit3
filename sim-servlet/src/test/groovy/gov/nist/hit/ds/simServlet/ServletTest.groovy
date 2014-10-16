@@ -1,10 +1,13 @@
 package gov.nist.hit.ds.simServlet
+
 import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.manager.ActorSimConfigManager
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import spock.lang.Specification
+
+
 /**
  * Created by bmajur on 10/6/14.
  */
@@ -116,7 +119,7 @@ Host: localhost:9085'''
     }
 
 
-    def 'Message to non-existant sim should report'() {
+    def 'Message to non-existent sim should report'() {
         when:
         def simHandle = simServlet.runPost(new SimId('NoSim'), header, noSimEndpointBody.getBytes(), [], null)
         def fault = simHandle.getEvent().getFault()
