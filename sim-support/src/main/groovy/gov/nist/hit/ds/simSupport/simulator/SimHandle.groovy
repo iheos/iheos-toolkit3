@@ -39,7 +39,7 @@ class SimHandle {
         return event
     }
 
-    boolean hasOption(String option) { options.contains(option)}
+    String getOption(String option) { options.find { String opt -> opt.startsWith(option)}}
 
     SimHandle fault(Fault fault) {
         event.fault = fault

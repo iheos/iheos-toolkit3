@@ -150,9 +150,14 @@ public class SimServlet extends HttpServlet {
         SimHandle simHandle;
         simHandle = SimUtils.open(simId);
         if (simHandle == null) {
-            logger.debug("Sim " + simId.getId() + " does not exist");
-            // Sim does not exist
-            return sendFault(new SimId(errorSimId), "Simulator with ID " + simId.getId() + " does not exist.", FaultCode.Sender, soapEnvironment, content);
+            if (options.contains("autocreate")) {
+                logger.info("Auto Creating sim " + simId.getId());
+                simHandle = autoCreateSim(endpointBuilder);
+            } else {
+                logger.debug("Sim " + simId.getId() + " does not exist");
+                // Sim does not exist
+                return sendFault(new SimId(errorSimId), "Simulator with ID " + simId.getId() + " does not exist.", FaultCode.Sender, soapEnvironment, content);
+            }
         }
         simHandle.setSoapEnvironment(soapEnvironment);
         simHandle.setEndpointBuilder(endpointBuilder);
@@ -166,7 +171,7 @@ public class SimServlet extends HttpServlet {
         simHandle.setTransactionType(transactionType);
         logRequest(simHandle, content);
 
-        if (simHandle.hasOption("fault")) {
+        if (simHandle.getOption("fault") != null) {
             simHandle.getEvent().setFault(new Fault("Forced Fault", FaultCode.Sender.toString(), "Unknown", ""));
             logRequest(simHandle, content);
             return simHandle;
@@ -194,6 +199,10 @@ public class SimServlet extends HttpServlet {
         simHandle.getEvent().getInOut().setReqBody(content.getBody());
     }
 
+    SimHandle autoCreateSim(EndpointBuilder builder) {
+        return SimUtils.create(builder.getActorCode(), builder.getSimId());
+    }
+
     private void runTransaction(SimHandle simHandle) {
         try {
            new TransactionRunner(simHandle).prun();
@@ -211,7 +220,7 @@ public class SimServlet extends HttpServlet {
     // xdstools3/sim/simid/option1/option2
     List<String> parseOptionsFromURI(String uri) {
         String[] parts = uri.split("/");
-        return Arrays.asList(parts).subList(5, parts.length-1);
+        return Arrays.asList(parts).subList(6, parts.length);
     }
 
     SimId parseSimIdFromURI(String uri) {

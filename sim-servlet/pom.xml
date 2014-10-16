@@ -25,6 +25,10 @@
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
         </dependency>
+        <dependency>
+        <groupId>com.google.gwt</groupId>
+        <artifactId>gwt-servlet</artifactId>
+        </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
           <artifactId>httpSoap</artifactId>

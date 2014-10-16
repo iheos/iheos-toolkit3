@@ -1,10 +1,6 @@
 package gov.nist.hit.ds.simSupport.client.configElementTypes;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
-import java.io.Serializable;
-
-abstract public class SimConfigElement implements IsSerializable, Serializable {
+abstract public class SimConfigElement {
 
 	private static final long serialVersionUID = -5290538505675778269L;
 
