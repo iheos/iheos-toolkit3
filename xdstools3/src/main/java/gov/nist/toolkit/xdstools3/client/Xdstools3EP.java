@@ -6,15 +6,11 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.web.bindery.event.shared.EventBus;
-import com.smartgwt.client.widgets.layout.Layout;
-import com.smartgwt.client.widgets.layout.VLayout;
-import gov.nist.toolkit.xdstools3.client.util.Util;
-
-import java.util.logging.Logger;
+import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
+import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.Xdstools3ActivityMapper;
+import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.Xdstools3PlaceHistoryMapper;
+import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
 
 /**
  * Application entry point. It start the UI and initiate the Activity Place design.

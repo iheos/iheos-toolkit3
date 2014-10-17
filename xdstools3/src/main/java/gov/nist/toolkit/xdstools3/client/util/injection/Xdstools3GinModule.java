@@ -1,13 +1,13 @@
-package gov.nist.toolkit.xdstools3.client;
+package gov.nist.toolkit.xdstools3.client.util.injection;
 
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.inject.Provider;
-import com.google.inject.Provides;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 import com.google.inject.Singleton;
+import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.Xdstools3ActivityMapper;
 
 import javax.inject.Inject;
 

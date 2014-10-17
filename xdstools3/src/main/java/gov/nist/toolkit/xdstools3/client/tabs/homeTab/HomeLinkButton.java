@@ -6,11 +6,9 @@ import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
-import gov.nist.toolkit.xdstools3.client.TabPlace;
-import gov.nist.toolkit.xdstools3.client.Xdstools3GinInjector;
+import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
+import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
-
-import javax.inject.Inject;
 
 /**
  * Creates a button with the title passed in argument. Also creates a listener which fires an event through Eventbus,
