@@ -68,7 +68,7 @@
 
     <modules>
 
-        <!-- For some reason there seems to be an issue compiling the soapHttpValidator module with JDK 1.7, which is required by the editor module -->
+        <!-- There is an issue with soapHttpValidator unit tests and JDK 1.7 -->
 
         <module>repository-tools</module>
         <module>tk-core</module>

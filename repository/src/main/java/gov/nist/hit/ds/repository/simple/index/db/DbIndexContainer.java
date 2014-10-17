@@ -1212,7 +1212,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 				}
 			}
 		} catch (RepositoryException e) {
-			logger.fine(e.toString());
+			logger.warning(e.toString());
 		}
 		return indexableAssetProperties;
 	}

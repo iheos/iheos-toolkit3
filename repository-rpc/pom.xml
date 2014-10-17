@@ -100,7 +100,7 @@
         <dependency>
             <groupId>net.timewalker.ffmq3</groupId>
             <artifactId>ffmq3-core</artifactId>
-            <version>3.0.5</version>
+            <version>3.0.5.01</version>
         </dependency>
         <dependency>
             <groupId>javax.jms</groupId>

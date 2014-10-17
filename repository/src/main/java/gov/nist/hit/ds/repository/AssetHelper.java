@@ -191,7 +191,7 @@ public class AssetHelper {
      * @param parentAssetType The parent asset type.
      * @param detailAssetType The detail asset type.
      * @param detailAssetFilterCriteria A criteria to filter detail assets. For example, a criteria can be built to represent to mean filter by "status=ERROR." An empty criteria or a null value signifies no special restriction.
-     * @param displayColumns Select the columns to display. No value can indicate to display all columns.
+     * @param displayColumns Select the columns to display. A null value can be used display all columns.
      * @return
      * @throws gov.nist.hit.ds.repository.api.RepositoryException
      */

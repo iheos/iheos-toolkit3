@@ -179,7 +179,8 @@ public class EventAggregatorWidget extends Composite {
 //        txTable.setStyleName("txDataGridNoTableSpacing");
 
         table.setAutoHeaderRefreshDisabled(false);
-        table.setFocus(false);
+        table.getElement().getStyle().setProperty("wordWrap","break-word");
+        table.setFocus(true);
 
 
         // Create table columns

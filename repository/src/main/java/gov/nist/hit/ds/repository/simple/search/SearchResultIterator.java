@@ -139,7 +139,7 @@ public class SearchResultIterator implements AssetIterator  {
                 Asset a = null;
 
                 if (isLoadProperties()) {
-                    logger.info("loading by prop pop method");
+                    logger.fine("loading by prop pop method");
                     String propFileStr = an.getLocation();
                     if (propFileStr!=null && !"".equals(propFileStr)) {
                         String fullPath = repos.getRoot() + File.separator + propFileStr;

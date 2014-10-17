@@ -398,7 +398,12 @@ public class LogBrowserWidget extends Composite {
             canvas.setCoordinateSpaceWidth(width);
             canvas.setCoordinateSpaceHeight(height);
 
-            loggingControlWidget = new LoggingControlWidget(canvas, eventBus,"title");
+            backBuffer.setWidth(width + "px");
+            backBuffer.setHeight(height + "px");
+            backBuffer.setCoordinateSpaceWidth(width);
+            backBuffer.setCoordinateSpaceHeight(height);
+
+            loggingControlWidget = new LoggingControlWidget(backBuffer, canvas, eventBus,"title");
             initMouseHandlers();
 
             final Timer timer = new Timer() {
@@ -438,8 +443,8 @@ public class LogBrowserWidget extends Composite {
             public void onMouseOut(MouseOutEvent event) {
                 if (!activeControl)
                     return;
-                mouseX = -200;
-                mouseY = -200;
+//                mouseX = -200;
+//                mouseY = -200;
             }
         });
 
@@ -456,12 +461,14 @@ public class LogBrowserWidget extends Composite {
         canvas.addMouseUpHandler(new MouseUpHandler() {
             @Override
             public void onMouseUp(MouseUpEvent event) {
-                mouseX = -200;
-                mouseY = -200;
+//                mouseX = -200;
+//                mouseY = -200;
                 activeControl = false;
 
             }
         });
+
+        /*
 
                 canvas.addMouseOutHandler(new MouseOutHandler() {
                     public void onMouseOut(MouseOutEvent event) {
@@ -469,6 +476,8 @@ public class LogBrowserWidget extends Composite {
                         mouseY = -200;
                     }
                 });
+
+                */
 
         /*
         canvas.addTouchMoveHandler(new TouchMoveHandler() {
@@ -1198,7 +1207,7 @@ public class LogBrowserWidget extends Composite {
         eventMessageAggregatorWidget.setSize("98%", "98%");
         eventMessageAggregatorWidget.getTable().redraw();
 
-        multiContentTabPanel.add(centerPanel, "Content Viewer");
+        multiContentTabPanel.add(centerPanel, "Document Viewer");
         addContentViewerTabPanelOption(centerPanel, 0);
         splitPanel.add(multiContentTabPanel);
     }
@@ -1299,6 +1308,7 @@ public class LogBrowserWidget extends Composite {
                            }
                        }
 
+                    table.getElement().getStyle().setProperty("wordWrap","break-word");
 
                     SplitLayoutPanel layoutPanel = new SplitLayoutPanel(0);
 
