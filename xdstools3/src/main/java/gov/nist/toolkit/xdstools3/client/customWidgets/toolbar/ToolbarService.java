@@ -15,8 +15,7 @@ public interface ToolbarService extends RemoteService {
 
     public String[] retrieveEnvironments();
     public String[] retrieveTestSessions();
+    public String[] addTestSession(String sessionName);
 
-
-	
 
 }

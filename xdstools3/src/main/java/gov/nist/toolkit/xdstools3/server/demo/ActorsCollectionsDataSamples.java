@@ -8,14 +8,16 @@ import java.util.Map;
 
 /**
  * Created by onh2 on 8/26/2014.
+ *
+ * Provides test data / GUI demo data for Actors and Collections widgets
  */
-public enum DataHelper {
+public enum ActorsCollectionsDataSamples {
     instance;
 
     Map<String,List<String>> testsMap;
     Map<String,String> collectionsReadme;
 
-    private DataHelper(){
+    private ActorsCollectionsDataSamples(){
         testsMap = new HashMap<>();
         collectionsReadme = new HashMap<>();
 

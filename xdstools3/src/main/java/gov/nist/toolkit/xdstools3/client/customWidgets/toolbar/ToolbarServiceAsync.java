@@ -15,4 +15,6 @@ public interface ToolbarServiceAsync {
     void retrieveEnvironments(AsyncCallback<String[]> async);
 
     void retrieveTestSessions(AsyncCallback<String[]> async);
+
+    void addTestSession(String sessionName, AsyncCallback<String[]> async);
 }

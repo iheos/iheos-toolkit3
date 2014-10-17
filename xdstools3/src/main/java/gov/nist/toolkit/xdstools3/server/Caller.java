@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools3.server;
 
-import gov.nist.toolkit.xdstools3.server.demo.DataHelper;
+import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -45,12 +45,16 @@ public class Caller implements Serializable {
         System.out.println("Call to server successful");
 	}
 
+
+    // --------------------- Sessions and Environments ---------------------
+
     /**
      * Set the list of environments
      * @return the list of available environments
      */
    public String[] retrieveEnvironments(){
-        return null;
+       String[] envs = {"NA2014", "EURO2011", "EURO2012", "NwHIN"};
+       return envs;
    }
 
     /**
@@ -58,18 +62,33 @@ public class Caller implements Serializable {
      * @return the list of test sessions
      */
     public String[]  retrieveTestSessions(){
-        return null;
+        String[] sessions = {"Test session 1", "Test session 2"};
+        return sessions;
     }
 
+    /**
+     * Register a new session name and update the client-side data
+     * @param sessionName New session name entered by the user
+     */
+    public String[] addTestSession(String sessionName){
+        String[] sessions = {"Test session 1", "Test session 2", sessionName};
+        // this test data gives wrong behavior (can stay as is for now)
+        System.out.println("A new click or new session name was registered");
+        return sessions;
+    }
+
+
+    // --------------------- Actors and Collectons ---------------------
+
     public Map<String, String> getCollectionNames(String collectionSetName) throws Exception  {
-        return DataHelper.instance.getCollectionNames(collectionSetName);
+        return ActorsCollectionsDataSamples.instance.getCollectionNames(collectionSetName);
     }
 
     public Map<String, String> getCollection(String collectionSetName, String collectionName) {
-        return DataHelper.instance.getCollection(collectionSetName,collectionName);
+        return ActorsCollectionsDataSamples.instance.getCollection(collectionSetName,collectionName);
     }
 
     public String getTestReadme(String test) {
-        return DataHelper.instance.getTestReadme(test);
+        return ActorsCollectionsDataSamples.instance.getTestReadme(test);
     }
 }
