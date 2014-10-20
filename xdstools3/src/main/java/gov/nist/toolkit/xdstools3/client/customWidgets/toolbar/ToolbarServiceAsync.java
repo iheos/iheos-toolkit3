@@ -13,8 +13,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface ToolbarServiceAsync {
 
     void retrieveEnvironments(AsyncCallback<String[]> async);
-
     void retrieveTestSessions(AsyncCallback<String[]> async);
-
     void addTestSession(String sessionName, AsyncCallback<String[]> async);
+    void setEnvironment(String environmentName, AsyncCallback<Void> async);
 }

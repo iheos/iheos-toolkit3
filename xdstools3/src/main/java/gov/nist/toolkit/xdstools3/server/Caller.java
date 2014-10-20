@@ -42,14 +42,14 @@ public class Caller implements Serializable {
 	public void logMeIn(String username, String password){
 
         // TODO compare login with server-side admin credentials
-        System.out.println("Call to server successful");
+        System.out.println("Test successful: you are logged in.");
 	}
 
 
     // --------------------- Sessions and Environments ---------------------
 
     /**
-     * Set the list of environments
+     * Sets the list of environments
      * @return the list of available environments
      */
    public String[] retrieveEnvironments(){
@@ -58,7 +58,15 @@ public class Caller implements Serializable {
    }
 
     /**
-     * Set the list of test sessions
+     * Sets the environment selected by the user
+     */
+    public void setEnvironment(String envName) {
+        // FIXME NA2014 or the top item from the drop-down needs to be set as default environment in back-end.
+        System.out.println("Test successful: Environment " + envName + " was set.");
+    }
+
+    /**
+     * Sets the list of test sessions
      * @return the list of test sessions
      */
     public String[]  retrieveTestSessions(){
@@ -67,15 +75,16 @@ public class Caller implements Serializable {
     }
 
     /**
-     * Register a new session name and update the client-side data
+     * Registers a new session name and update the client-side data
      * @param sessionName New session name entered by the user
      */
     public String[] addTestSession(String sessionName){
         String[] sessions = {"Test session 1", "Test session 2", sessionName};
         // this test data gives wrong behavior (can stay as is for now)
-        System.out.println("A new click or new session name was registered");
+        System.out.println("Test successful: A new click or new session name was registered");
         return sessions;
     }
+
 
 
     // --------------------- Actors and Collectons ---------------------
@@ -91,4 +100,6 @@ public class Caller implements Serializable {
     public String getTestReadme(String test) {
         return ActorsCollectionsDataSamples.instance.getTestReadme(test);
     }
+
+
 }
