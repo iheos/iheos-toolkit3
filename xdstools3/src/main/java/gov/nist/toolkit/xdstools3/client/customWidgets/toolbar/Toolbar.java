@@ -24,7 +24,7 @@ import java.util.LinkedHashMap;
 
 // TODO put each session and env in a separate ribbonbar
 public class Toolbar extends RibbonBar {
-    // static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Toolbar.class);
+     static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Toolbar.class);
     private SelectOtherItem sessionsComboBox;
     private SelectItem envListBox;
     private ToolbarServiceAsync rpcService = GWT.create(ToolbarService.class);
@@ -90,7 +90,7 @@ public class Toolbar extends RibbonBar {
                 AsyncCallback<Void> envIsSelectedCallback = new AsyncCallback<Void>() {
                     @Override
                     public void onFailure(Throwable caught) {
-                        //logger.debug(getClassName() + ": " +" envListBox.addChangedHandler");
+                        logger.debug(getClassName() + ": " +" envListBox.addChangedHandler");
                         new PopupMessageV3(caught.getMessage());
                     }
 
@@ -115,7 +115,7 @@ public class Toolbar extends RibbonBar {
                 AsyncCallback<String[]> addSessionNameCallback = new AsyncCallback<String[]>() {
                     @Override
                     public void onFailure(Throwable caught) {
-                        //logger.debug(getClassName() + ": " +" sessionsComboBox.addChangedHandler");
+                        logger.debug(getClassName() + ": " +" sessionsComboBox.addChangedHandler");
                         new PopupMessageV3(caught.getMessage());
                     }
 
@@ -173,7 +173,7 @@ public class Toolbar extends RibbonBar {
 
         AsyncCallback<String[]> sessionCallback = new AsyncCallback<String[]>() {
             public void onFailure(Throwable caught) {
-                //logger.debug(getClassName() + ": " +"loadSessionNamesFromServer");
+                logger.debug(getClassName() + ": " +"loadSessionNamesFromServer");
                 new PopupMessageV3(caught.getMessage());
             }
             @Override
@@ -193,7 +193,7 @@ public class Toolbar extends RibbonBar {
 
         AsyncCallback<String[]> envCallback = new AsyncCallback<String[]>() {
             public void onFailure(Throwable caught) {
-                // logger.debug(getClassName() + ": " +"loadEnvironmentNamesFromServer");
+                logger.debug(getClassName() + ": " +"loadEnvironmentNamesFromServer");
                 new PopupMessageV3(caught.getMessage());
             }
             @Override
