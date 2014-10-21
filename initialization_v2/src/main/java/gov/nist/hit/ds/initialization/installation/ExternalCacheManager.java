@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.initialization.installation;
 
+import gov.nist.hit.ds.initialization.environment.Environment;
+
 import java.io.File;
 
 public class ExternalCacheManager {
@@ -32,5 +34,7 @@ public class ExternalCacheManager {
 	public File getActorsDir() {
 		return new File(externalCache, "actors");
 	}
+
+    public Environment getEnvironment(){return new Environment(getEnvironmentFile());}
 	
 }

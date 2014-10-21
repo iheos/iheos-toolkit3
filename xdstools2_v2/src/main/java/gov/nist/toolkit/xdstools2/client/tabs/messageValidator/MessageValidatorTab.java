@@ -1019,11 +1019,11 @@ public class MessageValidatorTab extends TabbedWindow {
     protected AsyncCallback<MessageValidationResults> messageValidationCallback = new AsyncCallback<MessageValidationResults> () {
 
         public void onFailure(Throwable caught) {
-            new GwtValFormatter().addCell(caught.getMessage(), 0);
-            // what is the gwtformatter used for? how does it relate to resultsTable?
 
+
+            // TODO modify EnvironmentNotFoundException bya dding a message and remove getClass.getName below
+            new GwtValFormatter().addCell(caught.getClass().getName() + ": " + caught.getMessage(), 0);
             topPanel.add(resultsTable);
-            System.out.println(resultsTable.toString());
 
             // v3 - Alert the top-level Smartgwt panel that the contents changed
             topPanel.fireEvent(new PaneChangedEvent(null));

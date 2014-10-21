@@ -24,6 +24,8 @@ public class PopupMessageV3 extends Dialog {
         addItem(lab);
         lab.setLayoutAlign(Alignment.CENTER);
         lab.setAutoFit(true);
+        setWidth(350);
+        lab.setWidth(300);
 
         // OK button
 		final Button ok = new Button("OK");
