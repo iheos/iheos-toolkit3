@@ -20,6 +20,7 @@ public class TransactionTypeFactoryTest {
         <implClass value="unused"/>
     </transaction>
     <transaction name="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
+        <params multipart="true" soap="true"/>
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
         <implClass value="unused"/>
@@ -61,7 +62,7 @@ public class TransactionTypeFactoryTest {
 	}
 
 	@Test
-	public void verifyFieldsTest()   {
+	public void verifyFieldsTestrb()   {
 		TransactionType tt = new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb");
         println tt
 		assertTrue(tt.code.equals("rb"));
@@ -69,4 +70,13 @@ public class TransactionTypeFactoryTest {
 		assertTrue(tt.requestAction.equals("urn:ihe:iti:2007:RegisterDocumentSet-b"));
 		assertTrue(tt.responseAction.equals("urn:ihe:iti:2007:RegisterDocumentSet-bResponse"));
 	}
+
+
+    @Test
+    public void verifyFieldsTestprb()   {
+        TransactionType tt = new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("prb");
+        println tt
+        assertTrue(tt.multiPart)
+        assertTrue(tt.soap)
+    }
 }

@@ -26,16 +26,16 @@ class ActorTransactionTypeDAO {
 
     void parseTransaction(tt) {
         TransactionType ttype = new TransactionType()
-        ttype.name = tt.@name
-        ttype.code = tt.@code
-        ttype.isRetrieve = tt.@isRetrieve == 'true'
-        ttype.asyncCode = tt.@asyncCode
-        ttype.requestAction = tt.request.@action
-        ttype.responseAction = tt.response.@action
-        ttype.implementationClassName = tt.implClass.@value
-        if (tt.params) {
-            ttype.multiPart = tt.params.@multiPart == 'true'
-            ttype.soap = tt.params.@soap == 'true'
+        ttype.name = tt.@name.text()
+        ttype.code = tt.@code.text()
+        ttype.isRetrieve = tt.@isRetrieve.text() == 'true'
+        ttype.asyncCode = tt.@asyncCode.text()
+        ttype.requestAction = tt.request.@action.text()
+        ttype.responseAction = tt.response.@action.text()
+        ttype.implementationClassName = tt.implClass.@value.text()
+        tt.params.each  { params ->
+            ttype.multiPart = params.@multipart.text() == 'true'
+            ttype.soap = params.@soap.text() == 'true'
         }
         fact.transactionByName.put(ttype.name, ttype)
         fact.transactionByName.put(ttype.code, ttype)

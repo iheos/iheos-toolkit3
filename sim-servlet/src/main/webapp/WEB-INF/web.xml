@@ -20,6 +20,16 @@
 		<!--<url-pattern>/xdstools2/toolkit</url-pattern>-->
 	<!--</servlet-mapping>-->
 
+    <!--
+    <filter>
+        <filter-name>Response logging filter</filter-name>
+        <filter-class>gov.nist.hit.ds.simServlet.SimServletFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Response logging filter</filter-name>
+        <servlet-name>simulatorServlet</servlet-name>
+    </filter-mapping>
+-->
 	<servlet-mapping>
 		<servlet-name>simulatorServlet</servlet-name>
 		<url-pattern>/sim/*</url-pattern>

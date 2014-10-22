@@ -11,7 +11,7 @@ class EventDAO {
     def validatorsAsset = null
     Event event
     def artifacts
-    def inOut
+    InOutMessagesDAO inOut
 
     def EventDAO(event) { this.event = event }
 

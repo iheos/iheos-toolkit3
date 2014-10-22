@@ -11,13 +11,19 @@ public class HttpSoapParser {
         content = _content
     }
 
+    def init() {
+        if (!hparser) hparser = new HttpParserBa(content.bytes)
+    }
+
     byte[] getSoapEnvelope() {
-        hparser = new HttpParserBa(content.bytes)
+        init()
         if (hparser.isMultipart()) {
             return new MtomParser(hparser, content).getSoapEnvelope()
         } else {
             return new SimpleSoapParser(hparser, content).getSoapEnvelope()
         }
     }
+
+    boolean isMultiPart() { init(); hparser.isMultipart() }
 
 }

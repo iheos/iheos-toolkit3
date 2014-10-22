@@ -68,7 +68,7 @@ It is great!
 //        SimUtils.delete(simId)
     }
 
-    def 'Test1'() {
+    def 'PnR Soap should be accepted'() {
         when:
         def simHandle = simServlet.runPost(simId, header, body.getBytes(), [], null)
         def fault = simHandle.getEvent().getFault()

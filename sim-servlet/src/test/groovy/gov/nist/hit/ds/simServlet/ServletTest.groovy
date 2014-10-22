@@ -69,15 +69,13 @@ Host: localhost:9085'''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope"
     xmlns:wsa="http://www.w3.org/2005/08/addressing">
     <soapenv:Header>
-        <wsa:To soapenv:mustUnderstand="true">http://localhost:9085/xdstools3/sim/target23/docrec/pnr</wsa:To>
+        <wsa:To soapenv:mustUnderstand="true">http://localhost:9085/xdstools3/sim/target23/docreg/rb</wsa:To>
         <wsa:MessageID>urn:uuid:806D8FD2D542EDCC2C1199332890651</wsa:MessageID>
-        <wsa:Action>urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b</wsa:Action>
+        <wsa:Action>urn:ihe:iti:2007:RegisterDocumentSet-b</wsa:Action>
     </soapenv:Header>
     <soapenv:Body>
-        <xdsb:ProvideAndRegisterDocumentSetRequest xmlns:xdsb="urn:ihe:iti:xds-b:2007">
             <lcm:SubmitObjectsRequest xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0">
             </lcm:SubmitObjectsRequest>
-        </xdsb:ProvideAndRegisterDocumentSetRequest>
     </soapenv:Body>
 </soapenv:Envelope>'''
 

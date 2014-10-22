@@ -75,10 +75,15 @@ class InOutMessagesDAO {
 	}
 
     public void putResponseBody(byte[] bytes) throws RepositoryException {
-//        log.debug("Body\n" + new String(bytes));
-        Asset a = AssetHelper.createChildAsset(inOutAsset, "Response Body", "", new SimpleType(resBodyType));
-        a.setOrder(2);
-        a.setMimeType("application/octet-stream");
+        log.debug("Response body saved")
+        Asset a
+        try {
+            a = inOutAsset.getChildByName("Response Body")
+        } catch (RepositoryException e) {
+            a = AssetHelper.createChildAsset(inOutAsset, "Response Body", "", new SimpleType(resBodyType));
+            a.setOrder(2);
+            a.setMimeType("application/octet-stream");
+        }
         a.updateContent(bytes);
     }
 

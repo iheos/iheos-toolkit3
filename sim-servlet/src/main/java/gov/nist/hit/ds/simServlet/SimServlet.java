@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
@@ -37,6 +37,7 @@ import java.util.List;
  * @author bill
  *
  */
+// TODO: Send SIMPLE SOAP to PnR endpoint to test soap fault format
 public class SimServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     static Logger logger = Logger.getLogger(SimServlet.class);
@@ -86,13 +87,15 @@ public class SimServlet extends HttpServlet {
             logger.fatal("runPost threw exception " + ExceptionUtil.exception_details(t));
             return;
         }
-        response.setContentType("application/soap+xml");
         try {
-            OutputStream os = response.getOutputStream();
-            os.write(simHandle.getEvent().getInOut().getRespBody());
-            os.flush();
+            String contentType = simHandle.getEvent().getInOut().getRespContentType();
+            response.setContentType(contentType);
+            request.setAttribute("contentType", contentType);
+            PrintWriter out = response.getWriter();
+            out.write(new String(simHandle.getEvent().getInOut().getRespBody()));
+            out.flush();
         } catch (IOException e) {
-                // give up - cannot simHandle this
+            logger.error("Error writing response - " + ExceptionUtil.exception_details(e));
         }
     }
 
@@ -104,13 +107,13 @@ public class SimServlet extends HttpServlet {
             logger.debug("No Fault - sending response");
             OMElement responseEle = new RegistryResponseGenerator(new RegistryResponse()).toXml();
             String responseBody = new SoapResponseGenerator(simHandle.getSoapEnvironment(), responseEle).getEnvelopeAsString();
-            simHandle.getEvent().getInOut().setRespBody(responseBody.getBytes());
+            buildSimpleOrMtom(simHandle, responseBody);
         } else {
             logger.debug("Sending Fault");
             SoapEnvironment soapEnvironment = simHandle.getSoapEnvironment();
             OMElement faultEle = new SoapFaultGenerator(soapEnvironment, fault).getXML();
             String responseBody = new SoapResponseGenerator(simHandle.getSoapEnvironment(), faultEle).getEnvelopeAsString();
-            simHandle.getEvent().getInOut().setRespBody(responseBody.getBytes());
+            buildSimpleOrMtom(simHandle, responseBody);
         }
         SimUtils.close(simHandle);
         return simHandle;
@@ -124,28 +127,30 @@ public class SimServlet extends HttpServlet {
         SoapHeader soapHeader;
         String to;
         SoapEnvironment soapEnvironment;
+        HttpSoapParser soapParser;
 
+        soapParser = new HttpSoapParser(content);
         try {
-            soapEnvelopeBytes = new HttpSoapParser(content).getSoapEnvelope();
+            soapEnvelopeBytes = soapParser.getSoapEnvelope();
             soapHeader = new SoapHeaderParser(new String(soapEnvelopeBytes)).parse();
             to = soapHeader.getTo();
         } catch (Throwable t) {
             soapEnvironment = buildSoapEnvironment(response);
-            return sendFault(simId, "Internal Error parsing SOAP Header\n" + ExceptionUtil.exception_details(t), FaultCode.Receiver, soapEnvironment, content);
+            return sendFault(simId, "Internal Error parsing SOAP Header\n" + ExceptionUtil.exception_details(t), FaultCode.Receiver, soapEnvironment, content, soapParser.isMultiPart());
         }
         soapEnvironment = buildSoapEnvironment(soapHeader, response);
         if (to == null || to.equals(""))
-            return sendFault(simId, "No To endpoint found in SOAP header", FaultCode.Sender, soapEnvironment, content);
+            return sendFault(simId, "No To endpoint found in SOAP header", FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
         EndpointBuilder endpointBuilder = new EndpointBuilder().parse(to);
         SimId toSimId = endpointBuilder.getSimId();
         if (toSimId == null)
-            return sendFault(new SimId(errorSimId), "Could not parse To endpoint found in SOAP header. Endpoint is [" + to + "]", FaultCode.Sender, soapEnvironment, content);
+            return sendFault(new SimId(errorSimId), "Could not parse To endpoint found in SOAP header. Endpoint is [" + to + "]", FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
         if (!toSimId.getId().equals(simId.getId())) {
             // SimId mismatch between URI and SOAP Header To field
             String msg = "SimId mismatch: URI has " + simId.getId() + " and To Header has " + toSimId.getId();
             logger.debug(msg);
             // This is going into a special simulator log for collecting addressing errors
-            return sendFault(new SimId(errorSimId), msg, FaultCode.Sender, soapEnvironment, content);
+            return sendFault(new SimId(errorSimId), msg, FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
         }
         SimHandle simHandle;
         simHandle = SimUtils.open(simId);
@@ -156,10 +161,11 @@ public class SimServlet extends HttpServlet {
             } else {
                 logger.debug("Sim " + simId.getId() + " does not exist");
                 // Sim does not exist
-                return sendFault(new SimId(errorSimId), "Simulator with ID " + simId.getId() + " does not exist.", FaultCode.Sender, soapEnvironment, content);
+                return sendFault(new SimId(errorSimId), "Simulator with ID " + simId.getId() + " does not exist.", FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
             }
         }
         simHandle.setSoapEnvironment(soapEnvironment);
+        simHandle.setRequestIsMultipart(soapParser.isMultiPart());
         simHandle.setEndpointBuilder(endpointBuilder);
         TransactionType transactionType = factory.getTransactionTypeFromRequestAction(soapHeader.getAction());
         if (transactionType == null) {
@@ -177,12 +183,37 @@ public class SimServlet extends HttpServlet {
             return simHandle;
         }
 
+        if (simHandle.getRequestIsMultipart() != simHandle.getTransactionType().multiPart) {
+            if (simHandle.getTransactionType().multiPart)
+                return sendFault(simHandle, "This transaction [" + simHandle.getTransactionType().getName() + "] requires MTOM", FaultCode.Sender, soapEnvironment, content);
+            else
+                return sendFault(simHandle, "This transaction  [" + simHandle.getTransactionType().getName() + "] requires SIMPLE SOAP", FaultCode.Sender, soapEnvironment, content);
+        }
+
         runTransaction(simHandle);
         return simHandle;
     }
 
-    SimHandle sendFault(SimId simId, String faultMsg, FaultCode code, SoapEnvironment soapEnvironment, HttpMessageContent content) {
+    void buildSimpleOrMtom(SimHandle simHandle, String responseBody) {
+        String contentTypeHeader;
+        if (simHandle.getRequestIsMultipart()) {
+            logger.debug("Sending MTOM response");
+            StringBuilder bodyBuffer = new StringBuilder();
+            contentTypeHeader = new WrapMtom().wrap(responseBody, bodyBuffer);
+            System.out.println("response content type is " + contentTypeHeader);
+            simHandle.getEvent().getInOut().setRespBody(bodyBuffer.toString().getBytes());
+        } else {
+            logger.debug("Sending SIMPLE response");
+            contentTypeHeader = "application/soap+xml";
+            simHandle.getEvent().getInOut().setRespBody(responseBody.getBytes());
+        }
+        simHandle.getEvent().getInOut().setRespContentType(contentTypeHeader);
+        simHandle.getEvent().getInOut().setRespHdr("content-type: " + contentTypeHeader);
+    }
+
+    SimHandle sendFault(SimId simId, String faultMsg, FaultCode code, SoapEnvironment soapEnvironment, HttpMessageContent content, boolean multiPart) {
         SimHandle simHandle = SimUtils.create(simId);
+        simHandle.setRequestIsMultipart(multiPart);
         return sendFault(simHandle, faultMsg, code, soapEnvironment, content);
     }
 

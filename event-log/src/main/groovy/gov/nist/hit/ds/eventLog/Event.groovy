@@ -155,6 +155,10 @@ class Event {
         flushAllResultsForExit()
     }
 
+    void flushOutput() {
+        eventDAO.saveInOut()
+    }
+
     void flush() {
         if (!resultsStack.empty)
             resultsStack.last().flush(FlushStatus.Force)
