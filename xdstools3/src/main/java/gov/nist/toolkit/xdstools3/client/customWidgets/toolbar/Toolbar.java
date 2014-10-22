@@ -35,9 +35,7 @@ public class Toolbar extends RibbonBar {
         setMembersMargin(20);
         setAlign(Alignment.CENTER);
 
-        // Menu group: Session
-        RibbonGroup sessionGroup = createRibbonGroup("Session");
-
+        // ------------ Menu group: Environments -------------
         envListBox = new SelectItem();
         envListBox.setShowTitle(false);
         envListBox.setShowOptionsFromDataSource(false);
@@ -51,27 +49,41 @@ public class Toolbar extends RibbonBar {
         envListBox.setImageURLPrefix("icons/flags/16/");
         envListBox.setImageURLSuffix(".png");
 
-        // create sessions drop-down
+        // create form
+        DynamicForm envForm = new DynamicForm();
+        envForm.setFields(envListBox);
+        envForm.setCellPadding(10);
+
+        RibbonGroup envGroup = createRibbonGroup("Environment");
+        envGroup.addControls(envForm);
+        envGroup.setLayoutRightMargin(40);
+
+
+        // ------------ Menu group: Session -------------
         sessionsComboBox = new SelectOtherItem();
         sessionsComboBox.setShowTitle(false);
         sessionsComboBox.setWidth(603);
         sessionsComboBox.setOtherTitle("Enter a new session name...");
-        sessionsComboBox.setTitle("Session");
+        sessionsComboBox.setTitle("User session");
 
         // load session data from server
         loadSessionNamesFromServer();
 
         // create form
-        DynamicForm form = new DynamicForm();
-        form.setFields(envListBox, sessionsComboBox);
-        form.setCellPadding(10);
+        DynamicForm sessionForm = new DynamicForm();
+        sessionForm.setFields(sessionsComboBox);
+        sessionForm.setCellPadding(10);
 
-        sessionGroup.addControls(form);
+        RibbonGroup sessionGroup = createRibbonGroup("User session");
+        sessionGroup.addControls(sessionForm);
 
-        // Menu group: Site / Actors
+
+
+        // ----------- Menu Site / Actors -----------
         IconButton endpointButton = getIconButton("View / Configure Endpoints", "icons/user_24x24.png", true);
 
-        // Menu group: Admin
+
+        // ----------- Menu Admin -------------
         // Behavior: Clicking on any of the buttons in the admin group opens a dialog to allow the user to log in as admin,
         // IF not logged in yet. Then follows to the link initially requested.
         IconButton adminButton = getIconButton("Admin Settings", "icons/glyphicons/glyphicons_136_cogwheel.png", true);
@@ -157,11 +169,8 @@ public class Toolbar extends RibbonBar {
         });
 
 
-
-
-
         // Add menu groups to menu bar
-        this.addMembers(sessionGroup, endpointButton, adminButton);
+        this.addMembers(envGroup, sessionGroup, endpointButton, adminButton);
         draw();
     }
 
