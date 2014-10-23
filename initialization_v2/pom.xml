@@ -4,7 +4,7 @@
 
     <groupId>gov.nist.toolkit</groupId>
     <version>2.7.0-SNAPSHOT</version>
-    <artifactId>initialization</artifactId>
+    <artifactId>initialization_v2</artifactId>
 
     <dependencies>
         <dependency>
