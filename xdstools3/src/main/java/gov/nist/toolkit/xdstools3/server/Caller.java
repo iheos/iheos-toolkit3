@@ -1,6 +1,5 @@
 package gov.nist.toolkit.xdstools3.server;
 
-import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
 
 import java.io.Serializable;
@@ -54,8 +53,8 @@ public class Caller implements Serializable {
      * @return the list of available environments
      */
    public String[] retrieveEnvironments(){
-      String[] envs = Toolkit.getEnvironmentNames().toArray(new String[0]);
-      // String[] envs = {"NA2014", "EURO2011", "EURO2012", "NwHIN"};
+     // String[] envs = Toolkit.getEnvironmentNames().toArray(new String[0]);
+       String[] envs = {"NA2014", "EURO2011", "EURO2012", "NwHIN"};
        return envs;
    }
 
