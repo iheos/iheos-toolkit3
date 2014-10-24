@@ -1,0 +1,17 @@
+
+<site name="OTHER_TIE">
+   <transaction name="sq.b" secure="1">https://tie4:7002/tieservice/xdsregistryb</transaction>
+   <transaction name="isr" secure="0">http://tie4/tieservice/xdsrepositoryb</transaction>
+   <transaction name="ret.b" secure="0">http://tie4:7001/tieservice/xdsrepositoryb</transaction>
+   <transaction name="r.b" secure="0">http://tie4:7001/tieservice/xdsregistryb</transaction>
+   <transaction name="sq.b" secure="0">http://tie4:7001/tieservice/xdsregistryb</transaction>
+   <transaction name="r.b" secure="1">https://tie4:7002/tieservice/xdsregistryb</transaction>
+   <transaction name="ret.b" secure="1">https://tie4:7002/tieservice/xdsrepositoryb</transaction>
+   <transaction name="pr.b" secure="0">http://tie4:7001/tieservice/xdsrepositoryb</transaction>
+   <transaction name="isr" secure="1">https://tie4:7002/tieservice/xdsrepositoryb</transaction>
+   <transaction name="pr.b" secure="1">https://tie4:7002/tieservice/xdsrepositoryb</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.115"
+         secure="0">http://tie4:7001/tieservice/xdsrepositoryb</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.115"
+         secure="1">https://tie4:7002/tieservice/xdsrepositoryb</repository>
+</site>

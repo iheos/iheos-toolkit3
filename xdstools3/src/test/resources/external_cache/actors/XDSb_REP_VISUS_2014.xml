@@ -1,0 +1,25 @@
+
+<site name="XDSb_REP_VISUS_2014">
+   <transaction name="pr.b" secure="0">http://visus24/JiveX_XDSRepository_WS/service</transaction>
+   <transaction name="r.b" secure="1">https://visus24/JiveX_XDSRegistry_WS/service</transaction>
+   <transaction name="isr" secure="1">https://visus24/JiveX_XDSEmbeddedRepository_WS/service</transaction>
+   <transaction name="sq.b" secure="1">https://visus24/JiveX_XDSRegistry_WS/service</transaction>
+   <transaction name="xdrpr" secure="0">http://visus24/JiveX_XDRRecipient_WS/service</transaction>
+   <transaction name="ret.b" secure="0">http://visus24/JiveX_XDSRepository_WS/service</transaction>
+   <transaction name="isr" secure="0">http://visus24/JiveX_XDSEmbeddedRepository_WS/service</transaction>
+   <transaction name="ret.b" secure="0">http://visus24/JiveX_XDSRepository_WS/service</transaction>
+   <transaction name="ret.b" secure="1">https://visus24/JiveX_XDSRepository_WS/service</transaction>
+   <transaction name="sq.b" secure="0">http://visus24/JiveX_XDSRegistry_WS/service</transaction>
+   <transaction name="pr.b" secure="1">https://visus24/JiveX_XDSRepository_WS/service</transaction>
+   <transaction name="r.b" secure="0">http://visus24/JiveX_XDSRegistry_WS/service</transaction>
+   <transaction name="ret.b" secure="1">https://visus24/JiveX_XDSRepository_WS/service</transaction>
+   <transaction name="xdrpr" secure="1">https://visus24/JiveX_XDRRecipient_WS/service</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.124"
+         secure="0">http://visus24/JiveX_XDSRepository_WS/service</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.124"
+         secure="0">http://visus24/JiveX_XDSRepository_WS/service</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.124"
+         secure="1">https://visus24/JiveX_XDSRepository_WS/service</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.124"
+         secure="1">https://visus24/JiveX_XDSRepository_WS/service</repository>
+</site>

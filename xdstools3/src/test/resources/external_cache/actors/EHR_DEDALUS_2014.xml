@@ -1,0 +1,11 @@
+
+<site name="EHR_DEDALUS_2014">
+   <transaction name="ret.b" secure="0">http://dedalus29/repo</transaction>
+   <transaction name="pr.b" secure="1">https://dedalus29/repo</transaction>
+   <transaction name="ret.b" secure="1">https://dedalus29/repo</transaction>
+   <transaction name="pr.b" secure="0">http://dedalus29/repo</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.144"
+         secure="0">http://dedalus29/repo</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.144"
+         secure="1">https://dedalus29/repo</repository>
+</site>

@@ -1,0 +1,677 @@
+Configuration Type,Company,System,Host,Actor,is secured,is approved,comment,url,assigningAuthority,ws-type,port,port proxy,port secured
+Webservice,ICW,EHR_ICW_1,icw15,ON_DEMAND_DOC_SOURCE,true,true,,https://icw15:8443/pxs/webservices/xdsb/ondemanddocumentsource/iti43-retrievedocumentset,ICE3,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,ICW,EHR_ICW_1,icw16,DOC_REPOSITORY,true,true,,https://icw16:8443/pxs/webservices/rev6/xdsb-provideandregister,ICE3,ITI-41:Provide and Register.b:pr.b,,,8443
+Webservice,synedra,PACS_synedra__2014,synedra7,DOC_REPOSITORY,false,true,,http://synedra7:8080/xds/documentrepository,SYP0,RAD-68:P&R Imaging Doc Set MTOM/XOP,8080,,
+Webservice,ICW,PIX_X_REF_MGR_ICW,icw17,PROV_INFO_DIR,true,true,,https://icw17:8585/hpd/services/dsml,ICP2,ITI-59:Provider Info Feed,,,8585
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,INIT_GATEWAY,false,true,,http://nist18:9080/tf6/services/ig,NIO1112,ITI-43:Initiating Gateway Retrieve:igr,9080,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,true,false,,https://tiani---cisco75:8443/XDS3/C1,TIE1111115,ITI-57:Update Doc Set:upd.b,,,8443
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REGISTRY,true,true,,https://ideosante0:8443/xdsbRegistry,IDEH,ITI-42:Register.b:r.b,,,8443
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,IMG_DOC_SOURCE,true,true,,https://visus24/JiveX_XDSSource_WS/service,VIX1,RAD-69:Retrieve Imaging Doc Set,,,443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_IMG_GATEWAY,false,true,,http://agfa32:8080/xcai/RespondingGW,AGP1,RAD-75:Cross GW Retrieve Img Doc Set,8080,10931,
+Webservice,GPI,XDSb_REP_GPI,gpi1,RESP_GATEWAY,true,true,,https://gpi1:8643/DocumentRepositoryXDSBWS/RespondingGatewayXDSB,GPX1,ITI-38:Cross Gateway Query:xcq,,,8643
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,INIT_GATEWAY,true,true,,https://forcare14:8443/xca/services/initiatingGateway/query,FOX5,ITI-18:Initiating Gateway Stored Query:igq,,,8443
+Webservice,GPI,XDSb_REP_GPI,gpi1,RESP_GATEWAY,false,true,,http://gpi1:8280/DocumentRepositoryXDSBWS/RespondingGatewayXDSB,GPX1,ITI-38:Cross Gateway Query:xcq,8280,,
+Webservice,GE,OTHER_GE_EA 2014,ge85,DOC_REPOSITORY,false,true,,http://ge85/ea-service/XdsRepository,GE011111111112222222222333333333344443,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DOC_REGISTRY,true,true,,https://intersystems3/csp/connect/HS.IHE.XDSb.Registry.Services.cls,INE9,ITI-61:Register On-Demand Doc:rod.b,,,443
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,true,false,,https://acuo5:8080/your_url,ACX3,ITI-42:Async Register.b:r.as,,,8080
+Webservice,GE,OTHER_GE_EA 2014,ge85,IMG_DOC_SOURCE,false,true,,http://ge85/ea/PACS_GE_EA_2014,GE011111111112222222222333333333344443,RAD-55:WADO Retrieve,80,,
+Webservice,Acuo,XDSb_REP_Acuo_6.0.1,acuo6,DOC_REPOSITORY,false,false,,http://acuo6/your_url,ACX4,ITI-43:Async Retrieve:ret.as,80,,
+Webservice,AGFA,OTHER_AGFA,agfa36,DOC_REPOSITORY,true,false,,https://agfa36:9443/g5-xds-ws/g5-xds-ws,AGOT,ITI-41:Provide and Register.b:pr.b,,,9443
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REGISTRY,false,true,,http://meddex0:8080/MGXDS/DocumentRegistry_Service,MEXD,ITI-18:Initiating Gateway Stored Query:igq,8080,10866,
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REGISTRY,true,true,,https://topicus11:8443/services/registry,TOO1,ITI-18:Async Stored Query:sq.as,,,8443
+Webservice,GPI,XDSb_REP_GPI,gpi1,INIT_GATEWAY,true,true,,https://gpi1:8643/DocumentRepositoryXDSBWS/InitiatingGatewayXDSB,GPX1,ITI-43:Initiating Gateway Retrieve:igr,,,8643
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,DOC_REPOSITORY,false,true,,http://nist1:9080/services/xdsrepositoryb,NIO1112,ITI-43:Retrieve.b:ret.b,9080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,false,false,,http://agfa32/your_url,AGP3,RAD-69:Retrieve Imaging Doc Set,80,10361,
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REGISTRY,false,true,,http://ideosante0:8080/xdsbRegistry,IDEH,ITI-42:Register.b:r.b,8080,,
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REPOSITORY,true,true,,https://ideosante0:8443/xdsbRepository,IDEH,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,INSIEL,XDSb_REG_INSIEL__2014,insiel8,DOC_RESPONDER,false,false,,http://insiel8:9080/portalemmg-mhd-responder/net.ihe/DocumentDossier/,,ITI-66:Get Doc Dossier,9080,10879,
+Webservice,synedra,PACS_synedra__2014,synedra7,IMG_DOC_SOURCE,true,true,,https://synedra7:8443/xds/documentsource,SYP0,RAD-69:Retrieve Imaging Doc Set,,,8443
+Webservice,synedra,PACS_synedra__2014,synedra7,DOC_REPOSITORY,true,true,,https://synedra7:8443/xds/documentrepository,SYP0,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,INIT_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/initiating,TIE1111115,ITI-18:Initiating Gateway Stored Query:igq,,,8443
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve16,DOC_REPOSITORY,false,true,,http://ith-icoserve16:5080/Repository/services/RepositoryService,ITE9,ITI-43:Retrieve.b:ret.b,5080,10905,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_RECIPIENT,true,false,,https://tiani---cisco76:8443/XDS3/C1,TIE1111115,ITI-41:Provide and Register.b:pr.b,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,false,false,,http://agfa32/your_url,AGP3,ITI-43:Retrieve.b:ret.b,80,10954,
+Webservice,OSVB,XDSb_REG_OSVB,osvb1,DOC_REGISTRY,false,true,,http://osvb1:9091/ihe,OSX0,ITI-18:Stored Query:sq.b,9091,,
+Webservice,ICW,EHR_ICW_1,icw15,INIT_GATEWAY,true,true,,https://icw15:8443/pxs/webservices/iti18Gateway,ICE3,ITI-18:Initiating Gateway Stored Query:igq,,,8443
+Webservice,IASI,OF_IASI,iasi0,DOC_REGISTRY,true,false,,https://iasi0:8080/your_url,IAOF,ITI-18:Stored Query:sq.b,,,8080
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,RESP_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/responding,TIE1111115,ITI-39:Async Cross Gateway Retrieve:xcr:as,,,8443
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REGISTRY,true,true,,https://meddex0:8443/MGXDS/DocumentRegistry_Service,,ITI-42:Register.b:r.b,,,8443
+Webservice,synedra,PACS_synedra__2014,synedra7,X-SERVICE-PROVIDER,false,true,,http://synedra7:8080/xds/documentrepository,SYP0,ITI-40:Provide X-User Assertion,8080,10957,
+Webservice,BINT,OTHER_BINT,bint1,DM_NOTIF_BROKER,false,false,,http://bint1/your_url,BIO0,ITI-52:Doc Metadata Subscribe,80,,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,ON_DEMAND_DOC_SOURCE,false,true,,http://meddex0:8080/MGXDS/DocumentRepository_Service,MEXD,ITI-43:Retrieve.b:ret.b,8080,,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,RESP_GATEWAY,true,true,,https://meddex0:8443/MGXDS/Gateway_Service,,ITI-39:Cross Gateway Retrieve:xcr,,,8443
+Webservice,CHILI,PACS_CHILI_1,chili2,IMG_DOC_SOURCE,false,false,,http://chili2/chili/servlet/doWado,CHP1,RAD-55:WADO Retrieve,80,10932,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_IMG_GATEWAY,true,false,,https://agfa32:8080/your_url,AGP3,RAD-75:Async Cross GW Retrieve Img Doc Set,,,8080
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REGISTRY,false,true,,http://ideosante0:8080/xdsbRegistry,IDEH,ITI-57:Update Doc Set:upd.b,8080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_GATEWAY,true,true,,https://agfa32:8443/xca/InitiatingGW,,ITI-43:Async Initiating Gateway Retrieve:igr:as,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,false,false,,http://tiani---cisco75:8081/XDS3/C1,TIE1111115,ITI-18:Stored Query:sq.b,8081,,
+Webservice,synedra,PACS_synedra__2014,synedra7,DOC_REPOSITORY,true,true,,https://synedra7:8443/xds/documentrepository,SYP0,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,false,true,,http://agfa32:8080/xds/repository,AGP1,ITI-43:Retrieve.b:ret.b,8080,10909,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_IMG_GATEWAY,true,true,,https://agfa32:8443/xcai/InitiatingGW,AGP1,RAD-69:Retrieve Imaging Doc Set,,,8443
+Webservice,Acuo,XDSb_REP_Acuo_6.0.1,acuo6,DOC_REPOSITORY,true,false,,https://acuo6:8080/your_url,ACX4,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,RESP_GATEWAY,false,true,,http://nist18:9080/tf6/services/rg,NIO1112,ITI-39:Cross Gateway Retrieve:xcr,9080,,
+Webservice,VISUS,PACS_VISUS_2014,visus23,VALUE_SET_REPOSITORY,false,true,HTTP binding,http://visus23:3003/RetrieveMultipleValueSets,VIP10,ITI-60:Retrieve Multiple Value Sets,3003,,
+Webservice,GE,OTHER_GE_EA 2014,ge72,IMG_DOC_SOURCE,false,true,,http://ge72/ea-service/ARCH1/ge/XdsImagingSource,GE011111111112222222222333333333344443,RAD-69:Retrieve Imaging Doc Set,80,,
+Webservice,INFINITT,PACS_INFINITT_1,infinitt9,ID,false,true,http://xds.infinitt.com:88/IHEInvokeImageDisplay,http://infinitt9/IHEInvokeImageDisplay,INP1,RAD-106:Invoke Image Display,80,10482,
+Webservice,AGFA,OTHER_AGFA,agfa36,DOC_REPOSITORY,true,false,,https://agfa36:8080/your_url,AGO10,ITI-41:Provide and Register.b:pr.b,,,8080
+Webservice,GE,OTHER_GE_EA 2014,ge72,IMG_DOC_SOURCE,true,true,,https://ge72:8085/ea/PACS_GE_EA_2014,GE01111111111222222222233333333334444445,RAD-55:WADO Retrieve,,,8085
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_GATEWAY,false,true,,http://agfa32:8080/xca/InitiatingGW,,ITI-18:Async Initiating Gateway Stored Query:igq:as,8080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,true,false,,https://agfa32:8080/your_url,AGP3,RAD-69:Retrieve Imaging Doc Set,,,8080
+Webservice,OSVB,XDSb_REG_OSVB,osvb1,DOC_REGISTRY,false,true,,http://osvb1/your_url,OSX0,ITI-42:Register.b:r.b,80,10972,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,false,false,,http://tiani---cisco75:8081/XDS3/C1,TIE1111115,ITI-62:Delete Doc Set:del.b,8081,,
+Webservice,GPI,XDSb_REP_GPI,gpi1,RESP_GATEWAY,true,true,,https://gpi1:8643/DocumentRepositoryXDSBWS/RespondingGatewayXDSB,GPX1,ITI-38:Async Cross Gateway Query:xcq:as,,,8643
+Webservice,IBV,OTHER_IBV,ibv0,IMG_DOC_SOURCE,false,true,,http://ibv0:10114/ihe/imagingDocumentSetRequestService,IBO0,RAD-69:Retrieve Imaging Doc Set,10114,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,false,false,,http://tiani---cisco75:8081/XDS3/C1,TIE1111115,ITI-18:Async Stored Query:sq.as,8081,,
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DM_NOTIF_BROKER,true,true,,https://forcare14:8443/index/services/notificationBroker,FOX5,ITI-54:Doc Metadata Publish,,,8443
+Webservice,GE,OTHER_GE_EA 2014,ge85,IMG_DOC_SOURCE,true,true,,https://ge85:8085/ea-service/ARCH1/ge/XdsImagingSource,GE011111111112222222222333333333344443,RAD-69:Retrieve Imaging Doc Set,,,8085
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DM_NOTIF_BROKER,true,false,,https://tiani---cisco75:8443/XDS3/C1,TIE1111115,ITI-52:Doc Metadata Subscribe,,,8443
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DM_NOTIF_BROKER,false,false,,http://acuo5/your_url,ACX3,ITI-52:Doc Metadata Subscribe,80,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_GATEWAY,false,true,,http://agfa32:8080/xca/InitiatingGW,,ITI-18:Initiating Gateway Stored Query:igq,8080,,
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus31,VALUE_SET_REPOSITORY,false,true,SOAP binding,http://dedalus31/exec/services/ValueSetRepository_Service,DEE6,ITI-48:Retrieve Value Set,80,10449,
+Webservice,AGFA,OTHER_AGFA,agfa36,EMBED_REPOS,false,false,,http://agfa36/your_url,AGO10,ITI-43:Retrieve.b:ret.b,80,10433,
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REPOSITORY,false,true,,http://visus24/JiveX_XDSRepository_WS/service,VIX1,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,RESP_GATEWAY,true,true,,https://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls,INE9,ITI-38:Cross Gateway Query:xcq,,,443
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon21,DM_NOTIF_BROKER,true,true,,https://a-thon21:9733/broker-ee-war/services/Broker,A-X7,ITI-52:Doc Metadata Subscribe,,,9733
+Webservice,ICW,EHR_ICW_1,icw15,DOC_REGISTRY,true,true,,https://icw15:8443/pxs/webservices/rev6/xdsb-storedquery,,ITI-18:Async Stored Query:sq.as,,,8443
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_RESPONDER,false,false,,http://solinfo2/your_url,SOE8,ITI-68:Get Document,80,,
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,DOC_REPOSITORY,true,false,,https://visbion12:8080/your_url,VIP9,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,8080
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,true,true,,https://agfa32:8443/xca/RespondingGW,AGP1,ITI-38:Async Cross Gateway Query:xcq:as,,,8443
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,RESP_GATEWAY,true,true,,https://nist17:9080/tf6/services/rg,NIO1112,ITI-39:Cross Gateway Retrieve:xcr,,,9080
+Webservice,GE,OTHER_GE_EA 2014,ge72,DOC_REPOSITORY,true,true,,https://ge72:8080/ea-service/XdsRepository,GE011111111112222222222333333333344443,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,8080
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REPOSITORY,true,true,,https://meddex0:8443/MGXDS/DocumentRepository_Service,MEXD,ITI-41:Provide and Register.b:pr.b,,,8443
+Webservice,ARTS,OTHER_ARTS_4_0,arts9,IMG_DOC_SOURCE,false,true,,http://arts9:8081/Wado/Get,ARO1,RAD-55:WADO Retrieve,8081,,
+Webservice,BINT,OTHER_BINT,bint1,DOC_REGISTRY,false,true,,http://bint1/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls,BIO0,ITI-57:Update Doc Set:upd.b,80,,
+Webservice,Rogan,EHR_Rogan_XDS_2,rogan26,INIT_IMG_GATEWAY,true,false,,https://rogan26:2060/XCA-I/IG/Async,,RAD-69:Async Retrieve Imaging Doc Set,,,2060
+Webservice,Rogan,EHR_Rogan_XDS_2,rogan26,RESP_IMG_GATEWAY,true,true,,https://rogan26:2060/XCA-I/RG/Async,ROE7,RAD-75:Async Cross GW Retrieve Img Doc Set,,,2060
+Webservice,ARTS,OTHER_ARTS_4_0,arts9,IMG_DOC_SOURCE,true,true,,https://arts9:8447/ImagingDocumentSource,ARO1,RAD-69:Retrieve Imaging Doc Set,,,8447
+Webservice,RVC,EHR_RVC_3,rvc6,DOC_REPOSITORY,true,false,,https://rvc6:8080/your_url,RVE5,ITI-41:Provide and Register.b:pr.b,,,8080
+Webservice,BINT,OTHER_BINT,bint1,DOC_REGISTRY,true,true,,https://bint1:444/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls,BIO0,ITI-57:Update Doc Set:upd.b,,,444
+Webservice,Omnyx,OTHER_Omnyx_IDP,omnyx0,IMG_DOC_SOURCE,true,false,,https://omnyx0:8080/your_url,OMOT,RAD-69:Retrieve Imaging Doc Set,,,8080
+Webservice,GE,OTHER_GE_EA 2014,ge85,DOC_REPOSITORY,true,true,,https://ge85:8080/ea-service/XdsRepository,GE01111111111222222222233333333334444445,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,8080
+Webservice,TIE,OTHER_TIE,tie4,DOC_REGISTRY,true,true,,https://tie4:7002/tieservice/xdsregistryb,TIO0,ITI-18:Stored Query:sq.b,,,7002
+Webservice,GE,GATEWAY_GE__CCG,ge73,IMG_DOC_SOURCE,true,false,,https://ge73:8080/your_url,GE0111111111122222222223333333333444444,RAD-69:Retrieve Imaging Doc Set,,,8080
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,true,false,,https://agfa32:8080/your_url,AGP3,ITI-41:Provide and Register.b:pr.b,,,8080
+Webservice,Rogan,EHR_Rogan_2,rogan23,DOC_REGISTRY,true,true,,https://rogan23:2021/IHE-XDS/Registry,ROE9,ITI-51:Multi-Patient Query:MPQ,,,2021
+Webservice,IASI,OF_IASI,iasi0,DOC_REPOSITORY,false,false,,http://iasi0/your_url,IAOF,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,INIT_IMG_GATEWAY,true,true,,https://forcare14:8443/xca/services/initiatingGateway/retrieve,FOX5,RAD-69:Retrieve Imaging Doc Set,,,8443
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,INIT_GATEWAY,false,true,,http://intersystems3/csp/connect/HS.IHE.XCA.InitiatingGateway.Services.cls,INE9,ITI-43:Initiating Gateway Retrieve:igr,80,,
+Webservice,xt,EHR_xt_HIE,xt2,DOC_REPOSITORY,false,false,,http://xt2/your_url,XT00,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon19,DOC_REGISTRY,true,true,,https://a-thon19/XDS/registry/registry.php,A-X7,ITI-42:Register.b:r.b,,,443
+Webservice,GPI,XDSb_REP_GPI,gpi1,RESP_GATEWAY,true,true,,https://gpi1:8643/DocumentRepositoryXDSBWS/RespondingGatewayXDSB,GPX1,ITI-39:Cross Gateway Retrieve:xcr,,,8643
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_REPOSITORY,true,false,,https://tiani---cisco76:8443/XDS3/C1,TIE1111115,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,INIT_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/initiating,TIE1111115,ITI-43:Async Initiating Gateway Retrieve:igr:as,,,8443
+Webservice,Sectra,PACS_Sectra_0,sectra2,ID,true,false,,https://sectra2:8080/your_url,SEP0,RAD-106:Invoke Image Display,,,8080
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DOC_REPOSITORY,true,true,,https://intersystems3/csp/repository/HS.IHE.XDSb.Repository.Services.cls,INE9,ITI-41:Provide and Register.b:pr.b,,,443
+Webservice,CHILI,PACS_CHILI_1,chili2,ID,false,false,,http://chili2/chili/servlet/IHEInvokeImageDisplay,CHP1,RAD-106:Invoke Image Display,80,,
+Webservice,synedra,PACS_synedra__2014,synedra7,EMBED_REPOS,false,true,,http://synedra7:8080/xds/documentrepository,SYP0,ITI-43:Retrieve.b:ret.b,8080,,
+Webservice,GE,PACS_GE_UViewer 2014,ge69,IMG_DOC_SOURCE,true,false,,https://ge69:8080/your_url,GE01111111111222222222233333333334444445,RAD-55:WADO Retrieve,,,8080
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REPOSITORY,true,true,,https://arts8:8446/Repository,ARO1,ITI-43:Retrieve.b:ret.b,,,8446
+Webservice,ICW,EHR_ICW_1,icw16,DOC_RECIPIENT,true,true,,https://icw16:8443/pxs/webservices/rev6/xdsb-provideandregister,ICE3,ITI-41:Provide and Register.b:pr.b,,,8443
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DM_NOTIF_BROKER,true,true,,https://forcare14:8443/index/services/subscriptionManager,FOX5,ITI-52:Doc Metadata Subscribe,,,8443
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,RESP_GATEWAY,false,true,,http://nist1:9080/tf6/services/rg,NIO1112,ITI-39:Cross Gateway Retrieve:xcr,9080,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REGISTRY,false,true,,http://nist17:9080/tf6/services/xdsregistryb,NIO1112,ITI-42:Register.b:r.b,9080,,
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,DOC_REPOSITORY,true,true,,https://nist18:9085/tf6/services/xdsrepositoryb,NIO1112,ITI-43:Retrieve.b:ret.b,,,9085
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_GATEWAY,true,true,,https://agfa32:8443/xca/InitiatingGW,,ITI-18:Async Initiating Gateway Stored Query:igq:as,,,8443
+Webservice,TIE,OTHER_TIE,tie4,EMBED_REPOS,false,true,,http://tie4/tieservice/xdsrepositoryb,TIO0,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,topicus,OTHER_topicus_2,topicus11,X-SERVICE-PROVIDER,false,true,,http://topicus11:8080/services/registry,TOO1,ITI-40:Provide X-User Assertion,8080,,
+Webservice,GE,PACS_GE_UViewer 2014,ge69,IMG_DOC_SOURCE,false,false,,http://ge69/your_url,GE01111111111222222222233333333334444445,RAD-55:WADO Retrieve,80,,
+Webservice,ETIAM,OTHER_ETIAM_NEXUS,etiam2,DOC_REPOSITORY,true,false,,https://etiam2:8080/your_url,ETO7,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,RESP_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/responding,TIE1111115,ITI-38:Cross Gateway Query:xcq,,,8443
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_REGISTRY,true,true,,https://forcare14:8443/index/services/registry,FOX5,ITI-62:Delete Doc Set:del.b,,,8443
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REGISTRY,true,true,,https://ideosante0:8443/xdsbRegistry,IDEH,ITI-57:Update Doc Set:upd.b,,,8443
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REPOSITORY,false,false,,http://solinfo2/your_url,SOE8,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REPOSITORY,false,true,,http://arts8:8083/Repository,ARO1,ITI-43:Retrieve.b:ret.b,8083,,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,false,false,,http://acuo5/your_url,ACX3,ITI-42:Async Register.b:r.as,80,,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,EMBED_REPOS,false,true,,http://arts8:8083/Repository,ARO1,ITI-43:Retrieve.b:ret.b,8083,,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,true,false,,https://acuo5:8080/your_url,ACX3,ITI-18:Stored Query:sq.b,,,8080
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,INIT_GATEWAY,false,true,,http://ideosante0:8080/dcr-InitiatingGateway/Retrieve,IDEH,ITI-43:Initiating Gateway Retrieve:igr,8080,,
+Webservice,ICW,EHR_ICW_1,icw15,DOC_REGISTRY,true,true,,https://icw15:8443/pxs/webservices/xdsb/documentregistry/iti62-deletedocumentset,ICE3,ITI-62:Delete Doc Set:del.b,,,8443
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REPOSITORY,false,true,,http://ideosante0:8080/xdsbRepository,IDEH,ITI-41:Provide and Register.b:pr.b,8080,,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REGISTRY,false,true,,http://arts8:8082/Registry,ARO1,ITI-62:Delete Doc Set:del.b,8082,,
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus31,VALUE_SET_REPOSITORY,false,true,HTTP Binding,http://dedalus31/exec/services/MultipleValueSetHTTPService,,ITI-60:Retrieve Multiple Value Sets,80,10766,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REGISTRY,true,true,,https://arts8:8445/Registry,ARO1,ITI-18:Stored Query:sq.b,,,8445
+Webservice,GE,OTHER_GE_EA 2014,ge85,IMG_DOC_SOURCE,true,true,,https://ge85:8085/ea/PACS_GE_EA_2014,GE011111111112222222222333333333344443,RAD-55:WADO Retrieve,,,8085
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,true,false,,https://tiani---cisco75:8443/XDS3/C1,TIE1111115,ITI-61:Register On-Demand Doc:rod.b,,,8443
+Webservice,IASI,OF_IASI,iasi0,DOC_REGISTRY,false,false,,http://iasi0/your_url,IAOF,ITI-18:Stored Query:sq.b,80,,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REGISTRY,true,true,,https://meddex0:8443/MGXDS/DocumentRegistry_Service,MEXD,ITI-18:Stored Query:sq.b,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,RESP_IMG_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/responding,TIE1111115,RAD-75:Cross GW Retrieve Img Doc Set,,,8443
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REGISTRY,true,true,,https://visus24/JiveX_XDSRegistry_WS/service,VIX1,ITI-42:Register.b:r.b,,,443
+Webservice,xt,EHR_xt_HIE,xt2,DOC_REPOSITORY,false,false,,http://xt2:8020/axis2/services/xdsrepositoryb,XT00,ITI-43:Retrieve.b:ret.b,8020,,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,RESP_GATEWAY,true,true,,https://meddex0:8443/MGXDS/Gateway_Service,,ITI-38:Cross Gateway Query:xcq,,,8443
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,DOC_REGISTRY,true,true,,https://nist1:9085/services/xdsregistryb,NIO1112,ITI-42:Register.b:r.b,,,9085
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_REPOSITORY,false,false,,http://tiani---cisco76:8080/XDS3/C1,TIE1111115,ITI-41:Async Provide and Register.b:pr.as,8080,10980,
+Webservice,TIE,OTHER_TIE,tie4,DOC_REPOSITORY,false,true,,http://tie4:7001/tieservice/xdsrepositoryb,TIO0,ITI-43:Retrieve.b:ret.b,7001,,
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,INIT_GATEWAY,false,true,,http://nist1:9080/tf6/services/ig,NIO1112,ITI-18:Initiating Gateway Stored Query:igq,9080,,
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon21,DM_NOTIF_BROKER,false,true,,http://a-thon21:9090/broker-ee-war/services/Broker,A-X7,ITI-54:Doc Metadata Publish,9090,10265,
+Webservice,TIE,OTHER_TIE,tie4,DOC_REGISTRY,false,true,,http://tie4:7001/tieservice/xdsregistryb,TIO0,ITI-42:Register.b:r.b,7001,,
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_RESPONDER,true,true,,https://forcare14:8443/viewer/mhd/DocumentDossier,FOX5,ITI-66:Get Doc Dossier,,,8443
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_RESPONDER,true,true,,https://forcare14:8443/viewer/mhd/DocumentDossier/Search,FOX5,ITI-67:Find Doc Dossier,,,8443
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,RESP_GATEWAY,true,true,,https://nist18:9085/tf6/services/rg,NIO1112,ITI-39:Cross Gateway Retrieve:xcr,,,9085
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REGISTRY,false,false,,http://agfa32/your_url,AGP3,ITI-18:Stored Query:sq.b,80,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_IMG_GATEWAY,true,true,,https://agfa32:8443/xcai/RespondingGW,AGP1,RAD-75:Cross GW Retrieve Img Doc Set,,,8443
+Webservice,BINT,OTHER_BINT,bint1,INIT_GATEWAY,false,true,,http://bint1/your_url,BIO0,ITI-43:Initiating Gateway Retrieve:igr,80,,
+Webservice,GE,OTHER_GE_EA 2014,ge85,DOC_REPOSITORY,true,true,,https://ge85:8080/ea-service/XdsRepository,GE011111111112222222222333333333344443,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,IMG_DOC_SOURCE,true,true,,https://meddex0:9443/MGSuite/imagingdocsource/WadoServlet,MEXD,RAD-55:WADO Retrieve,,,9443
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,EMBED_REPOS,true,true,,https://visus24/JiveX_XDSEmbeddedRepository_WS/service,VIX1,ITI-43:Retrieve.b:ret.b,,,443
+Webservice,ICW,EHR_ICW_1,icw15,INIT_GATEWAY,true,true,,https://icw15:8443/pxs/webservices/iti43GatewayAsync,,ITI-43:Async Initiating Gateway Retrieve:igr:as,,,8443
+Webservice,AGFA,OTHER_AGFA,agfa36,DOC_REPOSITORY,true,false,,https://agfa36:9443/g5-xds-ws/g5-xds-ws,AGOT,ITI-43:Retrieve.b:ret.b,,,9443
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REGISTRY,false,true,,http://topicus11:8080/services/registry,TOO1,ITI-18:Stored Query:sq.b,8080,10134,
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REPOSITORY,false,false,,http://solinfo2/your_url,SOE8,RAD-68:P&R Imaging Doc Set MTOM/XOP,80,,
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,RESP_GATEWAY,true,true,,https://nist1:9085/tf6/services/rg,NIO1112,ITI-39:Cross Gateway Retrieve:xcr,,,9085
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REPOSITORY,true,true,,https://topicus11:9443/services/repository,TOO1,ITI-43:Retrieve.b:ret.b,,,9443
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,RESP_GATEWAY,false,true,,http://ideosante0:8080/dcr-RespondingGateway/CrossGatewayRetrieve,IDEH,ITI-39:Cross Gateway Retrieve:xcr,8080,,
+Webservice,Acuo,XDSb_REP_Acuo_6.0.1,acuo6,DOC_REPOSITORY,true,false,,https://acuo6:8080/your_url,ACX4,ITI-43:Async Retrieve:ret.as,,,8080
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,RESP_IMG_GATEWAY,true,true,,https://forcare14:8443/xca/services/respondingGateway/retrieve,FOX5,RAD-75:Cross GW Retrieve Img Doc Set,,,8443
+Webservice,GPI,XDSb_REP_GPI,gpi1,INIT_GATEWAY,true,true,,https://gpi1:8643/DocumentRepositoryXDSBWS/InitiatingGatewayXDSB,GPX1,ITI-18:Initiating Gateway Stored Query:igq,,,8643
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,true,true,,https://agfa32:8443/xds/repository,AGP1,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,xt,EHR_xt_HIE,xt2,DOC_REPOSITORY,true,false,,https://xt2:8080/your_url,XT00,ITI-41:Provide and Register.b:pr.b,,,8080
+Webservice,ATS,OTHER_ATS_CW,ats2,PROV_INFO_DIR,false,false,,http://ats2/your_url,ATO1,ITI-58:Provider Info Query,80,10922,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,IMG_DOC_SOURCE,true,false,,https://tiani---cisco81:8443/XDSI/source,TIE1111115,RAD-69:Async Retrieve Imaging Doc Set,,,8443
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,DOC_REPOSITORY,true,false,,https://visbion12:8080/your_url,VIP9,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,INIT_GATEWAY,true,true,,https://nist18:9085/tf6/services/ig,NIO1112,ITI-18:Initiating Gateway Stored Query:igq,,,9085
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,false,false,,http://agfa32/your_url,AGP1,RAD-69:Retrieve Imaging Doc Set,80,10894,
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,IMG_DOC_SOURCE,true,true,,https://visus24/jiveXWADO/wado,VIX1,RAD-55:WADO Retrieve,,,443
+Webservice,xt,EHR_xt_HIE,xt2,DOC_REPOSITORY,false,false,,http://xt2:8123/iti42,,ITI-42:Register.b:r.b,8123,10859,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DOC_REPOSITORY,true,true,,https://intersystems3/csp/repository/HS.IHE.XDSb.Repository.Services.cls,INE9,ITI-43:Retrieve.b:ret.b,,,443
+Webservice,Acuo,XDSb_REP_Acuo_6.0.1,acuo6,DOC_REPOSITORY,false,false,,http://acuo6/your_url,ACX4,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,true,false,,https://acuo5:8080/your_url,ACX3,ITI-42:Register.b:r.b,,,8080
+Webservice,Omnyx,OTHER_Omnyx_IDP,omnyx0,IMG_DOC_SOURCE,false,false,,http://omnyx0/your_url,OMOT,RAD-69:Retrieve Imaging Doc Set,80,,
+Webservice,Acuo,XDSb_REP_Acuo_6.0.1,acuo6,DOC_REPOSITORY,true,false,,https://acuo6:8080/your_url,ACX4,ITI-41:Async Provide and Register.b:pr.as,,,8080
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DOC_REGISTRY,false,true,,http://intersystems3/csp/connect/HS.IHE.XDSb.Registry.Services.cls,INE9,ITI-61:Register On-Demand Doc:rod.b,80,,
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,IMG_DOC_SOURCE,true,false,,https://visbion12:8080/your_url,VIP9,RAD-55:WADO Retrieve,,,8080
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco82,FORM_ARCHIVER,false,false,,http://tiani---cisco82:8081/SpiritProxy/FormAchiver,TIE1111115,ITI-36:Archive Form,8081,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REGISTRY,true,true,,https://agfa32:8443/xds/registry,AGP1,ITI-42:Register.b:r.b,,,8443
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,X-SERVICE-PROVIDER,false,true,,http://ideosante0:8080/xdsbHabilitation/SAMLService,IDEH,ITI-40:Provide X-User Assertion,8080,,
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,RESP_GATEWAY,false,true,,http://ideosante0:8080/dcr-RespondingGateway/CrossGatewayStoredQuery,IDEH,ITI-38:Cross Gateway Query:xcq,8080,,
+Webservice,ARTS,OTHER_ARTS_4_0,arts9,IMG_DOC_SOURCE,false,true,,http://arts9:8084/ImagingDocumentSource,ARO1,RAD-69:Retrieve Imaging Doc Set,8084,,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,RESP_GATEWAY,false,true,,http://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls,INE9,ITI-38:Cross Gateway Query:xcq,80,10971,
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus29,DOC_REPOSITORY,false,true,,http://dedalus29/repo,,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REPOSITORY,false,true,,http://arts8:8083/Repository,ARO1,RAD-68:P&R Imaging Doc Set MTOM/XOP,8083,,
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REPOSITORY,true,true,,https://visus24/JiveX_XDSRepository_WS/service,VIX1,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,true,false,,https://agfa32:8080/your_url,AGP3,ITI-38:Async Cross Gateway Query:xcq:as,,,8080
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,IMG_DOC_SOURCE,false,true,,http://visus24/JiveX_XDSSource_WS/service,VIX1,RAD-69:Retrieve Imaging Doc Set,80,,
+Webservice,GE,PACS_GE_UViewer 2014,ge69,IMG_DOC_SOURCE,false,false,,http://ge69/your_url,GE01111111111222222222233333333334444445,RAD-69:Retrieve Imaging Doc Set,80,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,false,true,,http://agfa32:8080/xca/RespondingGW,AGP1,ITI-39:Async Cross Gateway Retrieve:xcr:as,8080,10904,
+Webservice,BINT,OTHER_BINT,bint1,RESP_GATEWAY,true,true,,https://bint1:444/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls,BIO0,ITI-38:Async Cross Gateway Query:xcq:as,,,444
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco86,ON_DEMAND_DOC_SOURCE,true,false,,https://tiani---cisco86:8443/SpiritProxy/repository,TIE1111115,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,true,true,,https://agfa32:8443/xca/RespondingGW,AGP1,ITI-39:Cross Gateway Retrieve:xcr,,,8443
+Webservice,BINT,OTHER_BINT,bint1,DOC_REGISTRY,true,true,,https://bint1:444/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls,BIO0,ITI-18:Stored Query:sq.b,,,444
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REGISTRY,true,true,,https://visus24/JiveX_XDSRegistry_WS/service,VIX1,ITI-18:Stored Query:sq.b,,,443
+Webservice,GE,OTHER_GE_EA 2014,ge72,DOC_REPOSITORY,false,true,,http://ge72/ea-service/XdsRepository,GE01111111111222222222233333333334444445,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,IBV,OTHER_IBV,ibv0,IMG_DOC_SOURCE,false,true,,http://ibv0:10112/wadofileserver/wado,IBO0,RAD-55:WADO Retrieve,10112,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco72,FORM_PROCESSOR,true,false,,https://tiani---cisco72:8080/your_url,TIE1111115,ITI-35:Submit Form,,,8080
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REPOSITORY,true,true,,https://nist17:9080/tf6/services/xdsrepositoryb,NIO1112,ITI-41:Provide and Register.b:pr.b,,,9080
+Webservice,Rogan,EHR_Rogan_2,rogan24,DOC_REPOSITORY,true,true,,https://rogan24:2040/XDS/Repository,ROE9,ITI-43:Retrieve.b:ret.b,,,2040
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_REPOSITORY,true,true,,https://forcare14:8443/store/services/repository,FOX5,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,false,false,,http://tiani---cisco75:8081/XDS3/C1,TIE1111115,ITI-57:Update Doc Set:upd.b,8081,10992,
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_RECIPIENT,false,false,,http://solinfo2/your_url,SOE8,ITI-65:Put Doc Dossier,80,,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REPOSITORY,true,true,,https://arts8:8446/Repository,ARO1,ITI-43:Retrieve.b:ret.b,,,8446
+Webservice,GPI,XDSb_REP_GPI,gpi1,RESP_GATEWAY,false,true,,http://gpi1:8280/DocumentRepositoryXDSBWS/RespondingGatewayXDSB,GPX1,ITI-39:Async Cross Gateway Retrieve:xcr:as,8280,,
+Webservice,TIE,OTHER_TIE,tie4,DOC_REGISTRY,false,true,,http://tie4:7001/tieservice/xdsregistryb,TIO0,ITI-18:Stored Query:sq.b,7001,10962,
+Webservice,TIE,OTHER_TIE,tie4,DOC_REGISTRY,true,true,,https://tie4:7002/tieservice/xdsregistryb,TIO0,ITI-42:Register.b:r.b,,,7002
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon19,DOC_REGISTRY,false,true,,http://a-thon19:8080/rem-ada-ee-war/services/ADA,A-X7,ITI-18:Stored Query:sq.b,8080,10947,
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,VALUE_SET_REPOSITORY,false,true,SOAP binding,http://ith-icoserve14:3080/ValueSetRepository/services/ValueSetRepositoryService,ITE9,ITI-48:Retrieve Value Set,3080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_GATEWAY,true,true,,https://agfa32:8443/xca/InitiatingGW,,ITI-43:Initiating Gateway Retrieve:igr,,,8443
+Webservice,ETIAM,OTHER_ETIAM_NEXUS,etiam2,DOC_REGISTRY,true,false,,https://etiam2:8080/your_url,ETO7,ITI-18:Stored Query:sq.b,,,8080
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,true,false,,https://tiani---cisco75:8443/XDS3/C1,TIE1111115,ITI-18:Stored Query:sq.b,,,8443
+Webservice,VISUS,PACS_VISUS_2014,visus23,VALUE_SET_REPOSITORY,false,true,SOAP binding,http://visus23:3006/ValueSetRepository/ValueSetRepository_Service?wsdl,VIP10,ITI-48:Retrieve Value Set,3006,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_IMG_GATEWAY,false,false,,http://agfa32/your_url,AGP3,RAD-75:Cross GW Retrieve Img Doc Set,80,,
+Webservice,VISUS,WS_VISUS_2014,visus22,ID,false,true,,http://visus22/InvokeImageDisplay,VIW3,RAD-106:Invoke Image Display,80,,
+Webservice,AGFA,OTHER_AGFA,agfa36,DOC_REPOSITORY,false,false,,http://agfa36/your_url,AGO10,ITI-41:Provide and Register.b:pr.b,80,10359,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco72,FORM_PROCESSOR,false,false,,http://tiani---cisco72/your_url,TIE1111115,ITI-34:Retrieve Form,80,10966,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DOC_REPOSITORY,false,true,,http://intersystems3/csp/repository/HS.IHE.XDSb.Repository.Services.cls,INE9,ITI-43:Retrieve.b:ret.b,80,10982,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,IMG_DOC_SOURCE,true,false,,https://tiani---cisco81:8443/SpiritWADO/wado,TIE1111115,RAD-55:WADO Retrieve,,,8443
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,IMG_DOC_SOURCE,false,true,,http://visus24/jiveXWADO/wado,VIX1,RAD-55:WADO Retrieve,80,,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,true,false,,https://acuo5:8080/your_url,ACX3,ITI-51:Multi-Patient Query:MPQ,,,8080
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve16,DOC_REPOSITORY,true,true,,https://ith-icoserve16:5043/Repository/services/RepositoryService,ITE9,ITI-41:Provide and Register.b:pr.b,,,5043
+Webservice,AGFA,OTHER_AGFA,agfa36,DOC_REPOSITORY,false,false,,http://agfa36/your_url,AGO10,ITI-43:Retrieve.b:ret.b,80,10361,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_IMG_GATEWAY,false,false,,http://agfa32/your_url,AGP3,RAD-69:Retrieve Imaging Doc Set,80,,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REGISTRY,false,true,,http://meddex0:8080/MGXDS/DocumentRegistry_Service,MEXD,ITI-61:Register On-Demand Doc:rod.b,8080,,
+Webservice,ICW,EHR_ICW_1,icw15,DM_NOTIF_BROKER,true,true,UNSUBSCRIBE,https://icw15:8443/pxs/webservices/NotificationBroker/Unsubscribe,,ITI-52:Doc Metadata Subscribe,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,false,false,,http://agfa32/your_url,AGP3,ITI-38:Cross Gateway Query:xcq,80,10466,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,true,false,,https://agfa32:8080/your_url,AGP3,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,EMBED_REPOS,false,false,,http://visbion12/your_url,VIP9,ITI-43:Retrieve.b:ret.b,80,10925,
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus29,DM_NOTIF_BROKER,false,true,,http://dedalus29/publish,,ITI-54:Doc Metadata Publish,80,,
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,INIT_GATEWAY,true,true,,https://forcare14:8443/xca/services/initiatingGateway/retrieve,FOX5,ITI-43:Initiating Gateway Retrieve:igr,,,8443
+Webservice,INFINITT,PACS_INFINITT_1,infinitt8,DOC_RESPONDER,false,true,,http://infinitt8/WebConsumerMaker/MHDDocumentResponder.svc,INP1,ITI-68:Get Document,80,10297,
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REPOSITORY,false,true,,http://topicus11:9080/services/repository,TOO1,ITI-43:Async Retrieve:ret.as,9080,10963,
+Webservice,AGFA,OTHER_AGFA,agfa36,EMBED_REPOS,false,false,,http://agfa36:6444/g5-xds-ws/g5-xds-ws,AGOT,ITI-43:Retrieve.b:ret.b,6444,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REGISTRY,true,true,,https://nist17:9085/tf6/services/xdsregistryb,NIO1112,ITI-42:Register.b:r.b,,,9085
+Webservice,ARTS,OTHER_ARTS_4_0,arts9,IMG_DOC_SOURCE,true,true,,https://arts9:8444/Wado/Get,ARO1,RAD-55:WADO Retrieve,,,8444
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,IMG_DOC_SOURCE,true,true,,https://forcare14:8443/connect/services/source,FOX5,RAD-69:Retrieve Imaging Doc Set,,,8443
+Webservice,BINT,OTHER_BINT,bint1,RESP_GATEWAY,false,true,,http://bint1/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls,BIO0,ITI-38:Async Cross Gateway Query:xcq:as,80,,
+Webservice,ICW,PIX_X_REF_MGR_ICW,icw17,PROV_INFO_DIR,false,true,,http://icw17:8584/hpd/services/dsml,ICP2,ITI-58:Provider Info Query,8584,,
+Webservice,CHILI,PACS_CHILI_1,chili2,IMG_DOC_SOURCE,true,false,,https://chili2/chili/servlet/doXDS,CHP1,RAD-69:Retrieve Imaging Doc Set,,,443
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,INIT_GATEWAY,true,true,,https://intersystems3/csp/connect/HS.IHE.XCA.InitiatingGateway.Services.cls,INE9,ITI-43:Initiating Gateway Retrieve:igr,,,443
+Webservice,GE,GATEWAY_GE__CCG,ge73,IMG_DOC_SOURCE,true,false,,https://ge73:8080/your_url,GE01111111111222222222233333333334444445,RAD-69:Retrieve Imaging Doc Set,,,8080
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,false,true,,http://agfa32:8080/xds/repository,AGP1,ITI-43:Retrieve.b:ret.b,8080,10926,
+Webservice,VISUS,PACS_VISUS_2014,visus23,VALUE_SET_REPOSITORY,false,true,SOAP binding,http://visus23:3006/ValueSetRepository/ValueSetRepository_Service?wsdl,VIP10,ITI-60:Retrieve Multiple Value Sets,3006,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,true,false,,https://agfa32:8080/your_url,AGP3,ITI-39:Async Cross Gateway Retrieve:xcr:as,,,8080
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_RECIPIENT,false,true,,http://visus24/JiveX_XDRRecipient_WS/service,VIX1,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,ICW,EHR_ICW_1,icw15,RESP_GATEWAY,true,true,,https://icw15:8443/pxs/webservices/iti39Gateway,ICE3,ITI-39:Cross Gateway Retrieve:xcr,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_IMG_GATEWAY,false,false,,http://agfa32/your_url,AGP3,RAD-75:Async Cross GW Retrieve Img Doc Set,80,,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,false,false,,http://acuo5/your_url,ACX3,ITI-18:Async Stored Query:sq.as,80,,
+Webservice,OSVB,XDSb_REP_OSVB,osvb0,DOC_REPOSITORY,false,false,,http://osvb0/your_url,OSXD,ITI-41:Provide and Register.b:pr.b,80,10868,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,false,false,,http://acuo5/your_url,ACX3,ITI-62:Delete Doc Set:del.b,80,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,INIT_GATEWAY,true,true,,https://nist17:9085/tf6/services/ig,NIO1112,ITI-43:Initiating Gateway Retrieve:igr,,,9085
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,VALUE_SET_REPOSITORY,true,true,HTTP Binding,https://ith-icoserve14:3043/ValueSetRepository/services/ValueSetRepositoryServiceREST/RetrieveValueSet,,ITI-48:Retrieve Value Set,,,3043
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REGISTRY,false,true,,http://ideosante0:8080/xdsbRegistry,IDEH,ITI-18:Stored Query:sq.b,8080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,true,false,,https://agfa32:8080/your_url,AGP1,RAD-55:WADO Retrieve,,,8080
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REGISTRY,true,true,,https://arts8:8445/Registry,ARO1,ITI-62:Delete Doc Set:del.b,,,8445
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_RESPONDER,true,true,,https://forcare14:8443/viewer/mhd/Document/,FOX5,ITI-68:Get Document,,,8443
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,DOC_REPOSITORY,true,false,,https://visbion12:8080/your_url,VIP9,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REGISTRY,true,false,,https://agfa32:8080/your_url,AGP3,ITI-42:Register.b:r.b,,,8080
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,false,false,,http://agfa32/your_url,AGP3,ITI-39:Cross Gateway Retrieve:xcr,80,10951,
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REGISTRY,false,true,,http://ideosante0:8080/xdsbRegistry,IDEH,ITI-62:Delete Doc Set:del.b,8080,,
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REGISTRY,false,true,,http://topicus11:8080/services/registry,TOO1,ITI-18:Async Stored Query:sq.as,8080,,
+Webservice,RVC,EHR_RVC_3,rvc6,DOC_REPOSITORY,false,false,,http://rvc6/your_url,RVE5,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_IMG_GATEWAY,false,true,,http://agfa32:8080/xcai/InitiatingGW,AGP1,RAD-69:Retrieve Imaging Doc Set,8080,10929,
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REPOSITORY,false,true,,http://visus24/JiveX_XDSRepository_WS/service,VIX1,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,Parsek,MSG_ROUTER_Parsek,parsek2,DOC_RESPONDER,false,true,,http://parsek2:8080/hsb/web-services/18/net.ihe/Document/,PAM2,ITI-68:Get Document,8080,10701,
+Webservice,ICW,EHR_ICW_1,icw15,DOC_RECIPIENT,true,true,,https://icw15:8443/pxs/webservices/xdsb/documentregistry/iti62-deletedocumentset,,ITI-62:Delete Doc Set:del.b,,,8443
+Webservice,BINT,OTHER_BINT,bint1,DOC_REGISTRY,true,false,,https://bint1:444/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls,BIO0,ITI-42:Register.b:r.b,,,444
+Webservice,synedra,PACS_synedra__2014,synedra7,DOC_REPOSITORY,false,true,,http://synedra7:8080/xds/documentrepository,SYP0,ITI-43:Retrieve.b:ret.b,8080,10961,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,true,false,,https://tiani---cisco75:8443/XDS3/C1,TIE1111115,ITI-42:Register.b:r.b,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,DOC_RESPONDER,false,false,,http://tiani---cisco81:8443/MHD/responder,TIE1111115,ITI-68:Get Document,8443,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REGISTRY,true,true,,https://nist17:9085/tf6/services/xdsregistryb,NIO1112,ITI-18:Stored Query:sq.b,,,9085
+Webservice,INSIEL,XDSb_REG_INSIEL__2014,insiel8,DOC_RESPONDER,false,false,,http://insiel8/your_url,INX4,ITI-66:Get Doc Dossier,80,10964,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REPOSITORY,false,true,,http://meddex0:8080/MGXDS/DocumentRepository_Service,,ITI-41:Provide and Register.b:pr.b,8080,10979,
+Webservice,GE,GATEWAY_GE__CCG,ge73,IMG_DOC_SOURCE,false,false,,http://ge73/your_url,GE01111111111222222222233333333334444445,RAD-55:WADO Retrieve,80,,
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DM_NOTIF_RECIPIENT,true,true,,https://visus24/JiveX_MetaNotify_WS/service,VIX1,ITI-53:Doc Metadata Notify,,,443
+Webservice,Parsek,MSG_ROUTER_Parsek,parsek2,DOC_RESPONDER,false,true,,http://parsek2:8080/hsb/web-services/18/DocumentDossier,PAM2,ITI-66:Get Doc Dossier,8080,10700,
+Webservice,ETIAM,OTHER_ETIAM_NEXUS,etiam2,DOC_REGISTRY,true,false,,https://etiam2:8080/your_url,ETO7,ITI-42:Register.b:r.b,,,8080
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,false,false,,http://agfa32/your_url,AGP3,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,synedra,PACS_synedra__2014,synedra7,DOC_REPOSITORY,true,true,,https://synedra7:8443/xds/documentrepository,SYP0,ITI-41:Provide and Register.b:pr.b,,,8443
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REPOSITORY,false,true,,http://topicus11:9080/services/repository,TOO1,ITI-41:Provide and Register.b:pr.b,9080,,
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus29,X-SERVICE-PROVIDER,true,true,,https://dedalus29/repo,DEE6,ITI-40:Provide X-User Assertion,,,443
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,VALUE_SET_REPOSITORY,true,true,SOAP binding,https://ith-icoserve14:3043/ValueSetRepository/services/ValueSetRepositoryService,ITE9,ITI-48:Retrieve Value Set,,,3043
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,IMG_DOC_SOURCE,true,false,,https://visbion12:8080/your_url,VIP9,RAD-69:Retrieve Imaging Doc Set,,,8080
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,RESP_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/responding,TIE1111115,ITI-39:Cross Gateway Retrieve:xcr,,,8443
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DOC_REPOSITORY,false,true,,http://intersystems3/csp/repository/HS.IHE.XDSb.Repository.Services.cls,INE9,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,GE,GATEWAY_GE__CCG,ge73,IMG_DOC_SOURCE,false,false,,http://ge73/your_url,GE0111111111122222222223333333333444444,RAD-55:WADO Retrieve,80,,
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,INIT_GATEWAY,false,true,,http://nist1:9080/tf6/services/ig,NIO1112,ITI-43:Initiating Gateway Retrieve:igr,9080,,
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REGISTRY,false,true,,http://topicus11:8080/services/registry,TOO1,ITI-42:Async Register.b:r.as,8080,,
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REGISTRY,true,true,,https://topicus11:8443/services/registry,TOO1,ITI-18:Stored Query:sq.b,,,8443
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_RECIPIENT,true,true,,https://forcare14:8443/viewer/mhd/DocumentDossier,FOX5,ITI-65:Put Doc Dossier,,,8443
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,INIT_GATEWAY,true,true,,https://nist17:9085/tf6/services/ig,NIO1112,ITI-18:Initiating Gateway Stored Query:igq,,,9085
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,DOC_REPOSITORY,false,true,,http://nist18:9080/tf6/services/xdsrepositoryb,NIO1112,ITI-43:Retrieve.b:ret.b,9080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,true,true,,https://agfa32:8443/xds/repository,AGP1,ITI-41:Provide and Register.b:pr.b,,,8443
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REPOSITORY,true,true,,https://ideosante0:8443/xdsbRepository,IDEH,ITI-41:Provide and Register.b:pr.b,,,8443
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,INIT_GATEWAY,true,true,,https://meddex0:8443/MGXDS/Gateway_Service,,ITI-18:Initiating Gateway Stored Query:igq,,,8443
+Webservice,BINT,OTHER_BINT,bint1,DOC_REGISTRY,true,true,,https://bint1:444/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls,BIO0,ITI-62:Delete Doc Set:del.b,,,444
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,X-SERVICE-PROVIDER,true,false,,https://acuo5:8080/your_url,ACX3,ITI-40:Provide X-User Assertion,,,8080
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_REGISTRY,true,true,,https://forcare14:8443/Index/services/registry,FOX5,ITI-61:Register On-Demand Doc:rod.b,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DM_NOTIF_BROKER,false,false,,http://tiani---cisco75:8081/XDS3/C1,TIE1111115,ITI-52:Doc Metadata Subscribe,8081,,
+Webservice,xt,EHR_xt_HIE,xt2,DOC_REPOSITORY,true,false,,https://xt2:8080/your_url,XT00,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,GE,OTHER_GE_EA 2014,ge72,IMG_DOC_SOURCE,true,true,,https://ge72:8085/ea-service/ARCH1/ge/XdsImagingSource,GE011111111112222222222333333333344443,RAD-69:Retrieve Imaging Doc Set,,,8085
+Webservice,synedra,PACS_synedra__2014,synedra7,IMG_DOC_SOURCE,true,true,,https://synedra7:8443/xds/documentsource,SYP0,RAD-55:WADO Retrieve,,,8443
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REGISTRY,false,true,,http://topicus11:8080/services/registry,TOO1,ITI-61:Register On-Demand Doc:rod.b,8080,,
+Webservice,GE,PACS_GE_UViewer 2014,ge69,IMG_DOC_SOURCE,true,false,,https://ge69:8080/your_url,GE01111111111222222222233333333334444445,RAD-69:Retrieve Imaging Doc Set,,,8080
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,false,false,,http://agfa32/your_url,AGP3,RAD-69:Retrieve Imaging Doc Set,80,10433,
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus29,DM_NOTIF_BROKER,true,true,,https://dedalus29/publish,,ITI-54:Doc Metadata Publish,,,443
+Webservice,INSIEL,XDSb_REG_INSIEL__2014,insiel8,DOC_RESPONDER,false,false,,http://insiel8/your_url,INX4,ITI-67:Find Doc Dossier,80,,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REGISTRY,false,true,,http://arts8:8082/Registry,ARO1,ITI-42:Register.b:r.b,8082,,
+Webservice,ICW,EHR_ICW_1,icw15,DOC_REGISTRY,true,true,,https://icw15:8443/pxs/webservices/rev6/xdsb-registerdocuments,ICE3,ITI-42:Register.b:r.b,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,false,false,,http://tiani---cisco75:8081/XDS3/C1,TIE1111115,ITI-42:Async Register.b:r.as,8081,,
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,INIT_GATEWAY,false,true,,http://nist18:9080/tf6/services/ig,NIO1112,ITI-18:Initiating Gateway Stored Query:igq,9080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_GATEWAY,false,true,,http://agfa32:8080/xca/InitiatingGW,,ITI-43:Async Initiating Gateway Retrieve:igr:as,8080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_IMG_GATEWAY,false,true,,http://agfa32:8080/xcai/RespondingGW,AGP1,RAD-75:Async Cross GW Retrieve Img Doc Set,8080,10938,
+Webservice,ETIAM,OTHER_ETIAM_NEXUS,etiam2,DOC_REGISTRY,false,false,,http://etiam2/your_url,ETO7,ITI-42:Register.b:r.b,80,,
+Webservice,Acuo,XDSb_REP_Acuo_6.0.1,acuo6,DOC_REPOSITORY,false,false,,http://acuo6/your_url,ACX4,ITI-41:Async Provide and Register.b:pr.as,80,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco84,EMBED_REPOS,true,false,,https://tiani---cisco84:8443/SpiritProxy/repository,TIE1111115,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REPOSITORY,true,false,,https://solinfo2:8080/your_url,SOE8,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REPOSITORY,true,true,,https://topicus11:9443/services/repository,TOO1,ITI-41:Provide and Register.b:pr.b,,,9443
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DM_NOTIF_RECIPIENT,false,true,,http://visus24/JiveX_MetaNotify_WS/service,VIX1,ITI-53:Doc Metadata Notify,80,10977,
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REPOSITORY,true,false,,https://solinfo2:8080/your_url,SOE8,ITI-41:Provide and Register.b:pr.b,,,8080
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,INIT_GATEWAY,false,true,,http://intersystems3/csp/connect/HS.IHE.XCA.InitiatingGateway.Services.cls,INE9,ITI-18:Initiating Gateway Stored Query:igq,80,10620,
+Webservice,ICW,EHR_ICW_1,icw16,DOC_REPOSITORY,true,true,,https://icw16:8443/pxs/webservices/xdsb-retrievedocuments,ICE3,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus29,X-SERVICE-PROVIDER,false,true,,http://dedalus29/repo,DEE6,ITI-40:Provide X-User Assertion,80,,
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,DOC_REPOSITORY,true,true,,https://nist1:9085/services/xdsrepositoryb,NIO1112,ITI-43:Retrieve.b:ret.b,,,9085
+Webservice,GE,OTHER_GE_EA 2014,ge85,IMG_DOC_SOURCE,false,true,,http://ge85/ea-service/ARCH1/ge/XdsImagingSource,GE011111111112222222222333333333344443,RAD-69:Retrieve Imaging Doc Set,80,,
+Webservice,ICW,EHR_ICW_1,icw15,DOC_REGISTRY,true,true,,https://icw15:8443/pxs/webservices/rev6/xdsb-storedquery,ICE3,ITI-18:Stored Query:sq.b,,,8443
+Webservice,GPI,XDSb_REP_GPI,gpi1,RESP_GATEWAY,false,true,,http://gpi1:8280/DocumentRepositoryXDSBWS/RespondingGatewayXDSB,GPX1,ITI-38:Async Cross Gateway Query:xcq:as,8280,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REGISTRY,false,true,,http://nist17:9080/tf6/services/xdsregistryb,NIO1112,ITI-18:Stored Query:sq.b,9080,,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,X-SERVICE-PROVIDER,false,false,,http://acuo5/your_url,ACX3,ITI-40:Provide X-User Assertion,80,,
+Webservice,synedra,PACS_synedra__2014,synedra7,X-SERVICE-PROVIDER,true,true,,https://synedra7:8443/xds/documentrepository,SYP0,ITI-40:Provide X-User Assertion,,,8443
+Webservice,OSVB,XDSb_REP_OSVB,osvb0,DOC_REPOSITORY,false,false,,http://osvb0/your_url,OSX1,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,ICW,EHR_ICW_1,icw15,RESP_GATEWAY,true,true,,https://icw15:8443/pxs/webservices/iti39Gateway,ICE3,ITI-39:Async Cross Gateway Retrieve:xcr:as,,,8443
+Webservice,IASI,OF_IASI,iasi0,DOC_REGISTRY,true,false,,https://iasi0:8080/your_url,IAOF,ITI-42:Register.b:r.b,,,8080
+Webservice,OSVB,XDSb_REG_OSVB,osvb1,DOC_REGISTRY,false,true,,http://osvb1/your_url,OSXD,ITI-42:Register.b:r.b,80,10874,
+Webservice,Acuo,XDSb_REP_Acuo_6.0.1,acuo6,X-SERVICE-PROVIDER,false,false,,http://acuo6/your_url,ACX4,ITI-40:Provide X-User Assertion,80,,
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,VALUE_SET_REPOSITORY,false,true,SOAP binding,http://ith-icoserve14:3080/ValueSetRepository/services/ValueSetRepositoryService,ITE9,ITI-60:Retrieve Multiple Value Sets,3080,,
+Webservice,Omnyx,OTHER_Omnyx_IDP,omnyx0,IMG_DOC_SOURCE,true,false,,https://omnyx0:8080/your_url,OMOT,RAD-55:WADO Retrieve,,,8080
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,RESP_GATEWAY,false,true,,http://meddex0:8080/MGXDS/Gateway_Service,,ITI-38:Cross Gateway Query:xcq,8080,,
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,INIT_GATEWAY,true,true,,https://ideosante0:8443/dcr-InitiatingGateway/Retrieve,IDEH,ITI-43:Initiating Gateway Retrieve:igr,,,8443
+Webservice,GE,GATEWAY_GE__CCG,ge73,IMG_DOC_SOURCE,true,false,,https://ge73:8080/your_url,GE0111111111122222222223333333333444444,RAD-55:WADO Retrieve,,,8080
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,EMBED_REPOS,false,true,,http://visus24/JiveX_XDSEmbeddedRepository_WS/service,VIX1,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,AGFA,OTHER_AGFA,agfa36,EMBED_REPOS,true,false,,https://agfa36:9443/g5-xds-ws/g5-xds-ws,AGOT,ITI-43:Retrieve.b:ret.b,,,9443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,false,false,,http://tiani---cisco75:8081/XDS3/C1,TIE1111115,ITI-61:Register On-Demand Doc:rod.b,8081,,
+Webservice,INFINITT,PACS_INFINITT_1,infinitt8,DOC_RESPONDER,false,true,,http://infinitt8/WebConsumerMaker/MHDDocumentResponder.svc,INP1,ITI-66:Get Doc Dossier,80,10314,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REGISTRY,true,true,,https://arts8:8445/Registry,ARO1,ITI-42:Register.b:r.b,,,8445
+Webservice,ICW,EHR_ICW_1,icw15,ON_DEMAND_DOC_SOURCE,true,true,,https://icw15:8443/pxs/webservices/xdsb/ondemanddocumentsource/iti43-retrievedocumentset,,ITI-43:Async Retrieve:ret.as,,,8443
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon19,DM_NOTIF_RECIPIENT,true,true,,https://a-thon19/DSUB/recipient/recipient.php,A-X7,ITI-53:Doc Metadata Notify,,,443
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,DOC_REPOSITORY,false,false,,http://visbion12/your_url,VIP9,ITI-41:Provide and Register.b:pr.b,80,10935,
+Webservice,synedra,PACS_synedra__2014,synedra7,DOC_REPOSITORY,false,true,,http://synedra7:8080/xds/documentrepository,SYP0,ITI-43:Retrieve.b:ret.b,8080,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco86,ON_DEMAND_DOC_SOURCE,false,false,,http://tiani---cisco86:8081/SpiritProxy/repository,TIE1111115,ITI-43:Retrieve.b:ret.b,8081,,
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REPOSITORY,false,true,,http://topicus11:9080/services/repository,TOO1,ITI-43:Retrieve.b:ret.b,9080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,true,false,,https://agfa32:8080/your_url,AGP3,ITI-39:Cross Gateway Retrieve:xcr,,,8080
+Webservice,AGFA,OTHER_AGFA,agfa36,DOC_REPOSITORY,true,false,,https://agfa36:8080/your_url,AGO10,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,Rogan,EHR_Rogan_PACS_3,rogan22,IMG_DOC_SOURCE,true,true,,https://rogan22:8008/XDSIService,ROE8,RAD-69:Retrieve Imaging Doc Set,,,8008
+Webservice,GE,OTHER_GE_EA 2014,ge72,IMG_DOC_SOURCE,false,true,,http://ge72/ea/PACS_GE_EA_2014,GE01111111111222222222233333333334444445,RAD-55:WADO Retrieve,80,10867,
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,IMG_DOC_SOURCE,false,false,,http://visbion12/your_url,VIP9,RAD-55:WADO Retrieve,80,10885,
+Webservice,BINT,OTHER_BINT,bint1,DOC_REGISTRY,false,true,,http://bint1/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls,BIO0,ITI-42:Register.b:r.b,80,,
+Webservice,Sectra,PACS_Sectra_0,sectra2,ID,false,false,,http://sectra2/your_url,SEP0,RAD-106:Invoke Image Display,80,10880,
+Webservice,ICW,EHR_ICW_1,icw15,DOC_REGISTRY,true,true,,https://icw15:8443/pxs/webservices/xdsb/documentregistry/iti61-registerondemanddocumententry,ICE3,ITI-61:Register On-Demand Doc:rod.b,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,false,false,,http://agfa32/your_url,AGP3,ITI-38:Async Cross Gateway Query:xcq:as,80,10952,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco82,FORM_RECEIVER,false,false,,http://tiani---cisco82:8081/SpiritProxy/FormReceiver,TIE1111115,ITI-35:Submit Form,8081,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco72,FORM_PROCESSOR,true,false,,https://tiani---cisco72:8080/your_url,TIE1111115,ITI-34:Retrieve Form,,,8080
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,RESP_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/responding,TIE1111115,ITI-63:Cross Gateway Fetch:xcf,,,8443
+Webservice,GE,OTHER_GE_EA 2014,ge85,DOC_REPOSITORY,false,true,,http://ge85/ea-service/XdsRepository,GE011111111112222222222333333333344443,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DOC_REGISTRY,true,true,,https://intersystems3/csp/connect/HS.IHE.XDSb.Registry.Services.cls,INE9,ITI-18:Stored Query:sq.b,,,443
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,DOC_REPOSITORY,true,true,,https://nist18:9085/tf6/services/xdsrepositoryb,NIO1112,ITI-41:Provide and Register.b:pr.b,,,9085
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,true,false,,https://agfa32:8080/your_url,AGP3,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,8080
+Webservice,synedra,PACS_synedra__2014,synedra7,DOC_REPOSITORY,false,true,,http://synedra7:8080/xds/documentrepository,SYP0,ITI-41:Provide and Register.b:pr.b,8080,,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DOC_REGISTRY,true,true,,https://intersystems3/csp/connect/HS.IHE.XDSb.Registry.Services.cls,INE9,ITI-42:Register.b:r.b,,,443
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,true,false,,https://acuo5:8080/your_url,ACX3,ITI-18:Async Stored Query:sq.as,,,8080
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REPOSITORY,false,true,,http://ideosante0:8080/xdsbRepository,IDEH,ITI-43:Retrieve.b:ret.b,8080,,
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,INIT_GATEWAY,true,true,,https://nist1:9085/tf6/services/ig,NIO1112,ITI-18:Initiating Gateway Stored Query:igq,,,9085
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,RESP_GATEWAY,false,true,,http://nist1:9080/tf6/services/rg,NIO1112,ITI-38:Cross Gateway Query:xcq,9080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,true,false,,https://agfa32:8080/your_url,AGP1,RAD-69:Retrieve Imaging Doc Set,,,8080
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REPOSITORY,false,true,,http://meddex0:8080/MGXDS/DocumentRepository_Service,MEXD,ITI-43:Retrieve.b:ret.b,8080,,
+Webservice,Rogan,EHR_Rogan_XDS_2,rogan21,ON_DEMAND_DOC_SOURCE,true,true,,https://rogan21:8080/your_url,ROE7,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,BINT,OTHER_BINT,bint1,RESP_GATEWAY,true,true,,https://bint1:444/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls,BIO0,ITI-39:Async Cross Gateway Retrieve:xcr:as,,,444
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,false,false,,http://agfa32/your_url,AGP3,RAD-55:WADO Retrieve,80,10359,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,true,false,,https://acuo5:8080/your_url,ACX3,ITI-62:Delete Doc Set:del.b,,,8080
+Webservice,GE,OTHER_GE_EA 2014,ge72,DOC_REPOSITORY,false,true,,http://ge72/ea-service/XdsRepository,GE01111111111222222222233333333334444445,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,INIT_GATEWAY,false,true,,http://nist17:9080/tf6/services/ig,NIO1112,ITI-43:Initiating Gateway Retrieve:igr,9080,,
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus29,DM_NOTIF_BROKER,true,true,,https://dedalus29/subscribe,DEE6,ITI-52:Doc Metadata Subscribe,,,443
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,RESP_GATEWAY,true,true,,https://nist1:9085/tf6/services/rg,NIO1112,ITI-38:Cross Gateway Query:xcq,,,9085
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,INIT_GATEWAY,false,true,,http://ideosante0:8080/dcr-InitiatingGateway/StoredQuery,IDEH,ITI-18:Initiating Gateway Stored Query:igq,8080,,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,RESP_GATEWAY,true,true,,https://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls,INE9,ITI-39:Cross Gateway Retrieve:xcr,,,443
+Webservice,BINT,OTHER_BINT,bint1,DOC_REGISTRY,false,true,,http://bint1/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls,BIO0,ITI-62:Delete Doc Set:del.b,80,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,true,true,,https://agfa32:8443/xca/RespondingGW,AGP1,ITI-38:Cross Gateway Query:xcq,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_REPOSITORY,true,false,,https://tiani---cisco76:8443/XDS3/C1,TIE1111115,ITI-41:Async Provide and Register.b:pr.as,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco72,FORM_PROCESSOR,false,false,,http://tiani---cisco72/your_url,TIE1111115,ITI-37:Retrieve Clarifications,80,,
+Webservice,ETIAM,OTHER_ETIAM_NEXUS,etiam2,DOC_REPOSITORY,true,false,,https://etiam2:8080/your_url,ETO7,ITI-41:Provide and Register.b:pr.b,,,8080
+Webservice,Rogan,EHR_Rogan_XDS_2,rogan26,INIT_IMG_GATEWAY,true,true,,https://rogan26:2060/XCA-I/IG,ROE7,RAD-69:Retrieve Imaging Doc Set,,,2060
+Webservice,Parsek,MSG_ROUTER_Parsek,parsek2,DOC_RECIPIENT,false,true,,http://parsek2:8080/hsb/web-services/18/net.ihe/DocumentDossier/,PAM2,ITI-65:Put Doc Dossier,8080,10989,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,true,false,,https://agfa32:8080/your_url,AGP3,RAD-69:Retrieve Imaging Doc Set,,,8080
+Webservice,BINT,OTHER_BINT,bint1,RESP_GATEWAY,true,true,,https://bint1:444/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls,BIO0,ITI-39:Cross Gateway Retrieve:xcr,,,444
+Webservice,ETIAM,OTHER_ETIAM_NEXUS,etiam2,DOC_REPOSITORY,false,true,,http://etiam2/etiam-nexus-ihe/webservices/xds-iti41,ETO7,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,Omnyx,OTHER_Omnyx_IDP,omnyx0,IMG_DOC_SOURCE,false,false,,http://omnyx0/your_url,OMOT,RAD-55:WADO Retrieve,80,,
+Webservice,GPI,XDSb_REP_GPI,gpi1,INIT_GATEWAY,false,true,,http://gpi1:8280/DocumentRepositoryXDSBWS/InitiatingGatewayXDSB,GPX1,ITI-43:Initiating Gateway Retrieve:igr,8280,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,DOC_RECIPIENT,false,false,,http://tiani---cisco81:8081/MHD/recipient,TIE1111115,ITI-65:Put Doc Dossier,8081,,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,EMBED_REPOS,true,true,,https://arts8:8446/Repository,ARO1,ITI-43:Retrieve.b:ret.b,,,8446
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REGISTRY,true,true,,https://meddex0:8443/MGXDS/DocumentRegistry_Service,MEXD,ITI-61:Register On-Demand Doc:rod.b,,,8443
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REGISTRY,false,false,,http://solinfo2/your_url,SOE8,ITI-18:Stored Query:sq.b,80,,
+Webservice,RVC,EHR_RVC_3,rvc6,DM_NOTIF_RECIPIENT,false,false,,http://rvc6/your_url,RVE5,ITI-53:Doc Metadata Notify,80,,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REPOSITORY,false,true,,http://arts8:8083/Repository,ARO1,ITI-41:Provide and Register.b:pr.b,8083,,
+Webservice,Rogan,EHR_Rogan_2,rogan23,DOC_REGISTRY,true,true,,https://rogan23:2021/IHE-XDS/Registry,ROE9,ITI-61:Register On-Demand Doc:rod.b,,,2021
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,DOC_REPOSITORY,true,true,,https://nist1:9080/services/xdsrepositoryb,NIO1112,ITI-41:Provide and Register.b:pr.b,,,9080
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,X-SERVICE-PROVIDER,true,true,,https://ideosante0:8443/xdsbHabilitation/SAMLService,IDEH,ITI-40:Provide X-User Assertion,,,8443
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REGISTRY,false,true,,http://arts8:8082/Registry,ARO1,ITI-18:Stored Query:sq.b,8082,10770,
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon19,X-SERVICE-PROVIDER,false,false,,http://a-thon19/your_url,A-X7,ITI-40:Provide X-User Assertion,80,10945,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_REPOSITORY,false,false,,http://tiani---cisco76:8080/XDS3/C1,TIE1111115,ITI-43:Retrieve.b:ret.b,8080,,
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,DOC_REPOSITORY,false,false,,http://visbion12/your_url,VIP9,RAD-68:P&R Imaging Doc Set MTOM/XOP,80,10919,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco84,EMBED_REPOS,false,false,,http://tiani---cisco84:8081/SpiritProxy/repository,TIE1111115,ITI-43:Retrieve.b:ret.b,8081,,
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REPOSITORY,true,false,,https://solinfo2:8080/your_url,SOE8,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,GE,GATEWAY_GE__CCG,ge73,IMG_DOC_SOURCE,true,false,,https://ge73:8080/your_url,GE01111111111222222222233333333334444445,RAD-55:WADO Retrieve,,,8080
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,RESP_GATEWAY,true,true,,https://nist18:9085/tf6/services/rg,NIO1112,ITI-38:Cross Gateway Query:xcq,,,9085
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon19,X-SERVICE-PROVIDER,true,false,,https://a-thon19:8080/your_url,A-X7,ITI-40:Provide X-User Assertion,,,8080
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REGISTRY,true,true,,https://ideosante0:8443/xdsbRegistry,IDEH,ITI-62:Delete Doc Set:del.b,,,8443
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REPOSITORY,true,true,,https://topicus11:9443/services/repository,TOO1,ITI-41:Async Provide and Register.b:pr.as,,,9443
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,IMG_DOC_SOURCE,true,true,,https://meddex0:9443/MGSuite/ImagingDocumentSource_Service,,RAD-69:Retrieve Imaging Doc Set,,,9443
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,false,false,,http://acuo5/your_url,ACX3,ITI-51:Multi-Patient Query:MPQ,80,,
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REPOSITORY,false,true,,http://visus24/JiveX_XDSRepository_WS/service,VIX1,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon21,DM_NOTIF_BROKER,true,true,,https://a-thon21:9733/broker-ee-war/services/Broker,A-X7,ITI-54:Doc Metadata Publish,,,9733
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DM_NOTIF_RECIPIENT,true,true,,https://intersystems3/csp/connect/HS.IHE.DSUB.NotificationConsumer.Services.cls,,ITI-53:Doc Metadata Notify,,,443
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REGISTRY,true,false,,https://solinfo2:8080/your_url,SOE8,ITI-42:Register.b:r.b,,,8080
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,DOC_REPOSITORY,false,false,,http://visbion12/your_url,VIP9,ITI-43:Retrieve.b:ret.b,80,10939,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_REPOSITORY,false,false,,http://tiani---cisco76:8080/XDS3/C1,TIE1111115,ITI-41:Provide and Register.b:pr.b,8080,,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,ON_DEMAND_DOC_SOURCE,true,true,,https://meddex0:8443/MGXDS/DocumentRepository_Service,MEXD,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,INSIEL,XDSb_REG_INSIEL__2014,insiel8,DOC_RESPONDER,false,false,,http://insiel8:9080/portalemmg-mhd-responder/net.ihe/Document/,,ITI-68:Get Document,9080,10883,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco80,X-SERVICE-PROVIDER,true,false,Please Ask for information,https://tiani---cisco80:8443/SpiritProxy/registry,TIE1111115,ITI-40:Provide X-User Assertion,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_IMG_GATEWAY,true,false,,https://agfa32:8080/your_url,AGP3,RAD-75:Cross GW Retrieve Img Doc Set,,,8080
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REPOSITORY,true,true,,https://arts8:8446/Repository,ARO1,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,8446
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,VALUE_SET_REPOSITORY,true,true,HTTP Binding,https://ith-icoserve14:3043/ValueSetRepository/services/ValueSetRepositoryServiceREST/RetrieveMultipleValueSets,,ITI-60:Retrieve Multiple Value Sets,,,3043
+Webservice,ICW,EHR_ICW_1,icw15,DM_NOTIF_BROKER,true,true,,https://icw15:8443/pxs/webservices/NotificationBroker/Publish,ICE3,ITI-54:Doc Metadata Publish,,,8443
+Webservice,Acuo,XDSb_REP_Acuo_6.0.1,acuo6,DOC_REPOSITORY,false,false,,http://acuo6/your_url,ACX4,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REGISTRY,true,true,,https://agfa32:8443/xds/registry,AGP1,ITI-18:Stored Query:sq.b,,,8443
+Webservice,Parsek,MSG_ROUTER_Parsek,parsek2,DOC_RESPONDER,false,true,,http://parsek2:8080/hsb/web-services/18/net.ihe/DocumentDossier/search,PAM2,ITI-67:Find Doc Dossier,8080,10987,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,VALUE_SET_REPOSITORY,true,false,HTTP binding,https://tiani---cisco81:8443/SVS/repository,TIE1111115,ITI-48:Retrieve Value Set,,,8443
+Webservice,VISUS,PACS_VISUS_2014,visus23,VALUE_SET_REPOSITORY,false,true,HTTP binding,http://visus23:3004/RetrieveValueSet,VIP10,ITI-48:Retrieve Value Set,3004,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_GATEWAY,true,true,,https://agfa32:8443/xca/InitiatingGW,,ITI-18:Initiating Gateway Stored Query:igq,,,8443
+Webservice,BINT,OTHER_BINT,bint1,INIT_GATEWAY,false,false,,http://bint1/csp/healthshare/bintmed/HS.IHE.XCA.InitiatingGateway.Services.cls,BIO0,ITI-18:Initiating Gateway Stored Query:igq,80,,
+Webservice,GE,OTHER_GE_EA 2014,ge85,DOC_REPOSITORY,false,true,,http://ge85/ea-service/XdsRepository,GE011111111112222222222333333333344443,RAD-68:P&R Imaging Doc Set MTOM/XOP,80,,
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,DOC_REGISTRY,false,true,,http://nist18:9080/tf6/services/xdsregistryb,NIO1112,ITI-18:Stored Query:sq.b,9080,,
+Webservice,TIE,OTHER_TIE,tie4,DOC_REPOSITORY,true,true,,https://tie4:7002/tieservice/xdsrepositoryb,TIO0,ITI-43:Retrieve.b:ret.b,,,7002
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_REGISTRY,true,true,,https://forcare14:8443/index/services/registry,FOX5,ITI-57:Update Doc Set:upd.b,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco82,FORM_MANAGER,false,false,,http://tiani---cisco82:8081/SpiritProxy/FormManager,TIE1111115,ITI-34:Retrieve Form,8081,,
+Webservice,INFINITT,PACS_INFINITT_1,infinitt8,DOC_RECIPIENT,false,true,,http://infinitt8/WebSourceMaker/MHDDocumentRecipient.svc,INP1,ITI-65:Put Doc Dossier,80,,
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,VALUE_SET_REPOSITORY,false,true,HTTP binding,http://ith-icoserve14:3080/ValueSetRepository/services/ValueSetRepositoryServiceREST/RetrieveValueSet,ITE9,ITI-48:Retrieve Value Set,3080,,
+Webservice,RVC,EHR_RVC_3,rvc6,DOC_REPOSITORY,false,false,,http://rvc6/your_url,RVE5,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,true,false,,https://tiani---cisco75:8443/XDS3/C1,TIE1111115,ITI-62:Delete Doc Set:del.b,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,true,false,,https://agfa32:8080/your_url,AGP1,RAD-69:Retrieve Imaging Doc Set,,,8080
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,X-SERVICE-PROVIDER,false,true,ITI 43,http://ith-icoserve14:3080/Repository/services/RepositoryService,,ITI-40:Provide X-User Assertion,3080,,
+Webservice,ICW,EHR_ICW_1,icw15,RESP_GATEWAY,true,true,,https://icw15:8443/pxs/webservices/iti38Gateway,ICE3,ITI-38:Async Cross Gateway Query:xcq:as,,,8443
+Webservice,ICW,PIX_X_REF_MGR_ICW,icw17,PROV_INFO_DIR,true,true,,https://icw17:8585/hpd/services/dsml,ICP2,ITI-58:Provider Info Query,,,8585
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REGISTRY,false,true,,http://agfa32:8080/xds/registry,AGP1,ITI-42:Register.b:r.b,8080,10916,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REPOSITORY,true,true,,https://arts8:8446/Repository,ARO1,ITI-41:Provide and Register.b:pr.b,,,8446
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REPOSITORY,true,true,,https://nist17:9085/tf6/services/xdsrepositoryb,NIO1112,ITI-43:Retrieve.b:ret.b,,,9085
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,false,false,,http://agfa32/your_url,AGP1,RAD-55:WADO Retrieve,80,10886,
+Webservice,ATS,OTHER_ATS_CW,ats2,PROV_INFO_DIR,true,false,,https://ats2:8080/your_url,ATO1,ITI-58:Provider Info Query,,,8080
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,RESP_GATEWAY,true,true,,https://ideosante0:8443/dcr-RespondingGateway/CrossGatewayRetrieve,IDEH,ITI-39:Cross Gateway Retrieve:xcr,,,8443
+Webservice,GPI,XDSb_REP_GPI,gpi1,RESP_GATEWAY,false,true,,http://gpi1:8280/DocumentRepositoryXDSBWS/RespondingGatewayXDSB,GPX1,ITI-39:Cross Gateway Retrieve:xcr,8280,,
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_REPOSITORY,true,true,,https://forcare14:8443/store/services/repository,FOX5,ITI-41:Provide and Register.b:pr.b,,,8443
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REGISTRY,false,true,,http://arts8:8082/Registry,ARO1,ITI-57:Update Doc Set:upd.b,8082,,
+Webservice,ICW,EHR_ICW_1,icw15,X-SERVICE-PROVIDER,true,true,ANY OTHER URL,https://icw15:8443/-----ANY-OTHER-CONFGIRED-URL-----,ICE3,ITI-40:Provide X-User Assertion,,,8443
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,INIT_GATEWAY,true,true,,https://nist18:9085/tf6/services/ig,NIO1112,ITI-43:Initiating Gateway Retrieve:igr,,,9085
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,true,true,,https://agfa32:8443/xds/repository,AGP1,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,ETIAM,OTHER_ETIAM_NEXUS,etiam2,DOC_REGISTRY,false,false,,http://etiam2/your_url,ETO7,ITI-18:Stored Query:sq.b,80,,
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REPOSITORY,false,true,,http://visus24/JiveX_XDSRepository_WS/service,VIX1,RAD-68:P&R Imaging Doc Set MTOM/XOP,80,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REGISTRY,true,false,,https://agfa32:8080/your_url,AGP3,ITI-18:Stored Query:sq.b,,,8080
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REPOSITORY,true,false,,https://solinfo2:8080/your_url,SOE8,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,8080
+Webservice,ICW,EHR_ICW_1,icw16,DOC_REPOSITORY,true,true,,https://icw16:8443/pxs/webservices/rev6/xdsb-provideandregister,ICE3,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,8443
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,DOC_REPOSITORY,false,false,,http://visbion12/your_url,VIP9,ITI-43:Retrieve.b:ret.b,80,10915,
+Webservice,INSIEL,XDSb_REG_INSIEL__2014,insiel8,DOC_RESPONDER,false,false,,http://insiel8:9080/portalemmg-mhd-responder/net.ihe/DocumentDossier/,,ITI-67:Find Doc Dossier,9080,10876,
+Webservice,CHILI,PACS_CHILI_1,chili2,IMG_DOC_SOURCE,true,false,,https://chili2/chili/servlet/doWado,CHP1,RAD-55:WADO Retrieve,,,443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco72,FORM_PROCESSOR,true,false,,https://tiani---cisco72:8080/your_url,TIE1111115,ITI-37:Retrieve Clarifications,,,8080
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon21,DM_NOTIF_BROKER,false,true,,http://a-thon21:9090/broker-ee-war/services/Broker,A-X7,ITI-52:Doc Metadata Subscribe,9090,10266,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,VALUE_SET_REPOSITORY,true,false,HTTP binding,https://tiani---cisco81:8443/SVS/repository,TIE1111115,ITI-60:Retrieve Multiple Value Sets,,,8443
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus29,DOC_REPOSITORY,true,true,,https://dedalus29/repo,,ITI-41:Provide and Register.b:pr.b,,,443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,INIT_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/initiating,TIE1111115,ITI-63:Async Cross Gateway Fetch:xcf.as,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,INIT_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/initiating,TIE1111115,ITI-18:Async Initiating Gateway Stored Query:igq:as,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,false,false,,http://agfa32/your_url,AGP3,ITI-39:Async Cross Gateway Retrieve:xcr:as,80,10953,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,RESP_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/responding,TIE1111115,ITI-38:Async Cross Gateway Query:xcq:as,,,8443
+Webservice,Rogan,EHR_Rogan_2,rogan24,DOC_REPOSITORY,true,true,,https://rogan24:2040/XDS/Repository,ROE9,ITI-41:Provide and Register.b:pr.b,,,2040
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,true,false,,https://tiani---cisco75:8443/XDS3/C1,TIE1111115,ITI-51:Multi-Patient Query:MPQ,,,8443
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus31,VALUE_SET_REPOSITORY,false,true,HTTP binding,http://dedalus31/exec/services/ValueSetHTTPService,DEE6,ITI-48:Retrieve Value Set,80,10815,
+Webservice,CHILI,PACS_CHILI_1,chili2,IMG_DOC_SOURCE,false,false,,http://chili2/chili/servlet/doXDS,CHP1,RAD-69:Retrieve Imaging Doc Set,80,10937,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,true,false,,https://agfa32:8080/your_url,AGP3,ITI-38:Cross Gateway Query:xcq,,,8080
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon19,DOC_REGISTRY,true,true,,https://a-thon19:8443/rem-ada-ee-war/services/ADA,A-X7,ITI-18:Stored Query:sq.b,,,8443
+Webservice,ETIAM,OTHER_ETIAM_NEXUS,etiam2,DOC_REPOSITORY,false,false,,http://etiam2/your_url,ETO7,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,INIT_GATEWAY,true,true,,https://nist1:9085/tf6/services/ig,NIO1112,ITI-43:Initiating Gateway Retrieve:igr,,,9085
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REGISTRY,true,true,,https://arts8:8445/Registry,ARO1,ITI-57:Update Doc Set:upd.b,,,8445
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,PROV_INFO_DIR,true,false,,https://tiani---cisco81:8443/HPD/directory,TIE1111115,ITI-59:Provider Info Feed,,,8443
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REPOSITORY,false,false,,http://solinfo2/your_url,SOE8,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,RESP_IMG_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/responding,TIE1111115,RAD-75:Async Cross GW Retrieve Img Doc Set,,,8443
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,RESP_GATEWAY,false,true,,http://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls,INE9,ITI-39:Cross Gateway Retrieve:xcr,80,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,true,false,,https://tiani---cisco75:8443/XDS3/C1,TIE1111115,ITI-42:Async Register.b:r.as,,,8443
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus29,DOC_REPOSITORY,true,true,,https://dedalus29/repo,,ITI-43:Retrieve.b:ret.b,,,443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_GATEWAY,false,true,,http://agfa32:8080/xca/InitiatingGW,,ITI-43:Initiating Gateway Retrieve:igr,8080,,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,INIT_GATEWAY,true,true,,https://meddex0:8443/MGXDS/Gateway_Service,,ITI-43:Initiating Gateway Retrieve:igr,,,8443
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_REGISTRY,true,true,,https://forcare14:8443/index/services/registry,FOX5,ITI-51:Multi-Patient Query:MPQ,,,8443
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,RESP_GATEWAY,true,true,,https://ideosante0:8443/dcr-RespondingGateway/CrossGatewayStoredQuery,IDEH,ITI-38:Cross Gateway Query:xcq,,,8443
+Webservice,TIE,OTHER_TIE,tie4,DOC_REPOSITORY,false,true,,http://tie4:7001/tieservice/xdsrepositoryb,TIO0,ITI-41:Provide and Register.b:pr.b,7001,,
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_RESPONDER,false,false,,http://solinfo2/your_url,SOE8,ITI-66:Get Doc Dossier,80,,
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REPOSITORY,true,true,,https://topicus11:9443/services/repository,TOO1,ITI-43:Async Retrieve:ret.as,,,9443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco72,FORM_PROCESSOR,false,false,,http://tiani---cisco72/your_url,TIE1111115,ITI-35:Submit Form,80,,
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,RESP_GATEWAY,true,true,,https://forcare14:8443/xca/services/respondingGateway/retrieve,FOX5,ITI-39:Cross Gateway Retrieve:xcr,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,false,false,,http://tiani---cisco75:8081/XDS3/C1,TIE1111115,ITI-42:Register.b:r.b,8081,,
+Webservice,IBV,OTHER_IBV,ibv0,IMG_DOC_SOURCE,true,true,,https://ibv0:10115/ihe/imagingDocumentSetRequestService,IBO0,RAD-69:Retrieve Imaging Doc Set,,,10115
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REPOSITORY,true,true,,https://meddex0:8443/MGXDS/DocumentRepository_Service,,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,8443
+Webservice,synedra,PACS_synedra__2014,synedra7,IMG_DOC_SOURCE,false,true,,http://synedra7:8080/xds/documentsource,SYP0,RAD-55:WADO Retrieve,8080,10959,
+Webservice,Rogan,EHR_Rogan_2,rogan23,DOC_REGISTRY,true,true,,https://rogan23:2021/IHE-XDS/Registry,ROE9,ITI-42:Register.b:r.b,,,2021
+Webservice,IBV,OTHER_IBV,ibv0,IMG_DOC_SOURCE,true,true,,https://ibv0:10113/wadofileserver/wado,IBO0,RAD-55:WADO Retrieve,,,10113
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,true,true,,https://agfa32:8443/xds/repository,AGP1,RAD-68:P&R Imaging Doc Set MTOM/XOP,,,8443
+Webservice,GE,OTHER_GE_EA 2014,ge85,DOC_REPOSITORY,true,true,,https://ge85:8080/ea-service/XdsRepository,GE01111111111222222222233333333334444445,ITI-41:Provide and Register.b:pr.b,,,8080
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REPOSITORY,false,true,,http://nist17:9080/tf6/services/xdsrepositoryb,NIO1112,ITI-41:Provide and Register.b:pr.b,9080,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_REPOSITORY,true,false,,https://tiani---cisco76:8443/XDS3/C1,TIE1111115,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,DOC_REPOSITORY,false,true,,http://nist1:9080/services/xdsrepositoryb,NIO1112,ITI-41:Provide and Register.b:pr.b,9080,,
+Webservice,OSVB,XDSb_REP_OSVB,osvb0,DOC_REPOSITORY,false,false,,http://osvb0/your_url,OSXD,ITI-43:Retrieve.b:ret.b,80,10873,
+Webservice,IASI,OF_IASI,iasi0,DOC_REGISTRY,false,false,,http://iasi0/your_url,IAOF,ITI-42:Register.b:r.b,80,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_REPOSITORY,true,false,,https://tiani---cisco76:8443/XDS3/C1,TIE1111115,ITI-43:Async Retrieve:ret.as,,,8443
+Webservice,Rogan,EHR_Rogan_2,rogan23,DOC_REGISTRY,true,true,,https://rogan23:2021/IHE-XDS/Registry,ROE9,ITI-57:Update Doc Set:upd.b,,,2021
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,DOC_RESPONDER,true,false,,https://tiani---cisco81:8443/MHD/responder,TIE1111115,ITI-67:Find Doc Dossier,,,8443
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,DOC_REGISTRY,false,true,,http://nist1:9080/tf6/services/xdsregistryb,NIO1112,ITI-18:Stored Query:sq.b,9080,,
+Webservice,GE,GATEWAY_GE__CCG,ge73,IMG_DOC_SOURCE,false,false,,http://ge73/your_url,GE01111111111222222222233333333334444445,RAD-69:Retrieve Imaging Doc Set,80,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,true,false,,https://tiani---cisco75:8443/XDS3/C1,TIE1111115,ITI-18:Async Stored Query:sq.as,,,8443
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,DOC_REGISTRY,true,true,,https://nist1:9085/tf6/services/xdsregistryb,NIO1112,ITI-18:Stored Query:sq.b,,,9085
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,X-SERVICE-PROVIDER,true,true,ITI 18,https://ith-icoserve14:3043/Registry/services/RegistryService,ITE9,ITI-40:Provide X-User Assertion,,,3043
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_REPOSITORY,false,false,,http://tiani---cisco76:8080/XDS3/C1,TIE1111115,ITI-43:Async Retrieve:ret.as,8080,,
+Webservice,GE,OTHER_GE_EA 2014,ge72,DOC_REPOSITORY,true,true,Gustavo H system,https://ge72:8080/ea-service/XdsRepository,GE011111111112222222222333333333344443,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,Sectra,PACS_Sectra_0,sectra2,ID,false,false,,http://sectra2/your_url,SEPA,RAD-106:Invoke Image Display,80,10877,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,false,true,,http://agfa32:8080/xds/repository,AGP1,RAD-68:P&R Imaging Doc Set MTOM/XOP,8080,10911,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,INIT_IMG_GATEWAY,true,false,,https://agfa32:8080/your_url,AGP3,RAD-69:Retrieve Imaging Doc Set,,,8080
+Webservice,synedra,PACS_synedra__2014,synedra7,DOC_REPOSITORY,true,true,,https://synedra7:8443/xds/documentrepository,SYP0,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve16,DOC_REPOSITORY,true,true,,https://ith-icoserve16:5043/Repository/services/RepositoryService,ITE9,ITI-43:Retrieve.b:ret.b,,,5043
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,false,false,,http://acuo5/your_url,ACX3,ITI-42:Register.b:r.b,80,,
+Webservice,Acuo,XDSb_REP_Acuo_6.0.1,acuo6,X-SERVICE-PROVIDER,true,false,,https://acuo6:8080/your_url,ACX4,ITI-40:Provide X-User Assertion,,,8080
+Webservice,ICW,EHR_ICW_1,icw15,INIT_GATEWAY,true,true,,https://icw15:8443/pxs/webservices/iti18GatewayAsync,,ITI-18:Async Initiating Gateway Stored Query:igq:as,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,INIT_IMG_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/initiating,TIE1111115,RAD-69:Async Retrieve Imaging Doc Set,,,8443
+Webservice,INFINITT,PACS_INFINITT_1,infinitt8,DOC_RESPONDER,false,true,,http://infinitt8/WebConsumerMaker/MHDDocumentResponder.svc,INP1,ITI-67:Find Doc Dossier,80,10436,
+Webservice,BINT,OTHER_BINT,bint1,INIT_GATEWAY,true,false,,https://bint1:8080/your_url,BIO0,ITI-43:Initiating Gateway Retrieve:igr,,,8080
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,INIT_GATEWAY,false,true,,http://meddex0:8080/MGXDS/Gateway_Service,,ITI-43:Initiating Gateway Retrieve:igr,8080,,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DOC_REGISTRY,false,true,,http://intersystems3/csp/connect/HS.IHE.XDSb.Registry.Services.cls,INE9,ITI-18:Stored Query:sq.b,80,10973,
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,IMG_DOC_SOURCE,true,false,,https://visbion12:8080/your_url,VIP9,RAD-69:Retrieve Imaging Doc Set,,,8080
+Webservice,IASI,OF_IASI,iasi0,DOC_REPOSITORY,false,false,,http://iasi0/your_url,IAOF,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,IMG_DOC_SOURCE,true,false,,https://tiani---cisco81:8443/XDSI/source,TIE1111115,RAD-69:Retrieve Imaging Doc Set,,,8443
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DOC_REGISTRY,false,true,,http://intersystems3/csp/connect/HS.IHE.XDSb.Registry.Services.cls,INE9,ITI-42:Register.b:r.b,80,,
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,DOC_REPOSITORY,false,true,,http://nist18:9080/tf6/services/xdsrepositoryb,NIO1112,ITI-41:Provide and Register.b:pr.b,9080,,
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REGISTRY,false,true,,http://topicus11:8080/services/registry,TOO1,ITI-42:Register.b:r.b,8080,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,DOC_RESPONDER,true,false,,https://tiani---cisco81:8443/MHD/responder,TIE1111115,ITI-66:Get Doc Dossier,,,8443
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REPOSITORY,false,true,,http://nist17:9080/tf6/services/xdsrepositoryb,NIO1112,ITI-43:Retrieve.b:ret.b,9080,,
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_REGISTRY,true,true,,https://forcare14:8443/index/services/registry,FOX5,ITI-42:Register.b:r.b,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,true,true,,https://agfa32:8443/xca/RespondingGW,AGP1,ITI-39:Async Cross Gateway Retrieve:xcr:as,,,8443
+Webservice,AGFA,OTHER_AGFA,agfa36,DOC_REPOSITORY,false,false,,http://agfa36:6444/g5-xds-ws/g5-xds-ws,AGOT,ITI-41:Provide and Register.b:pr.b,6444,,
+Webservice,BINT,OTHER_BINT,bint1,RESP_GATEWAY,true,true,,https://bint1:444/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls,BIO0,ITI-38:Cross Gateway Query:xcq,,,444
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REGISTRY,true,true,,https://topicus11:8443/services/registry,TOO1,ITI-61:Register On-Demand Doc:rod.b,,,8443
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REGISTRY,true,false,,https://solinfo2:8080/your_url,SOE8,ITI-18:Stored Query:sq.b,,,8080
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_IMG_GATEWAY,true,true,,https://agfa32:8443/xcai/RespondingGW,AGP1,RAD-75:Async Cross GW Retrieve Img Doc Set,,,8443
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,RESP_GATEWAY,true,true,,https://nist17:9085/tf6/services/rg,NIO1112,ITI-38:Cross Gateway Query:xcq,,,9085
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REPOSITORY,true,true,,https://visus24/JiveX_XDSRepository_WS/service,VIX1,ITI-43:Retrieve.b:ret.b,,,443
+Webservice,GE,OTHER_GE_EA 2014,ge72,DOC_REPOSITORY,false,true,,http://ge72/ea-service/XdsRepository,GE01111111111222222222233333333334444445,RAD-68:P&R Imaging Doc Set MTOM/XOP,80,,
+Webservice,BINT,OTHER_BINT,bint1,RESP_GATEWAY,false,true,,http://bint1/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls,BIO0,ITI-39:Cross Gateway Retrieve:xcr,80,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,false,true,,http://agfa32:8080/xca/RespondingGW,AGP1,ITI-39:Cross Gateway Retrieve:xcr,8080,10907,
+Webservice,Rogan,EHR_Rogan_2,rogan23,DOC_REGISTRY,true,true,,https://rogan23:2021/IHE-XDS/Registry,ROE9,ITI-62:Delete Doc Set:del.b,,,2021
+Webservice,Rogan,EHR_Rogan_PACS_3,rogan22,DOC_RECIPIENT,true,true,,https://rogan22:8008/XDRRecipient,ROE8,ITI-41:Provide and Register.b:pr.b,,,8008
+Webservice,IASI,OF_IASI,iasi0,DOC_REPOSITORY,true,false,,https://iasi0:8080/your_url,IAOF,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,topicus,OTHER_topicus_2,topicus11,X-SERVICE-PROVIDER,true,true,,https://topicus11:8443/services/registry,TOO1,ITI-40:Provide X-User Assertion,,,8443
+Webservice,ICW,EHR_ICW_1,icw16,DOC_RECIPIENT,true,true,,https://icw16:8443/pxs/webservices/rev6/xdsb-provideandregister,,ITI-41:Async Provide and Register.b:pr.as,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,false,false,,http://agfa32/your_url,AGP3,ITI-43:Retrieve.b:ret.b,80,,
+Webservice,Sectra,PACS_Sectra_0,sectra2,ID,true,false,,https://sectra2:8080/your_url,SEPA,RAD-106:Invoke Image Display,,,8080
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,false,true,,http://agfa32:8080/xca/RespondingGW,AGP1,ITI-38:Cross Gateway Query:xcq,8080,10857,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,false,false,,http://acuo5/your_url,ACX3,ITI-18:Stored Query:sq.b,80,,
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REGISTRY,false,true,,http://visus24/JiveX_XDSRegistry_WS/service,VIX1,ITI-18:Stored Query:sq.b,80,,
+Webservice,GE,GATEWAY_GE__CCG,ge73,IMG_DOC_SOURCE,false,false,,http://ge73/your_url,GE0111111111122222222223333333333444444,RAD-69:Retrieve Imaging Doc Set,80,,
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,IMG_DOC_SOURCE,false,false,,http://visbion12/your_url,VIP9,RAD-69:Retrieve Imaging Doc Set,80,10891,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DM_NOTIF_BROKER,true,true,,https://intersystems3/csp/connect/HS.IHE.DSUB.NotificationBroker.Services.cls,,ITI-54:Doc Metadata Publish,,,443
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REPOSITORY,true,true,,https://visus24/JiveX_XDSRepository_WS/service,VIX1,ITI-41:Provide and Register.b:pr.b,,,443
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,RESP_GATEWAY,false,true,,http://nist17:9080/tf6/services/rg,NIO1112,ITI-38:Cross Gateway Query:xcq,9080,,
+Webservice,ARTS,OTHER_ARTS_4_0,arts8,DOC_REPOSITORY,false,true,,http://arts8:8083/Repository,ARO1,ITI-43:Retrieve.b:ret.b,8083,,
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon19,DM_NOTIF_RECIPIENT,false,true,,http://a-thon19/DSUB/recipient/recipient.php,A-X7,ITI-53:Doc Metadata Notify,80,10955,
+Webservice,Rogan,EHR_Rogan_XDS_2,rogan26,RESP_IMG_GATEWAY,true,true,,https://rogan26:2060/XCA-I/RG,ROE7,RAD-75:Cross GW Retrieve Img Doc Set,,,2060
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REGISTRY,false,true,,http://meddex0:8080/MGXDS/DocumentRegistry_Service,,ITI-42:Register.b:r.b,8080,10869,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,RESP_GATEWAY,true,true,,https://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls,INE9,ITI-38:Async Cross Gateway Query:xcq:as,,,443
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REGISTRY,false,true,,http://visus24/JiveX_XDSRegistry_WS/service,VIX1,ITI-42:Register.b:r.b,80,10975,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,INIT_GATEWAY,true,true,,https://intersystems3/csp/connect/HS.IHE.XCA.InitiatingGateway.Services.cls,INE9,ITI-18:Initiating Gateway Stored Query:igq,,,443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,true,false,,https://agfa32:8080/your_url,AGP3,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,INIT_IMG_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/initiating,TIE1111115,RAD-69:Retrieve Imaging Doc Set,,,8443
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,VALUE_SET_REPOSITORY,false,true,HTTP binding,http://ith-icoserve14:3080/ValueSetRepository/services/ValueSetRepositoryServiceREST/RetrieveMultipleValueSets,ITE9,ITI-60:Retrieve Multiple Value Sets,3080,,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,INIT_GATEWAY,true,false,,https://tiani---cisco81:8443/XCA/initiating,TIE1111115,ITI-43:Initiating Gateway Retrieve:igr,,,8443
+Webservice,TIE,OTHER_TIE,tie4,EMBED_REPOS,true,true,,https://tie4:7002/tieservice/xdsrepositoryb,TIO0,ITI-43:Retrieve.b:ret.b,,,7002
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus29,DOC_REPOSITORY,false,true,,http://dedalus29/repo,,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,DM_NOTIF_BROKER,true,true,,https://intersystems3/csp/connect/HS.IHE.DSUB.NotificationBroker.Services.cls,,ITI-52:Doc Metadata Subscribe,,,443
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,DOC_REGISTRY,true,true,,https://ideosante0:8443/xdsbRegistry,IDEH,ITI-18:Stored Query:sq.b,,,8443
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REGISTRY,false,true,,http://meddex0:8080/MGXDS/DocumentRegistry_Service,MEXD,ITI-18:Stored Query:sq.b,8080,10861,
+Webservice,OSVB,XDSb_REP_OSVB,osvb0,DOC_REPOSITORY,false,false,,http://osvb0/your_url,OSX1,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,BINT,OTHER_BINT,bint1,DOC_REGISTRY,false,true,,http://bint1/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls,BIO0,ITI-18:Stored Query:sq.b,80,10944,
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco75,DOC_REGISTRY,false,false,,http://tiani---cisco75:8081/XDS3/C1,TIE1111115,ITI-51:Multi-Patient Query:MPQ,8081,10974,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REPOSITORY,false,true,,http://meddex0:8080/MGXDS/DocumentRepository_Service,,RAD-68:P&R Imaging Doc Set MTOM/XOP,8080,10862,
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,X-SERVICE-PROVIDER,true,true,,https://ith-icoserve14:3043/Repository/services/RepositoryService,,ITI-40:Provide X-User Assertion,,,3043
+Webservice,synedra,PACS_synedra__2014,synedra7,IMG_DOC_SOURCE,false,true,,http://synedra7:8080/xds/documentsource,SYP0,RAD-69:Retrieve Imaging Doc Set,8080,,
+Webservice,OSVB,XDSb_REG_OSVB,osvb1,DOC_REGISTRY,false,true,,http://osvb1/your_url,OSXD,ITI-18:Stored Query:sq.b,80,10870,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,IMG_DOC_SOURCE,false,true,,http://meddex0:9080/MGSuite/imagingdocsource/WadoServlet,,RAD-55:WADO Retrieve,9080,10875,
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DOC_REGISTRY,true,true,,https://forcare14:8443/index/services/registry,FOX5,ITI-18:Stored Query:sq.b,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco81,PROV_INFO_DIR,true,false,,https://tiani---cisco81:8443/HPD/directory,TIE1111115,ITI-58:Provider Info Query,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,true,false,,https://agfa32:8080/your_url,AGP3,RAD-55:WADO Retrieve,,,8080
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REPOSITORY,false,false,,http://solinfo2/your_url,SOE8,ITI-41:Provide and Register.b:pr.b,80,,
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REGISTRY,true,true,,https://topicus11:8443/services/registry,TOO1,ITI-42:Register.b:r.b,,,8443
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REGISTRY,false,false,,http://agfa32/your_url,AGP3,ITI-42:Register.b:r.b,80,,
+Webservice,IdéoSanté,EHR_IdéoSanté,ideosante0,INIT_GATEWAY,true,true,,https://ideosante0:8443/dcr-InitiatingGateway/StoredQuery,IDEH,ITI-18:Initiating Gateway Stored Query:igq,,,8443
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,VALUE_SET_REPOSITORY,true,true,SOAP binding,https://ith-icoserve14:3043/ValueSetRepository/services/ValueSetRepositoryService,ITE9,ITI-60:Retrieve Multiple Value Sets,,,3043
+Webservice,BINT,OTHER_BINT,bint1,INIT_GATEWAY,true,false,,https://bint1:444/csp/healthshare/bintmed/HS.IHE.XCA.InitiatingGateway.Services.cls,BIO0,ITI-18:Initiating Gateway Stored Query:igq,,,444
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_RESPONDER,false,false,,http://solinfo2/your_url,SOE8,ITI-67:Find Doc Dossier,80,,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REGISTRY,false,true,,http://meddex0:8080/MGXDS/DocumentRegistry_Service,MEXD,ITI-18:Initiating Gateway Stored Query:igq,8080,10866,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,RESP_GATEWAY,false,true,,http://nist17:9080/tf6/services/rg,NIO1112,ITI-39:Cross Gateway Retrieve:xcr,9080,,
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,DOC_REGISTRY,false,true,,http://nist18:9080/tf6/services/xdsregistryb,NIO1112,ITI-42:Register.b:r.b,9080,,
+Webservice,GPI,XDSb_REP_GPI,gpi1,INIT_GATEWAY,false,true,,http://gpi1:8280/DocumentRepositoryXDSBWS/InitiatingGatewayXDSB,GPX1,ITI-18:Initiating Gateway Stored Query:igq,8280,,
+Webservice,AGFA,OTHER_AGFA,agfa36,EMBED_REPOS,true,false,,https://agfa36:8080/your_url,AGO10,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,BINT,OTHER_BINT,bint1,DM_NOTIF_BROKER,true,false,,https://bint1:8080/your_url,BIO0,ITI-52:Doc Metadata Subscribe,,,8080
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_REPOSITORY,false,false,,http://tiani---cisco76:8080/XDS3/C1,TIE1111115,RAD-68:P&R Imaging Doc Set MTOM/XOP,8080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,false,true,,http://agfa32:8080/xds/repository,AGP1,ITI-41:Provide and Register.b:pr.b,8080,10921,
+Webservice,IASI,OF_IASI,iasi0,DOC_REPOSITORY,true,false,,https://iasi0:8080/your_url,IAOF,ITI-41:Provide and Register.b:pr.b,,,8080
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve14,X-SERVICE-PROVIDER,false,true,ITI 18,http://ith-icoserve14:3080/Registry/services/RegistryService,ITE9,ITI-40:Provide X-User Assertion,3080,10793,
+Webservice,BINT,OTHER_BINT,bint1,RESP_GATEWAY,false,true,,http://bint1/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls,BIO0,ITI-39:Async Cross Gateway Retrieve:xcr:as,80,,
+Webservice,Rogan,EHR_Rogan_2,rogan23,DOC_REGISTRY,true,true,,https://rogan23:2021/IHE-XDS/Registry,ROE9,ITI-18:Stored Query:sq.b,,,2021
+Webservice,ITH-ICOSERVE,EHR_ITH-ICOSERVE_sense,ith-icoserve16,DOC_REPOSITORY,false,true,,http://ith-icoserve16:5080/Repository/services/RepositoryService,ITE9,ITI-41:Provide and Register.b:pr.b,5080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,IMG_DOC_SOURCE,false,false,,http://agfa32/your_url,AGP1,RAD-69:Retrieve Imaging Doc Set,80,10899,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,RESP_GATEWAY,false,true,,http://agfa32:8080/xca/RespondingGW,AGP1,ITI-38:Async Cross Gateway Query:xcq:as,8080,10903,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DM_NOTIF_BROKER,true,false,,https://acuo5:8080/your_url,ACX3,ITI-52:Doc Metadata Subscribe,,,8080
+Webservice,synedra,PACS_synedra__2014,synedra7,EMBED_REPOS,true,true,,https://synedra7:8443/xds/documentrepository,SYP0,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,CHILI,PACS_CHILI_1,chili2,ID,true,false,,https://chili2/chili/servlet/IHEInvokeImageDisplay,CHP1,RAD-106:Invoke Image Display,,,443
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,IMG_DOC_SOURCE,false,true,,http://meddex0:9080/MGSuite/ImagingDocumentSource_Service,MEXD,RAD-69:Retrieve Imaging Doc Set,9080,,
+Webservice,INSIEL,XDSb_REG_INSIEL__2014,insiel8,DOC_RESPONDER,false,false,,http://insiel8/your_url,INX4,ITI-68:Get Document,80,,
+Webservice,ICW,EHR_ICW_1,icw15,INIT_GATEWAY,true,true,,https://icw15:8443/pxs/webservices/iti43Gateway,ICE3,ITI-43:Initiating Gateway Retrieve:igr,,,8443
+Webservice,ICW,EHR_ICW_1,icw15,DM_NOTIF_BROKER,true,true,,https://icw15:8443/pxs/webservices/NotificationBroker/Subscribe,ICE3,ITI-52:Doc Metadata Subscribe,,,8443
+Webservice,ICW,EHR_ICW_1,icw15,DOC_REGISTRY,true,true,,https://icw15:8443/pxs/webservices/rev6/xdsb-registerdocuments,,ITI-42:Async Register.b:r.as,,,8443
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,RESP_GATEWAY,false,true,,http://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls,INE9,ITI-39:Async Cross Gateway Retrieve:xcr:as,80,,
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,RESP_GATEWAY,false,true,,http://nist18:9080/tf6/services/rg,NIO1112,ITI-38:Cross Gateway Query:xcq,9080,,
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REGISTRY,false,true,,http://agfa32:8080/xds/registry,AGP1,ITI-18:Stored Query:sq.b,8080,10913,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,false,false,,http://acuo5/your_url,ACX3,ITI-57:Update Doc Set:upd.b,80,,
+Webservice,ICW,PIX_X_REF_MGR_ICW,icw17,PROV_INFO_DIR,false,true,,http://icw17:8584/hpd/services/dsml,ICP2,ITI-59:Provider Info Feed,8584,,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,RESP_GATEWAY,false,true,,http://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls,INE9,ITI-38:Async Cross Gateway Query:xcq:as,80,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,INIT_GATEWAY,false,true,,http://nist17:9080/tf6/services/ig,NIO1112,ITI-18:Initiating Gateway Stored Query:igq,9080,,
+Webservice,ICW,EHR_ICW_1,icw15,RESP_GATEWAY,true,true,,https://icw15:8443/pxs/webservices/iti38Gateway,ICE3,ITI-38:Cross Gateway Query:xcq,,,8443
+Webservice,BINT,OTHER_BINT,bint1,RESP_GATEWAY,false,true,,http://bint1/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls,BIO0,ITI-38:Cross Gateway Query:xcq,80,,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REGISTRY,true,true,,https://meddex0:8443/MGXDS/DocumentRegistry_Service,MEXD,ITI-42:Register.b:r.b,,,8443
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,DM_NOTIF_RECIPIENT,true,true,,https://forcare14:8443/notify/services/notification,FOX5,ITI-53:Doc Metadata Notify,,,8443
+Webservice,GPI,XDSb_REP_GPI,gpi1,RESP_GATEWAY,true,true,,https://gpi1:8643/DocumentRepositoryXDSBWS/RespondingGatewayXDSB,GPX1,ITI-39:Async Cross Gateway Retrieve:xcr:as,,,8643
+Webservice,Rogan,EHR_Rogan_PACS_3,rogan22,IMG_DOC_SOURCE,true,true,,https://rogan22:8008/Wado,ROE8,RAD-55:WADO Retrieve,,,8008
+Webservice,RVC,EHR_RVC_3,rvc6,DM_NOTIF_RECIPIENT,true,false,,https://rvc6:8080/your_url,RVE5,ITI-53:Doc Metadata Notify,,,8080
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus31,VALUE_SET_REPOSITORY,false,true,SOAP binding ,http://dedalus31/exec/services/ValueSetRepository_Service,,ITI-60:Retrieve Multiple Value Sets,80,,
+Webservice,InterSystems,GATEWAY_InterSystems_HealthShare,intersystems3,RESP_GATEWAY,true,true,,https://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls,INE9,ITI-39:Async Cross Gateway Retrieve:xcr:as,,,443
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REPOSITORY,false,true,,http://topicus11:9080/services/repository,TOO1,ITI-41:Async Provide and Register.b:pr.as,9080,10842,
+Webservice,A-thon,XDSab_REG_A-thon_7,a-thon19,DOC_REGISTRY,false,true,,http://a-thon19/XDS/registry/registry.php,A-X7,ITI-42:Register.b:r.b,80,10949,
+Webservice,Acuo,XDSb_REG_Acuo_6.0.1,acuo5,DOC_REGISTRY,true,false,,https://acuo5:8080/your_url,ACX3,ITI-57:Update Doc Set:upd.b,,,8080
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,DOC_REGISTRY,true,true,,https://nist18:9085/tf6/services/xdsregistryb,NIO1112,ITI-18:Stored Query:sq.b,,,9085
+Webservice,NIST,OTHER_NIST_RED_2014,nist1,DOC_REGISTRY,false,true,,http://nist1:9080/tf6/services/xdsregistryb,NIO1112,ITI-42:Register.b:r.b,9080,,
+Webservice,GE,OTHER_GE_EA 2014,ge72,DOC_REPOSITORY,true,true,,https://ge72:8080/ea-service/XdsRepository,GE011111111112222222222333333333344443,ITI-41:Provide and Register.b:pr.b,,,8080
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,EMBED_REPOS,true,false,,https://visbion12:8080/your_url,VIP9,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_REPOSITORY,true,true,,https://visus24/JiveX_XDSRepository_WS/service,VIX1,ITI-43:Retrieve.b:ret.b,,,443
+Webservice,NIST,OTHER_NIST_BLUE_2014,nist18,DOC_REGISTRY,true,true,,https://nist18:9085/tf6/services/xdsregistryb,NIO1112,ITI-42:Register.b:r.b,,,9085
+Webservice,Forcare,XDSab_REG_Forcare_2,forcare14,RESP_GATEWAY,true,true,,https://forcare14:8443/xca/services/respondingGateway/query,FOX5,ITI-38:Cross Gateway Query:xcq,,,8443
+Webservice,RVC,EHR_RVC_3,rvc6,DOC_REPOSITORY,true,false,,https://rvc6:8080/your_url,RVE5,ITI-43:Retrieve.b:ret.b,,,8080
+Webservice,Acuo,XDSb_REP_Acuo_6.0.1,acuo6,DOC_REPOSITORY,true,false,,https://acuo6:8080/your_url,ACX4,ITI-41:Provide and Register.b:pr.b,,,8080
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_REPOSITORY,true,false,,https://tiani---cisco76:8443/XDS3/C1,TIE1111115,ITI-41:Provide and Register.b:pr.b,,,8443
+Webservice,topicus,OTHER_topicus_2,topicus11,DOC_REGISTRY,true,true,,https://topicus11:8443/services/registry,TOO1,ITI-42:Async Register.b:r.as,,,8443
+Webservice,Tiani - Cisco,EHR_Tiani - Cisco_SpiritEHR,tiani---cisco76,DOC_RECIPIENT,false,false,,http://tiani---cisco76:8081/XDS3/C1,TIE1111115,ITI-41:Provide and Register.b:pr.b,8081,,
+Webservice,SOLINFO,EHR_SOLINFO_CARTESIO,solinfo2,DOC_REGISTRY,false,false,,http://solinfo2/your_url,SOE8,ITI-42:Register.b:r.b,80,,
+Webservice,Visbion,PACS_Visbion_IPACS_414,visbion12,DOC_REPOSITORY,true,false,,https://visbion12:8080/your_url,VIP9,ITI-41:Provide and Register.b:pr.b,,,8080
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,RESP_GATEWAY,false,true,,http://meddex0:8080/MGXDS/Gateway_Service,,ITI-39:Cross Gateway Retrieve:xcr,8080,,
+Webservice,AGFA,OTHER_AGFA,agfa36,DOC_REPOSITORY,false,false,,http://agfa36:6444/g5-xds-ws/g5-xds-ws,AGOT,ITI-43:Retrieve.b:ret.b,6444,,
+Webservice,DEDALUS,EHR_DEDALUS_2014,dedalus29,DM_NOTIF_BROKER,false,true,,http://dedalus29/subscribe,DEE6,ITI-52:Doc Metadata Subscribe,80,,
+Webservice,Meddex,XDSab_REP_Meddex,meddex0,DOC_REPOSITORY,true,true,,https://meddex0:8443/MGXDS/DocumentRepository_Service,MEXD,ITI-43:Retrieve.b:ret.b,,,8443
+Webservice,VISUS,XDSb_REP_VISUS_2014,visus24,DOC_RECIPIENT,true,true,,https://visus24/JiveX_XDRRecipient_WS/service,VIX1,ITI-41:Provide and Register.b:pr.b,,,443
+Webservice,TIE,OTHER_TIE,tie4,DOC_REPOSITORY,true,true,,https://tie4:7002/tieservice/xdsrepositoryb,TIO0,ITI-41:Provide and Register.b:pr.b,,,7002
+Webservice,AGFA,PACS_AGFA_EE2,agfa32,DOC_REPOSITORY,false,false,,http://agfa32/your_url,AGP3,RAD-68:P&R Imaging Doc Set MTOM/XOP,80,,

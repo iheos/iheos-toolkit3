@@ -1,0 +1,11 @@
+#
+#Thu Aug 01 11:42:06 EDT 2013
+mimeType=text/*
+id=1d408262-1baa-44c8-845a-c197ab67b5b8
+modifiedDate=20130801114206
+expirationDate=20130831114206
+repository=f28389de-452e-4113-b903-c0f5ae07696c
+type=siteAsset
+displayName=My Site
+description=This is my site
+createdDate=20130801114206

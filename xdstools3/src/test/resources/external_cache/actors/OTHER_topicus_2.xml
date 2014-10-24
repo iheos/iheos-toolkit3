@@ -1,0 +1,15 @@
+
+<site name="OTHER_topicus_2">
+   <transaction name="sq.b" secure="0">http://topicus11:8080/services/registry</transaction>
+   <transaction name="ret.b" secure="1">https://topicus11:9443/services/repository</transaction>
+   <transaction name="pr.b" secure="0">http://topicus11:9080/services/repository</transaction>
+   <transaction name="sq.b" secure="1">https://topicus11:8443/services/registry</transaction>
+   <transaction name="pr.b" secure="1">https://topicus11:9443/services/repository</transaction>
+   <transaction name="ret.b" secure="0">http://topicus11:9080/services/repository</transaction>
+   <transaction name="r.b" secure="0">http://topicus11:8080/services/registry</transaction>
+   <transaction name="r.b" secure="1">https://topicus11:8443/services/registry</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.117"
+         secure="1">https://topicus11:9443/services/repository</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.117"
+         secure="0">http://topicus11:9080/services/repository</repository>
+</site>

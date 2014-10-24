@@ -1,0 +1,11 @@
+#
+#Tue Jun 25 17:19:47 EDT 2013
+patientId=bogus
+id=efb91ed6-6af3-45a0-81e6-80da58f4e2a2
+modifiedDate=20130625171947
+expirationDate=20130725171947
+repository=abd5bd25-0ceb-49a1-a9d8-ba5ef2a88f81
+type=siteAsset
+displayName=My Site
+description=This is my site
+createdDate=20130625171947

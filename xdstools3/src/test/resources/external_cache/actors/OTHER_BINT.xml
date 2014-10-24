@@ -1,0 +1,18 @@
+
+<site name="OTHER_BINT">
+   <home>urn:oid:1.3.6.1.4.1.21367.2011.2.6.55</home>
+   <transaction name="update.b" secure="0">http://bint1/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls</transaction>
+   <transaction name="update.b" secure="1">https://bint1:444/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls</transaction>
+   <transaction name="igr" secure="0">http://bint1/your_url</transaction>
+   <transaction name="sq.b" secure="1">https://bint1:444/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls</transaction>
+   <transaction name="r.b" secure="1">https://bint1:444/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls</transaction>
+   <transaction name="r.b" secure="0">http://bint1/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls</transaction>
+   <transaction name="xcr" secure="1">https://bint1:444/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls</transaction>
+   <transaction name="igq" secure="0">http://bint1/csp/healthshare/bintmed/HS.IHE.XCA.InitiatingGateway.Services.cls</transaction>
+   <transaction name="igr" secure="1">https://bint1:8080/your_url</transaction>
+   <transaction name="xcq" secure="1">https://bint1:444/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls</transaction>
+   <transaction name="xcr" secure="0">http://bint1/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls</transaction>
+   <transaction name="sq.b" secure="0">http://bint1/csp/healthshare/bintmed/HS.IHE.XDSb.Registry.Services.cls</transaction>
+   <transaction name="igq" secure="1">https://bint1:444/csp/healthshare/bintmed/HS.IHE.XCA.InitiatingGateway.Services.cls</transaction>
+   <transaction name="xcq" secure="0">http://bint1/csp/healthshare/bintmed/HS.IHE.XCA.RespondingGateway.Services.cls</transaction>
+</site>

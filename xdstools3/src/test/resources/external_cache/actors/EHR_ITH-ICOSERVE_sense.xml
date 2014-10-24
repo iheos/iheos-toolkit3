@@ -1,0 +1,11 @@
+
+<site name="EHR_ITH-ICOSERVE_sense">
+   <transaction name="ret.b" secure="0">http://ith-icoserve16:5080/Repository/services/RepositoryService</transaction>
+   <transaction name="pr.b" secure="1">https://ith-icoserve16:5043/Repository/services/RepositoryService</transaction>
+   <transaction name="ret.b" secure="1">https://ith-icoserve16:5043/Repository/services/RepositoryService</transaction>
+   <transaction name="pr.b" secure="0">http://ith-icoserve16:5080/Repository/services/RepositoryService</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.131"
+         secure="0">http://ith-icoserve16:5080/Repository/services/RepositoryService</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.131"
+         secure="1">https://ith-icoserve16:5043/Repository/services/RepositoryService</repository>
+</site>

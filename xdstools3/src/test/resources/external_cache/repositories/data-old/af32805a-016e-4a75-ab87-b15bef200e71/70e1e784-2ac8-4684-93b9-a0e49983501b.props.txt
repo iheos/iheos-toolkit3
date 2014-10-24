@@ -1,0 +1,11 @@
+#
+#Wed Jun 26 12:28:40 EDT 2013
+displayName=My Site
+createdDate=20130626122840
+modifiedDate=20130626122840
+mimeType=text/plain
+type=site
+repository=af32805a-016e-4a75-ab87-b15bef200e71
+description=This is my site
+
+id=70e1e784-2ac8-4684-93b9-a0e49983501b

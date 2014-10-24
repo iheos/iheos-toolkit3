@@ -1,0 +1,4 @@
+
+<site name="EHR_Rogan_PACS_3">
+   <transaction name="xdrpr" secure="1">https://rogan22:8008/XDRRecipient</transaction>
+</site>

@@ -1,0 +1,19 @@
+
+<site name="PACS_Visbion_IPACS_414">
+   <transaction name="ret.b" secure="1">https://visbion12:8080/your_url</transaction>
+   <transaction name="isr" secure="0">http://visbion12/your_url</transaction>
+   <transaction name="ret.b" secure="1">https://visbion12:8080/your_url</transaction>
+   <transaction name="pr.b" secure="0">http://visbion12/your_url</transaction>
+   <transaction name="ret.b" secure="0">http://visbion12/your_url</transaction>
+   <transaction name="ret.b" secure="0">http://visbion12/your_url</transaction>
+   <transaction name="isr" secure="1">https://visbion12:8080/your_url</transaction>
+   <transaction name="pr.b" secure="1">https://visbion12:8080/your_url</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.111"
+         secure="1">https://visbion12:8080/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.111"
+         secure="1">https://visbion12:8080/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.111"
+         secure="0">http://visbion12/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.111"
+         secure="0">http://visbion12/your_url</repository>
+</site>

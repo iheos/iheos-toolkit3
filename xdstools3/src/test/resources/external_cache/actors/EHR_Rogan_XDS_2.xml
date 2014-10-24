@@ -1,0 +1,4 @@
+
+<site name="EHR_Rogan_XDS_2">
+   <transaction name="odds" secure="1">https://rogan21:8080/your_url</transaction>
+</site>
