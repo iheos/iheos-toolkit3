@@ -18,6 +18,9 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericCancelButt
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.LoginButton;
 
 public class LoginDialogWidget extends Window {
+    private static int POPUP_WIDTH = 295;
+    private static int POPUP_HEIGHT = 165;
+
 
     //	protected TextItem userName;
     //	protected TextItem password;
@@ -34,9 +37,12 @@ public class LoginDialogWidget extends Window {
 
         // Create elements
         setTitle("Login");
-        setWidth(280); setHeight(140);
+        setWidth(POPUP_WIDTH); setHeight(POPUP_HEIGHT);
         setShowResizeBar(false);
         setAutoCenter(true);
+        setMembersMargin(10);
+        setLayoutMargin(10);
+
 
         // Set DataSource (link to backend)
         dataSource = new DataSource();
@@ -92,6 +98,7 @@ public class LoginDialogWidget extends Window {
         buttonLayout.addMembers(cancel, login);
         buttonLayout.setAlign(Alignment.CENTER);
         buttonLayout.setMembersMargin(10);
+        buttonLayout.setLayoutMargin(10);
         return buttonLayout;
     }
 
@@ -107,37 +114,39 @@ public class LoginDialogWidget extends Window {
 
         AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
             public void onFailure(Throwable caught) {
+                // If the call to the server fails
                 // logger.debug(getClassName() + ": " + "logMeIn");
-                Label errorMsg = new Label(caught.getMessage());
-                vlayout.addMember(errorMsg); //TODO this should be added after the form but before the buttons
-                redraw();
+                Label errLabel = createErrorLabel("Could not contact the server for authentification. Please contact the system administrator.");
+                vlayout.addMember(errLabel, 1);
+                vlayout.redraw();
+                setAutoSize(true);
             }
             @Override
             public void onSuccess(Boolean loggedIn) {
                 if (loggedIn){
-                    // The callback depends on which tab we want to open
-                    Label errorMsg = new Label("test");
-                    errorMsg.setAutoFit(true);
-                    errorMsg.setLayoutAlign(Alignment.CENTER);
-                    // TODO here set margin
-                    vlayout.addMember(errorMsg, 1);
-                    vlayout.redraw();
-                    setAutoSize(true);
-
-                        // TODO HOW DO WE KNOW WHICH - where do we come from when we log in?
-                        // TODO display a "you are logged in as admin" text somewhere at the top
-                    //close(); // close the popup
+                        // TODO Open admin settings page AND display a "you are logged in as admin" text somewhere at the top
+                    close(); // close the popup
 
                 } else {
                     // call to server went through but login failed
-                    Label errorMsg = new Label("Incorrect password or username. Nice try though.");
-                    vlayout.addMember(errorMsg); //TODO this should be added after the form but before the buttons
-                    redraw();
-                    close(); // close the popup
+                    Label errLabel = createErrorLabel("Incorrect password or username. Nice try though.");
+                    vlayout.addMember(errLabel);
+                    vlayout.redraw();
+                    setAutoSize(true);
                 }
             }
         };
         service.logMeIn(username, password, callback);
+    }
+
+    private Label createErrorLabel(String msg){
+        Label errorMsg = new Label();
+        errorMsg.setWidth(POPUP_WIDTH - 20);
+        errorMsg.setHeight(45);
+        errorMsg.setLayoutAlign(Alignment.CENTER);
+        errorMsg.setPadding(10);
+        errorMsg.setContents("<span style='color: "+ "red" + "'>" + msg + "</span>");
+        return errorMsg;
     }
 
 }
