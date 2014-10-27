@@ -4,6 +4,7 @@ import gov.nist.hit.ds.repository.api.ArtifactId
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.Repository
 import gov.nist.hit.ds.repository.api.RepositoryException
+import gov.nist.hit.ds.repository.simple.SimpleAsset
 import gov.nist.hit.ds.repository.simple.SimpleId
 import gov.nist.hit.ds.repository.simple.SimpleType
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig
@@ -156,12 +157,22 @@ class SimUtils {
 
     private static ArtifactId artifactId(SimId simId) { return new SimpleId(simId.id) }
 
-    private static storeConfig(String config, Asset simAsset) { store(config, configAssetName, simAsset) }
+    static storeConfig(SimHandle simHandle, String config) { storeConfig(config, simHandle.simAsset)}
+
+    static storeConfig(String config, Asset simAsset) { store(config, configAssetName, simAsset) }
     private static storeSite(String site, Asset simAsset) { store(site, siteAssetName, simAsset) }
 
     private static store(String xmlEle, String name, Asset parent) {
-        def a = RepoUtils.mkChild(name, parent)
-        a.setContent(xmlEle, 'text/xml')
+        SimpleAsset a = RepoUtils.getChildIfAvailable(name, parent)
+        if (!a) {
+            println "Storing content ${xmlEle}"
+            a = RepoUtils.mkChild(name, parent)
+            a.setContent(xmlEle, 'text/xml')
+        } else {
+            println "Updating content ${xmlEle}"
+            a.setAutoFlush(true)
+            a.updateContent(xmlEle)
+        }
     }
 
     private static ActorSimConfig loadConfig(Asset a) { new SimulatorDAO().toModel(load(a))}

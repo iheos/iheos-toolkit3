@@ -25,6 +25,11 @@ class RepoUtils {
         return parent.getChildByName(name)
     }
 
+    static Asset getChildIfAvailable(String name, Asset parent) {
+        try {
+            return parent.getChildByName(name)
+        } catch (RepositoryException e) { return null }
+    }
     static Asset child(String name, Repository parent) {
         return parent.getChildByName(name)
     }

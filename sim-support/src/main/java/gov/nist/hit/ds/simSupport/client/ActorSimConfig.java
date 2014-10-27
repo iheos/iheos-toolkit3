@@ -87,6 +87,14 @@ public class ActorSimConfig {
 	 * @return
 	 */
 	public List<SimConfigElement> getElements() { return elements; }
+
+    public List<SimConfigElement> getElements(Class clazz) {
+        List<SimConfigElement> eles = new ArrayList<SimConfigElement>();
+        for (SimConfigElement ele : elements) {
+            if (ele.getClass().getName().equals(clazz.getName())) eles.add(ele);
+        }
+        return eles;
+    }
 	
 	/**
 	 * Return all the config elements that can be edited in the UI.

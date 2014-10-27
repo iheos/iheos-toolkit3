@@ -25,6 +25,7 @@ class SimulatorDAO {
                 def aTrans = trans.first()
                 xml.transaction(name: trans.first().transactionName) {
                     xml.endpoint(value: trans.first().endpointValue.value, readOnly: true)
+
                     xml.settings() {
                         aTrans.elements.each { SimConfigElement tele ->
                             if (tele instanceof BooleanSimConfigElement) {
@@ -32,8 +33,9 @@ class SimulatorDAO {
                             }
                         }
                     }
+
                     transactions.each {
-                        xml.webService(value: it.endpointType.label())
+                        xml.webService(value: it.endpointType.label(), readOnly: true)
                     }
                 }
             }
@@ -82,6 +84,27 @@ class SimulatorDAO {
         actor.repositoryUid.each { actorSimConfig.add(new RepositoryUniqueIdSimConfigElement(it.@value as String)) }
         actor.text.each { actorSimConfig.add(new TextSimConfigElement(it.@name as String, it.@value as String))}
         actor.time.each { actorSimConfig.add(new TimeSimConfigElement(it.@name as String, it.@value as String))}
+
+        return actorSimConfig
+    }
+
+    // xmlText is the entire actor structure.  The only parts that can be updated are
+    // the settings.  Rest are read only for now.
+    ActorSimConfig updateModel(ActorSimConfig actorSimConfig, String xmlText) {
+        def actor = new XmlSlurper().parseText(xmlText)
+        actor.children().findAll { it.name() == 'transaction'}
+        .each { trans ->
+            def setting = [ : ]
+            trans.settings.children().findAll { it.name() == 'boolean'}
+            .each { buul ->
+                setting[buul.@name.text()] = new Boolean(buul.@value.text())
+            }
+            TransactionSimConfigElement transactionSimConfigElement = (TransactionSimConfigElement) actorSimConfig.getElements(TransactionSimConfigElement).first()
+            if (!transactionSimConfigElement) return
+            setting.each { name, value ->
+                transactionSimConfigElement.setBool(name, value)
+            }
+        }
 
         return actorSimConfig
     }

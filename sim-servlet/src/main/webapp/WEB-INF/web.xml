@@ -35,7 +35,30 @@
 		<url-pattern>/sim/*</url-pattern>
 	</servlet-mapping>
 
-	<!-- Default page to serve -->
+    <!--  REST     -->
+
+    <servlet>
+        <servlet-name>SimRest</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>gov.nist.hit.ds.simServlet.rest</param-value> <!-- This must be edited for each new project -->
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- ============== Servlet mappings ============== -->
+    <servlet-mapping>
+        <servlet-name>SimRest</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>Xdstools3.html</welcome-file>
 	</welcome-file-list>

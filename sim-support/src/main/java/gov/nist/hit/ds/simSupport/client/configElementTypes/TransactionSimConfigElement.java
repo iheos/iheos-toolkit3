@@ -55,7 +55,7 @@ public class TransactionSimConfigElement extends SimConfigElement
 
     public void setBool(String name, boolean value) {
         BooleanSimConfigElement bool = getBool(name);
-        if (bool == null) { bool = addBool(name, value); }
+        if (bool == null) { addBool(name, value); return; }
         bool.setValue(value);
     }
 
