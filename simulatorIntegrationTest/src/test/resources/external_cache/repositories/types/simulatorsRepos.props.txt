@@ -1,6 +1,0 @@
-# simulatorsRepository
-
-keyword=simulatorsRepos
-domain=repository
-description=Repository to hold Simulator state
-indexes=off
