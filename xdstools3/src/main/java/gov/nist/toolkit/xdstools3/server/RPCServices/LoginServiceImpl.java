@@ -18,7 +18,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	private static final long serialVersionUID = 1L;
 
     // Login functions
-	public void logMeIn(String username, String password){
-        Caller.getInstance().logMeIn(username, password);}
+	public boolean logMeIn(String username, String password){
+        return Caller.getInstance().logMeIn(username, password);}
 
 }

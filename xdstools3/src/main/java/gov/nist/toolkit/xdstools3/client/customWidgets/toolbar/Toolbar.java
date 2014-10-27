@@ -24,7 +24,7 @@ import java.util.LinkedHashMap;
 
 // TODO put each session and env in a separate ribbonbar
 public class Toolbar extends RibbonBar {
-    // static Logger logger = Logger.getLogger(Toolbar.class);
+    //static Logger logger = Logger.getLogger(Toolbar.class);
     private SelectOtherItem sessionsComboBox;
     private SelectItem envListBox;
     private ToolbarServiceAsync rpcService = GWT.create(ToolbarService.class);

@@ -7,14 +7,13 @@ import com.smartgwt.client.data.fields.DataSourcePasswordField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.VerticalAlignment;
+import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import gov.nist.toolkit.xdstools3.client.RPCUtils.OpenEndpointTabCallback;
-import gov.nist.toolkit.xdstools3.client.RPCUtils.OpenSettingsTabCallback;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericCancelButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.LoginButton;
 
@@ -28,6 +27,7 @@ public class LoginDialogWidget extends Window {
     protected DataSource dataSource;
 
     private String protectedTab = "";
+    private VLayout vlayout;
 
     public LoginDialogWidget(String _protectedTab) {
         protectedTab = _protectedTab;
@@ -46,7 +46,7 @@ public class LoginDialogWidget extends Window {
         dataSource.setFields(firstNameField, passwordField);
 
 
-        VLayout vlayout = new VLayout();
+        vlayout = new VLayout();
         vlayout.setHeight100();
         vlayout.addMembers(createLoginForm(), createButtons());
         vlayout.setAlign(Alignment.CENTER);
@@ -77,7 +77,7 @@ public class LoginDialogWidget extends Window {
         login.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 if (form.validate()){
-                logMeIn();
+                logMeIn((String)form.getField("username").getValue(), (String)form.getField("password").getValue());
                	}
             }});
 
@@ -96,18 +96,48 @@ public class LoginDialogWidget extends Window {
     }
 
     /**
-     * Perform login operations
+     * Perform login operations.
+     * If the call to server fails, an error message is added to the existing login dialog.
+     * If the call succeeds, the login itself can have succeeded or failed. The status of the login attempt
+     * is relayed from the server using a Boolean.
      */
-    protected void logMeIn(){
+    protected void logMeIn(String username, String password){
         // call to server to log the user
-        LoginService intf = GWT.create(LoginService.class);
+        LoginServiceAsync service = GWT.create(LoginService.class);
 
-        // The callback depends on which tab we want to open
-        AsyncCallback callback;
-        if (protectedTab == "ADMIN") {callback = new OpenSettingsTabCallback();}
-        else {callback = new OpenEndpointTabCallback();} // ENDPOINTS
-        intf.logMeIn("", "");
-        close();
+        AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+            public void onFailure(Throwable caught) {
+                // logger.debug(getClassName() + ": " + "logMeIn");
+                Label errorMsg = new Label(caught.getMessage());
+                vlayout.addMember(errorMsg); //TODO this should be added after the form but before the buttons
+                redraw();
+            }
+            @Override
+            public void onSuccess(Boolean loggedIn) {
+                if (loggedIn){
+                    // The callback depends on which tab we want to open
+                    Label errorMsg = new Label("test");
+                    errorMsg.setAutoFit(true);
+                    errorMsg.setLayoutAlign(Alignment.CENTER);
+                    // TODO here set margin
+                    vlayout.addMember(errorMsg, 1);
+                    vlayout.redraw();
+                    setAutoSize(true);
+
+                        // TODO HOW DO WE KNOW WHICH - where do we come from when we log in?
+                        // TODO display a "you are logged in as admin" text somewhere at the top
+                    //close(); // close the popup
+
+                } else {
+                    // call to server went through but login failed
+                    Label errorMsg = new Label("Incorrect password or username. Nice try though.");
+                    vlayout.addMember(errorMsg); //TODO this should be added after the form but before the buttons
+                    redraw();
+                    close(); // close the popup
+                }
+            }
+        };
+        service.logMeIn(username, password, callback);
     }
 
 }

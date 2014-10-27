@@ -13,6 +13,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("login")
 public interface LoginService extends RemoteService {
 
-	public void logMeIn(String username, String password);
+	public boolean logMeIn(String username, String password);
 
 }
