@@ -4,17 +4,9 @@
 
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
-<<<<<<< local
-        <artifactId>toolkit3</artifactId>
-=======
         <artifactId>tk-deps</artifactId>
->>>>>>> other
         <version>3.0.0-SNAPSHOT</version>
-<<<<<<< local
-        <relativePath>../pom.xml</relativePath>
-=======
         <relativePath>../tk-deps/pom.xml</relativePath>
->>>>>>> other
     </parent>
 
     <artifactId>toolkit</artifactId>
@@ -24,31 +16,6 @@
         <dependency>
             <groupId>org.apache.commons.io</groupId>
             <artifactId>commons-io</artifactId>
-<<<<<<< local
-            <version>2.4</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/../lib/commons-io-2.4.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <version>2.5.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xds-exceptions</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>utilities</artifactId>
-        </dependency>
-        <dependency>
-=======
      <!--       <scope>system</scope>   -->
          </dependency>
           <dependency>
@@ -68,7 +35,6 @@
                 <artifactId>utilities</artifactId>
             </dependency>
          <dependency>
->>>>>>> other
             <groupId>com.sun.ebxml</groupId>
             <artifactId>ebxmlrr-common</artifactId>
         </dependency>

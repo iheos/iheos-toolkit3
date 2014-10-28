@@ -113,17 +113,9 @@ public class Installation {
 			initializeEnvironments(ecMgr);
 			initializeSimDb(ecMgr);
 			initializeActors(ecMgr);
-<<<<<<< local
-            // Only set flag when everything above has been initialized without exceptions
-            initialized = true;
-		} catch (IOException e) {
-			throw new InitializationFailedException("",e);
-		}
-=======
 //		} catch (IOException e) {
 //			throw new InitializationFailedException("",e);
 //		}
->>>>>>> other
 	}
 
 
