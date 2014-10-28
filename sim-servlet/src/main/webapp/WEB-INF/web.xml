@@ -10,9 +10,15 @@
 		<!--<servlet-class>gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl</servlet-class>-->
 	<!--</servlet>-->
 
+    <servlet>
+        <servlet-name>simulatorServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.simServlet.SimServlet</servlet-class>
+    </servlet>
+
 	<servlet>
-		<servlet-name>simulatorServlet</servlet-name>
-		<servlet-class>gov.nist.hit.ds.simServlet.SimServlet</servlet-class>
+		<servlet-name>Initialization Servlet</servlet-name>
+		<servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<!--<servlet-mapping>-->

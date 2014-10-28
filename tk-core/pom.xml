@@ -25,6 +25,7 @@
         <module>../site-management</module>
         <module>../tk-apis</module>
         <module>../sim-support</module>
+        <module>../tk-initialization</module>
     </modules>
     
     <dependencies>
