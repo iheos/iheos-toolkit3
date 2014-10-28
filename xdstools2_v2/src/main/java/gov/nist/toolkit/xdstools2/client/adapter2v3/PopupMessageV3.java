@@ -4,26 +4,29 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.util.EventHandler;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Dialog;
-import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.events.KeyDownEvent;
 import com.smartgwt.client.widgets.events.KeyDownHandler;
 
+/**
+ * Displays an error message in a SmartGWT popup.
+ */
 public class PopupMessageV3 extends Dialog {
 
 	public PopupMessageV3(String message) {
         super();
 
-		// Set the dialog box's caption.
-        Label lab =  new Label(message);
-        addItem(lab);
-        lab.setLayoutAlign(Alignment.CENTER);
-        //lab.setAutoFit(true);
-        lab.setWidth(300);
+        // popup attributes
+        setTitle("Error");
+        setAutoSize(true);
+        setMinWidth(350);
+        setIcon("[SKIN]error.png");
+        setMessage("<span style='color: red'>" + message + "</span>");
 
         // OK button
 		final Button ok = new Button("OK");
+        ok.setLayoutAlign(Alignment.CENTER);
 
         // Close the dialog with a click on the OK button
 		ok.addClickHandler(new ClickHandler() {
@@ -40,16 +43,9 @@ public class PopupMessageV3 extends Dialog {
                 }
             }
         });
-		addItem(ok);
-		ok.setLayoutAlign(Alignment.CENTER);
-
+        setButtons(ok);
         // Set the focus on the button (has to be set only after drawing the widget)
         ok.focus();
-
-        // popup attributes
-        setTitle("Error");
-        setAutoSize(true);
-        setMinWidth(350);
 
         draw();
 	}

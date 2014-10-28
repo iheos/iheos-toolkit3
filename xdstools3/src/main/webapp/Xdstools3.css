@@ -2,6 +2,8 @@
 
 /**Rules copied from the new Direct Tool template (author Julien Perugini)*/
 
+
+/* ----------- Global styles ----------- */
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
@@ -9,42 +11,6 @@ body{
     margin:0;
     font-family: Verdana;
 }
-
-/* Main app title */
-#apptitle {
-    margin-bottom: 5px;
-    display: inline-block;
-    margin-left: 10px;
-    font-size: 32px;
-    color: #F3C60D;
-}
-#appsubtitle {
-    font-size: 14px;
-    margin-left: 10px;
-    color: #fc0;
-    text-shadow: none;
-}
-
-/* Large dark blue bar */
-#appheader {
-    float: none;
-    font-family: Verdana;
-    font-weight: 700;
-    background-color: #021a4c;
-    margin: 0px;
-    padding:10px;
-    padding-left:20px;
-}
-#appversion{
-    font-size: 14px;
-    margin-left: 10px;
-    color: #fc0;
-    text-shadow: none;
-    float:right;
-    padding-top:45px;
-    padding-right:20px;
-}
-
 
 h1,
 h2,
@@ -167,45 +133,9 @@ p {
 .subtitle1{
     font-size: 24px;
 }
-
-/*.subtitle1:after {*/
-/*content: "";*/
-/*position: absolute;*/
-/*bottom: 20px;*/
-/*left: -3px;*/
-/*right: -3px;*/
-/*height: 3px;*/
-/*background-image: -webkit-gradient(linear, 0 0, 100% 0, from(#021a4c), to(transparent));*/
-/*background-image: -webkit-linear-gradient(left, #021a4c, transparent);*/
-/*background-image: -moz-linear-gradient(left, #021a4c, transparent);*/
-/*background-image: -o-linear-gradient(left, #021a4c, transparent);*/
-
-/*}*/
-
 .subtitle2{
     font-size: 18px;
 }
-
-
-/* Icons greyed out */
-.glyphicon {
-    opacity:0.6;
-    filter:alpha(opacity=60);  /*For IE5-7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"; /* IE 8 */
-    -moz-opacity: 0.6; /* Netscape */
-    -khtml-opacity: 0.6; /* Safari 1.x */
-}
-
-
-
-/* Each tab */
-.tabpane {
-    border: 0;
-}
-.tabpane .h4{
-}
-
-/* --- Misc --- */
 .noSetting {
     text-align: center;
 }
@@ -220,6 +150,57 @@ p {
     padding-left: 20px;
     padding-right: 20px;
 }
+
+
+
+/* ----------- Tabs ----------- */
+.tabpane {
+    border: 0;
+}
+.tabpane .h4{
+}
+
+
+
+/* ----------- Main title header ----------- */
+#apptitle {
+    margin-bottom: 5px;
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 32px;
+    color: #F3C60D;
+}
+#appsubtitle {
+    font-size: 14px;
+    margin-left: 10px;
+    color: #fc0;
+    text-shadow: none;
+}
+
+/* Large dark blue bar */
+#appheader {
+    float: none;
+    font-family: Verdana;
+    font-weight: 700;
+    background-color: #021a4c;
+    margin: 0px;
+    padding:10px;
+    padding-left:20px;
+}
+#appversion{
+    font-size: 14px;
+    margin-left: 10px;
+    color: #fc0;
+    text-shadow: none;
+    float:right;
+    padding-top:45px;
+    padding-right:20px;
+}
+
+
+
+/* ----------- Navigation bar ----------- */
+
 .navbar {
     font-size: medium;
     min-height: 38px;
@@ -303,6 +284,22 @@ nav ul ul ul {
     position: absolute; left: 100%; top:0;
 }
 
+
+
+/* ----------- GWT toolbar ----------- */
+
+/* Icons greyed out */
+.glyphicon {
+    opacity:0.6;
+    filter:alpha(opacity=60);  /*For IE5-7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"; /* IE 8 */
+    -moz-opacity: 0.6; /* Netscape */
+    -khtml-opacity: 0.6; /* Safari 1.x */
+}
+
+
+
+/* ----------- Footer ----------- */
 footer{
     margin:0px;
     padding:0px;
