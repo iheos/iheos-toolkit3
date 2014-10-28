@@ -94,7 +94,7 @@ public class IdParser {
             };
 
     /**
-     * Build identifyingAttributes (id attributes) and symbolic referencing attributes (atts making reference with symbolic name)
+     * Build identifyingAttributes (id attributes) and symbolic referencing attributes (atts making reference with symbolic displayName)
      * @param obj
      */
     void parse(OMElement obj, boolean scanIds) {
@@ -162,7 +162,7 @@ public class IdParser {
                 continue;
             int idIndex = symbolicNames.indexOf(symbolicName);
             if (idIndex == -1)
-                throw new XdsInternalException("Metadata:compileSymbolicNamesIntoUuids(): cannot find symbolic name " + symbolicName + " in tables");
+                throw new XdsInternalException("Metadata:compileSymbolicNamesIntoUuids(): cannot find symbolic displayName " + symbolicName + " in tables");
             String uuid = (String) uuids.get(idIndex);
             att.setAttributeValue(uuid);
         }

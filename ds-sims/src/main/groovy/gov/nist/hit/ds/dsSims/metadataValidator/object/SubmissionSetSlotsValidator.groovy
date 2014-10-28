@@ -29,20 +29,26 @@ class SubmissionSetSlotsValidator extends ValComponentBase {
 
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='SSSlot001', msg='submissionTime must be present and have single value', ref="ITI TF-3: Table 4.1-6")
-    def submissionTimeSlotSingleValue() {
-        if (!model.getSlot('submissionTime')?.size())
+    @Validation(id='SSSlot001', msg='submissionTime must be present', ref="ITI TF-3: Table 4.1-6")
+    def submissionTimeSlotPresent() {
+        if (model.getSlot('submissionTime')?.size() == 0)
             fail('No value')
-        else {
-            assertEquals(1, model.getSlot('submissionTime').size())
-            infoFound(model.getSlot('submissionTime').getValue(0))
+    }
+
+    @Guard(methodNames = ['hasSubmissionTime'])
+    @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
+    @Validation(id='SSSlot002', msg='submissionTime must have single value', ref="ITI TF-3: Table 4.1-6")
+    def submissionTimeSlotSingleValue() {
+        assertEquals(1, model.getSlot('submissionTime').size())
+        for (int i=0; i<model.getSlot('submissionTime').size(); i++) {
+            infoFound(model.getSlot('submissionTime').getValue(i))
         }
     }
 
     @Guard(methodNames = ['hasSubmissionTime'])
     @DependsOn(ids=['SSSlot001'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='SSSlot002', msg='submissionTime must be DTM format', ref="ITI TF-3: Table 4.1-6")
+    @Validation(id='SSSlot003', msg='submissionTime must be DTM format', ref="ITI TF-3: Table 4.1-6")
     def submissionTimeSlotFormat() {
         new DtmSubValidator(this, model.getSlot('submissionTime').getValue(0)).asSelf().run()
     }
@@ -50,14 +56,14 @@ class SubmissionSetSlotsValidator extends ValComponentBase {
     // TODO: When is intendedRecipient required
     @Guard(methodNames = ['intendedRecipientRequired'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='SSSlot003', msg='intendedRecipient present', ref="ITI TF-3: Table 4.1-6")
+    @Validation(id='SSSlot010', msg='intendedRecipient present', ref="ITI TF-3: Table 4.1-6")
     def intendedRecipientCheck() {
         assertNotNull(model.getSlot('intendedRecipient'))
     }
 
     @Guard(methodNames = ['hasIntendedRecipient'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='SSSlot004', msg='hasIntendedRecipient must be XON or XCN or XTN format', ref="ITI TF-3: Table 4.1-6")
+    @Validation(id='SSSlot011', msg='hasIntendedRecipient must be XON or XCN or XTN format', ref="ITI TF-3: Table 4.1-6")
     def intendedRecipientFormat() {
         new XonXcnXtnSubValidator(this, model.getSlot('intendedRecipient')).asSelf().run()
     }

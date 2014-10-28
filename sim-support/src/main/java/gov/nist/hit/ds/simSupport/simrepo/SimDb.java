@@ -67,8 +67,8 @@ public class SimDb {
 //	 * will be created. So after successful completion of this call, content can
 //	 * be added to the simulator state.
 //	 * @param simId - simulator id
-//	 * @param actor - short name for Actor
-//	 * @param transaction - short name for Transaction
+//	 * @param actor - short displayName for Actor
+//	 * @param transaction - short displayName for Transaction
 //	 * @throws IOException
 //	 * @throws NoSimException - Simulator does not exist.
 //	 */
@@ -232,8 +232,8 @@ public class SimDb {
 //		File aDir = new File(simDir.toString());
 //		for (File file : aDir.listFiles()) {
 //			if (file.isDirectory()) {
-//				String name = file.getName();
-//				return ActorType.getActorTypeIfAvailable(name);
+//				String displayName = file.getName();
+//				return ActorType.getActorTypeIfAvailable(displayName);
 //			}
 //		}
 //		return null;
@@ -307,13 +307,13 @@ public class SimDb {
 //			for (File tr : actor.listFiles()) {
 //				if (!tr.isDirectory())
 //					continue;
-//				String name = tr.getName();
-//				if (trans != null && !name.equals(trans) && !trans.equals(("All")))
+//				String displayName = tr.getName();
+//				if (trans != null && !displayName.equals(trans) && !trans.equals(("All")))
 //					continue;
 //				for (File inst : tr.listFiles()) {
 //					if (!inst.isDirectory())
 //						continue;
-//					names.setAssertionGroup(inst.getName() + " " + name);
+//					names.setAssertionGroup(inst.getName() + " " + displayName);
 //				}
 //			}
 //		}
@@ -430,8 +430,8 @@ public class SimDb {
 //				String filename = f.getName();
 //				int dotI = filename.indexOf('.');
 //				if (dotI != -1) {
-//					String name = filename.substring(0, dotI);
-//					ids.setAssertionGroup(name);
+//					String displayName = filename.substring(0, dotI);
+//					ids.setAssertionGroup(displayName);
 //				}
 //			}
 //		}

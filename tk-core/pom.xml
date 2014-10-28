@@ -3,25 +3,37 @@
 
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
-        <artifactId>toolkit3</artifactId>
+        <artifactId>tk-deps</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
+<<<<<<< local
     <!-- no groupId because it is inherited from the parent -->
+=======
+>>>>>>> other
     <version>3.0.0-SNAPSHOT</version>
     <artifactId>tk-core</artifactId>
     <packaging>pom</packaging>
     
     <modules>
+        <module>../xdsException</module>
+        <module>../common-datatypes</module>
+        <module>../utilities</module>
+        <module>../toolkit</module>
         <module>../repository</module>
+<<<<<<< local
         <module>../repository-shared</module>
+=======
+        <module>../event-log</module>
+>>>>>>> other
         <module>../http</module>
+        <module>../actor-transaction</module>
         <module>../soap-support</module>
         <module>../site-management</module>
-        <module>../actor-transaction</module>
-        <module>../event-log</module>
+        <module>../tk-apis</module>
         <module>../sim-support</module>
+<<<<<<< local
         <module>../utilities</module>
         <module>../xds-exceptions</module>
         <module>../toolkit</module>
@@ -29,9 +41,12 @@
         <module>../http-soap-validator</module>
         <module>../ds-sims</module>
         <module>../tk-apis</module>
+=======
+>>>>>>> other
     </modules>
     
     <dependencies>
+<<<<<<< local
         <!--
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
@@ -79,6 +94,11 @@
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository</artifactId>
         </dependency>
+=======
+        <!-- Dependencies are listed here if they intend to
+        override the project-wide ones found in
+        toolkit3-deps
+>>>>>>> other
         -->
         <dependency>
             <groupId>com.sun.ebxml</groupId>

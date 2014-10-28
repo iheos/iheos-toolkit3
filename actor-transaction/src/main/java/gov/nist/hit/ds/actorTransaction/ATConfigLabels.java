@@ -13,7 +13,7 @@ public class ATConfigLabels {
 	public static final String update_metadata_option = "Update_Metadata_Option";
 
 
-	public static final String creationTime = "Creation Time";
+	public static final String creationTime = "Creation_Time";
 
 
 	public static final String repositoryUniqueId = "repositoryUniqueId";

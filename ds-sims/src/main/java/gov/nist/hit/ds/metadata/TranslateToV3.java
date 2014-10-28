@@ -112,7 +112,7 @@ public class TranslateToV3 extends Translate {
                 continue;
             else if (name.equals("lang"))
                 namespace = xml_namespace;
-//			else if (name.equals("objectType") && ! value.startsWith("urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:"))
+//			else if (displayName.equals("objectType") && ! value.startsWith("urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:"))
 //			value = "urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:" + value;
             OMAttribute to_a = MetadataSupport.om_factory.createOMAttribute(name, namespace, value);
             to.addAttribute(to_a);

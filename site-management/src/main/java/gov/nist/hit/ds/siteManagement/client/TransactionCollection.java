@@ -11,6 +11,9 @@ import java.util.List;
 
 /**
  * Used with Site to define all the transaction a site can accept.
+ * A special type of TransactionCollection is defined to hold an index to all repositories
+ * so they can be looked up by their repositoryUniqueId.  This instance can be identified by
+ * the flag isRepositories.
  * @author bmajur
  *
  */
@@ -20,8 +23,7 @@ public class TransactionCollection implements IsSerializable, Serializable {
 
     public List<TransactionBean> transactions = new ArrayList<TransactionBean>();
     public String collectionName;    // never really used
-    boolean isRepositories = false; // a TransactionCollection is either for Repositories
-    // or not
+    boolean isRepositories = false; // a TransactionCollection is either for Repositories or not
 
     public boolean equals(TransactionCollection tc) {
         if (tc == null)
@@ -148,7 +150,7 @@ public class TransactionCollection implements IsSerializable, Serializable {
     }
 
     public TransactionBean lookup(TransactionType transType, boolean isSecure, boolean isAsync) {
-        return lookup(transType.getName(), isSecure, isAsync);
+        return lookup(transType.getCode(), isSecure, isAsync);
     }
 
     public TransactionBean lookup(String name, boolean isSecure, boolean isAsync) {

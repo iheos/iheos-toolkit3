@@ -1,10 +1,10 @@
 package gov.nist.hit.ds.simSupport.simulator
-import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.ActorType
 import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement
 import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.RetrieveTransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
@@ -14,11 +14,13 @@ import groovy.util.logging.Log4j
 @Log4j
 class SimConfigFactory {
 
-    ActorSimConfig buildSim(String server, String port, String base, SimId simId, String actorTypeName) {
-        log.debug("SimConfigFactory: actorType ${actorTypeName}")
-        ActorType actorType= new ActorTransactionTypeFactory().getActorType(actorTypeName)
+    ActorSimConfig buildSim(String server, String port, String base, SimId simId, ActorType actorType) {
+        log.debug("SimConfigFactory: actorType ${actorType.name}")
         ActorSimConfig actorSimConfig = new ActorSimConfig(actorType)
+
         EndpointBuilder endpointBuilder = new EndpointBuilder(server, port, base, simId)
+
+        // Not clear that properties are being used at the moment
         actorType.props.each { name, value ->
             log.debug("SimConfigFactory: property ${name}")
             // I should use reflection to do fancy stuff here.  Maybe later.
@@ -31,12 +33,13 @@ class SimConfigFactory {
                 throw new ToolkitRuntimeException(msg)
             }
         }
-        actorType.endpointLabels().each {
+
+        actorType.endpointTypes().each {
             log.debug("SimConfigFactory: endpoint ${it}")
-            if (it.transType.hasTransactionProperty('RepositoryUniqueId')) {
-                actorSimConfig.add(new RepositoryUniqueIdSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
+            if (it.transType.isRetrieve) {
+                actorSimConfig.add(new RetrieveTransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorType, it)))
             } else {
-                actorSimConfig.add(new EndpointActorSimConfigElement(it, endpointBuilder.makeEndpoint(actorTypeName, it)))
+                actorSimConfig.add(new TransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorType, it)))
             }
         }
         return actorSimConfig

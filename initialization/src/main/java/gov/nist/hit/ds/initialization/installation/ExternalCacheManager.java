@@ -32,5 +32,7 @@ public class ExternalCacheManager {
 	public File getActorsDir() {
 		return new File(externalCache, "actors");
 	}
+
+    public Environment getEnvironment() { return new Environment(getEnvironmentFile()); }
 	
 }

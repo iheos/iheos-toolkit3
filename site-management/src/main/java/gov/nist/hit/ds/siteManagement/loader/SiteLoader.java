@@ -59,7 +59,7 @@ public abstract class SiteLoader {
 					if (name.equals("pr") || name.equals("sq") || name.equals("r"))
 						name = name + ".b";
 				} 
-				//name = withoutSuffix(name, ".as");
+				//displayName = withoutSuffix(displayName, ".as");
 			}
 
 			if (uid != null) {

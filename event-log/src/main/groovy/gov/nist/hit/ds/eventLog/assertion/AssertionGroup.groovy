@@ -38,10 +38,12 @@ public class AssertionGroup  {
     public int size() { return assertions.size(); }
 
     Assertion addAssertion(Assertion asser, boolean required) {
+        log.debug("New Assertion is ${asser} (required=${required})")
         if (required && asser.getStatus().ordinal() > worstStatus.ordinal())
             worstStatus = asser.getStatus();
         if (!asser.defaultMsg) removeDefaultMsg()
         log.debug("...adding assertion to ${toString()}")
+        log.debug("...worstStatus now ${worstStatus}")
         assertions.add(asser);
         assertionIds << asser.id
         if (asser.failed()) log.debug("...Failed (${(required) ? '' : 'not '} required)")

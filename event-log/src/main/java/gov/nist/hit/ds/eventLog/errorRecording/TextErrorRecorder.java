@@ -208,7 +208,6 @@ public class TextErrorRecorder implements IAssertionGroup {
 		return errMsgs.size();
 	}
 
-    @Override
     public void concat(IAssertionGroup er) {
 
     }

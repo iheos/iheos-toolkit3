@@ -18,40 +18,32 @@ public class FooUserBarMaker implements ValComponent {
 		return new Bar("Created in FooUserBarMaker");
 	}
 
-	@Override
 	public void setAssertionGroup(AssertionGroup er) {
 	}
 
-	@Override
 	public String getName() {
 		return this.getClass().getSimpleName();
 	}
 
-	@Override
 	public void run() {
 		System.out.println("FooUserBarMaker running - foo is " + foo.getValue());
 	}
 
-	@Override
 	public String getDescription() {
 		return null;
 	}
 
-	@Override
 	public void setName(String name) {
 		
 	}
 
-	@Override
 	public void setDescription(String description) {
 	}
 
-	@Override
 	public void setEvent(Event event) {
 		this.event = event;
 	}
 
-	@Override
 	public boolean showOutputInLogs() {
 		return false;
 	}

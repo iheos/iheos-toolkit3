@@ -1,0 +1,20 @@
+Simulator options
+
+Basic simulator URL is
+    http://host:port/xdstools3/sim/simid/actor/transaction
+
+This form is expected in the To header of the SOAP Addressing block.
+
+Another form is acceptable as the target URL
+
+    http://host:port/xdstools3/sim/simid/option1/option2/...
+
+where each option is an independent flag controlling the operation
+of the simulator.  Most options are defined by a specific
+transaction but some are appropriate for any simulator. An option
+specified that is not recognized is ignored and there is no
+overlap between option names and actor/transaction names.
+
+Options appropriate for any simulator
+
+fault - force a SOAP fault to be returned

@@ -977,6 +977,7 @@ public class Metadata {
         addExternalId(ele, MetadataSupport.XDSFolder_uniqueid_uuid, id);
     }
 
+    @Deprecated
     public void addExternalId(OMElement ele, String uuid, String id) {
         OMElement e = MetadataSupport.om_factory.createOMElement(MetadataSupport.externalidentifier_qnamens);
         ele.addChild(e);
@@ -989,6 +990,25 @@ public class Metadata {
         if (myid.startsWith("urn:uuid:"))
             e.addAttribute("lid", myid, null);
         e.addAttribute("registryObject", ele.getAttributeValue(MetadataSupport.id_qname), null);
+
+        addVersionInfo(e, "1.1");
+
+    }
+
+    public void addExternalId(OMElement ele, String uuid, String id, String name) {
+        OMElement e = MetadataSupport.om_factory.createOMElement(MetadataSupport.externalidentifier_qnamens);
+        ele.addChild(e);
+
+        String myid = allocate_id();
+        e.addAttribute("id", myid, null);
+        e.addAttribute("objectType", "urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier", null);
+        e.addAttribute("identificationScheme", uuid, null);
+        e.addAttribute("value", id, null);
+        if (myid.startsWith("urn:uuid:"))
+            e.addAttribute("lid", myid, null);
+        e.addAttribute("registryObject", ele.getAttributeValue(MetadataSupport.id_qname), null);
+
+        addName(e, name);
 
         addVersionInfo(e, "1.1");
 
@@ -1034,6 +1054,15 @@ public class Metadata {
         ele.addChild(e);
 
         e.addAttribute("versionName", version, null);
+    }
+
+    void addName(OMElement ele, String value) {
+        OMElement e = MetadataSupport.om_factory.createOMElement(MetadataSupport.name_qnamens);
+        ele.addChild(e);
+
+        OMElement ls = MetadataSupport.om_factory.createOMElement(MetadataSupport.localizedstring_qnamens);
+        e.addChild(ls);
+        ls.addAttribute("value", value, null);
     }
 
     public void addLid(OMElement ele, String lid) {
@@ -1400,7 +1429,7 @@ public class Metadata {
 
     public void addSlot(OMElement ele, String slot_name, String slot_value) {
         OMElement slot = this.om_factory().createOMElement("Slot", null);
-        slot.addAttribute("name", slot_name, null);
+        slot.addAttribute("displayName", slot_name, null);
         OMElement value_list = this.om_factory().createOMElement("ValueList",
                 null);
         slot.addChild(value_list);
@@ -1414,7 +1443,7 @@ public class Metadata {
     // this depends on getV2 or getV3 to sort the attributes into the correct order
     public OMElement addSlot(OMElement ele, String slot_name) {
         OMElement slot = this.om_factory().createOMElement("Slot", null);
-        slot.addAttribute("name", slot_name, null);
+        slot.addAttribute("displayName", slot_name, null);
         OMElement value_list = this.om_factory().createOMElement("ValueList",
                 null);
         slot.addChild(value_list);
@@ -1425,7 +1454,7 @@ public class Metadata {
 
     public OMElement mkSlot(String slot_name) {
         OMElement slot = this.om_factory().createOMElement(MetadataSupport.slot_qnamens);
-        slot.addAttribute("name", slot_name, null);
+        slot.addAttribute("displayName", slot_name, null);
         OMElement value_list = this.om_factory().createOMElement(MetadataSupport.valuelist_qnamens);
         slot.addChild(value_list);
         return slot;
@@ -1481,7 +1510,7 @@ public class Metadata {
                     slot, "ValueList");
             if (value_list == null)
                 throw new MetadataException(
-                        "Slot without ValueList - slot name is " + slot_name
+                        "Slot without ValueList - slot displayName is " + slot_name
                                 + " of object " + id(ele), EbRim.Slot);
             for (@SuppressWarnings("unchecked")
                  Iterator<OMElement> it = value_list.getChildElements(); it.hasNext();) {
@@ -2771,7 +2800,7 @@ public class Metadata {
         hash_list.add(hash);
     }
 
-    // get map of uid ==> ArrayList of hashes
+    // label map of uid ==> ArrayList of hashes
     // for folder and ss, hash is null
     // Some docs may not have a hash either, depending on where this use used
     public HashMap<String, List<String>> getUidHashMap()

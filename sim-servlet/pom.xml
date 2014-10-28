@@ -1,14 +1,56 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>gov.nist.hit.ds</groupId>
-    <artifactId>toolkit3</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
-  </parent>
 
+<<<<<<< local
+=======
+    <parent>
+        <groupId>gov.nist.hit.ds</groupId>
+        <artifactId>tk-deps</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../tk-deps/pom.xml</relativePath>
+    </parent>
+
+  <version>3.0.0-SNAPSHOT</version>
+>>>>>>> other
   <artifactId>sim-servlet</artifactId>
+<<<<<<< local
+=======
+  <packaging>war</packaging>
+>>>>>>> other
 
-  <dependencies>
+    <properties>
+        <!-- Convenience property to set the GWT version -->
+        <gwtVersion>2.5.1</gwtVersion>
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>me.soliveirajr</groupId>
+            <artifactId>mentawai</artifactId>
+            <version>2.5.4</version>
+        </dependency>        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+        </dependency>
+        <dependency>
+        <groupId>com.google.gwt</groupId>
+        <artifactId>gwt-servlet</artifactId>
+        </dependency>
+      <dependency>
+          <groupId>gov.nist.hit.ds</groupId>
+          <artifactId>httpSoap</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>gov.nist.hit.ds</groupId>
+          <artifactId>ds-sims</artifactId>
+      </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
           <artifactId>http</artifactId>
@@ -17,7 +59,10 @@
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
           <artifactId>soap-support</artifactId>
+<<<<<<< local
           <version>3.0.0-SNAPSHOT</version>
+=======
+>>>>>>> other
       </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
@@ -44,5 +89,80 @@
           <artifactId>event-log</artifactId>
           <version>3.0.0-SNAPSHOT</version>
       </dependency>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+        </dependency>
   </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <!-- 2.8.0-01 and later require maven-compiler-plugin 3.1 or higher -->
+                <version>3.1</version>
+                <configuration>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
+                    <!-- set verbose to be true if you want lots of uninteresting messages -->
+                    <!-- <verbose>true</verbose> -->
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-compiler</artifactId>
+                        <version>2.8.0-01</version>
+                    </dependency>
+                    <!-- for 2.8.0-01 and later you must have an explicit dependency on groovy-eclipse-batch -->
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <version>2.1.8-01</version>
+                        <!-- or choose a different compiler version -->
+                        <!-- <version>1.8.6-01</version> -->
+                        <!-- <version>1.7.10-06</version> -->
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-eclipse-compiler</artifactId>
+                <version>2.8.0-01</version>
+                <extensions>true</extensions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <!-- or if you want to use tomcat 6.x
+                <artifactId>tomcat6-maven-plugin</artifactId>
+                -->
+                <version>2.2</version>
+                <configuration>
+                    <!-- http port -->
+                    <port>9090</port>
+                    <!-- application path always starts with /-->
+                    <path>/tk</path>
+                    <!-- optional path to a context file -->
+                    <contextFile>${tomcatContextXml}</contextFile>
+                    <!-- optional system propoerties you want to add -->
+                    <systemProperties>
+                        <appserver.base>${project.build.directory}/appserver-base</appserver.base>
+                        <appserver.home>${project.build.directory}/appserver-home</appserver.home>
+                        <derby.system.home>${project.build.directory}/appserver-base/logs</derby.system.home>
+                        <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
+                    </systemProperties>
+                    <!-- if you want to use test dependencies rather than only runtime -->
+                    <useTestClasspath>false</useTestClasspath>
+                    <!-- optional if you want to add some extra directories into the classloader -->
+                    <additionalClasspathDirs>
+                        <additionalClasspathDir></additionalClasspathDir>
+                    </additionalClasspathDirs>
+                </configuration>
+                <!-- For any extra dependencies needed when running embedded Tomcat (not WAR dependencies) add them below -->
+                <dependencies>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

@@ -15,19 +15,16 @@ public class FooMakerError implements ValComponent {
 	}
 
 
-	@Override
 	public String getName() {
 		return this.getClass().getSimpleName();
 	}
 
 
-	@Override
 	public void setAssertionGroup(AssertionGroup er) {
 		this.er = er;
 	}
 
 
-	@Override
 	public void run() {
 		try {
 			throw new Exception("FooMakerError");
@@ -37,29 +34,24 @@ public class FooMakerError implements ValComponent {
 	}
 
 
-	@Override
 	public String getDescription() {
 		return null;
 	}
 
 
-	@Override
 	public void setName(String name) {
 	}
 
 
-	@Override
 	public void setDescription(String description) {
 	}
 
 
-	@Override
 	public void setEvent(Event event) {
 		this.event = event;
 	}
 
 
-	@Override
 	public boolean showOutputInLogs() {
 		return false;
 	}

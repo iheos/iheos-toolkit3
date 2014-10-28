@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation does nothing but allow the developer to 
- * label get methods that are used by SimEngine to inject 
+ * label label methods that are used by SimEngine to inject
  * parameters into a later validator. 
  * @author bill
  *

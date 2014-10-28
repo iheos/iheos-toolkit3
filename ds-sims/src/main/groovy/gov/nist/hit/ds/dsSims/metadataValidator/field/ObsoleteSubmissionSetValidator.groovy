@@ -46,7 +46,7 @@ public class ObsoleteSubmissionSetValidator extends ValidatorCommon {
 				List<OMElement> ext_ids = m.getExternalIdentifiers(id);
 
 				// has necessary ExternalIdentifiers
-				//													name							identificationScheme                          OID value required
+				//													displayName							identificationScheme                          OID value required
 				validate_ext_id_present("Submission Set", id, ext_ids, "XDSSubmissionSet.patientId", MetadataSupport.XDSSubmissionSet_patientid_uuid, false);
 				validate_ext_id_present("Submission Set", id, ext_ids, "XDSSubmissionSet.sourceId",  MetadataSupport.XDSSubmissionSet_sourceid_uuid,  true);
 				validate_ext_id_present("Submission Set", id, ext_ids, "XDSSubmissionSet.uniqueId",  MetadataSupport.XDSSubmissionSet_uniqueid_uuid,  true);
@@ -75,7 +75,7 @@ public class ObsoleteSubmissionSetValidator extends ValidatorCommon {
 				String slot_name = slot.getAttributeValue(MetadataSupport.slot_name_qname);
 				if (slot_name == null) slot_name = "";
 				if ( ! legal_slot_name(slot_name))
-					err("Submission Set " + ss_id + ": " + slot_name + " is not a legal slot name for a Submission Set");
+					err("Submission Set " + ss_id + ": " + slot_name + " is not a legal slot displayName for a Submission Set");
 			}
 		} catch (MetadataException e) {
 			err(e);
@@ -96,7 +96,7 @@ public class ObsoleteSubmissionSetValidator extends ValidatorCommon {
 				String id = (String) ss_ids.get(i);
 				List<OMElement> slots = m.getSlots(id);
 
-				//                      					name						multi	required	number
+				//                      					displayName						multi	required	number
 				validate_slot("Submission Set", id, slots, 	"submissionTime", 			false, 	true, 		true);
 
 			}
@@ -113,7 +113,7 @@ public class ObsoleteSubmissionSetValidator extends ValidatorCommon {
 				String id = (String) ss_ids.get(i);
 				List<OMElement> classs = m.getClassifications(id);
 
-				//                                               classificatinScheme								name							required	multiple
+				//                                               classificatinScheme								displayName							required	multiple
 				validate_class("SubmissionSet", id, classs, "urn:uuid:aa543740-bdda-424e-8c96-df4873be8500" , 	"contentTypeCode",		true, 		 false);
 			}		
 		} catch (MetadataException e) {

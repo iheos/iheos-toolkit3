@@ -93,7 +93,7 @@ class PatternGenerator {
             ],
             [name: 'URI', values: ['http://example.com']],
 
-            // name and description
+            // displayName and description
             [name: 'name', values: ['Summary']],
             [name: 'description', values: ['My summary']],
 

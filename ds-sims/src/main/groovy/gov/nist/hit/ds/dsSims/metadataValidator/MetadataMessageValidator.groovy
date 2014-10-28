@@ -1,5 +1,4 @@
 package gov.nist.hit.ds.dsSims.metadataValidator
-
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.engine.MetadataValidator
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
@@ -7,7 +6,6 @@ import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.metadata.MetadataContainer
 import gov.nist.hit.ds.metadata.MetadataParser
-import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
@@ -42,13 +40,9 @@ public class MetadataMessageValidator extends ValComponentBase {
         }
     }
 
-    @Override
-    void run() throws SoapFaultException, RepositoryException {
-        runValidationEngine()
-        event.addChildResults('MetadataValidation')
+    void runAfter() {
         new MetadataValidator(handle, m, vc, rvi).asPeer().run()
     }
-
 
     public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
 		this.er = er;

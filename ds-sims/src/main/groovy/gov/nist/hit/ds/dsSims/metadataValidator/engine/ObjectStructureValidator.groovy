@@ -28,7 +28,7 @@ class ObjectStructureValidator extends ValComponentBase {
         this.rvi = rvi
     }
 
-    void run() {
+    void runAfter() {
         if (vc.skipInternalStructure)
             return;
 

@@ -90,7 +90,7 @@ public class DocumentEntryValidator extends AbstractRegistryObjectValidator {
 		verifySlotsUnique(er);
 		for (SlotModel slot : model.getSlots()) {
 			if ( ! legal_slot_name(slot.getName()))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + slot.getName() + " is not a legal slot name for a DocumentEntry",   this, table415);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + slot.getName() + " is not a legal slot displayName for a DocumentEntry",   this, table415);
 
 		}
 	}
@@ -103,18 +103,18 @@ public class DocumentEntryValidator extends AbstractRegistryObjectValidator {
 
 	public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
 
-		//                    name				   multi	format                                                  resource
+		//                    displayName				   multi	format                                                  resource
 		validateSlot(er, 	"creationTime", 	   false, 	new DtmSubValidator(er, "Slot creationTime",      table415),  table415);
-		validateSlot(er, 	"languageCode",		   false, 	new Rfc3066Format(er, "Slot languageCode",      table415),  table415);
+		validateSlot(er, 	"languageCode",		   false, 	new Rfc3066Validator(er, "Slot languageCode",      table415),  table415);
 		validateSlot(er, 	"legalAuthenticator",  false, 	new XcnSubValidator(er, "Slot legalAuthenticator",table415),  table415);
 		validateSlot(er, 	"serviceStartTime",	   false, 	new DtmSubValidator(er, "Slot serviceStartTime",  table415),  table415);
 		validateSlot(er, 	"serviceStopTime",	   false, 	new DtmSubValidator(er, "Slot serviceStopTime",   table415),  table415);
-		validateSlot(er, 	"sourcePatientInfo",   true, 	new SourcePatientInfoFormat(er, "Slot sourcePatientInfo", table415),  table415);
+		validateSlot(er, 	"sourcePatientInfo",   true, 	new SourcePatientInfoValidator(er, "Slot sourcePatientInfo", table415),  table415);
 		validateSlot(er, 	"sourcePatientId",     false, 	new CxSubValidator(er, "Slot sourcePatientId",   table415),  table415);
-		validateSlot(er, 	"hash",			 	   false, 	new HashFormat(er, "Slot hash",   null), 		        table415);
-		validateSlot(er, 	"size",				   false, 	new IntFormat(er, "Slot size",   table415),             table415);
+		validateSlot(er, 	"hash",			 	   false, 	new HashValidator(er, "Slot hash",   null), 		        table415);
+		validateSlot(er, 	"size",				   false, 	new IntValidator(er, "Slot size",   table415),             table415);
 		validateSlot(er, 	"URI",				   true, 	new AnyFormat(er, "Slot URI",   table415),   table415);
-		validateSlot(er, 	"repositoryUniqueId",	false, 	new OidFormat(this, "Slot repositoryUniqueId"),   table415);
+		validateSlot(er, 	"repositoryUniqueId",	false, 	new OidValidator(this, "Slot repositoryUniqueId"),   table415);
 
 
 		if ( model.getSlot("URI") != null ) {

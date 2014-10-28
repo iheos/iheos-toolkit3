@@ -17,19 +17,19 @@ class SubmissionSetTest {
 	def goodss = '''
    <foo>
         <RegistryPackage id="SubmissionSet01">
-        	<Slot name="intendedRecipient">
+        	<Slot displayName="intendedRecipient">
         	  <ValueList>
                 <Value>Some Hospital^^^^^^^^^1.2.3.4.5.6.7.8.9.1789.45|^Wel^Marcus^^^Dr^MD|^^Internet^marcus.wel@direct.example.org</Value>
 			  </ValueList>
 			</Slot>
-            <Slot name="submissionTime">
+            <Slot displayName="submissionTime">
                 <ValueList>
                     <Value>20121025235050</Value>
                 </ValueList>
             </Slot>
             <Classification  id="author01" classificationScheme="urn:uuid:a7058bb9-b4e4-4307-ba5b-e3f0ab85e12d"
                 classifiedObject="SubmissionSet01" nodeRepresentation="">
-				<Slot name="authorTelecommunication">
+				<Slot displayName="authorTelecommunication">
 					<!-- shall be single valued -->
 					<ValueList>
 						<Value>^^Internet^john.doe@healthcare.example.org</Value>

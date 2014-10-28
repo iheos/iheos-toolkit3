@@ -2,7 +2,8 @@ package gov.nist.hit.ds.simSupport.endpoint
 
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.AsyncType
-import gov.nist.hit.ds.actorTransaction.EndpointLabel
+import gov.nist.hit.ds.actorTransaction.EndpointType
+import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.actorTransaction.TlsType
 import gov.nist.hit.ds.simSupport.client.SimId
 import spock.lang.Specification
@@ -13,46 +14,52 @@ import spock.lang.Specification
 class EndpointBuilderEndpointTest extends Specification {
     static String config = '''
 <ActorsTransactions>
-    <transaction displayName="Stored Query" id="sq" code="sq" asyncCode="sq.as">
+    <transaction name="Stored Query" id="sq" code="sq" asyncCode="sq.as">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as">
+    <transaction name="Register" id="rb" code="rb" asyncCode="r.as">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
+    <transaction name="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Update" id="update" code="update" asyncCode="update.as">
+    <transaction name="Update" id="update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <actor displayName="Document Registry" id="reg">
-        <simFactoryClass class="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
+    <actor name="Document Registry" id="reg">
+        <implClass value="unused"/>
         <transaction id="rb"/>
         <transaction id="sq"/>
         <transaction id="update"/>
     </actor>
-    <actor displayName="Document Repository" id="rep">
-        <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
+    <actor name="Document Repository" id="rep">
+        <implClass value="unused"/>
         <transaction id="prb"/>
-        <property name="repositoryUniqueId" value="1.2.3.4"/>
     </actor>
 </ActorsTransactions>
 '''
+    ActorTransactionTypeFactory atFactory
+
     void setup() {
-        new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().loadFromString(config)
+        atFactory = new ActorTransactionTypeFactory()
+        atFactory.clear()
+        atFactory.loadFromString(config)
     }
 
     def 'Build simple endpoint'() {
         when:
         def builder = new EndpointBuilder('localhost', '8080', 'xdstools2/sims', new SimId('123'))
         def transType = new ActorTransactionTypeFactory().getTransactionType('rb')
-        def elabel = new EndpointLabel(transType, TlsType.NOTLS, AsyncType.SYNC)
-        def endpoint = builder.makeEndpoint('reg', elabel)
+        def elabel = new EndpointType(transType, TlsType.NOTLS, AsyncType.SYNC)
+        def endpoint = builder.makeEndpoint(atFactory.getActorType('reg'), elabel)
 
         then:
         endpoint.value == 'http://localhost:8080/xdstools2/sims/123/reg/rb'
