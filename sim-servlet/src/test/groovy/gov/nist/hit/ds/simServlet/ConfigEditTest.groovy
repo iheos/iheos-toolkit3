@@ -119,31 +119,31 @@ class ConfigEditTest extends Specification {
         !getSchemaCheck(updatedConfig)
     }
 
-//    def 'Update of settings should be saved in config'() {
-//        when: '''Create a sim'''
-//        SimUtils.delete(simId2)
-//        simHandle = SimUtils.create('docrec', simId2)
-//        def updater = new SimConfigUpdater()
-//
-//        and: '''Get config (XML) through API'''
-//        def config = updater.getConfig(simHandle.simId)
-//        println 'Config as Read' + config
-//
-//        and: '''Update config - set schemaCheck to false'''
-//        def config2 = setSchemaCheck(config, false)
-//        println 'Config as Updated' + config2
-//
-//        then:  'In memory copy has been updated'
-//        !getSchemaCheck(config2)
-//
-//        when: 'Save out updates'
-//        updater.updateConfig(simHandle.simId, config2)
-//
-//        and: '''Re-read updated config'''
-//        def config3 = updater.getConfig(simHandle.simId)
-//
-//        then: '''Verify change has been changed'''
-//        !getSchemaCheck(config3)
-//    }
+    def 'Update of settings should be saved in config'() {
+        when: '''Create a sim'''
+        SimUtils.delete(simId2)
+        simHandle = SimUtils.create('docrec', simId2)
+        def updater = new SimConfigUpdater()
+
+        and: '''Get config (XML) through API'''
+        def config = updater.getConfig(simHandle.simId)
+        println 'Config as Read' + config
+
+        and: '''Update config - set schemaCheck to false'''
+        def config2 = setSchemaCheck(config, false)
+        println 'Config as Updated' + config2
+
+        then:  'In memory copy has been updated'
+        !getSchemaCheck(config2)
+
+        when: 'Save out updates'
+        updater.updateConfig(simHandle.simId, config2)
+
+        and: '''Re-read updated config'''
+        def config3 = updater.getConfig(simHandle.simId)
+
+        then: '''Verify change has been changed'''
+        !getSchemaCheck(config3)
+    }
 
 }
