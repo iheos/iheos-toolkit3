@@ -25,7 +25,7 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.hit.ds</groupId>
-			<artifactId>xds-exceptions</artifactId>
+			<artifactId>xdsException</artifactId>
 		</dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
