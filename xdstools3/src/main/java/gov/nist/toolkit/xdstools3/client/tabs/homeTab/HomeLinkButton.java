@@ -73,6 +73,8 @@ public class HomeLinkButton extends IButton {
                     placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getv2TabCode()));
                 else if (title == "XDS.b Repository Do This First")
                     placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getSubmitRetrieveTabCode()));
+                else if (title == "MHD Validator")
+                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getMHDValidatorTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });

@@ -42,26 +42,22 @@ public class TabNamesUtil {
     private static final String folderValidationTabCode = "FOLDER_VALIDATION";
     private static final String submitRetrieveTabCode="SUBMIT_RETRIEVE";
     private static final String homeTabCode="HOME";
+    private static final String mhdValidatorTabCode="MHD_VALIDATOR";
 
 
     public static String getFindDocumentsTabCode() {
         return findDocumentsTabCode;
     }
-
     public static String getAdminTabCode() {
         return adminTabCode;
     }
-
     public static String getEndpointsTabCode() {
         return endpointsTabCode;
     }
-
     public static String getMpqFindDocumentsTabCode() {
         return mpqFindDocumentsTabCode;
     }
-
     public static String getMessageValidatorTabCode() { return messageValidatorTabCode; }
-
     public static String getDocumentMetadataEditorTabCode() { return documentMetadataEditorTabCode; }
     public static String getPreConnectathonTestsTabCode() { return preConnectathonTestsTabCode; }
     public static String getGetDocumentsTabCode() { return getDocumentsCode; }
@@ -76,9 +72,11 @@ public class TabNamesUtil {
     public static String getLifecycleValidationTabCode() {return lifecycleValidationTabCode;}
     public static String getFolderValidationTabCode() {return folderValidationTabCode;}
     public static String getSubmitRetrieveTabCode() { return submitRetrieveTabCode; }
-     public static String getv2TabCode() { return v2TabCode; }
-
+    public static String getv2TabCode() { return v2TabCode; }
+    public static String getMHDValidatorTabCode() {return mhdValidatorTabCode;}
     public static String getHomeTabCode() {
         return homeTabCode;
     }
+
+
 }

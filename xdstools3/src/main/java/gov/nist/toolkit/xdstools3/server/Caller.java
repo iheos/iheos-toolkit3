@@ -25,7 +25,7 @@ public class Caller implements Serializable {
 
 	/**
 	 * Singleton method. Use this method to gain access to the functionality in this class.
-	 * @return
+	 * @return Caller instance
 	 */
 	public static Caller getInstance(){
 		if (instance == null){
@@ -103,5 +103,9 @@ public class Caller implements Serializable {
         return ActorsCollectionsDataSamples.instance.getTestReadme(test);
     }
 
-
+    // ----------------------------- MHD -------------------------------
+    public String validateMHDMessage(String messageType, String somethingAboutTheFileUploaded) {
+        //TODO Implementation (Change method prototype if required)
+        return "Response for "+messageType+" validation";
+    }
 }

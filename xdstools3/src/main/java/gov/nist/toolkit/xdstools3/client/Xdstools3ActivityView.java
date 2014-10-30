@@ -7,6 +7,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.util.BooleanCallback;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.HTMLFlow;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
@@ -20,6 +22,8 @@ import gov.nist.toolkit.xdstools2.client.tabs.QueryState;
 import gov.nist.toolkit.xdstools2.client.tabs.TestSessionState;
 import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseAllTabsEvent;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
 import gov.nist.toolkit.xdstools3.client.tabs.*;
@@ -28,6 +32,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
+import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.v2.v2TabExample;
@@ -112,6 +117,39 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                 Xdstools3GinInjector.injector.getPlaceController().goTo(new TabPlace(tabName));
             }
         });
+        //------ TODO Could be move to GenericTabSet ------
+        Util.EVENT_BUS.addHandler(CloseTabEvent.TYPE,new CloseTabEvent.CloseTabEventHandler() {
+            @Override
+            public void onCloseTabEvent(CloseTabEvent event) {
+                final Tab t=event.getTab();
+                SC.confirm("Are you sure you want to close the tab: '" + t.getTitle() + "'?", new BooleanCallback() {
+                    @Override
+                    public void execute(Boolean response) {
+                        if(response != null && response){
+                            topTabSet.removeTab(t);
+                        }
+                    }
+                });
+            }
+        });
+        Util.EVENT_BUS.addHandler(CloseAllTabsEvent.TYPE,new CloseAllTabsEvent.CloseAllTabsEventHandler() {
+            @Override
+            public void onCloseAllTabsEvent(CloseAllTabsEvent event) {
+                SC.confirm("Are you sure you want to close your tabs?", new BooleanCallback() {
+                    @Override
+                    public void execute(Boolean response) {
+                        if(response != null && response){
+                            for (Tab t:topTabSet.getTabs()){
+                                if (!(t.getTitle().equals("Home"))){
+                                    topTabSet.removeTab(t);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        //--------------------------------------------------
     }
 
 
@@ -186,6 +224,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
         else if (tabName.equals(TabNamesUtil.getInstance().getSubmitRetrieveTabCode())) {
             tab = new SubmitRetrieveTab();
         }
+        else if (tabName.equals(TabNamesUtil.getInstance().getMHDValidatorTabCode())) {
+            tab = new MHDValidatorTab();
+        }
 
         // ---------- legacy v2 tabs --------
         else if (tabName.equals(TabNamesUtil.getInstance().getv2TabCode())) {
@@ -200,17 +241,11 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
         // update set of tabs
         if (tab != null) {
             // tests if the tab is already open
-            boolean found=false;
-            for (Tab t:topTabSet.getTabs())
-                if (t.getTitle().equals(tab.getTitle())) {
-                    // select and display the tab when already open
-                    topTabSet.selectTab(t);
-                    found=true;
-                    break;
-                }
-            // Remove comment on second part of the condition if you do not want to reopen
-            // a closed tab on browser history back navigation
-            if(found==false /*&& TabNamesUtil.getHomeTabCode().equals(currentPlace)*/){
+            Tab t=topTabSet.findTab(tab);
+            if(t!=null){
+                // select and display the tab when already open
+                topTabSet.selectTab(t);
+            }else{
                 // open a new tab in tabset, select and display it.
                 topTabSet.addTab(tab);
                 topTabSet.selectTab(tab);

@@ -40,6 +40,11 @@ public class HomeTab extends GenericTab {
         HomeBox simulators = new HomeBox("Simulators");
         simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");
 
+        HomeBox mhdTools = new HomeBox("MHD Tools");
+        mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
+        // Connectathon Validations
+        mhdTools.addItem("MHD Validator");
+
         HomeBox connectathonTools = new HomeBox("Connectathon Tools");
         connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         // Connectathon Validations
@@ -56,7 +61,8 @@ public class HomeTab extends GenericTab {
         HStack hStack3 = new HStack();
         hstack1.addMembers(queriesAndRetrieves, new LayoutSpacer(), tools);
         hstack2.addMembers(sendTestData, new LayoutSpacer(), simulators);
-        hStack3.addMember(connectathonTools);
+        hStack3.addMembers(mhdTools, new LayoutSpacer(),connectathonTools);
+
         VStack vstack = new VStack();
         LayoutSpacer spacer = new LayoutSpacer();
         spacer.setHeight(30);

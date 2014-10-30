@@ -26,10 +26,19 @@
 
     <!-- ============== Application servlet classes ============== -->
     <servlet>
+        <servlet-name>fileUploadServlet</servlet-name>
+        <!-- Le chemin vers la servlet -->
+        <servlet-class>gov.nist.toolkit.xdstools3.server.UploadFileServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>mhdTabsServlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.MHDServicesImpl</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>preConnectathonTabServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.PreConnectathonTabServiceImpl</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>loginServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.LoginServiceImpl</servlet-class>
@@ -59,6 +68,17 @@
     <servlet-mapping>
         <servlet-name>preConnectathonTabServlet</servlet-name>
         <url-pattern>/xdstools3/preconnectathon-tab</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>mhdTabsServlet</servlet-name>
+        <url-pattern>/xdstools3/mhd-tabs</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>fileUploadServlet</servlet-name>
+        <!-- Ce qu'on a mis dans la vue à uploadForm.setAction -->
+        <url-pattern>/fileUploadServlet</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
