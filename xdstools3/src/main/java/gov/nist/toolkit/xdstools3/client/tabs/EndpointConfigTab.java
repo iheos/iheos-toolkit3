@@ -23,7 +23,7 @@ public class EndpointConfigTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getEndpointsTabCode();
+        return TabNamesUtil.getInstance().getEndpointsTabCode();
     }
 
 

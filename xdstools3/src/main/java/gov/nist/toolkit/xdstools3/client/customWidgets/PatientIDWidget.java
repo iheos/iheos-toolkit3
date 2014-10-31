@@ -4,6 +4,8 @@ package gov.nist.toolkit.xdstools3.client.customWidgets;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.events.ItemChangedEvent;
 import com.smartgwt.client.widgets.form.events.ItemChangedHandler;
+import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
+import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 
 /**
  * Creates a TextItem to hold a Patient ID, to be used in a form. The PID input is required.

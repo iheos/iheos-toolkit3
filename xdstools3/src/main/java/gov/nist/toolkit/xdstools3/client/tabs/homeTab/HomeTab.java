@@ -32,6 +32,7 @@ public class HomeTab extends GenericTab {
         tools.addItem("Message Validator");
         tools.addItem("Document Metadata Editor");
         tools.addItem("Pre-Connectathon Tests");
+        tools.addItem("Submit Test Data");
         tools.addItem("v2 Tab Example");
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
@@ -42,7 +43,7 @@ public class HomeTab extends GenericTab {
 
         HomeBox mhdTools = new HomeBox("MHD Tools");
         mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
-        // Connectathon Validations
+        // Mhd Validations
         mhdTools.addItem("MHD Validator");
 
         HomeBox connectathonTools = new HomeBox("Connectathon Tools");
@@ -72,7 +73,7 @@ public class HomeTab extends GenericTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getHomeTabCode();
+        return TabNamesUtil.getInstance().getHomeTabCode();
     }
 
 

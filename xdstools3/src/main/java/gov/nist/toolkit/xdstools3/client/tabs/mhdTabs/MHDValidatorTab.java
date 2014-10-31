@@ -11,8 +11,9 @@ import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.fields.FileItem;
+import com.smartgwt.client.widgets.form.fields.HeaderItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
-import com.smartgwt.client.widgets.form.fields.UploadItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
@@ -20,9 +21,7 @@ import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class MHDValidatorTab extends GenericCloseableTab {
@@ -32,11 +31,12 @@ public class MHDValidatorTab extends GenericCloseableTab {
     private static String header="MHD Validator";
     private String selectedMessageType;
     private Button runBtn;
-    private DynamicForm uploadForm;
+//    private DynamicForm uploadForm;
 
     private Logger logger=Logger.getLogger(MHDValidatorTab.class.getName());
     private SelectItem messageTypeSelect;
     private HTMLPane validationResultsPanel;
+    private FileItem fileUploadItem;
 
     public MHDValidatorTab() {
         super(header);
@@ -46,38 +46,37 @@ public class MHDValidatorTab extends GenericCloseableTab {
     protected Widget createContents() {
         VStack vStack=new VStack();
 
-        DynamicForm messageTypeForm = new DynamicForm();
-        Label l1=createSubtitle1("1. Select a message type");
+        DynamicForm form = new DynamicForm();
+        form.setMethod(FormMethod.POST);
+        form.setEncoding(Encoding.MULTIPART);
+        form.setAction("fileUploadServlet");
+
+        HeaderItem l1=new HeaderItem();
+        l1.setDefaultValue("1. Select a message type");
         messageTypeSelect = new SelectItem();
         messageTypeSelect.setTitle("Message type");
         messageTypeSelect.setName("messageTypeItem");
         messageTypeSelect.setEmptyDisplayValue("Select message type...");
         messageTypeSelect.setWidth(400);
-        LinkedHashMap<String,String> messageMap=new LinkedHashMap<String,String>();
-        Map<String,String> map= new HashMap<String,String>();
-        map.put("sbmt", "Submit");
-        map.put("sbmt_resp","Submit Response");
-        messageMap.putAll(map);
-        messageTypeSelect.setValueMap(messageMap);
-        messageTypeForm.setFields(messageTypeSelect);
+        loadMessageTypesMap();
 
-        uploadForm = new DynamicForm();
-        uploadForm.setMethod(FormMethod.POST);
-        uploadForm.setEncoding(Encoding.MULTIPART);
-        uploadForm.setAction("fileUploadServlet");
-        Label l2=createSubtitle1("2. Upload file to validate");
-        UploadItem fileUploadItem = new UploadItem(); // or UploadItemWithTooltip
+        HeaderItem l2=new HeaderItem();
+        l2.setDefaultValue("2. Upload file to validate");
+        fileUploadItem = new FileItem();
+//        fileUploadItem = new UploadItem(); // or ...WithTooltip
         fileUploadItem.setTitle("File to validate");
         fileUploadItem.setName("uploadItem");
         fileUploadItem.setWidth(400);
-        uploadForm.setFields(fileUploadItem);
 
         runBtn = new Button("Run");
+        runBtn.disable();
+
+        form.setFields(l1,messageTypeSelect,l2,fileUploadItem);
 
         validationResultsPanel = new HTMLPane();
 
 
-        vStack.addMembers(l1, messageTypeForm, l2, uploadForm, new LayoutSpacer(), runBtn, validationResultsPanel);
+        vStack.addMembers(form,runBtn,validationResultsPanel);
 
         bindUI();
 
@@ -86,7 +85,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getMHDValidatorTabCode();
+        return TabNamesUtil.getInstance().getMHDValidatorTabCode();
     }
 
     private void bindUI(){
@@ -94,6 +93,21 @@ public class MHDValidatorTab extends GenericCloseableTab {
             @Override
             public void onChange(ChangeEvent changeEvent) {
                 selectedMessageType = (String) changeEvent.getValue();
+                if (selectedMessageType!=null){
+                    if(fileUploadItem.getDisplayValue()!=null && !fileUploadItem.getDisplayValue().isEmpty()){
+                        runBtn.enable();
+                    }
+                }
+            }
+        });
+        fileUploadItem.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent changeEvent) {
+                if(fileUploadItem.getDisplayValue()!=null && !fileUploadItem.getDisplayValue().isEmpty()){
+                    if(selectedMessageType!=null && !selectedMessageType.isEmpty()){
+                        runBtn.enable();
+                    }
+                }
             }
         });
         runBtn.addClickHandler(new ClickHandler() {
@@ -116,17 +130,12 @@ public class MHDValidatorTab extends GenericCloseableTab {
         });
     }
 
-//    private void loadMessageTypesMap() {
-//        // TODO
-//        LinkedHashMap<String,String> map=new LinkedHashMap<String,String>();
-//        map.put("sbmt", "Submit");
-//        map.put("sbmt_resp","Submit Response");
-//        messageTypeSelect.setValueMap(map);
-//        Logger.getLogger(this.getClass().getName()).info("map loaded "+messageTypeSelect.getValues());
-//        for(String s:messageTypeSelect.getValues()){
-//            Logger.getLogger(this.getClass().getName()).info(s);
-//        }
-//    }
+    private void loadMessageTypesMap() {
+        LinkedHashMap<String,String> map=new LinkedHashMap<String,String>();
+        map.put("sbmt", "Submit");
+        map.put("sbmt_resp","Submit Response");
+        messageTypeSelect.setValueMap(map);
+    }
 
     private void displayValidationResults(String result) {
         validationResultsPanel.setContents(result);
@@ -135,20 +144,4 @@ public class MHDValidatorTab extends GenericCloseableTab {
         }
     }
 
-//    /*make a javascript funtion and html to received result
-//        here sniped function :*/
-//    public void uploadComplete(String status) {
-//        String[] result=status.split("@");
-//        if(result[0].equals("sucess")){
-//            //TODO
-//        }//else SC.say(result[0] + " upload file " + result[1]);
-//
-//    }
-//    // Solution from http://www.mrsondao.com/TopicDetail.aspx?TopicId=2
-//    private native void initComplete(MHDValidatorTab upload) /*-{
-//        $wnd.uploadComplete = function(fileName) {
-//            upload.@gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab::uploadComplete(Ljava/lang/String;)(fileName);
-//        };
-//    }-*/;
-////    You see reponseStatus in FileUploadServlet will call uploadComplete in client, end snip code below declare uploadComplete function on client!
 }

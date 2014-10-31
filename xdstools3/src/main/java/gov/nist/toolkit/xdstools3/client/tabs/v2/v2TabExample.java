@@ -58,6 +58,6 @@ public class v2TabExample extends Tab {
     }
 
     public String getTabName() {
-        return TabNamesUtil.getv2TabCode();
+        return TabNamesUtil.getInstance().getv2TabCode();
     }
 }

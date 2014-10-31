@@ -12,6 +12,6 @@ public class GetFolderAndContentsTab extends GetFoldersTab{
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getGetFoldersAndContentsCode();
+        return TabNamesUtil.getInstance().getGetFoldersAndContentsCode();
     }
 }

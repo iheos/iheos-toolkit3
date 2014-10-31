@@ -35,6 +35,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
+import gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab.SubmitTestDataTab;
 import gov.nist.toolkit.xdstools3.client.tabs.v2.v2TabExample;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
@@ -227,6 +228,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
         else if (tabName.equals(TabNamesUtil.getInstance().getMHDValidatorTabCode())) {
             tab = new MHDValidatorTab();
         }
+        else if(tabName.equals(TabNamesUtil.getInstance().getTestDataSubmissionTabCode())){
+            tab = new SubmitTestDataTab();
+        }
 
         // ---------- legacy v2 tabs --------
         else if (tabName.equals(TabNamesUtil.getInstance().getv2TabCode())) {
@@ -293,60 +297,60 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
      */
     private String getHeaderHtmlContent() {
         return "<header id='appheader'>" +
-                    "<div id='apptitle'>Document Sharing Test Tools</div>" +
-                    "<div id='appversion'>Version 3.0.1</div>" +
-                    "<div id='appsubtitle'>IHE USA Chicago Connectathon Jan. 2014</div>" +
+                "<div id='apptitle'>Document Sharing Test Tools</div>" +
+                "<div id='appversion'>Version 3.0.1</div>" +
+                "<div id='appsubtitle'>IHE USA Chicago Connectathon Jan. 2014</div>" +
                 "</header>" +
                 "<nav class='navbar'>" +
-                    "<div class='app-padding navbar-inner'>" +
-                    "<ul>" +
-                    "<li><a href='#'>Home</a></li>" +
-                    "<li><a href='#'>Queries & Retrieves</a>" +
-                        "<ul>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getFindDocumentsTabCode()+"'>Find Document</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getMpqFindDocumentsTabCode()+"'>MPQ Find Documents</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getGetDocumentsTabCode()+"'>Get Documents</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getGetRelatedDocumentsCode()+"'>Get Related Documents</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getRetrieveDocumentTabCode()+"'>Retrieve Document</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getFindFoldersCode()+"'>Find Folders</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getGetFoldersTabCode()+"'>Get Folders</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getGetFoldersAndContentsCode()+"'>Get Folders and Contents</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getGetSubmissionSetAndContentsTabCode()+"'>Get Submission Set and Contents</a></li>" +
-                        "</ul>" +
-                    "</li>" +
-                    "<li><a href='#'>Tools</a>" +
-                        "<ul>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getMessageValidatorTabCode()+"'>Message Validator</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getDocumentMetadataEditorTabCode()+"'>Document Metadata Editor</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getPreConnectathonTestsTabCode()+"'>Pre-Connectathon Tests</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getv2TabCode()+"'>v2 Tab Example</a></li>" +
-                        "</ul>" +
-                    "</li>" +
-                    "<li><a href='#'>Send Test Data</a>" +
-                        "<ul>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getv2TabCode()+"'>v2 Tab Example</a></li>" +
-                        "</ul>" +
-                    "</li>" +
-                    "<li><a href='#'>Simulators</a>" +
-                        "<ul>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getv2TabCode()+"'>v2 Tab Example</a></li>" +
-                        "</ul>" +
-                    "</li>" +
-                    "<li><a href='#'>Connectathon Tools</a>" +
-                        "<ul>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getSourceStoresDocumentValidationCode()+"'>XDS.b Doc Source Stores Document</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getRegisterAndQueryTabCode()+"'>XDS.b Register and Query</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getLifecycleValidationTabCode()+"'>XDS.b Lifecycle Validation</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getFolderValidationTabCode()+"'>XDS.b Registry Folder Validation</a></li>" +
-                            "<li><a href='#TabPlace:"+TabNamesUtil.getSubmitRetrieveTabCode()+"'>XDS.b Submit/Retrieve</a></li>" +
-                        "</ul>" +
-                    "</li>" +
-                    "<div style='float:right'>" +
-                        "<li><a href='#'><i class=\"fa fa-download\"></i> Download</a></li>" +
-                        "<li><a href='#'><i class=\"fa fa-question-circle\"></i> Help</a></li>" +
-                    "</div>" +
-                    "<ul>" +
-                    "</div>" +
+                "<div class='app-padding navbar-inner'>" +
+                "<ul>" +
+                "<li><a href='#'>Home</a></li>" +
+                "<li><a href='#'>Queries & Retrieves</a>" +
+                "<ul>" +
+                "<li><a href='#TabPlace:"+ TabNamesUtil.getInstance().getFindDocumentsTabCode()+"'>Find Document</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()+"'>MPQ Find Documents</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetDocumentsTabCode()+"'>Get Documents</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetRelatedDocumentsCode()+"'>Get Related Documents</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getRetrieveDocumentTabCode()+"'>Retrieve Document</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getFindFoldersCode()+"'>Find Folders</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetFoldersTabCode()+"'>Get Folders</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetFoldersAndContentsCode()+"'>Get Folders and Contents</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetSubmissionSetAndContentsTabCode()+"'>Get Submission Set and Contents</a></li>" +
+                "</ul>" +
+                "</li>" +
+                "<li><a href='#'>Tools</a>" +
+                "<ul>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getMessageValidatorTabCode()+"'>Message Validator</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode()+"'>Document Metadata Editor</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getPreConnectathonTestsTabCode()+"'>Pre-Connectathon Tests</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
+                "</ul>" +
+                "</li>" +
+                "<li><a href='#'>Send Test Data</a>" +
+                "<ul>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
+                "</ul>" +
+                "</li>" +
+                "<li><a href='#'>Simulators</a>" +
+                "<ul>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
+                "</ul>" +
+                "</li>" +
+                "<li><a href='#'>Connectathon Tools</a>" +
+                "<ul>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getSourceStoresDocumentValidationCode()+"'>XDS.b Doc Source Stores Document</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getRegisterAndQueryTabCode()+"'>XDS.b Register and Query</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getLifecycleValidationTabCode()+"'>XDS.b Lifecycle Validation</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getFolderValidationTabCode()+"'>XDS.b Registry Folder Validation</a></li>" +
+                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getSubmitRetrieveTabCode()+"'>XDS.b Submit/Retrieve</a></li>" +
+                "</ul>" +
+                "</li>" +
+                "<div style='float:right'>" +
+                "<li><a href='#'><i class=\"fa fa-download\"></i> Download</a></li>" +
+                "<li><a href='#'><i class=\"fa fa-question-circle\"></i> Help</a></li>" +
+                "</div>" +
+                "<ul>" +
+                "</div>" +
                 "</nav>";
     }
 

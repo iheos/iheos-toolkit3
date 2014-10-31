@@ -12,7 +12,7 @@ public class HomeBox extends VStack {
 
     public HomeBox(String _title){
         super();
-        title = Formatter.createSubtitle1(_title);
+        title = Formatter.createHomeSubtitle(_title);
         addMember(title);
     }
 
@@ -33,4 +33,6 @@ public class HomeBox extends VStack {
         HomeLinkButton button = new HomeLinkButton(item_title);
         addMember(button);
     }
+
+
 }

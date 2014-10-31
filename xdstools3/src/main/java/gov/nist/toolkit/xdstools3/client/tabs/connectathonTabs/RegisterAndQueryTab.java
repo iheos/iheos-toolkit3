@@ -16,6 +16,6 @@ public class RegisterAndQueryTab extends AbstractRegistryAndRepositoryTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getRegisterAndQueryTabCode();
+        return TabNamesUtil.getInstance().getRegisterAndQueryTabCode();
     }
 }

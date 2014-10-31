@@ -46,7 +46,7 @@ public class MessageValidatorTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getMessageValidatorTabCode();
+        return TabNamesUtil.getInstance().getMessageValidatorTabCode();
     }
 
 }

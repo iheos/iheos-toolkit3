@@ -126,7 +126,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getPreConnectathonTestsTabCode();
+        return TabNamesUtil.getInstance().getPreConnectathonTestsTabCode();
     }
 
     private void loadActorsMap() {
