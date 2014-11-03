@@ -2,22 +2,22 @@ package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FileUpload;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.smartgwt.client.types.Encoding;
-import com.smartgwt.client.types.FormMethod;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.HTMLPane;
-import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.form.fields.FileItem;
 import com.smartgwt.client.widgets.form.fields.HeaderItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
-import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VStack;
+import gov.nist.toolkit.xdstools2.client.Toolkit2Service;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
@@ -29,6 +29,9 @@ public class MHDValidatorTab extends GenericCloseableTab {
             .create(MHDTabsServices.class);
 
     private static String header="MHD Validator";
+
+    final protected Toolkit2ServiceAsync toolkitService =
+            GWT.create(Toolkit2Service.class);
     private String selectedMessageType;
     private Button runBtn;
 //    private DynamicForm uploadForm;
@@ -36,7 +39,9 @@ public class MHDValidatorTab extends GenericCloseableTab {
     private Logger logger=Logger.getLogger(MHDValidatorTab.class.getName());
     private SelectItem messageTypeSelect;
     private HTMLPane validationResultsPanel;
-    private FileItem fileUploadItem;
+    private FileUpload fileUploadItem;
+    private String uploadFilename;
+    private FormPanel uploadForm;
 
     public MHDValidatorTab() {
         super(header);
@@ -47,9 +52,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
         VStack vStack=new VStack();
 
         DynamicForm form = new DynamicForm();
-        form.setMethod(FormMethod.POST);
-        form.setEncoding(Encoding.MULTIPART);
-        form.setAction("fileUploadServlet");
 
         HeaderItem l1=new HeaderItem();
         l1.setDefaultValue("1. Select a message type");
@@ -62,21 +64,27 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
         HeaderItem l2=new HeaderItem();
         l2.setDefaultValue("2. Upload file to validate");
-        fileUploadItem = new FileItem();
-//        fileUploadItem = new UploadItem(); // or ...WithTooltip
+        uploadForm = new FormPanel();
+        uploadForm.setMethod(FormPanel.METHOD_POST);
+        uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
+        uploadForm.setAction("fileUploadServlet");
+        fileUploadItem = new FileUpload();
         fileUploadItem.setTitle("File to validate");
         fileUploadItem.setName("uploadItem");
-        fileUploadItem.setWidth(400);
+        fileUploadItem.setWidth("400");
+//        fileUploadItem.setWidth(400);
+        uploadForm.add(fileUploadItem);
 
         runBtn = new Button("Run");
         runBtn.disable();
 
-        form.setFields(l1,messageTypeSelect,l2,fileUploadItem);
-
         validationResultsPanel = new HTMLPane();
 
+        form.setFields(l1, messageTypeSelect, l2);
 
-        vStack.addMembers(form,runBtn,validationResultsPanel);
+        vStack.addMember(form);
+        vStack.addMember(uploadForm);
+        vStack.addMembers(runBtn,validationResultsPanel);
 
         bindUI();
 
@@ -94,17 +102,17 @@ public class MHDValidatorTab extends GenericCloseableTab {
             public void onChange(ChangeEvent changeEvent) {
                 selectedMessageType = (String) changeEvent.getValue();
                 if (selectedMessageType!=null){
-                    if(fileUploadItem.getDisplayValue()!=null && !fileUploadItem.getDisplayValue().isEmpty()){
+                    if(fileUploadItem.getFilename()!=null && !fileUploadItem.getFilename().isEmpty()){
                         runBtn.enable();
                     }
                 }
             }
         });
-        fileUploadItem.addChangeHandler(new ChangeHandler() {
+        fileUploadItem.addChangeHandler(new com.google.gwt.event.dom.client.ChangeHandler() {
             @Override
-            public void onChange(ChangeEvent changeEvent) {
-                if(fileUploadItem.getDisplayValue()!=null && !fileUploadItem.getDisplayValue().isEmpty()){
-                    if(selectedMessageType!=null && !selectedMessageType.isEmpty()){
+            public void onChange(com.google.gwt.event.dom.client.ChangeEvent event) {
+                if (fileUploadItem.getFilename() != null && !fileUploadItem.getFilename().isEmpty()) {
+                    if (selectedMessageType != null && !selectedMessageType.isEmpty()) {
                         runBtn.enable();
                     }
                 }
@@ -113,19 +121,35 @@ public class MHDValidatorTab extends GenericCloseableTab {
         runBtn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
-//                uploadForm.submit();
-                String somethingAboutTheFileUploaded = new String();
-                mhdToolkitService.validateMHDMessage(selectedMessageType, somethingAboutTheFileUploaded, new AsyncCallback<String>() {
-                    @Override
+                uploadForm.submit();
+            }
+        });
+        uploadForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+            @Override
+            public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
+                toolkitService.getLastFilename(new AsyncCallback<String>() {
                     public void onFailure(Throwable caught) {
-                        logger.warning(caught.getMessage());
+                        new PopupMessageV3(caught.getMessage());
                     }
-
-                    @Override
                     public void onSuccess(String result) {
-                        displayValidationResults(result);
+                        uploadFilename = result;
+                        validate();
                     }
                 });
+            }
+        });
+    }
+
+    private void validate() {
+        mhdToolkitService.validateMHDMessage(selectedMessageType, uploadFilename, new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                logger.warning(caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                displayValidationResults(result);
             }
         });
     }

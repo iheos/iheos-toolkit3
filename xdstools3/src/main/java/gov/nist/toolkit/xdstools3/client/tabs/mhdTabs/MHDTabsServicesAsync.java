@@ -3,5 +3,5 @@ package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface MHDTabsServicesAsync {
-    void validateMHDMessage(String messageType, String somethingAboutTheFileUploaded, AsyncCallback<String> async);
+    void validateMHDMessage(String messageType, String filename, AsyncCallback<String> async);
 }

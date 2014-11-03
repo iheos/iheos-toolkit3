@@ -104,8 +104,8 @@ public class Caller implements Serializable {
     }
 
     // ----------------------------- MHD -------------------------------
-    public String validateMHDMessage(String messageType, String somethingAboutTheFileUploaded) {
+    public String validateMHDMessage(String messageType, String filename) {
         //TODO Implementation (Change method prototype if required)
-        return "Response for "+messageType+" validation";
+        return "Response for "+messageType+" validation. File: "+filename;
     }
 }
