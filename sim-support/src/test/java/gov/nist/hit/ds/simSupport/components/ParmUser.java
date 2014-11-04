@@ -12,7 +12,6 @@ import gov.nist.hit.ds.soapSupport.SoapFaultException;
 public class ParmUser implements ValComponent {
     String lang;
 
-    @Override
     public void setAssertionGroup(AssertionGroup ag) {
 
     }
@@ -21,37 +20,30 @@ public class ParmUser implements ValComponent {
 
     public String getLang() { return lang; }
 
-    @Override
     public void setEvent(Event event) {
 
     }
 
-    @Override
     public String getName() {
         return null;
     }
 
-    @Override
     public void setName(String name) {
 
     }
 
-    @Override
     public String getDescription() {
         return null;
     }
 
-    @Override
     public void setDescription(String description) {
 
     }
 
-    @Override
     public void run() throws SoapFaultException, RepositoryException {
 
     }
 
-    @Override
     public boolean showOutputInLogs() {
         return false;
     }

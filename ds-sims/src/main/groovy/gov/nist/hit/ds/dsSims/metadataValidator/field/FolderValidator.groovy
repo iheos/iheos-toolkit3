@@ -27,7 +27,7 @@ public class FolderValidator extends ValidatorCommon {
 			try {
 			List<OMElement> ext_ids = m.getExternalIdentifiers(id);
 
-			//													name							identificationScheme            OID required
+			//													displayName							identificationScheme            OID required
 			validate_ext_id_present("Folder", id, ext_ids, "XDSFolder.patientId", "urn:uuid:f64ffdf0-4b97-4e06-b79f-a52b38ec2f8a", false);
 			validate_ext_id_present("Folder", id, ext_ids, "XDSFolder.uniqueId", "urn:uuid:75df8f67-9973-4fbe-a900-df66cefecc5a",  true);
 			} catch (MetadataException e) {
@@ -40,11 +40,11 @@ public class FolderValidator extends ValidatorCommon {
 	void validate_folder_slots()  {
 		List<String> fol_ids = m.getFolderIds();
 		for (int i=0; i<fol_ids.size(); i++) {
-//			String id = (String) fol_ids.get(i);
+//			String id = (String) fol_ids.label(i);
 //			try {
 //			List<OMElement> slots = m.getSlots(id);
 
-			//                      					name						multi	required	number
+			//                      					displayName						multi	required	number
 			// query only
 //			if (is_submit)
 //				validate_slot("Folder", id, slots, 		"lastUpdateTime", 			false, 	false, 		true);
@@ -71,7 +71,7 @@ public class FolderValidator extends ValidatorCommon {
 				String slot_name = slot.getAttributeValue(MetadataSupport.slot_name_qname);
 				if (slot_name == null) slot_name = "";
 				if ( ! legal_fol_slot_name(slot_name))
-					err("Folder " + id + ": " + slot_name + " is not a legal slot name for a Folder");
+					err("Folder " + id + ": " + slot_name + " is not a legal slot displayName for a Folder");
 			}
 			} catch (MetadataException e) {
 				err(e);
@@ -93,7 +93,7 @@ public class FolderValidator extends ValidatorCommon {
 			try {
 				List<OMElement> classs = m.getClassifications(id);
 
-				//                                      classificationScheme						name							required	multiple
+				//                                      classificationScheme						displayName							required	multiple
 				validate_class("Folder", id, classs, MetadataSupport.XDSFolder_codeList_uuid , 	"codeList",						true, 		true);
 
 			} catch (MetadataException e) {

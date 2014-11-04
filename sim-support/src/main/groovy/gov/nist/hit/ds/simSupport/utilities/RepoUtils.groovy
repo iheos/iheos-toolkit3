@@ -25,6 +25,11 @@ class RepoUtils {
         return parent.getChildByName(name)
     }
 
+    static Asset getChildIfAvailable(String name, Asset parent) {
+        try {
+            return parent.getChildByName(name)
+        } catch (RepositoryException e) { return null }
+    }
     static Asset child(String name, Repository parent) {
         return parent.getChildByName(name)
     }
@@ -48,6 +53,14 @@ class RepoUtils {
         init()
         try {
             repository.deleteAsset(aId)
+        } catch (RepositoryException e) {}
+    }
+
+    static rmAsset(String name, Repository repository) {
+        init()
+        try {
+            Asset a = repository.getChildByName(name)
+            if (a) repository.deleteAsset(a.getId())
         } catch (RepositoryException e) {}
     }
 

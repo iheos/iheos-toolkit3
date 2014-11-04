@@ -39,7 +39,15 @@ public class ValidationClassScanner {
                 vMethod.faultCode = fault.code()
             }
 
-            if (method.getAnnotation(Optional)) vMethod.required = false
+            Optional optional = method.getAnnotation(Optional)
+            if (optional) {
+                def optionalNames = optional.methodNames() as List
+                optionalNames.each {
+                    if (!getMethodByName(it))
+                        throw new ToolkitRuntimeException("Validation method: ${method.name} depends on guard method ${it} which is not defined.")
+                }
+                vMethod.addOptionalGuardMethod(optional.methodNames())
+            }
 
             def errorCode = method.getAnnotation(ErrorCode)
             if (errorCode) vMethod.errorCode = errorCode.code()

@@ -11,4 +11,5 @@ import java.lang.annotation.Target
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @interface Optional {
+    String[] methodNames() default ["null"]
 }

@@ -3,7 +3,7 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.dsSims.Transaction
 import gov.nist.hit.ds.eventLog.Event
-import gov.nist.hit.ds.httpSoapValidator.components.parsers.SoapMessageParser
+import gov.nist.hit.ds.httpSoap.components.parsers.SoapMessageParser
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.repository.shared.id.AssetId
 import gov.nist.hit.ds.tkapis.validation.MessageValidator

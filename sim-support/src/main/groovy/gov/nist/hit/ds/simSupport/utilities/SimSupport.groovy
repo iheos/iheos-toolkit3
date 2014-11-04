@@ -17,7 +17,7 @@ class SimSupport {
     static RepositorySource repoSource
     static RepositoryFactory repoFactory
     static Repository eventRepo
-    static Repository simRepo
+//    static Repository simRepo
     static eventLogName = 'EventLog'
     static simRepoName = 'Sim'
 //    File repoDataDir
@@ -41,8 +41,8 @@ class SimSupport {
     }
 
     static initActors() {
-        new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().loadFromResource('at.xml')
+//        new ActorTransactionTypeFactory().clear()
+//        new ActorTransactionTypeFactory().loadFromResource('at.xml')
     }
 
     static initFactories() {
@@ -52,6 +52,6 @@ class SimSupport {
 
     static initRepositories() {
         eventRepo = RepoUtils.mkRepository(eventLogName, new SimpleType('eventLog'))
-        simRepo = RepoUtils.mkRepository(simRepoName, new SimpleType('simRepos'))
+//        simRepo = RepoUtils.mkRepository(simRepoName, new SimpleType('simRepos'))
     }
 }

@@ -3,122 +3,122 @@ package gov.nist.hit.ds.dsSims;
 
 
 public class HtmlValFormatter implements ValFormatter {
-    @Override
+    
     public void addCell(String msg, int col) {
 
     }
 
-    @Override
+    
     public void setCell(String msg, int row, int col) {
 
     }
 
-    @Override
+    
     public void hr() {
 
     }
 
-    @Override
+    
     public void clearResults() {
 
     }
 
-    @Override
+    
     public void setColSpan(int col, int colSpan) {
 
     }
 
-    @Override
+    
     public void setDetail(String detail) {
 
     }
 
-    @Override
+    
     public void setDTS(String dts) {
 
     }
 
-    @Override
+    
     public void setFound(String found) {
 
     }
 
-    @Override
+    
     public void setReference(String ref) {
 
     }
 
-    @Override
+    
     public void setStatus(String status) {
 
     }
 
-    @Override
+    
     public void setName(String name) {
 
     }
 
-    @Override
+    
     public void setExpected(String expected) {
 
     }
 
-    @Override
+    
     public void setRFC(String rfc) {
 
     }
 
-    @Override
+    
     public String red(String msg) {
         return null;
     }
 
-    @Override
+    
     public String green(String msg) {
         return null;
     }
 
-    @Override
+    
     public String purple(String msg) {
         return null;
     }
 
-    @Override
+    
     public String blue(String msg) {
         return null;
     }
 
-    @Override
+    
     public String bold(String msg) {
         return null;
     }
 
-    @Override
+    
     public String h2(String msg) {
         return null;
     }
 
-    @Override
+    
     public String h3(String msg) {
         return null;
     }
 
-    @Override
+    
     public String rfc_link(String msg) {
         return null;
     }
 
-    @Override
+    
     public String html_link(String msg, String url) {
         return null;
     }
 
-    @Override
+    
     public void incRow() {
 
     }
 
-    @Override
+    
     public int getRow() {
         return 0;
     }
@@ -250,12 +250,12 @@ public class HtmlValFormatter implements ValFormatter {
 //	}
 //
 //	// Name Column
-//	public void setName(String name) {
-//		addCell(name, 0);
+//	public void setName(String displayName) {
+//		addCell(displayName, 0);
 //	}
 //
-//	public void name(String name) {
-//		setStatus(name);
+//	public void displayName(String displayName) {
+//		setStatus(displayName);
 //	}
 //
 //	// Expected column
@@ -301,7 +301,7 @@ public class HtmlValFormatter implements ValFormatter {
 //		return "<h3>" + msg + "</h3>";
 //	}
 //
-//	@Override
+//	
 //	public String rfc_link(String msg) {
 //		String res = "";
 //		if(msg.contains(";")) {
@@ -333,22 +333,22 @@ public class HtmlValFormatter implements ValFormatter {
 //		return row;
 //	}
 //
-//	@Override
+//	
 //	public String blue(String msg) {
 //		return "<font color=\"#0000FF\">" + msg  + "</font>";
 //	}
 //
-//	@Override
+//	
 //	public String green(String msg) {
 //		return "<font color=\"#66CD00\">" + msg  + "</font>";
 //	}
 //
-//	@Override
+//	
 //	public String purple(String msg) {
 //		return "<font color=\"#551A8B\">" + msg  + "</font>";
 //	}
 //
-//	@Override
+//	
 //	public void setColSpan(int col, int colSpan) {
 //		this.colspan[col] = 5;
 //	}

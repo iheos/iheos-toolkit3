@@ -21,6 +21,7 @@ public class PartParserBa extends HttpParserBa {
 	}
 	
 	void initPart() throws HttpParseException {
+        logger.debug("get content-id header in:\n" + message.getHeaders().toString());
 		String contentIDHeaderString = message.getHeader("content-id");
 		if (appendixV == false && (contentIDHeaderString == null || contentIDHeaderString.equals("")))
 			return;

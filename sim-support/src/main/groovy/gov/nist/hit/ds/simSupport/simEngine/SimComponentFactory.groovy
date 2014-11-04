@@ -8,7 +8,7 @@ import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
 /**
  * Create an instance of a Sim Component and inject the supplied parameters. 
- * Also inject the component name;
+ * Also inject the component displayName;
  * @author bmajur
  *
  */
@@ -22,7 +22,7 @@ public class SimComponentFactory {
      * Load a SimComponent and return a newly created instance.
      * @param className - fully qualified classname. This class must
      * implement the SimComponent interface or the loadFromPropertyBasedResource will fail.
-     * @param name - name value to be injected (getName()/setName(String)
+     * @param displayName - displayName value to be injected (getName()/setName(String)
      * @param parmMap - String valued parameters to inject. A parameter named
      * "action" requires that the class contain the setter setAction(String action).
      * Typical calling sequence is:

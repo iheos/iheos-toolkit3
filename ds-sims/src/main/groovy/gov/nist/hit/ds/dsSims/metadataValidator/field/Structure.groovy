@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.field
 
-import gov.nist.hit.ds.dsSims.generator.RegistryErrorListGenerator
 import gov.nist.hit.ds.eventLog.testSupport.LogMessage
 import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.metadata.MetadataSupport
@@ -12,26 +11,26 @@ import org.apache.axiom.om.OMElement
 
 public class Structure {
 	Metadata m;
-	RegistryErrorListGenerator rel;
+//	RegistryErrorListGenerator rel;
 	boolean is_submit;
 	LogMessage log_message;
 
 
 	public Structure(Metadata m, boolean is_submit) throws XdsInternalException {
-		this.m = m;
-		rel = new RegistryErrorListGenerator( 
-				(m.isVersion2()) ? RegistryErrorListGenerator.version_2 : RegistryErrorListGenerator.version_3, 
-						false /* log */);
-		this.is_submit = is_submit;
-		log_message = null;
+//		this.m = m;
+//		rel = new RegistryErrorListGenerator(
+//				(m.isVersion2()) ? RegistryErrorListGenerator.version_2 : RegistryErrorListGenerator.version_3,
+//						false /* log */);
+//		this.is_submit = is_submit;
+//		log_message = null;
 	}
 
-	public Structure(Metadata m, boolean is_submit, RegistryErrorListGenerator rel, 	LogMessage log_message) throws XdsInternalException {
-		this.m = m;
-		this.is_submit = is_submit;
-		this.rel = rel;
-		this.log_message = log_message;
-	}
+//	public Structure(Metadata m, boolean is_submit, RegistryErrorListGenerator rel, 	LogMessage log_message) throws XdsInternalException {
+//		this.m = m;
+//		this.is_submit = is_submit;
+//		this.rel = rel;
+//		this.log_message = log_message;
+//	}
 
 	public void run()  throws MetadataException, MetadataValidationException,  XdsException {
 		submission_structure();

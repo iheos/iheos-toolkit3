@@ -71,7 +71,6 @@ class RimGenerator {
     }
 
     def evalObjects(spec) {
-        println "spec is ${spec}"
             if (spec.type == 'DocumentEntry') return evalDocumentEntry(spec)
             if (spec.type == 'SubmissionSet') return evalSubmissionSet(spec)
             if (spec.type == 'Folder') return evalFolder(spec)
@@ -110,14 +109,13 @@ class RimGenerator {
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
                     }
-            labelSubmissionSet(xml, spec.id)
         } else {
             xml.RegistryPackage(id: spec.id, lid: spec.lid,)
                     {
                         spec.attributes.each { evalAttribute(xml, spec.id, it) }
                     }
-            labelSubmissionSet(xml, spec.id)
         }
+        xml.Classification(classifiedObject:spec.id, classificationNode:"urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd")
         return writer.toString()
     }
 
@@ -126,12 +124,12 @@ class RimGenerator {
         def xml = new MarkupBuilder(writer)
         def status = (spec.status) ? "urn:oasis:names:tc:ebxml-regrep:StatusType:${spec.status}" : null
         if (status) {
-            xml.RegistryPackage(id: spec.id, lid: spec.lid,
+            xml.RegistryPackage(id: spec.id,
                     status: "urn:oasis:names:tc:ebxml-regrep:StatusType:${spec.status}") {
                 spec.attributes.each { evalAttribute(xml, spec.id, it) }
             }
         } else {
-            xml.RegistryPackage(id: spec.id, lid: spec.lid,) {
+            xml.RegistryPackage(id: spec.id) {
                 spec.attributes.each { evalAttribute(xml, spec.id, it) }
             }
         }
@@ -169,6 +167,10 @@ class RimGenerator {
         }
     }
 
+    def mkVersion(xml, spec) {
+        xml.VersionInfo(versionName: spec.value)
+    }
+
     def mkClassification(xml, parent, spec) {
         def scheme = classSchemes.get(spec.name)
         if (scheme == null) throw new ToolkitRuntimeException("No Classification Scheme defined for ${spec.name}.")
@@ -183,14 +185,9 @@ class RimGenerator {
             }
         }
     }
-//    <Classification classifiedObject="SubmissionSet01"
-//    classificationNode="urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd"/>
-
-    def labelSubmissionSet(xml, parentId) {
-        xml.Classification(classifiedObject: parentId, classificationNode: 'urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd') {}
-    }
 
     def mkAuthor(xml, parent, spec) {
+        println "person is ${spec.person}"
         def scheme = authorSchemes.get(spec.name)
         if (scheme == null) throw new ToolkitRuntimeException("No Classification Scheme defined for ${spec.name}.")
         xml.Classification(id: newId(),
@@ -201,7 +198,7 @@ class RimGenerator {
             if (spec.person) {
                 xml.Slot(name: 'authorPerson') {
                     ValueList {
-                        Value ( spec.person )
+                        Value(spec.person)
                     }
                 }
             }
@@ -209,7 +206,7 @@ class RimGenerator {
                 xml.Slot(name: 'authorInstitution') {
                     ValueList {
                         spec.institutions.each {
-                            Value ( it )
+                            Value(it)
                         }
                     }
                 }
@@ -235,7 +232,7 @@ class RimGenerator {
             if (spec.telecom) {
                 xml.Slot(name: 'authorTelecommunication') {
                     ValueList {
-                        Value ( spec.telecom )
+                        Value (spec.telecom)
                     }
                 }
             }
@@ -262,10 +259,6 @@ class RimGenerator {
         xml.Name {
             LocalizedString(value: spec.values[0])
         }
-    }
-
-    def mkVersion(xml, spec) {
-        xml.VersionInfo(versionName: spec.value)
     }
 
     def id = 1

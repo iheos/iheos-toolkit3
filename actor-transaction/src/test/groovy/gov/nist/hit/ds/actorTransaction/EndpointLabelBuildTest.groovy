@@ -9,21 +9,25 @@ public class EndpointLabelBuildTest {
     ActorType actorType;
     static String config = '''
 <ActorsTransactions>
-    <transaction displayName="Stored Query" id="sq" code="sq" asyncCode="sq.as">
+    <transaction name="Stored Query" code="sq" asyncCode="sq.as">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as">
+    <transaction name="Register" code="rb" asyncCode="r.as">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
+    <transaction name="Provide and Register" code="prb" asyncCode="pr.as">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Update" id="update" code="update" asyncCode="update.as">
+    <transaction name="Update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
+        <implClass value="unused"/>
     </transaction>
     <actor displayName="Document Registry" id="reg">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
@@ -34,57 +38,57 @@ public class EndpointLabelBuildTest {
     <actor displayName="Document Repository" id="rep">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="prb"/>
-        <property name="repositoryUniqueId" value="1.2.3.4"/>
+        <property displayName="repositoryUniqueId" value="1.2.3.4"/>
     </actor>
 </ActorsTransactions>
 '''
     @Before
     void setup() {
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().loadFromString(config)
         actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
     }
 
 	@Test
 	public void buildTest()  {
-		TransactionType register = actorType.find("register");
-		EndpointLabel label;
-		label = new EndpointLabel(
+		TransactionType register = actorType.find("rb");
+		EndpointType label;
+		label = new EndpointType(
 				register,
 				TlsType.TLS,
 				AsyncType.ASYNC
 				);
-		assertEquals("", "Register_TLS_ASYNC", label.get());
+		assertEquals("", "rb_TLS_ASYNC", label.label());
 		assertTrue(label.isTls());
 		assertTrue(label.isAsync());
 		assertEquals("", register, label.getTransType());
 
-		label = new EndpointLabel(
+		label = new EndpointType(
 				register,
 				TlsType.NOTLS,
 				AsyncType.ASYNC
 				);
-		assertEquals("", "Register_ASYNC", label.get());
+		assertEquals("", "rb_ASYNC", label.label());
 		assertFalse(label.isTls());
 		assertTrue(label.isAsync());
 		assertEquals("", register, label.getTransType());
 
-		label = new EndpointLabel(
+		label = new EndpointType(
 				register,
 				TlsType.TLS,
 				AsyncType.SYNC
 				);
-		assertEquals("", "Register_TLS", label.get());
+		assertEquals("", "rb_TLS", label.label());
 		assertTrue(label.isTls());
 		assertFalse(label.isAsync());
 		assertEquals("", register, label.getTransType());
 
-		label = new EndpointLabel(
+		label = new EndpointType(
 				register,
 				TlsType.NOTLS,
 				AsyncType.SYNC
 				);
-		assertEquals("", "Register", label.get());
+		assertEquals("", "rb", label.label());
 		assertFalse(label.isTls());
 		assertFalse(label.isAsync());
 		assertEquals("", register, label.getTransType());

@@ -8,29 +8,33 @@ import spock.lang.Specification
 class CreateActorTest extends Specification {
     static String config = '''
 <ActorsTransactions>
-    <transaction displayName="Stored Query" id="sq" code="sq" asyncCode="sq.as">
+    <transaction name="Stored Query" code="sq" asyncCode="sq.as">
+        <implClass value="unused"/>
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
     </transaction>
-    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as">
+    <transaction name="Register"  code="rb" asyncCode="r.as">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
+    <transaction name="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Update" id="update" code="update" asyncCode="update.as">
+    <transaction name="Update" id="update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <actor displayName="Document Registry" id="reg">
+    <actor name="Document Registry" id="reg">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
         <transaction id="rb"/>
         <transaction id="sq"/>
         <transaction id="update"/>
     </actor>
-    <actor displayName="Document Repository" id="rep">
+    <actor name="Document Repository" id="rep">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="prb"/>
         <property name="repositoryUniqueId" value="1.2.3.4"/>
@@ -38,7 +42,7 @@ class CreateActorTest extends Specification {
 </ActorsTransactions>
 '''
     def setup() {
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().loadFromString(config)
     }
 
@@ -59,7 +63,7 @@ class CreateActorTest extends Specification {
 
         then: 'Verify actor properties are empty'
         actorType != null
-        actorType.getProperties().size() == 0   // nothing defined beyond required fields
+        actorType.getProps().size() == 0   // nothing defined beyond required fields
     }
 
     def 'Actor properties for Repository should contain extra property repositoryUniqueId'() {
@@ -70,8 +74,8 @@ class CreateActorTest extends Specification {
 
         then: 'Verify actor properties include repositoryUniqueId'
         actorType != null
-        actorType.getProperties().size() == 1
-        actorType.getProperties().containsKey('repositoryUniqueId')
+        actorType.getProps().size() == 1
+        actorType.getProps().containsKey('repositoryUniqueId')
     }
 
 }

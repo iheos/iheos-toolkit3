@@ -30,7 +30,7 @@ public class ExternalIdentifierValidator extends AbstractRegistryObjectValidator
 			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": value attribute missing or empty", this, "ebRIM 3.0 section 2.11.1");
 		
 		if (model.getName() == null || model.getName().equals(""))
-			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": display name (Name element) missing or empty", this, "ITI TF-3: 4.1.12.5");
+			er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": display displayName (Name element) missing or empty", this, "ITI TF-3: 4.1.12.5");
 	}
 
 	public void validateRequiredSlotsPresent(ErrorRecorder er,

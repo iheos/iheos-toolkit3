@@ -205,4 +205,95 @@ class DocumentEntryModel extends RegistryObjectModel {
         return isClassifiedAs(MetadataSupport.XDSDocumentEntry_limitedMetadata_uuid);
     }
 
+    String entryUUID() { id }
+
+    ExternalIdentifierModel uniqueId() {
+        externalIdentifiers.find { ExternalIdentifierModel it -> it.identificationScheme == MetadataSupport.XDSDocumentEntry_uniqueid_uuid}
+    }
+
+    ExternalIdentifierModel patientId() {
+        externalIdentifiers.find { ExternalIdentifierModel it -> it.identificationScheme == MetadataSupport.XDSDocumentEntry_patientid_uuid}
+    }
+
+    Collection<ClassificationModel> authors() {
+        classifications.findAll { ClassificationModel it -> it.classification_scheme == MetadataSupport.XDSDocumentEntry_author_uuid}
+    }
+
+    ClassificationModel classCode() {
+        classifications.find { ClassificationModel it -> it.classification_scheme ==  MetadataSupport.XDSDocumentEntry_classCode_uuid}
+    }
+
+    Collection<ClassificationModel> confCodes() {
+        classifications.findAll { ClassificationModel it -> it.classification_scheme ==  MetadataSupport.XDSDocumentEntry_formatCode_uuid}
+    }
+
+    Collection<ClassificationModel> eventCodes() {
+        classifications.findAll { ClassificationModel it -> it.classification_scheme == MetadataSupport.XDSDocumentEntry_eventCode_uuid}
+    }
+
+    ClassificationModel formatCode() {
+        classifications.find { ClassificationModel it -> it.classification_scheme == MetadataSupport.XDSDocumentEntry_formatCode_uuid}
+    }
+
+    ClassificationModel healthcareFacilityTypeCode() {
+        classifications.find { ClassificationModel it -> it.classification_scheme == MetadataSupport.XDSDocumentEntry_hcftCode_uuid}
+    }
+
+    ClassificationModel practiceSettingCode() {
+        classifications.find { ClassificationModel it -> it.classification_scheme == MetadataSupport.XDSDocumentEntry_psCode_uuid}
+    }
+
+    ClassificationModel typeCode() {
+        classifications.find { ClassificationModel it -> it.classification_scheme == MetadataSupport.XDSDocumentEntry_typeCode_uuid}
+    }
+
+    SlotModel creationTime() {
+        slots.find { SlotModel it -> it.name = 'creationTime'}
+    }
+
+    SlotModel hash() {
+        slots.find { SlotModel it -> it.name = 'hash'}
+    }
+
+    SlotModel languageCode() {
+        slots.find { SlotModel it -> it.name = 'languageCode'}
+    }
+
+    SlotModel legalAuthenticator() {
+        slots.find { SlotModel it -> it.name = 'legalAuthenticator'}
+    }
+
+    SlotModel repositoryUniqueId() {
+        slots.find { SlotModel it -> it.name = 'repositoryUniqueId'}
+    }
+
+    SlotModel serviceStartTime() {
+        slots.find { SlotModel it -> it.name = 'serviceStartTime'}
+    }
+
+    SlotModel serviceStopTime() {
+        slots.find { SlotModel it -> it.name = 'serviceStopTime'}
+    }
+
+    SlotModel size() {
+        slots.find { SlotModel it -> it.name = 'size'}
+    }
+
+    SlotModel sourcePatientId() {
+        slots.find { SlotModel it -> it.name = 'sourcePatientId'}
+    }
+
+    SlotModel sourcePatientInfo() {
+        slots.find { SlotModel it -> it.name = 'sourcePatientInfo'}
+    }
+
+    SlotModel URI() {
+        slots.find { SlotModel it -> it.name = 'URI'}
+    }
+
+    String title() { name }
+
+    String availabilityStatus() { status }
+
+    String homeCommunityId() { home }
 }

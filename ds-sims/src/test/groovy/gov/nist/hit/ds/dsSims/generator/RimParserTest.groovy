@@ -105,7 +105,7 @@ class RimParserTest extends Specification {
             classifiedObject="Document01" nodeRepresentation="History and Physical"
             objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
             id="id_3">
-            <rim:Slot name="codingScheme">
+            <rim:Slot displayName="codingScheme">
                 <rim:ValueList>
                     <rim:Value>Connect-a-thon classCodes</rim:Value>
                 </rim:ValueList>
@@ -160,12 +160,12 @@ class RimParserTest extends Specification {
   <rim:ExtrinsicObject id="Document01" mimeType="text/plain"
         objectType="urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1"
         status="urn:oasis:names:tc:ebxml-regrep:StatusType:Approved">
-        <rim:Slot name="creationTime">
+        <rim:Slot displayName="creationTime">
             <rim:ValueList>
                 <rim:Value>20051224</rim:Value>
             </rim:ValueList>
         </rim:Slot>
-        <rim:Slot name="languageCode">
+        <rim:Slot displayName="languageCode">
             <rim:ValueList>
                 <rim:Value>en-us</rim:Value>
                 <rim:Value>en-uk</rim:Value>

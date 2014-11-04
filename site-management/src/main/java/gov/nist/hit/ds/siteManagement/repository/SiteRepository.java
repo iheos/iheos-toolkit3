@@ -67,7 +67,7 @@ public class SiteRepository {
 //		try {
 //			String assetName = site.getName();
 //			if (assetName == null || assetName.equals(""))
-//				throw new ToolkitRuntimeException("Cannot save site that does not have a name.");
+//				throw new ToolkitRuntimeException("Cannot save site that does not have a displayName.");
 //			Directory reposDirectory = new Directory();
 //			Asset asset = repos.createNamedAsset(assetName, "", reposDirectory.getActorAssetType(), assetName);
 //

@@ -46,7 +46,7 @@ public class FolderValidator extends AbstractRegistryObjectValidator {
 
 	public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
 
-		//                    name				   multi	format                                                  resource
+		//                    displayName				   multi	format                                                  resource
 		validateSlot(er, 	"lastUpdateTime", 	   false, 	new DtmSubValidator(er, "Slot lastUpdateTime",            table417),  table417);
 	}
 
@@ -62,7 +62,7 @@ public class FolderValidator extends AbstractRegistryObjectValidator {
 		verifySlotsUnique(er);
 		for (SlotModel slot : model.getSlots()) {
 			if ( ! legal_slot_name(slot.getName()))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + slot.getName() + " is not a legal slot name for a SubmissionSet",  this,  table417);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + slot.getName() + " is not a legal slot displayName for a SubmissionSet",  this,  table417);
 
 		}
 	}

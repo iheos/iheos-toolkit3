@@ -8,37 +8,41 @@ import spock.lang.Specification
 class EndpointLabelParsingTest extends Specification {
     static String config = '''
 <ActorsTransactions>
-    <transaction displayName="Stored Query" id="sq" code="sq" asyncCode="sq.as">
+    <transaction name="Stored Query" id="sq" code="sq" asyncCode="sq.as">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as">
+    <transaction name="Register" id="rb" code="rb" asyncCode="r.as">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
+    <transaction name="Provide and Register" id="prb" code="prb" asyncCode="pr.as">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <transaction displayName="Update" id="update" code="update" asyncCode="update.as">
+    <transaction name="Update" id="update" code="update" asyncCode="update.as">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
+        <implClass value="unused"/>
     </transaction>
-    <actor displayName="Document Registry" id="reg">
+    <actor name="Document Registry" id="reg">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factories.DocumentRegistryActorFactory"/>
         <transaction id="rb"/>
         <transaction id="sq"/>
         <transaction id="update"/>
     </actor>
-    <actor displayName="Document Repository" id="rep">
+    <actor name="Document Repository" id="rep">
         <simFactoryClass class="gov.nist.hit.ds.registrySim.factory.DocumentRepositoryActorFactory"/>
         <transaction id="prb"/>
-        <property name="repositoryUniqueId" value="1.2.3.4"/>
+        <property displayName="repositoryUniqueId" value="1.2.3.4"/>
     </actor>
 </ActorsTransactions>
 '''
     def setup() {
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().loadFromString(config)
     }
 
@@ -46,7 +50,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointLabel(actorType, "Register_TLS_ASYNC");
+        def label = new EndpointType(actorType, "rb_TLS_ASYNC");
 
         then:
         register == label.getTransType()
@@ -58,7 +62,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointLabel(actorType, "Register_TLS_SYNC");
+        def label = new EndpointType(actorType, "rb_TLS_SYNC");
 
         then:
         register == label.getTransType()
@@ -70,7 +74,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointLabel(actorType, "Register_ASYNC");
+        def label = new EndpointType(actorType, "rb_ASYNC");
 
         then:
         register == label.getTransType()
@@ -82,7 +86,7 @@ class EndpointLabelParsingTest extends Specification {
         when:
         def actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         def register = actorType.find("rb");
-        def label = new EndpointLabel(actorType, "Register");
+        def label = new EndpointType(actorType, "rb");
 
         then:
         register == label.getTransType()

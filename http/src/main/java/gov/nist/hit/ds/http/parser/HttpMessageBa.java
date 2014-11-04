@@ -31,7 +31,7 @@ public class HttpMessageBa implements HttpServletRequest {
 		Header() {}
 		Header(String name, String value) {
 			this.name = name.trim();
-			this.lcname = name.toLowerCase();
+			this.lcname = this.name.toLowerCase();
 			this.value = value.trim();
 		}
 		
@@ -134,9 +134,10 @@ public class HttpMessageBa implements HttpServletRequest {
         logger.debug("looking for header " + lcHeaderName);
 		for (int i=0; i<headers.size(); i++) {
             logger.debug(headers.get(i).lcname);
-			if (lcHeaderName.equals(headers.get(i).lcname))
+			if (lcHeaderName.equals(headers.get(i).lcname)) {
                 logger.debug("got it");
-				return headers.get(i).name + ": " + headers.get(i).value;
+                return headers.get(i).name + ": " + headers.get(i).value;
+            }
 		}
 		return null;
 	}

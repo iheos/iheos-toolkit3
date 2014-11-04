@@ -1,7 +1,6 @@
 package gov.nist.hit.ds.simSupport.transaction
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.TransactionType
-import gov.nist.hit.ds.eventLog.EventFactory
 import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
@@ -18,47 +17,49 @@ import groovy.util.logging.Log4j
 class TransactionRunner {
 //    String endpoint
     EndpointBuilder endpointBuilder
-    String header = ''
-    byte[] body = ''
     SimId simId
     SimHandle simHandle
     def transactionType
     String implClassName
     def event
     def transCode
-//    def actorCode
     def repoName
 
-    ////////////////////////////////////////////////////////////////
-    // Production support
+//    ////////////////////////////////////////////////////////////////
+//    // generates two events - don't use
+//
+//    @Deprecated
+//    TransactionRunner(EndpointBuilder _endpointBuilder, String _repoName) {
+//        endpointBuilder = _endpointBuilder
+////        this.endpoint = endpoint
+//        this.transCode = endpointBuilder.transCode
+//        repoName = _repoName
+//        init()
+//    }
 
-    TransactionRunner(EndpointBuilder _endpointBuilder, String _repoName, String header, byte[] body) {
-        endpointBuilder = _endpointBuilder
-//        this.endpoint = endpoint
-        this.transCode = endpointBuilder.transCode
-        this.header = header
-        this.body = body
-        repoName = _repoName
-        init()
-    }
+    TransactionRunner() {}
 
-    TransactionRunner(SimId _simId, String repositoryName, TransactionType _transactionType, String _header, byte[] _body) {
-        header = _header
-        body = _body
+    TransactionRunner(SimId _simId, String repositoryName, TransactionType _transactionType) {
+        log.debug("TransactionRunner: transactionType is ${_transactionType}")
         transactionType = _transactionType
         simId = _simId
         repoName = repositoryName
         implClassName = transactionType.implementationClassName
         log.debug("implClassName is ${implClassName}")
-        init2(simId, repositoryName, transactionType.code)
+        init2(simId, transactionType.code, repositoryName)
+    }
+
+    TransactionRunner(SimHandle _simHandle) {
+        simHandle = _simHandle
+        event = simHandle.event
+        transactionType = simHandle.transactionType
+        implClassName = simHandle.transactionType?.implementationClassName
+        log.debug("TransactionRunner: transactionType is ${simHandle.transactionType} implClass is ${implClassName}")
     }
     ////////////////////////////////////////////////////////////////
 
     def init() {
-//        def builder = new EndpointBuilder()
-//        builder.parse(endpoint)
         transCode = endpointBuilder.transCode
-//        actorCode = endpointBuilder.actorCode
         def simId = endpointBuilder.simId
 
         assert repoName
@@ -70,17 +71,11 @@ class TransactionRunner {
         log.debug("transactionClassName is ${implClassName}")
     }
 
+
     private init2(simId, transactionCode, repositoryName) {
         log.debug("TransactionRunner using repo ${repositoryName}")
-        simHandle = SimUtils.open(simId, repositoryName)
-        event = new EventFactory().buildEvent(simHandle.repository, simHandle.eventLogAsset)
-        simHandle.event = event
-
-        // Register inputs
-        event.inOut.reqHdr = header
-        event.inOut.reqBody = body
-
-        event.init()
+        simHandle = SimUtils.open(simId.id, repositoryName)
+        event = simHandle.event
 
         // Lookup transaction implementation class
         transactionType = new ActorTransactionTypeFactory().getTransactionType(transactionCode)
@@ -89,12 +84,24 @@ class TransactionRunner {
 
     def validateRequest() {runAMethod('validateRequest')}
     def validateResponse() {runAMethod('validateResponse')}
-    def run() { runAMethod('run')}
+    SimHandle run() { runAMethod('run'); return simHandle }  // used for unit tests
+    SimHandle prun() { runPMethod('run'); return simHandle }  // used for production (from servlet)
 
+    // TODO - may be closing sim too early - good for unit tests, bad for servlet access
     def runAMethod(methodName) {
         // build implementation
-        Class<?> clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
-        if (!clazz) throw new ToolkitRuntimeException("Class ${implClassName} cannot be loaded.")
+        log.debug("Running transaction class ${implClassName}")
+
+        Class<?> clazz
+        try {
+            clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
+        } catch (ClassNotFoundException e) {
+            throw new ToolkitRuntimeException("Class [${implClassName}] cannot be loaded.")
+            String actorTrans = transCode
+            event.fault = new Fault("Class [${implClassName}] cannot be loaded.", FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(e))
+            SimUtils.close(simHandle)
+            throw e
+        }
         Object[] params = new Object[1]
         params[0] = simHandle
         Object instance = clazz.newInstance(params)
@@ -102,12 +109,40 @@ class TransactionRunner {
         // call run() method
         try {
             instance.invokeMethod(methodName, null)
-            event.flushAll()
+//            SimUtils.close(simHandle)
         } catch (Throwable t) {
             String actorTrans = transCode
             event.fault = new Fault('Exception', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))
-            event.flushAll()
+            SimUtils.close(simHandle)
             throw t
+        }
+    }
+
+    // Used for production
+    def runPMethod(String methodName) {
+        // build implementation
+        log.debug("Running transaction class ${implClassName}")
+        Class<?> clazz
+        try {
+            clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
+        } catch (Throwable t) {
+            simHandle.event.fault = new Fault("Configuration Error - cannot load transaction class ${implClassName}", FaultCode.Receiver.toString(), simHandle.transactionType?.code, "Transaction implementation class ${implClassName} does not exist.")
+            return
+        }
+        if (!clazz) {
+            simHandle.event.fault = new Fault('Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType.code, "Transaction implementation class ${implClassName} does not exist.")
+            return
+        }
+        Object[] params = new Object[1]
+        params[0] = simHandle
+        Object instance = clazz.newInstance(params)
+
+        // call run() method
+        try {
+            instance.invokeMethod(methodName, null)
+        } catch (Throwable t) {
+            String actorTrans = transCode
+            event.fault = new Fault('Exception running transaction', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))
         }
     }
 
@@ -116,8 +151,6 @@ class TransactionRunner {
 
     Closure runner
     TransactionRunner(String transactionCode, SimId simId, repositoryName, Closure runner)  {
-        header = 'x'
-        body = 'x'.getBytes()
         repoName = repositoryName
         transactionType = new ActorTransactionTypeFactory().getTransactionType(transactionCode)
         init2(simId, transactionCode, repositoryName)

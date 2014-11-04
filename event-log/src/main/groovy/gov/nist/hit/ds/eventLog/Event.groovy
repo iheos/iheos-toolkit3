@@ -71,12 +71,13 @@ class Event {
     ValidatorResults currentResults() { assert resultsStack.size() > 0; return resultsStack.last() }
 
     def addPeerResults(validatorName) {
-        log.debug("Creating ${validatorName} AG")
+        log.debug("Add peer results ${validatorName} AG")
         Asset parent = (resultsStack.empty) ? eventDAO.validatorsAsset : resultsStack.last().parentAsset
         initResults(parent, validatorName)
         resultsStack.last().flush(FlushStatus.Force)
     }
     def addChildResults(childName) {
+        log.debug("Add child results ${childName} AG")
         assert !resultsStack.empty
         def result = resultsStack.last()
 //        initResults(result.parentAsset, childName)
@@ -84,10 +85,12 @@ class Event {
         result.flush(FlushStatus.Force)
     }
     def addSelfResults(validatorName) {
+        log.debug("Add self results ${validatorName} AG")
         if (resultsStack.empty) init()
     }
 
     def close() {
+        println "Closing ${resultsStack}"
         assert !resultsStack.empty
         println "Closing from ${resultsStack}"
         def result = resultsStack.pop()
@@ -130,7 +133,9 @@ class Event {
     def flushAllResultsForExit() {
         // it is important that this be done bottom up so errors can
         // propagate up
+        log.debug("Flushing results: empty? = ${resultsStack.empty}")
         while (!resultsStack.empty) { popChildResults() }
+        flush()
     }
 
     Event(Asset eventAsset) {
@@ -149,16 +154,23 @@ class Event {
     void flushAll() {
         flushAllResultsForExit()
     }
+
+    void flushOutput() {
+        eventDAO.saveInOut()
+    }
+
     void flush() {
-        resultsStack.last().flush(FlushStatus.Force)
-        if (!artifacts.empty()) {
-            artDAO.save(artifacts)
-        }
-        if (fault) {
-            def faultDAO = new FaultDAO()
-            faultDAO.init(eventAsset)
-            faultDAO.add(fault)
-        }
+        if (!resultsStack.empty)
+            resultsStack.last().flush(FlushStatus.Force)
+        eventDAO.save()
+//        if (!artifacts.empty()) {
+//            artDAO.save(artifacts)
+//        }
+//        if (fault) {
+//            def faultDAO = new FaultDAO()
+//            faultDAO.init(eventAsset)
+//            faultDAO.add(fault)
+//        }
     }
 
     boolean hasFault() { fault }

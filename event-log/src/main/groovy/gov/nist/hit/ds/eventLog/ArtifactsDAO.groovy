@@ -21,7 +21,7 @@ class ArtifactsDAO {
 
     def save(Artifacts artifacts) throws RepositoryException {
         artifacts.artifactOrder.each { name ->
-            logger.debug("Artifact: " + name + " = " + artifacts.artifactMap[name]);
+//            logger.debug("Artifact: " + name + " = " + artifacts.artifactMap[name]);
             Asset a = AssetHelper.createChildAsset(artifactsAsset, name, "", new SimpleType("simpleType"));
             a.setOrder(counter++);
             a.setContent(artifacts.artifactMap[name], "text/plain");

@@ -34,7 +34,7 @@ public class TransactionOfferingFactory {
 			if (tt == null) { 
 				continue;
 			}
-			buf.append(tt.getShortName()).append(": ");
+			buf.append(tt.getCode()).append(": ");
 			List<Site> ss = to.map.get(tt);
 			for (Site s : ss) {
 				buf.append(" ").append(s.getName());
@@ -47,7 +47,7 @@ public class TransactionOfferingFactory {
 			if (tt == null) {
 				continue;
 			}
-			buf.append(tt.getShortName()).append(": ");
+			buf.append(tt.getCode()).append(": ");
 			List<Site> ss = to.tmap.get(tt);
 			for (Site s : ss) {
 				buf.append(" ").append(s.getName());

@@ -7,6 +7,6 @@ public class ClassAndIdDescription {
 	List<String> definedSchemes;
 	List<String> requiredSchemes;
 	List<String> multipleSchemes;
-	// id => name mapping
+	// id => displayName mapping
 	Map<String, String> names;
 }

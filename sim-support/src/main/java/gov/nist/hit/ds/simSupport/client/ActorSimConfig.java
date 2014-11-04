@@ -1,17 +1,13 @@
 package gov.nist.hit.ds.simSupport.client;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.*;
-import gov.nist.hit.ds.simSupport.client.configElementTypes.AbstractActorSimConfigElement;
-import gov.nist.hit.ds.simSupport.client.configElementTypes.EndpointActorSimConfigElement;
-import gov.nist.hit.ds.utilities.xml.XmlUtil;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.SimConfigElement;
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement;
+import gov.nist.hit.ds.simSupport.endpoint.EndpointValue;
 import groovy.transform.ToString;
-import org.apache.axiom.om.OMElement;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,55 +18,20 @@ import java.util.List;
  *
  */
 @ToString(excludes="serialVersionUID, expires, isExpired, actorState")
-public class ActorSimConfig implements IsSerializable, Serializable {
+public class ActorSimConfig {
 
 	private static final long serialVersionUID = -736965164284950123L;
-	ActorType actorType;
-	Date expires;
-	boolean isExpired = false;
-	List<AbstractActorSimConfigElement> elements  = new ArrayList<AbstractActorSimConfigElement>();
-	Object actorState = null;
-	
+	public ActorType actorType;
+	public List<SimConfigElement> elements  = new ArrayList<SimConfigElement>();
+
 	public ActorSimConfig() { }
 
-    public OMElement toXML() {
-        OMElement top = XmlUtil.om_factory.createOMElement("SimConfig", null);
-        for (AbstractActorSimConfigElement ele : elements) {
-            OMElement part = ele.toXML();
-            top.addChild(part);
-        }
-        return top;
-    }
-
-	/**
-	 * Set expiration date
-	 * @param expires
-	 * @return
-	 */
-	public ActorSimConfig setExpiration(Date expires) {
-		this.expires = expires;
-		return this;
-	}
-	public boolean isExpired() { return isExpired; }
-	
-	public void setExpired(boolean is) { isExpired = is; }
-	
-	public boolean hasExpired() {
-		Date now = new Date();
-		if (now.after(expires))
-			isExpired = true;
-		else
-			isExpired = false;
-		return isExpired;
-	}
-	
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		
 		buf.append("ActorSimulatorConfig:");
-		buf.append("\n\telements=[");
-		for (AbstractActorSimConfigElement asce : elements) {
-			buf.append("\n\t\t").append(asce);
+		for (SimConfigElement asce : elements) {
+			buf.append("\n\t").append(asce);
 		}
 		
 		return buf.toString();
@@ -89,7 +50,7 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	 * @param elementList
 	 * @return
 	 */
-	public ActorSimConfig add(List<AbstractActorSimConfigElement> elementList) {
+	public ActorSimConfig add(List<SimConfigElement> elementList) {
 		elements.addAll(elementList);
 		return this;
 	}
@@ -99,22 +60,22 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	 * @param confElement
 	 * @return
 	 */
-	public ActorSimConfig add(AbstractActorSimConfigElement confElement) {
+	public ActorSimConfig add(SimConfigElement confElement) {
 		elements.add(confElement);
 		return this;
 	}
 
-	public Date getExpiration() {
-		return expires;
-	}
+//	public Date getExpiration() {
+//		return expires;
+//	}
 	
 	/**
 	 * Return all the fixed (not editable in the UI) config elements.
 	 * @return
 	 */
-	public List<AbstractActorSimConfigElement> getFixed() {
-		List<AbstractActorSimConfigElement> fixed = new ArrayList<AbstractActorSimConfigElement>();
-		for (AbstractActorSimConfigElement ele : elements) {
+	public List<SimConfigElement> getFixed() {
+		List<SimConfigElement> fixed = new ArrayList<SimConfigElement>();
+		for (SimConfigElement ele : elements) {
 			if (!ele.isEditable())
 				fixed.add(ele);
 		}
@@ -125,15 +86,23 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	 * Return all config elements.
 	 * @return
 	 */
-	public List<AbstractActorSimConfigElement> getAll() { return elements; }
+	public List<SimConfigElement> getElements() { return elements; }
+
+    public List<SimConfigElement> getElements(Class clazz) {
+        List<SimConfigElement> eles = new ArrayList<SimConfigElement>();
+        for (SimConfigElement ele : elements) {
+            if (ele.getClass().getName().equals(clazz.getName())) eles.add(ele);
+        }
+        return eles;
+    }
 	
 	/**
 	 * Return all the config elements that can be edited in the UI.
 	 * @return
 	 */
-	public List<AbstractActorSimConfigElement> getEditable() {
-		List<AbstractActorSimConfigElement> user = new ArrayList<AbstractActorSimConfigElement>();
-		for (AbstractActorSimConfigElement ele : elements) {
+	public List<SimConfigElement> getEditable() {
+		List<SimConfigElement> user = new ArrayList<SimConfigElement>();
+		for (SimConfigElement ele : elements) {
 			if (ele.isEditable())
 				user.add(ele);
 		}
@@ -141,15 +110,15 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	}
 	
 	/**
-	 * Get the config element based on its name. 
+	 * Get the config element based on its displayName.
 	 * @param name
 	 * @return config element or null if not defined.
 	 */
-	public AbstractActorSimConfigElement getByName(String name) {
+	public SimConfigElement getByName(String name) {
 		if (name == null)
 			return null;
 		
-		for (AbstractActorSimConfigElement ele : elements) {
+		for (SimConfigElement ele : elements) {
 			if (name.equals(ele.getName()))
 				return ele;
 		}
@@ -163,15 +132,22 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	 * @param asyncType
 	 * @return endpoint or null if no endpoint matches the type information.
 	 */
-	public String getEndpoint(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
-        List<AbstractActorSimConfigElement> configs = findConfigs(
+	public EndpointValue getEndpoint(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
+        List<TransactionSimConfigElement> configs = findConfigs(
                 new ArrayList<TransactionType>(Arrays.asList(transType)),
                 new ArrayList<TlsType>(Arrays.asList(tlsType)),
                 new ArrayList<AsyncType>(Arrays.asList(asyncType)));
 		if (configs.isEmpty())
 			return null;
-		return configs.get(0).getValue();
+		return configs.get(0).getEndpointValue();
 	}
+
+    public SimConfigElement getByClass(Class claz) {
+        for (SimConfigElement e : elements) {
+            if (e.getClass().getName().equals(claz.getName())) return e;
+        }
+        return null;
+    }
 	
 	/**
 	 * Get config elements that match all the parameters.
@@ -180,8 +156,8 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 	 * @param asyncTypes
 	 * @return
 	 */
-    public List<AbstractActorSimConfigElement> findConfigs(List<TransactionType> transTypes, List<TlsType> tlsTypes, List<AsyncType> asyncTypes)  {
-        List<AbstractActorSimConfigElement> simEles = new ArrayList<AbstractActorSimConfigElement>();
+    public List<TransactionSimConfigElement> findConfigs(List<TransactionType> transTypes, List<TlsType> tlsTypes, List<AsyncType> asyncTypes)  {
+        List<TransactionSimConfigElement> simEles = new ArrayList<TransactionSimConfigElement>();
 
         class Tls {
             List<TlsType> tlsTypes;
@@ -220,25 +196,25 @@ public class ActorSimConfig implements IsSerializable, Serializable {
         Tls tls = new Tls(tlsTypes);
         Async async = new Async(asyncTypes);
 
-        for (AbstractActorSimConfigElement ele : getAll()) {
-            if (ele.getType() != ParamType.ENDPOINT) continue;
-            EndpointActorSimConfigElement endp = (EndpointActorSimConfigElement) ele;
-            EndpointLabel elabel = endp.getEndpointLabel();
+        for (SimConfigElement ele : getElements()) {
+            if (!(ele instanceof TransactionSimConfigElement)) continue;
+            TransactionSimConfigElement endp = (TransactionSimConfigElement) ele;
+            EndpointType elabel = endp.getEndpointType();
             if (!tTypes.has(elabel.getTransType())) continue;
             if (!tls.has(elabel.getTlsType())) continue;
             if (!async.has(elabel.getAsyncType())) continue;
-            simEles.add(ele);
+            simEles.add(endp);
         }
 
         return simEles;
     }
 
 	/**
-	 * Delete the config element based on its name.
+	 * Delete the config element based on its displayName.
 	 * @param name
 	 */
 	public void deleteByName(String name) {
-		AbstractActorSimConfigElement ele = getByName(name);
+		SimConfigElement ele = getByName(name);
 		if (ele != null)
 			elements.remove(ele);
 	}	
@@ -251,7 +227,4 @@ public class ActorSimConfig implements IsSerializable, Serializable {
 		return actorType.equals(actorType2);
 	}
 	
-	public Object getActorState() {
-		return actorState;
-	}
 }

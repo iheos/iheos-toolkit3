@@ -20,25 +20,24 @@ class ActorTransactionTypeDAO {
         def records = new XmlSlurper().parseText(config)
         def transactions = records.transaction
         def actors = records.actor
-        transactions.each { parseTransactionType(it) }
-        actors.each { parseActorType(it) }
+        transactions.each { parseTransaction(it) }
+        actors.each { parseActor(it) }
     }
 
-    void parseTransactionType(tt) {
+    void parseTransaction(tt) {
         TransactionType ttype = new TransactionType()
-        ttype.id = tt.@id
-        ttype.shortName = tt.@id
-        ttype.name = tt.@id
-        ttype.code = tt.@code
-        ttype.asyncCode = tt.@asyncCode
-        ttype.requestAction = tt.request.@action
-        ttype.responseAction = tt.response.@action
-        ttype.implementationClassName = tt.@class
-        if (tt.params) {
-            ttype.multiPart = tt.params.@multiPart == 'true'
-            ttype.soap = tt.params.@soap == 'true'
+        ttype.name = tt.@name.text()
+        ttype.code = tt.@code.text()
+        ttype.isRetrieve = tt.@isRetrieve.text() == 'true'
+        ttype.asyncCode = tt.@asyncCode.text()
+        ttype.requestAction = tt.request.@action.text()
+        ttype.responseAction = tt.response.@action.text()
+        ttype.implementationClassName = tt.implClass.@value.text()
+        tt.params.each  { params ->
+            ttype.multiPart = params.@multipart.text() == 'true'
+            ttype.soap = params.@soap.text() == 'true'
         }
-        fact.transactionByName.put(ttype.id, ttype)
+        fact.transactionByName.put(ttype.name, ttype)
         fact.transactionByName.put(ttype.code, ttype)
         fact.transactionByName.put(ttype.asyncCode, ttype)
         fact.transactionByRequestAction.put(ttype.requestAction, ttype)
@@ -49,18 +48,21 @@ class ActorTransactionTypeDAO {
             ttype.putTransactionProperty(name, value)
         }
         log.debug("Loading ${ttype}")
+        ttype.check()
     }
 
-    void parseActorType(at) {
+    void parseActor(at) {
         ActorType actorType = new ActorType()
-        actorType.name = at.@displayName
+        log.debug("Parsing actor type ${at.@id}")
+        actorType.name = at.@id
         actorType.shortName = at.@id
         actorType.actorSimFactoryClassName = at.simFactoryClass.@class
         at.transaction.each { trans ->
-            def transId = trans.@id
-            def tt = fact.transactionByName.get(transId.text())
+            String transId = trans.@id
+            log.debug("...${transId}")
+            def tt = fact.transactionByName.get(transId)
             if (!tt)
-                throw new ToolkitRuntimeException("Transaction ${transId} not defined - ${transactionTypeMap.keySet()}")
+                throw new ToolkitRuntimeException("Transaction [${trans}] not defined - ${fact.transactionByName.keySet()}")
             actorType.getTransactionTypes().add(tt)
         }
         at.property.each {

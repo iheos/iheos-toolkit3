@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.dsSims.generator
 
 import groovy.xml.MarkupBuilder
+import org.custommonkey.xmlunit.Diff
+import org.custommonkey.xmlunit.XMLUnit
 import spock.lang.Specification
-import org.custommonkey.xmlunit.*
-
 /**
  * Created by bmajur on 7/13/14.
  */
@@ -38,7 +38,7 @@ class RimGeneratorTest extends Specification {
     }
 
    def spec1 = '''
-x = [['name': 'languageCode', 'values':['en-us']]]
+ [['name': 'languageCode', 'values':['en-us']]]
 '''
 
     def rim1 = '''
@@ -66,7 +66,7 @@ x = [['name': 'languageCode', 'values':['en-us']]]
     }
 
     def spec2 = '''
-[[name: 'classCode', code: 'classCodeValue', system: 'XDS Affinity Domain Specific Value', display: 'classCodeDisplayName']]
+[[name: 'classCode', code: 'classCodeValue', system: 'XDS Affinity Domain Specific Value', display: 'classCodeName']]
 '''
 
     def rim2 = '''
@@ -76,7 +76,7 @@ x = [['name': 'languageCode', 'values':['en-us']]]
   objectType="urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification"
     nodeRepresentation="classCodeValue">
     <Name>
-       <LocalizedString value="classCodeDisplayName"/>
+       <LocalizedString value="classCodeName"/>
     </Name>
     <Slot name="codingScheme">
        <ValueList>
@@ -145,8 +145,8 @@ x = [['name': 'languageCode', 'values':['en-us']]]
 '''
 
         def rimm = '''
-<ExtrinsicObject id='Document1' lid='' mimeType='text/xml'
-    status='urn:oasis:names:tc:ebxml-regrep:StatusType:Approved'
+<ExtrinsicObject id='Document1' mimeType='text/xml'
+    status='urn:oasis:names:tc:ebxml-regrep:StatusType:Approved' lid=''
     objectType='urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1'>
 <Description>
   <LocalizedString value="hello"/>

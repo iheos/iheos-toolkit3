@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.dsSims.metadataValidator.object
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.CxSubValidator
-import gov.nist.hit.ds.dsSims.metadataValidator.datatype.OidFormat
+import gov.nist.hit.ds.dsSims.metadataValidator.datatype.OidValidator
 import gov.nist.hit.ds.dsSims.metadataValidator.datatype.UuidFormat
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
@@ -106,7 +106,7 @@ abstract class RegistryObjectValidator extends AbstractRegistryObjectValidator {
             String[] parts = model.home.split(":");
             if (parts.length < 3 || !parts[0].equals("urn") || !parts[1].equals("oid"))
                 er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": homeCommunityId must begin with urn:oid: prefix, found [" + model.home + "]", this, resource);
-            new OidFormat(er, model.identifyingString() + " homeCommunityId", resource).validate(parts[parts.length-1]);
+            new OidValidator(er, model.identifyingString() + " homeCommunityId", resource).validate(parts[parts.length-1]);
         }
     }
 
@@ -161,7 +161,7 @@ abstract class RegistryObjectValidator extends AbstractRegistryObjectValidator {
             new ExternalIdentifierValidator(event, eiModel).validateStructure(er, vc);
             if (MetadataSupport.XDSDocumentEntry_uniqueid_uuid.equals(eiModel.getIdentificationScheme())) {
                 String[] parts = eiModel.getValue().split("\\^");
-                new OidFormat(er, model.identifyingString() + ": " + eiModel.identifyingString(), model.externalIdentifierDescription(desc, eiModel.getIdentificationScheme()))
+                new OidValidator(er, model.identifyingString() + ": " + eiModel.identifyingString(), model.externalIdentifierDescription(desc, eiModel.getIdentificationScheme()))
                         .validate(parts[0]);
                 if (parts[0].length() > 64)
                     er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + eiModel.identifyingString() + " OID part of DocumentEntry uniqueID is limited to 64 digits", this, resource);
