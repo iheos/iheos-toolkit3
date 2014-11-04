@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.simServlet
-import gov.nist.hit.ds.simServlet.api.SimConfigUpdater
+
+import gov.nist.hit.ds.simServlet.api.SimApi
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.manager.ActorSimConfigManager
@@ -72,7 +73,7 @@ class ConfigEditTest extends Specification {
     def 'Verify getSchemaCheck and setSchemaCheck'() {
         when: '''Create a sim'''
         simHandle = SimUtils.create('docrec', simId2)
-        def updater = new SimConfigUpdater()
+        def updater = new SimApi()
 
         and: '''Get config (XML) through API'''
         def config = updater.getConfig(simHandle.simId)
@@ -95,7 +96,7 @@ class ConfigEditTest extends Specification {
         when: '''Create a sim'''
         SimUtils.delete(simId2)
         simHandle = SimUtils.create('docrec', simId2)
-        def updater = new SimConfigUpdater()
+        def updater = new SimApi()
 
         and: '''Get config (XML) through API'''
         def config = updater.getConfig(simHandle.simId)
@@ -123,7 +124,7 @@ class ConfigEditTest extends Specification {
         when: '''Create a sim'''
         SimUtils.delete(simId2)
         simHandle = SimUtils.create('docrec', simId2)
-        def updater = new SimConfigUpdater()
+        def updater = new SimApi()
 
         and: '''Get config (XML) through API'''
         def config = updater.getConfig(simHandle.simId)
