@@ -26,6 +26,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServicesAsync;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class SubmitTestDataTab extends GenericCloseableTab {
     private final static String header = "Test Data Submission";
@@ -67,6 +68,7 @@ public class SubmitTestDataTab extends GenericCloseableTab {
         testDataSetSelectItem.setWidth(400);
         testDataSetSelectItem.setTitle("Test Data Set");
         testDataSetSelectItem.setEmptyDisplayValue("Select test data set...");
+        loadTestDataSet();
 
         Label l3=createSubtitle1("3. Enter Patient ID");
         pid = new PatientIDWidget();
@@ -84,6 +86,22 @@ public class SubmitTestDataTab extends GenericCloseableTab {
 
         container.addMembers(form,l3, pid,l4, /*docRepository,*/l5, tlsAndSAMLForm, runBtn);
         return container;
+    }
+
+    private void loadTestDataSet() {
+        testDataSubmissionServices.retrieveTestDataSet("",new AsyncCallback<Map<String,String>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+
+            }
+
+            @Override
+            public void onSuccess(Map<String,String> result) {
+                LinkedHashMap<String,String> map=new LinkedHashMap<String,String>();
+                map.putAll(result);
+                testDataSetSelectItem.setValueMap(map);
+            }
+        });
     }
 
     private void bindUI(){

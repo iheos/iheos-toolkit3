@@ -2,6 +2,7 @@ package gov.nist.toolkit.xdstools3.server;
 
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
+import gov.nist.toolkit.xdstools3.server.demo.TestDataHelper;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -112,4 +113,7 @@ public class Caller implements Serializable {
         return "Response for "+messageType+" validation.";
     }
 
+    public Map<String,String> retrieveTestDataSet(String testDataType) {
+        return TestDataHelper.instance.getTestDataSet();
+    }
 }
