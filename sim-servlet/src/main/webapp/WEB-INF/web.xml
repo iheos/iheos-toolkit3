@@ -15,13 +15,17 @@
         <servlet-class>gov.nist.hit.ds.simServlet.SimServlet</servlet-class>
     </servlet>
 
+    <!-- This is already set in xdstools3 -->
+
 	<servlet>
 		<servlet-name>Initialization Servlet</servlet-name>
 		<servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-	</servlet>
 
-	<!--<servlet-mapping>-->
+        <!--<load-on-startup>1</load-on-startup>-->
+    </servlet>
+
+
+ <!--<servlet-mapping>-->
 		<!--<servlet-displayName>toolkitServlet</servlet-displayName>-->
 		<!--<url-pattern>/xdstools2/toolkit</url-pattern>-->
 	<!--</servlet-mapping>-->

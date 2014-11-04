@@ -1,12 +1,10 @@
 package gov.nist.hit.ds.initialization;
 
-import static org.junit.Assert.fail;
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
 import gov.nist.hit.ds.initialization.installation.Installation;
-
-import java.io.IOException;
-
 import org.junit.Test;
+
+import static junit.framework.Assert.fail;
 
 public class BadInitializationTest {
 

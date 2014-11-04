@@ -49,23 +49,23 @@
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-eclipse-compiler</artifactId>
-                <version>2.8.0-01</version>
+                <version>2.7.0-01</version>
             </dependency>
-            <!-- for 2.8.0-01 and later you must have an explicit dependency on groovy-eclipse-batch -->
+           <!-- &lt;!&ndash; for 2.8.0-01 and later you must have an explicit dependency on groovy-eclipse-batch &ndash;&gt;
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-eclipse-batch</artifactId>
-                <version>2.1.8-01</version>
-                <!-- or choose a different compiler version -->
-                <!-- <version>1.8.6-01</version> -->
-                <!-- <version>1.7.10-06</version> -->
-            </dependency>
+                <version>2.7.0-01</version>
+                &lt;!&ndash; or choose a different compiler version &ndash;&gt;
+                &lt;!&ndash; <version>1.8.6-01</version> &ndash;&gt;
+                &lt;!&ndash; <version>1.7.10-06</version> &ndash;&gt;
+            </dependency>-->
         </dependencies>
     </plugin>
     <plugin>
         <groupId>org.codehaus.groovy</groupId>
         <artifactId>groovy-eclipse-compiler</artifactId>
-        <version>2.8.0-01</version>
+        <version>2.7.0-01</version>
         <extensions>true</extensions>
     </plugin>
     </plugins>

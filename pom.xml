@@ -72,8 +72,10 @@
 
         <!-- For some reason there seems to be an issue compiling the soapHttpValidator module with JDK 1.7, which is required by the editor module -->
 
+        <module>tk-deps</module>
         <module>repository-tools</module>
         <module>tk-core</module>
+        <module>docshare-sims</module>
         <module>gui-core</module>
         <module>toolkit2-build</module>
     </modules>

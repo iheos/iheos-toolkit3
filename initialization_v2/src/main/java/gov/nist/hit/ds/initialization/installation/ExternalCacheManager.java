@@ -37,6 +37,5 @@ public class ExternalCacheManager {
 
     public Environment getEnvironment(){return new Environment(getEnvironmentFile());}
 
-    public Environment getEnvironment() { return new Environment(getEnvironmentFile()); }
 	
 }

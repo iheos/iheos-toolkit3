@@ -23,8 +23,14 @@
     </servlet>
 
 
+      <servlet>
+          <servlet-name>Initialization Servlet</servlet-name>
+          <servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
+          <load-on-startup>1</load-on-startup>
+      </servlet>
 
-    <!-- ============== Application servlet classes ============== -->
+
+      <!-- ============== Application servlet classes ============== -->
     <servlet>
         <servlet-name>preConnectathonTabServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.PreConnectathonTabServiceImpl</servlet-class>
