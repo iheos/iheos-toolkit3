@@ -16,8 +16,8 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
     public MHDServicesImpl() {
     }
 
-    public String validateMHDMessage(String messageType, String filename){
-        return Caller.getInstance().validateMHDMessage(messageType,filename);
+    public String validateMHDMessage(String messageType){
+        return Caller.getInstance().validateMHDMessage(messageType);
     }
 
 }

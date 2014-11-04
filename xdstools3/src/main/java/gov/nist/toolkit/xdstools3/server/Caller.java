@@ -5,6 +5,7 @@ import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Singleton class that acts as a directory of all calls to server-side packages. All calls must go through this class in order to
@@ -19,6 +20,7 @@ public class Caller implements Serializable {
 	 */
 	private static final long serialVersionUID = -6431109235310163158L;
 	private static Caller instance = null;
+    private final static Logger logger = Logger.getLogger(Caller.class.getName());
 
 	protected Caller(){
 	}
@@ -104,8 +106,10 @@ public class Caller implements Serializable {
     }
 
     // ----------------------------- MHD -------------------------------
-    public String validateMHDMessage(String messageType, String filename) {
-        //TODO Implementation (Change method prototype if required)
-        return "Response for "+messageType+" validation. File: "+filename;
+    public String validateMHDMessage(String messageType) {
+        /* TODO Implementation using toolkitServices.getSession().getLastUpload() to get the file uploaded
+          (Change method prototype if required)*/
+        return "Response for "+messageType+" validation.";
     }
+
 }

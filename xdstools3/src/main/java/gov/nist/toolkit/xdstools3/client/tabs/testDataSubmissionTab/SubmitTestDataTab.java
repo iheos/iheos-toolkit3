@@ -1,5 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Label;
@@ -19,12 +21,18 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServices;
+import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServicesAsync;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 import java.util.LinkedHashMap;
 
 public class SubmitTestDataTab extends GenericCloseableTab {
     private final static String header = "Test Data Submission";
+
+    private final static TestDataSubmissionServicesAsync testDataSubmissionServices = GWT
+            .create(TestDataSubmissionServices.class);
+
     private SelectItem testDataType;
     private SelectItem testDataSetSelectItem;
     private PatientIDWidget pid;
@@ -111,7 +119,17 @@ public class SubmitTestDataTab extends GenericCloseableTab {
             public void onClick(ClickEvent clickEvent) {
                 String selectedTestDataType = testDataType.getValueAsString();
                 String pidValue=pid.getValue();
-//                submitTestData(selectedTestDataType,selectedDataTestSet,pidValue,"repository");
+                testDataSubmissionServices.submitTestData(selectedTestDataType, selectedDataTestSet, pidValue, "repository", tlsAndSAMLForm.isTLSChecked(),tlsAndSAMLForm.getSAMLValue(),new AsyncCallback<String>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        // TODO error meessage
+                    }
+
+                    @Override
+                    public void onSuccess(String result) {
+
+                    }
+                });
             }
         });
     }

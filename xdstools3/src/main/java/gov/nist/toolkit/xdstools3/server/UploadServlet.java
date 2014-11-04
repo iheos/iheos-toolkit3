@@ -37,8 +37,6 @@ public class UploadServlet extends HttpServlet {
 		HttpParser hp;
 		try {
 			hp = new HttpParser(request, false);
-            filename=hp.getHttpMessage().getHeader("content-disposition");
-            logger.info("FILENAME: "+filename);
 			byte[] bodybytes = hp.getBody();
 		} catch (HttpParseException e1) {
 			logger.error("HTTPParser parse error: " + e1.getMessage());

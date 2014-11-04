@@ -30,8 +30,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
     private static String header="MHD Validator";
 
-    final protected Toolkit2ServiceAsync toolkitService =
-            GWT.create(Toolkit2Service.class);
     private String selectedMessageType;
     private Button runBtn;
 //    private DynamicForm uploadForm;
@@ -57,6 +55,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         l1.setDefaultValue("1. Select a message type");
         messageTypeSelect = new SelectItem();
         messageTypeSelect.setTitle("Message type");
+        messageTypeSelect.setType("comboBox");
         messageTypeSelect.setName("messageTypeItem");
         messageTypeSelect.setEmptyDisplayValue("Select message type...");
         messageTypeSelect.setWidth(400);
@@ -70,7 +69,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         uploadForm.setAction("fileUploadServlet");
         fileUploadItem = new FileUpload();
         fileUploadItem.setTitle("File to validate");
-        fileUploadItem.setName("uploadItem");
+        fileUploadItem.setName("upload1FormElement");
         fileUploadItem.setWidth("400");
 //        fileUploadItem.setWidth(400);
         uploadForm.add(fileUploadItem);
@@ -127,21 +126,13 @@ public class MHDValidatorTab extends GenericCloseableTab {
         uploadForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
             @Override
             public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
-                toolkitService.getLastFilename(new AsyncCallback<String>() {
-                    public void onFailure(Throwable caught) {
-                        new PopupMessageV3(caught.getMessage());
-                    }
-                    public void onSuccess(String result) {
-                        uploadFilename = result;
-                        validate();
-                    }
-                });
+                validate();
             }
         });
     }
 
     private void validate() {
-        mhdToolkitService.validateMHDMessage(selectedMessageType, uploadFilename, new AsyncCallback<String>() {
+        mhdToolkitService.validateMHDMessage(selectedMessageType, new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
                 logger.warning(caught.getMessage());

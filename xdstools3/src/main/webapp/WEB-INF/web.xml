@@ -46,6 +46,10 @@
         <servlet-name>fileUploadServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.UploadServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>testDataSubmissionServlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.TestDataSubmissionServicesImpl</servlet-class>
+    </servlet>
 
     <!-- v2 legacy servlets -->
     <servlet>
@@ -71,6 +75,11 @@
     <servlet-mapping>
         <servlet-name>mhdTabsServlet</servlet-name>
         <url-pattern>/xdstools3/mhd-tabs</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>testDataSubmissionServlet</servlet-name>
+        <url-pattern>/xdstools3/test-data-submission</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
