@@ -119,8 +119,8 @@ public class TransactionMonitorAdvancedWidget extends Composite {
     private final String COLUMN_HEADER_CONTENT_TYPE = "Content Type";
 
     final String[] columns = {COLUMN_HEADER_SEARCH_HIT_IND,"Timestamp","Status","Artifact",COLUMN_HEADER_ROW_MESSAGE_FROM,COLUMN_HEADER_PROXY,COLUMN_HEADER_ROW_FORWARDED_TO,COLUMN_HEADER_PATH,COLUMN_HEADER_CONTENT_TYPE,"Method","Length",COLUMN_HEADER_RESPONSE_TIME_MS,COLUMN_HEADER_VALIDATION};
-    private MessageViewerWidget requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
-    private MessageViewerWidget responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
+    private MessageViewerWidget requestViewerWidget;
+    private MessageViewerWidget responseViewerWidget;
     //Map<Integer, String> txRowParentId = new HashMap<Integer, String>();
     //Map<Integer, Map<String,AssetNode>> txRowAssetNode = new HashMap<Integer, Map<String,AssetNode>>();
     //int txRowIdx = 0;
@@ -138,15 +138,15 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         public void onSuccess(AssetNode an) {
             logger.info("in content load" + an.getType());
             if (an.getTxtContent()!=null) {
-                HTML txtContent = new HTML("<pre>" + an.getTxtContent() + "</pre>");
+//                HTML txtContent = new HTML("<pre>" + an.getTxtContent() + "</pre>");
                 if ("reqHdrType".equals(an.getType())) {
-                    requestViewerWidget.setHeaderContent(txtContent);
+                    requestViewerWidget.setHeaderAssetNode(an);
                 } else if ("reqBodyType".equals(an.getType())) {
-                    requestViewerWidget.setMessageContent(txtContent);
+                    requestViewerWidget.setMessageAssetNode(an);
                 } else if ("resHdrType".equals(an.getType())) {
-                    responseViewerWidget.setHeaderContent(txtContent);
+                    responseViewerWidget.setHeaderAssetNode(an);
                 } else if ("resBodyType".equals(an.getType())) {
-                    responseViewerWidget.setMessageContent(txtContent);
+                    responseViewerWidget.setMessageAssetNode(an);
                 }
             }
 
@@ -285,6 +285,10 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         setShowTxDetail(showTxDetail);
         setListenerEnabled(enableListener);
         setFilterEnabled(enableFilter);
+
+        requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
+        responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
+
 
         // All composites must call initWidget() in their constructors.
 	     initWidget(setupMonitor());

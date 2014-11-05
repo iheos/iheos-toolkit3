@@ -129,7 +129,9 @@ public class SimpleAsset implements Asset, Flushable {
             p.assertNotNull(value);
 
             properties.setProperty(key, value);
-            if (autoFlush) flush(getPropFile());
+            if (isAutoFlush()) {
+                flush(getPropFile());
+            }
 
         } catch (RepositoryException re)  {
             logger.warning(re.toString());
@@ -503,15 +505,9 @@ public class SimpleAsset implements Asset, Flushable {
      */
 	@Override
 	public byte[] getContent() throws RepositoryException {
-
-		/* Is this still needed?
-		if (properties.size()==0) {
-			this.load(getId()); // , getAssetBaseFile(getId())
-		}
-		*/
 		
 		if (!loadContentAttempted && hasContent()) {
-			loadContent(getContentFile());
+			return loadContent(getContentFile());
 		}
 		
 		return content;
@@ -526,7 +522,11 @@ public class SimpleAsset implements Asset, Flushable {
 	@Override
 	public void updateContent(byte[] content) throws RepositoryException {
 		this.content = content;
-		if (autoFlush) flushContent(getContentFile());
+		if (isAutoFlush()) {
+            flushContent(getContentFile());
+        } else {
+            throw new RepositoryException(RepositoryException.ASSET_AUTO_FLUSH_NOT_SET);
+        }
 	}
 
     /**
@@ -922,13 +922,14 @@ public class SimpleAsset implements Asset, Flushable {
 	/**
 	 * @param assetContentFile The content file
 	 */
-	private void loadContent(File assetContentFile) {
+	private byte[] loadContent(File assetContentFile) {
 			try {				
 				loadContentAttempted = true;
 				content = FileUtils.readFileToByteArray(assetContentFile);
 			} catch (Exception e) {
 				logger.info("Content load fail <" + assetContentFile.toString()  +">: " + e.toString());
-			} 		
+			}
+        return content;
 	}
 
     /**
@@ -971,7 +972,7 @@ public class SimpleAsset implements Asset, Flushable {
      * @throws RepositoryException
      */
 	@Override
-	public void flush(File propFile) throws RepositoryException {					
+	public void flush(File propFile) throws RepositoryException {
 		if (!getSource().getLocation().exists())
 		    throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
 				"source directory [" + getSource().getLocation().toString() + "] does not exist");
@@ -992,7 +993,7 @@ public class SimpleAsset implements Asset, Flushable {
 	}
 
     private void flushContent(File contentFile) throws RepositoryException {
-        if (getContent() != null) {
+        if (content != null) {
             try {
                 String[] ext = getContentExtension();
                 if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {

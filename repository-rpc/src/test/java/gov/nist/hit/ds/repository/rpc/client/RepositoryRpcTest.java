@@ -3,6 +3,8 @@ package gov.nist.hit.ds.repository.rpc.client;
 import gov.nist.hit.ds.dsSims.factories.MessageValidatorFactory;
 import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.ContentHelper;
+import gov.nist.hit.ds.repository.api.ArtifactId;
+import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -28,10 +30,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -252,7 +256,7 @@ public class RepositoryRpcTest {
     public void testAssertionAggregationBySelectColumns()  {
         /**
          * local test only
-         * C:\e\artrep_test_resources\Installation\IHE-Testing\xdstools2_environment\repositories\data\Sim\123\Events\2014_07_29_13_17_30_089
+         * See the test resource folder for the assets
          */
         String eventId = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
         String type = "validators";
@@ -317,5 +321,53 @@ public class RepositoryRpcTest {
         }
     }
 
+    /*
 
+    @Test
+    public void testCoalesceMessage() throws RepositoryException {
+    final Access acs = Access.RW_EXTERNAL;
+
+        RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(acs));
+
+        Repository repos = null;
+        try {
+            repos = fact.getRepository(new SimpleId("transactions-cap"));
+        } catch (Exception ex) {
+            fail(ex.toString());
+        }
+
+        assertNotNull(repos);
+
+        try {
+
+            Asset chunkedMessage = repos.getAsset(new SimpleId("4134c163-2d26-4a3b-9959-f77a97110cfb"));
+
+            assertNotNull(chunkedMessage);
+
+            assertTrue(chunkedMessage.hasContent());
+
+            FileInputStream fis = new FileInputStream(chunkedMessage.getContentFile());
+            ChunkedInputStream chunkedInputStream = new ChunkedInputStream(fis);
+
+
+            assertNotNull(chunkedMessage);
+
+            Asset coalesced = repos.createNamedAsset("Coalesced Message", "Coalesced from a chunked message", chunkedMessage.getAssetType(), "Coalesced");
+            coalesced.setProperty(PropertyKey.DISPLAY_ORDER, "1");
+            coalesced.setContent(IOUtils.toByteArray(chunkedInputStream), chunkedMessage.getMimeType());
+
+            fis.close(); // This must be called explicitly because ChunkedInputStream will not close the file input stream
+
+            chunkedMessage.addChild(coalesced); // Add child to the parent
+
+
+        } catch (Throwable t) {
+            t.printStackTrace();
+            fail(t.toString());
+        }
+
+
+    }
+
+    */
 }

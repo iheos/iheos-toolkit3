@@ -19,7 +19,6 @@ public class OutOfContextAssetClickedEvent extends GwtEvent<OutOfContextAssetCli
     private int rowNumber;
 
 
-
     public OutOfContextAssetClickedEvent(AssetNode value) {
         this.an = value;
     }

@@ -253,7 +253,7 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
     private List<Widget> createCriteriaOptions() {
         List<Widget> options = new ArrayList<Widget>();
 
-        options.add(new HTML("<span style=\"width:32px;height:32px;\"><img border=0 height=16 width=16 src='" + GWT.getModuleBaseForStaticFiles() + "images/code_colored"
+        options.add(new HTML("<span style=\"width:32px;height:32px;\"><img border=0 height=16 width=16 src='" + GWT.getModuleBaseForStaticFiles() + "images/find_selection"
                 +  ".png'/></span>"));
 
         options.add(new HTML("Message Filter"));

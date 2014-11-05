@@ -2,14 +2,16 @@ package gov.nist.hit.ds.repository.simple;
 
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Parameter;
-import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -84,7 +86,7 @@ public class FolderManager {
 					if (newParentFolder.mkdir()) {
 						String baseNameWoExt = null;
 						if (assetPaths[0].exists()) {
-							baseNameWoExt = newParentFolder + File.separator 
+							baseNameWoExt = newParentFolder + File.separator
 							+ assetPaths[0].getName()
 							.replaceAll(Configuration.PROPERTIES_FILE_EXT + "$" // Last index
 									,"");
@@ -93,11 +95,21 @@ public class FolderManager {
 								sa.setPath(newLoc);
 							}
 						}
+                        logger.info("parent content path is: " + assetPaths[1]);
 						if (assetPaths[1]!=null && assetPaths[1].exists()) {
-							newContentFile = new File(newParentFolder + File.separator + assetPaths[1].getName());
-							if (assetPaths[1].renameTo(newContentFile)) {
-								sa.setContentPath(newContentFile);
-							}								
+							newContentFile = new File(newParentFolder, assetPaths[1].getName());
+
+                            Path srcPath = assetPaths[1].toPath();
+                            Path dstPath = newContentFile.toPath();
+
+                            Files.move(srcPath, dstPath); // This API call is platform independent
+
+//							if (assetPaths[1].renameTo(newContentFile)) {
+//                                logger.info("moved parent content path is: " + assetPaths[1] + " to " + newContentFile);
+//								sa.setContentPath(newContentFile);
+//							}	else {
+//                                logger.info("could not move parent content path : " + assetPaths[1] + " to " + newContentFile);
+//                            }
 						}							
 					} else {
 						logger.warning("newParentFolder could not be created. " + newParentFolder);

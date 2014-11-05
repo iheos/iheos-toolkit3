@@ -345,6 +345,7 @@ public class LogBrowserWidget extends Composite {
             });
 
 
+
             return setupBrowseFeature(targetContext);
 		} 
 		else if (Feature.SEARCH==f) {
@@ -354,6 +355,30 @@ public class LogBrowserWidget extends Composite {
         } else if (Feature.TRANSACTION_FILTER==f) {
             return setupTxFilter();
         } else if (Feature.TRANSACTION_FILTER_ADVANCED==f) {
+
+
+            // This handler is specific to the widget launch from the proxy asset maximized-viewer focus
+            eventBus.addHandler(OutOfContextAssetClickedEvent.TYPE, new OutOfContextAssetClickedEventHandler() {
+                public void onAssetClick(OutOfContextAssetClickedEvent event) {
+                    try {
+                        final AssetNode target = event.getValue();
+
+                        if (!"text/csv".equals(target.getMimeType())) {
+                            String rowNumberToHighlightStr = "" + event.getRowNumber();
+
+                            target.getExtendedProps().put("rowNumberToHighlight",rowNumberToHighlightStr);
+
+                            featureTlp.add(new LogBrowserWidget(eventBus,target),target.getRepId());
+                        }
+
+                    } catch (Throwable t) {
+                        logger.warning("OutOfContextAssetClickedEvent:" + t.toString());
+                    }
+
+                }
+            });
+
+
             return setupTxFilterAdvanced();
         }  else if (Feature.EVENT_MESSAGE_AGGREGATOR==f) {
             /**
@@ -364,25 +389,27 @@ public class LogBrowserWidget extends Composite {
             String type = "validators";
             String[] displayColumns = new String[]{"ID","STATUS","MSG"};
 
-            // This handler is specific to the widget launch from the log browser tree context menu
+
+            // This handler is specific to the widget launch from the event aggregation widget
             eventBus.addHandler(OutOfContextAssetClickedEvent.TYPE, new OutOfContextAssetClickedEventHandler() {
                 public void onAssetClick(OutOfContextAssetClickedEvent event) {
                     try {
                         final AssetNode target = event.getValue();
-                        String rowNumberToHighlightStr = "" + event.getRowNumber();
 
+                        if ("text/csv".equals(target.getMimeType())) {
+                            String rowNumberToHighlightStr = "" + event.getRowNumber();
 
-                        target.getExtendedProps().put("rowNumberToHighlight",rowNumberToHighlightStr);
+                            target.getExtendedProps().put("rowNumberToHighlight",rowNumberToHighlightStr);
 
-
-                        featureTlp.add(new LogBrowserWidget(eventBus,target),target.getRepId());
-
+                            featureTlp.add(new LogBrowserWidget(eventBus,target),target.getRepId());
+                        }
                     } catch (Throwable t) {
                         logger.warning("OutOfContextAssetClickedEvent:" + t.toString());
                     }
 
                 }
             });
+
 
 
             return setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT , "Sim", id,type,displayColumns);
@@ -838,7 +865,13 @@ public class LogBrowserWidget extends Composite {
                                 public void onSuccess(List<AssetNode> topLevelAssets) {
                                     treeHolder.clear();
                                     treeHolder.add(popTreeWidget(topLevelAssets, targetContext, true, contentSetup));
-                                    reposService.getAssetTxtContent(targetContext, contentSetup);
+
+                                    if (targetContext.getTxtContent()!=null) {
+                                        displayAssetContent(targetContext, centerPanel, propsWidget);
+                                    } else {
+                                        reposService.getAssetTxtContent(targetContext, contentSetup);
+                                    }
+
                                 }
                             });
 
