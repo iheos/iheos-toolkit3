@@ -39,6 +39,10 @@ class EventAccess {
         new File(new File(eventDir(), 'Input Output Messages'), 'Request Body.bytes')
     }
 
+    File respBodyFile() {
+        new File(new File(eventDir(), 'Input Output Messages'), 'Response Body.bytes')
+    }
+
     File assertionGroupFile(String agName) {
         new File(new File(eventDir(), 'Validators'), "${agName}.csv")
     }

@@ -1,17 +1,17 @@
 package gov.nist.hit.ds.simSupport.validationEngine
-
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.Fault
-import gov.nist.hit.ds.eventLog.assertion.*
+import gov.nist.hit.ds.eventLog.assertion.Assertion
+import gov.nist.hit.ds.eventLog.assertion.AssertionDAO
+import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
+import gov.nist.hit.ds.eventLog.assertion.AssertionStatus
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext
 import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
-import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
-import gov.nist.hit.ds.xdsException.ExceptionUtil
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
-
 /**
  * An abstract class that makes use of the SimComponent interface easier
  * by implementing most of the required methods leaving only the injectAll
@@ -71,7 +71,7 @@ public abstract class ValComponentBase implements ValComponent {
             event.close()
     }
 
-    ValidationMethod currentValidationMethod() { return validationEngine.currentValidationMethod }
+    ValidationMethod currentValidationMethod() { validationEngine.currentValidationMethod }
 
     @Override void setEvent(Event event) { this.event = event }
 
@@ -101,7 +101,7 @@ public abstract class ValComponentBase implements ValComponent {
      * Cooperate with ValidationEngine
      *
      * These assert calls are wrappers for the calls of the same
-     * name(s) in AssertionGroup where the actual comparisons are made.
+     * displayName(s) in AssertionGroup where the actual comparisons are made.
      *
      * The AssertionGroup calls make the actual comparisons and record
      * the assertions in the AssertionGroup.  The recordAssertion
@@ -230,77 +230,77 @@ public abstract class ValComponentBase implements ValComponent {
      * This collection of assertions is for when the ValidationEngine is not used
      */
 
-    public boolean infoFound(boolean found, ValidationRef vr) {
-        Assertion a = ag.infoFound(found);
-        recordAssertion(a, vr);
-        return true;
-    }
-
-    public boolean infoFound(String found, ValidationRef vr) {
-        Assertion a = ag.infoFound(found);
-        recordAssertion(a, vr);
-        return true;
-    }
-
-    public boolean fail(String expected, ValidationRef vr) {
-        Assertion a = ag.fail(expected, currentValidationMethod().required);
-        recordAssertion(a, vr);
-        return !a.failed();
-    }
-
-    public boolean fail(ValidationRef vr) {
-        Assertion a = ag.fail("", currentValidationMethod().required);
-        recordAssertion(a, vr);
-        return !a.failed();
-    }
-
-    public boolean assertIn(String[] expecteds, String value, ValidationRef vr) {
-        Assertion a = ag.assertIn(expecteds, value, currentValidationMethod().required);
-        recordAssertion(a, vr);
-        return !a.failed();
-    }
-
-    public boolean assertEquals(String expected, String found, ValidationRef vr) {
-        Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
-        recordAssertion(a, vr);
-        return !a.failed();
-    }
-
-    public boolean assertEquals(int expected, int found, ValidationRef vr) {
-        Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
-        recordAssertion(a, vr);
-        return !a.failed();
-    }
-
-    public boolean assertTrue(boolean value, ValidationRef vr) {
-        Assertion a = ag.assertTrue(value, currentValidationMethod().required);
-        recordAssertion(a, vr);
-        return !a.failed();
-    }
-
-    public boolean assertTrueNoLog(boolean value, ValidationRef vr) {
-        if (!value)
-            return assertTrue(value, vr);
-        return true;
-    }
-
-    public boolean assertFalse(boolean value, ValidationRef vr) {
-        Assertion a = ag.assertTrue(!value, currentValidationMethod().required);
-        recordAssertion(a, vr);
-        return !a.failed();
-    }
-
-    public boolean assertNotNull(Object value, ValidationRef vr) {
-        Assertion a = ag.assertNotNull(value, currentValidationMethod().required);
-        recordAssertion(a, vr);
-        return !a.failed();
-    }
-
-    public boolean assertNotNullNoLog(Object value, ValidationRef vr) {
-        if (value == null)
-            return assertNotNull(value, vr);
-        return true;
-    }
+//    public boolean infoFound(boolean found, ValidationRef vr) {
+//        Assertion a = ag.infoFound(found);
+//        recordAssertion(a, vr);
+//        return true;
+//    }
+//
+//    public boolean infoFound(String found, ValidationRef vr) {
+//        Assertion a = ag.infoFound(found);
+//        recordAssertion(a, vr);
+//        return true;
+//    }
+//
+//    public boolean fail(String expected, ValidationRef vr) {
+//        Assertion a = ag.fail(expected, currentValidationMethod().required);
+//        recordAssertion(a, vr);
+//        return !a.failed();
+//    }
+//
+//    public boolean fail(ValidationRef vr) {
+//        Assertion a = ag.fail("", currentValidationMethod().required);
+//        recordAssertion(a, vr);
+//        return !a.failed();
+//    }
+//
+//    public boolean assertIn(String[] expecteds, String value, ValidationRef vr) {
+//        Assertion a = ag.assertIn(expecteds, value, currentValidationMethod().required);
+//        recordAssertion(a, vr);
+//        return !a.failed();
+//    }
+//
+//    public boolean assertEquals(String expected, String found, ValidationRef vr) {
+//        Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
+//        recordAssertion(a, vr);
+//        return !a.failed();
+//    }
+//
+//    public boolean assertEquals(int expected, int found, ValidationRef vr) {
+//        Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
+//        recordAssertion(a, vr);
+//        return !a.failed();
+//    }
+//
+//    public boolean assertTrue(boolean value, ValidationRef vr) {
+//        Assertion a = ag.assertTrue(value, currentValidationMethod().required);
+//        recordAssertion(a, vr);
+//        return !a.failed();
+//    }
+//
+//    public boolean assertTrueNoLog(boolean value, ValidationRef vr) {
+//        if (!value)
+//            return assertTrue(value, vr);
+//        return true;
+//    }
+//
+//    public boolean assertFalse(boolean value, ValidationRef vr) {
+//        Assertion a = ag.assertTrue(!value, currentValidationMethod().required);
+//        recordAssertion(a, vr);
+//        return !a.failed();
+//    }
+//
+//    public boolean assertNotNull(Object value, ValidationRef vr) {
+//        Assertion a = ag.assertNotNull(value, currentValidationMethod().required);
+//        recordAssertion(a, vr);
+//        return !a.failed();
+//    }
+//
+//    public boolean assertNotNullNoLog(Object value, ValidationRef vr) {
+//        if (value == null)
+//            return assertNotNull(value, vr);
+//        return true;
+//    }
 
     /**************************************************************/
 
@@ -327,36 +327,6 @@ public abstract class ValComponentBase implements ValComponent {
         }
     }
 
-    private void recordAssertion(Assertion a, ValidationRef vr) {
-        String id = vr.getId();
-        if ("".equals(id)) {
-            throw new RuntimeException(ExceptionUtil.here("Assertion has no id"));
-        } else {
-            if (idsAsserted.contains(id)) {
-                a.setId(id);
-                a.setMsg("Validator contains multiple assertions with this id");
-                String[] refs = [ ]
-                a.setReference(refs);
-                a.setExpected("");
-                a.setFound("");
-                a.setCode(FaultCode.Receiver.toString());
-                a.setStatus(AssertionStatus.INTERNALERROR);
-                throw new RuntimeException("Validator contains multiple assertions with the id <" + id + ">");
-            }
-            idsAsserted.add(vr.getId());
-        }
-
-        a.setId(id);
-        a.setCode(vr.getErrCode());
-        a.setMsg(vr.getMsg());
-        a.setReference(vr.getRef());
-        a.setLocation(vr.getLocation());
-
-        log.debug("Assertion: " + a);
-    }
-
-    boolean validationAlreadyRecorded(String id) { idsAsserted.contains(id) }
-
     private void recordAssertion(Assertion a, Validation vf)
             throws SoapFaultException {
 
@@ -365,9 +335,13 @@ public abstract class ValComponentBase implements ValComponent {
         ValidationMethod validationMethod = currentValidationMethod()
 
         String id = vf.id();
+        if (!validationMethod.required)
+            a.setRequiredOptional(RequiredOptional.O)
         a.setId(id);
         a.setMsg(vf.msg());
         a.setReference(vf.ref());
+        if (a.getStatus().isError())
+            a.setCode(currentValidationMethod().errorCode)
         if (a.getStatus().isError() && validationMethod.type == RunType.FAULT) {
             a.setCode(validationMethod.faultCode.toString())
             a.setStatus(AssertionStatus.FAULT)
@@ -383,4 +357,36 @@ public abstract class ValComponentBase implements ValComponent {
             );
         }
     }
+
+//    private void recordAssertion(Assertion a, ValidationRef vr) {
+//        String id = vr.getId();
+//        if ("".equals(id)) {
+//            throw new RuntimeException(ExceptionUtil.here("Assertion has no id"));
+//        } else {
+//            if (idsAsserted.contains(id)) {
+//                a.setId(id);
+//                a.setMsg("Validator contains multiple assertions with this id");
+//                String[] refs = [ ]
+//                a.setReference(refs);
+//                a.setExpected("");
+//                a.setFound("");
+//                a.setCode(FaultCode.Receiver.toString());
+//                a.setStatus(AssertionStatus.INTERNALERROR);
+//                throw new RuntimeException("Validator contains multiple assertions with the id <" + id + ">");
+//            }
+//            idsAsserted.add(vr.getId());
+//        }
+//
+//        a.setId(id);
+//        if (a.getStatus().isError())
+//            a.setCode(currentValidationMethod().errorCode);
+//        a.setMsg(vr.getMsg());
+//        a.setReference(vr.getRef());
+//        a.setLocation(vr.getLocation());
+//
+//        log.debug("Assertion: " + a);
+//    }
+
+    boolean validationAlreadyRecorded(String id) { idsAsserted.contains(id) }
+
 }

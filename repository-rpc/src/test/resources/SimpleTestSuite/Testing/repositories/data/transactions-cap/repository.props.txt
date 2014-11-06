@@ -1,0 +1,9 @@
+#
+#Tue Apr 22 16:55:05 EDT 2014
+displayName=transactions-cap
+description=captured transactions
+repositoryType=simpleRepos
+id=transactions-cap
+#indexOnlyNewItems=True
+#Bill's project server
+#jmsHostAddress=tcp://129.6.59.221:10002

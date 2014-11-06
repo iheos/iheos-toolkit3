@@ -17,7 +17,6 @@
 
 
     <properties>
-        <!-- Convenience property to set the GWT version -->
         <gwtVersion>2.5.1</gwtVersion>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,6 +25,7 @@
 
 
     <repositories>
+        <!--
         <repository>
             <id>internal-nist-repo-third-party</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>
@@ -34,6 +34,7 @@
             <id>internal-nist-repo-snapshots</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
         </repository>
+        -->
         <repository>
             <id>smartgwt</id>
             <url>http://www.smartclient.com/maven2</url>
@@ -69,6 +70,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
@@ -216,7 +218,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <!-- <path>/xdstools2</path> <warFile>${project.build.directory}/xdstools3-v2-maven-alpha.war</warFile>
+                    <!-- <path>/xdstools2</path> <warFile>${project.build.directory}/xdstools3.war</warFile>
                         <tomcatLoggingFile>${project.build.directory}/log.txt</tomcatLoggingFile> -->
                 </configuration>
             </plugin>

@@ -1,8 +1,7 @@
 package gov.nist.hit.ds.soapSupport.core;
 
-import gov.nist.hit.ds.http.environment.HttpEnvironment;
-import gov.nist.hit.ds.http.parser.HttpResponseGenerator;
 import gov.nist.hit.ds.utilities.xml.OMFormatter;
+import gov.nist.hit.ds.xdsException.XMLParserException;
 import org.apache.axiom.om.OMElement;
 
 /**
@@ -20,8 +19,14 @@ public class SoapResponseGenerator {
 		this.senv = senv;
 		this.body = body;
 	}
-	
-	public OMElement getEnvelope() {
+
+    public SoapResponseGenerator(SoapEnvironment senv, String _body) throws XMLParserException {
+        this.senv = senv;
+        this.body = gov.nist.hit.ds.utilities.xml.Parse.parse_xml_string(_body);
+    }
+
+
+    public OMElement getEnvelope() {
 		if (envelope == null) {
 			envelope = SoapUtil.buildSoapEnvelope();
 
@@ -30,20 +35,9 @@ public class SoapResponseGenerator {
 		}
 		return envelope;
 	}
-	
-	public String send() throws Exception {
-        if (senv == null)
-            return "";
-		if (senv.multipart)
-			throw new Exception("SoapResponseGenerator#send: cannot generate multipart responses yet");
-		
-		HttpEnvironment httpEnv = senv.getHttpEnvironment();
-        if (httpEnv == null) return "";
-        httpEnv.getResponse().setContentType("application/soap+xml");
-		HttpResponseGenerator resp = new HttpResponseGenerator(senv.getHttpEnvironment());
-		String soapResponseString = new OMFormatter(getEnvelope()).toString(); 
-		resp.sendResponse(soapResponseString);
-		return soapResponseString;
-	}
 
+    public String getEnvelopeAsString() {
+        return new OMFormatter(getEnvelope()).toString();
+    }
+	
 }

@@ -1,8 +1,5 @@
 package edu.tn.xds.metadata.editor.server;
 
-import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
-
-import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,14 +16,13 @@ import java.util.logging.Logger;
 public class SaveFileService implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    private static File FILE_REPOSITORY;
     private final Logger logger = Logger.getLogger(SaveFileService.class.getName());
 
-    private static File FILE_REPOSITORY;
-
     public SaveFileService(){
-        String rootDirPath=RequestFactoryServlet.getThreadLocalServletContext().getRealPath("/");
-        logger.info(rootDirPath);
+        String rootDirPath = System.getProperty("user.dir");
+//        String rootDirPath=RequestFactoryServlet.getThreadLocalServletContext().getRealPath("/");
+        logger.info("Root Path: " + rootDirPath);
         File fileFolder=new File(new File(rootDirPath),"/files/");
         if(!fileFolder.exists()) {
             logger.info("Create storage folder 'files''");

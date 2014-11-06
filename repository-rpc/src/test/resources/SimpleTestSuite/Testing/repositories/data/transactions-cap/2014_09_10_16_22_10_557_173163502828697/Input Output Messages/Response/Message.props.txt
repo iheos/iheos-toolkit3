@@ -1,0 +1,12 @@
+#
+#Wed Sep 10 16:22:10 EDT 2014
+displayOrder=2
+name=a2ce6566-0b6b-4f2e-a193-d74b02876086_Message
+mimeType=text/html
+id=06af5983-8e59-45ff-805c-c6401e83a9b9
+parentId=a2ce6566-0b6b-4f2e-a193-d74b02876086
+repositoryId=transactions-cap
+type=resBodyType
+displayName=Message
+createdDate=20140910162210
+updatedDate=20140910162210

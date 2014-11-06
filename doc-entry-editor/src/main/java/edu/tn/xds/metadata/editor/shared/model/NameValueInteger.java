@@ -120,4 +120,25 @@ public class NameValueInteger implements ModelElement, Serializable {
         return answer;
     }
 
+    @Override
+    public String toString() {
+        return "NameValueInteger{" +
+                "name=" + name +
+                ", values=" + values +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NameValueInteger)) return false;
+
+        NameValueInteger that = (NameValueInteger) o;
+
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (values != null ? !values.equals(that.values) : that.values != null) return false;
+
+        return true;
+    }
+
 }

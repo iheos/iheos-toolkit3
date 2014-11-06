@@ -18,7 +18,7 @@ class CreateActorErrorTest extends Specification {
 
     def 'Missing transaction def should throw exception'() {
         when:
-        ActorTransactionTypeFactory.clear()
+        new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().loadFromString(config)
 
 

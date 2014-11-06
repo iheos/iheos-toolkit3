@@ -3,86 +3,36 @@
 
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
-        <artifactId>toolkit3</artifactId>
+        <artifactId>tk-deps</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
-    <!-- no groupId because it is inherited from the parent -->
     <version>3.0.0-SNAPSHOT</version>
     <artifactId>tk-core</artifactId>
     <packaging>pom</packaging>
     
     <modules>
+        <module>../xdsException</module>
+        <module>../common-datatypes</module>
+        <module>../utilities</module>
+        <module>../toolkit</module>
         <module>../repository</module>
-        <module>../repository-shared</module>
+        <module>../event-log</module>
         <module>../http</module>
+        <module>../actor-transaction</module>
         <module>../soap-support</module>
         <module>../site-management</module>
-        <module>../actor-transaction</module>
-        <module>../event-log</module>
-        <module>../sim-support</module>
-        <module>../utilities</module>
-        <module>../xds-exceptions</module>
-        <module>../toolkit</module>
-        <module>../common-datatypes</module>
-        <module>../http-soap-validator</module>
-        <module>../ds-sims</module>
         <module>../tk-apis</module>
+        <module>../sim-support</module>
+        <module>../tk-initialization</module>
     </modules>
     
     <dependencies>
-        <!--
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>actor-transaction</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xds-exceptions</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>http-soap-validator</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>utilities</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>toolkit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>http</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>soap-support</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>sim-support</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>site-management</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>event-log</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>repository</artifactId>
-        </dependency>
-        -->
         <dependency>
             <groupId>com.sun.ebxml</groupId>
             <artifactId>ebxmlrr-common</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 

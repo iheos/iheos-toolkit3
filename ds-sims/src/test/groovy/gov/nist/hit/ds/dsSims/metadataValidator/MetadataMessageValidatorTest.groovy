@@ -8,6 +8,7 @@ import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -21,8 +22,8 @@ import spock.lang.Specification
 class MetadataMessageValidatorTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
-    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as"
-       class="gov.nist.hit.ds.dsSims.reg.RegisterTransaction">
+    <transaction name="Register" code="rb" asyncCode="r.as">
+       <implClass value="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>
@@ -45,8 +46,8 @@ class MetadataMessageValidatorTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('123')
-        SimUtils.create('reg', simId, repoName)
+        simId = new SimId('MetadataMessageValidatorTest')
+        SimUtils.create('reg', simId, new SimSystemConfig().repoName)
     }
 
     def 'SubmissionSet passes metadata parser'() {
@@ -81,6 +82,7 @@ class MetadataMessageValidatorTest extends Specification {
                                               attributes: [[name:'submissionTime', values:['2004']]]
                                       ] ]
         def ssXml = new RimGenerator().toRimXml(submissionSpec,'SubmitObjectsRequest')
+        println ssXml
 
         when:
         OMElement xml = Parse.parse_xml_string(ssXml)

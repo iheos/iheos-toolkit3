@@ -32,6 +32,7 @@ public class DtmSubValidator  extends ValComponentBase {
     def lengthCheck() {
         int size = input.length();
         assertTrue(size == 4 || size == 6 || size == 8 || size == 10 || size == 12 || size == 14)
+        infoFound("${size} characters")
     }
 
     @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)

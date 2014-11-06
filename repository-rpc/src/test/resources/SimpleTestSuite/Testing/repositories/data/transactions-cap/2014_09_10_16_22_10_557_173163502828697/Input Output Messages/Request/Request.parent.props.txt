@@ -1,0 +1,26 @@
+#
+#Wed Sep 10 16:22:10 EDT 2014
+messageFrom=127.0.0.1
+forwardedToIpAddress=127.0.0.1\:8080
+statuscode=200
+method=POST
+type=reqType
+proxyRuleMappingName=localcap
+displayName=Request
+rule=localcap
+time=20140910162210
+msgtype=REQUEST
+forwardedTo=localhost\:8080
+messageFromIpAddress=127.0.0.1
+displayOrder=1
+updatedDate=20140910162210
+contenttype=application/soap+xml
+path=/tf6/services/xdsregistryb
+id=f93bd6d7-877d-462c-9752-f4aaf1cafe06
+proxyPort=8001
+parentId=4ea4b779-33f8-42fb-9c13-dc9bc7f44c10
+proxy=localhost
+repositoryId=transactions-cap
+contentlength=15403
+createdDate=20140910162210
+name=2014_09_10_16_22_10_557_173163502828697_io_Request

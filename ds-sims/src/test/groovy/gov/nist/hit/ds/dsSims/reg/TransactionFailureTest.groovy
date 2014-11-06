@@ -17,20 +17,20 @@ import spock.lang.Specification
 class TransactionFailureTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
-    <transaction displayName="Fault" id="fault" code="fault" asyncCode="fault.as"
-       class="gov.nist.hit.ds.dsSims.bad.FailsWithFaultValidator">
+    <transaction name="Fault" code="fault" asyncCode="fault.as">
+       <implClass value="gov.nist.hit.ds.dsSims.bad.FailsWithFaultValidator"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>
     </transaction>
-    <transaction displayName="Error" id="error" code="error" asyncCode="errof.as"
-       class="gov.nist.hit.ds.dsSims.bad.FailsWithErrorValidator">
+    <transaction name="Error" code="error" asyncCode="errof.as">
+       <implClass value="gov.nist.hit.ds.dsSims.bad.FailsWithErrorValidator"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>
     </transaction>
-    <actor displayName="Document Registry" id="my"
-      class="">
+    <actor name="reg" id="reg">
+      <implClass value=""/>
         <transaction id="fault"/>
         <transaction id="error"/>
     </actor>
@@ -40,6 +40,8 @@ class TransactionFailureTest extends Specification {
     File repoDataDir
     def repoSource
     def repoName = 'Sim'
+    ActorTransactionTypeFactory factory
+    def simIdStr = 'TransactionFailureTest'
 
     def initTest() {
         if (repoDataDir.exists()) {
@@ -49,8 +51,9 @@ class TransactionFailureTest extends Specification {
     }
     def setup() {
         SimSupport.initialize()
-        new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
+        factory = new ActorTransactionTypeFactory()
+        factory.clear()
+        factory.loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
     }
@@ -58,16 +61,22 @@ class TransactionFailureTest extends Specification {
 
     def 'Should fail with fault'() {
         when: ''
-        def simId = new SimId('123')
-        if (!SimUtils.exists(simId, repoName)) SimUtils.create('my', simId, repoName)
-        def runner = new TransactionRunner(new EndpointBuilder().parse('http://localhost:8080/tools/sim/123/act/fault'), repoName, null, null)
-        def handle = runner.simHandle
-        def eventAccess = new EventAccess(simId.id, handle.event)
+        def simId = new SimId(simIdStr)
+        def simHandle = SimUtils.create('reg', simId, repoName)
+        def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tools/sim/123/act/fault')
+        simHandle.transactionType = factory.getTransactionType(endpointBuilder.transCode)
+
+        then:
+        simHandle.transactionType
+
+        when:
+        def runner = new TransactionRunner(simHandle)
+        def eventAccess = new EventAccess(simId.id, simHandle.event)
         runner.run()
 
         then:
         thrown SoapFaultException
-        handle.event.hasFault()
+        simHandle.event.hasFault()
         eventAccess
         eventAccess.simDir().exists()
         eventAccess.eventLogDir().exists()
@@ -78,17 +87,22 @@ class TransactionFailureTest extends Specification {
 
     def 'Should fail with error'() {
         when: ''
-        def simId = new SimId('123')
-        def endpoint = 'http://localhost:8080/tools/sim/123/my/error'
-        if (!SimUtils.exists(simId, repoName)) SimUtils.create('my', simId, repoName)
-        def runner = new TransactionRunner(new EndpointBuilder().parse('http://localhost:8080/tk/sim/123/act/error'), repoName, null, null)
-        def handle = runner.simHandle
-        def eventAccess = new EventAccess(simId.id, handle.event)
+        def simId = new SimId(simIdStr)
+        def simHandle = SimUtils.create('reg', simId, repoName)
+        def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tk/sim/123/reg/error')
+        simHandle.transactionType = factory.getTransactionType(endpointBuilder.transCode)
+
+        then:
+        simHandle.transactionType
+
+        when:
+        def runner = new TransactionRunner(simHandle)
+        def eventAccess = new EventAccess(simId.id, simHandle.event)
         runner.run()
 
         then:
         notThrown SoapFaultException
-        handle.event.hasErrors()
+        simHandle.event.hasErrors()
         eventAccess
         eventAccess.simDir().exists()
         eventAccess.eventLogDir().exists()

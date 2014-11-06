@@ -12,7 +12,7 @@ import gov.nist.hit.ds.simSupport.simChain.SimChain
 class SimScanner extends SimEngine {
 
     /**
-     * Enable trace so we get diagnostic output.
+     * Enable trace so we label diagnostic output.
      * @param simChain
      */
     SimScanner(SimChain simChain) {

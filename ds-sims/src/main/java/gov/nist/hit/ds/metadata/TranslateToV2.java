@@ -94,7 +94,7 @@ public class TranslateToV2 extends Translate {
                 String[] parts = value.split(":");
                 value = parts[parts.length-1];
             }
-//			else if (name.equals("objectType") && ! value.startsWith("urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:"))
+//			else if (displayName.equals("objectType") && ! value.startsWith("urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:"))
 //			value = "urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:" + value;
             OMAttribute to_a = MetadataSupport.om_factory.createOMAttribute(name, namespace, value);
             to.addAttribute(to_a);
@@ -106,9 +106,9 @@ public class TranslateToV2 extends Translate {
 //	protected void copy_attributes(OMElement from, OMElement to) {
 //		for (Iterator it=from.getAllAttributes(); it.hasNext();  ) {
 //			OMAttribute from_a = (OMAttribute) it.next();
-//			String name = from_a.getLocalName();
+//			String displayName = from_a.getLocalName();
 //			String value = from_a.getAttributeValue();
-//			OMAttribute to_a = MetadataSupport.om_factory.createOMAttribute(name, null, value);
+//			OMAttribute to_a = MetadataSupport.om_factory.createOMAttribute(displayName, null, value);
 //			to.addAttribute(to_a);
 //		}
 //	}

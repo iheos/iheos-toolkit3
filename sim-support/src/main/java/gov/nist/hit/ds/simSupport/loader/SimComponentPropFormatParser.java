@@ -12,30 +12,30 @@ import java.util.Properties;
  * Create an element in componentProperties for each SimComponent configured.
  * Example:
  element1.class=gov.nist.hit.ds.simSupport.loader.ByParamLogLoader
- element1.name=Log Loader
+ element1.displayName=Log Loader
  element1.description=Load incoming HTTP header and body from logs
  element1.source=src/test/resources/simple
 
- element2.class=gov.nist.hit.ds.httpSoapValidator.validators.HttpMsgParser
- element2.name=HTTP Message Parser/Validator
+ element2.class=gov.nist.hit.ds.httpSoap.validators.HttpMsgParser
+ element2.displayName=HTTP Message Parser/Validator
 
- element3.class=gov.nist.hit.ds.httpSoapValidator.validators.SimpleSoapEnvironmentValidator
- element3.name=Verify HTTP environment describes SIMPLE SOAP
+ element3.class=gov.nist.hit.ds.httpSoap.validators.SimpleSoapEnvironmentValidator
+ element3.displayName=Verify HTTP environment describes SIMPLE SOAP
  element3.description=Verify not multipart and correct content-type
 
  element4.class=gov.nist.hit.ds.xmlValidator.XmlParser
- element4.name=XML Parser
+ element4.displayName=XML Parser
 
- element5.class=gov.nist.hit.ds.httpSoapValidator.validators.SoapParser
- element5.name=SOAP Parser
+ element5.class=gov.nist.hit.ds.httpSoap.validators.SoapParser
+ element5.displayName=SOAP Parser
  element5.description=Parses XML into SOAP Header and SOAP Body
 
- element6.class=gov.nist.hit.ds.httpSoapValidator.validators.SoapHeaderValidator
- element6.name=SOAP Header Validator
+ element6.class=gov.nist.hit.ds.httpSoap.validators.SoapHeaderValidator
+ element6.displayName=SOAP Header Validator
  element6.expectedWsAction=urn:ihe:iti:2007:RegisterDocumentSet-b
  *
  * .class indicates the Component implementation
- * .name and .description are documentation
+ * .displayName and .description are documentation
  * Others, like .source or .expectedWsAction are parameters to the
  * Compoment.
  */

@@ -49,7 +49,7 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "UniqueID " + uid + "  is assigned to more than one object within the submission", this, null);
 			submittedUIDs.add(uid);
 			
-			// get object from registry
+			// label object from registry
             // TODO: Reconnect this
 			Ro ro = null;   //mc.getObjectByUid(uid);
 			if (ro != null) {

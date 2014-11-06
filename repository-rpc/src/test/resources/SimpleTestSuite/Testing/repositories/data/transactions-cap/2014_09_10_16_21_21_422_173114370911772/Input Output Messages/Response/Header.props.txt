@@ -1,0 +1,12 @@
+#
+#Wed Sep 10 16:21:21 EDT 2014
+displayOrder=1
+name=a7bf310f-1301-4da1-9529-f37bd3265755_Header
+mimeType=text/plain
+id=21510102-f7a1-457e-b9c3-89e3e3ab80c6
+parentId=a7bf310f-1301-4da1-9529-f37bd3265755
+repositoryId=transactions-cap
+type=resHdrType
+displayName=Header
+createdDate=20140910162121
+updatedDate=20140910162121

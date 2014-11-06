@@ -14,9 +14,14 @@ public class ValidationMethod {
 	List<String> dependsOnId = []
 	String id;
     List<String> guardMethodNames = []
-    boolean required = true
+    List<String> optionalGuardMethodNames = [] // optional determined by a set of guards
     boolean setup = false
+    boolean required = true
     String errorCode
+
+    public String toString() {
+        return "${method} required ${required} depends on ${dependsOnId} guards ${guardMethodNames} optionals ${optionalGuardMethodNames}"
+    }
 
     ValidationMethod(Method method, Validation validationAnnotation) {
         this.id = validationAnnotation.id()
@@ -47,4 +52,6 @@ public class ValidationMethod {
     }
 
     def addGuardMethod(String[] methodNames) { for (int i=0; i<methodNames.length; i++) if (methodNames[i] != 'null') guardMethodNames.add(methodNames[i]) }
+    def addOptionalGuardMethod(String[] methodNames) { for (int i=0; i<methodNames.length; i++) if (methodNames[i] != 'null') optionalGuardMethodNames.add(methodNames[i]) }
+
 }

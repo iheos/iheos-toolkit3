@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meaninglessWrapper>
+    <!-- 
+        Example REST request for Simulator Creation
+        Endpoint:  /simcntl/create/docrec/1234
+        Operation: POST
+        Request:
+    -->
+
+    <simulator id="1234">
+        <actor name="docrec">
+            <tls value="yes|no|both"/>
+            <option type="async" value="yes|no"/>
+            <option type="extraMetadata" value="yes|no"/>
+            <callback transaction="pnr" rest="http://localhost/xdrreceived"/>
+        </actor>
+    </simulator>
+
+    <!-- 
+        Example REST request for retrieving available Simulator options
+        Endpoint: /simcntl/options/docref
+        Operation: GET
+        Response:
+    -->
+
+    <simulator>
+        <actor type="docrec">
+            <option type="extraMetadata"/>
+        </actor>
+    </simulator>
+
+    <!-- 
+        Example REST request for retrieving current Simulator settings
+        Endpoint: /simcntl/options/docref/1234
+        Operation: GET
+        Response:
+    -->
+
+    <simulator id="1234">
+        <actor type="docrec">
+            <tls value="true"/>
+            <option type="extraMetadata" value="true"/>
+            <callback transaction="pnr" rest="http://localhost/xdrreceived"/>
+            <endpoint value="https://localhost:8443/xdstools3/sim/1234/pnr" type="pnr_TLS"/>
+        </actor>
+    </simulator>
+
+</meaninglessWrapper>

@@ -10,7 +10,9 @@ import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Setup
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
-//@groovy.transform.TypeChecked
+import groovy.util.logging.Log4j
+
+@Log4j
 public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
     SubmissionSetModel model
     Set<String> knownIds
@@ -35,10 +37,12 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
     }
 
     void runAfter() {
+        new TopAttsSubValidator(this, model, vc, SubmissionSetModel.statusValues).asSelf().run()
         new IdSubValidator(this, model, vc).asSelf().run()
         new LidSubValidator(this, model, vc).asSelf().run()
 
         new SubmissionSetSlotsValidator(simHandle, model).asPeer().run()
+//        new SubmissionSetClassificationsValidator(simHandle, model).asPeer().run()
     }
 
     // Guards
@@ -53,7 +57,6 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
             msg("Labeled as Minimal Metadata (Direct)");
         else
             msg ('Labeled as Full Metadata')
-        new TopAttsSubValidator(this, model, vc, SubmissionSetModel.statusValues).asSelf().run()
     }
 
 //    @Validation(id='Top', msg='Top attributes', ref='')
@@ -65,7 +68,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
     public void validate(ErrorRecorder er, ValidationContext vc,
 			Set<String> knownIds) {
 
-		validateTopAtts(er, vc);
+//		validateTopAtts(er, vc);
 
 		validateSlots(er, vc);
 
@@ -90,7 +93,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
 		if (vc.isXDRMinimal) { 
 			validateDirectSlotsCodedCorrectly(er, vc);
 		} else {
-			//                    name				   multi	format                                                  resource
+			//                    displayName				   multi	format                                                  resource
 			validateSlot(er, 	"submissionTime", 	   false, 	new DtmSubValidator(er, "Slot submissionTime",            table416),  table416);
 			validateSlot(er, 	"intendedRecipient",   true, 	new XonXcnXtnSubValidator(er, "Slot intendedRecipient",      table416),  table416);
 		}
@@ -98,7 +101,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
 
 	public void validateDirectSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
 
-		//                    name				   multi	format                                                  resource
+		//                    displayName				   multi	format                                                  resource
 		validateSlot(er, 	"submissionTime", 	   false, 	new DtmSubValidator(er, "Slot submissionTime",            table416),  table416);
 		validateSlot(er, 	"intendedRecipient",   true, 	new XonXcnXtnSubValidator(er, "Slot intendedRecipient",     table416),  table416);
 	}
@@ -122,7 +125,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
 		verifySlotsUnique(er);
 		for (SlotModel slot : model.getSlots()) {
 			if ( ! legal_slot_name(slot.getName()))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + slot.getName() + " is not a legal slot name for a SubmissionSet",  this,  table416);
+				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + slot.getName() + " is not a legal slot displayName for a SubmissionSet",  this,  table416);
 
 		}
 	}

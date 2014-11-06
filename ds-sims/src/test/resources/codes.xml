@@ -929,7 +929,7 @@
 		This section replaced by folderCodeList below.
 		
 		
-	<CodeType name="codeList" classScheme="urn:uuid:1ba97051-7806-41a8-a48b-8fce7af683c5">
+	<CodeType displayName="codeList" classScheme="urn:uuid:1ba97051-7806-41a8-a48b-8fce7af683c5">
 		<Code code="Anesthesia" display="Anesthesia" codingScheme="Connect-a-thon codeList" />
 		<Code code="Cardiology" display="Cardiology" codingScheme="Connect-a-thon codeList" />
 		<Code code="Case Manager" display="Case Manager" codingScheme="Connect-a-thon codeList" />

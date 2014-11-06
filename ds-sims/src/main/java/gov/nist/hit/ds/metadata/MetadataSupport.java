@@ -190,6 +190,11 @@ public class MetadataSupport {
     public static String status_partial_success = "urn:ihe:iti:2007:ResponseStatusType:PartialSuccess";
     public static String status_failure = "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Failure";
 
+    // availability status values
+
+    public static String statusType_approved = "urn:oasis:names:tc:ebxml-regrep:StatusType:Approved";
+    public static String statusType_deprecated = "urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated";
+
     // Association types
 
     public static String assoctype_has_member = "urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember";
@@ -290,10 +295,12 @@ public class MetadataSupport {
 
     public static String XDSSubmissionSet_patientid_uuid = "urn:uuid:6b5aea1a-874d-4603-a4bc-96a0a7b38446";
     public static String XDSDocumentEntry_patientid_uuid = "urn:uuid:58a6f841-87b3-4a3e-92fd-a8ffeff98427";
+    public static String XDSDocumentEntry_patientid_name = "XDSDocumentEntry.patientId";
     public static String XDSFolder_patientid_uuid = "urn:uuid:f64ffdf0-4b97-4e06-b79f-a52b38ec2f8a";
 
     public static String XDSSubmissionSet_uniqueid_uuid = "urn:uuid:96fdda7c-d067-4183-912e-bf5ee74998a8";
     public static String XDSDocumentEntry_uniqueid_uuid = "urn:uuid:2e82c1f6-a085-4c72-9da3-8640a32e42ab";
+    public static String XDSDocumentEntry_uniqueid_name = "XDSDocumentEntry.uniqueId";
     public static String XDSFolder_uniqueid_uuid = "urn:uuid:75df8f67-9973-4fbe-a900-df66cefecc5a";
 
     public static String XDSSubmissionSet_author_uuid = "urn:uuid:a7058bb9-b4e4-4307-ba5b-e3f0ab85e12d";

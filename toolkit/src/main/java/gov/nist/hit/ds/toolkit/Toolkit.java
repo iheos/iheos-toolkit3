@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.toolkit;
 
+import gov.nist.hit.ds.toolkit.environment.Environment;
 import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.toolkit.installation.PropertyManager;
 import org.apache.commons.io.FileUtils;
@@ -8,6 +9,7 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 /**
  * This is the starting point to find all file-based resources in toolkit.
@@ -159,6 +161,7 @@ public class Toolkit {
             throw new RuntimeException(e);
         }
     }
+    static public List<String> getEnvironmentNames() { return new Environment(externalCacheFile()).getInstalledEnvironments(); }
     static public File repositoriesTypesFile() { return new File(new File(externalCacheFile(), "repositories"), "types"); }
 
 }
