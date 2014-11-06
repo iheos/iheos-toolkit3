@@ -15,6 +15,6 @@ public class LifecycleValidationTab extends AbstractRegistryAndRepositoryTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getLifecycleValidationTabCode();
+        return TabNamesUtil.getInstance().getLifecycleValidationTabCode();
     }
 }

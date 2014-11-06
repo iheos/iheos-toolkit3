@@ -53,7 +53,7 @@ public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Gener
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getFindFoldersCode();
+        return TabNamesUtil.getInstance().getFindFoldersCode();
     }
 
     private void bindUI() {

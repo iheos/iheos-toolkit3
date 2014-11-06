@@ -56,7 +56,7 @@ public class MPQTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getMpqFindDocumentsTabCode();
+        return TabNamesUtil.getInstance().getMpqFindDocumentsTabCode();
     }
 
 }

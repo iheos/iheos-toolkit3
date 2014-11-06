@@ -90,6 +90,6 @@ public class SettingsTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getAdminTabCode();
+        return TabNamesUtil.getInstance().getAdminTabCode();
     }
 }

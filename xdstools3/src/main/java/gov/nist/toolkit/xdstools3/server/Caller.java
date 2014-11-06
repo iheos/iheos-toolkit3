@@ -2,9 +2,11 @@ package gov.nist.toolkit.xdstools3.server;
 
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
+import gov.nist.toolkit.xdstools3.server.demo.TestDataHelper;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Singleton class that acts as a directory of all calls to server-side packages. All calls must go through this class in order to
@@ -19,13 +21,14 @@ public class Caller implements Serializable {
 	 */
 	private static final long serialVersionUID = -6431109235310163158L;
 	private static Caller instance = null;
+    private final static Logger logger = Logger.getLogger(Caller.class.getName());
 
 	protected Caller(){
 	}
 
 	/**
 	 * Singleton method. Use this method to gain access to the functionality in this class.
-	 * @return
+	 * @return Caller instance
 	 */
 	public static Caller getInstance(){
 		if (instance == null){
@@ -103,5 +106,14 @@ public class Caller implements Serializable {
         return ActorsCollectionsDataSamples.instance.getTestReadme(test);
     }
 
+    // ----------------------------- MHD -------------------------------
+    public String validateMHDMessage(String messageType,String filecontent) {
+        /* TODO Implementation using toolkitServices.getSession().getLastUpload() to get the file uploaded
+          (Change method prototype if required)*/
+        return "Response for "+messageType+" validation.";
+    }
 
+    public Map<String,String> retrieveTestDataSet(String testDataType) {
+        return TestDataHelper.instance.getTestDataSet();
+    }
 }
