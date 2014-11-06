@@ -17,6 +17,10 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.AdminSettings
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
+/**
+ * This tabs allows to edit the Administrator Settings / Toolkit Settings available through the back-end from a
+ * properties file. This tab is being opened when the user logs in as administrator, through the Login Dialog.
+ */
 public class AdminSettingsTab extends GenericCloseableTab {
 	private static String title = "Administrator Settings";
     private TextItem host, port, tls_port, cache, environment, gazelle;
