@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * Client side of the GWT RPC mechanism. This is the asynchronous interface.
  * 
  * @author dazais
- * @see LoginService
+ * @see gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.LoginService
  *
  */
 

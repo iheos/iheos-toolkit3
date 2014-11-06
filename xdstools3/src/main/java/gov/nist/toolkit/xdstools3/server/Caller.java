@@ -5,6 +5,7 @@ import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Singleton class that acts as a directory of all calls to server-side packages. All calls must go through this class in order to
@@ -19,13 +20,14 @@ public class Caller implements Serializable {
 	 */
 	private static final long serialVersionUID = -6431109235310163158L;
 	private static Caller instance = null;
+    private final static Logger logger = Logger.getLogger(Caller.class.getName());
 
 	protected Caller(){
 	}
 
 	/**
 	 * Singleton method. Use this method to gain access to the functionality in this class.
-	 * @return
+	 * @return Caller instance
 	 */
 	public static Caller getInstance(){
 		if (instance == null){
@@ -34,17 +36,44 @@ public class Caller implements Serializable {
 		return instance;
 	}
 
-	// ---- List here the calls to backend packages ----
+
+
+    // ------------------ Administrator functionality --------------------
     /**
      * Login as admin
      * @param username the admin username
      * @param password the admin password
      */
-	public boolean logMeIn(String username, String password){
+    public boolean logMeIn(String username, String password){
         // TODO compare login with server-side admin credentials
         System.out.println("Test successful: you are logged in.");
         return true;
-	}
+    }
+
+    /**
+     * Saves the application settings as defined by the administrator(s)
+     * @param settings Table of settings: host, port, tls_port, cache, environment, gazelleURL
+     */
+    public void saveAdminSettings(String[] settings){
+        // TODO save admin settings to back-end
+        System.out.println("Admin settings were saved");
+    }
+
+    public void saveAdminPassword(String oldPassword, String newPassword){
+        // TODO save admin password to back-end if oldPassword is correct
+        System.out.println("Admin password was saved");
+    }
+
+    /**
+     * Retrieves the Toolkit / Admin settings from the back-end
+     * @return Table of settings: host, port, tls_port, cache, environment, gazelleURL
+     */
+    public String[] retrieveAdminSettings(){
+        // TODO retrieve Toolkit / admin settings from back-end
+        System.out.println("Test: retrieving admin settings from server.");
+        String[] test = {"http://nist1", "90800", "90801", "C://ext_cache", "NA2015", "http://gazelle.net"};
+        return test;
+    }
 
 
     // --------------------- Sessions and Environments ---------------------
@@ -102,6 +131,7 @@ public class Caller implements Serializable {
     public String getTestReadme(String test) {
         return ActorsCollectionsDataSamples.instance.getTestReadme(test);
     }
+
 
 
 }

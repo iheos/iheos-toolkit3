@@ -195,7 +195,7 @@ public class Toolbar extends RibbonBar {
             public void onFailure(Throwable caught) {
                 //logger.debug(getClassName() + ": " +"loadEnvironmentNamesFromServer");
                 new PopupMessageV3("Failed to retrieve the list of available environments from the server. " +
-                        "The location of the configuration files for this application may have been misconfigured.");
+                        "The location of the configuration files for this application may be misconfigured.");
             }
             @Override
             public void onSuccess(String[] result) {

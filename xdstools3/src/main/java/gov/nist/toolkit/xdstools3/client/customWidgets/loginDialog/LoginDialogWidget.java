@@ -16,6 +16,9 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericCancelButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.LoginButton;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.util.Util;
 
 public class LoginDialogWidget extends Window {
     private static int POPUP_WIDTH = 295;
@@ -124,7 +127,8 @@ public class LoginDialogWidget extends Window {
             @Override
             public void onSuccess(Boolean loggedIn) {
                 if (loggedIn){
-                        // TODO Open admin settings page AND display a "you are logged in as admin" text somewhere at the top
+                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getAdminTabCode()));
+                    // TODO display a "you are logged in as admin" text somewhere in a menu bar
                     close(); // close the popup
 
                 } else {
