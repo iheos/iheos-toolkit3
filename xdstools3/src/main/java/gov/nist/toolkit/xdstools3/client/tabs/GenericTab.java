@@ -36,6 +36,9 @@ public abstract class GenericTab extends Tab implements TabInterface {
         return Formatter.createSubtitle1(s); // TODO May need to be transformed into direct call inside each tab
     }
 
+    public void hideHeaderTitle(){
+        panel.removeMember(headerLabel);
+    }
 
     /**
      * Sets a tab contents
