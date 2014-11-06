@@ -44,7 +44,7 @@ class SoapMessageValidator2Test extends Specification {
         SimUtils.create('reg', simId, repName)
     }
 
-    def 'SoapMessageParser should succeed'() {
+    def 'SoapMessageValidator should succeed'() {
         def envelope = '''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:wsa="http://www.w3.org/2005/08/addressing">
   <soapenv:Header>
@@ -70,10 +70,10 @@ class SoapMessageValidator2Test extends Specification {
 
         then:
         !transRunner.simHandle.event.hasErrors()
-        eventAccess.assertionGroupFile('SoapMessageParser').exists()
+        eventAccess.assertionGroupFile('SoapMessageValidator').exists()
     }
 
-    def 'SoapMessageParser should fail on XML parse'() {
+    def 'SoapMessageValidator should fail on XML parse'() {
         def envelope = '''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:wsa="http://www.w3.org/2005/08/addressing">
   <soapenv:Header>
@@ -98,13 +98,13 @@ class SoapMessageValidator2Test extends Specification {
 
         then:
         transRunner.simHandle.event.hasFault()
-        eventAccess.assertionGroupFile('SoapMessageParser').exists()
+        eventAccess.assertionGroupFile('SoapMessageValidator').exists()
         Exception e = thrown()
         e instanceof SoapFaultException
         e.message.contains 'XML Parse errors'
     }
 
-    def 'SoapMessageParser should fail - no Envelope'() {
+    def 'SoapMessageValidator should fail - no Envelope'() {
         def envelope = '''
 <stuff/>
 '''
@@ -118,14 +118,14 @@ class SoapMessageValidator2Test extends Specification {
 
         then:
         transRunner.simHandle.event.hasFault()
-        eventAccess.assertionGroupFile('SoapMessageParser').exists()
+        eventAccess.assertionGroupFile('SoapMessageValidator').exists()
         Exception e = thrown()
         e instanceof SoapFaultException
         e.message.contains 'Top element must be Envelope'
         e.message.contains 'stuff'
     }
 
-    def 'SoapMessageParser should fail - Header missing'() {
+    def 'SoapMessageValidator should fail - Header missing'() {
         def envelope = '''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:wsa="http://www.w3.org/2005/08/addressing">
   <soapenv:Body>
@@ -147,14 +147,14 @@ class SoapMessageValidator2Test extends Specification {
 
         then:
         transRunner.simHandle.event.hasFault()
-        eventAccess.assertionGroupFile('SoapMessageParser').exists()
+        eventAccess.assertionGroupFile('SoapMessageValidator').exists()
         Exception e = thrown()
         e instanceof SoapFaultException
         e.message.contains 'Header must be present and be first child of Envelope'
         e.message.contains 'Expected: Header; Found: Body'
     }
 
-    def 'SoapMessageParser should fail - Header out of order'() {
+    def 'SoapMessageValidator should fail - Header out of order'() {
         def envelope = '''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:wsa="http://www.w3.org/2005/08/addressing">
   <soapenv:Body>
@@ -180,14 +180,14 @@ class SoapMessageValidator2Test extends Specification {
 
         then:
         transRunner.simHandle.event.hasFault()
-        eventAccess.assertionGroupFile('SoapMessageParser').exists()
+        eventAccess.assertionGroupFile('SoapMessageValidator').exists()
         Exception e = thrown()
         e instanceof SoapFaultException
         e.message.contains 'Header must be present and be first child of Envelope'
         e.message.contains 'Expected: Header; Found: Body'
     }
 
-    def 'SoapMessageParser should fail - Body missing'() {
+    def 'SoapMessageValidator should fail - Body missing'() {
         def envelope = '''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:wsa="http://www.w3.org/2005/08/addressing">
   <soapenv:Header>
@@ -206,14 +206,14 @@ class SoapMessageValidator2Test extends Specification {
 
         then:
         transRunner.simHandle.event.hasFault()
-        eventAccess.assertionGroupFile('SoapMessageParser').exists()
+        eventAccess.assertionGroupFile('SoapMessageValidator').exists()
         Exception e = thrown()
         e instanceof SoapFaultException
         e.message.contains 'Body must be present, must be second child of Envelope'
         e.message.contains 'Expected: Body; Found: null'
     }
 
-    def 'SoapMessageParser should fail - Envelope namespace'() {
+    def 'SoapMessageValidator should fail - Envelope namespace'() {
         def envelope = '''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-env" xmlns:wsa="http://www.w3.org/2005/08/addressing">
   <soapenv:Header>
@@ -239,13 +239,13 @@ class SoapMessageValidator2Test extends Specification {
 
         then:
         transRunner.simHandle.event.hasFault()
-        eventAccess.assertionGroupFile('SoapMessageParser').exists()
+        eventAccess.assertionGroupFile('SoapMessageValidator').exists()
         Exception e = thrown()
         e instanceof SoapFaultException
         e.message.contains 'Correct Envelope Namespace'
     }
 
-    def 'SoapMessageParser should fail - Header namespace'() {
+    def 'SoapMessageValidator should fail - Header namespace'() {
         def envelope = '''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:wsa="http://www.w3.org/2005/08/addressing">
   <soapenvx:Header xmlns:soapenvx="http://www.w3.org/2003/05/soap-envelopexx">
@@ -271,13 +271,13 @@ class SoapMessageValidator2Test extends Specification {
 
         then:
         transRunner.simHandle.event.hasFault()
-        eventAccess.assertionGroupFile('SoapMessageParser').exists()
+        eventAccess.assertionGroupFile('SoapMessageValidator').exists()
         Exception e = thrown()
         e instanceof SoapFaultException
 //        e.message.contains 'Correct Header Namespace'
     }
 
-    def 'SoapMessageParser should fail - Body namespace'() {
+    def 'SoapMessageValidator should fail - Body namespace'() {
         def envelope = '''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" xmlns:wsa="http://www.w3.org/2005/08/addressing">
   <soapenv:Header>
@@ -303,7 +303,7 @@ class SoapMessageValidator2Test extends Specification {
 
         then:
         transRunner.simHandle.event.hasFault()
-        eventAccess.assertionGroupFile('SoapMessageParser').exists()
+        eventAccess.assertionGroupFile('SoapMessageValidator').exists()
         Exception e = thrown()
         e instanceof SoapFaultException
 //        e.message.contains 'Correct Body Namespace'

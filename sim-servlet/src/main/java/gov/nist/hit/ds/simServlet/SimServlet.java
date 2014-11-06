@@ -5,6 +5,7 @@ import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.dsSims.msgs.RegistryResponseGenerator;
 import gov.nist.hit.ds.eventLog.Fault;
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser;
+import gov.nist.hit.ds.simServlet.rest.TransactionReportBuilder;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder;
 import gov.nist.hit.ds.simSupport.simulator.SimHandle;
@@ -97,6 +98,8 @@ public class SimServlet extends HttpServlet {
         } catch (IOException e) {
             logger.error("Error writing response - " + ExceptionUtil.exception_details(e));
         }
+
+        logger.info(new TransactionReportBuilder().build(simHandle));
     }
 
     protected SimHandle runPost(SimId simId, String header, byte[] body, List<String> options, HttpServletResponse response) {

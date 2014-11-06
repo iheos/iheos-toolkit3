@@ -15,25 +15,20 @@
 		<servlet-class>gov.nist.hit.ds.simServlet.SimServlet</servlet-class>
 	</servlet>
 
-	<!--<servlet-mapping>-->
-		<!--<servlet-displayName>toolkitServlet</servlet-displayName>-->
-		<!--<url-pattern>/xdstools2/toolkit</url-pattern>-->
-	<!--</servlet-mapping>-->
-
-    <!--
-    <filter>
-        <filter-name>Response logging filter</filter-name>
-        <filter-class>gov.nist.hit.ds.simServlet.SimServletFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>Response logging filter</filter-name>
-        <servlet-name>simulatorServlet</servlet-name>
-    </filter-mapping>
--->
 	<servlet-mapping>
 		<servlet-name>simulatorServlet</servlet-name>
 		<url-pattern>/sim/*</url-pattern>
 	</servlet-mapping>
+
+    <servlet>
+        <servlet-name>RestTestServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.simServlet.RestTestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RestTestServlet</servlet-name>
+        <url-pattern>/resttest/*</url-pattern>
+    </servlet-mapping>
 
     <!--  REST     -->
 
