@@ -179,7 +179,7 @@ public class HttpParserBa {
 		}
 
 		String header = new String(input, from, to-from).trim();
-        logger.debug("Parsed header " + header);
+//        logger.debug("Parsed header " + header);
 		if (header.length() > 0) {
 			message.addHeader(header);
 			to = findStartOfNextHeader();
@@ -220,7 +220,7 @@ public class HttpParserBa {
 
 	void parseHeadersAndBody() throws HttpParseException, ParseException  {
         input = new String(input).trim().getBytes();
-        logger.debug("parseHeadersAndBody from:\n" + new String(input));
+//        logger.debug("parseHeadersAndBody from:\n" + new String(input));
 		try {
 			while (true)
 				nextHeader();

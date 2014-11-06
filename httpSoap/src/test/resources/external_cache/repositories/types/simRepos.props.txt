@@ -1,0 +1,5 @@
+# Simulator support
+
+keyword=simRepos
+domain=repository
+description=Holds simulator state

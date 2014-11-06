@@ -3,42 +3,42 @@ package gov.nist.hit.ds.metadata.store;
 import gov.nist.hit.ds.metadata.Metadata;
 
 public class ProcessMetadataForRegister implements ProcessMetadataInterface {
-    @Override
+    
     public void checkUidUniqueness(Metadata m) {
 
     }
 
-    @Override
+    
     public void setLidToId(Metadata m) {
 
     }
 
-    @Override
+    
     public void setInitialVersion(Metadata m) {
 
     }
 
-    @Override
+    
     public void setNewFolderTimes(Metadata m) {
 
     }
 
-    @Override
+    
     public void updateExistingFolderTimes(Metadata m) {
 
     }
 
-    @Override
+    
     public void verifyAssocReferences(Metadata m) {
 
     }
 
-    @Override
+    
     public void doRPLCDeprecations(Metadata m) {
 
     }
 
-    @Override
+    
     public void updateExistingFoldersWithReplacedDocs(Metadata m) {
 
     }
@@ -77,7 +77,7 @@ public class ProcessMetadataForRegister implements ProcessMetadataInterface {
 //				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "UniqueID " + uid + "  is assigned to more than one object within the submission", this, null);
 //			submittedUIDs.add(uid);
 //
-//			// get object from registry
+//			// label object from registry
 //			Ro ro = mc.getObjectByUid(uid);
 //			if (ro != null) {
 //				// RegistryObject with this UID already in Registry

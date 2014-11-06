@@ -1,9 +1,10 @@
 package gov.nist.hit.ds.simSupport.endpoint
 
-import gov.nist.hit.ds.actorTransaction.EndpointLabel
+import gov.nist.hit.ds.actorTransaction.ActorType
+import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.soapSupport.core.Endpoint
 import groovy.util.logging.Log4j
-
 /**
  * Created by bmajur on 6/6/14.
  */
@@ -12,11 +13,12 @@ class EndpointBuilder {
     String server
     String port
     String base
-    SimId simId
+    SimId simId = null
     String actorCode
     String transCode
 
-    EndpointBuilder() {}
+
+    EndpointBuilder() { log.debug("EndpointBuilder")}
 
     EndpointBuilder(String server, String port, String base, SimId simId) {
         this.server = server
@@ -25,15 +27,17 @@ class EndpointBuilder {
         this.simId = simId
     }
 
-    Endpoint makeEndpoint(String actor, EndpointLabel endpointLabel) {
+    public String toString() { [server: server, port: port, base: base, simId: simId?.id, actorCode: actorCode, transCode: transCode].toString() }
+
+    EndpointValue makeEndpoint(ActorType actor, EndpointType endpointLabel) {
         server = clean(server)
         port = clean(port)
         base = clean(base)
-        actor = clean(actor)
+        def actorName = clean(actor.name)
         def secure = (endpointLabel.tls) ? 's' : ''
         String val;
-        val = "http${secure}://${server}:${port}/${base}/${simId.getId()}/${actor}/${endpointLabel.transType.code}"
-        return new Endpoint(val)
+        val = "http${secure}://${server}:${port}/${base}/${simId.getId()}/${actorName}/${endpointLabel.transType.code}"
+        return new EndpointValue(val)
     }
 
     String clean(String val) {
@@ -44,17 +48,19 @@ class EndpointBuilder {
         return x
     }
 
+    EndpointBuilder parse(Endpoint endpoint) {
+        parse(endpoint.endpoint)
+        return this
+    }
+
     EndpointBuilder parse(String endpoint) {
         // http, serverport are actually wrong
         def (http, serverPort, basePart, simStr, simid, actor, trans) = endpoint.tokenize('/')
-        log.debug(endpoint.tokenize('/'))
-        assert endpoint.tokenize('/').size() == 7
-        simId = new SimId(simid)
+        if (simid)
+            simId = new SimId(simid)
         actorCode = actor
         transCode = trans
-        assert simId
-        assert actorCode
-        assert transCode
+        log.debug("endpoint parser : ${toString()}")
         return this
     }
 }

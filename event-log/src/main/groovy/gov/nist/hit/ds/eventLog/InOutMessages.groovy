@@ -8,6 +8,7 @@ class InOutMessages {
     byte[] reqBody = null
     String respHdr = null
     byte[] respBody = null
+    String respContentType = null
 
     def reqHdrSaved = false
     def reqBodySaved = false
@@ -15,5 +16,5 @@ class InOutMessages {
     def respBodySaved = false
 
     public String getRequestHeader() { reqHdr }
-    public byte[] getRequestBody() { rreqBody }
+    public byte[] getRequestBody() { reqBody }
 }

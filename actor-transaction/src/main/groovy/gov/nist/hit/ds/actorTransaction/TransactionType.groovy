@@ -1,70 +1,62 @@
 package gov.nist.hit.ds.actorTransaction
 
-import com.google.gwt.user.client.rpc.IsSerializable
 import gov.nist.hit.ds.actorTransaction.exceptions.InvalidTransactionTypeDefinitionException
-import groovy.transform.ToString;
-
+import groovy.transform.ToString
 /**
  * Created by bill on 4/16/14.
  */
-@ToString(includeFields=true, includes="id, implementationClassName, props")
-class TransactionType implements IsSerializable, Serializable {
-    public String id
+@ToString(includeFields=true, includes="name, code, implementationClassName, props, isRetrieve")
+class TransactionType /* implements IsSerializable, Serializable */ {
     public String name
-    public String shortName
     public String code
     public String asyncCode
     public String requestAction
     public String responseAction
     public String implementationClassName
-    // These are used at runtime
-    transient public boolean multiPart
-    transient public boolean soap
+    public boolean multiPart
+    public boolean soap
+    public boolean isRetrieve
+    Map<String, String> props = new HashMap<String, String>()
+    public static final String retrieveTransactionTypeCode = 'ret.b'   // why?
 
     public String getCode() { return code }
     public String getName() { return name }
-    public String getShortName() { return shortName }
-    Map<String, String> props = new HashMap<String, String>()
+    public String setName(String name) { this.name = name; }
+
+
+    TransactionType() {}
 
     String getTransactionProperty(String key) { return props.get(key) }
     boolean hasTransactionProperty(String key) { return props.containsKey(key) }
     void putTransactionProperty(String key, String value) { props.put(key, value) }
 
     boolean equals(TransactionType tt) {
-        tt.name.equalsIgnoreCase(name)
+        tt.code.equalsIgnoreCase(code)
     }
 
     int hashCode() {
-        name.toLowerCase().hashCode()
+        code.toLowerCase().hashCode()
     }
     boolean identifiedBy(String s) {
-        s.equalsIgnoreCase(name) ||
-                s.equalsIgnoreCase(shortName) ||
                 s.equalsIgnoreCase(code) ||
                 s.equalsIgnoreCase(asyncCode)
     }
 
-//    String toString() { return name }
+//    String toString() { return displayName }
 
     void check()  {
         String val;
         TransactionType tt = this;
 
-        val = tt.id;
-        if (val == null || val.equals(""))
-            throw new InvalidTransactionTypeDefinitionException("id not defined");
-        val = tt.name;
-        if (val == null || val.equals(""))
-            throw new InvalidTransactionTypeDefinitionException("name not defined");
-        val = tt.shortName;
-        if (val == null || val.equals(""))
-            throw new InvalidTransactionTypeDefinitionException("shortName not defined");
         val = tt.code;
         if (val == null || val.equals(""))
             throw new InvalidTransactionTypeDefinitionException("code not defined");
-        val = tt.asyncCode;
+        val = tt.name;
         if (val == null || val.equals(""))
-            throw new InvalidTransactionTypeDefinitionException("asyncCode not defined");
+            throw new InvalidTransactionTypeDefinitionException("name not defined");
+//        val = tt.asyncCode;
+//        if (val == null || val.equals(""))
+//            throw new InvalidTransactionTypeDefinitionException("asyncCode not defined");
         val = tt.requestAction;
         if (val == null || val.equals(""))
             throw new InvalidTransactionTypeDefinitionException("requestAction not defined");
@@ -73,7 +65,7 @@ class TransactionType implements IsSerializable, Serializable {
             throw new InvalidTransactionTypeDefinitionException("responseAction not defined");
         val = tt.implementationClassName;
         if (val == null || val.equals(""))
-            throw new InvalidTransactionTypeDefinitionException("simChainName not defined");
+            throw new InvalidTransactionTypeDefinitionException("implClass not defined");
     }
 
 

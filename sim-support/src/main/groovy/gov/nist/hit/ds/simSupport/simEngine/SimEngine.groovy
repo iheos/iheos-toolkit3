@@ -9,9 +9,9 @@ import gov.nist.hit.ds.simSupport.exception.SimEngineSubscriptionException
 import gov.nist.hit.ds.simSupport.simChain.SimChain
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponent
 import gov.nist.hit.ds.soapSupport.FaultCode
-import gov.nist.hit.ds.soapSupport.SoapFault
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
+import gov.nist.hit.ds.soapSupport.core.SoapFault
 import gov.nist.hit.ds.xdsException.ExceptionUtil
 import org.apache.log4j.Logger
 
@@ -185,7 +185,7 @@ public class SimEngine  {
         ValComponent subscriptionObject = simStep.simComponent
         for (Object pubObject : priorComponents) {
             Method pubMethod = pubObject.class.methods.find { method ->
-                method.name.startsWith("get") && method.returnType == subClass
+                method.name.startsWith("label") && method.returnType == subClass
             }
             if (!pubMethod) continue
 
@@ -260,7 +260,7 @@ public class SimEngine  {
         Method[] pubMethods = pubSim.class.methods
         pubMethods.each { pubMethod ->
             def methodName = pubMethod.name
-            if (!methodName.startsWith("get")) return
+            if (!methodName.startsWith("label")) return
             String typeName = pubMethod.returnType.name
             if (!typeName.startsWith("java."))
                 buf.
@@ -305,7 +305,7 @@ public class SimEngine  {
         for (int i=0; i<methods.length; i++) {
             Method method = methods[i];
             String name = method.getName();
-            if (name.startsWith("get") && !name.equals("getClass") && !name.equals("getName")) {
+            if (name.startsWith("label") && !name.equals("getClass") && !name.equals("getName")) {
                 Class<?> returnType = method.getReturnType();
                 if (!returnType.getName().startsWith("java."))
                     buf.append("..Generates " + returnType.getSimpleName()).append(" <#").append(name).append(">").append("\n");

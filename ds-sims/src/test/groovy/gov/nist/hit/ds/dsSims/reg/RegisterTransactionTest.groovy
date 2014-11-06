@@ -5,6 +5,8 @@ import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -18,13 +20,13 @@ import spock.lang.Specification
 class RegisterTransactionTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
-    <transaction displayName="Register" id="rb" code="rb" asyncCode="r.as"
-       class="gov.nist.hit.ds.dsSims.reg.RegisterTransaction">
+    <transaction name="Register" id="rb" code="rb" asyncCode="r.as">
+      <implClass value="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>
     </transaction>
-    <actor displayName="Document Registry" id="reg"
+    <actor name="Document Registry" id="reg"
       class="">
         <transaction id="rb"/>
     </actor>
@@ -71,15 +73,36 @@ Host: localhost:9085'''
 
     def 'Register Transaction should succeed'() {
         when: ''
-        SimId simId = new SimId('123')
-        def endpoint = 'http://localhost:8080/tools/sim/123/reg/rb'
-        SimUtils.create('reg', simId)
-        def transRunner = new TransactionRunner(new EndpointBuilder(endpoint), header.trim(), body.trim().bytes)
+        SimId simId = new SimId('RegisterTransactionTest')
+        String endpoint = 'http://localhost:8080/tools/sim/123/reg/rb'
+        SimHandle simHandle = SimUtils.create('reg', simId)
+        simHandle.transactionType = new ActorTransactionTypeFactory().getTransactionType('rb')
+
+        then:
+        simHandle.open
+
+        when:
+        simHandle.event.inOut.reqHdr = header.trim()
+        simHandle.event.inOut.reqBody = body.trim().bytes
+        EndpointBuilder endpointBuilder = new EndpointBuilder()
+        endpointBuilder.parse(endpoint)
+//        def transRunner = new TransactionRunner(endpointBuilder, new SimSystemConfig().repoName)
+        def transRunner = new TransactionRunner(simHandle)
         transRunner.run()
+
+        then: '''Sim should still be open'''
+        simHandle.isOpen()
+
+        when:
+        SimUtils.close(simHandle)
+
+        then:
+        !simHandle.isOpen()
+
+        when:
         def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
 
         then:
-//        !transRunner.simHandle.event.hasErrors()
         !transRunner.simHandle.event.hasFault()
         !eventAccess.faultFile().exists()
 

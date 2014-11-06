@@ -36,7 +36,7 @@ public class Injector {
         paramMap.keySet().each { paramName ->
             if ('class' == paramName) return;
             def paramValue = paramMap[paramName];
-			logger.trace("Parm name = <" + paramName + "> value = <" + paramValue + ">");
+			logger.trace("Parm displayName = <" + paramName + "> value = <" + paramValue + ">");
             Object[] params = [ paramValue ].toArray()
             Method setterMethod = getSetterMethod(paramName);
             logger.trace("Method is: <" + setterMethod + "> Parm is: <" + paramValue + ">");

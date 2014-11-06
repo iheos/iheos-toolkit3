@@ -9,13 +9,10 @@ import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.metadata.MetadataSupport
-import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
-import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import org.apache.axiom.om.OMElement
-
 //@groovy.transform.TypeChecked
 class MetadataValidator extends ValComponentBase {
 	Metadata m
@@ -33,17 +30,21 @@ class MetadataValidator extends ValComponentBase {
         this.er = new EventErrorRecorder(simHandle.event)
 	}
 
-    @Override
-    void run() throws SoapFaultException, RepositoryException {
-       // runValidationEngine()
-
-        simHandle.event.addChildResults('MetadataValidator')
-        new ObjectStructureValidator(simHandle, m, vc, rvi).run()
-
+//    @Override
+//    void run() throws SoapFaultException, RepositoryException {
+//       // runValidationEngine()
+//
+//        simHandle.event.addChildResults('MetadataValidator')
+//        new ObjectStructureValidator(simHandle, m, vc, rvi).run()
+//
 //        runObjectStructureValidation()
 //		runCodeValidation(er);
 //		runSubmissionStructureValidation(er);
-	}
+//	}
+
+    void runAfter() {
+        new ObjectStructureValidator(simHandle, m, vc, rvi).asSelf().run()
+    }
 
     def runObjectStructureValidation()   {
 

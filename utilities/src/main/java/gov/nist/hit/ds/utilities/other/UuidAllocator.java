@@ -13,4 +13,12 @@ public class UuidAllocator {
         return "urn:uuid:" + uu;
     }
 
+    static public String allocateOid() {
+        if (fact == null)
+            fact = UUIDFactory.getInstance();
+        UUID uu = fact.newUUID();
+        String upart = uu.toString().replaceAll("-", "");
+        return "2.25." + upart;
+    }
+
 }

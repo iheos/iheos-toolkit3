@@ -1,16 +1,14 @@
 package gov.nist.hit.ds.actorTransaction
 
-import com.google.gwt.user.client.rpc.IsSerializable
 import gov.nist.hit.ds.actorTransaction.exceptions.InvalidActorTypeDefinitionException
 import groovy.transform.ToString
 import groovy.util.logging.Log4j
-
 /**
  * Created by bill on 4/16/14.
  */
 @Log4j
 @ToString(includeFields=true, includes="shortName, transactionTypes, props")
-class ActorType implements IsSerializable, Serializable {
+class ActorType /* implements IsSerializable, Serializable */{
     String name
     String shortName
     String actorSimFactoryClassName
@@ -36,7 +34,7 @@ class ActorType implements IsSerializable, Serializable {
     }
 
 //    String toString() {
-//        return "ActorType: ${name} (${shortName} with ${properties.keySet()})"
+//        return "ActorType: ${displayName} (${shortName} with ${properties.keySet()})"
 //    }
 
     void check() throws InvalidActorTypeDefinitionException {
@@ -45,7 +43,7 @@ class ActorType implements IsSerializable, Serializable {
 
         val = name;
         if (val == null || val.equals(""))
-            throw new InvalidActorTypeDefinitionException("${typeName}: name not defined");
+            throw new InvalidActorTypeDefinitionException("${typeName}: displayName not defined");
         val = shortName;
         if (val == null || val.equals(""))
             throw new InvalidActorTypeDefinitionException("${typeName}: shortName not defined");
@@ -56,10 +54,10 @@ class ActorType implements IsSerializable, Serializable {
             throw new InvalidActorTypeDefinitionException("${typeName}: must define at least one transaction");
     }
 
-    List<EndpointLabel> endpointLabels() {
+    List<EndpointType> endpointTypes() {
         return transactionTypes.collect { ttype ->
-           [ new EndpointLabel(ttype, TlsType.NOTLS, AsyncType.SYNC) ,
-             new EndpointLabel(ttype, TlsType.TLS, AsyncType.SYNC) ]
+           [ new EndpointType(ttype, TlsType.NOTLS, AsyncType.SYNC) ,
+             new EndpointType(ttype, TlsType.TLS, AsyncType.SYNC) ]
         }.flatten()
     }
 

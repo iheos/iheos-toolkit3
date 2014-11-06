@@ -51,14 +51,14 @@ public class DocumentEntryValidator extends ValidatorCommon {
 //		List<String> doc_ids = m.getExtrinsicObjectIds();
 //
 //		for (int i=0; i<doc_ids.size(); i++) {
-//			String id = (String) doc_ids.get(i);
+//			String id = (String) doc_ids.label(i);
 //			try {
 //			List<OMElement> slots = m.getSlots(id);
 //
 //
 //
 //			for (int s=0; s<slots.size(); s++) {
-//				OMElement slot = (OMElement) slots.get(s);
+//				OMElement slot = (OMElement) slots.label(s);
 //				String slot_name = slot.getAttributeValue(MetadataSupport.slot_name_qname);
 //
 //				if (slot_name == null)
@@ -113,7 +113,7 @@ public class DocumentEntryValidator extends ValidatorCommon {
 				}
 
 
-				//											name							identificationScheme                    OID required
+				//											displayName							identificationScheme                    OID required
 				validate_ext_id_present("DocumentEntry", id, ext_ids, "XDSDocumentEntry.patientId", MetadataSupport.XDSDocumentEntry_patientid_uuid, false);
 				// the oid^ext format is tested in UniqueId.java?
 				validate_ext_id_present("DocumentEntry", id, ext_ids, "XDSDocumentEntry.uniqueId", MetadataSupport.XDSDocumentEntry_uniqueid_uuid,  false);

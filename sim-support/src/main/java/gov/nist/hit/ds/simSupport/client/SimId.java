@@ -2,11 +2,7 @@ package gov.nist.hit.ds.simSupport.client;
 
 import gov.nist.hit.ds.utilities.other.UuidAllocator;
 
-import java.io.Serializable;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
-
-public class SimId implements IsSerializable, Serializable {
+public class SimId  {
 	/**
 	 * 
 	 */

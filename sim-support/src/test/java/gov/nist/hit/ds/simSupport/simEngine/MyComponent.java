@@ -19,41 +19,33 @@ public class MyComponent implements ValComponent {
 		this.myStuff = myStuff;
 	}
 
-	@Override
 	public void setAssertionGroup(AssertionGroup er) {
 	}
 
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public void run() throws SoapFaultException {
 		
 	}
 
-	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	@Override
 	public String getDescription() {
 		return description;
 	}
 
-	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	@Override
 	public void setEvent(Event event) {
 		this.event = event;
 	}
 
-	@Override
 	public boolean showOutputInLogs() {
 		return false;
 	}

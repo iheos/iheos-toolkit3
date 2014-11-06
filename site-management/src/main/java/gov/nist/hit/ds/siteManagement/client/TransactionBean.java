@@ -12,34 +12,39 @@ import java.io.Serializable;
 /**
  * Configuration of a single instance of a transaction. Transactions are
  * split into two major types: Retrieve and All Others. The isRetrieve()
- * determines which kind this is.    
+ * determines which kind this is.
+ * This combines information from TransactionType, repository, endpoint
  * @author bill
  *
  */
 public class TransactionBean implements IsSerializable, Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
+    // indexes
 	public boolean isSecure = false;
 	public boolean isAsync = false;
+    String name = "";   // can be transaction displayName or repository uid
+    // if repositoryType is NONE then this is interpreted as the transaction displayName
+    // otherwise this holds the repositoryUniqueId
+    TransactionType transType = null;
+//    ActorType actorType = null;
+    public RepositoryType repositoryType;
+
+    // value
 	public String endpoint = "";   // make private
 	
-	String name = "";   // can be transaction name or repository uid
-						// if repositoryType is NONE then this is interpreted as the transaction name
-						// otherwise this holds the repositoryUniqueId
-	TransactionType transType = null;
-	ActorType actorType = null;
+
     static Logger logger = Logger.getLogger(TransactionBean.class);
 	
 	// TODO: Remove RepositoryType? Not used for anything real yet.
 	public enum RepositoryType  implements IsSerializable, Serializable  { REPOSITORY, ODDS, NONE;
-	
 		RepositoryType() {}
 	};
-	
-	public RepositoryType repositoryType;
-	
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
 	public String getEndpoint() { return endpoint; }
 	
 	/**
@@ -53,16 +58,16 @@ public class TransactionBean implements IsSerializable, Serializable {
 				isAsync == b.isAsync &&
 				((name == null) ? b.name == null : name.equals(b.name)) && 
 				((transType == null) ? b.transType == null : transType == b.transType) &&
-				((actorType == null) ? b.actorType == null : actorType == b.actorType) &&
+//				((actorType == null) ? b.actorType == null : actorType == b.actorType) &&
 				((repositoryType == null) ? b.repositoryType == null : repositoryType == b.repositoryType);
 	}
+
+    public boolean hasSameValue(TransactionBean b) {
+        return "".equals(endpoint) && "".equals(b.endpoint) || endpoint.equals(b.endpoint);
+    }
 	
 	public boolean equals(TransactionBean b) {
-		return hasSameIndex(b) && 
-				(
-						("".equals(endpoint) && "".equals(b.endpoint)) ||
-						endpoint.equals(b.endpoint)
-						);
+		return hasSameIndex(b) && hasSameValue(b);
 	}
 	
 	public boolean hasName(String nam) {
@@ -70,9 +75,7 @@ public class TransactionBean implements IsSerializable, Serializable {
 			return true;
 		if (transType == null)
 			return false;
-		if (transType.getName().equals(nam))
-			return true;
-		if (transType.getShortName().equals(nam))
+		if (transType.getCode().equals(nam))
 			return true;
 		return false;
 	}
@@ -91,7 +94,7 @@ public class TransactionBean implements IsSerializable, Serializable {
 		if (transType != null)
 			return "[trans=" + transType + 
 //					" RepositoryType=" + repositoryType +
-					" ActorType=" + (actorType == null ? "?" : actorType.getName()) + 
+//					" ActorType=" + (actorType == null ? "?" : actorType.getName()) +
 					" isSecure=" + isSecure + " isAsync=" + isAsync + "] : " + endpoint; 
 		return "[repositoryUniqueId=" + name + " isSecure=" + isSecure + " isAsync=" + isAsync + "] : " + endpoint; 
 	}
@@ -122,13 +125,11 @@ public class TransactionBean implements IsSerializable, Serializable {
 		return endpoint != null && !endpoint.equals("");
 	}
 	
-	public TransactionBean() {
-		
-	}
+	public TransactionBean() {	}
 
-	// Used by simulator factories, ActorConfigTab and the Gazelle interface
+	// Used by Site Management
 	/**
-	 * Specify a retrieve type transaction where the name is actually the OID representing the interface.
+	 * Specify a retrieve type transaction where the displayName is actually the OID representing the interface.
 	 * @param name
 	 * @param repositoryType
 	 * @param endpoint
@@ -157,7 +158,7 @@ public class TransactionBean implements IsSerializable, Serializable {
             throw new ToolkitRuntimeException("TransactionBean: RepositoryType <" + repositoryType + "> unknown");
         }
 
-		// name can be trans name or repository uid
+		// displayName can be trans displayName or repository uid
 		transType = actorType.find("retrieve");
 		this.repositoryType = repositoryType;
 		this.endpoint = endpoint;
@@ -167,27 +168,23 @@ public class TransactionBean implements IsSerializable, Serializable {
 	
 	public TransactionBean(TransactionType transType, RepositoryType repositoryType, String endpoint, boolean isSecure, boolean isAsync) {
 		this.transType = transType;
-		this.name = transType.getName();
+		this.name = transType.getCode();
 		this.repositoryType = repositoryType;
 		this.endpoint = endpoint;
 		this.isSecure = isSecure;
 		this.isAsync = isAsync;
 	}
 
-	// Used only by Gazelle interface
-	@Deprecated
-	public TransactionBean(TransactionType transType, RepositoryType repositoryType, ActorType actorType, String endpoint, boolean isSecure, boolean isAsync) {
-		this.transType = transType;
-		this.name = transType.getName();
-		this.repositoryType = repositoryType;
-		this.actorType = actorType;
-		this.endpoint = endpoint;
-		this.isSecure = isSecure;
-		this.isAsync = isAsync;
-	}
+//	// Used only by Gazelle interface
+//	public TransactionBean(TransactionType transType, RepositoryType repositoryType, ActorType actorType, String endpoint, boolean isSecure, boolean isAsync) {
+//		this.transType = transType;
+//		this.name = transType.getCode();
+//		this.repositoryType = repositoryType;
+//		this.actorType = actorType;
+//		this.endpoint = endpoint;
+//		this.isSecure = isSecure;
+//		this.isAsync = isAsync;
+//	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
+
 }

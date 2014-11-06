@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.http.parser;
 
-import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.eventLog.errorRecording.SystemErrorRecorder;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;

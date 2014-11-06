@@ -11,7 +11,9 @@ class OptionalTestValidator extends ValComponentBase {
         super(event)
     }
 
-    @Optional
+    def trueValue() { return true }
+
+    @Optional(methodNames=['trueValue'])
     @Validation(id="TV101", msg="A test Validation", ref="??")
     def val1() { fail('oops') }
 

@@ -4,11 +4,12 @@
 
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
-        <artifactId>toolkit3</artifactId>
+        <artifactId>tk-deps</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-	<relativePath>../pom.xml</relativePath>
+        <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
+    <version>3.0.0-SNAPSHOT</version>
     <artifactId>site-management</artifactId>
 
     <!--
@@ -28,7 +29,6 @@
         <dependency>
             <groupId>org.apache.ws.commons.axiom</groupId>
             <artifactId>axiom-dom</artifactId>
-            <version>1.2.10</version>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
@@ -37,7 +37,6 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
@@ -45,7 +44,7 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xds-exceptions</artifactId>
+            <artifactId>xdsException</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
@@ -68,52 +67,32 @@
 
     <build>
         <plugins>
-            <!-- ... or ask the plugin to detect them based on gwt modules files and
-                copy the required java sources -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>resources</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <!-- 2.8.0-01 and later require maven-compiler-plugin 3.1 or higher -->
+                <version>3.1</version>
+                <configuration>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
+                    <!-- set verbose to be true if you want lots of uninteresting messages -->
+                    <!-- <verbose>true</verbose> -->
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-compiler</artifactId>
+                        <version>2.8.0-01</version>
+                    </dependency>
+                    <!-- for 2.8.0-01 and later you must have an explicit dependency on groovy-eclipse-batch -->
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <version>2.1.8-01</version>
+                        <!-- or choose a different compiler version -->
+                        <!-- <version>1.8.6-01</version> -->
+                        <!-- <version>1.7.10-06</version> -->
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings
-                    only. It has no influence on the Maven build itself. -->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
-                                            org.codehaus.mojo
-                                        </groupId>
-                                        <artifactId>
-                                            gwt-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [2.5.1,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>resources</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 </project>

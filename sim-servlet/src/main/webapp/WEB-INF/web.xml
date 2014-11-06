@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+	<!--<servlet>-->
+		<!--<servlet-displayName>toolkitServlet</servlet-displayName>-->
+		<!--<servlet-class>gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl</servlet-class>-->
+	<!--</servlet>-->
+
+    <servlet>
+        <servlet-name>simulatorServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.simServlet.SimServlet</servlet-class>
+    </servlet>
+
+	<servlet>
+		<servlet-name>Initialization Servlet</servlet-name>
+		<servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!--<servlet-mapping>-->
+		<!--<servlet-displayName>toolkitServlet</servlet-displayName>-->
+		<!--<url-pattern>/xdstools2/toolkit</url-pattern>-->
+	<!--</servlet-mapping>-->
+
+    <!--
+    <filter>
+        <filter-name>Response logging filter</filter-name>
+        <filter-class>gov.nist.hit.ds.simServlet.SimServletFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Response logging filter</filter-name>
+        <servlet-name>simulatorServlet</servlet-name>
+    </filter-mapping>
+-->
+	<servlet-mapping>
+		<servlet-name>simulatorServlet</servlet-name>
+		<url-pattern>/sim/*</url-pattern>
+	</servlet-mapping>
+
+    <!--  REST     -->
+
+    <servlet>
+        <servlet-name>SimRest</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>gov.nist.hit.ds.simServlet.rest</param-value> <!-- This must be edited for each new project -->
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- ============== Servlet mappings ============== -->
+    <servlet-mapping>
+        <servlet-name>SimRest</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Xdstools3.html</welcome-file>
+	</welcome-file-list>
+
+</web-app>

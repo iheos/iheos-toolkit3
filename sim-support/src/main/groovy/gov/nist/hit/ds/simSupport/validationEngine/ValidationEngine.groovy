@@ -50,7 +50,6 @@ public class ValidationEngine {
     public void runValidationMethods() throws Exception {
         currentValidationMethod = getARunableValidationMethod();
         while(currentValidationMethod) {
-            logger.debug("...Running Validation ${currentValidationMethod.id} on ${validationObject.class.name}");
             validationObject.defaultMsg()
             invoke(currentValidationMethod)
             currentValidationMethod = getARunableValidationMethod();
@@ -58,6 +57,8 @@ public class ValidationEngine {
     }
 
     def invoke(validationMethod) throws Exception {
+        logger.debug("Running Validation ${currentValidationMethod.id} on ${validationObject.class.name}");
+        log.debug("...Validation Method is ${validationMethod}")
         try {
             validationMethod.method.invoke(validationObject);
         } catch (Exception e) {
@@ -93,17 +94,24 @@ public class ValidationEngine {
     private def getARunableValidationMethod() {
         def runFirst = validationMethods.find { it.setup && it.runable() }
         if (runFirst) { setupRunable(runFirst); return runFirst }
-        def valMethod = validationMethods.find { validationMethod ->
-            if (!(validationMethod.runable() && dependenciesSatisfied(validationMethod.dependsOnId))) return false
-            log.debug("For ${validationMethod.id}...")
+        def runableMethods = validationMethods.findAll() { validationMethod ->
+            validationMethod.runable() && dependenciesSatisfied(validationMethod.dependsOnId)
+        }
+        if (!runableMethods) return null
+        def valMethod = runableMethods.sort { it.id }.find { validationMethod ->
             evalGuard(validationMethod)
         }
-        if (valMethod) { setupRunable(valMethod); return valMethod }
-//            validationAnnotation = valMethod.validationAnnotation
-//            assert validationAnnotation
-//            valMethod.markHasBeenRun()
-//            return valMethod
+
+//        def valMethod = validationMethods.find { validationMethod ->
+//            if (!(validationMethod.runable() && dependenciesSatisfied(validationMethod.dependsOnId))) return false
+//            log.debug("For ${validationMethod.id}...")
+//            evalGuard(validationMethod)// determines FOUND status
 //        }
+        if (valMethod) {
+            setupRunable(valMethod)
+            valMethod.required = !isOptional(valMethod)
+            return valMethod
+        }
         return null
     }
 
@@ -120,6 +128,17 @@ public class ValidationEngine {
             if (!guardValue) return false
         }
         return true
+    }
+
+    // If any @Optional guard are true then the valiation is optional
+    // and we return true here
+    private boolean isOptional(ValidationMethod validationMethod) {
+        for (def guardMethodName in validationMethod.optionalGuardMethodNames) {
+            def guardValue = validationObject."${guardMethodName}"()
+            log.debug("Optional Guard ${guardMethodName}? ${guardValue}")
+            if (guardValue) return true
+        }
+        return false
     }
 
     private def dependenciesSatisfied(List<String> dependsOnIds) {
