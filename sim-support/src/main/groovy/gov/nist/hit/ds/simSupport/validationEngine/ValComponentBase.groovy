@@ -41,8 +41,6 @@ public abstract class ValComponentBase implements ValComponent {
     ValComponentBase(Event _event) {
         event = _event
         log.debug "ValComponentBase() - ${this.class.name}"
-//        _event.addPeerResults(this.class.simpleName)
-//        validationEngine = new ValidationEngine(this, _event)
     }
 
     ValComponentBase asPeer() { parentRelation = Relation.PEER; return this }

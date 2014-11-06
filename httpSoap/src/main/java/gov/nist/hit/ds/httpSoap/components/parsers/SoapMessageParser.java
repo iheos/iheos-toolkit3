@@ -15,13 +15,13 @@ public class SoapMessageParser {
         this.xmlText = xmlText;
     }
 
-    SoapMessage parse() {
+    public SoapMessage parse() {
         try {
             OMElement ele = Parse.parse_xml_string(xmlText);
             SoapMessage soapMessage = new SoapMessage();
             soapMessage.setRoot(ele);
             soapMessage.setHeader(((OMElement) ele.getChildrenWithLocalName("Header").next()));
-            soapMessage.setHeader(((OMElement) ele.getChildrenWithLocalName("Body").next()));
+            soapMessage.setBody(((OMElement) ele.getChildrenWithLocalName("Body").next()));
             return soapMessage;
         } catch (Exception e) {
             throw new ToolkitRuntimeException("Cannot parse SOAP Message: " + e.getMessage());
