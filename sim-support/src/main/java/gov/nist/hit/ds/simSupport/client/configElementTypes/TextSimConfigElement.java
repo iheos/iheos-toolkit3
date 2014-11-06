@@ -15,4 +15,7 @@ public class TextSimConfigElement extends SimConfigElement implements IsSerializ
 		setName(name);
 		this.value = value;
 	}
+
+    public String getValue() { return value; }
+    public void setValue(String text) { value = text; }
 }

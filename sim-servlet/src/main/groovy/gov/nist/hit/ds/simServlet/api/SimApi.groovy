@@ -20,7 +20,7 @@ class SimApi {
     // return is an XML blob
     String getConfig(SimId simId) {
         SimHandle simHandle = SimUtils.open(simId)
-        return SimUtils.load(simHandle.configAsset)
+        return new String(simHandle.configAsset.content)
     }
 
     def updateConfig(SimId simId, String configXml) {

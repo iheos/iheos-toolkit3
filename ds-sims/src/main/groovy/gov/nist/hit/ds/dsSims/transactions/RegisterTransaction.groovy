@@ -4,7 +4,7 @@ import gov.nist.hit.ds.dsSims.reg.DSMetadataProcessing
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.httpSoap.components.validators.SoapHeaderValidator
 import gov.nist.hit.ds.httpSoap.validators.HttpHeaderValidator
-import gov.nist.hit.ds.httpSoap.validators.SoapMessageParser
+import gov.nist.hit.ds.httpSoap.validators.SoapMessageValidator
 import gov.nist.hit.ds.metadata.*
 import gov.nist.hit.ds.metadata.client.MetadataCollection
 import gov.nist.hit.ds.metadata.store.RegistryFactory
@@ -35,7 +35,7 @@ class RegisterTransaction implements Transaction {
         log.debug('In RegisterTransaction#validateRequest')
         new HttpHeaderValidator(simHandle).asChild().run()
 
-        def soapMessageParser = new SoapMessageParser(simHandle, httpHdrVal.body)
+        def soapMessageParser = new SoapMessageValidator(simHandle, httpHdrVal.body)
         soapMessageParser.run()
         def header = soapMessageParser.header
         def body = soapMessageParser.body
@@ -56,7 +56,7 @@ class RegisterTransaction implements Transaction {
         log.debug('In RegisterTransaction#run')
         new HttpHeaderValidator(simHandle).asChild().run()
 
-        def soapMessageParser = new SoapMessageParser(simHandle, new String(simHandle.event.inOut.reqBody))
+        def soapMessageParser = new SoapMessageValidator(simHandle, new String(simHandle.event.inOut.reqBody))
         soapMessageParser.asPeer().run()
         def header = soapMessageParser.header
         def body = soapMessageParser.body

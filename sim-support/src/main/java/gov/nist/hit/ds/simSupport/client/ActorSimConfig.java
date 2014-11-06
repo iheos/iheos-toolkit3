@@ -148,6 +148,13 @@ public class ActorSimConfig {
         }
         return null;
     }
+
+    public SimConfigElement getByClassAndName(Class claz, String name) {
+        for (SimConfigElement e : elements) {
+            if (name.equals(e.getName()) && e.getClass().getName().equals(claz.getName())) return e;
+        }
+        return null;
+    }
 	
 	/**
 	 * Get config elements that match all the parameters.

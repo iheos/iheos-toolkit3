@@ -31,6 +31,9 @@ class SimulatorDAO {
                             if (tele instanceof BooleanSimConfigElement) {
                                 xml.boolean(name: tele.name, value: tele.value)
                             }
+                            if (tele instanceof TextSimConfigElement) {
+                                xml.text(name: tele.name, value: tele.value)
+                            }
                         }
                     }
 
@@ -67,16 +70,25 @@ class SimulatorDAO {
         actor.callback.each { actorSimConfig.add(new CallbackSimConfigElement(it.@name as String, it.@transaction as String, it.@restUrl as String))}
         actor.transaction.each { trans ->
             def endpointString = trans.endpoint.@value as String
+
             def setting = [ : ]
             trans.settings.boolean.each { settings ->
                 setting[settings.@name as String] = bool(settings.@value as String)
+            }
+            trans.settings.text.each { settings ->
+                setting[settings.@name as String] = text(settings.@value as String)
             }
             trans.webService.each { ws ->
                 def label = ws.@value as String
                 EndpointType etype = new EndpointType(actorSimConfig.actorType, label)
                 assert etype.transType
                 TransactionSimConfigElement transactionSimConfigElement = new TransactionSimConfigElement(etype, new EndpointValue(endpointString))
-                setting.each { type, value -> transactionSimConfigElement.setBool(type, value)}
+                setting.each { type, value ->
+                    if (value instanceof Boolean)
+                        transactionSimConfigElement.setBool(type, value)
+                    else
+                        transactionSimConfigElement.setText(type, value)
+                }
                 actorSimConfig.add(transactionSimConfigElement)
             }
 
@@ -99,10 +111,17 @@ class SimulatorDAO {
             .each { buul ->
                 setting[buul.@name.text()] = new Boolean(buul.@value.text())
             }
+            trans.settings.children().findAll { it.name() == 'text'}
+                    .each { buul ->
+                setting[buul.@name.text()] = buul.@value.text()
+            }
             TransactionSimConfigElement transactionSimConfigElement = (TransactionSimConfigElement) actorSimConfig.getElements(TransactionSimConfigElement).first()
             if (!transactionSimConfigElement) return
             setting.each { name, value ->
-                transactionSimConfigElement.setBool(name, value)
+                if (value instanceof Boolean)
+                    transactionSimConfigElement.setBool(name, value)
+                else
+                    transactionSimConfigElement.setText(name, value)
             }
         }
 
@@ -113,4 +132,7 @@ class SimulatorDAO {
         if (value.compareToIgnoreCase('true') == 0) return true
         return false
     }
+
+    String text(String value) { return value }
+
 }
