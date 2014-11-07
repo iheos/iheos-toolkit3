@@ -1,0 +1,25 @@
+#
+#Wed Sep 10 16:21:21 EDT 2014
+messageFrom=0\:0\:0\:0\:0\:0\:0\:1
+forwardedToIpAddress=127.0.0.1\:8080
+statuscode=200
+method=GET
+type=reqType
+proxyRuleMappingName=localcap
+displayName=Request
+rule=localcap
+time=20140910162121
+msgtype=REQUEST
+forwardedTo=localhost\:8080
+messageFromIpAddress=0\:0\:0\:0\:0\:0\:0\:1
+displayOrder=1
+updatedDate=20140910162121
+path=/favicon.ico
+id=0ed9b42a-532b-47d1-b882-e5725a8ef1cb
+proxyPort=8001
+parentId=a2e65b82-dafe-4568-9f47-e918b8be85f0
+proxy=localhost
+repositoryId=transactions-cap
+contentlength=0
+createdDate=20140910162121
+name=2014_09_10_16_21_21_422_173114370911772_io_Request

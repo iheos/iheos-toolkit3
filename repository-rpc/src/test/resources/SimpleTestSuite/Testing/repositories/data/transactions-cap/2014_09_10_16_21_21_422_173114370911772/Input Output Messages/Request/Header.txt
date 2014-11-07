@@ -1,0 +1,9 @@
+GET /favicon.ico HTTP/1.1
+Host: localhost:8001
+Connection: keep-alive
+Accept: */*
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.103 Safari/537.36
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: en-US,en;q=0.8
+X-Forwarded-For: 0:0:0:0:0:0:0:1
+

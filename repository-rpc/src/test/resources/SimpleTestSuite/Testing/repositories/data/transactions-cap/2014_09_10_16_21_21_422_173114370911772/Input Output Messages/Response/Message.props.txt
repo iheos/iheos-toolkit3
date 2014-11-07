@@ -1,0 +1,11 @@
+#
+#Wed Sep 10 16:21:21 EDT 2014
+displayOrder=2
+name=a7bf310f-1301-4da1-9529-f37bd3265755_Message
+id=80ec1a7c-3653-4475-8115-91966d33e13d
+parentId=a7bf310f-1301-4da1-9529-f37bd3265755
+repositoryId=transactions-cap
+type=resBodyType
+displayName=Message
+createdDate=20140910162121
+updatedDate=20140910162121

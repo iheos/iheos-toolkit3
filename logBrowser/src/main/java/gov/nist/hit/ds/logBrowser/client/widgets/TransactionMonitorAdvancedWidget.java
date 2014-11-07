@@ -114,12 +114,13 @@ public class TransactionMonitorAdvancedWidget extends Composite {
     private final String COLUMN_HEADER_SEARCH_HIT_IND = " ";
     private final String COLUMN_HEADER_ROW_MESSAGE_FROM = "Message From";
     private final String COLUMN_HEADER_ROW_FORWARDED_TO = "Forwarded To";
+    private final String COLUMN_HEADER_PATH = "Path";
     private final String COLUMN_HEADER_VALIDATION = "Validation";
     private final String COLUMN_HEADER_CONTENT_TYPE = "Content Type";
 
-    final String[] columns = {COLUMN_HEADER_SEARCH_HIT_IND,"Timestamp","Status","Artifact",COLUMN_HEADER_ROW_MESSAGE_FROM,COLUMN_HEADER_PROXY,COLUMN_HEADER_ROW_FORWARDED_TO,"Path",COLUMN_HEADER_CONTENT_TYPE,"Method","Length",COLUMN_HEADER_RESPONSE_TIME_MS,COLUMN_HEADER_VALIDATION};
-    private MessageViewerWidget requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
-    private MessageViewerWidget responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
+    final String[] columns = {COLUMN_HEADER_SEARCH_HIT_IND,"Timestamp","Status","Artifact",COLUMN_HEADER_ROW_MESSAGE_FROM,COLUMN_HEADER_PROXY,COLUMN_HEADER_ROW_FORWARDED_TO,COLUMN_HEADER_PATH,COLUMN_HEADER_CONTENT_TYPE,"Method","Length",COLUMN_HEADER_RESPONSE_TIME_MS,COLUMN_HEADER_VALIDATION};
+    private MessageViewerWidget requestViewerWidget;
+    private MessageViewerWidget responseViewerWidget;
     //Map<Integer, String> txRowParentId = new HashMap<Integer, String>();
     //Map<Integer, Map<String,AssetNode>> txRowAssetNode = new HashMap<Integer, Map<String,AssetNode>>();
     //int txRowIdx = 0;
@@ -137,15 +138,15 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         public void onSuccess(AssetNode an) {
             logger.info("in content load" + an.getType());
             if (an.getTxtContent()!=null) {
-                HTML txtContent = new HTML("<pre>" + an.getTxtContent() + "</pre>");
+//                HTML txtContent = new HTML("<pre>" + an.getTxtContent() + "</pre>");
                 if ("reqHdrType".equals(an.getType())) {
-                    requestViewerWidget.setHeaderContent(txtContent);
+                    requestViewerWidget.setHeaderAssetNode(an);
                 } else if ("reqBodyType".equals(an.getType())) {
-                    requestViewerWidget.setMessageContent(txtContent);
+                    requestViewerWidget.setMessageAssetNode(an);
                 } else if ("resHdrType".equals(an.getType())) {
-                    responseViewerWidget.setHeaderContent(txtContent);
+                    responseViewerWidget.setHeaderAssetNode(an);
                 } else if ("resBodyType".equals(an.getType())) {
-                    responseViewerWidget.setMessageContent(txtContent);
+                    responseViewerWidget.setMessageAssetNode(an);
                 }
             }
 
@@ -285,6 +286,10 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         setListenerEnabled(enableListener);
         setFilterEnabled(enableFilter);
 
+        requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
+        responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
+
+
         // All composites must call initWidget() in their constructors.
 	     initWidget(setupMonitor());
 
@@ -330,7 +335,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                 txMonitorMainSplitPanel.setWidgetSize(southPanel, messageDetailViewerHeight);
                 southPanel.setWidgetSize(requestViewerWidget, Math.round(.5 * containerWidth));
             } else {
-                logger.info("parent is " + (txMonitorMainSplitPanel.getParent()==null) + " or no detail showing:  detail: " + getShowTxDetail());
+                logger.fine("parent is " + (txMonitorMainSplitPanel.getParent()==null) + " or no detail showing:  detail: " + getShowTxDetail());
             }
 
         } catch (Throwable t) {
@@ -683,8 +688,14 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                         }
                     } else  if (COLUMN_HEADER_RESPONSE_TIME_MS.equals(columns[index])) {
                         return formatResponseTime(o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index));
-                    }  else if (COLUMN_HEADER_VALIDATION.equals(columns[index])) {
+                    } else if (COLUMN_HEADER_PATH.equals(columns[index])) {
 
+                        String path = o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index);
+                        shb.appendHtmlConstant("<span title='" + ((path!=null)?path:"")  + "'>");
+                        shb.appendEscaped(path);
+                        shb.appendHtmlConstant("</span>");
+
+                    } else if (COLUMN_HEADER_VALIDATION.equals(columns[index])) {
 
                         String validationDetail = o.getMessageDetailMap().get(getMessageKey()).getAnMap().get("header").getExtendedProps().get("validationDetail");
                         shb.appendHtmlConstant("<span title='" + ((validationDetail!=null)?validationDetail:"")  + "'>");
@@ -1037,6 +1048,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             txTable.setSkipRowHoverFloatElementCheck(true);
             txTable.setSkipRowHoverStyleUpdate(true);
             txTable.setStyleName("txDataGridNoTableSpacing");
+            txTable.getElement().getStyle().setProperty("wordWrap","break-word");
 
 
             //List<List<String>> rows = new ArrayList<List<String>>();
@@ -1201,7 +1213,11 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         if (an!=null) {
             if (an.getCsv() !=null) {
                 String[][] csvData = an.getCsv();
-                csvData[0][12] = resultStr; // TODO: make constant
+
+                SafeHtmlBuilder shb = new SafeHtmlBuilder();
+                shb.appendEscaped(resultStr);
+
+                csvData[0][12] = shb.toSafeHtml().asString(); // TODO: make constant
                 an.setCsv(csvData);
                 an.getExtendedProps().put("validationDetail",validationDetail);
             }
@@ -1437,6 +1453,13 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                     shb.appendHtmlConstant("<span title='" + o.getCsvData().get(this.index)  + "'>"); // .getProps()
                     shb.appendEscaped(headerMsg.getExtendedProps().get("toIp"));
                     shb.appendHtmlConstant("</span>");
+
+                } else if (COLUMN_HEADER_PATH.equals(columns[this.index])) {
+
+                    shb.appendHtmlConstant("<span title='" + o.getCsvData().get(this.index)  + "'>"); // .getProps()
+                    shb.appendEscaped(o.getCsvData().get(this.index));
+                    shb.appendHtmlConstant("</span>");
+
 
                 } else if (COLUMN_HEADER_RESPONSE_TIME_MS.equals(columns[this.index])) {
                     if (o.getCsvData()!=null) {

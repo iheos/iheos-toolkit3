@@ -1,0 +1,12 @@
+#
+#Wed Sep 10 16:22:10 EDT 2014
+displayOrder=2
+name=f93bd6d7-877d-462c-9752-f4aaf1cafe06_Message
+mimeType=application/soap+xml
+id=4134c163-2d26-4a3b-9959-f77a97110cfb
+parentId=f93bd6d7-877d-462c-9752-f4aaf1cafe06
+repositoryId=transactions-cap
+type=reqBodyType
+displayName=Message
+createdDate=20140910162210
+updatedDate=20140910162210
