@@ -1,4 +1,4 @@
-package gov.nist.hit.mhd
+package gov.nist.hit.ds.mhd
 
 import gov.nist.hit.ds.metadata.Metadata
 import gov.nist.hit.ds.metadata.MetadataSupport
@@ -62,6 +62,12 @@ class FhirToEbrim {
         if (!valueProperty.hasValues()) return
         def type = valueProperty.values[0]
         parse(type, extensionName)
+    }
+
+    def parse(String_ x, String y) {
+        println "Parse ${x} ${y}"
+        if (y == 'homeCommunityId')
+            extrinsicObject.addAttribute('home', x.value, null)
     }
 
     def parse(ResourceReference reference, String extensionName) {

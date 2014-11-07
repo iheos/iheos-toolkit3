@@ -38,7 +38,6 @@ class Event {
             this.parentAsset = parentAsset
             this.validatorName = validatorName
             aDAO = new AssertionGroupDAO(assertionGroup, parentAsset)
-//            aDAO.init(parentAsset)
         }
         AssertionStatus getStatus() { return assertionGroup.status() }
         def setStatus(AssertionStatus status) { assertionGroup.setErrorStatus(status) }
@@ -47,7 +46,6 @@ class Event {
             log.debug("Flushing ${assertionGroup.validatorName} AG")
             if (flushStatus == FlushStatus.Force || assertionGroup?.needsFlushing()) {
                 allAssetionGroups << assertionGroup
-//                assertionGroup.saved = true
                 def asset = aDAO.save()
                 return asset
             }
@@ -65,7 +63,6 @@ class Event {
         result.assertionGroup = new AssertionGroup()
         result.assertionGroup.validatorName = validatorName
         result.aDAO = new AssertionGroupDAO(result.assertionGroup, parentAsset);
-//        result.aDAO.init(parentAsset)
         resultsStack << result
     }
     ValidatorResults currentResults() { assert resultsStack.size() > 0; return resultsStack.last() }
@@ -105,15 +102,6 @@ class Event {
         if (!resultsStack.empty) {
             def parentResult = resultsStack.last()
             propagateStatus(result, parentResult)
-//            log.debug("Propagate status from ${result.validatorName} to ${parentResult.validatorName}?")
-//            println 'Has Parent'
-//            println "status is ${result.getStatus()}"
-//            if (result.getStatus() >= AssertionStatus.WARNING) {
-//                parentResult.setStatus(result.getStatus())
-//                println "parent status is now ${parentResult.getStatus()}"
-//                result.flush(FlushStatus.Force)
-//                return
-//            }
         }
         if (result.getStatus() >= AssertionStatus.WARNING)
             result.flush(FlushStatus.Force)
@@ -159,18 +147,14 @@ class Event {
         eventDAO.saveInOut()
     }
 
-    void flush() {
+    def flushValidators() {
         if (!resultsStack.empty)
             resultsStack.last().flush(FlushStatus.Force)
+    }
+
+    void flush() {
+        flushValidators()
         eventDAO.save()
-//        if (!artifacts.empty()) {
-//            artDAO.save(artifacts)
-//        }
-//        if (fault) {
-//            def faultDAO = new FaultDAO()
-//            faultDAO.init(eventAsset)
-//            faultDAO.add(fault)
-//        }
     }
 
     boolean hasFault() { fault }

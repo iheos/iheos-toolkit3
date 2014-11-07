@@ -49,7 +49,7 @@ public class Toolkit {
             throw new RuntimeException("Cannot load toolkit.properties");
         }
         else {
-            logger.debug("toolkit.properties loaded from <" + resource + ">");
+            logger.info("toolkit.properties loaded from <" + resource + ">");
             toolkitPropertiesFile = new File(resource.getFile());
             // if a unit test is currently running the the relative location of
             // the warRoot will be different. This conditional checks for this

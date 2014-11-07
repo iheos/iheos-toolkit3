@@ -12,10 +12,14 @@ import java.util.List;
 public class TransactionSimConfigElement extends SimConfigElement
         implements IsSerializable, Serializable {
 
+    // Booleans
     public static final String SCHEMACHECK = "schemaCheck";
     public static final String MODELCHECK = "modelCheck";
     public static final String CODINGCHECK = "codingCheck";
     public static final String SOAPCHECK = "soapCheck";
+
+    // Text
+    public static final String MSGCALLBACK = "msgCallback";
 
     public EndpointValue endpointValue;
     public EndpointType endpointType;
@@ -34,6 +38,8 @@ public class TransactionSimConfigElement extends SimConfigElement
         if (!hasBool(MODELCHECK)) addBool(MODELCHECK, true);
         if (!hasBool(CODINGCHECK)) addBool(CODINGCHECK, true);
         if (!hasBool(SOAPCHECK)) addBool(SOAPCHECK, true);
+
+        if (!hasText(MSGCALLBACK)) addText(MSGCALLBACK, "");
 	}
 
     private BooleanSimConfigElement addBool(String name, boolean value) {
@@ -57,6 +63,29 @@ public class TransactionSimConfigElement extends SimConfigElement
         BooleanSimConfigElement bool = getBool(name);
         if (bool == null) { addBool(name, value); return; }
         bool.setValue(value);
+    }
+
+    private boolean hasText(String name) { return getText(name) != null; }
+
+    public TextSimConfigElement getText(String name) {
+        for (SimConfigElement ele : elements) {
+            if (!(ele instanceof TextSimConfigElement)) continue;
+            TextSimConfigElement b = (TextSimConfigElement) ele;
+            if (b.getName().equals(name)) return b;
+        }
+        return null;
+    }
+
+    public void setText(String name, String value) {
+        TextSimConfigElement text = getText(name);
+        if (text == null) { addText(name, value); return; }
+        text.setValue(value);
+    }
+
+    private TextSimConfigElement addText(String name, String value) {
+        TextSimConfigElement text = new TextSimConfigElement(name, value);
+        elements.add(text);
+        return text;
     }
 
     private boolean getCheck(String name) {

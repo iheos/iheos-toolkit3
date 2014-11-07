@@ -107,7 +107,7 @@
     </dependency>
   	 <dependency>
 	  		<groupId>gov.nist.hit.ds</groupId>
-	  		<artifactId>xds-exceptions</artifactId>
+	  		<artifactId>xdsException</artifactId>
 	  		<version>3.0.0-SNAPSHOT</version>
 	 </dependency>
 	  	
@@ -150,8 +150,9 @@
              see gwt-maven-plugin documentation at codehaus.org -->
         <configuration>
    		  <compileSourcesArtifacts>
-      		<compileSourcesArtifact>gov.nist.hit.ds:repository</compileSourcesArtifact> <!-- gov.nist.hit.ds:repository -->
-		  </compileSourcesArtifacts>
+      		<compileSourcesArtifact>gov.nist.hit.ds:repository-rpc</compileSourcesArtifact> <!-- gov.nist.hit.ds:repository -->
+              <compileSourcesArtifact>gov.nist.hit.ds:repository-shared</compileSourcesArtifact>
+          </compileSourcesArtifacts>
 
           <!-- URL that should be automatically opened in the GWT shell (gwt:run). -->
           <runTarget>logBrowser.html</runTarget>

@@ -2,7 +2,6 @@ package gov.nist.hit.ds.mhd
 
 import gov.nist.hit.ds.dsSims.metadataValidator.object.DocumentEntryModel
 import gov.nist.hit.ds.metadata.Metadata
-import gov.nist.hit.mhd.FhirToEbrim
 import org.hl7.fhir.instance.model.DocumentReference
 import org.hl7.fhir.instance.model.Resource
 import spock.lang.Specification

@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.httpSoap.parsers
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.eventLog.testSupport.EventAccess
-import gov.nist.hit.ds.httpSoap.validators.SoapMessageParser
+import gov.nist.hit.ds.httpSoap.validators.SoapMessageValidator
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
@@ -68,7 +68,7 @@ class SoapMessageParserTestOld extends Specification {
         def simId = new SimId('123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageValidator(simHandle, envelope).run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.runTest()
@@ -92,7 +92,7 @@ class SoapMessageParserTestOld extends Specification {
         def simId = new SimId('123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageValidator(simHandle, envelope).run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.runTest()
@@ -119,7 +119,7 @@ class SoapMessageParserTestOld extends Specification {
         def simId = new SimId('123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageValidator(simHandle, envelope).run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.runTest()
@@ -150,7 +150,7 @@ class SoapMessageParserTestOld extends Specification {
         def simId = new SimId('123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
-            new SoapMessageParser(simHandle, envelope).run()
+            new SoapMessageValidator(simHandle, envelope).run()
         }
         def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.runTest()

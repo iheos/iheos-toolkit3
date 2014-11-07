@@ -6,7 +6,6 @@ import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
-import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -108,7 +107,7 @@ Host: localhost:9085'''
 
         then:
         eventAccess.assertionGroupFile('HttpHeaderValidator').exists()
-        eventAccess.assertionGroupFile('SoapMessageParser').exists()
+        eventAccess.assertionGroupFile('SoapMessageValidator').exists()
         eventAccess.assertionGroupFile('SoapHeaderValidator').exists()
         eventAccess.assertionGroupFile('DSMetadataProcessing').exists()
 
