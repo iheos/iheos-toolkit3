@@ -76,7 +76,7 @@ public class GetRelatedDocumentsTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getGetRelatedDocumentsCode();
+        return TabNamesUtil.getInstance().getGetRelatedDocumentsCode();
     }
 
     private void loadAssociationTypesMap() {

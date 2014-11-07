@@ -16,6 +16,6 @@ public class FolderValidationTab extends AbstractRegistryAndRepositoryTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getFolderValidationTabCode();
+        return TabNamesUtil.getInstance().getFolderValidationTabCode();
     }
 }

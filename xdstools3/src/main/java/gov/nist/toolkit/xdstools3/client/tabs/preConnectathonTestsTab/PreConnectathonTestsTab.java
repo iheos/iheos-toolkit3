@@ -65,24 +65,6 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
                 if ("".equals(selectedActor))
                     return;
                 loadTestsForActor(selectedActor);
-//                readmeBox.clear();
-
-                // these names are found in war/toolkit/testkit/actorcollections/xxxx.tc
-
-                // list all sites
-
-//                ATFactory.ActorType act = ATFactory.ActorType.findActor(sel);
-//                if (act == null)
-//                    return;
-
-//                List<ATFactory.TransactionType> tt = act.getTransactions();
-
-
-//                queryBoilerplate = addQueryBoilerplate(
-//                        new Runner(),
-//                        tt,
-//                        new CoupledTransactions(),
-//                        act);
             }
         });
 
@@ -103,7 +85,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
         htmlReadme.setHeight(300);
         htmlReadme.setShowEdges(true);
         htmlReadme.setContents("<div style='padding-left:20px'>" +
-               "<h3>README</h3>" +
+                "<h3>README</h3>" +
                 "</div>");
         afterReadme = new HTMLFlow("<hr/>");
         afterReadme = new HTMLFlow("<hr/>");
@@ -144,7 +126,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getPreConnectathonTestsTabCode();
+        return TabNamesUtil.getInstance().getPreConnectathonTestsTabCode();
     }
 
     private void loadActorsMap() {
@@ -174,8 +156,8 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
             @Override
             public void onSuccess(Map<String, String> result) {
                 final LinkedHashMap<String,String> map=new LinkedHashMap<String,String>();
-                    map.putAll(result);
-                if (map==null||map.isEmpty()){
+                map.putAll(result);
+                if (map.isEmpty()){
                     selectTest.setEmptyDisplayValue(" -- NO DATA -- ");
                 }else{
                     selectTest.setEmptyDisplayValue("Select Test...");
@@ -202,8 +184,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
             public void onSuccess(String result) {
                 String readme = result;
                 // FIXME line break character replacement does not work
-                readme.replaceAll("\\n", "<br/>");
-                logger.info(readme);
+                readme=readme.replaceAll("\\n", "<br/>");
                 setReadmeHTMLPanel(readme);
             }
         });

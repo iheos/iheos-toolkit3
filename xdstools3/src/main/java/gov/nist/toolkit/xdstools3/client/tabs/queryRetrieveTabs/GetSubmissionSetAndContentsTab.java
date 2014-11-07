@@ -59,7 +59,7 @@ public class GetSubmissionSetAndContentsTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getGetSubmissionSetAndContentsTabCode();
+        return TabNamesUtil.getInstance().getGetSubmissionSetAndContentsTabCode();
     }
 
     private void bindUI() {

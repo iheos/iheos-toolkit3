@@ -11,6 +11,7 @@ public class HomeTab extends GenericTab {
 
     public HomeTab(String s) {
         super(s);
+        hideHeaderTitle();
     }
 
     @Override
@@ -32,6 +33,7 @@ public class HomeTab extends GenericTab {
         tools.addItem("Message Validator");
         tools.addItem("Document Metadata Editor");
         tools.addItem("Pre-Connectathon Tests");
+        tools.addItem("Submit Test Data");
         tools.addItem("v2 Tab Example");
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
@@ -39,6 +41,11 @@ public class HomeTab extends GenericTab {
 
         HomeBox simulators = new HomeBox("Simulators");
         simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");
+
+        HomeBox mhdTools = new HomeBox("MHD Tools");
+        mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
+        // Mhd Validations
+        mhdTools.addItem("MHD Validator");
 
         HomeBox connectathonTools = new HomeBox("Connectathon Tools");
         connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
@@ -56,7 +63,8 @@ public class HomeTab extends GenericTab {
         HStack hStack3 = new HStack();
         hstack1.addMembers(queriesAndRetrieves, new LayoutSpacer(), tools);
         hstack2.addMembers(sendTestData, new LayoutSpacer(), simulators);
-        hStack3.addMember(connectathonTools);
+        hStack3.addMembers(mhdTools, new LayoutSpacer(),connectathonTools);
+
         VStack vstack = new VStack();
         LayoutSpacer spacer = new LayoutSpacer();
         spacer.setHeight(30);
@@ -66,7 +74,7 @@ public class HomeTab extends GenericTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getHomeTabCode();
+        return TabNamesUtil.getInstance().getHomeTabCode();
     }
 
 

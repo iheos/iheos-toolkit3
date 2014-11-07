@@ -56,7 +56,7 @@ public class GetFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Generi
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getGetFoldersTabCode();
+        return TabNamesUtil.getInstance().getGetFoldersTabCode();
     }
 
     private void bindUI() {
