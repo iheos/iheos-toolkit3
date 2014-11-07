@@ -4,6 +4,9 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.smartgwt.client.widgets.tab.Tab;
 
+/**
+ * Event thrown to close a specific tab
+ */
 public class CloseTabEvent extends GwtEvent<CloseTabEvent.CloseTabEventHandler> {
     public static Type<CloseTabEventHandler> TYPE = new Type<CloseTabEventHandler>();
     private Tab tab;

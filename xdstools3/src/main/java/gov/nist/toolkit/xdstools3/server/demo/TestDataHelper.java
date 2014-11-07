@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by onh2 on 8/26/2014.
+ * Test data helper for testing purpose.
  *
- * Provides test data / GUI demo data for Actors and Collections widgets
+ * Provides test data / GUI demo data
  */
 public enum TestDataHelper {
     instance;
 
-    Map<String,String> testsMap;
+    private Map<String,String> testsMap;
 
     private TestDataHelper(){
         testsMap = new HashMap<>();
