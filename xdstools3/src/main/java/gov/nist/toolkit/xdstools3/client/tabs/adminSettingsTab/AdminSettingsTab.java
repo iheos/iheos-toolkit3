@@ -13,7 +13,6 @@ import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.form.validator.MatchesFieldValidator;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
-import gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog.AdminSettingsForm;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 

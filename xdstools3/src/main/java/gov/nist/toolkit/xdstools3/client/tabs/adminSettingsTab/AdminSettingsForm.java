@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog;
+package gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab;
 
 import com.smartgwt.client.types.Alignment;
 import gov.nist.toolkit.xdstools3.client.customWidgets.forms.GenericForm;

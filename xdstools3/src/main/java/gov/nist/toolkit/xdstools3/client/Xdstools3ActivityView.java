@@ -26,8 +26,11 @@ import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseAllTabsEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
-import gov.nist.toolkit.xdstools3.client.tabs.*;
+import gov.nist.toolkit.xdstools3.client.tabs.EndpointConfigTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
+import gov.nist.toolkit.xdstools3.client.tabs.MessageValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
@@ -317,6 +320,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                 "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetFoldersTabCode()+"'>Get Folders</a></li>" +
                 "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetFoldersAndContentsCode()+"'>Get Folders and Contents</a></li>" +
                 "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetSubmissionSetAndContentsTabCode()+"'>Get Submission Set and Contents</a></li>" +
+                "</ul>" +
                 "</li>" +
                 "<li><a href='#'>Tools</a>" +
                 "<ul>" +
