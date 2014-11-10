@@ -1,0 +1,9 @@
+#
+#Wed Sep 10 16:22:10 EDT 2014
+displayName=2014_09_10_16_22_10_557_173163502828697
+createdDate=20140910162210
+name=2014_09_10_16_22_10_557_173163502828697
+updatedDate=20140910162210
+type=simpleType
+repositoryId=transactions-cap
+id=33b68722-f469-4201-a04d-ac5902bab243

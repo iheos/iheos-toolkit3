@@ -12,6 +12,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.DefaultCellTableBuilder;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -54,9 +55,10 @@ public class EventAggregatorWidget extends Composite {
 
     public static final int FIXED_HEADER_LAST_IDX = 1;
     public static final int START_ROW_ZERO = 0;
+    public static final int PAGE_SIZE = 4096;
     private static Logger logger = Logger.getLogger(EventAggregatorWidget.class.getName());
 
-    private SplitLayoutPanel contentPanel = new SplitLayoutPanel();
+    private SplitLayoutPanel contentPanel = new SplitLayoutPanel(0);
     private SimpleEventBus eventBus;
     private ASSET_CLICK_EVENT assetClickEvent;
     private AssetId eventAssetId;
@@ -77,7 +79,7 @@ public class EventAggregatorWidget extends Composite {
     private CsvTableFactory csvFactory = new CsvTableFactory();
     private List<String[]> rows = new ArrayList<String[]>();
 
-    private DataGrid<List<EventMessageCell>> table = new DataGrid<List<EventMessageCell>>(500); // TODO: add pager
+    private DataGrid<List<EventMessageCell>> table = new DataGrid<List<EventMessageCell>>(PAGE_SIZE);
     private ListDataProvider<List<EventMessageCell>> dataProvider  = new ListDataProvider<List<EventMessageCell>>();
     private List<List<EventMessageCell>> dataRows = new ArrayList<List<EventMessageCell>>();
 
@@ -177,7 +179,8 @@ public class EventAggregatorWidget extends Composite {
 //        txTable.setStyleName("txDataGridNoTableSpacing");
 
         table.setAutoHeaderRefreshDisabled(false);
-        table.setFocus(false);
+        table.getElement().getStyle().setProperty("wordWrap","break-word");
+        table.setFocus(true);
 
 
         // Create table columns
@@ -193,7 +196,9 @@ public class EventAggregatorWidget extends Composite {
         dataProvider.setList(dataRows);
         dataProvider.addDataDisplay(table);
 
-//        getContentPanel().setSize("52%","20%");
+        SimplePager pager = CsvTableFactory.getPager();
+        pager.setDisplay(table);
+        getContentPanel().addSouth(pager, 26);
         getContentPanel().add(table);
 
         try {

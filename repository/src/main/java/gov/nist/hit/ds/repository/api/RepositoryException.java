@@ -103,6 +103,9 @@ public class RepositoryException extends Exception  {
 
     /** Asset not found */
     public static final String ASSET_NOT_FOUND = "Asset not found";
+
+    /** Asset auto flush */
+    public static final String ASSET_AUTO_FLUSH_NOT_SET = "Asset auto flush flag is not set";
     
     /** Src not found */
     public static final String REPOSITORY_SRC_NOT_FOUND = "Repository source not found";
@@ -127,6 +130,7 @@ public class RepositoryException extends Exception  {
     
     /** Repository already exists */
     public static final String REPOSITORY_API_REQUIREMENT_FAIL = "Error";
+
     
     public RepositoryException() {}
     

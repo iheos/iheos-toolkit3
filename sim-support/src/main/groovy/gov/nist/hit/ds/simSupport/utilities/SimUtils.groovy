@@ -175,7 +175,7 @@ class SimUtils {
         }
     }
 
-    private static ActorSimConfig loadConfig(Asset a) { new SimulatorDAO().toModel(load(a))}
-    private static String load(Asset a) { new String(a.content) }
+    static ActorSimConfig loadConfig(Asset a) { new SimulatorDAO().toModel(load(a))}
+    static String load(Asset a) { new String(a.content) }
 
 }

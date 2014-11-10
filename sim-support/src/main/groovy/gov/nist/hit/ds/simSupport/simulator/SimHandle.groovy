@@ -9,10 +9,13 @@ import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
+import groovy.util.logging.Log4j
 
 /**
  * Created by bmajur on 7/5/14.
  */
+
+@Log4j
 class SimHandle {
     SimId simId
     Asset simAsset
@@ -41,6 +44,21 @@ class SimHandle {
     }
 
     String getOption(String option) { options.find { String opt -> opt.startsWith(option)}}
+
+    String getOptionFromMap(String option) {
+        def m = [ : ]
+        for(i=0; i<options.size()-1; i++)
+            m.put(options[i], options[i+1])
+        return m.get(option) as String
+    }
+
+    String getOptionFromMap(String option, options) {
+        def m = [ : ]
+        for(int i=0; i<options.size()-1; i++)
+            m.put(options[i], options[i+1])
+        log.debug("option map is ${m}")
+        return m.get(option) as String
+    }
 
     SimHandle fault(Fault fault) {
         event.fault = fault

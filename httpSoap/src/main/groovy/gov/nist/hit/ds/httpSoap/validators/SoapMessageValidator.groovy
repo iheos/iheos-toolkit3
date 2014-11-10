@@ -13,7 +13,7 @@ import org.apache.axiom.om.OMElement
 import org.apache.axiom.om.OMNamespace
 
 @Log4j
-public class SoapMessageParser extends ValComponentBase {
+public class SoapMessageValidator extends ValComponentBase {
 	String soapNamespaceName = "http://www.w3.org/2003/05/soap-envelope";
     String xmlMessage
     OMElement xml
@@ -23,9 +23,9 @@ public class SoapMessageParser extends ValComponentBase {
 	int partCount;
 
     SimHandle handle
-    SoapMessageParser parser
+    SoapMessageValidator parser
 
-    SoapMessageParser(SimHandle handle, String msg) {
+    SoapMessageValidator(SimHandle handle, String msg) {
         super(handle.event)
         this.handle = handle
         this.xmlMessage = msg

@@ -119,7 +119,7 @@ class RegistryObjectModel {
     }
 
     public String getHome() {
-        return ro.getAttributeValue(MetadataSupport.home_community_id_qname);
+        return ro.getAttributeValue(MetadataSupport.home_qname);
     }
 
     public String getName() { return name; }

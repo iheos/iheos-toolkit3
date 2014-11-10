@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -31,6 +32,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import gov.nist.hit.ds.logBrowser.client.event.asset.SearchResultAssetClickedEvent;
 import gov.nist.hit.ds.logBrowser.client.event.FilterSelectedEvent;
 import gov.nist.hit.ds.repository.shared.PropertyKey;
@@ -58,7 +60,7 @@ public class SearchWidget extends Composite {
 	 * @author Sunil.Bhaskarla
 	 */
 	private static Logger logger = Logger.getLogger(SearchWidget.class.getName());
-	public VerticalPanel topPanel;
+	public FlowPanel topPanel = new FlowPanel(); // was verticalPanel
 	private static final String PROP_VALUE = "propValue";
 	private static final String PROP_NAME = "propName";
 	private static final String OPERATOR = "Operator";
@@ -92,6 +94,28 @@ public class SearchWidget extends Composite {
 	
 	
 	String required = new String("*Required fields");
+
+    protected ArrayList<String> propNames = new ArrayList<String>();
+
+    static String PREFWIDTH = "10em"; // 20em
+    static String DEFAULTWIDTH = "14em"; // 20em
+    static String REPOSLBOXWIDTH = "15em"; // 17em
+    static String DEFAULTTITLEWIDTH = "15em";
+    static String MOVEMENTWIDTH = "7em";
+
+
+    private FlowPanel criteriaPanel = new FlowPanel(); //  VerticalPanel();
+    private FlowPanel scPanel = new FlowPanel(); // VerticalPanel();
+
+    private RadioButton simpleQuery = new RadioButton("queryMode", "Simple");
+    private RadioButton advancedQuery = new RadioButton("queryMode", "Advanced");
+    private Button searchBtn = new Button("Search");
+    private ListBox qSelector = new ListBox();
+    private TextBox sqTxt = new TextBox();
+    private DisclosurePanel advancedDisclosure = new DisclosurePanel();
+
+    final public RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
+    private EventBus eventBus;
 
     public static enum Option {
         QUICK_SEARCH() {
@@ -127,28 +151,6 @@ public class SearchWidget extends Composite {
         }
     };
 
-	protected ArrayList<String> propNames = new ArrayList<String>();
-	
-	static String PREFWIDTH = "10em"; // 20em
-	static String DEFAULTWIDTH = "14em"; // 20em
-	static String REPOSLBOXWIDTH = "15em"; // 17em
-	static String DEFAULTTITLEWIDTH = "15em";
-	static String MOVEMENTWIDTH = "7em";
-
-
-	VerticalPanel criteriaPanel = new VerticalPanel();
-	VerticalPanel scPanel = new VerticalPanel();
-
-    RadioButton simpleQuery = new RadioButton("queryMode", "Simple");
-    RadioButton advancedQuery = new RadioButton("queryMode", "Advanced");
-    Button searchBtn = new Button("Search");
-	ListBox qSelector = new ListBox();
-	TextBox sqTxt = new TextBox();
-	DisclosurePanel advancedDisclosure = new DisclosurePanel();
-	
-	final public RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
-    private EventBus eventBus;
-
 	
 	public SearchWidget(SimpleEventBus eventBus, Option[] options) {
 
@@ -157,7 +159,7 @@ public class SearchWidget extends Composite {
 
 	    searchBtn.setWidth("6em");
 	    
-		topPanel = new VerticalPanel();
+//		topPanel = new  VerticalPanel();
 
 		StyleInjector.inject(".searchCriteriaGroup {background-color: #F5F5F5} .searchHeader {background-color: #E6E6FA; width:100%}");
         StyleInjector.inject(".roundedButton1 {\n" +
@@ -177,11 +179,14 @@ public class SearchWidget extends Composite {
 		grid.setCellSpacing(15);
 
 		reposService.getRepositoryDisplayTags(reposSetup);
-		reposService.getIndexablePropertyNames(propsSetup);
-		
+
 		topPanel.add(setupMainPanel());
-		
-	     // All composites must call initWidget() in their constructors.
+
+        reposService.getIndexablePropertyNames(propsSetup);
+
+
+
+        // All composites must call initWidget() in their constructors.
 	     initWidget(topPanel);
 
 	     // Give the overall composite a style name.
@@ -228,7 +233,9 @@ public class SearchWidget extends Composite {
 				topPanel.add(setupSearchPanel());
 				topPanel.add(scPanel);
                 topPanel.add(resultPanel); ////
-			}
+			} else {
+                logger.warning("No indexable properties. Run search option will be disabled!");
+            }
 			
 		}
 	};
@@ -381,7 +388,7 @@ public class SearchWidget extends Composite {
 		
 	}
 
-    protected Boolean addSearchRepositories(VerticalPanel panel, String headerText) {
+    protected Boolean addSearchRepositories(FlowPanel panel, String headerText) {
         FlexTable reposGrid = new FlexTable();
         int row = 0;
         int col = 0;
@@ -442,7 +449,7 @@ public class SearchWidget extends Composite {
         return Boolean.TRUE;
     }
 
-    protected Boolean addQuickSearchToPanel(VerticalPanel panel, String headerText) {
+    protected Boolean addQuickSearchToPanel(FlowPanel panel, String headerText) {
         panel.add(new HTML("<h4 class='searchHeader'>"+ headerText +"</h4>"));
         panel.add(new HTML("  "));
         FlexTable prefGrid = new FlexTable();
@@ -585,8 +592,8 @@ public class SearchWidget extends Composite {
         return Boolean.FALSE;
     }
 
-	protected VerticalPanel setupMainPanel() {
-		VerticalPanel panel = new VerticalPanel();
+	protected Widget setupMainPanel() {
+		FlowPanel panel = new FlowPanel(); // VerticalPanel();
 
         if (isOptionEnabled(Option.QUICK_SEARCH)) {
             String headerText = Option.QUICK_SEARCH.toString();
@@ -864,7 +871,9 @@ public class SearchWidget extends Composite {
 			}	
 			
 			ListBox cSelector = getCSelector();
-			cSelector.setSelectedIndex(sc.getCriteria().ordinal());
+            if (sc.getCriteria()!=null) {
+			    cSelector.setSelectedIndex(sc.getCriteria().ordinal());
+            }
 			cSelector.addChangeHandler(new CSelectorChangeHandler(CRITERIA, ancestorId));
 		
 			int col=0;
@@ -935,7 +944,9 @@ public class SearchWidget extends Composite {
 				
 				
 				ListBox cSelector = getCSelector();
-				cSelector.setSelectedIndex(sc.getCriteria().ordinal());
+                if (sc.getCriteria()!=null) {
+				    cSelector.setSelectedIndex(sc.getCriteria().ordinal());
+                }
 				cSelector.addChangeHandler(new CSelectorChangeHandler(CRITERIA, ancestorId));
 
 
@@ -1286,30 +1297,37 @@ public class SearchWidget extends Composite {
 	 * 
 	 */
 	public void addNewSearchCriteria() {
-		sc = new SearchCriteria(Criteria.AND);
-		
-	
-		SearchTerm st = new SearchTerm(getPropNames().get(0),Operator.EQUALTO,"");
-		sc.append(st);
+        try {
+            sc = new SearchCriteria(Criteria.AND);
+
+
+            SearchTerm st = new SearchTerm(getPropNames().get(0),Operator.EQUALTO,"");
+            sc.append(st);
 //		st = new SearchTerm(getPropNames().get(0),Operator.EQUALTO,"");
 //		sc.append(st);
-		
 
-		
-		
-		
-		simpleQuery.setEnabled(true);
-		advancedQuery.setEnabled(true);
 
-		advancedBuilderOption(advancedQuery.getValue());
-		
-		// Preserve builder mode
-		// simpleQuery.setValue(true);
-		
-		
-		resultPanel.clear();
-		scPanel.clear();
-		printTable(sc, "");
+
+
+
+            simpleQuery.setEnabled(true);
+            advancedQuery.setEnabled(true);
+
+            advancedBuilderOption(advancedQuery.getValue());
+
+            // Preserve builder mode
+            // simpleQuery.setValue(true);
+
+
+            resultPanel.clear();
+            scPanel.clear();
+            printTable(sc, "");
+        } catch (Throwable t) {
+            Window.alert(t.toString());
+        }
+
+
+
 	}
 
 	/**
@@ -1320,18 +1338,21 @@ public class SearchWidget extends Composite {
 		Style.Visibility v = (abo)?Style.Visibility.VISIBLE:Style.Visibility.HIDDEN;
 		Style.Display d = (abo)?Style.Display.BLOCK:Style.Display.NONE;
 		
-		Element e = Document.get().getElementById(newCriteriaGroupTxt);	
-		e.getStyle().setVisibility(v);
-		e.getStyle().setDisplay(d);
-		
+		Element e = Document.get().getElementById(newCriteriaGroupTxt);
+        if (e!=null) {
+            e.getStyle().setVisibility(v);
+            e.getStyle().setDisplay(d);
+
 //		e = Document.get().getElementById(appendCriteriaTxt);
 //		e.getStyle().setVisibility(v);
 //		e.getStyle().setDisplay(d);
-//		
-		e = Document.get().getElementById(removeGroupTxt);
-		e.getStyle().setVisibility(v);
-		e.getStyle().setDisplay(d);
-		
+//
+            e = Document.get().getElementById(removeGroupTxt);
+            if (e!=null) {
+                e.getStyle().setVisibility(v);
+                e.getStyle().setDisplay(d);
+            }
+        }
 		
 	}
 
@@ -1369,8 +1390,10 @@ public class SearchWidget extends Composite {
 		}
 	}
 
-    protected VerticalPanel setupCriteriaBuilderMode() {
+    protected Widget setupCriteriaBuilderMode() {
+
         if (getPropNames()==null || (getPropNames()!=null && getPropNames().size()==0)) {
+            Window.alert("No properties have been specified in the asset TYPE file(s).");
             return new VerticalPanel();
         }
 
@@ -1471,23 +1494,22 @@ public class SearchWidget extends Composite {
             }
         });
 
-
-
-
-        criteriaPanel.add(queryMode);
-        criteriaPanel.add(new HTML("&nbsp;"));
+        queryMode.getElement().getStyle().setVisibility(Style.Visibility.VISIBLE);
+        queryMode.getElement().getStyle().setDisplay(Style.Display.BLOCK);
 
         // Start in simple builder mode
         simpleQuery.setValue(true);
 
-        return criteriaPanel;
+        return queryMode;
 
     }
 
-	protected VerticalPanel setupSearchPanel() {
+	protected Widget setupSearchPanel() {
 
         if (isOptionEnabled(Option.CRITERIA_BUILDER_MODE)) {
-            setupCriteriaBuilderMode();
+            criteriaPanel.add(setupCriteriaBuilderMode());
+            criteriaPanel.add(new HTML("&nbsp;"));
+
         }
 
 		addNewSearchCriteria();

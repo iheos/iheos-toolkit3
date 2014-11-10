@@ -1,0 +1,7 @@
+POST /tf6/services/xdsregistryb HTTP/1.1
+Content-Type: application/soap+xml; charset=UTF-8; action="urn:ihe:iti:2007:RegisterDocumentSet-b"
+User-Agent: Axis2
+Host: localhost:8001
+Transfer-Encoding: chunked
+X-Forwarded-For: 127.0.0.1
+

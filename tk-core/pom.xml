@@ -18,6 +18,7 @@
         <module>../utilities</module>
         <module>../toolkit</module>
         <module>../repository</module>
+        <module>../repository-shared</module>
         <module>../event-log</module>
         <module>../http</module>
         <module>../actor-transaction</module>

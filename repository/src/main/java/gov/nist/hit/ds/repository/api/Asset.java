@@ -641,23 +641,77 @@ public interface Asset {
     public void setProperty(PropertyKey key, String value)
             throws gov.nist.hit.ds.repository.api.RepositoryException;
 
+    /**
+     *
+     * @param order
+     * @throws RepositoryException
+     */
     public void setOrder(int order) throws RepositoryException;
-    
+
+    /**
+     *
+     * @return
+     * @throws RepositoryException
+     */
     public String getOrder() throws RepositoryException;
-    
+
+    /**
+     *
+     * @param mimeType
+     * @throws RepositoryException
+     */
     public void setMimeType(String mimeType) throws RepositoryException;
-    
+
+    /**
+     *
+     * @param id
+     * @throws RepositoryException
+     */
     public void setParentId(String id) throws RepositoryException;
-    
+
+    /**
+     *
+     * @return
+     */
     public RepositorySource getSource();
-    
+
+    /**
+     *
+     * @param source
+     */
     public void setSource(RepositorySource source);
-    
+
+    /**
+     * Use auto flush to automatically update an asset when it has been retrieved as a read-only asset.
+     * @param autoFlush
+     */
+    public void setAutoFlush(boolean autoFlush);
+
+    /**
+     *
+     * @return
+     */
     public File getPath();
-    
+
+    /**
+     *
+     * @param path
+     */
     public void setPath(File path);
 
+    /**
+     *
+     * @return
+     * @throws RepositoryException
+     */
     public File getContentFile() throws RepositoryException;
+
+    /**
+     *
+     * @param part
+     * @return
+     * @throws RepositoryException
+     */
 	public File getContentFile(File part) throws RepositoryException;
 
 	public boolean hasContent() throws RepositoryException;

@@ -2,10 +2,10 @@ package gov.nist.hit.ds.simServlet;
 
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.dsSims.msgModels.RegistryResponse;
 import gov.nist.hit.ds.dsSims.msgs.RegistryResponseGenerator;
 import gov.nist.hit.ds.eventLog.Fault;
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser;
+import gov.nist.hit.ds.simServlet.rest.TransactionReportBuilder;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder;
 import gov.nist.hit.ds.simSupport.simulator.SimHandle;
@@ -13,6 +13,7 @@ import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig;
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner;
 import gov.nist.hit.ds.simSupport.utilities.SimSupport;
 import gov.nist.hit.ds.simSupport.utilities.SimUtils;
+import gov.nist.hit.ds.simSupport.validationEngine.ValidatorWithError;
 import gov.nist.hit.ds.soapSupport.FaultCode;
 import gov.nist.hit.ds.soapSupport.core.*;
 import gov.nist.hit.ds.utilities.html.HttpMessageContent;
@@ -97,6 +98,8 @@ public class SimServlet extends HttpServlet {
         } catch (IOException e) {
             logger.error("Error writing response - " + ExceptionUtil.exception_details(e));
         }
+
+        logger.info(new TransactionReportBuilder().build(simHandle));
     }
 
     protected SimHandle runPost(SimId simId, String header, byte[] body, List<String> options, HttpServletResponse response) {
@@ -105,7 +108,8 @@ public class SimServlet extends HttpServlet {
         Fault fault = simHandle.getEvent().getFault();
         if (fault == null) {
             logger.debug("No Fault - sending response");
-            OMElement responseEle = new RegistryResponseGenerator(new RegistryResponse()).toXml();
+            simHandle.getEvent().flushValidators();
+            OMElement responseEle = new RegistryResponseGenerator(simHandle).toXml();
             String responseBody = new SoapResponseGenerator(simHandle.getSoapEnvironment(), responseEle).getEnvelopeAsString();
             buildSimpleOrMtom(simHandle, responseBody);
         } else {
@@ -152,8 +156,22 @@ public class SimServlet extends HttpServlet {
             // This is going into a special simulator log for collecting addressing errors
             return sendFault(new SimId(errorSimId), msg, FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
         }
+
         SimHandle simHandle;
-        simHandle = SimUtils.open(simId);
+
+
+        // Endpoint says to return a specific error
+        String errorToReturn = new SimHandle().getOptionFromMap("error", options);
+        boolean hasErrorToReturn;
+        if (errorToReturn != null && !errorToReturn.equals("")) {
+            logger.info("Should return forced error - " + errorToReturn);
+            simHandle = SimUtils.open(simId);
+            hasErrorToReturn = true;
+        } else {
+            simHandle = SimUtils.open(simId);
+            hasErrorToReturn = false;
+        }
+
         if (simHandle == null) {
             if (options.contains("autocreate")) {
                 logger.info("Auto Creating sim " + simId.getId());
@@ -190,7 +208,12 @@ public class SimServlet extends HttpServlet {
                 return sendFault(simHandle, "This transaction  [" + simHandle.getTransactionType().getName() + "] requires SIMPLE SOAP", FaultCode.Sender, soapEnvironment, content);
         }
 
-        runTransaction(simHandle);
+        if (hasErrorToReturn) {
+            logger.info("Forcing error");
+            new ValidatorWithError().error(simHandle, errorToReturn, "message");
+        } else {
+            runTransaction(simHandle);
+        }
         return simHandle;
     }
 

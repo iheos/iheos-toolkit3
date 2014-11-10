@@ -12,7 +12,6 @@
 
 
     <repositories>
-    <!--
         <repository>
             <id>internal-nist-repo-releases</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
@@ -45,7 +44,6 @@
             <id>codehaus</id>
             <url>http://repository.codehaus.org/org/codehaus</url>
         </repository>
--->
     </repositories>
 
     <scm>
@@ -70,7 +68,7 @@
 
     <modules>
 
-        <!-- For some reason there seems to be an issue compiling the soapHttpValidator module with JDK 1.7, which is required by the editor module -->
+        <!-- There is an issue with soapHttpValidator unit tests and JDK 1.7 -->
 
         <module>repository-tools</module>
         <module>tk-core</module>

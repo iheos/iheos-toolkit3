@@ -1,17 +1,9 @@
 package gov.nist.toolkit.xdstest2logging;
 
 
-
-import gov.nist.toolkit.xdstest2logging.LogFileContent;
-import gov.nist.toolkit.xdstest2logging.Report;
-import gov.nist.toolkit.xdstest2logging.SectionGoals;
 import gov.nist.toolkit.xdsexception.XdsInternalException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SectionLogMap {
 	// section name => log

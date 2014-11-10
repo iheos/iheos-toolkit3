@@ -32,6 +32,7 @@ import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder.Depth;
 import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse;
 import gov.nist.hit.ds.toolkit.installation.Installation;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import net.timewalker.ffmq3.FFMQConstants;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -457,27 +458,37 @@ public class PresentationData implements IsSerializable, Serializable  {
 
 
 
-    public static String getJmsHostAddress() {
+    private static Map<String,String> getJmsConfig() {
+        Map<String,String> result =  new HashMap<String,String>();
 
-        String localJms = "tcp://localhost:10002";
+        String jmsAddress = "tcp://localhost:10002";
+        String jmsDebug = "false";
         try {
             Repository repos = getRepositoryByName(Access.RW_EXTERNAL, new SimpleId("transactions-cap"));
 
             String jmsHostAddress = repos.getProperties().getProperty("jmsHostAddress");
             if (jmsHostAddress!=null && !"".equals(jmsHostAddress)) {
-                return jmsHostAddress;
-            } else {
-                return localJms;
+                jmsAddress = jmsHostAddress;
             }
+
+            jmsDebug = repos.getProperties().getProperty("jmsDebug");
 
         } catch (RepositoryException re) {
             // Ok, default to local JMS port
             logger.fine(re.toString());
         }
 
-        return localJms;
+        result.put("jmsHostAddress", jmsAddress);
+        result.put("jmsDebug",jmsDebug);
+
+        return result;
 
     }
+
+    public static String getJmsHostAddress() {
+       return getJmsConfig().get("jmsHostAddress");
+    }
+
 
 
     /**
@@ -491,7 +502,6 @@ public class PresentationData implements IsSerializable, Serializable  {
         //ArrayList<AssetNode> result = new ArrayList<AssetNode>();
         Map<String,AssetNode> result =  new HashMap<String,AssetNode>();
 
-        String jmsHostAddress = getJmsHostAddress();
         MessageConsumer consumer = null;
         javax.jms.QueueSession session = null;
         javax.jms.QueueConnection connection = null;
@@ -506,21 +516,21 @@ public class PresentationData implements IsSerializable, Serializable  {
         String proxyDetail = null;
         String fromIp = null;
         String toIp = null;
+        Map<String,String> jmsConfig = getJmsConfig();
+        boolean jmsDebug = Boolean.parseBoolean(jmsConfig.get("jmsDebug"));
 
         try {
 
             Hashtable<String,String> env = new Hashtable<String, String>();
             env.put(Context.INITIAL_CONTEXT_FACTORY, FFMQConstants.JNDI_CONTEXT_FACTORY);
 //            env.put(Context.PROVIDER_URL, "tcp://localhost:10002");
-            env.put(Context.PROVIDER_URL, jmsHostAddress);
+            env.put(Context.PROVIDER_URL, jmsConfig.get("jmsHostAddress"));
             Context context = new InitialContext(env);
 
             // Lookup a connection factory in the context
             javax.jms.QueueConnectionFactory factory = (QueueConnectionFactory) context.lookup(FFMQConstants.JNDI_QUEUE_CONNECTION_FACTORY_NAME);
 
-
             connection = factory.createQueueConnection();
-
 
             session = connection.createQueueSession(false,
                     javax.jms.Session.AUTO_ACKNOWLEDGE);
@@ -555,24 +565,41 @@ public class PresentationData implements IsSerializable, Serializable  {
 
 
         } catch (Exception ex) { // TODO: look into thrown an exception to avoid too many calls when broker is offline
-            logger.finest(ex.toString());
-            // ex.printStackTrace();
+
+            if (jmsDebug) {
+                logger.info(ex.toString());
+                ex.printStackTrace();
+            } else {
+                logger.finest(ex.toString());
+            }
             throw new RepositoryException(ex.toString());
         } finally {
             if (consumer!=null) {
                 try {
                     consumer.close();
-                } catch (Exception ex) {}
+                } catch (Exception ex) {
+                    if (jmsDebug) {
+                        logger.info(ex.toString());
+                    }
+                }
             }
             if (session!=null) {
                 try {
                     session.close();
-                } catch (Exception ex) {}
+                } catch (Exception ex) {
+                    if (jmsDebug) {
+                        logger.info(ex.toString());
+                    }
+                }
             }
             if (connection!=null) {
                 try {
                     connection.close();
-                } catch (Exception ex) {}
+                } catch (Exception ex) {
+                    if (jmsDebug) {
+                        logger.info(ex.toString());
+                    }
+                }
             }
 
         }
@@ -689,8 +716,8 @@ public class PresentationData implements IsSerializable, Serializable  {
             List<AssetNode> children = AssetHelper.getImmediateChildren(transaction); // Input/output level children = // Request/response
             logger.info("after getIm-children");
 
-            String messageHeader = null;
-            byte[] messageBody = null;
+            String messageHeader = "";
+            byte[] messageBody = "".getBytes();
 
             logger.info("got children: " + ((children==null)?"null":children.size()));
 
@@ -703,10 +730,12 @@ public class PresentationData implements IsSerializable, Serializable  {
 [ERROR] INFO: artifact=Request type=reqType
 */
                     AssetNode an = ContentHelper.getContent(artifact);
-                    if (artifact.getType().endsWith("HdrType")) {
-                        messageHeader =  an.getTxtContent();
-                    } else if (artifact.getType().endsWith("BodyType")) {
-                        messageBody = an.getRawContent();
+                    if (an!=null) {
+                        if (artifact.getType().endsWith("HdrType") && an.getTxtContent()!=null) {
+                            messageHeader = an.getTxtContent();
+                        } else if (artifact.getType().endsWith("BodyType") && an.getRawContent()!=null) {
+                            messageBody = an.getRawContent();
+                        }
                     }
                 }
                 logger.info("hdr sz: " + messageHeader.length() + " body sz: " + ((messageBody==null)?"null": messageBody.length));
@@ -716,7 +745,8 @@ public class PresentationData implements IsSerializable, Serializable  {
                     valMessageResponse = validatorFactory.getMessageValidator().validateMessage(validatorName,messageHeader,messageBody);
 
                 } catch (Throwable t) {
-                    valExceptionStr = t.toString();
+//                    valExceptionStr = t.toString();
+                    valExceptionStr = ExceptionUtil.exception_details(t);
                     logger.warning(valExceptionStr);
                 }
                 AssetNode assetNode = new AssetNode();
@@ -726,7 +756,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                     assetNode.setAssetId(valMessageResponse.getEventAssetId().id);
                     assetNode.getExtendedProps().put("result", valMessageResponse.getValidationStatus().name());
                 } else {
-                    assetNode.getExtendedProps().put("result", "No Result");
+                    assetNode.getExtendedProps().put("result", "Exception");
                     assetNode.getExtendedProps().put("validationDetail", valExceptionStr);
                 }
 
