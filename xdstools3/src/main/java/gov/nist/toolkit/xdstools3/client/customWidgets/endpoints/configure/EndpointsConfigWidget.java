@@ -27,16 +27,6 @@ public class EndpointsConfigWidget extends HLayout {
 
     public ListGrid createEndpointGrid() {
 
-        // Load all endpoints
-//        List<String> results = new ArrayList<String>();
-//        File[] files = new File("/path/to/the/directory").listFiles();
-//
-//        for (File file : files) {
-//            if (file.isFile()) {
-//                results.add(file.getName());
-//            }
-//        }
-
         // Create the ListGrid linked to the DataSource
         final ListGrid grid = new ListGrid(){
 
@@ -70,7 +60,9 @@ public class EndpointsConfigWidget extends HLayout {
                 saveButton.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
                         nestedGrid.saveAllEdits();
-                        nestedGrid.exportAsXML();
+                        //nestedGrid.exportAsXML();
+                        //nestedGrid.updateData(createRecord("A", "Edited Value", "Edited Value"));
+
                     }
                 });
                 hLayout.addMember(saveButton);
@@ -159,6 +151,14 @@ public class EndpointsConfigWidget extends HLayout {
 //        });
 
         return grid;
+    }
+
+    public ListGridRecord createRecord(String countryCode, String countryName, String capital) {
+        ListGridRecord record = new ListGridRecord();
+        record.setAttribute("countryName", countryName);
+        record.setAttribute("countryCode", countryCode);
+        record.setAttribute("capital", capital);
+        return record;
     }
 
 

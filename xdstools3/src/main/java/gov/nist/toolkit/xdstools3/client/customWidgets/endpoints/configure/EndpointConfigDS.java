@@ -41,9 +41,6 @@ public class EndpointConfigDS extends RestDataSource {
 
 
         // Define REST URLs - not used for now
-		//setFetchDataURL("rest/endpointconfig/read");
-		//setAddDataURL("rest/endpointconfig/add");
-		//setUpdateDataURL("rest/endpointconfig/update");
-		//setRemoveDataURL("rest/endpointconfig/remove");
+        setDataURL("rest/endpointconfig");
 	}
 }

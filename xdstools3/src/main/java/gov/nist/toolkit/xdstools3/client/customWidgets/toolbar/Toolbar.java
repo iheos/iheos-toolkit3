@@ -36,7 +36,7 @@ public class Toolbar extends RibbonBar {
         setAlign(Alignment.CENTER);
 
         // Menu group: Session
-        RibbonGroup sessionGroup = createRibbonGroup("Session");
+        GenericRibbonGroup sessionGroup = createRibbonGroup("Session");
 
         envListBox = new SelectItem();
         envListBox.setShowTitle(false);
@@ -162,6 +162,7 @@ public class Toolbar extends RibbonBar {
 
         // Add menu groups to menu bar
         this.addMembers(sessionGroup, endpointButton, adminButton);
+        this.setStyleName("toolbar");
         draw();
     }
 
@@ -223,8 +224,8 @@ public class Toolbar extends RibbonBar {
         return button;
     }
 
-    private RibbonGroup createRibbonGroup(String title){
-        RibbonGroup group = new RibbonGroup();
+    private GenericRibbonGroup createRibbonGroup(String title){
+        GenericRibbonGroup group = new GenericRibbonGroup();
         group.setTitle(title);
         group.setNumRows(1);
         return group;
