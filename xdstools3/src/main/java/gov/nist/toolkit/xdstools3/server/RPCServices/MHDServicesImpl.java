@@ -16,28 +16,45 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 
-
+/**
+ * MHD RPC Services Implementation inspired from v2 ToolkitServicesImpl.
+ * TODO Some element will need to be review when integrating the rest of v2 elements
+ */
 @SuppressWarnings("serial")
 public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServices {
-
     static Logger logger = Logger.getLogger(PreConnectathonTabServiceImpl.class);
 
     // Used only for non-servlet use (Dashboard is good example)
     static public final String sessionVarName = "MySession";
-    String sessionID = null;
-    ServletContext context = null;
+    private String sessionID = null;
+    private Session standAloneSession = null;  // needed for standalone use not part of servlet
+
+    private ServletContext context = null;
+
     public SiteServiceManager siteServiceManager;
-    Session standAloneSession = null;  // needed for standalone use not part of servlet
 
-
+    /**
+     * Default constructor
+     */
     public MHDServicesImpl() {
         siteServiceManager = SiteServiceManager.getSiteServiceManager();   // One copy shared between sessions
     }
 
+    /**
+     * MHD Message Validation method
+     *
+     * @param messageType Type of MHD message
+     *
+     * @return validation result
+     */
     public String validateMHDMessage(String messageType){
         return Caller.getInstance().validateMHDMessage(messageType,new String(getSession().getlastUpload()).trim());
     }
 
+    /**
+     * Method that return the SessionId (copied from v2)
+     * @return Session Id
+     */
     public String getSessionId() {
         if (sessionID != null)
             return sessionID;
@@ -45,21 +62,21 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
         HttpSession hsession = request.getSession();
         return hsession.getId();
     }
-    // This exception is passable to the GUI.  The server side exception
-    // is NoSessionException
-    public Session session() throws NoServletSessionException {
-        Session s = getSession();
-        if (s == null)
-            throw new NoServletSessionException("");
-        return s;
-    }
 
-
+    /**
+     * Method that return the session using rpc servlet
+     * @return session
+     */
     public Session getSession() {
         HttpServletRequest request = this.getThreadLocalRequest();
         return getSession(request);
     }
 
+    /**
+     * Method that return the session using servlet request (copied from v2)
+     * @param request
+     * @return
+     */
     public Session getSession(HttpServletRequest request) {
         if (request == null && standAloneSession != null) {
             // not running interactively - maybe part of Dashboard
@@ -127,6 +144,12 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
         return s;
     }
 
+    // copied from v2
+
+    /**
+     * Method that sets the servlet context
+     * @return
+     */
     public ServletContext servletContext() {
         // this gets called from the initialization section of SimServlet
         // for access to properties.  This code is not expected to work correct.

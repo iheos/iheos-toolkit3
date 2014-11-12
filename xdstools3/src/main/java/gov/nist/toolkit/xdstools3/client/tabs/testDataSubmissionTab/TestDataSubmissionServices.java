@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import java.util.Map;
 
 /**
- * Created by onh2 on 11/4/2014.
+ * RPC Services client interface to call upon test data submission distant methods
  */
 @RemoteServiceRelativePath("test-data-submission")
 public interface TestDataSubmissionServices extends  RemoteService{

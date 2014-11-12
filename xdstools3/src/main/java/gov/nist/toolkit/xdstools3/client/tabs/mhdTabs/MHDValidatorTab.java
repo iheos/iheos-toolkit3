@@ -24,33 +24,47 @@ import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
+/**
+ * This class is the UI implementation for MHD Validation tab.
+ */
 public class MHDValidatorTab extends GenericCloseableTab {
+    private Logger logger=Logger.getLogger(MHDValidatorTab.class.getName());
+    // RPC services declaration
     private final static MHDTabsServicesAsync mhdToolkitService = GWT
             .create(MHDTabsServices.class);
 
+    // tab's title and heander
     private static String header="MHD Validator";
 
-    private String selectedMessageType;
-    private Button runBtn;
-//    private DynamicForm uploadForm;
-
-    private Logger logger=Logger.getLogger(MHDValidatorTab.class.getName());
-    private SelectItem messageTypeSelect;
-    private HTMLPane validationResultsPanel;
-    private FileUpload fileUploadItem;
-    private String uploadFilename;
+    // UI components
     private FormPanel uploadForm;
+    private SelectItem messageTypeSelect;
+    private FileUpload fileUploadItem;
+    private HTMLPane validationResultsPanel;
+    private Button runBtn;
 
+    // Variables
+    private String selectedMessageType;
+
+    /**
+     * Default constuctor
+     */
     public MHDValidatorTab() {
         super(header);
     }
 
+    /**
+     * Abstract method implementation that build the UI.
+     *
+     * @return tab UI as a Widget
+     */
     @Override
     protected Widget createContents() {
         VStack vStack=new VStack();
 
         DynamicForm form = new DynamicForm();
 
+        // Message type elements
         HeaderItem l1=new HeaderItem();
         l1.setDefaultValue("1. Select a message type");
         messageTypeSelect = new SelectItem();
@@ -61,6 +75,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         messageTypeSelect.setWidth(400);
         loadMessageTypesMap();
 
+        // Uploader elements
         HeaderItem l2=new HeaderItem();
         l2.setDefaultValue("2. Upload file to validate");
         uploadForm = new FormPanel();
@@ -70,13 +85,14 @@ public class MHDValidatorTab extends GenericCloseableTab {
         fileUploadItem = new FileUpload();
         fileUploadItem.setTitle("File to validate");
         fileUploadItem.setName("upload1FormElement");
-        fileUploadItem.setWidth("400");
-//        fileUploadItem.setWidth(400);
+        fileUploadItem.setWidth("400px");
         uploadForm.add(fileUploadItem);
 
+        // Run button
         runBtn = new Button("Run");
         runBtn.disable();
 
+        // Validation result elements
         validationResultsPanel = new HTMLPane();
 
         form.setFields(l1, messageTypeSelect, l2);
@@ -90,11 +106,18 @@ public class MHDValidatorTab extends GenericCloseableTab {
         return vStack;
     }
 
+    /**
+     * Abstract method implementation to set the tab name
+     * @return
+     */
     @Override
     protected String setTabName() {
         return TabNamesUtil.getInstance().getMHDValidatorTabCode();
     }
 
+    /**
+     * Method that binds the tab widgets together and their functionality
+     */
     private void bindUI(){
         messageTypeSelect.addChangeHandler(new ChangeHandler() {
             @Override
@@ -117,20 +140,26 @@ public class MHDValidatorTab extends GenericCloseableTab {
                 }
             }
         });
+        // Click handler on run button
         runBtn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
+                // submit the form information to the UploadServlet (for file upload)
                 uploadForm.submit();
             }
         });
         uploadForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
             @Override
             public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
+                // call for validation
                 validate();
             }
         });
     }
 
+    /**
+     * Method that calls RPC method for validation
+     */
     private void validate() {
         mhdToolkitService.validateMHDMessage(selectedMessageType, new AsyncCallback<String>() {
             @Override
@@ -145,6 +174,9 @@ public class MHDValidatorTab extends GenericCloseableTab {
         });
     }
 
+    /**
+     * Method loading possible values for message type.
+     */
     private void loadMessageTypesMap() {
         LinkedHashMap<String,String> map=new LinkedHashMap<String,String>();
         map.put("sbmt", "Submit");
@@ -152,6 +184,11 @@ public class MHDValidatorTab extends GenericCloseableTab {
         messageTypeSelect.setValueMap(map);
     }
 
+    /**
+     * Method to display validation results
+     *
+     * @param result Validation result from RPC validation
+     */
     private void displayValidationResults(String result) {
         validationResultsPanel.setContents(result);
         if (!validationResultsPanel.isVisible()){
