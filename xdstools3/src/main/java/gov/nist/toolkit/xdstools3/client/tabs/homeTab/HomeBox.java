@@ -31,6 +31,9 @@ public class HomeBox extends VStack {
      */
     public void addItem(String item_title){
         HomeLinkButton button = new HomeLinkButton(item_title);
+        button.setBaseStyle("home-button");
+        button.setTitleStyle("home-button-title");
+//        button.setItemBaseStyle("home-button");
         addMember(button);
     }
 
