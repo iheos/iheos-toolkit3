@@ -291,7 +291,35 @@ nav ul ul ul {
     position: absolute; left: 100%; top:0;
 }
 
+.toolbar {
+    background: #f4f4ff; /* Old browsers */
+    background: -moz-linear-gradient(top,  #fbf9ff 0%, #f2f7ff 55%, #e5e8ff 100%); /* FF3.6   */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fbf9ff), color-stop(55%,#f2f7ff), color-stop(100%,#e5e8ff)); /* Chrome,Safari4   */
+    background: -webkit-linear-gradient(top,  #fbf9ff 0%,#f2f7ff 55%,#e5e8ff 100%); /* Chrome10  ,Safari5.1   */
+    background: -o-linear-gradient(top,  #fbf9ff 0%,#f2f7ff 55%,#e5e8ff 100%); /* Opera 11.10   */
+    background: -ms-linear-gradient(top,  #fbf9ff 0%,#f2f7ff 55%,#e5e8ff 100%); /* IE10   */
+    background: linear-gradient(to bottom,  #fbf9ff 0%,#f2f7ff 55%,#e5e8ff 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbf9ff', endColorstr='#e5e8ff',GradientType=0 ); /* IE6-9 */
+    border-radius: 5px;
+    /*border: 1px solid #e5e8ff;*/
+    box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
+}
 
+/* Style of a RibbonGroup object inside the Toolbar */
+.toolbarGroup {
+    background: #f4f4ff; /* Old browsers */
+    background: -moz-linear-gradient(top,  #fbf9ff 0%, #f2f7ff 55%, #e5e8ff 100%); /* FF3.6   */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fbf9ff), color-stop(55%,#f2f7ff), color-stop(100%,#e5e8ff)); /* Chrome,Safari4   */
+    background: -webkit-linear-gradient(top,  #fbf9ff 0%,#f2f7ff 55%,#e5e8ff 100%); /* Chrome10  ,Safari5.1   */
+    background: -o-linear-gradient(top,  #fbf9ff 0%,#f2f7ff 55%,#e5e8ff 100%); /* Opera 11.10   */
+    background: -ms-linear-gradient(top,  #fbf9ff 0%,#f2f7ff 55%,#e5e8ff 100%); /* IE10   */
+    background: linear-gradient(to bottom,  #fbf9ff 0%,#f2f7ff 55%,#e5e8ff 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbf9ff', endColorstr='#e5e8ff',GradientType=0 ); /* IE6-9 */
+    border-radius: 5px;
+}
+.toolbarGroupTitle {
+    background: #fbf9ff; /* Old browsers */
+}
 
 /* ----------- GWT toolbar ----------- */
 
