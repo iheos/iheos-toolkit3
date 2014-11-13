@@ -27,7 +27,6 @@ public class HomeTab extends GenericTab {
         queriesAndRetrieves.addItem("Get Folders");
         queriesAndRetrieves.addItem("Get Folder and Contents");
         queriesAndRetrieves.addItem("Get Submission Set and Contents");
-        queriesAndRetrieves.setStyleName("home-box");
 
         HomeBox tools = new HomeBox("Tools");
         tools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
@@ -35,22 +34,18 @@ public class HomeTab extends GenericTab {
         tools.addItem("Document Metadata Editor");
         tools.addItem("Pre-Connectathon Tests");
         tools.addItem("v2 Tab Example");
-        tools.setStyleName("home-box");
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
         sendTestData.addItem("Submit Test Data");
-        sendTestData.setStyleName("home-box");
 
         HomeBox simulators = new HomeBox("Simulators");
         simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");
-        simulators.setStyleName("home-box");
 
         HomeBox mhdTools = new HomeBox("MHD Tools");
         mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         // Mhd Validations
         mhdTools.addItem("MHD Validator");
-        mhdTools.addStyleName("home-box");
 
         HomeBox connectathonTools = new HomeBox("Connectathon Tools");
         connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
@@ -62,19 +57,16 @@ public class HomeTab extends GenericTab {
         connectathonTools.addItem("XDS.b Registry Folder Handling");
         // Repository Validations
         connectathonTools.addItem("XDS.b Repository Do This First");
-        connectathonTools.setStyleName("home-box");
 
         VStack hstack1 = new VStack();
         VStack hstack2 = new VStack();
-        VStack hStack3 = new VStack();
-        hstack1.addMembers(queriesAndRetrieves/*, new LayoutSpacer()*/,sendTestData,mhdTools);
-        hstack2.addMembers(tools/*, new LayoutSpacer()*/, simulators,connectathonTools);
-//        hStack3.addMembers(/*, new LayoutSpacer()*/,connectathonTools);
+        hstack1.addMembers(queriesAndRetrieves,sendTestData,mhdTools);
+        hstack2.addMembers(tools, simulators,connectathonTools);
 
         HStack vstack = new HStack();
         LayoutSpacer spacer = new LayoutSpacer();
         spacer.setHeight(30);
-        vstack.addMembers(hstack1, /*spacer,*/ hstack2/*,spacer*//*,hStack3*/);
+        vstack.addMembers(hstack1, hstack2);
         return vstack;
     }
 

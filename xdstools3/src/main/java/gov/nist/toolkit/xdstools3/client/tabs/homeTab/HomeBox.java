@@ -12,6 +12,7 @@ public class HomeBox extends VStack {
 
     public HomeBox(String _title){
         super();
+        this.setStyleName("home-box");
         title = Formatter.createHomeSubtitle(_title);
         addMember(title);
     }
