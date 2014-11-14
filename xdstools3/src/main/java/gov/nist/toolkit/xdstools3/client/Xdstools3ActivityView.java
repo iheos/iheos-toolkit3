@@ -22,10 +22,7 @@ import gov.nist.toolkit.xdstools2.client.tabs.QueryState;
 import gov.nist.toolkit.xdstools2.client.tabs.TestSessionState;
 import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseAllTabsEvent;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseTabEvent;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.*;
 import gov.nist.toolkit.xdstools3.client.tabs.EndpointConfigTab;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
@@ -122,6 +119,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                 Xdstools3GinInjector.injector.getPlaceController().goTo(new TabPlace(tabName));
             }
         });
+        //---------- Close Tabs from context menu ---------
         //------ TODO Could be move to GenericTabSet ------
         Util.EVENT_BUS.addHandler(CloseTabEvent.TYPE,new CloseTabEvent.CloseTabEventHandler() {
             @Override
@@ -132,6 +130,24 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                     public void execute(Boolean response) {
                         if(response != null && response){
                             topTabSet.removeTab(t);
+                        }
+                    }
+                });
+            }
+        });
+        Util.EVENT_BUS.addHandler(CloseOtherTabsEvent.TYPE,new CloseOtherTabsEvent.CloseOtherTabsEventHandler() {
+            @Override
+            public void onCloseOtherTabsEvent(CloseOtherTabsEvent event) {
+                final Tab tab=event.getTab();
+                SC.confirm("Are you sure you want to close all tab except from: '" + tab.getTitle() + "'?", new BooleanCallback() {
+                    @Override
+                    public void execute(Boolean response) {
+                        if(response != null && response){
+                            for (Tab t:topTabSet.getTabs()){
+                                if (!(t.getTitle().equals("Home") || t.getTitle().equals(tab.getTitle()))){
+                                    topTabSet.removeTab(t);
+                                }
+                            }
                         }
                     }
                 });
@@ -350,8 +366,8 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                 "</ul>" +
                 "</li>" +
                 "<div style='float:right'>" +
-                "<li><a href='#'><i class=\"fa fa-download\"></i> Download</a></li>" +
-                "<li><a href='#'><i class=\"fa fa-question-circle\"></i> Help</a></li>" +
+                "<li><a href='#'><img src='/images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
+                "<li><a href='#'><img src='/images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
                 "</div>" +
                 "<ul>" +
                 "</div>" +

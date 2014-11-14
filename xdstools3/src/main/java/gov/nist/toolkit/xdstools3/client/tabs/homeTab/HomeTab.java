@@ -15,7 +15,7 @@ public class HomeTab extends GenericTab {
     }
 
     @Override
-    protected VStack createContents(){
+    protected HStack createContents(){
         HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
         queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
         queriesAndRetrieves.addItem("Find Documents");
@@ -33,11 +33,11 @@ public class HomeTab extends GenericTab {
         tools.addItem("Message Validator");
         tools.addItem("Document Metadata Editor");
         tools.addItem("Pre-Connectathon Tests");
-        tools.addItem("Submit Test Data");
         tools.addItem("v2 Tab Example");
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
+        sendTestData.addItem("Submit Test Data");
 
         HomeBox simulators = new HomeBox("Simulators");
         simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");
@@ -58,17 +58,15 @@ public class HomeTab extends GenericTab {
         // Repository Validations
         connectathonTools.addItem("XDS.b Repository Do This First");
 
-        HStack hstack1 = new HStack();
-        HStack hstack2 = new HStack();
-        HStack hStack3 = new HStack();
-        hstack1.addMembers(queriesAndRetrieves, new LayoutSpacer(), tools);
-        hstack2.addMembers(sendTestData, new LayoutSpacer(), simulators);
-        hStack3.addMembers(mhdTools, new LayoutSpacer(),connectathonTools);
+        VStack hstack1 = new VStack();
+        VStack hstack2 = new VStack();
+        hstack1.addMembers(queriesAndRetrieves,sendTestData,mhdTools);
+        hstack2.addMembers(tools, simulators,connectathonTools);
 
-        VStack vstack = new VStack();
+        HStack vstack = new HStack();
         LayoutSpacer spacer = new LayoutSpacer();
         spacer.setHeight(30);
-        vstack.addMembers(hstack1, spacer, hstack2,spacer,hStack3);
+        vstack.addMembers(hstack1, hstack2);
         return vstack;
     }
 

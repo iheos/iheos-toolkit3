@@ -24,7 +24,7 @@ public class v2TabExample extends Tab {
 
     public v2TabExample(TabContainer _tabContainer) {
         super(header);
-
+        this.setCanClose(true);
         tabContainer = _tabContainer;
 
         if (tabContainer == null) System.out.println("tab container is null in Emptytab class");
