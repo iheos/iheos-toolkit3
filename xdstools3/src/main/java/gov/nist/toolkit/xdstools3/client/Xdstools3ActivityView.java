@@ -62,7 +62,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
     public void run() {
         // Toolbar
         Toolbar configBar = new Toolbar();
-        configBar.addStyleName("app-padding");
+        configBar.setStyleName("app-padding");
 
 
         // Tabs
@@ -94,7 +94,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
 
 
         // Smartgwt Console - useful for development, mainly tracking RPC calls
-        // SC.showConsole();
+        //SC.showConsole();
 
         bindUI();
     }

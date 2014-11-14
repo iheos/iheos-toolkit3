@@ -12,57 +12,69 @@ import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
+import java.util.HashMap;
+
 /**
+ * Creates grids to display and edit the Sites.
+ * @see com.smartgwt.client.widgets.grid.ListGrid
+ * @see SmartGWT nested ListGrid mechanism
+ * @see gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointsConfigWidget
+ *
  *
  * Created by dazais on 5/21/2014.
  */
+@SuppressWarnings("JavadocReference")
 public class EndpointsConfigWidget extends HLayout {
     private ListGrid endpointGrid;
-    private boolean endpointValueSelected = false;
 
     public EndpointsConfigWidget() {
         endpointGrid = createEndpointGrid();
         addMember(endpointGrid);
     }
 
+    //TODO: Save to file, Delete
     public ListGrid createEndpointGrid() {
 
         // Create the ListGrid linked to the DataSource
         final ListGrid grid = new ListGrid(){
 
-            //TODO may need to call super for default behavior. This should move to the nested grid.
-            @Override
-            public boolean canEditCell(int rowNum, int colNum) {
+            //TODO not sure what this is
+            //@Override
+/*            public boolean canEditCell(int rowNum, int colNum) {
                 ListGridRecord record = this.getRecord(rowNum);
                 String colName = this.getFieldName(colNum);
 
                 if (colName == "Non-TLS Endpoints" && (record.getAttribute("Transaction Type") == "repositoryUniqueID")
                     || (record.getAttribute("Transaction Type") == "homeCommunityId")) return false;
                 else return true;
-            }
+            }*/
 
             @Override
             protected Canvas getExpansionComponent(final ListGridRecord record) {
 
+                // create the nested grids
                 final TransactionGrid nestedGrid = new TransactionGrid();
-                nestedGrid.fetchRelatedData(record, EndpointConfigDSNew.getInstance());
+                nestedGrid.fetchRelatedData(record, EndpointConfigDS.getInstance());
 
 
+                // Layout
                 VLayout layout = new VLayout(5);
                 layout.setPadding(5);
                 layout.addMember(nestedGrid);
+                layout.setAlign(Alignment.CENTER);
 
                 HLayout hLayout = new HLayout(10);
                 hLayout.setAlign(Alignment.CENTER);
 
+
+                // Buttons
                 IButton saveButton = new IButton("Save");
                 saveButton.setTop(250);
                 saveButton.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
+                        // FIXME this dooesnt work
                         nestedGrid.saveAllEdits();
                         //nestedGrid.exportAsXML();
-                        //nestedGrid.updateData(createRecord("A", "Edited Value", "Edited Value"));
-
                     }
                 });
                 hLayout.addMember(saveButton);
@@ -70,7 +82,11 @@ public class EndpointsConfigWidget extends HLayout {
                 IButton newButton = new IButton("Add");
                 newButton.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-                        nestedGrid.startEditingNew();
+                        String currentSiteName = endpointGrid.getRecord(endpointGrid.getFocusRow()).getAttribute("endpointName");
+                       // nestedGrid.addData(createListGridRecord(currentSiteName, "actorCode", "actorType", "reg.b", "transactionName", "tls", "notls", "repositoryUniqueID"));
+                        HashMap<String, String> map = new HashMap<String, String>();
+                        map.put("siteName", currentSiteName);
+                        nestedGrid.startEditingNew(map);
                     }
                 });
                 hLayout.addMember(newButton);
@@ -98,69 +114,23 @@ public class EndpointsConfigWidget extends HLayout {
             }
         };
 
+        // More formatting
         grid.setHeight100();
-        grid.setWidth(800);
+        grid.setMinWidth(800);
+        grid.setWidth100();
         grid.setAlternateRecordStyles(true);
-        grid.setDataSource(EndpointConfigDSNew.getInstance());
+        grid.setDataSource(EndpointConfigDS.getInstance());
         grid.setAutoFetchData(true);
-        grid.setDrawAheadRatio(4);
         grid.setCanExpandRecords(true);
         grid.setCanExpandMultipleRecords(true);
-       //  grid.setExpansionMode(ExpansionMode.RELATED);
-      //  grid.setDetailDS(TransactionDS.getInstance());
         grid.setCanEdit(true);
         grid.setModalEditing(true);
-        grid.setEditEvent(ListGridEditEvent.CLICK);
+        grid.setEditEvent(ListGridEditEvent.DOUBLECLICK);
         grid.setListEndEditAction(RowEndEditAction.NEXT);
         grid.setAutoSaveEdits(false);
         draw();
 
-
-
-
-//
-//        // Group by type of transaction
-//        LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
-//        map.put("transaction", "Transaction Type");
-//        grid.getField("Transaction Type").setGroupValueFunction(new GroupValueFunction() {
-//            public Object getGroupValue(Object value, ListGridRecord record, ListGridField field, String fieldName, ListGrid grid) {
-//                String transaction = (String) value;
-//                    if ((transaction.equals("Patient Identity Feed")) || (transaction.equals("Register")) || (transaction.equals("Stored Query"))
-//                            || (transaction.equals("Update")) || (transaction.equals("Multi-Patient Query"))) {
-//                        return "Document Registry";
-//                    } else {
-//                        return ""; // TODO more to add
-//                    }
-//            }
-//        });
-//        grid.getField("transaction.name").setGroupingMode("transaction");
-//
-
-//       ListGridField transactionTypeField = new ListGridField("Transaction Type");
-//        transactionTypeField.setWidth(150);
-//        grid.setFields(transactionTypeField);
-
-//        grid.addRecordClickHandler(new RecordClickHandler() {
-//            @Override
-//            public void onRecordClick(RecordClickEvent event) {
-//                ListGridRecord record = grid.getSelectedRecord();
-//                if (record != null) {
-//                    grid.fetchRelatedData(record, ItemSupplyDS.getInstance());
-//                }
-//            }
-//        });
-
         return grid;
     }
-
-    public ListGridRecord createRecord(String countryCode, String countryName, String capital) {
-        ListGridRecord record = new ListGridRecord();
-        record.setAttribute("countryName", countryName);
-        record.setAttribute("countryCode", countryCode);
-        record.setAttribute("capital", capital);
-        return record;
-    }
-
-
 
 }

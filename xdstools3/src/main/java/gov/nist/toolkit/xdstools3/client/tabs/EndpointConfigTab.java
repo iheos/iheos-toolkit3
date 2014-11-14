@@ -12,12 +12,6 @@ public class EndpointConfigTab extends GenericCloseableTab {
 	}
 
 	protected EndpointsConfigWidget createContents(){
-        // Check if logged in or not and display View or Edit version of the widget accordingly
-//        if (!Util.getInstance().getLoggedAsAdminStatus()) {
-//            // ask user to log in
-//            LoginDialogWidget dialog = new LoginDialogWidget("ENDPOINTS");
-//            dialog.show();
-//        }
         return new EndpointsConfigWidget();
 	}
 
