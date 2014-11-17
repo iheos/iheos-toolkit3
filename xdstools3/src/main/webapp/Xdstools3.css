@@ -394,3 +394,7 @@ footer ul li a:visited{
 .home-buttonOver{
     font-weight:bold;
 }
+.icon-link{
+    border:none;
+    text-decoration: none;
+}

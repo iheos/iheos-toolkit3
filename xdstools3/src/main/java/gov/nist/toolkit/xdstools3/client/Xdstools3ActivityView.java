@@ -370,8 +370,8 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                 "</ul>" +
                 "</li>" +
                 "<div style='float:right'>" +
-                "<li><a href='#'><img src='/images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
-                "<li><a href='#'><img src='/images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
+                "<li><a href='#'><img class='icon-link' src='/images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
+                "<li><a href='#'><img class='icon-link' src='/images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
                 "</div>" +
                 "<ul>" +
                 "</div>" +
