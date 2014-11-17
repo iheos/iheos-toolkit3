@@ -1,14 +1,5 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
-import gov.nist.toolkit.http.client.HtmlMarkup;
-import gov.nist.toolkit.xdstools2.client.RegistryStatus;
-import gov.nist.toolkit.xdstools2.client.RepositoryStatus;
-import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
-import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
-
-import java.util.List;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -16,6 +7,15 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import gov.nist.toolkit.http.client.HtmlMarkup;
+import gov.nist.toolkit.xdstools2.client.RegistryStatus;
+import gov.nist.toolkit.xdstools2.client.RepositoryStatus;
+import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
+import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
+import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
+
+import java.util.List;
 
 public class DashboardTab  extends GenericQueryTab {
 	//	final protected ToolkitServiceAsync toolkitService = GWT
@@ -34,7 +34,7 @@ public class DashboardTab  extends GenericQueryTab {
 
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 
 
 		container.addTab(topPanel, "Dashboard", select);

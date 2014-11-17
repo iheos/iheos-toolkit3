@@ -113,8 +113,6 @@ public class NorthPanel extends ContentPanel {
 			@Override
 			public void onSelect(SelectEvent event) {
 				saveButton.enable();
-//                eventBus.fireEditNewEvent(new EditNewEvent());
-//				placeController.goTo(new EditorPlace());
             }
 
 		});
@@ -130,7 +128,7 @@ public class NorthPanel extends ContentPanel {
 
 	public void start() {
 		fileUploadMVP.init();
-		fileUploadMVP.start();
+//		fileUploadMVP.start();
 
 		bindUI();
 	}

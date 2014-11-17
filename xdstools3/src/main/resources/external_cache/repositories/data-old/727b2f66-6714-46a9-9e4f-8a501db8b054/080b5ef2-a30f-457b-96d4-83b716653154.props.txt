@@ -1,0 +1,9 @@
+#
+#Fri Aug 02 10:42:32 EDT 2013
+displayName=My Site
+createdDate=20130802104232
+modifiedDate=20130802104232
+type=site
+repository=727b2f66-6714-46a9-9e4f-8a501db8b054
+description=This is my site
+id=080b5ef2-a30f-457b-96d4-83b716653154

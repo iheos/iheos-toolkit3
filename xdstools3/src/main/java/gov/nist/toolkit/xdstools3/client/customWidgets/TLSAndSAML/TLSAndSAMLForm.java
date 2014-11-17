@@ -9,11 +9,24 @@ import com.smartgwt.client.widgets.form.fields.SpacerItem;
  */
 public class TLSAndSAMLForm extends DynamicForm {
 
+    private TLSCheckbox tls;
+    private SAMLComboBox saml;
+
     public TLSAndSAMLForm(){
-        TLSCheckbox tls = new TLSCheckbox(); tls.setEndRow(true);
-        SAMLComboBox saml = new SAMLComboBox(); saml.setEndRow(true);
+        tls = new TLSCheckbox();
+        tls.setEndRow(true);
+        saml = new SAMLComboBox();
+        saml.setEndRow(true);
         SpacerItem space = new SpacerItem();
         setFields(new FormItem[]{tls, space, saml});
         setCellPadding(10);
+    }
+
+    public boolean isTLSChecked(){
+        return tls.getValueAsBoolean();
+    }
+
+    public String getSAMLValue(){
+        return saml.getDisplayValue();
     }
 }

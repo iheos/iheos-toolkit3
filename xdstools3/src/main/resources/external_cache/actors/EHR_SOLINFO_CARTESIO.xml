@@ -1,0 +1,21 @@
+
+<site name="EHR_SOLINFO_CARTESIO">
+   <transaction name="ret.b" secure="0">http://solinfo2/your_url</transaction>
+   <transaction name="ret.b" secure="1">https://solinfo2:8080/your_url</transaction>
+   <transaction name="pr.b" secure="1">https://solinfo2:8080/your_url</transaction>
+   <transaction name="sq.b" secure="0">http://solinfo2/your_url</transaction>
+   <transaction name="ret.b" secure="1">https://solinfo2:8080/your_url</transaction>
+   <transaction name="r.b" secure="1">https://solinfo2:8080/your_url</transaction>
+   <transaction name="ret.b" secure="0">http://solinfo2/your_url</transaction>
+   <transaction name="sq.b" secure="1">https://solinfo2:8080/your_url</transaction>
+   <transaction name="pr.b" secure="0">http://solinfo2/your_url</transaction>
+   <transaction name="r.b" secure="0">http://solinfo2/your_url</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.122"
+         secure="0">http://solinfo2/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.122"
+         secure="1">https://solinfo2:8080/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.122"
+         secure="1">https://solinfo2:8080/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.122"
+         secure="0">http://solinfo2/your_url</repository>
+</site>

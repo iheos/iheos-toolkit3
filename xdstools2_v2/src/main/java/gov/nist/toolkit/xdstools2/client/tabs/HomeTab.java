@@ -1,25 +1,20 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.*;
 import gov.nist.toolkit.tk.client.PropertyNotFoundException;
 import gov.nist.toolkit.tk.client.TkProps;
 import gov.nist.toolkit.xdstools2.client.PasswordManagement;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.Xdstools2;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.inspector.HyperlinkFactory;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.tabs.directRegistrationTab.DirectRegistrationContentValidationTable;
 import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class HomeTab extends GenericQueryTab {
 	//	private static final String Container = null;
@@ -35,7 +30,7 @@ public class HomeTab extends GenericQueryTab {
 
 	public void onTabLoad(final Xdstools2 container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();	
+		topPanel = new TopWindowPanel();
 
 		select = true;
 		myContainer.addTab(topPanel, "Home", select );
@@ -56,7 +51,7 @@ public class HomeTab extends GenericQueryTab {
 		Hyperlink h = HyperlinkFactory.link("&nbsp;&nbsp;[about version]&nbsp;&nbsp;", new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
-				new PopupMessage(aboutMessage);
+				new PopupMessageV3(aboutMessage);
 			}
 
 		});
@@ -131,7 +126,7 @@ public class HomeTab extends GenericQueryTab {
 				}
 
 			} catch (Exception e) {
-				new PopupMessage(e.getClass().getName() + ": " + e.getMessage());
+				new PopupMessageV3(e.getClass().getName() + ": " + e.getMessage());
 			}
 		}
 
@@ -195,17 +190,17 @@ public class HomeTab extends GenericQueryTab {
 		try {
 			 cert = pubcertConfig.get("pubcert");
 		} catch (PropertyNotFoundException e) {
-			new PopupMessage("Configuration parameter direct.pubcert.pubcert cannot be loaded from tk_props.txt properties file located in the external cache");
+			new PopupMessageV3("Configuration parameter direct.pubcert.pubcert cannot be loaded from tk_props.txt properties file located in the external cache");
 		}
 		try {
 			trustanchor = pubcertConfig.get("trustanchor");
 		} catch (PropertyNotFoundException e) {
-			new PopupMessage("Configuration parameter direct.pubcert.trustanchor cannot be loaded from tk_props.txt properties file located in the external cache");
+			new PopupMessageV3("Configuration parameter direct.pubcert.trustanchor cannot be loaded from tk_props.txt properties file located in the external cache");
 		}
 		try {
 			invtrustrelanchor = pubcertConfig.get("invtrustrelanchor");
 		} catch (PropertyNotFoundException e) {
-			new PopupMessage("Configuration parameter direct.pubcert.invtrustrelanchor cannot be loaded from tk_props.txt properties file located in the external cache");
+			new PopupMessageV3("Configuration parameter direct.pubcert.invtrustrelanchor cannot be loaded from tk_props.txt properties file located in the external cache");
 		}
 		
 		topPanel.add(new HTML("<hr />"));
@@ -474,7 +469,7 @@ public class HomeTab extends GenericQueryTab {
 	AsyncCallback<String> getPasswordCallback = new AsyncCallback<String> () {
 
 		public void onFailure(Throwable caught) {
-			new PopupMessage("Call to retrieve admin password failed: " + caught.getMessage());
+			new PopupMessageV3("Call to retrieve admin password failed: " + caught.getMessage());
 		}
 
 		public void onSuccess(String result) {
@@ -497,7 +492,7 @@ public class HomeTab extends GenericQueryTab {
 
 			public void onFailure(Throwable caught) {
 				aboutMessage =  caught.getMessage();
-				new PopupMessage("Cannot load the implementation version - " +
+				new PopupMessageV3("Cannot load the implementation version - " +
 						" This is usually cased by an error in building the WAR file. " +
 						aboutMessage);
 			}

@@ -16,6 +16,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Parser class for loading possible coded values for CodedTerms and MimeType.
+ *
+ * <code>
+ *     // Sample to load the list of possible CodedTerms
+ *     PredefinedCodesParser.INSTANCE.getCodes(PredefinedCodes.XXXX); // PredefinedCodes.CLASS_CODES for instance
+ *     // Sample to load the list of possible Mime Types
+ *     PredefinedCodesParser.INSTANCE.getMimeTypes();
+ * </code>
+ *
+ * @see edu.tn.xds.metadata.editor.shared.model.XdsDocumentEntry
+ * @see edu.tn.xds.metadata.editor.shared.model.CodedTerm
+ */
 public enum PredefinedCodesParser {
     INSTANCE;
     @SuppressWarnings("GwtInconsistentSerializableClass")
@@ -35,6 +48,13 @@ public enum PredefinedCodesParser {
     @SuppressWarnings("GwtInconsistentSerializableClass")
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
+    /**
+     * Method that extracts and returns a list of possible CodedTerms from a server XML configuration file for Codes.
+     * @param predefinedCodes Type of CodedTerm requested
+     * @return list of possible CodedTerms for the type requested.
+     * @see edu.tn.xds.metadata.editor.shared.model.CodedTerm
+     * @see edu.tn.xds.metadata.editor.client.editor.widgets.PredefinedCodes
+     */
     public List<CodedTerm> getCodes(PredefinedCodes predefinedCodes) {
 
         if (predefinedCodes.equals(PredefinedCodes.CLASS_CODES)) {
@@ -76,6 +96,12 @@ public enum PredefinedCodesParser {
         return null;
     }
 
+    /**
+     * Method to parse a specific code node from xml configuration file for codes
+     * @param nodeName
+     * @return list of CodedTerm
+     * @see edu.tn.xds.metadata.editor.shared.model.CodedTerm
+     */
     private List<CodedTerm> parseNode(String nodeName) {
         int index = 0;
         List<CodedTerm> temp = new ArrayList<CodedTerm>();
@@ -103,6 +129,12 @@ public enum PredefinedCodesParser {
         return temp;
     }
 
+    /**
+     * Method to extract and return possible MimeTypes from a server configuration XML file.
+     *
+     * @return list of possible MimeTypes
+     * @see edu.tn.xds.metadata.editor.shared.model.String256
+     */
     public List<String256> getMimeTypes() {
         if (mimeTypes.size() == 0) {
             int index = 0;
@@ -126,9 +158,14 @@ public enum PredefinedCodesParser {
         return mimeTypes;
     }
 
+    /**
+     * Possible nodes codes enumerated class for parser
+     */
     private static enum ConfigCodeNodes {
         classCode, formatCode, healthcareFacilityTypeCode, practiceSettingCode, typeCode, confidentialityCode, eventCodeList, mimeType;
-
+        /**
+         * Possible attributes codes enumerated class for parser
+         */
         private static enum CodeAttributes {
             name, code, display, codingScheme;
         }

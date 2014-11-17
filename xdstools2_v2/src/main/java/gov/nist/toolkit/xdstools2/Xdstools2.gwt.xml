@@ -7,6 +7,12 @@
     <!-- GWT theme                                                  -->
     <inherits name='com.google.gwt.user.theme.standard.Standard'/>
 
+    <!-- Inherit SmartGWT                                            -->
+    <inherits name="com.smartgwt.SmartGwt"/>
+    <inherits name="com.smartgwt.tools.SmartGwtTools"/>
+    <inherits name="com.smartgwt.SmartGwtNoTheme"/>
+    <inherits name="com.smartclient.theme.enterprise.Enterprise"/>
+
     <!-- Inherit local modules                                      -->
 
     <inherits name="gov.nist.toolkit.tk.tk"/>

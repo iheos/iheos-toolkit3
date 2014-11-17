@@ -1,10 +1,9 @@
 package gov.nist.toolkit.xdstools2.client.tabs.testRunnerTab;
 
 import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
-
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TestRunnerTabController extends GenericQueryTab {
 
@@ -19,7 +18,7 @@ public class TestRunnerTabController extends GenericQueryTab {
 		
 		// build panel infrastructure
 		// relies on GenericQueyTab which inherits from TabbedWindow
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 		container.addTab(topPanel, eventName, select);
 		addCloseButton(container, topPanel, null);
 		

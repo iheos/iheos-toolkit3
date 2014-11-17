@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs.actorConfigTab;
 
 import gov.nist.toolkit.sitemanagement.client.Site;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -22,7 +22,7 @@ class CreateNewSite implements ClickHandler {
 
 	public void onClick(ClickEvent event) {
 		if (this.actorConfigTab.currentEditSite != null && this.actorConfigTab.currentEditSite.changed == true) {
-			new PopupMessage("Current Site has been edited. Save or Forget changes before creating new site");
+			new PopupMessageV3("Current Site has been edited. Save or Forget changes before creating new site");
 			return;
 		}
 		Site site = new Site();

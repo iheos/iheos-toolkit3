@@ -1,0 +1,24 @@
+
+<site name="GATEWAY_InterSystems_HealthShare">
+   <home>urn:oid:1.3.6.1.4.1.21367.2011.2.6.50</home>
+   <transaction name="xcq" secure="1">https://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls</transaction>
+   <transaction name="igr" secure="0">http://intersystems3/csp/connect/HS.IHE.XCA.InitiatingGateway.Services.cls</transaction>
+   <transaction name="pr.b" secure="1">https://intersystems3/csp/repository/HS.IHE.XDSb.Repository.Services.cls</transaction>
+   <transaction name="ret.b" secure="1">https://intersystems3/csp/repository/HS.IHE.XDSb.Repository.Services.cls</transaction>
+   <transaction name="xcq" secure="0">http://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls</transaction>
+   <transaction name="ret.b" secure="0">http://intersystems3/csp/repository/HS.IHE.XDSb.Repository.Services.cls</transaction>
+   <transaction name="igr" secure="1">https://intersystems3/csp/connect/HS.IHE.XCA.InitiatingGateway.Services.cls</transaction>
+   <transaction name="pr.b" secure="0">http://intersystems3/csp/repository/HS.IHE.XDSb.Repository.Services.cls</transaction>
+   <transaction name="igq" secure="0">http://intersystems3/csp/connect/HS.IHE.XCA.InitiatingGateway.Services.cls</transaction>
+   <transaction name="sq.b" secure="1">https://intersystems3/csp/connect/HS.IHE.XDSb.Registry.Services.cls</transaction>
+   <transaction name="r.b" secure="1">https://intersystems3/csp/connect/HS.IHE.XDSb.Registry.Services.cls</transaction>
+   <transaction name="xcr" secure="1">https://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls</transaction>
+   <transaction name="xcr" secure="0">http://intersystems3/csp/connect/HS.IHE.XCA.RespondingGateway.Services.cls</transaction>
+   <transaction name="sq.b" secure="0">http://intersystems3/csp/connect/HS.IHE.XDSb.Registry.Services.cls</transaction>
+   <transaction name="r.b" secure="0">http://intersystems3/csp/connect/HS.IHE.XDSb.Registry.Services.cls</transaction>
+   <transaction name="igq" secure="1">https://intersystems3/csp/connect/HS.IHE.XCA.InitiatingGateway.Services.cls</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.121"
+         secure="1">https://intersystems3/csp/repository/HS.IHE.XDSb.Repository.Services.cls</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.121"
+         secure="0">http://intersystems3/csp/repository/HS.IHE.XDSb.Repository.Services.cls</repository>
+</site>

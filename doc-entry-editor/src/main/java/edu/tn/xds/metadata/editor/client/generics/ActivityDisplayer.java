@@ -8,9 +8,16 @@ import com.google.web.bindery.event.shared.EventBus;
 
 import edu.tn.xds.metadata.editor.client.root.MetadataEditorAppView;
 
+/**
+ * Displayer interface to load widget into an Activity container.
+ */
 public interface ActivityDisplayer {
 	public void display(Widget w, AcceptsOneWidget p, EventBus b);
 
+    /**
+     * ActivityDisplayer implementations. This Class enables to inject a widget (or a view)
+     * into our application main container.
+     */
 	public class MetadataEditorAppDisplayer implements ActivityDisplayer {
 		@Inject
 		MetadataEditorAppView appView;

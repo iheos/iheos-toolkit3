@@ -1,0 +1,7 @@
+
+<site name="XDSab_REG_A-thon_7">
+   <transaction name="r.b" secure="1">https://a-thon19/XDS/registry/registry.php</transaction>
+   <transaction name="sq.b" secure="0">http://a-thon19:8080/rem-ada-ee-war/services/ADA</transaction>
+   <transaction name="sq.b" secure="1">https://a-thon19:8443/rem-ada-ee-war/services/ADA</transaction>
+   <transaction name="r.b" secure="0">http://a-thon19/XDS/registry/registry.php</transaction>
+</site>

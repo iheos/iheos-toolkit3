@@ -31,12 +31,12 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
     private final static SubmissionMenuData submissionSetTreeNode = new SubmissionMenuData("subSet", "Submission set");
     private final ToolBar toolbar = new ToolBar();
 
+    private final TextButton addDocEntryButton = new TextButton();
     private final Menu addMenu = new Menu();
     private final MenuItem addEmptyDocEntry = new MenuItem("Create an empty document entry");
     private final MenuItem addPrefilledDocEntry = new MenuItem("Create a pre-filled document entry");
     private final MenuItem loadDocEntry = new MenuItem("Load a document entry from xml file");
 
-    private final TextButton addDocEntryButton = new TextButton();
     private final TextButton removeDocEntryButton = new TextButton();
     private final TextButton clearDocEntriesButton = new TextButton();
     private final TextButton saveDocEntriesButton = new TextButton();
@@ -68,6 +68,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         addMenu.add(addPrefilledDocEntry);
         addMenu.add(loadDocEntry);
         addDocEntryButton.setMenu(addMenu);
+
         removeDocEntryButton.setIcon(AppImages.INSTANCE.delete());
         removeDocEntryButton.setToolTip("Remove this Document Entry");
         clearDocEntriesButton.setIcon(AppImages.INSTANCE.clear());
@@ -76,13 +77,15 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         saveDocEntriesButton.setToolTip("Download xml file with document entries");
         helpButton.setIcon(AppImages.INSTANCE.help());
         helpButton.setToolTip("Help");
+
         toolbar.add(addDocEntryButton);
         toolbar.add(removeDocEntryButton);
         toolbar.add(clearDocEntriesButton);
         toolbar.add(saveDocEntriesButton);
         toolbar.add(helpButton);
         vlc.add(toolbar);
-        buildTreeStore();
+
+        initTreeStore();
         tree.getStyle().setLeafIcon(AppImages.INSTANCE.file());
         tree.expandAll();
         tree.setAutoExpand(true);
@@ -93,7 +96,10 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         return cp;
     }
 
-    private void buildTreeStore() {
+    /**
+     * Method to initialize the Submission Tree Store with a "SubmissionSet" item.
+     */
+    private void initTreeStore() {
         if (treeStore.getAll().isEmpty()) {
             treeStore.add(submissionSetTreeNode);
         }
@@ -101,41 +107,21 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
 
     @Override
     protected void bindUI() {
+        // Add empty doc entry handler
         addEmptyDocEntry.addSelectionHandler(new SelectionHandler<Item>() {
             @Override
             public void onSelection(SelectionEvent<Item> event) {
                 presenter.createNewDocumentEntry();
             }
         });
-        removeDocEntryButton.addSelectHandler(new SelectEvent.SelectHandler() {
-            @Override
-            public void onSelect(SelectEvent event) {
-                tree.getStore().remove(tree.getSelectionModel().getSelectedItem());
-                tree.getSelectionModel().select(tree.getStore().getFirstChild(getSubmissionSetTreeNode()), false);
-//                presenter.loadDocumentEntry(tree.getStore().getFirstChild(getSubmissionSetTreeNode()));
-            }
-        });
-        clearDocEntriesButton.addSelectHandler(new SelectEvent.SelectHandler() {
-            @Override
-            public void onSelect(SelectEvent event) {
-                tree.getStore().clear();
-                buildTreeStore();
-            }
-        });
-        tree.getSelectionModel().addSelectionHandler(new SelectionHandler<SubmissionMenuData>() {
-            @Override
-            public void onSelection(SelectionEvent<SubmissionMenuData> event) {
-                if (!tree.getSelectionModel().getSelectedItem().equals(submissionSetTreeNode)) {
-                    presenter.loadDocumentEntry(event.getSelectedItem());
-                }
-            }
-        });
+        // load pre-filled doc entry handler
         addPrefilledDocEntry.addSelectionHandler(new SelectionHandler<Item>() {
             @Override
             public void onSelection(SelectionEvent<Item> itemSelectionEvent) {
                 getPresenter().createPrefilledDocumentEntry();
             }
         });
+        // load an existing doc entry handler
         loadDocEntry.addSelectionHandler(new SelectionHandler<Item>() {
 
             @Override
@@ -145,10 +131,38 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
             }
 
         });
+        // remove selected document entry handler
+        removeDocEntryButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                tree.getStore().remove(tree.getSelectionModel().getSelectedItem());
+                tree.getSelectionModel().select(tree.getStore().getFirstChild(getSubmissionSetTreeNode()), false);
+//                presenter.loadDocumentEntry(tree.getStore().getFirstChild(getSubmissionSetTreeNode()));
+            }
+        });
+        // clear submission set handler
+        clearDocEntriesButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                tree.getStore().clear();
+                initTreeStore();
+            }
+        });
+        // save doc entry to XML file handler
         saveDocEntriesButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent selectEvent) {
                 presenter.doSave();
+            }
+        });
+        // doc entry selection change handler
+        tree.getSelectionModel().addSelectionHandler(new SelectionHandler<SubmissionMenuData>() {
+            @Override
+            public void onSelection(SelectionEvent<SubmissionMenuData> event) {
+                if (!tree.getSelectionModel().getSelectedItem().equals(submissionSetTreeNode)) {
+                    // load selected doc entry data into the editor
+                    presenter.loadDocumentEntry(event.getSelectedItem());
+                }
             }
         });
 

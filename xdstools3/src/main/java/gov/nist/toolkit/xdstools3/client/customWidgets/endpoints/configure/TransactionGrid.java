@@ -17,29 +17,47 @@ public class TransactionGrid extends ListGrid {
         setDataSource(TransactionDS.getInstance());
 
         setHeight(200);
-       // setAutoWidth();
         setCanEdit(true);
         setModalEditing(true);
         setEditEvent(ListGridEditEvent.CLICK);
         setListEndEditAction(RowEndEditAction.NEXT);
         setAutoSaveEdits(true);
         setAlternateRecordStyles(true);
-        setGroupByField("actorName");
+        setGroupByField("actorType");
         setGroupStartOpen(GroupStartOpen.ALL);
         setCanRemoveRecords(true);
 
 
         // --- fields ----
-        ListGridField tls = new ListGridField("secure");
+
+        ListGridField siteName = new ListGridField("siteName");
+        siteName.setHidden(true);
+
+        ListGridField actorCode = new ListGridField("actorCode");
+        actorCode.setHidden(true);
+
+        ListGridField actorType = new ListGridField("actorType");
+        actorType.setWidth(130);
+        actorType.setRequired(true);
 
         ListGridField transactionCode = new ListGridField("transactionCode");
+        transactionCode.setWidth(130);
+        transactionCode.setRequired(true);
+
+        ListGridField transactionName = new ListGridField("transactionName");
+        transactionName.setHidden(true);
+
+        ListGridField tls = new ListGridField("secure");
+        tls.setRequired(true);
 
         ListGridField notls = new ListGridField("unsecure");
 
-        ListGridField actorName = new ListGridField("actorName");
-        actorName.setHidden(true);
+        ListGridField repositoryUniqueID = new ListGridField("repositoryUniqueID");
+        repositoryUniqueID.setHidden(true);
 
-        setFields(actorName, transactionCode, tls, notls);
+
+
+        setFields(siteName, actorCode, actorType, transactionCode, transactionName, tls, notls, repositoryUniqueID);
     }
 
     // TODO should be written into separate files instead of one

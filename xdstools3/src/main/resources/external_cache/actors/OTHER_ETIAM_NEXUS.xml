@@ -1,0 +1,15 @@
+
+<site name="OTHER_ETIAM_NEXUS">
+   <transaction name="ret.b" secure="1">https://etiam2:8080/your_url</transaction>
+   <transaction name="sq.b" secure="1">https://etiam2:8080/your_url</transaction>
+   <transaction name="r.b" secure="1">https://etiam2:8080/your_url</transaction>
+   <transaction name="r.b" secure="0">http://etiam2/your_url</transaction>
+   <transaction name="pr.b" secure="1">https://etiam2:8080/your_url</transaction>
+   <transaction name="pr.b" secure="0">http://etiam2/etiam-nexus-ihe/webservices/xds-iti41</transaction>
+   <transaction name="sq.b" secure="0">http://etiam2/your_url</transaction>
+   <transaction name="ret.b" secure="0">http://etiam2/your_url</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.130"
+         secure="1">https://etiam2:8080/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.130"
+         secure="0">http://etiam2/your_url</repository>
+</site>

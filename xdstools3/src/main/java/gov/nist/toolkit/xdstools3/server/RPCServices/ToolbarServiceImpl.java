@@ -20,6 +20,9 @@ public class ToolbarServiceImpl extends RemoteServiceServlet implements ToolbarS
 
     public String[] retrieveEnvironments(){  return Caller.getInstance().retrieveEnvironments();}
     public String[] retrieveTestSessions(){  return Caller.getInstance().retrieveTestSessions();}
-
+    public String[] addTestSession(String sessionName) {
+        Caller.getInstance().addTestSession(sessionName);
+        return Caller.getInstance().retrieveTestSessions();}
+    public void setEnvironment(String envName) { Caller.getInstance().setEnvironment(envName); }
 
 }

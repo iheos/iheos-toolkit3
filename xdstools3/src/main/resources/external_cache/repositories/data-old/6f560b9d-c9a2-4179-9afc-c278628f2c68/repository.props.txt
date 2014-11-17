@@ -1,0 +1,6 @@
+#
+#Fri Jun 07 18:55:44 EDT 2013
+DisplayName=This is a document repository
+description=Description - indexable repository
+repositoryType=documentRepos
+id=6f560b9d-c9a2-4179-9afc-c278628f2c68

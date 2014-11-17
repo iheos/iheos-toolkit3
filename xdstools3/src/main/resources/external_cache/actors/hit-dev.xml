@@ -1,0 +1,33 @@
+
+<site name="hit-dev">
+   <transaction name="r.b" secure="1"/>
+   <transaction name="r.b" secure="0"/>
+   <transaction name="sq.b" secure="1"/>
+   <transaction name="sq.b" secure="0"/>
+   <transaction name="update.b" secure="1"/>
+   <transaction name="update.b" secure="0"/>
+   <transaction name="mpq" secure="1"/>
+   <transaction name="mpq" secure="0"/>
+   <transaction name="ret.b" secure="0"/>
+   <transaction name="ret.b" secure="1"/>
+   <transaction name="pr.b" secure="1"/>
+   <transaction name="pr.b" secure="0"/>
+   <transaction name="odds" secure="1"/>
+   <transaction name="odds" secure="0"/>
+   <transaction name="isr" secure="1"/>
+   <transaction name="isr" secure="0"/>
+   <transaction name="xdrpr" secure="1">https://hit-dev.nist.gov:12081/ttt/sim/7bb7ce41-5893-4e5c-9068-9403752ff086/rec/xdrpr</transaction>
+   <transaction name="xdrpr" secure="0">http://hit-dev.nist.gov:12080/ttt/sim/7bb7ce41-5893-4e5c-9068-9403752ff086/rec/xdrpr</transaction>
+   <transaction name="xcq" secure="1"/>
+   <transaction name="xcq" secure="0"/>
+   <transaction name="xcr" secure="1"/>
+   <transaction name="xcr" secure="0"/>
+   <transaction name="xcpd" secure="1"/>
+   <transaction name="xcpd" secure="0"/>
+   <transaction name="igq" secure="1"/>
+   <transaction name="igq" secure="0"/>
+   <transaction name="igr" secure="1"/>
+   <transaction name="igr" secure="0"/>
+   <transaction name="direct" secure="1"/>
+   <transaction name="direct" secure="0"/>
+</site>

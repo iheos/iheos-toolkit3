@@ -183,6 +183,11 @@
             <artifactId>ebxmlrr-common</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.smartgwt</groupId>
+            <artifactId>smartgwt</artifactId>
+            <version>4.1p</version>
+        </dependency>
     </dependencies>
 
     <build>

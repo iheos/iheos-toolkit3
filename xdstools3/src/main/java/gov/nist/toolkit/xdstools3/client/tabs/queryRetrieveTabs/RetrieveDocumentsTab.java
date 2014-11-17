@@ -58,7 +58,7 @@ public class RetrieveDocumentsTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getRetrieveDocumentTabCode();
+        return TabNamesUtil.getInstance().getRetrieveDocumentTabCode();
     }
 
     private void bindUI() {

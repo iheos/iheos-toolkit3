@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 
 public class PidAllocateTab extends TabbedWindow {
 	
@@ -24,7 +25,7 @@ public class PidAllocateTab extends TabbedWindow {
 
 	
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 		container.addTab(topPanel, "Patient ID", select);
 		addCloseButton(container, topPanel, null);
 		

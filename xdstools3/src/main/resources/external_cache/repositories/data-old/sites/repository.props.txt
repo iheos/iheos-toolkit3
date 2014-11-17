@@ -1,0 +1,6 @@
+#
+#Fri Aug 02 12:19:12 EDT 2013
+DisplayName=This is my repository
+description=Description
+repositoryType=simple
+id=sites

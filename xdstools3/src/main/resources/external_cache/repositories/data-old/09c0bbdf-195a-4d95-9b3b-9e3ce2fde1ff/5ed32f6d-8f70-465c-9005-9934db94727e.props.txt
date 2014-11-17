@@ -1,0 +1,10 @@
+#
+#Fri Aug 02 14:32:14 EDT 2013
+createdDate=20130802143214
+displayName=My Site
+modifiedDate=20130802143214
+parent=6b8626e9-df64-4758-982f-c54872c36d59
+repository=09c0bbdf-195a-4d95-9b3b-9e3ce2fde1ff
+type=site
+description=This is my site
+id=5ed32f6d-8f70-465c-9005-9934db94727e

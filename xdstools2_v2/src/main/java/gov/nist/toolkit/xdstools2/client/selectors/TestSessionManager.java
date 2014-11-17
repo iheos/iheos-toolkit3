@@ -2,7 +2,7 @@ package gov.nist.toolkit.xdstools2.client.selectors;
 
 import gov.nist.toolkit.xdstools2.client.CookieManager;
 import gov.nist.toolkit.xdstools2.client.Panel;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 import gov.nist.toolkit.xdstools2.client.tabs.TestSessionState;
@@ -54,7 +54,7 @@ public class TestSessionManager {
 			toolkitService.addMesaTestSession(newItem, new AsyncCallback<Boolean>() {
 
 				public void onFailure(Throwable caught) {
-					new PopupMessage("addMesaTestSession: " + caught.getMessage());
+					new PopupMessageV3("addMesaTestSession: " + caught.getMessage());
 				}
 
 				public void onSuccess(Boolean result) {
@@ -152,7 +152,7 @@ public class TestSessionManager {
 		toolkitService.getMesaTestSessionNames(new AsyncCallback<List<String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getTestSessionNames: " + caught.getMessage());
+				new PopupMessageV3("getTestSessionNames: " + caught.getMessage());
 			}
 
 			public void onSuccess(List<String> result) {
@@ -184,7 +184,7 @@ public class TestSessionManager {
 	protected AsyncCallback<String> setTestSessionCallback = new AsyncCallback<String> () {
 
 		public void onFailure(Throwable caught) {
-			new PopupMessage(caught.getMessage());
+			new PopupMessageV3(caught.getMessage());
 		}
 
 		public void onSuccess(String x) {

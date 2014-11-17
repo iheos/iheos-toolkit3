@@ -1,0 +1,11 @@
+#
+#Fri Jul 26 16:18:01 EDT 2013
+mimeType=text/*
+id=0b3261fc-6ef3-4241-867b-8e1cd3ca7239
+modifiedDate=20130726161801
+expirationDate=20130825161801
+repository=1e016b1b-a5a1-4f48-a433-dc1bda08ee53
+type=siteAsset
+displayName=My Site
+description=This is my site
+createdDate=20130726161801

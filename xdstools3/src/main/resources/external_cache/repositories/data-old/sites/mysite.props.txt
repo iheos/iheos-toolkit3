@@ -1,0 +1,9 @@
+#
+#Fri Aug 02 12:19:12 EDT 2013
+displayName=My Site
+createdDate=20130802121912
+modifiedDate=20130802121912
+type=site
+repository=sites
+description=This is my site
+id=mysite

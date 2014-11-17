@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs.directSenderTab.view;
 
 import gov.nist.direct.client.config.SigningCertType;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.tabs.directSenderTab.DirectSenderTab;
 
 import java.util.ArrayList;
@@ -219,21 +219,21 @@ public class DirectSenderView implements DirectSenderTab.Display {
 	public boolean checkInputs() {
 		submitButton.setEnabled(false);
 		if ("".equals(getFromAddress())) {
-			new PopupMessage("From Address is required");
+			new PopupMessageV3("From Address is required");
 			return false;
 		}
 		if ("".equals(getToAddress())) {
-			new PopupMessage("To Address is required");
+			new PopupMessageV3("To Address is required");
 			return false;
 		}
 		String selected = getSelectedMessageName();
 		if (selected.equals("")) {
-			new PopupMessage("Message Selection is required");
+			new PopupMessageV3("Message Selection is required");
 			return false;
 		}
 //		String fn = upload.getFilename();
 //		if (fn == null || fn.equals("")) {
-//			new PopupMessage("Signing Cert is required");
+//			new PopupMessageV3("Signing Cert is required");
 //			return false;
 //		}
 		submitButton.setEnabled(true);
@@ -279,7 +279,7 @@ public class DirectSenderView implements DirectSenderTab.Display {
 
 	  
 	public void popupError(String msg) {
-		new PopupMessage(msg);
+		new PopupMessageV3(msg);
 	}
 
 	  

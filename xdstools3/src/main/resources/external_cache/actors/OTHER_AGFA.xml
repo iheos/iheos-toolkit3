@@ -1,0 +1,23 @@
+
+<site name="OTHER_AGFA">
+   <transaction name="pr.b" secure="1">https://agfa36:9443/g5-xds-ws/g5-xds-ws</transaction>
+   <transaction name="pr.b" secure="1">https://agfa36:8080/your_url</transaction>
+   <transaction name="isr" secure="0">http://agfa36/your_url</transaction>
+   <transaction name="ret.b" secure="1">https://agfa36:9443/g5-xds-ws/g5-xds-ws</transaction>
+   <transaction name="pr.b" secure="0">http://agfa36/your_url</transaction>
+   <transaction name="ret.b" secure="0">http://agfa36/your_url</transaction>
+   <transaction name="isr" secure="0">http://agfa36:6444/g5-xds-ws/g5-xds-ws</transaction>
+   <transaction name="isr" secure="1">https://agfa36:9443/g5-xds-ws/g5-xds-ws</transaction>
+   <transaction name="ret.b" secure="1">https://agfa36:8080/your_url</transaction>
+   <transaction name="pr.b" secure="0">http://agfa36:6444/g5-xds-ws/g5-xds-ws</transaction>
+   <transaction name="isr" secure="1">https://agfa36:8080/your_url</transaction>
+   <transaction name="ret.b" secure="0">http://agfa36:6444/g5-xds-ws/g5-xds-ws</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.136"
+         secure="1">https://agfa36:9443/g5-xds-ws/g5-xds-ws</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.136"
+         secure="0">http://agfa36/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.136"
+         secure="1">https://agfa36:8080/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.136"
+         secure="0">http://agfa36:6444/g5-xds-ws/g5-xds-ws</repository>
+</site>

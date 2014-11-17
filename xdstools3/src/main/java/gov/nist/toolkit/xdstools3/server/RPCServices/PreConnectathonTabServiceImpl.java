@@ -20,8 +20,6 @@ public class PreConnectathonTabServiceImpl extends RemoteServiceServlet implemen
 
 
     public PreConnectathonTabServiceImpl() {
-
-
     }
 
     public Map<String, String> getCollectionNames(String collectionSetName) throws Exception {

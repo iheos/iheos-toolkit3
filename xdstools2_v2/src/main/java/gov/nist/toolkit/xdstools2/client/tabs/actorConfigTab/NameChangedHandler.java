@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs.actorConfigTab;
 
 import gov.nist.toolkit.sitemanagement.client.Site;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -25,7 +25,7 @@ class NameChangedHandler implements ChangeHandler {
 	public void onChange(ChangeEvent event) {
 		String newName = textbox.getText().trim();
 		if (this.actorConfigTab.currentSiteNames.contains(newName)) {
-			new PopupMessage("Site " + newName + " already exists");
+			new PopupMessageV3("Site " + newName + " already exists");
 			return;
 		}
 		s.setName(newName);

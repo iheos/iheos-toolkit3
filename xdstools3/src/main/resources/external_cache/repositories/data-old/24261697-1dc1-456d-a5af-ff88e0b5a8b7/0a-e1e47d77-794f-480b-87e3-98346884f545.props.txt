@@ -1,0 +1,7 @@
+#
+#Mon Jun 03 16:40:04 EDT 2013
+displayName=My Site
+type=siteAsset
+repository=24261697-1dc1-456d-a5af-ff88e0b5a8b7
+description=This is an indexable property
+id=0a-e1e47d77-794f-480b-87e3-98346884f545

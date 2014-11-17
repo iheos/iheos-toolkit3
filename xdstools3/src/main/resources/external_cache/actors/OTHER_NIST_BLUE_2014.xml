@@ -1,0 +1,19 @@
+
+<site name="OTHER_NIST_BLUE_2014">
+   <transaction name="igr" secure="0">http://nist18:9080/tf6/services/ig</transaction>
+   <transaction name="xcr" secure="0">http://nist18:9080/tf6/services/rg</transaction>
+   <transaction name="ret.b" secure="1">https://nist18:9085/tf6/services/xdsrepositoryb</transaction>
+   <transaction name="xcr" secure="1">https://nist18:9085/tf6/services/rg</transaction>
+   <transaction name="igq" secure="1">https://nist18:9085/tf6/services/ig</transaction>
+   <transaction name="ret.b" secure="0">http://nist18:9080/tf6/services/xdsrepositoryb</transaction>
+   <transaction name="igq" secure="0">http://nist18:9080/tf6/services/ig</transaction>
+   <transaction name="pr.b" secure="1">https://nist18:9085/tf6/services/xdsrepositoryb</transaction>
+   <transaction name="xcq" secure="1">https://nist18:9085/tf6/services/rg</transaction>
+   <transaction name="sq.b" secure="0">http://nist18:9080/tf6/services/xdsregistryb</transaction>
+   <transaction name="igr" secure="1">https://nist18:9085/tf6/services/ig</transaction>
+   <transaction name="pr.b" secure="0">http://nist18:9080/tf6/services/xdsrepositoryb</transaction>
+   <transaction name="r.b" secure="0">http://nist18:9080/tf6/services/xdsregistryb</transaction>
+   <transaction name="xcq" secure="0">http://nist18:9080/tf6/services/rg</transaction>
+   <transaction name="sq.b" secure="1">https://nist18:9085/tf6/services/xdsregistryb</transaction>
+   <transaction name="r.b" secure="1">https://nist18:9085/tf6/services/xdsregistryb</transaction>
+</site>

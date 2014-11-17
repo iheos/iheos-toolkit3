@@ -1,0 +1,21 @@
+
+<site name="EHR_IdC)oSantC)">
+   <transaction name="r.b" secure="1">https://ideosante0:8443/xdsbRegistry</transaction>
+   <transaction name="r.b" secure="0">http://ideosante0:8080/xdsbRegistry</transaction>
+   <transaction name="ret.b" secure="1">https://ideosante0:8443/xdsbRepository</transaction>
+   <transaction name="update.b" secure="0">http://ideosante0:8080/xdsbRegistry</transaction>
+   <transaction name="update.b" secure="1">https://ideosante0:8443/xdsbRegistry</transaction>
+   <transaction name="igr" secure="0">http://ideosante0:8080/dcr-InitiatingGateway/Retrieve</transaction>
+   <transaction name="pr.b" secure="0">http://ideosante0:8080/xdsbRepository</transaction>
+   <transaction name="xcr" secure="0">http://ideosante0:8080/dcr-RespondingGateway/CrossGatewayRetrieve</transaction>
+   <transaction name="xcq" secure="0">http://ideosante0:8080/dcr-RespondingGateway/CrossGatewayStoredQuery</transaction>
+   <transaction name="sq.b" secure="0">http://ideosante0:8080/xdsbRegistry</transaction>
+   <transaction name="pr.b" secure="1">https://ideosante0:8443/xdsbRepository</transaction>
+   <transaction name="igr" secure="1">https://ideosante0:8443/dcr-InitiatingGateway/Retrieve</transaction>
+   <transaction name="ret.b" secure="0">http://ideosante0:8080/xdsbRepository</transaction>
+   <transaction name="igq" secure="0">http://ideosante0:8080/dcr-InitiatingGateway/StoredQuery</transaction>
+   <transaction name="xcr" secure="1">https://ideosante0:8443/dcr-RespondingGateway/CrossGatewayRetrieve</transaction>
+   <transaction name="xcq" secure="1">https://ideosante0:8443/dcr-RespondingGateway/CrossGatewayStoredQuery</transaction>
+   <transaction name="sq.b" secure="1">https://ideosante0:8443/xdsbRegistry</transaction>
+   <transaction name="igq" secure="1">https://ideosante0:8443/dcr-InitiatingGateway/StoredQuery</transaction>
+</site>

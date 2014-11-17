@@ -6,9 +6,17 @@ import edu.tn.xds.metadata.editor.shared.model.CodedTerm;
 import edu.tn.xds.metadata.editor.shared.model.CodingScheme;
 import edu.tn.xds.metadata.editor.shared.model.String256;
 
+/**
+ * CodedTerm implementation of {@link edu.tn.xds.metadata.editor.client.generics.GridModelFactory}.
+ */
 public enum CodedTermFactory implements GridModelFactory<CodedTerm> {
     instance;
 
+    /**
+     * CodedTerm implementation for {@link edu.tn.xds.metadata.editor.client.generics.GridModelFactory#newInstance()}
+     *
+     * @return instance of CodedTerm
+     */
     @Override
     public CodedTerm newInstance() {
         CodedTerm e = GWT.create(CodedTerm.class);

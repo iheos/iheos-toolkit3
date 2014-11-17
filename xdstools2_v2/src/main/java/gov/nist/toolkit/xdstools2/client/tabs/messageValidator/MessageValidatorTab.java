@@ -10,6 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
+import com.smartgwt.client.widgets.layout.events.PaneChangedEvent;
 import gov.nist.toolkit.actorfactory.client.CcdaTypeSelection;
 import gov.nist.toolkit.http.client.HtmlMarkup;
 import gov.nist.toolkit.results.client.Result;
@@ -18,6 +19,8 @@ import gov.nist.toolkit.valsupport.client.MessageValidatorDisplay;
 import gov.nist.toolkit.valsupport.client.ValFormatter;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.xdstools2.client.*;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.inspector.MetadataInspectorTab;
 import gov.nist.toolkit.xdstools2.client.tabs.TextViewerTab;
 
@@ -337,7 +340,7 @@ public class MessageValidatorTab extends TabbedWindow {
 
     public void onTabLoad(TabContainer container, boolean select, String eventName) {
         myContainer = container;
-        topPanel = new VerticalPanel();
+        topPanel = new TopWindowPanel();
         disableTestSesMgr();
         ccdaSel = new CcdaTypeSelection(tkProps(), null);
 
@@ -472,7 +475,7 @@ public class MessageValidatorTab extends TabbedWindow {
                 vc.hasSoap = true;
                 int sel = simFilesListBox.getSelectedIndex();
                 if (sel == -1) {
-                    new PopupMessage("Select message first");
+                    new PopupMessageV3("Select message first");
                     return;
                 }
                 filename = simFilesListBox.getValue(sel);
@@ -493,7 +496,7 @@ public class MessageValidatorTab extends TabbedWindow {
             public void onClick(ClickEvent event) {
                 int sel = simFilesListBox.getSelectedIndex();
                 if (sel == -1) {
-                    new PopupMessage("Select message first");
+                    new PopupMessageV3("Select message first");
                     return;
                 }
                 filename = simFilesListBox.getValue(sel);
@@ -510,7 +513,7 @@ public class MessageValidatorTab extends TabbedWindow {
             public void onClick(ClickEvent event) {
                 int sel = simFilesListBox.getSelectedIndex();
                 if (sel == -1) {
-                    new PopupMessage("Select message first");
+                    new PopupMessageV3("Select message first");
                     return;
                 }
                 filename = simFilesListBox.getValue(sel);
@@ -526,7 +529,7 @@ public class MessageValidatorTab extends TabbedWindow {
                 new GwtValFormatter().clearResults();
                 int sel = simFilesListBox.getSelectedIndex();
                 if (sel == -1) {
-                    new PopupMessage("Select message first");
+                    new PopupMessageV3("Select message first");
                     return;
                 }
                 filename = simFilesListBox.getValue(sel);
@@ -542,7 +545,7 @@ public class MessageValidatorTab extends TabbedWindow {
             public void onClick(ClickEvent event) {
                 int sel = simFilesListBox.getSelectedIndex();
                 if (sel == -1) {
-                    new PopupMessage("Select message first");
+                    new PopupMessageV3("Select message first");
                     return;
                 }
                 filename = simFilesListBox.getValue(sel);
@@ -559,7 +562,7 @@ public class MessageValidatorTab extends TabbedWindow {
             public void onClick(ClickEvent event) {
                 int sel = simFilesListBox.getSelectedIndex();
                 if (sel == -1) {
-                    new PopupMessage("Select message first");
+                    new PopupMessageV3("Select message first");
                     return;
                 }
                 filename = simFilesListBox.getValue(sel);
@@ -666,14 +669,14 @@ public class MessageValidatorTab extends TabbedWindow {
         toolkitService.getSimulatorEndpoint(new AsyncCallback<String>() {
 
             public void onFailure(Throwable caught) {
-                new PopupMessage(caught.getMessage());
+                new PopupMessageV3(caught.getMessage());
             }
 
             public void onSuccess(String result) {
                 try {
                     simEndpointMessage.setText("Simulator endpoint is " + result);
                 } catch (Exception e) {
-                    new PopupMessage(e.getMessage());
+                    new PopupMessageV3(e.getMessage());
                 }
             }
 
@@ -685,7 +688,7 @@ public class MessageValidatorTab extends TabbedWindow {
         toolkitService.getLastFilename(new AsyncCallback<String>() {
 
             public void onFailure(Throwable caught) {
-                new PopupMessage(caught.getMessage());
+                new PopupMessageV3(caught.getMessage());
             }
 
             public void onSuccess(String result) {
@@ -694,7 +697,7 @@ public class MessageValidatorTab extends TabbedWindow {
                     if (isReadyForValidation())
                         requestValidation();
                 } catch (Exception e) {
-                    new PopupMessage(e.getMessage());
+                    new PopupMessageV3(e.getMessage());
                 }
 
             }
@@ -708,7 +711,7 @@ public class MessageValidatorTab extends TabbedWindow {
         toolkitService.getTimeAndDate(new AsyncCallback<String>() {
 
             public void onFailure(Throwable caught) {
-                new PopupMessage(caught.getMessage());
+                new PopupMessageV3(caught.getMessage());
             }
 
             public void onSuccess(String result) {
@@ -717,7 +720,7 @@ public class MessageValidatorTab extends TabbedWindow {
                     if (isReadyForValidation())
                         requestValidation();
                 } catch (Exception e) {
-                    new PopupMessage(e.getMessage());
+                    new PopupMessageV3(e.getMessage());
                 }
 
             }
@@ -731,7 +734,7 @@ public class MessageValidatorTab extends TabbedWindow {
         toolkitService.getClientIPAddress(new AsyncCallback<String>() {
 
             public void onFailure(Throwable caught) {
-                new PopupMessage(caught.getMessage());
+                new PopupMessageV3(caught.getMessage());
             }
 
             public void onSuccess(String result) {
@@ -740,7 +743,7 @@ public class MessageValidatorTab extends TabbedWindow {
                     if (isReadyForValidation())
                         requestValidation();
                 } catch (Exception e) {
-                    new PopupMessage(e.getMessage());
+                    new PopupMessageV3(e.getMessage());
                 }
 
             }
@@ -748,6 +751,7 @@ public class MessageValidatorTab extends TabbedWindow {
         });
     }
 
+    /** Runs a validation **/
     void requestValidation() {
         ValidationContext vc = new ValidationContext();
         loadValidationContext(vc);
@@ -760,7 +764,7 @@ public class MessageValidatorTab extends TabbedWindow {
     final AsyncCallback<List<String>> getSimFileNamesCallback = new AsyncCallback<List<String>>() {
 
         public void onFailure(Throwable caught) {
-            new PopupMessage(caught.getMessage());
+            new PopupMessageV3(caught.getMessage());
         }
 
         public void onSuccess(List<String> result) {
@@ -773,7 +777,7 @@ public class MessageValidatorTab extends TabbedWindow {
                 chooseFromEndpointArea.setVisible(true);
                 uploadForm.setVisible(false);
             } catch (Exception e) {
-                new PopupMessage(e.getMessage());
+                new PopupMessageV3(e.getMessage());
             }
 
         }
@@ -945,14 +949,14 @@ public class MessageValidatorTab extends TabbedWindow {
     protected AsyncCallback reloadSimMessages = new AsyncCallback () {
 
         public void onFailure(Throwable caught) {
-            new PopupMessage(caught.getMessage());
+            new PopupMessageV3(caught.getMessage());
         }
 
         public void onSuccess(Object result) {
             try {
                 reloadSimFileList();
             } catch (Exception e) {
-                new PopupMessage(e.getMessage());
+                new PopupMessageV3(e.getMessage());
             }
 
         }
@@ -972,7 +976,7 @@ public class MessageValidatorTab extends TabbedWindow {
                 //			InspectorTab itab = new InspectorTab();
                 //			itab.onTabLoad(myContainer, true, toolkitService, results, null);
             } catch (Exception e) {
-                new PopupMessage(e.getMessage());
+                new PopupMessageV3(e.getMessage());
             }
 
         }
@@ -990,7 +994,7 @@ public class MessageValidatorTab extends TabbedWindow {
             try {
                 viewText(result);
             } catch (Exception e) {
-                new PopupMessage(e.getMessage());
+                new PopupMessageV3(e.getMessage());
             }
 
         }
@@ -1011,18 +1015,25 @@ public class MessageValidatorTab extends TabbedWindow {
         v.onTabLoad(myContainer, true, null);
     }
 
+    /** Handles the validation result */
     protected AsyncCallback<MessageValidationResults> messageValidationCallback = new AsyncCallback<MessageValidationResults> () {
 
         public void onFailure(Throwable caught) {
-            new GwtValFormatter().addCell(caught.getMessage(), 0);
+
+
+            // TODO modify EnvironmentNotFoundException bya dding a message and remove getClass.getName below
+            new GwtValFormatter().addCell(caught.getClass().getName() + ": " + caught.getMessage(), 0);
             topPanel.add(resultsTable);
+
+            // v3 - Alert the top-level Smartgwt panel that the contents changed
+            topPanel.fireEvent(new PaneChangedEvent(null));
         }
 
         public void onSuccess(MessageValidationResults result) {
             try {
                 displayResults(result);
             } catch (Exception e) {
-                new PopupMessage(e.getMessage());
+                new PopupMessageV3(e.getMessage());
             }
 
         }
@@ -1260,7 +1271,7 @@ public class MessageValidatorTab extends TabbedWindow {
      * Added for v2-v3 integration purposes
      * @return the page vertical panel that contains v2 UI elements
      */
-    public VerticalPanel getTopPanel() {
+    public TopWindowPanel getTopPanel() {
         return topPanel;
     }
 

@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs.directRegistrationTab;
 
 import gov.nist.toolkit.directsim.client.ContactRegistrationData;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -58,7 +58,7 @@ public class LoadContactHandler implements ClickHandler, ChangeHandler {
 
 		  
 		public void onFailure(Throwable arg0) {
-			new PopupMessage("Error: " + arg0.getMessage());
+			new PopupMessageV3("Error: " + arg0.getMessage());
 		}
 
 		  

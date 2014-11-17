@@ -1,25 +1,23 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
-import gov.nist.toolkit.results.client.Result;
-import gov.nist.toolkit.xdstools2.client.*;
-import gov.nist.toolkit.xdstools2.client.inspector.MetadataInspectorTab;
-import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
-import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
-
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.*;
+import gov.nist.toolkit.results.client.Result;
+import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.Toolkit2Service;
+import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
+import gov.nist.toolkit.xdstools2.client.inspector.MetadataInspectorTab;
+import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
+import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
+
+import java.util.List;
 
 public class TestLogListingTab extends GenericQueryTab {
 	final protected Toolkit2ServiceAsync toolkitService = GWT
@@ -38,7 +36,7 @@ public class TestLogListingTab extends GenericQueryTab {
 
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 
 
 		container.addTab(topPanel, "TestLog Listing", select);
@@ -69,7 +67,7 @@ public class TestLogListingTab extends GenericQueryTab {
 		toolkitService.isPrivateMesaTesting(new AsyncCallback<Boolean>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("isPrivateMesaTesting: " + caught.getMessage());
+				new PopupMessageV3("isPrivateMesaTesting: " + caught.getMessage());
 			}
 
 			public void onSuccess(Boolean result) {
@@ -86,7 +84,7 @@ public class TestLogListingTab extends GenericQueryTab {
 		toolkitService.getMesaTestSessionNames(new AsyncCallback<List<String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getMesaTestSessionNames: " + caught.getMessage());
+				new PopupMessageV3("getMesaTestSessionNames: " + caught.getMessage());
 			}
 
 			public void onSuccess(List<String> result) {
@@ -106,7 +104,7 @@ public class TestLogListingTab extends GenericQueryTab {
 		toolkitService.getTestlogListing(testSession, new AsyncCallback<List<String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getTestlogListing: " + caught.getMessage());			
+				new PopupMessageV3("getTestlogListing: " + caught.getMessage());
 			}
 
 			public void onSuccess(List<String> result) {
@@ -138,7 +136,7 @@ public class TestLogListingTab extends GenericQueryTab {
 			toolkitService.getLogContent(testSession, testName, new AsyncCallback<List<Result>>() {
 
 				public void onFailure(Throwable caught) {
-					new PopupMessage("getLogsForTest: " + caught.getMessage());			
+					new PopupMessageV3("getLogsForTest: " + caught.getMessage());
 				}
 
 				public void onSuccess(List<Result> results) {

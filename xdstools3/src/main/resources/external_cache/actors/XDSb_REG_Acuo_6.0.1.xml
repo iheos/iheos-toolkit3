@@ -1,0 +1,11 @@
+
+<site name="XDSb_REG_Acuo_6.0.1">
+   <transaction name="sq.b" secure="1">https://acuo5:8080/your_url</transaction>
+   <transaction name="r.b" secure="1">https://acuo5:8080/your_url</transaction>
+   <transaction name="mpq" secure="1">https://acuo5:8080/your_url</transaction>
+   <transaction name="mpq" secure="0">http://acuo5/your_url</transaction>
+   <transaction name="r.b" secure="0">http://acuo5/your_url</transaction>
+   <transaction name="sq.b" secure="0">http://acuo5/your_url</transaction>
+   <transaction name="update.b" secure="0">http://acuo5/your_url</transaction>
+   <transaction name="update.b" secure="1">https://acuo5:8080/your_url</transaction>
+</site>

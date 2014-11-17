@@ -1,0 +1,12 @@
+#
+#Thu Oct 16 14:04:50 EDT 2014
+name=config
+mimeType=text/xml
+id=3f82a1a5-ff06-4cf3-a3ab-9442927cb465
+parentId=c99181b2-a0d1-4a89-9cdc-fe28fbf4e39f
+repositoryId=Sim
+type=simpleType
+displayName=config
+description=config
+createdDate=20141016140450
+updatedDate=20141016140450

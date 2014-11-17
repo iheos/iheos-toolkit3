@@ -1,0 +1,11 @@
+#
+#Thu Oct 16 14:14:02 EDT 2014
+displayOrder=2
+mimeType=application/octet-stream
+id=408e4dc6-fc1c-4306-86a6-e5a625a6127e
+parentId=e02dae0b-e8c1-4242-b7b7-d52bf0556bcf
+repositoryId=Sim
+type=resBodyType
+displayName=Response Body
+createdDate=20141016141402
+updatedDate=20141016141402

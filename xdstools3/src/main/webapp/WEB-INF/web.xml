@@ -26,10 +26,13 @@
 
     <!-- ============== Application servlet classes ============== -->
     <servlet>
+        <servlet-name>mhdTabsServlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.MHDServicesImpl</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>preConnectathonTabServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.PreConnectathonTabServiceImpl</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>loginServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.LoginServiceImpl</servlet-class>
@@ -39,11 +42,27 @@
         <servlet-name>toolbarServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.ToolbarServiceImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>fileUploadServlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools3.server.UploadServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>testDataSubmissionServlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.TestDataSubmissionServicesImpl</servlet-class>
+    </servlet>
 
     <!-- v2 legacy servlets -->
     <servlet>
         <servlet-name>toolkit2Servlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>uploadServlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools2.server.upload.UploadServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>adminSettingsServlet</servlet-name>
+        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.AdminSettingsImpl</servlet-class>
     </servlet>
 
     <!-- ============== Servlet mappings ============== -->
@@ -58,6 +77,16 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>mhdTabsServlet</servlet-name>
+        <url-pattern>/xdstools3/mhd-tabs</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>testDataSubmissionServlet</servlet-name>
+        <url-pattern>/xdstools3/test-data-submission</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>/xdstools3/login</url-pattern>
     </servlet-mapping>
@@ -67,10 +96,24 @@
         <url-pattern>/xdstools3/toolbar</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>fileUploadServlet</servlet-name>
+        <url-pattern>/fileUploadServlet</url-pattern>
+    </servlet-mapping>
+
+
     <!-- v2 legacy servlets -->
     <servlet-mapping>
         <servlet-name>toolkit2Servlet</servlet-name>
         <url-pattern>/xdstools3/toolkit2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>uploadServlet</servlet-name>
+        <url-pattern>/xdstools3/upload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>adminSettingsServlet</servlet-name>
+        <url-pattern>/xdstools3/adminSettings</url-pattern>
     </servlet-mapping>
 
 

@@ -40,7 +40,6 @@ public class SourcesStoresDocumentValidationTab extends GenericCloseableTab {
 
         Label l2=createSubtitle1("2. Select Registry");
         sites = new EndpointWidget();
-//        sites.isEndpointValueSelected()
 
         Label l3=createSubtitle1("3. Select SAML and TLS options");
         TLSAndSAMLForm tlsAndSAMLForm=new TLSAndSAMLForm();
@@ -57,7 +56,7 @@ public class SourcesStoresDocumentValidationTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getSourceStoresDocumentValidationCode();
+        return TabNamesUtil.getInstance().getSourceStoresDocumentValidationCode();
     }
 
     private void bindUI() {

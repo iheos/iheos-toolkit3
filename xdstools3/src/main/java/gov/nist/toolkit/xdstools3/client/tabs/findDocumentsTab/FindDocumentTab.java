@@ -80,7 +80,7 @@ public class FindDocumentTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getFindDocumentsTabCode();
+        return TabNamesUtil.getInstance().getFindDocumentsTabCode();
     }
 
     // FIXME Unused is that normal?

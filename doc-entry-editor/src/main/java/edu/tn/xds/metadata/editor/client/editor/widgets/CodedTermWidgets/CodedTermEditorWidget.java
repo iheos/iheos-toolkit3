@@ -45,7 +45,6 @@ public class CodedTermEditorWidget extends Composite implements Editor<CodedTerm
         FieldLabel codingSchemeLabel = new FieldLabel(codingScheme, "Coding Scheme");
         codingSchemeLabel.setLabelWidth(125);
 
-        // setAllowBlanks(false, false, false);
         setEmptyTexts("ex: General Medicine", "ex: Outpatient", "ex: urn:uuid:vvvh6285-8b07-6s88-f36d-df545z654jgf");
         setToolTipConfigs(new ToolTipConfig("Display Name is a string", "it should contain less than 256 characters"), new ToolTipConfig(
                 "Code is a string", "it should contain less than 256 characters"), new ToolTipConfig("Coding Scheme is a string",

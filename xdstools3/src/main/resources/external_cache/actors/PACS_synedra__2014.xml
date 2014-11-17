@@ -1,0 +1,19 @@
+
+<site name="PACS_synedra__2014">
+   <transaction name="ret.b" secure="1">https://synedra7:8443/xds/documentrepository</transaction>
+   <transaction name="isr" secure="0">http://synedra7:8080/xds/documentrepository</transaction>
+   <transaction name="ret.b" secure="0">http://synedra7:8080/xds/documentrepository</transaction>
+   <transaction name="pr.b" secure="1">https://synedra7:8443/xds/documentrepository</transaction>
+   <transaction name="ret.b" secure="0">http://synedra7:8080/xds/documentrepository</transaction>
+   <transaction name="pr.b" secure="0">http://synedra7:8080/xds/documentrepository</transaction>
+   <transaction name="ret.b" secure="1">https://synedra7:8443/xds/documentrepository</transaction>
+   <transaction name="isr" secure="1">https://synedra7:8443/xds/documentrepository</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.114"
+         secure="1">https://synedra7:8443/xds/documentrepository</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.114"
+         secure="0">http://synedra7:8080/xds/documentrepository</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.114"
+         secure="0">http://synedra7:8080/xds/documentrepository</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.114"
+         secure="1">https://synedra7:8443/xds/documentrepository</repository>
+</site>

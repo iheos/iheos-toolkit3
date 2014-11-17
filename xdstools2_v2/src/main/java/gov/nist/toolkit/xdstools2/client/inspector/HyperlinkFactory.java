@@ -10,7 +10,7 @@ import gov.nist.toolkit.registrymetadata.client.Uid;
 import gov.nist.toolkit.results.client.AssertionResults;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.results.client.StepResult;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.TestDocumentation;
 import gov.nist.toolkit.xdstools2.client.tabs.GetRelatedTab;
@@ -172,7 +172,7 @@ public class HyperlinkFactory {
 			String docs = TestDocumentation.getDocumentation(testname);
 			if (docs == null)
 				docs = "No documentation available";
-			new PopupMessage(docs);
+			new PopupMessageV3(docs);
 		}
 	}
 

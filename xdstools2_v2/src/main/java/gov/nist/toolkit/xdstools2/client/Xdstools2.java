@@ -5,9 +5,16 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import gov.nist.toolkit.tk.client.TkProps;
-import gov.nist.toolkit.xdstools2.client.tabs.*;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.toolkit.xdstools2.client.tabs.EnvironmentState;
+import gov.nist.toolkit.xdstools2.client.tabs.HomeTab;
+import gov.nist.toolkit.xdstools2.client.tabs.QueryState;
+import gov.nist.toolkit.xdstools2.client.tabs.TestSessionState;
 import gov.nist.toolkit.xdstools2.client.tabs.messageValidator.MessageValidatorTab;
 import gov.nist.toolkit.xdstools2.client.tabs.testRunnerTab.TestRunnerTab;
 
@@ -102,7 +109,7 @@ public class Xdstools2 implements EntryPoint, TabContainer {
 
 
             public void onFailure(Throwable arg0) {
-                new PopupMessage("Load of TkProps failed");
+                new PopupMessageV3("Load of TkProps failed");
                 if (newHomeTab)
                     onModuleLoad2(); // continue so admin can fix the config
             }
@@ -111,7 +118,7 @@ public class Xdstools2 implements EntryPoint, TabContainer {
             public void onSuccess(TkProps arg0) {
                 props = arg0;
 //				if (props.isEmpty())
-//					new PopupMessage("Load of TkProps failed");
+//					new PopupMessageV3("Load of TkProps failed");
                 if (newHomeTab)
                     onModuleLoad2();
             }

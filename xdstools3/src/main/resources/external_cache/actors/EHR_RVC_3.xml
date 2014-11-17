@@ -1,0 +1,11 @@
+
+<site name="EHR_RVC_3">
+   <transaction name="pr.b" secure="1">https://rvc6:8080/your_url</transaction>
+   <transaction name="ret.b" secure="0">http://rvc6/your_url</transaction>
+   <transaction name="pr.b" secure="0">http://rvc6/your_url</transaction>
+   <transaction name="ret.b" secure="1">https://rvc6:8080/your_url</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.137"
+         secure="0">http://rvc6/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.137"
+         secure="1">https://rvc6:8080/your_url</repository>
+</site>

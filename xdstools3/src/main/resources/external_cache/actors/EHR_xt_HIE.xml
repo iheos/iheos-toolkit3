@@ -1,0 +1,11 @@
+
+<site name="EHR_xt_HIE">
+   <transaction name="pr.b" secure="0">http://xt2/your_url</transaction>
+   <transaction name="ret.b" secure="0">http://xt2:8020/axis2/services/xdsrepositoryb</transaction>
+   <transaction name="pr.b" secure="1">https://xt2:8080/your_url</transaction>
+   <transaction name="ret.b" secure="1">https://xt2:8080/your_url</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.133"
+         secure="0">http://xt2:8020/axis2/services/xdsrepositoryb</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.133"
+         secure="1">https://xt2:8080/your_url</repository>
+</site>
