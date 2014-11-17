@@ -26,6 +26,9 @@ public class AssertionGroup  {
 
     AssertionGroup() {}
 
+    boolean hasAssertion(id) { assertions.find { it.id == id}}
+    def getAssertions(id) { assertions.findAll { it.id == id}}
+
     boolean hasContent() { return assertions.size() > 0 }
 
     boolean needsFlushing() { (hasContent() || hasWarnings()) && !saved }
@@ -201,6 +204,17 @@ public class AssertionGroup  {
             found = value
         }
         a.status = (value != null && value.size() > 0) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
+        addAssertion(a, required);
+        return a;
+    }
+
+    public Assertion assertStartsWith(String value, String prefix, boolean required) {
+        Assertion a = new Assertion();
+        a.with {
+            expected = "Has prefix ${prefix}"
+            found = value
+        }
+        a.status = (value != null && value.startsWith(prefix)) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
         addAssertion(a, required);
         return a;
     }

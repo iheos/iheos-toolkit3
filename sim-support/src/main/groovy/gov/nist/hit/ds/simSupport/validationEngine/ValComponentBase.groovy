@@ -40,7 +40,7 @@ public abstract class ValComponentBase implements ValComponent {
 
     ValComponentBase(Event _event) {
         event = _event
-        log.debug "ValComponentBase() - ${this.class.name}"
+        log.debug "ValComponentBase() - ${this.class.name} - ${event}"
     }
 
     ValComponentBase asPeer() { parentRelation = Relation.PEER; return this }
@@ -50,6 +50,7 @@ public abstract class ValComponentBase implements ValComponent {
     void runValidationEngine() throws SoapFaultException, RepositoryException {
         String name = this.class.simpleName
         log.debug("Running ${parentRelation} ${name}")
+        if (event == null) log.error("Validator ${name} not initialized correctly, must call super(event) in constructor.")
         log.debug("resultsStack before init: ${event.resultsStack}")
         if (parentRelation == Relation.NONE) throw new ToolkitRuntimeException("Validation ${name} has no established relationhip to parent")
         if (parentRelation == Relation.PEER) event.addPeerResults(name)
@@ -183,6 +184,13 @@ public abstract class ValComponentBase implements ValComponent {
 
     public Assertion assertHasValue(String value) throws SoapFaultException {
         Assertion a = ag.assertHasValue(value, currentValidationMethod().required);
+        log.debug("Assertion: ${a}")
+        recordAssertion(a);
+        return a
+    }
+
+    public Assertion assertStartsWith(String value, String prefix) throws SoapFaultException {
+        Assertion a = ag.assertStartsWith(value, prefix, currentValidationMethod().required);
         log.debug("Assertion: ${a}")
         recordAssertion(a);
         return a
