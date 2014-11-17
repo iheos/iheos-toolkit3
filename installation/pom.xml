@@ -41,7 +41,7 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.hit.ds</groupId>
-			<artifactId>xds-exceptions</artifactId>
+			<artifactId>xdsException</artifactId>
 			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
