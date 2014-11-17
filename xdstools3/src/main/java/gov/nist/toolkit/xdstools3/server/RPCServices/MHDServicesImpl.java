@@ -51,6 +51,12 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
         return Caller.getInstance().validateMHDMessage(messageType,new String(getSession().getlastUpload()).trim());
     }
 
+    @Override
+    public String convertToXds() {
+        String fileToConvert = new String(getSession().getlastUpload()).trim();
+        return Caller.getInstance().convertToXDS(fileToConvert);
+    }
+
     /**
      * Method that return the SessionId (copied from v2)
      * @return Session Id

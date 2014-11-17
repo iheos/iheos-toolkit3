@@ -77,6 +77,8 @@ public class HomeLinkButton extends IButton {
                     placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getMHDValidatorTabCode()));
                 else if (title == "Submit Test Data")
                     placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getTestDataSubmissionTabCode()));
+                else if (title == "MHD to XDS Converter")
+                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });

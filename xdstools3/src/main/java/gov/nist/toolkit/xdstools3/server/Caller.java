@@ -1,5 +1,6 @@
 package gov.nist.toolkit.xdstools3.server;
 
+import gov.nist.toolkit.xdstools3.server.RPCServices.SaveTempFileService;
 import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
 import gov.nist.toolkit.xdstools3.server.demo.TestDataHelper;
 
@@ -21,6 +22,7 @@ public class Caller implements Serializable {
 	private static final long serialVersionUID = -6431109235310163158L;
 	private static Caller instance = null;
     private final static Logger logger = Logger.getLogger(Caller.class.getName());
+    private final SaveTempFileService saveTempFileService = new SaveTempFileService();
 
 	protected Caller(){
 	}
@@ -134,13 +136,39 @@ public class Caller implements Serializable {
 
 
     // ----------------------------- MHD -------------------------------
+
+    /**
+     * Method that calls for a mhd message validation
+     * @param messageType type of mhd message
+     * @param filecontent mhd message itself
+     *
+     * @return
+     */
     public String validateMHDMessage(String messageType,String filecontent) {
         /* TODO Implementation using toolkitServices.getSession().getLastUpload() to get the file uploaded
           (Change method prototype if required)*/
         return "Response for "+messageType+" validation.";
     }
 
+    /**
+     * Method that retrieves test data set
+     * @param testDataType
+     * @return
+     */
     public Map<String,String> retrieveTestDataSet(String testDataType) {
         return TestDataHelper.instance.getTestDataSet();
+    }
+
+    /**
+     * Method that converts a mhd file into a xds file
+     * @param fileToConvert
+     * @return
+     */
+    public String convertToXDS(String fileToConvert) {
+        String convertedFile=new String();
+        // TODO Implement conversion
+        convertedFile=fileToConvert;
+        String filename=saveTempFileService.saveAsXMLFile(convertedFile);
+        return filename;
     }
 }

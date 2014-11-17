@@ -46,6 +46,7 @@ public class HomeTab extends GenericTab {
         mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         // Mhd Validations
         mhdTools.addItem("MHD Validator");
+        mhdTools.addItem("MHD to XDS Converter");
 
         HomeBox connectathonTools = new HomeBox("Connectathon Tools");
         connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
