@@ -7,6 +7,7 @@ import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext
 import gov.nist.hit.ds.repository.api.RepositoryException
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
@@ -42,6 +43,8 @@ public abstract class ValComponentBase implements ValComponent {
         event = _event
         log.debug "ValComponentBase() - ${this.class.name} - ${event}"
     }
+
+    ValComponentBase(SimHandle simHandle) { this(simHandle.event)}
 
     ValComponentBase asPeer() { parentRelation = Relation.PEER; return this }
     ValComponentBase asChild() { parentRelation = Relation.CHILD; return this }

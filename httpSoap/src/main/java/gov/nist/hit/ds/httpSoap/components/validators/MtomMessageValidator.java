@@ -3,6 +3,7 @@ package gov.nist.hit.ds.httpSoap.components.validators;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.http.parser.HttpParserBa;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.simSupport.simulator.SimHandle;
 import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase;
 import gov.nist.hit.ds.soapSupport.SoapFaultException;
@@ -14,7 +15,7 @@ public class MtomMessageValidator extends ValComponentBase {
 	byte[] bodyBytes;
 	Event event;
 
-    public MtomMessageValidator() { super(null); }
+    public MtomMessageValidator() { super((SimHandle)null); }
 
     @Override
     public void run() throws SoapFaultException, RepositoryException {
