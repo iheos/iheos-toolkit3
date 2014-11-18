@@ -38,7 +38,7 @@ public class UriTest extends TestCase {
 //		try {
 //			m.reParse();
 //			val = new Validator(m, rel, true, false, null, false);
-//			val.run();
+//			val.testRun();
 //		} catch (LoggerException e) {
 //			fail("Exception: " + ExceptionUtil.exception_details(e));
 //		} catch (XdsException e) {

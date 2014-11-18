@@ -86,7 +86,7 @@ public class SoapHeaderMetadataLevelValidator extends ValComponentBase {
 //	}
 //
 //	@Override
-//	public void run(MessageValidatorEngine mve) throws SoapFaultException,
+//	public void testRun(MessageValidatorEngine mve) throws SoapFaultException,
 //	RepositoryException {
 //		runValidationEngine();
 //	}

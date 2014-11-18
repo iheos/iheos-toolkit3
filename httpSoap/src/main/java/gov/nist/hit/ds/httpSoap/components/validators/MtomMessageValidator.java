@@ -35,7 +35,7 @@ public class MtomMessageValidator extends ValComponentBase {
 //	}
 //
 //
-//	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
+//	public void testRun(IAssertionGroup er, MessageValidatorEngine mvc) {
 //		this.er = er;
 //		headers.setErrorRecorder(er);
 //		try {

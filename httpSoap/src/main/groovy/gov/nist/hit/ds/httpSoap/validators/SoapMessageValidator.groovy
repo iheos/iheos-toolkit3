@@ -31,7 +31,7 @@ public class SoapMessageValidator extends ValComponentBase {
         this.xmlMessage = msg
     }
 
-    // TODO:  This needs a Do-This-First annotation similar to dependsOn.  It should run first because we label it so not because it has no dependencies.
+    // TODO:  This needs a Do-This-First annotation similar to dependsOn.  It should testRun first because we label it so not because it has no dependencies.
     @Fault(code=FaultCode.Sender)
     @Validation(id="Soap001",  msg="HTTP Body Present", ref="??")
     public void bodyPresent() throws SoapFaultException {

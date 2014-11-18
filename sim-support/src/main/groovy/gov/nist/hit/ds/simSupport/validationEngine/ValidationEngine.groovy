@@ -27,7 +27,7 @@ public class ValidationEngine {
         validationObject.validationEngine = this
     }
 
-    // called (indirectly through ValComponentBase) by the validator method run()
+    // called (indirectly through ValComponentBase) by the validator method testRun()
     public void run() throws SoapFaultException {
         try {
             scanForValidationMethods()

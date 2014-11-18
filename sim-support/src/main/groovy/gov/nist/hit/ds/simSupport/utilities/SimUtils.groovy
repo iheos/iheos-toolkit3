@@ -146,7 +146,7 @@ class SimUtils {
         log.debug("runTransaction: endpoint = ${endp}")
         def transactionType = new ActorTransactionTypeFactory().getTransactionType(endp.transCode)
         SimId simId = endp.simId
-        return new TransactionRunner(simId, repositoryName, transactionType, header, body).run()
+        return new TransactionRunner(simId, repositoryName, transactionType, header, body).testRun()
     }
 
     private static Asset sim(SimId simId, Repository repository) {

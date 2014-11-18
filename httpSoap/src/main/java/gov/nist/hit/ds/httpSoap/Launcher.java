@@ -13,7 +13,7 @@ public class Launcher {
 	 * 
 	 * @param chainDef - resource location (something in the classpath) of a property file that 
 	 * defines a SimChain. 
-	 * @return Launcher object - after SimChain has been run
+	 * @return Launcher object - after SimChain has been testRun
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 * @throws NoSuchMethodException
@@ -37,7 +37,7 @@ public class Launcher {
 //
 //		logger.info(engine.getDescription(simChain));
 //
-//		engine.run();
+//		engine.testRun();
 //
 //		logger.info(simChain.getLog());
 //

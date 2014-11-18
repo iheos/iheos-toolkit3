@@ -72,7 +72,7 @@ class TransactionFailureTest extends Specification {
         when:
         def runner = new TransactionRunner(simHandle)
         def eventAccess = new EventAccess(simId.id, simHandle.event)
-        runner.run()
+        runner.testRun()
 
         then:
         thrown SoapFaultException
@@ -98,7 +98,7 @@ class TransactionFailureTest extends Specification {
         when:
         def runner = new TransactionRunner(simHandle)
         def eventAccess = new EventAccess(simId.id, simHandle.event)
-        runner.run()
+        runner.testRun()
 
         then:
         notThrown SoapFaultException

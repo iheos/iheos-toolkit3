@@ -39,7 +39,7 @@ public class SimpleSoapEnvironmentValidator extends ValComponentBase {
 //	}
 //
 //	@Override
-//	public void run(MessageValidatorEngine mve) throws SoapFaultException, RepositoryException {
+//	public void testRun(MessageValidatorEngine mve) throws SoapFaultException, RepositoryException {
 //		if (hparser.isMultipart())
 //			throw new SoapFaultException(
 //					ag,

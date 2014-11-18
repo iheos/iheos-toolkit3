@@ -53,7 +53,7 @@ class RegisterTransaction implements Transaction {
 
     @Override
     ValidationStatus run() {
-        log.debug('In RegisterTransaction#run')
+        log.debug('In RegisterTransaction#testRun')
         new HttpHeaderValidator(simHandle).asChild().run()
 
         def soapMessageParser = new SoapMessageValidator(simHandle, new String(simHandle.event.inOut.reqBody))
@@ -78,7 +78,7 @@ class RegisterTransaction implements Transaction {
 
 
 //        def metadataProcessing = new RegisterMetadataProcessing(open, soapBody)
-//        metadataProcessing.run()
+//        metadataProcessing.testRun()
 
 
 //        // These steps are common to Registry and Update.  They operate
@@ -131,7 +131,7 @@ class RegisterTransaction implements Transaction {
         rmHome();
     }
 
-    // These steps are run on the entire metadata collection
+    // These steps are testRun on the entire metadata collection
     // for the Register transaction but only on an operation
     // for the Update transaction.
     public void processMetadata(Metadata m, ProcessMetadataInterface pmi) {

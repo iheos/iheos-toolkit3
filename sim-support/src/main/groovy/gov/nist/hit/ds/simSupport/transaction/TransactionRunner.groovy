@@ -84,10 +84,13 @@ class TransactionRunner {
         simHandle.transactionType = transactionType
     }
 
+    // These depend on the interface Transaction to be implemented by all classes
+    // that define transactions.
     def validateRequest() {runAMethod('validateRequest')}
     def validateResponse() {runAMethod('validateResponse')}
-    SimHandle run() { runAMethod('run'); return simHandle }  // used for unit tests
-    SimHandle prun() { runPMethod('run'); return simHandle }  // used for production (from servlet)
+    SimHandle run() { runPMethod('run'); return simHandle }  // used for production (from servlet)
+
+    SimHandle testRun() { runAMethod('run'); return simHandle }  // used for unit tests
 
     // TODO - may be closing sim too early - good for unit tests, bad for servlet access
     def runAMethod(methodName) {
@@ -108,7 +111,7 @@ class TransactionRunner {
         params[0] = simHandle
         Object instance = clazz.newInstance(params)
 
-        // call run() method
+        // call testRun() method
         try {
             instance.invokeMethod(methodName, null)
 //            SimUtils.close(simHandle)
@@ -146,7 +149,7 @@ class TransactionRunner {
         params[0] = simHandle
         Object instance = clazz.newInstance(params)
 
-        // call run() method
+        // call testRun() method
         try {
             instance.invokeMethod(methodName, null)
         } catch (Throwable t) {
@@ -156,7 +159,7 @@ class TransactionRunner {
     }
 
     ///////////////////////////////////////////////////////////////////
-    // Unit Test support - run individual validator/simulator component
+    // Unit Test support - testRun individual validator/simulator component
 
     Closure runner
     TransactionRunner(String transactionCode, SimId simId, repositoryName, Closure runner)  {

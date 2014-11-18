@@ -46,7 +46,7 @@ public class RepositoryRpcTest {
         Installation.reset();
         Installation.installation().initialize();
 
-        // Test assets created will be automatically removed after the test suite run is complete
+        // Test assets created will be automatically removed after the test suite testRun is complete
 
         Configuration.configuration();
 

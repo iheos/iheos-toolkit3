@@ -259,7 +259,7 @@ public class SimServlet extends HttpServlet {
 
     private void runTransaction(SimHandle simHandle) {
         try {
-           new TransactionRunner(simHandle).prun();
+           new TransactionRunner(simHandle).run();
         } catch (Exception e) {
             logger.debug("runTransaction caught exception");
             simHandle.getEvent().setFault(new Fault(ExceptionUtil.exception_details(e), FaultCode.Receiver.toString(), "Unknown",

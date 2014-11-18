@@ -62,7 +62,7 @@ public class EbSchemaValidation {
                     + e.getMessage());
         }
 
-        // run parser and collect parser and schema errors
+        // testRun parser and collect parser and schema errors
         try {
             // translate urn:uuid: to urn_uuid_ since the colons really screw up schema stuff
             String metadata2 = metadata.replaceAll("urn:uuid:", "urn_uuid_");

@@ -9,7 +9,7 @@ public class SoapMessageParserTest {
 //		xml.xml = envelope;
 //		SoapMessageParser soapMessageParser = new SoapMessageParser();
 //		soapMessageParser.setXML(xml);
-//		soapMessageParser.run(null);
+//		soapMessageParser.testRun(null);
 //		SoapMessage soapMessage = soapMessageParser.getSoapMessage();
 //		assertTrue(soapMessage != null);
 //		assertTrue(soapMessage.getHeader() != null);

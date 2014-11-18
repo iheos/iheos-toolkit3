@@ -87,7 +87,7 @@ Host: localhost:9085'''
         endpointBuilder.parse(endpoint)
 //        def transRunner = new TransactionRunner(endpointBuilder, new SimSystemConfig().repoName)
         def transRunner = new TransactionRunner(simHandle)
-        transRunner.run()
+        transRunner.testRun()
 
         then: '''Sim should still be open'''
         simHandle.isOpen()

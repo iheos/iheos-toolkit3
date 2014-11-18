@@ -3,7 +3,6 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
@@ -63,7 +62,7 @@ class PnrTest extends Specification {
         simHandle.event.inOut.reqBody = body
         when:
         def runner = new TransactionRunner(simId, repoName, transactionType)
-        runner.run()
+        runner.testRun()
 
         then:
         true
