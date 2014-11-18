@@ -9,14 +9,21 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
  */
 class CodingValidator extends ValComponentBase {
     def coding
+    String elementName = 'coding'
 
     CodingValidator(SimHandle simHandle, _coding) {
         super(simHandle.event)
         coding = _coding
     }
 
-    @Validation(id='fhircode010', msg='Code root is coding', ref='')
-    def code010() { assertEquals('coding', coding.name()) }
+    CodingValidator(SimHandle simHandle, _coding, _elementName) {
+        super(simHandle.event)
+        coding = _coding
+        elementName = _elementName
+    }
+
+    @Validation(id='fhircode010', msg='Validating code root', ref='')
+    def code010() { infoFound("Root should be ${elementName}"); assertEquals(elementName, coding.name()) }
 
     @Validation(id='fhircode020', msg='Code has value in system.@value', ref='')
     def code020() { assertHasValue(coding.system.@value.text())}

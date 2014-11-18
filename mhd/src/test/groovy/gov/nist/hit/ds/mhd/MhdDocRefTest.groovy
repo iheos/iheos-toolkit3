@@ -76,7 +76,8 @@ class MhdDocRefTest extends Specification {
     <authenticator>
         <reference value="#auth2"/>
     </authenticator>
-</DocumentReference>'''
+</DocumentReference>
+'''
 
         when:
         def xml = new XmlSlurper().parseText(text)
@@ -89,18 +90,58 @@ class MhdDocRefTest extends Specification {
         validator.containedPractitioners('auth1').size() == 1
     }
 
-    def 'ClassCode test'() {
-        def text1 = '''
+    def 'Should collect ome sourcepatient element'() {
+        def text = '''
 <DocumentReference>
-    <class>
-        <coding>
-            <system value="urn:oid:1.3.6.1.4.1.21367.100.1"/>
-            <code value="DEMO-Pt Mgmt"/>
-            <display value="Patient Management"/>
-        </coding>
-    </class>
-</DocumentReference>'''
+    <extension url="http://ihe.net/fhir/Profile/XDS/extensions#sourcePatient">
+        <valueResource>
+            <reference value="#sourcepatient"/>
+        </valueResource>
+    </extension>
+    <contained>
+        <!-- this could contain the full sourcePatientInfo detail
+             referenced by <subject/> DocumentEntry.patientId
+             this is the Source patientID -->
+        <Patient id="sourcepatient">
+            <identifier>
+                <system value="urn:oid:7.7.7"/>
+                <value value="DTG1234"/>
+            </identifier>
+            <name>
+                <family value="Brown"/>
+                <given value="Charlie"/>
+            </name>
+            <gender>
+                <coding>
+                    <code value="M">
+                    </code>
+                </coding>
+            </gender>
+            <birthDate value="1951-08-24T09:35:00"/>
+            <address>
+                <line value="100 Main St"/>
+                <city value="Burlington"/>
+                <state value="MA"/>
+                <zip value="01803"></zip>
+                <country value="USA"/>
+            </address>
+        </Patient>
+    </contained>
+</DocumentReference>
+'''
+        when:
+        def xml = new XmlSlurper().parseText(text)
+        def validator = new MhdDocRefValidator(SimUtils.create(new SimId('tmp')), xml)
 
+        then:
+        validator.sourcePatientExtensions().size() == 1
+        validator.sourcePatientRefValues().size() == 1
+        validator.sourcePatientRefTags().size() == 1
+        validator.sourcePatients().size() == 1
+        validator.sourcePatients().first().name() == 'Patient'
+    }
+
+    def 'ClassCode test'() {
         def text = getClass().getResource('/mhd/full_docref.xml').text
 
         when:
@@ -111,11 +152,18 @@ class MhdDocRefTest extends Specification {
         def transRunner = new TransactionRunner('rb', simId, repoName, closure)
         transRunner.simHandle.event.addArtifact('Metadata', '')
         transRunner.runTest()
-        println transRunner.simHandle.event.getAssertions('mhd140')
 
         then:
         transRunner.simHandle.event.getAssertions('mhd140')
+        transRunner.simHandle.event.getAssertions('mhd150')
+        transRunner.simHandle.event.getAssertions('mhd190')
+        transRunner.simHandle.event.getAssertions('mhd200')
+        transRunner.simHandle.event.getAssertions('mhd210')
+        transRunner.simHandle.event.getAssertions('mhd220')
+        transRunner.simHandle.event.getAssertions('mhd230')
+        transRunner.simHandle.event.getAssertions('mhd270')
         transRunner.simHandle.event.getAssertions('fhirpract010')
+        transRunner.simHandle.event.getAssertions('fhirpatient010')
         !transRunner.simHandle.event.hasErrors()
     }
 
