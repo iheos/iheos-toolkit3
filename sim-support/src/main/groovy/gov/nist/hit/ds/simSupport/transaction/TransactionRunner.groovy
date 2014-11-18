@@ -10,6 +10,8 @@ import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.xdsException.ExceptionUtil
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
+import org.apache.commons.lang.ArrayUtils
+
 /**
  * Created by bmajur on 7/5/14.
  */
@@ -133,6 +135,13 @@ class TransactionRunner {
             simHandle.event.fault = new Fault('Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType.code, "Transaction implementation class ${implClassName} does not exist.")
             return
         }
+
+        println "Class ${clazz.name} implements ${clazz.getInterfaces()}"
+        if (!(ArrayUtils.contains(clazz.getInterfaces(), Transaction))) {
+            simHandle.event.fault = new Fault('Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType.code, "Transaction implementation class ${implClassName} does not implment interface Transaction.")
+            return
+        }
+
         Object[] params = new Object[1]
         params[0] = simHandle
         Object instance = clazz.newInstance(params)

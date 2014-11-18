@@ -1,5 +1,5 @@
 package gov.nist.hit.ds.dsSims.transactions
-import gov.nist.hit.ds.dsSims.Transaction
+import gov.nist.hit.ds.simSupport.transaction.Transaction
 import gov.nist.hit.ds.dsSims.reg.DSMetadataProcessing
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.httpSoap.components.validators.SoapHeaderValidator
@@ -9,7 +9,7 @@ import gov.nist.hit.ds.metadata.*
 import gov.nist.hit.ds.metadata.client.MetadataCollection
 import gov.nist.hit.ds.metadata.store.RegistryFactory
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
-import gov.nist.hit.ds.tkapis.validation.ValidationStatus
+import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
 import gov.nist.hit.ds.xdsException.MetadataException
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import groovy.util.logging.Log4j

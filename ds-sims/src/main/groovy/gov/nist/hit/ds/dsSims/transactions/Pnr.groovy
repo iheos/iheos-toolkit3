@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.dsSims.transactions
 
-import gov.nist.hit.ds.dsSims.Transaction
+import gov.nist.hit.ds.simSupport.transaction.Transaction
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
-import gov.nist.hit.ds.tkapis.validation.ValidationStatus
+import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
 
 /**
  * Created by bmajur on 9/24/14.
