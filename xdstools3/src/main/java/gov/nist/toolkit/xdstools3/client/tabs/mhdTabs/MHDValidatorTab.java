@@ -1,12 +1,13 @@
 package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.widgets.Button;
-import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
@@ -15,9 +16,7 @@ import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VStack;
-import gov.nist.toolkit.xdstools2.client.Toolkit2Service;
-import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
-import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.hit.ds.logBrowser.client.widgets.EventAggregatorWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
@@ -40,11 +39,14 @@ public class MHDValidatorTab extends GenericCloseableTab {
     private FormPanel uploadForm;
     private SelectItem messageTypeSelect;
     private FileUpload fileUploadItem;
-    private HTMLPane validationResultsPanel;
+    private VStack validationResultsPanel;
     private Button runBtn;
 
     // Variables
     private String selectedMessageType;
+    String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
+    String type = "validators";
+    String[] displayColumns = new String[]{"ID","STATUS","MSG"};
 
     /**
      * Default constuctor
@@ -93,7 +95,9 @@ public class MHDValidatorTab extends GenericCloseableTab {
         runBtn.disable();
 
         // Validation result elements
-        validationResultsPanel = new HTMLPane();
+        validationResultsPanel = new VStack();
+
+        validationResultsPanel.addMember(setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT, "Sim", id, type, displayColumns));
 
         form.setFields(l1, messageTypeSelect, l2);
 
@@ -102,6 +106,8 @@ public class MHDValidatorTab extends GenericCloseableTab {
         vStack.addMembers(runBtn,validationResultsPanel);
 
         bindUI();
+
+
 
         return vStack;
     }
@@ -194,6 +200,22 @@ public class MHDValidatorTab extends GenericCloseableTab {
         if (!validationResultsPanel.isVisible()){
             validationResultsPanel.setVisible(true);
         }
+    }
+
+    protected Widget setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
+        try {
+            /* manual setup:
+            1) change also the assertionGroup type in event widget.
+             */
+
+            EventAggregatorWidget eventMessageAggregatorWidget = new EventAggregatorWidget(new SimpleEventBus(), assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
+
+            return eventMessageAggregatorWidget;
+
+        } catch (Exception ex) {
+            Window.alert(ex.toString());
+        }
+        return null;
     }
 
 }

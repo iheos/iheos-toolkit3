@@ -50,6 +50,10 @@
         <servlet-name>testDataSubmissionServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.TestDataSubmissionServicesImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>repositoryServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.repository.rpc.search.server.RepositoryServiceImpl</servlet-class>
+    </servlet>
 
     <!-- v2 legacy servlets -->
     <servlet>
@@ -99,6 +103,11 @@
     <servlet-mapping>
         <servlet-name>fileUploadServlet</servlet-name>
         <url-pattern>/fileUploadServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>repositoryServlet</servlet-name>
+        <url-pattern>/xdstools3/repository</url-pattern>
     </servlet-mapping>
 
 
