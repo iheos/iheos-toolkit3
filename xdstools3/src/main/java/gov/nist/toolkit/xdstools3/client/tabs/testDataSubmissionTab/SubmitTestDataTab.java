@@ -111,8 +111,9 @@ public class SubmitTestDataTab extends GenericCloseableTab {
         runBtn.disable();
 
         form.setFields(l1, testDataType,l2, testDataSetSelectItem);
+        form.setCellPadding(15);
 
-        container.addMembers(form,l3, pid,l4, /*docRepository,*/l5, tlsAndSAMLForm, runBtn);
+        container.addMembers(form,l3, pid,l4, docRepository,l5, tlsAndSAMLForm, runBtn);
         return container;
     }
 

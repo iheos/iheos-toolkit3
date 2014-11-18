@@ -39,6 +39,7 @@ public class GetSubmissionSetAndContentsTab extends GenericCloseableTab {
         subSetUUID.setTitle("Submission Set UUID or UID");
         subSetUUID.setWidth(400);
         subSetUUIDForm.setFields(subSetUUID);
+        subSetUUIDForm.setCellPadding(10);
 
         Label l2=createSubtitle1("2. Select site");
         sites = new EndpointWidget();

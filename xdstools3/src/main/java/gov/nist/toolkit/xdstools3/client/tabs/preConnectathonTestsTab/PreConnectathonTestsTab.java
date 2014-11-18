@@ -91,6 +91,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
         afterReadme = new HTMLFlow("<hr/>");
 
         form.setFields(selectActor, selectTest);
+        form.setCellPadding(10);
 
         selectSection = new SelectItem();
         selectSection.setTitle("Select section");
@@ -114,6 +115,8 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
         IButton viewTestPlan = new IButton("View this section's testplan");
         viewTestPlan.setWidth(200);
         f.setFields(selectSection);
+        f.setCellPadding(10);
+
         sectionPanel = new VStack();
         sectionPanel.addMembers(f,viewTestPlan);
 

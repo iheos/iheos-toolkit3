@@ -96,6 +96,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         validationResultsPanel = new HTMLPane();
 
         form.setFields(l1, messageTypeSelect, l2);
+        form.setCellPadding(10);
 
         vStack.addMember(form);
         vStack.addMember(uploadForm);

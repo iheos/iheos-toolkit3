@@ -45,6 +45,7 @@ public class GetRelatedDocumentsTab extends GenericCloseableTab {
         docEntryUUID.setTitle("Document Entry UUID");
         docEntryUUID.setWidth(400);
         docEntryUUIDForm.setFields(docEntryUUID);
+        docEntryUUIDForm.setCellPadding(10);
 
         Label l2=createSubtitle1("2. Select Association Type");
         DynamicForm associationForm = new DynamicForm();
@@ -54,6 +55,7 @@ public class GetRelatedDocumentsTab extends GenericCloseableTab {
         associationTypes.setEmptyDisplayValue("Select Association Type...");
         associationTypes.setWidth(400);
         associationForm.setFields(associationTypes);
+        associationForm.setCellPadding(10);
         loadAssociationTypesMap();
 
 
