@@ -22,7 +22,12 @@ class Reg implements Transaction {
     }
 
     @Override
-    ValidationStatus run() {
+    ValidationStatus acceptRequest() {
+        return null
+    }
+
+    @Override
+    ValidationStatus sendRequest() {
         return null
     }
 }

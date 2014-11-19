@@ -6,5 +6,6 @@ package gov.nist.hit.ds.simSupport.transaction;
 public interface Transaction {
     ValidationStatus validateRequest();
     ValidationStatus validateResponse();
-    ValidationStatus run();
+    ValidationStatus acceptRequest();
+    ValidationStatus sendRequest();
 }

@@ -139,7 +139,7 @@ class SimUtils {
         } catch (Exception e) { return false }
     }
 
-    static runTransaction(SimHandle simHandle) { new TransactionRunner(simHandle).run() }
+    static runTransaction(SimHandle simHandle) { new TransactionRunner(simHandle).acceptRequest() }
     static validateTransactionRequest(SimHandle simHandle) { new TransactionRunner(simHandle).validateRequest() }
     static validateTransactionResponse(SimHandle simHandle) { new TransactionRunner(simHandle).validateResponse() }
 

@@ -46,7 +46,7 @@ class TransactionRunner {
         transactionType = _transactionType
         simId = _simId
         repoName = repositoryName
-        implClassName = transactionType.implementationClassName
+        implClassName = transactionType.acceptRequestClassName
         log.debug("implClassName is ${implClassName}")
         init2(simId, transactionType.code, repositoryName)
     }
@@ -55,7 +55,7 @@ class TransactionRunner {
         simHandle = _simHandle
         event = simHandle.event
         transactionType = simHandle.transactionType
-        implClassName = simHandle.transactionType?.implementationClassName
+        implClassName = simHandle.transactionType?.acceptRequestClassName
         log.debug("TransactionRunner: transactionType is ${simHandle.transactionType} implClass is ${implClassName}")
     }
     ////////////////////////////////////////////////////////////////
@@ -88,9 +88,10 @@ class TransactionRunner {
     // that define transactions.
     def validateRequest() {runAMethod('validateRequest')}
     def validateResponse() {runAMethod('validateResponse')}
-    SimHandle run() { runPMethod('run'); return simHandle }  // used for production (from servlet)
+    SimHandle acceptRequest() { runPMethod('acceptRequest'); return simHandle }  // used for production (from servlet)
+    SimHandle sendRequest() { runPMethod('sendRequest'); return simHandle }
 
-    SimHandle testRun() { runAMethod('run'); return simHandle }  // used for unit tests
+    SimHandle testRun() { runAMethod('run'); return simHandle }  // used for unit tests - run method on validator
 
     // TODO - may be closing sim too early - good for unit tests, bad for servlet access
     def runAMethod(methodName) {
@@ -113,6 +114,7 @@ class TransactionRunner {
 
         // call testRun() method
         try {
+            log.debug("Run method ${methodName} on instance of class ${clazz.name}")
             instance.invokeMethod(methodName, null)
 //            SimUtils.close(simHandle)
         } catch (Throwable t) {

@@ -52,7 +52,7 @@ class RegisterTransaction implements Transaction {
     }
 
     @Override
-    ValidationStatus run() {
+    ValidationStatus acceptRequest() {
         log.debug('In RegisterTransaction#testRun')
         new HttpHeaderValidator(simHandle).asChild().run()
 
@@ -64,6 +64,11 @@ class RegisterTransaction implements Transaction {
         new SoapHeaderValidator(simHandle, header).asPeer().run()
 
         new DSMetadataProcessing(simHandle, body).asPeer().run()
+        return null
+    }
+
+    @Override
+    ValidationStatus sendRequest() {
         return null
     }
 

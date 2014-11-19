@@ -22,7 +22,12 @@ class Pnr implements Transaction {
         return null
     }
 
-    ValidationStatus run() {
+    ValidationStatus acceptRequest() {
         println("Running PnR transaction")
+    }
+
+    @Override
+    ValidationStatus sendRequest() {
+        return null
     }
 }

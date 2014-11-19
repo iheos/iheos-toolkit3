@@ -62,7 +62,7 @@ class PnrTest extends Specification {
         simHandle.event.inOut.reqBody = body
         when:
         def runner = new TransactionRunner(simId, repoName, transactionType)
-        runner.testRun()
+        runner.acceptRequest()
 
         then:
         true
