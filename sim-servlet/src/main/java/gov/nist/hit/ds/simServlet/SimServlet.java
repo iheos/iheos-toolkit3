@@ -99,7 +99,12 @@ public class SimServlet extends HttpServlet {
             logger.error("Error writing response - " + ExceptionUtil.exception_details(e));
         }
 
-        logger.info(new TransactionReportBuilder().build(simHandle));
+        String callbackURI = simHandle.getActorSimConfig().getMessageCallback();
+        if (callbackURI != null && !callbackURI.equals("")) {
+            String payload = new TransactionReportBuilder().build(simHandle);
+            logger.info(payload);
+                        
+        }
     }
 
     protected SimHandle runPost(SimId simId, String header, byte[] body, List<String> options, HttpServletResponse response) {

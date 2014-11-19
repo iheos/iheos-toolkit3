@@ -235,5 +235,6 @@ public class ActorSimConfig {
     boolean isModelCheck() { getByName(TransactionSimConfigElement.MODELCHECK).getValue() }
     boolean isCodingCheck() { getByName(TransactionSimConfigElement.CODINGCHECK).getValue() }
     boolean isSoapCheck() { getByName(TransactionSimConfigElement.SOAPCHECK).getValue() }
+    String getMessageCallback() { getByName(TransactionSimConfigElement.MSGCALLBACK).getValue() }
 
 }

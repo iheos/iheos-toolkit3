@@ -52,15 +52,18 @@ public class Toolkit {
             logger.info("toolkit.properties loaded from <" + resource + ">");
             toolkitPropertiesFile = new File(resource.getFile());
             // if a unit test is currently running the the relative location of
-            // the warRoot will be different. This conditional checks for this
-            // and only sets warRoot if the environment looks like a full
-            // production build
-            if (
-                    toolkitPropertiesFile.getParent().endsWith("classes") &&
-                    toolkitPropertiesFile.getParentFile().getParent().endsWith("WAR"))
+            // the warRoot will be different. This conditional checks for this.
+            // If this is a test then set warRootFile to the resource directory within
+            // thee test directory.
+            if (toolkitPropertiesFile.getParent().endsWith("classes") &&
+                toolkitPropertiesFile.getParentFile().getParent().endsWith("WAR")) {
+                    // production environment
+                    warRootFile = toolkitPropertiesFile.getParentFile().getParentFile();
+            } else if (toolkitPropertiesFile.getParent().endsWith("test-classes")) {
                 warRootFile = toolkitPropertiesFile.getParentFile().getParentFile();
-//            else
-//                warRootFile = null;
+            }
+            else
+                warRootFile = null;
             logger.debug("warRoot set to <" + warRootFile + ">");
 
             propertyManager = new PropertyManager();

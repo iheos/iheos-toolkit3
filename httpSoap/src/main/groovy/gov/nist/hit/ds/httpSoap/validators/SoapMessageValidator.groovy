@@ -1,5 +1,5 @@
 package gov.nist.hit.ds.httpSoap.validators
-import gov.nist.hit.ds.repository.api.RepositoryException
+
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.DependsOn
@@ -141,17 +141,6 @@ public class SoapMessageValidator extends ValComponentBase {
             cnt++;
         }
         return cnt;
-    }
-
-
-    @Override
-    public void run() throws SoapFaultException, RepositoryException {
-        runValidationEngine();
-    }
-
-    @Override
-    public boolean showOutputInLogs() {
-        return false;
     }
 
 

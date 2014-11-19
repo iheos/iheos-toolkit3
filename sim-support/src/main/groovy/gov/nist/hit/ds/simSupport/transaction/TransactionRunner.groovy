@@ -27,18 +27,6 @@ class TransactionRunner {
     def transCode
     def repoName
 
-//    ////////////////////////////////////////////////////////////////
-//    // generates two events - don't use
-//
-//    @Deprecated
-//    TransactionRunner(EndpointBuilder _endpointBuilder, String _repoName) {
-//        endpointBuilder = _endpointBuilder
-////        this.endpoint = endpoint
-//        this.transCode = endpointBuilder.transCode
-//        repoName = _repoName
-//        init()
-//    }
-
     TransactionRunner() {}
 
     TransactionRunner(SimId _simId, String repositoryName, TransactionType _transactionType) {
@@ -58,6 +46,16 @@ class TransactionRunner {
         implClassName = simHandle.transactionType?.acceptRequestClassName
         log.debug("TransactionRunner: transactionType is ${simHandle.transactionType} implClass is ${implClassName}")
     }
+
+    // These depend on the interface Transaction to be implemented by all classes
+    // that define transactions.
+    def validateRequest() {runPMethod('validateRequest', [simHandle])}
+    def validateResponse() {runPMethod('validateResponse', [simHandle])}
+    SimHandle acceptRequest() { runPMethod('acceptRequest', [simHandle]); return simHandle }  // used for production (from servlet)
+    SimHandle sendRequest() { runPMethod('sendRequest', [simHandle]); return simHandle }
+
+    SimHandle testRun() { runAMethod('run'); return simHandle }  // used for unit tests - run method on validator
+
     ////////////////////////////////////////////////////////////////
 
     def init() {
@@ -84,14 +82,6 @@ class TransactionRunner {
         simHandle.transactionType = transactionType
     }
 
-    // These depend on the interface Transaction to be implemented by all classes
-    // that define transactions.
-    def validateRequest() {runAMethod('validateRequest')}
-    def validateResponse() {runAMethod('validateResponse')}
-    SimHandle acceptRequest() { runPMethod('acceptRequest'); return simHandle }  // used for production (from servlet)
-    SimHandle sendRequest() { runPMethod('sendRequest'); return simHandle }
-
-    SimHandle testRun() { runAMethod('run'); return simHandle }  // used for unit tests - run method on validator
 
     // TODO - may be closing sim too early - good for unit tests, bad for servlet access
     def runAMethod(methodName) {
@@ -126,7 +116,7 @@ class TransactionRunner {
     }
 
     // Used for production
-    def runPMethod(String methodName) {
+    def runPMethod(String methodName, def args) {
         // build implementation
         log.debug("Running transaction class ${implClassName}")
         Class<?> clazz
@@ -147,9 +137,11 @@ class TransactionRunner {
             return
         }
 
-        Object[] params = new Object[1]
-        params[0] = simHandle
-        Object instance = clazz.newInstance(params)
+//        Object[] params = new Object[1]
+//        params[0] = simHandle
+//        Object instance = clazz.newInstance(params)
+
+        Object instance = clazz.newInstance(args as String[])
 
         // call testRun() method
         try {
