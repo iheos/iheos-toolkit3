@@ -139,6 +139,10 @@ class SimUtils {
         } catch (Exception e) { return false }
     }
 
+    static runTransaction(SimHandle simHandle) { new TransactionRunner(simHandle).run() }
+    static validateTransactionRequest(SimHandle simHandle) { new TransactionRunner(simHandle).validateRequest() }
+    static validateTransactionResponse(SimHandle simHandle) { new TransactionRunner(simHandle).validateResponse() }
+
     // used in unit tests only
     static SimHandle runTransaction(Endpoint endpoint, String header, byte[] body, String repositoryName) {
         log.debug("Inside runTransaction")
