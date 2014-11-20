@@ -106,10 +106,12 @@
         <url-pattern>/fileUploadServlet</url-pattern>
     </servlet-mapping>
 
+    <!--
     <servlet-mapping>
         <servlet-name>repositoryServlet</servlet-name>
         <url-pattern>/xdstools3/repository</url-pattern>
     </servlet-mapping>
+    -->
 
 
     <!-- v2 legacy servlets -->

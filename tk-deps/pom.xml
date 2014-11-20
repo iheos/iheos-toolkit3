@@ -100,16 +100,11 @@
                 <artifactId>docshare-sims</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
-            <!--<dependency>-->
-                <!--<groupId>gov.nist.hit.ds</groupId>-->
-                <!--<artifactId>installation</artifactId>-->
-                <!--<version>3.0.0-SNAPSHOT</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>gov.nist.hit.ds</groupId>-->
-                <!--<artifactId>tk-initialization</artifactId>-->
-                <!--<version>3.0.0-SNAPSHOT</version>-->
-            <!--</dependency>-->
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>ds-sims</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
 
 
     <!-- External Jars -->
