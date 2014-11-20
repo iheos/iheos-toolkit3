@@ -1,6 +1,4 @@
-package gov.nist.hit.ds.dsSims;
-
-import gov.nist.hit.ds.tkapis.validation.ValidationStatus;
+package gov.nist.hit.ds.simSupport.transaction;
 
 /**
  * Created by bmajur on 8/28/14.
@@ -8,5 +6,6 @@ import gov.nist.hit.ds.tkapis.validation.ValidationStatus;
 public interface Transaction {
     ValidationStatus validateRequest();
     ValidationStatus validateResponse();
-    ValidationStatus run();
+    ValidationStatus acceptRequest();
+    ValidationStatus sendRequest();
 }

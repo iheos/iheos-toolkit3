@@ -36,6 +36,7 @@ class SimHandle {
     // Event creation is lazy so create doesn't build unused event
     Event getEvent() {
         if (!event) {
+            log.debug("Creating event for sim ${simId}")
             def event1 = new EventFactory().buildEvent(repository, eventLogAsset)
             event = event1
             event.init()

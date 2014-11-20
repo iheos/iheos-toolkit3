@@ -9,21 +9,21 @@ import gov.nist.hit.ds.simSupport.utilities.SimUtils
  */
 class SimApi {
 
-    SimHandle create(String actorTypeName, SimId simId) {
+    static SimHandle create(String actorTypeName, SimId simId) {
         SimUtils.create(actorTypeName, simId)
     }
 
-    def delete(SimId simId) {
+    static delete(SimId simId) {
         SimUtils.delete(simId)
     }
 
     // return is an XML blob
-    String getConfig(SimId simId) {
+    static String getConfig(SimId simId) {
         SimHandle simHandle = SimUtils.open(simId)
         return new String(simHandle.configAsset.content)
     }
 
-    def updateConfig(SimId simId, String configXml) {
+    static updateConfig(SimId simId, String configXml) {
         SimHandle simHandle = SimUtils.open(simId)
         SimulatorDAO dao = new SimulatorDAO()
         // updates actorSimConfig with only the entries

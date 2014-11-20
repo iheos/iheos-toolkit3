@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.tkapis.validation;
 
+import gov.nist.hit.ds.simSupport.transaction.ValidationStatus;
+
 import java.util.List;
 
 /**

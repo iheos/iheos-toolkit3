@@ -1,11 +1,9 @@
 package gov.nist.hit.ds.simServlet.rest
-
 import gov.nist.hit.ds.simServlet.api.SimApi
 import gov.nist.hit.ds.simSupport.client.SimId
 
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
-
 /**
  * Created by bmajur on 10/26/14.
  */
@@ -28,4 +26,5 @@ class SimConfig {
         SimId simId = new SimId(simIdString)
         new SimApi().updateConfig(simId, message)
     }
+
 }

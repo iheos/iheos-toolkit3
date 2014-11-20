@@ -7,6 +7,7 @@ import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext
 import gov.nist.hit.ds.repository.api.RepositoryException
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
@@ -40,8 +41,10 @@ public abstract class ValComponentBase implements ValComponent {
 
     ValComponentBase(Event _event) {
         event = _event
-        log.debug "ValComponentBase() - ${this.class.name}"
+        log.debug "ValComponentBase() - ${this.class.name} - ${event}"
     }
+
+    ValComponentBase(SimHandle simHandle) { this(simHandle.event)}
 
     ValComponentBase asPeer() { parentRelation = Relation.PEER; return this }
     ValComponentBase asChild() { parentRelation = Relation.CHILD; return this }
@@ -50,24 +53,35 @@ public abstract class ValComponentBase implements ValComponent {
     void runValidationEngine() throws SoapFaultException, RepositoryException {
         String name = this.class.simpleName
         log.debug("Running ${parentRelation} ${name}")
+        if (event == null) log.error("Validator ${name} not initialized correctly, must call super(event) in constructor.")
         log.debug("resultsStack before init: ${event.resultsStack}")
         if (parentRelation == Relation.NONE) throw new ToolkitRuntimeException("Validation ${name} has no established relationhip to parent")
         if (parentRelation == Relation.PEER) event.addPeerResults(name)
         else if (parentRelation == Relation.CHILD) event.addChildResults(name)
         else if (parentRelation == Relation.SELF) event.addSelfResults(name)
         log.debug("resultsStack after init: ${event.resultsStack}")
+        try {
+
         runBefore()
-        event.flush()
+//        event.flush()
         validationEngine = new ValidationEngine(this, event)
         validationEngine.run()
-        log.debug("Flushing ${parentRelation} ${name}")
-        event.flush()
+//        log.debug("Flushing ${parentRelation} ${name}")
+//        event.flush()
         runAfter()
         event.flush()
-         log.debug("Closing ${parentRelation} ${name}")
-        if (parentRelation != Relation.SELF)
-            event.close()
+        } catch (SoapFaultException sfe) {
+            event.flush()
+            throw sfe
+        } finally {
+            if (parentRelation != Relation.SELF) {
+                log.debug("Closing ${parentRelation} ${name}")
+                event.close()
+            }
+        }
     }
+
+    def quit() { validationEngine.quit = true}
 
     ValidationMethod currentValidationMethod() { validationEngine.currentValidationMethod }
 
@@ -183,6 +197,13 @@ public abstract class ValComponentBase implements ValComponent {
 
     public Assertion assertHasValue(String value) throws SoapFaultException {
         Assertion a = ag.assertHasValue(value, currentValidationMethod().required);
+        log.debug("Assertion: ${a}")
+        recordAssertion(a);
+        return a
+    }
+
+    public Assertion assertStartsWith(String value, String prefix) throws SoapFaultException {
+        Assertion a = ag.assertStartsWith(value, prefix, currentValidationMethod().required);
         log.debug("Assertion: ${a}")
         recordAssertion(a);
         return a

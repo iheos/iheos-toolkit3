@@ -36,7 +36,7 @@ abstract public class EbrsRootValidator implements ValComponent {
 //	}
 //
 //	@Override
-//	public void run(MessageValidatorEngine mve) {
+//	public void testRun(MessageValidatorEngine mve) {
 //		if (expectedRootName != null && expectedRootName.equals(soapBody.getBody().getLocalName()))
 //			er.challenge("Root element is <" + expectedRootName + ">");
 //		else

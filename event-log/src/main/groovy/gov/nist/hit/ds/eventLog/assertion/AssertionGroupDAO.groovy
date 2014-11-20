@@ -40,7 +40,7 @@ public class AssertionGroupDAO {
             ag.asset = a
             a.setOrder(order++)
             a.setProperty(PropertyKey.STATUS, ag.getWorstStatus().name())
-            a.setContent(asTable(ag.assertions).toString(), "text/csv")
+            a.setContent(asTable(ag.assertions).toString().getBytes(), "text/csv")
             return a
         }
     }

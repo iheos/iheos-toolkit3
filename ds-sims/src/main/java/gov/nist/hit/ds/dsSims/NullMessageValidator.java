@@ -5,7 +5,7 @@ import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 
 /**
- * A validator with and empty run method.  Used as a place to hang
+ * A validator with and empty testRun method.  Used as a place to hang
  * an isolated ErrorRecorder.
  * @author bill
  *

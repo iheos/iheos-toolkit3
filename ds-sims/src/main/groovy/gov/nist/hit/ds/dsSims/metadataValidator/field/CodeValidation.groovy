@@ -40,7 +40,7 @@ public class CodeValidation extends CodeValidationBase {
 	}
 
 
-//	public void run() throws MetadataException, XdsInternalException {
+//	public void testRun() throws MetadataException, XdsInternalException {
 //		List<String> all_object_ids = m.getObjectIds(m.getAllObjects());
 //
 //		for (String obj_id : all_object_ids) {

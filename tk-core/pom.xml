@@ -27,6 +27,7 @@
         <module>../tk-apis</module>
         <module>../sim-support</module>
         <module>../tk-initialization</module>
+        <module>../installation</module>
     </modules>
     
     <dependencies>

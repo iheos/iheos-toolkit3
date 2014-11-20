@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.dsSims.topLevel
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.TransactionType
-import gov.nist.hit.ds.dsSims.Transaction
+import gov.nist.hit.ds.simSupport.transaction.Transaction
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.httpSoap.components.parsers.SoapMessageParser
 import gov.nist.hit.ds.simSupport.simulator.SimHandle

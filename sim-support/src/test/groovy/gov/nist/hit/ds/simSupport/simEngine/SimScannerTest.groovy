@@ -15,7 +15,7 @@ class SimScannerTest extends Specification {
 //        simChainFactory.loadFromPropertyBasedResource('simChainTwoSteps.properties')
 //        SimChain simChain = simChainFactory.simChain
 //        SimScanner simScanner = new SimScanner(simChain)
-//        simScanner.run()
+//        simScanner.testRun()
 //
 //        then:
 //        simChain.steps.size() == 2
@@ -30,7 +30,7 @@ class SimScannerTest extends Specification {
 //        simChainFactory.loadFromPropertyBasedResource('simChainTwoStepsMissingInput.properties')
 //        SimChain simChain = simChainFactory.simChain
 //        SimScanner simScanner = new SimScanner(simChain)
-//        simScanner.run()
+//        simScanner.testRun()
 //
 //        then:
 //        simChain.steps.size() == 2

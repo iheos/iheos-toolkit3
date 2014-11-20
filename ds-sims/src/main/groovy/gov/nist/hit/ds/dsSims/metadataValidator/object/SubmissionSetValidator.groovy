@@ -42,7 +42,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
         new LidSubValidator(this, model, vc).asSelf().run()
 
         new SubmissionSetSlotsValidator(simHandle, model).asPeer().run()
-//        new SubmissionSetClassificationsValidator(simHandle, model).asPeer().run()
+//        new SubmissionSetClassificationsValidator(simHandle, model).asPeer().testRun()
     }
 
     // Guards
@@ -61,7 +61,7 @@ public class SubmissionSetValidator extends AbstractRegistryObjectValidator {
 
 //    @Validation(id='Top', msg='Top attributes', ref='')
 //    def validateTopAtts() {
-//        new TopAttsSubValidator(this, model, vc, SubmissionSetModel.statusValues).asSelf().run()
+//        new TopAttsSubValidator(this, model, vc, SubmissionSetModel.statusValues).asSelf().testRun()
 //    }
 
 

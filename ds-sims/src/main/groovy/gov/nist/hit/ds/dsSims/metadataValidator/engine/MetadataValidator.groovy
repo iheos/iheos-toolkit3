@@ -31,11 +31,11 @@ class MetadataValidator extends ValComponentBase {
 	}
 
 //    @Override
-//    void run() throws SoapFaultException, RepositoryException {
+//    void testRun() throws SoapFaultException, RepositoryException {
 //       // runValidationEngine()
 //
 //        simHandle.event.addChildResults('MetadataValidator')
-//        new ObjectStructureValidator(simHandle, m, vc, rvi).run()
+//        new ObjectStructureValidator(simHandle, m, vc, rvi).testRun()
 //
 //        runObjectStructureValidation()
 //		runCodeValidation(er);

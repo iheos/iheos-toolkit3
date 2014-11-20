@@ -9,7 +9,7 @@ class ToolkitServiceRunner {
     def run(serviceName, paramMap) {
         Class<IServiceClass> serviceClass = ServiceDefinitions.Services[serviceName]
         def object = serviceClass.newInstance()
-        object.invokeMethod('run', paramMap)
+        object.invokeMethod('testRun', paramMap)
     }
 }
 

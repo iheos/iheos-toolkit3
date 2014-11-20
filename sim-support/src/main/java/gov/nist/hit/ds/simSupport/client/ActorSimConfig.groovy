@@ -1,15 +1,9 @@
-package gov.nist.hit.ds.simSupport.client;
-
-import gov.nist.hit.ds.actorTransaction.*;
-import gov.nist.hit.ds.simSupport.client.configElementTypes.SimConfigElement;
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement;
-import gov.nist.hit.ds.simSupport.endpoint.EndpointValue;
-import groovy.transform.ToString;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+package gov.nist.hit.ds.simSupport.client
+import gov.nist.hit.ds.actorTransaction.*
+import gov.nist.hit.ds.simSupport.client.configElementTypes.SimConfigElement
+import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
+import groovy.transform.ToString
 /**
  * Definition for an actor simulator. This focuses on a single
  * actor.  The class Simulator is a collection of ActorSimConfig 
@@ -155,7 +149,40 @@ public class ActorSimConfig {
         }
         return null;
     }
-	
+
+    class Tls {
+        List<TlsType> tlsTypes;
+        Tls(List<TlsType> types) { tlsTypes = types; }
+        boolean has(TlsType type) {
+            if (tlsTypes == null) return false;
+            for (int i=0; i<tlsTypes.size(); i++)
+                if (type == tlsTypes.get(i)) return true;
+            return false;
+        }
+    }
+
+    class Async {
+        List<AsyncType> asyncTypes;
+        Async(List<AsyncType> types) { asyncTypes = types; }
+        boolean has(AsyncType type) {
+            if (asyncTypes == null) return false;
+            for (int i=0; i<asyncTypes.size(); i++)
+                if (type == asyncTypes.get(i)) return true;
+            return false;
+        }
+    }
+
+    class TTypes {
+        List<TransactionType> transTypes;
+        TTypes(List<TransactionType> types) { transTypes = types; }
+        boolean has(TransactionType type) {
+            if (transTypes == null) return false;
+            for (int i=0; i<transTypes.size(); i++)
+                if (type == transTypes.get(i)) return true;
+            return false;
+        }
+    }
+
 	/**
 	 * Get config elements that match all the parameters.
 	 * @param transTypes
@@ -166,38 +193,6 @@ public class ActorSimConfig {
     public List<TransactionSimConfigElement> findConfigs(List<TransactionType> transTypes, List<TlsType> tlsTypes, List<AsyncType> asyncTypes)  {
         List<TransactionSimConfigElement> simEles = new ArrayList<TransactionSimConfigElement>();
 
-        class Tls {
-            List<TlsType> tlsTypes;
-            Tls(List<TlsType> types) { tlsTypes = types; }
-            boolean has(TlsType type) {
-                if (tlsTypes == null) return false;
-                for (int i=0; i<tlsTypes.size(); i++)
-                    if (type == tlsTypes.get(i)) return true;
-                return false;
-            }
-        }
-
-        class Async {
-            List<AsyncType> asyncTypes;
-            Async(List<AsyncType> types) { asyncTypes = types; }
-            boolean has(AsyncType type) {
-                if (asyncTypes == null) return false;
-                for (int i=0; i<asyncTypes.size(); i++)
-                    if (type == asyncTypes.get(i)) return true;
-                return false;
-            }
-        }
-
-        class TTypes {
-            List<TransactionType> transTypes;
-            TTypes(List<TransactionType> types) { transTypes = types; }
-            boolean has(TransactionType type) {
-                if (transTypes == null) return false;
-                for (int i=0; i<transTypes.size(); i++)
-                    if (type == transTypes.get(i)) return true;
-                return false;
-            }
-        }
 
         TTypes tTypes = new TTypes(transTypes);
         Tls tls = new Tls(tlsTypes);
@@ -233,5 +228,13 @@ public class ActorSimConfig {
 	public boolean isActorType(ActorType actorType2) {
 		return actorType.equals(actorType2);
 	}
-	
+
+    // Accessor functions for popular config elements
+
+    boolean isSchemaCheck() { getByName(TransactionSimConfigElement.SCHEMACHECK).getValue() }
+    boolean isModelCheck() { getByName(TransactionSimConfigElement.MODELCHECK).getValue() }
+    boolean isCodingCheck() { getByName(TransactionSimConfigElement.CODINGCHECK).getValue() }
+    boolean isSoapCheck() { getByName(TransactionSimConfigElement.SOAPCHECK).getValue() }
+    String getMessageCallback() { getByName(TransactionSimConfigElement.MSGCALLBACK).getValue() }
+
 }

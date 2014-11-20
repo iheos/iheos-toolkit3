@@ -139,6 +139,10 @@ class SimUtils {
         } catch (Exception e) { return false }
     }
 
+    static runTransaction(SimHandle simHandle) { new TransactionRunner(simHandle).acceptRequest() }
+    static validateTransactionRequest(SimHandle simHandle) { new TransactionRunner(simHandle).validateRequest() }
+    static validateTransactionResponse(SimHandle simHandle) { new TransactionRunner(simHandle).validateResponse() }
+
     // used in unit tests only
     static SimHandle runTransaction(Endpoint endpoint, String header, byte[] body, String repositoryName) {
         log.debug("Inside runTransaction")
@@ -146,7 +150,7 @@ class SimUtils {
         log.debug("runTransaction: endpoint = ${endp}")
         def transactionType = new ActorTransactionTypeFactory().getTransactionType(endp.transCode)
         SimId simId = endp.simId
-        return new TransactionRunner(simId, repositoryName, transactionType, header, body).run()
+        return new TransactionRunner(simId, repositoryName, transactionType, header, body).testRun()
     }
 
     private static Asset sim(SimId simId, Repository repository) {

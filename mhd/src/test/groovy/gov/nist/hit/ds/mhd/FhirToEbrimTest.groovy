@@ -11,8 +11,8 @@ import spock.lang.Specification
  */
 class FhirToEbrimTest extends Specification {
 
-    // TODO - run schema
-    // TODO - run metadata validator
+    // TODO - testRun schema
+    // TODO - testRun metadata validator
     def 'Minimal'() {
         setup:
         def url = getClass().classLoader.getResource('mhd/minimal_docref.xml')
@@ -50,8 +50,8 @@ class FhirToEbrimTest extends Specification {
         de.uniqueId()
     }
 
-    // TODO - run schema
-    // TODO - run metadata validator
+    // TODO - testRun schema
+    // TODO - testRun metadata validator
     def 'Full'() {
         setup:
         def url = getClass().classLoader.getResource('mhd/full_docref.xml')

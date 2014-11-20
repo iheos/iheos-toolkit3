@@ -103,7 +103,7 @@ public class PatternMatchTest {
 	
 	static public void main(String[] args) {
 		try {
-//			new PatternMatchTest().run();
+//			new PatternMatchTest().testRun();
 			new PatternMatchTest().run2();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

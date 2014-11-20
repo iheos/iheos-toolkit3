@@ -6,12 +6,14 @@ import java.io.IOException;
 public class HttpMessageContent {
 	String header;
 	byte[] body;
+    String stringBody;
 
     public HttpMessageContent() {}
 
     public HttpMessageContent(String header, byte[] body) {
         this.header = header;
         this.body = body;
+        this.stringBody = new String(body);
     }
 
 	public String getHeader() {

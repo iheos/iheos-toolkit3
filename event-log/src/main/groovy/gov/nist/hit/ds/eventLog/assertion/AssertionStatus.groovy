@@ -11,6 +11,12 @@ public enum AssertionStatus {
         return this;
     }
 
+    static AssertionStatus getWorst(statuses) {
+        AssertionStatus worst = NONE
+        statuses.each { worst = it.getWorst(worst)}
+        return worst
+    }
+
     public boolean isError() {
         return (ordinal() >= ERROR.ordinal());
     }

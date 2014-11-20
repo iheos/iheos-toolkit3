@@ -1,0 +1,14 @@
+<actor type='docrec'>
+    <transaction name='prb'>
+        <endpoint value='http://localhost:8080/xdstools3/sim/PnrSoapTest/docrec/prb' readOnly='true' />
+        <settings>
+            <boolean name='schemaCheck' value='false' />
+            <boolean name='modelCheck' value='false' />
+            <boolean name='codingCheck' value='false' />
+            <boolean name='soapCheck' value='true' />
+            <text name='msgCallback' value='foo' />
+        </settings>
+        <webService value='prb' readOnly='true' />
+        <webService value='prb_TLS' readOnly='true' />
+    </transaction>
+</actor>

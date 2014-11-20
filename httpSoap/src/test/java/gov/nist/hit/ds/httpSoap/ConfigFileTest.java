@@ -29,7 +29,7 @@ public class ConfigFileTest {
 //
 //			System.out.println(engine.getDescription(simChain));
 //
-//			engine.run();
+//			engine.testRun();
 //
 //			System.out.println(simChain.getLog());
 //
