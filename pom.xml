@@ -73,7 +73,6 @@
         <module>tk-core</module>
         <module>gui-core</module>
         <module>toolkit2-build</module>
-        <module>docshare-sims</module>
     </modules>
 
     <dependencyManagement>

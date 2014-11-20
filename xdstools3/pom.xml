@@ -15,7 +15,6 @@
     <packaging>war</packaging>
     <groupId>gov.nist.toolkit</groupId>
 
-
     <properties>
         <gwtVersion>2.5.1</gwtVersion>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
@@ -128,16 +127,16 @@
             <artifactId>installation</artifactId>
             <version>3.0.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>logBrowser</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>repository-rpc</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>logBrowser</artifactId>-->
+            <!--<version>3.0.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>repository-rpc</artifactId>-->
+            <!--<version>3.0.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
 
     </dependencies>
 

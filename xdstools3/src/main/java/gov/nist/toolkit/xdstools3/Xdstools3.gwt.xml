@@ -25,8 +25,8 @@
     <inherits name='com.google.gwt.place.Place' />
 
 
-    <inherits name="gov.nist.hit.ds.logBrowser.LogBrowser"/>
-    <inherits name="gov.nist.hit.ds.repository.RepositoryRpc"/>
+    <!--<inherits name="gov.nist.hit.ds.logBrowser.LogBrowser"/>-->
+    <!--<inherits name="gov.nist.hit.ds.repository.RepositoryRpc"/>-->
 
     <!-- ============ Specify the app entry point class ============== -->
     <entry-point class='gov.nist.toolkit.xdstools3.client.Xdstools3EP' />

@@ -1,8 +1,6 @@
 package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -16,12 +14,13 @@ import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VStack;
-import gov.nist.hit.ds.logBrowser.client.widgets.EventAggregatorWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
+
+//import gov.nist.hit.ds.logBrowser.client.widgets.EventAggregatorWidget;
 
 /**
  * This class is the UI implementation for MHD Validation tab.
@@ -97,7 +96,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         // Validation result elements
         validationResultsPanel = new VStack();
 
-        validationResultsPanel.addMember(setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT, "Sim", id, type, displayColumns));
+//        validationResultsPanel.addMember(setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT, "Sim", id, type, displayColumns));
 
         form.setFields(l1, messageTypeSelect, l2);
 
@@ -202,11 +201,12 @@ public class MHDValidatorTab extends GenericCloseableTab {
         }
     }
 
+    /*
     protected Widget setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
         try {
-            /* manual setup:
-            1) change also the assertionGroup type in event widget.
-             */
+//             manual setup:
+//            1) change also the assertionGroup type in event widget.
+
 
             EventAggregatorWidget eventMessageAggregatorWidget = new EventAggregatorWidget(new SimpleEventBus(), assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
 
@@ -217,5 +217,5 @@ public class MHDValidatorTab extends GenericCloseableTab {
         }
         return null;
     }
-
+    */
 }
