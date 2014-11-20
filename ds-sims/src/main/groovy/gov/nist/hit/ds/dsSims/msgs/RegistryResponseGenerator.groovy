@@ -16,6 +16,7 @@ import org.apache.axiom.om.OMElement
 /**
  * Created by bmajur on 10/7/14.
  */
+// TODO Errors not extracted from Repository correctly
 @Log4j
 class RegistryResponseGenerator {
     SimHandle simHandle

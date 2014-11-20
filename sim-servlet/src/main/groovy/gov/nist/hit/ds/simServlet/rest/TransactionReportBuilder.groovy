@@ -6,6 +6,7 @@ import groovy.xml.MarkupBuilder
 /**
  * Created by bmajur on 11/6/14.
  */
+
 class TransactionReportBuilder {
 
     String build(SimHandle simHandle) {

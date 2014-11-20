@@ -12,7 +12,6 @@
 
 
     <repositories>
-    <!--
         <repository>
             <id>internal-nist-repo-releases</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
@@ -45,7 +44,6 @@
             <id>codehaus</id>
             <url>http://repository.codehaus.org/org/codehaus</url>
         </repository>
--->
     </repositories>
 
     <scm>
@@ -70,104 +68,19 @@
 
     <modules>
 
-        <!-- For some reason there seems to be an issue compiling the soapHttpValidator module with JDK 1.7, which is required by the editor module -->
+        <!-- There is an issue with soapHttpValidator unit tests and JDK 1.7 -->
 
         <module>repository-tools</module>
         <module>tk-core</module>
-<<<<<<< local
         <module>gui-core</module>
         <module>toolkit2-build</module>
-=======
-        <module>docshare-sims</module>
-        <module>xdstools3</module>
-        <module>toolkit3-deps</module>
->>>>>>> other
     </modules>
 
     <dependencyManagement>
         <dependencies>
-<<<<<<< local
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>http-soap-validator</artifactId>
-                    <version>3.0.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>com.sun.ebxml</groupId>
-                    <artifactId>ebxmlrr-common</artifactId>
-                    <version>1.0</version>
-                </dependency>
-                <dependency>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                    <version>4.11</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.spockframework</groupId>
-                    <artifactId>spock-core</artifactId>
-                    <version>0.7-groovy-2.0</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.spockframework</groupId>
-                    <artifactId>spock-maven</artifactId>
-                    <version>0.7-groovy-2.0</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.codehaus.groovy</groupId>
-                    <artifactId>groovy-all</artifactId>
-                    <version>2.0.0</version>
-                </dependency>
-                <dependency>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                    <version>1.2.17</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.codehaus.jackson</groupId>
-                    <artifactId>jackson-mapper-asl</artifactId>
-                    <version>1.9.12</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.ws.commons.axiom</groupId>
-                    <artifactId>axiom-api</artifactId>
-                    <version>1.2.14</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.ws.commons.axiom</groupId>
-                    <artifactId>axiom-impl</artifactId>
-                    <version>1.2.14</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.ws.commons.axiom</groupId>
-                    <artifactId>axiom-dom</artifactId>
-                    <version>1.2.10</version>
-                </dependency>
-                <dependency>
-                    <groupId>commons-lang</groupId>
-                    <artifactId>commons-lang</artifactId>
-                    <version>2.3</version>
-                </dependency>
-                <dependency>
-                    <groupId>com.google.gwt</groupId>
-                    <artifactId>gwt-user</artifactId>
-                    <version>${gwtVersion}</version>
-                    <!-- <scope>provided</scope> -->
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.velocity</groupId>
-                    <artifactId>velocity</artifactId>
-                    <version>1.5</version>
-                </dependency>
-=======
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <artifactId>ds-sims</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>gov.nist.hit.ds</groupId>
-                <artifactId>httpSoapValidator</artifactId>
+                <artifactId>http-soap-validator</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -226,107 +139,116 @@
                 <artifactId>commons-lang</artifactId>
                 <version>2.3</version>
             </dependency>
->>>>>>> other
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-user</artifactId>
+                <version>${gwtVersion}</version>
+                <!-- <scope>provided</scope> -->
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>1.5</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>tk-apis</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
 
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>tk-apis</artifactId>
-                    <version>3.0.0-SNAPSHOT</version>
-                </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>utilities</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>toolkit</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>errorRecording</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+                <version>1.7.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.ws.commons.axiom</groupId>
+                <artifactId>axiom-common-impl</artifactId>
+                <version>1.2.14</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>3.0.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>xmlunit</groupId>
+                <artifactId>xmlunit</artifactId>
+                <version>1.4</version>
+            </dependency>
 
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>utilities</artifactId>
-                    <version>3.0.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>toolkit</artifactId>
-                    <version>3.0.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>errorRecording</artifactId>
-                    <version>3.0.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>log4j-over-slf4j</artifactId>
-                    <version>1.7.5</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                    <version>1.7.5</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.ws.commons.axiom</groupId>
-                    <artifactId>axiom-common-impl</artifactId>
-                    <version>1.2.14</version>
-                </dependency>
-                <dependency>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>javax.servlet-api</artifactId>
-                    <version>3.0.1</version>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>xmlunit</groupId>
-                    <artifactId>xmlunit</artifactId>
-                    <version>1.4</version>
-                </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>actor-transaction</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>xds-exceptions</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
 
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>actor-transaction</artifactId>
-                    <version>3.0.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>xds-exceptions</artifactId>
-                    <version>3.0.0-SNAPSHOT</version>
-                </dependency>
-
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>common-datatypes</artifactId>
-                    <version>3.0.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <version>3.0.0-SNAPSHOT</version>
-                    <artifactId>http</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <version>3.0.0-SNAPSHOT</version>
-                    <artifactId>soap-support</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>sim-support</artifactId>
-                    <version>3.0.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <version>3.0.0-SNAPSHOT</version>
-                    <artifactId>site-management</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>event-log</artifactId>
-                    <version>3.0.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>repository</artifactId>
-                    <version>3.0.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.axis2</groupId>
-                    <artifactId>axis2-kernel</artifactId>
-                    <version>1.6.2</version>
-                </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>common-datatypes</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <version>3.0.0-SNAPSHOT</version>
+                <artifactId>http</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <version>3.0.0-SNAPSHOT</version>
+                <artifactId>soap-support</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>sim-support</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <version>3.0.0-SNAPSHOT</version>
+                <artifactId>site-management</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>event-log</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>repository</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-kernel</artifactId>
+                <version>1.6.2</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
