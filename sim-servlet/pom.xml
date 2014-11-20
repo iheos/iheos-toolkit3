@@ -75,10 +75,7 @@
           <groupId>gov.nist.hit.ds</groupId>
           <artifactId>xdsException</artifactId>
       </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>tk-initialization</artifactId>
-        </dependency>
+
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
           <artifactId>event-log</artifactId>
