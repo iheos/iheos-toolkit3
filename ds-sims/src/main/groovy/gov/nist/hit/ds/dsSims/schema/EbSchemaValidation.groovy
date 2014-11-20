@@ -1,4 +1,7 @@
 package gov.nist.hit.ds.dsSims.schema
+
+import gov.nist.hit.ds.soapSupport.SoapFaultException
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import org.apache.xerces.parsers.DOMParser
 import org.xml.sax.ErrorHandler
@@ -10,7 +13,7 @@ import org.xml.sax.SAXException
 public class EbSchemaValidation {
 
     // empty string as result means no errors
-    static public void run(String metadata, int metadataType, File localSchema, ErrorHandler eHandler) throws XdsInternalException {
+    static public void run(String metadata, int metadataType, File localSchema, ErrorHandler eHandler)  {
         DOMParser p;
         System.out.println("Local Schema to be found at " + localSchema);
 
@@ -50,7 +53,7 @@ public class EbSchemaValidation {
         try {
             p=new DOMParser();
         } catch (Exception e) {
-            throw new XdsInternalException("DOMParser failed: " + e.getMessage());
+            throw new ToolkitRuntimeException("DOMParser failed: " + e.getMessage());
         }
         try {
             p.setFeature( "http://xml.org/sax/features/validation", true );
@@ -58,7 +61,7 @@ public class EbSchemaValidation {
             p.setProperty("http://apache.org/xml/properties/schema/external-schemaLocation", schemaLocation);
             p.setErrorHandler(eHandler);
         } catch (SAXException e) {
-            throw new XdsInternalException("SchemaValidation: error in setting up parser property: SAXException thrown with message: "
+            throw new ToolkitRuntimeException("SchemaValidation: error in setting up parser property: SAXException thrown with message: "
                     + e.getMessage());
         }
 
@@ -68,9 +71,10 @@ public class EbSchemaValidation {
             String metadata2 = metadata.replaceAll("urn:uuid:", "urn_uuid_");
             InputSource is = new InputSource(new StringReader(metadata2));
             p.parse(is);
-        } catch (Exception e) {
-//            throw new XdsInternalException("SchemaValidation: XML parser/Schema validation error: " +
-//                    exception_details(e));
+        } catch (SAXException e) {
+            if (e.exception != null && e.exception instanceof SoapFaultException)
+                throw e.exception
+            throw e
         }
     }
     protected static String exception_details(Exception e) {

@@ -60,18 +60,28 @@ public abstract class ValComponentBase implements ValComponent {
         else if (parentRelation == Relation.CHILD) event.addChildResults(name)
         else if (parentRelation == Relation.SELF) event.addSelfResults(name)
         log.debug("resultsStack after init: ${event.resultsStack}")
+        try {
+
         runBefore()
-        event.flush()
+//        event.flush()
         validationEngine = new ValidationEngine(this, event)
         validationEngine.run()
-        log.debug("Flushing ${parentRelation} ${name}")
-        event.flush()
+//        log.debug("Flushing ${parentRelation} ${name}")
+//        event.flush()
         runAfter()
         event.flush()
-         log.debug("Closing ${parentRelation} ${name}")
-        if (parentRelation != Relation.SELF)
-            event.close()
+        } catch (SoapFaultException sfe) {
+            event.flush()
+            throw sfe
+        } finally {
+            if (parentRelation != Relation.SELF) {
+                log.debug("Closing ${parentRelation} ${name}")
+                event.close()
+            }
+        }
     }
+
+    def quit() { validationEngine.quit = true}
 
     ValidationMethod currentValidationMethod() { validationEngine.currentValidationMethod }
 

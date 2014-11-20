@@ -4,7 +4,10 @@ import gov.nist.hit.ds.eventLog.assertion.Assertion
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
+import gov.nist.hit.ds.simSupport.validationEngine.annotation.Fault
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
+import gov.nist.hit.ds.soapSupport.FaultCode
+import gov.nist.hit.ds.soapSupport.SoapFaultException
 import org.xml.sax.ErrorHandler
 import org.xml.sax.SAXException
 import org.xml.sax.SAXParseException
@@ -43,19 +46,21 @@ class EbSchemaValidator extends ValComponentBase {
         @Override
         void fatalError(SAXParseException exception) throws SAXException {
             Assertion a = new Assertion()
-            a.found = exception.message
-            a.status = AssertionStatus.ERROR
-            a.expected = ''
-            a.location = "Line ${exception.lineNumber} : Col ${exception.columnNumber}"
-            simHandle.event.assertionGroup.addAssertion(a, true)
             if (exception.message.trim().startsWith('Content is not allowed in prolog')) {
-                a = new Assertion()
-                a.found = xmlString.substring(0, 25)
-                a.status = AssertionStatus.INFO
+                a.msg = exception.message.trim()
+                a.found = xmlString.substring(0, 25).trim()
+                a.status = AssertionStatus.ERROR
                 a.expected = 'XML starts with'
                 a.location = "Line ${exception.lineNumber} : Col ${exception.columnNumber}"
                 simHandle.event.assertionGroup.addAssertion(a, true)
+            } else {
+                a.msg = exception.message
+                a.status = AssertionStatus.ERROR
+                a.expected = ''
+                a.location = "Line ${exception.lineNumber} : Col ${exception.columnNumber}"
+                simHandle.event.assertionGroup.addAssertion(a, true)
             }
+            throw new SoapFaultException(simHandle.event, FaultCode.Sender, a.expected + ' ' + a.found)
         }
     }
 
@@ -67,6 +72,7 @@ class EbSchemaValidator extends ValComponentBase {
         localSchema = _localSchema
     }
 
+    @Fault(code=FaultCode.Sender)
     @Validation(id='schema001', msg='Validate against Schema', ref='')
     def schema001() {
         Handler handler = new Handler()

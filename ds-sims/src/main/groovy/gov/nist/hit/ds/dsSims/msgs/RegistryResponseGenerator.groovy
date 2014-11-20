@@ -42,7 +42,7 @@ class RegistryResponseGenerator {
                 rel.addChild(er)
                 er.addAttribute('errorCode', r.columns[CODEindex], null)
                 er.addAttribute('codeContext', r.columns[MSGindex], null)
-                er.addAttribute('location', 'zzz', null)
+                er.addAttribute('location', r.columns[IDindex], null)
             }
         }
         return response
@@ -58,7 +58,7 @@ class RegistryResponseGenerator {
         log.debug("Query Event for errors")
 
         // 1. Build a search criteria 'filter' (which can be null to indicate no filter restriction)
-        SearchCriteria criteria = new SearchCriteria(SearchCriteria.Criteria.AND);
+        SearchCriteria criteria = new SearchCriteria(SearchCriteria.Criteria.OR);
         criteria.append(new SearchTerm(
                 PropertyKey.STATUS,
                 SearchTerm.Operator.EQUALTOANY,

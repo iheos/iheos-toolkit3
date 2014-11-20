@@ -7,6 +7,7 @@ import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.soapSupport.SoapFaultException
 import spock.lang.Specification
 
 /**
@@ -92,6 +93,7 @@ class EbSchemaValidatorTest extends Specification {
 
         then:
         transRunner.simHandle.event.hasErrors()
+        thrown SoapFaultException
     }
 
 }

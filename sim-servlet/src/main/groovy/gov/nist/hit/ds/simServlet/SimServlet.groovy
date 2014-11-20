@@ -1,38 +1,35 @@
-package gov.nist.hit.ds.simServlet;
+package gov.nist.hit.ds.simServlet
+import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.TransactionType
+import gov.nist.hit.ds.dsSims.msgs.RegistryResponseGenerator
+import gov.nist.hit.ds.eventLog.Fault
+import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser
+import gov.nist.hit.ds.simServlet.rest.TransactionReportBuilder
+import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
+import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.utilities.SimSupport
+import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.simSupport.validationEngine.ValidatorWithError
+import gov.nist.hit.ds.soapSupport.FaultCode
+import gov.nist.hit.ds.soapSupport.core.*
+import gov.nist.hit.ds.utilities.html.HttpMessageContent
+import gov.nist.hit.ds.utilities.io.Io
+import gov.nist.hit.ds.xdsException.ExceptionUtil
+import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.Method
+import org.apache.axiom.om.OMElement
+import org.apache.log4j.Logger
 
-import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory;
-import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.dsSims.msgs.RegistryResponseGenerator;
-import gov.nist.hit.ds.eventLog.Fault;
-import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser;
-import gov.nist.hit.ds.simServlet.rest.TransactionReportBuilder;
-import gov.nist.hit.ds.simSupport.client.SimId;
-import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder;
-import gov.nist.hit.ds.simSupport.simulator.SimHandle;
-import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig;
-import gov.nist.hit.ds.simSupport.transaction.TransactionRunner;
-import gov.nist.hit.ds.simSupport.utilities.SimSupport;
-import gov.nist.hit.ds.simSupport.utilities.SimUtils;
-import gov.nist.hit.ds.simSupport.validationEngine.ValidatorWithError;
-import gov.nist.hit.ds.soapSupport.FaultCode;
-import gov.nist.hit.ds.soapSupport.core.*;
-import gov.nist.hit.ds.utilities.html.HttpMessageContent;
-import gov.nist.hit.ds.utilities.io.Io;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import org.apache.axiom.om.OMElement;
-import org.apache.log4j.Logger;
+import javax.servlet.ServletConfig
+import javax.servlet.ServletException
+import javax.servlet.http.HttpServlet
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
-
+import static groovyx.net.http.ContentType.XML
 /**
  * Servlet to service simulator input transactions.
  * @author bill
@@ -102,8 +99,15 @@ public class SimServlet extends HttpServlet {
         String callbackURI = simHandle.getActorSimConfig().getMessageCallback();
         if (callbackURI != null && !callbackURI.equals("")) {
             String payload = new TransactionReportBuilder().build(simHandle);
-            logger.info(payload);
-                        
+            logger.info("Callback to ${callbackURI} with payload ${payload}");
+            def http = new HTTPBuilder( callbackURI )
+            http.request(Method.POST, XML) {
+                body = payload.bytes
+
+                response.success = { resp ->
+                    logger.info "POST Success: ${resp.statusLine}"
+                }
+            }
         }
     }
 
@@ -264,7 +268,9 @@ public class SimServlet extends HttpServlet {
 
     private void runTransaction(SimHandle simHandle) {
         try {
-           new TransactionRunner(simHandle).acceptRequest();
+            def runner = new TransactionRunner(simHandle)
+            runner.validateRequest()
+            runner.acceptRequest();
         } catch (Exception e) {
             logger.debug("runTransaction caught exception");
             simHandle.getEvent().setFault(new Fault(ExceptionUtil.exception_details(e), FaultCode.Receiver.toString(), "Unknown",

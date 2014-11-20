@@ -46,7 +46,7 @@ public class HttpHeaderValidator extends ValComponentBase {
     public void soapExpected() throws SoapFaultException {
         String contentTypeString = httpParser.getHttpMessage().getHeader("content-type")
         String contentType = new HttpHeader(contentTypeString)?.getValue()?.toLowerCase()
-        assertEquals('application/soap+xml', contentType)
+        assertEquals('multipart/related', contentType)
     }
 
     void run() {
@@ -56,7 +56,7 @@ public class HttpHeaderValidator extends ValComponentBase {
         assert header
         assert body
 
-        httpParser = new HttpParserBa(header.getBytes())
+        httpParser = new HttpParserBa((header + "\r\n\r\n" + new String(body)).bytes)
 
         runValidationEngine()
 	}

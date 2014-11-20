@@ -7,6 +7,7 @@ import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.FaultCode
+import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.ExceptionUtil
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
@@ -141,11 +142,13 @@ class TransactionRunner {
 //        params[0] = simHandle
 //        Object instance = clazz.newInstance(params)
 
-        Object instance = clazz.newInstance(args as String[])
+        Object instance = clazz.newInstance(args as Object[])
 
         // call testRun() method
         try {
             instance.invokeMethod(methodName, null)
+        } catch (SoapFaultException sfe) {
+            event.fault = sfe.asFault()
         } catch (Throwable t) {
             String actorTrans = transCode
             event.fault = new Fault('Exception running transaction', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))

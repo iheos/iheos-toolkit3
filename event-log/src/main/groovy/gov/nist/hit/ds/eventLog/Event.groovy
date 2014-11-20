@@ -53,6 +53,7 @@ class Event {
         }
 
         def getAssertions(id) { assertionGroup.getAssertions(id)}
+        def getAssertions() { assertionGroup.assertions }
 
         String toString() { "Results:${validatorName}"}
     }
@@ -65,6 +66,12 @@ class Event {
         boolean empty() { stack.empty }
         ValidatorResults last() { stack.last()}
         def getAssertions(id) { backing.collect { it.getAssertions(id)}.flatten() }
+        def getAssertions() { stack.collect { it.getAssertions()}.flatten()}
+        def getWorstStatus() {
+            def worsts = stack.collect { it.assertionGroup.worstStatus }
+            AssertionStatus.getWorst(worsts)
+        }
+        String toString() { "ResultsStack: ${getAssertions().size()} Assertions, worst status is ${getWorstStatus()}"}
     }
 
     ResultsStack resultsStack = new ResultsStack()
@@ -162,8 +169,10 @@ class Event {
     }
 
     def flushValidators() {
-        if (!resultsStack.empty())
-            resultsStack.last().flush(FlushStatus.Force)
+        if (!resultsStack.empty()) {
+            ValidatorResults ele = resultsStack.last()
+            ele.flush(FlushStatus.Force)
+        }
     }
 
     void flush() {

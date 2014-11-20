@@ -261,7 +261,7 @@ public class AssertionGroup  {
     public Assertion infoFound(boolean foundVal) {
         Assertion a = new Assertion();
         a.with {
-            expected = dashes
+            expected = ''
             found = (foundVal) ? 'True' : 'False'
             status = AssertionStatus.INFO
         }
@@ -272,7 +272,7 @@ public class AssertionGroup  {
     public Assertion infoFound(String foundVal) {
         Assertion a = new Assertion();
         a.with {
-            expected = dashes
+            expected = ''
             found = foundVal
             status = AssertionStatus.INFO
         }
@@ -283,7 +283,7 @@ public class AssertionGroup  {
     public Assertion msg(String msg) {
         Assertion a = new Assertion();
         a.with {
-            expected = dashes
+            expected = ''
             found = msg
             status = AssertionStatus.SUCCESS
         }
@@ -294,7 +294,7 @@ public class AssertionGroup  {
     public Assertion defaultMsg() {
         Assertion a = new Assertion();
         a.with {
-            expected = dashes
+            expected = ''
             found = 'Ok'
             status = AssertionStatus.SUCCESS
             defaultMsg = true
