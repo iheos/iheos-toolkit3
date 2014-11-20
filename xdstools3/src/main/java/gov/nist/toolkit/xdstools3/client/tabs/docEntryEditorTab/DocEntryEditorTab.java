@@ -18,7 +18,7 @@ public class DocEntryEditorTab extends GenericCloseableTab {
     protected Widget createContents() {
         HTMLPane pane =new HTMLPane();
         pane.setShowEdges(false);
-        pane.setContentsURL("http://transport-testing.nist.gov:12090/docentryeditor/");
+        pane.setContentsURL("http://hit-dev.nist.gov:12090/docentryeditor/");
         pane.setContentsType(ContentsType.PAGE);
         return pane;
     }

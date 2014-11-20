@@ -164,7 +164,7 @@ public class Caller implements Serializable {
      * @param fileToConvert
      * @return
      */
-    public String convertToXDS(String fileToConvert) {
+    public String convertToXDS(String location,String fileToConvert) {
         String convertedFile=new String();
         // TODO Implement conversion
         convertedFile=fileToConvert;
