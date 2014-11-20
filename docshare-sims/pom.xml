@@ -24,7 +24,6 @@
         <module>../httpSoap</module>
         <module>../sim-servlet</module>
         <module>../ds-sims</module>
-        <module>../tk-initialization</module>
     </modules>
 
 </project>

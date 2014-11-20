@@ -22,14 +22,16 @@
     <inherits name="gov.nist.toolkit.xdstools2.Xdstools2"/>
     <inherits name="com.google.gwt.inject.Inject"/>
     <inherits name="com.google.gwt.activity.Activity"/>
-    <inherits name='com.google.gwt.place.Place' />
+    <inherits name="com.google.gwt.place.Place" />
 
 
-    <inherits name="gov.nist.hit.ds.logBrowser.LogBrowser"/>
-    <inherits name="gov.nist.hit.ds.repository.RepositoryRpc"/>
+    <!-- ================= Inherit v3 modules ================= -->
+     <!--<inherits name="gov.nist.hit.ds.logBrowser.LogBrowser"/> -->
+    <!--<inherits name="gov.nist.hit.ds.repository.RepositoryRpc"/>-->
+
 
     <!-- ============ Specify the app entry point class ============== -->
-    <entry-point class='gov.nist.toolkit.xdstools3.client.Xdstools3EP' />
+    <entry-point class="gov.nist.toolkit.xdstools3.client.Xdstools3EP" />
 
 
     <!-- Uncomment this line to force GWT compiler to only generate javascript
