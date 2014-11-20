@@ -6,14 +6,14 @@ package gov.nist.hit.ds.httpSoap;
  * 
  * TODO: check with Bill. In my own opinion, the design of the message validator
  * interface is flawed. As a first shot and since the goal is to enforce an
- * contract, an interface Validator with a run() method seems more appropriate.
+ * contract, an interface Validator with a testRun() method seems more appropriate.
  * ValidationContext could be push as a parameter of this method.
  * 
  * NOTE : CustomLogger is a quick way to log stuff from the wsse module without
  * having to define an object model of what is "logging"!
  * 
  * TODO clarify what vc , err, mvc are doing! How comes the element to validate
- * on in not part of the run() params?
+ * on in not part of the testRun() params?
  * 
  * TODO why should we pass the envelope in the constructor? Confusing.
  * 
@@ -46,7 +46,7 @@ public class WsseHeaderValidatorAdapter /* extends MessageValidator */ {
 ////				new ValidationContext(), wsseHeader);
 ////		ErrorRecorder er = new TextErrorRecorder();
 ////		MessageValidatorEngine mvc = new MessageValidatorEngine();
-////		validator.run(er, mvc);
+////		validator.testRun(er, mvc);
 ////	}
 //
 //	private WsseHeaderValidator val;
@@ -59,7 +59,7 @@ public class WsseHeaderValidatorAdapter /* extends MessageValidator */ {
 //	}
 //
 //	@Override
-//	public void run(IAssertionGroup er, MessageValidatorEngine mvc) {
+//	public void testRun(IAssertionGroup er, MessageValidatorEngine mvc) {
 //
 //		try {
 //			// We use a special appender to record message coming from the wsse

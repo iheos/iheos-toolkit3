@@ -26,6 +26,9 @@ public class AssertionGroup  {
 
     AssertionGroup() {}
 
+    boolean hasAssertion(id) { assertions.find { it.id == id}}
+    def getAssertions(id) { assertions.findAll { it.id == id}}
+
     boolean hasContent() { return assertions.size() > 0 }
 
     boolean needsFlushing() { (hasContent() || hasWarnings()) && !saved }
@@ -205,6 +208,17 @@ public class AssertionGroup  {
         return a;
     }
 
+    public Assertion assertStartsWith(String value, String prefix, boolean required) {
+        Assertion a = new Assertion();
+        a.with {
+            expected = "Has prefix ${prefix}"
+            found = value
+        }
+        a.status = (value != null && value.startsWith(prefix)) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
+        addAssertion(a, required);
+        return a;
+    }
+
     public Assertion assertTrue(boolean ok, boolean required) {
         Assertion a = new Assertion();
         if (ok) {
@@ -247,7 +261,7 @@ public class AssertionGroup  {
     public Assertion infoFound(boolean foundVal) {
         Assertion a = new Assertion();
         a.with {
-            expected = dashes
+            expected = ''
             found = (foundVal) ? 'True' : 'False'
             status = AssertionStatus.INFO
         }
@@ -258,7 +272,7 @@ public class AssertionGroup  {
     public Assertion infoFound(String foundVal) {
         Assertion a = new Assertion();
         a.with {
-            expected = dashes
+            expected = ''
             found = foundVal
             status = AssertionStatus.INFO
         }
@@ -269,7 +283,7 @@ public class AssertionGroup  {
     public Assertion msg(String msg) {
         Assertion a = new Assertion();
         a.with {
-            expected = dashes
+            expected = ''
             found = msg
             status = AssertionStatus.SUCCESS
         }
@@ -280,7 +294,7 @@ public class AssertionGroup  {
     public Assertion defaultMsg() {
         Assertion a = new Assertion();
         a.with {
-            expected = dashes
+            expected = ''
             found = 'Ok'
             status = AssertionStatus.SUCCESS
             defaultMsg = true

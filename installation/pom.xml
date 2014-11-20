@@ -4,9 +4,9 @@
 
 	<parent>
         <groupId>gov.nist.hit.ds</groupId>
-        <artifactId>toolkit3</artifactId>
+        <artifactId>tk-core</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../tk-core/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>installation</artifactId>

@@ -67,7 +67,7 @@ It is great!
     def cleanup() {
 //        SimUtils.delete(simId)
     }
-
+// TODO: This test throws errors that are not detected
     def 'PnR Soap should be accepted'() {
         when:
         def simHandle = simServlet.runPost(simId, header, body.getBytes(), [], null)

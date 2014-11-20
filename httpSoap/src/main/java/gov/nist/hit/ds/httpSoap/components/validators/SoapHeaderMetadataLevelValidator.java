@@ -2,6 +2,7 @@ package gov.nist.hit.ds.httpSoap.components.validators;
 
 import gov.nist.hit.ds.httpSoap.datatypes.MetadataLevel;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.simSupport.simulator.SimHandle;
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase;
 import gov.nist.hit.ds.soapSupport.SoapFaultException;
 import org.apache.axiom.om.OMElement;
@@ -14,7 +15,7 @@ public class SoapHeaderMetadataLevelValidator extends ValComponentBase {
 	OMElement metadataLevelEle = null;
 	OMNamespace namespace = null;
 
-    public SoapHeaderMetadataLevelValidator() { super(null); }
+    public SoapHeaderMetadataLevelValidator() { super((SimHandle)null); }
 
     @Override
     public void run() throws SoapFaultException, RepositoryException {
@@ -85,7 +86,7 @@ public class SoapHeaderMetadataLevelValidator extends ValComponentBase {
 //	}
 //
 //	@Override
-//	public void run(MessageValidatorEngine mve) throws SoapFaultException,
+//	public void testRun(MessageValidatorEngine mve) throws SoapFaultException,
 //	RepositoryException {
 //		runValidationEngine();
 //	}

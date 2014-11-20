@@ -1,0 +1,8 @@
+To create docrec sim with simId of 1
+
+http://localhost:9090
+/tk/rest/sim/create/1
+POST
+
+send createsim.xml
+

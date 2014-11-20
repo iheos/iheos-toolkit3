@@ -52,9 +52,31 @@ class Event {
             return null
         }
 
+        def getAssertions(id) { assertionGroup.getAssertions(id)}
+        def getAssertions() { assertionGroup.assertions }
+
         String toString() { "Results:${validatorName}"}
     }
-    List<ValidatorResults> resultsStack = []
+
+    class ResultsStack {
+        List<ValidatorResults> stack = []
+        List<ValidatorResults> backing = []
+        def push(ValidatorResults results) { stack.push(results); backing.push(results) }
+        ValidatorResults pop() { stack.pop() }
+        boolean empty() { stack.empty }
+        ValidatorResults last() { stack.last()}
+        def getAssertions(id) { backing.collect { it.getAssertions(id)}.flatten() }
+        def getAssertions() { stack.collect { it.getAssertions()}.flatten()}
+        def getWorstStatus() {
+            def worsts = stack.collect { it.assertionGroup.worstStatus }
+            AssertionStatus.getWorst(worsts)
+        }
+        String toString() { "ResultsStack: ${getAssertions().size()} Assertions, worst status is ${getWorstStatus()}"}
+    }
+
+    ResultsStack resultsStack = new ResultsStack()
+
+    String toString() { "Event(${eventAsset.id})"}
 
     // Init results collection
     def initResults(Asset parentAsset, validatorName) {
@@ -63,43 +85,42 @@ class Event {
         result.assertionGroup = new AssertionGroup()
         result.assertionGroup.validatorName = validatorName
         result.aDAO = new AssertionGroupDAO(result.assertionGroup, parentAsset);
-        resultsStack << result
+        resultsStack.push(result)
     }
-    ValidatorResults currentResults() { assert resultsStack.size() > 0; return resultsStack.last() }
+    ValidatorResults currentResults() { assert !resultsStack.empty(); return resultsStack.last() }
 
     def addPeerResults(validatorName) {
         log.debug("Add peer results ${validatorName} AG")
-        Asset parent = (resultsStack.empty) ? eventDAO.validatorsAsset : resultsStack.last().parentAsset
+        Asset parent = (resultsStack.empty()) ? eventDAO.validatorsAsset : resultsStack.last().parentAsset
         initResults(parent, validatorName)
         resultsStack.last().flush(FlushStatus.Force)
     }
     def addChildResults(childName) {
         log.debug("Add child results ${childName} AG")
-        assert !resultsStack.empty
+        assert !resultsStack.empty()
         def result = resultsStack.last()
-//        initResults(result.parentAsset, childName)
         initResults(result.getaDAO().getAsset(), childName)
         result.flush(FlushStatus.Force)
     }
     def addSelfResults(validatorName) {
         log.debug("Add self results ${validatorName} AG")
-        if (resultsStack.empty) init()
+        if (resultsStack.empty()) init()
     }
 
     def close() {
         println "Closing ${resultsStack}"
-        assert !resultsStack.empty
+        assert !resultsStack.empty()
         println "Closing from ${resultsStack}"
         def result = resultsStack.pop()
-        if (!resultsStack.empty)
+        if (!resultsStack.empty())
             propagateStatus(result, resultsStack.last())
         result.flush(FlushStatus.Force)
     }
     def popChildResults() {
         println "Popping from ${resultsStack}"
-        assert !resultsStack.empty
+        assert !resultsStack.empty()
         def result = resultsStack.pop()
-        if (!resultsStack.empty) {
+        if (!resultsStack.empty()) {
             def parentResult = resultsStack.last()
             propagateStatus(result, parentResult)
         }
@@ -121,8 +142,8 @@ class Event {
     def flushAllResultsForExit() {
         // it is important that this be done bottom up so errors can
         // propagate up
-        log.debug("Flushing results: empty? = ${resultsStack.empty}")
-        while (!resultsStack.empty) { popChildResults() }
+        log.debug("Flushing results: empty? = ${resultsStack.empty()}")
+        while (!resultsStack.empty()) { popChildResults() }
         flush()
     }
 
@@ -148,8 +169,10 @@ class Event {
     }
 
     def flushValidators() {
-        if (!resultsStack.empty)
-            resultsStack.last().flush(FlushStatus.Force)
+        if (!resultsStack.empty()) {
+            ValidatorResults ele = resultsStack.last()
+            ele.flush(FlushStatus.Force)
+        }
     }
 
     void flush() {
@@ -172,4 +195,5 @@ class Event {
     AssertionGroup getAssertionGroup(String validatorName) {
         return allAssetionGroups.find { it.validatorName == validatorName }
     }
+    def getAssertions(id) { resultsStack.getAssertions(id)}
 }

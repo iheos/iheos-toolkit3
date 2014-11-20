@@ -29,7 +29,7 @@ public class DocumentEntryValidator extends ValidatorCommon {
 		cloneEnvironment(vc);
 	}
 
-//	public void run() {
+//	public void testRun() {
 //		List<DocumentEntry> docEntries = new ArrayList<DocumentEntry>();
 //		for (OMElement ele : m.getExtrinsicObjects()) {
 //			try {

@@ -89,8 +89,8 @@ class SoapSimExampleTest extends Specification {
 //        SimEngine engine = new SimEngine(simChain)
 //
 //        when:
-//        // run the sim chain
-//        engine.run()
+//        // testRun the sim chain
+//        engine.testRun()
 //
 //        then: ''
 //    }

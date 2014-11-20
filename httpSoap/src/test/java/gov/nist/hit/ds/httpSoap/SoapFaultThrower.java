@@ -65,7 +65,7 @@ public class SoapFaultThrower implements ValComponent {
 //	}
 //
 //	
-//	public void run(MessageValidatorEngine mve) throws SoapFaultException {
+//	public void testRun(MessageValidatorEngine mve) throws SoapFaultException {
 //		throw new SoapFaultException(er, FaultCode.ActionNotSupported, "This is a test");
 //	}
 //

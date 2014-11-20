@@ -28,7 +28,7 @@ public class SimEngineTest extends Specification {
 //        SimEngine engine = new SimEngine(simChain)
 //
 //        when:
-//        engine.run()
+//        engine.testRun()
 //
 //        then:
 //        simChain.isDone()
@@ -94,7 +94,7 @@ public class SimEngineTest extends Specification {
 //        SimEngine engine = new SimEngine(simChain)
 //
 //        when:
-//        engine.run()
+//        engine.testRun()
 //        def errs = simChain.getErrorMessages()
 //
 //        then:
@@ -116,7 +116,7 @@ public class SimEngineTest extends Specification {
 //        SimEngine engine = new SimEngine(simChain)
 //
 //        when:
-//        engine.run()
+//        engine.testRun()
 //
 //        then:
 //        simChain.isDone()
@@ -133,7 +133,7 @@ public class SimEngineTest extends Specification {
 //        SimEngine engine = new SimEngine(simChain)
 //
 //        when:
-//        engine.run()
+//        engine.testRun()
 //
 //        then:
 //        simChain.isDone()
@@ -152,7 +152,7 @@ public class SimEngineTest extends Specification {
 //        engine.trace = true
 //
 //        when:
-//        engine.run()
+//        engine.testRun()
 //        println engine.getExecutionTrace()
 //
 //        then:
@@ -170,7 +170,7 @@ public class SimEngineTest extends Specification {
 //        engine.trace = true
 //
 //        when:
-//        engine.run()
+//        engine.testRun()
 //        println engine.getExecutionTrace()
 //
 //        then:

@@ -45,7 +45,7 @@ public class XcnSubValidator extends ValComponentBase {
 //			err(input, "Either displayName or an identifier shall be present", xresource);
 //
 //		if ((!id().equals("") && !aa().equals(""))) {
-//			new CxSubValidator(this, id() + "^^^" + aa()).asSelf().run()
+//			new CxSubValidator(this, id() + "^^^" + aa()).asSelf().testRun()
 //		}
 //	}
 

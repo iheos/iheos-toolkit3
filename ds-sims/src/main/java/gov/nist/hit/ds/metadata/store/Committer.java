@@ -12,7 +12,7 @@ public class Committer /* extends MessageValidator */ {
 //
 //	// caller takes responsibility for locking
 //
-//	public void run(ErrorRecorder er, MessageValidatorEngine mvc) {
+//	public void testRun(ErrorRecorder er, MessageValidatorEngine mvc) {
 //		this.er = er;
 //
 //

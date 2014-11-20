@@ -16,6 +16,7 @@ import org.apache.axiom.om.OMElement
 /**
  * Created by bmajur on 10/7/14.
  */
+// TODO Errors not extracted from Repository correctly
 @Log4j
 class RegistryResponseGenerator {
     SimHandle simHandle
@@ -42,7 +43,7 @@ class RegistryResponseGenerator {
                 rel.addChild(er)
                 er.addAttribute('errorCode', r.columns[CODEindex], null)
                 er.addAttribute('codeContext', r.columns[MSGindex], null)
-                er.addAttribute('location', 'zzz', null)
+                er.addAttribute('location', r.columns[IDindex], null)
             }
         }
         return response
@@ -58,11 +59,12 @@ class RegistryResponseGenerator {
         log.debug("Query Event for errors")
 
         // 1. Build a search criteria 'filter' (which can be null to indicate no filter restriction)
-        SearchCriteria criteria = new SearchCriteria(SearchCriteria.Criteria.AND);
+        SearchCriteria criteria = new SearchCriteria(SearchCriteria.Criteria.OR);
         criteria.append(new SearchTerm(
                 PropertyKey.STATUS,
                 SearchTerm.Operator.EQUALTOANY,
-                ['ERROR', 'WARNING'] as String[]
+                ['ERROR'] as String[]
+                // TODO removed WARNING since getStatus() sets status_failure - still need to report
         ));
 
         log.debug("Event asset is ${simHandle.event.eventAsset.id.idString}")
