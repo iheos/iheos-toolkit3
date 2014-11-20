@@ -10,7 +10,6 @@ import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.ExceptionUtil
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
-import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.log4j.Logger
 
 import java.lang.reflect.InvocationTargetException
@@ -78,7 +77,7 @@ public class ValidationEngine {
             } catch (Exception e) {
                 logException(e)
                 Throwable t = e.getCause();
-                throw t;
+                if (t) throw t; else throw e
             } catch (Throwable t) {
                 logThrowable(t)
                 throw t;
@@ -90,7 +89,10 @@ public class ValidationEngine {
         // Force a log entry under validators even if this validator would not normally generate one
         AssertionGroup ag = validationObject.ag
         Assertion a = new Assertion()
-        a.setLocation(ExceptionUtils.getStackTrace(e.getCause()))
+        if (e.cause)
+            a.setLocation(ExceptionUtil.exception_details(e.getCause()))
+        else
+            a.setLocation(ExceptionUtil.exception_details(e))
         a.setMsg(e.getMessage())
         a.setStatus(AssertionStatus.INTERNALERROR)
         ag.addAssertion(a, true)
@@ -100,7 +102,10 @@ public class ValidationEngine {
         // Force a log entry under validators even if this validator would not normally generate one
         AssertionGroup ag = validationObject.ag
         Assertion a = new Assertion()
-        a.setLocation(ExceptionUtils.getStackTrace(t.getCause()))
+        if (t.cause)
+            a.setLocation(ExceptionUtil.exception_details(t.getCause()))
+        else
+            a.setLocation(ExceptionUtil.exception_details(t))
         a.setMsg(t.getMessage())
         a.setStatus(AssertionStatus.INTERNALERROR)
         ag.addAssertion(a, true)

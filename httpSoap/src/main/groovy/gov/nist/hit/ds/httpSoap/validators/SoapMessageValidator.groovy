@@ -38,7 +38,12 @@ public class SoapMessageValidator extends ValComponentBase {
     }
 
     @Validation(id="Soap011",  msg="XML starts with", ref="??")
-    public void Soap011() throws SoapFaultException { infoFound(xmlMessage.substring(0, 15).trim()) }
+    public void Soap011() throws SoapFaultException {
+        def size = xmlMessage.size()
+        if (size == 0) return
+        if (size > 16) size = 15
+        infoFound(xmlMessage.substring(0, size).trim())
+    }
 
     @Fault(code=FaultCode.Sender)
     @Validation(id="Soap020", msg="Parsing XML", ref="??")
