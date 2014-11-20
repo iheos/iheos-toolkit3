@@ -769,19 +769,20 @@ public class XdsParser {
             logger.warning(node + " node is empty.\nCheck your XML Document!");
             return null;
         } else {
-            // NameValue<String256>
             NameValueInteger nameValue = new NameValueInteger();
             ArrayList<Integer> values = new ArrayList<Integer>();
             // Set name
             String256 name256 = new String256();
+            // extract name from dom
             name256.setString(((Element) nodeList.item(0)).getElementsByTagName(RootNodesEnum.SubNodesEnum.name.toString())
                     .item(0).getFirstChild().getNodeValue());
             if (name256.verify()) {
                 nameValue.setName(name256);
             }
-            // Set values
+            // Extract integer value from dom set NameValueInteger values
             NodeList valueNodes = ((Element) nodeList.item(0)).getElementsByTagName(RootNodesEnum.SubNodesEnum.value
                     .toString());
+            // Set values
             for (int i = 0; i < valueNodes.getLength(); i++) {
                 String value = valueNodes.item(i).getFirstChild().getNodeValue();
                 values.add(Integer.parseInt(value));
@@ -812,6 +813,7 @@ public class XdsParser {
             ArrayList<DTM> values = new ArrayList<DTM>();
             // Set name
             String256 name256 = new String256();
+            // extract date name's value from dom
             name256.setString(((Element) nodeList.item(0)).getElementsByTagName(RootNodesEnum.SubNodesEnum.name.toString())
                     .item(0).getFirstChild().getNodeValue());
             if (name256.verify()) {
@@ -819,8 +821,7 @@ public class XdsParser {
             } else {
                 // TODO fire problem to view
             }
-            // Set values
-            // Set values
+            // Set date value from dom
             NodeList valueNodes = ((Element) nodeList.item(0)).getElementsByTagName(RootNodesEnum.SubNodesEnum.value
                     .toString());
 
@@ -828,6 +829,7 @@ public class XdsParser {
                 String256 value256 = new String256();
                 DTM dtm = new DTM();
                 value256.setString(valueNodes.item(i).getFirstChild().getNodeValue());
+                // perform data format conversion
                 String df = null;
                 int dateLength = value256.getString().length();
                 switch (dateLength) {

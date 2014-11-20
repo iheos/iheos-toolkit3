@@ -1,12 +1,11 @@
 package gov.nist.hit.ds.toolkit.installation;
 
 import gov.nist.hit.ds.utilities.io.Io;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 public class PropertyServiceManager {
 	static public final String TOOLKIT_TLS_PORT = "Toolkit_TLS_Port";

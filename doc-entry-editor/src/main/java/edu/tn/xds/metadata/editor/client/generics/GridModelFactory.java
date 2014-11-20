@@ -1,6 +1,7 @@
 package edu.tn.xds.metadata.editor.client.generics;
 
 /**
+ * Factory class for grid's Model to avoid reflection with GWT.
  * Created by onh2 on 7/17/2014.
  */
 public interface GridModelFactory<M> {

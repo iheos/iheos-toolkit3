@@ -36,6 +36,9 @@ public abstract class GenericTab extends Tab implements TabInterface {
         return Formatter.createSubtitle1(s); // TODO May need to be transformed into direct call inside each tab
     }
 
+    public void hideHeaderTitle(){
+        panel.removeMember(headerLabel);
+    }
 
     /**
      * Sets a tab contents
@@ -59,7 +62,15 @@ public abstract class GenericTab extends Tab implements TabInterface {
         return tabName;
     }
 
+    /**
+     * Abstract method that builds the tab's widget content.
+     * @return tab's content widget
+     */
     protected abstract Widget createContents();
 
+    /**
+     * Method that sets the tab's name.
+     * @return tab's name
+     */
     protected abstract String setTabName();
 }

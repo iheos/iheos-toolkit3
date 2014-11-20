@@ -1,22 +1,21 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
-import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
-import gov.nist.toolkit.results.client.SiteSpec;
-import gov.nist.toolkit.xdstools2.client.CoupledTransactions;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
-import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
-import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
+import gov.nist.toolkit.results.client.SiteSpec;
+import gov.nist.toolkit.xdstools2.client.CoupledTransactions;
+import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
+import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
+import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProvideAndRetrieveTab extends GenericQueryTab {
 	
@@ -44,7 +43,7 @@ public class ProvideAndRetrieveTab extends GenericQueryTab {
 
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 		
 		
 		container.addTab(topPanel, "SubmitAndRetrieve", select);
@@ -82,7 +81,7 @@ public class ProvideAndRetrieveTab extends GenericQueryTab {
 				return;
 
 			if (pid.getValue() == null || pid.getValue().equals("")) {
-				new PopupMessage("You must enter a Patient ID first");
+				new PopupMessageV3("You must enter a Patient ID first");
 				return;
 			}
 			addStatusBox();

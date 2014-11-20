@@ -4,12 +4,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.*;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 
 public class AdminPasswordDialogBox extends DialogBox {
 	PasswordTextBox passBox;
@@ -59,7 +55,7 @@ public class AdminPasswordDialogBox extends DialogBox {
 				PasswordManagement.callSignInCallbacks();
 			}
 			else
-				new PopupMessage("Sorry");
+				new PopupMessageV3("Sorry");
 		}
 		
 	}

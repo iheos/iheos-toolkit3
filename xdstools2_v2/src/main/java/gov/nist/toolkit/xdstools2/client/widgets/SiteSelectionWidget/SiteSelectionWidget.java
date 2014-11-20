@@ -6,7 +6,7 @@ import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.sitemanagement.client.TransactionOfferings;
 import gov.nist.toolkit.xdstools2.client.CoupledTransactions;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.StringSort;
 import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
@@ -274,7 +274,7 @@ public class SiteSelectionWidget extends Composite   {
 
 				public void onFailure(Throwable caught) {
 					if (!isEmpty(caught))
-						new PopupMessage(caught.getMessage());
+						new PopupMessageV3(caught.getMessage());
 				}
 
 				public void onSuccess(TransactionOfferings to) {
@@ -284,7 +284,7 @@ public class SiteSelectionWidget extends Composite   {
 			});
 		} catch (Exception e) {
 			if (!isEmpty(e))
-				new PopupMessage(e.getMessage());
+				new PopupMessageV3(e.getMessage());
 		}
 	}
 

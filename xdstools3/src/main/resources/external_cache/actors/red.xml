@@ -1,0 +1,36 @@
+
+<site name="red">
+   <home>urn:oid:1.3.6.1.4.1.21367.13.70.101</home>
+   <transaction name="xcq" secure="0">http://red:9080/tf6/services/rg</transaction>
+   <transaction name="xcq" secure="1">https://red:9085/tf6/services/rg</transaction>
+   <transaction name="xcr" secure="0">http://red:9080/tf6/services/rg</transaction>
+   <transaction name="xcr" secure="1">https://red:9085/tf6/services/rg</transaction>
+   <transaction name="sq.b" secure="0">http://red:9080/tf6/services/xdsregistryb</transaction>
+   <transaction name="sq.b" secure="1">https://red:9085/tf6/services/xdsregistryb</transaction>
+   <transaction name="r.b" secure="0">http://red:9080/tf6/services/xdsregistryb</transaction>
+   <transaction name="r.b" secure="1">https://red:9085/tf6/services/xdsregistryb</transaction>
+   <transaction name="pr.b" secure="0">http://red:9080/tf6/services/xdsrepositoryb</transaction>
+   <transaction name="pr.b" secure="1">https://red:9085/tf6/services/xdsrepositoryb</transaction>
+   <transaction name="ret.b" secure="0">http://red:9080/tf6/services/xdsrepositoryb</transaction>
+   <transaction name="ret.b" secure="1">https://red:9085/tf6/services/xdsrepositoryb</transaction>
+   <transaction name="igr" secure="0">http://red:9080/tf6/services/ig</transaction>
+   <transaction name="igr" secure="1">https://red:9085/tf6/services/ig</transaction>
+   <transaction name="igq" secure="0">http://red:9080/tf6/services/ig</transaction>
+   <transaction name="igq" secure="1">https://red:9085/tf6/services/ig</transaction>
+   <transaction name="update.b" secure="1"/>
+   <transaction name="update.b" secure="0"/>
+   <transaction name="mpq" secure="1"/>
+   <transaction name="mpq" secure="0">http://red:9080/tf6/services/xdsregistryb</transaction>
+   <transaction name="odds" secure="1"/>
+   <transaction name="odds" secure="0"/>
+   <transaction name="isr" secure="1"/>
+   <transaction name="isr" secure="0"/>
+   <transaction name="xdrpr" secure="1"/>
+   <transaction name="xdrpr" secure="0"/>
+   <transaction name="xcpd" secure="1"/>
+   <transaction name="xcpd" secure="0"/>
+   <transaction name="direct" secure="1"/>
+   <transaction name="direct" secure="0"/>
+   <repository uid="1.3.6.1.4.1.21367.13.40.149" secure="0">http://red:9080/tf6/services/xdsrepositoryb</repository>
+   <repository uid="1.3.6.1.4.1.21367.13.40.149" secure="1">https://red:9085/tf6/services/xdsrepositoryb</repository>
+</site>

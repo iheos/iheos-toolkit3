@@ -2,7 +2,7 @@ package gov.nist.toolkit.xdstools2.client.tabs.directRegistrationTab;
 
 import gov.nist.toolkit.tk.client.PropertyNotFoundException;
 import gov.nist.toolkit.tk.client.TkProps;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.Xdstools2;
 
 import com.google.gwt.user.client.ui.FlexTable;

@@ -1,0 +1,52 @@
+
+<site name="PACS_AGFA_EE2">
+   <home>urn:oid:1.3.6.1.4.1.21367.2011.2.6.47</home>
+   <transaction name="ret.b" secure="0">http://agfa32/your_url</transaction>
+   <transaction name="ret.b" secure="0">http://agfa32:8080/xds/repository</transaction>
+   <transaction name="igq" secure="0">http://agfa32:8080/xca/InitiatingGW</transaction>
+   <transaction name="pr.b" secure="1">https://agfa32:8080/your_url</transaction>
+   <transaction name="sq.b" secure="0">http://agfa32/your_url</transaction>
+   <transaction name="ret.b" secure="1">https://agfa32:8443/xds/repository</transaction>
+   <transaction name="r.b" secure="1">https://agfa32:8443/xds/registry</transaction>
+   <transaction name="xcr" secure="1">https://agfa32:8443/xca/RespondingGW</transaction>
+   <transaction name="igr" secure="1">https://agfa32:8443/xca/InitiatingGW</transaction>
+   <transaction name="xcq" secure="0">http://agfa32/your_url</transaction>
+   <transaction name="ret.b" secure="1">https://agfa32:8080/your_url</transaction>
+   <transaction name="ret.b" secure="0">http://agfa32:8080/xds/repository</transaction>
+   <transaction name="r.b" secure="1">https://agfa32:8080/your_url</transaction>
+   <transaction name="xcr" secure="0">http://agfa32/your_url</transaction>
+   <transaction name="pr.b" secure="0">http://agfa32/your_url</transaction>
+   <transaction name="pr.b" secure="1">https://agfa32:8443/xds/repository</transaction>
+   <transaction name="xcr" secure="1">https://agfa32:8080/your_url</transaction>
+   <transaction name="xcq" secure="1">https://agfa32:8443/xca/RespondingGW</transaction>
+   <transaction name="sq.b" secure="1">https://agfa32:8443/xds/registry</transaction>
+   <transaction name="igq" secure="1">https://agfa32:8443/xca/InitiatingGW</transaction>
+   <transaction name="r.b" secure="0">http://agfa32:8080/xds/registry</transaction>
+   <transaction name="ret.b" secure="1">https://agfa32:8443/xds/repository</transaction>
+   <transaction name="sq.b" secure="1">https://agfa32:8080/your_url</transaction>
+   <transaction name="xcq" secure="1">https://agfa32:8080/your_url</transaction>
+   <transaction name="igr" secure="0">http://agfa32:8080/xca/InitiatingGW</transaction>
+   <transaction name="xcr" secure="0">http://agfa32:8080/xca/RespondingGW</transaction>
+   <transaction name="ret.b" secure="0">http://agfa32/your_url</transaction>
+   <transaction name="xcq" secure="0">http://agfa32:8080/xca/RespondingGW</transaction>
+   <transaction name="ret.b" secure="1">https://agfa32:8080/your_url</transaction>
+   <transaction name="r.b" secure="0">http://agfa32/your_url</transaction>
+   <transaction name="pr.b" secure="0">http://agfa32:8080/xds/repository</transaction>
+   <transaction name="sq.b" secure="0">http://agfa32:8080/xds/registry</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.113"
+         secure="0">http://agfa32/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.113"
+         secure="0">http://agfa32:8080/xds/repository</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.113"
+         secure="1">https://agfa32:8443/xds/repository</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.113"
+         secure="1">https://agfa32:8080/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.113"
+         secure="0">http://agfa32:8080/xds/repository</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.113"
+         secure="1">https://agfa32:8443/xds/repository</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.113"
+         secure="0">http://agfa32/your_url</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.113"
+         secure="1">https://agfa32:8080/your_url</repository>
+</site>

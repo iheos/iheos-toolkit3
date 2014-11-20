@@ -1,26 +1,16 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
-import gov.nist.toolkit.xdstools2.client.AdminPasswordDialogBox;
-import gov.nist.toolkit.xdstools2.client.LoadGazelleConfigsClickHandler;
-import gov.nist.toolkit.xdstools2.client.PasswordManagement;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
-import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.Xdstools2;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.*;
+import gov.nist.toolkit.xdstools2.client.*;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.NullSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
 
 import java.util.Map;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class ToolConfigTab extends GenericQueryTab {
 	
@@ -36,7 +26,7 @@ public class ToolConfigTab extends GenericQueryTab {
 
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 
 
 		container.addTab(topPanel, "ToolConfig", select);
@@ -59,11 +49,11 @@ public class ToolConfigTab extends GenericQueryTab {
 			toolkitService.removeOldSimulators(new AsyncCallback<Integer> () {
 
 				public void onFailure(Throwable caught) {
-					new PopupMessage("removeOldSimulators() call failed: " + caught.getMessage());
+					new PopupMessageV3("removeOldSimulators() call failed: " + caught.getMessage());
 				}
 
 				public void onSuccess(Integer result) {
-					new PopupMessage(result + " simulators removed");
+					new PopupMessageV3(result + " simulators removed");
 				}
 				
 			});
@@ -154,11 +144,11 @@ public class ToolConfigTab extends GenericQueryTab {
 	AsyncCallback<String> savePropertiesCallback = new AsyncCallback<String> () {
 
 		public void onFailure(Throwable caught) {
-			new PopupMessage("setToolkitProperties() call failed: " + caught.getMessage());
+			new PopupMessageV3("setToolkitProperties() call failed: " + caught.getMessage());
 		}
 
 		public void onSuccess(String result) {
-			new PopupMessage("Properties saved");
+			new PopupMessageV3("Properties saved");
 			Xdstools2.getInstance().loadTkProps();  // this may now be accessible if it wasn't before
 		}
 		
@@ -171,7 +161,7 @@ public class ToolConfigTab extends GenericQueryTab {
 	AsyncCallback<Map<String, String>> getToolkitPropertiesCallback = new AsyncCallback<Map<String, String>> () {
 
 		public void onFailure(Throwable caught) {
-			new PopupMessage("getPropertyFile() call failed: " + caught.getMessage());
+			new PopupMessageV3("getPropertyFile() call failed: " + caught.getMessage());
 		}
 
 		public void onSuccess(Map<String, String> result) {

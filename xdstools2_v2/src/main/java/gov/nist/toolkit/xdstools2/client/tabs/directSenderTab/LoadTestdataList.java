@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools2.client.tabs.directSenderTab;
 
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class LoadTestdataList {
 
 		  
 		public void onFailure(Throwable arg0) {
-			new PopupMessage("Error: " + arg0.getMessage());
+			new PopupMessageV3("Error: " + arg0.getMessage());
 		}
 
 		  

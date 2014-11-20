@@ -1,0 +1,4 @@
+content-type: multipart/related; boundary="MIMEBoundary_b7390309c398fed6b93213dced729590ba43740f512888e8"; type="application/xop+xml"; start="<0.87390309c398fed6b93213dced729590ba43740f512888e8@apache.org>"; start-info="application/soap+xml"; action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"
+user-agent: Axis2
+host: localhost:9080
+transfer-encoding: chunked

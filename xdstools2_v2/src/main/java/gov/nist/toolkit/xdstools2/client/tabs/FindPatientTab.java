@@ -4,8 +4,9 @@ package gov.nist.toolkit.xdstools2.client.tabs;
 import gov.nist.toolkit.actortransaction.client.ATFactory.TransactionType;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.xdstools2.client.CoupledTransactions;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.FindDocumentsSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
 
@@ -72,7 +73,7 @@ public class FindPatientTab extends GenericQueryTab {
 	}
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 			
 		container.addTab(topPanel, "FindPatient", select);
 		addCloseButton(container,topPanel, null);
@@ -414,11 +415,11 @@ public class FindPatientTab extends GenericQueryTab {
 				return;
 
 			if (firstName.getValue() == null || firstName.getValue().equals("")) {
-				new PopupMessage("You must enter a First Name");
+				new PopupMessageV3("You must enter a First Name");
 				return;
 			}
 			if (lastName.getValue() == null || lastName.getValue().equals("")) {
-				new PopupMessage("You must enter a Last Name");
+				new PopupMessageV3("You must enter a Last Name");
 				return;
 			}
 			addStatusBox();

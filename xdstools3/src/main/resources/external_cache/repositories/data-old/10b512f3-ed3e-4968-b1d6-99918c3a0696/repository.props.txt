@@ -1,0 +1,6 @@
+#
+#Thu Aug 01 11:42:06 EDT 2013
+DisplayName=This is my repository
+description=Description
+repositoryType=simple
+id=10b512f3-ed3e-4968-b1d6-99918c3a0696

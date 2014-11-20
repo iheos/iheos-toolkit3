@@ -1,0 +1,2 @@
+basic string - text stream - content
+test 1

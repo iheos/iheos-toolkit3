@@ -25,27 +25,29 @@ public class TransactionDS extends DataSource {
         setRecordXPath("/site/actor/transaction"); //the XML path of the element we want to display, in the datasource file (.data.xml)
         setClientOnly(true);
 
+
         //---- actors ----
 
         DataSourceTextField siteName = new DataSourceTextField("siteName", "Site Name");
         siteName.setValueXPath("ancestor::site/@siteName");
         siteName.setHidden(true);
-        siteName.setForeignKey("endpointConfigDSNew.endpointName");
+        siteName.setForeignKey("endpointConfigDS.endpointName");
 
         DataSourceTextField actorCode = new DataSourceTextField("actorCode", "Endpoint Code");
         actorCode.setValueXPath("parent::actor/@actorCode");
-        actorCode.setDisplayField("actorName");
+        actorCode.setDisplayField("actorType");
+        actorCode.setCanEdit(false);
         actorCode.setHidden(true); // is already displayed in group mode title
 
-        DataSourceTextField actorName = new DataSourceTextField("actorName");
-        actorName.setValueXPath("parent::actor/@actorName");
-        actorName.setHidden(true); // used only for formatting
+        DataSourceTextField actorType = new DataSourceTextField("actorType", "Actor Type");
+        actorType.setValueXPath("parent::actor/@actorType");
+        actorType.setValueMap("Document Registry", "Document Repository");
+        
+
 
         //---- transactions -----
 
         DataSourceTextField transactionCode = new DataSourceTextField("transactionCode");
-        transactionCode.setPrimaryKey(true);
-        transactionCode.setCanEdit(false); // primary keys cannot be edited. A workaround is to delete the record and create a new one with the same values.
         transactionCode.setDisplayField("transactionName");
 
         DataSourceTextField transactionName = new DataSourceTextField("transactionName", "Transaction Type");
@@ -53,13 +55,16 @@ public class TransactionDS extends DataSource {
         transactionName.setHidden(true); // used only for formatting
 
         DataSourceTextField tls = new DataSourceTextField("secure", "TLS Endpoint");
+        tls.setPrimaryKey(true);
+
         DataSourceTextField notls = new DataSourceTextField("unsecure", "Non-TLS Endpoint");
 
-        //----- repositoryUniqueID and homeCommunityID ------
 
+        //----- repositoryUniqueID and homeCommunityID ------
         DataSourceTextField repositoryUniqueID = new DataSourceTextField("uid");
         repositoryUniqueID.setValueXPath("parent::actor/@uid");
 
-        setFields(siteName, actorCode, actorName, transactionCode, transactionName, tls, notls, repositoryUniqueID);
+
+        setFields(siteName, actorCode, actorType, transactionCode, transactionName, tls, notls, repositoryUniqueID);
     }
 }

@@ -1,0 +1,11 @@
+
+<site name="OTHER_GE_EA 2014">
+   <transaction name="pr.b" secure="0">http://ge85/ea-service/XdsRepository</transaction>
+   <transaction name="ret.b" secure="1">https://ge85:8080/ea-service/XdsRepository</transaction>
+   <transaction name="pr.b" secure="0">http://ge72/ea-service/XdsRepository</transaction>
+   <transaction name="ret.b" secure="0">http://ge85/ea-service/XdsRepository</transaction>
+   <transaction name="ret.b" secure="0">http://ge72/ea-service/XdsRepository</transaction>
+   <transaction name="pr.b" secure="1">https://ge85:8080/ea-service/XdsRepository</transaction>
+   <transaction name="ret.b" secure="1">https://ge72:8080/ea-service/XdsRepository</transaction>
+   <transaction name="pr.b" secure="1">https://ge72:8080/ea-service/XdsRepository</transaction>
+</site>

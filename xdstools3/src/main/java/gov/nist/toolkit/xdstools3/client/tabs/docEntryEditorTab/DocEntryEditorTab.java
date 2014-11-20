@@ -25,6 +25,6 @@ public class DocEntryEditorTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getDocumentMetadataEditorTabCode();
+        return TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode();
     }
 }

@@ -1,8 +1,5 @@
 package edu.tn.xds.metadata.editor.client.generics;
 
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.Converter;
 import com.sencha.gxt.data.shared.ListStore;
@@ -39,7 +36,6 @@ public abstract class GenericEditableListView<M, N> extends GenericEditableGrid<
         columnsConfigs.add(cc1);
 
         return new ColumnModel<M>(columnsConfigs);
-//        return this.cm;
     }
 
     public void addEditorConfig(Field<N> field) {

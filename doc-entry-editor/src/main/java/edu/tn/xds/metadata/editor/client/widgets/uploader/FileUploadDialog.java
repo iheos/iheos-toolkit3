@@ -30,7 +30,6 @@ public class FileUploadDialog extends Dialog {
 
     public void init() {
         fileUploadMVP.init();
-        fileUploadMVP.start();
         add(fileUploadMVP.getDisplay());
         bind();
     }

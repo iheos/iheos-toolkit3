@@ -79,13 +79,6 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
     @Ignore
     String256EditorWidget authorInstitution = new String256EditorWidget();
 
-    // /*
-    // * field to input the authorTelecommunication attribute it is directly
-    // mapped by its
-    // * name on "Telecommunication" in Author's class.
-    // */
-    // String256EditorWidget authorTelecommunication = new
-    // String256EditorWidget();
     @Ignore
     TextButton addInstitutionButton = new TextButton("Add");
     @Ignore

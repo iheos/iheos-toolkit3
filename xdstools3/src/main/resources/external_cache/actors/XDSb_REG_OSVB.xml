@@ -1,0 +1,7 @@
+
+<site name="XDSb_REG_OSVB">
+   <transaction name="sq.b" secure="0">http://osvb1:9091/ihe</transaction>
+   <transaction name="r.b" secure="0">http://osvb1/your_url</transaction>
+   <transaction name="r.b" secure="0">http://osvb1/your_url</transaction>
+   <transaction name="sq.b" secure="0">http://osvb1/your_url</transaction>
+</site>

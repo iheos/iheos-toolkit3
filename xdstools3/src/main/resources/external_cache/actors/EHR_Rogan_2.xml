@@ -1,0 +1,11 @@
+
+<site name="EHR_Rogan_2">
+   <transaction name="mpq" secure="1">https://rogan23:2021/IHE-XDS/Registry</transaction>
+   <transaction name="ret.b" secure="1">https://rogan24:2040/XDS/Repository</transaction>
+   <transaction name="pr.b" secure="1">https://rogan24:2040/XDS/Repository</transaction>
+   <transaction name="r.b" secure="1">https://rogan23:2021/IHE-XDS/Registry</transaction>
+   <transaction name="update.b" secure="1">https://rogan23:2021/IHE-XDS/Registry</transaction>
+   <transaction name="sq.b" secure="1">https://rogan23:2021/IHE-XDS/Registry</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.132"
+         secure="1">https://rogan24:2040/XDS/Repository</repository>
+</site>

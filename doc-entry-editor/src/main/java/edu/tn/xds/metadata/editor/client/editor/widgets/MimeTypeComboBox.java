@@ -10,6 +10,9 @@ import edu.tn.xds.metadata.editor.shared.model.String256;
 
 import java.util.List;
 
+/**
+ * ComboBox widget for MimeTypes with pre-loaded possible values.
+ */
 public class MimeTypeComboBox extends ComboBox<String256> {
     public MimeTypeComboBox(){
         super(new ListStore<String256>(

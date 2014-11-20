@@ -2,7 +2,7 @@ package gov.nist.toolkit.xdstools2.client.selectors;
 
 import gov.nist.toolkit.xdstools2.client.CookieManager;
 import gov.nist.toolkit.xdstools2.client.Panel;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 import gov.nist.toolkit.xdstools2.client.tabs.EnvironmentState;
@@ -118,7 +118,7 @@ public class EnvironmentManager {
 		toolkitService.getEnvironmentNames(new AsyncCallback<List<String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getEnvironmentNames: " + caught.getMessage());
+				new PopupMessageV3("getEnvironmentNames: " + caught.getMessage());
 			}
 
 			public void onSuccess(List<String> result) {
@@ -141,7 +141,7 @@ public class EnvironmentManager {
 
 			  
 			public void onFailure(Throwable caught) {
-				new PopupMessage("setEnvironment(" + initialEnvironmentName + ") failed");
+				new PopupMessageV3("setEnvironment(" + initialEnvironmentName + ") failed");
 			}
 
 			  
@@ -161,7 +161,7 @@ public class EnvironmentManager {
 	AsyncCallback<String> getDefaultEnvironmentCallback = new AsyncCallback<String> () {
 
 		public void onFailure(Throwable caught) {
-			new PopupMessage("Call to retrieve default environment name failed: " + caught.getMessage());
+			new PopupMessageV3("Call to retrieve default environment name failed: " + caught.getMessage());
 		}
 
 		public void onSuccess(String result) {
@@ -195,7 +195,7 @@ public class EnvironmentManager {
 	protected AsyncCallback<String> setEnvironmentCallback = new AsyncCallback<String> () {
 
 		public void onFailure(Throwable caught) {
-			new PopupMessage(caught.getMessage());
+			new PopupMessageV3(caught.getMessage());
 		}
 
 		public void onSuccess(String x) {

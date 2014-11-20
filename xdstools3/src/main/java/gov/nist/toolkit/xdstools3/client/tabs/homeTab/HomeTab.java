@@ -11,10 +11,11 @@ public class HomeTab extends GenericTab {
 
     public HomeTab(String s) {
         super(s);
+        hideHeaderTitle();
     }
 
     @Override
-    protected VStack createContents(){
+    protected HStack createContents(){
         HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
         queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
         queriesAndRetrieves.addItem("Find Documents");
@@ -36,9 +37,15 @@ public class HomeTab extends GenericTab {
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
+        sendTestData.addItem("Submit Test Data");
 
         HomeBox simulators = new HomeBox("Simulators");
         simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");
+
+        HomeBox mhdTools = new HomeBox("MHD Tools");
+        mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
+        // Mhd Validations
+        mhdTools.addItem("MHD Validator");
 
         HomeBox connectathonTools = new HomeBox("Connectathon Tools");
         connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
@@ -51,22 +58,21 @@ public class HomeTab extends GenericTab {
         // Repository Validations
         connectathonTools.addItem("XDS.b Repository Do This First");
 
-        HStack hstack1 = new HStack();
-        HStack hstack2 = new HStack();
-        HStack hStack3 = new HStack();
-        hstack1.addMembers(queriesAndRetrieves, new LayoutSpacer(), tools);
-        hstack2.addMembers(sendTestData, new LayoutSpacer(), simulators);
-        hStack3.addMember(connectathonTools);
-        VStack vstack = new VStack();
+        VStack hstack1 = new VStack();
+        VStack hstack2 = new VStack();
+        hstack1.addMembers(queriesAndRetrieves,sendTestData,mhdTools);
+        hstack2.addMembers(tools, simulators,connectathonTools);
+
+        HStack vstack = new HStack();
         LayoutSpacer spacer = new LayoutSpacer();
         spacer.setHeight(30);
-        vstack.addMembers(hstack1, spacer, hstack2,spacer,hStack3);
+        vstack.addMembers(hstack1, hstack2);
         return vstack;
     }
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getHomeTabCode();
+        return TabNamesUtil.getInstance().getHomeTabCode();
     }
 
 

@@ -1,0 +1,30 @@
+
+<site name="EHR_Tiani - Cisco_SpiritEHR">
+   <home>urn:oid:1.3.6.1.4.1.21367.2011.2.6.46</home>
+   <transaction name="update.b" secure="1">https://tiani---cisco75:8443/XDS3/C1</transaction>
+   <transaction name="igq" secure="1">https://tiani---cisco81:8443/XCA/initiating</transaction>
+   <transaction name="xdrpr" secure="1">https://tiani---cisco76:8443/XDS3/C1</transaction>
+   <transaction name="sq.b" secure="0">http://tiani---cisco75:8081/XDS3/C1</transaction>
+   <transaction name="xcq" secure="1">https://tiani---cisco81:8443/XCA/responding</transaction>
+   <transaction name="odds" secure="1">https://tiani---cisco86:8443/SpiritProxy/repository</transaction>
+   <transaction name="update.b" secure="0">http://tiani---cisco75:8081/XDS3/C1</transaction>
+   <transaction name="sq.b" secure="1">https://tiani---cisco75:8443/XDS3/C1</transaction>
+   <transaction name="r.b" secure="1">https://tiani---cisco75:8443/XDS3/C1</transaction>
+   <transaction name="xcr" secure="1">https://tiani---cisco81:8443/XCA/responding</transaction>
+   <transaction name="isr" secure="1">https://tiani---cisco84:8443/SpiritProxy/repository</transaction>
+   <transaction name="odds" secure="0">http://tiani---cisco86:8081/SpiritProxy/repository</transaction>
+   <transaction name="ret.b" secure="0">http://tiani---cisco76:8080/XDS3/C1</transaction>
+   <transaction name="isr" secure="0">http://tiani---cisco84:8081/SpiritProxy/repository</transaction>
+   <transaction name="pr.b" secure="0">http://tiani---cisco76:8080/XDS3/C1</transaction>
+   <transaction name="mpq" secure="1">https://tiani---cisco75:8443/XDS3/C1</transaction>
+   <transaction name="r.b" secure="0">http://tiani---cisco75:8081/XDS3/C1</transaction>
+   <transaction name="ret.b" secure="1">https://tiani---cisco76:8443/XDS3/C1</transaction>
+   <transaction name="igr" secure="1">https://tiani---cisco81:8443/XCA/initiating</transaction>
+   <transaction name="mpq" secure="0">http://tiani---cisco75:8081/XDS3/C1</transaction>
+   <transaction name="pr.b" secure="1">https://tiani---cisco76:8443/XDS3/C1</transaction>
+   <transaction name="xdrpr" secure="0">http://tiani---cisco76:8081/XDS3/C1</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.110"
+         secure="0">http://tiani---cisco76:8080/XDS3/C1</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.110"
+         secure="1">https://tiani---cisco76:8443/XDS3/C1</repository>
+</site>

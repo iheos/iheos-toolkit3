@@ -1,14 +1,13 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
+import com.google.gwt.user.client.ui.HTML;
 import gov.nist.toolkit.results.client.AssertionResult;
 import gov.nist.toolkit.results.client.Result;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.TabbedWindow;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 
 import java.util.List;
-
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TextViewerTab extends TabbedWindow {
 	boolean escapeHTML = true;
@@ -27,7 +26,7 @@ public class TextViewerTab extends TabbedWindow {
 	public void setResult(List<Result> results) { this.results = results; }
 
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {		
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 		container.addTab(topPanel, "Viewer", select);
 		topPanel.setWidth("100%");
 		addCloseButton(container,topPanel, null, null);
@@ -60,7 +59,7 @@ public class TextViewerTab extends TabbedWindow {
 	}
 
 	public void onTabLoad(TabContainer container, boolean select, String text, String titleString) {		
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 		container.addTab(topPanel, titleString, select);
 		topPanel.setWidth("100%");
 		addCloseButton(container,topPanel, null, null);

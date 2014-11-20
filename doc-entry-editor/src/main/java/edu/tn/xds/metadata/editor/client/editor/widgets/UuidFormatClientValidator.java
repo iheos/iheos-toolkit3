@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Created by onh2 on 8/28/2014.
+ * UUID Format type GXT Client Validator.
  */
 public class UuidFormatClientValidator extends AbstractValidator<String> {
     Logger logger = Logger.getLogger(this.getClass().getName());
@@ -53,7 +53,6 @@ public class UuidFormatClientValidator extends AbstractValidator<String> {
                     return createError(editor, "Value is not a correct UUID. It does not have the right number of characters. It should be 45 and start with 'urn:uuid:'.", value);
                 }
             }
-//            return createError(editor, "Value does not start with 'urn:uuid:'. It should.", value);
         } else {
             if (value.length() != 45) {
                 String tmp = value;

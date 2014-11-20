@@ -1,0 +1,10 @@
+#
+#Thu Oct 16 15:03:57 EDT 2014
+displayName=Artifacts
+createdDate=20141016150357
+updatedDate=20141016150357
+type=simArtifacts
+displayOrder=2
+repositoryId=Sim
+parentId=af1d64bc-7b1e-46b6-a575-fa137c6db8dd
+id=cb9525f1-7d04-4830-b75e-c3fab679625d

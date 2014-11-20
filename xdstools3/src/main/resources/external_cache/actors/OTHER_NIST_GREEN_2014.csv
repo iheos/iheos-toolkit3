@@ -1,0 +1,17 @@
+Configuration Type,Company,System,Host,Actor,is secured,is approved,comment,url,assigningAuthority,ws-type,port,port proxy,port secured
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REGISTRY,false,true,,http://nist17:9080/tf6/services/xdsregistryb,NIO1112,ITI-18:Stored Query:sq.b,9080,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REPOSITORY,true,true,,https://nist17:9085/tf6/services/xdsrepositoryb,NIO1112,ITI-43:Retrieve.b:ret.b,,,9085
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,RESP_GATEWAY,true,true,,https://nist17:9085/tf6/services/rg,NIO1112,ITI-38:Cross Gateway Query:xcq,,,9085
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REGISTRY,true,true,,https://nist17:9085/tf6/services/xdsregistryb,NIO1112,ITI-18:Stored Query:sq.b,,,9085
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,RESP_GATEWAY,false,true,,http://nist17:9080/tf6/services/rg,NIO1112,ITI-38:Cross Gateway Query:xcq,9080,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,INIT_GATEWAY,true,true,,https://nist17:9085/tf6/services/ig,NIO1112,ITI-18:Initiating Gateway Stored Query:igq,,,9085
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REGISTRY,false,true,,http://nist17:9080/tf6/services/xdsregistryb,NIO1112,ITI-42:Register.b:r.b,9080,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,INIT_GATEWAY,false,true,,http://nist17:9080/tf6/services/ig,NIO1112,ITI-43:Initiating Gateway Retrieve:igr,9080,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REGISTRY,true,true,,https://nist17:9085/tf6/services/xdsregistryb,NIO1112,ITI-42:Register.b:r.b,,,9085
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,INIT_GATEWAY,true,true,,https://nist17:9085/tf6/services/ig,NIO1112,ITI-43:Initiating Gateway Retrieve:igr,,,9085
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,RESP_GATEWAY,false,true,,http://nist17:9080/tf6/services/rg,NIO1112,ITI-39:Cross Gateway Retrieve:xcr,9080,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REPOSITORY,false,true,,http://nist17:9080/tf6/services/xdsrepositoryb,NIO1112,ITI-43:Retrieve.b:ret.b,9080,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REPOSITORY,false,true,,http://nist17:9080/tf6/services/xdsrepositoryb,NIO1112,ITI-41:Provide and Register.b:pr.b,9080,,
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,RESP_GATEWAY,true,true,,https://nist17:9080/tf6/services/rg,NIO1112,ITI-39:Cross Gateway Retrieve:xcr,,,9080
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,DOC_REPOSITORY,true,true,,https://nist17:9080/tf6/services/xdsrepositoryb,NIO1112,ITI-41:Provide and Register.b:pr.b,,,9080
+Webservice,NIST,OTHER_NIST_GREEN_2014,nist17,INIT_GATEWAY,false,true,,http://nist17:9080/tf6/services/ig,NIO1112,ITI-18:Initiating Gateway Stored Query:igq,9080,,

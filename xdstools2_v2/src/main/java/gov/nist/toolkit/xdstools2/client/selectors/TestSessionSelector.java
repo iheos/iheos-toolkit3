@@ -2,7 +2,7 @@ package gov.nist.toolkit.xdstools2.client.selectors;
 
 import gov.nist.toolkit.xdstools2.client.CookieManager;
 import gov.nist.toolkit.xdstools2.client.Panel;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.ArrayList;
@@ -153,7 +153,7 @@ public class TestSessionSelector {
 		protected AsyncCallback<String> setTestSessionCallback = new AsyncCallback<String> () {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage(caught.getMessage());
+				new PopupMessageV3(caught.getMessage());
 			}
 
 			public void onSuccess(String x) {
@@ -170,7 +170,7 @@ public class TestSessionSelector {
 			toolkitService.addMesaTestSession(testSessionTextBox.getText(), new AsyncCallback<Boolean>() {
 
 				public void onFailure(Throwable caught) {
-					new PopupMessage("addMesaTestSession: " + caught.getMessage());
+					new PopupMessageV3("addMesaTestSession: " + caught.getMessage());
 				}
 
 				public void onSuccess(Boolean result) {
@@ -188,7 +188,7 @@ public class TestSessionSelector {
 		toolkitService.isPrivateMesaTesting(new AsyncCallback<Boolean>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("isPrivateMesaTesting: " + caught.getMessage());
+				new PopupMessageV3("isPrivateMesaTesting: " + caught.getMessage());
 			}
 
 			public void onSuccess(Boolean result) {
@@ -206,7 +206,7 @@ public class TestSessionSelector {
 		toolkitService.getMesaTestSessionNames(new AsyncCallback<List<String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getMesaTestSessionNames: " + caught.getMessage());
+				new PopupMessageV3("getMesaTestSessionNames: " + caught.getMessage());
 			}
 
 			public void onSuccess(List<String> result) {

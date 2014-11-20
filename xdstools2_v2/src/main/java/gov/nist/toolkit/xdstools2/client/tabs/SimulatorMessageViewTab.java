@@ -1,11 +1,5 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
-import gov.nist.toolkit.http.client.HtmlMarkup;
-import gov.nist.toolkit.xdstools2.client.*;
-
-import java.util.List;
-import java.util.Map;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -13,19 +7,17 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.*;
+import gov.nist.toolkit.http.client.HtmlMarkup;
+import gov.nist.toolkit.xdstools2.client.Panel;
+import gov.nist.toolkit.xdstools2.client.*;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
+
+import java.util.List;
+import java.util.Map;
 
 public class SimulatorMessageViewTab extends TabbedWindow {
 	protected TabContainer myContainer;
@@ -71,7 +63,7 @@ public class SimulatorMessageViewTab extends TabbedWindow {
 
 	public void onTabLoad(TabContainer container, boolean select, String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 
 		container.addTab(topPanel, "Sim Msgs", select);
 		addCloseButton(container,topPanel, null);
@@ -158,7 +150,7 @@ public class SimulatorMessageViewTab extends TabbedWindow {
 		toolkitService.getActorSimulatorNameMap(new AsyncCallback<Map<String, String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getActorSimulatorNameMap: " + caught.getMessage());
+				new PopupMessageV3("getActorSimulatorNameMap: " + caught.getMessage());
 			}
 
 			public void onSuccess(Map<String, String> map) {
@@ -181,7 +173,7 @@ public class SimulatorMessageViewTab extends TabbedWindow {
 		toolkitService.getTransactionsForSimulator(simid, new AsyncCallback<List<String>>() {
 
 			public void onFailure(Throwable caught) {
-				new PopupMessage("getSimulatorTransactionNames: " + caught.getMessage());
+				new PopupMessageV3("getSimulatorTransactionNames: " + caught.getMessage());
 			}
 
 			public void onSuccess(List<String> transNames) {
@@ -203,7 +195,7 @@ public class SimulatorMessageViewTab extends TabbedWindow {
 //
 //			public void onFailure(Throwable caught) {
 //				if (caught.getMessage() != null)
-//					new PopupMessage("Error: " + caught.getMessage());			
+//					new PopupMessageV3("Error: " + caught.getMessage());
 //			}
 //
 //			public void onSuccess(List<String> result) {
@@ -242,7 +234,7 @@ public class SimulatorMessageViewTab extends TabbedWindow {
 
 			public void onFailure(Throwable caught) {
 				if (caught.getMessage() != null)
-					new PopupMessage("Error: " + caught.getMessage());			
+					new PopupMessageV3("Error: " + caught.getMessage());
 			}
 
 			public void onSuccess(List<String> result) {
@@ -322,7 +314,7 @@ public class SimulatorMessageViewTab extends TabbedWindow {
 
 			public void onFailure(Throwable caught) {
 				if (caught.getMessage() != null)
-					new PopupMessage("Error: " + caught.getMessage());			
+					new PopupMessageV3("Error: " + caught.getMessage());
 			}
 
 			public void onSuccess(String result) {
@@ -335,7 +327,7 @@ public class SimulatorMessageViewTab extends TabbedWindow {
 
 			public void onFailure(Throwable caught) {
 				if (caught.getMessage() != null)
-					new PopupMessage("Error: " + caught.getMessage());			
+					new PopupMessageV3("Error: " + caught.getMessage());
 			}
 
 			public void onSuccess(String result) {
@@ -348,7 +340,7 @@ public class SimulatorMessageViewTab extends TabbedWindow {
 
 			public void onFailure(Throwable caught) {
 				if (caught.getMessage() != null)
-					new PopupMessage("Error: " + caught.getMessage());			
+					new PopupMessageV3("Error: " + caught.getMessage());
 			}
 
 			public void onSuccess(String result) {
@@ -424,7 +416,7 @@ public class SimulatorMessageViewTab extends TabbedWindow {
 			Request response = builder.sendRequest(null, new RequestCallback() {
 				public void onError(Request request, Throwable exception) {
 					if (exception.getMessage() != null)
-						new PopupMessage("Error: " + exception);
+						new PopupMessageV3("Error: " + exception);
 				}
 
 				public void onResponseReceived(Request request, Response response) {
@@ -432,7 +424,7 @@ public class SimulatorMessageViewTab extends TabbedWindow {
 					if (status == 200) {
 						transactionChosen(currentActor, currentTransaction);					}
 					else
-						new PopupMessage("Failure");
+						new PopupMessageV3("Failure");
 				}
 			});
 		} catch (RequestException e) {

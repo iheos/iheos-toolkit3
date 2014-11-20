@@ -2,6 +2,12 @@ package edu.tn.xds.metadata.editor.client.generics.abstracts;
 
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * Abstract class to implement a class full GWT MVP architecture.
+ * @param <M> Model class
+ * @param <V> View class
+ * @param <P> Presenter class
+ */
 public abstract class AbstractMVP<M, V extends AbstractView<P>, P extends AbstractPresenter<V>> {
 
 	private V view;
@@ -11,12 +17,22 @@ public abstract class AbstractMVP<M, V extends AbstractView<P>, P extends Abstra
 	public AbstractMVP() {
 	}
 
-	// abstract
+    /**
+     * Abstract method that builds the view for MVP and returns its instance.
+     * @return View instance for MVP
+     */
 	public abstract V buildView();
 
+    /**
+     * Abstract method that builds the presenter for MVP and returns its instance.
+     * @return Presenter instance for MVP
+     */
 	public abstract P buildPresenter();
 
-	// impl
+    /**
+     * Method that initialize the MVP. Must be called with MVP class is instantiated.
+     */
+    // impl
 	public void init() {
 		// build
 		view = buildView();
@@ -33,7 +49,7 @@ public abstract class AbstractMVP<M, V extends AbstractView<P>, P extends Abstra
 		start();
 	}
 
-	public void start() {
+	private void start() {
 		presenter.start();
 		view.start();
 	}

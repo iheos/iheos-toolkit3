@@ -51,11 +51,6 @@
 
 
     <dependencies>
-        <!--<dependency>-->
-        <!--<groupId>edu.tn.xds.metadata</groupId>-->
-        <!--<artifactId>docentryeditor</artifactId>-->
-        <!--<version>1.0.0-SNAPSHOT</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.google.gwt.inject</groupId>
             <artifactId>gin</artifactId>
@@ -64,7 +59,6 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -113,24 +107,38 @@
             <artifactId>jersey-client</artifactId>
             <version>1.9</version>
         </dependency>
-
-        <!-- Local dependencies -->
-        <dependency>
-            <groupId>gov.nist.toolkit</groupId>
-            <artifactId>session_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>gov.nist.toolkit</groupId>-->
-            <!--<artifactId>testkit</artifactId>-->
-            <!--<version>2.7.0-SNAPSHOT</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>xdstools2</artifactId>
             <version>2.7.0-SNAPSHOT</version>
             <classifier>classes</classifier> <!-- maps to the sources packaged along with the xdstools2 war file -->
         </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>xdsException</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>toolkit</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>installation</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>logBrowser</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>repository-rpc</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
 

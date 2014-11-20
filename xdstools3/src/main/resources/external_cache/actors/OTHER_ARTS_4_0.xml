@@ -1,0 +1,25 @@
+
+<site name="OTHER_ARTS_4_0">
+   <transaction name="ret.b" secure="1">https://arts8:8446/Repository</transaction>
+   <transaction name="ret.b" secure="0">http://arts8:8083/Repository</transaction>
+   <transaction name="isr" secure="0">http://arts8:8083/Repository</transaction>
+   <transaction name="sq.b" secure="1">https://arts8:8445/Registry</transaction>
+   <transaction name="ret.b" secure="1">https://arts8:8446/Repository</transaction>
+   <transaction name="r.b" secure="0">http://arts8:8082/Registry</transaction>
+   <transaction name="r.b" secure="1">https://arts8:8445/Registry</transaction>
+   <transaction name="isr" secure="1">https://arts8:8446/Repository</transaction>
+   <transaction name="pr.b" secure="0">http://arts8:8083/Repository</transaction>
+   <transaction name="sq.b" secure="0">http://arts8:8082/Registry</transaction>
+   <transaction name="pr.b" secure="1">https://arts8:8446/Repository</transaction>
+   <transaction name="update.b" secure="0">http://arts8:8082/Registry</transaction>
+   <transaction name="update.b" secure="1">https://arts8:8445/Registry</transaction>
+   <transaction name="ret.b" secure="0">http://arts8:8083/Repository</transaction>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.120"
+         secure="1">https://arts8:8446/Repository</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.120"
+         secure="0">http://arts8:8083/Repository</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.120"
+         secure="1">https://arts8:8446/Repository</repository>
+   <repository uid="1.3.6.1.4.1.21367.2011.2.3.120"
+         secure="0">http://arts8:8083/Repository</repository>
+</site>

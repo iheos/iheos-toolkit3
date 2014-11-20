@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Custom ComboBox for CodedTerms with pre-loaded possible values depending on the type of CodedTerm.
+ *
+ * @see edu.tn.xds.metadata.editor.client.editor.widgets.PredefinedCodes
+ */
 public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
 
     private TextButton editCustomedValueBtn = new TextButton("Edit");
@@ -166,6 +171,9 @@ public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
         redraw(true);
     }
 
+    /**
+     * Popup editor for CodedTerm custom values
+     */
     private class CodedTermPopUpEditor extends Dialog {
 
         private final TextButton cancelButton;

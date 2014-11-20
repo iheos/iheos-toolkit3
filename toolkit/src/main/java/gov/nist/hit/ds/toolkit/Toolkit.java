@@ -161,7 +161,7 @@ public class Toolkit {
             throw new RuntimeException(e);
         }
     }
-    static public List<String> getEnvironmentNames() { return new Environment(externalCacheFile()).getInstalledEnvironments(); }
+    static public List<String> getEnvironmentNames() { return new Environment(externalCacheFile()).getInstalledEnvironments();}
     static public File repositoriesTypesFile() { return new File(new File(externalCacheFile(), "repositories"), "types"); }
 
 }

@@ -85,7 +85,6 @@ public class InternationalStringEditorWidget extends Composite implements Editor
         setEditionMode(EditionMode.NODATA);
         model = null;
         internationalStringEditorDriver.edit(model);
-        // editNew();
     }
 
     public void save() {

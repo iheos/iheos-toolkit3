@@ -2,8 +2,9 @@ package gov.nist.toolkit.xdstools2.client.tabs.directRegistrationTab;
 
 
 import gov.nist.toolkit.directsim.client.ContactRegistrationData;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.BaseSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.NullSiteActorManager;
 import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
@@ -75,7 +76,7 @@ public class DirectRegistrationTab extends GenericQueryTab {
 	public void onTabLoad(TabContainer container, boolean select,
 			String eventName) {
 		myContainer = container;
-		topPanel = new VerticalPanel();
+		topPanel = new TopWindowPanel();
 		disableEnvMgr();
 		disableTestSesMgr();
 		
@@ -363,7 +364,7 @@ public class DirectRegistrationTab extends GenericQueryTab {
 
 		  
 		public void onFailure(Throwable arg0) {
-			new PopupMessage("Certificate could not be saved: " + arg0.getMessage());
+			new PopupMessageV3("Certificate could not be saved: " + arg0.getMessage());
 		}
 
 		  
@@ -418,7 +419,7 @@ public class DirectRegistrationTab extends GenericQueryTab {
 //
 //		  
 //		public void onFailure(Throwable arg0) {
-//			new PopupMessage("Failed to load Validation Endpoints");
+//			new PopupMessageV3("Failed to load Validation Endpoints");
 //
 //		}
 //

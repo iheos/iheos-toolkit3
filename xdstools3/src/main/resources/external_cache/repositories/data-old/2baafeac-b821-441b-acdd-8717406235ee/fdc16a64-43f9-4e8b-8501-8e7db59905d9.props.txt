@@ -1,0 +1,10 @@
+#
+#Fri Jul 26 17:03:29 EDT 2013
+displayName=My Site
+createdDate=20130726170329
+expirationDate=20130825170329
+modifiedDate=20130726170329
+type=siteAsset
+repository=2baafeac-b821-441b-acdd-8717406235ee
+description=This is my site
+id=fdc16a64-43f9-4e8b-8501-8e7db59905d9

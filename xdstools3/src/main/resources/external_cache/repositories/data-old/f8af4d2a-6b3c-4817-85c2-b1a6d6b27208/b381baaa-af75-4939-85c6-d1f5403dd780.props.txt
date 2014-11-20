@@ -1,0 +1,8 @@
+#
+#Mon Jun 10 13:19:45 EDT 2013
+patientId=bogus
+displayName=My Site
+type=siteAsset
+repository=f8af4d2a-6b3c-4817-85c2-b1a6d6b27208
+description=This is my site
+id=b381baaa-af75-4939-85c6-d1f5403dd780

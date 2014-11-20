@@ -4,6 +4,8 @@ package gov.nist.toolkit.xdstools3.client.customWidgets;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.events.ItemChangedEvent;
 import com.smartgwt.client.widgets.form.events.ItemChangedHandler;
+import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
+import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 
 /**
  * Creates a TextItem to hold a Patient ID, to be used in a form. The PID input is required.
@@ -15,11 +17,12 @@ public class PatientIDWidget extends DynamicForm {
 
     private String tooltip = "Ex.: 2729f2aca58d47f^^^&1.3.6.1.4.1.21367.2005.3.7&ISO";
     private boolean pidValueEntered = false; //monitors the state of the PID field (value is required).
+    private final GenericTextItemWithTooltipWidget pid;
 
 
     public PatientIDWidget(){
 
-        GenericTextItemWithTooltipWidget pid = new GenericTextItemWithTooltipWidget();
+        pid = new GenericTextItemWithTooltipWidget();
         pid.setWidth(400);
         pid.setTitle("Patient ID *");
         pid.setName("patientID");
@@ -54,5 +57,9 @@ public class PatientIDWidget extends DynamicForm {
 
     public boolean isPidValueEntered() {
         return pidValueEntered;
+    }
+
+    public String getValue(){
+        return pid.getValueAsString();
     }
 }

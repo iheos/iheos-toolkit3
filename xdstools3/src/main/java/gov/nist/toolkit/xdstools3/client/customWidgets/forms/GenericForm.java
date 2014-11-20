@@ -1,6 +1,5 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.forms;
 
-import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.form.DynamicForm;
 
 /**
@@ -9,9 +8,7 @@ import com.smartgwt.client.widgets.form.DynamicForm;
 public class GenericForm extends DynamicForm {
 
     public GenericForm(){
-       // setLayoutAlign(VerticalAlignment.CENTER);
         setCellPadding(10);
-        //setColWidths(350);
     }
 
 }

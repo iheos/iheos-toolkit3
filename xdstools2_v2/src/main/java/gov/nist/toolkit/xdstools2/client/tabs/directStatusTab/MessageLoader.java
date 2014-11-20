@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools2.client.tabs.directStatusTab;
 
 import gov.nist.direct.client.MessageLog;
-import gov.nist.toolkit.xdstools2.client.PopupMessage;
+import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class MessageLoader  {
 
 			  
 			public void onFailure(Throwable caught) {
-				new PopupMessage(caught.getMessage());
+				new PopupMessageV3(caught.getMessage());
 			}
 
 			  

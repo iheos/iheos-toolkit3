@@ -6,9 +6,17 @@ import edu.tn.xds.metadata.editor.shared.model.InternationalString;
 import edu.tn.xds.metadata.editor.shared.model.LanguageCode;
 import edu.tn.xds.metadata.editor.shared.model.String256;
 
+/**
+ * InternationalString implementation of {@link edu.tn.xds.metadata.editor.client.generics.GridModelFactory}.
+ */
 public enum InternationalStringFactory implements GridModelFactory<InternationalString> {
     instance;
 
+    /**
+     * InternationalString implementation for {@link edu.tn.xds.metadata.editor.client.generics.GridModelFactory#newInstance()}
+     *
+     * @return instance of InternationalString
+     */
     @Override
     public InternationalString newInstance() {
         InternationalString is = GWT.create(InternationalString.class);

@@ -1,0 +1,9 @@
+#
+#Mon Jun 10 15:30:51 EDT 2013
+patientId=1002
+displayName=My Site
+type=siteAsset
+repository=b9d329bd-25f4-4d62-939e-acdfa9d03bcd
+description=This is my site
+id=bf35793f-3f0a-47c8-a670-bd3bfb205bfa
+startTime=2008

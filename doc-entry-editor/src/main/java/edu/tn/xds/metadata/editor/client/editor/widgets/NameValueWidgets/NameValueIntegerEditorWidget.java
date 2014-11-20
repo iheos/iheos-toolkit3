@@ -35,7 +35,6 @@ public class NameValueIntegerEditorWidget extends GenericEditableListView<Intege
         value = new SpinnerField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
         value.setAllowBlank(false);
         value.setWidth("auto");
-//        this.setHeight(75);
         value.setMinValue(1);
         value.setIncrement(5);
 

@@ -16,6 +16,6 @@ public class SubmitRetrieveTab extends AbstractRegistryAndRepositoryTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getSubmitRetrieveTabCode();
+        return TabNamesUtil.getInstance().getSubmitRetrieveTabCode();
     }
 }
