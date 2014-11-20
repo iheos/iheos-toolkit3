@@ -68,12 +68,12 @@
 
     <modules>
 
-        <!-- There is an issue with soapHttpValidator unit tests and JDK 1.7 -->
-
+        <module>tk-deps</module>
         <module>repository-tools</module>
         <module>tk-core</module>
         <module>gui-core</module>
         <module>toolkit2-build</module>
+        <module>docshare-sims</module>
     </modules>
 
     <dependencyManagement>

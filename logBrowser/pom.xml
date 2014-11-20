@@ -26,7 +26,8 @@
     <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <gwt.style>DETAILED</gwt.style>
+    <!-- JavaScript output mode -->
+    <!--<gwt.style>DETAILED</gwt.style>-->
   </properties>
 
   <dependencies>
