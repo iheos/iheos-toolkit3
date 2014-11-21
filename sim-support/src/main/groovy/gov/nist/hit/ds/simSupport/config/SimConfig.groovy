@@ -1,7 +1,5 @@
-package gov.nist.hit.ds.simSupport.client
+package gov.nist.hit.ds.simSupport.config
 import gov.nist.hit.ds.actorTransaction.*
-import gov.nist.hit.ds.simSupport.client.configElementTypes.SimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import groovy.transform.ToString
 /**
@@ -12,107 +10,40 @@ import groovy.transform.ToString
  *
  */
 @ToString(excludes="serialVersionUID, expires, isExpired, actorState")
-public class ActorSimConfig {
+public class SimConfig {
+	ActorType actorType;
+	List<TransactionSimConfigElement> elements  = new ArrayList<TransactionSimConfigElement>();
 
-	private static final long serialVersionUID = -736965164284950123L;
-	public ActorType actorType;
-	public List<SimConfigElement> elements  = new ArrayList<SimConfigElement>();
-
-	public ActorSimConfig() { }
+	SimConfig() { }
+    SimConfig(ActorType _actorType) { actorType = _actorType; }
 
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		
-		buf.append("ActorSimulatorConfig:");
-		for (SimConfigElement asce : elements) {
+		buf.append("SimulatorConfig:");
+		for (TransactionSimConfigElement asce : elements) {
 			buf.append("\n\t").append(asce);
 		}
 		
 		return buf.toString();
 	}
-	
-	/**
-	 * Build an ActorSimConfig based on the ActorType
-	 * @param actorType
-	 */
-	public ActorSimConfig(ActorType actorType) {
-		this.actorType = actorType;
-	}
-	
-	/**
-	 * Add a collection of config elements
-	 * @param elementList
-	 * @return
-	 */
-	public ActorSimConfig add(List<SimConfigElement> elementList) {
-		elements.addAll(elementList);
-		return this;
-	}
 
-	/**
-	 * Add a config element.
-	 * @param confElement
-	 * @return
-	 */
-	public ActorSimConfig add(SimConfigElement confElement) {
+	SimConfig add(TransactionSimConfigElement confElement) {
 		elements.add(confElement);
 		return this;
 	}
+	List<TransactionSimConfigElement> getElements() { return elements; }
 
-//	public Date getExpiration() {
-//		return expires;
-//	}
-	
-	/**
-	 * Return all the fixed (not editable in the UI) config elements.
-	 * @return
-	 */
-	public List<SimConfigElement> getFixed() {
-		List<SimConfigElement> fixed = new ArrayList<SimConfigElement>();
-		for (SimConfigElement ele : elements) {
-			if (!ele.isEditable())
-				fixed.add(ele);
-		}
-		return fixed;
-	}
-	
-	/**
-	 * Return all config elements.
-	 * @return
-	 */
-	public List<SimConfigElement> getElements() { return elements; }
-
-    public List<SimConfigElement> getElements(Class clazz) {
-        List<SimConfigElement> eles = new ArrayList<SimConfigElement>();
-        for (SimConfigElement ele : elements) {
-            if (ele.getClass().getName().equals(clazz.getName())) eles.add(ele);
-        }
-        return eles;
-    }
-	
-	/**
-	 * Return all the config elements that can be edited in the UI.
-	 * @return
-	 */
-	public List<SimConfigElement> getEditable() {
-		List<SimConfigElement> user = new ArrayList<SimConfigElement>();
-		for (SimConfigElement ele : elements) {
-			if (ele.isEditable())
-				user.add(ele);
-		}
-		return user;
-	}
-	
 	/**
 	 * Get the config element based on its displayName.
 	 * @param name
 	 * @return config element or null if not defined.
 	 */
-	public SimConfigElement getByName(String name) {
+    TransactionSimConfigElement getByName(String name) {
 		if (name == null)
 			return null;
 		
-		for (SimConfigElement ele : elements) {
+		for (TransactionSimConfigElement ele : elements) {
 			if (name.equals(ele.getName()))
 				return ele;
 		}
@@ -135,20 +66,6 @@ public class ActorSimConfig {
 			return null;
 		return configs.get(0).getEndpointValue();
 	}
-
-    public SimConfigElement getByClass(Class claz) {
-        for (SimConfigElement e : elements) {
-            if (e.getClass().getName().equals(claz.getName())) return e;
-        }
-        return null;
-    }
-
-    public SimConfigElement getByClassAndName(Class claz, String name) {
-        for (SimConfigElement e : elements) {
-            if (name.equals(e.getName()) && e.getClass().getName().equals(claz.getName())) return e;
-        }
-        return null;
-    }
 
     class Tls {
         List<TlsType> tlsTypes;
@@ -198,7 +115,7 @@ public class ActorSimConfig {
         Tls tls = new Tls(tlsTypes);
         Async async = new Async(asyncTypes);
 
-        for (SimConfigElement ele : getElements()) {
+        for (AbstractSimConfigElement ele : getElements()) {
             if (!(ele instanceof TransactionSimConfigElement)) continue;
             TransactionSimConfigElement endp = (TransactionSimConfigElement) ele;
             EndpointType elabel = endp.getEndpointType();
@@ -210,24 +127,6 @@ public class ActorSimConfig {
 
         return simEles;
     }
-
-	/**
-	 * Delete the config element based on its displayName.
-	 * @param name
-	 */
-	public void deleteByName(String name) {
-		SimConfigElement ele = getByName(name);
-		if (ele != null)
-			elements.remove(ele);
-	}	
-	
-	public ActorType getActorType() {
-		return actorType;
-	}
-
-	public boolean isActorType(ActorType actorType2) {
-		return actorType.equals(actorType2);
-	}
 
     // Accessor functions for popular config elements
 

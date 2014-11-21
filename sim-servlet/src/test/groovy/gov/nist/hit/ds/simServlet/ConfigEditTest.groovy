@@ -2,8 +2,8 @@ package gov.nist.hit.ds.simServlet
 
 import gov.nist.hit.ds.simServlet.api.SimApi
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
-import gov.nist.hit.ds.simSupport.manager.ActorSimConfigManager
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.manager.SimConfigManager
 import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import groovy.xml.XmlUtil
@@ -34,14 +34,14 @@ class ConfigEditTest extends Specification {
 
         and: '''Change the Sim's SCHEMACHECK setting.'''
         // set no message validation options
-        def actorSimConfigManager = new ActorSimConfigManager(simHandle.actorSimConfig)
+        def actorSimConfigManager = new SimConfigManager(simHandle.actorSimConfig)
         TransactionSimConfigElement config = actorSimConfigManager.getSimConfigElement()
         config.setBool(TransactionSimConfigElement.SCHEMACHECK, false)
         actorSimConfigManager.save(simHandle.configAsset)
 
         and: '''Reload sim configuration'''
         def simHandle2 = SimUtils.open(simId1)
-        def actorSimConfigManager2 = new ActorSimConfigManager(simHandle2.actorSimConfig)
+        def actorSimConfigManager2 = new SimConfigManager(simHandle2.actorSimConfig)
         TransactionSimConfigElement config2 = actorSimConfigManager2.getSimConfigElement()
 
         then: '''Schema Check setting should have persisted'''

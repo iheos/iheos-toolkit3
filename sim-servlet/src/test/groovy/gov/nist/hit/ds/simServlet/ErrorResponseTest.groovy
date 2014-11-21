@@ -2,8 +2,8 @@ package gov.nist.hit.ds.simServlet
 
 import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
-import gov.nist.hit.ds.simSupport.manager.ActorSimConfigManager
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.manager.SimConfigManager
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import spock.lang.Specification
 
@@ -56,7 +56,7 @@ It is great!
         simServlet.init()
         def simHandle = SimUtils.create('docrec', simId)
         // Cancel everything but SOAP validation
-        def actorSimConfigManager = new ActorSimConfigManager(simHandle.actorSimConfig)
+        def actorSimConfigManager = new SimConfigManager(simHandle.actorSimConfig)
         TransactionSimConfigElement config = actorSimConfigManager.getSimConfigElement()
         config.setBool(TransactionSimConfigElement.SCHEMACHECK, false)
         config.setBool(TransactionSimConfigElement.MODELCHECK, false)

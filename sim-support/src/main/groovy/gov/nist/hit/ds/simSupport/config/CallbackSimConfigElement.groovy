@@ -1,9 +1,9 @@
-package gov.nist.hit.ds.simSupport.client.configElementTypes;
+package gov.nist.hit.ds.simSupport.config;
 
 /**
  * Created by bmajur on 9/22/14.
  */
-public class CallbackSimConfigElement extends SimConfigElement {
+public class CallbackSimConfigElement extends AbstractSimConfigElement {
     String transactionId;
     String restURL;
 

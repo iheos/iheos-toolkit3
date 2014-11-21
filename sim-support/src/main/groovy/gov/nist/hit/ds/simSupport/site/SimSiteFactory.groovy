@@ -2,13 +2,11 @@ package gov.nist.hit.ds.simSupport.site
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.actorTransaction.TransactionType
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig
-import gov.nist.hit.ds.simSupport.client.configElementTypes.RetrieveTransactionSimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
+import gov.nist.hit.ds.simSupport.config.SimConfig
+import gov.nist.hit.ds.simSupport.config.RetrieveTransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 
 /**
@@ -17,7 +15,7 @@ import groovy.util.logging.Log4j
 @Log4j
 class SimSiteFactory {
 
-    Site buildSite(ActorSimConfig actorSimConfig, String name) {
+    Site buildSite(SimConfig actorSimConfig, String name) {
         println(actorSimConfig)
         Site site = new Site(name)
 

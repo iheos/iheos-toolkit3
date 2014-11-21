@@ -1,9 +1,8 @@
 package gov.nist.hit.ds.simSupport.site
 import gov.nist.hit.ds.actorTransaction.*
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.RetrieveTransactionSimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.RetrieveTransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.simulator.SimConfigFactory
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.client.TransactionBean

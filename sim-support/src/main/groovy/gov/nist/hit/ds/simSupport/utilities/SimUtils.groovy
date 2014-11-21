@@ -7,8 +7,8 @@ import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.repository.simple.SimpleAsset
 import gov.nist.hit.ds.repository.simple.SimpleId
 import gov.nist.hit.ds.repository.simple.SimpleType
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
 import gov.nist.hit.ds.simSupport.simulator.SimConfigFactory
@@ -60,7 +60,7 @@ class SimUtils {
         Asset simAsset = RepoUtils.mkAsset(simId.id, new SimpleType('sim'), repo)
 
         if (actorTypeName) {
-            ActorSimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
+            SimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
             storeConfig(new SimulatorDAO().toXML(actorSimConfig), simAsset)
             Site site = new SimSiteFactory().buildSite(actorSimConfig, simId.id)
             OMElement siteEle = new SeparateSiteLoader().siteToXML(site)
@@ -179,7 +179,7 @@ class SimUtils {
         }
     }
 
-    static ActorSimConfig loadConfig(Asset a) { new SimulatorDAO().toModel(load(a))}
+    static SimConfig loadConfig(Asset a) { new SimulatorDAO().toModel(load(a))}
     static String load(Asset a) { new String(a.content) }
 
 }

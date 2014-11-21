@@ -1,8 +1,15 @@
 package gov.nist.hit.ds.simSupport.serializer
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.EndpointType
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig
+import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.client.configElementTypes.*
+import gov.nist.hit.ds.simSupport.config.AbstractSimConfigElement
+import gov.nist.hit.ds.simSupport.config.BooleanSimConfigElement
+import gov.nist.hit.ds.simSupport.config.CallbackSimConfigElement
+import gov.nist.hit.ds.simSupport.config.RepositoryUniqueIdSimConfigElement
+import gov.nist.hit.ds.simSupport.config.TextSimConfigElement
+import gov.nist.hit.ds.simSupport.config.TimeSimConfigElement
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import groovy.xml.MarkupBuilder
 /**
@@ -12,11 +19,11 @@ import groovy.xml.MarkupBuilder
 // TODO: needs unit tests
 class SimulatorDAO {
 
-    String toXML(ActorSimConfig config) {
+    String toXML(SimConfig config) {
         def writer = new StringWriter()
         def xml = new MarkupBuilder(writer)
         xml.actor(type: config.actorType.shortName) {
-            def transactions = config.elements.findAll { SimConfigElement ele ->
+            def transactions = config.elements.findAll { AbstractSimConfigElement ele ->
                 ele instanceof TransactionSimConfigElement
             }
             def transactionNames = transactions.collect { it.transactionName } as Set
@@ -27,7 +34,7 @@ class SimulatorDAO {
                     xml.endpoint(value: trans.first().endpointValue.value, readOnly: true)
 
                     xml.settings() {
-                        aTrans.elements.each { SimConfigElement tele ->
+                        aTrans.elements.each { AbstractSimConfigElement tele ->
                             if (tele instanceof BooleanSimConfigElement) {
                                 xml.boolean(name: tele.name, value: tele.value)
                             }
@@ -42,7 +49,7 @@ class SimulatorDAO {
                     }
                 }
             }
-            config.elements.each { SimConfigElement ele ->
+            config.elements.each { AbstractSimConfigElement ele ->
                 if (ele instanceof BooleanSimConfigElement) {
                     xml.boolean(name: ele.name, value: ele.value)
                 } else if (ele instanceof CallbackSimConfigElement) {
@@ -62,9 +69,9 @@ class SimulatorDAO {
         return writer.toString()
     }
 
-    ActorSimConfig toModel(String xmlText) {
+    SimConfig toModel(String xmlText) {
         def actor = new XmlSlurper().parseText(xmlText)
-        ActorSimConfig actorSimConfig = new ActorSimConfig()
+        SimConfig actorSimConfig = new SimConfig()
         actorSimConfig.actorType = new ActorTransactionTypeFactory().getActorType(actor.@type as String)
         actor.boolean.each { actorSimConfig.add(new BooleanSimConfigElement(it.@name as String, it.@value as Boolean)) }
         actor.callback.each { actorSimConfig.add(new CallbackSimConfigElement(it.@name as String, it.@transaction as String, it.@restUrl as String))}
@@ -102,7 +109,7 @@ class SimulatorDAO {
 
     // xmlText is the entire actor structure.  The only parts that can be updated are
     // the settings.  Rest are read only for now.
-    ActorSimConfig updateModel(ActorSimConfig actorSimConfig, String xmlText) {
+    SimConfig updateModel(SimConfig actorSimConfig, String xmlText) {
         def actor = new XmlSlurper().parseText(xmlText)
         actor.children().findAll { it.name() == 'transaction'}
         .each { trans ->
@@ -115,7 +122,7 @@ class SimulatorDAO {
                     .each { buul ->
                 setting[buul.@name.text()] = buul.@value.text()
             }
-            TransactionSimConfigElement transactionSimConfigElement = (TransactionSimConfigElement) actorSimConfig.getElements(TransactionSimConfigElement).first()
+            TransactionSimConfigElement transactionSimConfigElement = actorSimConfig.getElements().first()
             if (!transactionSimConfigElement) return
             setting.each { name, value ->
                 if (value instanceof Boolean)

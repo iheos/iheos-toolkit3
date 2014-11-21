@@ -1,15 +1,11 @@
-package gov.nist.hit.ds.simSupport.client.configElementTypes;
+package gov.nist.hit.ds.simSupport.config;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.EndpointType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.simSupport.endpoint.EndpointValue;
+import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-public class TransactionSimConfigElement extends SimConfigElement
+public class TransactionSimConfigElement extends AbstractSimConfigElement
         implements IsSerializable, Serializable {
 
     // Booleans
@@ -23,7 +19,7 @@ public class TransactionSimConfigElement extends SimConfigElement
 
     public EndpointValue endpointValue;
     public EndpointType endpointType;
-    public List<SimConfigElement> elements  = new ArrayList<SimConfigElement>();
+    public List<AbstractSimConfigElement> elements  = new ArrayList<AbstractSimConfigElement>();
 
 	private static final long serialVersionUID = 532031604752465534L;
 
@@ -51,7 +47,7 @@ public class TransactionSimConfigElement extends SimConfigElement
     private boolean hasBool(String name) { return getBool(name) != null; }
 
     public BooleanSimConfigElement getBool(String name) {
-        for (SimConfigElement ele : elements) {
+        for (AbstractSimConfigElement ele : elements) {
             if (!(ele instanceof BooleanSimConfigElement)) continue;
             BooleanSimConfigElement b = (BooleanSimConfigElement) ele;
             if (b.getName().equals(name)) return b;
@@ -68,7 +64,7 @@ public class TransactionSimConfigElement extends SimConfigElement
     private boolean hasText(String name) { return getText(name) != null; }
 
     public TextSimConfigElement getText(String name) {
-        for (SimConfigElement ele : elements) {
+        for (AbstractSimConfigElement ele : elements) {
             if (!(ele instanceof TextSimConfigElement)) continue;
             TextSimConfigElement b = (TextSimConfigElement) ele;
             if (b.getName().equals(name)) return b;
@@ -89,7 +85,7 @@ public class TransactionSimConfigElement extends SimConfigElement
     }
 
     private boolean getCheck(String name) {
-        for (SimConfigElement ele : elements) {
+        for (AbstractSimConfigElement ele : elements) {
             if (!(ele instanceof BooleanSimConfigElement)) continue;
             BooleanSimConfigElement b = (BooleanSimConfigElement) ele;
             if (b.getName().equals(name)) return b.getValue();

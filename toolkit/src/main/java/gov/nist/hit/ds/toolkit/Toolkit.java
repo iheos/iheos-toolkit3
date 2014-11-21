@@ -55,12 +55,15 @@ public class Toolkit {
             // the warRoot will be different. This conditional checks for this.
             // If this is a test then set warRootFile to the resource directory within
             // thee test directory.
-            if (toolkitPropertiesFile.getParent().endsWith("classes") /*&&
+            if (toolkitPropertiesFile.getParent().endsWith("test-classes")) {
+                warRootFile = toolkitPropertiesFile.getParentFile().getParentFile();
+                logger.debug("Initializing Test environment");
+            }
+            else if (toolkitPropertiesFile.getParent().endsWith("classes") /*&&
                 toolkitPropertiesFile.getParentFile().getParent().endsWith("WAR") */) {
                     // production environment
+                logger.debug("Initializing Production environment");
                     warRootFile = toolkitPropertiesFile.getParentFile().getParentFile().getParentFile();
-            } else if (toolkitPropertiesFile.getParent().endsWith("test-classes")) {
-                warRootFile = toolkitPropertiesFile.getParentFile().getParentFile();
             }
             else
                 warRootFile = null;
@@ -86,8 +89,9 @@ public class Toolkit {
                 }
             }
             try {
-                repositoriesTypesFile().mkdirs();
-                FileUtils.copyDirectory(defaultRepositoriesTypesFile(), repositoriesTypesFile());
+                externalRepositoriesTypesFile().mkdirs();
+                if (internalRepositoriesTypesFile().exists())
+                    FileUtils.copyDirectory(internalRepositoriesTypesFile(), externalRepositoriesTypesFile());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -142,7 +146,6 @@ public class Toolkit {
     static public File schemaFile() { return new File(toolkitxFile(), "schema"); }
     static public File testkitFile() { return new File(toolkitxFile(), "testkit"); }
     static public File xdstestFile() { return new File(toolkitxFile(), "xdstest"); }
-    static public File defaultRepositoriesTypesFile() { return new File(new File(toolkitxFile(), "repositories"), "types"); }
 
     static public String getPassword() { return propertyManager.getPassword(); }
     static public String getHost() { return propertyManager.getToolkitHost(); }
@@ -165,6 +168,7 @@ public class Toolkit {
         }
     }
     static public List<String> getEnvironmentNames() { return new Environment(externalCacheFile()).getInstalledEnvironments();}
-    static public File repositoriesTypesFile() { return new File(new File(externalCacheFile(), "repositories"), "types"); }
+    static public File externalRepositoriesTypesFile() { return new File(new File(externalCacheFile(), "repositories"), "types"); }
+    static public File internalRepositoriesTypesFile() { return new File(new File(toolkitxFile(), "repositories"), "types"); }
 
 }
