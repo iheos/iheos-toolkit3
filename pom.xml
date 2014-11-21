@@ -296,14 +296,6 @@
                     <releaseProfiles>releases</releaseProfiles>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>${tomcat7-maven-plugin.version}</version>
-                <configuration>
-                    <warSourceDirectory>${basedir}/target/xdstools3</warSourceDirectory>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
