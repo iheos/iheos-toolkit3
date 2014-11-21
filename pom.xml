@@ -62,7 +62,6 @@
     <modules>
         <module>tk-deps</module>
         <module>docshare-sims</module>
-
         <module>repository-tools</module>
         <module>tk-core</module>
         <module>gui-core</module>
