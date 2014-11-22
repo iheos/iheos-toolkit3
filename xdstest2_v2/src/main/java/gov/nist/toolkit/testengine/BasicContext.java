@@ -1,8 +1,8 @@
 package gov.nist.toolkit.testengine;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdsexception.MetadataValidationException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.MetadataValidationException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.HashMap;
 import java.util.Iterator;

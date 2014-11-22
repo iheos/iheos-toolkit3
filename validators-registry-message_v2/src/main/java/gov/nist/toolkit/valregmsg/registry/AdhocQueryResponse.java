@@ -4,7 +4,7 @@ import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorListGenerator;
 import gov.nist.toolkit.registrymsgformats.registry.Response;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.List;
 

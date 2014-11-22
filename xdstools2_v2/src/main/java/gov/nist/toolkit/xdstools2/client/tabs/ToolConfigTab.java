@@ -43,23 +43,23 @@ public class ToolConfigTab extends GenericQueryTab {
 		
 	}
 	
-	class RmOldSimsClickHandler implements ClickHandler {
-
-		public void onClick(ClickEvent event) {
-			toolkitService.removeOldSimulators(new AsyncCallback<Integer> () {
-
-				public void onFailure(Throwable caught) {
-					new PopupMessageV3("removeOldSimulators() call failed: " + caught.getMessage());
-				}
-
-				public void onSuccess(Integer result) {
-					new PopupMessageV3(result + " simulators removed");
-				}
-				
-			});
-		}
-		
-	}
+//	class RmOldSimsClickHandler implements ClickHandler {
+//
+//		public void onClick(ClickEvent event) {
+//			toolkitService.removeOldSimulators(new AsyncCallback<Integer> () {
+//
+//				public void onFailure(Throwable caught) {
+//					new PopupMessageV3("removeOldSimulators() call failed: " + caught.getMessage());
+//				}
+//
+//				public void onSuccess(Integer result) {
+//					new PopupMessageV3(result + " simulators removed");
+//				}
+//
+//			});
+//		}
+//
+//	}
 
 
 	// Boolean data type ignored 
@@ -104,8 +104,8 @@ public class ToolConfigTab extends GenericQueryTab {
 		separator.setHTML("<hl />");
 		topPanel.add(separator);
 		
-		topPanel.add(rmOldSims);
-		rmOldSims.addClickHandler(new RmOldSimsClickHandler());
+//		topPanel.add(rmOldSims);
+//		rmOldSims.addClickHandler(new RmOldSimsClickHandler());
 		
 		topPanel.add(loadAllGazelleConfigs);
 		loadAllGazelleConfigs.addClickHandler(new LoadGazelleConfigsClickHandler(toolkitService, myContainer, "ALL"));

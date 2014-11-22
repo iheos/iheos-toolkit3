@@ -6,7 +6,7 @@ import gov.nist.toolkit.http.HttpParser;
 import gov.nist.toolkit.http.MultipartMessage;
 import gov.nist.toolkit.http.MultipartParser;
 import gov.nist.toolkit.session.server.Session;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;

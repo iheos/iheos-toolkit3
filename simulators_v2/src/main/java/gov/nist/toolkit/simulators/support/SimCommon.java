@@ -31,10 +31,10 @@ import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorder;
 import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorderBuilder;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
 import gov.nist.toolkit.valsupport.message.NullMessageValidator;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.IOException;
 import java.io.OutputStream;

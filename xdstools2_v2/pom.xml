@@ -44,11 +44,13 @@
             <version>1.0.0.GA</version>
             <classifier>sources</classifier>
         </dependency>
+<!--
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>ihetools</artifactId>
             <version>2.0</version>
         </dependency>
+-->
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>sim-common_v2</artifactId>
@@ -120,16 +122,14 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>gov.nist.toolkit</groupId>
-            <artifactId>direct-sim_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
-            <classifier>sources</classifier>
-            <scope>compile</scope>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>xdsException</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.toolkit</groupId>
-            <artifactId>tk_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>tk</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
             <classifier>sources</classifier>
             <scope>compile</scope>
         </dependency>
@@ -150,13 +150,6 @@
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>http_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
-            <classifier>sources</classifier>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.toolkit</groupId>
-            <artifactId>direct_v2</artifactId>
             <version>2.7.0-SNAPSHOT</version>
             <classifier>sources</classifier>
             <scope>compile</scope>
@@ -251,6 +244,19 @@
                 </executions>
             </plugin>
 
+<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

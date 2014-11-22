@@ -12,9 +12,9 @@ import gov.nist.toolkit.xdstest2logging.LogFileContent;
 import gov.nist.toolkit.xdstest2logging.TestDetails;
 import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-import gov.nist.toolkit.xdsexception.XdsParameterException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsParameterException;
 
 import java.io.File;
 import java.io.IOException;

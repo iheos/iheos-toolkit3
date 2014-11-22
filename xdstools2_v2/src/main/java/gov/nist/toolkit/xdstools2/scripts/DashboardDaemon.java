@@ -15,24 +15,21 @@ import gov.nist.toolkit.testengine.LogMap;
 import gov.nist.toolkit.testengine.LogMapItem;
 import gov.nist.toolkit.testengine.TransactionSettings;
 import gov.nist.toolkit.testengine.Xdstest2;
-import gov.nist.toolkit.testenginelogging.LogFileContent;
-import gov.nist.toolkit.testenginelogging.TestStepLogContent;
+import gov.nist.toolkit.xdstest2logging.LogFileContent;
+import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
 import gov.nist.toolkit.xdstools2.client.RegistryStatus;
 import gov.nist.toolkit.xdstools2.client.RepositoryStatus;
+import org.apache.axiom.om.OMElement;
 
+import javax.xml.parsers.FactoryConfigurationError;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import javax.xml.parsers.FactoryConfigurationError;
-
-import org.apache.axiom.om.OMElement;
+//import gov.nist.toolkit.testenginelogging.LogFileContent;
+//import gov.nist.toolkit.testenginelogging.TestStepLogContent;
 
 public class DashboardDaemon {
 //	ToolkitServiceImpl toolkit = new ToolkitServiceImpl();

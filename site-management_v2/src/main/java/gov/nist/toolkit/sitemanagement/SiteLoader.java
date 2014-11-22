@@ -7,7 +7,7 @@ import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.sitemanagement.client.TransactionBean;
 import gov.nist.toolkit.sitemanagement.client.TransactionCollection;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -1,45 +1,37 @@
 package gov.nist.toolkit.xdstools2.client;
 
-import gov.nist.direct.client.MessageLog;
-import gov.nist.direct.client.config.SigningCertType;
-import gov.nist.toolkit.actorfactory.client.Simulator;
-import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
-import gov.nist.toolkit.directsim.client.ContactRegistrationData;
-import gov.nist.toolkit.directsim.client.DirectRegistrationData;
+//import gov.nist.direct.client.MessageLog;
+//import gov.nist.direct.client.config.SigningCertType;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import gov.nist.toolkit.registrymetadata.client.AnyIds;
 import gov.nist.toolkit.registrymetadata.client.ObjectRef;
 import gov.nist.toolkit.registrymetadata.client.ObjectRefs;
 import gov.nist.toolkit.registrymetadata.client.Uids;
-import gov.nist.toolkit.results.client.CodesResult;
-import gov.nist.toolkit.results.client.Result;
-import gov.nist.toolkit.results.client.SiteSpec;
-import gov.nist.toolkit.results.client.TestLogs;
-import gov.nist.toolkit.results.client.XdstestLogId;
+import gov.nist.toolkit.results.client.*;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.sitemanagement.client.TransactionOfferings;
 import gov.nist.toolkit.tk.client.TkProps;
-import gov.nist.toolkit.valsupport.client.MessageValidationResults;
-import gov.nist.toolkit.valsupport.client.ValidationContext;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+//import gov.nist.toolkit.directsim.client.ContactRegistrationData;
+//import gov.nist.toolkit.directsim.client.DirectRegistrationData;
 
 public interface Toolkit2ServiceAsync {
 	
-	void getAvailableDirectSigningCerts(AsyncCallback<List<SigningCertType>> callback);
-	void directRegistration(DirectRegistrationData reg, AsyncCallback<DirectRegistrationData> callback);
-	void contactRegistration(ContactRegistrationData reg, AsyncCallback<ContactRegistrationData> callback);
-	void loadDirectRegistration(String contact, AsyncCallback<ContactRegistrationData> callback);	
-	void deleteDirect(ContactRegistrationData contact, DirectRegistrationData direct, AsyncCallback<ContactRegistrationData> callback); 
-	void toolkitPubCert(AsyncCallback<String> cert);
-	void saveCertFromUpload(ContactRegistrationData reg, String directAddr, AsyncCallback<ContactRegistrationData> callback);
-	void directSend(Map<String, String> parms, AsyncCallback<List<Result>> callback);
-	void getEncryptionCertDomains(AsyncCallback<List<String>> asyncCallback);
-	void getDirectMsgIds(String user, AsyncCallback<List<String>> callback);
-	void getDirectOutgoingMsgStatus(String user, AsyncCallback<List<MessageLog>> callback);
+//	void getAvailableDirectSigningCerts(AsyncCallback<List<SigningCertType>> callback);
+//	void directRegistration(DirectRegistrationData reg, AsyncCallback<DirectRegistrationData> callback);
+//	void contactRegistration(ContactRegistrationData reg, AsyncCallback<ContactRegistrationData> callback);
+//	void loadDirectRegistration(String contact, AsyncCallback<ContactRegistrationData> callback);
+//	void deleteDirect(ContactRegistrationData contact, DirectRegistrationData direct, AsyncCallback<ContactRegistrationData> callback);
+//	void toolkitPubCert(AsyncCallback<String> cert);
+//	void saveCertFromUpload(ContactRegistrationData reg, String directAddr, AsyncCallback<ContactRegistrationData> callback);
+//	void directSend(Map<String, String> parms, AsyncCallback<List<Result>> callback);
+//	void getEncryptionCertDomains(AsyncCallback<List<String>> asyncCallback);
+//	void getDirectMsgIds(String user, AsyncCallback<List<String>> callback);
+//	void getDirectOutgoingMsgStatus(String user, AsyncCallback<List<MessageLog>> callback);
 
 	void getTkProps(AsyncCallback<TkProps> callback);
 	void getTestResults(List<String> testIds, String testSession, AsyncCallback<Map<String, Result>> callback);
@@ -68,37 +60,37 @@ public interface Toolkit2ServiceAsync {
 	void getTestlogListing(String sessionName, AsyncCallback<List<String>> callback);
 	void getUpdateNames(AsyncCallback<List<String>> callback);
 	
-	void getTransactionRequest(String simName, String actor, String trans, String event, AsyncCallback<String> callback);
-	void getTransactionResponse(String simName, String actor, String trans, String event, AsyncCallback<String> callback);
-	void getTransactionLog(String simName, String actor, String trans, String event, AsyncCallback<String> callback);
-
-	void getTransactionsForSimulator(String simid, AsyncCallback<List<String>> callback);
+//	void getTransactionRequest(String simName, String actor, String trans, String event, AsyncCallback<String> callback);
+//	void getTransactionResponse(String simName, String actor, String trans, String event, AsyncCallback<String> callback);
+//	void getTransactionLog(String simName, String actor, String trans, String event, AsyncCallback<String> callback);
+//
+//	void getTransactionsForSimulator(String simid, AsyncCallback<List<String>> callback);
 
 //	void getActorNames(AsyncCallback<List<String>> callback);
 
-	void executeSimMessage(String simFileSpec, AsyncCallback<MessageValidationResults> callback);
-
-	
-	void renameSimFile(String simFileSpec, String newSimFileSpec, AsyncCallback callback);
-
-	void deleteSimFile(String simFileSpec, AsyncCallback callback);
-
-	void getSimulatorEndpoint(AsyncCallback<String> callback);
-
-	void getSelectedMessage(String simFilename, AsyncCallback<List<Result>> callback);
-	void getSelectedMessageResponse(String simFilename, AsyncCallback<List<Result>> callback);
+//	void executeSimMessage(String simFileSpec, AsyncCallback<MessageValidationResults> callback);
+//
+//
+//	void renameSimFile(String simFileSpec, String newSimFileSpec, AsyncCallback callback);
+//
+//	void deleteSimFile(String simFileSpec, AsyncCallback callback);
+//
+//	void getSimulatorEndpoint(AsyncCallback<String> callback);
+//
+//	void getSelectedMessage(String simFilename, AsyncCallback<List<Result>> callback);
+//	void getSelectedMessageResponse(String simFilename, AsyncCallback<List<Result>> callback);
 	@Deprecated
 	void getClientIPAddress(AsyncCallback<String> callback);
 
 //	void  validateMessage(ValidationContext vc, String simFileName, AsyncCallback<MessageValidationResults> callback);
 
-	void  getTransInstances(String simid, String actor, String trans, AsyncCallback<List<String>> callback);
+//	void  getTransInstances(String simid, String actor, String trans, AsyncCallback<List<String>> callback);
   
 	void getLastMetadata(AsyncCallback<List<Result>> callback);
 	void getLastFilename(AsyncCallback<String> callback);
 	void getTimeAndDate(AsyncCallback<String> callback);
 	
-	void validateMessage(ValidationContext vc, AsyncCallback<MessageValidationResults> callback);
+//	void validateMessage(ValidationContext vc, AsyncCallback<MessageValidationResults> callback);
 	
 	void getSiteNames(boolean reload, boolean simAlso, AsyncCallback<List<String>> callback);
 
@@ -155,14 +147,14 @@ public interface Toolkit2ServiceAsync {
 	void getToolkitProperties(AsyncCallback<Map<String, String>> callback);
 	void reloadPropertyFile(AsyncCallback<Boolean> callback);
 	
-	void  getActorTypeNames(AsyncCallback<List<String>> callback);
-	void  getNewSimulator(String actorTypeName, AsyncCallback<Simulator> callback);
-	void getSimConfigs(List<String> ids, AsyncCallback<List<SimulatorConfig>> callback);
-	void putSimConfig(SimulatorConfig config, AsyncCallback<String> callback);
-	void deleteConfig(SimulatorConfig config, AsyncCallback<String> callback);
-	void getActorSimulatorNameMap(AsyncCallback<Map<String, String>> callback);
-//	void getSimulatorTransactionNames(String simid, AsyncCallback<List<String>> callback);
-	void removeOldSimulators(AsyncCallback<Integer> callback);
+//	void  getActorTypeNames(AsyncCallback<List<String>> callback);
+//	void  getNewSimulator(String actorTypeName, AsyncCallback<Simulator> callback);
+//	void getSimConfigs(List<String> ids, AsyncCallback<List<SimulatorConfig>> callback);
+//	void putSimConfig(SimulatorConfig config, AsyncCallback<String> callback);
+//	void deleteConfig(SimulatorConfig config, AsyncCallback<String> callback);
+//	void getActorSimulatorNameMap(AsyncCallback<Map<String, String>> callback);
+////	void getSimulatorTransactionNames(String simid, AsyncCallback<List<String>> callback);
+//	void removeOldSimulators(AsyncCallback<Integer> callback);
 	
 	void getCollectionNames(String collectionSetName, AsyncCallback<Map<String, String>> callback);
 	void getCollection(String collectionSetName, String collectionName, AsyncCallback<Map<String, String>> callback);
@@ -174,5 +166,7 @@ public interface Toolkit2ServiceAsync {
 	void addMesaTestSession(String name, AsyncCallback<Boolean> callback);
 	
 	void getTestplanAsText(String testname, String section, AsyncCallback<String> callback);
+
+//    void getDirectMsgIds(String user, AsyncCallback<List<String>> async);
 //	void getToolkitEnableNwHIN(AsyncCallback<String> callback);
 }

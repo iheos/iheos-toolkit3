@@ -6,7 +6,7 @@ import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem.ReportingComple
 import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem.ReportingLevel;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode.Code;
 import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -60,10 +60,12 @@
 
  
     <modules>
+<!--
         <module>tk-deps</module>
-        <module>docshare-sims</module>
-        <module>repository-tools</module>
         <module>tk-core</module>
+        <module>docshare-sims</module>
+-->
+        <module>repository-tools</module>
         <module>gui-core</module>
         <module>toolkit2-build</module>
     </modules>
@@ -197,7 +199,7 @@
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <artifactId>xds-exceptions</artifactId>
+                <artifactId>xdsExceptions</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
 

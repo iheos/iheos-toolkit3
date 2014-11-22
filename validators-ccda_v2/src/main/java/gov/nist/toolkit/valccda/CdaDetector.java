@@ -1,7 +1,7 @@
 package gov.nist.toolkit.valccda;
 
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.InputStream;
 

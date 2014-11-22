@@ -15,8 +15,8 @@ import gov.nist.toolkit.valregmetadata.datatype.Rfc3066Format;
 import gov.nist.toolkit.valregmetadata.datatype.SourcePatientInfoFormat;
 import gov.nist.toolkit.valregmetadata.datatype.XcnFormat;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

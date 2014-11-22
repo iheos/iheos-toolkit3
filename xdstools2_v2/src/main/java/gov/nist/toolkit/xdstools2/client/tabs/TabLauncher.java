@@ -1,18 +1,13 @@
 package gov.nist.toolkit.xdstools2.client.tabs;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import gov.nist.toolkit.registrymetadata.client.RegistryObject;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.inspector.MetadataEditorTab;
 import gov.nist.toolkit.xdstools2.client.tabs.actorConfigTab.ActorConfigTab;
-import gov.nist.toolkit.xdstools2.client.tabs.directRegistrationTab.DirectRegistrationTab;
-import gov.nist.toolkit.xdstools2.client.tabs.directSenderTab.DirectSenderTab;
-import gov.nist.toolkit.xdstools2.client.tabs.directStatusTab.DirectStatusTab;
 import gov.nist.toolkit.xdstools2.client.tabs.messageValidator.MessageValidatorTab;
-import gov.nist.toolkit.xdstools2.client.tabs.simulatorControlTab.SimulatorControlTab;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 
 public class TabLauncher implements ClickHandler {
 	TabContainer container;
@@ -107,19 +102,9 @@ public class TabLauncher implements ClickHandler {
 			new MessageValidatorTab().onAbstractTabLoad(container, true, null);
 		else if (tabType.equals(directMessageValidatorTabLabel)) 
 			new MessageValidatorTab().onAbstractTabLoad(container, true, null);
-		else if (tabType.equals(simulatorMessageViewTabLabel)) 
-			new SimulatorMessageViewTab().onAbstractTabLoad(container, true, null);
-		else if (tabType.equals(simulatorControlTabLabel)) 
-			new SimulatorControlTab().onAbstractTabLoad(container, true, null);
-		else if (tabType.equals(toolConfigTabLabel)) 
+		else if (tabType.equals(toolConfigTabLabel))
 			new ToolConfigTab().onAbstractTabLoad(container, true, null);
-		else if (tabType.equals(directRegistrationTabLabel)) 
-			new DirectRegistrationTab().onAbstractTabLoad(container, true, null);
-		else if (tabType.equals(directSendTabLabel)) 
-			new DirectSenderTab().onAbstractTabLoad(container, true, null);
-		else if (tabType.equals(directViewTabLabel)) 
-			new DirectStatusTab().onAbstractTabLoad(container, true, null);
-		else if (tabType.equals(mesaTabLabel)) 
+		else if (tabType.equals(mesaTabLabel))
 			new MesaTestTab().onAbstractTabLoad(container, true, "Pre-Con Tests");
 		else if (tabType.equals(testRunnerTabLabel)) 
 			new gov.nist.toolkit.xdstools2.client.tabs.testRunnerTab.TestRunnerTabController().onAbstractTabLoad(container, true, "Conformance Tests");

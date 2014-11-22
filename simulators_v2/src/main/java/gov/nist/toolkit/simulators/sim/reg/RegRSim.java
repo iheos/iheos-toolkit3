@@ -18,8 +18,8 @@ import gov.nist.toolkit.simulators.support.SimCommon;
 import gov.nist.toolkit.simulators.support.TransactionSimulator;
 import gov.nist.toolkit.valregmsg.message.MetadataContainer;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.HashMap;
 import java.util.List;

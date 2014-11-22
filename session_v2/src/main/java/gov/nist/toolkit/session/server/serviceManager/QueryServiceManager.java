@@ -43,8 +43,8 @@ import gov.nist.toolkit.session.server.services.SubmitRegistryTestdata;
 import gov.nist.toolkit.session.server.services.SubmitRepositoryTestdata;
 import gov.nist.toolkit.session.server.services.SubmitXDRTestdata;
 import gov.nist.toolkit.sitemanagement.client.Site;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.XdsException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

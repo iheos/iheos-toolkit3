@@ -1,6 +1,6 @@
 package gov.nist.toolkit.securityCommon;
 
-import gov.nist.toolkit.xdsexception.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
 
 import java.io.File;
 import java.io.IOException;

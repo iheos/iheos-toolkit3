@@ -12,7 +12,7 @@ import gov.nist.toolkit.registrymetadata.UuidAllocator;
 import gov.nist.toolkit.simcommon.client.config.SimulatorConfigElement;
 import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
-import gov.nist.toolkit.xdsexception.NoSimulatorException;
+import gov.nist.hit.ds.xdsException.NoSimulatorException;
 
 import java.io.File;
 import java.io.FileInputStream;

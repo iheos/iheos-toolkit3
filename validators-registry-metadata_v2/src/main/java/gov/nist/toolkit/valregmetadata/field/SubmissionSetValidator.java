@@ -1,8 +1,8 @@
 package gov.nist.toolkit.valregmetadata.field;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.Arrays;
 import java.util.List;
