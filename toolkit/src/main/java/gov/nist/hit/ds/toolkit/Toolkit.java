@@ -90,8 +90,10 @@ public class Toolkit {
             }
             try {
                 externalRepositoriesTypesFile().mkdirs();
+                externalRepositoriesDataFile().mkdirs();
                 if (internalRepositoriesTypesFile().exists())
                     FileUtils.copyDirectory(internalRepositoriesTypesFile(), externalRepositoriesTypesFile());
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -169,6 +171,7 @@ public class Toolkit {
     }
     static public List<String> getEnvironmentNames() { return new Environment(externalCacheFile()).getInstalledEnvironments();}
     static public File externalRepositoriesTypesFile() { return new File(new File(externalCacheFile(), "repositories"), "types"); }
+    static public File externalRepositoriesDataFile() { return new File(new File(externalCacheFile(), "repositories"), "data"); }
     static public File internalRepositoriesTypesFile() { return new File(new File(toolkitxFile(), "repositories"), "types"); }
 
 }
