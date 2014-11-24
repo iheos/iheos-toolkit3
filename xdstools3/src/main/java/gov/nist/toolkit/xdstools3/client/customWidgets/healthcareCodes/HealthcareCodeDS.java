@@ -8,7 +8,7 @@ import com.smartgwt.client.types.DSProtocol;
 
 /**
  * SmartGWT datasource for Healthcare Codes, to use with RESTful services.
- * Defines a RESTDataSource fields, operations and REST service URLs.
+ * Defines a RESTDataSource fields, scripts and REST service URLs.
  */
 public class HealthcareCodeDS extends RestDataSource {
 
@@ -21,7 +21,7 @@ public class HealthcareCodeDS extends RestDataSource {
             DataSourceTextField descr = new DataSourceTextField("description");
             setFields(code, descr);
 
-            // Define operations
+            // Define scripts
             OperationBinding fetch = new OperationBinding();
             fetch.setOperationType(DSOperationType.FETCH);
             fetch.setDataProtocol(DSProtocol.POSTMESSAGE);

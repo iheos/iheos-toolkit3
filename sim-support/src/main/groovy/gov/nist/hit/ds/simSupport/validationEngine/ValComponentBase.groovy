@@ -52,7 +52,7 @@ public abstract class ValComponentBase implements ValComponent {
 
     void runValidationEngine() throws SoapFaultException, RepositoryException {
         String name = this.class.simpleName
-        log.debug("Running ${parentRelation} ${name}")
+        log.info("Validator: ${parentRelation} ${name}")
         if (event == null) log.error("Validator ${name} not initialized correctly, must call super(event) in constructor.")
         log.debug("resultsStack before init: ${event.resultsStack}")
         if (parentRelation == Relation.NONE) throw new ToolkitRuntimeException("Validation ${name} has no established relationhip to parent")

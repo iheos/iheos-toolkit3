@@ -4,11 +4,7 @@ import gov.nist.hit.ds.simServlet.api.SimApi
 import gov.nist.hit.ds.simSupport.client.SimId
 import org.xml.sax.SAXParseException
 
-import javax.ws.rs.Consumes
-import javax.ws.rs.POST
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.WebApplicationException
+import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
@@ -17,10 +13,11 @@ import javax.ws.rs.core.Response
  */
 
 @Path('/sim/create/{simid}')
-class CreateSim {
+class   CreateSim {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
-    def create(@PathParam('simid') String simIdString, String message) {
+//    @Produces(MediaType.APPLICATION_XML)
+    String create(@PathParam('simid') String simIdString, String message) {
         def xml
         println "simid is ${simIdString.trim()}"
         println "Message is ${message}"
@@ -37,5 +34,6 @@ class CreateSim {
         def simId = new SimId(simIdString)
         SimApi.create(actorTypeName, simId)
         SimApi.updateConfig(simId, message)
+        return '<foo/>'
     }
 }

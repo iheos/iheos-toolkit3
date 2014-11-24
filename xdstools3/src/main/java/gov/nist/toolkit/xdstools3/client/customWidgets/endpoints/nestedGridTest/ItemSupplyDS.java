@@ -7,7 +7,7 @@ import com.smartgwt.client.widgets.form.validator.FloatRangeValidator;
 
 /**
  * SmartGWT datasource for accessing entities over http in a RESTful manner.
- * Defines a RESTDataSource fields, operations and REST service URLs.
+ * Defines a RESTDataSource fields, scripts and REST service URLs.
  */
 public class ItemSupplyDS extends RestDataSource {
 

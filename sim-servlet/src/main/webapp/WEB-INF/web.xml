@@ -12,7 +12,7 @@
 
     <servlet>
         <servlet-name>simulatorServlet</servlet-name>
-        <servlet-class>gov.nist.hit.ds.simServlet.SimServlet</servlet-class>
+        <servlet-class>gov.nist.hit.ds.simServlet.servlet.SimServlet</servlet-class>
     </servlet>
 
 	<servlet>

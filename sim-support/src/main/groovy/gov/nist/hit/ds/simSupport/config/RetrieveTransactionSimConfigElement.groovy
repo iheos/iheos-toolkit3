@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.simSupport.client.configElementTypes
+package gov.nist.hit.ds.simSupport.config
 
 import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue

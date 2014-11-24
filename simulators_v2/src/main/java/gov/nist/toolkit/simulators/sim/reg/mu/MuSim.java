@@ -66,7 +66,7 @@ public class MuSim extends RegRSim {
 		// be created containing only the metadata relevant to that operation.
 		// That way, if extra, unprocessable metadata is present, we will know
 		// it in the end
-		// Of course nothing gets committed unless ALL operations are
+		// Of course nothing gets committed unless ALL scripts are
 		// successful
 
 		// This clones the Metadata object, not the individual chunks of XML
@@ -105,7 +105,7 @@ public class MuSim extends RegRSim {
 
 
 		//
-		// process operations
+		// process scripts
 		//
 		documentEntryUpdateTrigger(clone);
 

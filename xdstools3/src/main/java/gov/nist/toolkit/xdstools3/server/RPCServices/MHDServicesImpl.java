@@ -17,7 +17,7 @@ import java.io.File;
 
 /**
  * MHD RPC Services Implementation inspired from v2 ToolkitServicesImpl.
- * TODO Some element will need to be review when integrating the rest of v2 elements
+ * TODO Some element will need to be review when integrating the rest of v2 transactions
  */
 @SuppressWarnings("serial")
 public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServices {

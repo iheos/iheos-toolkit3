@@ -41,7 +41,7 @@ class EbSchemaValidatorTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('test')
-        SimUtils.create('ebxml', simId, repoName)
+        SimUtils.recreate('ebxml', simId, repoName)
     }
 
     def 'Good Example'() {

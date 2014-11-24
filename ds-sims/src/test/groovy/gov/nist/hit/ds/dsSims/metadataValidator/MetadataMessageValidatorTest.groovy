@@ -47,7 +47,7 @@ class MetadataMessageValidatorTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('MetadataMessageValidatorTest')
-        SimUtils.create('reg', simId, new SimSystemConfig().repoName)
+        SimUtils.recreate('reg', simId, new SimSystemConfig().repoName)
     }
 
     def 'SubmissionSet passes metadata parser'() {
