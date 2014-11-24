@@ -68,7 +68,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
         DynamicForm form = new DynamicForm();
 
-        // Message type elements
+        // Message type transactions
         HeaderItem l1=new HeaderItem();
         l1.setDefaultValue("1. Select a message type");
         messageTypeSelect = new SelectItem();
@@ -79,7 +79,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         messageTypeSelect.setWidth(400);
         loadMessageTypesMap();
 
-        // Uploader elements
+        // Uploader transactions
         HeaderItem l2=new HeaderItem();
         l2.setDefaultValue("2. Upload file to validate");
         uploadForm = new FormPanel();
@@ -96,7 +96,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         runBtn = new Button("Run");
         runBtn.disable();
 
-        // Validation result elements
+        // Validation result transactions
         validationResultsPanel = new VStack();
 
         //validationResultsPanel.addMember(setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT, "Sim", id, type, displayColumns));

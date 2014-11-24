@@ -38,7 +38,7 @@ public class LoginDialogWidget extends Window {
     public LoginDialogWidget(String _protectedTab) {
         protectedTab = _protectedTab;
 
-        // Create elements
+        // Create transactions
         setTitle("Login");
         setWidth(POPUP_WIDTH); setHeight(POPUP_HEIGHT);
         setShowResizeBar(false);
@@ -106,7 +106,7 @@ public class LoginDialogWidget extends Window {
     }
 
     /**
-     * Perform login operations.
+     * Perform login scripts.
      * If the call to server fails, an error message is added to the existing login dialog.
      * If the call succeeds, the login itself can have succeeded or failed. The status of the login attempt
      * is relayed from the server using a Boolean.

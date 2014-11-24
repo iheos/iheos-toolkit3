@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.transaction
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.TransactionType
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
@@ -22,9 +23,9 @@ class TransactionRunner {
     EndpointBuilder endpointBuilder
     SimId simId
     SimHandle simHandle
-    def transactionType
+    TransactionType transactionType
     String implClassName
-    def event
+    Event event
     def transCode
     def repoName
 
@@ -119,7 +120,8 @@ class TransactionRunner {
     // Used for production
     def runPMethod(String methodName, def args) {
         // build implementation
-        log.debug("Running transaction class ${implClassName}")
+        log.debug("Running transaction code ${transactionType.code} class ${implClassName}")
+        log.info("SimConfig: ${simHandle.actorSimConfig.get(transactionType.code).toString()}")
         Class<?> clazz
         try {
             clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
@@ -132,7 +134,7 @@ class TransactionRunner {
             return
         }
 
-        println "Class ${clazz.name} implements ${clazz.getInterfaces()}"
+        log.debug "Class ${clazz.name} implements ${clazz.getInterfaces()}"
         if (!(ArrayUtils.contains(clazz.getInterfaces(), Transaction))) {
             simHandle.event.fault = new Fault('Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType.code, "Transaction implementation class ${implClassName} does not implment interface Transaction.")
             return

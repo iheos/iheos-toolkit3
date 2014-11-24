@@ -1,10 +1,10 @@
-package gov.nist.hit.ds.simServlet
+package gov.nist.hit.ds.simServlet.servlet
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.dsSims.msgs.RegistryResponseGenerator
 import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser
-import gov.nist.hit.ds.simServlet.rest.TransactionReportBuilder
+import gov.nist.hit.ds.simServlet.WrapMtom
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
@@ -18,8 +18,6 @@ import gov.nist.hit.ds.soapSupport.core.*
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.utilities.io.Io
 import gov.nist.hit.ds.xdsException.ExceptionUtil
-import groovyx.net.http.HTTPBuilder
-import groovyx.net.http.Method
 import org.apache.axiom.om.OMElement
 import org.apache.log4j.Logger
 
@@ -28,8 +26,6 @@ import javax.servlet.ServletException
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-
-import static groovyx.net.http.ContentType.XML
 /**
  * Servlet to service simulator input transactions.
  * @author bill
@@ -64,7 +60,7 @@ public class SimServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         Endpoint endpoint = new Endpoint("http://host:port" + request.getRequestURI());
-        logger.debug("Post to " + endpoint);
+        logger.info("\n\n\n===============================================================================\nPost to ${endpoint}\n\n\n");
         List<String> options = parseOptionsFromURI(request.getRequestURI());
         logger.debug("Request options are " + options);
         String header = headersAsString(request);
@@ -96,19 +92,20 @@ public class SimServlet extends HttpServlet {
             logger.error("Error writing response - " + ExceptionUtil.exception_details(e));
         }
 
-        String callbackURI = simHandle.getActorSimConfig().getMessageCallback();
-        if (callbackURI != null && !callbackURI.equals("")) {
-            String payload = new TransactionReportBuilder().build(simHandle);
-            logger.info("Callback to ${callbackURI} with payload ${payload}");
-            def http = new HTTPBuilder( callbackURI )
-            http.request(Method.POST, XML) {
-                body = payload.bytes
-
-                response.success = { resp ->
-                    logger.info "POST Success: ${resp.statusLine}"
-                }
-            }
-        }
+//        String callbackURI = simHandle.getActorSimConfig().getMessageCallback();
+//        if (callbackURI != null && !callbackURI.equals("")) {
+//            String payload = new TransactionReportBuilder().build(simHandle);
+//            logger.info("Callback to ${callbackURI} with payload ${payload}");
+//            def http = new HTTPBuilder( callbackURI )
+//            http.request(Method.POST, XML) {
+//                body = payload.bytes
+//
+//                response.success = { resp ->
+//                    logger.info "POST Success: ${resp.statusLine}"
+//                }
+//            }
+//        }
+        logger.info("\n===============================================================================");
     }
 
     protected SimHandle runPost(SimId simId, String header, byte[] body, List<String> options, HttpServletResponse response) {
@@ -232,7 +229,7 @@ public class SimServlet extends HttpServlet {
             logger.debug("Sending MTOM response");
             StringBuilder bodyBuffer = new StringBuilder();
             contentTypeHeader = new WrapMtom().wrap(responseBody, bodyBuffer);
-            System.out.println("response content type is " + contentTypeHeader);
+            logger.debug("response content type is " + contentTypeHeader);
             simHandle.getEvent().getInOut().setRespBody(bodyBuffer.toString().getBytes());
         } else {
             logger.debug("Sending SIMPLE response");

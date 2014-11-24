@@ -6,7 +6,7 @@
         <implClass value="gov.nist.hit.ds.dsSims.transactions.Pnr"/>
     </transaction>
     <actor name="Document Recipient" id="docrec">
-        <implClass value="gov.nist.hit.ds.simSupport.factories.DocumentRecipientActorFactory"/>
+        <implClass value=""/>
         <transaction id="prb"/>
     </actor>
     <transaction name="Register" id="rb" code="rb">
@@ -15,10 +15,6 @@
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <implClass value="gov.nist.hit.ds.dsSims.transactions.Reg"/>
     </transaction>
-    <actor name="Document Recipient" id="docrec">
-        <implClass value="gov.nist.hit.ds.simSupport.factories.DocumentRecipientActorFactory"/>
-        <transaction id="prb"/>
-    </actor>
     <actor name="Document Registry" id="reg">
         <implClass value="gov.nist.hit.ds.simSupport.factories.DocumentRegistryActorFactory"/>
         <transaction id="rb"/>

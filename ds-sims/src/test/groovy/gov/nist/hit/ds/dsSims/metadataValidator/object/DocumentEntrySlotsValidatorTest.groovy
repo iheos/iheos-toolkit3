@@ -52,7 +52,7 @@ class DocumentEntrySlotsValidatorTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('DocumentEntrySlotsValidatorTest')
-        SimUtils.create('reg', simId, new SimSystemConfig().repoName)
+        SimUtils.recreate('reg', simId, new SimSystemConfig().repoName)
         pnrText = this.getClass().classLoader.getResource('PnR1Doc.xml').getText()
         vc = new ValidationContext()
         vc.isRequest = true

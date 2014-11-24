@@ -21,11 +21,24 @@ import org.apache.axiom.om.OMElement
 class RegistryResponseGenerator {
     SimHandle simHandle
     List<CSVRow> data
-    String[] displayColumns = ["ID","STATUS","MSG", "CODE"]
+    String[] displayColumns = ["ID","STATUS", "EXPECTED", "FOUND", "MSG", "CODE"]
     def IDindex = 0
     def STATUSindex = 1
-    def MSGindex = 2
-    def CODEindex = 3
+    def EXPECTEDindex = 2
+    def FOUNDindex = 3
+    def MSGindex = 4
+    def CODEindex = 5
+
+    def id(r) {r.columns[IDindex]}
+    def status(r) {r.columns[STATUSindex]}
+    def msg(r) {r.columns[MSGindex]}
+    def code(r) {r.columns[CODEindex]}
+    def found(r) {r.columns[FOUNDindex]}
+    def expected(r) {r.columns[EXPECTEDindex]}
+
+    def safe(String x) { x.replaceAll('<', '&lt;')}
+
+    def statusToReturn = ['ERROR']
 
     RegistryResponseGenerator(SimHandle _simHandle) {
         simHandle = _simHandle
@@ -39,11 +52,12 @@ class RegistryResponseGenerator {
             OMElement rel = XmlUtil.om_factory.createOMElement("RegistryErrorList", MetadataSupport.ebRSns3)
             response.addChild(rel)
             data.each { CSVRow r ->
+                if (! (status(r) in statusToReturn)) return
                 OMElement er = XmlUtil.om_factory.createOMElement("RegistryError", MetadataSupport.ebRSns3)
                 rel.addChild(er)
-                er.addAttribute('errorCode', r.columns[CODEindex], null)
-                er.addAttribute('codeContext', r.columns[MSGindex], null)
-                er.addAttribute('location', r.columns[IDindex], null)
+                er.addAttribute('errorCode', '', null)
+                er.addAttribute('codeContext', "EXPECTED: ${safe(expected(r))}; FOUND: ${safe(found(r))} : MSG ${safe(msg(r))}", null)
+                er.addAttribute('location', code(r), null)
             }
         }
         return response
@@ -63,7 +77,7 @@ class RegistryResponseGenerator {
         criteria.append(new SearchTerm(
                 PropertyKey.STATUS,
                 SearchTerm.Operator.EQUALTOANY,
-                ['ERROR'] as String[]
+                statusToReturn as String[]
                 // TODO removed WARNING since getStatus() sets status_failure - still need to report
         ));
 

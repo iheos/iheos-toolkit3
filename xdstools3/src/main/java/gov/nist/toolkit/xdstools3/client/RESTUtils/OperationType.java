@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Simple enumeration representing the different {@link //RestDataSource} operations.
+ * Simple enumeration representing the different {@link //RestDataSource} scripts.
  */
 @XmlType
 @XmlEnum(String.class)

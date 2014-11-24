@@ -23,12 +23,19 @@ class EbSchemaValidator extends ValComponentBase {
 
     class Handler implements ErrorHandler {
 
+        def prefix(String str) {
+            def size = 25
+            if (str.size() < 25) size = str.size()
+            str.trim().substring(0, size)
+        }
+
         @Override
         void warning(SAXParseException exception) throws SAXException {
             Assertion a = new Assertion()
-            a.found = exception.message
+            a.msg = "Schema: ${exception.message.trim()}"
             a.status = AssertionStatus.WARNING
-            a.expected = ''
+            a.expected = 'XML starts with'
+            a.found = prefix(xmlString)
             a.location = "Line ${exception.lineNumber} : Col ${exception.columnNumber}"
             simHandle.event.assertionGroup.addAssertion(a, true)
         }
@@ -36,9 +43,10 @@ class EbSchemaValidator extends ValComponentBase {
         @Override
         void error(SAXParseException exception) throws SAXException {
             Assertion a = new Assertion()
-            a.found = exception.message
+            a.msg = "Schema: ${exception.message.trim()}"
             a.status = AssertionStatus.ERROR
-            a.expected = ''
+            a.expected = 'XML starts with'
+            a.found = prefix(xmlString)
             a.location = "Line ${exception.lineNumber} : Col ${exception.columnNumber}"
             simHandle.event.assertionGroup.addAssertion(a, true)
         }
@@ -47,16 +55,16 @@ class EbSchemaValidator extends ValComponentBase {
         void fatalError(SAXParseException exception) throws SAXException {
             Assertion a = new Assertion()
             if (exception.message.trim().startsWith('Content is not allowed in prolog')) {
-                a.msg = exception.message.trim()
-                a.found = xmlString.substring(0, 25).trim()
+                a.msg = "Schema: ${exception.message.trim()}"
                 a.status = AssertionStatus.ERROR
                 a.expected = 'XML starts with'
+                a.found = prefix(xmlString)
                 a.location = "Line ${exception.lineNumber} : Col ${exception.columnNumber}"
                 simHandle.event.assertionGroup.addAssertion(a, true)
             } else {
-                a.msg = exception.message
+                a.msg = "Schema: ${exception.message.trim()}"
                 a.status = AssertionStatus.ERROR
-                a.expected = ''
+                a.expected = 'XML starts with'
                 a.location = "Line ${exception.lineNumber} : Col ${exception.columnNumber}"
                 simHandle.event.assertionGroup.addAssertion(a, true)
             }

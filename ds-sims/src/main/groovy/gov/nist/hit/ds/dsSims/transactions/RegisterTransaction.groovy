@@ -156,7 +156,7 @@ class RegisterTransaction implements Transaction {
 
         // build update to metadata index with new objects
         // this will later be committed
-        // This is done now because the operations below need this index
+        // This is done now because the scripts below need this index
         buildMetadataIndex(m);
 
         // set folder lastUpdateTime on folders in the submission

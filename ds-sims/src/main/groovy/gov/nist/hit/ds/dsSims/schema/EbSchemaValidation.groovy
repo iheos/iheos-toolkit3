@@ -3,6 +3,7 @@ package gov.nist.hit.ds.dsSims.schema
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import gov.nist.hit.ds.xdsException.XdsInternalException
+import groovy.util.logging.Log4j
 import org.apache.xerces.parsers.DOMParser
 import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
@@ -10,12 +11,13 @@ import org.xml.sax.SAXException
 /**
  * Created by bmajur on 11/18/14.
  */
+@Log4j
 public class EbSchemaValidation {
 
     // empty string as result means no errors
     static public void run(String metadata, int metadataType, File localSchema, ErrorHandler eHandler)  {
         DOMParser p;
-        System.out.println("Local Schema to be found at " + localSchema);
+        log.debug("Local Schema to be found at " + localSchema);
 
         // Decode schema location
         String schemaLocation;

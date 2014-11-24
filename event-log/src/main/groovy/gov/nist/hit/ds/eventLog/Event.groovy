@@ -108,16 +108,16 @@ class Event {
     }
 
     def close() {
-        println "Closing ${resultsStack}"
+        log.debug "Closing ${resultsStack}"
         assert !resultsStack.empty()
-        println "Closing from ${resultsStack}"
+        log.debug "Closing from ${resultsStack}"
         def result = resultsStack.pop()
         if (!resultsStack.empty())
             propagateStatus(result, resultsStack.last())
         result.flush(FlushStatus.Force)
     }
     def popChildResults() {
-        println "Popping from ${resultsStack}"
+        log.debug "Popping from ${resultsStack}"
         assert !resultsStack.empty()
         def result = resultsStack.pop()
         if (!resultsStack.empty()) {
@@ -132,10 +132,10 @@ class Event {
 
     def propagateStatus(ValidatorResults from, ValidatorResults to) {
         log.debug("Propagate status from ${from.validatorName} to ${to.validatorName}?")
-        println "status is ${from.getStatus()}"
+        log.info "status is ${from.getStatus()}"
         if (from.getStatus() >= AssertionStatus.WARNING) {
             to.setStatus(from.getStatus())
-            println "parent status is now ${to.getStatus()}"
+            log.debug "parent status is now ${to.getStatus()}"
         }
     }
 

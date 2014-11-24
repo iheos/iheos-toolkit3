@@ -61,7 +61,7 @@ public class EndpointWidget extends HLayout {
                                                         if (event.getRecord() != null) endpointValueSelected = true;
 
                                                         // if yes, pass value to validation
-//                                                    String newValue = (event.getNewValue() == null ? null : event.getNewValue().toString());
+//                                                    String newValue = (event.mkNewValue() == null ? null : event.mkNewValue().toString());
 //                                                    disabledForm.getItem(FORM_FIELD_NAME).setValue(newValue);
                                                     }
                                                 }

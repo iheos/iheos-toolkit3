@@ -18,6 +18,8 @@ class Pnr implements Transaction {
 
     def Pnr(SimHandle _simHandle) { simHandle = _simHandle }
 
+    def schema() { simHandle.actorSimConfig.get('prb').isSchemaCheck() }
+
     @Override
     ValidationStatus validateRequest() {
         def headerVal = new HttpHeaderValidator(simHandle)
@@ -26,7 +28,9 @@ class Pnr implements Transaction {
         def soapEnvelopeBytes  = soapParser.getSoapEnvelope()
         def soapVal = new SoapMessageValidator(simHandle, new String(soapEnvelopeBytes))
         soapVal.asPeer().run()
-        new EbSchemaValidator(simHandle, soapVal.body.toString(), MetadataTypes.METADATA_TYPE_PRb, Toolkit.schemaFile()).asPeer().run()
+        if (schema()) {
+            new EbSchemaValidator(simHandle, soapVal.body.toString(), MetadataTypes.METADATA_TYPE_PRb, Toolkit.schemaFile()).asPeer().run()
+        }
     }
 
     @Override

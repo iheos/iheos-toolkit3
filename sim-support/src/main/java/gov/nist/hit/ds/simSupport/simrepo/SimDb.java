@@ -127,7 +127,7 @@ public class SimDb {
 //	}
 //
 	static public Date getNewExpiration(@SuppressWarnings("rawtypes") Class controllingClass)   {
-		// establish expiration for newly touched cache elements
+		// establish expiration for newly touched cache transactions
 		Date now = new Date();
 		Calendar newExpiration = Calendar.getInstance();
 		newExpiration.setTime(now);
