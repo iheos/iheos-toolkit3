@@ -24,9 +24,11 @@ public class HomeLinkButton extends IButton {
         setStyleName("homelinkbutton");
         setTitle(title);
         setAlign(Alignment.LEFT);
+
+        // for some reason, setting these properties in the CSS does not override SmartGWT defaults
         setBorder("0");
         setWidth(400);
-        setHeight(40);
+        setHeight(20);
 
         bindUI();
     }

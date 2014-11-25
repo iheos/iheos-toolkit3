@@ -59,16 +59,16 @@ public class HomeTab extends GenericTab {
         // Repository Validations
         connectathonTools.addItem("XDS.b Repository Do This First");
 
-        VStack hstack1 = new VStack();
-        VStack hstack2 = new VStack();
-        hstack1.addMembers(queriesAndRetrieves,sendTestData,mhdTools);
-        hstack2.addMembers(tools, simulators,connectathonTools);
+        VStack vstack1 = new VStack();
+        VStack vstack2 = new VStack();
+        vstack1.addMembers(queriesAndRetrieves, sendTestData, mhdTools);
+        vstack2.addMembers(tools, simulators, connectathonTools);
 
-        HStack vstack = new HStack();
+        HStack hstack = new HStack();
         LayoutSpacer spacer = new LayoutSpacer();
         spacer.setHeight(30);
-        vstack.addMembers(hstack1, hstack2);
-        return vstack;
+        hstack.addMembers(vstack1, vstack2);
+        return hstack;
     }
 
     @Override
