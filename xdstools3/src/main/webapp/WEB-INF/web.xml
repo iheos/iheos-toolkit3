@@ -5,6 +5,18 @@
 <web-app>
     <display-name>Document Sharing Toolkit</display-name>
 
+    <!-- ============== Toolkit initialization ============== -->
+
+    <servlet>
+        <servlet-name>Initialization</servlet-name>
+        <servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Initialization</servlet-name>
+        <url-pattern>/init</url-pattern>
+    </servlet-mapping>
 
 
     <!-- ============== Jersey import for REST ============== -->
@@ -13,18 +25,12 @@
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>gov.nist.toolkit.xdstools3</param-value>
+            <param-value>gov.nist.toolkit.xdstools3;gov.nist.hit.ds.simServlet.rest</param-value>
         </init-param>
         <init-param>
             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
             <param-value>true</param-value>
         </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>Initialization</servlet-name>
-        <servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 

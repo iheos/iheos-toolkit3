@@ -5,26 +5,33 @@
 
 <web-app>
 
-	<!--<servlet>-->
-		<!--<servlet-displayName>toolkitServlet</servlet-displayName>-->
-		<!--<servlet-class>gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl</servlet-class>-->
-	<!--</servlet>-->
+    <!-- ============== Toolkit initialization ============== -->
+
+    <servlet>
+        <servlet-name>Initialization</servlet-name>
+        <servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Initialization</servlet-name>
+        <url-pattern>/init</url-pattern>
+    </servlet-mapping>
+
+    <!-- ============== Simulator Servlet ============== -->
 
     <servlet>
         <servlet-name>simulatorServlet</servlet-name>
         <servlet-class>gov.nist.hit.ds.simServlet.servlet.SimServlet</servlet-class>
     </servlet>
 
-	<servlet>
-		<servlet-name>Initialization Servlet</servlet-name>
-		<servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>simulatorServlet</servlet-name>
 		<url-pattern>/sim/*</url-pattern>
 	</servlet-mapping>
+
+    <!-- ============== Rest Test Servlet ============== -->
 
     <servlet>
         <servlet-name>RestTestServlet</servlet-name>
@@ -41,10 +48,10 @@
         <servlet-class>gov.nist.hit.ds.simServlet.servlet.LogServlet</servlet-class>
     </servlet>
 
-    <!--  REST     -->
+    <!-- ============== Rest Servlet (Jersey) ============== -->
 
     <servlet>
-        <servlet-name>SimRest</servlet-name>
+        <servlet-name>jersey</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
@@ -57,15 +64,9 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <servlet>
-        <servlet-name>Initialization</servlet-name>
-        <servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
     <!-- ============== Servlet mappings ============== -->
     <servlet-mapping>
-        <servlet-name>SimRest</servlet-name>
+        <servlet-name>jersey</servlet-name>
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
 
