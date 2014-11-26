@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.loginDialog;
+package gov.nist.toolkit.xdstools3.client.customWidgets.dialogs.loginDialog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;

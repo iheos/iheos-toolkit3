@@ -17,6 +17,13 @@
     <name>toolkit3</name>
 
 
+    <modules>
+        <module>repository-tools</module>
+        <module>gui-core</module>
+        <module>toolkit2-build</module> <!-- still in use by xdstools3. -->
+    </modules>
+
+
     <repositories>
         <repository>
             <id>internal-nist-repo-releases</id>
@@ -55,12 +62,6 @@
     <scm>
         <connection>scm:hg:https://bitbucket.org/iheos/toolkit</connection>
     </scm>
-
-
-    <modules>
-        <module>repository-tools</module>
-        <module>gui-core</module>
-    </modules>
 
 
     <dependencyManagement>

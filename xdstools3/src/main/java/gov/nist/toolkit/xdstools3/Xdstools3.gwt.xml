@@ -18,8 +18,7 @@
     <!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
 
 
-    <!-- ================= Inherit v2 legacy modules ================= -->
-    <inherits name="gov.nist.toolkit.xdstools2.Xdstools2"/>
+    <!-- ====== Inherit GWT Injection, Activity, Places modules ====== -->
     <inherits name="com.google.gwt.inject.Inject"/>
     <inherits name="com.google.gwt.activity.Activity"/>
     <inherits name="com.google.gwt.place.Place" />
