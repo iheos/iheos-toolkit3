@@ -10,7 +10,6 @@
         <relativePath>/tk-deps/pom.xml</relativePath>
     </parent>
 
-    <groupId>gov.nist.hit.ds</groupId>
     <artifactId>toolkit3</artifactId>
     <version>3.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -58,17 +57,11 @@
     </scm>
 
 
- 
     <modules>
-<!--
-        <module>tk-deps</module>
-        <module>tk-core</module>
-        <module>docshare-sims</module>
--->
         <module>repository-tools</module>
         <module>gui-core</module>
-        <module>toolkit2-build</module>
     </modules>
+
 
     <dependencyManagement>
         <dependencies>
