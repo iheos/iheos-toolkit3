@@ -12,7 +12,7 @@ public class IconLabel extends Label {
         setIconSpacing(10);
         setIconSize(15);
         setWidth(400);
-        setHeight(40);
+        setHeight(18);
     }
 
 }

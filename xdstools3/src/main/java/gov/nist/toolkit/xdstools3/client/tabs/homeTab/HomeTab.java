@@ -1,6 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.tabs.homeTab;
 
 
+import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VStack;
@@ -61,13 +62,14 @@ public class HomeTab extends GenericTab {
 
         VStack vstack1 = new VStack();
         VStack vstack2 = new VStack();
-        vstack1.addMembers(queriesAndRetrieves, sendTestData, mhdTools);
-        vstack2.addMembers(tools, simulators, connectathonTools);
+        vstack1.addMembers(queriesAndRetrieves, connectathonTools);
+        vstack2.addMembers(mhdTools, tools, sendTestData); // category simulators is empty for now
 
         HStack hstack = new HStack();
         LayoutSpacer spacer = new LayoutSpacer();
         spacer.setHeight(30);
         hstack.addMembers(vstack1, vstack2);
+        hstack.setAlign(Alignment.CENTER);
         return hstack;
     }
 

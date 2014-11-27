@@ -371,12 +371,13 @@ footer ul li a:visited{
     color:#61c;
 }
 .home-box{
-    padding:40px;
-    padding-top:0px;
-    margin-left:8px;
-    margin-right:7px;
-    margin-top:7px;
-    margin-bottom:7px;
+    padding:20px;
+    padding-top:10px;
+    padding-bottom:15px;
+    margin-left:20px;
+    margin-right:20px;
+    margin-top:5px;
+    margin-bottom:5px;
     box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
     background: #f4f4ff; /* Old browsers */
     background: -moz-linear-gradient(top,  #fbf9ff 0%, #f2f7ff 55%, #e5e8ff 100%); /* FF3.6+ */
@@ -390,10 +391,12 @@ footer ul li a:visited{
 .home-button {
     border: none;
     background: none;
-    margin:0px;
+    margin:0;
+    padding-left:28px;
 }
 .home-buttonOver{
     font-weight:bold;
+    padding-left:28px;
 }
 .icon-link{
     border:none;
