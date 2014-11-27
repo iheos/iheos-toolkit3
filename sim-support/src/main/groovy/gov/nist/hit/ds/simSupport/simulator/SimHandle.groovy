@@ -7,6 +7,7 @@ import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.Repository
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.config.SimConfig
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
 import groovy.util.logging.Log4j
@@ -65,5 +66,10 @@ class SimHandle {
         event.fault = fault
         complete = true
         return this
+    }
+
+    TransactionSimConfigElement transactionElement() {
+        String code = transactionType.code
+        actorSimConfig.get(code)
     }
 }

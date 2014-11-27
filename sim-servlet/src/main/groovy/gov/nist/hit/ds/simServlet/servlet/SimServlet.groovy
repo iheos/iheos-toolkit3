@@ -5,7 +5,9 @@ import gov.nist.hit.ds.dsSims.msgs.RegistryResponseGenerator
 import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser
 import gov.nist.hit.ds.simServlet.WrapMtom
+import gov.nist.hit.ds.simServlet.rest.TransactionReportBuilder
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
@@ -18,6 +20,8 @@ import gov.nist.hit.ds.soapSupport.core.*
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.utilities.io.Io
 import gov.nist.hit.ds.xdsException.ExceptionUtil
+import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.Method
 import org.apache.axiom.om.OMElement
 import org.apache.log4j.Logger
 
@@ -26,6 +30,8 @@ import javax.servlet.ServletException
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+
+import static groovyx.net.http.ContentType.XML
 /**
  * Servlet to service simulator input transactions.
  * @author bill
@@ -48,8 +54,6 @@ public class SimServlet extends HttpServlet {
 
     public void init() {
         logger.info("SimServlet initializing...");
-//        BasicConfigurator.configure();
-
         SimSupport.initialize();
         factory = new ActorTransactionTypeFactory();
         factory.clear();
@@ -91,21 +95,31 @@ public class SimServlet extends HttpServlet {
         } catch (IOException e) {
             logger.error("Error writing response - " + ExceptionUtil.exception_details(e));
         }
-
-//        String callbackURI = simHandle.getActorSimConfig().getMessageCallback();
-//        if (callbackURI != null && !callbackURI.equals("")) {
-//            String payload = new TransactionReportBuilder().build(simHandle);
-//            logger.info("Callback to ${callbackURI} with payload ${payload}");
-//            def http = new HTTPBuilder( callbackURI )
-//            http.request(Method.POST, XML) {
-//                body = payload.bytes
-//
-//                response.success = { resp ->
-//                    logger.info "POST Success: ${resp.statusLine}"
-//                }
-//            }
-//        }
+        callback(simHandle)
         logger.info("\n===============================================================================");
+    }
+
+    def callback(SimHandle simHandle) {
+        TransactionSimConfigElement transactionElement = simHandle.transactionElement()
+        assert transactionElement
+        String callbackURI = transactionElement.getCallBack()
+        if (callbackURI) {
+            assert callbackURI.startsWith("http")
+            String payload = new TransactionReportBuilder().build(simHandle);
+            logger.info("Callback to ${callbackURI} with payload ${payload}");
+            def http = new HTTPBuilder( callbackURI )
+            http.request(Method.POST, XML) { request ->
+                requestContentType = XML
+                body = payload
+
+                response.success = { resp ->
+                    logger.info "POST Success: ${resp.statusLine}"
+                }
+                response.failure = { resp ->
+                    logger.error("POST Failure: ${resp.statusLine}")
+                }
+            }
+        }
     }
 
     protected SimHandle runPost(SimId simId, String header, byte[] body, List<String> options, HttpServletResponse response) {
@@ -129,9 +143,9 @@ public class SimServlet extends HttpServlet {
         return simHandle;
     }
 
-    // Surface errors
-    //    invalid endpoint
-    //    sim does not exist
+// Surface errors
+//    invalid endpoint
+//    sim does not exist
     protected SimHandle runPost2(SimId simId, HttpMessageContent content, List<String> options, HttpServletResponse response) {
         byte[] soapEnvelopeBytes;
         SoapHeader soapHeader;
@@ -275,11 +289,11 @@ public class SimServlet extends HttpServlet {
         } catch (Throwable e) {
             logger.debug("runTransaction caught throwable");
             simHandle.getEvent().setFault(new Fault(ExceptionUtil.exception_details(e), FaultCode.Receiver.toString(), "Unknown",
-               ""     ));
+                    ""     ));
         }
     }
 
-    // xdstools3/sim/simid/option1/option2
+// xdstools3/sim/simid/option1/option2
     List<String> parseOptionsFromURI(String uri) {
         String[] parts = uri.split("/");
         return Arrays.asList(parts).subList(6, parts.length);
@@ -312,7 +326,7 @@ public class SimServlet extends HttpServlet {
         return soapEnvironment;
     }
 
-    // for error handling - SOAP header not availble.  Build SOAP environment from defaults
+// for error handling - SOAP header not availble.  Build SOAP environment from defaults
     SoapEnvironment buildSoapEnvironment(HttpServletResponse response) {
         SoapEnvironment soapEnvironment = new SoapEnvironment();
         soapEnvironment.setRequestAction("Unknown");

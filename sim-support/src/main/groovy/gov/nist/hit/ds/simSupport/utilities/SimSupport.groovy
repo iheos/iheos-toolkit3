@@ -3,6 +3,7 @@ import gov.nist.hit.ds.repository.api.Repository
 import gov.nist.hit.ds.repository.api.RepositoryFactory
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
+import gov.nist.hit.ds.repository.simple.SimpleType
 import gov.nist.hit.ds.toolkit.Toolkit
 import gov.nist.hit.ds.toolkit.installation.Installation
 /**
@@ -51,7 +52,7 @@ class SimSupport {
     }
 
     static initRepositories() {
-//        eventRepo = RepoUtils.mkRepository(eventLogName, new SimpleType('eventLog'))
+        eventRepo = RepoUtils.mkRepository(eventLogName, new SimpleType('eventLog'))
 //        simRepo = RepoUtils.mkRepository(simRepoName, new SimpleType('simRepos'))
     }
 }

@@ -82,7 +82,7 @@ public class TransactionSimConfigElement {
         return text;
     }
 
-    boolean getValue(String name) { get(name)?.value }
+    def getValue(String name) { get(name)?.value }
 
     boolean isSchemaCheck() { getValue(SCHEMACHECK); }
     boolean isModelCheck() { getValue(MODELCHECK); }
