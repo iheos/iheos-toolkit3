@@ -86,6 +86,7 @@ public class Caller implements Serializable {
      */
    public String[] retrieveEnvironments(){
        String[] envs = Toolkit.getEnvironmentNames().toArray(new String[0]);
+       logger.info("Retrieved the list of environments.");
        // String[] envs = {"NA2014", "EURO2011", "EURO2012", "NwHIN"}; // test data
        return envs;
    }
@@ -95,7 +96,7 @@ public class Caller implements Serializable {
      */
     public void setEnvironment(String envName) {
         Toolkit.setCurrentEnvironmentName(envName);
-        logger.info("Test successful: Environment " + envName + " was set.");
+        logger.info("Environment '" + envName + "' was set.");
     }
 
     /**
@@ -104,6 +105,7 @@ public class Caller implements Serializable {
      */
     public String[] retrieveTestSessions(){
         String[] sessions = {"Test session 1", "Test session 2"}; // test data
+        //logger.info("Retrieved the list of sessions.");
         return sessions;
     }
 
