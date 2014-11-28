@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 /**
  * Tab to handle a file conversion from mhd to xds
  */
-public class MhdToXdsConverterTab extends GenericCloseableTab {
+public class MHDToXDSConverterTab extends GenericCloseableTab {
     private Logger logger=Logger.getLogger(MHDValidatorTab.class.getName());
     // RPC services declaration
     private final static MHDTabsServicesAsync mhdToolkitService = GWT
@@ -33,7 +33,7 @@ public class MhdToXdsConverterTab extends GenericCloseableTab {
     private FileUpload fileUploadItem;
     private Button runBtn;
 
-    public MhdToXdsConverterTab() {
+    public MHDToXDSConverterTab() {
         super(header);
         bindUI();
     }
@@ -62,7 +62,7 @@ public class MhdToXdsConverterTab extends GenericCloseableTab {
         runBtn=new Button("Convert");
         runBtn.disable();
 
-        vStack.addMember(createSubtitle1("Select file to convert"));
+        vStack.addMember(createSubtitle1("Select MHD file to convert"));
         vStack.addMember(uploadForm);
         vStack.addMember(runBtn);
 
@@ -94,11 +94,11 @@ public class MhdToXdsConverterTab extends GenericCloseableTab {
             @Override
             public void onSubmitComplete(FormPanel.SubmitCompleteEvent submitCompleteEvent) {
                 // call for the distant method that converts the mhd file to an xds file
-                mhdToolkitService.convertToXds(new AsyncCallback<String>(){
+                mhdToolkitService.convertMHDToXDS(new AsyncCallback<String>() {
 
                     @Override
                     public void onFailure(Throwable e) {
-                        logger.warning("Error: "+e.getMessage());
+                        logger.warning("Error: " + e.getMessage());
                     }
 
                     @Override

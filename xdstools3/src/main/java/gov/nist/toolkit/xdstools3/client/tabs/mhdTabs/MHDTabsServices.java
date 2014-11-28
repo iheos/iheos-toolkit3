@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs;
 
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -9,7 +9,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("mhd-tabs")
 public interface MHDTabsServices extends RemoteService  {
+
     public String validateMHDMessage(String messageType);
 
-    public String convertToXds();
+    public String convertMHDToXDS();
 }

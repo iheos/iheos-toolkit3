@@ -21,8 +21,6 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServices;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServicesAsync;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 import java.util.LinkedHashMap;

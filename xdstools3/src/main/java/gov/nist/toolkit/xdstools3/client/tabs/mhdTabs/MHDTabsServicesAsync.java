@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -8,5 +8,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface MHDTabsServicesAsync {
     void validateMHDMessage(String messageType, AsyncCallback<String> async);
 
-    void convertToXds(AsyncCallback<String> convertedDocument);
+    void convertMHDToXDS(AsyncCallback<String> convertedDocument);
 }

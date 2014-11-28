@@ -160,15 +160,15 @@ public class Caller implements Serializable {
     }
 
     /**
-     * Method that converts a mhd file into a xds file
-     * @param fileToConvert
+     * Method that converts a MHD file into an XDS file
+     * @param uploadedFileContents the contents as a String of the MHD file uploaded by the user
+     * @param location the location of the file. This is the "rootDirPath" parameter that originates from the
+     *                 upload servlet. I do not know if we need this. -Diane
      * @return
      */
-    public String convertToXDS(String location,String fileToConvert) {
-        String convertedFile=new String();
-        // TODO Implement conversion
-        convertedFile=fileToConvert;
-        String filename=saveTempFileService.saveAsXMLFile(convertedFile);
-        return filename;
+    public String convertMHDtoXDS(String location, String uploadedFileContents) {
+        // This is a test implementation that saves the uploaded file and displays it for the user
+        // inside a popup window. This should go away when the actual conversion is linked from the backend.
+        return saveTempFileService.saveAsXMLFile(uploadedFileContents);
     }
 }

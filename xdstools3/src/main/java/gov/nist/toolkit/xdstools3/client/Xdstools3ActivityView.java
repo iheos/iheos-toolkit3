@@ -26,6 +26,7 @@ import gov.nist.toolkit.xdstools3.client.eventBusUtils.*;
 import gov.nist.toolkit.xdstools3.client.tabs.EndpointConfigTab;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
+import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs.MHDToXDSConverterTab;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.MessageValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
@@ -33,8 +34,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MhdToXdsConverterTab;
+import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs.MHDValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab.SubmitTestDataTab;
@@ -253,7 +253,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
             tab = new SubmitTestDataTab();
         }
         else if(tabName.equals(TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode())){
-            tab = new MhdToXdsConverterTab();
+            tab = new MHDToXDSConverterTab();
         }
 
         // ---------- legacy v2 tabs --------

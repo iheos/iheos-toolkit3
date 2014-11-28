@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -15,9 +15,6 @@ import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VStack;
-import gov.nist.toolkit.xdstools2.client.Toolkit2Service;
-import gov.nist.toolkit.xdstools2.client.Toolkit2ServiceAsync;
-import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
@@ -66,9 +63,9 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
         // Message type elements
         HeaderItem l1=new HeaderItem();
-        l1.setDefaultValue("1. Select a message type");
+        l1.setDefaultValue("1. Select the type of the MHD message to validate:");
         messageTypeSelect = new SelectItem();
-        messageTypeSelect.setTitle("Message type");
+        messageTypeSelect.setShowTitle(false);
         messageTypeSelect.setType("comboBox");
         messageTypeSelect.setName("messageTypeItem");
         messageTypeSelect.setEmptyDisplayValue("Select message type...");
@@ -83,7 +80,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setAction("fileUploadServlet");
         fileUploadItem = new FileUpload();
-        fileUploadItem.setTitle("File to validate");
         fileUploadItem.setName("upload1FormElement");
         fileUploadItem.setWidth("400px");
         uploadForm.add(fileUploadItem);
