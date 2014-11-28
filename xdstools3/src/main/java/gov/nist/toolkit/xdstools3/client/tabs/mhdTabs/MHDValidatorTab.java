@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -17,13 +17,13 @@ import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VStack;
 
+
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
-//import gov.nist.hit.ds.logBrowser.client.widgets.EventAggregatorWidget;
 
 /**
  * This class is the UI implementation for MHD Validation tab.
@@ -70,9 +70,9 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
         // Message type transactions
         HeaderItem l1=new HeaderItem();
-        l1.setDefaultValue("1. Select a message type");
+        l1.setDefaultValue("1. Select the type of MHD message to validate:");
         messageTypeSelect = new SelectItem();
-        messageTypeSelect.setTitle("Message type");
+        messageTypeSelect.setShowTitle(false);
         messageTypeSelect.setType("comboBox");
         messageTypeSelect.setName("messageTypeItem");
         messageTypeSelect.setEmptyDisplayValue("Select message type...");
@@ -87,7 +87,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setAction("fileUploadServlet");
         fileUploadItem = new FileUpload();
-        fileUploadItem.setTitle("File to validate");
+
         fileUploadItem.setName("upload1FormElement");
         fileUploadItem.setWidth("400px");
         uploadForm.add(fileUploadItem);
@@ -102,6 +102,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         //validationResultsPanel.addMember(setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT, "Sim", id, type, displayColumns));
 
         form.setFields(l1, messageTypeSelect, l2);
+        form.setCellPadding(10);
 
         vStack.addMember(form);
         vStack.addMember(uploadForm);

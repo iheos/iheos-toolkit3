@@ -1,5 +1,6 @@
 package gov.nist.toolkit.xdstools3.server;
 
+import gov.nist.toolkit.xdstools3.server.RPCServices.SaveTempFileService;
 import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
 import gov.nist.toolkit.xdstools3.server.demo.TestDataHelper;
 
@@ -21,6 +22,7 @@ public class Caller implements Serializable {
 	private static final long serialVersionUID = -6431109235310163158L;
 	private static Caller instance = null;
     private final static Logger logger = Logger.getLogger(Caller.class.getName());
+    private final SaveTempFileService saveTempFileService = new SaveTempFileService();
 
 	protected Caller(){
 	}
@@ -136,13 +138,39 @@ public class Caller implements Serializable {
 
 
     // ----------------------------- MHD -------------------------------
+
+    /**
+     * Calls validation on an MHD message
+     * @param messageType type of mhd message
+     * @param filecontent mhd message itself
+     *
+     * @return
+     */
     public String validateMHDMessage(String messageType, String filecontent) {
         /* TODO Implementation using toolkitServices.getSession().getLastUpload() to get the file uploaded
           (Change method prototype if required)*/
         return "Response for "+messageType+" validation.";
     }
 
+    /**
+     * Method that retrieves test data set
+     * @param testDataType
+     * @return
+     */
     public Map<String,String> retrieveTestDataSet(String testDataType) {
         return TestDataHelper.instance.getTestDataSet();
+    }
+
+    /**
+     * Method that converts a MHD file into an XDS file
+     * @param uploadedFileContents the contents as a String of the MHD file uploaded by the user
+     * @param location the location of the file. This is the "rootDirPath" parameter that originates from the
+     *                 upload servlet. I do not know if we need this. -Diane
+     * @return
+     */
+    public String convertMHDtoXDS(String location, String uploadedFileContents) {
+        // This is a test implementation that saves the uploaded file and displays it for the user
+        // inside a popup window. This should go away when the actual conversion is linked from the backend.
+        return saveTempFileService.saveAsXMLFile(uploadedFileContents);
     }
 }

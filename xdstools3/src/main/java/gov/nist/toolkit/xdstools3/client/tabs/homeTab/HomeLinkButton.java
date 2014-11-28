@@ -24,9 +24,11 @@ public class HomeLinkButton extends IButton {
         setStyleName("homelinkbutton");
         setTitle(title);
         setAlign(Alignment.LEFT);
+
+        // for some reason, setting these properties in the CSS does not override SmartGWT defaults
         setBorder("0");
         setWidth(400);
-        setHeight(40);
+        setHeight(20);
 
         bindUI();
     }
@@ -77,6 +79,8 @@ public class HomeLinkButton extends IButton {
                     placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getMHDValidatorTabCode()));
                 else if (title == "Submit Test Data")
                     placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getTestDataSubmissionTabCode()));
+                else if (title == "MHD to XDS Converter")
+                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });

@@ -38,6 +38,7 @@ public class RetrieveDocumentsTab extends GenericCloseableTab {
         docUID.setTitle("Document UID");
         docUID.setWidth(400);
         docUIDForm.setFields(docUID);
+        docUIDForm.setCellPadding(10);
 
         Label l2=createSubtitle1("2. Select Repository");
         repositories = new EndpointWidget();

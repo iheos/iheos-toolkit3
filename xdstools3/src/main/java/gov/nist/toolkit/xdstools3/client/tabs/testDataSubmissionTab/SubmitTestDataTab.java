@@ -21,8 +21,6 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServices;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServicesAsync;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 import java.util.LinkedHashMap;
@@ -111,8 +109,9 @@ public class SubmitTestDataTab extends GenericCloseableTab {
         runBtn.disable();
 
         form.setFields(l1, testDataType,l2, testDataSetSelectItem);
+        form.setCellPadding(15);
 
-        container.addMembers(form,l3, pid,l4, /*docRepository,*/l5, tlsAndSAMLForm, runBtn);
+        container.addMembers(form,l3, pid,l4, docRepository,l5, tlsAndSAMLForm, runBtn);
         return container;
     }
 

@@ -198,7 +198,7 @@
                     <systemProperties>
                         <property>
                             <name>gwt.args</name>
-                            <value>-out \${webAppDirectory}</value>
+                            <value>-out \${webAppDirectory}/target/tests</value>
                         </property>
                     </systemProperties>
                 </configuration>

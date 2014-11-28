@@ -20,6 +20,7 @@ import gov.nist.toolkit.xdstools3.client.eventBusUtils.*;
 import gov.nist.toolkit.xdstools3.client.tabs.EndpointConfigTab;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
+import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs.MHDToXDSConverterTab;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.MessageValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
@@ -27,7 +28,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
+import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs.MHDValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab.SubmitTestDataTab;
@@ -240,6 +241,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         else if(tabName.equals(TabNamesUtil.getInstance().getTestDataSubmissionTabCode())){
             tab = new SubmitTestDataTab();
         }
+        else if(tabName.equals(TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode())){
+            tab = new MHDToXDSConverterTab();
+        }
         else{
             // unknown tab
             topTabSet.selectTab(0); // todo we can create a 404
@@ -349,8 +353,8 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "</ul>" +
                 "</li>" +
                 "<div style='float:right'>" +
-                "<li><a href='#'><img src='/images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
-                "<li><a href='#'><img src='/images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
+                "<li><a href='#'><img class='icon-link' src='images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
+                "<li><a href='#'><img class='icon-link' src='images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
                 "</div>" +
                 "<ul>" +
                 "</div>" +

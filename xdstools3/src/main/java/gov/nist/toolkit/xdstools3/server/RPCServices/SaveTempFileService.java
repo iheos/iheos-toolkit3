@@ -1,33 +1,21 @@
-package edu.tn.xds.metadata.editor.server;
-
-import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
+package gov.nist.toolkit.xdstools3.server.RPCServices;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
- * This class enables to create a xml metadata file's content on the server and
- * retrieve the name of the generated file.
- *
- * @author Olivier
+ * Service class to save a temporary file on the server. The file is save into the webapp directory.
  */
-public class SaveFileService implements Serializable {
-
+public class SaveTempFileService {
     private static final long serialVersionUID = 1L;
     private static File FILE_REPOSITORY;
-    private final Logger logger = Logger.getLogger(SaveFileService.class.getName());
+    private final Logger logger = Logger.getLogger(SaveTempFileService.class.getName());
 
-    public SaveFileService(){
-        String rootDirPath;
-        try {
-            rootDirPath = RequestFactoryServlet.getThreadLocalServletContext().getRealPath("/");
-        }catch(NullPointerException e){
-            rootDirPath = System.getProperty("user.dir");
-        }
+    public SaveTempFileService(){
+        String rootDirPath = System.getProperty("user.dir");
         logger.info("Root Path: " + rootDirPath);
         File fileFolder=new File(new File(rootDirPath),"/files/");
         if(!fileFolder.exists()) {
@@ -98,5 +86,4 @@ public class SaveFileService implements Serializable {
         // return created file's name
         return fileName;
     }
-
 }

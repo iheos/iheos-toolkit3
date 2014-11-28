@@ -6,7 +6,9 @@ import gov.nist.hit.ds.utilities.xml.SchemaValidation;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.session.server.Session;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServices;
+
+import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs.MHDTabsServices;
+
 import gov.nist.toolkit.xdstools3.server.Caller;
 import org.apache.log4j.Logger;
 
@@ -41,11 +43,25 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
 
     /**
      * MHD Message Validation method
+     *
      * @param messageType Type of MHD message
+     *
      * @return validation result
      */
     public String validateMHDMessage(String messageType){
         return Caller.getInstance().validateMHDMessage(messageType,new String(getSession().getlastUpload()).trim());
+    }
+
+    /**
+     * Retrieves uploaded MHD file from the servlet and calls the conversion to XDS file.
+     * The uploaded file must be an XML file.
+     * @return
+     */
+    @Override
+    public String convertMHDToXDS() {
+        String rootDirPath = getServletContext().getContextPath();
+        String uploadedFileContents = new String(getSession().getlastUpload()).trim();
+        return Caller.getInstance().convertMHDtoXDS(rootDirPath, uploadedFileContents);
     }
 
     /**
@@ -140,6 +156,7 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
 
         return s;
     }
+
 
 
     /**

@@ -10,8 +10,9 @@ public class IconLabel extends Label {
     public IconLabel(){
         super();
         setIconSpacing(10);
-        setIconSize(20);
+        setIconSize(15);
         setWidth(400);
+        setHeight(18);
     }
 
 }
