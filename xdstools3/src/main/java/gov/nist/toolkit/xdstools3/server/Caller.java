@@ -1,12 +1,13 @@
 package gov.nist.toolkit.xdstools3.server;
 
+import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.toolkit.xdstools3.server.RPCServices.SaveTempFileService;
 import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
 import gov.nist.toolkit.xdstools3.server.demo.TestDataHelper;
+import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Singleton class that acts as a directory of all calls to server-side packages. All calls must go through this class in order to
@@ -16,9 +17,7 @@ import java.util.logging.Logger;
  *
  */
 public class Caller implements Serializable {
-	/**
-	 *
-	 */
+
 	private static final long serialVersionUID = -6431109235310163158L;
 	private static Caller instance = null;
     private final static Logger logger = Logger.getLogger(Caller.class.getName());
@@ -47,6 +46,7 @@ public class Caller implements Serializable {
      * @param password the admin password
      */
     public boolean logMeIn(String username, String password){
+        String pwd = Toolkit.getPassword();
         // TODO compare login with server-side admin credentials
         System.out.println("Test successful: you are logged in.");
         return true;
@@ -85,8 +85,8 @@ public class Caller implements Serializable {
      * @return the list of available environments
      */
    public String[] retrieveEnvironments(){
-      // String[] envs = Toolkit.getEnvironmentNames().toArray(new String[0]);
-       String[] envs = {"NA2014", "EURO2011", "EURO2012", "NwHIN"};
+       String[] envs = Toolkit.getEnvironmentNames().toArray(new String[0]);
+       // String[] envs = {"NA2014", "EURO2011", "EURO2012", "NwHIN"}; // test data
        return envs;
    }
 
@@ -94,8 +94,8 @@ public class Caller implements Serializable {
      * Sets the environment selected by the user
      */
     public void setEnvironment(String envName) {
-        // FIXME NA2014 or the top item from the drop-down needs to be set as default environment in back-end.
-        System.out.println("Test successful: Environment " + envName + " was set.");
+        Toolkit.setCurrentEnvironmentName(envName);
+        logger.info("Test successful: Environment " + envName + " was set.");
     }
 
     /**
@@ -103,7 +103,7 @@ public class Caller implements Serializable {
      * @return the list of test sessions
      */
     public String[] retrieveTestSessions(){
-        String[] sessions = {"Test session 1", "Test session 2"};
+        String[] sessions = {"Test session 1", "Test session 2"}; // test data
         return sessions;
     }
 
@@ -112,8 +112,7 @@ public class Caller implements Serializable {
      * @param sessionName New session name entered by the user
      */
     public String[] addTestSession(String sessionName){
-        String[] sessions = {"Test session 1", "Test session 2", sessionName};
-        // this test data gives wrong behavior (can stay as is for now)
+        String[] sessions = {"Test session 1", "Test session 2", sessionName}; // test data
         System.out.println("Test successful: A new click or new session name was registered");
         return sessions;
     }

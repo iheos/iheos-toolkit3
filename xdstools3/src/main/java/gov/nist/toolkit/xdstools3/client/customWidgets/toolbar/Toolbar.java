@@ -27,6 +27,7 @@ public class Toolbar extends RibbonBar {
     private SelectOtherItem sessionsComboBox;
     private SelectItem envListBox;
     private ToolbarServiceAsync rpcService = GWT.create(ToolbarService.class);
+    private LinkedHashMap<String, String> valueMap;
 
 
     public Toolbar() {
@@ -98,7 +99,11 @@ public class Toolbar extends RibbonBar {
                         // do nothing
                     }
                 };
-                rpcService.setEnvironment((String)changedEvent.getValue(), envIsSelectedCallback);
+                // the value retrieved is actually the ID of the environment name selected by the user
+                String envIdInMap = (String)changedEvent.getValue();
+                // getting the actual value
+                String selectedEnv = valueMap.get(envIdInMap);
+                rpcService.setEnvironment(selectedEnv, envIsSelectedCallback);
             }
         });
 
@@ -246,7 +251,7 @@ public class Toolbar extends RibbonBar {
         String key = "";
         int counterEU = 0;
         int counterUS = 0;
-        LinkedHashMap<String, String> valueMap = new LinkedHashMap<String, String>(); /* Not specifying types here does not work at GWT compile */
+        valueMap = new LinkedHashMap<String, String>(); /* Not specifying types here does not work at GWT compile */
         LinkedHashMap<String, String> iconsMap = new LinkedHashMap<String, String>();
 
         for (String envName : envs) {
