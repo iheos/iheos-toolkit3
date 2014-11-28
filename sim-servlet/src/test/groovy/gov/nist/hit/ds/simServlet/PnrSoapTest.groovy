@@ -1,8 +1,9 @@
 package gov.nist.hit.ds.simServlet
 
 import gov.nist.hit.ds.eventLog.testSupport.EventAccess
+import gov.nist.hit.ds.simServlet.servlet.SimServlet
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.manager.ActorSimConfigManager
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import spock.lang.Specification
@@ -56,18 +57,20 @@ It is great!
         def simHandle = SimUtils.create('docrec', simId)
         // Cancel everything but SOAP validation
         def actorSimConfigManager = new ActorSimConfigManager(simHandle.actorSimConfig)
-        TransactionSimConfigElement config = actorSimConfigManager.getSimConfigElement()
-        config.setBool(TransactionSimConfigElement.SCHEMACHECK, false)
-        config.setBool(TransactionSimConfigElement.MODELCHECK, false)
-        config.setBool(TransactionSimConfigElement.CODINGCHECK, false)
-        config.setBool(TransactionSimConfigElement.SOAPCHECK, true)
+        def configs = actorSimConfigManager.getSimConfigElements()
+        configs.each { config ->
+            config.setBool(TransactionSimConfigElement.SCHEMACHECK, false)
+            config.setBool(TransactionSimConfigElement.MODELCHECK, false)
+            config.setBool(TransactionSimConfigElement.CODINGCHECK, false)
+            config.setBool(TransactionSimConfigElement.SOAPCHECK, true)
+        }
         actorSimConfigManager.save(simHandle.configAsset)
     }
 
     def cleanup() {
 //        SimUtils.delete(simId)
     }
-
+// TODO: This test throws errors that are not detected
     def 'PnR Soap should be accepted'() {
         when:
         def simHandle = simServlet.runPost(simId, header, body.getBytes(), [], null)

@@ -1,5 +1,4 @@
 package gov.nist.hit.ds.dsSims.metadataValidator
-
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.dsSims.client.ValidationContext
 import gov.nist.hit.ds.dsSims.generator.RimGenerator
@@ -10,7 +9,6 @@ import gov.nist.hit.ds.metadata.MetadataParser
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -47,7 +45,7 @@ class MetadataValidatorTest extends Specification {
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
 
         simId = new SimId('MetadataValidatorTest')
-        SimUtils.create('reg', simId)
+        SimUtils.recreate('reg', simId)
     }
 
     def 'Submission passes metadata validator'() {

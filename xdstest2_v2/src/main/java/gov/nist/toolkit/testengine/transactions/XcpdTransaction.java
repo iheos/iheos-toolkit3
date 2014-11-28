@@ -4,8 +4,8 @@ import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.testengine.StepContext;
 import gov.nist.toolkit.valregmsg.validation.schematron.ReportProcessor;
 import gov.nist.toolkit.valregmsg.validation.schematron.schematronValidation;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 import java.util.ArrayList;

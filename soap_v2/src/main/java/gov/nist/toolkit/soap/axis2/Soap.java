@@ -11,11 +11,11 @@ import gov.nist.toolkit.securityCommon.SecurityParams;
 import gov.nist.toolkit.soap.wsseToolkitAdapter.WsseHeaderGeneratorAdapter;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.EnvironmentNotSelectedException;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.LoadKeystoreException;
-import gov.nist.toolkit.xdsexception.XdsFormatException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.LoadKeystoreException;
+import gov.nist.hit.ds.xdsException.XdsFormatException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

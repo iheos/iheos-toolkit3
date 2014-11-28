@@ -39,7 +39,7 @@ class NestedValidatorTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('123')
-        SimUtils.create('reg', simId, repoName)
+        SimUtils.recreate('reg', simId, repoName)
     }
 
     def 'Sequential validators should validate'() {

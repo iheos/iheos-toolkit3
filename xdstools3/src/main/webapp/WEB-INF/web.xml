@@ -5,6 +5,18 @@
 <web-app>
     <display-name>Document Sharing Toolkit</display-name>
 
+    <!-- ============== Toolkit initialization ============== -->
+
+    <servlet>
+        <servlet-name>Initialization</servlet-name>
+        <servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Initialization</servlet-name>
+        <url-pattern>/init</url-pattern>
+    </servlet-mapping>
 
 
     <!-- ============== Jersey import for REST ============== -->
@@ -13,7 +25,7 @@
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>gov.nist.toolkit.xdstools3</param-value>
+            <param-value>gov.nist.toolkit.xdstools3;gov.nist.hit.ds.simServlet.rest</param-value>
         </init-param>
         <init-param>
             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
@@ -21,7 +33,6 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
 
 
     <!-- ============== Application servlet classes ============== -->
@@ -50,20 +61,16 @@
         <servlet-name>testDataSubmissionServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.TestDataSubmissionServicesImpl</servlet-class>
     </servlet>
-
-    <!-- v2 legacy servlets -->
-    <servlet>
-        <servlet-name>toolkit2Servlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools2.server.ToolkitServiceImpl</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>uploadServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools2.server.upload.UploadServlet</servlet-class>
-    </servlet>
     <servlet>
         <servlet-name>adminSettingsServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.AdminSettingsImpl</servlet-class>
     </servlet>
+    <!--<servlet>-->
+        <!--<servlet-name>repositoryServlet</servlet-name>-->
+        <!--<servlet-class>gov.nist.hit.ds.repository.rpc.search.server.RepositoryServiceImpl</servlet-class>-->
+    <!--</servlet>-->
+
+
 
     <!-- ============== Servlet mappings ============== -->
     <servlet-mapping>
@@ -101,20 +108,18 @@
         <url-pattern>/fileUploadServlet</url-pattern>
     </servlet-mapping>
 
-
-    <!-- v2 legacy servlets -->
-    <servlet-mapping>
-        <servlet-name>toolkit2Servlet</servlet-name>
-        <url-pattern>/xdstools3/toolkit2</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>uploadServlet</servlet-name>
-        <url-pattern>/xdstools3/upload</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>adminSettingsServlet</servlet-name>
         <url-pattern>/xdstools3/adminSettings</url-pattern>
     </servlet-mapping>
+
+    <!--
+    <servlet-mapping>
+        <servlet-name>repositoryServlet</servlet-name>
+        <url-pattern>/xdstools3/repository</url-pattern>
+    </servlet-mapping>
+-->
+
 
 
     <!-- ============== Default page to serve ============== -->

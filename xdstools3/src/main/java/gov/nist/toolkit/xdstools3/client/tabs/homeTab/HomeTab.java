@@ -34,7 +34,6 @@ public class HomeTab extends GenericTab {
         tools.addItem("Message Validator");
         tools.addItem("Document Metadata Editor");
         tools.addItem("Pre-Connectathon Tests");
-        tools.addItem("v2 Tab Example");
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");

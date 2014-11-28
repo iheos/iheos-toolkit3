@@ -102,7 +102,7 @@ public class Caller implements Serializable {
      * Sets the list of test sessions
      * @return the list of test sessions
      */
-    public String[]  retrieveTestSessions(){
+    public String[] retrieveTestSessions(){
         String[] sessions = {"Test session 1", "Test session 2"};
         return sessions;
     }
@@ -135,6 +135,8 @@ public class Caller implements Serializable {
     }
 
 
+
+
     // ----------------------------- MHD -------------------------------
 
     /**
@@ -144,7 +146,7 @@ public class Caller implements Serializable {
      *
      * @return
      */
-    public String validateMHDMessage(String messageType,String filecontent) {
+    public String validateMHDMessage(String messageType, String filecontent) {
         /* TODO Implementation using toolkitServices.getSession().getLastUpload() to get the file uploaded
           (Change method prototype if required)*/
         return "Response for "+messageType+" validation.";

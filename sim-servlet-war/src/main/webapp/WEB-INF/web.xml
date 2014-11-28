@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+    <!-- ============== Toolkit initialization ============== -->
+
+    <servlet>
+        <servlet-name>Initialization</servlet-name>
+        <servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Initialization</servlet-name>
+        <url-pattern>/init</url-pattern>
+    </servlet-mapping>
+
+    <!-- ============== Simulator Servlet ============== -->
+
+    <servlet>
+        <servlet-name>simulatorServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.simServlet.servlet.SimServlet</servlet-class>
+    </servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>simulatorServlet</servlet-name>
+		<url-pattern>/sim/*</url-pattern>
+	</servlet-mapping>
+
+    <!-- ============== Rest Test Servlet ============== -->
+
+    <servlet>
+        <servlet-name>RestTestServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.simServlet.RestTestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RestTestServlet</servlet-name>
+        <url-pattern>/resttest/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DisplayLogger</servlet-name>
+        <servlet-class>gov.nist.hit.ds.simServlet.servlet.LogServlet</servlet-class>
+    </servlet>
+
+    <!-- ============== Rest Servlet (Jersey) ============== -->
+
+    <servlet>
+        <servlet-name>jersey</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>gov.nist.hit.ds.simServlet.rest</param-value> <!-- This must be edited for each new project -->
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- ============== Servlet mappings ============== -->
+    <servlet-mapping>
+        <servlet-name>jersey</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DisplayLogger</servlet-name>
+        <url-pattern>/log/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Xdstools3.html</welcome-file>
+	</welcome-file-list>
+
+</web-app>

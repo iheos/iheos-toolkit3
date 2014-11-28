@@ -139,7 +139,7 @@ class TestAssertionGroup extends Specification {
         def asser = ag.infoFound(true)
 
         then:
-        asser.expected == AssertionGroup.dashes
+        asser.expected == ''
         asser.found == 'True'
         asser.status == AssertionStatus.INFO
         ag.assertions.size() == 1
@@ -153,7 +153,7 @@ class TestAssertionGroup extends Specification {
         def asser = ag.infoFound(false)
 
         then:
-        asser.expected == AssertionGroup.dashes
+        asser.expected == ''
         asser.found == 'False'
         asser.status == AssertionStatus.INFO
         ag.assertions.size() == 1
@@ -167,7 +167,7 @@ class TestAssertionGroup extends Specification {
         def asser = ag.infoFound('hi')
 
         then:
-        asser.expected == AssertionGroup.dashes
+        asser.expected == ''
         asser.found == 'hi'
         asser.status == AssertionStatus.INFO
         ag.assertions.size() == 1
@@ -181,7 +181,7 @@ class TestAssertionGroup extends Specification {
         def asser = ag.infoFound(false)
 
         then:
-        asser.expected == AssertionGroup.dashes
+        asser.expected == ''
         asser.found == 'False'
         asser.status == AssertionStatus.INFO
         ag.assertions.size() == 1

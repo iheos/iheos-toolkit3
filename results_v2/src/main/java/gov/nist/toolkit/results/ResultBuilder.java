@@ -5,7 +5,7 @@ import java.util.Calendar;
 import gov.nist.toolkit.results.client.AssertionResult;
 import gov.nist.toolkit.results.client.AssertionResults;
 import gov.nist.toolkit.results.client.Result;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 public class ResultBuilder {
 

@@ -10,11 +10,11 @@ import gov.nist.toolkit.testengine.StepContext;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.io.Sha1Bean;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-import gov.nist.toolkit.xdsexception.XdsPreparsedException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsPreparsedException;
 
 import java.io.File;
 import java.io.FileInputStream;

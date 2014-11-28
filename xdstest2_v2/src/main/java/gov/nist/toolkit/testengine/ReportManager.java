@@ -4,8 +4,8 @@ import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.xdstest2logging.Report;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

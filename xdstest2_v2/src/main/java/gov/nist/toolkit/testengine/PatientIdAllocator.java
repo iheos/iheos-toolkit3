@@ -2,7 +2,7 @@ package gov.nist.toolkit.testengine;
 
 import gov.nist.toolkit.http.httpclient.HttpClient;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -26,8 +26,6 @@
     <inherits name="gov.nist.toolkit.registrymetadata.registryMetadata"/>
     <inherits name="gov.nist.toolkit.commondatatypes.commonDatatypes"/>
     <inherits name="gov.nist.toolkit.actortransaction.actorTransaction"/>
-    <inherits name="gov.nist.toolkit.directsim.directSim"/>
-    <inherits name="gov.nist.direct.direct"/>
     <inherits name="gov.nist.toolkit.results.results"/>
     <inherits name="gov.nist.toolkit.actorfactory.actorfactory"/>
     <inherits name="gov.nist.toolkit.http.http"/>

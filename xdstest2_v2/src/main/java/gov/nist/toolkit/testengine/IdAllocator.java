@@ -2,7 +2,7 @@ package gov.nist.toolkit.testengine;
 
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 import java.util.HashMap;

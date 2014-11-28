@@ -40,10 +40,10 @@ public class Toolkit {
      * of unit testing it does)
      */
 
-    public void initialize() {
+    static public void initialize() {
         if (initialized) return;
         initialized = true;
-        URL resource = getClass().getResource("/toolkit.properties");
+        URL resource = new Toolkit().getClass().getResource("/toolkit.properties");
         if (resource == null) {
             logger.fatal("Cannot load toolkit.properties");
             throw new RuntimeException("Cannot load toolkit.properties");
@@ -52,15 +52,21 @@ public class Toolkit {
             logger.info("toolkit.properties loaded from <" + resource + ">");
             toolkitPropertiesFile = new File(resource.getFile());
             // if a unit test is currently running the the relative location of
-            // the warRoot will be different. This conditional checks for this
-            // and only sets warRoot if the environment looks like a full
-            // production build
-            if (
-                    toolkitPropertiesFile.getParent().endsWith("classes") &&
-                    toolkitPropertiesFile.getParentFile().getParent().endsWith("WAR"))
+            // the warRoot will be different. This conditional checks for this.
+            // If this is a test then set warRootFile to the resource directory within
+            // thee test directory.
+            if (toolkitPropertiesFile.getParent().endsWith("test-classes")) {
                 warRootFile = toolkitPropertiesFile.getParentFile().getParentFile();
-//            else
-//                warRootFile = null;
+                logger.info("Test configuration");
+            }
+            else if (toolkitPropertiesFile.getParent().endsWith("classes") /*&&
+                toolkitPropertiesFile.getParentFile().getParent().endsWith("WAR") */) {
+                    // production environment
+                    warRootFile = toolkitPropertiesFile.getParentFile().getParentFile().getParentFile();
+                logger.info("Production configuration");
+            }
+            else
+                warRootFile = null;
             logger.debug("warRoot set to <" + warRootFile + ">");
 
             propertyManager = new PropertyManager();
@@ -83,8 +89,9 @@ public class Toolkit {
                 }
             }
             try {
-                repositoriesTypesFile().mkdirs();
-                FileUtils.copyDirectory(defaultRepositoriesTypesFile(), repositoriesTypesFile());
+                externalRepositoriesTypesFile().mkdirs();
+                if (internalRepositoriesTypesFile().exists())
+                    FileUtils.copyDirectory(internalRepositoriesTypesFile(), externalRepositoriesTypesFile());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -139,7 +146,6 @@ public class Toolkit {
     static public File schemaFile() { return new File(toolkitxFile(), "schema"); }
     static public File testkitFile() { return new File(toolkitxFile(), "testkit"); }
     static public File xdstestFile() { return new File(toolkitxFile(), "xdstest"); }
-    static public File defaultRepositoriesTypesFile() { return new File(new File(toolkitxFile(), "repositories"), "types"); }
 
     static public String getPassword() { return propertyManager.getPassword(); }
     static public String getHost() { return propertyManager.getToolkitHost(); }
@@ -162,6 +168,7 @@ public class Toolkit {
         }
     }
     static public List<String> getEnvironmentNames() { return new Environment(externalCacheFile()).getInstalledEnvironments();}
-    static public File repositoriesTypesFile() { return new File(new File(externalCacheFile(), "repositories"), "types"); }
+    static public File externalRepositoriesTypesFile() { return new File(new File(externalCacheFile(), "repositories"), "types"); }
+    static public File internalRepositoriesTypesFile() { return new File(new File(toolkitxFile(), "repositories"), "types"); }
 
 }

@@ -5,8 +5,8 @@ import gov.nist.toolkit.registrymetadata.MetadataParser;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.testengine.HomeAttribute;
 import gov.nist.toolkit.testengine.StepContext;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import org.apache.axiom.om.OMElement;
 

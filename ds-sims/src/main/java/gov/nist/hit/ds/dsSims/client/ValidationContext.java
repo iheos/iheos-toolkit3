@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * Collection of flags and logic to record needed validation steps. If validation
- * steps are discovered along the way then this keeps track of what was run.
+ * steps are discovered along the way then this keeps track of what was testRun.
  * @author bill
  *
  */

@@ -62,7 +62,7 @@ class TransactionFailureTest extends Specification {
     def 'Should fail with fault'() {
         when: ''
         def simId = new SimId(simIdStr)
-        def simHandle = SimUtils.create('reg', simId, repoName)
+        def simHandle = SimUtils.recreate('reg', simId, repoName)
         def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tools/sim/123/act/fault')
         simHandle.transactionType = factory.getTransactionType(endpointBuilder.transCode)
 
@@ -72,7 +72,7 @@ class TransactionFailureTest extends Specification {
         when:
         def runner = new TransactionRunner(simHandle)
         def eventAccess = new EventAccess(simId.id, simHandle.event)
-        runner.run()
+        runner.testRun()
 
         then:
         thrown SoapFaultException
@@ -88,7 +88,7 @@ class TransactionFailureTest extends Specification {
     def 'Should fail with error'() {
         when: ''
         def simId = new SimId(simIdStr)
-        def simHandle = SimUtils.create('reg', simId, repoName)
+        def simHandle = SimUtils.recreate('reg', simId, repoName)
         def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tk/sim/123/reg/error')
         simHandle.transactionType = factory.getTransactionType(endpointBuilder.transCode)
 
@@ -98,7 +98,7 @@ class TransactionFailureTest extends Specification {
         when:
         def runner = new TransactionRunner(simHandle)
         def eventAccess = new EventAccess(simId.id, simHandle.event)
-        runner.run()
+        runner.testRun()
 
         then:
         notThrown SoapFaultException

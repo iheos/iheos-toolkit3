@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.simSupport.client
 
 import gov.nist.hit.ds.actorTransaction.*
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.SimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.AbstractConfigElement
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import org.junit.Before
 import org.junit.Test
@@ -11,9 +11,9 @@ import org.junit.Test
 import static org.junit.Assert.assertEquals
 
 public class FindConfigOneEndpointTest {
-	ActorSimConfig sConfig;
+	SimConfig sConfig;
     ActorType actorType;
-	List<SimConfigElement> cEles;
+	List<AbstractConfigElement> cEles;
 
 
     static String config = '''
@@ -59,8 +59,8 @@ public class FindConfigOneEndpointTest {
     }
 
 	public void startUp() {
-		sConfig = new ActorSimConfig(new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg")).
-				add(
+		sConfig = new SimConfig(new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg"))
+				sConfig.add(
 						new TransactionSimConfigElement(
 								new EndpointType(
 										new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb"),
@@ -80,7 +80,7 @@ public class FindConfigOneEndpointTest {
 	@Test
 	public void verifyTestdata() {
 		assertEquals(sConfig.getActorType(), new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg"));
-		assertEquals("ActorSimConfig size", 1, sConfig.elements.size());
+		assertEquals("ActorSimConfig size", 1, sConfig.transactions.size());
 	}
 	
 	@Test

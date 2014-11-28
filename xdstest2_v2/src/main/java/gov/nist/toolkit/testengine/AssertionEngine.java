@@ -3,10 +3,10 @@ package gov.nist.toolkit.testengine;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.utilities.xml.Parse;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.XMLParserException;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XMLParserException;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -20,6 +20,10 @@
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository</artifactId>
         </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>sim-support</artifactId>
+        </dependency>
     </dependencies>
 
 

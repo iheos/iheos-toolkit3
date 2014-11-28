@@ -8,7 +8,7 @@ import org.apache.axiom.om.OMElement;
 
 /**
  * Abstract class that all valiators are based on. It's primary
- * significance is forcing validators to support the run method so they
+ * significance is forcing validators to support the testRun method so they
  * can be called when their turn comes on the validation queue.
  * @author bill
  *

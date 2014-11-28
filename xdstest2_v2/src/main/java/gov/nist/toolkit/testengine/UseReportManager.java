@@ -6,7 +6,7 @@ import gov.nist.toolkit.xdstest2logging.Report;
 import gov.nist.toolkit.xdstest2logging.SectionLogMap;
 import gov.nist.toolkit.xdstest2logging.TestDetails;
 import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 import java.util.ArrayList;

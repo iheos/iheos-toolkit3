@@ -12,7 +12,7 @@
 
     <servlet>
         <servlet-name>simulatorServlet</servlet-name>
-        <servlet-class>gov.nist.hit.ds.simServlet.SimServlet</servlet-class>
+        <servlet-class>gov.nist.hit.ds.simServlet.servlet.SimServlet</servlet-class>
     </servlet>
 
 	<servlet>
@@ -49,6 +49,12 @@
             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
             <param-value>true</param-value>
         </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>Initialization</servlet-name>
+        <servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 

@@ -1,17 +1,8 @@
 	package gov.nist.toolkit.xdstools2.server;
 
-import gov.nist.direct.client.MessageLog;
-import gov.nist.direct.client.config.SigningCertType;
-import gov.nist.direct.config.DirectConfigManager;
-import gov.nist.direct.logger.UserLog;
-import gov.nist.toolkit.MessageValidatorFactory2.MessageValidatorFactoryFactory;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.actorfactory.client.Simulator;
 import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
-import gov.nist.toolkit.directsim.DirectServiceManager;
-import gov.nist.toolkit.directsim.DirectUserManager;
-import gov.nist.toolkit.directsim.client.ContactRegistrationData;
-import gov.nist.toolkit.directsim.client.DirectRegistrationData;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.installation.PropertyServiceManager;
 import gov.nist.toolkit.registrymetadata.client.AnyIds;
@@ -30,18 +21,14 @@ import gov.nist.toolkit.sitemanagement.client.TransactionOfferings;
 import gov.nist.toolkit.tk.TkLoader;
 import gov.nist.toolkit.tk.client.TkProps;
 import gov.nist.toolkit.utilities.xml.SchemaValidation;
-import gov.nist.toolkit.valregmsg.validation.factories.MessageValidatorFactory;
 import gov.nist.toolkit.valsupport.client.MessageValidationResults;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.xdstools2.client.*;
 import gov.nist.toolkit.xdstools2.server.serviceManager.DashboardServiceManager;
 import gov.nist.toolkit.xdstools2.server.serviceManager.GazelleServiceManager;
-import gov.nist.toolkit.xdstools2.server.serviceManager.SimulatorServiceManager;
-import gov.nist.toolkit.xdstools2.server.smtptools.LogAccessMock;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -80,9 +67,9 @@ public class ToolkitServiceImpl extends RemoteServiceServlet implements
 	public ToolkitServiceImpl() {
 			siteServiceManager = SiteServiceManager.getSiteServiceManager();   // One copy shared between sessions
 			System.out.println("MessageValidatorFactory()");
-			if (MessageValidatorFactoryFactory.messageValidatorFactory2I == null) {
-				MessageValidatorFactoryFactory.messageValidatorFactory2I = new MessageValidatorFactory("a");
-			}
+//			if (MessageValidatorFactoryFactory.messageValidatorFactory2I == null) {
+//				MessageValidatorFactoryFactory.messageValidatorFactory2I = new MessageValidatorFactory("a");
+//			}
 	}
 	
 	//------------------------------------------------------------------------
@@ -91,55 +78,55 @@ public class ToolkitServiceImpl extends RemoteServiceServlet implements
 	//------------------------------------------------------------------------
 	//------------------------------------------------------------------------
 	  
-	public DirectRegistrationData directRegistration(DirectRegistrationData reg) throws NoServletSessionException, Exception { 
-		new DirectServiceManager().directRegistration(session(), reg); 
-		return reg;
-		}
+//	public DirectRegistrationData directRegistration(DirectRegistrationData reg) throws NoServletSessionException, Exception {
+//		new DirectServiceManager().directRegistration(session(), reg);
+//		return reg;
+//		}
+//
+//	public ContactRegistrationData contactRegistration(ContactRegistrationData reg) throws NoServletSessionException, Exception {
+//		new DirectUserManager().contactRegistration(reg);
+//		return reg;
+//		}
+//
+//	public ContactRegistrationData saveCertFromUpload(ContactRegistrationData reg, String directAddr)  throws NoServletSessionException, Exception {
+//		byte[] cert = session().getlastUpload();
+//		new DirectUserManager().saveCertFromUpload(reg, directAddr, cert);
+//		return reg;
+//	}
+//
+//	public ContactRegistrationData loadDirectRegistration(String contact) throws Exception {
+//		return new DirectUserManager().load(contact);
+//	}
+//
+//	public ContactRegistrationData deleteDirect(ContactRegistrationData contact, DirectRegistrationData direct) throws NoServletSessionException, Exception {
+//		return new DirectUserManager().deleteDirect(contact, direct);
+//	}
 	  
-	public ContactRegistrationData contactRegistration(ContactRegistrationData reg) throws NoServletSessionException, Exception { 
-		new DirectUserManager().contactRegistration(reg); 
-		return reg;
-		}
+//	public String toolkitPubCert()  throws NoServletSessionException { return new DirectServiceManager(session()).toolkitPubCert(); }
+//
+//	public List<Result> directSend(Map<String, String> parms) throws NoServletSessionException, Exception { return new DirectServiceManager(session()).directSend(parms); }
+//
+//	public List<String> getEncryptionCertDomains() { return new DirectConfigManager(Installation.installation().externalCache()).getEncryptionCertDomains(); }
+//
+//	public List<String> getDirectMsgIds(String user) { return new LogAccessMock().getMsgIds(user); }
+//
+//	public List<MessageLog> getDirectOutgoingMsgStatus(String user) throws NoServletSessionException {
+//		//return new LogAccessMock().getOutgoingMsgStatus(user, msg_ids);
+//		if (user == null || user.equals("null") || user.equals(""))
+//			return new ArrayList<MessageLog>();
+//		session().setMesaSessionName(user);
+//		List<MessageLog> logs = new UserLog().readUserLogs(user);
+//		return logs;
+//	}
 	  
-	public ContactRegistrationData saveCertFromUpload(ContactRegistrationData reg, String directAddr)  throws NoServletSessionException, Exception {
-		byte[] cert = session().getlastUpload();
-		new DirectUserManager().saveCertFromUpload(reg, directAddr, cert); 
-		return reg;
-	}
-	  
-	public ContactRegistrationData loadDirectRegistration(String contact) throws Exception {
-		return new DirectUserManager().load(contact);
-	}
-	  
-	public ContactRegistrationData deleteDirect(ContactRegistrationData contact, DirectRegistrationData direct) throws NoServletSessionException, Exception {
-		return new DirectUserManager().deleteDirect(contact, direct);
-	}
-	  
-	public String toolkitPubCert()  throws NoServletSessionException { return new DirectServiceManager(session()).toolkitPubCert(); }
-	  
-	public List<Result> directSend(Map<String, String> parms) throws NoServletSessionException, Exception { return new DirectServiceManager(session()).directSend(parms); }
-	  
-	public List<String> getEncryptionCertDomains() { return new DirectConfigManager(Installation.installation().externalCache()).getEncryptionCertDomains(); }
-	  
-	public List<String> getDirectMsgIds(String user) { return new LogAccessMock().getMsgIds(user); }
-	  
-	public List<MessageLog> getDirectOutgoingMsgStatus(String user) throws NoServletSessionException { 
-		//return new LogAccessMock().getOutgoingMsgStatus(user, msg_ids);
-		if (user == null || user.equals("null") || user.equals(""))
-			return new ArrayList<MessageLog>();
-		session().setMesaSessionName(user);
-		List<MessageLog> logs = new UserLog().readUserLogs(user);
-		return logs;
-	}
-	  
-	public List<SigningCertType> getAvailableDirectSigningCerts() throws NoServletSessionException {
-		logger.debug(session().id() + ": " + 
-				"getAvailableDirectSigningCerts");
-		
-		List<SigningCertType> certs = new DirectConfigManager().getSigningCertTypesAvailable();
-		logger.debug(session().id() + ": " + "getAvailableDirectSigningCerts => " + certs);
-		return certs;
-	}
+//	public List<SigningCertType> getAvailableDirectSigningCerts() throws NoServletSessionException {
+//		logger.debug(session().id() + ": " +
+//				"getAvailableDirectSigningCerts");
+//
+//		List<SigningCertType> certs = new DirectConfigManager().getSigningCertTypesAvailable();
+//		logger.debug(session().id() + ": " + "getAvailableDirectSigningCerts => " + certs);
+//		return certs;
+//	}
 
 	//------------------------------------------------------------------------
 	//------------------------------------------------------------------------
@@ -238,7 +225,7 @@ public class ToolkitServiceImpl extends RemoteServiceServlet implements
 	public List<String> getTestlogListing(String sessionName) throws Exception { return session().xdsTestServiceManager().getTestlogListing(sessionName); }
 	public Map<String, String> getCollection(String collectionSetName, String collectionName) throws Exception { return session().xdsTestServiceManager().getCollection(collectionSetName, collectionName); }
 	public boolean isPrivateMesaTesting()  throws NoServletSessionException { return session().xdsTestServiceManager().isPrivateMesaTesting(); }
-	public List<MessageLog> getDirectLogs(String sessionName) throws Exception { return session().xdsTestServiceManager().getDirectLogs(sessionName); }
+//	public List<MessageLog> getDirectLogs(String sessionName) throws Exception { return session().xdsTestServiceManager().getDirectLogs(sessionName); }
 	
 	
 	//------------------------------------------------------------------------
@@ -289,24 +276,24 @@ public class ToolkitServiceImpl extends RemoteServiceServlet implements
 	// Simulator Service
 	//------------------------------------------------------------------------
 	//------------------------------------------------------------------------
-	public String putSimConfig(SimulatorConfig config) throws Exception { return new SimulatorServiceManager(session()).putSimConfig(config); }
-	public String deleteConfig(SimulatorConfig config) throws Exception { return new SimulatorServiceManager(session()).deleteConfig(config); }
-	public void renameSimFile(String simFileSpec, String newSimFileSpec) throws Exception { new SimulatorServiceManager(session()).renameSimFile(simFileSpec, newSimFileSpec); }
-	public String getSimulatorEndpoint() throws NoServletSessionException { return new SimulatorServiceManager(session()).getSimulatorEndpoint(); }
-	public MessageValidationResults executeSimMessage(String simFileSpec) throws NoServletSessionException { return new SimulatorServiceManager(session()).executeSimMessage(simFileSpec); }
-	public List<String> getTransInstances(String simid, String xactor, String trans) throws Exception { return new SimulatorServiceManager(session()).getTransInstances(simid, xactor, trans); }
-	public String getTransactionRequest(String simid, String actor, String trans, String event) throws NoServletSessionException { return new SimulatorServiceManager(session()).getTransactionRequest(simid, actor, trans, event); }
-	public String getTransactionResponse(String simid, String actor, String trans, String event) throws NoServletSessionException { return new SimulatorServiceManager(session()).getTransactionResponse(simid, actor, trans, event); }
-	public int removeOldSimulators() throws NoServletSessionException { return new SimulatorServiceManager(session()).removeOldSimulators(); }
-	public List<Result> getSelectedMessage(String simFileSpec) throws NoServletSessionException { return new SimulatorServiceManager(session()).getSelectedMessage(simFileSpec); }
-	public List<Result> getSelectedMessageResponse(String simFileSpec) throws NoServletSessionException { return new SimulatorServiceManager(session()).getSelectedMessageResponse(simFileSpec); }
-	public Map<String, String> getActorSimulatorNameMap() throws NoServletSessionException { return new SimulatorServiceManager(session()).getSimulatorNameMap(); }
-	public MessageValidationResults validateMessage(ValidationContext vc) throws NoServletSessionException, EnvironmentNotSelectedClientException { return new SimulatorServiceManager(session()).validateMessage(vc); }
-	public List<SimulatorConfig> getSimConfigs(List<String> ids) throws Exception { return new SimulatorServiceManager(session()).getSimConfigs(ids); }
-	public Simulator getNewSimulator(String actorTypeName) throws Exception { return new SimulatorServiceManager(session()).getNewSimulator(actorTypeName); }
-	public void deleteSimFile(String simFileSpec) throws Exception { new SimulatorServiceManager(session()).deleteSimFile(simFileSpec); }
-	public List<String> getTransactionsForSimulator(String simid) throws Exception { return new SimulatorServiceManager(session()).getTransactionsForSimulator(simid); }
-	public String getTransactionLog(String simid, String actor, String trans, String event) throws NoServletSessionException { return new SimulatorServiceManager(session()).getTransactionLog(simid, actor, trans, event); }
+//	public String putSimConfig(SimulatorConfig config) throws Exception { return new SimulatorServiceManager(session()).putSimConfig(config); }
+//	public String deleteConfig(SimulatorConfig config) throws Exception { return new SimulatorServiceManager(session()).deleteConfig(config); }
+//	public void renameSimFile(String simFileSpec, String newSimFileSpec) throws Exception { new SimulatorServiceManager(session()).renameSimFile(simFileSpec, newSimFileSpec); }
+//	public String getSimulatorEndpoint() throws NoServletSessionException { return new SimulatorServiceManager(session()).getSimulatorEndpoint(); }
+//	public MessageValidationResults executeSimMessage(String simFileSpec) throws NoServletSessionException { return new SimulatorServiceManager(session()).executeSimMessage(simFileSpec); }
+//	public List<String> getTransInstances(String simid, String xactor, String trans) throws Exception { return new SimulatorServiceManager(session()).getTransInstances(simid, xactor, trans); }
+//	public String getTransactionRequest(String simid, String actor, String trans, String event) throws NoServletSessionException { return new SimulatorServiceManager(session()).getTransactionRequest(simid, actor, trans, event); }
+//	public String getTransactionResponse(String simid, String actor, String trans, String event) throws NoServletSessionException { return new SimulatorServiceManager(session()).getTransactionResponse(simid, actor, trans, event); }
+//	public int removeOldSimulators() throws NoServletSessionException { return new SimulatorServiceManager(session()).removeOldSimulators(); }
+//	public List<Result> getSelectedMessage(String simFileSpec) throws NoServletSessionException { return new SimulatorServiceManager(session()).getSelectedMessage(simFileSpec); }
+//	public List<Result> getSelectedMessageResponse(String simFileSpec) throws NoServletSessionException { return new SimulatorServiceManager(session()).getSelectedMessageResponse(simFileSpec); }
+//	public Map<String, String> getActorSimulatorNameMap() throws NoServletSessionException { return new SimulatorServiceManager(session()).getSimulatorNameMap(); }
+//	public MessageValidationResults validateMessage(ValidationContext vc) throws NoServletSessionException, EnvironmentNotSelectedClientException { return new SimulatorServiceManager(session()).validateMessage(vc); }
+//	public List<SimulatorConfig> getSimConfigs(List<String> ids) throws Exception { return new SimulatorServiceManager(session()).getSimConfigs(ids); }
+//	public Simulator getNewSimulator(String actorTypeName) throws Exception { return new SimulatorServiceManager(session()).getNewSimulator(actorTypeName); }
+//	public void deleteSimFile(String simFileSpec) throws Exception { new SimulatorServiceManager(session()).deleteSimFile(simFileSpec); }
+//	public List<String> getTransactionsForSimulator(String simid) throws Exception { return new SimulatorServiceManager(session()).getTransactionsForSimulator(simid); }
+//	public String getTransactionLog(String simid, String actor, String trans, String event) throws NoServletSessionException { return new SimulatorServiceManager(session()).getTransactionLog(simid, actor, trans, event); }
 
 	//------------------------------------------------------------------------
 	//------------------------------------------------------------------------

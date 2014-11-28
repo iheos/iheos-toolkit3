@@ -9,9 +9,9 @@ package gov.nist.toolkit.http.util;
 
 import gov.nist.toolkit.http.httpclient.HttpClient;
 import gov.nist.toolkit.http.httpclient.HttpClientInfo;
-import gov.nist.toolkit.xdsexception.HttpClientException;
-import gov.nist.toolkit.xdsexception.HttpCodeException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.HttpClientException;
+import gov.nist.hit.ds.xdsException.HttpCodeException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.IOException;
 import java.io.PrintWriter;

@@ -1,7 +1,8 @@
 package gov.nist.toolkit.session.server.serviceManager;
 
-import gov.nist.direct.client.MessageLog;
-import gov.nist.direct.logger.UserLog;
+import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.actorfactory.CommonServiceManager;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.installation.Installation;
@@ -11,53 +12,29 @@ import gov.nist.toolkit.registrymetadata.UuidAllocator;
 import gov.nist.toolkit.registrymetadata.client.Document;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.results.ResultBuilder;
-import gov.nist.toolkit.results.client.AssertionResult;
-import gov.nist.toolkit.results.client.AssertionResults;
-import gov.nist.toolkit.results.client.CodesConfiguration;
-import gov.nist.toolkit.results.client.CodesResult;
-import gov.nist.toolkit.results.client.MetadataToMetadataCollectionParser;
-import gov.nist.toolkit.results.client.Result;
-import gov.nist.toolkit.results.client.SiteSpec;
-import gov.nist.toolkit.results.client.StepResult;
-import gov.nist.toolkit.results.client.TestLogs;
-import gov.nist.toolkit.results.client.XdstestLogId;
+import gov.nist.toolkit.results.client.*;
 import gov.nist.toolkit.session.server.CodesConfigurationBuilder;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.session.server.TestSessionNotSelectedException;
 import gov.nist.toolkit.session.server.services.TestLogCache;
 import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
-import gov.nist.toolkit.testengine.LogMap;
-import gov.nist.toolkit.testengine.ResultPersistence;
-import gov.nist.toolkit.testengine.RetInfo;
-import gov.nist.toolkit.testengine.RetrieveB;
-import gov.nist.toolkit.testengine.TestLogsBuilder;
-import gov.nist.toolkit.testengine.TransactionSettings;
-import gov.nist.toolkit.testengine.Xdstest2;
+import gov.nist.toolkit.testengine.*;
 import gov.nist.toolkit.testengine.logrepository.LogRepositoryFactory;
 import gov.nist.toolkit.testkitutilities.TestDefinition;
 import gov.nist.toolkit.testkitutilities.TestKit;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
-import gov.nist.toolkit.xdsexception.EnvironmentNotSelectedException;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
 import gov.nist.toolkit.xdstest2logging.LogFileContent;
 import gov.nist.toolkit.xdstest2logging.TestDetails;
 import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.parsers.FactoryConfigurationError;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
+
+import javax.xml.parsers.FactoryConfigurationError;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class XdsTestServiceManager extends CommonServiceManager {
 	CodesConfiguration codesConfiguration = null;
@@ -516,21 +493,6 @@ public class XdsTestServiceManager extends CommonServiceManager {
 
 		return asList(result);
 	}
-	
-	
-	/**
-	 * 
-	 * @param sessionName the username for the current session?
-	 * @return
-	 * @throws Exception
-	 */
-	public List<MessageLog> getDirectLogs(String sessionName) throws Exception {
-		logger.debug(session.id() + ": " + "getLogContent()"); 
-		List<MessageLog> logs = new UserLog().readUserLogs(sessionName);
-
-		return (List<MessageLog>)logs;
-	}
-	
 
 	public LogMap buildLogMap(File testDir, String testName) throws Exception {
 		LogMap lm = new LogMap();

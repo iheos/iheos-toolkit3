@@ -6,7 +6,7 @@ import gov.nist.toolkit.registrymsgformats.registry.RegistryResponse;
 import gov.nist.toolkit.registrymsgformats.registry.Response;
 import gov.nist.toolkit.simulators.sim.reg.RegistryResponseGeneratingSim;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 public class UnknownSim extends TransactionSimulator implements RegistryResponseGeneratingSim  {
 	Response response;

@@ -33,7 +33,7 @@ class RegisterTransactionTest extends Specification {
 '''
     def header = '''
 POST /axis2/services/registryBonedoc HTTP/1.1
-Content-Type: application/soap+xml; charset=UTF-8; action="urn:ihe:iti:2007:RegisterDocumentSet-b"
+Content-Type: multipart/related; charset=UTF-8; action="urn:ihe:iti:2007:RegisterDocumentSet-b"
 User-Agent: Axis2
 Host: localhost:9085'''
     def body = '''
@@ -74,7 +74,7 @@ Host: localhost:9085'''
         when: ''
         SimId simId = new SimId('RegisterTransactionTest')
         String endpoint = 'http://localhost:8080/tools/sim/123/reg/rb'
-        SimHandle simHandle = SimUtils.create('reg', simId)
+        SimHandle simHandle = SimUtils.recreate('reg', simId)
         simHandle.transactionType = new ActorTransactionTypeFactory().getTransactionType('rb')
 
         then:
@@ -87,7 +87,7 @@ Host: localhost:9085'''
         endpointBuilder.parse(endpoint)
 //        def transRunner = new TransactionRunner(endpointBuilder, new SimSystemConfig().repoName)
         def transRunner = new TransactionRunner(simHandle)
-        transRunner.run()
+        transRunner.acceptRequest()
 
         then: '''Sim should still be open'''
         simHandle.isOpen()

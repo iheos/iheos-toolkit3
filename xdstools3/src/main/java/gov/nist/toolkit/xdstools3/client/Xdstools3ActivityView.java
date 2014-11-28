@@ -4,8 +4,6 @@ package gov.nist.toolkit.xdstools3.client;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
@@ -16,10 +14,6 @@ import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
 import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
-import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.tabs.EnvironmentState;
-import gov.nist.toolkit.xdstools2.client.tabs.QueryState;
-import gov.nist.toolkit.xdstools2.client.tabs.TestSessionState;
 import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.*;
@@ -38,7 +32,6 @@ import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs.MHDValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab.SubmitTestDataTab;
-import gov.nist.toolkit.xdstools3.client.tabs.v2.v2TabExample;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
@@ -47,7 +40,7 @@ import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
  * Main class of the application which is the Activity for Activity-Places design, the view and a bit of a controller.
  */
 // TabContainer was added for v2-v3 integration purposes, AcceptsOneWidget to avoid an entire MVP architecture (fuse Activity and View in one single class)
-public class Xdstools3ActivityView extends AbstractActivity implements TabContainer, AcceptsOneWidget {
+public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOneWidget {
 
     private GenericTabSet topTabSet;
 
@@ -112,11 +105,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
             @Override
             public void onTabSelected(TabSelectedEvent tabSelectedEvent) {
                 String tabName;
-                if(tabSelectedEvent.getTab() instanceof v2TabExample){
-                    tabName=((v2TabExample) tabSelectedEvent.getTab()).getTabName();
-                }else{
-                    tabName=((GenericTab) tabSelectedEvent.getTab()).getTabName();
-                }
+                tabName=((GenericTab) tabSelectedEvent.getTab()).getTabName();
                 Xdstools3GinInjector.injector.getPlaceController().goTo(new TabPlace(tabName));
             }
         });
@@ -255,12 +244,6 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
         else if(tabName.equals(TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode())){
             tab = new MHDToXDSConverterTab();
         }
-
-        // ---------- legacy v2 tabs --------
-        else if (tabName.equals(TabNamesUtil.getInstance().getv2TabCode())) {
-            tab = new v2TabExample(this);
-        }
-
         else{
             // unknown tab
             topTabSet.selectTab(0); // todo we can create a 404
@@ -395,32 +378,4 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                 "</footer>";
     }
 
-    //---------------------------------------------------
-    // ------- Added for v2-v3 integration purposes -----
-    //---------------------------------------------------
-    @Override
-    public void addTab(VerticalPanel w, String title, boolean select) {
-
-    }
-
-    @Override
-    public TabPanel getTabPanel() {
-        return null;
-    }
-
-    @Override
-    public TestSessionState getTestSessionState() {
-        return null;
-    }
-
-    @Override
-    public QueryState getQueryState() {
-        return null;
-    }
-
-    @Override
-    public EnvironmentState getEnvironmentState() {
-        return null;
-    }
-    //---------------------------------------------------
 }

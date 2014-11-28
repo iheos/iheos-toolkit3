@@ -13,7 +13,6 @@ import gov.nist.toolkit.xdstools2.client.adapter2v3.PopupMessageV3;
 import gov.nist.toolkit.xdstools2.client.adapter2v3.TopWindowPanel;
 import gov.nist.toolkit.xdstools2.client.inspector.HyperlinkFactory;
 import gov.nist.toolkit.xdstools2.client.siteActorManagers.GetDocumentsSiteActorManager;
-import gov.nist.toolkit.xdstools2.client.tabs.directRegistrationTab.DirectRegistrationContentValidationTable;
 import gov.nist.toolkit.xdstools2.client.tabs.genericQueryTab.GenericQueryTab;
 
 public class HomeTab extends GenericQueryTab {
@@ -223,9 +222,6 @@ public class HomeTab extends GenericQueryTab {
 				));
 
 		topPanel.add(new HTML("<hr />"));
-
-		DirectRegistrationContentValidationTable drcvTbl = new DirectRegistrationContentValidationTable();
-		topPanel.add(drcvTbl.contentValidation());
 
 		topPanel.add(new HTML("<hr />"));
 

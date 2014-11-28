@@ -13,9 +13,9 @@ import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.registry.RegistryValidationInterface;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.MetadataValidationException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.MetadataValidationException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 import java.io.IOException;

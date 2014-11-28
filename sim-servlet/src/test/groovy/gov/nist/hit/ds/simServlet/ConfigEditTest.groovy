@@ -1,8 +1,9 @@
 package gov.nist.hit.ds.simServlet
 
 import gov.nist.hit.ds.simServlet.api.SimApi
+import gov.nist.hit.ds.simServlet.servlet.SimServlet
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.manager.ActorSimConfigManager
 import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -28,34 +29,48 @@ class ConfigEditTest extends Specification {
     def cleanup() {
     }
 
+    def 'Sim create should include Transaction config' () {
+        when: '''Create a sim'''
+        simHandle = SimUtils.recreate('docrec', simId1)
+
+        then:
+        simHandle.actorSimConfig.transactions.size() > 0
+    }
+
     def 'Sim Config edits should be persist'() {
         when: '''Create a sim'''
-        simHandle = SimUtils.create('docrec', simId1)
+        simHandle = SimUtils.recreate('docrec', simId1)
 
         and: '''Change the Sim's SCHEMACHECK setting.'''
         // set no message validation options
         def actorSimConfigManager = new ActorSimConfigManager(simHandle.actorSimConfig)
-        TransactionSimConfigElement config = actorSimConfigManager.getSimConfigElement()
+        println actorSimConfigManager
+        def configs = actorSimConfigManager.getSimConfigElements()
+        def config = configs.first()
         config.setBool(TransactionSimConfigElement.SCHEMACHECK, false)
         actorSimConfigManager.save(simHandle.configAsset)
 
         and: '''Reload sim configuration'''
         def simHandle2 = SimUtils.open(simId1)
         def actorSimConfigManager2 = new ActorSimConfigManager(simHandle2.actorSimConfig)
-        TransactionSimConfigElement config2 = actorSimConfigManager2.getSimConfigElement()
+        def config2s = actorSimConfigManager2.getSimConfigElements()
+        def config2 = config2s.first()
 
         then: '''Schema Check setting should have persisted'''
         !config2.getBool(TransactionSimConfigElement.SCHEMACHECK).value
     }
 
+    def bool(String str) { str.toLowerCase().equals('true')}
+
     Boolean getSchemaCheck(String actorXML) {
         def actor = new XmlSlurper().parseText(actorXML)
         def value = actor.transaction.find {
-            it.@name == 'prb'
+            println "Got transaction ${it.@name.text()}"
+            it.@name.text() == 'prb'
         }.settings.boolean.find {
-            it.@name == 'schemaCheck'
+            it.@name.text() == 'schemaCheck'
         }.@value.text()
-        value = new Boolean(value)
+        value = new Boolean(bool(value))
         return value
     }
 
@@ -118,23 +133,23 @@ class ConfigEditTest extends Specification {
     def 'Model should show updates'() {
         when: '''Create a sim'''
         SimUtils.delete(simId2)
-        simHandle = SimUtils.create('docrec', simId2)
+        simHandle = SimUtils.recreate('docrec', simId2)
         def updater = new SimApi()
 
         and: '''Get config (XML) through API'''
-        def config = updater.getConfig(simHandle.simId)
-        println 'Config as Read' + config
+        def configString = updater.getConfig(simHandle.simId)
+        println 'Config as Read' + configString
 
         and: '''Update config - set schemaCheck to false'''
-        def config2 = setSchemaCheck(config, false)
-        println 'Config as Updated' + config2
+        def config2String = setSchemaCheck(configString, false)
+        println 'Config as Updated' + config2String
 
         then:  'In memory copy has been updated'
-        !getSchemaCheck(config2)
+        !getSchemaCheck(config2String)
 
         when: 'Save changes to model'
         SimulatorDAO dao = new SimulatorDAO()
-        dao.updateModel(simHandle.actorSimConfig, config2)
+        dao.updateModel(simHandle.actorSimConfig, config2String)
 
         and: 'Get changes back in XML'
         String updatedConfig = dao.toXML(simHandle.actorSimConfig)
@@ -146,7 +161,7 @@ class ConfigEditTest extends Specification {
     def 'Update of boolean settings should be saved in config'() {
         when: '''Create a sim'''
         SimUtils.delete(simId2)
-        simHandle = SimUtils.create('docrec', simId2)
+        simHandle = SimUtils.recreate('docrec', simId2)
         def updater = new SimApi()
 
         and: '''Get config (XML) through API'''

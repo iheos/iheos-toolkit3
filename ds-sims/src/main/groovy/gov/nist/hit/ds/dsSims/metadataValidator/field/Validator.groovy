@@ -49,15 +49,15 @@ public class Validator {
 //	}
 //
 //
-//	public void run() throws XdsInternalException, MetadataValidationException, LoggerException, XdsException {
+//	public void testRun() throws XdsInternalException, MetadataValidationException, LoggerException, XdsException {
 //		a.setIsXDM(is_xdm);
 //
 //		try {
-//			s.run();
+//			s.testRun();
 //
-//			a.run();
+//			a.testRun();
 //
-//			cv.run();
+//			cv.testRun();
 //		}
 //		catch (XdsInternalException e) {
 //			rel.add_error(MetadataSupport.XDSRegistryError, e.getMessage(), RegistryUtility.exception_details(e), null);
@@ -66,14 +66,14 @@ public class Validator {
 //			rel.add_error(MetadataSupport.XDSRegistryError, e.getMessage(), RegistryUtility.exception_details(e), null);
 //		}
 //
-//		pid.run();
+//		pid.testRun();
 //
 //		for (OMElement ele : m.getRegistryPackages()) 
 //			validate_internal_classifications(ele);
 //		for (OMElement ele : m.getExtrinsicObjects()) 
 //			validate_internal_classifications(ele);
 //
-//		uid.run();
+//		uid.testRun();
 //
 //		rel.getRegistryErrorList(); // forces output of validation report
 //		//System.out.println("Metadata Validator Done");

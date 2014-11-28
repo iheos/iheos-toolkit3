@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.tkapis.validation;
 
 import gov.nist.hit.ds.repository.shared.id.AssetId;
+import gov.nist.hit.ds.simSupport.transaction.ValidationStatus;
 
 /**
 * Created by bmajur on 8/28/14.

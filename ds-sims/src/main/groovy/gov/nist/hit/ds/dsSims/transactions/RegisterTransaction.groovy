@@ -1,5 +1,5 @@
 package gov.nist.hit.ds.dsSims.transactions
-import gov.nist.hit.ds.dsSims.Transaction
+import gov.nist.hit.ds.simSupport.transaction.Transaction
 import gov.nist.hit.ds.dsSims.reg.DSMetadataProcessing
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.httpSoap.components.validators.SoapHeaderValidator
@@ -9,7 +9,7 @@ import gov.nist.hit.ds.metadata.*
 import gov.nist.hit.ds.metadata.client.MetadataCollection
 import gov.nist.hit.ds.metadata.store.RegistryFactory
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
-import gov.nist.hit.ds.tkapis.validation.ValidationStatus
+import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
 import gov.nist.hit.ds.xdsException.MetadataException
 import gov.nist.hit.ds.xdsException.XdsInternalException
 import groovy.util.logging.Log4j
@@ -52,8 +52,8 @@ class RegisterTransaction implements Transaction {
     }
 
     @Override
-    ValidationStatus run() {
-        log.debug('In RegisterTransaction#run')
+    ValidationStatus acceptRequest() {
+        log.debug('In RegisterTransaction#testRun')
         new HttpHeaderValidator(simHandle).asChild().run()
 
         def soapMessageParser = new SoapMessageValidator(simHandle, new String(simHandle.event.inOut.reqBody))
@@ -64,6 +64,11 @@ class RegisterTransaction implements Transaction {
         new SoapHeaderValidator(simHandle, header).asPeer().run()
 
         new DSMetadataProcessing(simHandle, body).asPeer().run()
+        return null
+    }
+
+    @Override
+    ValidationStatus sendRequest() {
         return null
     }
 
@@ -78,7 +83,7 @@ class RegisterTransaction implements Transaction {
 
 
 //        def metadataProcessing = new RegisterMetadataProcessing(open, soapBody)
-//        metadataProcessing.run()
+//        metadataProcessing.testRun()
 
 
 //        // These steps are common to Registry and Update.  They operate
@@ -131,7 +136,7 @@ class RegisterTransaction implements Transaction {
         rmHome();
     }
 
-    // These steps are run on the entire metadata collection
+    // These steps are testRun on the entire metadata collection
     // for the Register transaction but only on an operation
     // for the Update transaction.
     public void processMetadata(Metadata m, ProcessMetadataInterface pmi) {
@@ -151,7 +156,7 @@ class RegisterTransaction implements Transaction {
 
         // build update to metadata index with new objects
         // this will later be committed
-        // This is done now because the operations below need this index
+        // This is done now because the scripts below need this index
         buildMetadataIndex(m);
 
         // set folder lastUpdateTime on folders in the submission

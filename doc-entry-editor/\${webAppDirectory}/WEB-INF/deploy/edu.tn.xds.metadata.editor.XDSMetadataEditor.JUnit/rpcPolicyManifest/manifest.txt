@@ -1,0 +1,2 @@
+# Module edu.tn.xds.metadata.editor.XDSMetadataEditor.JUnit
+# RPC service class, partial path of RPC policy file

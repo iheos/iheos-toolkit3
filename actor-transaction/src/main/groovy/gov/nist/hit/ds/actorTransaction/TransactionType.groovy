@@ -5,14 +5,15 @@ import groovy.transform.ToString
 /**
  * Created by bill on 4/16/14.
  */
-@ToString(includeFields=true, includes="name, code, implementationClassName, props, isRetrieve")
+@ToString(includeFields=true, includes="name, code, acceptRequestClassName, props, isRetrieve")
 class TransactionType /* implements IsSerializable, Serializable */ {
     public String name
     public String code
     public String asyncCode
     public String requestAction
     public String responseAction
-    public String implementationClassName
+    public String acceptRequestClassName
+    public String sendRequestClassName
     public boolean multiPart
     public boolean soap
     public boolean isRetrieve
@@ -63,7 +64,7 @@ class TransactionType /* implements IsSerializable, Serializable */ {
         val = tt.responseAction;
         if (val == null || val.equals(""))
             throw new InvalidTransactionTypeDefinitionException("responseAction not defined");
-        val = tt.implementationClassName;
+        val = tt.acceptRequestClassName;
         if (val == null || val.equals(""))
             throw new InvalidTransactionTypeDefinitionException("implClass not defined");
     }

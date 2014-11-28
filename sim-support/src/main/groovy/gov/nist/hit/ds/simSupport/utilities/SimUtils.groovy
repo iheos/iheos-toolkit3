@@ -7,8 +7,8 @@ import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.repository.simple.SimpleAsset
 import gov.nist.hit.ds.repository.simple.SimpleId
 import gov.nist.hit.ds.repository.simple.SimpleType
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
 import gov.nist.hit.ds.simSupport.simulator.SimConfigFactory
@@ -44,12 +44,24 @@ class SimUtils {
         return create(null, simId, SimSystemConfig.repoName)
     }
 
+    static SimHandle recreate(String actorTypeName, SimId simId) {
+        delete(simId)
+        create(actorTypeName, simId)
+    }
+
     static SimHandle create(String actorTypeName, SimId simId) {
         return create(actorTypeName, simId, new SimSystemConfig().repoName)
     }
 
+    static SimHandle recreate(String actorTypeName, SimId simId, String repoName) {
+        delete(simId)
+        create(actorTypeName, simId, repoName)
+    }
+
+
     static SimHandle create(String actorTypeName, SimId simId, String repoName) {
         SimSystemConfig simSystemConfig = new SimSystemConfig()
+        log.debug(simSystemConfig.toString())
         Repository repo = buildRepository(repoName)
         if (exists(simId, repoName)) {
             log.debug("Sim ${simId.id} exists.")
@@ -60,7 +72,7 @@ class SimUtils {
         Asset simAsset = RepoUtils.mkAsset(simId.id, new SimpleType('sim'), repo)
 
         if (actorTypeName) {
-            ActorSimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
+            SimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
             storeConfig(new SimulatorDAO().toXML(actorSimConfig), simAsset)
             Site site = new SimSiteFactory().buildSite(actorSimConfig, simId.id)
             OMElement siteEle = new SeparateSiteLoader().siteToXML(site)
@@ -139,6 +151,10 @@ class SimUtils {
         } catch (Exception e) { return false }
     }
 
+    static runTransaction(SimHandle simHandle) { new TransactionRunner(simHandle).acceptRequest() }
+    static validateTransactionRequest(SimHandle simHandle) { new TransactionRunner(simHandle).validateRequest() }
+    static validateTransactionResponse(SimHandle simHandle) { new TransactionRunner(simHandle).validateResponse() }
+
     // used in unit tests only
     static SimHandle runTransaction(Endpoint endpoint, String header, byte[] body, String repositoryName) {
         log.debug("Inside runTransaction")
@@ -146,7 +162,7 @@ class SimUtils {
         log.debug("runTransaction: endpoint = ${endp}")
         def transactionType = new ActorTransactionTypeFactory().getTransactionType(endp.transCode)
         SimId simId = endp.simId
-        return new TransactionRunner(simId, repositoryName, transactionType, header, body).run()
+        return new TransactionRunner(simId, repositoryName, transactionType, header, body).testRun()
     }
 
     private static Asset sim(SimId simId, Repository repository) {
@@ -175,7 +191,7 @@ class SimUtils {
         }
     }
 
-    static ActorSimConfig loadConfig(Asset a) { new SimulatorDAO().toModel(load(a))}
+    static SimConfig loadConfig(Asset a) { new SimulatorDAO().toModel(load(a))}
     static String load(Asset a) { new String(a.content) }
 
 }

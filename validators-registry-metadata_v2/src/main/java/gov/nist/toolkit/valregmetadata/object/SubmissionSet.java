@@ -8,7 +8,7 @@ import gov.nist.toolkit.valregmetadata.datatype.DtmFormat;
 import gov.nist.toolkit.valregmetadata.datatype.XonXcnFormat;
 import gov.nist.toolkit.valregmetadata.datatype.XonXcnXtnFormat;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

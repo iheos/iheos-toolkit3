@@ -4,9 +4,9 @@ import gov.nist.toolkit.docref.MetadataTables;
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.MetadataValidationException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.MetadataValidationException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 import java.util.ArrayList;

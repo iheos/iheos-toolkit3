@@ -2,7 +2,7 @@ package gov.nist.hit.ds.simSupport.simGeneration
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.AsyncType
 import gov.nist.hit.ds.actorTransaction.TlsType
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig
+import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import gov.nist.hit.ds.simSupport.simulator.SimConfigFactory
@@ -64,7 +64,7 @@ class CreateSimTest extends Specification {
 
         when:
         SimConfigFactory factory = new SimConfigFactory()
-        ActorSimConfig actorSimConfig = factory.buildSim(server, port, base, simId, atFactory.getActorType(actorTypeName))
+        SimConfig actorSimConfig = factory.buildSim(server, port, base, simId, atFactory.getActorType(actorTypeName))
 
         then:
         actorSimConfig
@@ -81,7 +81,7 @@ class CreateSimTest extends Specification {
 
         when:
         SimConfigFactory factory = new SimConfigFactory()
-        ActorSimConfig actorSimConfig = factory.buildSim(server, port, base, simId, atFactory.getActorType(actorTypeName))
+        SimConfig actorSimConfig = factory.buildSim(server, port, base, simId, atFactory.getActorType(actorTypeName))
         EndpointValue endpoint = actorSimConfig.getEndpoint(
                 new ActorTransactionTypeFactory().getTransactionType("rb"),
                 TlsType.TLS,

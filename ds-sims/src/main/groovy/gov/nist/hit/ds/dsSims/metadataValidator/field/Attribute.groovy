@@ -29,11 +29,11 @@ public class Attribute extends ValidatorCommon {
 //	}
 //
 //
-//	public void run()   {
+//	public void testRun()   {
 //
-//		new SubmissionSetValidator(this).run();
-//		new DocumentEntryValidator(this).run();
-//		new FolderValidator(this).run();
+//		new SubmissionSetValidator(this).testRun();
+//		new DocumentEntryValidator(this).testRun();
+//		new FolderValidator(this).testRun();
 //
 //		if (is_submit && m.getSubmissionSets().size() == 0) 
 //			err("Submission must contain a SubmissionSet object, none were found");

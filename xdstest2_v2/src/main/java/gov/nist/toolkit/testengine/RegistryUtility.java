@@ -5,9 +5,9 @@ import gov.nist.toolkit.registrymsgformats.registry.RegistryErrorListGenerator;
 import gov.nist.toolkit.utilities.xml.SchemaValidation;
 import gov.nist.toolkit.valregmetadata.field.MetadataValidator;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.toolkit.xdsexception.SchemaValidationException;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.SchemaValidationException;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

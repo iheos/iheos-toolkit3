@@ -5,8 +5,8 @@ import gov.nist.hit.ds.eventLog.EventFactory
 import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.Repository
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
 import groovy.util.logging.Log4j
@@ -25,7 +25,7 @@ class SimHandle {
     Event event
     TransactionType transactionType
     Repository repository
-    ActorSimConfig actorSimConfig
+    SimConfig actorSimConfig
     EndpointBuilder endpointBuilder
     SoapEnvironment soapEnvironment
     boolean requestIsMultipart = false
@@ -36,6 +36,7 @@ class SimHandle {
     // Event creation is lazy so create doesn't build unused event
     Event getEvent() {
         if (!event) {
+            log.debug("Creating event for sim ${simId}")
             def event1 = new EventFactory().buildEvent(repository, eventLogAsset)
             event = event1
             event.init()

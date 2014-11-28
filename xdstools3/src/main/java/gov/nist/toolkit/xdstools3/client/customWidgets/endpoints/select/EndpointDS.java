@@ -8,7 +8,7 @@ import com.smartgwt.client.types.DSProtocol;
 
 /**
  * SmartGWT datasource for accessing entities over http in a RESTful manner.
- * Defines a RESTDataSource fields, operations and REST service URLs.
+ * Defines a RESTDataSource fields, scripts and REST service URLs.
  */
 public class EndpointDS extends RestDataSource {
 	
@@ -22,7 +22,7 @@ public class EndpointDS extends RestDataSource {
         DataSourceTextField endpointType = new DataSourceTextField("type");
         setFields(endpointId, endpointName, endpointType);
 
-        // Define operations
+        // Define scripts
 		OperationBinding fetch = new OperationBinding();
 		fetch.setOperationType(DSOperationType.FETCH);
 		fetch.setDataProtocol(DSProtocol.POSTMESSAGE);

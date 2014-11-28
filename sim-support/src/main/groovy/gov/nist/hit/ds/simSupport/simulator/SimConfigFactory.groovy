@@ -1,10 +1,10 @@
 package gov.nist.hit.ds.simSupport.simulator
 import gov.nist.hit.ds.actorTransaction.ActorType
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.RetrieveTransactionSimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.RepositoryUniqueIdSimConfigElement
+import gov.nist.hit.ds.simSupport.config.RetrieveTransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.SimConfig
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
@@ -14,9 +14,9 @@ import groovy.util.logging.Log4j
 @Log4j
 class SimConfigFactory {
 
-    ActorSimConfig buildSim(String server, String port, String base, SimId simId, ActorType actorType) {
+    SimConfig buildSim(String server, String port, String base, SimId simId, ActorType actorType) {
         log.debug("SimConfigFactory: actorType ${actorType.name}")
-        ActorSimConfig actorSimConfig = new ActorSimConfig(actorType)
+        SimConfig actorSimConfig = new SimConfig(actorType)
 
         EndpointBuilder endpointBuilder = new EndpointBuilder(server, port, base, simId)
 

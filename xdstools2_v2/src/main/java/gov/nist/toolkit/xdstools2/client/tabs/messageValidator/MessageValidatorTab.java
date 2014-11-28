@@ -441,7 +441,6 @@ public class MessageValidatorTab extends TabbedWindow {
 
         simEndpointMessage = HtmlMarkup.html("My Simulator");
         simArea.add(simEndpointMessage);
-        requestSimEndpoint();
 
         Button reloadSimFileList = new Button("Reload");
         reloadSimFileList.addClickHandler(new ClickHandler() {
@@ -491,84 +490,23 @@ public class MessageValidatorTab extends TabbedWindow {
         endpointAreaButtonPanel.setWidget(0, 1, validateRespFromEndpointButton);
 
         Button viewFromEndpointButton = new Button("View Request");
-        viewFromEndpointButton.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                int sel = simFilesListBox.getSelectedIndex();
-                if (sel == -1) {
-                    new PopupMessageV3("Select message first");
-                    return;
-                }
-                filename = simFilesListBox.getValue(sel);
-                toolkitService.getSelectedMessage(filename, getTextCallback);
-            }
-        });
 
         endpointAreaButtonPanel.setWidget(1, 0, viewFromEndpointButton);
         //		endpointPartsArea.add(viewFromEndpointButton);
 
         Button viewRespFromEndpointButton = new Button("View Response");
-        viewRespFromEndpointButton.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                int sel = simFilesListBox.getSelectedIndex();
-                if (sel == -1) {
-                    new PopupMessageV3("Select message first");
-                    return;
-                }
-                filename = simFilesListBox.getValue(sel);
-                toolkitService.getSelectedMessageResponse(filename, getTextCallback);
-            }
-        });
         endpointAreaButtonPanel.setWidget(1, 1, viewRespFromEndpointButton);
 
         Button reExecuteMessageButton = new Button("Re-Execute");
-        reExecuteMessageButton.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                new GwtValFormatter().clearResults();
-                int sel = simFilesListBox.getSelectedIndex();
-                if (sel == -1) {
-                    new PopupMessageV3("Select message first");
-                    return;
-                }
-                filename = simFilesListBox.getValue(sel);
-                toolkitService.executeSimMessage(filename, messageValidationCallback);
-            }
-        });
 
         endpointAreaButtonPanel.setWidget(2, 0, reExecuteMessageButton);
 
         Button renameMessageButton = new Button("Rename");
-        renameMessageButton.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                int sel = simFilesListBox.getSelectedIndex();
-                if (sel == -1) {
-                    new PopupMessageV3("Select message first");
-                    return;
-                }
-                filename = simFilesListBox.getValue(sel);
-                new RenameSimFileDialogBox(topPanel, filename, reloadSimMessages);
-            }
-        });
 
         endpointAreaButtonPanel.setWidget(3, 0, renameMessageButton);
         //		endpointPartsArea.add(renameMessageButton);
 
         Button deleteFromEndpointButton = new Button("Delete");
-        deleteFromEndpointButton.addClickHandler(new ClickHandler() {
-
-            public void onClick(ClickEvent event) {
-                int sel = simFilesListBox.getSelectedIndex();
-                if (sel == -1) {
-                    new PopupMessageV3("Select message first");
-                    return;
-                }
-                filename = simFilesListBox.getValue(sel);
-                toolkitService.deleteSimFile(filename, reloadSimMessages );
-            }
-        });
 
         endpointAreaButtonPanel.setWidget(4, 0, deleteFromEndpointButton);
         //		endpointPartsArea.add(deleteFromEndpointButton);
@@ -665,23 +603,6 @@ public class MessageValidatorTab extends TabbedWindow {
     }
 
     HTML simEndpointMessage;
-    void requestSimEndpoint() {
-        toolkitService.getSimulatorEndpoint(new AsyncCallback<String>() {
-
-            public void onFailure(Throwable caught) {
-                new PopupMessageV3(caught.getMessage());
-            }
-
-            public void onSuccess(String result) {
-                try {
-                    simEndpointMessage.setText("Simulator endpoint is " + result);
-                } catch (Exception e) {
-                    new PopupMessageV3(e.getMessage());
-                }
-            }
-
-        });
-    }
 
     String uploadFilename;
     void requestFilename() {
@@ -692,14 +613,14 @@ public class MessageValidatorTab extends TabbedWindow {
             }
 
             public void onSuccess(String result) {
-                try {
-                    uploadFilename = result;
-                    if (isReadyForValidation())
-                        requestValidation();
-                } catch (Exception e) {
-                    new PopupMessageV3(e.getMessage());
-                }
-
+//                try {
+//                    uploadFilename = result;
+//                    if (isReadyForValidation())
+//                        requestValidation();
+//                } catch (Exception e) {
+//                    new PopupMessageV3(e.getMessage());
+//                }
+//
             }
 
         });
@@ -708,58 +629,58 @@ public class MessageValidatorTab extends TabbedWindow {
 
     String timeAndDate;
     void requestTimeAndDate() {
-        toolkitService.getTimeAndDate(new AsyncCallback<String>() {
-
-            public void onFailure(Throwable caught) {
-                new PopupMessageV3(caught.getMessage());
-            }
-
-            public void onSuccess(String result) {
-                try {
-                    timeAndDate = result;
-                    if (isReadyForValidation())
-                        requestValidation();
-                } catch (Exception e) {
-                    new PopupMessageV3(e.getMessage());
-                }
-
-            }
-
-        });
+//        toolkitService.getTimeAndDate(new AsyncCallback<String>() {
+//
+//            public void onFailure(Throwable caught) {
+//                new PopupMessageV3(caught.getMessage());
+//            }
+//
+//            public void onSuccess(String result) {
+//                try {
+//                    timeAndDate = result;
+//                    if (isReadyForValidation())
+//                        requestValidation();
+//                } catch (Exception e) {
+//                    new PopupMessageV3(e.getMessage());
+//                }
+//
+//            }
+//
+//        });
     }
 
     String clientIP = null;
     @SuppressWarnings("deprecation")
     void requestClientIP() {
-        toolkitService.getClientIPAddress(new AsyncCallback<String>() {
-
-            public void onFailure(Throwable caught) {
-                new PopupMessageV3(caught.getMessage());
-            }
-
-            public void onSuccess(String result) {
-                try {
-                    clientIP = result;
-                    if (isReadyForValidation())
-                        requestValidation();
-                } catch (Exception e) {
-                    new PopupMessageV3(e.getMessage());
-                }
-
-            }
-
-        });
+//        toolkitService.getClientIPAddress(new AsyncCallback<String>() {
+//
+//            public void onFailure(Throwable caught) {
+//                new PopupMessageV3(caught.getMessage());
+//            }
+//
+//            public void onSuccess(String result) {
+//                try {
+//                    clientIP = result;
+//                    if (isReadyForValidation())
+//                        requestValidation();
+//                } catch (Exception e) {
+//                    new PopupMessageV3(e.getMessage());
+//                }
+//
+//            }
+//
+//        });
     }
 
-    /** Runs a validation **/
-    void requestValidation() {
-        ValidationContext vc = new ValidationContext();
-        loadValidationContext(vc);
-
-        System.out.println(vc);
-
-        toolkitService.validateMessage(vc, messageValidationCallback);
-    }
+//    /** Runs a validation **/
+//    void requestValidation() {
+//        ValidationContext vc = new ValidationContext();
+//        loadValidationContext(vc);
+//
+//        System.out.println(vc);
+//
+//        toolkitService.validateMessage(vc, messageValidationCallback);
+//    }
 
     final AsyncCallback<List<String>> getSimFileNamesCallback = new AsyncCallback<List<String>>() {
 

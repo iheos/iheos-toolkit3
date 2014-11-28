@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.simServlet
 import gov.nist.hit.ds.simServlet.api.SimApi
+import gov.nist.hit.ds.simServlet.servlet.SimServlet
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.utilities.SimUtils

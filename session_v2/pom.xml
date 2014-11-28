@@ -50,11 +50,6 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
-            <artifactId>direct_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.toolkit</groupId>
             <artifactId>dns_v2</artifactId>
             <version>2.7.0-SNAPSHOT</version>
         </dependency>
@@ -104,9 +99,8 @@
             <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.toolkit</groupId>
-            <artifactId>tk_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>tk</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
@@ -114,9 +108,8 @@
             <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.toolkit</groupId>
-            <artifactId>xds-exceptions_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>xdsException</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>

@@ -24,7 +24,7 @@ public class HttpSoapValTest {
 //
 //		engine = setup(loader, simChain);
 //
-//		run(engine, simChain);
+//		testRun(engine, simChain);
 //		System.out.println(simChain.getLog());
 //		assertFalse(simChain.hasErrors());
 //	}
@@ -46,7 +46,7 @@ public class HttpSoapValTest {
 //
 //		simChain.setSteps(simSteps);
 //
-//		run(engine, simChain);
+//		testRun(engine, simChain);
 //		System.out.println(simChain.getLog());
 //		assertTrue(simChain.hasErrors());
 //	}
@@ -59,7 +59,7 @@ public class HttpSoapValTest {
 //
 //		engine = setup(loader, simChain);
 //
-//		run(engine, simChain);
+//		testRun(engine, simChain);
 //		System.out.println(simChain.getLog());
 //		assertTrue(simChain.hasErrors());
 //	}
@@ -75,7 +75,7 @@ public class HttpSoapValTest {
 ////
 ////		engine = setup(loader, simChain);
 ////
-////		run(engine, simChain);
+////		testRun(engine, simChain);
 ////		System.out.println(simChain.getLog());
 ////		assertTrue(simChain.hasErrors());
 ////	}
@@ -122,10 +122,10 @@ public class HttpSoapValTest {
 //		return engine;
 //	}
 //
-//	void run(SimEngine engine, SimChain simChain) {
+//	void testRun(SimEngine engine, SimChain simChain) {
 //		System.out.println(engine.getDescription(simChain));
 //		try {
-//			engine.run();
+//			engine.testRun();
 //		} catch (SimEngineException e) {
 //			System.out.flushAll();
 //			e.printStackTrace();
@@ -164,7 +164,7 @@ public class HttpSoapValTest {
 //		}
 //
 //		@Override
-//		public void run(MessageValidatorEngine mve) throws SoapFaultException {
+//		public void testRun(MessageValidatorEngine mve) throws SoapFaultException {
 //
 //		}
 //

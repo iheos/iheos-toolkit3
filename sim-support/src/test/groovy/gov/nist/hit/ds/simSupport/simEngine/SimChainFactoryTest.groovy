@@ -28,7 +28,7 @@ class SimChainFactoryTest extends Specification {
 //        simChain.init(event)
 //        simChain.base = new SoapEnvironment()
 //        def engine = new SimEngine(simChain);
-//        engine.run()
+//        engine.testRun()
 //        println simChain.getStepStatusString()
 //
 //        then:

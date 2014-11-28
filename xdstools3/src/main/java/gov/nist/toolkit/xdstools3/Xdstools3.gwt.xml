@@ -18,15 +18,19 @@
     <!--<inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue"/>-->
 
 
-    <!-- ================= Inherit v2 legacy modules ================= -->
-    <inherits name="gov.nist.toolkit.xdstools2.Xdstools2"/>
+    <!-- ====== Inherit GWT Injection, Activity, Places modules ====== -->
     <inherits name="com.google.gwt.inject.Inject"/>
     <inherits name="com.google.gwt.activity.Activity"/>
-    <inherits name='com.google.gwt.place.Place' />
+    <inherits name="com.google.gwt.place.Place" />
+
+
+    <!-- ================= Inherit v3 modules ================= -->
+     <!--<inherits name="gov.nist.hit.ds.logBrowser.LogBrowser"/> -->
+    <!--<inherits name="gov.nist.hit.ds.repository.RepositoryRpc"/>-->
 
 
     <!-- ============ Specify the app entry point class ============== -->
-    <entry-point class='gov.nist.toolkit.xdstools3.client.Xdstools3EP' />
+    <entry-point class="gov.nist.toolkit.xdstools3.client.Xdstools3EP" />
 
 
     <!-- Uncomment this line to force GWT compiler to only generate javascript
@@ -41,7 +45,7 @@
 
     <!-- ======================= GWT logging ======================= -->
      <inherits name="com.google.gwt.logging.Logging"/>
-      <set-property name="gwt.logging.logLevel" value="INFO"/>
+    <set-property name="gwt.logging.logLevel" value="INFO"/>
      <set-property name="gwt.logging.enabled" value="TRUE"/>
      <set-property name="gwt.logging.popupHandler" value="DISABLED" />
 

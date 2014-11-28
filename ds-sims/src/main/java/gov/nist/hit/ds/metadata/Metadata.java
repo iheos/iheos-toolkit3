@@ -2234,7 +2234,7 @@ public class Metadata {
         if (metadata == null || metadata.getLocalName() == null)
             throw new NoMetadataException(
                     "find_metadata_wrapper: Cannot find a wrapper element, top element is NULL"
-                            + ". A wrapper is one of the XML elements that holds metadata (ExtrinsicObject, RegistryPackage, Association etc.)",
+                            + ". A wrapper is one of the XML transactions that holds metadata (ExtrinsicObject, RegistryPackage, Association etc.)",
                     EbRS.SOR_example);
 
         if (metadata.getLocalName().equals("TestResults")) {
@@ -2305,7 +2305,7 @@ public class Metadata {
         throw new NoMetadataException(
                 "find_metadata_wrapper: Cannot find a wrapper element, top element is "
                         + metadata.getLocalName()
-                        + ". A wrapper is one of the XML elements that holds metadata (ExtrinsicObject, RegistryPackage, Association etc.)\n"
+                        + ". A wrapper is one of the XML transactions that holds metadata (ExtrinsicObject, RegistryPackage, Association etc.)\n"
                         + "input starts with:\n"
                         + metadataString.substring(0, min(400, metadataString
                         .length() - 1)),

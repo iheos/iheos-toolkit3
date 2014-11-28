@@ -2,11 +2,13 @@ package gov.nist.toolkit.xdstools3.server.RPCServices;
 
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import gov.nist.hit.ds.utilities.xml.SchemaValidation;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.session.server.Session;
-import gov.nist.toolkit.utilities.xml.SchemaValidation;
+
 import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs.MHDTabsServices;
+
 import gov.nist.toolkit.xdstools3.server.Caller;
 import org.apache.log4j.Logger;
 
@@ -17,7 +19,7 @@ import java.io.File;
 
 /**
  * MHD RPC Services Implementation inspired from v2 ToolkitServicesImpl.
- * TODO Some element will need to be review when integrating the rest of v2 elements
+ * TODO Some elements will need to be reviewed when integrating the rest of v2 transactions
  */
 @SuppressWarnings("serial")
 public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServices {
@@ -41,7 +43,9 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
 
     /**
      * MHD Message Validation method
+     *
      * @param messageType Type of MHD message
+     *
      * @return validation result
      */
     public String validateMHDMessage(String messageType){
@@ -61,7 +65,7 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
     }
 
     /**
-     * Method that return the SessionId (copied from v2)
+     * Method that returns the SessionId (copied from v2)
      * @return Session Id
      */
     public String getSessionId() {
@@ -73,7 +77,7 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
     }
 
     /**
-     * Method that return the session using rpc servlet
+     * Method that returns the session using rpc servlet
      * @return session
      */
     public Session getSession() {
@@ -82,7 +86,7 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
     }
 
     /**
-     * Method that return the session using servlet request (copied from v2)
+     * Method that returns the session using servlet request (copied from v2)
      * @param request
      * @return
      */
@@ -153,10 +157,10 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
         return s;
     }
 
-    // copied from v2
+
 
     /**
-     * Method that sets the servlet context
+     * Method that sets the servlet context, copied from v2
      * @return
      */
     public ServletContext servletContext() {
