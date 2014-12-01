@@ -1,10 +1,8 @@
 package gov.nist.hit.ds.repository.rpc.client;
 
-import gov.nist.hit.ds.dsSims.factories.MessageValidatorFactory;
+import gov.nist.hit.ds.dsSims.eb.factories.MessageValidatorFactory;
 import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.ContentHelper;
-import gov.nist.hit.ds.repository.api.ArtifactId;
-import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -30,7 +28,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.List;
 import java.util.Properties;
 

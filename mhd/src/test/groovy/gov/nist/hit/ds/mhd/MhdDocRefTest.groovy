@@ -14,7 +14,7 @@ class MhdDocRefTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
     <transaction name="Register" code="rb" asyncCode="r.as">
-       <implClass value="gov.nist.hit.ds.dsSims.transactions.RegisterTransaction"/>
+       <implClass value="RegisterTransaction"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>
