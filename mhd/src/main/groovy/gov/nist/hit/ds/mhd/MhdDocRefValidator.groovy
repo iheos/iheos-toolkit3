@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.mhd
 
-import gov.nist.hit.ds.dsSims.metadataValidator.datatype.HashValidator
-import gov.nist.hit.ds.dsSims.metadataValidator.datatype.OidValidator
+import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.HashValidator
+import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.OidValidator
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
