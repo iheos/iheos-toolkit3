@@ -352,9 +352,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getSubmitRetrieveTabCode()+"'>XDS.b Submit/Retrieve</a></li>" +
                 "</ul>" +
                 "</li>" +
-                "<div style='float:right'>" +
-                "<li><a href='#'><img class='icon-link' src='images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
-                "<li><a href='#'><img class='icon-link' src='images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
+                "<div style='float:right;'>" +
+                "<li><a class='right-side-button' href='#'><img class='icon-link' src='images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
+                "<li><a class='right-side-button' href='#'><img class='icon-link' src='images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
                 "</div>" +
                 "<ul>" +
                 "</div>" +

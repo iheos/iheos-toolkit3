@@ -1,6 +1,10 @@
-/** Example rules used by the template application (remove for your app) */
+/**
+This is composed of Toolkit3-specific rules as well as rules copied from the new
+Direct Tool template.
+author Diane Azais, Olivier Herrmann, Julien Perugini
+2014
+*/
 
-/**Rules copied from the new Direct Tool template (author Julien Perugini)*/
 
 
 /* ----------- Global styles ----------- */
@@ -170,53 +174,13 @@ p {
 
 
 
-/* ----------- Main title header ----------- */
-#apptitle {
-    margin-bottom: 5px;
-    display: inline-block;
-    margin-left: 10px;
-    font-size: 32px;
-    color: #F3C60D;
-}
-#appsubtitle {
-    font-size: 14px;
-    margin-left: 10px;
-    color: #fc0;
-    text-shadow: none;
-}
-
-/* Large dark blue bar */
-#appheader {
-    float: none;
-    font-family: Verdana;
-    font-weight: 700;
-    background-color: #021a4c;
-    margin: 0px;
-    padding:10px;
-    padding-left:20px;
-}
-#appversion{
-    font-size: 14px;
-    margin-left: 10px;
-    color: #fc0;
-    text-shadow: none;
-    float:right;
-    padding-top:45px;
-    padding-right:20px;
-}
-
-
-
-/* ----------- Navigation bar ----------- */
+/* ----------- Navigation bar (yellow bar) ----------- */
 
 .navbar {
-    font-size: medium;
-    min-height: 38px;
     background: #ffec9d;
     background-color: #ffec9d;
     -webkit-filter: none;
     filter: none;
-    margin:0px;
     border: 0px;
     border-radius: 0;
     border-bottom: 1px solid #fc0;
@@ -225,7 +189,7 @@ p {
     box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
 }
 .app-padding.navbar-inner{
-    width:1024px;
+    width: 1024px;
     margin:auto;
 }
 nav{
@@ -262,7 +226,6 @@ nav ul li:hover a {
 nav ul li a {
     display: block;
     position:relative;
-    padding: 10px 15px;
     text-decoration: none;
     color:#777;
 }
@@ -275,15 +238,13 @@ nav ul ul {
 }
 nav ul ul li {
     float: none;
-    /*border-top: 1px solid #fc0;
-    border-bottom: 1px solid #fc0;*/
-    border:2px solid #fc0;
-    border-top:0px;
     position: relative;
+    padding: 3px;
 }
 nav ul ul li a {
-    padding: 10px 15px;
     color: #777;
+    padding-top:3px;
+    padding-bottom:3px;
 }
 nav ul ul li a:hover {
     background: #ffec9d;
@@ -291,6 +252,22 @@ nav ul ul li a:hover {
 nav ul ul ul {
     position: absolute; left: 100%; top:0;
 }
+
+/* Fontawesome icons for the right hand side of the yellow toolbar */
+.icon-link{
+    border:0;
+    text-decoration: none;
+    margin-bottom:5;
+}
+.right-side-button{
+    border:0;
+    text-decoration: none;
+    padding: 4px 15px;
+}
+
+
+
+/* ----------- Smartgwt toolbar (Sessions, environments, etc.) ----------- */
 
 .toolbar {
     background: #f4f4ff; /* Old browsers */
@@ -321,8 +298,6 @@ nav ul ul ul {
 .toolbarGroupTitle {
     background: #fbf9ff; /* Old browsers */
 }
-
-/* ----------- GWT toolbar ----------- */
 
 /* Icons greyed out */
 .glyphicon {
@@ -370,6 +345,11 @@ footer ul li a:hover{
 footer ul li a:visited{
     color:#61c;
 }
+
+
+/* ----------- Home page ----------- */
+
+
 .home-box{
     padding:20px;
     padding-top:10px;
@@ -398,7 +378,4 @@ footer ul li a:visited{
     font-weight:bold;
     padding-left:28px;
 }
-.icon-link{
-    border:none;
-    text-decoration: none;
-}
+
