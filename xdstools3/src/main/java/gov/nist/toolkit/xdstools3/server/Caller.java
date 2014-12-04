@@ -141,7 +141,7 @@ public class Caller implements Serializable {
     // ----------------------------- MHD -------------------------------
 
     /**
-     * Method that calls for a mhd message validation
+     * Calls validation on an MHD message
      * @param messageType type of mhd message
      * @param filecontent mhd message itself
      *

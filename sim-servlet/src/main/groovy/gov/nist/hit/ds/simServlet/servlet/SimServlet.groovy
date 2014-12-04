@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.simServlet.servlet
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.TransactionType
-import gov.nist.hit.ds.dsSims.msgs.RegistryResponseGenerator
+import gov.nist.hit.ds.dsSims.eb.msgs.RegistryResponseGenerator
 import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser
 import gov.nist.hit.ds.simServlet.WrapMtom
