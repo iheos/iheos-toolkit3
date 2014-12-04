@@ -1,10 +1,6 @@
-# repository type simpleRepos
+# simEventRepository
 
-# must match filename
 keyword=simEventRepos
-
-# repository|asset
-domain=repository 
-   
-description=The most basic repository type
-
+domain=repository
+description=Repository to hold simEvents
+indexes=off

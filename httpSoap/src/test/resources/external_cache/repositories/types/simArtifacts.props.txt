@@ -1,12 +1,5 @@
-# simple asset
+# simArtifacts
 
-# must match filename
-keyword=simAssertions
-
-# repository|asset
+keyword=simArtifacts
 domain=asset
-   
-description=The most basic repository type
-
-
-lifetime=10 days
+description=simArtifacts desc

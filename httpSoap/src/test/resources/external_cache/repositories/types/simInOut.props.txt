@@ -1,12 +1,5 @@
-# simple asset
+# simInOut
 
-# must match filename
 keyword=simInOut
-
-# repository|asset
 domain=asset
-   
-description=The most basic repository type
-
-
-lifetime=10 days
+description=simInOut desc
