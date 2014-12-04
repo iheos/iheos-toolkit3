@@ -16,19 +16,19 @@ class FhirToEbrimTest extends Specification {
     // TODO - testRun metadata validator
     def 'Minimal'() {
         setup:
+        def res
         def url = getClass().classLoader.getResource('mhd/minimal_docref.xml')
-        Resource resource
         url.withInputStream {
-            resource = new XmlParser().parse(it)
+            res = new org.hl7.fhir.instance.formats.XmlParser().parse(it)
         }
 
         when: ''
 
         then:
-        resource != null
-        resource instanceof DocumentReference
+        res instanceof DocumentReference
 
         when:
+        Resource resource = (Resource) res
         DocumentReference documentReference = (DocumentReference) resource
         def metadata = new Metadata()
         def converter = new FhirToEbrim(documentReference, 'Document1', metadata)
@@ -55,19 +55,20 @@ class FhirToEbrimTest extends Specification {
     // TODO - testRun metadata validator
     def 'Full'() {
         setup:
+        def res
         def url = getClass().classLoader.getResource('mhd/full_docref.xml')
-        Resource resource
         url.withInputStream {
-            resource = new XmlParser().parse(it)
+            res = new org.hl7.fhir.instance.formats.XmlParser().parse(it)
         }
 
         when: ''
 
         then:
-        resource != null
-        resource instanceof DocumentReference
+        res != null
+        res instanceof DocumentReference
 
         when:
+        Resource resource = (Resource) res
         DocumentReference documentReference = (DocumentReference) resource
         def metadata = new Metadata()
         def converter = new FhirToEbrim(documentReference, 'Document1', metadata)

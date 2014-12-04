@@ -170,9 +170,13 @@ public class Toolkit {
     }
     static public List<String> getEnvironmentNames() { return new Environment(new File(externalCacheFile(), "environment")).getInstalledEnvironments();}
 
+    // Manage user sessions
     static public List<String> getUserSessions() { return new UserSession(externalCacheFile()).names(); }
     static public void addUserSession(String name) { new UserSession(externalCacheFile()).add(name); }
+    static public void deleteUserSession(String name) { new UserSession(externalCacheFile()).delete(name); }
 
+
+    // Manage repository types
     static public File externalRepositoriesTypesFile() { return new File(new File(externalCacheFile(), "repositories"), "types"); }
     static public File internalRepositoriesTypesFile() { return new File(new File(toolkitxFile(), "repositories"), "types"); }
 

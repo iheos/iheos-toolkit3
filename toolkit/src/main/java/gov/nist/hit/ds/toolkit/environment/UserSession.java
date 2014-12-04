@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.toolkit.environment;
 
+import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 
 import java.io.File;
@@ -32,5 +33,12 @@ public class UserSession {
         if (file.isDirectory()) return;
         if (file.exists()) throw new ToolkitRuntimeException("Cannot create user sesson " + name + " - non-directory file of same name exists in " + dir);
         file.mkdir();
+    }
+
+    public void delete(String name) {
+        File dir = new File(externalCache, "TestLogCache");
+        File file = new File(dir, name);
+        if (!file.exists()) return;
+        if (file.isDirectory()) Io.delete(file);
     }
 }
