@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.mhd
+package gov.nist.hit.ds.dsSims.fhir.transactions
 
 import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
 import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
@@ -260,7 +260,7 @@ class FhirToEbrim {
         return item.substring(1)
     }
 
-    def formatTime(org.hl7.fhir.instance.model.Integer time) { formatTime(time.toString())}
+    def formatTime(Integer time) { formatTime(time.toString())}
 
     def formatTime(java.lang.Integer time) { formatTime(time.toString())}
 

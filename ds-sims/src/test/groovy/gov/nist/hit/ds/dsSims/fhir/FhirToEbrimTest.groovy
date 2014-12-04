@@ -1,7 +1,8 @@
-package gov.nist.hit.ds.mhd
+package gov.nist.hit.ds.dsSims.fhir
 
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.object.DocumentEntryModel
 import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
+import gov.nist.hit.ds.dsSims.fhir.transactions.FhirToEbrim
 import org.hl7.fhir.instance.model.DocumentReference
 import org.hl7.fhir.instance.model.Resource
 import spock.lang.Specification
@@ -18,7 +19,7 @@ class FhirToEbrimTest extends Specification {
         def url = getClass().classLoader.getResource('mhd/minimal_docref.xml')
         Resource resource
         url.withInputStream {
-            resource = new org.hl7.fhir.instance.formats.XmlParser().parse(it)
+            resource = new XmlParser().parse(it)
         }
 
         when: ''
@@ -57,7 +58,7 @@ class FhirToEbrimTest extends Specification {
         def url = getClass().classLoader.getResource('mhd/full_docref.xml')
         Resource resource
         url.withInputStream {
-            resource = new org.hl7.fhir.instance.formats.XmlParser().parse(it)
+            resource = new XmlParser().parse(it)
         }
 
         when: ''
