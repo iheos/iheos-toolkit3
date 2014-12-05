@@ -120,23 +120,24 @@ class TransactionRunner {
     // Used for production
     def runPMethod(String methodName, def args) {
         // build implementation
-        log.debug("Running transaction code ${transactionType.code} class ${implClassName}")
-        log.info("SimConfig: ${simHandle.actorSimConfig.get(transactionType.code).toString()}")
+        log.debug("TransactionRunner: Running transaction code ${transactionType.code} class ${implClassName}")
+        if (simHandle.actorSimConfig)
+            log.info("TransactionRunner: SimConfig: ${simHandle.actorSimConfig.get(transactionType.code).toString()}")
         Class<?> clazz
         try {
             clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
         } catch (Throwable t) {
-            simHandle.event.fault = new Fault("Configuration Error - cannot load transaction class ${implClassName}", FaultCode.Receiver.toString(), simHandle.transactionType?.code, "Transaction implementation class ${implClassName} does not exist.")
+            simHandle.event.fault = new Fault("TransactionRunner: Configuration Error - cannot load transaction class ${implClassName}", FaultCode.Receiver.toString(), simHandle.transactionType?.code, "Transaction implementation class ${implClassName} does not exist.")
             return
         }
         if (!clazz) {
-            simHandle.event.fault = new Fault('Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType.code, "Transaction implementation class ${implClassName} does not exist.")
+            simHandle.event.fault = new Fault('TransactionRunner: Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType.code, "Transaction implementation class ${implClassName} does not exist.")
             return
         }
 
-        log.debug "Class ${clazz.name} implements ${clazz.getInterfaces()}"
+        log.debug "TransactionRunner: Class ${clazz.name} implements ${clazz.getInterfaces()}"
         if (!(ArrayUtils.contains(clazz.getInterfaces(), Transaction))) {
-            simHandle.event.fault = new Fault('Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType.code, "Transaction implementation class ${implClassName} does not implment interface Transaction.")
+            simHandle.event.fault = new Fault('TransactionRunner: Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType.code, "Transaction implementation class ${implClassName} does not implment interface Transaction.")
             return
         }
 
@@ -153,7 +154,7 @@ class TransactionRunner {
             event.fault = sfe.asFault()
         } catch (Throwable t) {
             String actorTrans = transCode
-            event.fault = new Fault('Exception running transaction', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))
+            event.fault = new Fault('TransactionRunner: Exception running transaction', FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(t))
         }
     }
 

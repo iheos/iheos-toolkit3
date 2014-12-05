@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.fhir
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.dsSims.fhir.transactions.MhdDocRefValidator
+import gov.nist.hit.ds.dsSims.fhir.mhd.validators.MhdDocRefValidator
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId

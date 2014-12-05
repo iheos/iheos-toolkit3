@@ -45,7 +45,7 @@ class EventDAO {
     }
 
     def save() {
-        inOut.save(event.inOutMessages)
+        inOut.save(event.inOut)
         artifacts.save(event.artifacts)
         if (event.fault) {
             def fault = new FaultDAO();
