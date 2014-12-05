@@ -372,7 +372,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "            <a href=\"http://www.nist.gov\">NIST homepage</a>" +
                 "         </li>" +
                 "         <li>" +
-                "            <a href=\"http://www.nist.gov/public_affairs/disclaimer.cfm\">NIST Disclaimer</a>" +
+                "            <a href=\"http://www.nist.gov/public_affairs/disclaimer.cfm\">NIST disclaimer</a>" +
                 "         </li>" +
                 "    </ul>" +
                 "</footer>";

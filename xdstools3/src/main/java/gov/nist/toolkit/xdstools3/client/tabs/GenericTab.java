@@ -24,8 +24,12 @@ public abstract class GenericTab extends Tab implements TabInterface {
         return panel;
     }
 
-    // main header
+    /**
+     * This is the title of the tab, displayed in large characters at the top of the tab
+     * @param s the title or header to be set, as String
+     */
     public void setHeader(String s){
+        headerLabel.setHeight(30);
         headerLabel.setContents(s);
         headerLabel.setStyleName("h3");
         panel.addMember(headerLabel);
