@@ -2,7 +2,7 @@ package gov.nist.toolkit.xdstools3.server.RPCServices;
 
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab.TestDataSubmissionServices;
+import gov.nist.toolkit.xdstools3.client.tabs.submitTestDataTab.TestDataSubmissionServices;
 import gov.nist.toolkit.xdstools3.server.Caller;
 import org.apache.log4j.Logger;
 

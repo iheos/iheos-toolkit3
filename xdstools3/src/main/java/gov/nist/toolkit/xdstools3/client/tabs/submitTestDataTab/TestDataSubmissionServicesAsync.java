@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab;
+package gov.nist.toolkit.xdstools3.client.tabs.submitTestDataTab;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

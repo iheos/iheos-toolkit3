@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab;
+package gov.nist.toolkit.xdstools3.client.tabs.submitTestDataTab;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -37,8 +37,8 @@ public class SubmitTestDataTab extends GenericCloseableTab {
     private final static TestDataSubmissionServicesAsync testDataSubmissionServices = GWT
             .create(TestDataSubmissionServices.class);
 
-    // tab's title and header
-    private final static String header = "Test Data Submission";
+    // tab title and header
+    private final static String header = "Submit Test Data";
 
     // Tab components
     private SelectItem testDataType;
