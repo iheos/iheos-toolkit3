@@ -25,7 +25,6 @@ class ValidationApi {
         simHandle.event.inOut.reqBody = content.getBytes()
         def runner = new TransactionRunner(simHandle)
         runner.validateRequest()
-        simHandle.event.eventAsset.getProperty("status")
         return simHandle.event.eventAsset
     }
 }

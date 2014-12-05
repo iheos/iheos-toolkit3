@@ -7,6 +7,7 @@ import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.utilities.io.Io
 import spock.lang.Specification
 /**
  * Created by bmajur on 7/30/14.
@@ -106,5 +107,13 @@ class NestedValidatorTest extends Specification {
 
         then: 'verify error has propogated up to parent'
         parentProperties.getProperty('status') == 'ERROR'
+
+        when: '''Error should have propogated up to Event'''
+        File eventPropsFile = eventAccess.eventPropertiesFile()
+        Properties props = new Properties()
+        props.load(Io.getInputStreamFromFile(eventPropsFile))
+
+        then:
+        props.getProperty('status') == 'ERROR'
     }
 }

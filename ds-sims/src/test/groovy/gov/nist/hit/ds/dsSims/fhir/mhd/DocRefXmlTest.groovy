@@ -2,6 +2,7 @@ package gov.nist.hit.ds.dsSims.fhir.mhd
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.RepositorySource
+import gov.nist.hit.ds.repository.shared.PropertyKey
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.api.ValidationApi
 import gov.nist.hit.ds.simSupport.client.SimId
@@ -49,8 +50,6 @@ class DocRefXmlTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-//        simId = new SimId('DocRefXmlTest')
-//        simHandle = SimUtils.create('mhddocrec', simId, repoName)
     }
 
     def 'XML Test'() {
@@ -63,7 +62,7 @@ class DocRefXmlTest extends Specification {
         Asset a = new ValidationApi().validateRequest('drv', xml)
 
         then:
-        a.properties.getProperty('status') != 'ERROR'
+        a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
     }
 
     def 'JSON Test'() {
@@ -74,8 +73,11 @@ class DocRefXmlTest extends Specification {
             xml = Io.getStringFromInputStream(it)
         }
         Asset a = new ValidationApi().validateRequest('drv', xml)
-
+        println "Asset is ${a.id.idString}"
+        println "Final status is ${a.getProperty(PropertyKey.STATUS)}"
+        println "type ${a.getProperty(PropertyKey.ASSET_TYPE)}"
+        println "keys ${a.getProperties().keySet().toString()}"
         then:
-        a.properties.getProperty('status') != 'ERROR'
+        a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
     }
 }

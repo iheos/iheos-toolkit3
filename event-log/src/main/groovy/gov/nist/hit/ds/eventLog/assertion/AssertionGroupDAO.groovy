@@ -31,7 +31,7 @@ public class AssertionGroupDAO {
         if (!parentAsset) { log.debug('Not flushing - no parent asset'); return null }
         if (ag.asset) {
             // update
-            log.debug("Setting status on ${asset.getId().idString}")
+            log.debug("Setting status on ${ag.asset.getId().idString}")
             propigateStatus(ag.asset, ag.getWorstStatus().name(), 'event')
             Asset a = ag.asset
 //            a.setProperty(PropertyKey.STATUS, ag.getWorstStatus().name())
@@ -50,10 +50,14 @@ public class AssertionGroupDAO {
     }
 
     def propigateStatus(Asset a, String statusValue, String untilType) {
+        log.debug("Propigating status ${statusValue}")
         while (a) {
+            log.debug("...to ${a.getId().idString}")
+            a.autoFlush = true
             a.setProperty(PropertyKey.STATUS, statusValue)
-            if (statusValue == AssertionStatus.ERROR)
+            if (statusValue == AssertionStatus.ERROR.name()) {
                 a.setProperty(PropertyKey.COLOR, 'red')
+            }
             if (a.getProperty(PropertyKey.ASSET_TYPE) == untilType) break
             a = RepoUtils.parent(a)
         }
