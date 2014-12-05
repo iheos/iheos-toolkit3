@@ -1,6 +1,8 @@
-package gov.nist.hit.ds.simSupport.utilities
+package gov.nist.hit.ds.repoSupport
 import gov.nist.hit.ds.repository.api.*
+import gov.nist.hit.ds.repository.shared.PropertyKey
 import gov.nist.hit.ds.repository.simple.Configuration
+import gov.nist.hit.ds.repository.simple.SimpleId
 import gov.nist.hit.ds.repository.simple.SimpleType
 import groovy.util.logging.Log4j
 
@@ -9,6 +11,8 @@ import groovy.util.logging.Log4j
  */
 @Log4j
 class RepoUtils {
+    static RepositorySource repoSource = null
+    static RepositoryFactory repoFactory
 
     static Asset asset(ArtifactId id, Repository repository) {
         init()
@@ -19,6 +23,13 @@ class RepoUtils {
         try {
             return asset(id, repository)
         } catch (Exception e) { return null }
+    }
+
+    static Asset parent(Asset a) {
+        String parentId = a.getProperty(PropertyKey.PARENT_ID)
+        if (!parentId) return null
+        String repoId = a.getProperty(PropertyKey.REPOSITORY_ID)
+        return asset(new SimpleId(parentId), repository(new SimpleId(repoId)))
     }
 
     static Asset child(String name, Asset parent) {
@@ -89,7 +100,7 @@ class RepoUtils {
 
     static Repository repository(ArtifactId repositoryId) {
         init()
-        return SimSupport.repoFactory.getRepository(repositoryId)
+        return repoFactory.getRepository(repositoryId)
     }
 
     static ArtifactId repositoryId(Repository repository) {
@@ -98,19 +109,19 @@ class RepoUtils {
     }
 
     static boolean repositoryExists(ArtifactId repositoryId) {
-        return Configuration.repositoryExists(SimSupport.repoSource, repositoryId)
+        return Configuration.repositoryExists(repoSource, repositoryId)
     }
 
     static Repository mkRepository(String name, Type type) {
         init()
-        def repo = SimSupport.repoFactory.createNamedRepository(name, '', type, name)
-        repo.setSource(SimSupport.repoSource)
+        def repo = repoFactory.createNamedRepository(name, '', type, name)
+        repo.setSource(repoSource)
         return repo
     }
 
     static rmRepository(ArtifactId id) {
         init()
-        SimSupport.repoFactory.deleteRepository(id)
+        repoFactory.deleteRepository(id)
     }
 
     /**
@@ -128,7 +139,7 @@ class RepoUtils {
             r.setSource(source)
             if (r.getDisplayName() == repositoryName) return r
         }
-        log.debug("Creating Repository ${repositoryName}")
+        RepoUtils.log.debug("Creating Repository ${repositoryName}")
         return mkRepository(repositoryName, type)
     }
 
@@ -136,5 +147,9 @@ class RepoUtils {
         return getRepository(repositoryName, new SimpleType('simpleRepos'))
     }
 
-    static init() { SimSupport.initialize() }
+    static init() {
+        if (repoSource) return
+        repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
+        repoFactory = new RepositoryFactory(repoSource)
+    }
 }

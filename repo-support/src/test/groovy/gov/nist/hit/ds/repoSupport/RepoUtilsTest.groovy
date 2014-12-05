@@ -1,6 +1,8 @@
-package gov.nist.hit.ds.simSupport.utilities
+package gov.nist.hit.ds.repoSupport
 import gov.nist.hit.ds.repository.api.Repository
+import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.repository.simple.SimpleType
+import gov.nist.hit.ds.toolkit.Toolkit
 import spock.lang.Specification
 /**
  * Created by bmajur on 7/5/14.
@@ -10,6 +12,9 @@ class RepoUtilsTest extends Specification {
     String assetName = 'one'
 
     def setup() {
+        Toolkit.initialize()
+        Configuration.configuration()
+        RepoUtils.init()
         repos = RepoUtils.mkRepository('TestRepo', new SimpleType('simpleRepos'))
     }
 
