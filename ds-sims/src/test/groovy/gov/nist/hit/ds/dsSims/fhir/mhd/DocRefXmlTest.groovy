@@ -20,13 +20,13 @@ class DocRefXmlTest extends Specification {
         <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocRefXml"/>
     </transaction>
     <transaction name="Doc Manifest Validation" id="dmv" code="dmv">
-        <implClass value=""/>
+        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocManXml"/>
     </transaction>
     <transaction name="Provide Doc Reference Validation" id="pdr" code="pdr">
-        <implClass value=""/>
+        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocRefXml"/>
     </transaction>
     <transaction name="Doc Ref Validation - XML" id="drvx" code="drvx">
-        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocRefXml"/>
+        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.PdrXml"/>
     </transaction>
     <actor name="MHD Document Recipient" id="mhddocrec">
         <implClass value=""/>
