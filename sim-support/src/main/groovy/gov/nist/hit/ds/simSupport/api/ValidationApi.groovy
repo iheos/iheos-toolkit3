@@ -7,7 +7,6 @@ import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.RepoUtils
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import groovy.util.logging.Log4j
-
 /**
  * Created by bmajur on 12/4/14.
  */
@@ -17,7 +16,6 @@ class ValidationApi {
     def config = new SimSystemConfig()
 
     Asset validateRequest(String transactionName, String content) {
-        assert content
         def simId = new SimId('ValidationApi')
         def simHandle = SimUtils.create(simId)
         def transactionType = factory.getTransactionType(transactionName)

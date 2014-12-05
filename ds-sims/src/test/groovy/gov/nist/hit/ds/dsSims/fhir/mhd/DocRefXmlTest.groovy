@@ -7,7 +7,6 @@ import gov.nist.hit.ds.simSupport.api.ValidationApi
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
-import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.utilities.io.Io
 import spock.lang.Specification
 /**
@@ -50,14 +49,27 @@ class DocRefXmlTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('DocRefXmlTest')
-        simHandle = SimUtils.create('mhddocrec', simId, repoName)
+//        simId = new SimId('DocRefXmlTest')
+//        simHandle = SimUtils.create('mhddocrec', simId, repoName)
     }
 
-    def 'Test'() {
+    def 'XML Test'() {
         when:
         String xml
         def url = getClass().classLoader.getResource('mhd/full_docref.xml')
+        url.withInputStream {
+            xml = Io.getStringFromInputStream(it)
+        }
+        Asset a = new ValidationApi().validateRequest('drv', xml)
+
+        then:
+        a.properties.getProperty('status') != 'ERROR'
+    }
+
+    def 'JSON Test'() {
+        when:
+        String xml
+        def url = getClass().classLoader.getResource('mhd/minimal_docref.json')
         url.withInputStream {
             xml = Io.getStringFromInputStream(it)
         }
