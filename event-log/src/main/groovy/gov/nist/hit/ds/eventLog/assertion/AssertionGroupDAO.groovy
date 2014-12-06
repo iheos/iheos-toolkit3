@@ -1,10 +1,8 @@
 package gov.nist.hit.ds.eventLog.assertion
 
-import gov.nist.hit.ds.repoSupport.RepoUtils
 import gov.nist.hit.ds.repository.AssetHelper
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.RepositoryException
-import gov.nist.hit.ds.repository.shared.PropertyKey
 import gov.nist.hit.ds.repository.simple.SimpleType
 import gov.nist.hit.ds.utilities.csv.CSVEntry
 import gov.nist.hit.ds.utilities.csv.CSVTable
@@ -32,7 +30,7 @@ public class AssertionGroupDAO {
         if (ag.asset) {
             // update
             log.debug("Setting status on ${ag.asset.getId().idString}")
-            propigateStatus(ag.asset, ag.getWorstStatus().name(), 'event')
+//            propigateStatus(ag.asset, ag.getWorstStatus().name(), 'event')
             Asset a = ag.asset
 //            a.setProperty(PropertyKey.STATUS, ag.getWorstStatus().name())
             a.updateContent(asTable(ag.assertions).toString().getBytes())
@@ -41,7 +39,7 @@ public class AssertionGroupDAO {
             // create
             Asset a = AssetHelper.createChildAsset(parentAsset, ag.validatorName, "", new SimpleType("assertionGroup"))
             ag.asset = a
-            propigateStatus(ag.asset, ag.getWorstStatus().name(), 'event')
+//            propigateStatus(ag.asset, ag.getWorstStatus().name(), 'event')
             a.setOrder(order++)
 //            a.setProperty(PropertyKey.STATUS, ag.getWorstStatus().name())
             a.setContent(asTable(ag.assertions).toString().getBytes(), "text/csv")
@@ -49,19 +47,19 @@ public class AssertionGroupDAO {
         }
     }
 
-    def propigateStatus(Asset a, String statusValue, String untilType) {
-        log.debug("Propigating status ${statusValue}")
-        while (a) {
-            log.debug("...to ${a.getId().idString}")
-            a.autoFlush = true
-            a.setProperty(PropertyKey.STATUS, statusValue)
-            if (statusValue == AssertionStatus.ERROR.name()) {
-                a.setProperty(PropertyKey.COLOR, 'red')
-            }
-            if (a.getProperty(PropertyKey.ASSET_TYPE) == untilType) break
-            a = RepoUtils.parent(a)
-        }
-    }
+//    def propigateStatus(Asset a, String statusValue, String untilType) {
+//        log.debug("Propigating status ${statusValue}")
+//        while (a) {
+//            log.debug("...to ${a.getId().idString}")
+//            a.autoFlush = true
+//            a.setProperty(PropertyKey.STATUS, statusValue)
+//            if (statusValue == AssertionStatus.ERROR.name()) {
+//                a.setProperty(PropertyKey.COLOR, 'red')
+//            }
+//            if (a.getProperty(PropertyKey.ASSET_TYPE) == untilType) break
+//            a = RepoUtils.parent(a)
+//        }
+//    }
 
     AssertionStatus worstAssertionStatus() { (ag == null) ? AssertionStatus.SUCCESS : ag.getWorstStatus() }
 

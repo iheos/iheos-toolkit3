@@ -18,70 +18,25 @@ class Event {
     Asset eventAsset
     EventDAO eventDAO
     ArtifactsDAO artDAO
-
-
-    // This class and the helper functions below it are used to manage
-    // AssertionGroup result recording which can be a flat list or
-    // have a tree structure. The storage area, resultsStack is part of
-    // the state of the Event. The class definition and helper functions
-    // exist to manage that stack.
-
-    enum FlushStatus { NoForce, Force }
-
-    class ValidatorResults {
-        AssertionGroupDAO aDAO
-        AssertionGroup assertionGroup = new AssertionGroup()
-        Asset parentAsset
-        String validatorName
-
-        ValidatorResults(Asset parentAsset, String validatorName) {
-            this.parentAsset = parentAsset
-            this.validatorName = validatorName
-            aDAO = new AssertionGroupDAO(assertionGroup, parentAsset)
-        }
-        AssertionStatus getStatus() { return assertionGroup.status() }
-        def setStatus(AssertionStatus status) { assertionGroup.setErrorStatus(status) }
-
-        Asset flush(FlushStatus flushStatus) {
-            log.debug("Flushing ${assertionGroup.validatorName} AG")
-            if (flushStatus == FlushStatus.Force || assertionGroup?.needsFlushing()) {
-                allAssetionGroups << assertionGroup
-                def asset = aDAO.save()
-                return asset
-            }
-            return null
-        }
-
-        def getAssertions(id) { assertionGroup.getAssertions(id)}
-        def getAssertions() { assertionGroup.assertions }
-
-        String toString() { "Results:${validatorName}"}
-    }
-
-    class ResultsStack {
-        List<ValidatorResults> stack = []
-        List<ValidatorResults> backing = []
-        def push(ValidatorResults results) { stack.push(results); backing.push(results) }
-        ValidatorResults pop() { stack.pop() }
-        boolean empty() { stack.empty }
-        ValidatorResults last() { stack.last()}
-        def getAssertions(id) { backing.collect { it.getAssertions(id)}.flatten() }
-        def getAssertions() { stack.collect { it.getAssertions()}.flatten()}
-        def getWorstStatus() {
-            def worsts = stack.collect { it.assertionGroup.worstStatus }
-            AssertionStatus.getWorst(worsts)
-        }
-        String toString() { "ResultsStack: ${getAssertions().size()} Assertions, worst status is ${getWorstStatus()}"}
-    }
+    Asset validatorsAsset
 
     ResultsStack resultsStack = new ResultsStack()
 
-    String toString() { "Event(${eventAsset.id})"}
+    /*
+     * Asset types used
+     * Event - event
+     * Validators - validators
+     * AssertionGroup - assertionGroup
+     *
+     * Remember that AssertionGroups can be nested (child results)
+     * Error propagation up the tree is done by ResultsStack
+     */
 
-    // Init results collection
+    // Parent present because results can be nested
+    // Your parent is somewhere in the resultsStack
     def initResults(Asset parentAsset, validatorName) {
         if (!parentAsset) parentAsset = eventDAO.validatorsAsset
-        def result = new ValidatorResults(parentAsset, validatorName)
+        def result = new ValidatorResults(parentAsset, validatorName, this)
         result.assertionGroup = new AssertionGroup()
         result.assertionGroup.validatorName = validatorName
         result.aDAO = new AssertionGroupDAO(result.assertionGroup, parentAsset);
@@ -93,14 +48,14 @@ class Event {
         log.debug("Add peer results ${validatorName} AG")
         Asset parent = (resultsStack.empty()) ? eventDAO.validatorsAsset : resultsStack.last().parentAsset
         initResults(parent, validatorName)
-        resultsStack.last().flush(FlushStatus.Force)
+        resultsStack.last().flush(ValidatorResults.FlushStatus.Force)
     }
     def addChildResults(childName) {
         log.debug("Add child results ${childName} AG")
         assert !resultsStack.empty()
         def result = resultsStack.last()
         initResults(result.getaDAO().getAsset(), childName)
-        result.flush(FlushStatus.Force)
+        result.flush(ValidatorResults.FlushStatus.Force)
     }
     def addSelfResults(validatorName) {
         log.debug("Add self results ${validatorName} AG")
@@ -114,7 +69,8 @@ class Event {
         def result = resultsStack.pop()
         if (!resultsStack.empty())
             propagateStatus(result, resultsStack.last())
-        result.flush(FlushStatus.Force)
+        result.flush(ValidatorResults.FlushStatus.Force)
+        resultsStack.propogateStatus(this)
     }
     def popChildResults() {
         log.debug "Popping from ${resultsStack}"
@@ -125,11 +81,12 @@ class Event {
             propagateStatus(result, parentResult)
         }
         if (result.getStatus() >= AssertionStatus.WARNING)
-            result.flush(FlushStatus.Force)
+            result.flush(ValidatorResults.FlushStatus.Force)
         else
-            result.flush(FlushStatus.NoForce)
+            result.flush(ValidatorResults.FlushStatus.NoForce)
     }
 
+//    // TODO - I don't think this works - test and delete
     def propagateStatus(ValidatorResults from, ValidatorResults to) {
         log.debug("Propagate status from ${from.validatorName} to ${to.validatorName}?")
         log.info "status is ${from.getStatus()}"
@@ -156,6 +113,7 @@ class Event {
         eventDAO.init()
         artDAO = eventDAO.artifacts
         initResults(eventDAO.validatorsAsset, 'TopLevel')
+        validatorsAsset = eventDAO.validatorsAsset
     }
 
     // Called by TransactionRunner when trying to flushAll an
@@ -171,7 +129,7 @@ class Event {
     def flushValidators() {
         if (!resultsStack.empty()) {
             ValidatorResults ele = resultsStack.last()
-            ele.flush(FlushStatus.Force)
+            ele.flush(ValidatorResults.FlushStatus.Force)
         }
     }
 
@@ -196,4 +154,6 @@ class Event {
         return allAssetionGroups.find { it.validatorName == validatorName }
     }
     def getAssertions(id) { resultsStack.getAssertions(id)}
+
+    String toString() { "Event(${eventAsset.id})"}
 }

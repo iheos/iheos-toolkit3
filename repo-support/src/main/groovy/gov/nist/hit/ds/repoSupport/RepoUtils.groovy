@@ -86,17 +86,17 @@ class RepoUtils {
         return parent.addChild(a)
     }
 
-    // needs test
-    static Asset childWithId(Asset asset, ArtifactId aId) {
-        assert aId
-        for (AssetIterator it= asset.getAssets() ; it.hasNextAsset() ; ) {
-            def a = it.nextAsset()
-            assert a.id
-            assert a.id.idString
-            if (a.id.idString == aId.idString) { return a  }
-        }
-        return null
-    }
+//    // needs test
+//    static Asset childWithId(Asset asset, ArtifactId aId) {
+//        assert aId
+//        for (AssetIterator it= asset.getAssets() ; it.hasNextAsset() ; ) {
+//            def a = it.nextAsset()
+//            assert a.id
+//            assert a.id.idString
+//            if (a.id.idString == aId.idString) { return a  }
+//        }
+//        return null
+//    }
 
     static Repository repository(ArtifactId repositoryId) {
         init()
