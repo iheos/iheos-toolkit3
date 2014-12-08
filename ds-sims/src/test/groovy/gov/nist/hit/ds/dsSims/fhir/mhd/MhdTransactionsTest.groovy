@@ -13,20 +13,17 @@ import spock.lang.Specification
 /**
  * Created by bmajur on 12/4/14.
  */
-class DocRefXmlTest extends Specification {
+class MhdTransactionsTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
     <transaction name="Doc Reference Validation" id="drv" code="drv">
-        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocRefXml"/>
+        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocRefTransaction"/>
     </transaction>
     <transaction name="Doc Manifest Validation" id="dmv" code="dmv">
-        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocManXml"/>
+        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocManTransaction"/>
     </transaction>
     <transaction name="Provide Doc Reference Validation" id="pdr" code="pdr">
-        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocRefXml"/>
-    </transaction>
-    <transaction name="Doc Ref Validation - XML" id="drvx" code="drvx">
-        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.PdrXml"/>
+        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.FeedTransaction"/>
     </transaction>
     <actor name="MHD Document Recipient" id="mhddocrec">
         <implClass value=""/>
@@ -52,7 +49,7 @@ class DocRefXmlTest extends Specification {
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
     }
 
-    def 'XML Test'() {
+    def 'Doc Ref XML Test'() {
         when:
         String xml
         def url = getClass().classLoader.getResource('mhd/full_docref.xml')
@@ -65,7 +62,7 @@ class DocRefXmlTest extends Specification {
         a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
     }
 
-    def 'JSON Test'() {
+    def 'Doc Ref JSON Test'() {
         when:
         String xml
         def url = getClass().classLoader.getResource('mhd/minimal_docref.json')
@@ -77,6 +74,46 @@ class DocRefXmlTest extends Specification {
         println "Final status is ${a.getProperty(PropertyKey.STATUS)}"
         println "type ${a.getProperty(PropertyKey.ASSET_TYPE)}"
         println "keys ${a.getProperties().keySet().toString()}"
+
+        then:
+        a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
+    }
+
+    def 'Doc Man XML Test'() {
+        when:
+        String xml
+        def url = getClass().classLoader.getResource('mhd/minimal_docman.xml')
+        url.withInputStream {
+            xml = Io.getStringFromInputStream(it)
+        }
+        Asset a = new ValidationApi().validateRequest('dmv', xml)
+
+        then:
+        a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
+    }
+
+    def 'Feed XML Test'() {
+        when:
+        String xml
+        def url = getClass().classLoader.getResource('mhd/feed.xml')
+        url.withInputStream {
+            xml = Io.getStringFromInputStream(it)
+        }
+        Asset a = new ValidationApi().validateRequest('pdr', xml)
+
+        then:
+        a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
+    }
+
+    def 'Feed JSON Test'() {
+        when:
+        String xml
+        def url = getClass().classLoader.getResource('mhd/feed.json')
+        url.withInputStream {
+            xml = Io.getStringFromInputStream(it)
+        }
+        Asset a = new ValidationApi().validateRequest('pdr', xml)
+
         then:
         a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
     }

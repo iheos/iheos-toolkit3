@@ -4,8 +4,8 @@
     This example contains all the attributes defined by XDS.
 -->
 <DocumentReference xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://hl7.org/fhir file:/Users/bmajur/Documents/HL7/FHIR/Schema/fhir-all-xsd/fhir-all.xsd"
-    xmlns="http://hl7.org/fhir">
+                   xsi:schemaLocation="http://hl7.org/fhir file:/Users/bmajur/Documents/HL7/FHIR/Schema/fhir-all-xsd/fhir-all.xsd"
+                   xmlns="http://hl7.org/fhir">
     <!-- DocumentEntry.sourcePatientId and DocumentEntry.sourcePatientInfo
          coded as extension with a reference from the Patient resource representing
          the sourcePatient (information stored outside XDS environment on the patient -->
@@ -14,6 +14,11 @@
             <reference value="#sourcepatient"/>
         </valueResource>
     </extension>
+    <!-- Comments-->
+    <extension url="http://ihe.net/fhir/Profile/XDS/extensions#comments">
+        <valueString value="Text of the comment"/>
+    </extension>
+    <!--  homeCommunityId   -->
     <extension url="http://ihe.net/fhir/Profile/XDS/extensions#homeCommunityId">
         <valueString value="urn:oid:1.2.334483.3.337395864.7"/>
     </extension>

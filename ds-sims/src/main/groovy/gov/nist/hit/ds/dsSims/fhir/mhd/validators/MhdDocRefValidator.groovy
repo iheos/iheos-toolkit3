@@ -1,7 +1,5 @@
 package gov.nist.hit.ds.dsSims.fhir.mhd.validators
-
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.HashValidator
-import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.OidValidator
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
@@ -230,43 +228,16 @@ class MhdDocRefValidator extends ValComponentBase {
     }
 
     ///////////////////////////
-    // patientId
+    // patientId/subject
     ///////////////////////////
 
     def subjectPresent() { dr.subject.size() > 0 }
 
-    def subjectRefValues() {
-        dr.subject.collect { it.reference.@value.text() }
-    }
-
-    def subjectTags() { subjectRefValues().collect { it.substring(1)}}
-
-    def containedPatients() {
-        dr.contained.findAll {
-            it.Patient.size() > 0
-        }.collect { it.Patient }
-    }
-
-    def containedPatients(id) {
-        containedPatients().findAll { it.@id.text() == id}
-    }
-
     @Guard(methodNames=['subjectPresent'])
     @Validation(id='mhd160', msg='Validating subject', ref='')
-    def mhd160() { infoFound(true)}
-
-    @Guard(methodNames=['subjectPresent'])
-    @Validation(id='mhd170', msg='subject is local reference (starts with #)', ref='')
-    def mhd170() { subjectRefValues().each { assertStartsWith(it, '#') } }
-
-    @Guard(methodNames=['subjectPresent'])
-    @Validation(id='mhd180', msg='subject references contained Patient', ref='')
-    def mhd180() {
-        subjectTags().each {
-            containedPatients(it).each { patient ->
-                new PatientIdentifierValidator(simHandle, patient.identifier).asSelf().run()
-            }
-        }
+    def mhd160() {
+        infoFound(true)
+        new SubjectValidator(simHandle, dr).asSelf().run()
     }
 
     ///////////////////////////
@@ -308,7 +279,8 @@ class MhdDocRefValidator extends ValComponentBase {
 
     def sourcePatients() {
         def tags = sourcePatientRefTags()
-        containedPatients().findAll { it.@id.text() in tags }
+        def subVal = new SubjectValidator(simHandle, dr)
+        subVal.containedPatients().findAll { it.@id.text() in tags }
     }
 
     @Guard(methodNames=['sourcePatientsPresent'])
@@ -357,28 +329,18 @@ class MhdDocRefValidator extends ValComponentBase {
     }
 
     ///////////////////////////
-    // uniqueId
+    // uniqueId/masterIdentifier
     ///////////////////////////
 
     def uniqueIdPresent() { dr.masterIdentifier.size() > 0}
 
     @Guard(methodNames=['uniqueIdPresent'])
     @Validation(id='mhd240', msg='Validating masterIdentifier', ref='')
-    def mhd240() { infoFound(true)}
-
-    @Guard(methodNames=['uniqueIdPresent'])
-    @Validation(id='mhd250', msg='MasterIdentifier.system coded', ref='')
-    def mhd250() { assertHasValue(dr.masterIdentifier.system.@value.text())}
-
-    @Guard(methodNames=['uniqueIdPresent'])
-    @Validation(id='mhd260', msg='MasterIdentifier.system has correct value', ref='')
-    def mhd260() { assertEquals('urn:ietf:rfc:3986', dr.masterIdentifier.system.@value.text())}
-
-    @Guard(methodNames=['uniqueIdPresent'])
-    @Validation(id='mhd270', msg='MasterIdentifier.value is OID', ref='')
-    def mhd270() {
-        def text = dr.masterIdentifier.value.@value.text()
-        assertStartsWith(text, 'urn:oid:')
-        new OidValidator(simHandle, text.substring(8)).asSelf().run()
+    def mhd240() {
+        infoFound(true)
+        dr.masterIdentifier.each {
+            new MasterIdentifierValidator(simHandle, dr).asSelf().run()
+        }
     }
+
 }

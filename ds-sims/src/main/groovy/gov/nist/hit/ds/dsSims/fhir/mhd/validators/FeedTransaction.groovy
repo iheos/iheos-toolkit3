@@ -1,18 +1,20 @@
 package gov.nist.hit.ds.dsSims.fhir.mhd.validators
 
-import gov.nist.hit.ds.dsSims.fhir.utilities.JsonToXml
+import gov.nist.hit.ds.dsSims.fhir.schema.FhirSchemaValidator
+import gov.nist.hit.ds.dsSims.fhir.utilities.JsonToXmlValidator
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.Transaction
 import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
+import gov.nist.hit.ds.toolkit.Toolkit
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 
 /**
- * Created by bmajur on 12/4/14.
+ * Created by bmajur on 12/7/14.
  */
-class DocRefXml implements Transaction {
+class FeedTransaction implements Transaction {
     SimHandle simHandle
 
-    DocRefXml(SimHandle _simHandle) { simHandle = _simHandle }
+    FeedTransaction(SimHandle _simHandle) { simHandle = _simHandle }
 
     @Override
     ValidationStatus validateRequest() {
@@ -22,15 +24,20 @@ class DocRefXml implements Transaction {
         reqString = reqString.trim()
         if (reqString.startsWith('<')) {
             // XML
+            new FhirSchemaValidator(simHandle, reqString, Toolkit.schemaFile(), true).asPeer().run()
             def dr = new XmlSlurper().parseText(reqString)
-            def validator = new MhdDocRefValidator(simHandle, dr)
+            def validator = new MhdFeedValidator(simHandle, dr)
             validator.asPeer().run()
         } else if (reqString.startsWith('{')) {
             // JSON
-            String xmlString = new JsonToXml(reqString).xml()
+            // TODO - this call does not work with feed
+            def jxval = new JsonToXmlValidator(simHandle, reqString).asPeer()
+            jxval.run()
+            String xmlString = jxval.xml()
             simHandle.event.artifacts.add('XML', xmlString)
+            new FhirSchemaValidator(simHandle, xmlString, Toolkit.schemaFile(), true).asPeer().run()
             def dr = new XmlSlurper().parseText(xmlString)
-            def validator = new MhdDocRefValidator(simHandle, dr)
+            def validator = new MhdFeedValidator(simHandle, dr)
             validator.asPeer().run()
         } else {
             throw new ToolkitRuntimeException('Parse failed - do not understand format - XML or JSON required')

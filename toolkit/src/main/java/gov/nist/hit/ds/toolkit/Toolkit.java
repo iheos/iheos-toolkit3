@@ -24,6 +24,7 @@ public class Toolkit {
     private static File externalCacheFile = null;
     private static PropertyManager propertyManager;
     private static boolean initialized = false;
+    private static boolean testEnv = false;
     static Logger logger = Logger.getLogger(Toolkit.class);
 
     /**
@@ -59,6 +60,7 @@ public class Toolkit {
             if (toolkitPropertiesFile.getParent().endsWith("test-classes")) {
                 warRootFile = toolkitPropertiesFile.getParentFile().getParentFile();
                 logger.info("Test configuration");
+                testEnv = true;
             }
             else if (toolkitPropertiesFile.getParent().endsWith("classes") /*&&
                 toolkitPropertiesFile.getParentFile().getParent().endsWith("WAR") */) {
@@ -142,7 +144,11 @@ public class Toolkit {
      */
 
 
-    static private File toolkitxFile() { return new File(warRootFile, "toolkitx"); }
+    static private File toolkitxFile() {
+        if (testEnv)
+            return new File(warRootFile, "test-classes/toolkitx");
+        return new File(warRootFile, "toolkitx");
+    }
 
     static public File schemaFile() { return new File(toolkitxFile(), "schema"); }
     static public File testkitFile() { return new File(toolkitxFile(), "testkit"); }
