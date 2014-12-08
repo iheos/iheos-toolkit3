@@ -19,45 +19,44 @@ public class HomeTab extends GenericTab {
     protected HStack createContents(){
         HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
         queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
-        queriesAndRetrieves.addItem("Find Documents");
-        queriesAndRetrieves.addItem("MPQ Find Documents");
-        queriesAndRetrieves.addItem("Get Documents");
-        queriesAndRetrieves.addItem("Get Related Documents");
-        queriesAndRetrieves.addItem("Retrieve Document");
-        queriesAndRetrieves.addItem("Find Folders");
-        queriesAndRetrieves.addItem("Get Folders");
-        queriesAndRetrieves.addItem("Get Folder and Contents");
-        queriesAndRetrieves.addItem("Get Submission Set and Contents");
+        queriesAndRetrieves.addItem("Find Documents", true);
+        queriesAndRetrieves.addItem("MPQ Find Documents", true);
+        queriesAndRetrieves.addItem("Get Documents", true);
+        queriesAndRetrieves.addItem("Get Related Documents", true);
+        queriesAndRetrieves.addItem("Retrieve Document", true);
+        queriesAndRetrieves.addItem("Find Folders", true);
+        queriesAndRetrieves.addItem("Get Folders", true);
+        queriesAndRetrieves.addItem("Get Folder and Contents", true);
+        queriesAndRetrieves.addItem("Get Submission Set and Contents", true);
 
         HomeBox tools = new HomeBox("Tools");
         tools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
-        tools.addItem("Message Validator");
-        tools.addItem("Document Metadata Editor");
-        tools.addItem("Pre-Connectathon Tests");
+        tools.addItem("Message Validator", true);
+        tools.addItem("Document Metadata Editor", false);
+        tools.addItem("Pre-Connectathon Tests", true);
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
-        sendTestData.addItem("Submit Test Data");
+        sendTestData.addItem("Submit Test Data", true);
 
-        HomeBox simulators = new HomeBox("Simulators");
-        simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");
+       /* HomeBox simulators = new HomeBox("Simulators");
+        simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");*/
 
         HomeBox mhdTools = new HomeBox("MHD Tools");
         mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
-        // Mhd Validations
-        mhdTools.addItem("MHD Validator");
-        mhdTools.addItem("MHD to XDS Converter");
+        mhdTools.addItem("MHD Validator", true);
+        mhdTools.addItem("MHD to XDS Converter", true);
 
         HomeBox connectathonTools = new HomeBox("Connectathon Tools");
         connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         // Connectathon Validations
-        connectathonTools.addItem("XDS.b Doc Source Stores Document");
+        connectathonTools.addItem("XDS.b Doc Source Stores Document", true);
         // Registry Validations
-        connectathonTools.addItem("XDS.b Registry Do This First");
-        connectathonTools.addItem("XDS.b Lifecycle");
-        connectathonTools.addItem("XDS.b Registry Folder Handling");
+        connectathonTools.addItem("XDS.b Registry Do This First", true);
+        connectathonTools.addItem("XDS.b Lifecycle", true);
+        connectathonTools.addItem("XDS.b Registry Folder Handling", true);
         // Repository Validations
-        connectathonTools.addItem("XDS.b Repository Do This First");
+        connectathonTools.addItem("XDS.b Repository Do This First", true);
 
         VStack vstack1 = new VStack();
         VStack vstack2 = new VStack();
