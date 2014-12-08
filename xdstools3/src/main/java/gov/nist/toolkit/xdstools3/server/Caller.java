@@ -77,6 +77,7 @@ public class Caller implements Serializable {
      * @return Table of settings: host, port, tls_port, external cache location, default environment, gazelle URL
      */
     public String[] retrieveAdminSettings(){
+        //TODO missing the location of external cache
         String[] currentAdminParams = {Toolkit.getHost(), Toolkit.getPort(), Toolkit.getTlsPort(),
                 "C://ext_cache", Toolkit.getDefaultEnvironmentName(), Toolkit.getGazelleConfigURL()};
         //String[] test = {"http://nist1", "90800", "90801", "C://ext_cache", "NA2015", "http://gazelle.net"}; // test data
@@ -112,6 +113,7 @@ public class Caller implements Serializable {
      * @return the list of test sessions
      */
     public String[] retrieveTestSessions(){
+        //TODO
         String[] sessions = {"Test session 1", "Test session 2"}; // test data
         //logger.info("Retrieved the list of sessions.");
         return sessions;
@@ -122,6 +124,7 @@ public class Caller implements Serializable {
      * @param sessionName New session name entered by the user
      */
     public String[] addTestSession(String sessionName){
+        // TODO
         String[] sessions = {"Test session 1", "Test session 2", sessionName}; // test data
         System.out.println("Test successful: A new click or new session name was registered");
         return sessions;
@@ -129,7 +132,7 @@ public class Caller implements Serializable {
 
 
 
-    // --------------------- Actors and Collectons ---------------------
+    // --------------------- Actors and Collections ---------------------
 
     public Map<String, String> getCollectionNames(String collectionSetName) throws Exception  {
         return ActorsCollectionsDataSamples.instance.getCollectionNames(collectionSetName);
@@ -150,8 +153,8 @@ public class Caller implements Serializable {
 
     /**
      * Calls validation on an MHD message
-     * @param messageType type of mhd message
-     * @param filecontent mhd message itself
+     * @param messageType type of MHD message
+     * @param filecontent MHD message contents
      *
      * @return
      */
@@ -171,13 +174,14 @@ public class Caller implements Serializable {
     }
 
     /**
-     * Method that converts a MHD file into an XDS file
+     * Converts a MHD file into an XDS file
      * @param uploadedFileContents the contents as a String of the MHD file uploaded by the user
      * @param location the location of the file. This is the "rootDirPath" parameter that originates from the
      *                 upload servlet. I do not know if we need this. -Diane
      * @return
      */
     public String convertMHDtoXDS(String location, String uploadedFileContents) {
+        //TODO
         // This is a test implementation that saves the uploaded file and displays it for the user
         // inside a popup window. This should go away when the actual conversion is linked from the backend.
         return saveTempFileService.saveAsXMLFile(uploadedFileContents);
