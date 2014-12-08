@@ -15,13 +15,17 @@
     <!--
         MHD
     -->
-    <transaction name="Doc Ref Validation - XML" id="drvx" code="drvx">
-        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocRefXml"/>
+    <transaction name="Doc Reference Validation - XML" id="drv" code="drv">
+        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocRefTransaction"/>
+    </transaction>
+    <transaction name="Doc Manifest Validation - XML" id="dmv" code="dmv">
+        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocManTransaction"/>
     </transaction>
     <actor name="MHD Document Recipient" id="mhddocrec">
         <implClass value=""/>
         <!-- Pseudo-transactions - really only speciality validators -->
-        <transaction id="drvx"/>
+        <transaction id="drv"/>
+        <transaction id="dmv"/>
     </actor>
     <!--
         XDS

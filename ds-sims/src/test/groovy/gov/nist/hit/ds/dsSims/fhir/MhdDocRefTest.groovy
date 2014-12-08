@@ -162,7 +162,7 @@ class MhdDocRefTest extends Specification {
         transRunner.simHandle.event.getAssertions('mhd210')
         transRunner.simHandle.event.getAssertions('mhd220')
         transRunner.simHandle.event.getAssertions('mhd230')
-        transRunner.simHandle.event.getAssertions('mhd270')
+        transRunner.simHandle.event.getAssertions('mhdmi040')
         transRunner.simHandle.event.getAssertions('fhirpract010')
         transRunner.simHandle.event.getAssertions('fhirpatient010')
         !transRunner.simHandle.event.hasErrors()
