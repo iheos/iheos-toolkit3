@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -206,7 +206,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
     }
 
    /* protected Widget setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
-   
+
         try {
             *//* manual setup:
             1) change also the assertionGroup type in event widget.

@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 /**
  * Tab to handle a file conversion from mhd to xds
  */
-public class MHDToXDSConverterTab extends GenericCloseableTab {
-    private Logger logger=Logger.getLogger(MHDValidatorTab.class.getName());
+public class MhdToXdsConverterTab extends GenericCloseableTab {
+    private Logger logger=Logger.getLogger(MhdToXdsConverterTab.class.getName());
     // RPC services declaration
     private final static MHDTabsServicesAsync mhdToolkitService = GWT
             .create(MHDTabsServices.class);
@@ -33,7 +33,7 @@ public class MHDToXDSConverterTab extends GenericCloseableTab {
     private FileUpload fileUploadItem;
     private Button runBtn;
 
-    public MHDToXDSConverterTab() {
+    public MhdToXdsConverterTab() {
         super(header);
         bindUI();
     }

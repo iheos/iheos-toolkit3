@@ -18,14 +18,14 @@ import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.*;
 import gov.nist.toolkit.xdstools3.client.tabs.*;
-import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs.MHDToXDSConverterTab;
-import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs.MHDValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
+import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
+import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MhdToXdsConverterTab;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.submitTestDataTab.SubmitTestDataTab;
@@ -61,6 +61,8 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         topTabSet.setWidth(1024);
         Tab homeTab = new HomeTab("Home");
         topTabSet.addTab(homeTab);
+        tabsetStack.setZIndex(-1);
+
 
         // Main layout
         VLayout mainLayout = new VLayout();
@@ -239,7 +241,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
             tab = new SubmitTestDataTab();
         }
         else if(tabName.equals(TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode())){
-            tab = new MHDToXDSConverterTab();
+            tab = new MhdToXdsConverterTab();
         }
         else if(tabName.equals(TabNamesUtil.getInstance().getHelpTabCode())){
             tab = new HelpTab();
