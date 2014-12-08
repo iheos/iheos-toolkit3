@@ -42,14 +42,15 @@ public class Caller implements Serializable {
     // ------------------ Administrator functionality --------------------
     /**
      * Login as admin
-     * @param username the admin username
      * @param password the admin password
      */
-    public boolean logMeIn(String username, String password){
+    public boolean logMeIn(String password){
         String pwd = Toolkit.getPassword();
-        // TODO compare login with server-side admin credentials
-        System.out.println("Test successful: you are logged in.");
-        return true;
+        if (password.equals(pwd)){
+            logger.info("User logged in as admin.");
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -61,6 +62,11 @@ public class Caller implements Serializable {
         System.out.println("Admin settings were saved");
     }
 
+    /**
+     * Changes the administrator password.
+     * @param oldPassword
+     * @param newPassword
+     */
     public void saveAdminPassword(String oldPassword, String newPassword){
         // TODO save admin password to back-end if oldPassword is correct
         System.out.println("Admin password was saved");
@@ -68,13 +74,15 @@ public class Caller implements Serializable {
 
     /**
      * Retrieves the Toolkit / Admin settings from the back-end
-     * @return Table of settings: host, port, tls_port, cache, environment, gazelleURL
+     * @return Table of settings: host, port, tls_port, external cache location, default environment, gazelle URL
      */
     public String[] retrieveAdminSettings(){
-        // TODO retrieve Toolkit / admin settings from back-end
-        System.out.println("Test: retrieving admin settings from server.");
-        String[] test = {"http://nist1", "90800", "90801", "C://ext_cache", "NA2015", "http://gazelle.net"};
-        return test;
+        String[] currentAdminParams = {Toolkit.getHost(), Toolkit.getPort(), Toolkit.getTlsPort(),
+                "C://ext_cache", Toolkit.getDefaultEnvironmentName(), Toolkit.getGazelleConfigURL()};
+        //String[] test = {"http://nist1", "90800", "90801", "C://ext_cache", "NA2015", "http://gazelle.net"}; // test data
+        logger.info("Retrieved from back-end (API Toolkit) the following parameters: "
+                     + "host, port, TLS port, external cache location, default environment, gazelle URL.");
+        return currentAdminParams;
     }
 
 

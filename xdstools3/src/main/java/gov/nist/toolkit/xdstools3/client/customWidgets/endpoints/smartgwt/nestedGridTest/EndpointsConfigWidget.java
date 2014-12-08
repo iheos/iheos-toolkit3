@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.nestedGridTest;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.nestedGridTest;
 
 import com.smartgwt.client.types.ExpansionMode;
 import com.smartgwt.client.types.ListGridEditEvent;

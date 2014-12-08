@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.listDirectories;
 
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.fields.DataSourceTextField;
@@ -7,19 +7,19 @@ import com.smartgwt.client.data.fields.DataSourceTextField;
  * SmartGWT datasource for accessing entities over http in a RESTful manner.
  * Defines a RESTDataSource fields, scripts and REST service URLs.
  */
-public class EndpointConfigDS_old extends RestDataSource {
+public class EndpointListDirDS extends RestDataSource {
 
-    private static EndpointConfigDS_old instance = null;
+    private static EndpointListDirDS instance = null;
 
-    public static EndpointConfigDS_old getInstance() {
+    public static EndpointListDirDS getInstance() {
         if (instance == null) {
-            instance = new EndpointConfigDS_old();
+            instance = new EndpointListDirDS();
         }
         return instance;
     }
 
-	private EndpointConfigDS_old() {
-        setID("supplyCategoryDS");
+	private EndpointListDirDS() {
+        setID("endpointListDir");
         setDataURL("resources/datasources/categories.data.xml");
         setRecordXPath("/List/supplyCategory");
 
@@ -27,22 +27,23 @@ public class EndpointConfigDS_old extends RestDataSource {
 		DataSourceTextField endpointId = new DataSourceTextField("id");
 		endpointId.setPrimaryKey(true);
 		endpointId.setCanEdit(false);
-
         DataSourceTextField categoryName = new DataSourceTextField("categoryName", "Category", 128, true);
-        //categoryName.setPrimaryKey(true);
+        categoryName.setPrimaryKey(true);
 
         DataSourceTextField parentField = new DataSourceTextField("parentID", null);
         parentField.setHidden(true);
         parentField.setRequired(true);
         parentField.setRootValue("root");
         parentField.setForeignKey("supplyCategoryDS.categoryName");
-        parentField.setPrimaryKey(true);
 
         setFields(categoryName, parentField);
 
 
 
         // Define REST URLs - not used for now
-        setDataURL("rest/endpointconfig");
+		//setFetchDataURL("rest/endpointconfig/read");
+		//setAddDataURL("rest/endpointconfig/add");
+		//setUpdateDataURL("rest/endpointconfig/update");
+		//setRemoveDataURL("rest/endpointconfig/remove");
 	}
 }

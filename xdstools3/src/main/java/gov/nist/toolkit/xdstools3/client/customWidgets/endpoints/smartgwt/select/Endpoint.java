@@ -1,13 +1,13 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select;
 
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+        import javax.xml.bind.annotation.XmlAttribute;
+        import javax.xml.bind.annotation.XmlElement;
+        import javax.xml.bind.annotation.XmlRootElement;
 
 
-@XmlRootElement(name = "endpointconfig")
-public class EndpointConfig {
+@XmlRootElement(name = "endpoint")
+public class Endpoint {
 
     /**
      * The constructor must have no arguments (requirement of RESTful service).

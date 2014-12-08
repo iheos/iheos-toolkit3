@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.listDirectories;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.listDirectories;
 
 import com.smartgwt.client.types.ListGridEditEvent;
 import com.smartgwt.client.types.RowEndEditAction;
@@ -6,10 +6,6 @@ import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

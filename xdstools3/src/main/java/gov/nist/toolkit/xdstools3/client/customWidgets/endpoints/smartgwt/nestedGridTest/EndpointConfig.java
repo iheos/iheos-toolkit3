@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.listDirectories;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.nestedGridTest;
 
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 @XmlRootElement(name = "endpointconfig")
-public class EndpointListDir {
+public class EndpointConfig {
 
     /**
      * The constructor must have no arguments (requirement of RESTful service).

@@ -1,7 +1,6 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.nestedGridTest;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure;
 
 import gov.nist.toolkit.xdstools3.client.RESTUtils.DSResponse;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointConfig;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -21,13 +20,13 @@ public class EndpointConfigDSResponse extends DSResponse {
 	// Holds all incoming data
 	@XmlElementWrapper(name="data")
 	@XmlElement(name="record")
-	List<gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointConfig> data;
-
-	public Collection<gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointConfig> getMessages() {
+	List<EndpointConfig> data;
+	
+	public Collection<EndpointConfig> getMessages() {
 		return data;
 	}
-
-	public void addMessage(gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointConfig endpoint) {
+	
+	public void addMessage(EndpointConfig endpoint) {
         if (data == null) {
             data = new ArrayList<EndpointConfig>();
         }

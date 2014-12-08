@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.listDirectories;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.listDirectories;
 
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.fields.DataSourceTextField;

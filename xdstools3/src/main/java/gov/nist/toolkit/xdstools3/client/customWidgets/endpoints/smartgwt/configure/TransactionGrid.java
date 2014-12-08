@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure;
 
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.types.*;

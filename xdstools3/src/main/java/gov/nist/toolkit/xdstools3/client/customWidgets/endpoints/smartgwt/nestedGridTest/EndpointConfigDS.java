@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.listDirectories;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.nestedGridTest;
 
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.fields.DataSourceTextField;
@@ -7,19 +7,19 @@ import com.smartgwt.client.data.fields.DataSourceTextField;
  * SmartGWT datasource for accessing entities over http in a RESTful manner.
  * Defines a RESTDataSource fields, scripts and REST service URLs.
  */
-public class EndpointListDirDS extends RestDataSource {
+public class EndpointConfigDS extends RestDataSource {
 
-    private static EndpointListDirDS instance = null;
+    private static EndpointConfigDS instance = null;
 
-    public static EndpointListDirDS getInstance() {
+    public static EndpointConfigDS getInstance() {
         if (instance == null) {
-            instance = new EndpointListDirDS();
+            instance = new EndpointConfigDS();
         }
         return instance;
     }
 
-	private EndpointListDirDS() {
-        setID("endpointListDir");
+	private EndpointConfigDS() {
+        setID("supplyCategoryDS");
         setDataURL("resources/datasources/categories.data.xml");
         setRecordXPath("/List/supplyCategory");
 

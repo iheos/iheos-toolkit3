@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select;
 
 /**
  * Created by dazais on 6/16/2014.

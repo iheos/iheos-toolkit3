@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure;
 
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.ListGridEditEvent;
@@ -18,7 +18,7 @@ import java.util.HashMap;
  * Creates grids to display and edit the Sites.
  * @see com.smartgwt.client.widgets.grid.ListGrid
  * @see SmartGWT nested ListGrid mechanism
- * @see gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointsConfigWidget
+ * @see gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointsConfigWidget
  *
  *
  * Created by dazais on 5/21/2014.

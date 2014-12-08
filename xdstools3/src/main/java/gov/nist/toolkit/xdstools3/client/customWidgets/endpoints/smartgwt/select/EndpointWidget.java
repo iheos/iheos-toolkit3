@@ -1,11 +1,9 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select;
 
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.types.GroupStartOpen;
 import com.smartgwt.client.types.RowEndEditAction;
 import com.smartgwt.client.types.SortDirection;
-import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.events.SelectionChangedHandler;

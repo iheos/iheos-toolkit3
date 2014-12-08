@@ -1,6 +1,7 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.nestedGridTest;
 
 import gov.nist.toolkit.xdstools3.client.RESTUtils.DSResponse;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointConfig;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -16,19 +17,19 @@ import java.util.List;
  * @see //http://www.smartclient.com/docs/7.0rc2/a/b/c/go.html#class..RestDataSource
  */
 @XmlRootElement(name="response")
-public class EndpointDSResponse extends DSResponse {
+public class EndpointConfigDSResponse extends DSResponse {
 	// Holds all incoming data
 	@XmlElementWrapper(name="data")
 	@XmlElement(name="record")
-	List<Endpoint> data;
-	
-	public Collection<Endpoint> getMessages() {
+	List<gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointConfig> data;
+
+	public Collection<gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointConfig> getMessages() {
 		return data;
 	}
-	
-	public void addMessage(Endpoint endpoint) {
+
+	public void addMessage(gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointConfig endpoint) {
         if (data == null) {
-            data = new ArrayList<Endpoint>();
+            data = new ArrayList<EndpointConfig>();
         }
         this.data.add(endpoint);
     }

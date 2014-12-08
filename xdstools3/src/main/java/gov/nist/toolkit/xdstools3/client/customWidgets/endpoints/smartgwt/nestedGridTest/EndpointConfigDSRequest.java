@@ -1,7 +1,7 @@
-package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.nestedGridTest;
+package gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.nestedGridTest;
 
 import gov.nist.toolkit.xdstools3.client.RESTUtils.DSRequest;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointConfig;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointConfig;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -22,13 +22,13 @@ public class EndpointConfigDSRequest extends DSRequest {
 	// Holds all incoming data
 	@XmlElementWrapper(name="data")
 	@XmlElement(name="EndpointConfigDS") // Must be the class name of the datasource
-	List<gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointConfig> data;
+	List<gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointConfig> data;
 
-	public Collection<gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointConfig> getMessages() {
+	public Collection<gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointConfig> getMessages() {
 		return data;
 	}
 
-	public void addMessage(gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointConfig endpoint) {
+	public void addMessage(gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointConfig endpoint) {
 		if (data == null) {
 			data = new ArrayList<EndpointConfig>();
 		}
