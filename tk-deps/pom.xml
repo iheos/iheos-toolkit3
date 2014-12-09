@@ -28,6 +28,47 @@
             <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
     </properties>
 
+
+    <repositories>
+        <repository>
+            <id>internal-nist-repo-releases</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>internal-nist-repo-snapshots</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>internal-nist-repo-maven-central</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/central/</url>
+        </repository>
+        <repository>
+            <id>jboss-maven2-release-repository</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/jboss-thirdparty-releases/</url>
+        </repository>
+        <repository>
+            <id>internal-nist-repo-third-party</id>
+            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>
+        </repository>
+        <repository>
+            <id>maven-central</id>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>apache-central</id>
+            <url>http://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>codehaus</id>
+            <url>http://repository.codehaus.org/org/codehaus</url>
+        </repository>
+    </repositories>
+
+    <scm>
+        <connection>scm:hg:https://bitbucket.org/iheos/toolkit</connection>
+    </scm>
+
+
     <dependencyManagement>
         <dependencies>
             <!-- Internal Jars
