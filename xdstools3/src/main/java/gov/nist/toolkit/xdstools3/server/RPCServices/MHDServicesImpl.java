@@ -7,7 +7,7 @@ import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.session.server.Session;
 
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServices;
+import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs.MHDTabsServices;
 
 import gov.nist.toolkit.xdstools3.server.Caller;
 import org.apache.log4j.Logger;
