@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -78,7 +79,12 @@ public class MhdToXdsConverterTab extends GenericCloseableTab {
             @Override
             public void onChange(ChangeEvent changeEvent) {
                 if (fileUploadItem.getFilename() != null && !fileUploadItem.getFilename().isEmpty()) {
-                    runBtn.enable();
+                    if(fileUploadItem.getFilename().endsWith(".xml") || fileUploadItem.getFilename().endsWith(".json")) {
+                        runBtn.enable();
+                    }else{
+                        runBtn.disable();
+                        SC.warn("Invalid file format - must be xml or json");
+                    }
                 }
             }
         });

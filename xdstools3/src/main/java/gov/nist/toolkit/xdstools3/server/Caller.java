@@ -161,7 +161,7 @@ public class Caller implements Serializable {
     public String validateMHDMessage(String messageType, String filecontent) {
         /* TODO Implementation using toolkitServices.getSession().getLastUpload() to get the file uploaded
           (Change method prototype if required)*/
-        return "Response for "+messageType+" validation.";
+        return "Response for mhd "+messageType+" validation.\n"+filecontent;
     }
 
     /**
