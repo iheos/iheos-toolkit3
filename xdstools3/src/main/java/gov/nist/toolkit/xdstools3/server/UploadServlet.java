@@ -37,10 +37,10 @@ public class UploadServlet extends HttpServlet {
 		HttpParser hp;
 		try {
 			hp = new HttpParser(request, false);
-			filename = extractFileName(hp.getMultipartParser().getMultipartMessage().asMessage());
-			if(!(filename.endsWith(".xml") || filename.endsWith(".json"))){
-				throw new IOException("Invalid file format exception - must be xml or json");
-			}
+//			filename = extractFileName(hp.getMultipartParser().getMultipartMessage().asMessage());
+//			if(!(filename.endsWith(".xml") || filename.endsWith(".json"))){
+//				throw new IOException("Invalid file format exception - must be xml or json");
+//			}
 			byte[] bodybytes = hp.getBody();
 		} catch (HttpParseException e1) {
 			logger.error("HTTPParser parse error: " + e1.getMessage());
