@@ -16,12 +16,15 @@ import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VStack;
-import gov.nist.hit.ds.logBrowser.client.widgets.EventAggregatorWidget;
+import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.util.Util;
 
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
+
+//import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
 
 /**
  * This class is the UI implementation for MHD Validation tab.
@@ -44,9 +47,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
     // Variables
     private String selectedMessageType;
-    String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
-    String type = "validators";
-    String[] displayColumns = new String[]{"ID","STATUS","MSG"};
 
     /**
      * Default constuctor
@@ -54,6 +54,15 @@ public class MHDValidatorTab extends GenericCloseableTab {
     public MHDValidatorTab() {
         super(header);
     }
+
+    /**
+     * This constructor has an log browser widget event bus
+     * @param logBrowserEventBus
+     */
+    public MHDValidatorTab(SimpleEventBus logBrowserEventBus) {
+        super(header);
+    }
+
 
     /**
      * Abstract method implementation that build the UI.
@@ -97,17 +106,24 @@ public class MHDValidatorTab extends GenericCloseableTab {
         // Validation result elements
         validationResultsPanel = new VStack();
 
-        validationResultsPanel.addMember(setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT, "Sim", id, type, displayColumns));
+//        validationResultsPanel.addMember();
 
         form.setFields(l1, messageTypeSelect, l2);
 
         vStack.addMember(form);
         vStack.addMember(uploadForm);
-        vStack.addMembers(runBtn,validationResultsPanel);
+        vStack.addMember(runBtn);
+
+        // Event summary widget parameters
+        String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
+        String type = "validators";
+        String[] displayColumns = new String[]{"ID","STATUS","MSG"};
+
+        // Event summary widget
+        validationResultsPanel.addMember(setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT, "Sim", id, type, displayColumns));
+        vStack.addMember(validationResultsPanel);
 
         bindUI();
-
-
 
         return vStack;
     }
@@ -202,20 +218,26 @@ public class MHDValidatorTab extends GenericCloseableTab {
         }
     }
 
-    protected Widget setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
-        try {
-            /* manual setup:
-            1) change also the assertionGroup type in event widget.
-             */
 
-            EventAggregatorWidget eventMessageAggregatorWidget = new EventAggregatorWidget(new SimpleEventBus(), assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
+    protected Widget setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
+   
+        try {
+
+            // Initialize the widget
+            EventAggregatorWidget eventMessageAggregatorWidget = new EventAggregatorWidget(Util.EVENT_BUS, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
+            eventMessageAggregatorWidget.setSize("1000px", "375px");
 
             return eventMessageAggregatorWidget;
 
-        } catch (Exception ex) {
-            Window.alert(ex.toString());
+
+
+        } catch (Throwable t) {
+            Window.alert("EventAggregatorWidget instance could not be created: " + t.toString());
         }
         return null;
     }
+
+
+
 
 }

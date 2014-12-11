@@ -1,5 +1,0 @@
-
-<site name="1">
-   <transaction name="prb" secure="0">http://localhost:9080/xdstools3/sim/1/docrec/prb</transaction>
-   <transaction name="prb" secure="1">https://localhost:9080/xdstools3/sim/1/docrec/prb</transaction>
-</site>

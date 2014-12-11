@@ -1,7 +1,0 @@
-#
-#Mon Jun 03 15:22:15 EDT 2013
-displayName=My Site
-type=siteAsset
-repository=4434bfd6-3da7-468d-8d03-fa9aa00156ca
-description=This is my simple site
-id=a31d5d23-3b2b-478d-a791-bba766cf308f

@@ -9,12 +9,23 @@
     <version>3.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-
-    <!--<name>toolkit3-deps</name>-->
+    <name>toolkit3-deps</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+            <jdk.version>1.7</jdk.version>
+            <junit.version>4.11</junit.version>
+            <gwtVersion>2.5.1</gwtVersion>
+            <mavenCompilerPluginVersion>3.1</mavenCompilerPluginVersion>
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+            <maven-source-plugin.version>2.3</maven-source-plugin.version>
+            <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
+            <maven-release-plugin.version>2.5</maven-release-plugin.version>
+            <maven-war-plugin.version>2.4</maven-war-plugin.version>
+            <nexus-staging-maven-plugin.version>1.6.2</nexus-staging-maven-plugin.version>
+            <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -86,12 +97,12 @@
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <artifactId>ds-sims</artifactId>
+                <artifactId>docshare-sims</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <artifactId>tk-initialization</artifactId>
+                <artifactId>ds-sims</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
 
@@ -267,6 +278,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>

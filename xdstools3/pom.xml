@@ -15,7 +15,6 @@
     <packaging>war</packaging>
     <groupId>gov.nist.toolkit</groupId>
 
-
     <properties>
         <gwtVersion>2.5.1</gwtVersion>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
@@ -108,10 +107,12 @@
             <version>1.9</version>
         </dependency>
         <dependency>
+            <!-- maps to the sources packaged along with the xdstools2 war file -->
+            <!-- The other part of the config is inside the xdstools2 pom, cf. maven-war-plugin. -->
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>xdstools2</artifactId>
             <version>2.7.0-SNAPSHOT</version>
-            <classifier>classes</classifier> <!-- maps to the sources packaged along with the xdstools2 war file -->
+            <classifier>classes</classifier>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
@@ -130,20 +131,50 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>logBrowser</artifactId>
+            <artifactId>tk-initialization</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- begin repository related -->
+
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>repository-rpc</artifactId>-->
+            <!--<version>3.0.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>repository-rpc</artifactId>-->
+            <!--<version>3.0.0-SNAPSHOT</version>-->
+            <!--<classifier>sources</classifier>-->
+            <!--<scope>compile</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>repository-shared</artifactId>-->
+            <!--<version>3.0.0-SNAPSHOT</version>-->
+            <!--<classifier>sources</classifier>-->
+            <!--<scope>compile</scope>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>repository-widgets-ui</artifactId>
             <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>repository-rpc</artifactId>
+            <artifactId>repository-widgets-ui</artifactId>
             <version>3.0.0-SNAPSHOT</version>
+            <classifier>sources</classifier>
+            <scope>compile</scope>
         </dependency>
+        <!-- end repository related -->
 
-    </dependencies>
+     </dependencies>
 
 
-    <build>
-        <!-- Generate compiled stuff in the folder used for developing mode -->
+     <build>
+         <!-- Generate compiled stuff in the folder used for developing mode -->
         <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
 
         <plugins>
@@ -182,6 +213,14 @@
 
                 </executions>
                 <configuration>
+                    <!-- begin repository related -->
+                    <compileSourcesArtifacts>
+                        <compileSourcesArtifact>gov.nist.hit.ds:repository-rpc</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.hit.ds:repository-shared</compileSourcesArtifact>
+                        <compileSourcesArtifact>gov.nist.hit.ds:repository-widgets-ui</compileSourcesArtifact>
+                    </compileSourcesArtifacts>
+                    <!-- end repository related -->
+
                     <runTarget>Xdstools3.html</runTarget>
                     <modules>
                         <module>${project.groupId}.xdstools3.Xdstools3</module>
@@ -224,11 +263,34 @@
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
+                <!-- or if you want to use tomcat 6.x
+                <artifactId>tomcat6-maven-plugin</artifactId>
+                -->
                 <version>2.2</version>
                 <configuration>
-                    <!-- <path>/xdstools2</path> <warFile>${project.build.directory}/xdstools3.war</warFile>
-                        <tomcatLoggingFile>${project.build.directory}/log.txt</tomcatLoggingFile> -->
+                    <!-- http port -->
+                    <port>9090</port>
+                    <!-- application path always starts with /-->
+                    <path>/xdstools3</path>
+                    <!-- optional path to a context file -->
+                    <contextFile>${tomcatContextXml}</contextFile>
+                    <!-- optional system propoerties you want to add -->
+                    <systemProperties>
+                        <appserver.base>${project.build.directory}/appserver-base</appserver.base>
+                        <appserver.home>${project.build.directory}/appserver-home</appserver.home>
+                        <derby.system.home>${project.build.directory}/appserver-base/logs</derby.system.home>
+                        <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
+                    </systemProperties>
+                    <!-- if you want to use test dependencies rather than only runtime -->
+                    <useTestClasspath>false</useTestClasspath>
+                    <!-- optional if you want to add some extra directories into the classloader -->
+                    <additionalClasspathDirs>
+                        <additionalClasspathDir></additionalClasspathDir>
+                    </additionalClasspathDirs>
                 </configuration>
+                <!-- For any extra dependencies needed when running embedded Tomcat (not WAR dependencies) add them below -->
+                <dependencies>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

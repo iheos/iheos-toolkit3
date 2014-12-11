@@ -40,10 +40,10 @@ public class Toolkit {
      * of unit testing it does)
      */
 
-    public void initialize() {
+    static public void initialize() {
         if (initialized) return;
         initialized = true;
-        URL resource = getClass().getResource("/toolkit.properties");
+        URL resource = new Toolkit().getClass().getResource("/toolkit.properties");
         if (resource == null) {
             logger.fatal("Cannot load toolkit.properties");
             throw new RuntimeException("Cannot load toolkit.properties");
@@ -55,10 +55,10 @@ public class Toolkit {
             // the warRoot will be different. This conditional checks for this.
             // If this is a test then set warRootFile to the resource directory within
             // thee test directory.
-            if (toolkitPropertiesFile.getParent().endsWith("classes") &&
-                toolkitPropertiesFile.getParentFile().getParent().endsWith("WAR")) {
+            if (toolkitPropertiesFile.getParent().endsWith("classes") /*&&
+                toolkitPropertiesFile.getParentFile().getParent().endsWith("WAR") */) {
                     // production environment
-                    warRootFile = toolkitPropertiesFile.getParentFile().getParentFile();
+                    warRootFile = toolkitPropertiesFile.getParentFile().getParentFile().getParentFile();
             } else if (toolkitPropertiesFile.getParent().endsWith("test-classes")) {
                 warRootFile = toolkitPropertiesFile.getParentFile().getParentFile();
             }

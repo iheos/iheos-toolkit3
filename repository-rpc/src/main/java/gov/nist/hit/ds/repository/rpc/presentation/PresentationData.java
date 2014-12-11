@@ -96,7 +96,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 					Repository r =  null;
 					while (it.hasNextRepository()) {
 						r = it.nextRepository();
-						
+
 						rtList.add(new RepositoryTag(r.getId().getIdString(), r.getType().getKeyword(),  acs.name(), r.getDisplayName(), ContentHelper.getSortedMapString(r.getProperties())));
 					}
 				} catch (RepositoryException ex) {
@@ -109,6 +109,55 @@ public class PresentationData implements IsSerializable, Serializable  {
 	        return rtList;
 	
 	}
+
+    /**
+     *
+     * @param reposSrc
+     * @param reposId
+     * @param assetId
+     * @return If all supplied parameters are valid, an proper assetNode is returned. If the assetId is null, an assetNode with only its repository reference is returned.
+     * @throws RepositoryException
+     */
+    public static AssetNode getAssetNode(String reposSrc, String reposId, String assetId) throws RepositoryConfigException {
+        try {
+            Parameter param = new Parameter();
+            param.setDescription("reposSrc");
+            param.assertNotNull(reposSrc);
+            param.setDescription("reposId");
+            param.assertNotNull(reposId);
+
+            AssetNode aDst = new AssetNode();
+
+            if (assetId==null) {
+                // Compose a assetNode only with a repository reference
+
+                aDst.setReposSrc(reposSrc);
+                aDst.setRepId(reposId);
+            } else {
+                Repository repos = RepositoryHelper.composeRepositoryObject(reposId, reposSrc);
+
+                Asset aSrc = repos.getAsset(new SimpleId(assetId));
+
+                aDst.setRepId(aSrc.getRepository().getIdString());
+                aDst.setAssetId(aSrc.getId().getIdString());
+                aDst.setDescription(aSrc.getDescription());
+                aDst.setDisplayName(aSrc.getDisplayName());
+                aDst.setMimeType(aSrc.getMimeType());
+                aDst.setReposSrc(aSrc.getSource().getAccess().name());
+                aDst.setParentId(aSrc.getProperty(PropertyKey.PARENT_ID));
+                aDst.setCreatedDate(aSrc.getCreatedDate());
+                aDst.setColor(aSrc.getProperty(PropertyKey.COLOR));
+                if (aSrc.getPath()!=null) {
+                    aDst.setLocation(aSrc.getPropFileRelativePart());
+                }
+            }
+
+            return aDst;
+        } catch (Throwable t) {
+            throw new RepositoryConfigException("getAssetNode failed: " + t.toString());
+        }
+
+    }
 
     /**
      *

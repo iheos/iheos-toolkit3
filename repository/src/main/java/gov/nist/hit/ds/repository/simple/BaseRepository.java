@@ -31,6 +31,7 @@ public abstract class BaseRepository implements Repository {
 	
 	private RepositorySource source;
 	private ArtifactId reposId;
+    private Type repositoryType;
 
     /**
      *
@@ -151,9 +152,40 @@ public abstract class BaseRepository implements Repository {
      */
 	@Override
 	public Type getType() throws RepositoryException {
-//		load();
-		return new SimpleType(properties.getProperty(PropertyKey.REPOSITORY_TYPE.toString()), "");
+
+        if (repositoryType!=null)
+            return repositoryType;
+
+		repositoryType = new SimpleType(properties.getProperty(PropertyKey.REPOSITORY_TYPE.toString()), "");
+        return repositoryType;
 	}
+
+    /**
+     *
+     * @return
+     * @throws RepositoryException
+     */
+    @Override
+    public Type getTypeProperties() throws RepositoryException {
+
+        if (repositoryType!=null && repositoryType.getProperties()!=null)
+            return repositoryType;
+
+        try {
+            TypeIterator it;
+
+            it = new SimpleTypeIterator(this.getSource(), getType(),SimpleType.REPOSITORY);
+            if (it.hasNextType()) {
+                repositoryType = it.nextType();
+                return repositoryType;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     /**
      *
@@ -545,5 +577,7 @@ public abstract class BaseRepository implements Repository {
     public static long getLastModified(File root) {
         return root.lastModified();
     }
+
+
 
 }

@@ -110,6 +110,15 @@ public interface Repository extends java.io.Serializable {
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
+     * Gets the complete properties associated with the type.
+     * @return
+     * @throws gov.nist.hit.ds.repository.api.RepositoryException
+     */
+    Type getTypeProperties()
+            throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+
+    /**
      * Get the description for this Repository.
      *
      * @return String the description

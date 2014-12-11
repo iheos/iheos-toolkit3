@@ -50,6 +50,8 @@ public abstract class GenericTab extends Tab implements TabInterface {
         getPane().setAlign(Alignment.CENTER);
     }
 
+
+
     /**
      * Returns tab's name name used for navigation.
      * These are defined in TabNamesUtil.

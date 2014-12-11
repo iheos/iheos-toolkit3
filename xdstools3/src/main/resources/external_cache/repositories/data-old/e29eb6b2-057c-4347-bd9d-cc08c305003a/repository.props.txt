@@ -1,6 +1,0 @@
-#
-#Tue Jun 04 16:40:31 EDT 2013
-DisplayName=This is a new repository
-description=Description - this is my new indexable repository
-repositoryType=simple
-id=e29eb6b2-057c-4347-bd9d-cc08c305003a

@@ -1,6 +1,9 @@
 package gov.nist.hit.ds.repository.api;
 
 
+import java.util.*;
+import java.util.Properties;
+
 /**
  * The Type class captures the fundamental concept of categorizing an object.
  * Type are designed to be shared among various OSIDs and Managers.  The exact
@@ -60,8 +63,10 @@ public abstract class Type implements java.io.Serializable {
     private String description;
     private String index;
     private String lifetime;
+    private java.util.Properties properties;
 
-	public Type(String authority, String domain, String keyword) {
+
+    public Type(String authority, String domain, String keyword) {
     	setDomain(domain);
         setAuthority(authority);
         setKeyword(keyword);
@@ -164,7 +169,16 @@ public abstract class Type implements java.io.Serializable {
     public final String getIndex() {
         return this.index;
     }
-    
+
+    public java.util.Properties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(java.util.Properties properties) {
+        this.properties = properties;
+    }
+
+
     /**
      * <p>
      * MIT O.K.I&#46; SID Definition License.

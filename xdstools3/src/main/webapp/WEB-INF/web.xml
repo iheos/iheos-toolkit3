@@ -22,6 +22,11 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>Initialization</servlet-name>
+        <servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
 
     <!-- ============== Application servlet classes ============== -->
@@ -50,6 +55,7 @@
         <servlet-name>testDataSubmissionServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.TestDataSubmissionServicesImpl</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>repositoryServlet</servlet-name>
         <servlet-class>gov.nist.hit.ds.repository.rpc.search.server.RepositoryServiceImpl</servlet-class>
@@ -105,11 +111,11 @@
         <url-pattern>/fileUploadServlet</url-pattern>
     </servlet-mapping>
 
+
     <servlet-mapping>
         <servlet-name>repositoryServlet</servlet-name>
         <url-pattern>/xdstools3/repository</url-pattern>
     </servlet-mapping>
-
 
     <!-- v2 legacy servlets -->
     <servlet-mapping>

@@ -13,6 +13,7 @@ class ActorTransactionTypeDAO {
     ActorTransactionTypeDAO(ActorTransactionTypeFactory _fact) { fact = _fact }
 
     void loadFromResource(String resourceName) {
+        log.info("Loading ActorTransaction types from ${resourceName}")
         loadFromString(this.class.getClassLoader().getResourceAsStream(resourceName).text)
     }
 

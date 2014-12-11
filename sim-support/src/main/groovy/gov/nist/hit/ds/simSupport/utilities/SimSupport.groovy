@@ -1,10 +1,11 @@
 package gov.nist.hit.ds.simSupport.utilities
-import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+
 import gov.nist.hit.ds.repository.api.Repository
 import gov.nist.hit.ds.repository.api.RepositoryFactory
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.repository.simple.SimpleType
+import gov.nist.hit.ds.toolkit.Toolkit
 import gov.nist.hit.ds.toolkit.installation.Installation
 /**
  * Created by bmajur on 7/4/14.
@@ -35,6 +36,7 @@ class SimSupport {
 
     static initToolkit() {
         // these may be redundant when running full toolkit
+        Toolkit.initialize()
         Installation.reset()
         Installation.installation().initialize()
         Configuration.configuration()

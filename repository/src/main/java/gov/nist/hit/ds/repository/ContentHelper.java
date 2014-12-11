@@ -62,10 +62,15 @@ public class ContentHelper {
 
         Asset aSrc = null;
         if (an.getLocation()!=null) {
-            // aSrc = repos.getAssetByPath(new File(an.getLocation()));
-            aSrc = repos.getAssetByRelativePath(new File(an.getLocation()));
+
+            try {
+                aSrc = repos.getAssetByRelativePath(new File(an.getLocation()));
+            } catch (Exception ex) {
+                aSrc = repos.getAssetByPath(new File(an.getLocation()));
+            }
+
             if (aSrc==null) {
-                throw new RepositoryException(RepositoryException.IO_ERROR + "Asset not found by relative location: " + an.getLocation());
+                throw new RepositoryException(RepositoryException.IO_ERROR + "Asset not found by either location: " + an.getLocation());
             }
         }
 
@@ -105,6 +110,18 @@ public class ContentHelper {
                     aDst.setTxtContent(XmlFormatter.htmlize(content));
                 } else if ("text/csv".equals(aSrc.getMimeType())) {
                     aDst.setCsv(processCsvContent(content));
+
+
+                    // Transfer a property from its type to an individual asset level
+                    if (aDst.getExtendedProps()!=null && aSrc.getAssetTypeProperties()!=null) {
+
+                        // Debug
+//                        logger.info(aSrc.getAssetTypeProperties().getProperties().getProperty(PropertyKey.DESCRIPTION.toString()));
+//                        logger.info(aSrc.getAssetTypeProperties().getProperties().getProperty(PropertyKey.COLUMN_HEADER_WIDTHS.toString()));
+
+                        aDst.getExtendedProps().put(PropertyKey.COLUMN_HEADER_WIDTHS.toString()
+                                , aSrc.getAssetType().getProperties().getProperty(PropertyKey.COLUMN_HEADER_WIDTHS.toString()));
+                    }
                 } else if ("text/json".equals(aSrc.getMimeType())) {
                     aDst.setTxtContent(prettyPrintJson(content));
                 } else {

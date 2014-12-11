@@ -4,230 +4,214 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
-        <artifactId>toolkit3</artifactId>
+        <artifactId>tk-deps</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
-
-    <groupId>gov.nist.hit.ds</groupId>
     <artifactId>logBrowser</artifactId>
 
 
-  <!-- POM file generated with GWT webAppCreator -->
-  <packaging>war</packaging>
-  <version>3.0.0-SNAPSHOT</version>
-  <name>logBrowser</name>
+    <!-- POM file generated with GWT webAppCreator -->
+    <packaging>war</packaging>
+    <name>logBrowser</name>
 
-  <properties>
-    <!-- Convenience property to set the GWT version -->
-    <gwtVersion>2.5.1</gwtVersion>
-    <!-- GWT needs at least java 1.5 -->
-    <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <properties>
+        <!-- Convenience property to set the GWT version -->
+        <gwtVersion>2.5.1</gwtVersion>
+        <!-- GWT needs at least java 1.5 -->
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- JavaScript output mode -->
+        <gwt.style>OBF</gwt.style>
     <!--<gwt.style>DETAILED</gwt.style>-->
-  </properties>
+    </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-servlet</artifactId>
-      <version>${gwtVersion}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-user</artifactId>
-      <version>${gwtVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-        <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <version>1.0.0.GA</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <version>1.0.0.GA</version>
-      <classifier>sources</classifier>
-      <scope>test</scope>
-    </dependency>
-
-
-    <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
-      <version>2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.gwt.inject</groupId>
-      <artifactId>gin</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <!-- Use the JSR 330 injection interfaces-->
-    <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
-      <version>1</version>
-    </dependency>
-
-	<dependency>
-  		<groupId>gov.nist.hit.ds</groupId>
-  		<artifactId>repository-shared</artifactId>
-  		<version>3.0.0-SNAPSHOT</version>
-  	</dependency>
-
-      <dependency>
-          <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>repository-rpc</artifactId>
-          <version>3.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-          <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>repository-rpc</artifactId>
-          <version>3.0.0-SNAPSHOT</version>
-          <classifier>sources</classifier>
-          <scope>compile</scope>
-      </dependency>
-    <dependency>
-      <groupId>gov.nist.hit.ds</groupId>
-      <artifactId>repository-shared</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
-      <classifier>sources</classifier>
-      <scope>compile</scope>
-    </dependency>
-  	 <dependency>
-	  		<groupId>gov.nist.hit.ds</groupId>
-	  		<artifactId>xdsException</artifactId>
-	  		<version>3.0.0-SNAPSHOT</version>
-	 </dependency>
-	  	
-  </dependencies>
-
-  <build>
-    <!-- Generate compiled stuff in the folder used for developing mode -->
-    <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
-
-    <plugins>
-
-      <!-- GWT Maven Plugin -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <version>2.5.1</version>
-        <dependencies>
-          <dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
+            <version>${gwtVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <version>${gwtVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <version>${gwtVersion}</version>
-          </dependency>
-        </dependencies>
-        <!-- JS is only needed in the package phase, this speeds up testing -->
-        <executions>
-          <execution>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+            <classifier>sources</classifier>
+            <scope>test</scope>
+        </dependency>
 
-        <!-- Plugin configuration. There are many available options,
-             see gwt-maven-plugin documentation at codehaus.org -->
-        <configuration>
-   		  <compileSourcesArtifacts>
-      		<compileSourcesArtifact>gov.nist.hit.ds:repository-rpc</compileSourcesArtifact> <!-- gov.nist.hit.ds:repository -->
-              <compileSourcesArtifact>gov.nist.hit.ds:repository-shared</compileSourcesArtifact>
-          </compileSourcesArtifacts>
 
-          <!-- URL that should be automatically opened in the GWT shell (gwt:run). -->
-          <runTarget>logBrowser.html</runTarget>
-          <!-- Ask GWT to create the Story of Your Compile (SOYC) (gwt:compile) -->
-          <compileReport>false</compileReport>
-          <module>gov.nist.hit.ds.logBrowser.LogBrowser</module>
-          <logLevel>INFO</logLevel>
-          <style>${gwt.style}</style>
-          <copyWebapp>true</copyWebapp>
-          <!-- <genParam>true</genParam> -->
-        </configuration>
-      </plugin>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt.inject</groupId>
+            <artifactId>gin</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <!-- Use the JSR 330 injection interfaces-->
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
 
-      <!-- Copy static web files before executing gwt:run -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>2.1.1</version>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>exploded</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <webappDirectory>${webappDirectory}</webappDirectory>
-        </configuration>
-      </plugin>
-        <!--
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>2.3.2</version>
-            <configuration>
-                <source>1.5</source>
-                <target>1.5</target>
-            </configuration>
-        </plugin>
-        -->
 
-    </plugins>
-  <pluginManagement><plugins><plugin>
-                <groupId>org.eclipse.m2e</groupId>
-                <artifactId>lifecycle-mapping</artifactId>
-                <version>1.0.0</version>
-                <configuration>             
-                    <lifecycleMappingMetadata>
-                        <pluginExecutions>
-                            <pluginExecution>
-                                <pluginExecutionFilter>
-                                    <groupId>org.codehaus.mojo</groupId>
-                                    <artifactId>
-                                        gwt-maven-plugin
-                                    </artifactId>
-                                    <versionRange>
-                                        [2.5.1,)
-                                    </versionRange>
-                                    <goals>
-                                        <goal>i18n</goal>
-                                    </goals>
-                                </pluginExecutionFilter>
-                                <action>
-                                    <ignore></ignore>
-                                </action>
-                            </pluginExecution>
-                        </pluginExecutions>
-                    </lifecycleMappingMetadata>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>repository-widgets-ui</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>repository-widgets-ui</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <classifier>sources</classifier>
+            <scope>compile</scope>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <!-- Generate compiled stuff in the folder used for developing mode -->
+        <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+
+        <plugins>
+
+            <!-- GWT Maven Plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>2.5.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                        <version>${gwtVersion}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-dev</artifactId>
+                        <version>${gwtVersion}</version>
+                    </dependency>
+                </dependencies>
+                <!-- JS is only needed in the package phase, this speeds up testing -->
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <!-- Plugin configuration. There are many available options,
+                     see gwt-maven-plugin documentation at codehaus.org -->
+                <configuration>
+                    <!--<compileSourcesArtifacts>-->
+                        <!--<compileSourcesArtifact>gov.nist.hit.ds:repository-rpc</compileSourcesArtifact> &lt;!&ndash; gov.nist.hit.ds:repository &ndash;&gt;-->
+                        <!--<compileSourcesArtifact>gov.nist.hit.ds:repository-shared</compileSourcesArtifact>-->
+                    <!--</compileSourcesArtifacts>-->
+
+                    <!-- URL that should be automatically opened in the GWT shell (gwt:run). -->
+                    <runTarget>logBrowser.html</runTarget>
+                    <!-- Ask GWT to create the Story of Your Compile (SOYC) (gwt:compile) -->
+                    <compileReport>false</compileReport>
+                    <module>gov.nist.hit.ds.logBrowser.LogBrowser</module>
+                    <logLevel>INFO</logLevel>
+                    <style>${gwt.style}</style>
+                    <copyWebapp>true</copyWebapp>
+                    <!-- <genParam>true</genParam> -->
                 </configuration>
-            </plugin></plugins>
-</pluginManagement>
+            </plugin>
+
+            <!-- Copy static web files before executing gwt:run -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exploded</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <webappDirectory>${webappDirectory}</webappDirectory>
+                    <attachClasses>true</attachClasses>  <!-- Attaches classes so the war can be imported as dependency in other projects -->
+                    <classesClassifier>classes</classesClassifier>
+                </configuration>
+            </plugin>
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            -->
+
+        </plugins>
+        <pluginManagement><plugins><plugin>
+            <groupId>org.eclipse.m2e</groupId>
+            <artifactId>lifecycle-mapping</artifactId>
+            <version>1.0.0</version>
+            <configuration>
+                <lifecycleMappingMetadata>
+                    <pluginExecutions>
+                        <pluginExecution>
+                            <pluginExecutionFilter>
+                                <groupId>org.codehaus.mojo</groupId>
+                                <artifactId>
+                                    gwt-maven-plugin
+                                </artifactId>
+                                <versionRange>
+                                    [2.5.1,)
+                                </versionRange>
+                                <goals>
+                                    <goal>i18n</goal>
+                                </goals>
+                            </pluginExecutionFilter>
+                            <action>
+                                <ignore></ignore>
+                            </action>
+                        </pluginExecution>
+                    </pluginExecutions>
+                </lifecycleMappingMetadata>
+            </configuration>
+        </plugin></plugins>
+        </pluginManagement>
 
 
-  </build>
+    </build>
 
 </project>

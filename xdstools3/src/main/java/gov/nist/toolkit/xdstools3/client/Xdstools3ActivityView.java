@@ -2,6 +2,7 @@ package gov.nist.toolkit.xdstools3.client;
 
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -16,26 +17,44 @@ import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
 import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.ui.client.event.asset.OutOfContextAssetClickedEvent;
+import gov.nist.hit.ds.repository.ui.client.event.asset.OutOfContextAssetClickedEventHandler;
 import gov.nist.toolkit.xdstools2.client.TabContainer;
 import gov.nist.toolkit.xdstools2.client.tabs.EnvironmentState;
 import gov.nist.toolkit.xdstools2.client.tabs.QueryState;
 import gov.nist.toolkit.xdstools2.client.tabs.TestSessionState;
 import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.*;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseAllTabsEvent;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseOtherTabsEvent;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseTabEvent;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
 import gov.nist.toolkit.xdstools3.client.tabs.EndpointConfigTab;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.MessageValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.*;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.FolderValidationTab;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.LifecycleValidationTab;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.RegisterAndQueryTab;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.SourcesStoresDocumentValidationTab;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.SubmitRetrieveTab;
 import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
+import gov.nist.toolkit.xdstools3.client.tabs.logBrowserTab.LogBrowserTab;
 import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
+import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.FindFoldersTab;
+import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetDocumentsTab;
+import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetFolderAndContentsTab;
+import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetFoldersTab;
+import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetRelatedDocumentsTab;
+import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetSubmissionSetAndContentsTab;
+import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.RetrieveDocumentsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab.SubmitTestDataTab;
 import gov.nist.toolkit.xdstools3.client.tabs.v2.v2TabExample;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
@@ -88,7 +107,6 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
         container.setHeight100();
         container.addMembers(mainLayout);
         container.draw();
-
 
         // Smartgwt Console - useful for development, mainly tracking RPC calls
         //SC.showConsole();
@@ -171,6 +189,38 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
             }
         });
         //--------------------------------------------------
+        // Add handler for log browser events
+        try {
+            // This handler is specific to the widget launch from the MHD Validator tab
+            Util.EVENT_BUS.addHandler(OutOfContextAssetClickedEvent.TYPE, new OutOfContextAssetClickedEventHandler() {
+                public void onAssetClick(OutOfContextAssetClickedEvent event) {
+                    try {
+                        final AssetNode target = event.getValue();
+
+                        if ("text/csv".equals(target.getMimeType())) {
+                            String rowNumberToHighlightStr = "" + event.getRowNumber();
+
+                            target.getExtendedProps().put("rowNumberToHighlight", rowNumberToHighlightStr);
+
+                            Tab lbContextTab = new LogBrowserTab(target);
+                            topTabSet.addTab(lbContextTab);
+                            topTabSet.selectTab(lbContextTab);
+
+                        }
+
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                        Window.alert(t.toString());
+                    }
+
+                }
+            });
+
+        } catch (Throwable t) {
+            t.printStackTrace();
+            Window.alert("Event setup failed. " + t.toString());
+        }
+        //--------------------------------------------------
     }
 
 
@@ -250,6 +300,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
         }
         else if(tabName.equals(TabNamesUtil.getInstance().getTestDataSubmissionTabCode())){
             tab = new SubmitTestDataTab();
+        }
+        else if (tabName.equals(TabNamesUtil.getInstance().getLogBrowserTabCode())){
+            tab = new LogBrowserTab();
         }
 
         // ---------- legacy v2 tabs --------
@@ -419,4 +472,6 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
         return null;
     }
     //---------------------------------------------------
+
+
 }

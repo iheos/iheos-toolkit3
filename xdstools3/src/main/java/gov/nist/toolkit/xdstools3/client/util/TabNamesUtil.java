@@ -44,6 +44,7 @@ public class TabNamesUtil {
     private   final String homeTabCode="HOME";
     private   final String mhdValidatorTabCode="MHD_VALIDATOR";
     private   final String testDataSubmissionTabCode = "SUBMIT_TEST_DATA";
+    private   final String logBrowserTabCode = "LOG_BROWSER";
 
 
     public String getFindDocumentsTabCode() {
@@ -79,4 +80,5 @@ public class TabNamesUtil {
         return homeTabCode;
     }
     public   String getTestDataSubmissionTabCode() {return testDataSubmissionTabCode;}
+    public   String getLogBrowserTabCode() {return logBrowserTabCode;}
 }
