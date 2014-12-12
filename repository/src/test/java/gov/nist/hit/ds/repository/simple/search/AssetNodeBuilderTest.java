@@ -91,7 +91,7 @@ public class AssetNodeBuilderTest {
 	
 	private void chainTest(AssetNode an, String prefix) {
 		for (AssetNode child : an.getChildren()) {
-			System.out.println(prefix + " chain test: " + child.getLocation());
+			System.out.println(prefix + " chain test: " + child.getRelativePath());
 			if (child.getChildren()!=null) {
 				chainTest(child, prefix);
 			}

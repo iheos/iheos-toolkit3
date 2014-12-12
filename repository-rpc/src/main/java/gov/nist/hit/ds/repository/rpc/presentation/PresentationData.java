@@ -111,7 +111,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 	}
 
     /**
-     *
+     * This method call will retrieve the asset and its content.
      * @param reposSrc
      * @param reposId
      * @param assetId
@@ -128,11 +128,12 @@ public class PresentationData implements IsSerializable, Serializable  {
 
             AssetNode aDst = new AssetNode();
 
+
             if (assetId==null) {
                 // Compose a assetNode only with a repository reference
-
                 aDst.setReposSrc(reposSrc);
                 aDst.setRepId(reposId);
+
             } else {
                 Repository repos = RepositoryHelper.composeRepositoryObject(reposId, reposSrc);
 
@@ -148,7 +149,14 @@ public class PresentationData implements IsSerializable, Serializable  {
                 aDst.setCreatedDate(aSrc.getCreatedDate());
                 aDst.setColor(aSrc.getProperty(PropertyKey.COLOR));
                 if (aSrc.getPath()!=null) {
-                    aDst.setLocation(aSrc.getPropFileRelativePart());
+                    aDst.setRelativePath(aSrc.getPropFileRelativePart());
+                }
+
+                try {
+                    // If content is not always needed, then parameterize the option
+                    aDst = ContentHelper.getContent(aDst);
+                } catch (Exception ex) {
+                    logger.info(ex.toString());
                 }
             }
 
@@ -400,7 +408,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 		aDst.setParentId(aSrc.getProperty(PropertyKey.PARENT_ID));
 		aDst.setCreatedDate(aSrc.getCreatedDate());
 		if (aSrc.getPath()!=null) {
-			aDst.setLocation(aSrc.getPropFileRelativePart()); 
+			aDst.setRelativePath(aSrc.getPropFileRelativePart());
 		}
 		
 		return aDst;
@@ -467,7 +475,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 			aDst.setParentId(aSrc.getProperty(PropertyKey.PARENT_ID));
 			aDst.setCreatedDate(aSrc.getCreatedDate());
 			if (aSrc.getPath()!=null) {
-				aDst.setLocation(aSrc.getPropFileRelativePart()); 
+				aDst.setRelativePath(aSrc.getPropFileRelativePart());
 			}
 			result.add(aDst);
 
@@ -660,7 +668,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                 if (parentLoc!=null) {
                     logger.fine("parentLoc is not null" + parentLoc);
                     AssetNode parentHdr = new AssetNode();
-                    parentHdr.setLocation(parentLoc);
+                    parentHdr.setRelativePath(parentLoc);
                     result.put("parentLoc",parentHdr);
 
                     AssetNode headerMsg = new AssetNode();
@@ -669,7 +677,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                     headerMsg.setRepId(repId);
                     logger.info("*** setting repos src:" + acs);
                     headerMsg.setReposSrc(acs);
-                    headerMsg.setLocation(headerLoc);
+                    headerMsg.setRelativePath(headerLoc);
                     headerMsg.setCsv(ContentHelper.processCsvContent(txDetail));
                     //headerMsg.setProps(proxyDetail);
                     headerMsg.getExtendedProps().put("proxyDetail",proxyDetail);
@@ -684,7 +692,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                         bodyMsg.setType("raw_"+msgType);
                         bodyMsg.setRepId(repId);
                         bodyMsg.setReposSrc(acs);
-                        bodyMsg.setLocation(bodyLoc);
+                        bodyMsg.setRelativePath(bodyLoc);
                         result.put("body",bodyMsg);
                     }
 

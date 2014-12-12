@@ -463,7 +463,7 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
         // Get criteria and append the location and check the searchresultiterator to see if it exists/count match
         // call method with assetNode list to populate the filtered list
 
-        String location = anMap.get("parentLoc").getLocation();
+        String location = anMap.get("parentLoc").getRelativePath();
 
         if (location==null) {
             logger.severe("Asset location is missing!");

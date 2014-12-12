@@ -85,13 +85,15 @@ import java.util.logging.Logger;
  */
 public class LogBrowserWidget extends Composite {
 
-	/**
+
+    /**
 	 *
 	 * @author Sunil.Bhaskarla
 	 */
 	private static Logger logger = Logger.getLogger(LogBrowserWidget.class.getName());
 	private static final int WESTERNBAR = 545;	
 	private static final int CONTEXTMENU_XOFFSET = 10;
+    private static final int LOG_BROWSER_FEATURE_IDX = 2;
     TabLayoutPanel multiContentTabPanel = new TabLayoutPanel(20, Unit.PX);
     TabLayoutPanel featureTlp = new TabLayoutPanel(20, Unit.PX);
 	LayoutPanel featureLp = new LayoutPanel();
@@ -1208,7 +1210,7 @@ public class LogBrowserWidget extends Composite {
 									,GWT.getHostPageBaseURL() + "repository/downloadAsset?"
 									+ "reposSrc="+ an.getReposSrc() 
 									+"&reposId=" + an.getRepId() 
-									+ "&asset=" + an.getLocation().replace(Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT, "") 
+									+ "&asset=" + an.getRelativePath().replace(Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT, "")
 									+ "&contentDisp=attachment"));
 						}
 					} catch (Exception ex) {
@@ -1254,7 +1256,7 @@ public class LogBrowserWidget extends Composite {
                     }
 
 					try {
-						if (featureTlp.getSelectedIndex()<2 && treeItemTarget!=null) {
+						if (featureTlp.getSelectedIndex() < LOG_BROWSER_FEATURE_IDX && treeItemTarget!=null) {
 							treeItemTarget.setSelected(treeItemTarget.getUserObject().equals(treeItem.getSelectedItem().getUserObject()));									
 						}
 						
@@ -1282,7 +1284,7 @@ public class LogBrowserWidget extends Composite {
 		    	if (expandLeaf && !(treeItem.getChildCount() == 1 && "HASCHILDREN".equals(treeItem.getChild(0).getText()))) {
                     // Selected index is -1 when featureLp is used instead of featureTlp
 		    		treeItem.setState(true); // Open node
-		    		if (featureTlp.getSelectedIndex()<2  && (target!=null && an.getLocation()!=null) && an.getLocation().equals(target.getLocation())) {
+		    		if (featureTlp.getSelectedIndex() < LOG_BROWSER_FEATURE_IDX && isSameAssetReference(target, an)) {
 		    			try {
 							treeItemTarget.setSelected(false);
 						} catch(Exception ex) {
@@ -1302,6 +1304,13 @@ public class LogBrowserWidget extends Composite {
 		    
 		    return tree;
 	  }
+
+    private boolean isSameAssetReference(AssetNode target, AssetNode an) {
+        return (an != null && target != null)
+                && (an.getRelativePath() != null && an.getRelativePath().equals(target.getRelativePath()) || (an.getFullPath()!=null && an.getFullPath().equals(target.getFullPath())))
+
+                ;
+    }
 
     private void showEventMessagesWidget(String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
         splitPanel.remove(centerPanel);
@@ -1382,8 +1391,8 @@ public class LogBrowserWidget extends Composite {
 			String propsTxt = (an.getProps()!=null)?an.getProps().trim():"";
 			// margin-top:0px;margin-left:3px;
 			propsContent.appendHtmlConstant("<div style='margin:3px;'>Asset Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
-			if (an.getLocation()!=null) {
-				propsContent.appendHtmlConstant("<!-- <br/>Asset Location:<br/><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>" + an.getLocation()  + "</span>-->");
+			if (an.getRelativePath()!=null) {
+				propsContent.appendHtmlConstant("<!-- <br/>Asset Relative Location:<br/><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>" + an.getRelativePath()  + "</span>-->");
 			}
 			propsContent.appendHtmlConstant("</div>");
 			propsWidget.setWidth("250px");
@@ -1453,7 +1462,7 @@ public class LogBrowserWidget extends Composite {
 					Image img = new Image();					
 					img.setUrl(GWT.getModuleBaseForStaticFiles() + "images/nocontent.png");
                     if (an.getMimeType()!=null) { // Mime-type exists, but no content file
-                        imgText.setText("The document is missing!");
+                        imgText.setText("Document is missing!");
                         imgText.setStyleName("serverResponseLabelError");
                     } else {
                         imgText.setText("No document");
@@ -1544,7 +1553,7 @@ public class LogBrowserWidget extends Composite {
 	        	AssetTreeItem treeItem = createTreeItem(child, target, expandLeaf);
 	        	if (expandLeaf && !(treeItem.getChildCount() == 1 && "HASCHILDREN".equals(treeItem.getChild(0).getText()))) {
 		    		treeItem.setState(true); // Open node
-		        	if ((target!=null && child.getLocation()!=null) && child.getLocation().equals(target.getLocation())) {
+		        	if (isSameAssetReference(target, child)) {
 		        		treeItemTarget = treeItem;
 		        		treeItemTarget.setSelected(true);
 		        	}

@@ -1249,7 +1249,7 @@ public class SearchWidget extends Composite {
             public void onSuccess(List<AssetNode> result) {
                 qSelector.clear();
                 for (AssetNode an: result) {
-                    qSelector.addItem(an.getDisplayName(), an.getLocation());
+                    qSelector.addItem(an.getDisplayName(), an.getRelativePath());
                 }
 
             }

@@ -61,19 +61,21 @@ public class ContentHelper {
         Repository repos = RepositoryHelper.composeRepositoryObject(an.getRepId(), an.getReposSrc());
 
         Asset aSrc = null;
-        if (an.getLocation()!=null) {
+        try {
+            if (an.getRelativePath()!=null) {
+                aSrc = repos.getAssetByRelativePath(new File(an.getRelativePath()));
 
-            try {
-                aSrc = repos.getAssetByRelativePath(new File(an.getLocation()));
-            } catch (Exception ex) {
-                aSrc = repos.getAssetByPath(new File(an.getLocation()));
+            } else if (an.getFullPath()!=null) {
+                aSrc = repos.getAssetByPath(new File(an.getFullPath()));
             }
-
-            if (aSrc==null) {
-                throw new RepositoryException(RepositoryException.IO_ERROR + "Asset not found by either location: " + an.getLocation());
-            }
+        } catch (Exception ex) {
+               logger.info(ex.toString());
         }
 
+
+        if (aSrc==null) {
+            throw new RepositoryException(RepositoryException.IO_ERROR + "Asset not found by either location: " + an.getRelativePath() + " fullPath:" + an.getFullPath());
+        }
 
 		/* this should not be required
 		 * else if (an.getAssetId()!=null) {
@@ -93,10 +95,13 @@ public class ContentHelper {
         aDst.setDisplayName(aSrc.getDisplayName());
         aDst.setMimeType(aSrc.getMimeType());
         aDst.setReposSrc(aSrc.getSource().getAccess().name());
+        aDst.setColor(aSrc.getProperty(PropertyKey.COLOR));
         aDst.setExtendedProps(an.getExtendedProps()); // This is from the original assetNode
 
         if (aSrc.getPath()!=null)
-            aDst.setLocation(aSrc.getPath().toString());
+            aDst.setFullPath(aSrc.getPath().toString());
+
+        aDst.setRelativePath(aSrc.getPropFileRelativePart());
 
         if (aSrc.getContent()!=null) {
             logger.fine("*** has got content" + an.getType() + " aSrc.getMimeType():" + aSrc.getMimeType());
@@ -129,8 +134,9 @@ public class ContentHelper {
                     aDst.setTxtContent(content);
                 }
                 aDst.setContentAvailable(true);
-            } catch (Exception e) {
-                logger.info("No content found for <"+ aDst.getAssetId() +">: May not have any content (which is okay for top-level assets): " + e.toString());
+            } catch (Exception ex) {
+                logger.info("No content found for <"+ aDst.getAssetId() +">: May not have any content (which may be okay for top-level assets): " + ex.toString());
+                ex.printStackTrace();
             }
         } else {
             logger.fine("*** getContent -- noContent" + an.getType() + " aSrc.getMimeType():" + aSrc.getMimeType());

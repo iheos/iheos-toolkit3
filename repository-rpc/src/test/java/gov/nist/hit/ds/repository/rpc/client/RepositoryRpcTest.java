@@ -3,8 +3,6 @@ package gov.nist.hit.ds.repository.rpc.client;
 import gov.nist.hit.ds.dsSims.factories.MessageValidatorFactory;
 import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.ContentHelper;
-import gov.nist.hit.ds.repository.api.ArtifactId;
-import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
@@ -30,12 +28,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.List;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -146,7 +142,7 @@ public class RepositoryRpcTest {
 
         System.out.println(an.getAssetId());
 
-        QueryParameters qp2 = PresentationData.getSearchCriteria(an.getRepId(),an.getReposSrc(), an.getLocation());
+        QueryParameters qp2 = PresentationData.getSearchCriteria(an.getRepId(),an.getReposSrc(), an.getRelativePath());
 
         assertTrue(qp.getSelectedRepos().length==qp2.getSelectedRepos().length);
         assertTrue(qp.getSearchCriteria().toString().equals(qp2.getSearchCriteria().toString()));

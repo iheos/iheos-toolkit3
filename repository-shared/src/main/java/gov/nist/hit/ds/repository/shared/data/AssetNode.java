@@ -26,7 +26,8 @@ public class AssetNode implements IsSerializable, Serializable {
 	private String description;
 	private String mimeType;
 	private String reposSrc;
-	private String location;
+	private String relativePath;
+    private String fullPath;
     private String color;
 	private String createdDate;
 	
@@ -164,15 +165,23 @@ public class AssetNode implements IsSerializable, Serializable {
 		this.hasContent = hasContent;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getRelativePath() {
+		return relativePath;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setRelativePath(String location) {
+		this.relativePath = location;
 	}
 
-	public String getParentId() {
+    public String getFullPath() {
+        return fullPath;
+    }
+
+    public void setFullPath(String fullPath) {
+        this.fullPath = fullPath;
+    }
+
+    public String getParentId() {
 		return parentId;
 	}
 

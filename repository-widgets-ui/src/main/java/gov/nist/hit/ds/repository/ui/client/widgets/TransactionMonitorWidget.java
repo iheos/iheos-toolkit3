@@ -275,7 +275,7 @@ public class TransactionMonitorWidget extends Composite {
             logger.fine("empty anMap");
             return false;
         }
-        logger.info("entering appendData" + anMap.get("header").getLocation());
+        logger.info("entering appendData" + anMap.get("header").getRelativePath());
         logger.info("contains filtered message? " + (anMap.get("header").getExtendedProps().containsKey("searchHit")));
         try {
 //            int colLen = columns.length;

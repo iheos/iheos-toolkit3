@@ -67,7 +67,7 @@ public class AssetNodeBuilder {
             parent.setColor(a.getProperty(PropertyKey.COLOR));
 			if (a.getPath()!=null) {
 				// parent.setLocation(a.getPath().toString());
-				parent.setLocation(a.getPropFileRelativePart());
+				parent.setRelativePath(a.getPropFileRelativePart());
 			}
 			parent.setContentAvailable(a.hasContent());
 			
@@ -100,7 +100,13 @@ public class AssetNodeBuilder {
 		List<AssetNode> children = new ArrayList<AssetNode>();
 
         SearchCriteria parentCriteria = new SearchCriteria(Criteria.AND);
-        parentCriteria.append(new SearchTerm(PropertyKey.PARENT_ID, Operator.EQUALTOANY, new String[]{parent.getLocation(), parent.getAssetId()}));
+
+
+        // This may not be need since we are now using assetIds consistently
+//        parentCriteria.append(new SearchTerm(PropertyKey.PARENT_ID, Operator.EQUALTOANY, new String[]{parent.getLocation(), parent.getAssetId()}));
+
+        // Use only Parent Id
+        parentCriteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTO,parent.getAssetId()));
 
 
         SearchCriteria criteria = null;
@@ -130,7 +136,7 @@ public class AssetNodeBuilder {
                 child.setColor(a.getProperty(PropertyKey.COLOR));
 				if (a.getPath()!=null) {
 					// child.setLocation(a.getPath().toString());
-					child.setLocation(a.getPropFileRelativePart());
+					child.setRelativePath(a.getPropFileRelativePart());
 				}
 				child.setContentAvailable(a.hasContent());
 
@@ -170,7 +176,7 @@ public class AssetNodeBuilder {
 			if (iter.hasNextAsset()) { // Get the first one
 				Asset a = iter.nextAsset();
 				// logger.fine("is --- " + child.getLocation() + " = " + a.getPropFileRelativePart());
-				if (!target.getLocation().equals(a.getPropFileRelativePart())) {
+				if (!target.getRelativePath().equals(a.getPropFileRelativePart())) {
 					AssetNode parent = new AssetNode(a.getRepository().getIdString()
 							,(a.getId()!=null)?a.getId().getIdString():null
 							,(a.getAssetType()==null)?null:a.getAssetType().toString()
@@ -182,14 +188,14 @@ public class AssetNodeBuilder {
                     parent.setColor(a.getProperty(PropertyKey.COLOR));
 					if (a.getPath()!=null) {
 						// child.setLocation(a.getPath().toString());
-						parent.setLocation(a.getPropFileRelativePart());
+						parent.setRelativePath(a.getPropFileRelativePart());
 					}
 					parent.setContentAvailable(a.hasContent());
 					
 					List<AssetNode> children = getImmediateChildren(repos, parent);
 					List<AssetNode> childrenUpdate = new ArrayList<AssetNode>();
 					for (AssetNode c : children) {
-						if (c.getLocation()!=null && c.getLocation().equals(target.getLocation())) {
+						if (c.getRelativePath()!=null && c.getRelativePath().equals(target.getRelativePath())) {
 							childrenUpdate.add(target);
 						} else
 							childrenUpdate.add(c);
@@ -251,7 +257,7 @@ public class AssetNodeBuilder {
                 parent.setColor(a.getProperty(PropertyKey.COLOR));
                 if (a.getPath()!=null) {
                     // parent.setLocation(a.getPath().toString());
-                    parent.setLocation(a.getPropFileRelativePart());
+                    parent.setRelativePath(a.getPropFileRelativePart());
                 }
                 parent.setContentAvailable(a.hasContent());
 
@@ -269,7 +275,10 @@ public class AssetNodeBuilder {
 
 	private boolean addChildIndicator(Repository repos, AssetNode potentialParent) throws RepositoryException {
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
-		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTOANY, new String[]{potentialParent.getLocation(), potentialParent.getAssetId()})); 
+
+//		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTOANY, new String[]{potentialParent.getLocation(), potentialParent.getAssetId()}));
+        criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTO, potentialParent.getAssetId()));
+
 		int childRecords = 	new DbIndexContainer().getHitCount(repos, criteria);
 		if (childRecords>0) {
 			logger.fine(">>> HAS children");
@@ -285,7 +294,10 @@ public class AssetNodeBuilder {
 		
 		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 
-		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTOANY, new String[]{parent.getLocation(), parent.getAssetId()})); // parent.getAssetId()
+        // This may not be need since we are now using assetIds consistently
+//		criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTOANY, new String[]{parent.getLocation(), parent.getAssetId()})); // parent.getAssetId()
+
+        criteria.append(new SearchTerm(PropertyKey.PARENT_ID,Operator.EQUALTO,parent.getAssetId()));
 		 		
 		AssetIterator iter;
 		try {
@@ -304,7 +316,7 @@ public class AssetNodeBuilder {
                 child.setColor(a.getProperty(PropertyKey.COLOR));
 				if (a.getPath()!=null) {
 					// child.setLocation(a.getPath().toString());
-					child.setLocation(a.getPropFileRelativePart());
+					child.setRelativePath(a.getPropFileRelativePart());
 				}
 				child.setContentAvailable(a.hasContent());
 				parent.addChild(child);

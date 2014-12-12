@@ -140,7 +140,7 @@ public class SearchResultIterator implements AssetIterator  {
 
                 if (isLoadProperties()) {
                     logger.fine("loading by prop pop method");
-                    String propFileStr = an.getLocation();
+                    String propFileStr = an.getRelativePath();
                     if (propFileStr!=null && !"".equals(propFileStr)) {
                         String fullPath = repos.getRoot() + File.separator + propFileStr;
                         logger.fine("Retrieving by path: " + fullPath);
@@ -171,7 +171,7 @@ public class SearchResultIterator implements AssetIterator  {
                     a.setProperty(PropertyKey.PARENT_ID,an.getParentId());
                     a.setProperty(PropertyKey.MIME_TYPE,an.getMimeType());
                     a.setProperty(PropertyKey.CREATED_DATE,an.getCreatedDate());
-                    a.setPath(new File(an.getLocation())); // Relative
+                    a.setPath(new File(an.getRelativePath())); // Relative
 
                 }
 				
