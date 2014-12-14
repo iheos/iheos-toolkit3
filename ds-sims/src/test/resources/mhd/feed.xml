@@ -28,13 +28,14 @@
                 </subject>
                 <source value="urn:oid:1.3.6.1.4.1.21367.2005.3.7"/>
                 <status value="current"/>
-                <content id="thedoc"/>
+                <content id="0ff2318b-c524-42a4-bec4-f221c808133e"/>
+                <content id="documententry2"/>
             </DocumentManifest>
         </content>
     </entry>
     <entry>
         <title>example DocumentEntry</title>
-        <id>urn:uuid:47c42e8e-38f3-4e1f-a096-4d15183d4f36</id>
+        <id>0ff2318b-c524-42a4-bec4-f221c808133e</id>
         <content type="text/xml">
             <DocumentReference xmlns="http://hl7.org/fhir">
                 <language value="en-US"/>
@@ -93,17 +94,17 @@
                 <indexed value="2004-12-25T22:20:10+01:00"/>
                 <status value="current"/>
                 <description value="doc1"/>
-                <mimeType value="application/pdf"/>
+                <mimeType value="text/plain"/>
                 <format value="urn:ihe:xds:formatCode:pdf^^Forcare formatCodes"/>
-                <size value="20"/>
-                <hash value="da39a3ee5e6b4b0d3255bfef95601890afd80709"/>
-                <location value="https://somehost/mhd2/Binary/fbc41da1-2936-46c3-98c4-cf2c13c32a7d"/>
+                <size value="11"/>
+                <hash value="A2E2298974C2BE5A6E2C635247210C2CFCB42A94"/>
+                <location value="#document1"/>
             </DocumentReference>
         </content>
     </entry>
     <entry>
         <title>example DocumentEntry</title>
-        <id>urn:uuid:bcf1fee3-6803-4fd5-9ef3-69d744d22823</id>
+        <id>documententry2</id>
         <content type="text/xml">
             <DocumentReference xmlns="http://hl7.org/fhir">
                 <language value="en-US"/>
@@ -165,11 +166,30 @@
                 <indexed value="2004-12-25T22:20:10+01:00"/>
                 <status value="current"/>
                 <description value="doc2"/>
-                <mimeType value="application/pdf"/>
+                <mimeType value="text/plain"/>
                 <format value="urn:ihe:xds:formatCode:pdf^^Forcare formatCodes"/>
-                <size value="20"/>
-                <hash value="da39a3ee5e6b4b0d3255bfef95601890afd80709"/>
+                <size value="11"/>
+                <hash value="805F6F66D093A19E589E3500EEBE2165A6BC51FC"/>
+                <location value="#document2"/>
             </DocumentReference>
+        </content>
+    </entry>
+    <entry>
+        <title>example DocumentEntry</title>
+        <id>document1</id>
+        <content type="text/xml">
+            <Binary xmlns="http://hl7.org/fhir" contentType="text/plain">
+                TUhEIG9uIEZISVI=
+            </Binary>
+        </content>
+    </entry>
+    <entry>
+        <title>example DocumentEntry</title>
+        <id>document2</id>
+        <content type="text/xml">
+            <Binary xmlns="http://hl7.org/fhir" contentType="text/plain">
+                TUhEIFRlc3Rpbmc=
+            </Binary>
         </content>
     </entry>
 </feed>
