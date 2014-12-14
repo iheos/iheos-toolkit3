@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.dsSims.fhir.mhd.validators
 
+import gov.nist.hit.ds.dsSims.fhir.mhd.SubmitModel
 import gov.nist.hit.ds.dsSims.fhir.schema.FhirSchemaValidator
 import gov.nist.hit.ds.dsSims.fhir.utilities.JsonToXmlValidator
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
@@ -26,7 +27,7 @@ class FeedTransaction implements Transaction {
             // XML
             new FhirSchemaValidator(simHandle, reqString, Toolkit.schemaFile(), true).asPeer().run()
             def dr = new XmlSlurper().parseText(reqString)
-            def validator = new MhdFeedValidator(simHandle, dr)
+            def validator = new SubmitModelValidator(simHandle, dr)
             validator.asPeer().run()
         } else if (reqString.startsWith('{')) {
             // JSON
@@ -37,7 +38,7 @@ class FeedTransaction implements Transaction {
             simHandle.event.artifacts.add('XML', xmlString)
             new FhirSchemaValidator(simHandle, xmlString, Toolkit.schemaFile(), true).asPeer().run()
             def dr = new XmlSlurper().parseText(xmlString)
-            def validator = new MhdFeedValidator(simHandle, dr)
+            def validator = new SubmitModelValidator(simHandle, dr)
             validator.asPeer().run()
         } else {
             throw new ToolkitRuntimeException('Parse failed - do not understand format - XML or JSON required')
@@ -57,5 +58,21 @@ class FeedTransaction implements Transaction {
     @Override
     ValidationStatus sendRequest() {
         return null
+    }
+
+    // feed is atom feed from XmlSlurper
+    SubmitModel genSubmitModel(feed) {
+        SubmitModel model = new SubmitModel()
+        feed.entry.each { entry ->
+            def id = entry.id.text()
+            def content = it.content
+            if (!content) return
+            if (content.manifest) model.docManifests << content.manifest
+            if (content.DocumentReference) model.docReferenceMap[id] = content.DocumentReference
+            if (content.Binary) model.binaryMap[id] = content.Binary.text()
+        }
+
+
+        return model
     }
 }
