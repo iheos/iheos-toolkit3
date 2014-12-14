@@ -27,7 +27,8 @@ class FeedTransaction implements Transaction {
             // XML
             new FhirSchemaValidator(simHandle, reqString, Toolkit.schemaFile(), true).asPeer().run()
             def dr = new XmlSlurper().parseText(reqString)
-            def validator = new SubmitModelValidator(simHandle, dr)
+            SubmitModel sm = buildSubmitModel(true, dr)
+            def validator = new SubmitModelValidator(simHandle, sm)
             validator.asPeer().run()
         } else if (reqString.startsWith('{')) {
             // JSON
@@ -38,11 +39,31 @@ class FeedTransaction implements Transaction {
             simHandle.event.artifacts.add('XML', xmlString)
             new FhirSchemaValidator(simHandle, xmlString, Toolkit.schemaFile(), true).asPeer().run()
             def dr = new XmlSlurper().parseText(xmlString)
-            def validator = new SubmitModelValidator(simHandle, dr)
+            SubmitModel sm = buildSubmitModel(false, dr)
+            def validator = new SubmitModelValidator(simHandle, sm)
             validator.asPeer().run()
         } else {
             throw new ToolkitRuntimeException('Parse failed - do not understand format - XML or JSON required')
         }
+    }
+
+    SubmitModel buildSubmitModel(isXml, bundle) {
+        if (bundle instanceof String) bundle = new XmlSlurper().parseText(bundle)
+        SubmitModel sm = new SubmitModel()
+        sm.isXml = isXml
+        sm.bundle = bundle
+        bundle.entry.each {
+            if (it.content.DocumentManifest.size() > 0) sm.docManifests << it.content.DocumentManifest
+            if (it.content.DocumentReference.size() > 0) {
+                def id = it.id.text()
+                if (id) sm.docReferenceMap[id] = it.content.DocumentReference
+            }
+            if (it.content.Binary.size() > 0) {
+                def id = it.id.text()
+                if (id) sm.binaryMap[id] = it.content.Binary
+            }
+        }
+        return sm
     }
 
     @Override
@@ -60,19 +81,4 @@ class FeedTransaction implements Transaction {
         return null
     }
 
-    // feed is atom feed from XmlSlurper
-    SubmitModel genSubmitModel(feed) {
-        SubmitModel model = new SubmitModel()
-        feed.entry.each { entry ->
-            def id = entry.id.text()
-            def content = it.content
-            if (!content) return
-            if (content.manifest) model.docManifests << content.manifest
-            if (content.DocumentReference) model.docReferenceMap[id] = content.DocumentReference
-            if (content.Binary) model.binaryMap[id] = content.Binary.text()
-        }
-
-
-        return model
-    }
 }

@@ -123,9 +123,6 @@
                     </Practitioner>
                 </contained>
                 <contained>
-                    <Binary id="doc1" contentType="text/plain">dGhpcyBpcyBteSBkb2N1bWVudC4=</Binary>
-                </contained>
-                <contained>
                     <Patient id="patient">
                         <identifier>
                             <use value="official"/>

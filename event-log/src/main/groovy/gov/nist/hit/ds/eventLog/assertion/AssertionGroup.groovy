@@ -26,6 +26,8 @@ public class AssertionGroup  {
 
     AssertionGroup() {}
 
+    def errorAssertionIds() { assertions.findAll { it.failed()}.collect { it.id } }
+
     boolean hasAssertion(id) { assertions.find { it.id == id}}
     def getAssertions(id) { assertions.findAll { it.id == id}}
 
@@ -112,7 +114,7 @@ public class AssertionGroup  {
 
     public Assertion assertIn(List<String> expecteds, String found, boolean required) {
         Assertion a = new Assertion();
-        a.expected = expecteds.toString();
+        a.expected = "One of ${expecteds.toString()}"
         a.found = found;
         for (String value : expecteds) if (value == found) return addAssertion(a, required)
         a.status = AssertionStatus.ERROR
@@ -243,6 +245,15 @@ public class AssertionGroup  {
             a.found = (ok) ? 'True' : 'False'
         }
         a.status = (ok) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
+        addAssertion(a, required);
+        return a;
+    }
+
+    public Assertion assertMoreThan(int reference, int found, boolean required) {
+        Assertion a = new Assertion();
+            a.expected = "more than ${reference}"
+            a.found = found.toString()
+        a.status = (found > reference) ? AssertionStatus.SUCCESS : AssertionStatus.ERROR
         addAssertion(a, required);
         return a;
     }
