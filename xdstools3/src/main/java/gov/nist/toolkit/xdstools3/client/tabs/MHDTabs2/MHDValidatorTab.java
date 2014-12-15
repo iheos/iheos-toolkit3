@@ -1,8 +1,6 @@
-package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs2;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;

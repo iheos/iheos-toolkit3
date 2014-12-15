@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs2;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;

@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs;
+package gov.nist.toolkit.xdstools3.client.tabs.MHDTabs2;
 
 
 import com.google.gwt.user.client.rpc.RemoteService;

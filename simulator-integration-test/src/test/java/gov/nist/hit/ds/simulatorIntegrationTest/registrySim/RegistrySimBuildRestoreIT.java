@@ -1,16 +1,15 @@
 package gov.nist.hit.ds.simulatorIntegrationTest.registrySim;
 
-import static org.junit.Assert.assertTrue;
 import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
-import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.client.Simulator;
 import gov.nist.hit.ds.simSupport.factory.SimulatorFactory;
 import gov.nist.hit.ds.siteManagement.client.Site;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class RegistrySimBuildRestoreIT {
 	@Before
