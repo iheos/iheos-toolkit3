@@ -32,6 +32,8 @@ class Event {
      * Error propagation up the tree is done by ResultsStack
      */
 
+    Set<String> errorAssertionIds() { allAssetionGroups.collect { it.errorAssertionIds() }.flatten() as Set }
+
     // Parent present because results can be nested
     // Your parent is somewhere in the resultsStack
     def initResults(Asset parentAsset, validatorName) {
@@ -144,7 +146,9 @@ class Event {
         allAssetionGroups.find { it.hasErrors() }
     }
 
-    void addArtifact(String name, String value) throws RepositoryException {
+    void addArtifact(String name, Object value) throws RepositoryException {
+        if (!(value instanceof String))
+            value = value.toString()
         artifacts.add(name, value);
     }
 

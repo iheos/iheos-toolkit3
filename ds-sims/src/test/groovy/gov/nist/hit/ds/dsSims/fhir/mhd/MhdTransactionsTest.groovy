@@ -56,7 +56,7 @@ class MhdTransactionsTest extends Specification {
         url.withInputStream {
             xml = Io.getStringFromInputStream(it)
         }
-        Asset a = new ValidationApi().validateRequest('drv', xml)
+        Asset a = new ValidationApi().validateRequest('drv', xml, 'Content-Type: application/atom+xml')
 
         then:
         a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
@@ -69,7 +69,7 @@ class MhdTransactionsTest extends Specification {
         url.withInputStream {
             xml = Io.getStringFromInputStream(it)
         }
-        Asset a = new ValidationApi().validateRequest('drv', xml)
+        Asset a = new ValidationApi().validateRequest('drv', xml, 'Content-Type: application/atom+xml')
         println "Asset is ${a.id.idString}"
         println "Final status is ${a.getProperty(PropertyKey.STATUS)}"
         println "type ${a.getProperty(PropertyKey.ASSET_TYPE)}"
@@ -86,7 +86,7 @@ class MhdTransactionsTest extends Specification {
         url.withInputStream {
             xml = Io.getStringFromInputStream(it)
         }
-        Asset a = new ValidationApi().validateRequest('dmv', xml)
+        Asset a = new ValidationApi().validateRequest('dmv', xml, 'Content-Type: application/atom+xml')
 
         then:
         a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
@@ -99,7 +99,7 @@ class MhdTransactionsTest extends Specification {
         url.withInputStream {
             xml = Io.getStringFromInputStream(it)
         }
-        Asset a = new ValidationApi().validateRequest('pdr', xml)
+        Asset a = new ValidationApi().validateRequest('pdr', xml, 'Content-Type: application/atom+xml')
 
         then:
         a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
@@ -112,7 +112,7 @@ class MhdTransactionsTest extends Specification {
         url.withInputStream {
             xml = Io.getStringFromInputStream(it)
         }
-        Asset a = new ValidationApi().validateRequest('pdr', xml)
+        Asset a = new ValidationApi().validateRequest('pdr', xml, 'Content-Type: application/json+fhir')
 
         then:
         a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
