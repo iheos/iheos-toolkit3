@@ -1135,14 +1135,14 @@ public class LogBrowserWidget extends Composite {
 //                            logger.warning(ex.toString());
 //                        }
 
-                        Anchor autoRefreshLink = new Anchor("Auto refresh");
-                        autoRefreshLink.addClickHandler(new ClickHandler() {
-                            @Override
-                            public void onClick(ClickEvent event) {
-                                Window.alert("Feature not yet implemented.");
-                            }
-                        });
-                        menuItemPanel.add(autoRefreshLink);
+//                        Anchor autoRefreshLink = new Anchor("Refresh");
+//                        autoRefreshLink.addClickHandler(new ClickHandler() {
+//                            @Override
+//                            public void onClick(ClickEvent event) {
+//                                Window.alert("Feature not yet implemented.");
+//                            }
+//                        });
+//                        menuItemPanel.add(autoRefreshLink);
 
                         // Browse method only
                         // Show Summary link here.
