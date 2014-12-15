@@ -21,8 +21,8 @@ import java.util.logging.Logger;
 /**
  * Tab to handle a file conversion from mhd to xds
  */
-public class MhdToXdsConverterTab extends GenericCloseableTab {
-    private Logger logger=Logger.getLogger(MhdToXdsConverterTab.class.getName());
+public class MhdToXdsConverterTab2 extends GenericCloseableTab {
+    private Logger logger=Logger.getLogger(MhdToXdsConverterTab2.class.getName());
     // RPC services declaration
     private final static MHDTabsServicesAsync mhdToolkitService = GWT
             .create(MHDTabsServices.class);
@@ -34,7 +34,7 @@ public class MhdToXdsConverterTab extends GenericCloseableTab {
     private FileUpload fileUploadItem;
     private Button runBtn;
 
-    public MhdToXdsConverterTab() {
+    public MhdToXdsConverterTab2() {
         super(header);
         bindUI();
     }

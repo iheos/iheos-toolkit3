@@ -25,7 +25,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTa
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MhdToXdsConverterTab;
+import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MhdToXdsConverterTab2;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.submitTestDataTab.SubmitTestDataTab;
@@ -241,7 +241,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
             tab = new SubmitTestDataTab();
         }
         else if(tabName.equals(TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode())){
-            tab = new MhdToXdsConverterTab();
+            tab = new MhdToXdsConverterTab2();
         }
         else if(tabName.equals(TabNamesUtil.getInstance().getHelpTabCode())){
             tab = new HelpTab();
