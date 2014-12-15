@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     
     <modules>
+        <module>../repo-support</module>
         <module>../xdsException</module>
         <module>../common-datatypes</module>
         <module>../utilities</module>

@@ -1,4 +1,7 @@
 <ActorsTransactions>
+    <!--
+        XDR
+    -->
     <transaction name="Provide and Register" id="prb" code="prb">
         <params multipart="true" soap="true"/>
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
@@ -9,6 +12,24 @@
         <implClass value=""/>
         <transaction id="prb"/>
     </actor>
+    <!--
+        MHD
+    -->
+    <transaction name="Doc Reference Validation - XML" id="drv" code="drv">
+        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocRefTransaction"/>
+    </transaction>
+    <transaction name="Doc Manifest Validation - XML" id="dmv" code="dmv">
+        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocManTransaction"/>
+    </transaction>
+    <actor name="MHD Document Recipient" id="mhddocrec">
+        <implClass value=""/>
+        <!-- Pseudo-transactions - really only speciality validators -->
+        <transaction id="drv"/>
+        <transaction id="dmv"/>
+    </actor>
+    <!--
+        XDS
+    -->
     <transaction name="Register" id="rb" code="rb">
         <params multipart="false" soap="true"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>

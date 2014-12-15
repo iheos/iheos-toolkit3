@@ -1,0 +1,176 @@
+{
+    "resourceType": "Bundle",
+    "title": "example submission bundle",
+    "id": "urn:uuid:f5207893-3074-4d38-8c83-0fdbfd79bdc0",
+    "updated": "2004-12-25T22:20:10+01:00",
+    "category": [{
+        "scheme": "http://hl7.org/fhir/tag",
+        "term": "http://ihe.net/fhir/tag/iti-65"
+    }],
+    "entry": [
+        {
+            "title": "title",
+            "id": null,
+            "updated": "2004-12-25T22:20:10+01:00",
+            "content": {
+                "resourceType": "DocumentManifest",
+                "text": {
+                    "status": "generated",
+                    "div": "<div><p>comments for the submission set<\/p><\/div>"
+                },
+                "contained": [{
+                    "resourceType": "Practitioner",
+                    "_id": "11375",
+                    "role": [{"text": "Referrer"}],
+                    "specialty": [{"text": "Radiology"}]
+                }],
+                "masterIdentifier": {"value": "1.3.6.1.4.1.40371.1.3.33830.62584.31048.57049.54365.50019.53148"},
+                "subject": [{"reference": "#patient"}],
+                "source": "urn:oid:1.3.6.1.4.1.21367.2005.3.7",
+                "status": "current",
+                "content": [
+                    {"reference": "urn:uuid:bcf1fee3-6803-4fd5-9ef3-69d744d22823"},
+                    {"reference": "urn:uuid:47c42e8e-38f3-4e1f-a096-4d15183d4f36"}
+                ]
+            }
+        },
+        {
+            "title": "example DocumentEntry",
+            "id": "urn:uuid:47c42e8e-38f3-4e1f-a096-4d15183d4f36",
+            "updated": "2004-12-25T22:20:10+01:00",
+            "content": {
+                "resourceType": "DocumentReference",
+                "text": {
+                    "status": "generated",
+                    "div": "<div><p>comments<\/p><\/div>"
+                },
+                "contained": [
+                    {
+                        "resourceType": "Practitioner",
+                        "_id": "lisa.jensen",
+                        "telecom": [{"value": "^^Internet^lisa.jensen@vestamedical.com"}],
+                        "role": [{"text": "Referrer"}]
+                    },
+                    {
+                        "resourceType": "Patient",
+                        "_id": "patient",
+                        "identifier": [
+                            {
+                                "use": "official",
+                                "system": "urn:oid:1.3.6.1.4.1.21367.2005.3.7",
+                                "value": "6578946"
+                            },
+                            {
+                                "use": "usual",
+                                "system": "urn:oid:1.2.3",
+                                "value": "6578946"
+                            }
+                        ]
+                    }
+                ],
+                "masterIdentifier": {"value": "1.3.6.1.4.1.40371.1.3.27817.10071.25344.32327.14622.20248.7826"},
+                "subject": {"reference": "#patient"},
+                "type": {"coding": [{
+                    "system": "2.16.840.1.113883.6.1",
+                    "code": "34104-0",
+                    "display": "Consultation Note"
+                }]},
+                "class": {"coding": [{
+                    "system": "2.16.840.1.113883.6.1",
+                    "code": "28570-0",
+                    "display": "Procedure Note"
+                }]},
+                "author": [{"reference": "#lisa.jensen"}],
+                "created": "2004-12-25T22:20:10+01:00",
+                "indexed": "2004-12-25T22:20:10+01:00",
+                "status": "current",
+                "description": "doc1",
+                "mimeType": "text/plain",
+                "format": ["urn:ihe:xds:formatCode:pdf^^Forcare formatCodes"],
+                "location": "document1"
+            }
+        },
+        {
+            "title": "example DocumentEntry",
+            "id": "urn:uuid:bcf1fee3-6803-4fd5-9ef3-69d744d22823",
+            "updated": "2004-12-25T22:20:10+01:00",
+            "content": {
+                "resourceType": "DocumentReference",
+                "text": {
+                    "status": "generated",
+                    "div": "<div><p>comments<\/p><\/div>"
+                },
+                "contained": [
+                    {
+                        "resourceType": "Practitioner",
+                        "_id": "lisa.jensen",
+                        "telecom": [{"value": "^^Internet^lisa.jensen@vestamedical.com"}],
+                        "role": [{"text": "Referrer"}]
+                    },
+                    {
+                        "resourceType": "Binary",
+                        "_id": "doc1",
+                        "contentType": "text/plain",
+                        "content": "dGhpcyBpcyBteSBkb2N1bWVudC4="
+                    },
+                    {
+                        "resourceType": "Patient",
+                        "_id": "patient",
+                        "identifier": [
+                            {
+                                "use": "official",
+                                "system": "urn:oid:1.3.6.1.4.1.21367.2005.3.7",
+                                "value": "6578946"
+                            },
+                            {
+                                "use": "usual",
+                                "system": "urn:oid:1.2.3",
+                                "value": "6578946"
+                            }
+                        ]
+                    }
+                ],
+                "masterIdentifier": {"value": "1.3.6.1.4.1.40371.1.3.8540.60734.56247.63167.57179.25543.26611"},
+                "subject": {"reference": "#patient"},
+                "type": {"coding": [{
+                    "system": "2.16.840.1.113883.6.1",
+                    "code": "34104-0",
+                    "display": "Consultation Note"
+                }]},
+                "class": {"coding": [{
+                    "system": "2.16.840.1.113883.6.1",
+                    "code": "28570-0",
+                    "display": "Procedure Note"
+                }]},
+                "author": [{"reference": "#lisa.jensen"}],
+                "created": "2004-12-25T22:20:10+01:00",
+                "indexed": "2004-12-25T22:20:10+01:00",
+                "status": "current",
+                "description": "doc2",
+                "mimeType": "text/plain",
+                "format": ["urn:ihe:xds:formatCode:pdf^^Forcare formatCodes"],
+                "location": "document2"
+            }
+        },
+        {
+            "title": "DocumentEntry content",
+            "id": "document1",
+            "updated": "2004-12-25T22:20:10+01:00",
+            "content": {
+                "resourceType": "Binary",
+                "contentType": "text/plain",
+                "content": "TUhEIG9uIEZISVI="
+            }
+        },
+        {
+            "title": "DocumentEntry content",
+            "id": "document2",
+            "updated": "2004-12-25T22:20:10+01:00",
+            "content": {
+                "resourceType": "Binary",
+                "contentType": "text/plain",
+                "content": "TUhEIG9uIEZISVI="
+            }
+        }
+    ]
+}

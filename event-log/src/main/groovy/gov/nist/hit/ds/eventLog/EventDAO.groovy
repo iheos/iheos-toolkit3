@@ -23,29 +23,20 @@ class EventDAO {
         inOut = new InOutMessagesDAO()
         a = inOut.init(event.eventAsset)
         a.setOrder(1)
-//        inOut.save(event.inOutMessages)
 
         artifacts = new ArtifactsDAO()
         a = artifacts.init(event.eventAsset)
         a.setOrder(2)
-  //      artifacts.save(event.artifacts)
 
         if (!validatorsAsset) {
             addValidatorsAsset()
         }
 
-        // Created only if needed
-//        if (event.fault) {
-//            def fault = new FaultDAO();
-//            fault.init(event.eventAsset)
-//            fault.add(event.fault)
-//            fault.asset.setOrder(4)
-//        }
         save()
     }
 
     def save() {
-        inOut.save(event.inOutMessages)
+        inOut.save(event.inOut)
         artifacts.save(event.artifacts)
         if (event.fault) {
             def fault = new FaultDAO();

@@ -31,6 +31,7 @@ class InOutMessagesDAO {
     // can be called multiple times - keeps track of what has been flushed to disk
     void save(InOutMessages iom) {
         iom.with {
+            log.debug("Saving IO Messages - reqBody = ${reqBody != null} reqBodySaved = ${reqBodySaved}")
             if (reqHdr && !reqHdrSaved) { putRequestHeader(reqHdr); reqHdrSaved = true }
             if (reqBody && !reqBodySaved) { putRequestBody(reqBody); reqBodySaved = true }
             if (respHdr && !respHdrSaved) { putResponseHeader(respHdr); respHdrSaved = true }
@@ -53,7 +54,7 @@ class InOutMessagesDAO {
 //	}
 
 	public void putRequestBody(byte[] bytes) throws RepositoryException {
-//		log.debug("Body\n" + new String(bytes));
+        log.debug("Request body saved")
 		Asset a = AssetHelper.createChildAsset(inOutAsset, "Request Body", "", new SimpleType(reqBodyType));
 		a.setOrder(2);
         a.setMimeType("application/octet-stream");

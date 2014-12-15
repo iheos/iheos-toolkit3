@@ -221,6 +221,12 @@ public abstract class ValComponentBase implements ValComponent {
         return a
     }
 
+    public Assertion assertMoreThan(int reference, int value) throws SoapFaultException {
+        Assertion a = ag.assertMoreThan(reference, value, currentValidationMethod().required);
+        recordAssertion(a);
+        return a
+    }
+
     public boolean assertTrueNoLog(boolean value) throws SoapFaultException {
         if (!value)
             return assertTrue(value);

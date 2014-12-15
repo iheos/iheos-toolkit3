@@ -1,0 +1,5 @@
+# Simulator support
+
+keyword=simulatorsRepos
+domain=repository
+description=Holds simulator state
