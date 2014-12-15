@@ -21,7 +21,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -200,12 +200,12 @@ public class SubmitTestDataTab extends GenericCloseableTab {
     }
 
     /**
-     * Abstract method implementation to set the tab name (defined in {@link gov.nist.toolkit.xdstools3.client.util.TabNamesUtil}).
+     * Abstract method implementation to set the tab name (defined in {@link gov.nist.toolkit.xdstools3.client.manager.TabNamesManager}).
      *
      * @return tab name
      */
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getTestDataSubmissionTabCode();
+        return TabNamesManager.getInstance().getTestDataSubmissionTabCode();
     }
 }

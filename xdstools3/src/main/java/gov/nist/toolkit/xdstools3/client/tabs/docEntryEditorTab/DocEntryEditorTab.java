@@ -2,10 +2,9 @@ package gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.types.ContentsType;
-import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLPane;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 public class DocEntryEditorTab extends GenericCloseableTab {
     static String header = "Document Metadata Editor";
@@ -25,6 +24,6 @@ public class DocEntryEditorTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode();
+        return TabNamesManager.getInstance().getDocumentMetadataEditorTabCode();
     }
 }

@@ -16,7 +16,7 @@ import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
@@ -118,7 +118,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
      */
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getMHDValidatorTabCode();
+        return TabNamesManager.getInstance().getMHDValidatorTabCode();
     }
 
     /**

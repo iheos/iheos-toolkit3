@@ -14,7 +14,7 @@ import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 import java.util.logging.Logger;
 
@@ -119,6 +119,6 @@ public class MhdToXdsConverterTab2 extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode();
+        return TabNamesManager.getInstance().getMhdtoXdsConverterTabCode();
     }
 }

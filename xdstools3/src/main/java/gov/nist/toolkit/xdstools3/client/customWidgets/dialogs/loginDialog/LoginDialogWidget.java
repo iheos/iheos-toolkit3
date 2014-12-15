@@ -6,18 +6,21 @@ import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.data.fields.DataSourcePasswordField;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.VerticalAlignment;
+import com.smartgwt.client.util.EventHandler;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.events.KeyDownEvent;
+import com.smartgwt.client.widgets.events.KeyDownHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericCancelButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.LoginButton;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
-import gov.nist.toolkit.xdstools3.client.util.Util;
+import gov.nist.toolkit.xdstools3.client.util.eventBus.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.manager.Manager;
 
 public class LoginDialogWidget extends Window {
     private static int POPUP_WIDTH = 295;
@@ -55,6 +58,7 @@ public class LoginDialogWidget extends Window {
         vlayout.setAlign(Alignment.CENTER);
         vlayout.setAlign(VerticalAlignment.CENTER);
         addItem(vlayout);
+        login.focus();
     }
 
     /**
@@ -77,12 +81,22 @@ public class LoginDialogWidget extends Window {
      */
     private HLayout createButtons(){
         login = new LoginButton();
+        login.setSelected(true);
         login.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 if (form.validate()){
                 logMeIn((String)form.getField("password").getValue());
                	}
             }});
+        // Close the dialog when pressing Enter or Escape
+        login.addKeyDownHandler(new KeyDownHandler() {
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                if (EventHandler.getKey().equals("Escape") || EventHandler.getKey().equals("Enter")) {
+                    clear();
+                        }
+                    }
+                });
 
         cancel = new GenericCancelButton();
         cancel.addClickHandler(new ClickHandler() {
@@ -121,7 +135,7 @@ public class LoginDialogWidget extends Window {
             @Override
             public void onSuccess(Boolean loggedIn) {
                 if (loggedIn){
-                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getAdminTabCode()));
+                    Manager.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesManager.getInstance().getAdminTabCode()));
                     // TODO display a "you are logged in as admin" text somewhere in a menu bar
                     close(); // close the popup
 

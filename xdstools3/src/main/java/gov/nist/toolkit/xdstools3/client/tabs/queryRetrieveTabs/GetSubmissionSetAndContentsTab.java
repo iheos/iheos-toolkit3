@@ -15,7 +15,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithToolti
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 public class GetSubmissionSetAndContentsTab extends GenericCloseableTab {
 
@@ -60,7 +60,7 @@ public class GetSubmissionSetAndContentsTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getGetSubmissionSetAndContentsTabCode();
+        return TabNamesManager.getInstance().getGetSubmissionSetAndContentsTabCode();
     }
 
     private void bindUI() {

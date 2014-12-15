@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.util;
+package gov.nist.toolkit.xdstools3.client.manager;
 
 
 import com.google.gwt.core.client.GWT;
@@ -8,30 +8,23 @@ import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
 /** Stores static variables & variables common to the application. This is a singleton.
  *
  */
-public class Util {
-    private static Util instance = null;
+public class Manager {
+    private static Manager instance = null;
 
+    // ----- Common GIN injector and event bus -----
     private static final Xdstools3GinInjector injector=GWT.create(Xdstools3GinInjector.class);
-
-    // Static variables
     public static final /*Simple*/EventBus EVENT_BUS = injector.getEventBus();/*new SimpleEventBus();*/
 
-    // Variables accessed by getter
-    private boolean isLoggedAsAdmin =  false;
 
     // Singleton constructor
-    private Util(){
+    private Manager(){
     }
 
-    public static Util getInstance(){
+    public static Manager getInstance(){
         if (instance == null) {
-            instance = new Util();
+            instance = new Manager();
         }
         return instance;
     }
-
-    // Login
-    public boolean getLoggedAsAdminStatus(){ return isLoggedAsAdmin;  }
-    public void setIsLoggedAsAdmin(){  isLoggedAsAdmin = true;  }
 
 }

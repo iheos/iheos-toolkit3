@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.util;
+package gov.nist.toolkit.xdstools3.client.manager;
 
 /**
  * Stores   variables & variables common to the application. This is a singleton.
@@ -11,12 +11,12 @@ package gov.nist.toolkit.xdstools3.client.util;
  * or GET_FOLDERS...
  *
  */
-public class TabNamesUtil {
-    private static TabNamesUtil instance = null;
+public class TabNamesManager {
+    private static TabNamesManager instance = null;
 
-    public static TabNamesUtil getInstance(){
+    public static TabNamesManager getInstance(){
         if (instance == null) {
-            instance = new TabNamesUtil();
+            instance = new TabNamesManager();
         }
         return instance;
     }

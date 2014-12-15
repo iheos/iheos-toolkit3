@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client.eventBusUtils;
+package gov.nist.toolkit.xdstools3.client.util.eventBus;
 
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;

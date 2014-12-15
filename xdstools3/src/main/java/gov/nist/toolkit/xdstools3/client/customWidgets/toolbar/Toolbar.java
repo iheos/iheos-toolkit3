@@ -14,9 +14,9 @@ import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.toolbar.RibbonBar;
 import gov.nist.toolkit.xdstools3.client.customWidgets.dialogs.PopupMessageV3;
 import gov.nist.toolkit.xdstools3.client.customWidgets.dialogs.loginDialog.LoginDialogWidget;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
-import gov.nist.toolkit.xdstools3.client.util.Util;
+import gov.nist.toolkit.xdstools3.client.util.eventBus.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.manager.Manager;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -139,7 +139,7 @@ public class Toolbar extends RibbonBar {
             @Override
             public void onClick(ClickEvent event) {
                 // Display the Endpoint Settings tab
-                Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getEndpointsTabCode()));
+                Manager.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesManager.getInstance().getEndpointsTabCode()));
             }});
 
         /**
@@ -148,15 +148,9 @@ public class Toolbar extends RibbonBar {
         adminButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // if not logged in
-                if (!Util.getInstance().getLoggedAsAdminStatus()) {
                     // ask user to log in
-                    LoginDialogWidget dialog = new LoginDialogWidget(TabNamesUtil.getInstance().getAdminTabCode());
+                    LoginDialogWidget dialog = new LoginDialogWidget(TabNamesManager.getInstance().getAdminTabCode());
                     dialog.show();
-                } else {
-                    // Display the Admin Settings tab if logged in
-                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getAdminTabCode()));
-                }
             }
         });
 

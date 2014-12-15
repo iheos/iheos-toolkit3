@@ -14,7 +14,7 @@ import com.smartgwt.client.widgets.form.validator.MatchesFieldValidator;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.toolkit.xdstools3.client.customWidgets.dialogs.PopupMessageV3;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 /**
  * This tabs allows to edit the Administrator Settings / Toolkit Settings available through the back-end from a
@@ -223,6 +223,6 @@ public class AdminSettingsTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getAdminTabCode();
+        return TabNamesManager.getInstance().getAdminTabCode();
     }
 }
