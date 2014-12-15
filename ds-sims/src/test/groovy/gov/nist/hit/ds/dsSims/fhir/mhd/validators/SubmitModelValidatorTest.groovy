@@ -42,8 +42,12 @@ Content-Type: application/atom+xml
         <title>title</title>
         <content type="text/xml">
             <DocumentManifest xmlns="http://hl7.org/fhir">
-                <content id="0ff2318b-c524-42a4-bec4-f221c808133e"/>
-                <content id="documententry2"/>
+                <content>
+                    <reference value="0ff2318b-c524-42a4-bec4-f221c808133e"/>
+                </content>
+                <content>
+                    <reference value="documententry2"/>
+                </content>
             </DocumentManifest>
         </content>
     </entry>
@@ -108,7 +112,7 @@ Content-Type: application/atom+xml
 
     def 'Test contentType parsing'() {
         setup: 'Build validator'
-        SubmitModelValidator val = new SubmitModelValidator()
+        SubmitHeaderValidator val = new SubmitHeaderValidator()
 
         when: 'parser run'
         String contentType = val.contentType(feedHeader)
@@ -235,8 +239,12 @@ Content-Type: application/atom+xml
         <title>title</title>
         <content type="text/xml">
             <DocumentManifest xmlns="http://hl7.org/fhir">
-                <content id="0ff2318b-c524-42a4-bec4-f221c808133e"/>
-                <content id="documententry2"/>
+                <content>
+                    <reference value="0ff2318b-c524-42a4-bec4-f221c808133e"/>
+                </content>
+                <content>
+                    <reference value="documententry2"/>
+                </content>
             </DocumentManifest>
         </content>
     </entry>

@@ -28,8 +28,16 @@
                 </subject>
                 <source value="urn:oid:1.3.6.1.4.1.21367.2005.3.7"/>
                 <status value="current"/>
+                <content>
+                    <reference value="0ff2318b-c524-42a4-bec4-f221c808133e"/>
+                </content>
+                <content>
+                    <reference value="documententry2"/>
+                </content>
+                <!--
                 <content id="0ff2318b-c524-42a4-bec4-f221c808133e"/>
                 <content id="documententry2"/>
+                -->
             </DocumentManifest>
         </content>
     </entry>
@@ -98,7 +106,7 @@
                 <format value="urn:ihe:xds:formatCode:pdf^^Forcare formatCodes"/>
                 <size value="11"/>
                 <hash value="A2E2298974C2BE5A6E2C635247210C2CFCB42A94"/>
-                <location value="#document1"/>
+                <location value="document1"/>
             </DocumentReference>
         </content>
     </entry>
@@ -167,7 +175,7 @@
                 <format value="urn:ihe:xds:formatCode:pdf^^Forcare formatCodes"/>
                 <size value="11"/>
                 <hash value="805F6F66D093A19E589E3500EEBE2165A6BC51FC"/>
-                <location value="#document2"/>
+                <location value="document2"/>
             </DocumentReference>
         </content>
     </entry>

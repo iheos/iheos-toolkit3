@@ -48,7 +48,7 @@ public class AssertionGroup  {
             worstStatus = asser.getStatus();
         if (!asser.defaultMsg) removeDefaultMsg()
         log.debug("...adding assertion to ${toString()}")
-        log.debug("...worstStatus now ${worstStatus}")
+//        log.debug("...worstStatus now ${worstStatus}")
         assertions.add(asser);
         assertionIds << asser.id
         if (asser.failed()) log.debug("...Failed (${(required) ? '' : 'not '} required)")

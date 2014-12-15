@@ -2,12 +2,10 @@ package gov.nist.hit.ds.dsSims.fhir.mhd.validators
 import gov.nist.hit.ds.dsSims.fhir.mhd.SubmitModel
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
-import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Setup
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.codec.digest.DigestUtils
-
 /**
  * Created by bmajur on 12/8/14.
  */
@@ -99,7 +97,7 @@ class SubmitModelValidator extends ValComponentBase {
 
     @Validation(id='mhdsm060', msg='All Document References are referenced by the Manifest', ref=['3.65.4.1.2.1 FHIR encoding of a resource bundle'])
     def mhdsm060() {
-        def manReferences = submitModel.docManifests[0]?.content.collect { it.@id.text() }
+        def manReferences = submitModel.docManifests[0]?.content.collect { it.reference.@value.text() }
         submitModel.docReferenceMap.keySet().each { assertIn(manReferences, it)}
     }
 
@@ -114,34 +112,6 @@ class SubmitModelValidator extends ValComponentBase {
         assertEquals('http://ihe.net/fhir/tag/iti-65', tag.@term.text())
     }
 
-    boolean isXml() { submitModel.isXml }
-    boolean isJson() { !submitModel.isXml }
-
-    @Guard(methodNames=['isXml'])
-    @Validation(id='mhdsm080', msg='Mime type is application/atom+xml', ref=['3.65.4.1.2 Message Semantics'])
-    def mhdsm080() { assertEquals('application/atom+xml', contentType()) }
-
-    @Guard(methodNames=['isJson'])
-    @Validation(id='mhdsm090', msg='Mime type is application/json+fhir', ref=['3.65.4.1.2 Message Semantics'])
-    def mhdsm090() { assertEquals('application/json+fhir', contentType()) }
-
-    String contentType() {
-        return contentType(simHandle.event.inOut.reqHdr)
-    }
-
-    String contentType(headers) {
-        headers = headers.toLowerCase().readLines()
-        def contentTypeHeader = headers.find { it.startsWith('content-type')}
-        if (!contentTypeHeader) return ''
-        String[] parts = contentTypeHeader.split(':')
-        if (parts.size() < 2) return ''
-        if (parts[1].indexOf(';') != -1) {
-            String[] parts2 = parts[1].split(';')
-            def type = parts2[0]
-            return type.trim()
-        }
-        return parts[1].trim()
-    }
 
     static byte[] base64decode(byte[] s) {
         return Base64.decodeBase64(s)

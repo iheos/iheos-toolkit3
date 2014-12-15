@@ -30,6 +30,7 @@ class FeedTransaction implements Transaction {
             SubmitModel sm = buildSubmitModel(true, dr)
             def validator = new SubmitModelValidator(simHandle, sm)
             validator.asPeer().run()
+            new SubmitHeaderValidator(simHandle, sm).asPeer().run()
         } else if (reqString.startsWith('{')) {
             // JSON
             // TODO - this call does not work with feed
@@ -42,6 +43,7 @@ class FeedTransaction implements Transaction {
             SubmitModel sm = buildSubmitModel(false, dr)
             def validator = new SubmitModelValidator(simHandle, sm)
             validator.asPeer().run()
+            new SubmitHeaderValidator(simHandle, sm).asPeer().run()
         } else {
             throw new ToolkitRuntimeException('Parse failed - do not understand format - XML or JSON required')
         }

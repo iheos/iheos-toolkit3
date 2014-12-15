@@ -15,13 +15,13 @@ class ValidationApi {
     def factory = new ActorTransactionTypeFactory()
     def config = new SimSystemConfig()
 
-    Asset validateRequest(String transactionName, String content) {
+    Asset validateRequest(String transactionName, String content, String headers) {
         def simId = new SimId('ValidationApi')
         def simHandle = SimUtils.create(simId)
         def transactionType = factory.getTransactionType(transactionName)
         simHandle.transactionType = transactionType
         simHandle.repository = RepoUtils.getRepository(config.repoName)
-        simHandle.event.inOut.reqHdr = ' '
+        simHandle.event.inOut.reqHdr = headers
         simHandle.event.inOut.reqBody = content.getBytes()
         def runner = new TransactionRunner(simHandle)
         runner.validateRequest()
