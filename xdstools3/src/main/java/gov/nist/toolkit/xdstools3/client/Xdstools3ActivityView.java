@@ -17,21 +17,18 @@ import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.*;
-import gov.nist.toolkit.xdstools3.client.tabs.EndpointConfigTab;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
-import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs2.MHDToXDSConverterTab;
+import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
-import gov.nist.toolkit.xdstools3.client.tabs.MessageValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
-import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs2.MHDValidatorTab;
+import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
+import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MhdToXdsConverterTab2;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
-import gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab.SubmitTestDataTab;
+import gov.nist.toolkit.xdstools3.client.tabs.submitTestDataTab.SubmitTestDataTab;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
@@ -64,6 +61,8 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         topTabSet.setWidth(1024);
         Tab homeTab = new HomeTab("Home");
         topTabSet.addTab(homeTab);
+        tabsetStack.setZIndex(-1);
+
 
         // Main layout
         VLayout mainLayout = new VLayout();
@@ -242,7 +241,10 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
             tab = new SubmitTestDataTab();
         }
         else if(tabName.equals(TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode())){
-            tab = new MHDToXDSConverterTab();
+            tab = new MhdToXdsConverterTab2();
+        }
+        else if(tabName.equals(TabNamesUtil.getInstance().getHelpTabCode())){
+            tab = new HelpTab();
         }
         else{
             // unknown tab
@@ -352,9 +354,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getSubmitRetrieveTabCode()+"'>XDS.b Submit/Retrieve</a></li>" +
                 "</ul>" +
                 "</li>" +
-                "<div style='float:right'>" +
-                "<li><a href='#'><img class='icon-link' src='images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
-                "<li><a href='#'><img class='icon-link' src='images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
+                "<div style='float:right;'>" +
+                "<li><a class='right-side-button' href='#'><img class='icon-link' src='images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
+                "<li><a class='right-side-button' href='#TabPlace:"+TabNamesUtil.getInstance().getHelpTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
                 "</div>" +
                 "<ul>" +
                 "</div>" +
@@ -372,7 +374,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "            <a href=\"http://www.nist.gov\">NIST homepage</a>" +
                 "         </li>" +
                 "         <li>" +
-                "            <a href=\"http://www.nist.gov/public_affairs/disclaimer.cfm\">NIST Disclaimer</a>" +
+                "            <a href=\"http://www.nist.gov/public_affairs/disclaimer.cfm\">NIST disclaimer</a>" +
                 "         </li>" +
                 "    </ul>" +
                 "</footer>";

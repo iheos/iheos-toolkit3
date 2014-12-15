@@ -4,7 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.data.fields.DataSourcePasswordField;
-import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.Label;
@@ -22,18 +21,14 @@ import gov.nist.toolkit.xdstools3.client.util.Util;
 
 public class LoginDialogWidget extends Window {
     private static int POPUP_WIDTH = 295;
-    private static int POPUP_HEIGHT = 165;
-
-
-    //	protected TextItem userName;
-    //	protected TextItem password;
+    private static int POPUP_HEIGHT = 125;
     protected DynamicForm form;
     protected LoginButton login;
     protected GenericCancelButton cancel;
     protected DataSource dataSource;
-
     private String protectedTab = "";
     private VLayout vlayout;
+
 
     public LoginDialogWidget(String _protectedTab) {
         protectedTab = _protectedTab;
@@ -50,9 +45,8 @@ public class LoginDialogWidget extends Window {
         // Set DataSource (link to backend)
         dataSource = new DataSource();
         dataSource.setID("login");
-        DataSourceTextField firstNameField = new DataSourceTextField("username", "Username", 50, true);
         DataSourcePasswordField passwordField = new DataSourcePasswordField("password", "Password", 50, true);
-        dataSource.setFields(firstNameField, passwordField);
+        dataSource.setFields(passwordField);
 
 
         vlayout = new VLayout();
@@ -71,7 +65,7 @@ public class LoginDialogWidget extends Window {
         form.setDataSource(dataSource);
         form.setUseAllDataSourceFields(true);
         form.setAutoFocus(true); form.setAutoFocusOnError(true);
-        form.setHeight(80);
+        form.setHeight(40);
         form.setCellPadding(5);
         form.setAlign(Alignment.CENTER);
         return form;
@@ -86,7 +80,7 @@ public class LoginDialogWidget extends Window {
         login.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 if (form.validate()){
-                logMeIn((String)form.getField("username").getValue(), (String)form.getField("password").getValue());
+                logMeIn((String)form.getField("password").getValue());
                	}
             }});
 
@@ -111,7 +105,7 @@ public class LoginDialogWidget extends Window {
      * If the call succeeds, the login itself can have succeeded or failed. The status of the login attempt
      * is relayed from the server using a Boolean.
      */
-    protected void logMeIn(String username, String password){
+    protected void logMeIn(String password){
         // call to server to log the user
         LoginServiceAsync service = GWT.create(LoginService.class);
 
@@ -133,19 +127,22 @@ public class LoginDialogWidget extends Window {
 
                 } else {
                     // call to server went through but login failed
-                    Label errLabel = createErrorLabel("Incorrect password or username. Nice try though.");
-                    vlayout.addMember(errLabel);
+                    Label errLabel = createErrorLabel("Incorrect password. Nice try though!");
+                    vlayout.hideMember(errLabel);
+                        vlayout.addMember(errLabel); // do nothing if this is the second failure or +,
+                                                        // the error label is already shown.
+
                     vlayout.redraw();
                     setAutoSize(true);
                 }
             }
         };
-        service.logMeIn(username, password, callback);
+        service.logMeIn(password, callback);
     }
 
     private Label createErrorLabel(String msg){
         Label errorMsg = new Label();
-        errorMsg.setWidth(POPUP_WIDTH - 20);
+        errorMsg.setWidth(POPUP_WIDTH - 40);
         errorMsg.setHeight(45);
         errorMsg.setLayoutAlign(Alignment.CENTER);
         errorMsg.setPadding(10);

@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.tabs;
 
 
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.configure.EndpointsConfigWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointsConfigWidget;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 public class EndpointConfigTab extends GenericCloseableTab {

@@ -42,6 +42,7 @@ public class TabNamesUtil {
     private final String folderValidationTabCode = "FOLDER_VALIDATION";
     private final String submitRetrieveTabCode="SUBMIT_RETRIEVE";
     private final String homeTabCode="HOME";
+    private final String helpTabCode="HELP";
     private final String mhdValidatorTabCode="MHD_VALIDATOR";
     private final String testDataSubmissionTabCode = "SUBMIT_TEST_DATA";
     private final String mhdToXdsConverterTabCode="MHD_CONVERTER";
@@ -81,4 +82,5 @@ public class TabNamesUtil {
     }
     public String getTestDataSubmissionTabCode() {return testDataSubmissionTabCode;}
     public String getMhdtoXdsConverterTabCode() {return mhdToXdsConverterTabCode;}
+    public String getHelpTabCode() {return helpTabCode;}
 }

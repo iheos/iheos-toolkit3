@@ -17,8 +17,12 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	 */
 	private static final long serialVersionUID = 1L;
 
-    // Login functions
-	public boolean logMeIn(String username, String password){
-        return Caller.getInstance().logMeIn(username, password);}
+    /**
+     * Admin login. Passes the password to the backend to be checked.
+     * @param password the admin password.
+     * @return a boolean that indicates whether the login was successful / unsuccessful.
+     */
+	public boolean logMeIn(String password){
+        return Caller.getInstance().logMeIn(password);}
 
 }

@@ -6,7 +6,7 @@ import com.smartgwt.client.types.RowEndEditAction;
 import com.smartgwt.client.types.SortDirection;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointDS;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointDS;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 public class MessageValidatorTab extends GenericCloseableTab {
