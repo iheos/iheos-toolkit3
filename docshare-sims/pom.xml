@@ -24,7 +24,7 @@
         <module>../httpSoap</module>
         <module>../sim-servlet</module>
         <module>../ds-sims</module>
-       
+        <module>../fhir</module>
     </modules>
 
 </project>

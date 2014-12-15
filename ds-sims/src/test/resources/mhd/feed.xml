@@ -1,12 +1,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>example submission bundle</title>
     <id>urn:uuid:f5207893-3074-4d38-8c83-0fdbfd79bdc0</id>
-    <updated value="2004-12-25T22:20:10+01:00"/>
+    <updated>2004-12-25T22:20:10+01:00</updated>
     <category scheme="http://hl7.org/fhir/tag" term="http://ihe.net/fhir/tag/iti-65"/>
     <entry>
         <title>title</title>
         <id>0ff2318b-c524-42a4-bec4-f221c8081359</id>
-        <updated value="2004-12-25T22:20:10+01:00"/>
+        <updated>2004-12-25T22:20:10+01:00</updated>
         <content type="text/xml">
             <DocumentManifest xmlns="http://hl7.org/fhir">
                 <text>
@@ -46,7 +46,7 @@
     </entry>
     <entry>
         <title>example DocumentEntry</title>
-        <updated value="2004-12-25T22:20:10+01:00"/>
+        <updated>2004-12-25T22:20:10+01:00</updated>
         <id>0ff2318b-c524-42a4-bec4-f221c808133e</id>
         <content type="text/xml">
             <DocumentReference xmlns="http://hl7.org/fhir">
@@ -117,7 +117,7 @@
     <entry>
         <title>example DocumentEntry</title>
         <id>documententry2</id>
-        <updated value="2004-12-25T22:20:10+01:00"/>
+        <updated>2004-12-25T22:20:10+01:00</updated>
         <content type="text/xml">
             <DocumentReference xmlns="http://hl7.org/fhir">
                 <language value="en-US"/>
@@ -187,7 +187,7 @@
     <entry>
         <title>example DocumentEntry</title>
         <id>document1</id>
-        <updated value="2004-12-25T22:20:10+01:00"/>
+        <updated>2004-12-25T22:20:10+01:00</updated>
         <content type="text/xml">
             <Binary xmlns="http://hl7.org/fhir" contentType="text/plain">
                 TUhEIG9uIEZISVI=
@@ -197,7 +197,7 @@
     <entry>
         <title>example DocumentEntry</title>
         <id>document2</id>
-        <updated value="2004-12-25T22:20:10+01:00"/>
+        <updated>2004-12-25T22:20:10+01:00</updated>
         <content type="text/xml">
             <Binary xmlns="http://hl7.org/fhir" contentType="text/plain">
                 TUhEIFRlc3Rpbmc=
