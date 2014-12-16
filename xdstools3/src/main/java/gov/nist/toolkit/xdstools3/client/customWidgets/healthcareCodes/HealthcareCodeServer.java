@@ -2,8 +2,8 @@ package gov.nist.toolkit.xdstools3.client.customWidgets.healthcareCodes;
 
 
 import gov.nist.toolkit.xdstools3.client.RESTUtils.DSResponse;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointDSRequest;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointDSResponse;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointDSRequest;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointDSResponse;
 import gov.nist.toolkit.xdstools3.client.RESTUtils.OperationType;
 
 import javax.ws.rs.Consumes;

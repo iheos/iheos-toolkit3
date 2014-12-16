@@ -2,8 +2,8 @@ package gov.nist.toolkit.xdstools3.client.RPCUtils;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.util.SC;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.util.Util;
+import gov.nist.toolkit.xdstools3.client.util.eventBus.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.manager.Manager;
 
 /**
  * Created by dazais on 5/16/2014.
@@ -19,7 +19,7 @@ public class OpenSettingsTabCallback implements AsyncCallback {
      */
     public void onSuccess(Object result) {
         // Display the Admin Settings Tab if login was successful
-        Util.EVENT_BUS.fireEvent(new OpenTabEvent("ADMIN"));
+        Manager.EVENT_BUS.fireEvent(new OpenTabEvent("ADMIN"));
     }
 
 

@@ -16,12 +16,11 @@ import com.smartgwt.client.widgets.grid.events.SelectionEvent;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithTooltipWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class GetRelatedDocumentsTab extends GenericCloseableTab {
     private static final String header="Get Related Documents";
@@ -78,7 +77,7 @@ public class GetRelatedDocumentsTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getGetRelatedDocumentsCode();
+        return TabNamesManager.getInstance().getGetRelatedDocumentsCode();
     }
 
     private void loadAssociationTypesMap() {

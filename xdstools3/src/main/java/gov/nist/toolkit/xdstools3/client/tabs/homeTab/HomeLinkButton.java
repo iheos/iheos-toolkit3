@@ -8,7 +8,7 @@ import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
 import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 /**
  * Creates a button with the title passed in argument. Also creates a listener which fires an event through Eventbus,
@@ -21,13 +21,12 @@ public class HomeLinkButton extends IButton {
 
     public HomeLinkButton(String _title){
         title = _title;
-        setStyleName("homelinkbutton");
         setTitle(title);
         setAlign(Alignment.LEFT);
 
         // for some reason, setting these properties in the CSS does not override SmartGWT defaults
         setBorder("0");
-        setWidth(400);
+       // setWidth(400);
         setHeight(20);
 
         bindUI();
@@ -39,48 +38,48 @@ public class HomeLinkButton extends IButton {
             public void onClick(ClickEvent event) {
                 // FIXME unsafe code if refactored
                 if (title == "Find Documents")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getFindDocumentsTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFindDocumentsTabCode()));
 //                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFindDocumentsTabCode()));
                 else if (title == "MPQ Find Documents")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMpqFindDocumentsTabCode()));
                 else if (title == "Message Validator")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getMessageValidatorTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMessageValidatorTabCode()));
                 else if (title == "Document Metadata Editor")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode()));// FIXME => why null?
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getDocumentMetadataEditorTabCode()));// FIXME => why null?
                 else if (title == "Pre-Connectathon Tests")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getPreConnectathonTestsTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getPreConnectathonTestsTabCode()));
                 else if (title == "Get Documents")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getGetDocumentsTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getGetDocumentsTabCode()));
                 else if (title == "Find Folders")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getFindFoldersCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFindFoldersCode()));
                 else if (title == "Get Folders")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getGetFoldersTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getGetFoldersTabCode()));
                 else if (title == "Get Folder and Contents")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getGetFoldersAndContentsCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getGetFoldersAndContentsCode()));
                 else if (title == "Retrieve Document")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getRetrieveDocumentTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getRetrieveDocumentTabCode()));
                 else if (title == "Get Submission Set and Contents")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getGetSubmissionSetAndContentsTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getGetSubmissionSetAndContentsTabCode()));
                 else if (title == "Get Related Documents")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getGetRelatedDocumentsCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getGetRelatedDocumentsCode()));
                 else if (title == "XDS.b Doc Source Stores Document")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getSourceStoresDocumentValidationCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getSourceStoresDocumentValidationCode()));
                 else if (title == "XDS.b Registry Do This First")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getRegisterAndQueryTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getRegisterAndQueryTabCode()));
                 else if (title == "XDS.b Lifecycle")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getLifecycleValidationTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getLifecycleValidationTabCode()));
                 else if (title == "XDS.b Registry Folder Handling")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getFolderValidationTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFolderValidationTabCode()));
                 else if (title == "v2 Tab Example")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getv2TabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getv2TabCode()));
                 else if (title == "XDS.b Repository Do This First")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getSubmitRetrieveTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getSubmitRetrieveTabCode()));
                 else if (title == "MHD Validator")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getMHDValidatorTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMHDValidatorTabCode()));
                 else if (title == "Submit Test Data")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getTestDataSubmissionTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getTestDataSubmissionTabCode()));
                 else if (title == "MHD to XDS Converter")
-                    placeController.goTo(new TabPlace(TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMhdtoXdsConverterTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });

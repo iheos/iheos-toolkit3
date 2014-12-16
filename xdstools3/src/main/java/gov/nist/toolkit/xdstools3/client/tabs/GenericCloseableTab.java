@@ -5,10 +5,10 @@ import com.smartgwt.client.widgets.menu.MenuItem;
 import com.smartgwt.client.widgets.menu.events.ClickHandler;
 import com.smartgwt.client.widgets.menu.events.MenuItemClickEvent;
 import com.smartgwt.client.widgets.tab.Tab;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseAllTabsEvent;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseOtherTabsEvent;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseTabEvent;
-import gov.nist.toolkit.xdstools3.client.util.Util;
+import gov.nist.toolkit.xdstools3.client.util.eventBus.CloseAllTabsEvent;
+import gov.nist.toolkit.xdstools3.client.util.eventBus.CloseOtherTabsEvent;
+import gov.nist.toolkit.xdstools3.client.util.eventBus.CloseTabEvent;
+import gov.nist.toolkit.xdstools3.client.manager.Manager;
 
 public abstract class GenericCloseableTab extends GenericTab {
     Menu tabMenu = new Menu();
@@ -29,19 +29,19 @@ public abstract class GenericCloseableTab extends GenericTab {
         closeTabBtn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(MenuItemClickEvent menuItemClickEvent) {
-                Util.EVENT_BUS.fireEvent(new CloseTabEvent(tab));
+                Manager.EVENT_BUS.fireEvent(new CloseTabEvent(tab));
             }
         });
         closeAllTabBtn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(MenuItemClickEvent menuItemClickEvent) {
-                Util.EVENT_BUS.fireEvent(new CloseAllTabsEvent());
+                Manager.EVENT_BUS.fireEvent(new CloseAllTabsEvent());
             }
         });
         closeOtherTabsBtn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(MenuItemClickEvent menuItemClickEvent) {
-                Util.EVENT_BUS.fireEvent(new CloseOtherTabsEvent(tab));
+                Manager.EVENT_BUS.fireEvent(new CloseOtherTabsEvent(tab));
             }
         });
     }

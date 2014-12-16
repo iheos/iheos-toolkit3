@@ -20,17 +20,10 @@ import gov.nist.hit.ds.repository.ui.client.event.asset.OutOfContextAssetClicked
 import gov.nist.hit.ds.repository.ui.client.event.asset.OutOfContextAssetClickedEventHandler;
 import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseAllTabsEvent;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseOtherTabsEvent;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseTabEvent;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
-import gov.nist.toolkit.xdstools3.client.tabs.EndpointConfigTab;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
-import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs2.MHDToXDSConverterTab;
+import gov.nist.toolkit.xdstools3.client.manager.Manager;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
-import gov.nist.toolkit.xdstools3.client.tabs.MessageValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.FolderValidationTab;
 import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.LifecycleValidationTab;
@@ -41,18 +34,12 @@ import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTa
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.toolkit.xdstools3.client.tabs.logBrowserTab.LogBrowserTab;
-import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs2.MHDValidatorTab;
+import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
+import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MhdToXdsConverterTab2;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.FindFoldersTab;
-import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetDocumentsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetFolderAndContentsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetFoldersTab;
-import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetRelatedDocumentsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetSubmissionSetAndContentsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.RetrieveDocumentsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab.SubmitTestDataTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
-import gov.nist.toolkit.xdstools3.client.util.Util;
+import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.*;
+import gov.nist.toolkit.xdstools3.client.tabs.submitTestDataTab.SubmitTestDataTab;
+import gov.nist.toolkit.xdstools3.client.util.eventBus.*;
 import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
 
 /**
@@ -83,6 +70,8 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         topTabSet.setWidth(1024);
         Tab homeTab = new HomeTab("Home");
         topTabSet.addTab(homeTab);
+        tabsetStack.setZIndex(-1);
+
 
         // Main layout
         VLayout mainLayout = new VLayout();
@@ -112,8 +101,8 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
      * binds the UI Actions
      */
     private void bindUI() {
-        // Add listener for Open Tab eventBusUtils. The tabs called must be defined in function "openTab".
-        Util.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new OpenTabEventHandler(){
+        // Add listener for Open Tab eventBus. The tabs called must be defined in function "openTab".
+        Manager.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new OpenTabEventHandler(){
             public void onEvent(OpenTabEvent event) {
                 openTab(event.getTabName());
             }
@@ -129,7 +118,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         });
         //---------- Close Tabs from context menu ---------
         //------ TODO Could be move to GenericTabSet ------
-        Util.EVENT_BUS.addHandler(CloseTabEvent.TYPE,new CloseTabEvent.CloseTabEventHandler() {
+        Manager.EVENT_BUS.addHandler(CloseTabEvent.TYPE,new CloseTabEvent.CloseTabEventHandler() {
             @Override
             public void onCloseTabEvent(CloseTabEvent event) {
                 final Tab t=event.getTab();
@@ -143,7 +132,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 });
             }
         });
-        Util.EVENT_BUS.addHandler(CloseOtherTabsEvent.TYPE,new CloseOtherTabsEvent.CloseOtherTabsEventHandler() {
+        Manager.EVENT_BUS.addHandler(CloseOtherTabsEvent.TYPE,new CloseOtherTabsEvent.CloseOtherTabsEventHandler() {
             @Override
             public void onCloseOtherTabsEvent(CloseOtherTabsEvent event) {
                 final Tab tab=event.getTab();
@@ -161,7 +150,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 });
             }
         });
-        Util.EVENT_BUS.addHandler(CloseAllTabsEvent.TYPE,new CloseAllTabsEvent.CloseAllTabsEventHandler() {
+        Manager.EVENT_BUS.addHandler(CloseAllTabsEvent.TYPE,new CloseAllTabsEvent.CloseAllTabsEventHandler() {
             @Override
             public void onCloseAllTabsEvent(CloseAllTabsEvent event) {
                 SC.confirm("Are you sure you want to close your tabs?", new BooleanCallback() {
@@ -182,7 +171,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         // Add handler for log browser events
         try {
             // This handler is specific to the widget launch from the MHD Validator tab
-            Util.EVENT_BUS.addHandler(OutOfContextAssetClickedEvent.TYPE, new OutOfContextAssetClickedEventHandler() {
+            Manager.EVENT_BUS.addHandler(OutOfContextAssetClickedEvent.TYPE, new OutOfContextAssetClickedEventHandler() {
                 public void onAssetClick(OutOfContextAssetClickedEvent event) {
                     try {
                         final AssetNode target = event.getValue();
@@ -219,83 +208,86 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
      * This function must be updated when new tabs are added to the application, as well as its related classes.
      *
      * @param tabName the name of the tab to open.
-     * @see TabNamesUtil, OpenTabEvent
+     * @see gov.nist.toolkit.xdstools3.client.manager.TabNamesManager , OpenTabEvent
      */
     public void openTab(String tabName) {
         Tab tab = null;
 
         // ---------- v3 tabs --------
-        if (tabName.equals(TabNamesUtil.getInstance().getHomeTabCode())){
+        if (tabName.equals(TabNamesManager.getInstance().getHomeTabCode())){
             tab = new HomeTab("Home");
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getAdminTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getAdminTabCode())) {
             tab = new AdminSettingsTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getEndpointsTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getEndpointsTabCode())) {
             tab = new EndpointConfigTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getFindDocumentsTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getFindDocumentsTabCode())) {
             tab = new FindDocumentTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getMpqFindDocumentsTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getMpqFindDocumentsTabCode())) {
             tab = new MPQTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getMessageValidatorTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getMessageValidatorTabCode())) {
             tab = new MessageValidatorTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getPreConnectathonTestsTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getPreConnectathonTestsTabCode())) {
             tab = new PreConnectathonTestsTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getDocumentMetadataEditorTabCode())) {
             tab = new DocEntryEditorTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getGetDocumentsTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getGetDocumentsTabCode())) {
             tab = new GetDocumentsTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getFindFoldersCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getFindFoldersCode())) {
             tab = new FindFoldersTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getGetFoldersTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getGetFoldersTabCode())) {
             tab = new GetFoldersTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getRetrieveDocumentTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getRetrieveDocumentTabCode())) {
             tab = new RetrieveDocumentsTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getGetFoldersAndContentsCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getGetFoldersAndContentsCode())) {
             tab = new GetFolderAndContentsTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getGetSubmissionSetAndContentsTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getGetSubmissionSetAndContentsTabCode())) {
             tab = new GetSubmissionSetAndContentsTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getGetRelatedDocumentsCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getGetRelatedDocumentsCode())) {
             tab = new GetRelatedDocumentsTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getSourceStoresDocumentValidationCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getSourceStoresDocumentValidationCode())) {
             tab = new SourcesStoresDocumentValidationTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getRegisterAndQueryTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getRegisterAndQueryTabCode())) {
             tab = new RegisterAndQueryTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getLifecycleValidationTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getLifecycleValidationTabCode())) {
             tab = new LifecycleValidationTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getFolderValidationTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getFolderValidationTabCode())) {
             tab = new FolderValidationTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getSubmitRetrieveTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getSubmitRetrieveTabCode())) {
             tab = new SubmitRetrieveTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getMHDValidatorTabCode())) {
+        else if (tabName.equals(TabNamesManager.getInstance().getMHDValidatorTabCode())) {
             tab = new MHDValidatorTab();
         }
-        else if(tabName.equals(TabNamesUtil.getInstance().getTestDataSubmissionTabCode())){
+        else if(tabName.equals(TabNamesManager.getInstance().getTestDataSubmissionTabCode())){
             tab = new SubmitTestDataTab();
         }
-        else if (tabName.equals(TabNamesUtil.getInstance().getLogBrowserTabCode())){
+        else if (tabName.equals(TabNamesManager.getInstance().getLogBrowserTabCode())) {
             tab = new LogBrowserTab();
         }
-        else if(tabName.equals(TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode())){
-            tab = new MHDToXDSConverterTab();
+        else if(tabName.equals(TabNamesManager.getInstance().getMhdtoXdsConverterTabCode())){
+            tab = new MhdToXdsConverterTab2();
+        }
+        else if(tabName.equals(TabNamesManager.getInstance().getHelpTabCode())){
+            tab = new HelpTab();
         }
         else{
             // unknown tab
@@ -329,7 +321,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
     public void start(AcceptsOneWidget acceptsOneWidget, com.google.gwt.event.shared.EventBus eventBus) {
         if(tabId!=null ) {
             // Open required tab
-            Util.EVENT_BUS.fireEvent(new OpenTabEvent(tabId));
+            Manager.EVENT_BUS.fireEvent(new OpenTabEvent(tabId));
         }
     }
 
@@ -367,47 +359,47 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<li><a href='#'>Home</a></li>" +
                 "<li><a href='#'>Queries & Retrieves</a>" +
                 "<ul>" +
-                "<li><a href='#TabPlace:"+ TabNamesUtil.getInstance().getFindDocumentsTabCode()+"'>Find Document</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getMpqFindDocumentsTabCode()+"'>MPQ Find Documents</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetDocumentsTabCode()+"'>Get Documents</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetRelatedDocumentsCode()+"'>Get Related Documents</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getRetrieveDocumentTabCode()+"'>Retrieve Document</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getFindFoldersCode()+"'>Find Folders</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetFoldersTabCode()+"'>Get Folders</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetFoldersAndContentsCode()+"'>Get Folders and Contents</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getGetSubmissionSetAndContentsTabCode()+"'>Get Submission Set and Contents</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getFindDocumentsTabCode()+"'>Find Document</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMpqFindDocumentsTabCode()+"'>MPQ Find Documents</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getGetDocumentsTabCode()+"'>Get Documents</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getGetRelatedDocumentsCode()+"'>Get Related Documents</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getRetrieveDocumentTabCode()+"'>Retrieve Document</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getFindFoldersCode()+"'>Find Folders</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getGetFoldersTabCode()+"'>Get Folders</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getGetFoldersAndContentsCode()+"'>Get Folders and Contents</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getGetSubmissionSetAndContentsTabCode()+"'>Get Submission Set and Contents</a></li>" +
                 "</ul>" +
                 "</li>" +
                 "<li><a href='#'>Tools</a>" +
                 "<ul>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getMessageValidatorTabCode()+"'>Message Validator</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getDocumentMetadataEditorTabCode()+"'>Document Metadata Editor</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getPreConnectathonTestsTabCode()+"'>Pre-Connectathon Tests</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMessageValidatorTabCode()+"'>Message Validator</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getDocumentMetadataEditorTabCode()+"'>Document Metadata Editor</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getPreConnectathonTestsTabCode()+"'>Pre-Connectathon Tests</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
                 "</ul>" +
                 "</li>" +
                 "<li><a href='#'>Send Test Data</a>" +
                 "<ul>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
                 "</ul>" +
                 "</li>" +
                 "<li><a href='#'>Simulators</a>" +
                 "<ul>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
                 "</ul>" +
                 "</li>" +
                 "<li><a href='#'>Connectathon Tools</a>" +
                 "<ul>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getSourceStoresDocumentValidationCode()+"'>XDS.b Doc Source Stores Document</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getRegisterAndQueryTabCode()+"'>XDS.b Register and Query</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getLifecycleValidationTabCode()+"'>XDS.b Lifecycle Validation</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getFolderValidationTabCode()+"'>XDS.b Registry Folder Validation</a></li>" +
-                "<li><a href='#TabPlace:"+TabNamesUtil.getInstance().getSubmitRetrieveTabCode()+"'>XDS.b Submit/Retrieve</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getSourceStoresDocumentValidationCode()+"'>XDS.b Doc Source Stores Document</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getRegisterAndQueryTabCode()+"'>XDS.b Register and Query</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getLifecycleValidationTabCode()+"'>XDS.b Lifecycle Validation</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getFolderValidationTabCode()+"'>XDS.b Registry Folder Validation</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getSubmitRetrieveTabCode()+"'>XDS.b Submit/Retrieve</a></li>" +
                 "</ul>" +
                 "</li>" +
-                "<div style='float:right'>" +
-                "<li><a href='#'><img class='icon-link' src='images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
-                "<li><a href='#'><img class='icon-link' src='images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
+                "<div style='float:right;'>" +
+                "<li><a class='right-side-button' href='#'><img class='icon-link' src='images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
+                "<li><a class='right-side-button' href='#TabPlace:"+ TabNamesManager.getInstance().getHelpTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
                 "</div>" +
                 "<ul>" +
                 "</div>" +
@@ -425,7 +417,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "            <a href=\"http://www.nist.gov\">NIST homepage</a>" +
                 "         </li>" +
                 "         <li>" +
-                "            <a href=\"http://www.nist.gov/public_affairs/disclaimer.cfm\">NIST Disclaimer</a>" +
+                "            <a href=\"http://www.nist.gov/public_affairs/disclaimer.cfm\">NIST disclaimer</a>" +
                 "         </li>" +
                 "    </ul>" +
                 "</footer>";

@@ -8,9 +8,9 @@ import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.widgets.LogBrowserWidget;
+import gov.nist.toolkit.xdstools3.client.manager.Manager;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
-import gov.nist.toolkit.xdstools3.client.util.Util;
 
 import java.util.logging.Logger;
 
@@ -102,12 +102,12 @@ public class LogBrowserTab extends GenericCloseableTab {
             LogBrowserWidget logBrowserWidget = null;
             if (target!=null) {
                 // This is target assetNode specific
-                logBrowserWidget = new LogBrowserWidget(Util.EVENT_BUS,target);
+                logBrowserWidget = new LogBrowserWidget(Manager.EVENT_BUS,target);
 
             } else {
                 // Normal browse mode
                 try {
-                    logBrowserWidget = new LogBrowserWidget(Util.EVENT_BUS,
+                    logBrowserWidget = new LogBrowserWidget(Manager.EVENT_BUS,
                             new LogBrowserWidget.Feature[] {
                                     LogBrowserWidget.Feature.BROWSE
                             });
@@ -135,7 +135,7 @@ public class LogBrowserTab extends GenericCloseableTab {
      */
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getMHDValidatorTabCode();
+        return TabNamesManager.getInstance().getMHDValidatorTabCode();
     }
 
     /**

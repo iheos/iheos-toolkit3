@@ -13,9 +13,9 @@ import com.smartgwt.client.widgets.grid.events.SelectionEvent;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithTooltipWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 public class SourcesStoresDocumentValidationTab extends GenericCloseableTab {
     private final static String header = "Sources Stores Document Validation";
@@ -56,7 +56,7 @@ public class SourcesStoresDocumentValidationTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getSourceStoresDocumentValidationCode();
+        return TabNamesManager.getInstance().getSourceStoresDocumentValidationCode();
     }
 
     private void bindUI() {

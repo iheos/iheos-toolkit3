@@ -13,8 +13,8 @@ import com.smartgwt.client.widgets.grid.events.SelectionEvent;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithTooltipWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
-import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 public class GetFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab {
     private static final String header="Get Folders";
@@ -57,7 +57,7 @@ public class GetFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Generi
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getGetFoldersTabCode();
+        return TabNamesManager.getInstance().getGetFoldersTabCode();
     }
 
     private void bindUI() {

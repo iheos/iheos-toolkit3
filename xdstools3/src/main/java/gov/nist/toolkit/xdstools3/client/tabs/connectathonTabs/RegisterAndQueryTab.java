@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs;
 
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 public class RegisterAndQueryTab extends AbstractRegistryAndRepositoryTab {
 
@@ -16,6 +16,6 @@ public class RegisterAndQueryTab extends AbstractRegistryAndRepositoryTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getRegisterAndQueryTabCode();
+        return TabNamesManager.getInstance().getRegisterAndQueryTabCode();
     }
 }

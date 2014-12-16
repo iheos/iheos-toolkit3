@@ -14,9 +14,9 @@ import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.toolbar.RibbonBar;
 import gov.nist.toolkit.xdstools3.client.customWidgets.dialogs.PopupMessageV3;
 import gov.nist.toolkit.xdstools3.client.customWidgets.dialogs.loginDialog.LoginDialogWidget;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
-import gov.nist.toolkit.xdstools3.client.util.Util;
+import gov.nist.toolkit.xdstools3.client.util.eventBus.OpenTabEvent;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.manager.Manager;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -27,6 +27,7 @@ public class Toolbar extends RibbonBar {
     private SelectOtherItem sessionsComboBox;
     private SelectItem envListBox;
     private ToolbarServiceAsync rpcService = GWT.create(ToolbarService.class);
+    private LinkedHashMap<String, String> valueMap;
 
 
     public Toolbar() {
@@ -98,7 +99,11 @@ public class Toolbar extends RibbonBar {
                         // do nothing
                     }
                 };
-                rpcService.setEnvironment((String)changedEvent.getValue(), envIsSelectedCallback);
+                // the value retrieved is actually the ID of the environment name selected by the user
+                String envIdInMap = (String)changedEvent.getValue();
+                // getting the actual value
+                String selectedEnv = valueMap.get(envIdInMap);
+                rpcService.setEnvironment(selectedEnv, envIsSelectedCallback);
             }
         });
 
@@ -134,7 +139,7 @@ public class Toolbar extends RibbonBar {
             @Override
             public void onClick(ClickEvent event) {
                 // Display the Endpoint Settings tab
-                Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getEndpointsTabCode()));
+                Manager.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesManager.getInstance().getEndpointsTabCode()));
             }});
 
         /**
@@ -143,15 +148,9 @@ public class Toolbar extends RibbonBar {
         adminButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // if not logged in
-                if (!Util.getInstance().getLoggedAsAdminStatus()) {
                     // ask user to log in
-                    LoginDialogWidget dialog = new LoginDialogWidget(TabNamesUtil.getInstance().getAdminTabCode());
+                    LoginDialogWidget dialog = new LoginDialogWidget(TabNamesManager.getInstance().getAdminTabCode());
                     dialog.show();
-                } else {
-                    // Display the Admin Settings tab if logged in
-                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getAdminTabCode()));
-                }
             }
         });
 
@@ -246,7 +245,7 @@ public class Toolbar extends RibbonBar {
         String key = "";
         int counterEU = 0;
         int counterUS = 0;
-        LinkedHashMap<String, String> valueMap = new LinkedHashMap<String, String>(); /* Not specifying types here does not work at GWT compile */
+        valueMap = new LinkedHashMap<String, String>(); /* Not specifying types here does not work at GWT compile */
         LinkedHashMap<String, String> iconsMap = new LinkedHashMap<String, String>();
 
         for (String envName : envs) {
