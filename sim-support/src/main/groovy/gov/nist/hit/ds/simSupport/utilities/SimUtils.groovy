@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.simSupport.utilities
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.repoSupport.RepoUtils
 import gov.nist.hit.ds.repository.api.ArtifactId
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.Repository
@@ -7,8 +8,8 @@ import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.repository.simple.SimpleAsset
 import gov.nist.hit.ds.repository.simple.SimpleId
 import gov.nist.hit.ds.repository.simple.SimpleType
-import gov.nist.hit.ds.simSupport.client.ActorSimConfig
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
 import gov.nist.hit.ds.simSupport.simulator.SimConfigFactory
@@ -44,12 +45,24 @@ class SimUtils {
         return create(null, simId, SimSystemConfig.repoName)
     }
 
+    static SimHandle recreate(String actorTypeName, SimId simId) {
+        delete(simId)
+        create(actorTypeName, simId)
+    }
+
     static SimHandle create(String actorTypeName, SimId simId) {
         return create(actorTypeName, simId, new SimSystemConfig().repoName)
     }
 
+    static SimHandle recreate(String actorTypeName, SimId simId, String repoName) {
+        delete(simId)
+        create(actorTypeName, simId, repoName)
+    }
+
+
     static SimHandle create(String actorTypeName, SimId simId, String repoName) {
         SimSystemConfig simSystemConfig = new SimSystemConfig()
+        log.debug(simSystemConfig.toString())
         Repository repo = buildRepository(repoName)
         if (exists(simId, repoName)) {
             log.debug("Sim ${simId.id} exists.")
@@ -60,7 +73,7 @@ class SimUtils {
         Asset simAsset = RepoUtils.mkAsset(simId.id, new SimpleType('sim'), repo)
 
         if (actorTypeName) {
-            ActorSimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
+            SimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
             storeConfig(new SimulatorDAO().toXML(actorSimConfig), simAsset)
             Site site = new SimSiteFactory().buildSite(actorSimConfig, simId.id)
             OMElement siteEle = new SeparateSiteLoader().siteToXML(site)
@@ -179,7 +192,7 @@ class SimUtils {
         }
     }
 
-    static ActorSimConfig loadConfig(Asset a) { new SimulatorDAO().toModel(load(a))}
+    static SimConfig loadConfig(Asset a) { new SimulatorDAO().toModel(load(a))}
     static String load(Asset a) { new String(a.content) }
 
 }

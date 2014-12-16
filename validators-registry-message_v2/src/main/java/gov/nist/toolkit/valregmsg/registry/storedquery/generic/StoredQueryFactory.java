@@ -13,11 +13,11 @@ import gov.nist.toolkit.valregmsg.registry.AdhocQueryResponse;
 import gov.nist.toolkit.valregmsg.registry.storedquery.support.ParamParser;
 import gov.nist.toolkit.valregmsg.registry.storedquery.support.SqParams;
 import gov.nist.toolkit.valregmsg.registry.storedquery.support.StoredQuerySupport;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.MetadataValidationException;
-import gov.nist.toolkit.xdsexception.XDSRegistryOutOfResourcesException;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.MetadataValidationException;
+import gov.nist.hit.ds.xdsException.XDSRegistryOutOfResourcesException;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import org.apache.axiom.om.OMElement;
 

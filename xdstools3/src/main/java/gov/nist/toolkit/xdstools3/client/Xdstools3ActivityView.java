@@ -5,8 +5,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
@@ -20,10 +18,6 @@ import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.event.asset.OutOfContextAssetClickedEvent;
 import gov.nist.hit.ds.repository.ui.client.event.asset.OutOfContextAssetClickedEventHandler;
-import gov.nist.toolkit.xdstools2.client.TabContainer;
-import gov.nist.toolkit.xdstools2.client.tabs.EnvironmentState;
-import gov.nist.toolkit.xdstools2.client.tabs.QueryState;
-import gov.nist.toolkit.xdstools2.client.tabs.TestSessionState;
 import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
 import gov.nist.toolkit.xdstools3.client.eventBusUtils.CloseAllTabsEvent;
@@ -34,6 +28,7 @@ import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEventHandler;
 import gov.nist.toolkit.xdstools3.client.tabs.EndpointConfigTab;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTabSet;
+import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs2.MHDToXDSConverterTab;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.MessageValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
@@ -46,7 +41,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTa
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.toolkit.xdstools3.client.tabs.logBrowserTab.LogBrowserTab;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
+import gov.nist.toolkit.xdstools3.client.tabs.MHDTabs2.MHDValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.FindFoldersTab;
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetDocumentsTab;
@@ -56,7 +51,6 @@ import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetRelatedDocume
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.GetSubmissionSetAndContentsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.queryRetrieveTabs.RetrieveDocumentsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.testDataSubmissionTab.SubmitTestDataTab;
-import gov.nist.toolkit.xdstools3.client.tabs.v2.v2TabExample;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 import gov.nist.toolkit.xdstools3.client.util.Util;
 import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
@@ -65,7 +59,7 @@ import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
  * Main class of the application which is the Activity for Activity-Places design, the view and a bit of a controller.
  */
 // TabContainer was added for v2-v3 integration purposes, AcceptsOneWidget to avoid an entire MVP architecture (fuse Activity and View in one single class)
-public class Xdstools3ActivityView extends AbstractActivity implements TabContainer, AcceptsOneWidget {
+public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOneWidget {
 
     private GenericTabSet topTabSet;
 
@@ -129,11 +123,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
             @Override
             public void onTabSelected(TabSelectedEvent tabSelectedEvent) {
                 String tabName;
-                if(tabSelectedEvent.getTab() instanceof v2TabExample){
-                    tabName=((v2TabExample) tabSelectedEvent.getTab()).getTabName();
-                }else{
-                    tabName=((GenericTab) tabSelectedEvent.getTab()).getTabName();
-                }
+                tabName=((GenericTab) tabSelectedEvent.getTab()).getTabName();
                 Xdstools3GinInjector.injector.getPlaceController().goTo(new TabPlace(tabName));
             }
         });
@@ -304,12 +294,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
         else if (tabName.equals(TabNamesUtil.getInstance().getLogBrowserTabCode())){
             tab = new LogBrowserTab();
         }
-
-        // ---------- legacy v2 tabs --------
-        else if (tabName.equals(TabNamesUtil.getInstance().getv2TabCode())) {
-            tab = new v2TabExample(this);
+        else if(tabName.equals(TabNamesUtil.getInstance().getMhdtoXdsConverterTabCode())){
+            tab = new MHDToXDSConverterTab();
         }
-
         else{
             // unknown tab
             topTabSet.selectTab(0); // todo we can create a 404
@@ -419,8 +406,8 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                 "</ul>" +
                 "</li>" +
                 "<div style='float:right'>" +
-                "<li><a href='#'><img src='/images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
-                "<li><a href='#'><img src='/images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
+                "<li><a href='#'><img class='icon-link' src='images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
+                "<li><a href='#'><img class='icon-link' src='images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
                 "</div>" +
                 "<ul>" +
                 "</div>" +
@@ -443,35 +430,5 @@ public class Xdstools3ActivityView extends AbstractActivity implements TabContai
                 "    </ul>" +
                 "</footer>";
     }
-
-    //---------------------------------------------------
-    // ------- Added for v2-v3 integration purposes -----
-    //---------------------------------------------------
-    @Override
-    public void addTab(VerticalPanel w, String title, boolean select) {
-
-    }
-
-    @Override
-    public TabPanel getTabPanel() {
-        return null;
-    }
-
-    @Override
-    public TestSessionState getTestSessionState() {
-        return null;
-    }
-
-    @Override
-    public QueryState getQueryState() {
-        return null;
-    }
-
-    @Override
-    public EnvironmentState getEnvironmentState() {
-        return null;
-    }
-    //---------------------------------------------------
-
 
 }

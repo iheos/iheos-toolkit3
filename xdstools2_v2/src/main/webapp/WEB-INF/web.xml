@@ -87,16 +87,6 @@
 		<servlet-class>gov.nist.toolkit.xdstools2.server.upload.UploadServlet</servlet-class>
 	</servlet>
 
-	<servlet>
-		<servlet-name>simulatorServlet</servlet-name>
-		<servlet-class>gov.nist.toolkit.xdstools2.server.simulator.support.SimServlet</servlet-class>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>messageServlet</servlet-name>
-		<servlet-class>gov.nist.toolkit.xdstools2.server.simulator.support.SimServlet</servlet-class>
-	</servlet>
-	
 	<servlet-mapping>
 		<servlet-name>toolkit2Servlet</servlet-name>
 		<url-pattern>/xdstools2/toolkit2</url-pattern>
@@ -110,26 +100,6 @@
 	<servlet-mapping>
 		<servlet-name>uploadServlet</servlet-name>
 		<url-pattern>/xdstools2/upload</url-pattern>
-	</servlet-mapping>
- 
-	<servlet-mapping>
-		<servlet-name>messageServlet</servlet-name>
-		<url-pattern>/xdstools2/message/*</url-pattern>
-	</servlet-mapping>
- 
-	<servlet-mapping>
-		<servlet-name>messageServlet</servlet-name>
-		<url-pattern>/message/*</url-pattern>
-	</servlet-mapping>
- 
-	<servlet-mapping>
-		<servlet-name>simulatorServlet</servlet-name>
-		<url-pattern>/sim/*</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>simulatorServlet</servlet-name>
-		<url-pattern>/xdstools2/sim/*</url-pattern>
 	</servlet-mapping>
 
 	<!--

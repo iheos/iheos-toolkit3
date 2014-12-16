@@ -1,0 +1,82 @@
+<DocumentReference xmlns="http://hl7.org/fhir">
+    <extension url="http://ihe.net/fhir/Profile/XDS/extensions#sourcePatient">
+        <valueResource>
+            <reference value="#sourcepatient"/>
+        </valueResource>
+    </extension>
+    <text>
+        <status value="generated"/>
+        <div xmlns="http://www.w3.org/1999/xhtml"/>
+    </text>
+    <contained>
+        <Patient id="patient">
+            <identifier>
+                <system value="urn:oid:1.3.6.1.4.1.21367.2005.3.7"/>
+                <value value="1234"/>
+            </identifier>
+        </Patient>
+    </contained>
+    <contained>
+        <Patient id="sourcepatient">
+            <identifier>
+                <value value="DTG1234"/>
+            </identifier>
+        </Patient>
+    </contained>
+    <contained>
+        <Practitioner id="docdave">
+            <name>
+                <family value="Careful"/>
+                <given value="Dave"/>
+                <prefix value="Dr"/>
+            </name>
+        </Practitioner>
+    </contained>
+    <masterIdentifier>
+        <system value="urn:ietf:rfc:3986"/>
+        <value value="urn:oid:1.3.6.1.4.1.21367.2005.3.7"/>
+    </masterIdentifier>
+    <subject>
+        <reference value="#patient"/>
+    </subject>
+    <type>
+        <coding>
+            <system value="urn:oid:2.16.840.1.113883.6.1"/>
+            <code value="28651-8"/>
+            <display value="Nurse Transfer note"/>
+        </coding>
+    </type>
+    <class>
+        <coding>
+            <system value="urn:oid:1.3.6.1.4.1.21367.100.1"/>
+            <code value="DEMO-Pt Mgmt"/>
+            <display value="Patient Management"/>
+        </coding>
+    </class>
+    <author>
+        <reference value="#docdave"/>
+    </author>
+    <created value="2005-12-24T09:35:00"/>
+    <indexed value="2005-12-24T09:35:00"/>
+    <status value="current"/>
+    <confidentiality>
+        <coding>
+            <system value="urn:oid:2.16.840.1.113883.5.25"/>
+            <code value="N"/>
+            <display value="Normal"/>
+        </coding>
+    </confidentiality>
+    <primaryLanguage value="en-US"/>
+    <mimeType value="text/plain"/>
+    <format value="urn:wustl:mir:ppoc:1999"/>
+    <location value="#binary1"/>
+    <context>
+        <facilityType>
+            <coding>
+                <system value="urn:oid:2.16.840.1.113883.5.11"/>
+                <code value="PEDHO"/>
+                <display value="Pediatric oncology clinic"/>
+            </coding>
+        </facilityType>
+    </context>
+</DocumentReference>

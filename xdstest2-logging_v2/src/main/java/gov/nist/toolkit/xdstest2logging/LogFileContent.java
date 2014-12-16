@@ -7,7 +7,7 @@ import gov.nist.toolkit.xdstest2logging.Report;
 import gov.nist.toolkit.xdstest2logging.SectionGoals;
 import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 import java.io.Serializable;

@@ -36,6 +36,7 @@ public class GetFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Generi
         folderUUID.setTitle("Folder UUID or UID");
         folderUUID.setWidth(400);
         folderUUIDForm.setFields(folderUUID);
+        folderUUIDForm.setCellPadding(10);
 
         Label l2=createSubtitle1("2. Select site");
         sites = new EndpointWidget();

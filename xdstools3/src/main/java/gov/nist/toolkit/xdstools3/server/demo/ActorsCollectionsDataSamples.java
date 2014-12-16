@@ -354,7 +354,7 @@ public enum ActorsCollectionsDataSamples {
                 "\tOperation with multiple UUIDs\n" +
                 "\n" +
                 "uuid_multiple_slot_values\n" +
-                "\tSQ parameter values spread across multiple Value elements\n" +
+                "\tSQ parameter values spread across multiple Value transactions\n" +
                 "of a Slot.  (CP 295)\n" +
                 "\n" +
                 "homeCommunityId\n" +

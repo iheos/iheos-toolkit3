@@ -13,8 +13,8 @@ import gov.nist.toolkit.simulators.sim.reg.store.SubSet;
 import gov.nist.toolkit.valregmsg.registry.storedquery.generic.GetSubmissionSetAndContents;
 import gov.nist.toolkit.valregmsg.registry.storedquery.generic.StoredQueryFactory.QueryReturnType;
 import gov.nist.toolkit.valregmsg.registry.storedquery.support.StoredQuerySupport;
-import gov.nist.toolkit.xdsexception.MetadataException;
-import gov.nist.toolkit.xdsexception.XdsException;
+import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsException.XdsException;
 
 import java.util.ArrayList;
 import java.util.HashSet;

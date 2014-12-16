@@ -1,0 +1,5 @@
+# simAssertions
+
+keyword=simAssertions
+domain=asset
+description=simAssertions desc

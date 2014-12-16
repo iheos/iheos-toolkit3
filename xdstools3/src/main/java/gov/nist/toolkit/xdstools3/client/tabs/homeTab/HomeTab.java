@@ -1,6 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.tabs.homeTab;
 
 
+import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VStack;
@@ -33,7 +34,6 @@ public class HomeTab extends GenericTab {
         tools.addItem("Message Validator");
         tools.addItem("Document Metadata Editor");
         tools.addItem("Pre-Connectathon Tests");
-        tools.addItem("v2 Tab Example");
 
         HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
@@ -46,6 +46,7 @@ public class HomeTab extends GenericTab {
         mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         // Mhd Validations
         mhdTools.addItem("MHD Validator");
+        mhdTools.addItem("MHD to XDS Converter");
 
         HomeBox connectathonTools = new HomeBox("Connectathon Tools");
         connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
@@ -58,16 +59,17 @@ public class HomeTab extends GenericTab {
         // Repository Validations
         connectathonTools.addItem("XDS.b Repository Do This First");
 
-        VStack hstack1 = new VStack();
-        VStack hstack2 = new VStack();
-        hstack1.addMembers(queriesAndRetrieves,sendTestData,mhdTools);
-        hstack2.addMembers(tools, simulators,connectathonTools);
+        VStack vstack1 = new VStack();
+        VStack vstack2 = new VStack();
+        vstack1.addMembers(queriesAndRetrieves, connectathonTools);
+        vstack2.addMembers(mhdTools, tools, sendTestData); // category simulators is empty for now
 
-        HStack vstack = new HStack();
+        HStack hstack = new HStack();
         LayoutSpacer spacer = new LayoutSpacer();
         spacer.setHeight(30);
-        vstack.addMembers(hstack1, hstack2);
-        return vstack;
+        hstack.addMembers(vstack1, vstack2);
+        hstack.setAlign(Alignment.CENTER);
+        return hstack;
     }
 
     @Override

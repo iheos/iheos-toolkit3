@@ -2,14 +2,24 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>gov.nist.hit.ds</groupId>
+        <artifactId>tk-deps</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../tk-deps/pom.xml</relativePath>
+    </parent>
+<!--
 	<parent>
 		<groupId>gov.nist.toolkit</groupId>
 		<artifactId>toolkit2</artifactId>
 		<version>2.7.0-SNAPSHOT</version>
         <relativePath>../toolkit2-build/pom.xml</relativePath>
 	</parent>
+-->
 
 	<artifactId>actorfactory_v2</artifactId>
+	<version>2.7.0-SNAPSHOT</version>
+	<groupId>gov.nist.toolkit</groupId>
 
 
 	<dependencies>
@@ -68,9 +78,8 @@
 			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>tk_v2</artifactId>
-			<version>2.7.0-SNAPSHOT</version>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>tk</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.toolkit</groupId>
@@ -83,9 +92,25 @@
 			<version>2.7.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist.toolkit</groupId>
-			<artifactId>xds-exceptions_v2</artifactId>
-			<version>2.7.0-SNAPSHOT</version>
+			<groupId>gov.nist.hit.ds</groupId>
+			<artifactId>xdsException</artifactId>
 		</dependency>
 	</dependencies>
+<build>
+        <plugins>
+<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+ 	</plugins>
+</build>
 </project>

@@ -21,8 +21,6 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServices;
-import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServicesAsync;
 import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
 
 import java.util.LinkedHashMap;
@@ -72,7 +70,7 @@ public class SubmitTestDataTab extends GenericCloseableTab {
 
         DynamicForm form=new DynamicForm();
 
-        // Test data type elements
+        // Test data type transactions
         HeaderItem l1 = new HeaderItem();
         l1.setDefaultValue("1. Select Test Data Type");
         testDataType = new SelectItem();
@@ -84,7 +82,7 @@ public class SubmitTestDataTab extends GenericCloseableTab {
         // select registry as default value
         testDataType.setDefaultValue("reg");
 
-        // Test data set elements
+        // Test data set transactions
         HeaderItem l2=new HeaderItem();
         l2.setDefaultValue("2. Select a Test Data Set");
         testDataSetSelectItem = new SelectItem();
@@ -95,15 +93,15 @@ public class SubmitTestDataTab extends GenericCloseableTab {
         testDataSetSelectItem.setEmptyDisplayValue("Select test data set...");
         loadTestDataSet();
 
-        // Patient ID elements
+        // Patient ID transactions
         Label l3=createSubtitle1("3. Enter Patient ID");
         pid = new PatientIDWidget();
 
-        // Document repository elements
+        // Document repository transactions
         Label l4 = createSubtitle1("4. Select a Document Repository");
         docRepository = new EndpointWidget();
 
-        // TLS and SAML elements
+        // TLS and SAML transactions
         Label l5=createSubtitle1("5. Select SAML and TLS options");
         tlsAndSAMLForm = new TLSAndSAMLForm();
 
@@ -111,8 +109,9 @@ public class SubmitTestDataTab extends GenericCloseableTab {
         runBtn.disable();
 
         form.setFields(l1, testDataType,l2, testDataSetSelectItem);
+        form.setCellPadding(15);
 
-        container.addMembers(form,l3, pid,l4, /*docRepository,*/l5, tlsAndSAMLForm, runBtn);
+        container.addMembers(form,l3, pid,l4, docRepository,l5, tlsAndSAMLForm, runBtn);
         return container;
     }
 

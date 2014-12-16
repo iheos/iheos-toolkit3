@@ -1,6 +1,6 @@
 package gov.nist.toolkit.utilities.xml;
 
-import gov.nist.toolkit.xdsexception.XMLParserException;
+import gov.nist.hit.ds.xdsException.XMLParserException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

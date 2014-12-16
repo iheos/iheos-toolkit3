@@ -6,7 +6,7 @@ import gov.nist.toolkit.errorrecording.client.ErrorRecorderAdapter;
 import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.session.server.Session;
-import gov.nist.toolkit.validatorsdirectfactory.DirectMessageValidatorFactory;
+//import gov.nist.toolkit.validatorsdirectfactory.DirectMessageValidatorFactory;
 import gov.nist.toolkit.valregmsg.message.HttpMessageValidator;
 import gov.nist.toolkit.valregmsg.message.MetadataMessageValidator;
 import gov.nist.toolkit.valsupport.client.MessageValidationResults;
@@ -17,7 +17,7 @@ import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorder;
 import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorderBuilder;
 import gov.nist.toolkit.valsupport.message.MessageValidator;
 import gov.nist.toolkit.valsupport.registry.RegistryValidationInterface;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -114,11 +114,11 @@ public class ValidateMessageService extends CommonServiceManager {
 
 			MessageValidatorEngine mvc;
 			
-			// rolls over to MessageValidatorFactory if necessary
-			DirectMessageValidatorFactory factory = new DirectMessageValidatorFactory();
-			
-			mvc = factory.getValidator(gerb, message, input2, vc, rvi);
-			mvc.run();
+//			// rolls over to MessageValidatorFactory if necessary
+//			DirectMessageValidatorFactory factory = new DirectMessageValidatorFactory();
+//
+//			mvc = factory.getValidator(gerb, message, input2, vc, rvi);
+//			mvc.run();
 			
 			MessageValidator mv = mvc.findMessageValidator("MetadataMessageValidator");
 			if (mv != null) {

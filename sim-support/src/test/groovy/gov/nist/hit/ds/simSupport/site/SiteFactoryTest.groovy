@@ -1,9 +1,8 @@
 package gov.nist.hit.ds.simSupport.site
 import gov.nist.hit.ds.actorTransaction.*
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.client.configElementTypes.RepositoryUniqueIdSimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.RetrieveTransactionSimConfigElement
-import gov.nist.hit.ds.simSupport.client.configElementTypes.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.RetrieveTransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.simulator.SimConfigFactory
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
@@ -70,7 +69,7 @@ class SiteFactoryTest extends Specification {
         def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
 
         when:
-        def endpoints = actorSimConfig.getElements().findAll { it instanceof TransactionSimConfigElement }
+        def endpoints = actorSimConfig.getTransactions().findAll { it instanceof TransactionSimConfigElement }
         println endpoints
 
         then:
@@ -83,7 +82,7 @@ class SiteFactoryTest extends Specification {
         def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
 
         when:
-        def repositories = actorSimConfig.getElements().findAll {
+        def repositories = actorSimConfig.getTransactions().findAll {
             it instanceof RetrieveTransactionSimConfigElement
         }
 

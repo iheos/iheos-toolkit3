@@ -38,6 +38,7 @@ public class GetDocumentsTab extends GenericCloseableTab {
         docEntryUUID.setTitle("Document Entry UUID or UID");
         docEntryUUID.setWidth(400);
         docEntryUUIDForm.setFields(docEntryUUID);
+        docEntryUUIDForm.setCellPadding(15);
 
         Label l2=createSubtitle1("2. Select site");
         sites = new EndpointWidget();

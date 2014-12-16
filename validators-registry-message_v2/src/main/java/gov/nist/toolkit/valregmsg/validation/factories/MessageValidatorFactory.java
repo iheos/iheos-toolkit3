@@ -34,7 +34,7 @@ import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine.ValidationStep;
 import gov.nist.toolkit.valsupport.message.NullMessageValidator;
 import gov.nist.toolkit.valsupport.registry.RegistryValidationInterface;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 
 import java.io.File;
 import java.util.List;

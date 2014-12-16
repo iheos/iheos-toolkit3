@@ -10,7 +10,7 @@ import gov.nist.toolkit.valregmetadata.object.Folder;
 import gov.nist.toolkit.valregmetadata.object.SubmissionSet;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
 import gov.nist.toolkit.valsupport.registry.RegistryValidationInterface;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.HashSet;
 import java.util.Set;

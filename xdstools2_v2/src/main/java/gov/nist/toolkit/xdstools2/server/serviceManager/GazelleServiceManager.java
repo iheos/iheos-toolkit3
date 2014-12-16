@@ -4,7 +4,7 @@ import gov.nist.toolkit.actorfactory.CommonServiceManager;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.session.server.Session;
-import gov.nist.toolkit.xdsexception.XdsException;
+import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.toolkit.xdstools2.server.gazelle.actorConfig.CSVParser;
 import gov.nist.toolkit.xdstools2.server.gazelle.actorConfig.ConfigPull;
 import gov.nist.toolkit.xdstools2.server.gazelle.actorConfig.ConfigToXml;

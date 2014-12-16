@@ -126,7 +126,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * Index a repository on the file system. This wrapper method eventually calls an internal method that uses two internal logical data sets to identify assets that are to be indexed, refreshed, or marked as stale.  
 	 * Set A is the master reference of a repository as provided by its repository source and the SimpleAssetIterator provides an iterator for the set on the file system. 
 	 * Set B is the indexed version of set A as it appears in the database. The repositoryIndex database table contains records by the repositoryId, source, and the location.
-	 * The following sets are the outcome of operations between the two main sets:
+	 * The following sets are the outcome of scripts between the two main sets:
 	 * Set C is the union of both sets that identifies set of assets that exist both on the file system and the database. The hash value of both asset instances are compared to ensure byte-level consistency. 
 	 * Set D is the difference between set A - B. These are the new assets that belong to the unindexed asset category.
 	 * Set E is the difference between set B - A. These are the stale assets, a byproduct of assets that were once indexed but later removed from the file system. These assets will be removed from the database.

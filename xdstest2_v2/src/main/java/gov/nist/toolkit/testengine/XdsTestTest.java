@@ -2,9 +2,9 @@ package gov.nist.toolkit.testengine;
 
 import gov.nist.toolkit.xdstest2logging.TestDetails;
 import gov.nist.toolkit.testkitutilities.TestEnvConfig;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
-import gov.nist.toolkit.xdsexception.XdsParameterException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsParameterException;
 
 import java.io.IOException;
 import java.util.List;

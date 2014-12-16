@@ -59,10 +59,10 @@ class TransactionType /* implements IsSerializable, Serializable */ {
 //        if (val == null || val.equals(""))
 //            throw new InvalidTransactionTypeDefinitionException("asyncCode not defined");
         val = tt.requestAction;
-        if (val == null || val.equals(""))
+        if (soap && (val == null || val.equals("")))
             throw new InvalidTransactionTypeDefinitionException("requestAction not defined");
         val = tt.responseAction;
-        if (val == null || val.equals(""))
+        if (soap && (val == null || val.equals("")))
             throw new InvalidTransactionTypeDefinitionException("responseAction not defined");
         val = tt.acceptRequestClassName;
         if (val == null || val.equals(""))

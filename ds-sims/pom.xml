@@ -73,8 +73,25 @@
             <artifactId>repository</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.hl7</groupId>
+            <artifactId>fhir</artifactId>
+            <version>0.0.81</version>
+        </dependency>
+        <dependency>
             <groupId>com.sun.ebxml</groupId>
             <artifactId>ebxmlrr-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xmlpull</groupId>
+            <artifactId>xmlpull</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
         </dependency>
     </dependencies>
     <build>

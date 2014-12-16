@@ -20,6 +20,10 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>repo-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
             <artifactId>toolkit</artifactId>
         </dependency>
         <dependency>

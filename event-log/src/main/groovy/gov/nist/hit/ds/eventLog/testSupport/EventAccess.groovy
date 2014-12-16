@@ -39,6 +39,10 @@ class EventAccess {
         new File(new File(eventDir(), 'Input Output Messages'), 'Request Body.bytes')
     }
 
+    File eventPropertiesFile() {
+        new File(eventDir(), "${event.eventAsset.getDisplayName()}.parent.props.txt")
+    }
+
     File respBodyFile() {
         new File(new File(eventDir(), 'Input Output Messages'), 'Response Body.bytes')
     }

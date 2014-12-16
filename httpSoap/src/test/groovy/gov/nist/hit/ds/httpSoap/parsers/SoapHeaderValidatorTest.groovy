@@ -43,7 +43,7 @@ class SoapHeaderValidatorTest extends Specification {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('SoapHeaderValidatorTest')
-        SimUtils.create('reg', simId, repoName)
+        SimUtils.recreate('reg', simId, repoName)
     }
 
     def 'SoapHeaderValidator should succeed'() {

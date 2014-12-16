@@ -20,7 +20,7 @@ This document was rendered into XML using software provided to HL7 by Beeler Con
    </xs:annotation>
    <xs:include schemaLocation="../coreschemas/infrastructureRoot.xsd"/>
    <xs:include schemaLocation="MCCI_MT000300UV01.xsd"/>
-   <!-- Changes to properly define the message, and to enable proper WSDL operations definition
+   <!-- Changes to properly define the message, and to enable proper WSDL scripts definition
    vassil 2007-11-14 -->
    <xs:include schemaLocation="QUQI_MT000001UV01.xsd"/>
    <xs:element name="QUQI_IN000003UV01" type="QUQI_IN000003UV01_Type"/>

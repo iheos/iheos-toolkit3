@@ -264,7 +264,7 @@ public abstract class BaseRepository implements Repository {
      * This method returns an asset by the assetId.
      * @param assetId
      *
-     * @return {@code Asset} The asset object is primarily used for read-only operations.
+     * @return {@code Asset} The asset object is primarily used for read-only scripts.
      * @throws RepositoryException {@code RepositoryException.UNKNOWN_REPOSITORY} is thrown when the repository could not be loaded
      */
 	@Override

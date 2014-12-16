@@ -5,6 +5,6 @@ domain=asset
 description=simAssertions desc
 
 
-## This property value is expected to be a JSON-formatted string. For example: example {"ID":"50px"}
+## This property value is expected to be a JSON-formatted string. For example: columnHeaderWidths={"ID":"50px"}
 
-columnHeaderWidths={"ID":"120px","R/O":"32px"}
+columnHeaderWidths={"ID":"120px","R/O":"38px"}

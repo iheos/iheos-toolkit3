@@ -12,11 +12,11 @@ import gov.nist.toolkit.registrysupport.logging.LogMessage;
 import gov.nist.toolkit.registrysupport.logging.LoggerException;
 import gov.nist.toolkit.utilities.xml.Util;
 import gov.nist.toolkit.valsupport.errrec.GwtErrorRecorder;
-import gov.nist.toolkit.xdsexception.ExceptionUtil;
-import gov.nist.toolkit.xdsexception.XDSMissingDocumentException;
-import gov.nist.toolkit.xdsexception.XDSRepositoryMetadataException;
-import gov.nist.toolkit.xdsexception.XdsException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XDSMissingDocumentException;
+import gov.nist.hit.ds.xdsException.XDSRepositoryMetadataException;
+import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

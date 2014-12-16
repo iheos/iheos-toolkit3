@@ -20,4 +20,6 @@ class SimSystemConfig {
         if (!repoName)
             repoName = 'Sim'
     }
+
+    String toString() { "SimSystemConfig: host=${host} port=${port} tlsPort=${tlsPort} service=${service}"}
 }

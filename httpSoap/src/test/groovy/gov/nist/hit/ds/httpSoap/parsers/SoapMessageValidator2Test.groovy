@@ -40,7 +40,7 @@ class SoapMessageValidator2Test extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('123')
+        simId = new SimId('SoapMessageValidator2Test')
         SimUtils.create('reg', simId, repName)
     }
 

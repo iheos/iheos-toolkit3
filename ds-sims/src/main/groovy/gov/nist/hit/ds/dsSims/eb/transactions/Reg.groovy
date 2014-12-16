@@ -1,0 +1,33 @@
+package gov.nist.hit.ds.dsSims.eb.transactions
+
+import gov.nist.hit.ds.simSupport.transaction.Transaction
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
+
+/**
+ * Created by bmajur on 10/21/14.
+ */
+class Reg implements Transaction {
+    SimHandle simHandle
+
+    def Reg(SimHandle _simHandle) { simHandle = _simHandle }
+    @Override
+    ValidationStatus validateRequest() {
+        return null
+    }
+
+    @Override
+    ValidationStatus validateResponse() {
+        return null
+    }
+
+    @Override
+    ValidationStatus acceptRequest() {
+        return null
+    }
+
+    @Override
+    ValidationStatus sendRequest() {
+        return null
+    }
+}

@@ -11,7 +11,6 @@
     </parent>
 
     <artifactId>xdstools3</artifactId>
-    <!-- <version>3.0.0dev</version>  -->
     <packaging>war</packaging>
     <groupId>gov.nist.toolkit</groupId>
 
@@ -107,14 +106,6 @@
             <version>1.9</version>
         </dependency>
         <dependency>
-            <!-- maps to the sources packaged along with the xdstools2 war file -->
-            <!-- The other part of the config is inside the xdstools2 pom, cf. maven-war-plugin. -->
-            <groupId>gov.nist.toolkit</groupId>
-            <artifactId>xdstools2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
-            <classifier>classes</classifier>
-        </dependency>
-        <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>xdsException</artifactId>
             <version>3.0.0-SNAPSHOT</version>
@@ -134,28 +125,18 @@
             <artifactId>tk-initialization</artifactId>
             <version>3.0.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>session_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>actorfactory_v2</artifactId>
+            <version>2.7.0-SNAPSHOT</version>
+        </dependency>
 
         <!-- begin repository related -->
-
-        <!--<dependency>-->
-            <!--<groupId>gov.nist.hit.ds</groupId>-->
-            <!--<artifactId>repository-rpc</artifactId>-->
-            <!--<version>3.0.0-SNAPSHOT</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>gov.nist.hit.ds</groupId>-->
-            <!--<artifactId>repository-rpc</artifactId>-->
-            <!--<version>3.0.0-SNAPSHOT</version>-->
-            <!--<classifier>sources</classifier>-->
-            <!--<scope>compile</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>gov.nist.hit.ds</groupId>-->
-            <!--<artifactId>repository-shared</artifactId>-->
-            <!--<version>3.0.0-SNAPSHOT</version>-->
-            <!--<classifier>sources</classifier>-->
-            <!--<scope>compile</scope>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-widgets-ui</artifactId>

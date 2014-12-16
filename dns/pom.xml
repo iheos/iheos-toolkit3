@@ -9,7 +9,7 @@
         <relativePath>../toolkit2-build/pom.xml</relativePath>
 	</parent>
 
-	<artifactId>dns</artifactId>
+	<artifactId>dns_v2</artifactId>
 
 	<dependencies>
 		<dependency>

@@ -4,10 +4,11 @@
 
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
-        <artifactId>toolkit3</artifactId>
+        <artifactId>tk-deps</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
+
 
     <groupId>gov.nist.toolkit</groupId>
     <artifactId>toolkit2</artifactId>
@@ -50,12 +51,8 @@
         <module>../actor-transaction_v2</module>
         <module>../common_v2</module>
         <module>../common-datatypes_v2</module>
-        <module>../direct_v2</module>
-        <module>../direct-listener_v2</module>
-        <module>../direct-sim_v2</module>
-        <module>../direct-support_v2</module>
         <module>../dns</module>
-        <module>../doc-ref_v2</module> <!-- looks like it is not used -->
+        <module>../docref_v2</module> <!-- looks like it is not used -->
         <module>../dsig_v2</module>
         <!--  <module>../dst_v2</module> -->
       <!--    <module>../email_v2</module> -->
@@ -72,20 +69,19 @@
          <module>../security-common_v2</module>
          <module>../session_v2</module>
          <module>../sim-common_v2</module>
-         <module>../simulators_v2</module>
+<!--         <module>../simulators_v2</module>  -->
          <module>../site-management_v2</module>
          <module>../soap_v2</module>
-         <module>../testkit_v2</module>
+<!--         <module>../testkit_v2</module>  -->
          <module>../testkit-utilities_v2</module>
-         <module>../timer_v2</module>
-         <module>../tk_v2</module>
+<!--         <module>../timer_v2</module>  -->
+         <module>../tk</module>
          <module>../utilities_v2</module>
          <module>../validators-ccda_v2</module>
-         <module>../validators-direct-factory_v2</module>
          <module>../validators-registry-message_v2</module>
          <module>../validators-registry-metadata_v2</module>
          <module>../validators-support_v2</module>
-         <module>../xds-exceptions_v2</module>
+         <module>../xdsException</module>
          <module>../xdstest-gui_v2</module>
          <module>../xdstest2_v2</module>
          <module>../xdstest2-logging_v2</module>
@@ -109,6 +105,11 @@
 
      <dependencyManagement>
          <dependencies>
+      <dependency>
+          <groupId>gov.nist.hit.ds</groupId>
+          <artifactId>xdsException</artifactId>
+          <version>3.0.0-SNAPSHOT</version>
+      </dependency>
              <dependency>
                  <groupId>junit</groupId>
                  <artifactId>junit</artifactId>
@@ -222,7 +223,19 @@
                         </execution>
                     </executions>
                 </plugin>
-
+<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             </plugins>
         </pluginManagement>
     </build>

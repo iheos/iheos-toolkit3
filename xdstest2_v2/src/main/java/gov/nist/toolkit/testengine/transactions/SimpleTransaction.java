@@ -4,7 +4,7 @@ import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.registrymsgformats.registry.RegistryResponseParser;
 import gov.nist.toolkit.testengine.StepContext;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.File;
 

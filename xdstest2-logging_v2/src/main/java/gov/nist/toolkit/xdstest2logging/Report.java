@@ -2,7 +2,7 @@ package gov.nist.toolkit.xdstest2logging;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.xdstest2logging.Report;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.io.Serializable;
 import java.util.ArrayList;

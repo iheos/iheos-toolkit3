@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.repository.rpc.client;
 
-import gov.nist.hit.ds.dsSims.factories.MessageValidatorFactory;
+import gov.nist.hit.ds.dsSims.eb.factories.MessageValidatorFactory;
 import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.ContentHelper;
 import gov.nist.hit.ds.repository.api.Repository;

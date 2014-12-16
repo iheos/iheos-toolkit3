@@ -21,30 +21,31 @@ public class TabNamesUtil {
         return instance;
     }
 
-    private   final String findDocumentsTabCode = "FIND_DOCUMENTS";
-    private   final String mpqFindDocumentsTabCode = "MPQ_FIND_DOCUMENTS";
-    private   final String messageValidatorTabCode = "MESSAGE_VALIDATOR";
-    private   final String adminTabCode = "ADMIN";
-    private   final String endpointsTabCode = "ENDPOINTS";
-    private   final String preConnectathonTestsTabCode = "PRE_CONNECTATHON";
-    private   final String documentMetadataEditorTabCode = "METADATA_EDITOR";
-    private   final String getDocumentsCode = "GET_DOCUMENTS";
-    private   final String v2TabCode = "v2_TAB";
-    private   final String findFoldersCode = "FIND_FOLDERS";
-    private   final String getFoldersCode = "GET_FOLDERS";
-    private   final String getFolderAndContentsCode="GET_FOLDER_AND_CONTENTS";
-    private   final String retrieveDocumentCode = "RETRIEVE_DOCUMENT";
-    private   final String getSubmissionSetAndContentsCode = "GET_SUB_SET_AND_CONTENTS";
-    private   final String getRelatedDocuments = "GET_RELATED_DOCUMENTS";
-    private   final String sourceStoresDocumentValidationCode = "SOURCE_STORES_DOC_VALIDATION";
-    private   final String registerAndQueryTabCode= "REGISTER_AND_QUERY";
-    private   final String lifecycleValidationTabCode = "LIFECYCLE_VALIDATION";
-    private   final String folderValidationTabCode = "FOLDER_VALIDATION";
-    private   final String submitRetrieveTabCode="SUBMIT_RETRIEVE";
-    private   final String homeTabCode="HOME";
-    private   final String mhdValidatorTabCode="MHD_VALIDATOR";
-    private   final String testDataSubmissionTabCode = "SUBMIT_TEST_DATA";
-    private   final String logBrowserTabCode = "LOG_BROWSER";
+    private final String findDocumentsTabCode = "FIND_DOCUMENTS";
+    private final String mpqFindDocumentsTabCode = "MPQ_FIND_DOCUMENTS";
+    private final String messageValidatorTabCode = "MESSAGE_VALIDATOR";
+    private final String adminTabCode = "ADMIN";
+    private final String endpointsTabCode = "ENDPOINTS";
+    private final String preConnectathonTestsTabCode = "PRE_CONNECTATHON";
+    private final String documentMetadataEditorTabCode = "METADATA_EDITOR";
+    private final String getDocumentsCode = "GET_DOCUMENTS";
+    private final String v2TabCode = "v2_TAB";
+    private final String findFoldersCode = "FIND_FOLDERS";
+    private final String getFoldersCode = "GET_FOLDERS";
+    private final String getFolderAndContentsCode="GET_FOLDER_AND_CONTENTS";
+    private final String retrieveDocumentCode = "RETRIEVE_DOCUMENT";
+    private final String getSubmissionSetAndContentsCode = "GET_SUB_SET_AND_CONTENTS";
+    private final String getRelatedDocuments = "GET_RELATED_DOCUMENTS";
+    private final String sourceStoresDocumentValidationCode = "SOURCE_STORES_DOC_VALIDATION";
+    private final String registerAndQueryTabCode= "REGISTER_AND_QUERY";
+    private final String lifecycleValidationTabCode = "LIFECYCLE_VALIDATION";
+    private final String folderValidationTabCode = "FOLDER_VALIDATION";
+    private final String submitRetrieveTabCode="SUBMIT_RETRIEVE";
+    private final String homeTabCode="HOME";
+    private final String mhdValidatorTabCode="MHD_VALIDATOR";
+    private final String testDataSubmissionTabCode = "SUBMIT_TEST_DATA";
+    private final String mhdToXdsConverterTabCode="MHD_CONVERTER";
+    private final String logBrowserTabCode = "LOG_BROWSER";
 
 
     public String getFindDocumentsTabCode() {
@@ -72,13 +73,14 @@ public class TabNamesUtil {
     public String getSourceStoresDocumentValidationCode(){return sourceStoresDocumentValidationCode;}
     public String getRegisterAndQueryTabCode() { return registerAndQueryTabCode;}
     public String getLifecycleValidationTabCode() {return lifecycleValidationTabCode;}
-    public   String getFolderValidationTabCode() {return folderValidationTabCode;}
-    public   String getSubmitRetrieveTabCode() { return submitRetrieveTabCode; }
-    public   String getv2TabCode() { return v2TabCode; }
-    public   String getMHDValidatorTabCode() {return mhdValidatorTabCode;}
-    public   String getHomeTabCode() {
+    public String getFolderValidationTabCode() {return folderValidationTabCode;}
+    public String getSubmitRetrieveTabCode() { return submitRetrieveTabCode; }
+    public String getv2TabCode() { return v2TabCode; }
+    public String getMHDValidatorTabCode() {return mhdValidatorTabCode;}
+    public String getHomeTabCode() {
         return homeTabCode;
     }
-    public   String getTestDataSubmissionTabCode() {return testDataSubmissionTabCode;}
-    public   String getLogBrowserTabCode() {return logBrowserTabCode;}
+    public String getTestDataSubmissionTabCode() {return testDataSubmissionTabCode;}
+    public String getMhdtoXdsConverterTabCode() {return mhdToXdsConverterTabCode;}
+    public String getLogBrowserTabCode() {return logBrowserTabCode;}
 }

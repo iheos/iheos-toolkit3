@@ -5,7 +5,7 @@ import com.smartgwt.client.data.fields.DataSourceTextField;
 
 /**
  * SmartGWT datasource for accessing entities over http in a RESTful manner.
- * Defines a RESTDataSource fields, operations and REST service URLs.
+ * Defines a RESTDataSource fields, scripts and REST service URLs.
  */
 public class NestedDS extends RestDataSource {
 

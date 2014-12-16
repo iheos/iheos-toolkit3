@@ -7,8 +7,8 @@ package gov.nist.toolkit.soap.http;
 
 import gov.nist.toolkit.soap.axis2.SoapInterface;
 
-import gov.nist.toolkit.xdsexception.XdsFormatException;
-import gov.nist.toolkit.xdsexception.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsFormatException;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 import java.util.ArrayList;
 import java.util.List;
