@@ -206,7 +206,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
      * @param result Validation result from RPC validation
      */
     private void displayValidationResults(String result) {
-        validationResultsPanel.setContents(result);
+//        validationResultsPanel.setContents(result);
         if (!validationResultsPanel.isVisible()){
             validationResultsPanel.setVisible(true);
         }

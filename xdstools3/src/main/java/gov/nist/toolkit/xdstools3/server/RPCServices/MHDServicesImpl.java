@@ -37,12 +37,7 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
      * @return validation result
      */
     public String validateMHDMessage(String messageType){
-        Session session = getSession();
-        if (session == null) throw new ToolkitRuntimeException("Session is null");
-        logger.debug("SessionId is " + session.getId());
-        byte[] bytes = session.getlastUpload();
-        if (bytes == null) throw new ToolkitRuntimeException("Upload is null");
-        return Caller.getInstance().validateMHDMessage(messageType,new String(bytes).trim());
+        return Caller.getInstance().validateMHDMessage(messageType, new String(getSession().getlastUpload()).trim());
     }
 
     /**
