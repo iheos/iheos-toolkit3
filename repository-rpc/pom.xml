@@ -22,6 +22,7 @@
 		<dependency>
 			<groupId>gov.nist.hit.ds</groupId>
 			<artifactId>utilities</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.hit.ds</groupId>
@@ -79,21 +80,21 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>10.4.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derbyclient</artifactId>
-			<version>10.4.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-jdbc</artifactId>
-			<version>7.0.40</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.apache.derby</groupId>-->
+			<!--<artifactId>derby</artifactId>-->
+			<!--<version>10.4.2.0</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>org.apache.derby</groupId>-->
+			<!--<artifactId>derbyclient</artifactId>-->
+			<!--<version>10.4.2.0</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>org.apache.tomcat</groupId>-->
+			<!--<artifactId>tomcat-jdbc</artifactId>-->
+			<!--<version>7.0.40</version>-->
+		<!--</dependency>-->
         <dependency>
             <groupId>net.timewalker.ffmq3</groupId>
             <artifactId>ffmq3-core</artifactId>

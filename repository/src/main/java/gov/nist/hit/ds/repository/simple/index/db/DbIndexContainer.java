@@ -1845,7 +1845,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 		if (rs!=null) {
 			while (rs.next()) {
 				AssetNode an = new AssetNode(rs.getString(1),rs.getString(2),"",rs.getString(3),"","",rs.getString(3));
-				an.setLocation(rs.getString(4));
+				an.setRelativePath(rs.getString(4));
 				assetList.add(an);
 			}
 		}

@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='logBrowser'>
 
-	<!--  BEGIN JSNI: sh 3rd party -->
-	<!-- Base CSS SyntaxHighlighter -->
-	<stylesheet src="styles/shCore.css" />
 
-	<!-- Eclipse Syntax Theme -->
-	<stylesheet src="styles/shThemeEclipse.css" />
-
-	<!-- Base JS SyntaxHighlighter -->
-	<script src="scripts/shCore.js" />
-
-	<!-- Extension for each wanted language to support -->
-	<script src="scripts/shBrushXml.js" />
-	<script src="scripts/shBrushCss.js" />
-	<script src="scripts/shBrushPlain.js" />
-	<!--  END JSNI: sh 3rd party -->
 	
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
@@ -37,21 +23,22 @@
     <set-property name='gwt.logging.popupHandler' value='DISABLED'/>
     <!--<set-property name='gwt.logging.enabled' value='FALSE'/>-->
 
-    <!-- old -->
-    <!--<inherits name='gov.nist.hit.ds.repository.Repository' />-->
-    <!-- old -->
 
-    <!-- new -->
-    <inherits name='gov.nist.hit.ds.repository.RepositoryRpc' />
-    <inherits name='gov.nist.hit.ds.repository.RepositoryShared' />
-    <!-- new -->
+    <!-- old -->
+    <!--<inherits name='gov.nist.hit.ds.repository.RepositoryRpc' />-->
+    <!--<inherits name='gov.nist.hit.ds.repository.RepositoryShared' />-->
+
+    <!-- begin repository related -->
+    <inherits name='gov.nist.hit.ds.repository.ui.RepositoryWidgetsUI' />
+    <!-- end repository related -->
 
 	<!-- Specify the app entry point class. -->
 	<entry-point class='gov.nist.hit.ds.logBrowser.client.LogBrowser' />
 
 	<!-- Specify the paths for translatable code -->
 	<source path='client' />
-	<source path='shared' />
 
+
+    <public path="public"/>
 
 </module>

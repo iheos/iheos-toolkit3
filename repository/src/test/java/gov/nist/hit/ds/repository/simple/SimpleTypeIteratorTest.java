@@ -1,16 +1,15 @@
 package gov.nist.hit.ds.repository.simple;
 
+import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.api.Type;
+import gov.nist.hit.ds.repository.api.TypeIterator;
+import org.junit.Test;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.api.RepositoryFactory;
-import gov.nist.hit.ds.repository.api.Type;
-import gov.nist.hit.ds.repository.api.TypeIterator;
-import gov.nist.hit.ds.repository.api.RepositorySource.Access;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
-import org.junit.Test;
 
 public class SimpleTypeIteratorTest {
 	

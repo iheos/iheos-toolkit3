@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -143,7 +142,7 @@ public class RepositoryRpcTest {
 
         System.out.println(an.getAssetId());
 
-        QueryParameters qp2 = PresentationData.getSearchCriteria(an.getRepId(),an.getReposSrc(), an.getLocation());
+        QueryParameters qp2 = PresentationData.getSearchCriteria(an.getRepId(),an.getReposSrc(), an.getRelativePath());
 
         assertTrue(qp.getSelectedRepos().length==qp2.getSelectedRepos().length);
         assertTrue(qp.getSearchCriteria().toString().equals(qp2.getSearchCriteria().toString()));

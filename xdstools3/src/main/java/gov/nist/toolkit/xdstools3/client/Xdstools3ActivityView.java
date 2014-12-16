@@ -2,6 +2,7 @@ package gov.nist.toolkit.xdstools3.client;
 
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.smartgwt.client.types.Alignment;
@@ -14,6 +15,9 @@ import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
 import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.ui.client.event.asset.OutOfContextAssetClickedEvent;
+import gov.nist.hit.ds.repository.ui.client.event.asset.OutOfContextAssetClickedEventHandler;
 import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
@@ -21,10 +25,15 @@ import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.*;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.FolderValidationTab;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.LifecycleValidationTab;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.RegisterAndQueryTab;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.SourcesStoresDocumentValidationTab;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.SubmitRetrieveTab;
 import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
+import gov.nist.toolkit.xdstools3.client.tabs.logBrowserTab.LogBrowserTab;
 import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MhdToXdsConverterTab2;
 import gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab.PreConnectathonTestsTab;
@@ -81,7 +90,6 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         container.setHeight100();
         container.addMembers(mainLayout);
         container.draw();
-
 
         // Smartgwt Console - useful for development, mainly tracking RPC calls
         //SC.showConsole();
@@ -159,6 +167,38 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 });
             }
         });
+        //--------------------------------------------------
+        // Add handler for log browser events
+        try {
+            // This handler is specific to the widget launch from the MHD Validator tab
+            Manager.EVENT_BUS.addHandler(OutOfContextAssetClickedEvent.TYPE, new OutOfContextAssetClickedEventHandler() {
+                public void onAssetClick(OutOfContextAssetClickedEvent event) {
+                    try {
+                        final AssetNode target = event.getValue();
+
+                        if ("text/csv".equals(target.getMimeType())) {
+                            String rowNumberToHighlightStr = "" + event.getRowNumber();
+
+                            target.getExtendedProps().put("rowNumberToHighlight", rowNumberToHighlightStr);
+
+                            Tab lbContextTab = new LogBrowserTab(target);
+                            topTabSet.addTab(lbContextTab);
+                            topTabSet.selectTab(lbContextTab);
+
+                        }
+
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                        Window.alert(t.toString());
+                    }
+
+                }
+            });
+
+        } catch (Throwable t) {
+            t.printStackTrace();
+            Window.alert("Event setup failed. " + t.toString());
+        }
         //--------------------------------------------------
     }
 
@@ -239,6 +279,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         }
         else if(tabName.equals(TabNamesManager.getInstance().getTestDataSubmissionTabCode())){
             tab = new SubmitTestDataTab();
+        }
+        else if (tabName.equals(TabNamesManager.getInstance().getLogBrowserTabCode())) {
+            tab = new LogBrowserTab();
         }
         else if(tabName.equals(TabNamesManager.getInstance().getMhdtoXdsConverterTabCode())){
             tab = new MhdToXdsConverterTab2();

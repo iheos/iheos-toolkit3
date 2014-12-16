@@ -1,6 +1,0 @@
-#
-#Thu Jun 13 17:42:02 EDT 2013
-DisplayName=This is a simple repository
-description=Description - the most basic repository
-repositoryType=simpleRepos
-id=ee7023aa-863f-4fa3-9396-cecc00140f0a

@@ -1,5 +1,0 @@
-# Simulator support
-
-keyword=simulator
-domain=asset
-description=Holds simulator state

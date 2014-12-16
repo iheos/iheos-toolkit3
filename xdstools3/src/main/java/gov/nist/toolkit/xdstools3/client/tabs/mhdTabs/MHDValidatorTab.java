@@ -1,6 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -15,12 +16,12 @@ import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VStack;
+import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
+import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
-
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
-
 
 /**
  * This class is the UI implementation for MHD Validation tab.
@@ -43,9 +44,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
     // Variables
     private String selectedMessageType;
-    String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
-    String type = "validators";
-    String[] displayColumns = new String[]{"ID","STATUS","MSG"};
 
     /**
      * Default constuctor
@@ -96,18 +94,25 @@ public class MHDValidatorTab extends GenericCloseableTab {
         // Validation result transactions
         validationResultsPanel = new VStack();
 
-        //validationResultsPanel.addMember(setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT, "Sim", id, type, displayColumns));
+//        validationResultsPanel.addMember();
 
         form.setFields(l1, messageTypeSelect, l2);
         form.setCellPadding(10);
 
         vStack.addMember(form);
         vStack.addMember(uploadForm);
-        vStack.addMembers(runBtn,validationResultsPanel);
+        vStack.addMember(runBtn);
+
+        // Event summary widget parameters
+        String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
+        String type = "validators";
+        String[] displayColumns = new String[]{"ID","STATUS","MSG"};
+
+        // Event summary widget
+        validationResultsPanel.addMember(setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT, "Sim", id, type, displayColumns));
+        vStack.addMember(validationResultsPanel);
 
         bindUI();
-
-
 
         return vStack;
     }
@@ -207,21 +212,20 @@ public class MHDValidatorTab extends GenericCloseableTab {
         }
     }
 
-   /* protected Widget setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
 
+    protected Widget setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
+   
         try {
-            *//* manual setup:
-            1) change also the assertionGroup type in event widget.
-             *//*
-
-            EventAggregatorWidget eventMessageAggregatorWidget = new EventAggregatorWidget(new SimpleEventBus(), assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
+            // Initialize the widget
+            EventAggregatorWidget eventMessageAggregatorWidget = new EventAggregatorWidget(Manager.EVENT_BUS, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
+            eventMessageAggregatorWidget.setSize("1000px", "375px");
 
             return eventMessageAggregatorWidget;
 
-        } catch (Exception ex) {
-            Window.alert(ex.toString());
+        } catch (Throwable t) {
+            Window.alert("EventAggregatorWidget instance could not be created: " + t.toString());
         }
         return null;
     }
-*/
+
 }

@@ -61,14 +61,21 @@ public class ContentHelper {
         Repository repos = RepositoryHelper.composeRepositoryObject(an.getRepId(), an.getReposSrc());
 
         Asset aSrc = null;
-        if (an.getLocation()!=null) {
-            // aSrc = repos.getAssetByPath(new File(an.getLocation()));
-            aSrc = repos.getAssetByRelativePath(new File(an.getLocation()));
-            if (aSrc==null) {
-                throw new RepositoryException(RepositoryException.IO_ERROR + "Asset not found by relative location: " + an.getLocation());
+        try {
+            if (an.getRelativePath()!=null) {
+                aSrc = repos.getAssetByRelativePath(new File(an.getRelativePath()));
+
+            } else if (an.getFullPath()!=null) {
+                aSrc = repos.getAssetByPath(new File(an.getFullPath()));
             }
+        } catch (Exception ex) {
+               logger.info(ex.toString());
         }
 
+
+        if (aSrc==null) {
+            throw new RepositoryException(RepositoryException.IO_ERROR + "Asset not found by either location: " + an.getRelativePath() + " fullPath:" + an.getFullPath());
+        }
 
 		/* this should not be required
 		 * else if (an.getAssetId()!=null) {
@@ -88,10 +95,13 @@ public class ContentHelper {
         aDst.setDisplayName(aSrc.getDisplayName());
         aDst.setMimeType(aSrc.getMimeType());
         aDst.setReposSrc(aSrc.getSource().getAccess().name());
+        aDst.setColor(aSrc.getProperty(PropertyKey.COLOR));
         aDst.setExtendedProps(an.getExtendedProps()); // This is from the original assetNode
 
         if (aSrc.getPath()!=null)
-            aDst.setLocation(aSrc.getPath().toString());
+            aDst.setFullPath(aSrc.getPath().toString());
+
+        aDst.setRelativePath(aSrc.getPropFileRelativePart());
 
         if (aSrc.getContent()!=null) {
             logger.fine("*** has got content" + an.getType() + " aSrc.getMimeType():" + aSrc.getMimeType());
@@ -105,6 +115,18 @@ public class ContentHelper {
                     aDst.setTxtContent(XmlFormatter.htmlize(content));
                 } else if ("text/csv".equals(aSrc.getMimeType())) {
                     aDst.setCsv(processCsvContent(content));
+
+
+                    // Transfer a property from its type to an individual asset level
+                    if (aDst.getExtendedProps()!=null && aSrc.getAssetTypeProperties()!=null) {
+
+                        // Debug
+//                        logger.info(aSrc.getAssetTypeProperties().getProperties().getProperty(PropertyKey.DESCRIPTION.toString()));
+//                        logger.info(aSrc.getAssetTypeProperties().getProperties().getProperty(PropertyKey.COLUMN_HEADER_WIDTHS.toString()));
+
+                        aDst.getExtendedProps().put(PropertyKey.COLUMN_HEADER_WIDTHS.toString()
+                                , aSrc.getAssetType().getProperties().getProperty(PropertyKey.COLUMN_HEADER_WIDTHS.toString()));
+                    }
                 } else if ("text/json".equals(aSrc.getMimeType())) {
                     aDst.setTxtContent(prettyPrintJson(content));
                 } else {
@@ -112,8 +134,9 @@ public class ContentHelper {
                     aDst.setTxtContent(content);
                 }
                 aDst.setContentAvailable(true);
-            } catch (Exception e) {
-                logger.info("No content found for <"+ aDst.getAssetId() +">: May not have any content (which is okay for top-level assets): " + e.toString());
+            } catch (Exception ex) {
+                logger.info("No content found for <"+ aDst.getAssetId() +">: May not have any content (which may be okay for top-level assets): " + ex.toString());
+                ex.printStackTrace();
             }
         } else {
             logger.fine("*** getContent -- noContent" + an.getType() + " aSrc.getMimeType():" + aSrc.getMimeType());

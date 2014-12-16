@@ -1,7 +1,0 @@
-#
-#Mon Jun 03 14:01:46 EDT 2013
-displayName=My Site
-type=site
-repository=8e4465aa-17ce-490f-9377-ff85b4d48daa
-description=This is my site (indexable)
-id=30b6eb10-5ca4-4b1b-ab2c-8640158552eb

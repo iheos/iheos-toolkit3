@@ -19,7 +19,9 @@ public class SimpleType extends Type {
 	public static final String ASSET = "asset";
 	public static final String REPOSITORY = "repository";
 
-	public SimpleType(String keyword, String description) throws RepositoryException {
+
+
+    public SimpleType(String keyword, String description) throws RepositoryException {
 		super("", "", keyword, description);
 		
 		if (keyword == null || keyword.equals(""))
@@ -61,4 +63,6 @@ public class SimpleType extends Type {
 	public String toString() {
 		return getKeyword();
 	}
+
+
 }

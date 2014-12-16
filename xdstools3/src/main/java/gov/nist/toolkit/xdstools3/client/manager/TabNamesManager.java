@@ -46,6 +46,7 @@ public class TabNamesManager {
     private final String mhdValidatorTabCode="MHD_VALIDATOR";
     private final String testDataSubmissionTabCode = "SUBMIT_TEST_DATA";
     private final String mhdToXdsConverterTabCode="MHD_CONVERTER";
+    private final String logBrowserTabCode = "LOG_BROWSER";
 
 
     public String getFindDocumentsTabCode() {
@@ -82,5 +83,6 @@ public class TabNamesManager {
     }
     public String getTestDataSubmissionTabCode() {return testDataSubmissionTabCode;}
     public String getMhdtoXdsConverterTabCode() {return mhdToXdsConverterTabCode;}
+    public String getLogBrowserTabCode() {return logBrowserTabCode;}
     public String getHelpTabCode() {return helpTabCode;}
 }

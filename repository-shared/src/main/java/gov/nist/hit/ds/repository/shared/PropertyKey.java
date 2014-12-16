@@ -4,7 +4,7 @@
 package gov.nist.hit.ds.repository.shared;
 
 /**
- * This enumeration contains some of the frequently used property keys, as used in {@link Properties#getProperty(java.io.Serializable)}, which is common to all types repositories or assets.
+ * This enumeration contains some of the frequently used property keys, as used in {@see Properties#getProperty(java.io.Serializable)}, which is common to all types of domains (repositories or assets).
  * @author Sunil.Bhaskarla
  *
  */
@@ -34,6 +34,15 @@ public enum PropertyKey {
             @Override
             public String toString() {
                 return "color";
+            }
+        },
+    /**
+     * This property value is expected to be a JSON-formatted string. For example: example {"ID":"50px"}
+     */
+        COLUMN_HEADER_WIDTHS(true) {
+            @Override
+            public String toString() {
+                return "columnHeaderWidths";
             }
         },
        CREATED_DATE(false){
@@ -82,6 +91,12 @@ public enum PropertyKey {
             @Override
             public String toString() {
                 return "lastModifiedTime";
+            }
+        },
+        LIFETIME(true) {
+            @Override
+            public String toString() {
+                return "lifetime";
             }
         },
         LOCATION(true) {
@@ -166,7 +181,11 @@ public enum PropertyKey {
 		public void setInternalUseOnly(boolean internalUseOnly) {
 			this.internalUseOnly = internalUseOnly;
 		}
-		
+
+    /**
+     *
+     * @param isInternal This flag represents a property identifier that is primarily for non-business related data, however, some identifiers can fall in both categories.
+     */
 		private PropertyKey(boolean isInternal) {
 			setInternalUseOnly(isInternal);
 		}		
