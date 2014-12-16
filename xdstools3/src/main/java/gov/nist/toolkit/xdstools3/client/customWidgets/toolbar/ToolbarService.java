@@ -14,7 +14,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface ToolbarService extends RemoteService {
 
     public String[] retrieveEnvironments();
+    public void setEnvironment(String environmentName);
     public String[] retrieveTestSessions();
     public String[] addTestSession(String sessionName);
-    public void setEnvironment(String environmentName);
+    public String[] deleteTestSession(String sessionName);
+
 }

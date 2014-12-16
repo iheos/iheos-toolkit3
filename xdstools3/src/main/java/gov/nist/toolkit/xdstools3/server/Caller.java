@@ -113,27 +113,43 @@ public class Caller implements Serializable {
      * Sets the list of test sessions
      * @return the list of test sessions
      */
-    public String[] retrieveTestSessions(){
-        //TODO
-        String[] sessions = {"Test session 1", "Test session 2"}; // test data
-        //logger.info("Retrieved the list of sessions.");
-        return sessions;
+    public String[] retrieveTestSessions() {
+        // String[] sessions = {"Test session 1", "Test session 2"};   // test data
+        try {
+            logger.info("Retrieved the list of user session names.");
+            return Toolkit.getUserSessions().toArray(new String[0]);
+        }
+        catch (NullPointerException e) {
+            logger.info("No user session names are registered.");
+            return new String[]{};
+        }
     }
 
     /**
-     * Registers a new session name and update the client-side data
+     * Registers a new session name and perpetuates the change to the back-end.
+     * Retrieving the new list of sessions is done from inside the service
+     * implementation ToolbarServiceImpl.
      * @param sessionName New session name entered by the user
+     * @see gov.nist.toolkit.xdstools3.server.RPCServices.ToolbarServiceImpl
      */
-    public String[] addTestSession(String sessionName){
-        // TODO
-        String[] sessions = {"Test session 1", "Test session 2", sessionName}; // test data
-        System.out.println("Test successful: A new click or new session name was registered");
-        return sessions;
+    public void addTestSession(String sessionName){
+        Toolkit.addUserSession(sessionName);
+    }
+
+    /**
+     * Deletes a user session and perpetuates the change to the back-end.
+     * Retrieving the new list of sessions is done from inside the service
+     * implementation ToolbarServiceImpl.
+     * @param sessionName
+     * @see gov.nist.toolkit.xdstools3.server.RPCServices.ToolbarServiceImpl
+     */
+    public void deleteTestSession(String sessionName) {
+        Toolkit.deleteUserSession(sessionName);
     }
 
 
 
-    // --------------------- Actors and Collections ---------------------
+        // --------------------- Actors and Collections ---------------------
 
     public Map<String, String> getCollectionNames(String collectionSetName) throws Exception  {
         return ActorsCollectionsDataSamples.instance.getCollectionNames(collectionSetName);
