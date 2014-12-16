@@ -1,5 +1,6 @@
 package gov.nist.toolkit.xdstools3.server;
 
+import gov.nist.hit.ds.simSupport.api.ValidationApi;
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.toolkit.xdstools3.server.RPCServices.SaveTempFileService;
 import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
@@ -153,15 +154,20 @@ public class Caller implements Serializable {
 
     /**
      * Calls validation on an MHD message
-     * @param messageType type of MHD message
+     * @param messageType the type of MHD message being uploaded
      * @param filecontent MHD message contents
      *
      * @return
      */
     public String validateMHDMessage(String messageType, String filecontent) {
-        /* TODO Implementation using toolkitServices.getSession().getLastUpload() to get the file uploaded
-          (Change method prototype if required)*/
-        return "Response for mhd "+messageType+" validation.\n"+filecontent;
+        ValidationApi api = new ValidationApi();
+        // is messageType (ex. submit) the same than a transactionName?
+
+       // Asset a = api.validateRequest(transactionName, filecontent, headers);
+
+        // if error
+        // boolean error = asset.getProperty("status").equals("ERROR");
+        return "Response for mhd validation.\n"+filecontent; // test
     }
 
     /**

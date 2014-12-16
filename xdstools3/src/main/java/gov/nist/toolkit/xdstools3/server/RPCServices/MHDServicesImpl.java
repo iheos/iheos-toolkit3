@@ -49,7 +49,7 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
      * @return validation result
      */
     public String validateMHDMessage(String messageType){
-        return Caller.getInstance().validateMHDMessage(messageType,new String(getSession().getlastUpload()).trim());
+        return Caller.getInstance().validateMHDMessage(messageType, new String(getSession().getlastUpload()).trim());
     }
 
     /**
