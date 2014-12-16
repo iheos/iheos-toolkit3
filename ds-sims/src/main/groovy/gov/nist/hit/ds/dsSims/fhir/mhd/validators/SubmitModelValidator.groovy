@@ -33,6 +33,8 @@ class SubmitModelValidator extends ValComponentBase {
     @Validation(id='mhdsm010', msg='Single DocumentManifest present', ref=['3.65.4.1.2.1 FHIR encoding of a resource bundle'])
     def mhdsm010() { assertEquals(1, submitModel.docManifests?.size())}
 
+
+
     @Validation(id='mhdsm020', msg='One or more DocumentReference present', ref=['3.65.4.1.2.1 FHIR encoding of a resource bundle'])
     def mhmhdsm020() { assertMoreThan(0, submitModel.docReferenceMap.size()) }
 

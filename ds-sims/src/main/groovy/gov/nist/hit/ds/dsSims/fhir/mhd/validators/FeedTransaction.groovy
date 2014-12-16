@@ -25,11 +25,18 @@ class FeedTransaction implements Transaction {
         reqString = reqString.trim()
         if (reqString.startsWith('<')) {
             // XML
+
+            // Schema validation
             new FhirSchemaValidator(simHandle, reqString, Toolkit.schemaFile(), true).asPeer().run()
             def dr = new XmlSlurper().parseText(reqString)
+            // build model description to support later calls
             SubmitModel sm = buildSubmitModel(true, dr)
+
+            // Validation model
             def validator = new SubmitModelValidator(simHandle, sm)
             validator.asPeer().run()
+
+            // valiation necessary HTTP headers
             new SubmitHeaderValidator(simHandle, sm).asPeer().run()
         } else if (reqString.startsWith('{')) {
             // JSON

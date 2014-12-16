@@ -1,12 +1,11 @@
 package gov.nist.toolkit.session.server;
 
+import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 import gov.nist.toolkit.actorfactory.SimCache;
 import gov.nist.toolkit.actorfactory.SimDb;
-import gov.nist.toolkit.actorfactory.SimManager;
-import gov.nist.toolkit.actorfactory.SimulatorFactory;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.actorfactory.client.NoSimException;
-import gov.nist.toolkit.actorfactory.client.SimulatorConfig;
 import gov.nist.toolkit.envSetting.EnvSetting;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.installation.PropertyServiceManager;
@@ -16,7 +15,6 @@ import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.securityCommon.SecurityParams;
 import gov.nist.toolkit.session.server.serviceManager.QueryServiceManager;
 import gov.nist.toolkit.session.server.serviceManager.XdsTestServiceManager;
-import gov.nist.toolkit.simcommon.server.ExtendedPropertyManager;
 import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.testengine.TransactionSettings;
@@ -24,18 +22,14 @@ import gov.nist.toolkit.testengine.Xdstest2;
 import gov.nist.toolkit.tk.TkLoader;
 import gov.nist.toolkit.tk.client.TkProps;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
+import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.apache.log4j.Logger;
+import java.util.*;
 
 /**
  * The session object is used in one of four ways depending on the context:
@@ -67,6 +61,8 @@ public class Session implements SecurityParams {
 	public TransactionSettings transactionSettings = new TransactionSettings();
 	public boolean isAdmin = false;
 	public boolean isSoap = true;
+
+    static final String sessionVarName = "NoSession";
 
 	byte[] lastUpload = null;
 	byte[] input2 = null;
@@ -147,7 +143,57 @@ public class Session implements SecurityParams {
 		return sessionMap.get(sessionId);
 	}
 
-	public void setSessionId(String id) {
+    /**
+     * Method that returns the session using servlet request (copied from v2)
+     * @param request
+     * @return
+     */
+    static public Session getSession(HttpServletRequest request) {
+        if (request == null) throw new ToolkitRuntimeException("Null request object");
+
+        Session s = null;
+        HttpSession hsession = null;
+        if (request != null) {
+            logger.debug("HttpRequest object available");
+            hsession = request.getSession();
+            logger.debug("SessionId is " + hsession.getId());
+            s = (Session) hsession.getAttribute(sessionVarName);
+            if (s != null) {
+                logger.debug("Using existing Session object");
+                return s;
+            }
+        }
+
+        // Force short session timeout for testing
+//		hsession.setMaxInactiveInterval(60/4);    // one quarter minute
+
+        if (s == null) {
+            logger.debug("Creating new Session object");
+            s = new Session();
+            if (hsession != null) {
+                s.setSessionId(hsession.getId());
+                s.addSession();
+                hsession.setAttribute(sessionVarName, s);
+                logger.debug("SessionId = " + hsession.getId());
+            } else {
+                s.setSessionId("mysession");
+                logger.debug("SessionId = " + "mysession");
+            }
+        }
+
+        if (request != null) {
+            if (s.getIpAddr() == null) {
+                s.setIpAddr(request.getRemoteHost());
+            }
+
+            s.setServerSpec(request.getLocalName(),
+                    String.valueOf(request.getLocalPort()));
+        }
+
+        return s;
+    }
+
+    public void setSessionId(String id) {
 		sessionId = id;
 	}
 
@@ -194,26 +240,14 @@ public class Session implements SecurityParams {
 		return serverPort;
 	}
 
+    public Session() { }
+
 	public Session(File warHome, SiteServiceManager siteServiceManager, String sessionId) {
 		this(warHome, siteServiceManager);
 		this.sessionId = sessionId;
-
-		// tomcatSessionCache = new File(warHome + File.separator +
-		// "SessionCache" + File.separator + sessionId);
 	}
 
 	public Session(File warHome, SiteServiceManager siteServiceManager) {
-		Installation.installation().warHome(warHome);
-		// this.siteServiceManager = siteServiceManager;
-		ExtendedPropertyManager.load(warHome);
-		System.out.print("warHome[Session]: " + warHome + "\n");
-
-		File externalCache = new File(Installation.installation().propertyServiceManager().getPropertyManager()
-				.getExternalCache());
-		Installation.installation().externalCache(externalCache);
-		if (externalCache == null || !externalCache.exists() || !externalCache.isDirectory())
-			externalCache = null;
-		Installation.installation().externalCache(externalCache);
 	}
 
 	public QueryServiceManager queryServiceManager() {
