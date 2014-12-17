@@ -177,12 +177,9 @@ public class Caller implements Serializable {
      */
     public String validateMHDMessage(String messageType, String filecontent) {
         ValidationApi api = new ValidationApi();
-        // is messageType (ex. submit) the same than a transactionName?
+        String transactionName = "pdb";
+        //Asset a = api.validateRequest(transactionName, filecontent);
 
-       // Asset a = api.validateRequest(transactionName, filecontent, headers);
-
-        // if error
-        // boolean error = asset.getProperty("status").equals("ERROR");
         return "Response for mhd validation.\n"+filecontent; // test
     }
 
