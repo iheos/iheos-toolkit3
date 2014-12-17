@@ -60,6 +60,7 @@ public class Caller implements Serializable {
      */
     public void saveAdminSettings(String[] settings){
         // TODO save admin settings to back-end
+        Toolkit.saveProperties(Toolkit.getToolkitPropertiesFile());
         System.out.println("Admin settings were saved");
     }
 
@@ -80,7 +81,7 @@ public class Caller implements Serializable {
     public String[] retrieveAdminSettings(){
         //TODO missing the location of external cache
         String[] currentAdminParams = {Toolkit.getHost(), Toolkit.getPort(), Toolkit.getTlsPort(),
-                "C://ext_cache", Toolkit.getDefaultEnvironmentName(), Toolkit.getGazelleConfigURL()};
+                "ext_cache_location", Toolkit.getDefaultEnvironmentName(), Toolkit.getGazelleConfigURL()};
         //String[] test = {"http://nist1", "90800", "90801", "C://ext_cache", "NA2015", "http://gazelle.net"}; // test data
         logger.info("Retrieved from back-end (API Toolkit) the following parameters: "
                      + "host, port, TLS port, external cache location, default environment, gazelle URL.");

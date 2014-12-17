@@ -123,8 +123,7 @@ public class Toolkit {
      * Accessor functions that reveal locations of critical resources in toolkit
      * @return
      */
-
-    static public File toolkitPropertiesFile() { return toolkitPropertiesFile; }
+    static public File getToolkitPropertiesFile() { return toolkitPropertiesFile; }
     static public File warRootFile() { return warRootFile; }
 
     /**
