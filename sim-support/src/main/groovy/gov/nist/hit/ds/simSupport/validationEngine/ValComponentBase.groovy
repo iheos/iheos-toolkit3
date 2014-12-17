@@ -51,7 +51,7 @@ public abstract class ValComponentBase implements ValComponent {
     ValComponentBase asSelf() { parentRelation = Relation.SELF; return this }
 
     void runValidationEngine() throws SoapFaultException, RepositoryException {
-        String name = this.class.simpleName
+        if (!name) name = this.class.simpleName
         log.info("Validator: ${parentRelation} ${name}")
         if (event == null) log.error("Validator ${name} not initialized correctly, must call super(event) in constructor.")
         log.debug("resultsStack before init: ${event.resultsStack}")

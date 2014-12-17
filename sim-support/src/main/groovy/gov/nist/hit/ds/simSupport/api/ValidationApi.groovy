@@ -27,4 +27,8 @@ class ValidationApi {
         runner.validateRequest()
         return simHandle.event.eventAsset
     }
+
+    Asset validateRequest(String transactionName, String content) {
+        return validateRequest(transactionName, content, '')
+    }
 }
