@@ -370,6 +370,12 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getGetSubmissionSetAndContentsTabCode()+"'>Get Submission Set and Contents</a></li>" +
                 "</ul>" +
                 "</li>" + */
+                "<li><a href='#'>MHD Tools</a>" +
+                "<ul>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMHDValidatorTabCode()+"'>MHD Validator</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMhdtoXdsConverterTabCode()+"'>MHD to XDS Converter</a></li>" +
+                "</ul>" +
+                "</li>" +
                 "<li><a href='#'>Tools</a>" +
                 "<ul>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMessageValidatorTabCode()+"'>Message Validator</a></li>" +
