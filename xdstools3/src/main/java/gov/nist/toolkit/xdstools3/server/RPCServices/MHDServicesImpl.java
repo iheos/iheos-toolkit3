@@ -3,6 +3,7 @@ package gov.nist.toolkit.xdstools3.server.RPCServices;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.session.server.Session;
+import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServices;
 import gov.nist.toolkit.xdstools3.server.Caller;
 import org.apache.log4j.Logger;
@@ -35,7 +36,7 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
      *
      * @return validation result
      */
-    public String validateMHDMessage(String messageType){
+    public String validateMHDMessage(String messageType) throws ToolkitServerError {
         return Caller.getInstance().validateMHDMessage(messageType, new String(getSession().getlastUpload()).trim());
     }
 

@@ -1,7 +1,10 @@
 package gov.nist.toolkit.xdstools3.server;
 
+import gov.nist.hit.ds.repository.api.Asset;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.simSupport.api.ValidationApi;
 import gov.nist.hit.ds.toolkit.Toolkit;
+import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.server.RPCServices.SaveTempFileService;
 import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
 import gov.nist.toolkit.xdstools3.server.demo.TestDataHelper;
@@ -23,6 +26,9 @@ public class Caller implements Serializable {
 	private static Caller instance = null;
     private final static Logger logger = Logger.getLogger(Caller.class.getName());
     private final SaveTempFileService saveTempFileService = new SaveTempFileService();
+
+    // Transaction name common to all MHD transactions
+    private final String MHD_TRANSACTION_NAME = "pdb";
 
 	protected Caller(){
 	}
@@ -174,14 +180,24 @@ public class Caller implements Serializable {
      * @param messageType the type of MHD message being uploaded
      * @param filecontent MHD message contents
      *
-     * @return
+     * @return an Asset (= validation result) as handled by the repository / LogBrowser
      */
-    public String validateMHDMessage(String messageType, String filecontent) {
+    public String validateMHDMessage(String messageType, String filecontent) throws ToolkitServerError {
         ValidationApi api = new ValidationApi();
-        String transactionName = "pdb";
-        //Asset a = api.validateRequest(transactionName, filecontent);
 
-        return "Response for mhd validation.\n"+filecontent; // test
+        //if (messageType == "Submit") {
+            Asset validationResult = api.validateRequest(MHD_TRANSACTION_NAME, filecontent);
+            try {
+                String assetId = validationResult.getId().getIdString();
+                logger.info("Received Asset ID #" + assetId);
+                return assetId;
+            } catch (RepositoryException e) {
+                logger.fatal("Server error: " + e.getMessage());
+                throw new ToolkitServerError(e.getMessage());
+
+            }
+        //} // end submit
+        // else throw new unsupportedmessagetypeexception
     }
 
     /**
