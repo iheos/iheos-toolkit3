@@ -11,16 +11,16 @@ import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.events.KeyDownEvent;
 import com.smartgwt.client.widgets.events.KeyDownHandler;
+import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericCancelButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.LoginButton;
-import gov.nist.toolkit.xdstools3.client.util.eventBus.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.util.eventBus.OpenTabEvent;
 
 public class LoginDialogWidget extends Window {
     private static int POPUP_WIDTH = 295;
@@ -31,6 +31,8 @@ public class LoginDialogWidget extends Window {
     protected DataSource dataSource;
     private String protectedTab = "";
     private VLayout vlayout;
+    LoginServiceAsync service = GWT.create(LoginService.class);
+
 
 
     public LoginDialogWidget(String _protectedTab) {
@@ -59,6 +61,22 @@ public class LoginDialogWidget extends Window {
         vlayout.setAlign(VerticalAlignment.CENTER);
         addItem(vlayout);
         login.focus();
+
+        // Close the dialog when pressing Escape, validate login when pressing Enter
+        this.addKeyDownHandler(new KeyDownHandler() {
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                if (EventHandler.getKey().equals("Escape")) {
+                    clear();
+                }
+                if (EventHandler.getKey().equals("Enter")) {
+                    if (form.validate()) {
+                        logMeIn((String) form.getField("password").getValue());
+                    }
+                }
+
+            }
+        });
     }
 
     /**
@@ -69,7 +87,7 @@ public class LoginDialogWidget extends Window {
         form.setDataSource(dataSource);
         form.setUseAllDataSourceFields(true);
         form.setAutoFocus(true); form.setAutoFocusOnError(true);
-        form.setHeight(40);
+        //form.setHeight(40);
         form.setCellPadding(5);
         form.setAlign(Alignment.CENTER);
         return form;
@@ -84,19 +102,11 @@ public class LoginDialogWidget extends Window {
         login.setSelected(true);
         login.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                if (form.validate()){
-                logMeIn((String)form.getField("password").getValue());
-               	}
-            }});
-        // Close the dialog when pressing Enter or Escape
-        login.addKeyDownHandler(new KeyDownHandler() {
-            @Override
-            public void onKeyDown(KeyDownEvent event) {
-                if (EventHandler.getKey().equals("Escape") || EventHandler.getKey().equals("Enter")) {
-                    clear();
-                        }
-                    }
-                });
+                if (form.validate()) {
+                    logMeIn((String) form.getField("password").getValue());
+                }
+            }
+        });
 
         cancel = new GenericCancelButton();
         cancel.addClickHandler(new ClickHandler() {
@@ -114,14 +124,12 @@ public class LoginDialogWidget extends Window {
     }
 
     /**
-     * Perform login scripts.
+     * Calls the server to check the user-entered password against the registered password.
      * If the call to server fails, an error message is added to the existing login dialog.
      * If the call succeeds, the login itself can have succeeded or failed. The status of the login attempt
      * is relayed from the server using a Boolean.
      */
     protected void logMeIn(String password){
-        // call to server to log the user
-        LoginServiceAsync service = GWT.create(LoginService.class);
 
         AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
             public void onFailure(Throwable caught) {
