@@ -196,8 +196,10 @@ public class MHDValidatorTab extends GenericCloseableTab {
     private void loadMessageTypesMap() {
         LinkedHashMap<String,String> map=new LinkedHashMap<String,String>();
         map.put("sbmt", "Submit");
-        map.put("sbmt_resp","Submit Response");
+        map.put("sbmt_resp","Submit Response - not implemented yet");
         messageTypeSelect.setValueMap(map);
+        messageTypeSelect.setDefaultValue("sbmt");
+        selectedMessageType=map.get("sbmt");
     }
 
     /**
@@ -214,7 +216,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
 
     protected Widget setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
-   
+
         try {
             // Initialize the widget
             EventAggregatorWidget eventMessageAggregatorWidget = new EventAggregatorWidget(Manager.EVENT_BUS, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
