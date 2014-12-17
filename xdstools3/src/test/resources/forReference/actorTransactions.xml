@@ -15,6 +15,9 @@
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <implClass value="gov.nist.hit.ds.dsSims.eb.transactions.Reg"/>
     </transaction>
+    <transaction name="Provide Document Bundle" id="pdb" code="pdb">
+        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.FeedTransaction"/>
+    </transaction>
     <actor name="Document Registry" id="reg">
         <implClass value="gov.nist.hit.ds.simSupport.factories.DocumentRegistryActorFactory"/>
         <transaction id="rb"/>

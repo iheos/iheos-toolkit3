@@ -1,7 +1,6 @@
 package gov.nist.toolkit.xdstools3.server.RPCServices;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServices;
