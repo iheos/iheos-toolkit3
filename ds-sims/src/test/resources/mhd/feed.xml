@@ -24,7 +24,8 @@
                     </Practitioner>
                 </contained>
                 <masterIdentifier>
-                    <value value="1.3.6.1.4.1.40371.1.3.33830.62584.31048.57049.54365.50019.53148"/>
+                    <system value="urn:ietf:rfc:3986"/>
+                    <value value="urn:oid:1.3.6.1.4.1.40371.1.3.33830.62584.31048.57049.54365.50019.53148"/>
                 </masterIdentifier>
                 <subject>
                     <reference value="#patient"/>
@@ -80,7 +81,8 @@
                     </Patient>
                 </contained>
                 <masterIdentifier>
-                    <value value="1.3.6.1.4.1.40371.1.3.27817.10071.25344.32327.14622.20248.7826"/>
+                    <system value="urn:ietf:rfc:3986"/>
+                    <value value="urn:oid:1.3.6.1.4.1.40371.1.3.27817.10071.25344.32327.14622.20248.7826"/>
                 </masterIdentifier>
                 <subject>
                     <reference value="#patient"/>
@@ -150,7 +152,8 @@
                     </Patient>
                 </contained>
                 <masterIdentifier>
-                    <value value="1.3.6.1.4.1.40371.1.3.8540.60734.56247.63167.57179.25543.26611"/>
+                    <system value="urn:ietf:rfc:3986"/>
+                    <value value="urn:oid:1.3.6.1.4.1.40371.1.3.8540.60734.56247.63167.57179.25543.26611"/>
                 </masterIdentifier>
                 <subject>
                     <reference value="#patient"/>
