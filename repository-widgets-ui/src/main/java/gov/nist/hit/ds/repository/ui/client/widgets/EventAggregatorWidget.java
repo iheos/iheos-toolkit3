@@ -12,7 +12,6 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.DefaultCellTableBuilder;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -22,7 +21,6 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.web.bindery.event.shared.EventBus;
-import fr.mikrosimage.gwt.client.IndexedColumn;
 import fr.mikrosimage.gwt.client.ResizableDataGrid;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
@@ -215,6 +213,19 @@ public class EventAggregatorWidget extends Composite {
         getContentPanel().addSouth(pager, 26);
         getContentPanel().add(table);
 
+        drawTable();
+        //
+
+        return getContentPanel();
+    }
+
+    public void drawTable() {
+        try {
+            dataProvider.getList().clear();
+        } catch (Throwable t) {
+
+        }
+
         try {
             reposService.aggregateAssertions(getExternalRepositoryId(), getEventAssetId(), getAssetType(), new SimpleTypeId("assertionGroup"),
                     null, // NOTE: Maybe it is a good idea to add a drop down of all distinct status codes for on-demand filtering of results
@@ -287,9 +298,6 @@ public class EventAggregatorWidget extends Composite {
         } catch (Throwable t) {
             Window.alert("reposService.aggregateAssertions call failed: " + t.toString());
         }
-        //
-
-        return getContentPanel();
     }
 
     private class IndexedColumn extends Column<List<EventMessageCell>, SafeHtml> { // Column<List<SafeHtml>, SafeHtml>
