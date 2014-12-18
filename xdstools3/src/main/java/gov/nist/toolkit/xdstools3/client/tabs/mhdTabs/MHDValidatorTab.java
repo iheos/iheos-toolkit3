@@ -213,13 +213,13 @@ public class MHDValidatorTab extends GenericCloseableTab {
     /**
      * Method to display validation results
      *
-     * @param assetId Validation result from RPC validation
+     * @param assetNode Validation result from RPC validation
      */
-    private void displayValidationResults(AssetNode assetId) {
+    private void displayValidationResults(AssetNode assetNode) {
         if (!validationResultsPanel.isVisible()){
             validationResultsPanel.setVisible(true);
         }
-        //eventMessageAggregatorWidget.setEventAssetId(assetId);
+        eventMessageAggregatorWidget.setEventAssetNode(assetNode);
     }
 
 
