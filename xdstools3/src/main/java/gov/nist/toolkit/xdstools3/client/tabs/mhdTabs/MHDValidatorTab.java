@@ -83,6 +83,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         HeaderItem l2=new HeaderItem();
         l2.setDefaultValue("2. Upload file to validate");
         uploadForm = new FormPanel();
+        uploadForm.setHeight("40px");
         uploadForm.setMethod(FormPanel.METHOD_POST);
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setAction("fileUploadServlet");
