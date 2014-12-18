@@ -186,7 +186,9 @@ public class Caller implements Serializable {
 
         //if (messageType == "Submit") {
         AssetNode validationResult = api.validateRequest(MHD_TRANSACTION_NAME, filecontent);
-        logger.info("Received AssetNode of AssetId #" + validationResult.getAssetId());
+        logger.info("Received AssetNode with parameters AssetId: " + validationResult.getAssetId()
+                +", AssetType: "+ validationResult.getType()
+                +", RepositoryId: "+ validationResult.getRepId());
         return validationResult;
         //} // end submit
         // else throw new unsupportedmessagetypeexception
@@ -198,6 +200,8 @@ public class Caller implements Serializable {
      * @return
      */
     public Map<String,String> retrieveTestDataSet(String testDataType) {
+        // TODO not sure what this is for. Needs more explanation.
+        // If it is a test method, it needs to be put in a different class.
         return TestDataHelper.instance.getTestDataSet();
     }
 
