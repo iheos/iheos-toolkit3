@@ -1,23 +1,15 @@
 package gov.nist.toolkit.xdstools3.server;
 
-import gov.nist.toolkit.http.HttpMessage;
-import gov.nist.toolkit.http.HttpParseException;
-import gov.nist.toolkit.http.HttpParser;
-import gov.nist.toolkit.http.MultipartMessage;
-import gov.nist.toolkit.http.MultipartParser;
-import gov.nist.toolkit.session.server.Session;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Map;
+import gov.nist.toolkit.http.*;
+import gov.nist.toolkit.session.server.Session;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Logger;
+import java.io.IOException;
+import java.util.Map;
 
 public class UploadServlet extends HttpServlet {
 
@@ -67,26 +59,25 @@ public class UploadServlet extends HttpServlet {
 		}
 
 		try {
-			HttpSession hsession = request.getSession();
-			Session session = (Session) hsession.getAttribute("MySession");
-			if (session == null) {
-				PrintWriter pw = response.getWriter();
-				pw.println("No Session established - that's impossible!");
-				return;
-			}
+            Session session = Session.getSession(request);
+            logger.debug("UploadServlet: sessionId is " + session.getId());
 
 			if (contentMap != null) {
+                byte[] upload1 = contentMap.get("upload1FormElement");
+                logger.debug("upload1 is " + ((upload1 == null) ? "null" : "not null"));
+                byte[] upload2 = contentMap.get("upload2FormElement");
+                logger.debug("upload2 is " + ((upload2 == null) ? "null" : "not null"));
 				session.setLastUpload(
 						"filename",
-						contentMap.get("upload1FormElement"),
+						upload1,
 						asString(contentMap, "password1"),
 						"filename",
-						contentMap.get("upload2FormElement"),
+						upload2,
 						asString(contentMap, "password2"));
 			}
 
 		} catch (Exception e7) {
-			logger.error("Exception: " + e7.getMessage());
+			logger.error(ExceptionUtil.exception_details(e7));
 			body = e7.getMessage().getBytes();
 		}
 		response.setStatus(HttpServletResponse.SC_OK);

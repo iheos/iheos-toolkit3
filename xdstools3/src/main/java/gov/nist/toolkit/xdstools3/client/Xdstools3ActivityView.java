@@ -357,7 +357,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<div class='app-padding navbar-inner'>" +
                 "<ul>" +
                 "<li><a href='#'>Home</a></li>" +
-                "<li><a href='#'>Queries & Retrieves</a>" +
+               /* "<li><a href='#'>Queries & Retrieves</a>" +
                 "<ul>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getFindDocumentsTabCode()+"'>Find Document</a></li>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMpqFindDocumentsTabCode()+"'>MPQ Find Documents</a></li>" +
@@ -369,6 +369,12 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getGetFoldersAndContentsCode()+"'>Get Folders and Contents</a></li>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getGetSubmissionSetAndContentsTabCode()+"'>Get Submission Set and Contents</a></li>" +
                 "</ul>" +
+                "</li>" + */
+                "<li><a href='#'>MHD Tools</a>" +
+                "<ul>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMHDValidatorTabCode()+"'>MHD Validator</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMhdtoXdsConverterTabCode()+"'>MHD to XDS Converter</a></li>" +
+                "</ul>" +
                 "</li>" +
                 "<li><a href='#'>Tools</a>" +
                 "<ul>" +
@@ -378,7 +384,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
                 "</ul>" +
                 "</li>" +
-                "<li><a href='#'>Send Test Data</a>" +
+               /* "<li><a href='#'>Send Test Data</a>" +
                 "<ul>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
                 "</ul>" +
@@ -396,7 +402,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getFolderValidationTabCode()+"'>XDS.b Registry Folder Validation</a></li>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getSubmitRetrieveTabCode()+"'>XDS.b Submit/Retrieve</a></li>" +
                 "</ul>" +
-                "</li>" +
+                "</li>" + */
                 "<div style='float:right;'>" +
                 "<li><a class='right-side-button' href='#'><img class='icon-link' src='images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
                 "<li><a class='right-side-button' href='#TabPlace:"+ TabNamesManager.getInstance().getHelpTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/help-icon.png'/> Help</a></li>" +

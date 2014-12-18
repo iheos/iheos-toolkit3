@@ -17,7 +17,7 @@ public class HomeTab extends GenericTab {
 
     @Override
     protected HStack createContents(){
-        HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
+        /*HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
         queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
         queriesAndRetrieves.addItem("Find Documents", true);
         queriesAndRetrieves.addItem("MPQ Find Documents", true);
@@ -28,6 +28,7 @@ public class HomeTab extends GenericTab {
         queriesAndRetrieves.addItem("Get Folders", true);
         queriesAndRetrieves.addItem("Get Folder and Contents", true);
         queriesAndRetrieves.addItem("Get Submission Set and Contents", true);
+        */
 
         HomeBox tools = new HomeBox("Tools");
         tools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
@@ -35,9 +36,9 @@ public class HomeTab extends GenericTab {
         tools.addItem("Document Metadata Editor", false);
         tools.addItem("Pre-Connectathon Tests", true);
 
-        HomeBox sendTestData = new HomeBox("Send Test Data");
+        /*HomeBox sendTestData = new HomeBox("Send Test Data");
         sendTestData.setIcon("icons/glyphicons/glyphicons_123_message_out.png");
-        sendTestData.addItem("Submit Test Data", true);
+        sendTestData.addItem("Submit Test Data", true);*/
 
        /* HomeBox simulators = new HomeBox("Simulators");
         simulators.setIcon("icons/glyphicons/glyphicons_086_display.png");*/
@@ -47,7 +48,7 @@ public class HomeTab extends GenericTab {
         mhdTools.addItem("MHD Validator", true);
         mhdTools.addItem("MHD to XDS Converter", true);
 
-        HomeBox connectathonTools = new HomeBox("Connectathon Tools");
+        /*HomeBox connectathonTools = new HomeBox("Connectathon Tools");
         connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         // Connectathon Validations
         connectathonTools.addItem("XDS.b Doc Source Stores Document", true);
@@ -56,12 +57,12 @@ public class HomeTab extends GenericTab {
         connectathonTools.addItem("XDS.b Lifecycle", true);
         connectathonTools.addItem("XDS.b Registry Folder Handling", true);
         // Repository Validations
-        connectathonTools.addItem("XDS.b Repository Do This First", true);
+        connectathonTools.addItem("XDS.b Repository Do This First", true); */
 
         VStack vstack1 = new VStack();
         VStack vstack2 = new VStack();
-        vstack1.addMembers(queriesAndRetrieves, connectathonTools);
-        vstack2.addMembers(mhdTools, tools, sendTestData); // category simulators is empty for now
+        vstack1.addMembers(mhdTools); //queriesAndRetrieves, connectathonTools);
+        vstack2.addMembers(tools); // sendTestData, simulators
 
         HStack hstack = new HStack();
         LayoutSpacer spacer = new LayoutSpacer();

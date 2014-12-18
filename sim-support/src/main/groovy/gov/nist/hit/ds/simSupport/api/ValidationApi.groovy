@@ -2,6 +2,7 @@ package gov.nist.hit.ds.simSupport.api
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.repoSupport.RepoUtils
 import gov.nist.hit.ds.repository.api.Asset
+import gov.nist.hit.ds.repository.shared.data.AssetNode
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
@@ -15,7 +16,7 @@ class ValidationApi {
     def factory = new ActorTransactionTypeFactory()
     def config = new SimSystemConfig()
 
-    Asset validateRequest(String transactionName, String content, String headers) {
+    AssetNode validateRequest(String transactionName, String content, String headers) {
         def simId = new SimId('ValidationApi')
         def simHandle = SimUtils.create(simId)
         def transactionType = factory.getTransactionType(transactionName)
@@ -25,6 +26,16 @@ class ValidationApi {
         simHandle.event.inOut.reqBody = content.getBytes()
         def runner = new TransactionRunner(simHandle)
         runner.validateRequest()
-        return simHandle.event.eventAsset
+        AssetNode assetNode = new AssetNode()
+        Asset a = simHandle.event.eventAsset
+        assetNode.assetId = a.id.idString
+        assetNode.reposSrc = a.source
+        assetNode.repId = a.repository.idString
+        assetNode.type = a.assetType
+        return assetNode
+    }
+
+    AssetNode validateRequest(String transactionName, String content) {
+        return validateRequest(transactionName, content, '')
     }
 }

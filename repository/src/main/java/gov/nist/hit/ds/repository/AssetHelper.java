@@ -231,7 +231,9 @@ public class AssetHelper {
             logger.fine("Processing nodes... size:" + children.size());
 
             for (AssetNode child : children) {
-                if (parentAssetType.toString().equals(child.getType())) { // validators
+                logger.fine("Scanning... assetId:" + child.getAssetId() + " type: <" + child.getType() + ">");
+//                if (parentAssetType.toString().equals(child.getType())) { // validators
+                if ("validators".equals(child.getType())) {
                     logger.info("processing..." + parentAssetType + " id:" + child.getAssetId());
                     try {
                         aggregateMessage(child, detailAssetType , assertionAggregation, detailAssetFilterCriteria, displayColumns); // "assertionGroup"

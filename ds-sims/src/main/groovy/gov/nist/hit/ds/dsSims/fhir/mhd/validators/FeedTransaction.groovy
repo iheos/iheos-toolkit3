@@ -25,29 +25,55 @@ class FeedTransaction implements Transaction {
         reqString = reqString.trim()
         if (reqString.startsWith('<')) {
             // XML
-            new FhirSchemaValidator(simHandle, reqString, Toolkit.schemaFile(), true).asPeer().run()
-            def dr = new XmlSlurper().parseText(reqString)
-            SubmitModel sm = buildSubmitModel(true, dr)
-            def validator = new SubmitModelValidator(simHandle, sm)
-            validator.asPeer().run()
-            new SubmitHeaderValidator(simHandle, sm).asPeer().run()
+            validateFeed(reqString, true)
         } else if (reqString.startsWith('{')) {
             // JSON
-            // TODO - this call does not work with feed
-            def jxval = new JsonToXmlValidator(simHandle, reqString).asPeer()
+            JsonToXmlValidator jxval = new JsonToXmlValidator(simHandle, reqString).asPeer()
             jxval.run()
             String xmlString = jxval.xml()
             simHandle.event.artifacts.add('XML', xmlString)
-            new FhirSchemaValidator(simHandle, xmlString, Toolkit.schemaFile(), true).asPeer().run()
-            def dr = new XmlSlurper().parseText(xmlString)
-            SubmitModel sm = buildSubmitModel(false, dr)
-            def validator = new SubmitModelValidator(simHandle, sm)
-            validator.asPeer().run()
-            new SubmitHeaderValidator(simHandle, sm).asPeer().run()
+            validateFeed(xmlString, false)
         } else {
             throw new ToolkitRuntimeException('Parse failed - do not understand format - XML or JSON required')
         }
+        return simHandle.event.hasErrors() ? ValidationStatus.ERROR : ValidationStatus.OK
     }
+
+    def validateFeed(String reqString, boolean isXml) {
+        // Schema validation
+        def schema = new FhirSchemaValidator ( simHandle, reqString, Toolkit.schemaFile ( ), true )
+        schema.setName('Schema')
+        schema.asPeer ( ).run ( )
+
+        // build model description to support later calls
+        def dr = new XmlSlurper().parseText(reqString)
+        SubmitModel sm = buildSubmitModel(isXml, dr)
+
+        // Validation model
+        def validator = new SubmitModelValidator(simHandle, sm)
+        validator.setName("Model Validation")
+        validator.asPeer ( ).run ( )
+
+        // validate necessary HTTP headers
+        def hdr = new SubmitHeaderValidator ( simHandle, sm )
+        hdr.setName('HTTP Headers')
+        hdr.asPeer ( ).run ( )
+
+        // validate the structure of the DocumentManifest resource
+        if ( sm.docManifests.size ( ) == 1 ) {
+            def man = new MhdDocManValidator(simHandle, sm.docManifests[0])
+            man.setName('Manifest')
+            man.asPeer().run()
+        }
+
+        // validate the structure of each DocumentReference resource
+        sm.docReferenceMap.entrySet().each {
+            def val = new MhdDocRefValidator(simHandle, it.value)
+            val.setName("DocReference - ${it.key}")
+            val.asPeer().run()
+        }
+    }
+
 
     SubmitModel buildSubmitModel(isXml, bundle) {
         if (bundle instanceof String) bundle = new XmlSlurper().parseText(bundle)
