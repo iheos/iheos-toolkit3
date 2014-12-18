@@ -1,8 +1,10 @@
 package gov.nist.hit.ds.dsSims.fhir.mhd
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.repoSupport.RepoUtils
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.shared.PropertyKey
+import gov.nist.hit.ds.repository.shared.data.AssetNode
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.api.ValidationApi
 import gov.nist.hit.ds.simSupport.client.SimId
@@ -86,7 +88,8 @@ class MhdTransactionsTest extends Specification {
         url.withInputStream {
             xml = Io.getStringFromInputStream(it)
         }
-        Asset a = new ValidationApi().validateRequest('dmv', xml, 'Content-Type: application/atom+xml')
+        AssetNode an = new ValidationApi().validateRequest('dmv', xml, 'Content-Type: application/atom+xml')
+        Asset a = RepoUtils.asset(an)
 
         then:
         a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
@@ -99,7 +102,8 @@ class MhdTransactionsTest extends Specification {
         url.withInputStream {
             xml = Io.getStringFromInputStream(it)
         }
-        Asset a = new ValidationApi().validateRequest('pdr', xml, 'Content-Type: application/atom+xml')
+        AssetNode an = new ValidationApi().validateRequest('pdr', xml, 'Content-Type: application/atom+xml')
+        Asset a = RepoUtils.asset(an)
 
         then:
         a.getProperty(PropertyKey.STATUS) == 'SUCCESS'
@@ -112,7 +116,8 @@ class MhdTransactionsTest extends Specification {
         url.withInputStream {
             xml = Io.getStringFromInputStream(it)
         }
-        Asset a = new ValidationApi().validateRequest('pdr', xml, 'Content-Type: application/json+fhir')
+        AssetNode an = new ValidationApi().validateRequest('pdr', xml, 'Content-Type: application/json+fhir')
+        Asset a = RepoUtils.asset(an)
 
         then:
         a.getProperty(PropertyKey.STATUS) == 'SUCCESS'

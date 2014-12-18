@@ -30,7 +30,7 @@ class ValidationApi {
         Asset a = simHandle.event.eventAsset
         assetNode.assetId = a.id.idString
         assetNode.reposSrc = a.source
-        assetNode.repId
+        assetNode.repId = a.repository.idString
         assetNode.type = a.assetType
         return assetNode
     }

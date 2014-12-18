@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.repoSupport
 import gov.nist.hit.ds.repository.api.*
 import gov.nist.hit.ds.repository.shared.PropertyKey
+import gov.nist.hit.ds.repository.shared.data.AssetNode
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.repository.simple.SimpleId
 import gov.nist.hit.ds.repository.simple.SimpleType
@@ -18,6 +19,13 @@ class RepoUtils {
         init()
         return repository.getAsset(id)
     }
+
+    static Asset asset(ArtifactId id, String repositoryId) {
+        init()
+        return repository(new SimpleId(repositoryId)).getAsset(id)
+    }
+
+    static Asset asset(AssetNode assetNode) { asset(new SimpleId(assetNode.assetId), assetNode.repId) }
 
     static Asset assetIfAvailable(ArtifactId id, Repository repository) {
         try {
