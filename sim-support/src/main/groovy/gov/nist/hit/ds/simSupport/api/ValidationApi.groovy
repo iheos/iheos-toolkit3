@@ -31,6 +31,7 @@ class ValidationApi {
         assetNode.assetId = a.id.idString
         assetNode.reposSrc = a.source
         assetNode.repId
+        assetNode.type = a.assetType
         return assetNode
     }
 
