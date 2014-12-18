@@ -1,7 +1,6 @@
 package gov.nist.toolkit.xdstools3.server;
 
-import gov.nist.hit.ds.repository.api.Asset;
-import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.simSupport.api.ValidationApi;
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
@@ -22,27 +21,27 @@ import java.util.Map;
  */
 public class Caller implements Serializable {
 
-	private static final long serialVersionUID = -6431109235310163158L;
-	private static Caller instance = null;
+    private static final long serialVersionUID = -6431109235310163158L;
+    private static Caller instance = null;
     private final static Logger logger = Logger.getLogger(Caller.class.getName());
     private final SaveTempFileService saveTempFileService = new SaveTempFileService();
 
     // Transaction name common to all MHD transactions
     private final String MHD_TRANSACTION_NAME = "pdb";
 
-	protected Caller(){
-	}
+    protected Caller(){
+    }
 
-	/**
-	 * Singleton method. Use this method to gain access to the functionality in this class.
-	 * @return Caller instance
-	 */
-	public static Caller getInstance(){
-		if (instance == null){
-			instance = new Caller();
-		}
-		return instance;
-	}
+    /**
+     * Singleton method. Use this method to gain access to the functionality in this class.
+     * @return Caller instance
+     */
+    public static Caller getInstance(){
+        if (instance == null){
+            instance = new Caller();
+        }
+        return instance;
+    }
 
 
 
@@ -90,7 +89,7 @@ public class Caller implements Serializable {
                 "ext_cache_location", Toolkit.getDefaultEnvironmentName(), Toolkit.getGazelleConfigURL()};
         //String[] test = {"http://nist1", "90800", "90801", "C://ext_cache", "NA2015", "http://gazelle.net"}; // test data
         logger.info("Retrieved from back-end (API Toolkit) the following parameters: "
-                     + "host, port, TLS port, external cache location, default environment, gazelle URL.");
+                + "host, port, TLS port, external cache location, default environment, gazelle URL.");
         return currentAdminParams;
     }
 
@@ -101,12 +100,12 @@ public class Caller implements Serializable {
      * Sets the list of environments
      * @return the list of available environments
      */
-   public String[] retrieveEnvironments(){
-       String[] envs = Toolkit.getEnvironmentNames().toArray(new String[0]);
-       logger.info("Retrieved the list of environments.");
-       // String[] envs = {"NA2014", "EURO2011", "EURO2012", "NwHIN"}; // test data
-       return envs;
-   }
+    public String[] retrieveEnvironments(){
+        String[] envs = Toolkit.getEnvironmentNames().toArray(new String[0]);
+        logger.info("Retrieved the list of environments.");
+        // String[] envs = {"NA2014", "EURO2011", "EURO2012", "NwHIN"}; // test data
+        return envs;
+    }
 
     /**
      * Sets the environment selected by the user
@@ -156,7 +155,7 @@ public class Caller implements Serializable {
 
 
 
-        // --------------------- Actors and Collections ---------------------
+    // --------------------- Actors and Collections ---------------------
 
     public Map<String, String> getCollectionNames(String collectionSetName) throws Exception  {
         return ActorsCollectionsDataSamples.instance.getCollectionNames(collectionSetName);
@@ -182,20 +181,13 @@ public class Caller implements Serializable {
      *
      * @return an Asset (= validation result) as handled by the repository / LogBrowser
      */
-    public String validateMHDMessage(String messageType, String filecontent) throws ToolkitServerError {
+    public AssetNode validateMHDMessage(String messageType, String filecontent) throws ToolkitServerError {
         ValidationApi api = new ValidationApi();
 
         //if (messageType == "Submit") {
-            Asset validationResult = api.validateRequest(MHD_TRANSACTION_NAME, filecontent);
-            try {
-                String assetId = validationResult.getId().getIdString();
-                logger.info("Received Asset ID #" + assetId);
-                return assetId;
-            } catch (RepositoryException e) {
-                logger.fatal("Server error: " + e.getMessage());
-                throw new ToolkitServerError(e.getMessage());
-
-            }
+        AssetNode validationResult = api.validateRequest(MHD_TRANSACTION_NAME, filecontent);
+        logger.info("Received AssetNode of AssetId #" + validationResult.getAssetId());
+        return validationResult;
         //} // end submit
         // else throw new unsupportedmessagetypeexception
     }
