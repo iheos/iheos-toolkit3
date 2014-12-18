@@ -220,6 +220,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
             validationResultsPanel.setVisible(true);
         }
         eventMessageAggregatorWidget.setEventAssetNode(assetNode);
+        validationResultsPanel.redraw();
     }
 
 
