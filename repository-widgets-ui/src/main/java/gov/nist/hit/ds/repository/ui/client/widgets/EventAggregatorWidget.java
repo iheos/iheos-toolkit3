@@ -66,6 +66,7 @@ public class EventAggregatorWidget extends Composite {
     private RepositoryId externalRepositoryId;
     private String[] displayColumns;
     private String[] reformattedDisplayColumns;
+    private AssetNode eventAssetNode;
     final private RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
 
     public static enum ASSET_CLICK_EVENT {
@@ -463,6 +464,19 @@ public class EventAggregatorWidget extends Composite {
 
     public void setAssetClickEvent(ASSET_CLICK_EVENT assetClickEvent) {
         this.assetClickEvent = assetClickEvent;
+    }
+    public AssetNode getEventAssetNode() {
+        return eventAssetNode;
+    }
+
+    public void setEventAssetNode(AssetNode eventAssetNode) {
+        if (eventAssetNode!=null) {
+            this.eventAssetNode = eventAssetNode;
+            setEventAssetId(eventAssetId.getId());
+            setExternalRepositoryId(eventAssetNode.getRepId());
+            setAssetType(eventAssetNode.getType());
+            drawTable();
+        }
     }
 
 }
