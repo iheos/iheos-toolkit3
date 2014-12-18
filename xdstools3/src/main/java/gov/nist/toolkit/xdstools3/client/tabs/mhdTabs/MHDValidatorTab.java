@@ -16,6 +16,7 @@ import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VStack;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
@@ -180,15 +181,15 @@ public class MHDValidatorTab extends GenericCloseableTab {
      */
     private void validate() {
         try {
-            mhdToolkitService.validateMHDMessage(selectedMessageType, new AsyncCallback<String>() {
+            mhdToolkitService.validateMHDMessage(selectedMessageType, new AsyncCallback<AssetNode>() {
                 @Override
                 public void onFailure(Throwable caught) {
                     logger.warning(caught.getMessage());
                 }
 
                 @Override
-                public void onSuccess(String assetId) {
-                    displayValidationResults(assetId);
+                public void onSuccess(AssetNode assetNode) {
+                    displayValidationResults(assetNode);
                 }
             });
         } catch (ToolkitServerError toolkitServerError) {
@@ -214,13 +215,11 @@ public class MHDValidatorTab extends GenericCloseableTab {
      *
      * @param assetId Validation result from RPC validation
      */
-    private void displayValidationResults(String assetId) {
+    private void displayValidationResults(AssetNode assetId) {
         if (!validationResultsPanel.isVisible()){
             validationResultsPanel.setVisible(true);
         }
-        eventMessageAggregatorWidget.setEventAssetId(assetId);
-        eventMessageAggregatorWidget.setVisible(true);
-        validationResultsPanel.redraw();
+        //eventMessageAggregatorWidget.setEventAssetId(assetId);
     }
 
 

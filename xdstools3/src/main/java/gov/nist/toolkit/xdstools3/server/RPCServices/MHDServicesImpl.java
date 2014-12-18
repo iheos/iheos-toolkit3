@@ -1,6 +1,7 @@
 package gov.nist.toolkit.xdstools3.server.RPCServices;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.toolkit.actorfactory.SiteServiceManager;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
@@ -36,7 +37,7 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
      *
      * @return validation result
      */
-    public String validateMHDMessage(String messageType) throws ToolkitServerError {
+    public AssetNode validateMHDMessage(String messageType) throws ToolkitServerError {
         return Caller.getInstance().validateMHDMessage(messageType, new String(getSession().getlastUpload()).trim());
     }
 
