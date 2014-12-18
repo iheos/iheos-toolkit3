@@ -34,7 +34,7 @@ class ValidationApi {
         return assetNode
     }
 
-    Asset validateRequest(String transactionName, String content) {
+    AssetNode validateRequest(String transactionName, String content) {
         return validateRequest(transactionName, content, '')
     }
 }
