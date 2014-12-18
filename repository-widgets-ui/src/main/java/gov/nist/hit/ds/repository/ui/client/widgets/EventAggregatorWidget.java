@@ -472,7 +472,7 @@ public class EventAggregatorWidget extends Composite {
     public void setEventAssetNode(AssetNode eventAssetNode) {
         if (eventAssetNode!=null) {
             this.eventAssetNode = eventAssetNode;
-            setEventAssetId(eventAssetId.getId());
+            setEventAssetId(eventAssetNode.getAssetId());
             setExternalRepositoryId(eventAssetNode.getRepId());
             setAssetType(eventAssetNode.getType());
             drawTable();
