@@ -84,6 +84,21 @@
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>session</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>gov.nist.hit.ds</groupId>-->
+                <!--<artifactId>security-common</artifactId>-->
+                <!--<version>3.0.0-SNAPSHOT</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>gov.nist.hit.ds</groupId>-->
+                <!--<artifactId>env-settings</artifactId>-->
+                <!--<version>3.0.0-SNAPSHOT</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>ds-sims</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
