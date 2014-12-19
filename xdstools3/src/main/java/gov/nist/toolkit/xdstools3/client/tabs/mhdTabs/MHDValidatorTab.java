@@ -233,7 +233,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         try {
             // Initialize the widget
             eventMessageAggregatorWidget = new EventAggregatorWidget(Manager.EVENT_BUS, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
-            eventMessageAggregatorWidget.setSize("1000px", "375px");
+            eventMessageAggregatorWidget.setSize("990px", "375px");
             return eventMessageAggregatorWidget;
 
         } catch (Throwable t) {
