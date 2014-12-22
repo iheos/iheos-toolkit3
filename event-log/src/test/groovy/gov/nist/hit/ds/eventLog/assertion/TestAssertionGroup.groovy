@@ -83,8 +83,6 @@ class TestAssertionGroup extends Specification {
         def asser = ag.assertTrue(true, true)
 
         then:
-//        asser.expected == 'True'
-//        asser.found == 'True'
         asser.status == AssertionStatus.SUCCESS
         ag.assertions.size() == 1
     }
