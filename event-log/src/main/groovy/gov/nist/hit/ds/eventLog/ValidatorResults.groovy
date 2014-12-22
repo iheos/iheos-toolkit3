@@ -29,7 +29,7 @@ class ValidatorResults {
         this.parentAsset = parentAsset
         this.validatorName = validatorName
         event = _event
-        aDAO = new AssertionGroupDAO(assertionGroup, parentAsset)
+        aDAO = new AssertionGroupDAO(assertionGroup, parentAsset, event.nextDisplayOrder())
     }
     AssertionStatus getStatus() { return assertionGroup.status() }
     def setStatus(AssertionStatus status) { assertionGroup.setErrorStatus(status) }

@@ -19,6 +19,7 @@ class Event {
     EventDAO eventDAO
     ArtifactsDAO artDAO
     Asset validatorsAsset
+    int displayOrder = 1
 
     ResultsStack resultsStack = new ResultsStack()
 
@@ -41,7 +42,7 @@ class Event {
         def result = new ValidatorResults(parentAsset, validatorName, this)
         result.assertionGroup = new AssertionGroup()
         result.assertionGroup.validatorName = validatorName
-        result.aDAO = new AssertionGroupDAO(result.assertionGroup, parentAsset);
+        result.aDAO = new AssertionGroupDAO(result.assertionGroup, parentAsset, nextDisplayOrder());
         resultsStack.push(result)
     }
     ValidatorResults currentResults() { assert !resultsStack.empty(); return resultsStack.last() }
@@ -158,6 +159,8 @@ class Event {
         return allAssetionGroups.find { it.validatorName == validatorName }
     }
     def getAssertions(id) { resultsStack.getAssertions(id)}
+
+    int nextDisplayOrder() { displayOrder++ }
 
     String toString() { "Event(${eventAsset.id})"}
 }
