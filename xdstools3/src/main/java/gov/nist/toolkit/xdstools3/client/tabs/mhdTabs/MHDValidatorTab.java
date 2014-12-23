@@ -55,7 +55,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
     // Variables
     private String selectedMessageType;
-    private WaitPanel waitPanel;
 
     /**
      * Default constuctor
@@ -119,7 +118,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
         vStack.addMember(form);
         vStack.addMember(uploadForm);
         vStack.addMember(runBtn);
-        waitPanel = new WaitPanel();
         vStack.addMember(waitPanel);
 
 
