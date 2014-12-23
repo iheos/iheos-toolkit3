@@ -1,16 +1,13 @@
 package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
-import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
@@ -22,7 +19,6 @@ import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.ReportingLevelSelectWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.WaitPanel;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
@@ -55,7 +51,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
     // Variables
     private String selectedMessageType;
-    private WaitPanel waitPanel;
 
     /**
      * Default constuctor
@@ -116,8 +111,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
         // Create Help Link
         String contents = "This is the help text";
         setHelpButton(this.getHelpPanel(), contents);
-        waitPanel = new WaitPanel();
-        vStack.addMember(waitPanel);
 
 
         // Event summary widget parameters
@@ -135,6 +128,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         vStack.addMember(form);
         vStack.addMember(uploadForm);
         vStack.addMember(runBtn);
+        vStack.addMember(getWaitPanel());
         vStack.setMinWidth(800);
 
         bindUI();

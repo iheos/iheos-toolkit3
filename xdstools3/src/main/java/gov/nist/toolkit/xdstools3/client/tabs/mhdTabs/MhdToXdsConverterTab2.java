@@ -43,7 +43,6 @@ public class MhdToXdsConverterTab2 extends GenericCloseableTab {
     private FormPanel uploadForm;
     private FileUpload fileUploadItem;
     private Button runBtn;
-    private WaitPanel waitPanel;
 
     public MhdToXdsConverterTab2() {
         super(header);
@@ -78,7 +77,6 @@ public class MhdToXdsConverterTab2 extends GenericCloseableTab {
         vStack.addMember(uploadForm);
         vStack.addMember(runBtn);
 
-        waitPanel = new WaitPanel();
         vStack.addMember(waitPanel);
 
         // Event summary widget parameters
