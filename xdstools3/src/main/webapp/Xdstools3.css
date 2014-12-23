@@ -383,4 +383,8 @@ footer ul li a:visited{
     font-style: italic;
     color: orangered;
 }
-
+#loading {
+    display:none;
+    margin-top:5px;
+    height:30px;
+}

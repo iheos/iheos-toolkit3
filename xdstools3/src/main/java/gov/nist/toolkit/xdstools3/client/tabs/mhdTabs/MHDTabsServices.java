@@ -14,5 +14,5 @@ public interface MHDTabsServices extends RemoteService  {
 
     public AssetNode validateMHDMessage(String messageType) throws ToolkitServerError;
 
-    public String convertMHDToXDS();
+    public AssetNode convertMHDToXDS();
 }
