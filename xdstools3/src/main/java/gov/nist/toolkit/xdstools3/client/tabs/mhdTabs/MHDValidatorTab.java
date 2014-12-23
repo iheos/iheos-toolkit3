@@ -15,7 +15,7 @@ import com.smartgwt.client.widgets.form.fields.HeaderItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
-import com.smartgwt.client.widgets.layout.VStack;
+import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
@@ -43,7 +43,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
     private FormPanel uploadForm;
     private SelectItem messageTypeSelect;
     private FileUpload fileUploadItem;
-    private VStack validationResultsPanel;
+    private VLayout validationResultsPanel;
     private Button runBtn;
     private EventAggregatorWidget eventMessageAggregatorWidget;
 
@@ -64,11 +64,9 @@ public class MHDValidatorTab extends GenericCloseableTab {
      */
     @Override
     protected Widget createContents() {
-        VStack vStack=new VStack();
+        VLayout vStack=new VLayout();
 
-        DynamicForm form = new DynamicForm();
-
-        // Message type transactions
+        // Message type drop-down select
         HeaderItem l1=new HeaderItem();
         l1.setDefaultValue("1. Select the type of MHD message to validate:");
         messageTypeSelect = new SelectItem();
@@ -79,7 +77,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         messageTypeSelect.setWidth(400);
         loadMessageTypesMap();
 
-        // Uploader transactions
+        // Uploader
         HeaderItem l2=new HeaderItem();
         l2.setDefaultValue("2. Upload file to validate");
         uploadForm = new FormPanel();
@@ -87,7 +85,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setAction("fileUploadServlet");
         fileUploadItem = new FileUpload();
-
         fileUploadItem.setName("upload1FormElement");
         fileUploadItem.setWidth("400px");
         uploadForm.add(fileUploadItem);
@@ -96,24 +93,31 @@ public class MHDValidatorTab extends GenericCloseableTab {
         runBtn = new Button("Run");
         runBtn.disable();
 
-        // Validation result transactions
-        validationResultsPanel = new VStack();
-
+        // ------- Create the form ------
+        DynamicForm form = new DynamicForm();
         form.setFields(l1, messageTypeSelect, l2);
         form.setCellPadding(10);
 
-        vStack.addMember(form);
-        vStack.addMember(uploadForm);
-        vStack.addMember(runBtn);
+        // Create Help Link
+        String contents = "This is the help text";
+        setHelpButton(this.getHelpPanel(), contents);
 
         // Event summary widget parameters
+        //TODO this should not be hardcoded and should ultimately be removed
         String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
         String type = "validators";
         String[] displayColumns = new String[]{"ID","STATUS","MSG"};
 
         // Event summary widget
+        validationResultsPanel = new VLayout();
         validationResultsPanel.addMember(setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT, "Sim", id, type, displayColumns));
-        vStack.addMember(validationResultsPanel);
+        setResultsPanel(validationResultsPanel);
+
+        // Layout
+        vStack.addMember(form);
+        vStack.addMember(uploadForm);
+        vStack.addMember(runBtn);
+        vStack.setMinWidth(800);
 
         bindUI();
 

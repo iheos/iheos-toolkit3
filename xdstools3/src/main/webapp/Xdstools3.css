@@ -174,7 +174,6 @@ p {
 }
 
 
-
 /* ----------- Navigation bar (yellow bar) ----------- */
 
 .navbar {
@@ -280,7 +279,7 @@ nav ul ul ul {
     background: linear-gradient(to bottom,  #fbf9ff 0%,#f2f7ff 55%,#e5e8ff 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbf9ff', endColorstr='#e5e8ff',GradientType=0 ); /* IE6-9 */
     border-radius: 5px;
-    /*border: 1px solid #e5e8ff;*/
+    border: 1px solid #e5e8ff;
     box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
 }
 

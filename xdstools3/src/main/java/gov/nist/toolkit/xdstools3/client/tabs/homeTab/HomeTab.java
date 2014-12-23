@@ -12,7 +12,7 @@ public class HomeTab extends GenericTab {
 
     public HomeTab(String s) {
         super(s);
-        hideHeaderTitle();
+        removeHeaderTitle();
     }
 
     @Override

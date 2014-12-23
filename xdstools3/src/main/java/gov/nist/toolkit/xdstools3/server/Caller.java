@@ -194,16 +194,6 @@ public class Caller implements Serializable {
         // else throw new unsupportedmessagetypeexception
     }
 
-    /**
-     * Method that retrieves test data set
-     * @param testDataType
-     * @return
-     */
-    public Map<String,String> retrieveTestDataSet(String testDataType) {
-        // TODO not sure what this is for. Needs more explanation.
-        // If it is a test method, it needs to be put in a different class.
-        return TestDataHelper.instance.getTestDataSet();
-    }
 
     /**
      * Converts a MHD file into an XDS file
@@ -218,4 +208,22 @@ public class Caller implements Serializable {
         // inside a popup window. This should go away when the actual conversion is linked from the backend.
         return saveTempFileService.saveAsXMLFile(uploadedFileContents);
     }
+
+
+
+    // ----------------------------- Submit Test Data -------------------------------
+
+    /**
+     * Retrieves all the available test data sets for a given type of test data.
+     * This is for now used in the Submit Test Data tab.
+     * @param testDataType type of test data
+     * @return all the matching test data sets
+     */
+    public Map<String,String> retrieveTestDataSet(String testDataType) {
+        return TestDataHelper.instance.getTestDataSet();
+    }
+
+
 }
+
+

@@ -1,4 +1,4 @@
-package gov.nist.toolkit.xdstools3.client;
+package gov.nist.toolkit.xdstools3.client.customWidgets.links;
 
 import com.google.gwt.user.client.Window;
 import com.smartgwt.client.types.VerticalAlignment;
