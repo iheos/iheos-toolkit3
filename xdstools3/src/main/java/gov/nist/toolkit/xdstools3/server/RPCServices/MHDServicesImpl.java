@@ -47,7 +47,7 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
      * @return
      */
     @Override
-    public String convertMHDToXDS() {
+    public AssetNode convertMHDToXDS() {
         String rootDirPath = getServletContext().getContextPath();
         String uploadedFileContents = new String(getSession().getlastUpload()).trim();
         return Caller.getInstance().convertMHDtoXDS(rootDirPath, uploadedFileContents);

@@ -31,11 +31,18 @@ class ValidationApi {
         assetNode.assetId = a.id.idString
         assetNode.reposSrc = a.source
         assetNode.repId = a.repository.idString
-        assetNode.type = a.assetType
+        assetNode.type = "validators"
         return assetNode
     }
 
     AssetNode validateRequest(String transactionName, String content) {
-        return validateRequest(transactionName, content, '')
+        def header
+        // fake the headers since upload only offers the body
+        content = content.trim()
+        if (content.size() > 1 && content.startsWith('{'))
+            header = 'Content-Type: application/json+fhir'
+        else
+            header = 'Content-Type: application/atom+xml'
+        return validateRequest(transactionName, content, header)
     }
 }

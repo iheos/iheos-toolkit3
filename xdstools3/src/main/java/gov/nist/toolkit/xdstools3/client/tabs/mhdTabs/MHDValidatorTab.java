@@ -1,13 +1,16 @@
 package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
+import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
@@ -18,6 +21,8 @@ import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.ReportingLevelSelectWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.WaitPanel;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
@@ -41,6 +46,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
     // UI components
     private FormPanel uploadForm;
+    private ReportingLevelSelectWidget reportingLevelSelect;
     private SelectItem messageTypeSelect;
     private FileUpload fileUploadItem;
     private VLayout validationResultsPanel;
@@ -49,6 +55,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
     // Variables
     private String selectedMessageType;
+    private WaitPanel waitPanel;
 
     /**
      * Default constuctor
@@ -68,7 +75,14 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
         // Message type drop-down select
         HeaderItem l1=new HeaderItem();
-        l1.setDefaultValue("1. Select the type of MHD message to validate:");
+        l1.setDefaultValue("1. Select reporting level");
+
+        reportingLevelSelect=new ReportingLevelSelectWidget();
+        reportingLevelSelect.setShowTitle(false);
+
+        // Message type transactions
+        HeaderItem l2=new HeaderItem();
+        l2.setDefaultValue("2. Select the type of MHD message to validate:");
         messageTypeSelect = new SelectItem();
         messageTypeSelect.setShowTitle(false);
         messageTypeSelect.setType("comboBox");
@@ -78,9 +92,10 @@ public class MHDValidatorTab extends GenericCloseableTab {
         loadMessageTypesMap();
 
         // Uploader
-        HeaderItem l2=new HeaderItem();
-        l2.setDefaultValue("2. Upload file to validate");
+        HeaderItem l3=new HeaderItem();
+        l3.setDefaultValue("3. Upload file to validate");
         uploadForm = new FormPanel();
+        uploadForm.setHeight("40px");
         uploadForm.setMethod(FormPanel.METHOD_POST);
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setAction("fileUploadServlet");
@@ -95,12 +110,15 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
         // ------- Create the form ------
         DynamicForm form = new DynamicForm();
-        form.setFields(l1, messageTypeSelect, l2);
+        form.setFields(l1,reportingLevelSelect,l2, messageTypeSelect, l3);
         form.setCellPadding(10);
 
         // Create Help Link
         String contents = "This is the help text";
         setHelpButton(this.getHelpPanel(), contents);
+        waitPanel = new WaitPanel();
+        vStack.addMember(waitPanel);
+
 
         // Event summary widget parameters
         //TODO this should not be hardcoded and should ultimately be removed
@@ -141,8 +159,8 @@ public class MHDValidatorTab extends GenericCloseableTab {
             @Override
             public void onChange(ChangeEvent changeEvent) {
                 selectedMessageType = (String) changeEvent.getValue();
-                if (selectedMessageType!=null){
-                    if(fileUploadItem.getFilename()!=null && !fileUploadItem.getFilename().isEmpty()){
+                if (selectedMessageType != null) {
+                    if (fileUploadItem.getFilename() != null && !fileUploadItem.getFilename().isEmpty()) {
                         runBtn.enable();
                     }
                 }
@@ -153,9 +171,9 @@ public class MHDValidatorTab extends GenericCloseableTab {
             public void onChange(com.google.gwt.event.dom.client.ChangeEvent event) {
                 if (fileUploadItem.getFilename() != null && !fileUploadItem.getFilename().isEmpty()) {
                     if (selectedMessageType != null && !selectedMessageType.isEmpty()) {
-                        if(fileUploadItem.getFilename().endsWith(".xml") || fileUploadItem.getFilename().endsWith(".json")) {
+                        if (fileUploadItem.getFilename().endsWith(".xml") || fileUploadItem.getFilename().endsWith(".json")) {
                             runBtn.enable();
-                        }else{
+                        } else {
                             runBtn.disable();
                             SC.warn("Invalid file format - must be xml or json");
                         }
@@ -174,6 +192,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         uploadForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
             @Override
             public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
+                waitPanel.show();
                 // call for validation
                 validate();
             }
@@ -198,7 +217,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
             });
         } catch (ToolkitServerError toolkitServerError) {
             toolkitServerError.printStackTrace();
-            // TODO display error messge to user
+            // TODO display error message to user
         }
     }
 
@@ -211,7 +230,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         map.put("sbmt_resp","Submit Response - not implemented yet");
         messageTypeSelect.setValueMap(map);
         messageTypeSelect.setDefaultValue("sbmt");
-        selectedMessageType=map.get("sbmt");
+        selectedMessageType="sbmt";
     }
 
     /**
@@ -223,8 +242,11 @@ public class MHDValidatorTab extends GenericCloseableTab {
         if (!validationResultsPanel.isVisible()){
             validationResultsPanel.setVisible(true);
         }
+        // TODO might want to use reporting level
+        // reportingLevelSelect.getSelectedReportingLevel();
         eventMessageAggregatorWidget.setEventAssetNode(assetNode);
         validationResultsPanel.redraw();
+        waitPanel.hide();
     }
 
 
@@ -236,7 +258,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         try {
             // Initialize the widget
             eventMessageAggregatorWidget = new EventAggregatorWidget(Manager.EVENT_BUS, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
-            eventMessageAggregatorWidget.setSize("1000px", "375px");
+            eventMessageAggregatorWidget.setSize("990px", "375px");
             return eventMessageAggregatorWidget;
 
         } catch (Throwable t) {

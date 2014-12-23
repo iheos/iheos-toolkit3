@@ -25,6 +25,7 @@ public class Caller implements Serializable {
     private static Caller instance = null;
     private final static Logger logger = Logger.getLogger(Caller.class.getName());
     private final SaveTempFileService saveTempFileService = new SaveTempFileService();
+    private final ValidationApi api = new ValidationApi();
 
     // Transaction name common to all MHD transactions
     private final String MHD_TRANSACTION_NAME = "pdb";
@@ -182,13 +183,11 @@ public class Caller implements Serializable {
      * @return an Asset (= validation result) as handled by the repository / LogBrowser
      */
     public AssetNode validateMHDMessage(String messageType, String filecontent) throws ToolkitServerError {
-        ValidationApi api = new ValidationApi();
-
         //if (messageType == "Submit") {
         AssetNode validationResult = api.validateRequest(MHD_TRANSACTION_NAME, filecontent);
         logger.info("Received AssetNode with parameters AssetId: " + validationResult.getAssetId()
                 +", AssetType: "+ validationResult.getType()
-                +", RepositoryId: "+ validationResult.getRepId());
+        +", RepositoryId: "+ validationResult.getRepId());
         return validationResult;
         //} // end submit
         // else throw new unsupportedmessagetypeexception
@@ -202,11 +201,16 @@ public class Caller implements Serializable {
      *                 upload servlet. I do not know if we need this. -Diane
      * @return
      */
-    public String convertMHDtoXDS(String location, String uploadedFileContents) {
+    public AssetNode convertMHDtoXDS(String location, String uploadedFileContents) {
         //TODO
         // This is a test implementation that saves the uploaded file and displays it for the user
         // inside a popup window. This should go away when the actual conversion is linked from the backend.
-        return saveTempFileService.saveAsXMLFile(uploadedFileContents);
+        AssetNode validationResult = api.validateRequest(MHD_TRANSACTION_NAME, uploadedFileContents);
+        logger.info("Received AssetNode with parameters AssetId: " + validationResult.getAssetId()
+                +", AssetType: "+ validationResult.getType()
+                +", RepositoryId: "+ validationResult.getRepId());
+        return validationResult;
+//        return saveTempFileService.saveAsXMLFile(uploadedFileContents);
     }
 
 
