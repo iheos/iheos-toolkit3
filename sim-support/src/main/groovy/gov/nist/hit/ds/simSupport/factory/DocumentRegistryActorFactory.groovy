@@ -1,6 +1,4 @@
-package gov.nist.hit.ds.simSupport.factories
-
-import gov.nist.hit.ds.simSupport.factory.ActorFactory
+package gov.nist.hit.ds.simSupport.factory
 /**
  * Created by bmajur on 9/22/14.
  */
