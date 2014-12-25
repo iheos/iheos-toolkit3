@@ -160,7 +160,7 @@ class RimGenerator {
     }
 
     def mkSlot(xml, spec) {
-        xml.Slot(name: spec.name) {
+        xml.SlotModel(name: spec.name) {
             ValueList {
                 spec.values.each { Value(it) }
             }
@@ -178,7 +178,7 @@ class RimGenerator {
             Name {
                 LocalizedString(value: spec.display)
             }
-            Slot(name: 'codingScheme') {
+            SlotModel(name: 'codingScheme') {
                 ValueList {
                     Value(spec.system)
                 }
@@ -196,14 +196,14 @@ class RimGenerator {
                 objectType: 'urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification',
                 nodeRepresentation: '') {
             if (spec.person) {
-                xml.Slot(name: 'authorPerson') {
+                xml.SlotModel(name: 'authorPerson') {
                     ValueList {
                         Value(spec.person)
                     }
                 }
             }
             if (spec.institutions) {
-                xml.Slot(name: 'authorInstitution') {
+                xml.SlotModel(name: 'authorInstitution') {
                     ValueList {
                         spec.institutions.each {
                             Value(it)
@@ -212,7 +212,7 @@ class RimGenerator {
                 }
             }
             if (spec.roles) {
-                xml.Slot(name: 'authorRole') {
+                xml.SlotModel(name: 'authorRole') {
                     ValueList {
                         spec.roles.each {
                             Value ( it )
@@ -221,7 +221,7 @@ class RimGenerator {
                 }
             }
             if (spec.specialty) {
-                xml.Slot(name: 'authorSpecialty') {
+                xml.SlotModel(name: 'authorSpecialty') {
                     ValueList {
                         spec.specialty.each {
                             Value ( it )
@@ -230,7 +230,7 @@ class RimGenerator {
                 }
             }
             if (spec.telecom) {
-                xml.Slot(name: 'authorTelecommunication') {
+                xml.SlotModel(name: 'authorTelecommunication') {
                     ValueList {
                         Value (spec.telecom)
                     }
