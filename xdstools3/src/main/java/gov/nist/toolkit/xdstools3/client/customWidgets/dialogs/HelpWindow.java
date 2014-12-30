@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets.dialogs;
 
-import com.smartgwt.client.widgets.Canvas;
+import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
 
@@ -14,7 +14,8 @@ public class HelpWindow extends Window {
     public HelpWindow (String contents){
         setTitle("Help");
         setWidth(500);
-        setCanDragResize(true);
+        setHeight100();
+        setCanDragScroll(true);
         setContents(contents);
     }
 
@@ -27,6 +28,7 @@ public class HelpWindow extends Window {
         l.setWidth100();
         l.setHeight100();
         l.setPadding(10);
-        addChild(l);
+        l.setValign(VerticalAlignment.TOP);
+        addItem(l);
     }
 }

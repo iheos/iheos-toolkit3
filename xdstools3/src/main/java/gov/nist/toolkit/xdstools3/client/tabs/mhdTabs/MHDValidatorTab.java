@@ -22,6 +22,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.ReportingLevelSelectWidge
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.resources.Resources;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 
 import java.util.LinkedHashMap;
@@ -33,6 +34,7 @@ import java.util.logging.Logger;
  */
 public class MHDValidatorTab extends GenericCloseableTab {
     private Logger logger=Logger.getLogger(MHDValidatorTab.class.getName());
+
     // RPC services declaration
     private final static MHDTabsServicesAsync mhdToolkitService = GWT
             .create(MHDTabsServices.class);
@@ -109,9 +111,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         form.setCellPadding(10);
 
         // Create Help Link
-        String contents = "This is the help text";
-        setHelpButton(this.getHelpPanel(), contents);
-
+        setHelpButton(getHelpPanel(), Resources.INSTANCE.helpContentsSample().getText());
 
         // Event summary widget parameters
         //TODO this should not be hardcoded and should ultimately be removed

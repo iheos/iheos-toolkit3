@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
  */
 @SuppressWarnings("serial")
 public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServices {
-    static Logger logger = Logger.getLogger(PreConnectathonTabServiceImpl.class);
+    static Logger logger = Logger.getLogger(MHDServicesImpl.class);
 
     // Used only for non-servlet use (Dashboard is good example)
     //    private String sessionID = null;

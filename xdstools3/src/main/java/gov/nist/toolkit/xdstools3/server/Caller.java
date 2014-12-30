@@ -4,7 +4,6 @@ import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.simSupport.api.ValidationApi;
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
-import gov.nist.toolkit.xdstools3.server.RPCServices.SaveTempFileService;
 import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
 import gov.nist.toolkit.xdstools3.server.demo.TestDataHelper;
 import org.apache.log4j.Logger;
@@ -24,7 +23,6 @@ public class Caller implements Serializable {
     private static final long serialVersionUID = -6431109235310163158L;
     private static Caller instance = null;
     private final static Logger logger = Logger.getLogger(Caller.class.getName());
-    private final SaveTempFileService saveTempFileService = new SaveTempFileService();
     private final ValidationApi api = new ValidationApi();
 
     // Transaction name common to all MHD transactions

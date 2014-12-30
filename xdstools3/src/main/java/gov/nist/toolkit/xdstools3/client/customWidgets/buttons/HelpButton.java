@@ -16,6 +16,11 @@ public class HelpButton extends IButton {
     private HelpWindow helpWindow;
     private String helpWindowContents;
 
+    /**
+     * Creates a Help button with a question mark icon.
+     * @param helpContainer
+     * @param helpContents
+     */
     public HelpButton(final Canvas helpContainer, String helpContents) {
         final Canvas helpWindowContainer = helpContainer;
         helpWindowContents = helpContents;
