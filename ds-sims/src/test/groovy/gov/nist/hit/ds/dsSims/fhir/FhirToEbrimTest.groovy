@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.dsSims.fhir
 
-import gov.nist.hit.ds.dsSims.eb.metadataValidator.object.DocumentEntryModel
 import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
+import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.DocumentEntryModel
 import gov.nist.hit.ds.dsSims.fhir.mhd.translators.FhirToEbrim
 import org.hl7.fhir.instance.model.DocumentReference
 import org.hl7.fhir.instance.model.Resource

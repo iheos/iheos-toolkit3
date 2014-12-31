@@ -41,6 +41,10 @@ public class MetadataVal {
 		
 		if (vc.skipInternalStructure)
 			return;
+
+        // model.knownIds starts out empty.  Each validation updates it. This is used
+        // to check uniqueness of the id attribute.
+        // TODO - model.knownIds needs expansion to validate uniqueness of uniqueIds.
 		
         model.submissionSets.each { new SubmissionSetVal(it).validate(er, vc, model.knownIds) }
 
@@ -51,11 +55,7 @@ public class MetadataVal {
         model.assocs.each { new AssociationVal(it).validate(er, vc, model.knownIds) }
 
 		for (String id : m.getRegistryPackageIds()) {
-			if (m.getSubmissionSetIds().contains(id))
-				;
-			else if (m.getFolderIds().contains(id))
-				;
-			else
+			if (!m.getSubmissionSetIds().contains(id) && !m.getFolderIds().contains(id))
 				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "RegistryPackage(" + id + ") : is not classified as SubmissionSet or Folder", this, "ITI TF-3: 4.1.9.1");
 		}
 	}

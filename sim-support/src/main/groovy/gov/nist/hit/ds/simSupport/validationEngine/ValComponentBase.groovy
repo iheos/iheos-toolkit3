@@ -36,6 +36,8 @@ public abstract class ValComponentBase implements ValComponent {
 
     enum Relation { NONE, PEER, CHILD, SELF}
     Relation parentRelation = Relation.PEER
+    ValComponentBase parent = null
+    int level = 0
 
     ValComponentBase() {}
 
@@ -48,7 +50,12 @@ public abstract class ValComponentBase implements ValComponent {
 
     ValComponentBase asPeer() { parentRelation = Relation.PEER; return this }
     ValComponentBase asChild() { parentRelation = Relation.CHILD; return this }
-    ValComponentBase asSelf() { parentRelation = Relation.SELF; return this }
+    ValComponentBase asSelf(ValComponentBase _parent) {
+        parent = _parent
+        level = parent.level + 1
+        parentRelation = Relation.SELF
+        return this
+    }
 
     void runValidationEngine() throws SoapFaultException, RepositoryException {
         if (!name) name = this.class.simpleName
@@ -363,7 +370,10 @@ public abstract class ValComponentBase implements ValComponent {
         if (!validationMethod.required)
             a.setRequiredOptional(RequiredOptional.O)
         a.setId(id);
-        a.setMsg(vf.msg());
+        def msgPrefix = []
+        level.times { msgPrefix << '...'}
+        msgPrefix = msgPrefix.join()
+        a.setMsg(msgPrefix + vf.msg());
         a.setReference(vf.ref());
         if (a.getStatus().isError())
             a.setCode(currentValidationMethod().errorCode)

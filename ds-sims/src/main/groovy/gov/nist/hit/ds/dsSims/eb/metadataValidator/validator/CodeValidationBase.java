@@ -250,12 +250,12 @@ public class CodeValidationBase {
 			for (OMElement cl_ele : classifications) {
 	
 				ClassificationModel cl = null;
-				try {
+//				try {
 					cl = new ClassificationModel(m, cl_ele);
-				} catch (XdsInternalException e) {
-					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
-					continue;
-				}
+//				} catch (XdsInternalException e) {
+//					er.err(XdsErrorCode.Code.XDSRegistryMetadataError, e);
+//					continue;
+//				}
 				validate(er, cl);
 	
 				validateAssocClassifications(er, cl);

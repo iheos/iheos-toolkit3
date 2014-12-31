@@ -1,10 +1,7 @@
 package gov.nist.hit.ds.eventLog
-
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup
 import gov.nist.hit.ds.eventLog.errorRecording.client.ValidatorErrorItem
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
-
 /**
  * Created by bmajur on 7/28/14.
  */
@@ -118,23 +115,23 @@ class EventErrorRecorder implements ErrorRecorder {
         return 0
     }
 
-    @Override
-    void concat(IAssertionGroup er) {
-        assert false
-    }
+//    @Override
+//    void concat(IAssertionGroup er) {
+//        assert false
+//    }
 
     @Override
     List<ValidatorErrorItem> getErrMsgs() {
         return null
     }
 
-    @Override
-    IAssertionGroup buildNewErrorRecorder() {
-        return null
-    }
-
-    @Override
-    IAssertionGroup getErrorRecorderBuilder() {
-        return null
-    }
+//    @Override
+//    IAssertionGroup buildNewErrorRecorder() {
+//        return null
+//    }
+//
+//    @Override
+//    IAssertionGroup getErrorRecorderBuilder() {
+//        return null
+//    }
 }

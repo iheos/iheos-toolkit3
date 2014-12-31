@@ -55,17 +55,13 @@ public abstract class AbstractRegistryObjectModel {
 	}
 
 	public boolean equals(AbstractRegistryObjectModel a) {
-		if (status == null && a.status == null)
-			;
-		else {
+		if (!(status == null && a.status == null)) {
 			if (status != null && !status.equals(a.status))
 				return false;
 			if (a.status != null && !a.status.equals(status))
 				return false;
 		}
-		if (home == null && a.home == null)
-			;
-		else {
+		if (!(home == null && a.home == null)) {
 			if (home != null && !home.equals(a.home))
 				return false;
 			if (a.home != null && !a.home.equals(home))
@@ -75,9 +71,7 @@ public abstract class AbstractRegistryObjectModel {
 		if (!version.equals(a.version))
 			return false;
 		
-		if (lid == null && a.lid == null)
-			;
-		else {
+		if (!(lid == null && a.lid == null)) {
 			if (lid != null && !lid.equals(a.lid))
 				return false;
 			if (a.lid != null && !a.lid.equals(lid))
@@ -271,7 +265,7 @@ public abstract class AbstractRegistryObjectModel {
 	}
 
 	public String getHome() {
-		return ro.getAttributeValue(MetadataSupport.home_community_id_qname);
+		return ro.getAttributeValue(MetadataSupport.home_qname);
 	}
 
 	public String getName() { return name; }

@@ -11,7 +11,16 @@ class AssertionDAO {
     /**
      * The following elements are all sensitive to the order and identity of the fields defined.
      */
-    def columnNames =  [ "ID", "STATUS", "R/O", "EXPECTED", "FOUND", "MSG", "CODE", "LOCATION", "REFERENCE" ];
+    def columnNames =  [
+            "ID",
+            "STATUS",
+            "MSG",
+            "R/O",
+            "EXPECTED",
+            "FOUND",
+            "CODE",
+            "LOCATION",
+            "REFERENCE" ];
 
     public CSVEntry asCVSEntry(a) {
         if (a instanceof CSVEntry) return a
@@ -20,10 +29,10 @@ class AssertionDAO {
         entry.
                 add(a.id).    					            // 0
                 add(a.status.name()).				            // 1
+                add(nocomma(a.msg)).				            // 5
                 add(a.requiredOptional.name()).	            // 2
                 add(nocomma(a.expected)).			            // 3
                 add(nocomma(a.found)).			            // 4
-                add(nocomma(a.msg)).				            // 5
                 add(a.code).						            // 6
                 add(a.location).					            // 7
                 add(nocomma(buildSemiDivided(a.reference)))  // 8
