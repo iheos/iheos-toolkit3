@@ -7,13 +7,10 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.ErrorCode
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 
 public class CxFormatValidator extends AbstractFormatValidator {
-    String value
-
     String formatName() { return 'CX' }
 
-    public CxFormatValidator(SimHandle _simHandle, String context, String _value) {
+    public CxFormatValidator(SimHandle _simHandle, String context) {
 		super(_simHandle, context);
-        value = _value
 	}
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)

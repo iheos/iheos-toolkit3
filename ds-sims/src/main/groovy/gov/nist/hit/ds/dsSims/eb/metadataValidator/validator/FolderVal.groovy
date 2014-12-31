@@ -5,13 +5,19 @@ import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.FolderModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.SlotModel
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
+
 /**
  * Created by bmajur on 12/23/14.
  */
 public class FolderVal  extends AbstractRegistryObjectVal  implements TopLevelObjectVal {
-    public FolderModel model;
+    FolderModel model
+    SimHandle simHandle
 
-    public FolderVal(FolderModel model) { this.model = model; }
+    public FolderVal(SimHandle _simHandle, FolderModel model) {
+        super(_simHandle)
+        this.model = model
+    }
 
     public void validate(ErrorRecorder er, ValidationContext vc,
                          Set<String> knownIds) {
@@ -35,9 +41,9 @@ public class FolderVal  extends AbstractRegistryObjectVal  implements TopLevelOb
             validateClassifications(er, vc, FolderModel.classificationDescription, FolderModel.table417);
 
         if (vc.isXDM || vc.isXDRLimited)
-            validateExternalIdentifiers(er, vc, FolderModel.XDMexternalIdentifierDescription, FolderModel.table417);
+            new ExternalIdentifierValidator(simHandle, model, vc, FolderModel.XDMexternalIdentifierDescription).asSelf(this).run()
         else
-            validateExternalIdentifiers(er, vc, FolderModel.externalIdentifierDescription, FolderModel.table417);
+            new ExternalIdentifierValidator(simHandle, model, vc, FolderModel.externalIdentifierDescription).asSelf(this).run()
 
         new IdUniqueValidator(simHandle, model.id, knownIds).asSelf(this).run()
     }
@@ -45,7 +51,7 @@ public class FolderVal  extends AbstractRegistryObjectVal  implements TopLevelOb
     public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
 
         //                    name				   multi	format                                                  resource
-        validateSlot(model, er, 	"lastUpdateTime", 	   false, 	new DtmFormatValidator(er, "Slot lastUpdateTime",            FolderModel.table417),  FolderModel.table417);
+        validateSlot(model, "lastUpdateTime", 	   false, 	new DtmFormatValidator(simHandle, "Slot lastUpdateTime"))
     }
 
     public void validateRequiredSlotsPresent(ErrorRecorder er, ValidationContext vc) {

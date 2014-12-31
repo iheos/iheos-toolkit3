@@ -20,13 +20,11 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
  *   
  */
 public class Rfc3066FormatValidator extends AbstractFormatValidator {
-    String value
 
     String formatName() { return 'RFC 3066' }
 
-    Rfc3066FormatValidator(SimHandle _simHandle, String context, String _value) {
+    Rfc3066FormatValidator(SimHandle _simHandle, String context) {
         super(_simHandle, context);
-        value = _value
     }
 
     String[] parts

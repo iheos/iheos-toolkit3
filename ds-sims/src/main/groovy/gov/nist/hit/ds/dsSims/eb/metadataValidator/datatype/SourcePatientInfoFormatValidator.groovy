@@ -8,25 +8,23 @@ import gov.nist.hit.ds.utilities.xml.XmlUtil
 import org.apache.axiom.om.OMElement
 
 public class SourcePatientInfoFormatValidator extends AbstractFormatValidator {
-    OMElement slot
 
     String formatName() { return 'SourcePatientInfo' }
 
-    SourcePatientInfoFormatValidator(SimHandle _simHandle, String context, OMElement _value) {
+    SourcePatientInfoFormatValidator(SimHandle _simHandle, String context) {
         super(_simHandle, context);
-        slot = _value
     }
 
     @ErrorCode(code= XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='rospi010', msg='SourcePatientInfo format', ref='ITI TF-3: Table 4.1-5: sourcePatientInfo')
     def rospi010() {
-        infoFound("${context} root is ${slot.getLocalName()}")
+        infoFound("${context} root is ${value_ele.getLocalName()}")
     }
 
     @ErrorCode(code= XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='rospi020', msg='SourcePatientInfo contents', ref='ITI TF-3: Table 4.1-5: sourcePatientInfo')
     def rospi020() {
-		OMElement value_list = XmlUtil.firstChildWithLocalName(slot, "ValueList");
+		OMElement value_list = XmlUtil.firstChildWithLocalName(value_ele, "ValueList");
 		int valueI = -1;
 		for (OMElement value : XmlUtil.childrenWithLocalName(value_list, "Value")) {
 			valueI++;

@@ -6,21 +6,19 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 
 public class UuidFormatValidator extends AbstractFormatValidator {
     SimHandle simHandle
-    String input
 
     String formatName() { return 'UUID' }
 
-    public UuidFormatValidator(SimHandle _simHandle, String _input) {
+    public UuidFormatValidator(SimHandle _simHandle) {
         super(_simHandle.event)
         simHandle = _simHandle
-        input = _input
     }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='rouuid010', msg='Validate UUID format', ref='ITI TF-3: Table 4.1-3 and section 4.1.12.3')
 	def rouuid010() {
-        infoFound(input)
-        assertTrue(isUuid(input))
+        infoFound(value)
+        assertTrue(isUuid(value))
 	}
 
 	// example: urn:uuid:488705e6-91e6-47f8-b567-8c06f8472e74

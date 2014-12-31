@@ -67,17 +67,13 @@ class ExternalIdentifierValidator extends ValComponentBase {
         for (ExternalIdentifierModel ei : model.getExternalIdentifiers()) {
             if (MetadataSupport.XDSDocumentEntry_uniqueid_uuid.equals(ei.getIdentificationScheme())) {
                 String[] parts = ei.getValue().split('^');
-                new OidFormatValidator(er, model.identifyingString() + ": " + ei.identifyingString(), model.externalIdentifierDescription(desc, ei.getIdentificationScheme()))
-                        .validate(parts[0]);
-                if (parts[0].length() > 64)
-                    er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + ei.identifyingString() + " OID part of DocumentEntry uniqueID is limited to 64 digits", this, resource);
-                if (parts.length > 1 && parts[1].length() > 16) {
-                    er.err(XdsErrorCode.Code.XDSRegistryMetadataError, model.identifyingString() + ": " + ei.identifyingString() + " extension part of DocumentEntry uniqueID is limited to 16 characters", this, resource);
-                }
-
+                new OidFormatValidator(simHandle, model.identifyingString() + ": " + ei.identifyingString() + " : " + model.externalIdentifierDescription(desc, ei.getIdentificationScheme()), parts[0]).asSelf(this).run()
+                infoFound("OID part of DocumentEntry uniqueID is limited to 64 digits")
+                assertFalse(parts[0].length() > 64)
+                infoFound("Extension part of DocumentEntry uniqueID is limited to 16 characters")
+                assertFalse(parts.length > 1 && parts[1].length() > 16)
             } else if (MetadataSupport.XDSDocumentEntry_patientid_uuid.equals(ei.getIdentificationScheme())){
-                new CxFormatValidator(er, model.identifyingString() + ": " + ei.identifyingString(), "ITI TF-3: Table 4.1.7")
-                        .validate(ei.getValue());
+                new CxFormatValidator(simHandle, model.identifyingString() + ": " + ei.identifyingString(), ei.getValue()).asSelf(this).run()
             }
         }
     }

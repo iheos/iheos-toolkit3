@@ -25,8 +25,7 @@ public class AssociationVal extends AbstractRegistryObjectVal  implements TopLev
 
         validateClassifications(er, vc);
 
-        validateExternalIdentifiers(er, vc, AssociationModel.externalIdentifierDescription, "ITI TF-3 4.1.3");
-
+        new ExternalIdentifierValidator(simHandle, model, vc, AssociationModel.externalIdentifierDescription).asSelf(this).run()
         new IdUniqueValidator(simHandle, model.id, knownIds).asSelf(this).run()
 
         verifyNotReferenceSelf(er);

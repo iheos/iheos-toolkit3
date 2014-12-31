@@ -6,6 +6,7 @@ import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.DocumentEntryModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.SlotModel
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.xdsException.MetadataException
 /**
  * Created by bmajur on 12/23/14.
@@ -13,7 +14,10 @@ import gov.nist.hit.ds.xdsException.MetadataException
 public class DocumentEntryVal extends AbstractRegistryObjectVal  implements TopLevelObjectVal {
     public DocumentEntryModel model;
 
-    public DocumentEntryVal(DocumentEntryModel model) { this.model = model; }
+    public DocumentEntryVal(SimHandle _simHandle, DocumentEntryModel _model) {
+        super(_simHandle)
+        model = _model;
+    }
 
     public void validate(ErrorRecorder er, ValidationContext vc, Set<String> knownIds) {
         if (vc.skipInternalStructure)
@@ -35,11 +39,11 @@ public class DocumentEntryVal extends AbstractRegistryObjectVal  implements TopL
             validateClassifications(er, vc, DocumentEntryModel.classificationDescription, table415);
 
         if (vc.isXDRMinimal)
-            validateExternalIdentifiers(er, vc, DocumentEntryModel.directExternalIdentifierDescription, table415);
+            new ExternalIdentifierValidator(simHandle, model, vc, DocumentEntryModel.directExternalIdentifierDescription).asSelf(this).run()
         else if (vc.isXDM || vc.isXDRLimited)
-            validateExternalIdentifiers(er, vc, DocumentEntryModel.XDMexternalIdentifierDescription, table415);
+            new ExternalIdentifierValidator(simHandle, model, vc, DocumentEntryModel.XDMexternalIdentifierDescription).asSelf(this).run()
         else
-            validateExternalIdentifiers(er, vc, DocumentEntryModel.externalIdentifierDescription, table415);
+            new ExternalIdentifierValidator(simHandle, model, vc, DocumentEntryModel.externalIdentifierDescription).asSelf(this).run()
 
         new IdUniqueValidator(simHandle, model.id, knownIds).asSelf(this).run()
     }
@@ -106,18 +110,18 @@ public class DocumentEntryVal extends AbstractRegistryObjectVal  implements TopL
     @Override
     public void validateSlotsCodedCorrectly(ErrorRecorder er, ValidationContext vc)  {
 
-        //                    name				   multi	format                                                  resource
-        validateSlot(model, er, 	"creationTime", 	   false, 	new DtmFormatValidator(er, "Slot creationTime",      table415),  table415);
-        validateSlot(model, er, 	"languageCode",		   false, 	new Rfc3066FormatValidator(er, "Slot languageCode",      table415),  table415);
-        validateSlot(model, er, 	"legalAuthenticator",  false, 	new XcnFormatValidator(er, "Slot legalAuthenticator",table415),  table415);
-        validateSlot(model, er, 	"serviceStartTime",	   false, 	new DtmFormatValidator(er, "Slot serviceStartTime",  table415),  table415);
-        validateSlot(model, er, 	"serviceStopTime",	   false, 	new DtmFormatValidator(er, "Slot serviceStopTime",   table415),  table415);
-        validateSlot(model, er, 	"sourcePatientInfo",   true, 	new SourcePatientInfoFormatValidator(er, "Slot sourcePatientInfo", table415),  table415);
-        validateSlot(model, er, 	"sourcePatientId",     false, 	new CxFormatValidator(er, "Slot sourcePatientId",   table415),  table415);
-        validateSlot(model, er, 	"hash",			 	   false, 	new HashFormatValidator(er, "Slot hash",   null), 		        table415);
-        validateSlot(model, er, 	"size",				   false, 	new IntFormatValidator(er, "Slot size",   table415),             table415);
-        validateSlot(model, er, 	"URI",				   true, 	new AnyFormatValidator(er, "Slot URI",   table415),   table415);
-        validateSlot(model, er, 	"repositoryUniqueId",	false, 	new OidFormatValidator(er, "Slot repositoryUniqueId",   table415),   table415);
+        //                    name				   multi	format
+        validateSlot(model, "creationTime", 	   false, 	new DtmFormatValidator(simHandle, "Slot creationTime"))
+        validateSlot(model, "languageCode",		   false, 	new Rfc3066FormatValidator(simHandle, "Slot languageCode"))
+        validateSlot(model, "legalAuthenticator",  false, 	new XcnFormatValidator(simHandle, "Slot legalAuthenticator"))
+        validateSlot(model, "serviceStartTime",	   false, 	new DtmFormatValidator(simHandle, "Slot serviceStartTime"))
+        validateSlot(model, "serviceStopTime",	   false, 	new DtmFormatValidator(simHandle, "Slot serviceStopTime"))
+        validateSlot(model, "sourcePatientInfo",   true, 	new SourcePatientInfoFormatValidator(simHandle, "Slot sourcePatientInfo"))
+        validateSlot(model, "sourcePatientId",     false, 	new CxFormatValidator(simHandle, "Slot sourcePatientId"))
+        validateSlot(model, "hash",			 	   false, 	new HashFormatValidator(simHandle, "Slot hash"))
+        validateSlot(model, "size",				   false, 	new IntFormatValidator(simHandle, "Slot size"))
+        validateSlot(model, "URI",				   true, 	new AnyFormatValidator(simHandle, "Slot URI"))
+        validateSlot(model, "repositoryUniqueId",	false, 	new OidFormatValidator(simHandle, "Slot repositoryUniqueId"))
 
 
         if ( model.getSlot("URI") != null ) {

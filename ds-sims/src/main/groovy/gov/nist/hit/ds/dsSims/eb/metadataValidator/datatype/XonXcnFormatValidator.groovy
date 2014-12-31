@@ -7,13 +7,11 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 
 public class XonXcnFormatValidator extends AbstractFormatValidator {
-    String value
 
     String formatName() { return 'XON|XCN' }
 
-    XonXcnFormatValidator(SimHandle _simHandle, String context, String _value) {
+    XonXcnFormatValidator(SimHandle _simHandle, String context) {
         super(_simHandle, context);
-        value = _value
     }
 
     @ErrorCode(code= XdsErrorCode.Code.XDSRegistryMetadataError)

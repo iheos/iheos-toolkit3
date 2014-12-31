@@ -7,6 +7,8 @@ import org.apache.axiom.om.OMElement
 public abstract class AbstractFormatValidator extends ValComponentBase {
     SimHandle simHandle
     String context
+    String value
+    OMElement value_ele
 
     abstract String formatName();
 
@@ -16,7 +18,13 @@ public abstract class AbstractFormatValidator extends ValComponentBase {
         context = _context
 	}
 	
-	def validate(String input)  { fail("Called incorrectly") }
+	def validate(String input)  {
+        value = input
+        run()
+    }
 
-	def validate(OMElement input) { fail("Called incorrectly") }
+	def validate(OMElement input) {
+        value_ele = input
+        run()
+    }
 }
