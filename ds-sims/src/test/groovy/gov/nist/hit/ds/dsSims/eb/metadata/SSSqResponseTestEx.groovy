@@ -3,7 +3,7 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.generator.RimGenerator
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.SubmissionSetModel
-import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.SubmissionSetVal
+import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.SubmissionSetValidator
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
@@ -60,7 +60,7 @@ class SSSqResponseTestEx extends Specification {
         def (ssXml, model) = ssModel(submissionSpec)
         println ssXml
         Closure closure = { simHandle ->
-            new SubmissionSetVal(simHandle, model, vc, [] as Set).asPeer().run()
+            new SubmissionSetValidator(simHandle, model, vc, [] as Set).asPeer().run()
         }
         def transRunner = new TransactionRunner('rb', simId, repoName, closure)
         transRunner.simHandle.event.addArtifact('Metadata', ssXml)

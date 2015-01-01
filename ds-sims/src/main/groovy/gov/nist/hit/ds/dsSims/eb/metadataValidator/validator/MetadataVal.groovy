@@ -46,11 +46,11 @@ public class MetadataVal {
         // to check uniqueness of the id attribute.
         // TODO - model.knownIds needs expansion to validate uniqueness of uniqueIds.
 		
-        model.submissionSets.each { new SubmissionSetVal(it).validate(er, vc, model.knownIds) }
+        model.submissionSets.each { new SubmissionSetValidator(it).validate(er, vc, model.knownIds) }
 
-        model.docEntries.each { new DocumentEntryVal(it).validate(er, vc, model.knownIds) }
+        model.docEntries.each { new DocumentEntryValidator(it).validate(er, vc, model.knownIds) }
 
-        model.folders.each { new FolderVal(it).validate(er, vc, model.knownIds) }
+        model.folders.each { new FolderValidator(it).validate(er, vc, model.knownIds) }
 
         model.assocs.each { new AssociationVal(it).validate(er, vc, model.knownIds) }
 

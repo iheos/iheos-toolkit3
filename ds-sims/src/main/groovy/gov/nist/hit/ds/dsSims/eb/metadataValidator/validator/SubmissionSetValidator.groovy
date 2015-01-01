@@ -12,13 +12,13 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 /**
  * Created by bmajur on 12/23/14.
  */
-public class SubmissionSetVal extends AbstractRegistryObjectVal {
+public class SubmissionSetValidator extends AbstractRegistryObjectVal {
     SubmissionSetModel model
     SimHandle simHandle
     ValidationContext vc
     Set<String> knownIds
 
-    public SubmissionSetVal(SimHandle _simHandle, SubmissionSetModel _model, ValidationContext _vc, Set<String> _knownIds) {
+    SubmissionSetValidator(SimHandle _simHandle, SubmissionSetModel _model, ValidationContext _vc, Set<String> _knownIds) {
         super(_simHandle)
         model = _model
         vc = _vc
@@ -34,17 +34,14 @@ public class SubmissionSetVal extends AbstractRegistryObjectVal {
     }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='ross010', msg='Validate SubmissionSet', ref='')
+    @Validation(id='ross010', msg='Identify options', ref='')
     def ross010() {
-        if (vc.isXDRLimited)
-            infoFound("Labeled as Limited Metadata");
-
-        if (vc.isXDRMinimal)
-            infoFound("Labeled as Minimal Metadata (Direct)");
+        if (vc.isXDRLimited) infoFound("Labeled as Limited Metadata");
+        if (vc.isXDRMinimal) infoFound("Labeled as Minimal Metadata (Direct)");
     }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='ross020', msg='Validate SubmissionSet top-level attributes', ref='')
+    @Validation(id='ross020', msg='Validate SubmissionSet top-level attributes', ref='ITI TF-3: Table 4.1-6')
     def ross020() {
         new TopAttsValidator(simHandle, model, vc, SubmissionSetModel.statusValues)
     }
@@ -58,7 +55,6 @@ public class SubmissionSetVal extends AbstractRegistryObjectVal {
         for (SlotModel slot : model.getSlots()) {
             if ( ! legal_slot_name(slot.getName()))
                 fail(model.identifyingString() + ": " + slot.getName() + " is not a legal slot name for a SubmissionSet")
-
         }
     }
 
@@ -74,6 +70,7 @@ public class SubmissionSetVal extends AbstractRegistryObjectVal {
                 fail(model.identifyingString() + ": Slot " + slotName + " missing")
         }
     }
+
     @Guard(methodNames=['notXdrMinimal'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='ross050', msg='Validating required Slots present', ref='ITI TF-3: Table 4.1-6')
@@ -115,7 +112,7 @@ public class SubmissionSetVal extends AbstractRegistryObjectVal {
     }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='ross090', msg='Validating Classifications', ref='ITI TF-3: Table 4.1-6')
+    @Validation(id='ross090', msg='Validating ExternalIdentifiers', ref='ITI TF-3: Table 4.1-6')
     def ross090() {
 
         if (vc.isXDM || vc.isXDRLimited)
@@ -127,9 +124,6 @@ public class SubmissionSetVal extends AbstractRegistryObjectVal {
 
         new IdUniqueValidator(simHandle, model.id, knownIds).asSelf(this).run()
     }
-
-
-
 
     boolean legal_slot_name(String name) {
         if (name == null) return false;
