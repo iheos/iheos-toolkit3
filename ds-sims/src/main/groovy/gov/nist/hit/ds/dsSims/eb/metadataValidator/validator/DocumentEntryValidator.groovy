@@ -26,7 +26,7 @@ public class DocumentEntryValidator extends AbstractRegistryObjectVal {
         knownIds = _knownIds
     }
 
-    def run() {
+    void run() {
         if (vc.skipInternalStructure) return;
 
         if (vc.isXDR) vc.isXDRLimited = model.isMetadataLimited();

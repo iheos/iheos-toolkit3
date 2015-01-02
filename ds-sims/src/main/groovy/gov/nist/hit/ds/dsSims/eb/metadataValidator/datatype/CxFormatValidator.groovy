@@ -20,5 +20,4 @@ public class CxFormatValidator extends AbstractFormatValidator {
         def error = ValidatorCommon.validate_CX_datatype(value)
         assertFalse(error)
     }
-
 }
