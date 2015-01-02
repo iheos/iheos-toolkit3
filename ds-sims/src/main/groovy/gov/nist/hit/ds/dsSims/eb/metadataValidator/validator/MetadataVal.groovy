@@ -3,41 +3,37 @@ import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.MetadataModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.parser.MetadataParser
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
-import gov.nist.hit.ds.xdsException.XdsInternalException
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
 
 public class MetadataVal {
 	Metadata m
 	ValidationContext vc
+    SimHandle simHandle
+
 	RegistryValidationInterface rvi
     MetadataModel model
 
-	public MetadataVal(Metadata m, ValidationContext vc, RegistryValidationInterface rvi) {
-		this.m = m
-		this.vc = vc
-		this.rvi = rvi
+	public MetadataVal(SimHandle _simHandle, Metadata _m, ValidationContext _vc, RegistryValidationInterface _rvi) {
+        simHandle = _simHandle
+		m = _m
+		vc = _vc
+		rvi = _rvi
 	}
 	
-	public void run(ErrorRecorder er) {
+	public void run() {
         model = new MetadataParser().run(m, vc)
-		runObjectStructureValidation(er)
-		runCodeValidation(er)
-		runSubmissionStructureValidation(er)
+		runObjectStructureValidation()
+		runCodeValidation()
+		runSubmissionStructureValidation()
 	}
 	
-	public void runCodeValidation(ErrorRecorder er)   {
+	public void runCodeValidation()   {
 		CodeValidation cv = new CodeValidation(m);
-		try {
-			cv.setValidationContext(vc);
-		} catch (XdsInternalException e) {
-			er.err(XdsErrorCode.Code.XDSRegistryError, e);
-			return;
-		}
-		cv.run(er);
+		cv.setValidationContext(vc);
+		cv.run();
 	}
 
-	public void runObjectStructureValidation(ErrorRecorder er)   {
+	public void runObjectStructureValidation()   {
 		
 		if (vc.skipInternalStructure)
 			return;
@@ -46,22 +42,17 @@ public class MetadataVal {
         // to check uniqueness of the id attribute.
         // TODO - model.knownIds needs expansion to validate uniqueness of uniqueIds.
 		
-        model.submissionSets.each { new SubmissionSetValidator(it).validate(er, vc, model.knownIds) }
+        model.submissionSets.each { new SubmissionSetValidator(simHandle, it, vc, model.knownIds).asChild().run() }
 
-        model.docEntries.each { new DocumentEntryValidator(it).validate(er, vc, model.knownIds) }
+        model.docEntries.each { new DocumentEntryValidator(simHandle, it, vc, model.knownIds).asChild().run() }
 
-        model.folders.each { new FolderValidator(it).validate(er, vc, model.knownIds) }
+        model.folders.each { new FolderValidator(simHandle, it, vc, model.knownIds).asChild().run() }
 
-        model.assocs.each { new AssociationVal(it).validate(er, vc, model.knownIds) }
-
-		for (String id : m.getRegistryPackageIds()) {
-			if (!m.getSubmissionSetIds().contains(id) && !m.getFolderIds().contains(id))
-				er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "RegistryPackage(" + id + ") : is not classified as SubmissionSet or Folder", this, "ITI TF-3: 4.1.9.1");
-		}
+        model.assocs.each { new AssociationValidator(simHandle, it, vc, model.knownIds).asChild().run() }
 	}
 
-	public void runSubmissionStructureValidation(ErrorRecorder er) {
-		new SubmissionStructureVal(m, rvi).run(er, vc);
+	public void runSubmissionStructureValidation() {
+		new SubmissionStructureValidator(simHandle, vc, m, rvi).asChild().run();
 	}
 	
 

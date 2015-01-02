@@ -17,14 +17,15 @@ class SlotsUniqueValidator extends ValComponentBase {
         slots = _slots
     }
 
-    @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
+    @ErrorCode(code = XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id = 'roslotu010', msg = 'Verify slot names unique', ref = 'ebRIM 3.0 section 2.8.2')
     def roslotu010() {
         List<String> names = new ArrayList<String>();
         for (SlotModel slot : slots) {
             if (names.contains(slot.getName())) {
                 fail("${model.identifyingString()} : Slot ${slot.getName()} is multiply defined");
-            names.add(slot.getName());
+                names.add(slot.getName());
+            }
         }
     }
 }
