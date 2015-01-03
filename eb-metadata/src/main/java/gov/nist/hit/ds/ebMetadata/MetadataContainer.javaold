@@ -1,9 +1,5 @@
-package gov.nist.hit.ds.dsSims.eb.metadata;
+package gov.nist.hit.ds.ebMetadata;
 
-import gov.nist.hit.ds.dsSims.eb.MessageValidator;
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext;
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder;
-import gov.nist.hit.ds.simSupport.v2compatibility.MessageValidatorEngine;
 
 /**
  * Empty shell of a validator that holds a copy of the pre-parsed 

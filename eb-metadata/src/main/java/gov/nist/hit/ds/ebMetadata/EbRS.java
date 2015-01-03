@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.dsSims.eb.metadata;
+package gov.nist.hit.ds.ebMetadata;
 
 /**
  * Created by bmajur on 7/7/14.

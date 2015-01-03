@@ -1,19 +1,7 @@
 package gov.nist.hit.ds.simSupport.loader;
 
-import gov.nist.hit.ds.eventLog.Event;
-import gov.nist.hit.ds.eventLog.assertion.Assertion;
-import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
-import gov.nist.hit.ds.http.parser.HttpParseException;
-import gov.nist.hit.ds.http.parser.HttpParserBa;
-import gov.nist.hit.ds.http.parser.ParseException;
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase;
-import gov.nist.hit.ds.utilities.html.HttpMessageContent;
-import gov.nist.hit.ds.utilities.io.Io;
-import gov.nist.hit.ds.utilities.xml.XmlText;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import org.apache.log4j.Logger;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 

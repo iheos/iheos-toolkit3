@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.dsSims.eb.metadata;
+package gov.nist.hit.ds.ebMetadata;
 
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsException.MetadataException;
