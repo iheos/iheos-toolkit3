@@ -1,4 +1,5 @@
 package gov.nist.hit.ds.dsSims.eb.reg
+
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
@@ -12,6 +13,7 @@ import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import groovy.util.logging.Log4j
 import org.apache.commons.io.FileUtils
 import spock.lang.Specification
+
 /**
  * Created by bmajur on 7/7/14.
  */

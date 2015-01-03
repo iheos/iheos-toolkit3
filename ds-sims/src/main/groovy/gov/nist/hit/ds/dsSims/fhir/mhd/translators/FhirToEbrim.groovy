@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.dsSims.fhir.mhd.translators
 
-import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
+import gov.nist.hit.ds.ebMetadata.Metadata
+import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import org.apache.axiom.om.OMElement
 import org.hl7.fhir.instance.model.*

@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.dsSims.eb.msgs
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
+
+import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.repository.AssetHelper
 import gov.nist.hit.ds.repository.shared.PropertyKey
 import gov.nist.hit.ds.repository.shared.SearchCriteria

@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.ExternalIdentifierModel
+import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase

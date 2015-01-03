@@ -2,8 +2,8 @@ package gov.nist.hit.ds.dsSims.eb.msgs;
 
 import gov.nist.hit.ds.dsSims.eb.logging.ErrorLogger;
 import gov.nist.hit.ds.dsSims.eb.logging.GwtErrorRecorder;
-import gov.nist.hit.ds.dsSims.eb.metadata.Metadata;
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport;
+import gov.nist.hit.ds.ebMetadata.Metadata;
+import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.eventLog.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;

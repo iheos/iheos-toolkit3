@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.toolkit.installation;
 
-
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.string.StringUtil;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;

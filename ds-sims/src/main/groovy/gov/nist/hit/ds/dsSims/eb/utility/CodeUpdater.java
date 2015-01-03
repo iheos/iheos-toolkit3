@@ -1,10 +1,10 @@
 package gov.nist.hit.ds.dsSims.eb.utility;
 
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport;
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.factory.CodesFactory;
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.UuidModel;
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.codes.AllCodes;
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.codes.Code;
+import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.utilities.io.Io;

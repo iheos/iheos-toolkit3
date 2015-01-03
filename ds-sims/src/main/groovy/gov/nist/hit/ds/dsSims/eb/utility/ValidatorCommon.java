@@ -1,10 +1,10 @@
 package gov.nist.hit.ds.dsSims.eb.utility;
 
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext;
-import gov.nist.hit.ds.dsSims.eb.metadata.Metadata;
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport;
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.codes.Code;
 import gov.nist.hit.ds.dsSims.eb.msgs.RegistryErrorListGenerator;
+import gov.nist.hit.ds.ebMetadata.Metadata;
+import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.eventLog.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;

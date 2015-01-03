@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.CxFormatValidator
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.OidFormatValidator
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.AbstractRegistryObjectModel

@@ -1,9 +1,7 @@
 package gov.nist.hit.ds.xdsException;
 
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
-public class XdsException extends Exception implements IsSerializable {
+public class XdsException extends Exception {
 	// TODO: parameter resource does not seem to ever be used
 	// Use of this exception needs rethinking.
 	/**

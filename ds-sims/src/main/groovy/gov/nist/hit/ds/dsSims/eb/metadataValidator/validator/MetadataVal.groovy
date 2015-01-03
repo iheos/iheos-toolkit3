@@ -1,8 +1,9 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
+
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
-import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.MetadataModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.parser.MetadataParser
+import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 
 public class MetadataVal {

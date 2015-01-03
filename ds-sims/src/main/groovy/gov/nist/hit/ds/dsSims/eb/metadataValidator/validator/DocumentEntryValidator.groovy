@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.*
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.DocumentEntryModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.SlotModel

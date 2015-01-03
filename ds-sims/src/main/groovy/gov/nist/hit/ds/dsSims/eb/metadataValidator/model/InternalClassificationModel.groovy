@@ -1,11 +1,11 @@
-package gov.nist.hit.ds.dsSims.eb.metadataValidator.model;
+package gov.nist.hit.ds.dsSims.eb.metadataValidator.model
 
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext;
-import gov.nist.hit.ds.dsSims.eb.metadata.Metadata;
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport;
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
-import org.apache.axiom.om.OMElement;
+import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
+import gov.nist.hit.ds.ebMetadata.Metadata
+import gov.nist.hit.ds.ebMetadata.MetadataSupport
+import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
+import gov.nist.hit.ds.xdsException.XdsInternalException
+import org.apache.axiom.om.OMElement
 
 public class InternalClassificationModel extends AbstractRegistryObjectModel {
 	String classifiedObjectId;

@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.eb.metadata.store;
 
-import gov.nist.hit.ds.dsSims.eb.metadata.Metadata;
+import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.simSupport.simrepo.SimDb;
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;

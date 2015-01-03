@@ -1,9 +1,10 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.parser
 
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
-import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.*
+import gov.nist.hit.ds.ebMetadata.Metadata
 import org.apache.axiom.om.OMElement
+
 /**
  * Created by bmajur on 12/24/14.
  */

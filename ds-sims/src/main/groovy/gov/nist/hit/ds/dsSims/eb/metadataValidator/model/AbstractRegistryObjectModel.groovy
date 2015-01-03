@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.model
-import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataParser
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
+
+import gov.nist.hit.ds.ebMetadata.Metadata
+import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.utilities.xml.XmlUtil
 import gov.nist.hit.ds.xdsException.MetadataException
 import gov.nist.hit.ds.xdsException.XdsInternalException
