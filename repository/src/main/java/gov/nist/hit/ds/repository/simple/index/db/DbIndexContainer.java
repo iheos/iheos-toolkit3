@@ -1677,7 +1677,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @throws RepositoryException 
 	 */
 	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
-		return getAssetsBySearch(repositories, searchCriteria, null, false);
+		return getAssetsBySearch(repositories, searchCriteria, null, false,0,0);
 	}
 	
 	/**
@@ -1729,7 +1729,7 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @throws RepositoryException
      */
     public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByStr) throws RepositoryException {
-        return getAssetsBySearch(repositories,searchCriteria,orderByStr,false);
+        return getAssetsBySearch(repositories,searchCriteria,orderByStr,false,0,0);
     }
 
     /**
@@ -1741,7 +1741,7 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @return
      * @throws RepositoryException
      */
-	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByPk, boolean searchCriteriaLocationOnly) throws RepositoryException {
+	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByPk, boolean searchCriteriaLocationOnly, final int offset, final int fetchSize) throws RepositoryException {
 		Repository[] fRep = new Repository[repositories.length];
 		int cx=0;
         String locations[] = searchCriteria.getPropertyValue(PropertyKey.LOCATION.getPropertyName(), SearchTerm.Operator.EQUALTO);
@@ -1763,7 +1763,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 			return null;
 		}
 		
-		DbContext dbc = new DbContext();		
+		DbContext dbc = new DbContext();
+        ResultSet rs = null;
 		try {
 			// Make sure properties exist
 			// ArrayList<String> searchProperties = searchCriteria.getProperties();
@@ -1779,7 +1780,14 @@ public class DbIndexContainer implements IndexContainer, Index {
 			} catch (SQLException e) {
 				; // Ignore if it does not exist
 			}
-			dbc.internalCmd("create table "+searchSession+"(repId varchar(64),assetId varchar(64), reposAcs varchar(40), reposOrder int, displayOrder int, createdDate varchar(64), propFile varchar(512))");
+			dbc.internalCmd("create table "+searchSession+"("
+                    + repId + " varchar(128),"
+                    + assetId +" varchar(512), "
+                    + reposAcs +" varchar(40),"
+                    +" reposOrder int, "
+                    + displayOrder+" int, "
+                    + createdDate+" varchar(32), "
+                    + locationId +" varchar(1024))");
 			
 			// Search needs to limit search properties to the ones supported by assets belonging to those repositories -
 			//  - to avoid searching for out-of-reach properties that do not apply to the repositories in question
@@ -1788,66 +1796,126 @@ public class DbIndexContainer implements IndexContainer, Index {
 			for (Repository rep : fRep) {
 				if (rep==null) continue; // Nothing found by the getHitCount call above, skip to next repos
 				
-				String sqlStr = "insert into "+searchSession+"(repId,assetId,reposAcs,reposOrder,displayOrder,createdDate,propFile)"
-						+"select " + DbIndexContainer.repId + ","+ DbIndexContainer.assetId + ",reposAcs," + (reposOrder++) + "," + displayOrder + "," + createdDate + "," + locationId + " from " + repContainerLabel
+				String sqlStr = "insert into "+searchSession+"("
+                        + repId+","
+                        + assetId+","
+                        + reposAcs
+                        + ",reposOrder,"
+                        + displayOrder+","
+                        + createdDate+","
+                        + locationId+")"
+						+ "select " + DbIndexContainer.repId + ","
+                        + DbIndexContainer.assetId + ","
+                        + reposAcs+","
+                        + (reposOrder++) + ","
+                        + displayOrder + ","
+                        + createdDate + ","
+                        + locationId
+                        + " from " + repContainerLabel
 						+ " where " + repId + " = ? and reposAcs=? " +(!"".equals(searchCriteriaWhere)?" and( "+ searchCriteriaWhere + ")":"");
 				
-				try {					
-				//	 dbc.internalCmd(sqlString);
-					
+            //	 dbc.internalCmd(sqlString);
+
 //					int[] rsData = dbc.executePreparedId(sqlStr, new String[]{rep.getId().getIdString()});
 //					logger.fine("rows affected: " + rsData[0]);
-					
-					int records = dbc.executePrepared(sqlStr, new String[]{rep.getId().getIdString(), rep.getSource().getAccess().name() });
-					logger.fine("rep: " + rep.getDisplayName() + " rows affected: " + records);
-					
-				} catch (SQLException e) {
-					e.printStackTrace();
-					logger.warning("possible non-existent column in where clause? " + e.toString());
-				}
+
+                int recordSize = dbc.executePrepared(sqlStr, new String[]{rep.getId().getIdString(), rep.getSource().getAccess().name() });
+                logger.fine("rep: " + rep.getDisplayName() + " rows affected: " + recordSize);
+
+                // ResultSet rs = dbc.executeQuery("select * from (select repId,assetId,reposAcs,propFile,reposOrder,createdDate,row_number() over() as rownum from "+searchSession+")as tr where tr.rownum<="+ QueryParameters.MAX_RESULTS +" order by tr.reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?",tr."+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
+
+                List<String> orderBy = new ArrayList<String>();
+                // Fixed order
+                orderBy.add("reposOrder");
+
+                // Append optional ordering keys
+                if (orderByPk !=null) {
+                    for (String s: orderByPk) {
+                        orderBy.add(s);
+                    }
+                }
+
+                sqlStr = "select "
+                        + repId+","
+                        + assetId+","
+                        + reposAcs+","
+                        + locationId
+                        + " from "+searchSession
+                        + " order by " + SearchTerm.getValueAsCsv(orderBy.toArray(new String[orderBy.size()]),false);
+
+
+            /* TODO: make the offset/fetch method compatible with other db providers as needed. */
+
+                String limitStr = "";
+                if (offset>0) {
+                    limitStr += " offset " + offset + " row ";
+                }
+                if (fetchSize>0) {
+                    limitStr += " fetch next " + fetchSize + " row only";
+                }
+
+                if (!"".equals(limitStr)) {
+                    sqlStr += limitStr;
+                }
+
+
+                rs = dbc.executeQuery(sqlStr); // Limit records
+
+
+                List<AssetNode> assetList = popAssetNode(rs,offset,fetchSize,recordSize);
+                logger.fine("Cached row set size: " + assetList.size());
+                rs.close();
+
+                return assetList;
+
 			}
 					
-			// ResultSet rs = dbc.executeQuery("select * from (select repId,assetId,reposAcs,propFile,reposOrder,createdDate,row_number() over() as rownum from "+searchSession+")as tr where tr.rownum<="+ QueryParameters.MAX_RESULTS +" order by tr.reposOrder" + ((orderByStr!=null && !"".equals(orderByStr))?",tr."+orderByStr:"")); //group by repId,assetId,reposOrder,displayOrder order
 
-            List<String> orderBy = new ArrayList<String>();
-            // Fixed order
-            orderBy.add("reposOrder");
-
-            // Append optional ordering keys
-            if (orderByPk !=null) {
-                for (String s: orderByPk) {
-                    orderBy.add(s);
-                }
-            }
-
-
-
-			ResultSet rs = dbc.executeQuery("select repId,assetId,reposAcs,propFile from "+searchSession+" order by " + SearchTerm.getValueAsCsv(orderBy.toArray(new String[orderBy.size()]),false)); //group by repId,assetId,reposOrder,displayOrder order
-			
-			
-    		List<AssetNode> assetList = popAssetNode(rs);
-    		logger.fine("Cached row set size: " + assetList.size());
-    		rs.close();			
-			dbc.close(rs);			
-			
-			return assetList;
-			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		return null;
+		} finally {
+            dbc.close(rs);
+        }
+        return null;
 			
 	}
-	
-	private List<AssetNode> popAssetNode(ResultSet rs) throws SQLException {
+
+    /**
+     * This is a partial population method
+     * @param rs
+     * @param offset
+     * @param totalRecordSize
+     * @return
+     * @throws SQLException
+     */
+	private List<AssetNode> popAssetNode(final ResultSet rs, final int offset, final int fetchSize, final int totalRecordSize) throws SQLException {
 		List<AssetNode> assetList = new ArrayList<AssetNode>();
 		
 		if (rs!=null) {
+            int segmentSize = 0;
 			while (rs.next()) {
-				AssetNode an = new AssetNode(rs.getString(1),rs.getString(2),"",rs.getString(3),"","",rs.getString(3));
+				AssetNode an = new AssetNode(rs.getString(1),rs.getString(2),"","","","",rs.getString(3));
 				an.setRelativePath(rs.getString(4));
 				assetList.add(an);
+                segmentSize++;
 			}
+
+            // Add an ellipses node as an indication of more records
+            logger.info("offset: " + offset + ", fetchSize: " + fetchSize + ", segmentSize: " + segmentSize + ", totalRecordSize: " + totalRecordSize);
+
+            if ((offset+fetchSize>0) && offset+segmentSize<totalRecordSize) {
+
+
+                if (assetList.size()>0) {
+                     String reposSrc =   assetList.get(0).getReposSrc();
+                    String repId = assetList.get(0).getRepId();
+
+                    AssetNode an = new AssetNode(repId,"","","...","","",reposSrc);
+                    an.getExtendedProps().put("_offset",""+offset+segmentSize);
+//                    an.addChild(new AssetNode(repId, "", "", "HASCHILDREN", "", "", reposSrc));
+                    assetList.add(an);
+                }
+            }
 		}
 		
 		return assetList;

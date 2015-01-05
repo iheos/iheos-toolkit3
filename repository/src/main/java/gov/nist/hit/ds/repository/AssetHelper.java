@@ -80,16 +80,19 @@ public class AssetHelper {
      * @throws RepositoryException
      */
     public static List<AssetNode> getImmediateChildren(AssetNode an) throws RepositoryException {
-        return getImmediateChildren(an,null);
-
+        return getImmediateChildren(an,null,0);
     }
 
-    private static List<AssetNode> getImmediateChildren(AssetNode an, SearchCriteria searchCriteria) throws RepositoryException {
+    public static List<AssetNode> getImmediateChildren(AssetNode an, int offset) throws RepositoryException {
+        return getImmediateChildren(an,null,offset);
+    }
+
+    private static List<AssetNode> getImmediateChildren(AssetNode an, SearchCriteria searchCriteria, int offset) throws RepositoryException {
         Repository repos = RepositoryHelper.composeRepositoryObject(an.getRepId(), an.getReposSrc());
 
         AssetNodeBuilder anb = new AssetNodeBuilder();
         try {
-            return anb.getImmediateChildren(repos, an, searchCriteria);
+            return anb.getImmediateChildren(repos, an, searchCriteria, offset);
         } catch (RepositoryException re) {
             logger.warning(re.toString());
         }
@@ -130,6 +133,8 @@ public class AssetHelper {
 
                     aDst.setRepId(aSrc.getRepository().getIdString());
                     aDst.setAssetId(aSrc.getId().getIdString());
+                    if (aSrc.getAssetType()!=null)
+                        aDst.setType(aSrc.getAssetType().getKeyword());
                     aDst.setDescription(aSrc.getDescription());
                     aDst.setDisplayName(aSrc.getDisplayName());
                     aDst.setMimeType(aSrc.getMimeType());
@@ -138,6 +143,7 @@ public class AssetHelper {
                     aDst.setCreatedDate(aSrc.getCreatedDate());
                     aDst.setColor(aSrc.getProperty(PropertyKey.COLOR)); // This is required for the target node to show up in the right color when the asset is clicked form the search result
                     if (aSrc.getPath()!=null) {
+                        aDst.setFullPath(aSrc.getPath().toString());
                         aDst.setRelativePath(aSrc.getPropFileRelativePart());
                         try {
                             if (aSrc.getContentFile()!=null && aSrc.getContentFile().exists()) {
@@ -232,8 +238,7 @@ public class AssetHelper {
 
             for (AssetNode child : children) {
                 logger.fine("Scanning... assetId:" + child.getAssetId() + " type: <" + child.getType() + ">");
-//                if (parentAssetType.toString().equals(child.getType())) { // validators
-                if ("validators".equals(child.getType())) {
+                if (parentAssetType.toString().equals(child.getType())) { // typically "validators"
                     logger.info("processing..." + parentAssetType + " id:" + child.getAssetId());
                     try {
                         aggregateMessage(child, detailAssetType , assertionAggregation, detailAssetFilterCriteria, displayColumns); // "assertionGroup"
@@ -340,7 +345,7 @@ public class AssetHelper {
 
         if (an.getChildren().size() == 1 && "HASCHILDREN".equals(an.getChildren().get(0).getDisplayName())) {
 
-            List<AssetNode> children = getImmediateChildren(an, detailAssetFilterCriteria);
+            List<AssetNode> children = getImmediateChildren(an, detailAssetFilterCriteria, 0);
 
             for (AssetNode child : children) {
                 try {

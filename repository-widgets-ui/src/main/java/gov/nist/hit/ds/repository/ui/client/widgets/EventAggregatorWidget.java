@@ -228,9 +228,12 @@ public class EventAggregatorWidget extends Composite {
         }
 
         try {
-            reposService.aggregateAssertions(getExternalRepositoryId(), getEventAssetId(), getAssetType(), new SimpleTypeId("assertionGroup"),
-                    null, // NOTE: Maybe it is a good idea to add a drop down of all distinct status codes for on-demand filtering of results
-                    getDisplayColumns()
+            reposService.aggregateAssertions(getExternalRepositoryId()
+                    , getEventAssetId()         // typically this asset has a date-formatted display name
+                    , getAssetType()            // typically it is 'validators'
+                    , new SimpleTypeId("assertionGroup") // We could refactor the API to accept a search criteria that has the parent id and type
+                    , null                      // NOTE: Maybe it is a good idea to add a drop down of all distinct status codes for on-demand filtering of results
+                    , getDisplayColumns()
                     , new AsyncCallback<AssertionAggregation>() {
                 @Override
                 public void onFailure(Throwable t) {

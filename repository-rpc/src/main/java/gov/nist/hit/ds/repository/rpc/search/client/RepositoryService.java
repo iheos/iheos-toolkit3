@@ -35,7 +35,7 @@ public interface RepositoryService extends RemoteService  {
 	public List<AssetNode> getAssetTree(String[][] repos) throws RepositoryConfigException;
     public AssetNode getAssetNode(String reposSrc, String reposId, String assetId) throws RepositoryConfigException;
 	public AssetNode getAssetTxtContent(AssetNode an) throws RepositoryConfigException;
-	public List<AssetNode> getImmediateChildren(AssetNode an) throws RepositoryConfigException;
+	public List<AssetNode> getImmediateChildren(AssetNode an, int offset) throws RepositoryConfigException;
     public AssetNode getChildren(AssetNode an) throws RepositoryConfigException;
 	public AssetNode getParentChain(AssetNode an) throws RepositoryConfigException;
     public List<AssetNode> getParentChainInTree(AssetNode an) throws RepositoryConfigException;

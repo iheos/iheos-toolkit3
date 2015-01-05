@@ -984,9 +984,75 @@ public class LogBrowserWidget extends Composite {
 
 
       private void popTreeItem(final TreeItem item, final boolean openTreeItem) {
-          if (item.getChildCount() == 1 && "HASCHILDREN".equals(item.getChild(0).getText())) {
 
-              AssetNode an =  (AssetNode)item.getUserObject();
+          final AssetNode focusAn =  (AssetNode)item.getUserObject();
+          AssetNode parentAn = null;
+
+          if (item.getParentItem()!=null) {
+              parentAn = (AssetNode)item.getParentItem().getUserObject();
+          }
+
+          final String offsetValue = focusAn.getExtendedProps().get("_offset");
+          if ((focusAn!=null && offsetValue!=null)) {
+
+              // Close the item immediately
+              item.setState(false, false);
+
+              final AsyncCallback<List<AssetNode>> addImmediateChildrenByOffset = new AsyncCallback<List<AssetNode>>() {
+
+                  public void onFailure(Throwable a) {
+                      Window.alert(a.toString());
+                  }
+
+                  public void onSuccess(List<AssetNode> a) {
+                      logger.info("--- got: " + ((a!=null)?a.size():"null"));
+
+                      for (AssetNode childAn : a) {
+                          AssetTreeItem treeItem = createTreeItem(childAn, null, false, false);
+
+//                          logger.info("_offset prop found for assetId: " + focusAn.getAssetId());
+//                          logger.info(" parent exists? " + (item.getParentItem()!=null));
+//                          logger.info(" display name: " + childAn.getDisplayName());
+//                          logger.info(" offsetValue: " + offsetValue);
+
+                          if (item.getParentItem()!=null) {
+                              item.getParentItem().addItem(treeItem); // Offset based retrieval adds an item to parent
+                          } else {
+//                              tree.addItem(treeItem); // TODO look at this in detail, how to add to root-level?
+                          }
+//                          logger.info("adding --- " + treeItem.getAssetNode().getDisplayName() + " child count: " + item.getChildCount());
+                      }
+
+                        item.remove();
+
+//                      if (item.getParentItem()!=null) {
+//                          item.getParentItem().removeItem(item);
+//                          item.remove();
+//                      } else {
+//                          tree.removeItem(item);
+//                      }
+
+
+                  }
+
+              };
+
+              try {
+
+                      reposService.getImmediateChildren(parentAn, Integer.parseInt(offsetValue), addImmediateChildrenByOffset);
+
+              } catch (RepositoryConfigException e) {
+                  e.printStackTrace();
+              }
+
+              logger.info("2 _offset prop found for assetId: " + focusAn.getAssetId());
+              logger.info("2 parent exists? " + (item.getParentItem()!=null));
+
+
+
+
+          } else if (item.getChildCount() == 1 && "HASCHILDREN".equals(item.getChild(0).getText())) {
+
 
               // Close the item immediately
               item.setState(false, false);
@@ -998,15 +1064,18 @@ public class LogBrowserWidget extends Composite {
                   }
 
                   public void onSuccess(List<AssetNode> a) {
-                      for (AssetNode an : a) {
-                          AssetTreeItem treeItem = createTreeItem(an, null, false);
-                          item.addItem(treeItem);
-//                          logger.info("adding --- " + treeItem.getAssetNode().getDisplayName() + " child count: " + item.getChildCount());
+                      for (AssetNode childAn : a) {
+                          AssetTreeItem treeItem = createTreeItem(childAn, null, false, true);
 
+                              item.addItem(treeItem);
+
+//                          logger.info("adding --- " + treeItem.getAssetNode().getDisplayName() + " child count: " + item.getChildCount());
                       }
+
                       if (a!=null && a.size()>0) {
                           item.setState(openTreeItem);
                       }
+
 
                   }
 
@@ -1014,7 +1083,7 @@ public class LogBrowserWidget extends Composite {
 
               try {
 
-                 reposService.getImmediateChildren(an, addImmediateChildren);
+                    reposService.getImmediateChildren(focusAn, 0, addImmediateChildren);
 
 
               } catch (RepositoryConfigException e) {
@@ -1026,6 +1095,7 @@ public class LogBrowserWidget extends Composite {
 
               // Reopen the item
               item.setState(true, false);
+
 
           }
       }
@@ -1049,7 +1119,7 @@ public class LogBrowserWidget extends Composite {
                     List<AssetNode> assetNodeList =  parent.getChildren();
 //                    logger.info(" ** ct: " + assetNodeList.size());
                     for (AssetNode an : assetNodeList) {
-                        AssetTreeItem treeItem = createTreeItem(an, null, true);
+                        AssetTreeItem treeItem = createTreeItem(an, null, true, true);
                         item.addItem(treeItem);
 //                          logger.info("adding --- " + treeItem.getAssetNode().getDisplayName() + " child count: " + item.getChildCount());
                     }
@@ -1076,8 +1146,11 @@ public class LogBrowserWidget extends Composite {
         }
     }
 
+
 	  protected Widget popTreeWidget(List<AssetNode> anList, AssetNode target, Boolean expandLeaf, final AsyncCallback<AssetNode> contentSetup) {
-		    Tree tree = new Tree();
+          final Tree tree = new Tree();
+            tree.clear();
+
 		    final PopupPanel menu = new PopupPanel(true);
 		    
 		    // dynamic children pop
@@ -1086,7 +1159,7 @@ public class LogBrowserWidget extends Composite {
                 public void onOpen(OpenEvent<TreeItem> event) {
 
                     final TreeItem item = event.getTarget();
-
+                    logger.info("___________ calling popTreeItem");
                     popTreeItem(item, true);
 
 
@@ -1271,15 +1344,17 @@ public class LogBrowserWidget extends Composite {
                             popTreeItemDeep(assetTreeItem, false);
                     }
 
-                    // Load content on selection
-				    reposService.getAssetTxtContent(an, contentSetup);
+                    if (an.getExtendedProps().get("_offset")==null) {
+                        // Load content on selection
+                        reposService.getAssetTxtContent(an, contentSetup);
+                    }
 
 
 				}
 			});
 		    
 		    for (AssetNode an : anList) {
-		    	AssetTreeItem treeItem = createTreeItem(an, target, expandLeaf);
+		    	AssetTreeItem treeItem = createTreeItem(an, target, expandLeaf, true);
 
 		    	if (expandLeaf && !(treeItem.getChildCount() == 1 && "HASCHILDREN".equals(treeItem.getChild(0).getText()))) {
                     // Selected index is -1 when featureLp is used instead of featureTlp
@@ -1413,7 +1488,7 @@ public class LogBrowserWidget extends Composite {
                     // Create a list data provider.
                        final ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
 //					   CellTable<List<SafeHtml>> table = new CsvTableFactory().createCellTable(dataProvider, an.getCsv());
-                        DataGrid<List<SafeHtml>> table = new CsvTableFactory().createDataGrid(dataProvider, an.getCsv(), an.getExtendedProps().get(PropertyKey.COLUMN_HEADER_WIDTHS.toString()));
+                        DataGrid<List<SafeHtml>> table = new CsvTableFactory().createDataGrid(dataProvider, an.getCsv(), an.getExtendedProps().get(PropertyKey.COLUMN_WIDTHS.toString()));
 
                        if (an.getExtendedProps()!=null && an.getExtendedProps().get("rowNumberToHighlight")!=null) {
                            int rowNumberToHighlight = Integer.parseInt(an.getExtendedProps().get("rowNumberToHighlight")) - 1; /* the rowNumberToHighlight starts with 1, so compensate for the zero-based get */
@@ -1545,14 +1620,15 @@ public class LogBrowserWidget extends Composite {
 
     }
 
-    protected AssetTreeItem createTreeItem(AssetNode an, AssetNode target, Boolean expandLeaf) {
+    protected AssetTreeItem createTreeItem(AssetNode an, AssetNode target, Boolean expandLeaf, Boolean openItem) {
 	        AssetTreeItem item = new AssetTreeItem(an);
 
 	        for (AssetNode child : an.getChildren()) {
 //                logger.info("** entering " + an.getDisplayName());
-	        	AssetTreeItem treeItem = createTreeItem(child, target, expandLeaf);
+	        	AssetTreeItem treeItem = createTreeItem(child, target, expandLeaf, openItem);
 	        	if (expandLeaf && !(treeItem.getChildCount() == 1 && "HASCHILDREN".equals(treeItem.getChild(0).getText()))) {
-		    		treeItem.setState(true); // Open node
+                    if (openItem)
+		    		    treeItem.setState(true); // Open node
 		        	if (isSameAssetReference(target, child)) {
 		        		treeItemTarget = treeItem;
 		        		treeItemTarget.setSelected(true);
