@@ -1,10 +1,5 @@
 package gov.nist.hit.ds.siteManagement.client;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory;
-import gov.nist.hit.ds.actorTransaction.ActorType;
-import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
@@ -16,7 +11,7 @@ import java.util.Set;
 // Transaction names are listed in TransactionCollection.java
 
 
-public class Site  implements IsSerializable, Serializable {
+public class Site  implements  Serializable {
     private static final long serialVersionUID = 1L;
     private String name = null;
     TransactionCollection transactions = new TransactionCollection(false);

@@ -22,6 +22,7 @@
         <module>gui-core</module>
         <module>toolkit2-build</module>
         <module>eb-metadata</module>
+        <module>test-client</module>
         <!-- still in use by xdstools3. -->
     </modules>
 

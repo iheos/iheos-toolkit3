@@ -152,6 +152,9 @@ public class Toolkit {
     static public File schemaFile() { return new File(toolkitxFile(), "schema"); }
     static public File testkitFile() { return new File(toolkitxFile(), "testkit"); }
     static public File xdstestFile() { return new File(toolkitxFile(), "xdstest"); }
+    static public File testLogFile() {
+        return new File(externalCacheFile(), "TestLogCache");
+    }
 
     static public String getPassword() { return propertyManager.getPassword(); }
     static public String getHost() { return propertyManager.getToolkitHost(); }
