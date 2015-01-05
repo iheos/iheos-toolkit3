@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<p><span style="color:#000080;"><strong>USAGE</strong></span></p>
+
+<ul>
+    <li>Select the message type &ndash; Submit is the only supported type, for now.</li>
+    <li>Use the Browse button to browse your local file system to identify a bundle to be validated. This is the body of a HTTP Post that would be sent to an endpoint. Do not include the HTTP headers. This tool is not prepared to handle them.</li>
+    <li>Hit the Run button.</li>
+</ul>
+
+<p><span style="color:#000080;"><strong>VALIDATION PROCESS</strong></span></p>
+
+<ul>
+    <li>If the input is in JSON format, it is translated to XML. This is done using HL7 FHIR tooling.</li>
+    <li>The XML is validated against the HL7 FHIR XML Schema. The bundle model is validated. This looks for what is included in the bundle, how elements are cross-linked, etc. The individual DocumentManifest and DocumentReference object are validated.</li>
+    <li>When the validation completes, a summary is displayed at the bottom of the window. Each major section, listed above, is presented as a link which when opened displays further detail.</li>
+</ul>
+
+<p><span style="color:#000080;"><strong>HL7/FHIR DOWNLOADS</strong></span></p>
+
+<p>These tools take advantage of the following HL7/FHIR packages listed at <a href="http://www.hl7.org/implement/standards/fhir/downloads.html">http://www.hl7.org/implement/standards/fhir/downloads.html</a>:</p>
+
+<ul>
+    <li>Schema - Schema XSD files&nbsp; <em><a href="http://www.hl7.org/documentcenter/public/standards/FHIR/fhir-all-xsd.zip">Download</a> (.zip)</em></li>
+    <li>Java Reference Implementation&nbsp; <em><a href="http://www.hl7.org/documentcenter/public/standards/FHIR/fhir-0.0.82-Java-0.81.zip">Download</a> (.zip)</em></li>
+</ul>
+</body>
+</html>
