@@ -59,6 +59,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
      */
     public MHDValidatorTab() {
         super(header);
+        getContentsPanel().setWidth(420);
     }
 
     /**
@@ -79,12 +80,11 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
         // Message type transactions
         HeaderItem l2=new HeaderItem();
-        l2.setDefaultValue("2. Select the type of MHD message to validate:");
+        l2.setDefaultValue("2. Select the type of MHD message to validate");
         messageTypeSelect = new SelectItem();
         messageTypeSelect.setShowTitle(false);
         messageTypeSelect.setType("comboBox");
         messageTypeSelect.setName("messageTypeItem");
-        messageTypeSelect.setEmptyDisplayValue("Select message type...");
         messageTypeSelect.setWidth(400);
         loadMessageTypesMap();
 
@@ -110,7 +110,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         form.setFields(l1,reportingLevelSelect,l2, messageTypeSelect, l3);
         form.setCellPadding(10);
 
-        // Create Help Link
+        // Create Help Link and populates it with text from resources
         setHelpButton(getHelpPanel(), Resources.INSTANCE.helpContentsSample().getText());
 
         // Event summary widget parameters
@@ -129,7 +129,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
         vStack.addMember(uploadForm);
         vStack.addMember(runBtn);
         vStack.addMember(getWaitPanel());
-        vStack.setMinWidth(800);
 
         bindUI();
 

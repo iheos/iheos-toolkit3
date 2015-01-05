@@ -5,33 +5,35 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.HLayout;
-import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
-import com.smartgwt.client.widgets.tab.Tab;
 import gov.nist.toolkit.xdstools3.client.customWidgets.WaitPanel;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.HelpButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.design.Formatter;
 import gov.nist.toolkit.xdstools3.client.customWidgets.design.IconLabel;
 
-public abstract class GenericTab extends Tab implements TabInterface {
+public abstract class GenericToolTab extends GenericTab implements ToolTabInterface {
 
     private VLayout mainPanel = new VLayout();
-    private VLayout contentsPanel = new VLayout(10); // this is the left panel
     private VLayout helpPanel = new VLayout(); // this is the right panel
     private HLayout topPanel = new HLayout();  // contains contentsPanel and resultsPanel
+    private VLayout contentsPanel = new VLayout(10); // form contents
     private VLayout resultsPanel = new VLayout(); // bottom label
     private Label headerLabel = new Label();
     private HLayout titleAndHelpButton = new HLayout();
     private HelpButton helpButton;
-    private String tabName;
     protected WaitPanel waitPanel = new WaitPanel();
 
-    public GenericTab(String header){
-        setTitle(header);
+    public GenericToolTab(String header){
+        super(header);
         setHeader(header);
-        setContents(createContents());
+
+        // set the left canvas contents
+        setFieldsCanvas(createContents());
+
+        // create the validation results canvas
         createResultsPanel();
-        tabName=setTabName();
+
+        // display attributes
         mainPanel.setLayoutMargin(10);
     }
 
@@ -50,32 +52,43 @@ public abstract class GenericTab extends Tab implements TabInterface {
         headerLabel.setWidth(200);
         headerLabel.setContents(s);
         headerLabel.setStyleName("h3");
-
-        // add a spacer to separate the title from the help button
-        LayoutSpacer spacer = new LayoutSpacer();
-        spacer.setHeight(30);
-
-        // add components to main contentsPanel
-        titleAndHelpButton.addMembers(headerLabel, spacer);
-        titleAndHelpButton.setHeight(30);
-        mainPanel.addMember(titleAndHelpButton);
+        mainPanel.addMember(headerLabel);
         setPane(mainPanel);
     }
 
+   /* // add a spacer to separate the title from the help button
+    LayoutSpacer spacer = new LayoutSpacer();
+    spacer.setHeight(30);
+
+    // add components to main contentsPanel
+    titleAndHelpButton.addMembers(headerLabel, spacer);
+    titleAndHelpButton.setHeight(30);
+    */
+    /**
+     * Creates a subtitle. Other, smaller subtitle functions can be later created in the same manner.
+     * @param s
+     * @return
+     */
     public IconLabel createSubtitle1(String s){
-        return Formatter.createSubtitle1(s); // TODO May need to be transformed into direct call inside each tab
+        return Formatter.createSubtitle1(s);
     }
 
     /**
-     * Sets a tab contents
+     * Sets the contents of a tab, inside its left panel. This
+     * is usually the fields intended to be filled out by the user.
      * @param pane The tab contents
      */
-    public void setContents(Widget pane){
-        contentsPanel.addMember(pane); // left contents panel, that contains for example form fields
+    public void setFieldsCanvas(Widget pane){
+        // add the form to be filled out by the user, to the left contents panel
+        contentsPanel.addMember(pane);
+        // populate the top panel (contents panel | help panel)
         topPanel.addMembers(contentsPanel, helpPanel);
+        // add the top panel to the overall tab canvas
         mainPanel.addMember(topPanel);
         setPane(mainPanel);
+        // display features
         getPane().setAlign(Alignment.CENTER);
+        contentsPanel.setShowResizeBar(true);
     }
 
     /**
@@ -97,13 +110,6 @@ public abstract class GenericTab extends Tab implements TabInterface {
 
     public VLayout getResultsPanel(){
         return mainPanel;
-    }
-
-    /**
-     * Removes the main header of a tab
-     */
-    public void removeHeaderTitle(){
-        mainPanel.removeMember(titleAndHelpButton);
     }
 
     /**
@@ -131,22 +137,6 @@ public abstract class GenericTab extends Tab implements TabInterface {
     }
 
 
-    public VLayout getHelpPanel() {
-        return helpPanel;
-    }
-
-
-    /**
-     * Returns tab's name name used for navigation.
-     * These are defined in TabNamesUtil.
-     *
-     * @return tab name (String)
-     *
-     * @See TabNamesUtil
-     */
-    public String getTabName(){
-        return tabName;
-    }
 
     /**
      * Abstract method that builds the tab's widget content.
@@ -154,11 +144,6 @@ public abstract class GenericTab extends Tab implements TabInterface {
      */
     protected abstract Widget createContents();
 
-    /**
-     * Method that sets the tab's name.
-     * @return tab's name
-     */
-    protected abstract String setTabName();
 
     /**
      * Method that return a panel displaying a message asking to wait
@@ -177,4 +162,10 @@ public abstract class GenericTab extends Tab implements TabInterface {
     protected WaitPanel getWaitPanel(){
         return waitPanel;
     }
+
+
+    public VLayout getHelpPanel() {
+        return helpPanel;
+    }
+
 }

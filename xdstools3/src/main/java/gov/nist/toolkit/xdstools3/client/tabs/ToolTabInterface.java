@@ -9,7 +9,7 @@ import com.smartgwt.client.widgets.Label;
  * @see GenericCloseableTab
  *
  */
-public interface TabInterface {
+public interface ToolTabInterface {
 	
 	public VLayout getContentsPanel();
 	public void setHeader(String s);
