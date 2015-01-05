@@ -120,7 +120,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         vStack.addMember(form);
         vStack.addMember(uploadForm);
         vStack.addMember(runBtn);
-        vStack.addMember(getWaitPanel());
+//        vStack.addMember(getWaitPanel());
         vStack.setMinWidth(800);
 
         bindUI();
@@ -178,7 +178,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         uploadForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
             @Override
             public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
-                waitPanel.show();
+//                waitPanel.show();
                 // call for validation
                 validate();
             }
@@ -232,7 +232,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         // reportingLevelSelect.getSelectedReportingLevel();
         eventMessageAggregatorWidget.setEventAssetNode(assetNode);
         validationResultsPanel.redraw();
-        waitPanel.hide();
+//        waitPanel.hide();
     }
 
 

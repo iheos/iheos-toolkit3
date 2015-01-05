@@ -24,7 +24,6 @@ public abstract class GenericTab extends Tab implements TabInterface {
     private HLayout titleAndHelpButton = new HLayout();
     private HelpButton helpButton;
     private String tabName;
-    protected WaitPanel waitPanel = new WaitPanel();
 
     public GenericTab(String header){
         setTitle(header);
@@ -160,21 +159,4 @@ public abstract class GenericTab extends Tab implements TabInterface {
      */
     protected abstract String setTabName();
 
-    /**
-     * Method that return a panel displaying a message asking to wait
-     * while the system is processing.
-     *
-     * <strong>How to:</strong>
-     * To display the panel, use {@link gov.nist.toolkit.xdstools3.client.customWidgets.WaitPanel#show()}
-     * method before system start processing.
-     * To hide the panel, use {@link gov.nist.toolkit.xdstools3.client.customWidgets.WaitPanel#hide()}
-     * method when system finishes processing.
-     *
-     * @see gov.nist.toolkit.xdstools3.client.customWidgets.WaitPanel
-     *
-     * @return WaitPanel
-     */
-    protected WaitPanel getWaitPanel(){
-        return waitPanel;
-    }
 }

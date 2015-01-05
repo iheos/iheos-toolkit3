@@ -111,7 +111,7 @@ public class MhdToXdsConverterTab2 extends GenericCloseableTab {
         runBtn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
-                waitPanel.show();
+//                waitPanel.show();
                 uploadForm.submit();
             }
         });
@@ -132,7 +132,7 @@ public class MhdToXdsConverterTab2 extends GenericCloseableTab {
                         // Open the converted file saved on the server in a new Window
 //                        Window.open(GWT.getHostPageBaseURL() + "files/" + response, response + "Converted File", "enabled");
                         eventMessageAggregatorWidget.setEventAssetNode(response);
-                        waitPanel.hide();
+//                        waitPanel.hide();
                     }
                 });
             }
