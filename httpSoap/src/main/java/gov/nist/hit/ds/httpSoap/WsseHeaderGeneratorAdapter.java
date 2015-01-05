@@ -1,10 +1,5 @@
 package gov.nist.hit.ds.httpSoap;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import java.security.KeyStoreException;
-
 public class WsseHeaderGeneratorAdapter {
 	
 	
@@ -22,10 +17,10 @@ public class WsseHeaderGeneratorAdapter {
 //	}
 
 
-	public static Element buildHeader(SecurityContext context) throws GenerationException, KeyStoreException {
-
-		Document wsseHeader = new OpenSamlWsseSecurityGenerator().generateWsseHeader(context);
-		return wsseHeader.getDocumentElement();
-	}
+//	public static Element buildHeader(SecurityContext context) throws GenerationException, KeyStoreException {
+//
+//		Document wsseHeader = new OpenSamlWsseSecurityGenerator().generateWsseHeader(context);
+//		return wsseHeader.getDocumentElement();
+//	}
 
 }
