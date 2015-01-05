@@ -387,3 +387,14 @@ footer ul li a:visited{
     margin-top:5px;
     height:30px;
 }
+.loading-invisible {
+    display:none;
+    margin-top:5px;
+    height:30px;
+}
+
+.loading-visible {
+    display:block;
+    margin-top:5px;
+    height:30px;
+}

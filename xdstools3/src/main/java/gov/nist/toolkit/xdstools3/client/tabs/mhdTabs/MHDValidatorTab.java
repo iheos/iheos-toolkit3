@@ -44,7 +44,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
     // UI components
     private FormPanel uploadForm;
-    private ReportingLevelSelectWidget reportingLevelSelect;
     private SelectItem messageTypeSelect;
     private FileUpload fileUploadItem;
     private VLayout validationResultsPanel;
@@ -70,16 +69,9 @@ public class MHDValidatorTab extends GenericCloseableTab {
     protected Widget createContents() {
         VLayout vStack=new VLayout();
 
-        // Message type drop-down select
-        HeaderItem l1=new HeaderItem();
-        l1.setDefaultValue("1. Select reporting level");
-
-        reportingLevelSelect=new ReportingLevelSelectWidget();
-        reportingLevelSelect.setShowTitle(false);
-
         // Message type transactions
-        HeaderItem l2=new HeaderItem();
-        l2.setDefaultValue("2. Select the type of MHD message to validate:");
+        HeaderItem messageTypeLabel=new HeaderItem();
+        messageTypeLabel.setDefaultValue("1. Select the type of MHD message to validate:");
         messageTypeSelect = new SelectItem();
         messageTypeSelect.setShowTitle(false);
         messageTypeSelect.setType("comboBox");
@@ -89,8 +81,8 @@ public class MHDValidatorTab extends GenericCloseableTab {
         loadMessageTypesMap();
 
         // Uploader
-        HeaderItem l3=new HeaderItem();
-        l3.setDefaultValue("3. Upload file to validate");
+        HeaderItem uploadLabel=new HeaderItem();
+        uploadLabel.setDefaultValue("2. Upload file to validate");
         uploadForm = new FormPanel();
         uploadForm.setHeight("40px");
         uploadForm.setMethod(FormPanel.METHOD_POST);
@@ -107,7 +99,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
         // ------- Create the form ------
         DynamicForm form = new DynamicForm();
-        form.setFields(l1,reportingLevelSelect,l2, messageTypeSelect, l3);
+        form.setFields(messageTypeLabel, messageTypeSelect, uploadLabel);
         form.setCellPadding(10);
 
         // Create Help Link
