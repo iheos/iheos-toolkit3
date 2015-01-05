@@ -5,7 +5,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 /**
  * Client side of the GWT RPC mechanism. This is the service class.
- * 
+ *
  * @author dazais
  * @see ToolbarServiceAsync
  *
@@ -18,5 +18,9 @@ public interface ToolbarService extends RemoteService {
     public String[] retrieveTestSessions();
     public String[] addTestSession(String sessionName);
     public String[] deleteTestSession(String sessionName);
+
+    // header app properties services
+    public String getToolkitAppSubtitle();
+    public String getToolkitVersion();
 
 }
