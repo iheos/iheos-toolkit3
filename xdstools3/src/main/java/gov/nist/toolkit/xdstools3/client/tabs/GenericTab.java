@@ -24,6 +24,7 @@ public abstract class GenericTab extends Tab implements TabInterface {
     private HLayout titleAndHelpButton = new HLayout();
     private HelpButton helpButton;
     private String tabName;
+    protected WaitPanel waitPanel=new WaitPanel();
 
     public GenericTab(String header){
         setTitle(header);
@@ -34,6 +35,7 @@ public abstract class GenericTab extends Tab implements TabInterface {
         mainPanel.setLayoutMargin(10);
     }
 
+    @Override
     public VLayout getContentsPanel() {
         return contentsPanel;
     }
@@ -43,6 +45,7 @@ public abstract class GenericTab extends Tab implements TabInterface {
      * This is the title of the tab, displayed in large characters at the top of the tab
      * @param s the title or header of the tab
      */
+    @Override
     public void setHeader(String s){
         // create the header of the tab
         headerLabel.setHeight(30);
@@ -61,6 +64,7 @@ public abstract class GenericTab extends Tab implements TabInterface {
         setPane(mainPanel);
     }
 
+    @Override
     public IconLabel createSubtitle1(String s){
         return Formatter.createSubtitle1(s); // TODO May need to be transformed into direct call inside each tab
     }
@@ -69,6 +73,7 @@ public abstract class GenericTab extends Tab implements TabInterface {
      * Sets a tab contents
      * @param pane The tab contents
      */
+    // set private
     public void setContents(Widget pane){
         contentsPanel.addMember(pane); // left contents panel, that contains for example form fields
         topPanel.addMembers(contentsPanel, helpPanel);
@@ -80,6 +85,7 @@ public abstract class GenericTab extends Tab implements TabInterface {
     /**
      * Adds a panel for the validation results
      */
+    @Override
     public void createResultsPanel(){
         mainPanel.addMember(resultsPanel);
         setPane(mainPanel);
@@ -89,11 +95,13 @@ public abstract class GenericTab extends Tab implements TabInterface {
      * Changes the contents of the result panel
      * @param canvas
      */
+    @Override
     public void setResultsPanel(Canvas canvas){
         resultsPanel.clear();
         resultsPanel.addMember(canvas);
     }
 
+    @Override
     public VLayout getResultsPanel(){
         return mainPanel;
     }
@@ -101,6 +109,7 @@ public abstract class GenericTab extends Tab implements TabInterface {
     /**
      * Removes the main header of a tab
      */
+    @Override
     public void removeHeaderTitle(){
         mainPanel.removeMember(titleAndHelpButton);
     }
@@ -108,15 +117,18 @@ public abstract class GenericTab extends Tab implements TabInterface {
     /**
      * Add a help button to the top right corner of the tab
      */
+    @Override
     public void setHelpButton(Canvas container, String contents){
         helpButton = new HelpButton(container, contents);
         titleAndHelpButton.addMember(helpButton);
+        titleAndHelpButton.setHeight(30);
         titleAndHelpButton.redraw();
     }
 
     /**
      * Hides the help button
      */
+    @Override
     public void hideHelpButton(){
         contentsPanel.hideMember(helpButton);
     }
@@ -125,11 +137,12 @@ public abstract class GenericTab extends Tab implements TabInterface {
      * Changes the contents of the Help Window, displayed when clicking on the Help Button
      * @param contents
      */
+    @Override
     public void setHelpWindowContents(String contents){
         helpButton.setHelpWindowContents(contents);
     }
 
-
+    @Override
     public VLayout getHelpPanel() {
         return helpPanel;
     }
@@ -143,6 +156,7 @@ public abstract class GenericTab extends Tab implements TabInterface {
      *
      * @See TabNamesUtil
      */
+    @Override
     public String getTabName(){
         return tabName;
     }

@@ -73,6 +73,8 @@ public class MhdToXdsConverterTab2 extends GenericCloseableTab {
         vStack.addMember(uploadForm);
         vStack.addMember(runBtn);
 
+//        vStack.addMember(waitPanel);
+
         // Event summary widget parameters
         String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
         String type = "validators";
