@@ -26,7 +26,8 @@ public class AssociationValidator extends AbstractRegistryObjectVal  {
         knownIds = _knownIds
     }
 
-    def run() {
+    @Override
+    void run() {
         if (vc.skipInternalStructure) return;
         runValidationEngine()
     }
@@ -81,9 +82,7 @@ public class AssociationValidator extends AbstractRegistryObjectVal  {
             return;
         if (s.getValues().size() == 1) {
             String value = s.getValues().get(0);
-            if ("Original".equals(value) || "Reference".equals(value))
-            ;
-            else
+            if ((!"Original".equals(value) || "Reference".equals(value)))
                 fail(model.identifyingString() + ": SubmissionSetStatus Slot can only take value Original or Reference")
         } else {
             fail(model.identifyingString() + ": SubmissionSetStatus Slot must have only single value")
@@ -94,13 +93,11 @@ public class AssociationValidator extends AbstractRegistryObjectVal  {
     @Validation(id='roas070', msg='Validate Classifications', ref='ITI TF-3 4.1.6.1')
     def roas070() {
         List<ClassificationModel> c = model.getClassificationsByClassificationScheme(MetadataSupport.XDSAssociationDocumentation_uuid);
-        if (c.size() == 0)
-        ;
-        else if (c.size() > 1)
+        if (c.size() > 1)
             fail(model.identifyingString() +
                     ": may contain only a single documentation classification (classificationScheme=" +
                     MetadataSupport.XDSAssociationDocumentation_uuid + ")")
-        else {
+        else if (c.size() != 0) {
             if (!assocs_with_documentation.contains(model.type))
                 fail(model.identifyingString() +
                         ": documentation classification (classificationScheme=" +

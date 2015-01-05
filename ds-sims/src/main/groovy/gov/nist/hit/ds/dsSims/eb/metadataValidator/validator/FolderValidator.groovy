@@ -24,7 +24,8 @@ public class FolderValidator extends AbstractRegistryObjectVal {
         knownIds = _knownIds
     }
 
-    def run() {
+    @Override
+    void run() {
         if (vc.skipInternalStructure) return;
 
         if (vc.isXDR) vc.isXDRLimited = model.isMetadataLimited();
