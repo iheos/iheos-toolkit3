@@ -1,14 +1,14 @@
 package gov.nist.hit.ds.repository.simple.index.db;
 
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.api.RepositoryException;
+import org.junit.Test;
 
 import java.sql.Connection;
 import java.util.ArrayList;
 
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 
 public class DbConnectionTest {
@@ -24,14 +24,14 @@ public class DbConnectionTest {
 			for (int i=0; i<NumberOfConnections; i++) {
 				System.out.println("Getting connection number "+i);
 				cList.add(DbConnection.getInstance().getConnection());
-				DbConnection.getInstance().printConnectionSummary();
+//				DbConnection.getInstance().printConnectionSummary();
 				
 			}
 			
 			int cx=0;
 			for (Connection c : cList ) {
 				System.out.println("Closing..."+ cx++);
-				DbConnection.getInstance().printConnectionSummary();
+//				DbConnection.getInstance().printConnectionSummary();
 				c.close();
 			}
 			

@@ -1,6 +1,0 @@
-#
-#Fri Aug 02 15:02:33 EDT 2013
-DisplayName=This is my repository
-description=Description
-repositoryType=site
-id=33ece892-2ae8-4d81-ae9d-cde2ae138239

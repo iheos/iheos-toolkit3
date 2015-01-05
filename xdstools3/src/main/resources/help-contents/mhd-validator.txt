@@ -1,0 +1,27 @@
+Select the message type - this should be Submit.
+
+Use the Browse button to browse your local file system to identify a bundle to be validated.  This is the body of a HTTP Post that would be sent to an endpoint.  Do not include the HTTP headers. This tool is not prepared to handle them.
+
+Hit the Run button.
+
+The following validations will be performed:
+
+If the input is in JSON format it is translated to XML.  This is done using HL7 FHIR tooling.
+
+The XML is validated against the HL7 FHIR XML Schema.
+
+The bundle model is validated.  This looks for what is included in the bundle, how elements are cross linked, etc.
+
+The individual DocumentManifest and DocumentReference object are validated.
+
+When the validation completes a summary is displayed at the bottom of the window.  Each major section, listed above, is presented as a link which when opened displays further detail.
+
+HL7/FHIR downloads
+
+These tools take advantage of these HL7/FHIR packages which are listed at
+
+    http://www.hl7.org/implement/standards/fhir/downloads.html
+
+Schema - Schema XSD files - http://www.hl7.org/documentcenter/public/standards/FHIR/fhir-all-xsd.zip
+
+Java Reference Implementation - http://www.hl7.org/documentcenter/public/standards/FHIR/fhir-0.0.82-Java-0.81.zip

@@ -255,6 +255,15 @@ public interface Asset {
         throws gov.nist.hit.ds.repository.api.RepositoryException;
 
     /**
+     *
+     * @return
+     * @throws gov.nist.hit.ds.repository.api.RepositoryException
+     */
+    gov.nist.hit.ds.repository.api.Type getAssetTypeProperties()
+            throws gov.nist.hit.ds.repository.api.RepositoryException;
+
+
+    /**
      * Get the date at which this Asset is effective.
      *
      * @return long the number of milliseconds since January 1, 1970, 00:00:00

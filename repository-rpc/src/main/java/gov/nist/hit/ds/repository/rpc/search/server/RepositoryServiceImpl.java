@@ -66,6 +66,12 @@ RepositoryService {
         return PresentationData.searchHit(repos, sc, newIndexOnly);
     }
 
+
+    @Override
+    public AssetNode getAssetNode(String reposSrc, String reposId, String assetId) throws RepositoryConfigException {
+        return PresentationData.getAssetNode(reposSrc, reposId, assetId);
+    }
+
     @Override
 	public List<AssetNode> getAssetTree(String[][] reposData)
 			throws RepositoryConfigException {
@@ -81,7 +87,6 @@ RepositoryService {
 		} catch (Exception re) {
 			throw new RepositoryConfigException(re.toString());
 		}
-		
 	}
 
 	@Override

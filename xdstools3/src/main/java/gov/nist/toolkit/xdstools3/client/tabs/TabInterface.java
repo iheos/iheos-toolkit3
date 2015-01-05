@@ -11,7 +11,7 @@ import com.smartgwt.client.widgets.Label;
  */
 public interface TabInterface {
 	
-	public VLayout getPanel();
+	public VLayout getContentsPanel();
 	public void setHeader(String s);
 	public Label createSubtitle1(String s);
 	

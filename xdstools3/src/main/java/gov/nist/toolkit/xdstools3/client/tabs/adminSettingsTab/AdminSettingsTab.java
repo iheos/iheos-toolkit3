@@ -14,7 +14,7 @@ import com.smartgwt.client.widgets.form.validator.MatchesFieldValidator;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.toolkit.xdstools3.client.customWidgets.dialogs.PopupMessageV3;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 /**
  * This tabs allows to edit the Administrator Settings / Toolkit Settings available through the back-end from a
@@ -68,16 +68,16 @@ public class AdminSettingsTab extends GenericCloseableTab {
         final AdminSettingsForm formPassword = new AdminSettingsForm();
 
         // Form items
-        final PasswordItem oldPassword = createPasswordField("old-password", "Current password", 30);
+        final PasswordItem oldPassword = createPasswordField("oldpassword", "Current password", 30);
         oldPassword.setRequired(true);
-        final PasswordItem newPassword = createPasswordField("new-password", "New password", 30);
+        final PasswordItem newPassword = createPasswordField("newpassword", "New password", 30);
         newPassword.setRequired(true);
-        final PasswordItem newPasswordCheck = createPasswordField("new-password-check", "Confirm new password", 30);
+        final PasswordItem newPasswordCheck = createPasswordField("newpasswordcheck", "Confirm new password", 30);
         newPasswordCheck.setRequired(true);
 
         // validator that checks that the "new password" fields match each other
         MatchesFieldValidator matchesValidator = new MatchesFieldValidator();
-        matchesValidator.setOtherField("new-password");
+        matchesValidator.setOtherField("newpassword");
         matchesValidator.setErrorMessage("Passwords do not match");
         newPasswordCheck.setValidators(matchesValidator);
 
@@ -85,7 +85,7 @@ public class AdminSettingsTab extends GenericCloseableTab {
         SectionItem section3 = new SectionItem();
         section3.setDefaultValue("Change administrator password");
         section3.setSectionExpanded(false);
-        section3.setItemIds("old-password", "new-password", "new-password-check");
+        section3.setItemIds("oldpassword", "newpassword", "newpasswordcheck");
 
         formPassword.setFields(section3, oldPassword, newPassword, newPasswordCheck);
 
@@ -153,7 +153,10 @@ public class AdminSettingsTab extends GenericCloseableTab {
         rpcService.retrieveAdminSettings(callback);
     }
 
-
+    /** Propagates changes in the admin settings to the back-end where they are ultimately saved to file
+     *
+     * @param settings the array of settings
+     */
     protected void saveAdminSettings(String[] settings){
 
         AsyncCallback<Void> callback = new AsyncCallback<Void>() {
@@ -223,6 +226,6 @@ public class AdminSettingsTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getAdminTabCode();
+        return TabNamesManager.getInstance().getAdminTabCode();
     }
 }

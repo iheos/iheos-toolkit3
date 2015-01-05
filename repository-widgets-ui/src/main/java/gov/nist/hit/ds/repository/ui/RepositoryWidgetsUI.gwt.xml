@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+
+    <stylesheet src="styles/logBrowser.css" />
+
+    <!-- 3rd party column header extension of data grid -->
+    <stylesheet src="styles/GwtResizableDraggableColumns.css" />
+
+    <!--  BEGIN JSNI: sh 3rd party -->
+    <!-- Base CSS SyntaxHighlighter -->
+    <stylesheet src="styles/shCore.css" />
+
+    <!-- Eclipse Syntax Theme -->
+    <stylesheet src="styles/shThemeEclipse.css" />
+
+    <!-- Base JS SyntaxHighlighter -->
+    <script src="scripts/shCore.js" />
+
+    <!-- Extension for each wanted language to support -->
+    <script src="scripts/shBrushXml.js" />
+    <script src="scripts/shBrushCss.js" />
+    <script src="scripts/shBrushPlain.js" />
+    <!--  END JSNI: sh 3rd party -->
+
+	<!-- Inherit the core Web Toolkit stuff. -->
+	<inherits name='com.google.gwt.user.User' />
+
+    <!-- JSON -->
+    <inherits name="com.google.gwt.json.JSON" />
+
+	<!-- We need the JUnit module in the main module, -->
+	<!-- otherwise eclipse complains (Google plugin bug?) -->
+	<inherits name='com.google.gwt.junit.JUnit' />
+
+	<!-- Inherit the default GWT style sheet. You can change -->
+	<!-- the theme of your GWT application by uncommenting -->
+	<!-- any one of the following lines. -->
+	<inherits name='com.google.gwt.user.theme.standard.Standard' />
+	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
+
+	<!-- Other module inherits -->
+    <inherits name='gov.nist.hit.ds.repository.RepositoryRpc' />
+    <inherits name='gov.nist.hit.ds.repository.RepositoryShared' />
+
+    <!-- 3rd party column header extensions for data grid -->
+    <inherits name='fr.mikrosimage.gwt.GwtResizableDraggableColumns'/>
+
+	<!--  this popups a log window
+	<inherits name="com.google.gwt.logging.Logging" />
+ 	-->
+ 
+	<!-- Specify the app entry point class. -->
+
+	<!-- Specify the paths for translatable code -->
+	<source path='client' />
+
+    <public path="public"/>
+
+</module>

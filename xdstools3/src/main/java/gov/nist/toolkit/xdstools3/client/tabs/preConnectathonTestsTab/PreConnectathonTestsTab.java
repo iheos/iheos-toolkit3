@@ -12,7 +12,7 @@ import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -129,7 +129,7 @@ public class PreConnectathonTestsTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getPreConnectathonTestsTabCode();
+        return TabNamesManager.getInstance().getPreConnectathonTestsTabCode();
     }
 
     private void loadActorsMap() {

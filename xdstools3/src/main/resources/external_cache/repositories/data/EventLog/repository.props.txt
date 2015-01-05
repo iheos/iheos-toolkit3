@@ -1,5 +1,0 @@
-#
-#Thu Oct 16 15:29:02 EDT 2014
-displayName=EventLog
-repositoryType=eventLog
-id=EventLog

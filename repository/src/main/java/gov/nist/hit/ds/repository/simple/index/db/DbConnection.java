@@ -1,36 +1,29 @@
 package gov.nist.hit.ds.repository.simple.index.db;
 
-import gov.nist.hit.ds.toolkit.installation.Installation;
-
+import com.zaxxer.hikari.HikariDataSource;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.index.IndexDataSource;
+import gov.nist.hit.ds.toolkit.installation.Installation;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
-import org.apache.tomcat.jdbc.pool.PoolProperties;
-
 /**
  * This class provides a JDBC compatible (Derby) database connection.
- * DbProvider is a singleton class that allows for automatic connection pooling through Tomcat JDBC Pooling.
+ * DbProvider is a singleton class that allows for automatic connection pooling through Hikari Pooling.
  * @author Sunil.Bhaskarla
  *
  */
 public class DbConnection implements IndexDataSource {
 
 	private static Logger logger = Logger.getLogger(DbConnection.class.getName());
-	
-	// See this web page on why Tomcat's own JDBC pooling is preferred to DBCP
-	// http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.htm
-	
-	// This is for the DBCP method	
-	//private static BasicDataSource bds = null;
-	
-     private static DataSource bds = null;
-     
-	static DbConnection self = null;
+
+//     private static DataSource bds = null;
+    private static HikariDataSource bds = null;
+
+    static DbConnection self = null;
 	
 	private DbConnection()  {		
 		try {
@@ -52,7 +45,28 @@ public class DbConnection implements IndexDataSource {
 		return self;
 	}
 
-	@Override
+
+    public void close()  {
+        logger.info("Running close on DBConnection");
+
+
+        try {
+            if (bds!=null) {
+                bds.close();
+            }
+        } catch (Throwable t) {
+//            logger.severe(t.toString());
+        }
+
+        try {
+            DriverManager.getConnection("jdbc:derby:;shutdown=true");
+        } catch (Throwable t) {
+//            t.printStackTrace();
+        }
+
+    }
+
+    @Override
 	public void setupDataSource() throws RepositoryException {
 		if (bds==null) {
 
@@ -71,38 +85,70 @@ public class DbConnection implements IndexDataSource {
 				System.out.println("E100: Could not get External_Cache from Installation setup. Database could not instantiated.");
 				return;
 			}
-			
-			  PoolProperties p = new PoolProperties();
-			 
-	          p.setUrl("jdbc:derby:"+ ecDir +"/db;create=true");
-	          
-	          //local "jdbc:derby:c:\\e\\myderby.db;create=true"
-	          
-	          p.setDriverClassName("org.apache.derby.jdbc.EmbeddedDriver");
-//	          p.setUsername("root");
-//	          p.setPassword("password");
-//	          p.setJmxEnabled(true);
-//	          p.setTestWhileIdle(false);
-//	          p.setTestOnBorrow(true);
-//	          p.setValidationQuery("SELECT 1");
-//	          p.setTestOnReturn(false);
-//	          p.setValidationInterval(30000);
-	          p.setTimeBetweenEvictionRunsMillis(15000);
-	          p.setMaxActive(777);
-	          p.setInitialSize(10);
-	          p.setMaxWait(35000);
-	          p.setRemoveAbandonedTimeout(1200); // 20min
-	          p.setMinEvictableIdleTimeMillis(35000);
-	          p.setMinIdle(25);
-	          p.setLogAbandoned(false);
-	          p.setRemoveAbandoned(true);
-//	          p.setJdbcInterceptors(
-//	            "org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"+
-//	            "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");
 
-			  bds = new DataSource();
-	          bds.setPoolProperties(p);
-	          
+            try {
+                String driver = "org.apache.derby.jdbc.EmbeddedDriver";
+                Class.forName(driver).newInstance();
+
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+
+            try {
+                DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+
+//            Properties props = new Properties();
+//            props.setProperty("dataSourceClassName", "org.apache.derby.jdbc.ClientDataSource");
+//            props.setProperty("dataSource.databaseName", ecDir +"/db");
+//
+//
+//            HikariConfig config = new HikariConfig(props);
+//            bds = new HikariDataSource(config);
+//
+            bds = new HikariDataSource();
+
+            bds.setMaximumPoolSize(777);
+            bds.setMinimumIdle(10);
+//            bds.setDataSourceClassName("org.apache.derby.jdbc.ClientDataSource");
+            bds.setJdbcUrl("jdbc:derby:"+ ecDir +"/db;create=true");
+
+//
+            // Tomcat JDBC
+//
+//			  PoolProperties p = new PoolProperties();
+//
+//	          p.setUrl("jdbc:derby:"+ ecDir +"/db;create=true");
+//
+//	          //local "jdbc:derby:c:\\e\\myderby.db;create=true"
+//
+//	          p.setDriverClassName("org.apache.derby.jdbc.EmbeddedDriver");
+////	          p.setUsername("root");
+////	          p.setPassword("password");
+////	          p.setJmxEnabled(true);
+////	          p.setTestWhileIdle(false);
+////	          p.setTestOnBorrow(true);
+////	          p.setValidationQuery("SELECT 1");
+////	          p.setTestOnReturn(false);
+////	          p.setValidationInterval(30000);
+//	          p.setTimeBetweenEvictionRunsMillis(15000);
+//	          p.setMaxActive(777);
+//	          p.setInitialSize(10);
+//	          p.setMaxWait(35000);
+//	          p.setRemoveAbandonedTimeout(1); // 20min
+//	          p.setMinEvictableIdleTimeMillis(35000);
+//	          p.setMinIdle(25);
+//	          p.setLogAbandoned(false);
+//	          p.setRemoveAbandoned(true);
+////	          p.setJdbcInterceptors(
+////	            "org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"+
+////	            "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");
+//
+//			  bds = new DataSource();
+//	          bds.setPoolProperties(p);
+//
 			// DBCP 
 			//bds = new BasicDataSource();	          			
 //			bds.setDriverClassName("org.apache.derby.jdbc.ClientDriver");
@@ -128,21 +174,9 @@ public class DbConnection implements IndexDataSource {
 			System.out.println("Connect failed");
 			e.printStackTrace();
 		}
-		
-		printConnectionSummary();
-		
+
 		return cnx;
 	}
-	
-	/**
-	 * 
-	 */
-	public void printConnectionSummary() {
-		logger.fine("----- Active " + bds.getActive()
-		+ " Max active "+ bds.getMaxActive()
-		+ " Max idle "+ bds.getMaxIdle()
-		+ " Max wait "+ bds.getMaxWait()
-		+ "-----");
-	}
+
 	
 }

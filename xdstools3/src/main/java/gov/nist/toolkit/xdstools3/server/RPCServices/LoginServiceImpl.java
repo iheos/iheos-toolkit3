@@ -26,3 +26,4 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
         return Caller.getInstance().logMeIn(password);}
 
 }
+

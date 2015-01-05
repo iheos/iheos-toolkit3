@@ -1,6 +1,6 @@
 package gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs;
 
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 public class LifecycleValidationTab extends AbstractRegistryAndRepositoryTab {
     @Override
@@ -15,6 +15,6 @@ public class LifecycleValidationTab extends AbstractRegistryAndRepositoryTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getLifecycleValidationTabCode();
+        return TabNamesManager.getInstance().getLifecycleValidationTabCode();
     }
 }

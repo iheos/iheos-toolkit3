@@ -24,6 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- JavaScript output mode -->
+        <gwt.style>OBF</gwt.style>
     <!--<gwt.style>DETAILED</gwt.style>-->
     </properties>
 
@@ -78,36 +79,20 @@
             <version>1</version>
         </dependency>
 
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>repository-shared</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
-        </dependency>
 
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>repository-rpc</artifactId>
+            <artifactId>repository-widgets-ui</artifactId>
             <version>3.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>repository-rpc</artifactId>
+            <artifactId>repository-widgets-ui</artifactId>
             <version>3.0.0-SNAPSHOT</version>
             <classifier>sources</classifier>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>repository-shared</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
-            <classifier>sources</classifier>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xdsException</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
-        </dependency>
+
 
     </dependencies>
 
@@ -147,10 +132,10 @@
                 <!-- Plugin configuration. There are many available options,
                      see gwt-maven-plugin documentation at codehaus.org -->
                 <configuration>
-                    <compileSourcesArtifacts>
-                        <compileSourcesArtifact>gov.nist.hit.ds:repository-rpc</compileSourcesArtifact> <!-- gov.nist.hit.ds:repository -->
-                        <compileSourcesArtifact>gov.nist.hit.ds:repository-shared</compileSourcesArtifact>
-                    </compileSourcesArtifacts>
+                    <!--<compileSourcesArtifacts>-->
+                        <!--<compileSourcesArtifact>gov.nist.hit.ds:repository-rpc</compileSourcesArtifact> &lt;!&ndash; gov.nist.hit.ds:repository &ndash;&gt;-->
+                        <!--<compileSourcesArtifact>gov.nist.hit.ds:repository-shared</compileSourcesArtifact>-->
+                    <!--</compileSourcesArtifacts>-->
 
                     <!-- URL that should be automatically opened in the GWT shell (gwt:run). -->
                     <runTarget>logBrowser.html</runTarget>

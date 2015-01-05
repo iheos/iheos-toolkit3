@@ -138,7 +138,7 @@ public class AssetHelper {
                     aDst.setCreatedDate(aSrc.getCreatedDate());
                     aDst.setColor(aSrc.getProperty(PropertyKey.COLOR)); // This is required for the target node to show up in the right color when the asset is clicked form the search result
                     if (aSrc.getPath()!=null) {
-                        aDst.setLocation(aSrc.getPropFileRelativePart());
+                        aDst.setRelativePath(aSrc.getPropFileRelativePart());
                         try {
                             if (aSrc.getContentFile()!=null && aSrc.getContentFile().exists()) {
                                 aDst.setContentAvailable(true);

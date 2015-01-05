@@ -13,7 +13,7 @@ import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab {
     private static final String header="Find Folders";
@@ -51,7 +51,7 @@ public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.Gener
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getFindFoldersCode();
+        return TabNamesManager.getInstance().getFindFoldersCode();
     }
 
     private void bindUI() {

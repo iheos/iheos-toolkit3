@@ -62,14 +62,17 @@
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.TestDataSubmissionServicesImpl</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>repositoryServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.repository.rpc.search.server.RepositoryServiceImpl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>downloadAssetServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.repository.rpc.search.DownloadAssetServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>adminSettingsServlet</servlet-name>
         <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.AdminSettingsImpl</servlet-class>
     </servlet>
-    <!--<servlet>-->
-        <!--<servlet-name>repositoryServlet</servlet-name>-->
-        <!--<servlet-class>gov.nist.hit.ds.repository.rpc.search.server.RepositoryServiceImpl</servlet-class>-->
-    <!--</servlet>-->
-
 
 
     <!-- ============== Servlet mappings ============== -->
@@ -113,12 +116,15 @@
         <url-pattern>/xdstools3/adminSettings</url-pattern>
     </servlet-mapping>
 
-    <!--
     <servlet-mapping>
         <servlet-name>repositoryServlet</servlet-name>
         <url-pattern>/xdstools3/repository</url-pattern>
     </servlet-mapping>
--->
+
+    <servlet-mapping>
+        <servlet-name>downloadAssetServlet</servlet-name>
+        <url-pattern>/repository/downloadAsset</url-pattern>
+    </servlet-mapping>
 
 
 
@@ -126,6 +132,11 @@
     <welcome-file-list>
         <welcome-file>Xdstools3.html</welcome-file>
     </welcome-file-list>
+
+    <!-- ============== Listeners ========================== -->
+    <listener>
+        <listener-class>gov.nist.hit.ds.repository.simple.index.db.DbAppCtxListener</listener-class>
+    </listener>
 
 </web-app>
 

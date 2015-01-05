@@ -14,7 +14,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButtonN
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 
 public class FindDocumentTab extends GenericCloseableTab {
@@ -79,7 +79,7 @@ public class FindDocumentTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getFindDocumentsTabCode();
+        return TabNamesManager.getInstance().getFindDocumentsTabCode();
     }
 
     // FIXME Unused is that normal?

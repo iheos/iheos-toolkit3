@@ -25,8 +25,10 @@
 
 
     <!-- ================= Inherit v3 modules ================= -->
-     <!--<inherits name="gov.nist.hit.ds.logBrowser.LogBrowser"/> -->
-    <!--<inherits name="gov.nist.hit.ds.repository.RepositoryRpc"/>-->
+    <!-- begin repository related -->
+    <inherits name='gov.nist.hit.ds.repository.ui.RepositoryWidgetsUI' />
+    <!-- end repository related -->
+
 
 
     <!-- ============ Specify the app entry point class ============== -->

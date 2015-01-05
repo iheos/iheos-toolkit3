@@ -1,9 +1,0 @@
-#
-#Fri Aug 02 15:02:33 EDT 2013
-displayName=My Site
-createdDate=20130802150233
-modifiedDate=20130802150233
-type=site
-repository=5c790c70-abd8-48ab-a140-e93fa6b9281d
-description=This is my site
-id=f45c7c12-5190-4981-8b3f-acf3fb43f606

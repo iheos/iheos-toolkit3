@@ -1,5 +1,0 @@
-#
-#Thu Oct 16 14:04:50 EDT 2014
-displayName=Sim
-repositoryType=simpleRepos
-id=Sim

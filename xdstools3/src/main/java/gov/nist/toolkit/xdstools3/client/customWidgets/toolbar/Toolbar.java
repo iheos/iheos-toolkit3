@@ -14,12 +14,13 @@ import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.toolbar.RibbonBar;
 import gov.nist.toolkit.xdstools3.client.customWidgets.dialogs.PopupMessageV3;
 import gov.nist.toolkit.xdstools3.client.customWidgets.dialogs.loginDialog.LoginDialogWidget;
-import gov.nist.toolkit.xdstools3.client.eventBusUtils.OpenTabEvent;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
-import gov.nist.toolkit.xdstools3.client.util.Util;
+import gov.nist.toolkit.xdstools3.client.manager.Manager;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.util.eventBus.OpenTabEvent;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 // TODO put each session and env in a separate ribbonbar
 public class Toolbar extends RibbonBar {
@@ -28,6 +29,7 @@ public class Toolbar extends RibbonBar {
     private SelectItem envListBox;
     private ToolbarServiceAsync rpcService = GWT.create(ToolbarService.class);
     private LinkedHashMap<String, String> valueMap;
+    private String[] currentUserSessions;
 
 
     public Toolbar() {
@@ -56,6 +58,7 @@ public class Toolbar extends RibbonBar {
         sessionsComboBox.setShowTitle(false);
         sessionsComboBox.setWidth(603);
         sessionsComboBox.setOtherTitle("Enter a new session name...");
+        sessionsComboBox.setSelectOtherPrompt("Register a new session name:");
         sessionsComboBox.setTitle("Session");
 
         // load session data from server
@@ -115,22 +118,31 @@ public class Toolbar extends RibbonBar {
         sessionsComboBox.addChangedHandler(new ChangedHandler() {
             @Override
             public void onChanged(ChangedEvent changedEvent) {
+                // if the session name added by the user already exists, warn the user
+                if (convertArrayToList(currentUserSessions).contains((String) changedEvent.getValue())) {
+                    // TODO this should be refactored better later with creating a homemade popup
+                    // TODO that will warn the user
 
-                AsyncCallback<String[]> addSessionNameCallback = new AsyncCallback<String[]>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        //logger.debug(getClassName() + ": " + " sessionsComboBox.addChangedHandler");
-                        new PopupMessageV3(caught.getMessage());
-                    }
+                    // otherwise, proceed with adding the new session name
+                } else {
+                    AsyncCallback<String[]> addSessionNameCallback = new AsyncCallback<String[]>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            //logger.debug(getClassName() + ": " + " sessionsComboBox.addChangedHandler");
+                            new PopupMessageV3(caught.getMessage());
+                        }
 
-                    @Override
-                    public void onSuccess(String[] result) {
-                        sessionsComboBox.setValueMap(result);
-                    }
-                };
-                rpcService.addTestSession((String)changedEvent.getValue(), addSessionNameCallback);
+                        @Override
+                        public void onSuccess(String[] result) {
+                            currentUserSessions = result;
+                            sessionsComboBox.setValueMap(result);
+                        }
+                    };
+                    rpcService.addTestSession((String) changedEvent.getValue(), addSessionNameCallback);
+                }
             }
         });
+
 
         /**
          * Open Endpoint Tab
@@ -139,7 +151,7 @@ public class Toolbar extends RibbonBar {
             @Override
             public void onClick(ClickEvent event) {
                 // Display the Endpoint Settings tab
-                Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getEndpointsTabCode()));
+                Manager.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesManager.getInstance().getEndpointsTabCode()));
             }});
 
         /**
@@ -148,15 +160,9 @@ public class Toolbar extends RibbonBar {
         adminButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // if not logged in
-                if (!Util.getInstance().getLoggedAsAdminStatus()) {
                     // ask user to log in
-                    LoginDialogWidget dialog = new LoginDialogWidget(TabNamesUtil.getInstance().getAdminTabCode());
+                    LoginDialogWidget dialog = new LoginDialogWidget(TabNamesManager.getInstance().getAdminTabCode());
                     dialog.show();
-                } else {
-                    // Display the Admin Settings tab if logged in
-                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getAdminTabCode()));
-                }
             }
         });
 
@@ -183,7 +189,11 @@ public class Toolbar extends RibbonBar {
             }
             @Override
             public void onSuccess(String[] result) {
-                sessionsComboBox.setValueMap(result);
+                // If some user sessions exist, set the widget. Else do nothing, since the list can be empty.
+                if (result != null){
+                    currentUserSessions = result;
+                    sessionsComboBox.setValueMap(result);
+                }
             }
         };
         rpcService.retrieveTestSessions(sessionCallback);
@@ -275,4 +285,16 @@ public class Toolbar extends RibbonBar {
         return envResults;
     }
 
+    /**
+     * Utility function
+     * @param array
+     * @return
+     */
+    private List convertArrayToList(String[] array){
+        List l = new ArrayList();
+        for (int i=0; i<array.length; i++){
+            l.add(array[i]);
+        }
+        return l;
+    }
 }

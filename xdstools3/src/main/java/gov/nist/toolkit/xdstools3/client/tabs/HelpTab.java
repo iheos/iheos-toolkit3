@@ -3,7 +3,7 @@ package gov.nist.toolkit.xdstools3.client.tabs;
 
 import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.layout.VStack;
-import gov.nist.toolkit.xdstools3.client.util.TabNamesUtil;
+import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 public class HelpTab extends GenericCloseableTab {
 	static String header = "Help";
@@ -21,7 +21,7 @@ public class HelpTab extends GenericCloseableTab {
 
     @Override
     protected String setTabName() {
-        return TabNamesUtil.getInstance().getHelpTabCode();
+        return TabNamesManager.getInstance().getHelpTabCode();
     }
 
 

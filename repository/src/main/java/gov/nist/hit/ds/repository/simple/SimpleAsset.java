@@ -39,6 +39,7 @@ public class SimpleAsset implements Asset, Flushable {
 	transient RepositorySource source;
 	private transient File path;
 	private transient File contentPath = null;
+    private SimpleType assetType;
 
     /**
      * Creates a new instance of an asset only in memory, which is eventually intended towards flushing to disk.
@@ -304,18 +305,50 @@ public class SimpleAsset implements Asset, Flushable {
 
 
     /**
-     * Gets the asset domain type, as specified in the {@code types} folder in the repository source.
+     * Gets the partial asset domain type, as specified in the {@code types} folder in the repository source. This is partial because it does not provide all other type properties.
      * @return Type
      * @throws RepositoryException
      */
 	@Override
-	public Type getAssetType() throws RepositoryException {		
-		String type = getProperty(PropertyKey.ASSET_TYPE);
-		if (type != null) {
-			return new SimpleType(type);
+	public Type getAssetType() throws RepositoryException {
+
+        if (assetType!=null)
+            return assetType;
+
+		String typeStr = getProperty(PropertyKey.ASSET_TYPE);
+		if (typeStr != null) {
+			assetType = new SimpleType(typeStr);
+            return assetType;
 		} else
 			return null;
 	}
+
+    /**
+     *
+     * @return
+     * @throws RepositoryException
+     */
+    @Override
+    public Type getAssetTypeProperties() throws RepositoryException {
+
+        if (assetType!=null && assetType.getProperties()!=null)
+            return assetType;
+
+        try {
+            TypeIterator it;
+
+            it = new SimpleTypeIterator(this.getSource(), getAssetType(),SimpleType.ASSET);
+            if (it.hasNextType()) {
+                assetType = (SimpleType)it.nextType();
+                return assetType;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     /**
      * Gets the expiration date if available
@@ -1046,7 +1079,7 @@ public class SimpleAsset implements Asset, Flushable {
 								Type assetType = it.nextType();
 								String lifetime = assetType.getLifetime();
 								if (lifetime!=null) {
-										Integer days = Integer.parseInt(lifetime.substring(0,lifetime.indexOf(" days")));
+										Integer days = Integer.parseInt(lifetime.toLowerCase().substring(0, lifetime.indexOf(" days")));
 										if (days!=null) {
 											logger.fine("asset " + getPropFile() +  " lifetime: " + days);
 											if (getExpirationDate()==null) {

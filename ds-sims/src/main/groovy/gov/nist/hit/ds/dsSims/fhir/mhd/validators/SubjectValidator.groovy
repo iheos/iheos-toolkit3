@@ -45,11 +45,27 @@ class SubjectValidator  extends ValComponentBase {
     def mhdsub170() { subjectRefValues().each { assertStartsWith(it, '#') } }
 
     @Guard(methodNames=['subjectPresent'])
-    @Validation(id='mhdsub180', msg='subject references contained Patient', ref='')
+    @Validation(id='mhdsub180', msg='Subject references contained Patient', ref='')
     def mhdsub180() {
+        def containedPatients = containedPatients()
+        def patientReferences = subjectRefValues()
+
+        patientReferences.each { String ref ->
+            def label = ref.substring(1)
+            def referencedPatient = containedPatients.find { patient -> patient.@id.text() == label }
+            if (referencedPatient)
+                infoFound("Found ${referencedPatient.@id.text()}")
+            else
+                fail("No contained Patient resource found with id ${label}")
+        }
+    }
+
+    @Guard(methodNames=['subjectPresent'])
+    @Validation(id='mhdsub190', msg='Validate contained Patient resources', ref='')
+    def mhdsub190() {
         subjectTags().each {
             containedPatients(it).each { patient ->
-                new PatientIdentifierValidator(simHandle, patient.identifier).asSelf().run()
+                new PatientValidator(simHandle, patient).asSelf().run()
             }
         }
     }

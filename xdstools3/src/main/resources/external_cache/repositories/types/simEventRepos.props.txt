@@ -1,6 +1,0 @@
-# simEventRepository
-
-keyword=simEventRepos
-domain=repository
-description=Repository to hold simEvents
-indexes=off
