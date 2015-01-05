@@ -34,25 +34,6 @@ public class WaitPanel extends HTMLPane {
     public WaitPanel(String message){
         setWaitMessage(message);
         setHeight(42);
-        setStyleName("loading-invisible");
-    }
-
-    /**
-     * Method that changes the css of the widget to make it visible.
-     */
-    public void show(){
-//        DOM.setStyleAttribute(RootPanel.get("loading").getElement(),"display","block");
-        removeStyleName("loading-invisible");
-        setStyleName("loading-visible");
-    }
-
-    /**
-     * Method that changes the css of the widget to hide it.
-     */
-    public void hide(){
-//        DOM.setStyleAttribute(RootPanel.get("loading").getElement(),"display","none");
-        removeStyleName("loading-visible");
-        setStyleName("loading-visible");
     }
 
     /**
@@ -61,7 +42,6 @@ public class WaitPanel extends HTMLPane {
      * @param message custom wait message
      */
     public void setWaitMessage(String message){
-//        setContents("<div id='loading'><img src='images/icons/wait.gif' style='width:24px;'/> "+message+"</div>");
-        setContents("<img src='images/icons/wait.gif' style='width:24px;'/> "+message);
+        setContents("<div class='wait-message'><img src='images/icons/wait.gif' style='width:24px;'/> "+message+"</div>");
     }
 }

@@ -18,7 +18,6 @@ import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.ReportingLevelSelectWidget;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
@@ -49,7 +48,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
     private VLayout validationResultsPanel;
     private Button runBtn;
     private EventAggregatorWidget eventMessageAggregatorWidget;
-
+    private VLayout container;
     // Variables
     private String selectedMessageType;
 
@@ -67,7 +66,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
      */
     @Override
     protected Widget createContents() {
-        VLayout vStack=new VLayout();
+        container =new VLayout();
 
         // Message type transactions
         HeaderItem messageTypeLabel=new HeaderItem();
@@ -117,15 +116,16 @@ public class MHDValidatorTab extends GenericCloseableTab {
         setResultsPanel(validationResultsPanel);
 
         // Layout
-        vStack.addMember(form);
-        vStack.addMember(uploadForm);
-        vStack.addMember(runBtn);
-//        vStack.addMember(getWaitPanel());
-        vStack.setMinWidth(800);
+        container.addMember(form);
+        container.addMember(uploadForm);
+        container.addMember(runBtn);
+        container.addMember(waitPanel);
+        container.hideMember(waitPanel);
+        container.setMinWidth(800);
 
         bindUI();
 
-        return vStack;
+        return container;
     }
 
     /**
@@ -179,6 +179,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
             @Override
             public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
 //                waitPanel.show();
+                container.showMember(waitPanel);
                 // call for validation
                 validate();
             }
@@ -233,6 +234,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         eventMessageAggregatorWidget.setEventAssetNode(assetNode);
         validationResultsPanel.redraw();
 //        waitPanel.hide();
+        container.hideMember(waitPanel);
     }
 
 
