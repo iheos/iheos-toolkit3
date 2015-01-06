@@ -257,7 +257,7 @@ nav ul ul ul {
 .icon-link{
     border:0;
     text-decoration: none;
-    margin-bottom:5;
+    margin-bottom:5px;
 }
 .right-side-button{
     border:0;
@@ -279,8 +279,8 @@ nav ul ul ul {
     background: linear-gradient(to bottom,  #fbf9ff 0%,#f2f7ff 55%,#e5e8ff 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbf9ff', endColorstr='#e5e8ff',GradientType=0 ); /* IE6-9 */
     border-radius: 5px;
-    border: 1px solid #e5e8ff;
     box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
+    /* Setting the border inside the CSS does not work on this component, for some reason. Cf classes Toolbar.java and GenericRibbonGroup.java. */
 }
 
 /* Style of a RibbonGroup object inside the Toolbar */
@@ -297,6 +297,7 @@ nav ul ul ul {
 }
 .toolbarGroupTitle {
     background: #fbf9ff; /* Old browsers */
+  font-size: 12px;
 }
 
 /* Icons greyed out */
