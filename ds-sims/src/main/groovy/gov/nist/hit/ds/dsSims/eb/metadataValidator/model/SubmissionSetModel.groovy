@@ -173,7 +173,7 @@ public class SubmissionSetModel extends AbstractRegistryObjectModel  {
 	}
 
 	public String identifyingString() {
-		return "SubmissionSet(" + getId() + ")";
+		return "SubmissionSet-" + getId();
 	}
 
 

@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 
+import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.ExternalIdentifierModel
 import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
@@ -15,11 +16,13 @@ class ExternalIdentifierStructureValidator extends ValComponentBase {
     OMElement parentEle
     String parentEleId
     ExternalIdentifierModel ei
+    ValidationContext vc
 
-    ExternalIdentifierStructureValidator(SimHandle _simHandle, ExternalIdentifierModel _ei) {
+    ExternalIdentifierStructureValidator(SimHandle _simHandle, ValidationContext _vc, ExternalIdentifierModel _ei) {
         super(_simHandle.event)
         simHandle = _simHandle
         ei = _ei
+        vc = _vc
 
         parentEle = (OMElement) ei.ro.getParent();
         parentEleId = ((parentEle == null) ? "null" :

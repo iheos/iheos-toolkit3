@@ -23,54 +23,59 @@ public class SubmissionStructureValidator extends ValComponentBase {
 
     SubmissionStructureValidator(SimHandle _simHandle, ValidationContext _vc, Metadata _m, RegistryValidationInterface _rvi)  {
         super(_simHandle.event)
+        simHandle = _simHandle
         m = _m;
         vc = _vc
         rvi = _rvi;
     }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='rosubstr010', msg='Validate submission structure', ref='')
+    @Validation(id='rosubstr010', msg='RegistryPackage, DocumentEntry, Association object must have IDs', ref='ebRIM 2.4.1')
     def rosubstr010() {
-        if (vc.isSubmit() && vc.isRequest)
-            infoFound("This is a submission");
-        else
-            infoFound("This is not a submission")
-    }
+        infoFound('')
+        m.getExtrinsicObjects().each { doc ->
+            String id = doc.getAttributeValue(MetadataSupport.id_qname);
+            assertHasValue("${dots}ExtrinsicObject.id", id)
+        }
 
+        m.getRegistryPackages().each { rp ->
+            String id = rp.getAttributeValue(MetadataSupport.id_qname);
+            assertHasValue("${dots}RegistryPackage.id", id)
+        }
+        m.getAssociations().each { a ->
+            String id = a.getAttributeValue(MetadataSupport.id_qname);
+            assertHasValue("${dots}Association.id", id)
+        }
+    }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='rosubstr020', msg='SubmissionSet, DocumentEntry, Folder object must have IDs', ref='ebRIM 2.4.1')
+    @Validation(id='rosubstr020', msg='', ref='')
     def rosubstr020() {
-        List<OMElement> docs = m.getExtrinsicObjects();
-        List<OMElement> rps = m.getRegistryPackages();
-
-        for (int i=0; i<docs.size(); i++) {
-            OMElement doc = (OMElement) docs.get(i);
-            String id = doc.getAttributeValue(MetadataSupport.id_qname);
-            assertHasValue(id)
-        }
-
-        for (int i=0; i<rps.size(); i++) {
-            OMElement rp = (OMElement) rps.get(i);
-            String id = rp.getAttributeValue(MetadataSupport.id_qname);
-            assertHasValue(id)
-        }
+        if (vc.isSubmit() && vc.isRequest)
+            infoMsg("Validating as a submission");
+        else
+            infoMsg("Validating as a non-submission")
+        m.submissionSetIds.each { infoMsg("${dots}contains SubmissionSet(${it})") }
+        m.extrinsicObjectIds.each { infoMsg( "${dots}contains DocumentEntry(${it})") }
+        m.folderIds.each { infoMsg("${dots}contains Folder(${it})")}
+        m.associationIds.each { infoMsg("${dots}contains Association(${it})")}
     }
-
     boolean submission() { vc.isSubmit() && vc.isRequest }
 
     @Guard(methodNames=['submission'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='rosubstr030', msg='Has single SubmissionSet', ref='ITI TF-3: 4.1.4')
-    def rosubstr030() {
+    @Validation(id='rosubstr025', msg='Has single SubmissionSet', ref='ITI TF-3: 4.1.4')
+    def rosubstr025() {
         List<OMElement> ssEles = m.getSubmissionSets();
         if (ssEles.size() == 0) {
             fail("Submission does not contain a SubmissionSet")
         } else if (ssEles.size() > 1) {
             fail("Submission contains multiple SubmissionSets")
         } else
-            infoFound("SubmissionSet found");
+            success()
     }
+
+
 
     @Guard(methodNames=['submission'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
@@ -98,7 +103,8 @@ public class SubmissionStructureValidator extends ValComponentBase {
                             ": links a DocumentEntry to the SubmissionSet but does not have a " +
                             "SubmissionSetStatus Slot with value Original")
                     hasMemberError = true;
-                }
+                } else
+                    success()
             }
 
         }
@@ -110,15 +116,15 @@ public class SubmissionStructureValidator extends ValComponentBase {
     def rosubstr050() {
         List<OMElement> fols = m.getFolders();
 
-        for (int i=0; i<fols.size(); i++) {
-            OMElement fol = (OMElement) fols.get(i);
-
+        boolean ok = true
+        m.getFolders().each { fol ->
             if ( !has_assoc(m.getSubmissionSetId(), assoc_type("HasMember"), m.getId(fol))) {
                 fail("Folder " + m.getId(fol) + " is not linked to the SubmissionSet with a " + assoc_type("HasMember") + " Association")
                 hasMemberError = true;
+                ok = false
             }
-
         }
+        if (ok) success()
     }
 
     @Guard(methodNames=['submission'])
@@ -127,6 +133,7 @@ public class SubmissionStructureValidator extends ValComponentBase {
     def rosubstr060() {
         List<OMElement> assocs = m.getAssociations();
 
+        boolean ok = true
         for (int i=0; i<assocs.size(); i++) {
             OMElement assoc = (OMElement) assocs.get(i);
             String target = assoc.getAttributeValue(MetadataSupport.target_object_qname);
@@ -136,34 +143,41 @@ public class SubmissionStructureValidator extends ValComponentBase {
             if (target == null || source == null || type == null)
                 continue;
 
-            if (!isUUID(source) && !submissionContains(source))
+            if (!isUUID(source) && !submissionContains(source)) {
                 fail(objectDescription(assoc) + ": sourceObject has value " + source +
                         " which is not in the submission but cannot be in registry since it is not in UUID format")
+                ok = false
+            }
 
-            if (!isUUID(target) && !submissionContains(target))
+            if (!isUUID(target) && !submissionContains(target)) {
                 fail(objectDescription(assoc) + ": targetObject has value " + target +
                         " which is not in the submission but cannot be in registry since it is not in UUID format")
+                ok = false
+            }
         }
+        if (ok) success()
     }
 
     @Guard(methodNames=['submission'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='rosubstr070', msg='Verify Association types', ref=['ITI TF-3: 4.1.12.3', 'ITI TF-3: 4.1.6.1'])
     def rosubstr070() {
+        infoFound('')
+        boolean ok = true
         for (OMElement assoc : m.getAssociations()) {
             String type = m.getAssocType(assoc)
             if (type == null)
                 continue
             type = simpleAssocType(type)
             if (type.equals("HasMember")) {
-                evalHasMember(assoc)
-            } else if(relationships.contains(type)) {
-                evalRelationship(assoc)
+                ok = evalHasMember(assoc) && ok
+            } else if (relationships.contains(type)) {
+                ok = evalRelationship(assoc) && ok
             } else if (type.equals("signs")) {
-                evalSigns(assoc)
+                ok = evalSigns(assoc) && ok
             }
-
         }
+        if (ok) assertTrue(true, "${dots}Association types ok")
     }
 
     @Guard(methodNames=['submission'])
@@ -538,55 +552,63 @@ public class SubmissionStructureValidator extends ValComponentBase {
 
     String assocsRef = "ITI Tf-3: 4.1";
 
-    void evalHasMember(OMElement assoc) {
+    boolean evalHasMember(OMElement assoc) {
         String source = m.getAssocSource(assoc);
         String target = m.getAssocTarget(assoc);
         String type = m.getAssocType(assoc);
 
         if (source == null || target == null || type == null)
-            return;
+            return true;
 
         if (is_ss_to_de_hasmember(assoc)) {
-            infoFound(assocDescription(assoc) + ": is a SubmissionSet to DocmentEntry HasMember association")
+            infoMsg(dots + assocDescription(assoc) + " is a SubmissionSet to DocmentEntry HasMember association")
         } else if (is_ss_to_existing_de_hasmember(assoc)) {
-            infoFound(assocDescription(assoc) + ": is a SubmissionSet to existing DocmentEntry HasMember (ByReference) association");
+            infoMsg(dots + assocDescription(assoc) + " is a SubmissionSet to existing DocmentEntry HasMember (ByReference) association");
         } else if (is_ss_to_folder_hasmember(assoc)) {
-            infoFound(assocDescription(assoc) + ": is a SubmissionSet to Folder HasMember association");
+            infoMsg(dots + assocDescription(assoc) + " is a SubmissionSet to Folder HasMember association");
         } else if (is_ss_to_folder_hasmember_hasmember(assoc)) {
-            infoFound(assocDescription(assoc) + ": is a SubmissionSet to Folder-HasMember HasMember association (adds existing DocumentEntry to existing Folder)");
+            infoMsg(dots + assocDescription(assoc) + " is a SubmissionSet to Folder-HasMember HasMember association (adds existing DocumentEntry to existing Folder)");
         } else if (is_fol_to_de_hasmember(assoc)) {
-            infoFound(assocDescription(assoc) + ": is a Folder to DocumentEntry HasMember association");
+            infoMsg(dots + assocDescription(assoc) + " is a Folder to DocumentEntry HasMember association");
         } else {
-            fail(assocDescription(assoc) + ": do not understand this HasMember association. " +
-                    "sourceObject is " + objectDescription(source) +
-                    " and targetObject is " + objectDescription(target))
+            fail(dots + assocDescription(assoc) + " do not understand this HasMember association:")
+            fail(dots + dots + "sourceObject is " + objectDescription(source))
+            fail(dots + dots + " and targetObject is " + objectDescription(target))
             hasMemberError = true;
+            return false
         }
+        return true
     }
 
     // ITI TF-3: 4.1.6.1
-    void evalRelationship(OMElement assoc) {
+    boolean evalRelationship(OMElement assoc) {
         String source = m.getAssocSource(assoc);
         String target = m.getAssocTarget(assoc);
         String type = m.getAssocType(assoc);
 
         if (source == null || target == null || type == null)
-            return;
+            return true;
 
-        if (!isDocumentEntry(source))
-            fail(objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in submission with its sourceObject attribute, it references " + objectDescription(source))
+        boolean ok = true
+        if (!isDocumentEntry(source)) {
+            fail(dots + objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in submission with its sourceObject attribute, it references " + objectDescription(source))
+            ok = false
+        }
 
         if (containsObject(target)) {
-            fail(objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectDescription(target) + " which is in the submission")
+            fail(dots + objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectDescription(target) + " which is in the submission")
+            ok = false
         }
 
         if (!isUUID(target)) {
-            fail(objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectDescription(target) + " which is a symbolic ID that cannot reference an object in the registry")
+            fail(dots + objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectDescription(target) + " which is a symbolic ID that cannot reference an object in the registry")
+            ok = false
         }
+        return ok
     }
 
-    void evalSigns(OMElement assoc) {
-
+    boolean evalSigns(OMElement assoc) {
+        return true
     }
 
     static List<String> relationships =

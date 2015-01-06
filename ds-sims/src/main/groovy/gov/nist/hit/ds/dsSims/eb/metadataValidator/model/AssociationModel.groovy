@@ -63,8 +63,14 @@ public class AssociationModel extends AbstractRegistryObjectModel {
 		if (type == null) type = "";
 	}
 
+    String getSimpleType() {
+        String[] parts = type.split(':')
+        if (!parts || parts.size() == 0) return type
+        return parts[parts.size()-1]
+    }
+
 	public String identifyingString() {
-		return "Association(" + getId() + ", " + type + ")";
+		return "Association-${simpleType}-${getId()}"
 	}
 
 	public boolean equals(AssociationModel a) {

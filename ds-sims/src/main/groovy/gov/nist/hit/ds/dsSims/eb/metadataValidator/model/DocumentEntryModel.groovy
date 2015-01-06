@@ -213,7 +213,7 @@ public class DocumentEntryModel extends AbstractRegistryObjectModel {
 	}
 
 	public String identifyingString() {
-		return "DocumentEntry(" + getId() + ")";
+		return "DocumentEntry-" + getId();
 	}
 	
 	public boolean isMetadataLimited() {

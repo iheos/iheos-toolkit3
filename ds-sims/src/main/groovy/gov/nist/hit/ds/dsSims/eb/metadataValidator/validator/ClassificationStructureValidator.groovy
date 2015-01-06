@@ -2,6 +2,7 @@ package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.ClassificationModel
+import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase

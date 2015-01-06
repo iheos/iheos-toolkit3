@@ -13,7 +13,6 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
  */
 public class FolderValidator extends AbstractRegistryObjectVal {
     FolderModel model
-    SimHandle simHandle
     ValidationContext vc
     Set<String> knownIds
 

@@ -5,19 +5,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Environment {
-	File environmentDir;
+	String name;
+    File environmentsFile;
 	
-	public Environment(File environmentDir) {
-		this.environmentDir = environmentDir;
+	public Environment(File environmentsFile, String name) {
+        this.name = name;
+        this.environmentsFile = environmentsFile;
 	}
+
+    File environmentDir() { return new File(environmentsFile, name); }
+
+    public File getCodesFile() {
+        return new File(environmentDir(), "codes.xml");
+    }
+
+    public String getName() { return name; }
+
 	
 	/**
-	 * Get names of all installed Environments.
+	 * Get names of all installed Environments. Should be called only
+     * through Toolkit()
 	 * @return
 	 */
-	public List<String> getInstalledEnvironments() {
+	static public List<String> getInstalledEnvironments(File environmentsFile) {
 		List<String> envs = new ArrayList<String>();
-		File[] files = environmentDir.listFiles();
+		File[] files = environmentsFile.listFiles();
 		if (files == null)
 			return envs;
 		for (int i=0; i<files.length; i++) {
@@ -28,7 +40,4 @@ public class Environment {
 		return envs;
 	}
 	
-	public File getCodesFile(String environmentName) {
-		return new File(environmentDir, environmentName);
-	}
 }

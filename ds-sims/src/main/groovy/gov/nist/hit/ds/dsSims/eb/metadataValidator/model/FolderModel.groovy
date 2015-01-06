@@ -110,7 +110,7 @@ public class FolderModel extends AbstractRegistryObjectModel {
 	static public String table417 = "ITI TF-3: Table 4.1-7";
 
 	public String identifyingString() {
-		return "Folder(" + getId() + ")";	
+		return "Folder-" + getId();
 	}
 
 	public OMElement toXml() throws XdsInternalException {

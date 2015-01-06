@@ -14,7 +14,6 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
  */
 public class SubmissionSetValidator extends AbstractRegistryObjectVal {
     SubmissionSetModel model
-    SimHandle simHandle
     ValidationContext vc
     Set<String> knownIds
 

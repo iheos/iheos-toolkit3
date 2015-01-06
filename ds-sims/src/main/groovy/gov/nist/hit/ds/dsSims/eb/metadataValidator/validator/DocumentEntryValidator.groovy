@@ -3,6 +3,7 @@ import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.*
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.DocumentEntryModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.SlotModel
+import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ErrorCode
@@ -14,7 +15,6 @@ import gov.nist.hit.ds.xdsException.MetadataException
  */
 public class DocumentEntryValidator extends AbstractRegistryObjectVal {
     public DocumentEntryModel model;
-    SimHandle simHandle
     ValidationContext vc
     Set<String> knownIds
 

@@ -20,11 +20,13 @@ public abstract class AbstractFormatValidator extends ValComponentBase {
 	
 	def validate(String input)  {
         value = input
+        asSelf(this)
         run()
     }
 
 	def validate(OMElement input) {
         value_ele = input
+        asSelf(this)
         run()
     }
 }

@@ -5,12 +5,11 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.ErrorCode
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 
 public class UuidFormatValidator extends AbstractFormatValidator {
-    SimHandle simHandle
 
     String formatName() { return 'UUID' }
 
     public UuidFormatValidator(SimHandle _simHandle) {
-        super(_simHandle.event)
+        super(_simHandle, '')
         simHandle = _simHandle
     }
 

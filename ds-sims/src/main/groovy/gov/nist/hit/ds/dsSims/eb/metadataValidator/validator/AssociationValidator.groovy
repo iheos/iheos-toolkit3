@@ -17,7 +17,6 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
  */
 public class AssociationValidator extends AbstractRegistryObjectVal  {
     public AssociationModel model;
-    SimHandle simHandle
     ValidationContext vc
     Set<String> knownIds
 

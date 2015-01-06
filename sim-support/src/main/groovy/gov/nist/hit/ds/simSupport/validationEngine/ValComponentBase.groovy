@@ -33,6 +33,7 @@ public abstract class ValComponentBase implements ValComponent {
     String name;
     String description;
     ValidationEngine validationEngine;
+    String dots = '...'
 
     enum Relation { NONE, PEER, CHILD, SELF}
     Relation parentRelation = Relation.PEER
@@ -132,6 +133,12 @@ public abstract class ValComponentBase implements ValComponent {
      *
      */
 
+    public boolean infoMsg(String msg) throws SoapFaultException {
+        Assertion a = ag.infoMsg(msg);
+        recordAssertion(a);
+        return true;
+    }
+
     public boolean infoFound(boolean found) throws SoapFaultException {
         Assertion a = ag.infoFound(found);
         recordAssertion(a);
@@ -203,7 +210,14 @@ public abstract class ValComponentBase implements ValComponent {
     }
 
     public Assertion assertHasValue(String value) throws SoapFaultException {
-        Assertion a = ag.assertHasValue(value, currentValidationMethod().required);
+        Assertion a = ag.assertHasValue('', value, currentValidationMethod().required);
+        log.debug("Assertion: ${a}")
+        recordAssertion(a);
+        return a
+    }
+
+    public Assertion assertHasValue(String msg, String value) throws SoapFaultException {
+        Assertion a = ag.assertHasValue(msg, value, currentValidationMethod().required);
         log.debug("Assertion: ${a}")
         recordAssertion(a);
         return a
@@ -216,7 +230,7 @@ public abstract class ValComponentBase implements ValComponent {
         return a
     }
 
-    public Assertion assertTrue(boolean value) throws SoapFaultException {
+    public Assertion assertTrue(value) throws SoapFaultException {
         Assertion a = ag.assertTrue(value, currentValidationMethod().required);
         recordAssertion(a);
         return a
@@ -227,6 +241,8 @@ public abstract class ValComponentBase implements ValComponent {
         recordAssertion(a);
         return a
     }
+
+    public Assertion success() throws SoapFaultException { assertTrue(true, '') }
 
     public Assertion assertMoreThan(int reference, int value) throws SoapFaultException {
         Assertion a = ag.assertMoreThan(reference, value, currentValidationMethod().required);
@@ -240,7 +256,7 @@ public abstract class ValComponentBase implements ValComponent {
         return true;
     }
 
-    public Assertion assertFalse(boolean value) throws SoapFaultException {
+    public Assertion assertFalse(def value) throws SoapFaultException {
         Assertion a = ag.assertTrue(!value, currentValidationMethod().required);
         recordAssertion(a);
         return a
@@ -371,9 +387,10 @@ public abstract class ValComponentBase implements ValComponent {
             a.setRequiredOptional(RequiredOptional.O)
         a.setId(id);
         def msgPrefix = []
-        level.times { msgPrefix << '...'}
+        level.times { msgPrefix << dots}
         msgPrefix = msgPrefix.join()
-        a.setMsg(msgPrefix + vf.msg());
+        if (!a.msg)
+            a.msg = msgPrefix + vf.msg();
         a.setReference(vf.ref());
         if (a.getStatus().isError())
             a.setCode(currentValidationMethod().errorCode)

@@ -159,6 +159,9 @@ class Event {
         return allAssetionGroups.find { it.validatorName == validatorName }
     }
     def getAssertions(id) { resultsStack.getAssertions(id)}
+    def getErrorAssertionIds() {
+        allAssetionGroups.collect { it.errorAssertionIds() }.flatten()
+    }
 
     int nextDisplayOrder() { displayOrder++ }
 

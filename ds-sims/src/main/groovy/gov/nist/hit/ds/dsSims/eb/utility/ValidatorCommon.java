@@ -200,7 +200,7 @@ public class ValidatorCommon implements ErrorRecorder {
 		String part2 = parts[1];
 		part2 = part2.replaceAll("&amp;", "&");
 		String[] partsa = part2.split("&");
-		if (partsa.length != 3) 
+		if (partsa.length != 3 || !part2.endsWith("ISO"))
 			return "Expected &OID&ISO after ^^^ in CX data type";
 		if (partsa[0].length() != 0)
 			return "Expected &OID&ISO after ^^^ in CX data type";

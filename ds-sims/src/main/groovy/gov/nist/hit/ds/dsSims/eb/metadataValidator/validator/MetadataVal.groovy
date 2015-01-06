@@ -5,31 +5,34 @@ import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.MetadataModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.parser.MetadataParser
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.toolkit.environment.Environment
 
 public class MetadataVal {
 	Metadata m
 	ValidationContext vc
     SimHandle simHandle
+    Environment environment
 
 	RegistryValidationInterface rvi
     MetadataModel model
 
-	public MetadataVal(SimHandle _simHandle, Metadata _m, ValidationContext _vc, RegistryValidationInterface _rvi) {
+	public MetadataVal(SimHandle _simHandle, Metadata _m, ValidationContext _vc, Environment _environment, RegistryValidationInterface _rvi) {
         simHandle = _simHandle
 		m = _m
 		vc = _vc
 		rvi = _rvi
+        environment = _environment
 	}
 	
 	public void run() {
         model = new MetadataParser().run(m, vc)
+        runSubmissionStructureValidation()
 		runObjectStructureValidation()
 		runCodeValidation()
-		runSubmissionStructureValidation()
 	}
 	
 	public void runCodeValidation()   {
-		CodeValidation cv = new CodeValidation(m);
+		CodeValidation cv = new CodeValidation(m, environment);
 		cv.setValidationContext(vc);
 		cv.run();
 	}
@@ -43,17 +46,34 @@ public class MetadataVal {
         // to check uniqueness of the id attribute.
         // TODO - model.knownIds needs expansion to validate uniqueness of uniqueIds.
 		
-        model.submissionSets.each { new SubmissionSetValidator(simHandle, it, vc, model.knownIds).asChild().run() }
+        model.submissionSets.each {
+            SubmissionSetValidator val = new SubmissionSetValidator(simHandle, it, vc, model.knownIds)
+            val.name = it.identifyingString()
+            val.asPeer().run()
+        }
 
-        model.docEntries.each { new DocumentEntryValidator(simHandle, it, vc, model.knownIds).asChild().run() }
+        model.docEntries.each {
+            def val = new DocumentEntryValidator(simHandle, it, vc, model.knownIds)
+            val.name =  it.identifyingString()
+            val.asPeer().run()
+        }
 
-        model.folders.each { new FolderValidator(simHandle, it, vc, model.knownIds).asChild().run() }
+        model.folders.each {
+            def val = new FolderValidator(simHandle, it, vc, model.knownIds)
+            val.name =  it.identifyingString()
+            val.asPeer().run()
+        }
 
-        model.assocs.each { new AssociationValidator(simHandle, it, vc, model.knownIds).asChild().run() }
+        model.assocs.each {
+            def val = new AssociationValidator(simHandle, it, vc, model.knownIds)
+            val.name =  it.identifyingString()
+            val.asPeer().run() }
 	}
 
 	public void runSubmissionStructureValidation() {
-		new SubmissionStructureValidator(simHandle, vc, m, rvi).asChild().run();
+		def val = new SubmissionStructureValidator(simHandle, vc, m, rvi)
+        val.name = 'SubmissionStructure'
+        val.asPeer().run();
 	}
 	
 

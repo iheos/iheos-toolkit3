@@ -1,25 +1,21 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator;
 
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext;
+import gov.nist.hit.ds.dsSims.eb.metadataValidator.factory.CodesFactory;
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.ClassificationModel;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
+import gov.nist.hit.ds.toolkit.environment.Environment;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.http.httpclient.HttpClient;
-import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.toolkit.utilities.xml.Util;
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
 
 import javax.xml.namespace.QName;
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.*;
 
 public class CodeValidationBase {
@@ -30,78 +26,21 @@ public class CodeValidationBase {
 	HashMap<String, String> ext_map;   // ext => mime
 	Exception startUpError = null;
 	ValidationContext vc = null;
+    Environment environment;
 	
 	static String ADConfigError = "ITI TF-3: 4.1.10";
 	static Logger logger = Logger.getLogger(CodeValidationBase.class);
 
 
-	CodeValidationBase() {}
-	
-	CodeValidationBase(int ignore) throws XdsInternalException {
-		loadCodes();
-	}
-	
-	public void setValidationContext(ValidationContext vc) throws XdsInternalException {
+	CodeValidationBase(Environment _environment) { environment = _environment; }
+
+	public void setValidationContext(ValidationContext vc) {
 		this.vc = vc;
-		loadCodes();
+		loadCodes(environment);
 	}
-	
-	void loadCodes() throws XdsInternalException {
-		if (codes != null)
-			return;
-		System.out.println("Loading Codes");
-		String fileCodesLocation = null;
-		
-		if (vc != null)
-			fileCodesLocation = vc.getCodesFilename();
-		if (fileCodesLocation == null)
-			fileCodesLocation = System.getenv("XDSCodesFile");
-		if (fileCodesLocation == null)
-			fileCodesLocation = System.getProperty("XDSCodesFile");
-		
-		String localCodesLocation = "http://localhost:9080/xdsref/codes/codes.xml";
-		String globalCodesLocation = "http://ihexds.nist.gov:9080/xdsref/codes/codes.xml";
-		
-		String codes_string = null;
-		String from = null;
 
-		if (fileCodesLocation != null) {
-			try {
-				codes_string = Io.getStringFromInputStream(new FileInputStream(new File(fileCodesLocation)));
-				from = fileCodesLocation;
-			}
-			catch (Exception e) {
-				throw new XdsInternalException("codes.xml file cannot be loaded from " + fileCodesLocation, e);
-			}
-		}
-		else {
-
-			try {
-				codes_string = HttpClient.httpGet(localCodesLocation);
-				from = localCodesLocation;
-			}
-			catch (Exception e1) {
-				logger.warn("Cannot contact localhost: " + ExceptionUtil.exception_details(e1));
-				try {
-					codes_string = HttpClient.httpGet(globalCodesLocation);
-					from = globalCodesLocation;
-				}
-				catch (Exception e) {
-					throw new XdsInternalException("CodeValidation: Unable to retrieve code configuration file " + globalCodesLocation +
-							"\n" + e.getMessage());
-				}
-			}
-		}
-		if (codes_string == null) 
-			throw new XdsInternalException("CodeValidation.init(): GET codes.xml returned NULL from " + from);
-		if (codes_string.equals("")) 
-			throw new XdsInternalException("CodeValidation.init(): GET codes.xml returned enpty from " + from);
-
-		logger.info("Codes loaded from " + from);
-		
-		codes = Util.parse_xml(codes_string);
-		if (codes == null)
-			throw new XdsInternalException("CodeValidation: cannot parse code configuration file from " + from);
+    void loadCodes(Environment environment) {
+        codes = CodesFactory.getCodes(environment);
 
 		assigning_authorities = new ArrayList<String>();
 		for (OMElement aa_ele : XmlUtil.childrenWithLocalName(codes, "AssigningAuthority"))
@@ -112,7 +51,7 @@ public class CodeValidationBase {
 		build_mime_map();
 	}
 
-	void build_mime_map() throws XdsInternalException {
+	void build_mime_map()  {
 		QName name_att_qname = new QName("name");
 		QName code_att_qname = new QName("code");
 		QName ext_att_qname = new QName("ext");
@@ -125,7 +64,7 @@ public class CodeValidationBase {
 				break;
 			}
 		}
-		if (mime_type_section == null) throw new XdsInternalException("CodeValidation2.java: Configuration Error: Cannot find mime type table");
+		if (mime_type_section == null) throw new ToolkitRuntimeException("CodeValidation2.java: Configuration Error: Cannot find mime type table");
 
 		mime_map = new HashMap<String, String>();
 		ext_map = new HashMap<String, String>();
@@ -140,15 +79,6 @@ public class CodeValidationBase {
 		}
 	}
 
-	public List<String> getAssigningAuthorities() {
-		try {
-			loadCodes();
-		} catch (Exception e) {
-			System.out.println("loading codes: " + e.getMessage());
-		}
-		return assigning_authorities;
-	}
-	
 	String[] assocClassifications = { 
 			"XFRM", "APND", "RPLC", "XFRM_RPLC"
 	};

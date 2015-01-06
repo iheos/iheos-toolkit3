@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.toolkit.installation;
 
+import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.string.StringUtil;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
@@ -98,23 +99,15 @@ public class Installation {
 	void initializeExternalCache(File externalCache) throws InitializationFailedException {
 		this.externalCache = externalCache;
 		logger.info("Initializing external cache to <" + externalCache + "> ");
-//		try {
-			File f = externalCache; 
+			File f = externalCache;
 			if (f.exists()) {
 				if (!f.isDirectory()) throw new InitializationFailedException("External Cache location <" + f + "> is not a directory");
 				if (!f.canWrite()) throw new InitializationFailedException("External Cache location <" + f + "> is not writable");
 			} else {
 				throw new InitializationFailedException("External Cache directory <" + externalCache + "> does not exist; it is specified by the following toolkit.properties file: <" + getToolkitPropertiesFile().toString() + ">. If the application is running in a development environment, please edit the toolkit.properties file in the src/main/resources instead of the path shown in the previous statement.");
 			}
-			ExternalCacheManager ecMgr = new ExternalCacheManager(f);
-			initializeRepository(ecMgr);
-//			initializeTkProps(ecMgr);
-			initializeEnvironments(ecMgr);
-			initializeSimDb(ecMgr);
-			initializeActors(ecMgr);
-//		} catch (IOException e) {
-//			throw new InitializationFailedException("",e);
-//		}
+			initializeRepository();
+			initializeEnvironments();
 	}
 
 
@@ -196,34 +189,14 @@ public class Installation {
 		}
 	}
 
-	void initializeRepository(ExternalCacheManager ecMgr) {
-		File r = ecMgr.getRepositoryFile();
+	void initializeRepository() {
+		File r = Toolkit.externalRepositoryFile();
 		if (!r.exists()) r.mkdir();
 	}
 
-//	void initializeTkProps(ExternalCacheManager ecMgr) throws IOException, InitializationFailedException {
-//		File r = ecMgr.getTkPropsFile();
-//		if (!r.exists())
-//			r.createNewFile();
-//		tkProps = TkLoader.tkProps(ecMgr.getTkPropsFile());
-//	}
-
-	void initializeEnvironments(ExternalCacheManager ecMgr) {
-		File e = ecMgr.getEnvironmentFile();
+	void initializeEnvironments() {
+		File e = Toolkit.environmentsFile();
 		if (!e.exists()) e.mkdir();
-	}
-
-	void initializeSimDb(ExternalCacheManager ecMgr) {
-		File e = ecMgr.getSimDbFile();
-		if (!e.exists()) e.mkdir();
-	}
-
-	void initializeActors(ExternalCacheManager ecMgr) {
-
-	}
-
-	public File getRepositoryRoot() {
-		return getExternalCacheManager().getRepositoryFile();
 	}
 
 	public PropertyManager getPropertyManager() {
@@ -239,21 +212,6 @@ public class Installation {
 		if (propertyServiceMgr == null)
 			propertyServiceMgr = new PropertyServiceManager();
 		return propertyServiceMgr;
-	}
-
-	public File simDbFile()  {
-		return propertyServiceManager().getSimDbDir();
-	}
-
-	ExternalCacheManager getExternalCacheManager() {
-		return new ExternalCacheManager(externalCache);
-	}
-
-	public File getDefaultCodesFile() throws IOException {
-		File envFile =  getExternalCacheManager().getEnvironmentFile();
-		String defaultEnvName = getPropertyManager().getPropertyMap().get(PropertyServiceManager.DEFAULT_ENVIRONMENT);
-		File env = new File(envFile,defaultEnvName);
-		return new File(env, "codes.xml");
 	}
 
 	public File getExternalCache() {

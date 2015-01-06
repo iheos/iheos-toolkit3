@@ -167,6 +167,8 @@ public class Toolkit {
     static public String getDefaultEnvironmentName() { return propertyManager.getDefaultEnvironmentName(); }
     static public String getEnableAllCiphers() { return propertyManager.getToolkitEnableAllCiphers(); }
     static public void saveProperties(File file) { propertyManager.saveProperties(file);}
+
+    // Environments
     static public String getCurrentEnvironmentName() { return propertyManager.getCurrentEnvironmentName(); }
     static public void setCurrentEnvironmentName(String name) {
         try {
@@ -176,16 +178,19 @@ public class Toolkit {
             throw new RuntimeException(e);
         }
     }
-    static public List<String> getEnvironmentNames() { return new Environment(new File(externalCacheFile(), "environment")).getInstalledEnvironments();}
+    static public File environmentsFile() { return new File(externalCacheFile(), "environment"); }
+    static public List<String> getEnvironmentNames() { return Environment.getInstalledEnvironments(environmentsFile()); }
+    static public Environment getEnvironment(String name) {  return new Environment(environmentsFile(), name); }
 
-    // Manage user sessions
+    // User sessions
     static public List<String> getUserSessions() { return new UserSession(externalCacheFile()).names(); }
     static public void addUserSession(String name) { new UserSession(externalCacheFile()).add(name); }
     static public void deleteUserSession(String name) { new UserSession(externalCacheFile()).delete(name); }
 
 
-    // Manage repository types
-    static public File externalRepositoriesTypesFile() { return new File(new File(externalCacheFile(), "repositories"), "types"); }
+    // Repository
+    static public File externalRepositoryFile() { return new File(externalCacheFile(), "repositories"); }
+    static public File externalRepositoriesTypesFile() { return new File(externalRepositoryFile(), "types"); }
     static public File internalRepositoriesTypesFile() { return new File(new File(toolkitxFile(), "repositories"), "types"); }
 
 }

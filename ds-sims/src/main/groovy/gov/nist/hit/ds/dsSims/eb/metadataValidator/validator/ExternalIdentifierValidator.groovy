@@ -5,6 +5,7 @@ import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.OidFormatValidator
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.AbstractRegistryObjectModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.ClassAndIdDescription
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.ExternalIdentifierModel
+import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
@@ -56,7 +57,7 @@ class ExternalIdentifierValidator extends ValComponentBase {
         for (ExternalIdentifierModel ei : model.getExternalIdentifiers()) {
             String idScheme = ei.identificationScheme
             infoFound("Identifier Scheme ${idScheme} found (${ei.identifyingString()})")
-            new ExternalIdentifierStructureValidator(simHandle, ei).asSelf(this).run()
+            new ExternalIdentifierStructureValidator(simHandle, vc, ei).asSelf(this).run()
         }
     }
 
@@ -66,13 +67,13 @@ class ExternalIdentifierValidator extends ValComponentBase {
         for (ExternalIdentifierModel ei : model.getExternalIdentifiers()) {
             if (MetadataSupport.XDSDocumentEntry_uniqueid_uuid.equals(ei.getIdentificationScheme())) {
                 String[] parts = ei.getValue().split('^');
-                new OidFormatValidator(simHandle, model.identifyingString() + ": " + ei.identifyingString() + " : " + model.externalIdentifierDescription(desc, ei.getIdentificationScheme()), parts[0]).asSelf(this).run()
+                new OidFormatValidator(simHandle, model.identifyingString() + ": " + ei.identifyingString() + " : " + model.externalIdentifierDescription(desc, ei.getIdentificationScheme())).validate(parts[0])
                 infoFound("OID part of DocumentEntry uniqueID is limited to 64 digits")
                 assertFalse(parts[0].length() > 64)
                 infoFound("Extension part of DocumentEntry uniqueID is limited to 16 characters")
                 assertFalse(parts.length > 1 && parts[1].length() > 16)
             } else if (MetadataSupport.XDSDocumentEntry_patientid_uuid.equals(ei.getIdentificationScheme())){
-                new CxFormatValidator(simHandle, model.identifyingString() + ": " + ei.identifyingString(), ei.getValue()).asSelf(this).run()
+                new CxFormatValidator(simHandle, model.identifyingString() + ": " + ei.identifyingString()).validate(ei.getValue())
             }
         }
     }

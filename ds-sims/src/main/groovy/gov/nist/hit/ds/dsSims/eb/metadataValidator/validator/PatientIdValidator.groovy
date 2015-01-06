@@ -16,6 +16,7 @@ public class PatientIdValidator extends ValComponentBase {
 
     public PatientIdValidator(SimHandle _simHandle, Metadata _m) {
         super(_simHandle.event)
+        simHandle = _simHandle
         m = _m;
     }
 

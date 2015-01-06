@@ -6,21 +6,17 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.ErrorCode
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 
 public class OidFormatValidator extends AbstractFormatValidator {
-    SimHandle simHandle
-    String attName
 
     String formatName() { return 'OID' }
 
     public OidFormatValidator(SimHandle _simHandle, String _attName) {
-		super(_simHandle.event)
-        simHandle = _simHandle
-        attName = _attName
+		super(_simHandle, _attName)
 	}
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='rooid010', msg='Verify OID format', ref='')
 	def rooid010() {
-        infoFound("${attName} is ${value}")
+        infoFound("${context} is ${value}")
         assertTrue(ValidatorCommon.is_oid(value, true))
 	}
 
