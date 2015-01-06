@@ -70,7 +70,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
         // Message type transactions
         HeaderItem messageTypeLabel=new HeaderItem();
-        messageTypeLabel.setDefaultValue("1. Select the type of MHD message to validate:");
+        messageTypeLabel.setDefaultValue("1. Select the type of MHD message to validate");
         messageTypeSelect = new SelectItem();
         messageTypeSelect.setShowTitle(false);
         messageTypeSelect.setType("comboBox");
@@ -81,7 +81,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
         // Uploader
         HeaderItem uploadLabel=new HeaderItem();
-        uploadLabel.setDefaultValue("2. Upload file to validate");
+        uploadLabel.setDefaultValue("2. Upload file");
         uploadForm = new FormPanel();
         uploadForm.setHeight("40px");
         uploadForm.setMethod(FormPanel.METHOD_POST);
