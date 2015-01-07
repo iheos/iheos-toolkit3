@@ -282,7 +282,7 @@ public class CsvTableFactory {
 
 
         pager.getElement().getStyle().setPosition(Style.Position.RELATIVE);
-        pager.getElement().getStyle().setMarginLeft(42, Style.Unit.PCT);
+        pager.getElement().getStyle().setMarginLeft(1, Style.Unit.PCT);
         pager.getElement().getStyle().setBackgroundColor("lavender");
 
         return pager;

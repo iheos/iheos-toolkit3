@@ -1,22 +1,34 @@
 package gov.nist.hit.ds.repository.ui.client.widgets;
 
+import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.DefaultCellTableBuilder;
 import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -34,6 +46,8 @@ import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 import gov.nist.hit.ds.repository.ui.client.CsvTableFactory;
 import gov.nist.hit.ds.repository.ui.client.event.asset.InContextAssetClickedEvent;
 import gov.nist.hit.ds.repository.ui.client.event.asset.OutOfContextAssetClickedEvent;
+import gov.nist.hit.ds.repository.ui.client.event.reportingLevel.ReportingLevelUpdatedEvent;
+import gov.nist.hit.ds.repository.ui.client.event.reportingLevel.ReportingLevelUpdatedEventHandler;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -67,7 +81,29 @@ public class EventAggregatorWidget extends Composite {
     private String[] displayColumns;
     private String[] reformattedDisplayColumns;
     private AssetNode eventAssetNode;
+
+
+    private String statusColumnName = "STATUS";
+
     final private RepositoryServiceAsync reposService = GWT.create(RepositoryService.class);
+
+    /* begin */
+    Canvas canvas;
+    Canvas backBuffer;
+    LoggingControlWidget loggingControlWidget;
+    double mouseX;
+    double mouseY;
+    //timer refresh rate, in milliseconds
+    static final int refreshRate = 300;
+
+    // canvas size, in px
+    static final int height = 95;
+    static final int width = 95;
+
+    static final String upgradeMessage = "Your browser does not support the HTML5 Canvas. Please upgrade your browser to view this widget.";
+
+
+    /** end */
 
     public static enum ASSET_CLICK_EVENT {
         IN_CONTEXT,
@@ -209,22 +245,182 @@ public class EventAggregatorWidget extends Composite {
         dataProvider.setList(dataRows);
         dataProvider.addDataDisplay(table);
 
+        HorizontalPanel horizontalPanel = new HorizontalPanel();
+
         SimplePager pager = CsvTableFactory.getPager();
         pager.setDisplay(table);
-        getContentPanel().addSouth(pager, 26);
+
+        horizontalPanel.add(setupLoggingSelectorWidget());
+        pager.setHeight("100%");
+        horizontalPanel.add(pager);
+        horizontalPanel.setWidth("100%");
+
+        getContentPanel().addSouth(horizontalPanel, height+1);
+
+
+
         getContentPanel().add(table);
 
-        drawTable();
+//        drawTable();
         //
+
+        try {
+            eventBus.addHandler(ReportingLevelUpdatedEvent.TYPE, new ReportingLevelUpdatedEventHandler() {
+                @Override
+                public void onUpdate(ReportingLevelUpdatedEvent event) {
+                    logger.info("*** "+(event.getLevel()==null));
+                    drawTable(event.getLevel());
+                }
+            });
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
 
         return getContentPanel();
     }
 
+    private Widget setupLoggingSelectorWidget() {
+
+            canvas = Canvas.createIfSupported();
+            backBuffer = Canvas.createIfSupported();
+            if (canvas == null) {
+                return new Label(upgradeMessage);
+            }
+
+            canvas.setWidth(width + "px");
+            canvas.setHeight(height + "px");
+            canvas.setCoordinateSpaceWidth(width);
+            canvas.setCoordinateSpaceHeight(height);
+
+            backBuffer.setWidth(width + "px");
+            backBuffer.setHeight(height + "px");
+            backBuffer.setCoordinateSpaceWidth(width);
+            backBuffer.setCoordinateSpaceHeight(height);
+
+            loggingControlWidget = new LoggingControlWidget(backBuffer, canvas, eventBus,"title",width,height);
+            initMouseHandlers();
+
+            final Timer timer = new Timer() {
+                @Override
+                public void run() {
+                    doUpdate();
+                }
+            };
+            timer.scheduleRepeating(refreshRate);
+
+            loggingControlWidget.getElement().getStyle()
+                .setProperty("border", "none");
+
+            return loggingControlWidget;
+
+    }
+
+    /** begin */
+    void doUpdate() {
+        loggingControlWidget.update(mouseX, mouseY);
+        loggingControlWidget.draw(canvas.getContext2d());
+
+    }
+
+    boolean activeControl = false;
+    void initMouseHandlers() {
+
+
+        canvas.addMouseMoveHandler(new MouseMoveHandler() {
+            public void onMouseMove(MouseMoveEvent event) {
+                if (!activeControl)
+                    return;
+                mouseX = event.getRelativeX(canvas.getElement());
+                mouseY = event.getRelativeY(canvas.getElement());
+
+            }
+        });
+
+        canvas.addMouseOutHandler(new MouseOutHandler() {
+            public void onMouseOut(MouseOutEvent event) {
+                if (!activeControl)
+                    return;
+//                mouseX = -200;
+//                mouseY = -200;
+            }
+        });
+
+
+        canvas.addMouseDownHandler(new MouseDownHandler() {
+            @Override
+            public void onMouseDown(MouseDownEvent event) {
+                mouseX = event.getRelativeX(canvas.getElement());
+                mouseY = event.getRelativeY(canvas.getElement());
+                activeControl = true;
+            }
+        });
+
+        canvas.addMouseUpHandler(new MouseUpHandler() {
+            @Override
+            public void onMouseUp(MouseUpEvent event) {
+
+                mouseX = -1;
+                mouseY = -1;
+
+                activeControl = false;
+
+            }
+        });
+
+        /*
+
+                canvas.addMouseOutHandler(new MouseOutHandler() {
+                    public void onMouseOut(MouseOutEvent event) {
+                        mouseX = -200;
+                        mouseY = -200;
+                    }
+                });
+
+                */
+
+        /*
+        canvas.addTouchMoveHandler(new TouchMoveHandler() {
+            public void onTouchMove(TouchMoveEvent event) {
+                event.preventDefault();
+                if (event.getTouches().length() > 0) {
+                    Touch touch = event.getTouches().get(0);
+                    mouseX = touch.getRelativeX(canvas.getElement());
+                    mouseY = touch.getRelativeY(canvas.getElement());
+                }
+                event.preventDefault();
+            }
+        });
+
+        canvas.addTouchEndHandler(new TouchEndHandler() {
+            public void onTouchEnd(TouchEndEvent event) {
+                event.preventDefault();
+                mouseX = -200;
+                mouseY = -200;
+            }
+        });
+        */
+    }
+
+
+
+    /* end */
+
+    /**
+     * Unfiltered request
+     */
     public void drawTable() {
+        drawTable(null);
+    }
+
+    /**
+     * Filter by status {@see EventAggregatorWidget#setStatusColumnName}
+     * @param reportingLevel
+     */
+    public void drawTable(final String[] reportingLevel) {
         try {
             dataProvider.getList().clear();
         } catch (Throwable t) {
-
+            t.printStackTrace();
         }
 
         try {
@@ -252,9 +448,31 @@ public class EventAggregatorWidget extends Composite {
                     String previousSection = "";
 
                     String linkColValue = "";
+
+
+                    int statusIdx = -1;
+
+                    if (rows!=null && rows.size()>0) {
+                        statusIdx = result.getHeader().getColumnIdxByName(getStatusColumnName());
+                        logger.info("*** "+(reportingLevel!=null?reportingLevel.length:"null") + " statusIdx: " + statusIdx + " statusColumnName: " + getStatusColumnName());
+                    }
+
                     for (CSVRow row : rows) {
                         AssetNode an = result.getAssetNodeMap().get(row.getAssetId());
                         int rowNumber = row.getRowNumber();
+
+                        // Apply Reporting Level
+                        if ((reportingLevel!=null && reportingLevel.length>0)
+                                && statusIdx>-1) {
+                            boolean match = false;
+                            for (String statusCode : reportingLevel) {
+                                if ("INFO".equals(statusCode)/* Pass everything */
+                                || statusCode.equalsIgnoreCase(row.getColumns()[statusIdx]))
+                                    match = true;
+                            }
+                            if (!match)
+                                continue; // Skip this row because it does not match the requested reporting level
+                        }
 
                         List<EventMessageCell> htmlRow = new ArrayList<EventMessageCell>(columns);
 
@@ -481,5 +699,14 @@ public class EventAggregatorWidget extends Composite {
             drawTable();
         }
     }
+
+    public String getStatusColumnName() {
+        return statusColumnName;
+    }
+
+    public void setStatusColumnName(String statusColumnName) {
+        this.statusColumnName = statusColumnName;
+    }
+
 
 }

@@ -134,8 +134,8 @@ public class LogBrowserWidget extends Composite {
     static final int refreshRate = 25;
 
     // canvas size, in px
-    static final int height = 400;
-    static final int width = 400;
+    static final int height = 95;
+    static final int width = 95;
 
     static final String upgradeMessage = "Your browser does not support the HTML5 Canvas. Please upgrade your browser to view this widget.";
 
@@ -490,7 +490,7 @@ public class LogBrowserWidget extends Composite {
             backBuffer.setCoordinateSpaceWidth(width);
             backBuffer.setCoordinateSpaceHeight(height);
 
-            loggingControlWidget = new LoggingControlWidget(backBuffer, canvas, eventBus,"title");
+            loggingControlWidget = new LoggingControlWidget(backBuffer, canvas, eventBus,"title",width,height);
             initMouseHandlers();
 
             final Timer timer = new Timer() {
@@ -548,8 +548,8 @@ public class LogBrowserWidget extends Composite {
         canvas.addMouseUpHandler(new MouseUpHandler() {
             @Override
             public void onMouseUp(MouseUpEvent event) {
-//                mouseX = -200;
-//                mouseY = -200;
+                mouseX = -1;
+                mouseY = -1;
                 activeControl = false;
 
             }
