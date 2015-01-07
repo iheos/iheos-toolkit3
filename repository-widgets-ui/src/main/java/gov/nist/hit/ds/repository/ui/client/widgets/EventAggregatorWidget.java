@@ -6,6 +6,7 @@ import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -26,8 +27,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -245,17 +249,29 @@ public class EventAggregatorWidget extends Composite {
         dataProvider.setList(dataRows);
         dataProvider.addDataDisplay(table);
 
-        HorizontalPanel horizontalPanel = new HorizontalPanel();
 
         SimplePager pager = CsvTableFactory.getPager();
         pager.setDisplay(table);
-
-        horizontalPanel.add(setupLoggingSelectorWidget());
         pager.setHeight("100%");
-        horizontalPanel.add(pager);
-        horizontalPanel.setWidth("100%");
 
-        getContentPanel().addSouth(horizontalPanel, height+1);
+        FlexTable grid = new FlexTable();
+
+        grid.setWidget(0,0,setupLoggingSelectorWidget());
+        grid.setWidget(1,0,pager);
+
+        HTMLTable.CellFormatter formatter = grid.getCellFormatter();
+        formatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        formatter.setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+        formatter.setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        formatter.setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+
+
+            grid.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.TOP);
+            grid.getElement().getStyle().setPosition(Style.Position.RELATIVE);
+            grid.getElement().getStyle().setMarginLeft(45, Style.Unit.PCT);
+
+
+        getContentPanel().addSouth(grid, 126);
 
 
 
@@ -268,7 +284,7 @@ public class EventAggregatorWidget extends Composite {
             eventBus.addHandler(ReportingLevelUpdatedEvent.TYPE, new ReportingLevelUpdatedEventHandler() {
                 @Override
                 public void onUpdate(ReportingLevelUpdatedEvent event) {
-                    logger.info("*** "+(event.getLevel()==null));
+//                    logger.info("*** "+(event.getLevel()==null));
                     drawTable(event.getLevel());
                 }
             });
@@ -311,7 +327,13 @@ public class EventAggregatorWidget extends Composite {
             loggingControlWidget.getElement().getStyle()
                 .setProperty("border", "none");
 
-            return loggingControlWidget;
+
+            loggingControlWidget.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.TOP);
+//            loggingControlWidget.getElement().getStyle().setPosition(Style.Position.RELATIVE);
+//            loggingControlWidget.getElement().getStyle().setMarginLeft(45, Style.Unit.PCT);
+
+
+        return loggingControlWidget;
 
     }
 
@@ -440,6 +462,10 @@ public class EventAggregatorWidget extends Composite {
                 @Override
                 public void onSuccess(AssertionAggregation result) {
 
+                    int errorCt = 0;
+                    int warningCt = 0;
+                    int infoCt = 0;
+
                     logger.info("got result size: " +  result.getRows().size() + " an map size: " + result.getAssetNodeMap().size());
 
                     List<CSVRow> rows = result.getRows();
@@ -454,12 +480,23 @@ public class EventAggregatorWidget extends Composite {
 
                     if (rows!=null && rows.size()>0) {
                         statusIdx = result.getHeader().getColumnIdxByName(getStatusColumnName());
-                        logger.info("*** "+(reportingLevel!=null?reportingLevel.length:"null") + " statusIdx: " + statusIdx + " statusColumnName: " + getStatusColumnName());
+//                        logger.info("*** "+(reportingLevel!=null?reportingLevel.length:"null") + " statusIdx: " + statusIdx + " statusColumnName: " + getStatusColumnName());
                     }
 
                     for (CSVRow row : rows) {
                         AssetNode an = result.getAssetNodeMap().get(row.getAssetId());
                         int rowNumber = row.getRowNumber();
+
+                        // Count message types
+                        String rowStatus = row.getColumns()[statusIdx];
+                        if (rowStatus!=null) {
+                            if ("ERROR".equalsIgnoreCase(rowStatus))
+                                errorCt++;
+                            else if ("WARNING".equalsIgnoreCase(rowStatus))
+                                warningCt++;
+                            else
+                                infoCt++;
+                        }
 
                         // Apply Reporting Level
                         if ((reportingLevel!=null && reportingLevel.length>0)
@@ -467,7 +504,7 @@ public class EventAggregatorWidget extends Composite {
                             boolean match = false;
                             for (String statusCode : reportingLevel) {
                                 if ("INFO".equals(statusCode)/* Pass everything */
-                                || statusCode.equalsIgnoreCase(row.getColumns()[statusIdx]))
+                                || statusCode.equalsIgnoreCase(rowStatus))
                                     match = true;
                             }
                             if (!match)
@@ -513,6 +550,7 @@ public class EventAggregatorWidget extends Composite {
                     dataProvider.refresh();
                     table.redraw();
 
+                    getLoggingControlWidget().setTitle("Error(s): " + errorCt + " Warning(s): " + warningCt + " Other: " + infoCt);
                 }
             }
             );
@@ -708,5 +746,11 @@ public class EventAggregatorWidget extends Composite {
         this.statusColumnName = statusColumnName;
     }
 
+    public LoggingControlWidget getLoggingControlWidget() {
+        return loggingControlWidget;
+    }
 
+    public void setLoggingControlWidget(LoggingControlWidget loggingControlWidget) {
+        this.loggingControlWidget = loggingControlWidget;
+    }
 }

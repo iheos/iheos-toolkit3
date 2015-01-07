@@ -278,11 +278,11 @@ public class CsvTableFactory {
 
     public static SimplePager getPager() {
         SimplePager pager = new SimplePager();
-        pager.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.MIDDLE);
+        pager.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.TOP);
 
 
-        pager.getElement().getStyle().setPosition(Style.Position.RELATIVE);
-        pager.getElement().getStyle().setMarginLeft(1, Style.Unit.PCT);
+//        pager.getElement().getStyle().setPosition(Style.Position.RELATIVE);
+//        pager.getElement().getStyle().setMarginLeft(40, Style.Unit.PCT);
         pager.getElement().getStyle().setBackgroundColor("lavender");
 
         return pager;
