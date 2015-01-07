@@ -44,7 +44,7 @@ public class Caller implements Serializable {
 
     // ------------------ Header app properties -------------------------
     public String getToolkitAppSubtitle() {
-        return Toolkit.getToolkitAppSubtilte();
+        return Toolkit.getToolkitAppSubtitle();
     }
 
     public String getToolkitVersion() {

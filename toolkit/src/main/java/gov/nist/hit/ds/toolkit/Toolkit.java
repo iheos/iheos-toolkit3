@@ -165,7 +165,7 @@ public class Toolkit {
     static public String getEnableAllCiphers() { return propertyManager.getToolkitEnableAllCiphers(); }
     static public void saveProperties(File file) { propertyManager.saveProperties(file);}
     static public String getCurrentEnvironmentName() { return propertyManager.getCurrentEnvironmentName(); }
-    static public String getToolkitAppSubtilte(){ return propertyManager.getToolkitAppSubtitle();}
+    static public String getToolkitAppSubtitle(){ return propertyManager.getToolkitAppSubtitle();}
     static public String getToolkitVersion(){ return propertyManager.getToolkitVersion();}
     static public void setCurrentEnvironmentName(String name) {
         try {
