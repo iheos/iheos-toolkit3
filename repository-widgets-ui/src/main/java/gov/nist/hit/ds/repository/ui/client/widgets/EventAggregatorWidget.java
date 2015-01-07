@@ -29,9 +29,8 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -86,6 +85,7 @@ public class EventAggregatorWidget extends Composite {
     private String[] reformattedDisplayColumns;
     private AssetNode eventAssetNode;
 
+    private FlexTable summaryGrid = new FlexTable();
 
     private String statusColumnName = "STATUS";
 
@@ -98,7 +98,7 @@ public class EventAggregatorWidget extends Composite {
     double mouseX;
     double mouseY;
     //timer refresh rate, in milliseconds
-    static final int refreshRate = 300;
+    static final int refreshRate = 50;
 
     // canvas size, in px
     static final int height = 95;
@@ -254,26 +254,37 @@ public class EventAggregatorWidget extends Composite {
         pager.setDisplay(table);
         pager.setHeight("100%");
 
-        FlexTable grid = new FlexTable();
-
-        grid.setWidget(0,0,setupLoggingSelectorWidget());
-        grid.setWidget(1,0,pager);
-
-        HTMLTable.CellFormatter formatter = grid.getCellFormatter();
-        formatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        formatter.setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-        formatter.setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        formatter.setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 
 
-            grid.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.TOP);
-            grid.getElement().getStyle().setPosition(Style.Position.RELATIVE);
-            grid.getElement().getStyle().setMarginLeft(45, Style.Unit.PCT);
+//        FlexTable grid = new FlexTable();
+//
+//        grid.setWidget(0,0,setupLoggingSelectorWidget());
+//        grid.setWidget(1,0,pager);
+//
+//        HTMLTable.CellFormatter formatter = grid.getCellFormatter();
+//        formatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+//        formatter.setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+//        formatter.setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
+//        formatter.setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+//
+//
+//        grid.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.TOP);
+//        grid.getElement().getStyle().setPosition(Style.Position.RELATIVE);
+//        grid.getElement().getStyle().setMarginLeft(45, Style.Unit.PCT);
 
 
-        getContentPanel().addSouth(grid, 126);
+        Widget loggingControlWidget1 = setupLoggingSelectorWidget();
 
 
+        HorizontalPanel horizontalPanel = new HorizontalPanel();
+        horizontalPanel.add(summaryGrid);
+        horizontalPanel.add(loggingControlWidget1);
+        horizontalPanel.getElement().getStyle().setPosition(Style.Position.RELATIVE);
+        horizontalPanel.getElement().getStyle().setWidth(100, Style.Unit.PCT);
+
+        getContentPanel().addNorth(horizontalPanel, 96);
+
+        getContentPanel().addSouth(pager, 22);
 
         getContentPanel().add(table);
 
@@ -296,6 +307,33 @@ public class EventAggregatorWidget extends Composite {
         }
 
         return getContentPanel();
+    }
+
+    private void drawSummaryTextTable(int errorCt, int warningCt, int otherCt) {
+        String errorText = "";
+        String warningText = "";
+        String infoText = "";
+
+        int row = 0;
+        int col = 0;
+        summaryGrid.clear();
+
+        summaryGrid.setWidget(row, 0, new HTML("<b>Summary<b>"));
+        summaryGrid.getFlexCellFormatter().setColSpan(row, col, 2);
+        summaryGrid.setWidget(++row,0,new HTML("Error(s):"));
+        summaryGrid.setWidget(row, 1, new HTML("" + errorCt ));
+
+        summaryGrid.getFlexCellFormatter().setHorizontalAlignment(row,1, HasHorizontalAlignment.ALIGN_RIGHT);
+
+        summaryGrid.setWidget(++row,0,new HTML("Warning(s):"));
+        summaryGrid.setWidget(row,1,new HTML(""+warningCt));
+
+        summaryGrid.getFlexCellFormatter().setHorizontalAlignment(row,1, HasHorizontalAlignment.ALIGN_RIGHT);
+
+        summaryGrid.setWidget(++row,0,new HTML("Other(s):"));
+        summaryGrid.setWidget(row,1,new HTML(""+otherCt));
+
+        summaryGrid.getFlexCellFormatter().setHorizontalAlignment(row,1, HasHorizontalAlignment.ALIGN_RIGHT);
     }
 
     private Widget setupLoggingSelectorWidget() {
@@ -329,11 +367,16 @@ public class EventAggregatorWidget extends Composite {
 
             loggingControlWidget.getElement().getStyle()
                 .setProperty("border", "none");
+            loggingControlWidget.getElement().getStyle()
+                .setProperty("outline", "none");
 
 
             loggingControlWidget.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.TOP);
-//            loggingControlWidget.getElement().getStyle().setPosition(Style.Position.RELATIVE);
-//            loggingControlWidget.getElement().getStyle().setMarginLeft(45, Style.Unit.PCT);
+            loggingControlWidget.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+            loggingControlWidget.getElement().getStyle().setRight(0, Style.Unit.PX);
+//            loggingControlWidget.getElement().getStyle().setWidth(96, Style.Unit.PX);
+
+//            loggingControlWidget.getElement().getStyle().setMarginLeft(75, Style.Unit.PCT);
 
 
         return loggingControlWidget;
@@ -557,7 +600,9 @@ public class EventAggregatorWidget extends Composite {
                     dataProvider.refresh();
                     table.redraw();
 
-                    getLoggingControlWidget().setTitle("Error(s): " + errorCt + " Warning(s): " + warningCt + " Other: " + infoCt);
+//                    getLoggingControlWidget().setTitle("Error(s): " + errorCt + " Warning(s): " + warningCt + " Other: " + infoCt);
+
+                    drawSummaryTextTable(errorCt,warningCt,infoCt);
                 }
             }
             );

@@ -317,7 +317,7 @@ public class LoggingControlWidget extends Composite {
         // Pointer
         context.beginPath();
         context.setFillStyle(CssColor.make("red"));
-        context.arc(newX, newY, 3, 0, Math.PI * 2.0,  true);
+        context.arc(newX, newY, 2.5D, 0, Math.PI * 2.0,  true);
         context.fill();
 
 
