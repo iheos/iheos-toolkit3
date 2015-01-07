@@ -92,14 +92,14 @@ public class MHDValidatorTab extends GenericCloseableTab {
         fileUploadItem.setWidth("400px");
         uploadForm.add(fileUploadItem);
 
-        // Run button
-        runBtn = new Button("Run");
-        runBtn.disable();
-
-        // ------- Create the form ------
+        // ------- Create the first form ------
         DynamicForm form = new DynamicForm();
         form.setFields(messageTypeLabel, messageTypeSelect, uploadLabel);
         form.setCellPadding(10);
+
+        // Run button
+        runBtn = new Button("Run");
+        runBtn.disable();
 
         // Create Help Link
         setHelpButton(getHelpPanel(), Resources.INSTANCE.helpContentsSample().getText());
@@ -116,7 +116,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         setResultsPanel(validationResultsPanel);
 
         // Layout
-        container.addMember(form);
+        container.addMembers(form);
         container.addMember(uploadForm);
         container.addMember(runBtn);
         container.addMember(waitPanel);

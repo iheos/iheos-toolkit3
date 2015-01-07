@@ -80,6 +80,7 @@ public abstract class GenericTab extends Tab implements TabInterface {
         mainPanel.addMember(topPanel);
         setPane(mainPanel);
         getPane().setAlign(Alignment.CENTER);
+        topPanel.setLayoutBottomMargin(20);
     }
 
     /**
