@@ -277,9 +277,12 @@ public class EventAggregatorWidget extends Composite {
 
         getContentPanel().add(table);
 
-//        drawTable();
-        //
+        // Load initial data set if an Id is available
+//        if (getEventAssetId()!=null)
+//            drawTable();
 
+
+        // Register event handler
         try {
             eventBus.addHandler(ReportingLevelUpdatedEvent.TYPE, new ReportingLevelUpdatedEventHandler() {
                 @Override
@@ -443,6 +446,10 @@ public class EventAggregatorWidget extends Composite {
             dataProvider.getList().clear();
         } catch (Throwable t) {
             t.printStackTrace();
+        }
+
+        if (getEventAssetId()==null) {
+            return;
         }
 
         try {
