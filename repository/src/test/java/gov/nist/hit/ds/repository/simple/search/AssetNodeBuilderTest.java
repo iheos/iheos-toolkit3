@@ -71,7 +71,7 @@ public class AssetNodeBuilderTest {
 
 		try {
 			AssetNodeBuilder anb = new AssetNodeBuilder();
-			List<AssetNode> tree = anb.build(repos, PropertyKey.CREATED_DATE);
+			List<AssetNode> tree = anb.build(repos, new PropertyKey[]{PropertyKey.CREATED_DATE},0);
 			System.out.println(tree.toString());
 			// Inspect the tree here 
 			
@@ -104,7 +104,7 @@ public class AssetNodeBuilderTest {
     public void getParentChildrenTest() {
         try {
             AssetNodeBuilder anb = new AssetNodeBuilder(AssetNodeBuilder.Depth.PARENT_ONLY);
-            List<AssetNode> tree = anb.build(repos, PropertyKey.CREATED_DATE);
+            List<AssetNode> tree = anb.build(repos, new PropertyKey[]{PropertyKey.CREATED_DATE},0);
             System.out.println(tree.toString());
             // Inspect the tree here
 

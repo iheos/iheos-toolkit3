@@ -21,9 +21,9 @@ public class SimpleCreateAssetTest {
 	@BeforeClass
 	static public void initialize() throws RepositoryException {
 		
-		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
+		RepositoryFactory fact = new RepositoryFactory(Configuration.configuration().getRepositorySrc(Access.RW_EXTERNAL));
 		repos = fact.createRepository(
-				"Repos "+ (int)(Math.random() * 10),
+				"Repos_SimpleCreateAssetTest",
 				"Description",
 				new SimpleType("simpleRepos"));
 	}
@@ -87,7 +87,7 @@ public class SimpleCreateAssetTest {
     @Test
     public void testSameChildNamedAssetInDifferentTopLevelAsset() throws RepositoryException {
 
-        Repository repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
+        Repository repos = new RepositoryFactory(Configuration.configuration().getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
                 "childWithSameName",
                 "Description",
                 new SimpleType("site"),
@@ -116,7 +116,7 @@ public class SimpleCreateAssetTest {
 
     @Test
     public void testCreateAndGetChildNamedAsset() throws RepositoryException {
-        Repository repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
+        Repository repos = new RepositoryFactory(Configuration.configuration().getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
                 "grandChildTest",
                 "Description",
                 new SimpleType("site"),
@@ -157,7 +157,7 @@ public class SimpleCreateAssetTest {
     @Test
     public void testCreateAndGetComplexChildNamedAsset() throws RepositoryException {
         // 1. Create test repository
-        Repository repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
+        Repository repos = new RepositoryFactory(Configuration.configuration().getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
                 "complexChildFolderTest",
                 "Description",
                 new SimpleType("site"),
@@ -204,7 +204,7 @@ public class SimpleCreateAssetTest {
 
     @Test
     public void testReposDelete() throws RepositoryException {
-        Repository repos = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
+        Repository repos = new RepositoryFactory(Configuration.configuration().getRepositorySrc(Access.RW_EXTERNAL)).createNamedRepository(
                 "reposDelete",
                 "Description",
                 new SimpleType("site"),

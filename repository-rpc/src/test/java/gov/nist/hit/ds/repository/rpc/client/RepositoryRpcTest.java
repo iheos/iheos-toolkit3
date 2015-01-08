@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -183,7 +184,8 @@ public class RepositoryRpcTest {
              aggregateAssertions(eventId, null, null);
 
          } catch (Exception ex) {
-                fail(ex.toString());
+             ex.printStackTrace();
+             fail(ex.toString());
          }
 
 
@@ -213,6 +215,7 @@ public class RepositoryRpcTest {
             assertEquals(assertionAggregation.getRows().size(),1); // Should be only one record in this data
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             fail(ex.toString());
         }
 
@@ -242,6 +245,7 @@ public class RepositoryRpcTest {
             assertEquals(assertionAggregation.getRows().size(),3); // Should be a total of three combined records in this data set
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             fail(ex.toString());
         }
 
@@ -274,7 +278,9 @@ public class RepositoryRpcTest {
             assertEquals(assertionAggregation.getRows().get(0).getColumns().length,displayColumns.length);
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             fail(ex.toString());
+
         }
 
 
@@ -284,6 +290,8 @@ public class RepositoryRpcTest {
 
         // There are more simplified function signatures to pick from, this one has the most parameters
         AssertionAggregation assertionAggregation =  AssetHelper.aggregateAssertions(new RepositoryId("Sim"), new AssetId(eventId), new SimpleTypeId("validators"), new SimpleTypeId("assertionGroup"), criteria, displayColumns);
+
+        assertNotNull(assertionAggregation);
 
         printHeader(assertionAggregation);
 

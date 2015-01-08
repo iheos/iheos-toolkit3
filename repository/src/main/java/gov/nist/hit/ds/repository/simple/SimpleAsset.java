@@ -7,8 +7,8 @@ import gov.nist.hit.ds.repository.api.Parameter;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
-import gov.nist.hit.ds.repository.api.TypeIterator;
 import gov.nist.hit.ds.repository.shared.PropertyKey;
+import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
 import gov.nist.hit.ds.utilities.io.Io;
 import org.apache.commons.io.FileUtils;
@@ -39,7 +39,7 @@ public class SimpleAsset implements Asset, Flushable {
 	transient RepositorySource source;
 	private transient File path;
 	private transient File contentPath = null;
-    private SimpleType assetType;
+    private Type assetType;
 
     /**
      * Creates a new instance of an asset only in memory, which is eventually intended towards flushing to disk.
@@ -315,12 +315,25 @@ public class SimpleAsset implements Asset, Flushable {
         if (assetType!=null)
             return assetType;
 
-		String typeStr = getProperty(PropertyKey.ASSET_TYPE);
-		if (typeStr != null) {
-			assetType = new SimpleType(typeStr);
-            return assetType;
-		} else
-			return null;
+		String keyword = getProperty(PropertyKey.ASSET_TYPE);
+        String domain = SimpleType.ASSET;
+
+		if (keyword != null) {
+//			assetType = new SimpleType(keyword);
+
+            assetType = Configuration.configuration().getType(new SimpleTypeId(keyword,domain));
+
+
+		}
+
+        if (assetType==null) {
+            logger.warning("Possible made-up type (it does not seem to exist in the types dir) at runtime: " + getProperty(PropertyKey.ASSET_TYPE));
+            if (getProperty(PropertyKey.ASSET_TYPE)!=null) {
+                assetType = new SimpleType(getProperty(PropertyKey.ASSET_TYPE),domain);
+            }
+        }
+
+        return assetType;
 	}
 
     /**
@@ -331,22 +344,24 @@ public class SimpleAsset implements Asset, Flushable {
     @Override
     public Type getAssetTypeProperties() throws RepositoryException {
 
-        if (assetType!=null && assetType.getProperties()!=null)
-            return assetType;
+//        if (assetType!=null && assetType.getProperties()!=null)
+//            return assetType;
+//
+//        try {
+//            TypeIterator it;
+//
+//            it = new SimpleTypeIterator(this.getSource(), getAssetType(),SimpleType.ASSET);
+//            if (it.hasNextType()) {
+//                assetType = (SimpleType)it.nextType();
+//                return assetType;
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//
+//        return null;
 
-        try {
-            TypeIterator it;
-
-            it = new SimpleTypeIterator(this.getSource(), getAssetType(),SimpleType.ASSET);
-            if (it.hasNextType()) {
-                assetType = (SimpleType)it.nextType();
-                return assetType;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return null;
+        return getAssetType();
     }
 
 
@@ -458,7 +473,7 @@ public class SimpleAsset implements Asset, Flushable {
      */
 	@Override
 	public File getContentFile() throws RepositoryException {
-		return getContentFile(null);
+		return getContentFile(null, null);
 	}
 
     /**
@@ -468,7 +483,7 @@ public class SimpleAsset implements Asset, Flushable {
      * @throws RepositoryException
      */
 	@Override	
-	public File getContentFile(File part) throws RepositoryException {
+	public File getContentFile(File part, PropertyKey propertyKey) throws RepositoryException {
 		String assetContentFilePart = null;
 		File initialContentFile = null;
 		File finalContentFile = null;
@@ -482,8 +497,12 @@ public class SimpleAsset implements Asset, Flushable {
 			assetContentFilePart = getPath().getParent() + File.separator + FolderManager.getAssetIdFromFilename(getPath().getName());
 		} else {
 			String names[] = new String[] {getDisplayName() ,getDescription()};
-			assetContentFilePart = new FolderManager().getFile(getReposDir(), names, getId())[1].toString();						
+			assetContentFilePart = new FolderManager().getFile(getReposDir(), names, getId(), true)[1].toString();
 		}
+
+//        if (propertyKey!=null) {
+//            assetContentFilePart += "_" + getProperty(propertyKey);
+//        }
 		
 		String[] ext = getContentExtension();
 		if (Configuration.CONTENT_TEXT_EXT.equals(ext[0])) {			
@@ -677,6 +696,7 @@ public class SimpleAsset implements Asset, Flushable {
         File dstPropFile = new File(parentFolder[0], asset.getPropFile().getName());
         File dstConFile = new File(parentFolder[0], asset.getContentFile().getName());
 
+
 		// Take care of the child asset here
         if (new FolderManager().doesParentAssetFolderExist(asset.getPropFile())) {
             // Complex asset
@@ -697,11 +717,21 @@ public class SimpleAsset implements Asset, Flushable {
             File srcPropFile = asset.getPropFile();
             File srcConFile = asset.getContentFile();
 
+            // Cannot assume that destination files do not have any pre-existing file naming conflicts -- especially when same displayName is used to name files
+            // Check the destination is free of such conflicts
+
+            if (dstPropFile.exists()) {
+                logger.info("Destination file already exists, using a unique identifier: " + asset.getId());
+                dstPropFile =  new File(parentFolder[0], asset.getPropFile(getId(),PropertyKey.DISPLAY_ORDER).getName()); // use a property to make new file name
+                dstConFile = new File(parentFolder[0], asset.getContentFile(null,PropertyKey.DISPLAY_ORDER).getName());
+            }
+
             File[] txSrc = new File[]{srcPropFile, srcConFile};
             File[] txDst = new File[]{dstPropFile, dstConFile};
 
 //		asset.setParentId(getPropFileRelativePart()); location based parentId is no longer used
             asset.setParentId(getId().getIdString());
+
             File[] loc = FolderManager.moveChildToParent(txSrc, txDst);
             asset.setPath(loc[0]);
             asset.setContentPath(loc[1]);
@@ -845,7 +875,7 @@ public class SimpleAsset implements Asset, Flushable {
      */
 	@Override
 	public String getPropFileRelativePart() throws RepositoryException {
-		return getPropFile(this.getId()).toString().replace(getReposDir().toString(), "").replace("\\", "/");
+		return getPropFile(this.getId(),null).toString().replace(getReposDir().toString(), "").replace("\\", "/");
 	}
 
     /**
@@ -855,7 +885,7 @@ public class SimpleAsset implements Asset, Flushable {
      */
 	@Override
 	public File getPropFile() throws RepositoryException {
-		return getPropFile(this.getId());
+		return getPropFile(this.getId(),null);
 	}
 
     /**
@@ -865,14 +895,25 @@ public class SimpleAsset implements Asset, Flushable {
      * @throws RepositoryException
      */
 	@Override
-	public File getPropFile(ArtifactId id) throws RepositoryException {
+	public File getPropFile(ArtifactId id, PropertyKey propertyKey) throws RepositoryException {
 		
 		if (!getSource().getLocation().exists())
 			throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
 					"source directory [" + getSource().getLocation().toString() + "] does not exist");		
 		
 		if (getPath()!=null) {
-			return getPath();
+            if (propertyKey==null) {
+			    return getPath();
+            } else {
+                String newFile =
+                getPath().toString().replaceAll(Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT + "$" // Last index
+                        ,"");
+
+                String propValue = FolderManager.getSafeName(new String[]{getProperty(propertyKey),getProperty(PropertyKey.ASSET_ID)});
+
+                newFile += "_" +  propValue + Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT;
+                return new File(newFile);
+            }
 		}
 
         String firstPrefName = getDisplayName();
@@ -881,19 +922,22 @@ public class SimpleAsset implements Asset, Flushable {
         if (getId()!=null && !(getId().getUserFriendlyName()==null)) {
             String userFriendlyName =  getId().getUserFriendlyName();
             if (!"".equals(userFriendlyName)) {
-                firstPrefName = userFriendlyName;
+                    firstPrefName = userFriendlyName;
             }
         }
 		
 		String names[] = new String[] {firstPrefName, getDescription()};
 
-		File[] assetPath = new FolderManager().getFile(getReposDir(), names, null);
+		File[] assetPath = new FolderManager().getFile(getReposDir(), names, getId(), false);
 
-		if (assetPath!=null && assetPath[0]!=null) {
-			setContentPath(getContentFile(assetPath[1])); // base path w/o extension
+        if (assetPath!=null && assetPath[0]!=null) {
+			setContentPath(getContentFile(assetPath[1],null)); // base path w/o extension
+            /*
+            This piece of code may no longer be needed because every asset now has a unique Id assigned to it.
 			if (assetPath[3]!=null) { // incremented id due to duplicate file conflict
 				setId(new SimpleId(assetPath[2].toString()));
 			}
+			*/
 			return assetPath[0];
 		} 
 		throw new RepositoryException(RepositoryException.NULL_ARGUMENT);
@@ -925,7 +969,7 @@ public class SimpleAsset implements Asset, Flushable {
 		p.setDescription("assetId");
 		p.assertNotNull(assetId);
 		
-		File[] assetPath = new FolderManager().getFile(getReposDir(), new String[] {assetId.getIdString()}, assetId);
+		File[] assetPath = new FolderManager().getFile(getReposDir(), new String[] {assetId.getIdString()}, assetId, true);
 
 		
 		if (assetPath[0]!=null) {
@@ -940,7 +984,7 @@ public class SimpleAsset implements Asset, Flushable {
 		properties.clear();
 		try {
 			FolderManager.loadProps(properties, assetPath[0]);
-			setContentPath(getContentFile(assetPath[1])); // w/o ext, this needs to happen after prop load to get the mimeType
+			setContentPath(getContentFile(assetPath[1],null)); // w/o ext, this needs to happen after prop load to get the mimeType
 		} catch (Exception e) {
 			throw new RepositoryException(RepositoryException.UNKNOWN_ID + " : " + 
 					"properties cannot be loaded: [" +
@@ -1018,7 +1062,7 @@ public class SimpleAsset implements Asset, Flushable {
 			properties.store(writer, "");
 			writer.close();
 
-            BaseRepository.setLastModified(getReposDir());
+            BaseRepository.setLastModified(getReposDir()); // Touch the repository main to indicate a recent update
 
         } catch (IOException e) {
 			throw new RepositoryException(RepositoryException.IO_ERROR, e);
@@ -1072,25 +1116,17 @@ public class SimpleAsset implements Asset, Flushable {
 				if (c!=null) {
 					Type t = getAssetType(); 
 					if (t != null) {			
-						TypeIterator it;
-			
-							it = new SimpleTypeIterator(this.getSource().getLocation(), t);
-							if (it.hasNextType()) {				
-								Type assetType = it.nextType();
-								String lifetime = assetType.getLifetime();
-								if (lifetime!=null) {
-										Integer days = Integer.parseInt(lifetime.toLowerCase().substring(0, lifetime.indexOf(" days")));
-										if (days!=null) {
-											logger.fine("asset " + getPropFile() +  " lifetime: " + days);
-											if (getExpirationDate()==null) {
-												c.add(Calendar.DATE, days);
-												Date expr = c.getTime();
-												setPropertyTemp(PropertyKey.EXPIRATION_DATE, sdf.format(expr));												
-											}
-										}
-											
-								}
-								
+                            if (t.getLifetime()!=null) {
+								String lifetime = t.getLifetime();
+                                Integer days = Integer.parseInt(lifetime.toLowerCase().substring(0, lifetime.indexOf(" days")));
+                                if (days!=null) {
+                                    logger.fine("asset " + getPropFile() +  " lifetime: " + days);
+                                    if (getExpirationDate()==null) {
+                                        c.add(Calendar.DATE, days);
+                                        Date expr = c.getTime();
+                                        setPropertyTemp(PropertyKey.EXPIRATION_DATE, sdf.format(expr));
+                                    }
+                                }
 							}
 					}			
 				}

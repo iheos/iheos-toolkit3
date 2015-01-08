@@ -11,6 +11,7 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
+import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 
 import java.io.File;
 import java.io.FileReader;
@@ -128,7 +129,7 @@ public abstract class BaseRepository implements Repository {
 			} finally {
                 if (fr!=null) {
                     try {
-                        fr.close(); // This will release the file lock
+                        fr.close(); // Release the file lock
                     } catch (Throwable t) {}
                 }
 			}
@@ -153,11 +154,21 @@ public abstract class BaseRepository implements Repository {
 	@Override
 	public Type getType() throws RepositoryException {
 
-        if (repositoryType!=null)
-            return repositoryType;
+        load();
 
-		repositoryType = new SimpleType(properties.getProperty(PropertyKey.REPOSITORY_TYPE.toString()), "");
-        return repositoryType;
+        if (repositoryType!=null) {
+            return repositoryType;
+        } else {
+
+    //		repositoryType = new SimpleType(properties.getProperty(PropertyKey.REPOSITORY_TYPE.toString()), "");
+
+            String keyword = properties.getProperty(PropertyKey.REPOSITORY_TYPE.toString());
+            String domain = SimpleType.REPOSITORY;
+
+            repositoryType = Configuration.configuration().getType(new SimpleTypeId(keyword,domain));
+
+            return repositoryType;
+        }
 	}
 
     /**
