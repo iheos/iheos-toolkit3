@@ -38,23 +38,24 @@ import java.io.File;
 		,BulkLoadTest.class
 		} )
 public class SimpleTestSuite {
-	
-	@ClassRule
+
+        @ClassRule
 	static public ExternalResource classRule = new ExternalResource()	{
-		
+
+
+
 		@Override
 		protected void before() throws Throwable {
-			
-			// Setup application-wide singletons
-			
-			Installation.reset();
-			Installation.installation().initialize(); 			
- 			
- 			// Test assets created will be automatically removed after the test suite run is complete
- 						 			
-			Configuration.configuration();
-			
-			
+
+            // Setup application-wide singletons
+
+            Installation.reset();
+            Installation.installation().initialize();
+
+            // Test assets created will be automatically removed after the test suite run is complete
+
+            Configuration.configuration();
+
 			File dataDir = Configuration.getRepositoriesDataDir(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
 			
 			if (dataDir.exists()) {

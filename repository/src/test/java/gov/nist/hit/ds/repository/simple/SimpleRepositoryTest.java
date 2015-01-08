@@ -1,18 +1,19 @@
 package gov.nist.hit.ds.repository.simple;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import gov.nist.hit.ds.repository.api.ArtifactId;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositoryIterator;
-import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+import gov.nist.hit.ds.repository.api.Type;
+import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class SimpleRepositoryTest {
 
@@ -49,8 +50,9 @@ public class SimpleRepositoryTest {
 	@Test 
 	public void repositoryIteratorTest2() throws RepositoryException {
 		RepositoryFactory fact = new RepositoryFactory(Configuration.getRepositorySrc(Access.RW_EXTERNAL));
-		Type simpleType = new SimpleType("simpleRepos", "");
-		Repository repos1 = fact.createRepository(
+//		Type simpleType = new SimpleType("simpleRepos");
+        Type simpleType = Configuration.getType(new SimpleTypeId("simpleRepos",SimpleType.REPOSITORY));
+                Repository repos1 = fact.createRepository(
 				"Repos "+ new Hl7Date().now(),
 				"Description",
 				simpleType);
@@ -106,7 +108,6 @@ public class SimpleRepositoryTest {
 			fail("An exception should be thrown");
 			
 		} catch (RepositoryException re) {
-			re.hashCode();
 			// This is expected
 			;
 		}
@@ -128,7 +129,6 @@ public class SimpleRepositoryTest {
 			fail("An exception should have been thrown");
 			
 		} catch (RepositoryException re) {
-			re.toString();
 			// This is expected
 			;
 		}

@@ -67,7 +67,7 @@ public class FolderManager {
 
 		// File[] assetPaths = getAssetPath(pff, residingFolder);
 		
-		File[] assetPaths = new File[] {sa.getPath(),sa.getContentFile(null)};
+		File[] assetPaths = new File[] {sa.getPath(),sa.getContentFile()};
 		
 		if (assetPaths!=null && assetPaths[0]!=null) {			
 
@@ -125,9 +125,15 @@ public class FolderManager {
 		return new File[]{residingFolder,null};
 	}
 	
-	public File[] getFile(File dir, String[] names, ArtifactId id) throws RepositoryException {
-	
-		String safeName = null;
+	public File[] getFile(File dir, String[] names, ArtifactId id, boolean retrieveById) throws RepositoryException {
+
+        Parameter param = new Parameter();
+
+        param.setDescription("id");
+        param.assertNotNull(id);
+
+
+        String safeName = null;
 		try {
 			safeName = FolderManager.getSafeName(names);
 		} catch (RepositoryException re) {
@@ -137,7 +143,7 @@ public class FolderManager {
 		String assetBaseFile = dir + File.separator + safeName;
 		File assetPropFile = new File(assetBaseFile + Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT);
 		
-		if (id!=null) {			
+		if (retrieveById) {
 			File[] f = findById(dir, id); // Exception when file does not exist
 			if (f!=null && f[0]!=null && f[0].exists()) {
 				File parentDir = f[0].getParentFile();
@@ -152,19 +158,25 @@ public class FolderManager {
 		
 		String newId = safeName;
 		// Append suffix to make a new file
+
+
+
 		int cx = 0;
 
+
 		while (assetPropFile.exists() && cx++ <50) { // safe loop limit
-			newId = safeName + "_" + (cx);
-			assetBaseFile = dir + File.separator + newId;
+            logger.info("file already exists: " + assetPropFile.toString() + " id: " + id.getIdString());
+//			newId = safeName + "_" + (cx);
+			assetBaseFile = dir + File.separator + safeName + "_" + (cx) + ((id!=null)?"_" + id.getIdString() :"");
 			assetPropFile = new File(assetBaseFile +  Configuration.DOT_SEPARATOR + Configuration.PROPERTIES_FILE_EXT);  			
 		}
+
 		
 		
 		return new File[]{assetPropFile // file w/ extension 							 [0]
 			,new File(assetBaseFile) // Base name file part w/o extension				 [1]
 			,new File(newId) // name-id only											 [2]
-			,(cx>0)?assetPropFile:null // just a non-null flag  to indicate counter trip [3] 
+			,(cx>0)?assetPropFile:null // just a non-null flag  to indicate counter trip [3]
 		};
 
 	}
@@ -428,17 +440,29 @@ public class FolderManager {
 		param.assertEquals(src.length, 2);
 		param.setDescription("Dst length");
 		param.assertEquals(dst.length, 2);
-		
 
-		if (!src[0].renameTo(dst[0])) {
-				logger.warning("Child relocation failed after its parent was associated with a new folder from <" + src[0].toString() + "> to <" + dst[0].toString() + ">");
-				return new File[]{src[0],src[1]}; // no change to Props or Cont 
-		} 
-		if (src[1].exists()) {
-				if (!src[1].renameTo(dst[1])) {
-					logger.warning("Asset content relocation failed after its parent was associated with a new folder from <" + src[1].toString() + "> to <" + dst[1].toString() + ">");
-				}			
-		}
+
+        try {
+            // Props
+            Files.move(src[0].toPath(), dst[0].toPath()); // This API call is platform independent
+
+        } catch (Throwable t) {
+            logger.warning("Child relocation failed after its parent was associated with a new folder from <" + src[0].toString() + "> to <" + dst[0].toString() + ">");
+            t.printStackTrace();
+        }
+
+        try {
+            // Content file
+            if (src[1].exists()) {
+                Files.move(src[1].toPath(), dst[1].toPath());
+            }
+
+        } catch (Throwable t) {
+            logger.warning("Asset content relocation failed after its parent was associated with a new folder from <" + src[1].toString() + "> to <" + dst[1].toString() + ">");
+            t.printStackTrace();
+        }
+
+
 		return new File[]{dst[0],dst[1]}; // Props, Cont
 		
 
