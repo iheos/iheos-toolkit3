@@ -5,14 +5,14 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VStack;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
 
 public class HomeTab extends GenericTab {
 
     public HomeTab(String s) {
         super(s);
-        hideHeaderTitle();
+        removeHeaderTitle();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class HomeTab extends GenericTab {
 
         HomeBox mhdTools = new HomeBox("MHD Tools");
         mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
-        mhdTools.addItem("MHD Validator", true);
+        mhdTools.addItem("MHD Validator", false);
         mhdTools.addItem("MHD to XDS Converter", true);
 
         /*HomeBox connectathonTools = new HomeBox("Connectathon Tools");

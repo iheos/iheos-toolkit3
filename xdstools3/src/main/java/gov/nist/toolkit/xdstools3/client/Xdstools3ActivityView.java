@@ -2,7 +2,9 @@ package gov.nist.toolkit.xdstools3.client;
 
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.smartgwt.client.types.Alignment;
@@ -19,17 +21,16 @@ import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.event.asset.OutOfContextAssetClickedEvent;
 import gov.nist.hit.ds.repository.ui.client.event.asset.OutOfContextAssetClickedEventHandler;
 import gov.nist.toolkit.xdstools3.client.activitiesAndPlaces.TabPlace;
+import gov.nist.toolkit.xdstools3.client.customWidgets.dialogs.PopupMessageV3;
 import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.Toolbar;
+import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.ToolbarService;
+import gov.nist.toolkit.xdstools3.client.customWidgets.toolbar.ToolbarServiceAsync;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
-import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.FolderValidationTab;
-import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.LifecycleValidationTab;
-import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.RegisterAndQueryTab;
-import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.SourcesStoresDocumentValidationTab;
-import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.SubmitRetrieveTab;
+import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
@@ -42,16 +43,24 @@ import gov.nist.toolkit.xdstools3.client.tabs.submitTestDataTab.SubmitTestDataTa
 import gov.nist.toolkit.xdstools3.client.util.eventBus.*;
 import gov.nist.toolkit.xdstools3.client.util.injection.Xdstools3GinInjector;
 
+import java.util.logging.Logger;
+
+
 /**
  * Main class of the application which is the Activity for Activity-Places design, the view and a bit of a controller.
  */
 // TabContainer was added for v2-v3 integration purposes, AcceptsOneWidget to avoid an entire MVP architecture (fuse Activity and View in one single class)
 public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOneWidget {
+    private ToolbarServiceAsync propertiesService = GWT.create(ToolbarService.class);
+    private Logger logger= Logger.getLogger(this.getClass().getName());
 
     private GenericTabSet topTabSet;
 
     private HLayout container;
     private String tabId;
+    private HTMLFlow header= new HTMLFlow();
+    private String appSubtitle=null;
+    private String toolkitVersion=null;
 
     /**
      * Method that starts the UI
@@ -75,8 +84,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
 
         // Main layout
         VLayout mainLayout = new VLayout();
-        HTMLFlow header = new HTMLFlow();
-        header.setContents(getHeaderHtmlContent());
+        setHeader();
         HTMLFlow footer = new HTMLFlow();
         footer.setContents(getFooterHtmlContent());
 
@@ -97,10 +105,41 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         bindUI();
     }
 
+    private void setHeader() {
+        header.setContents(getHeaderHtmlContent());
+        header.redraw();
+    }
+
     /**
      * binds the UI Actions
      */
     private void bindUI() {
+        propertiesService.getToolkitAppSubtitle(new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                new PopupMessageV3("Error loading app subtitle property. See log for more information.");
+                logger.warning("Error loading app subtitle property. "+throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(String s) {
+                appSubtitle=s;
+                setHeader();
+            }
+        });
+        propertiesService.getToolkitVersion(new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                new PopupMessageV3("Error loading app version property. See log for more information.");
+                logger.warning("Error loading app version property. "+throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(String s) {
+                toolkitVersion=s;
+                setHeader();
+            }
+        });
         // Add listener for Open Tab eventBus. The tabs called must be defined in function "openTab".
         Manager.EVENT_BUS.addHandler(OpenTabEvent.TYPE, new OpenTabEventHandler(){
             public void onEvent(OpenTabEvent event) {
@@ -350,8 +389,8 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
     private String getHeaderHtmlContent() {
         return "<header id='appheader'>" +
                 "<div id='apptitle'>Document Sharing Test Tools</div>" +
-                "<div id='appversion'>Version 3.0.1</div>" +
-                "<div id='appsubtitle'>IHE USA Chicago Connectathon Jan. 2014</div>" +
+                "<div id='appversion'>"+ toolkitVersion +"</div>" +
+                "<div id='appsubtitle'>"+ appSubtitle +"</div>" +
                 "</header>" +
                 "<nav class='navbar'>" +
                 "<div class='app-padding navbar-inner'>" +
@@ -381,7 +420,6 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMessageValidatorTabCode()+"'>Message Validator</a></li>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getDocumentMetadataEditorTabCode()+"'>Document Metadata Editor</a></li>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getPreConnectathonTestsTabCode()+"'>Pre-Connectathon Tests</a></li>" +
-                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getv2TabCode()+"'>v2 Tab Example</a></li>" +
                 "</ul>" +
                 "</li>" +
                /* "<li><a href='#'>Send Test Data</a>" +

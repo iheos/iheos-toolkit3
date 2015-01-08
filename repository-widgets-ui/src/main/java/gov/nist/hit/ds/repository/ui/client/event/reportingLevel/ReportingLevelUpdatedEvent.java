@@ -2,8 +2,8 @@ package gov.nist.hit.ds.repository.ui.client.event.reportingLevel;
 
 
 import com.google.gwt.event.shared.GwtEvent;
-import gov.nist.hit.ds.repository.shared.data.AssetNode;
-import gov.nist.hit.ds.repository.ui.client.event.asset.InContextAssetClickedEventHandler;
+
+import java.util.List;
 
 /**
  * InContext refers to the context already provided within the log browser tree repository viewer.
@@ -15,10 +15,10 @@ public class ReportingLevelUpdatedEvent extends GwtEvent<ReportingLevelUpdatedEv
     public static final Type<ReportingLevelUpdatedEventHandler> TYPE = new Type<ReportingLevelUpdatedEventHandler>();
 
 
-    private String[] level;
+    private List<String> statusCodes;
 
-    public ReportingLevelUpdatedEvent(String[] level) {
-        this.level = level;
+    public ReportingLevelUpdatedEvent(List<String> statusCodes) {
+        this.statusCodes = statusCodes;
     }
 
     @Override
@@ -37,14 +37,13 @@ public class ReportingLevelUpdatedEvent extends GwtEvent<ReportingLevelUpdatedEv
         handler.onUpdate(this);
     }
 
-    public String[] getLevel() {
-        return level;
+    public List<String> getStatusCodes() {
+        return statusCodes;
     }
 
-    public void setLevel(String[] level) {
-        this.level = level;
+    public void setStatusCodes(List<String> statusCodes) {
+        this.statusCodes = statusCodes;
     }
-
 }
 
 

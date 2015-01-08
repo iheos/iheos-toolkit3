@@ -299,7 +299,7 @@ public class EventAggregatorWidget extends Composite {
                 @Override
                 public void onUpdate(ReportingLevelUpdatedEvent event) {
 //                    logger.info("*** "+(event.getLevel()==null));
-                    drawTable(event.getLevel());
+                    drawTable(event.getStatusCodes());
                 }
             });
         } catch (Throwable t) {
@@ -307,6 +307,13 @@ public class EventAggregatorWidget extends Composite {
         }
 
         return getContentPanel();
+    }
+
+    private void drawLoading() {
+
+        summaryGrid.clear();
+
+        summaryGrid.setWidget(0, 0, new HTML("<b>Preparing results...<b>"));
     }
 
     private void drawSummaryTextTable(int errorCt, int warningCt, int otherCt) {
@@ -482,19 +489,21 @@ public class EventAggregatorWidget extends Composite {
 
     /**
      * Filter by status {@see EventAggregatorWidget#setStatusColumnName}
-     * @param reportingLevel
+     * @param statusCodes
      */
-    public void drawTable(final String[] reportingLevel) {
+    public void drawTable(final List<String> statusCodes) {
+
         try {
             dataProvider.getList().clear();
         } catch (Throwable t) {
             t.printStackTrace();
         }
 
-        if (getEventAssetId()==null) {
+        if (getEventAssetId()==null || (getEventAssetId()!=null && getEventAssetId().getId()==null||"".equals(getEventAssetId().getId()))) { // Nothing to do, just return
             return;
         }
 
+        drawLoading();
         try {
             reposService.aggregateAssertions(getExternalRepositoryId()
                     , getEventAssetId()         // typically this asset has a date-formatted display name
@@ -549,10 +558,10 @@ public class EventAggregatorWidget extends Composite {
                         }
 
                         // Apply Reporting Level
-                        if ((reportingLevel!=null && reportingLevel.length>0)
+                        if ((statusCodes!=null && statusCodes.size()>0)
                                 && statusIdx>-1) {
                             boolean match = false;
-                            for (String statusCode : reportingLevel) {
+                            for (String statusCode : statusCodes) {
                                 if ("INFO".equals(statusCode)/* Pass everything */
                                 || statusCode.equalsIgnoreCase(rowStatus))
                                     match = true;
@@ -786,7 +795,7 @@ public class EventAggregatorWidget extends Composite {
             setEventAssetId(eventAssetNode.getAssetId());
             setExternalRepositoryId(eventAssetNode.getRepId());
             setAssetType(eventAssetNode.getType());
-            drawTable();
+            drawTable(getLoggingControlWidget().getStatusCodes());
         }
     }
 

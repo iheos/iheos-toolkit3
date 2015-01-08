@@ -17,7 +17,7 @@ public class LoggingControlWidget extends Composite {
     private EventBus eventBus;
     private String caption;
 
-    private String statusCode;
+    private ArrayList<String> statusCodes = new ArrayList<String>();
 
     // mouse positions relative to canvas
     int mouseX, mouseY;
@@ -330,7 +330,9 @@ public class LoggingControlWidget extends Composite {
 
 
 //        if (!mouseUp) {
-        ArrayList<String> statusCodes = new ArrayList<String>();
+
+
+            statusCodes.clear();
 
             if ( "A".equals(flag) || "C".equals(flag)) {
                 errorLabelColor = "red";
@@ -384,7 +386,7 @@ public class LoggingControlWidget extends Composite {
             // Use this only in 1000 ms refresh mode to debug
 //            System.out.println(">>>>>>>>>>>>>> previousFlag: " + previousFlag + " flag: " + flag + " initialState: " + initialState + " mouseUp: " + mouseUp);
         if ((initialState || mouseUp) && (!previousFlag.equals(flag))) {
-            eventBus.fireEvent(new ReportingLevelUpdatedEvent(statusCodes.toArray(new String[statusCodes.size()])));
+            eventBus.fireEvent(new ReportingLevelUpdatedEvent(statusCodes));
             previousFlag = flag;
         }
 
@@ -406,12 +408,12 @@ public class LoggingControlWidget extends Composite {
 
     }
 
-    public String getStatusCode() {
-        return statusCode;
+
+    public ArrayList<String> getStatusCodes() {
+        return statusCodes;
     }
 
-    private void setStatusCode(String statusCode) {
-        this.statusCode = statusCode;
+    public void setStatusCodes(ArrayList<String> statusCodes) {
+        this.statusCodes = statusCodes;
     }
-
 }

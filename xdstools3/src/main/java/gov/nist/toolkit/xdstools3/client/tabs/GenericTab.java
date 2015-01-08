@@ -2,58 +2,151 @@ package gov.nist.toolkit.xdstools3.client.tabs;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
+import com.smartgwt.client.widgets.layout.HLayout;
+import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
+import gov.nist.toolkit.xdstools3.client.customWidgets.WaitPanel;
+import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.HelpButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.design.Formatter;
 import gov.nist.toolkit.xdstools3.client.customWidgets.design.IconLabel;
 
 public abstract class GenericTab extends Tab implements TabInterface {
-    private VLayout panel = new VLayout(10);
+
+    private VLayout mainPanel = new VLayout();
+    private VLayout contentsPanel = new VLayout(10); // this is the left panel
+    private VLayout helpPanel = new VLayout(); // this is the right panel
+    private HLayout topPanel = new HLayout();  // contains contentsPanel and resultsPanel
+    private VLayout resultsPanel = new VLayout(); // bottom label
     private Label headerLabel = new Label();
+    private HLayout titleAndHelpButton = new HLayout();
+    private HelpButton helpButton;
     private String tabName;
+    protected WaitPanel waitPanel=new WaitPanel();
 
     public GenericTab(String header){
         setTitle(header);
         setHeader(header);
         setContents(createContents());
+        createResultsPanel();
         tabName=setTabName();
+        mainPanel.setLayoutMargin(10);
     }
 
-    public VLayout getPanel() {
-        return panel;
+    @Override
+    public VLayout getContentsPanel() {
+        return contentsPanel;
     }
+
 
     /**
      * This is the title of the tab, displayed in large characters at the top of the tab
-     * @param s the title or header to be set, as String
+     * @param s the title or header of the tab
      */
+    @Override
     public void setHeader(String s){
+        // create the header of the tab
         headerLabel.setHeight(30);
+        headerLabel.setWidth(200);
         headerLabel.setContents(s);
         headerLabel.setStyleName("h3");
-        panel.addMember(headerLabel);
-        setPane(panel);
+
+        // add a spacer to separate the title from the help button
+        LayoutSpacer spacer = new LayoutSpacer();
+        spacer.setHeight(30);
+
+        // add components to main contentsPanel
+        titleAndHelpButton.addMembers(headerLabel, spacer);
+        titleAndHelpButton.setHeight(30);
+        mainPanel.addMember(titleAndHelpButton);
+        setPane(mainPanel);
     }
 
+    @Override
     public IconLabel createSubtitle1(String s){
         return Formatter.createSubtitle1(s); // TODO May need to be transformed into direct call inside each tab
-    }
-
-    public void hideHeaderTitle(){
-        panel.removeMember(headerLabel);
     }
 
     /**
      * Sets a tab contents
      * @param pane The tab contents
      */
+    // set private
     public void setContents(Widget pane){
-        panel.addMember(pane);
-        setPane(panel);
+        contentsPanel.addMember(pane); // left contents panel, that contains for example form fields
+        topPanel.addMembers(contentsPanel, helpPanel);
+        mainPanel.addMember(topPanel);
+        setPane(mainPanel);
         getPane().setAlign(Alignment.CENTER);
+        topPanel.setLayoutBottomMargin(20);
     }
 
+    /**
+     * Adds a panel for the validation results
+     */
+    @Override
+    public void createResultsPanel(){
+        mainPanel.addMember(resultsPanel);
+        setPane(mainPanel);
+    }
+
+    /**
+     * Changes the contents of the result panel
+     * @param canvas
+     */
+    @Override
+    public void setResultsPanel(Canvas canvas){
+        resultsPanel.clear();
+        resultsPanel.addMember(canvas);
+    }
+
+    @Override
+    public VLayout getResultsPanel(){
+        return mainPanel;
+    }
+
+    /**
+     * Removes the main header of a tab
+     */
+    @Override
+    public void removeHeaderTitle(){
+        mainPanel.removeMember(titleAndHelpButton);
+    }
+
+    /**
+     * Add a help button to the top right corner of the tab
+     */
+    @Override
+    public void setHelpButton(Canvas container, String contents){
+        helpButton = new HelpButton(container, contents);
+        titleAndHelpButton.addMember(helpButton);
+        titleAndHelpButton.setHeight(30);
+        titleAndHelpButton.redraw();
+    }
+
+    /**
+     * Hides the help button
+     */
+    @Override
+    public void hideHelpButton(){
+        contentsPanel.hideMember(helpButton);
+    }
+
+    /**
+     * Changes the contents of the Help Window, displayed when clicking on the Help Button
+     * @param contents
+     */
+    @Override
+    public void setHelpWindowContents(String contents){
+        helpButton.setHelpWindowContents(contents);
+    }
+
+    @Override
+    public VLayout getHelpPanel() {
+        return helpPanel;
+    }
 
 
     /**
@@ -64,6 +157,7 @@ public abstract class GenericTab extends Tab implements TabInterface {
      *
      * @See TabNamesUtil
      */
+    @Override
     public String getTabName(){
         return tabName;
     }
@@ -79,4 +173,5 @@ public abstract class GenericTab extends Tab implements TabInterface {
      * @return tab's name
      */
     protected abstract String setTabName();
+
 }

@@ -26,7 +26,7 @@
 
     <!-- Uncomment this line to force GWT compiler to only generate javascript
         for Safari/Chrome browsers -->
-    <set-property name="user.agent" value="safari" />
+    <!--<set-property name="user.agent" value="safari" />-->
 
     <!-- old -->
     <!--<inherits name='gov.nist.hit.ds.repository.RepositoryRpc' />-->
