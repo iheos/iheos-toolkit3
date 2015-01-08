@@ -5,9 +5,10 @@ import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.MetadataModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.parser.MetadataParser
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.toolkit.environment.Environment
 
-public class MetadataVal {
+public class MetadataVal extends ValComponentBase {
 	Metadata m
 	ValidationContext vc
     SimHandle simHandle

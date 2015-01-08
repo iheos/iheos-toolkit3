@@ -164,7 +164,6 @@ public class Toolkit {
     static public File externalCacheFile() { return new File(propertyManager.getExternalCache()); }
     static public boolean useActorsFile() { return propertyManager.isUseActorsFile(); }
     static public String getDefaultAssigningAuthority() { return propertyManager.getDefaultAssigningAuthority(); }
-    static public String getDefaultEnvironmentName() { return propertyManager.getDefaultEnvironmentName(); }
     static public String getEnableAllCiphers() { return propertyManager.getToolkitEnableAllCiphers(); }
     static public void saveProperties(File file) { propertyManager.saveProperties(file);}
 
@@ -181,6 +180,15 @@ public class Toolkit {
     static public File environmentsFile() { return new File(externalCacheFile(), "environment"); }
     static public List<String> getEnvironmentNames() { return Environment.getInstalledEnvironments(environmentsFile()); }
     static public Environment getEnvironment(String name) {  return new Environment(environmentsFile(), name); }
+    static public String getDefaultEnvironmentName() {
+        // If the default environment coded in toolkit.properties does not exist then fall back
+        // to the more basic default called "default" which is installed when toolkit
+        // is initialized.
+        String name = propertyManager.getDefaultEnvironmentName();
+        if (new Environment(environmentsFile(), name).exists())
+            return name;
+        return "default";
+    }
 
     // User sessions
     static public List<String> getUserSessions() { return new UserSession(externalCacheFile()).names(); }

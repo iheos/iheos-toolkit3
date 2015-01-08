@@ -1,5 +1,9 @@
 package gov.nist.hit.ds.dsSims.eb.transactions
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
+import gov.nist.hit.ds.dsSims.eb.topLevel.ValidatorManager
+import gov.nist.hit.ds.ebMetadata.Metadata
+import gov.nist.hit.ds.ebMetadata.MetadataParser
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
@@ -26,38 +30,46 @@ class PnrTest extends Specification {
     </actor>
 </ActorsTransactions>
 '''
-    def factory = new ActorTransactionTypeFactory()
-    def simId = new SimId('PnrTest')
-    def actorType = 'docrec'
-    def transactionName = 'prb'
+    def simId
     def repoName = 'Sim'
     def endpoint = new Endpoint('http://localhost:8080/xdstools3/sim/1234/docrec/prb')
-    def header = 'x'
-    def body = 'y'.getBytes()
     File repoDataDir
     RepositorySource repoSource
     SimHandle simHandle
 
-    void setup() {
+    def setup() {
         SimSupport.initialize()
-        factory.clear()
-        factory.loadFromString(config)
+        new ActorTransactionTypeFactory().clear()
+        new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simHandle = SimUtils.create(actorType, simId)
+        simId = new SimId('PnrTest')
+        SimUtils.recreate('docrec', simId, repoName)
     }
 
-    // TODO: How to pass in options/selections???
+    def run(String header, String body) {
+        Metadata metadata = MetadataParser.parseNonSubmission(submission)
+        ValidationContext vc = new ValidationContext()
+        vc.isPnR = true
+        vc.isRequest = true
+        def validationInterface = null
 
-//    def cleanup() {
-//        new SimUtils().delete(simId, repoName)
-//    }
+        Closure closure = { SimHandle simHandle ->
+            simHandle.event.addArtifact('Metadata', submission)
+            new ValidatorManager().validateMessage(ValidatorManager.soapAction, header, body.getBytes())
+        }
+        transRunner = new TransactionRunner('rb', simId, repoName, closure)
+        transRunner.runTest()
+
+        println "Failed assertions are ${transRunner.simHandle.event.errorAssertionIds()}"
+    }
+
 
     def 'Test'() {
         setup:
-        def header = 'x'
-        def body = 'y'.getBytes()
-        def transactionType = factory.getTransactionType(transactionName)
+        def header = getClass().classLoader.getResource('pnr/PnRSoapHeader.txt').text
+        def body = getClass().classLoader.getResource('pnr/PnR1DocSoapBody.xml').text.getBytes()
+        def transactionType = factory.getTransactionType('prb')
         simHandle.event.inOut.reqHdr = header
         simHandle.event.inOut.reqBody = body
         when:

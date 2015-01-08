@@ -16,7 +16,7 @@ import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
  */
 class ValidatorManager implements MessageValidator {
 
-    final String soapAction = 'by SOAP:Action'
+    static final String soapAction = 'by SOAP:Action'
 
     @Override
     List<String> getTransactionValidatorNames() {

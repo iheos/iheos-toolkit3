@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.toolkit.environment;
 
+import gov.nist.hit.ds.toolkit.Toolkit;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,13 @@ public class Environment {
         this.environmentsFile = environmentsFile;
 	}
 
-    File environmentDir() { return new File(environmentsFile, name); }
+    static public Environment getDefaultEnvironment() {
+        return new Environment(Toolkit.environmentsFile(), Toolkit.getDefaultEnvironmentName());
+    }
+
+    public File environmentDir() { return new File(environmentsFile, name); }
+
+    public boolean exists() { return environmentDir().exists(); }
 
     public File getCodesFile() {
         return new File(environmentDir(), "codes.xml");
