@@ -1,47 +1,47 @@
 [INFO] Scanning for projects...
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:repository:jar:3.0.0-SNAPSHOT
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:repository:jar:3.0.0
 [WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ line 143, column 12
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:http:jar:3.0.0-SNAPSHOT
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:http:jar:3.0.0
 [WARNING] 'build.plugins.plugin.version' for org.codehaus.mojo:gwt-maven-plugin is missing. @ line 73, column 12
-[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:soap-support:jar:3.0.0-SNAPSHOT
-[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:soap-support:jar:3.0.0
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:site-management:jar:3.0.0-SNAPSHOT
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:site-management:jar:3.0.0
 [WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: gov.nist.hit.ds:actor-transaction:jar -> duplicate declaration of version (?) @ line 56, column 21
 [WARNING] 'build.plugins.plugin.version' for org.codehaus.mojo:gwt-maven-plugin is missing. @ line 79, column 21
-[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:actor-transaction:jar:3.0.0-SNAPSHOT
-[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:actor-transaction:jar:3.0.0
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:event-log:jar:3.0.0-SNAPSHOT
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:event-log:jar:3.0.0
 [WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ line 55, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:sim-support:jar:3.0.0-SNAPSHOT
-[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:sim-support:jar:3.0.0
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:utilities:jar:3.0.0-SNAPSHOT
-[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:utilities:jar:3.0.0
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:xdsException:jar:3.0.0-SNAPSHOT
-[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:xdsException:jar:3.0.0
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:toolkit:jar:3.0.0-SNAPSHOT
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:toolkit:jar:3.0.0
 [WARNING] 'dependencies.dependency.systemPath' for org.apache.commons.io:commons-io:jar should not point at files within the project directory, ${basedir}/../lib/commons-io-2.4.jar will be unresolvable by dependent projects @ line 22, column 25
-[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:common-datatypes:jar:3.0.0-SNAPSHOT
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:common-datatypes:jar:3.0.0
 [WARNING] 'build.plugins.plugin.version' for org.codehaus.mojo:gwt-maven-plugin is missing. @ line 27, column 21
-[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:tk-core:pom:3.0.0-SNAPSHOT
-[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:tk-core:pom:3.0.0
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:toolkit3:pom:3.0.0-SNAPSHOT
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:toolkit3:pom:3.0.0
 [WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ line 299, column 21
 [WARNING] 
 [WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
@@ -66,7 +66,7 @@
 [INFO] tk-core
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building toolkit3 3.0.0-SNAPSHOT
+[INFO] Building toolkit3 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ toolkit3 ---
@@ -78,10 +78,10 @@
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ toolkit3 ---
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ toolkit3 ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\toolkit3\3.0.0-SNAPSHOT\toolkit3-3.0.0-SNAPSHOT.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\toolkit3\3.0.0\toolkit3-3.0.0.pom
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building common-datatypes 3.0.0-SNAPSHOT
+[INFO] Building common-datatypes 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ common-datatypes ---
@@ -122,22 +122,22 @@ Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 
 [INFO] 
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ common-datatypes ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\common-datatypes\target\common-datatypes-3.0.0-SNAPSHOT.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\common-datatypes\target\common-datatypes-3.0.0.jar
 [INFO] 
 [INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ common-datatypes >>>
 [INFO] 
 [INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ common-datatypes <<<
 [INFO] 
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ common-datatypes ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\common-datatypes\target\common-datatypes-3.0.0-SNAPSHOT-sources.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\common-datatypes\target\common-datatypes-3.0.0-sources.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ common-datatypes ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\common-datatypes\target\common-datatypes-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\common-datatypes\3.0.0-SNAPSHOT\common-datatypes-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\common-datatypes\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\common-datatypes\3.0.0-SNAPSHOT\common-datatypes-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\common-datatypes\target\common-datatypes-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\common-datatypes\3.0.0-SNAPSHOT\common-datatypes-3.0.0-SNAPSHOT-sources.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\common-datatypes\target\common-datatypes-3.0.0.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\common-datatypes\3.0.0\common-datatypes-3.0.0.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\common-datatypes\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\common-datatypes\3.0.0\common-datatypes-3.0.0.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\common-datatypes\target\common-datatypes-3.0.0-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\common-datatypes\3.0.0\common-datatypes-3.0.0-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building xdsException 3.0.0-SNAPSHOT
+[INFO] Building xdsException 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ xdsException ---
@@ -162,22 +162,22 @@ Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 [INFO] No tests to run.
 [INFO] 
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ xdsException ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0-SNAPSHOT.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0.jar
 [INFO] 
 [INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ xdsException >>>
 [INFO] 
 [INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ xdsException <<<
 [INFO] 
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ xdsException ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0-SNAPSHOT-sources.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0-sources.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ xdsException ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xdsException\3.0.0-SNAPSHOT\xdsException-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xdsException\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xdsException\3.0.0-SNAPSHOT\xdsException-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xdsException\3.0.0-SNAPSHOT\xdsException-3.0.0-SNAPSHOT-sources.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xdsException\3.0.0\xdsException-3.0.0.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xdsException\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xdsException\3.0.0\xdsException-3.0.0.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xdsException\3.0.0\xdsException-3.0.0-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building utilities 3.0.0-SNAPSHOT
+[INFO] Building utilities 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ utilities ---
@@ -220,22 +220,22 @@ Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
 
 [INFO] 
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ utilities ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\utilities\target\utilities-3.0.0-SNAPSHOT.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\utilities\target\utilities-3.0.0.jar
 [INFO] 
 [INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ utilities >>>
 [INFO] 
 [INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ utilities <<<
 [INFO] 
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ utilities ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\utilities\target\utilities-3.0.0-SNAPSHOT-sources.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\utilities\target\utilities-3.0.0-sources.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ utilities ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\utilities\target\utilities-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\utilities\3.0.0-SNAPSHOT\utilities-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\utilities\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\utilities\3.0.0-SNAPSHOT\utilities-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\utilities\target\utilities-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\utilities\3.0.0-SNAPSHOT\utilities-3.0.0-SNAPSHOT-sources.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\utilities\target\utilities-3.0.0.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\utilities\3.0.0\utilities-3.0.0.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\utilities\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\utilities\3.0.0\utilities-3.0.0.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\utilities\target\utilities-3.0.0-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\utilities\3.0.0\utilities-3.0.0-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building toolkit 3.0.0-SNAPSHOT
+[INFO] Building toolkit 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ toolkit ---
@@ -260,22 +260,22 @@ Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
 [INFO] No tests to run.
 [INFO] 
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ toolkit ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\toolkit\target\toolkit-3.0.0-SNAPSHOT.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\toolkit\target\toolkit-3.0.0.jar
 [INFO] 
 [INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ toolkit >>>
 [INFO] 
 [INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ toolkit <<<
 [INFO] 
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ toolkit ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\toolkit\target\toolkit-3.0.0-SNAPSHOT-sources.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\toolkit\target\toolkit-3.0.0-sources.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ toolkit ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\toolkit\target\toolkit-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\toolkit\3.0.0-SNAPSHOT\toolkit-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\toolkit\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\toolkit\3.0.0-SNAPSHOT\toolkit-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\toolkit\target\toolkit-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\toolkit\3.0.0-SNAPSHOT\toolkit-3.0.0-SNAPSHOT-sources.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\toolkit\target\toolkit-3.0.0.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\toolkit\3.0.0\toolkit-3.0.0.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\toolkit\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\toolkit\3.0.0\toolkit-3.0.0.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\toolkit\target\toolkit-3.0.0-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\toolkit\3.0.0\toolkit-3.0.0-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building repository 3.0.0-SNAPSHOT
+[INFO] Building repository 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ repository ---
@@ -32142,22 +32142,22 @@ Tests run: 42, Failures: 0, Errors: 0, Skipped: 0
 
 [INFO] 
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ repository ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\repository\target\repository-3.0.0-SNAPSHOT.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\repository\target\repository-3.0.0.jar
 [INFO] 
 [INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ repository >>>
 [INFO] 
 [INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ repository <<<
 [INFO] 
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ repository ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\repository\target\repository-3.0.0-SNAPSHOT-sources.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\repository\target\repository-3.0.0-sources.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ repository ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\repository\target\repository-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\repository\3.0.0-SNAPSHOT\repository-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\repository\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\repository\3.0.0-SNAPSHOT\repository-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\repository\target\repository-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\repository\3.0.0-SNAPSHOT\repository-3.0.0-SNAPSHOT-sources.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\repository\target\repository-3.0.0.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\repository\3.0.0\repository-3.0.0.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\repository\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\repository\3.0.0\repository-3.0.0.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\repository\target\repository-3.0.0-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\repository\3.0.0\repository-3.0.0-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building event-log 3.0.0-SNAPSHOT
+[INFO] Building event-log 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ event-log ---
@@ -32182,22 +32182,22 @@ Tests run: 42, Failures: 0, Errors: 0, Skipped: 0
 [INFO] No tests to run.
 [INFO] 
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ event-log ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\event-log\target\event-log-3.0.0-SNAPSHOT.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\event-log\target\event-log-3.0.0.jar
 [INFO] 
 [INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ event-log >>>
 [INFO] 
 [INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ event-log <<<
 [INFO] 
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ event-log ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\event-log\target\event-log-3.0.0-SNAPSHOT-sources.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\event-log\target\event-log-3.0.0-sources.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ event-log ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\event-log\target\event-log-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\event-log\3.0.0-SNAPSHOT\event-log-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\event-log\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\event-log\3.0.0-SNAPSHOT\event-log-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\event-log\target\event-log-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\event-log\3.0.0-SNAPSHOT\event-log-3.0.0-SNAPSHOT-sources.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\event-log\target\event-log-3.0.0.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\event-log\3.0.0\event-log-3.0.0.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\event-log\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\event-log\3.0.0\event-log-3.0.0.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\event-log\target\event-log-3.0.0-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\event-log\3.0.0\event-log-3.0.0-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building http 3.0.0-SNAPSHOT
+[INFO] Building http 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ http ---
@@ -32256,22 +32256,22 @@ Tests run: 16, Failures: 0, Errors: 0, Skipped: 0
 
 [INFO] 
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ http ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\http\target\http-3.0.0-SNAPSHOT.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\http\target\http-3.0.0.jar
 [INFO] 
 [INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ http >>>
 [INFO] 
 [INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ http <<<
 [INFO] 
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ http ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\http\target\http-3.0.0-SNAPSHOT-sources.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\http\target\http-3.0.0-sources.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ http ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\http\target\http-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\http\3.0.0-SNAPSHOT\http-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\http\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\http\3.0.0-SNAPSHOT\http-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\http\target\http-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\http\3.0.0-SNAPSHOT\http-3.0.0-SNAPSHOT-sources.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\http\target\http-3.0.0.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\http\3.0.0\http-3.0.0.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\http\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\http\3.0.0\http-3.0.0.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\http\target\http-3.0.0-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\http\3.0.0\http-3.0.0-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building actor-transaction 3.0.0-SNAPSHOT
+[INFO] Building actor-transaction 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ actor-transaction ---
@@ -32295,22 +32295,22 @@ Tests run: 16, Failures: 0, Errors: 0, Skipped: 0
 [INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ actor-transaction ---
 [INFO] 
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ actor-transaction ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\actor-transaction\target\actor-transaction-3.0.0-SNAPSHOT.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\actor-transaction\target\actor-transaction-3.0.0.jar
 [INFO] 
 [INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ actor-transaction >>>
 [INFO] 
 [INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ actor-transaction <<<
 [INFO] 
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ actor-transaction ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\actor-transaction\target\actor-transaction-3.0.0-SNAPSHOT-sources.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\actor-transaction\target\actor-transaction-3.0.0-sources.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ actor-transaction ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\actor-transaction\target\actor-transaction-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\actor-transaction\3.0.0-SNAPSHOT\actor-transaction-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\actor-transaction\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\actor-transaction\3.0.0-SNAPSHOT\actor-transaction-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\actor-transaction\target\actor-transaction-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\actor-transaction\3.0.0-SNAPSHOT\actor-transaction-3.0.0-SNAPSHOT-sources.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\actor-transaction\target\actor-transaction-3.0.0.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\actor-transaction\3.0.0\actor-transaction-3.0.0.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\actor-transaction\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\actor-transaction\3.0.0\actor-transaction-3.0.0.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\actor-transaction\target\actor-transaction-3.0.0-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\actor-transaction\3.0.0\actor-transaction-3.0.0-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building soap-support 3.0.0-SNAPSHOT
+[INFO] Building soap-support 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ soap-support ---
@@ -32335,22 +32335,22 @@ Tests run: 16, Failures: 0, Errors: 0, Skipped: 0
 [INFO] No tests to run.
 [INFO] 
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ soap-support ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\soap-support\target\soap-support-3.0.0-SNAPSHOT.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\soap-support\target\soap-support-3.0.0.jar
 [INFO] 
 [INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ soap-support >>>
 [INFO] 
 [INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ soap-support <<<
 [INFO] 
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ soap-support ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\soap-support\target\soap-support-3.0.0-SNAPSHOT-sources.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\soap-support\target\soap-support-3.0.0-sources.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ soap-support ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\soap-support\target\soap-support-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\soap-support\3.0.0-SNAPSHOT\soap-support-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\soap-support\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\soap-support\3.0.0-SNAPSHOT\soap-support-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\soap-support\target\soap-support-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\soap-support\3.0.0-SNAPSHOT\soap-support-3.0.0-SNAPSHOT-sources.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\soap-support\target\soap-support-3.0.0.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\soap-support\3.0.0\soap-support-3.0.0.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\soap-support\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\soap-support\3.0.0\soap-support-3.0.0.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\soap-support\target\soap-support-3.0.0-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\soap-support\3.0.0\soap-support-3.0.0-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building site-management 3.0.0-SNAPSHOT
+[INFO] Building site-management 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ site-management ---
@@ -32996,22 +32996,22 @@ Tests run: 37, Failures: 0, Errors: 0, Skipped: 0
 
 [INFO] 
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ site-management ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\site-management\target\site-management-3.0.0-SNAPSHOT.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\site-management\target\site-management-3.0.0.jar
 [INFO] 
 [INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ site-management >>>
 [INFO] 
 [INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ site-management <<<
 [INFO] 
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ site-management ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\site-management\target\site-management-3.0.0-SNAPSHOT-sources.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\site-management\target\site-management-3.0.0-sources.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ site-management ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\site-management\target\site-management-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\site-management\3.0.0-SNAPSHOT\site-management-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\site-management\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\site-management\3.0.0-SNAPSHOT\site-management-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\site-management\target\site-management-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\site-management\3.0.0-SNAPSHOT\site-management-3.0.0-SNAPSHOT-sources.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\site-management\target\site-management-3.0.0.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\site-management\3.0.0\site-management-3.0.0.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\site-management\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\site-management\3.0.0\site-management-3.0.0.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\site-management\target\site-management-3.0.0-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\site-management\3.0.0\site-management-3.0.0-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building sim-support 3.0.0-SNAPSHOT
+[INFO] Building sim-support 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ sim-support ---
@@ -33268,22 +33268,22 @@ Tests run: 39, Failures: 0, Errors: 0, Skipped: 0
 
 [INFO] 
 [INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ sim-support ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\sim-support\target\sim-support-3.0.0-SNAPSHOT.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\sim-support\target\sim-support-3.0.0.jar
 [INFO] 
 [INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ sim-support >>>
 [INFO] 
 [INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ sim-support <<<
 [INFO] 
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ sim-support ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\sim-support\target\sim-support-3.0.0-SNAPSHOT-sources.jar
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\sim-support\target\sim-support-3.0.0-sources.jar
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ sim-support ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\sim-support\target\sim-support-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\sim-support\3.0.0-SNAPSHOT\sim-support-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\sim-support\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\sim-support\3.0.0-SNAPSHOT\sim-support-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\sim-support\target\sim-support-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\sim-support\3.0.0-SNAPSHOT\sim-support-3.0.0-SNAPSHOT-sources.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\sim-support\target\sim-support-3.0.0.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\sim-support\3.0.0\sim-support-3.0.0.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\sim-support\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\sim-support\3.0.0\sim-support-3.0.0.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\sim-support\target\sim-support-3.0.0-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\sim-support\3.0.0\sim-support-3.0.0-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building tk-core 3.0.0-SNAPSHOT
+[INFO] Building tk-core 3.0.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ tk-core ---
@@ -33295,7 +33295,7 @@ Tests run: 39, Failures: 0, Errors: 0, Skipped: 0
 [INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ tk-core ---
 [INFO] 
 [INFO] --- maven-install-plugin:2.4:install (default-install) @ tk-core ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\tk-core\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\tk-core\3.0.0-SNAPSHOT\tk-core-3.0.0-SNAPSHOT.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\tk-core\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\tk-core\3.0.0\tk-core-3.0.0.pom
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Summary:
 [INFO] 
