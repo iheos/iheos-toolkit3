@@ -58,6 +58,7 @@ public class MhdToXdsConverterTab2 extends GenericCloseableTab {
         uploadForm.setMethod(FormPanel.METHOD_POST);
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setAction("fileUploadServlet");
+        uploadForm.setStyleName("gwt-form-margin");
 
         fileUploadItem = new FileUpload();
         fileUploadItem.setTitle("File to convert");
