@@ -10,9 +10,12 @@ import gov.nist.hit.ds.utilities.csv.CSVEntry;
 import gov.nist.hit.ds.utilities.csv.CSVParser;
 import gov.nist.hit.ds.utilities.xml.XmlFormatter;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Logger;
@@ -122,10 +125,12 @@ public class ContentHelper {
 
                         // Debug
 //                        logger.info(aSrc.getAssetTypeProperties().getProperties().getProperty(PropertyKey.DESCRIPTION.toString()));
-//                        logger.info(aSrc.getAssetTypeProperties().getProperties().getProperty(PropertyKey.COLUMN_HEADER_WIDTHS.toString()));
+//                        logger.info(aSrc.getAssetTypeProperties().getProperties().getProperty(PropertyKey.COLUMN_WIDTHS.toString()));
 
-                        aDst.getExtendedProps().put(PropertyKey.COLUMN_HEADER_WIDTHS.toString()
-                                , aSrc.getAssetType().getProperties().getProperty(PropertyKey.COLUMN_HEADER_WIDTHS.toString()));
+                        if (aSrc.getAssetType()!=null && aSrc.getAssetType().getProperties()!=null) { // Possible made-up type which doesn't exist in types dir
+                            aDst.getExtendedProps().put(PropertyKey.COLUMN_WIDTHS.toString()
+                                , aSrc.getAssetType().getProperties().getProperty(PropertyKey.COLUMN_WIDTHS.toString()));
+                        }
                     }
                 } else if ("text/json".equals(aSrc.getMimeType())) {
                     aDst.setTxtContent(prettyPrintJson(content));
@@ -227,6 +232,36 @@ public class ContentHelper {
     }
 
 
+    public static Map<String, String> getHashMapFromJsonStr(String jsonStr)  {
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            TypeReference<HashMap<String,String>> typeRef = new TypeReference<HashMap<String,String>>() {};
+
+            return mapper.readValue(jsonStr, typeRef);
+
+//            JSONValue jsonValue = JSONParser.parseStrict(jsonStr);
+//
+//            if (jsonValue!=null ) {
+//                System.out.println("jsonValue found");
+//                JSONObject jsonObject = jsonValue.isObject();
+//                if (jsonObject!=null) {
+//                    hashMap = new HashMap<String,String>();
+//                    for (String key : jsonObject.keySet()) {
+//                        String val = jsonObject.get(key).isString().stringValue();
+//                        System.out.println("key: " + key + " value: "  + val);
+//                        hashMap.put(key,val);
+//                    }
+//                }
+//            }
+
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+
+        return null;
+    }
 
 
 }

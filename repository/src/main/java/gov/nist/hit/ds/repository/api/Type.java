@@ -1,8 +1,7 @@
 package gov.nist.hit.ds.repository.api;
 
 
-import java.util.*;
-import java.util.Properties;
+import java.io.File;
 
 /**
  * The Type class captures the fundamental concept of categorizing an object.
@@ -64,6 +63,7 @@ public abstract class Type implements java.io.Serializable {
     private String index;
     private String lifetime;
     private java.util.Properties properties;
+    private File fullPath;
 
 
     public Type(String authority, String domain, String keyword) {
@@ -91,16 +91,46 @@ public abstract class Type implements java.io.Serializable {
         }    
 
     public final boolean isEqual(Type type2) {
-        if ((null != type2) && (null != type2.getDomain()) &&
-                (null != type2.getAuthority()) && (null != type2.getKeyword()) &&
-                (null != this.getDomain()) && (null != this.getAuthority()) &&
-                (null != this.getKeyword())) {
-            return (this.getDomain().equals(type2.getDomain()) &&
-            this.getAuthority().equals(type2.getAuthority()) &&
-            this.getKeyword().equals(type2.getKeyword()));
+//        if ((null != type2) && (null != type2.getDomain()) &&
+//                (null != type2.getAuthority()) && (null != type2.getKeyword()) &&
+//                (null != this.getDomain()) && (null != this.getAuthority()) &&
+//                (null != this.getKeyword())) {
+//            return (this.getDomain().equals(type2.getDomain()) &&
+//            this.getAuthority().equals(type2.getAuthority()) &&
+//            this.getKeyword().equals(type2.getKeyword()));
+//        }
+
+        boolean isEqual = true;
+
+        if (isEqual) {
+            if  (this.getKeyword()==null && type2.getKeyword()==null) {
+                isEqual = true;
+            } else {
+                isEqual = this.getKeyword().equals(type2.getKeyword());
+            }
         }
 
-        return false;
+
+        if (isEqual) {
+            if  (this.getDomain() ==null && type2.getDomain()==null) {
+                isEqual = true;
+            } else {
+                isEqual = this.getDomain().equals(type2.getDomain());
+            }
+        }
+
+
+
+        if (isEqual) {
+            if  (this.getAuthority()==null && type2.getAuthority()==null) {
+                isEqual = true;
+            } else {
+                isEqual = this.getAuthority().equals(type2.getAuthority());
+            }
+        }
+
+
+        return isEqual;
     }
     public void setDomain(String domain) {
     	if (domain!=null) {
@@ -178,6 +208,13 @@ public abstract class Type implements java.io.Serializable {
         this.properties = properties;
     }
 
+    public File getFullPath() {
+        return fullPath;
+    }
+
+    public void setFullPath(File fullPath) {
+        this.fullPath = fullPath;
+    }
 
     /**
      * <p>

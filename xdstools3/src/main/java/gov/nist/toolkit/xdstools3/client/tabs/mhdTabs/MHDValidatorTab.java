@@ -38,7 +38,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
     private final static MHDTabsServicesAsync mhdToolkitService = GWT
             .create(MHDTabsServices.class);
 
-    // tab's title and heander
+    // tab's title and header
     private static String header="MHD Validator";
 
     // UI components
@@ -105,9 +105,8 @@ public class MHDValidatorTab extends GenericCloseableTab {
         // Create Help Link
         setHelpButton(getHelpPanel(), Resources.INSTANCE.helpContentsSample().getText());
 
-        // Event summary widget parameters
-        //TODO this should not be hardcoded and should ultimately be removed
-        String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
+        // Initial event summary widget parameters
+        String id = null;
         String type = "validators";
         String[] displayColumns = new String[]{"ID","STATUS","MSG"};
 
@@ -247,7 +246,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         try {
             // Initialize the widget
             eventMessageAggregatorWidget = new EventAggregatorWidget(Manager.EVENT_BUS, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
-            eventMessageAggregatorWidget.setSize("990px", "375px");
+            eventMessageAggregatorWidget.setSize("990px", "300px");
             return eventMessageAggregatorWidget;
 
         } catch (Throwable t) {

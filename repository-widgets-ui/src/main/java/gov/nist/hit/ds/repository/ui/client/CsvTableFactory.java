@@ -278,7 +278,7 @@ public class CsvTableFactory {
 
     public static SimplePager getPager() {
         SimplePager pager = new SimplePager();
-        pager.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.MIDDLE);
+        pager.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.TOP);
 
 
         pager.getElement().getStyle().setPosition(Style.Position.RELATIVE);

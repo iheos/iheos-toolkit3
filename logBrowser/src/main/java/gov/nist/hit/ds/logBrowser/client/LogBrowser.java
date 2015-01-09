@@ -44,13 +44,13 @@ public class LogBrowser implements EntryPoint {
               } else {
                   logBrowserWidget = new LogBrowserWidget(eventBus,
                           new Feature[] {
-                                  Feature.BROWSE
-                                  , Feature.SEARCH
+//                                  Feature.BROWSE
+//                                  , Feature.SEARCH
 //                                , Feature.TRANSACTION_MONITOR // Old
 //                                , Feature.TRANSACTION_FILTER // Old
 //                                , Feature.TRANSACTION_FILTER_ADVANCED
-//                                  , Feature.EVENT_MESSAGE_AGGREGATOR // Independent widget test area
-//                                ,  Feature.LOGGING_CONTROL  // Experimental, comment off all others above
+                                 Feature.EVENT_MESSAGE_AGGREGATOR // Independent widget test area
+//                                 , Feature.LOGGING_CONTROL  // Experimental, comment off all others above
                           });
 
               }
