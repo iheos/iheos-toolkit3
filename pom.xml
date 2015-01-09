@@ -1,17 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-deps</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.0</version>
         <relativePath>/tk-deps/pom.xml</relativePath>
     </parent>
 
     <artifactId>toolkit3</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.2a</version>
     <packaging>pom</packaging>
 
     <name>toolkit3</name>
@@ -30,7 +28,7 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>http-soap-validator</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.ebxml</groupId>
@@ -102,23 +100,23 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>tk-apis</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
 
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>utilities</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>toolkit</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>errorRecording</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -150,48 +148,48 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>actor-transaction</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>xdsExceptions</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
 
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>common-datatypes</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
                 <artifactId>http</artifactId>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
                 <artifactId>soap-support</artifactId>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>sim-support</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
                 <artifactId>site-management</artifactId>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>event-log</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>repository</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.axis2</groupId>
@@ -294,7 +292,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -336,4 +334,8 @@
     </profiles>
 
 
+
+  <scm>
+    <tag>v3.0.2a</tag>
+  </scm>
 </project>

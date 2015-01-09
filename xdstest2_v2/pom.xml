@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>gov.nist.toolkit</groupId>
         <artifactId>toolkit2</artifactId>
-        <version>2.7.0-SNAPSHOT</version>
+        <version>2.7.0</version>
         <relativePath>../toolkit2-build/pom.xml</relativePath>
     </parent>
 
@@ -50,112 +49,112 @@
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>actorfactory_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>actortransaction_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>common_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>common-datatypes_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>docref_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>error-recording_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>http_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>installation_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>registry-metadata_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>registry-msg-formats_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>registry-support_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>results_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>security-common_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>site-management_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>soap_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>testkit-utilities_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>utilities_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>validators-registry-message_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>validators-registry-metadata_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>validators-support_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>xdsException</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.toolkit</groupId>
             <artifactId>xdstest2-logging_v2</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>2.7.0</version>
         </dependency>
     </dependencies>
 <build>
