@@ -1140,6 +1140,11 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                                     transaction.setReposSrc(requestViewerWidget.getRepositorySrc());
                                     transaction.setAssetId(requestViewerWidget.getIoHeaderId());
 //                                    Window.alert(transaction.getAssetId() + " src:" + transaction.getReposSrc());
+
+                                    setValidationResponseResult("request", "Processing...", "");
+                                    setValidationResponseResult("response", "Processing...", "");
+                                    getTxTable().redraw();
+
                                     try {
                                         reposService.validateMessage(valName,transaction, new AsyncCallback<Map<String, AssetNode>>() {
                                             @Override
@@ -1148,28 +1153,34 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                                                 Window.alert(msg);
                                                 setValidationResponseResult("request", "RPC Fail", msg);
                                                 setValidationResponseResult("response", "RPC Fail", msg);
+                                                getTxTable().redraw();
                                             }
 
                                             @Override
                                             public void onSuccess(Map<String, AssetNode> result) {
 //                                                Window.alert((result==null)?"null":""+result.size()  +  " req rs:" + result.get("Request").getExtendedProps().get("result") );
-                                                if (result!=null && result.size()==0) {
-                                                    Window.alert("No validation response was received.");
-                                                    setValidationResponseResult("request", "No data", "Empty set");
-                                                    setValidationResponseResult("response", "No data", "Empty set");
-                                                }
-                                                if (result!=null) {
+                                                try {
+                                                    if (result!=null && result.size()==0) {
+                                                        Window.alert("No validation response was received.");
+                                                        setValidationResponseResult("request", "No data", "Empty set");
+                                                        setValidationResponseResult("response", "No data", "Empty set");
+                                                    }
+                                                    if (result!=null) {
 //                                                    Window.alert(result.get("resType").getExtendedProps().get("result"));
-                                                    if (result.get("Request")!=null) {
-                                                        String resultStr = result.get("Request").getExtendedProps().get("result");
-                                                        String validationDetail = result.get("Request").getExtendedProps().get("validationDetail");
-                                                        setValidationResponseResult("request", resultStr , validationDetail);
+                                                        if (result.get("Request")!=null) {
+                                                            String resultStr = result.get("Request").getExtendedProps().get("result");
+                                                            String validationDetail = result.get("Request").getExtendedProps().get("validationDetail");
+                                                            setValidationResponseResult("request", resultStr , validationDetail);
+                                                        }
+                                                        if (result.get("Response")!=null) {
+                                                            String resultStr = result.get("Response").getExtendedProps().get("result");
+                                                            String validationDetail = result.get("Response").getExtendedProps().get("validationDetail");
+                                                            setValidationResponseResult("response", resultStr , validationDetail);
+                                                        }
                                                     }
-                                                    if (result.get("Response")!=null) {
-                                                        String resultStr = result.get("Response").getExtendedProps().get("result");
-                                                        String validationDetail = result.get("Response").getExtendedProps().get("validationDetail");
-                                                        setValidationResponseResult("response", resultStr , validationDetail);
-                                                    }
+                                                } catch (Throwable t) {
+                                                    setValidationResponseResult("request", "Exception/UI", t.toString());
+                                                    setValidationResponseResult("response", "Exception/UI", t.toString());
                                                 }
                                                 getTxTable().redraw();
                                             }
@@ -1214,12 +1225,17 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             if (an.getCsv() !=null) {
                 String[][] csvData = an.getCsv();
 
-                SafeHtmlBuilder shb = new SafeHtmlBuilder();
-                shb.appendEscaped(resultStr);
 
-                csvData[0][12] = shb.toSafeHtml().asString(); // TODO: make constant
+                SafeHtmlBuilder resultShb = new SafeHtmlBuilder();
+                resultShb.appendEscaped(resultStr);
+
+                csvData[0][12] =  resultShb.toSafeHtml().asString();
                 an.setCsv(csvData);
-                an.getExtendedProps().put("validationDetail",validationDetail);
+
+                SafeHtmlBuilder shb = new SafeHtmlBuilder();
+                shb.appendEscaped(validationDetail);
+
+                an.getExtendedProps().put("validationDetail",shb.toSafeHtml().asString());
             }
         }
     }
