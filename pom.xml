@@ -337,7 +337,7 @@
 
 
     <scm>
-        <developerConnection>scm:hg:https://bitbucket.org/iheos/toolkit</developerConnection>
+        <developerConnection>scm:hg:https://bitbucket.org/iheos/toolkit/branch/release/ihe</developerConnection>
         <tag>v3.0.2a</tag>
     </scm>
 </project>
