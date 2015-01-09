@@ -4,12 +4,13 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>toolkit3</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.2a</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
 
     <artifactId>gui-core</artifactId>
+  <version>3.0.0</version>
     <packaging>pom</packaging>
 
 

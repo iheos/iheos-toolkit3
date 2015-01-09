@@ -9,6 +9,7 @@
     </parent>
 
     <artifactId>tk</artifactId>
+  <version>3.0.0</version>
 
 
     <dependencies>

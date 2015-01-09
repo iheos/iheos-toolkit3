@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>toolkit3</artifactId>
-    <version>3.0.2a-SNAPSHOT</version>
+    <version>3.0.2a</version>
     <packaging>pom</packaging>
 
     <name>toolkit3</name>
@@ -245,6 +245,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>${maven-release-plugin.version}</version>
                 <configuration>
+                    <tagBase>https://svn.mycompany.com/repos/myapplication/releases</tagBase>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                     <releaseProfiles>releases</releaseProfiles>
                 </configuration>
