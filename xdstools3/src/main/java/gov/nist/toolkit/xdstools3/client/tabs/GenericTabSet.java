@@ -4,12 +4,14 @@ import com.smartgwt.client.types.Side;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
 
+/**
+ * Builds the main set of tabs for the application
+ */
 public class GenericTabSet extends TabSet {
 
 	public GenericTabSet(){
 	    this.setTabBarPosition(Side.TOP);
 	    this.setTabBarAlign(Side.LEFT);
-//        setStyleName("tabset");
 	}
 
     public Tab findTab(Tab tab){

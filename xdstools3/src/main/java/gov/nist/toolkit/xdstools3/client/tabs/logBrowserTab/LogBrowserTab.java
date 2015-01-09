@@ -41,7 +41,7 @@ public class LogBrowserTab extends GenericCloseableTab {
     public LogBrowserTab() {
         super(header);
         try {
-            setContents(createContent(null));
+            setFieldsCanvas(createContent(null));
         } catch (Throwable t) {
             t.printStackTrace();
         }
