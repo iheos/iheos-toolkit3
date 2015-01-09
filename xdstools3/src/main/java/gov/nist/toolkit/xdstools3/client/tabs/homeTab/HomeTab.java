@@ -17,10 +17,10 @@ public class HomeTab extends GenericTab {
 
     @Override
     protected HStack createContents(){
-        /*HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
+        HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
         queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
         queriesAndRetrieves.addItem("Find Documents", true);
-        queriesAndRetrieves.addItem("MPQ Find Documents", true);
+        /*queriesAndRetrieves.addItem("MPQ Find Documents", true);
         queriesAndRetrieves.addItem("Get Documents", true);
         queriesAndRetrieves.addItem("Get Related Documents", true);
         queriesAndRetrieves.addItem("Retrieve Document", true);
@@ -61,7 +61,7 @@ public class HomeTab extends GenericTab {
 
         VStack vstack1 = new VStack();
         VStack vstack2 = new VStack();
-        vstack1.addMembers(mhdTools); //queriesAndRetrieves, connectathonTools);
+        vstack1.addMembers(mhdTools,queriesAndRetrieves); //queriesAndRetrieves, connectathonTools);
         vstack2.addMembers(tools); // sendTestData, simulators
 
         HStack hstack = new HStack();
