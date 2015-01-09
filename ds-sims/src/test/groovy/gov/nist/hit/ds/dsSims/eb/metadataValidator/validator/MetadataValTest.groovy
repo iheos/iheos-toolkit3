@@ -10,6 +10,7 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.toolkit.environment.Environment
 import groovy.xml.StreamingMarkupBuilder
 import spock.lang.Specification
 /**
@@ -55,10 +56,11 @@ class MetadataValTest extends Specification {
         vc.isPnR = true
         vc.isRequest = true
         def validationInterface = null
+        Environment environment = Environment.getDefaultEnvironment()
 
         Closure closure = { SimHandle simHandle ->
             simHandle.event.addArtifact('Metadata', submission)
-            new MetadataVal(simHandle, metadata, vc, null, validationInterface).run()
+            new MetadataVal(simHandle, metadata, vc, environment, validationInterface).run()
         }
         transRunner = new TransactionRunner('rb', simId, repoName, closure)
         transRunner.runTest()

@@ -43,13 +43,14 @@ class ValidatorManager implements MessageValidator {
             // redo this to use TransactionRunner
             def aClass = this.getClass().classLoader.loadClass(transactionType.implementationClassName, true)
             Transaction transaction = aClass.newInstance()
-            if (isRequest)
+            // TODO:  update this
+            if (isRequest)   // return returned values
                 transaction.validateRequest(simHandle)
             else
                 transaction.validateResponse(simHandle)
 
         }
-        return null
+        return null    // throw an exception here
     }
 
     private getTransactionType(action) {

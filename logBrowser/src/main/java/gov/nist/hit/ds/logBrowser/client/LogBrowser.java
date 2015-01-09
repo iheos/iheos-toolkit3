@@ -48,9 +48,9 @@ public class LogBrowser implements EntryPoint {
                                   , Feature.SEARCH
 //                                , Feature.TRANSACTION_MONITOR // Old
 //                                , Feature.TRANSACTION_FILTER // Old
-//                                , Feature.TRANSACTION_FILTER_ADVANCED
-//                                  , Feature.EVENT_MESSAGE_AGGREGATOR // Independent widget test area
-//                                ,  Feature.LOGGING_CONTROL  // Experimental, comment off all others above
+                                , Feature.TRANSACTION_FILTER_ADVANCED
+//                                , Feature.EVENT_MESSAGE_AGGREGATOR // Independent widget test area
+//                                 , Feature.LOGGING_CONTROL  // Experimental, comment off all others above
                           });
 
               }

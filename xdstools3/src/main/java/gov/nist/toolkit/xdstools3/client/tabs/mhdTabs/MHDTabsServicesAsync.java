@@ -1,6 +1,7 @@
 package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 
@@ -10,5 +11,5 @@ import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 public interface MHDTabsServicesAsync {
     void validateMHDMessage(String messageType, AsyncCallback<AssetNode> async) throws ToolkitServerError;
 
-    void convertMHDToXDS(AsyncCallback<String> convertedDocument);
+    void convertMHDToXDS(AsyncCallback<AssetNode> convertedDocument);
 }

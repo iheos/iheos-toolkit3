@@ -12,10 +12,9 @@ public class HomeTab extends GenericTab {
 
     public HomeTab(String s) {
         super(s);
-        hideHeaderTitle();
+        setPane(createContents());
     }
 
-    @Override
     protected HStack createContents(){
         /*HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
         queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
@@ -72,7 +71,6 @@ public class HomeTab extends GenericTab {
         return hstack;
     }
 
-    @Override
     protected String setTabName() {
         return TabNamesManager.getInstance().getHomeTabCode();
     }

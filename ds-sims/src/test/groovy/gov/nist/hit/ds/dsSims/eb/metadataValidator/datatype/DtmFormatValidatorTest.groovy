@@ -54,7 +54,7 @@ class DtmFormatValidatorTest extends Specification {
         transRunner.simHandle.event.addArtifact('Metadata', '')
         transRunner.runTest()
 
-        assertionGroup = transRunner.simHandle.event.getAssertionGroup('DtmFormatValidator')
+        assertionGroup = transRunner.simHandle.event.getAssertionGroup('TopLevel')
         println "Failed assertions are ${assertionGroup.errorAssertionIds()}"
     }
 

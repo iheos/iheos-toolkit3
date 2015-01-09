@@ -52,7 +52,7 @@ class CxFormatValidatorTest extends Specification {
         transRunner.simHandle.event.addArtifact('Metadata', '')
         transRunner.runTest()
 
-        assertionGroup = transRunner.simHandle.event.getAssertionGroup('CxFormatValidator')
+        assertionGroup = transRunner.simHandle.event.getAssertionGroup('TopLevel')
     }
 
 

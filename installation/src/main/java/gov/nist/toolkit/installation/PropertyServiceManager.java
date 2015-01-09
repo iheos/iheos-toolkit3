@@ -14,9 +14,9 @@ import org.apache.log4j.Logger;
 public class PropertyServiceManager  /*extends CommonServiceManager*/ {
 	PropertyManager propertyManager = null;
 	File warHome = null;
-	
+
 	static Logger logger = Logger.getLogger(PropertyServiceManager.class);
-	
+
 	public PropertyServiceManager(File warHome)  {
 		this.warHome = warHome;
 	}
@@ -91,14 +91,14 @@ public class PropertyServiceManager  /*extends CommonServiceManager*/ {
 		loadPropertyManager();
 		return propertyManager;
 	}
-	
+
 	public void loadPropertyManager() {
 		if (propertyManager != null)
 			return;
 
 		propertyManager = new PropertyManager(warHome + File.separator + "WEB-INF" + File.separator + "toolkit.properties");
 
-		// This removes the dependency that 
+		// This removes the dependency that
 		// gov.nist.registry.common2.xml.SchemaValidation
 		// has on port 9080
 		// Schema references will be made directly through the file system and not
@@ -108,7 +108,7 @@ public class PropertyServiceManager  /*extends CommonServiceManager*/ {
 
 
 	public File internalActorsFile() {
-		return new File(warHome + File.separator + 
+		return new File(warHome + File.separator +
 				"toolkitx" + File.separator + "xdstest" + File.separator + "actors.xml");
 	}
 
@@ -116,12 +116,12 @@ public class PropertyServiceManager  /*extends CommonServiceManager*/ {
 	public File getTestLogCache() throws IOException {
 		String testLogCache = getPropertyManager().getExternalCache() + File.separator + "TestLogCache";
 		File f;
-		
+
 //		// internal is obsolete
 //		if ("internal".equals(testLogCache)) {
-//			testLogCache = getWarHome() + "SessionCache" + 
+//			testLogCache = getWarHome() + "SessionCache" +
 //					File.separator +
-//					getSession().getId() + File.separator + 
+//					getSession().getId() + File.separator +
 //					"TestLog";
 //			f = new File(testLogCache);
 //			f.mkdirs();
@@ -139,19 +139,19 @@ public class PropertyServiceManager  /*extends CommonServiceManager*/ {
 
 		return f;
 	}
-	
+
 	public String getAttributeValue(String username, String attName) throws Exception {
 		return Io.stringFromFile(getAttributeFile(username, attName));
 	}
-	
+
 	public void setAttributeValue(String username, String attName, String attValue) throws Exception {
 		Io.stringToFile(getAttributeFile(username, attName), attValue);
 	}
-	
+
 	File getAttributeFile(String username, String attName) throws Exception {
 		return new File(getAttributeCache(username) + File.separator + attName + ".txt");
 	}
-	
+
 	File getAttributeCache(String username) throws Exception {
 		String attributeCache = getPropertyManager().getExternalCache() + File.separator + "Attributes" + File.separator + username;
 		File f = new File(attributeCache);

@@ -2,8 +2,6 @@ package gov.nist.hit.ds.dsSims.eb.transactions
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.topLevel.ValidatorManager
-import gov.nist.hit.ds.ebMetadata.Metadata
-import gov.nist.hit.ds.ebMetadata.MetadataParser
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
@@ -36,11 +34,12 @@ class PnrTest extends Specification {
     File repoDataDir
     RepositorySource repoSource
     SimHandle simHandle
+    def factory = new ActorTransactionTypeFactory()
 
     def setup() {
         SimSupport.initialize()
         new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
+        new ActorTransactionTypeFactory().loadFromString(config)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('PnrTest')
@@ -48,33 +47,36 @@ class PnrTest extends Specification {
     }
 
     def run(String header, String body) {
-        Metadata metadata = MetadataParser.parseNonSubmission(submission)
+//        Metadata metadata = MetadataParser.parseNonSubmission(submission)
         ValidationContext vc = new ValidationContext()
         vc.isPnR = true
         vc.isRequest = true
-        def validationInterface = null
+//        def validationInterface = null
 
         Closure closure = { SimHandle simHandle ->
-            simHandle.event.addArtifact('Metadata', submission)
-            new ValidatorManager().validateMessage(ValidatorManager.soapAction, header, body.getBytes())
+//            simHandle.event.addArtifact('Metadata', submission)
+            new ValidatorManager().validateMessage('urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b', header, body.getBytes())
         }
-        transRunner = new TransactionRunner('rb', simId, repoName, closure)
+        def transRunner = new TransactionRunner('prb', simId, repoName, closure)
         transRunner.runTest()
 
         println "Failed assertions are ${transRunner.simHandle.event.errorAssertionIds()}"
     }
 
 
-    def 'Test'() {
+    def 'Test full validation'() {
         setup:
         def header = getClass().classLoader.getResource('pnr/PnRSoapHeader.txt').text
-        def body = getClass().classLoader.getResource('pnr/PnR1DocSoapBody.xml').text.getBytes()
+        def body = getClass().classLoader.getResource('pnr/PnR1DocSoapBody.xml').text
         def transactionType = factory.getTransactionType('prb')
-        simHandle.event.inOut.reqHdr = header
-        simHandle.event.inOut.reqBody = body
+
         when:
-        def runner = new TransactionRunner(simId, repoName, transactionType)
-        runner.acceptRequest()
+        run(header,body)
+//        simHandle.event.inOut.reqHdr = header
+//        simHandle.event.inOut.reqBody = body
+//        when:
+//        def runner = new TransactionRunner(simId, repoName, transactionType)
+//        runner.acceptRequest()
 
         then:
         true

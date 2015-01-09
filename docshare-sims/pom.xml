@@ -25,7 +25,6 @@
         <module>../sim-servlet</module>
         <module>../ds-sims</module>
         <module>../eb-metadata</module>
-        <module>../fhir</module>
     </modules>
 
 </project>

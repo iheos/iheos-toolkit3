@@ -19,22 +19,18 @@ public class CodesFactory {
     }
 
     static public OMElement getCodes(Environment environment) {
-//        if (environment == null) {
-//            // retrieve default internal codes
-//            try {
-//                String codesText = new CodesFactory().getClass().getClassLoader().getResource('codes.xml').text
-//                return Util.parse_xml(codesText)
-//            } catch (Exception e) {
-//                throw new ToolkitRuntimeException("Cannot load default codes file.", e)
-//            }
-//        } else {
-            File codesFile = environment.codesFile
-            try {
-                return Util.parse_xml(codesFile)
-            } catch (Exception e) {
-                throw new ToolkitRuntimeException("Cannot load codes file for environment ${environment.name}.", e)
-            }
+        File codesFile = environment.codesFile
+        def codes
+        if (codesFile.exists())
+            codes = codesFile.text
+        else
+            codes = new CodesFactory().getClass().classLoader.getResource('external-cache/environment/default/codes.xml').text
+        try {
+            return Util.parse_xml(codes)
+        } catch (Exception e) {
+            throw new ToolkitRuntimeException("Cannot load codes file for environment ${environment.name}. File name is ${codesFile}", e)
+        }
 //        }
     }
 
-    }
+}

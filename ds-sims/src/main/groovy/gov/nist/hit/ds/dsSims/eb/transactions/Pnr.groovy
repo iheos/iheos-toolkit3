@@ -23,10 +23,14 @@ import org.apache.axiom.om.OMElement
  * Created by bmajur on 9/24/14.
  */
 class Pnr implements Transaction {
+    SimHandle simHandle
+
+    def Pnr(SimHandle _simHamdle) { simHandle = _simHamdle}
+
     def schema(SimHandle simHandle) { simHandle.actorSimConfig.get('prb').isSchemaCheck() }
 
     @Override
-    ValidationStatus validateRequest(SimHandle simHandle) {
+    ValidationStatus validateRequest() {
         // Header
         def headerVal = new HttpHeaderValidator(simHandle)
         headerVal.asPeer().run()
@@ -45,7 +49,7 @@ class Pnr implements Transaction {
         ValidationContext vc = new ValidationContext()
         vc.isPnR = true
         vc.isRequest = true
-        Environment environment = Environment.defaultEnvironment()
+        Environment environment = Environment.getDefaultEnvironment()
 
         // Schema
         if (schema(simHandle)) {
@@ -57,17 +61,17 @@ class Pnr implements Transaction {
     }
 
     @Override
-    ValidationStatus validateResponse(SimHandle simHandle) {
+    ValidationStatus validateResponse() {
         return null
     }
 
     @Override
-    ValidationStatus acceptRequest(SimHandle simHandle) {
+    ValidationStatus acceptRequest() {
         println("Running PnR transaction")
     }
 
     @Override
-    ValidationStatus sendRequest(SimHandle simHandle) {
+    ValidationStatus sendRequest() {
         return null
     }
 }

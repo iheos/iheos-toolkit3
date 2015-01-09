@@ -2,7 +2,6 @@ package gov.nist.hit.ds.simSupport.simrepo;
 
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.simSupport.client.SimId;
-import gov.nist.hit.ds.toolkit.installation.ExtendedPropertyManager;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -126,20 +125,20 @@ public class SimDb {
 //		return null;
 //	}
 //
-	static public Date getNewExpiration(@SuppressWarnings("rawtypes") Class controllingClass)   {
-		// establish expiration for newly touched cache transactions
-		Date now = new Date();
-		Calendar newExpiration = Calendar.getInstance();
-		newExpiration.setTime(now);
-
-		String dayOffset = ExtendedPropertyManager.getProperty(controllingClass, "expiration");
-		if (dayOffset == null) {
-			logger.info("Extended Property expiration of class " + controllingClass + " is not defined");
-			dayOffset = "365";
-		}
-		newExpiration.add(Calendar.DAY_OF_MONTH, Integer.parseInt(dayOffset));
-		return newExpiration.getTime();
-	}
+//	static public Date getNewExpiration(@SuppressWarnings("rawtypes") Class controllingClass)   {
+//		// establish expiration for newly touched cache transactions
+//		Date now = new Date();
+//		Calendar newExpiration = Calendar.getInstance();
+//		newExpiration.setTime(now);
+//
+//		String dayOffset = ExtendedPropertyManager.getProperty(controllingClass, "expiration");
+//		if (dayOffset == null) {
+//			logger.info("Extended Property expiration of class " + controllingClass + " is not defined");
+//			dayOffset = "365";
+//		}
+//		newExpiration.add(Calendar.DAY_OF_MONTH, Integer.parseInt(dayOffset));
+//		return newExpiration.getTime();
+//	}
 
 
 

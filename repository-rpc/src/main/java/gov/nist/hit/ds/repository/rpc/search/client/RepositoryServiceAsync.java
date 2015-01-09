@@ -22,7 +22,7 @@ public interface RepositoryServiceAsync {
     void getAssetNode(String reposSrc, String reposId, String assetId, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
     void getAssetTree(String[][] repos, AsyncCallback<List<AssetNode>> callback);
 	void getAssetTxtContent(AssetNode an, AsyncCallback<AssetNode> callback);
-	void getImmediateChildren(AssetNode an, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
+	void getImmediateChildren(AssetNode an, int offset, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
     void getChildren(AssetNode an, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
 	void getParentChain(AssetNode an, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
     void getParentChainInTree(AssetNode an, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;

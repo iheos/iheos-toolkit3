@@ -4,7 +4,6 @@ import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.simSupport.api.ValidationApi;
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
-import gov.nist.toolkit.xdstools3.server.RPCServices.SaveTempFileService;
 import gov.nist.toolkit.xdstools3.server.demo.ActorsCollectionsDataSamples;
 import gov.nist.toolkit.xdstools3.server.demo.TestDataHelper;
 import org.apache.log4j.Logger;
@@ -24,7 +23,7 @@ public class Caller implements Serializable {
     private static final long serialVersionUID = -6431109235310163158L;
     private static Caller instance = null;
     private final static Logger logger = Logger.getLogger(Caller.class.getName());
-    private final SaveTempFileService saveTempFileService = new SaveTempFileService();
+    private final ValidationApi api = new ValidationApi();
 
     // Transaction name common to all MHD transactions
     private final String MHD_TRANSACTION_NAME = "pdb";
@@ -43,6 +42,14 @@ public class Caller implements Serializable {
         return instance;
     }
 
+    // ------------------ Header app properties -------------------------
+    public String getToolkitAppSubtitle() {
+        return Toolkit.getToolkitAppSubtitle();
+    }
+
+    public String getToolkitVersion() {
+        return Toolkit.getToolkitVersion();
+    }
 
 
     // ------------------ Administrator functionality --------------------
@@ -182,28 +189,16 @@ public class Caller implements Serializable {
      * @return an Asset (= validation result) as handled by the repository / LogBrowser
      */
     public AssetNode validateMHDMessage(String messageType, String filecontent) throws ToolkitServerError {
-        ValidationApi api = new ValidationApi();
-
         //if (messageType == "Submit") {
         AssetNode validationResult = api.validateRequest(MHD_TRANSACTION_NAME, filecontent);
         logger.info("Received AssetNode with parameters AssetId: " + validationResult.getAssetId()
                 +", AssetType: "+ validationResult.getType()
-                +", RepositoryId: "+ validationResult.getRepId());
+        +", RepositoryId: "+ validationResult.getRepId());
         return validationResult;
         //} // end submit
         // else throw new unsupportedmessagetypeexception
     }
 
-    /**
-     * Method that retrieves test data set
-     * @param testDataType
-     * @return
-     */
-    public Map<String,String> retrieveTestDataSet(String testDataType) {
-        // TODO not sure what this is for. Needs more explanation.
-        // If it is a test method, it needs to be put in a different class.
-        return TestDataHelper.instance.getTestDataSet();
-    }
 
     /**
      * Converts a MHD file into an XDS file
@@ -212,10 +207,32 @@ public class Caller implements Serializable {
      *                 upload servlet. I do not know if we need this. -Diane
      * @return
      */
-    public String convertMHDtoXDS(String location, String uploadedFileContents) {
+    public AssetNode convertMHDtoXDS(String location, String uploadedFileContents) {
         //TODO
         // This is a test implementation that saves the uploaded file and displays it for the user
         // inside a popup window. This should go away when the actual conversion is linked from the backend.
-        return saveTempFileService.saveAsXMLFile(uploadedFileContents);
+        AssetNode validationResult = api.validateRequest(MHD_TRANSACTION_NAME, uploadedFileContents);
+        logger.info("Received AssetNode with parameters AssetId: " + validationResult.getAssetId()
+                +", AssetType: "+ validationResult.getType()
+                +", RepositoryId: "+ validationResult.getRepId());
+        return validationResult;
+//        return saveTempFileService.saveAsXMLFile(uploadedFileContents);
     }
+
+
+
+    // ----------------------------- Submit Test Data -------------------------------
+
+    /**
+     * Retrieves all the available test data sets for a given type of test data.
+     * This is for now used in the Submit Test Data tab.
+     * @param testDataType type of test data
+     * @return all the matching test data sets
+     */
+    public Map<String,String> retrieveTestDataSet(String testDataType) {
+        return TestDataHelper.instance.getTestDataSet();
+    }
+
 }
+
+

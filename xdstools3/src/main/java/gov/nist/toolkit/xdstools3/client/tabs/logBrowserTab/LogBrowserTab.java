@@ -41,7 +41,7 @@ public class LogBrowserTab extends GenericCloseableTab {
     public LogBrowserTab() {
         super(header);
         try {
-            setContents(createContent(null));
+            setFieldsCanvas(createContent(null));
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -59,10 +59,10 @@ public class LogBrowserTab extends GenericCloseableTab {
         try {
 
             getPane().clear();
-            getPanel().clear();
+            getContentsPanel().clear();
             getPane().redraw();
-            getPanel().addMember(createContent(target));
-            setPane(getPanel());
+            getContentsPanel().addMember(createContent(target));
+            setPane(getContentsPanel());
             getPane().redraw();
 
         } catch (Throwable t) {

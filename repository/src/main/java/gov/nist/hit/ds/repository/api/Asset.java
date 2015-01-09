@@ -632,7 +632,7 @@ public interface Asset {
     public File getPropFile()
     		throws RepositoryException;
     
-	public File getPropFile(ArtifactId id) 
+	public File getPropFile(ArtifactId id, PropertyKey propertyKey)
 			throws RepositoryException;
 	
 	public java.util.Properties getProperties()
@@ -718,10 +718,11 @@ public interface Asset {
     /**
      *
      * @param part
+     * @param propertyKey
      * @return
      * @throws RepositoryException
      */
-	public File getContentFile(File part) throws RepositoryException;
+	public File getContentFile(File part, PropertyKey propertyKey) throws RepositoryException;
 
 	public boolean hasContent() throws RepositoryException;
 	
