@@ -37,25 +37,11 @@ public class WaitPanel extends HTMLPane {
     }
 
     /**
-     * Method that changes the css of the widget to make it visible.
-     */
-    public void show(){
-        DOM.setStyleAttribute(RootPanel.get("loading").getElement(),"display","block");
-    }
-
-    /**
-     * Method that changes the css of the widget to hide it.
-     */
-    public void hide(){
-        DOM.setStyleAttribute(RootPanel.get("loading").getElement(),"display","none");
-    }
-
-    /**
      * Method that changes the wait message of the widget.
      *
      * @param message custom wait message
      */
     public void setWaitMessage(String message){
-        setContents("<div id='loading'><img src='images/icons/wait.gif' style='width:24px;'/> "+message+"</div>");
+        setContents("<div class='wait-message'><img src='images/icons/wait.gif' style='width:24px;'/> "+message+"</div>");
     }
 }

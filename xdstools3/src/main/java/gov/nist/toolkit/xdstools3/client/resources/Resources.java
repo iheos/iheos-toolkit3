@@ -10,7 +10,7 @@ import com.google.gwt.resources.client.TextResource;
 public interface Resources extends ClientBundle {
     public static final Resources INSTANCE = GWT.create(Resources.class);
 
-    @Source("help-contents/mhd-validator.txt")
+    @Source("help-contents/mhd-validator.htm")
     TextResource helpContentsSample();
 
 }

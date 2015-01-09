@@ -18,7 +18,6 @@ import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.ReportingLevelSelectWidget;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
@@ -39,18 +38,17 @@ public class MHDValidatorTab extends GenericCloseableTab {
     private final static MHDTabsServicesAsync mhdToolkitService = GWT
             .create(MHDTabsServices.class);
 
-    // tab's title and heander
+    // tab's title and header
     private static String header="MHD Validator";
 
     // UI components
     private FormPanel uploadForm;
-    private ReportingLevelSelectWidget reportingLevelSelect;
     private SelectItem messageTypeSelect;
     private FileUpload fileUploadItem;
     private VLayout validationResultsPanel;
     private Button runBtn;
     private EventAggregatorWidget eventMessageAggregatorWidget;
-
+    private VLayout container;
     // Variables
     private String selectedMessageType;
 
@@ -69,28 +67,24 @@ public class MHDValidatorTab extends GenericCloseableTab {
      */
     @Override
     protected Widget createContents() {
-        VLayout vStack=new VLayout();
+        container =new VLayout();
 
-        // Message type drop-down select
-        HeaderItem l1=new HeaderItem();
-        l1.setDefaultValue("1. Select reporting level");
-
-        reportingLevelSelect=new ReportingLevelSelectWidget();
-        reportingLevelSelect.setShowTitle(false);
+       
 
         // Message type transactions
-        HeaderItem l2=new HeaderItem();
-        l2.setDefaultValue("2. Select the type of MHD message to validate");
+        HeaderItem messageTypeLabel=new HeaderItem();
+        messageTypeLabel.setDefaultValue("1. Select the type of MHD message to validate");
         messageTypeSelect = new SelectItem();
         messageTypeSelect.setShowTitle(false);
         messageTypeSelect.setType("comboBox");
         messageTypeSelect.setName("messageTypeItem");
+        messageTypeSelect.setEmptyDisplayValue("Select message type...");
         messageTypeSelect.setWidth(400);
         loadMessageTypesMap();
 
         // Uploader
-        HeaderItem l3=new HeaderItem();
-        l3.setDefaultValue("3. Upload file to validate");
+        HeaderItem uploadLabel=new HeaderItem();
+        uploadLabel.setDefaultValue("2. Upload file");
         uploadForm = new FormPanel();
         uploadForm.setHeight("40px");
         uploadForm.setMethod(FormPanel.METHOD_POST);
@@ -101,21 +95,25 @@ public class MHDValidatorTab extends GenericCloseableTab {
         fileUploadItem.setWidth("400px");
         uploadForm.add(fileUploadItem);
 
+        // ------- Create the first form ------
+        DynamicForm form = new DynamicForm();
+        form.setFields(messageTypeLabel, messageTypeSelect, uploadLabel);
+        form.setCellPadding(10);
+
         // Run button
         runBtn = new Button("Run");
         runBtn.disable();
-
+/*
         // ------- Create the form ------
         DynamicForm form = new DynamicForm();
         form.setFields(l1,reportingLevelSelect,l2, messageTypeSelect, l3);
         form.setCellPadding(10);
-
+*/
         // Create Help Link and populates it with text from resources
         setHelpButton(getHelpPanel(), Resources.INSTANCE.helpContentsSample().getText());
 
-        // Event summary widget parameters
-        //TODO this should not be hardcoded and should ultimately be removed
-        String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
+        // Initial event summary widget parameters
+        String id = null;
         String type = "validators";
         String[] displayColumns = new String[]{"ID","STATUS","MSG"};
 
@@ -125,14 +123,16 @@ public class MHDValidatorTab extends GenericCloseableTab {
         setResultsPanel(validationResultsPanel);
 
         // Layout
-        vStack.addMember(form);
-        vStack.addMember(uploadForm);
-        vStack.addMember(runBtn);
-        vStack.addMember(getWaitPanel());
+        container.addMembers(form);
+        container.addMember(uploadForm);
+        container.addMember(runBtn);
+        container.addMember(waitPanel);
+        container.hideMember(waitPanel);
+        container.setMinWidth(800);
 
         bindUI();
 
-        return vStack;
+        return container;
     }
 
     /**
@@ -185,7 +185,8 @@ public class MHDValidatorTab extends GenericCloseableTab {
         uploadForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
             @Override
             public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
-                waitPanel.show();
+//                waitPanel.show();
+                container.showMember(waitPanel);
                 // call for validation
                 validate();
             }
@@ -239,7 +240,8 @@ public class MHDValidatorTab extends GenericCloseableTab {
         // reportingLevelSelect.getSelectedReportingLevel();
         eventMessageAggregatorWidget.setEventAssetNode(assetNode);
         validationResultsPanel.redraw();
-        waitPanel.hide();
+//        waitPanel.hide();
+        container.hideMember(waitPanel);
     }
 
 
@@ -251,7 +253,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         try {
             // Initialize the widget
             eventMessageAggregatorWidget = new EventAggregatorWidget(Manager.EVENT_BUS, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
-            eventMessageAggregatorWidget.setSize("990px", "375px");
+            eventMessageAggregatorWidget.setSize("990px", "300px");
             return eventMessageAggregatorWidget;
 
         } catch (Throwable t) {

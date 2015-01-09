@@ -1,11 +1,12 @@
 package gov.nist.hit.ds.repository.simple;
 
-import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryIterator;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
+import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -157,8 +158,9 @@ public class SimpleRepositoryIterator implements RepositoryIterator, FilenameFil
                 if (type == null) {
                     return true;
                 } else {
-                    String typeStr = repos.getProperty(PropertyKey.REPOSITORY_TYPE);
-                    Type t = new SimpleType(typeStr);
+                    String keyword = repos.getProperty(PropertyKey.REPOSITORY_TYPE);
+//                    Type t = new SimpleType(typeStr);
+                    Type t = Configuration.getType(new SimpleTypeId(keyword,SimpleType.REPOSITORY));
                     return type.isEqual(t);
                 }
 

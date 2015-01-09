@@ -34,11 +34,8 @@ public class Toolbar extends RibbonBar {
 
     public Toolbar() {
 
-        setMembersMargin(20);
+        setMembersMargin(3);
         setAlign(Alignment.CENTER);
-
-        // Menu group: Session
-        GenericRibbonGroup sessionGroup = createRibbonGroup("Session");
 
         envListBox = new SelectItem();
         envListBox.setShowTitle(false);
@@ -64,12 +61,19 @@ public class Toolbar extends RibbonBar {
         // load session data from server
         loadSessionNamesFromServer();
 
-        // create form
-        DynamicForm form = new DynamicForm();
-        form.setFields(envListBox, sessionsComboBox);
-        form.setCellPadding(10);
+        // create forms
+        DynamicForm sessionForm = new DynamicForm();
+        sessionForm.setFields(sessionsComboBox);
+        DynamicForm envForm = new DynamicForm();
+        envForm.setFields(envListBox);
+        sessionForm.setCellPadding(10);
+        envForm.setCellPadding(10);
 
-        sessionGroup.addControls(form);
+        // Session and Environments toolbar groups
+        GenericRibbonGroup envGroup = createRibbonGroup("Environment");
+        GenericRibbonGroup sessionGroup = createRibbonGroup("Session");
+        envGroup.addControls(envForm);
+        sessionGroup.addControls(sessionForm);
 
         // Menu group: Site / Actors
         IconButton endpointButton = getIconButton("View / Configure Endpoints", "icons/user_24x24.png", true);
@@ -171,7 +175,7 @@ public class Toolbar extends RibbonBar {
 
 
         // Add menu groups to menu bar
-        this.addMembers(sessionGroup, endpointButton, adminButton);
+        this.addMembers(envGroup, sessionGroup, endpointButton, adminButton);
         this.setStyleName("toolbar");
         draw();
     }
@@ -234,6 +238,7 @@ public class Toolbar extends RibbonBar {
     private IconButton getIconButton(String title, String iconName, boolean vertical) {
         IconButton button = new IconButton(title);
         button.setIcon(iconName);
+        button.setPadding(7);
         if (vertical) button.setOrientation("vertical");
         return button;
     }

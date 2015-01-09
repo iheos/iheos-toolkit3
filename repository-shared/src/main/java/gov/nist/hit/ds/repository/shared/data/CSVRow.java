@@ -27,6 +27,25 @@ public class CSVRow implements IsSerializable, Serializable {
         return columns;
     }
 
+    /**
+     *
+     * @param name
+     * @return -1 if column name is not found.
+     */
+    public int getColumnIdxByName(String name) {
+        if (name!=null && getColumns()!=null) {
+            int cx=0;
+
+            for (String col: getColumns()) {
+                if (name.equalsIgnoreCase(col)) {
+                    return cx;
+                }
+                cx++;
+            }
+        }
+        return -1; // Not found
+    }
+
     public void setColumnValueByIndex(int idx, String value) {
         columns[idx] = value;
     }

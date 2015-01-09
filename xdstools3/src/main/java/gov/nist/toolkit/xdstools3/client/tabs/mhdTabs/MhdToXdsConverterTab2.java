@@ -3,25 +3,21 @@ package gov.nist.toolkit.xdstools3.client.tabs.mhdTabs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
-import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
-import gov.nist.toolkit.xdstools3.client.customWidgets.WaitPanel;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 
 import java.util.logging.Logger;
 
@@ -77,7 +73,7 @@ public class MhdToXdsConverterTab2 extends GenericCloseableTab {
         vStack.addMember(uploadForm);
         vStack.addMember(runBtn);
 
-        vStack.addMember(waitPanel);
+//        vStack.addMember(waitPanel);
 
         // Event summary widget parameters
         String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
@@ -111,7 +107,7 @@ public class MhdToXdsConverterTab2 extends GenericCloseableTab {
         runBtn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
-                waitPanel.show();
+//                waitPanel.show();
                 uploadForm.submit();
             }
         });
@@ -132,7 +128,7 @@ public class MhdToXdsConverterTab2 extends GenericCloseableTab {
                         // Open the converted file saved on the server in a new Window
 //                        Window.open(GWT.getHostPageBaseURL() + "files/" + response, response + "Converted File", "enabled");
                         eventMessageAggregatorWidget.setEventAssetNode(response);
-                        waitPanel.hide();
+//                        waitPanel.hide();
                     }
                 });
             }

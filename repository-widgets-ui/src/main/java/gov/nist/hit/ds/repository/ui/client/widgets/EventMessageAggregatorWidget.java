@@ -185,7 +185,7 @@ public class EventMessageAggregatorWidget extends Composite {
                     logger.fine("agg main event size match success");
                     try {
                         // 1.
-                        reposService.getImmediateChildren(an, new AsyncCallback<List<AssetNode>>() {
+                        reposService.getImmediateChildren(an,0, new AsyncCallback<List<AssetNode>>() {
                             @Override
                             public void onFailure(Throwable caught) {
                                 logger.log(Level.SEVERE, caught.toString());
@@ -437,7 +437,7 @@ public class EventMessageAggregatorWidget extends Composite {
             }
 
             if (an.getChildren().size() == 1 && "HASCHILDREN".equals(an.getChildren().get(0).getDisplayName())) {
-                reposService.getImmediateChildren(an, new AsyncCallback<List<AssetNode>>() {
+                reposService.getImmediateChildren(an,0, new AsyncCallback<List<AssetNode>>() {
                     @Override
                     public void onFailure(Throwable caught) {
                         logger.log(Level.SEVERE, caught.toString());

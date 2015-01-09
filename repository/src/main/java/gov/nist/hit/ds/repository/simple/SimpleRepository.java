@@ -8,6 +8,7 @@ import gov.nist.hit.ds.repository.api.Parameter;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.api.Type;
+import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -104,15 +105,19 @@ public class SimpleRepository extends BaseRepository implements Flushable {
 		param.setDescription("type parameter cannot be null");
 		param.assertNotNull(assetType);
 		
-		param.setDescription("Cannot find type <" + assetType.getKeyword() + ">");
-		param.assertEquals(
-				new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL),assetType,SimpleType.ASSET).hasNextType()
-				,new Boolean(true));
+//		param.setDescription("Cannot find type <" + assetType.getKeyword() + ">");
+//		param.assertEquals(
+//				new SimpleTypeIterator(Configuration.getRepositorySrc(Access.RW_EXTERNAL),assetType,SimpleType.ASSET).hasNextType()
+//				,new Boolean(true));
+
+        param.setDescription("Checking asset type: " + assetType.getKeyword());
+        Type type = Configuration.configuration().getType(new SimpleTypeId(assetType.getKeyword(), SimpleType.ASSET));
+        param.assertNotNull(type);
 		
 		SimpleAsset a = new SimpleAsset(getSource());
 		a.setAutoFlush(false);
 		a.setRepository(getId());
-		a.setType(assetType);
+		a.setType(type);
 		a.setId(new IdFactory().getNewId()); // before this happened here: Id was converted to a string so the Id properties were lost in the setId method call 
 		a.updateDisplayName(displayName);
 		a.updateDescription(description);

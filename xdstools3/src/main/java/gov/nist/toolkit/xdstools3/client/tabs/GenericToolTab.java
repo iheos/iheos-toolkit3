@@ -5,6 +5,7 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.HLayout;
+import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.toolkit.xdstools3.client.customWidgets.WaitPanel;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.HelpButton;
@@ -23,7 +24,7 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
     private HelpButton helpButton;
     protected WaitPanel waitPanel = new WaitPanel();
 
-    public GenericToolTab(String header){
+    public GenericToolTab(String header) {
         super(header);
         setHeader(header);
 
@@ -37,6 +38,7 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
         mainPanel.setLayoutMargin(10);
     }
 
+    @Override
     public VLayout getContentsPanel() {
         return contentsPanel;
     }
@@ -46,28 +48,31 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
      * This is the title of the tab, displayed in large characters at the top of the tab
      * @param s the title or header of the tab
      */
+    @Override
     public void setHeader(String s){
         // create the header of the tab
         headerLabel.setHeight(30);
         headerLabel.setWidth(200);
         headerLabel.setContents(s);
         headerLabel.setStyleName("h3");
-        mainPanel.addMember(headerLabel);
-        setPane(mainPanel);
-    }
 
-   /* // add a spacer to separate the title from the help button
+        // add a spacer to separate the title from the help button
     LayoutSpacer spacer = new LayoutSpacer();
     spacer.setHeight(30);
 
     // add components to main contentsPanel
     titleAndHelpButton.addMembers(headerLabel, spacer);
     titleAndHelpButton.setHeight(30);
-    */
+        mainPanel.addMember(titleAndHelpButton);
+        setPane(mainPanel);
+    }
+
+
+
     /**
      * Creates a subtitle. Other, smaller subtitle functions can be later created in the same manner.
      * @param s
-     * @return
+    @Override
      */
     public IconLabel createSubtitle1(String s){
         return Formatter.createSubtitle1(s);
@@ -88,12 +93,13 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
         setPane(mainPanel);
         // display features
         getPane().setAlign(Alignment.CENTER);
-        contentsPanel.setShowResizeBar(true);
+        topPanel.setLayoutBottomMargin(20);
     }
 
     /**
      * Adds a panel for the validation results
      */
+    @Override
     public void createResultsPanel(){
         mainPanel.addMember(resultsPanel);
         setPane(mainPanel);
@@ -103,27 +109,40 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
      * Changes the contents of the result panel
      * @param canvas
      */
+    @Override
     public void setResultsPanel(Canvas canvas){
         resultsPanel.clear();
         resultsPanel.addMember(canvas);
     }
 
+    @Override
     public VLayout getResultsPanel(){
         return mainPanel;
     }
 
     /**
+     * Removes the main header of a tab
+     */
+    @Override
+    public void removeHeaderTitle(){
+        mainPanel.removeMember(titleAndHelpButton);
+    }
+
+    /**
      * Add a help button to the top right corner of the tab
      */
+    @Override
     public void setHelpButton(Canvas container, String contents){
         helpButton = new HelpButton(container, contents);
         titleAndHelpButton.addMember(helpButton);
+        titleAndHelpButton.setHeight(30);
         titleAndHelpButton.redraw();
     }
 
     /**
      * Hides the help button
      */
+    @Override
     public void hideHelpButton(){
         contentsPanel.hideMember(helpButton);
     }
@@ -132,10 +151,15 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
      * Changes the contents of the Help Window, displayed when clicking on the Help Button
      * @param contents
      */
+    @Override
     public void setHelpWindowContents(String contents){
         helpButton.setHelpWindowContents(contents);
     }
 
+    @Override
+    public VLayout getHelpPanel() {
+        return helpPanel;
+    }
 
 
     /**
@@ -143,6 +167,12 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
      * @return tab's content widget
      */
     protected abstract Widget createContents();
+
+    /**
+     * Method that sets the tab's name.
+     * @return tab's name
+     */
+    protected abstract String setTabName();
 
 
     /**
@@ -163,9 +193,5 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
         return waitPanel;
     }
 
-
-    public VLayout getHelpPanel() {
-        return helpPanel;
-    }
 
 }

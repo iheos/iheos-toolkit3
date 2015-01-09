@@ -45,12 +45,14 @@ public class RepositoryFactory implements RepositoryManager {
 			Type repositoryType) throws RepositoryException {
 		
 		assertAccess(Access.RW_EXTERNAL);
-		assertType(repositoryType);	
-		
+
 		SimpleRepository rep = new SimpleRepository();
 		rep.setSource(getSource());
 		rep.setAutoFlush(false);
-		rep.setType(repositoryType);
+
+        assertType(repositoryType);
+        rep.setType(repositoryType);
+
 		rep.setDescription(description);
 		rep.setDisplayName(displayName);
 		rep.flush();

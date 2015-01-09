@@ -145,6 +145,16 @@ public class PropertyManager {
 		return (String) toolkitProperties.getProperty("Enable_all_ciphers");
 	}
 
+	public String getToolkitAppSubtitle() {
+		loadProperties();
+		return (String) toolkitProperties.getProperty("Toolkit_App_Subtitle");
+	}
+
+	public String getToolkitVersion() {
+		loadProperties();
+		return (String) toolkitProperties.getProperty("Toolkit_version");
+	}
+
     @Deprecated
 	public void save(Map<String, String> props) throws IOException  {
 		saveProperties();
@@ -195,7 +205,7 @@ public class PropertyManager {
 			fos = new FileOutputStream(file);
 			props.store(fos, "");
 			fos.flush();
-		} 
+		}
 		finally {
 			fos.close();
 		}
@@ -212,6 +222,5 @@ public class PropertyManager {
 		}
 		return props;
 	}
-
 
 }

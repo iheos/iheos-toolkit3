@@ -5,6 +5,7 @@ import com.smartgwt.client.widgets.tab.Tab;
 /**
  * Holds the functions common to all tabs (Tool Tabs and Home Tabs)
  */
+
 public abstract class GenericTab extends Tab {
     private String tabName;
 
@@ -14,7 +15,7 @@ public abstract class GenericTab extends Tab {
     }
 
     /**
-     * Returns tab's name name used for navigation.
+     * Returns the tab name, used for navigation.
      * These are defined in TabNamesUtil.
      *
      * @return tab name (String)
@@ -26,8 +27,8 @@ public abstract class GenericTab extends Tab {
     }
 
     /**
-     * Method that sets the tab's name.
-     * @return tab's name
+     * Sets the tab name.
+     * @return tab name
      */
     protected abstract String setTabName();
 

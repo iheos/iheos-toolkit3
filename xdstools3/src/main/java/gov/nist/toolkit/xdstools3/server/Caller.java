@@ -42,6 +42,14 @@ public class Caller implements Serializable {
         return instance;
     }
 
+    // ------------------ Header app properties -------------------------
+    public String getToolkitAppSubtitle() {
+        return Toolkit.getToolkitAppSubtitle();
+    }
+
+    public String getToolkitVersion() {
+        return Toolkit.getToolkitVersion();
+    }
 
 
     // ------------------ Administrator functionality --------------------
@@ -224,7 +232,6 @@ public class Caller implements Serializable {
     public Map<String,String> retrieveTestDataSet(String testDataType) {
         return TestDataHelper.instance.getTestDataSet();
     }
-
 
 }
 

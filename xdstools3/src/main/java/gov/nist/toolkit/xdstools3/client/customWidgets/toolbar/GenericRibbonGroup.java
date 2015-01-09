@@ -15,6 +15,7 @@ public class GenericRibbonGroup extends RibbonGroup {
     public GenericRibbonGroup(){
         setStyleName("toolbarGroup");
         setTitleStyle("toolbarGroupTitle");
+        setBorder("1px solid #CCD1FF"); /* Setting the border inside the CSS does not work on this component, for some reason */
     }
 
 }
