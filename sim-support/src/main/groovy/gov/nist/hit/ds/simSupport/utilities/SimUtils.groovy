@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.simSupport.utilities
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.repoSupport.RepoUtils
 import gov.nist.hit.ds.repository.api.ArtifactId
 import gov.nist.hit.ds.repository.api.Asset
@@ -59,6 +60,20 @@ class SimUtils {
         create(actorTypeName, simId, repoName)
     }
 
+    static SimHandle create(String transactionName, String repositoryName, String simId) {
+        return create(
+                new ActorTransactionTypeFactory().getTransactionType(transactionName),
+                RepoUtils.getRepository(new SimSystemConfig().repoName),
+                new SimId(simId)
+        )
+    }
+
+    static SimHandle create(TransactionType transactionType, Repository repository, SimId simId) {
+        def simHandle = create(simId)
+        simHandle.transactionType = transactionType
+        simHandle.repository = repository
+        return simHandle
+    }
 
     static SimHandle create(String actorTypeName, SimId simId, String repoName) {
         SimSystemConfig simSystemConfig = new SimSystemConfig()
