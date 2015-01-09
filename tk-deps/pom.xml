@@ -6,7 +6,7 @@
 
     <artifactId>tk-deps</artifactId>
     <groupId>gov.nist.hit.ds</groupId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.2a</version>
     <packaging>pom</packaging>
 
     <name>tk-deps</name>
