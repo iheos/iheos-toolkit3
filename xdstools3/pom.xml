@@ -5,12 +5,12 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>toolkit3</artifactId>
-        <version>3.0.2a</version>
+        <version>3.0.2a-SNAPSHOT</version>
     </parent>
 
+    <groupId>gov.nist.toolkit</groupId>
     <artifactId>xdstools3</artifactId>
     <packaging>war</packaging>
-    <groupId>gov.nist.toolkit</groupId>
 
     <properties>
         <gwtVersion>2.5.1</gwtVersion>
