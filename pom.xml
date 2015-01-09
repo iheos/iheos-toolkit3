@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>toolkit3</artifactId>
-    <version>3.0.2a</version>
+    <version>3.0.2a-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>toolkit3</name>
