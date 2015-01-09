@@ -311,4 +311,8 @@
         </pluginManagement>
 
     </build>
+
+  <scm>
+    <tag>v3.0.2a</tag>
+  </scm>
 </project>
