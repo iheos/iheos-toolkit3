@@ -17,8 +17,13 @@ import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
  */
 class ValidatorManager implements MessageValidator {
     SimHandle simHandle
+    String simId  = 'validation'
+    String repositoryName  = 'ValidationRepo'
 
     static final String soapAction = 'by SOAP:Action'
+
+    void setRepositoryName(String _repositoryName) { repositoryName = _repositoryName }
+    void setSimId(String _simId) { simId = _simId }
 
     @Override
     List<String> getTransactionValidatorNames() {
@@ -38,10 +43,7 @@ class ValidatorManager implements MessageValidator {
             def (transactionType, isRequest) = getTransactionType(action)
             if (!transactionType) throw new ToolkitRuntimeException("Unknown SOAPAction ${action}")
 
-            // create Event and SimHandle from hdr/body
-            def simIdName = 'validation'  // horrible approach
-            def repoName = 'ValidationRepo'  // another horrible approach
-            simHandle = SimUtils.create(transactionType, repoName, simIdName)
+            simHandle = SimUtils.create(transactionType, repositoryName, simId)
 
             TransactionRunner runner = new TransactionRunner(simHandle)
             if (isRequest)
@@ -51,7 +53,7 @@ class ValidatorManager implements MessageValidator {
 
             ValidateMessageResponse response = new ValidateMessageResponse()
             response.setEventAssetId(new AssetId(simHandle.event.eventAsset.id.idString))
-            response.setRepositoryId(new AssetId(RepoUtils.getRepository(repoName).id.idString))
+            response.setRepositoryId(new AssetId(RepoUtils.getRepository(repositoryName).id.idString))
             response.setValidationStatus((simHandle.event.hasErrors()) ? ValidationStatus.ERROR : ValidationStatus.OK)
             return response
         }
