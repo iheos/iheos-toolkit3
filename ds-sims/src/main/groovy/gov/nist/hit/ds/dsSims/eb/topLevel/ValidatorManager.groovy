@@ -1,20 +1,22 @@
 package gov.nist.hit.ds.dsSims.eb.topLevel
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.TransactionType
-import gov.nist.hit.ds.simSupport.transaction.Transaction
-import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.httpSoap.components.parsers.SoapMessageParser
-import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.repoSupport.RepoUtils
 import gov.nist.hit.ds.repository.shared.id.AssetId
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
+import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.tkapis.validation.MessageValidator
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
 import gov.nist.hit.ds.tkapis.validation.ValidateTransactionResponse
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
-
 /**
  * Created by bmajur on 8/28/14.
  */
 class ValidatorManager implements MessageValidator {
+    SimHandle simHandle
 
     static final String soapAction = 'by SOAP:Action'
 
@@ -29,28 +31,31 @@ class ValidatorManager implements MessageValidator {
     }
 
     @Override
-    ValidateMessageResponse validateMessage(String validatorName, String msgHeader, byte[] messageBody) {
-        if (soapAction == validatorName) {
+    ValidateMessageResponse validateMessage(String validationType, String msgHeader, byte[] messageBody) {
+        if (soapAction == validationType) {
             String action = new SoapMessageParser(new String(messageBody)).parse().getSoapAction();
 
             def (transactionType, isRequest) = getTransactionType(action)
             if (!transactionType) throw new ToolkitRuntimeException("Unknown SOAPAction ${action}")
 
             // create Event and SimHandle from hdr/body
-            Event e = null
-            SimHandle simHandle
+            def simIdName = 'validation'  // horrible approach
+            def repoName = 'ValidationRepo'  // another horrible approach
+            simHandle = SimUtils.create(transactionType, repoName, simIdName)
 
-            // redo this to use TransactionRunner
-            def aClass = this.getClass().classLoader.loadClass(transactionType.implementationClassName, true)
-            Transaction transaction = aClass.newInstance()
-            // TODO:  update this
-            if (isRequest)   // return returned values
-                transaction.validateRequest(simHandle)
+            TransactionRunner runner = new TransactionRunner(simHandle)
+            if (isRequest)
+                runner.validateRequest()
             else
-                transaction.validateResponse(simHandle)
+                runner.validateResponse()
 
+            ValidateMessageResponse response = new ValidateMessageResponse()
+            response.setEventAssetId(new AssetId(simHandle.event.eventAsset.id.idString))
+            response.setRepositoryId(new AssetId(RepoUtils.getRepository(repoName).id.idString))
+            response.setValidationStatus((simHandle.event.hasErrors()) ? ValidationStatus.ERROR : ValidationStatus.OK)
+            return response
         }
-        return null    // throw an exception here
+        throw new ToolkitRuntimeException("Do not understand validation type ${validationType}")
     }
 
     private getTransactionType(action) {

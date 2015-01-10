@@ -1,15 +1,15 @@
 package gov.nist.hit.ds.dsSims.eb.transactions
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.topLevel.ValidatorManager
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
-import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.core.Endpoint
+import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
 import spock.lang.Specification
 /**
  * Created by bmajur on 9/24/14.
@@ -46,21 +46,13 @@ class PnrTest extends Specification {
         SimUtils.recreate('docrec', simId, repoName)
     }
 
+    ValidatorManager vMan
+    ValidateMessageResponse response
+
     def run(String header, String body) {
-//        Metadata metadata = MetadataParser.parseNonSubmission(submission)
-        ValidationContext vc = new ValidationContext()
-        vc.isPnR = true
-        vc.isRequest = true
-//        def validationInterface = null
-
-        Closure closure = { SimHandle simHandle ->
-//            simHandle.event.addArtifact('Metadata', submission)
-            new ValidatorManager().validateMessage('urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b', header, body.getBytes())
-        }
-        def transRunner = new TransactionRunner('prb', simId, repoName, closure)
-        transRunner.runTest()
-
-        println "Failed assertions are ${transRunner.simHandle.event.errorAssertionIds()}"
+        vMan = new ValidatorManager()
+        response = vMan.validateMessage(ValidatorManager.soapAction, header, body.getBytes())
+        simHandle = vMan.simHandle
     }
 
 
@@ -68,18 +60,12 @@ class PnrTest extends Specification {
         setup:
         def header = getClass().classLoader.getResource('pnr/PnRSoapHeader.txt').text
         def body = getClass().classLoader.getResource('pnr/PnR1DocSoapBody.xml').text
-        def transactionType = factory.getTransactionType('prb')
 
         when:
         run(header,body)
-//        simHandle.event.inOut.reqHdr = header
-//        simHandle.event.inOut.reqBody = body
-//        when:
-//        def runner = new TransactionRunner(simId, repoName, transactionType)
-//        runner.acceptRequest()
 
         then:
-        true
+        response.validationStatus == ValidationStatus.OK
     }
 
 }

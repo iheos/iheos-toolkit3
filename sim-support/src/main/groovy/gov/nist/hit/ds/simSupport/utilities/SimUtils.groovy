@@ -23,6 +23,7 @@ import gov.nist.hit.ds.siteManagement.loader.SeparateSiteLoader
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import gov.nist.hit.ds.xdsException.ToolkitException
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 /**
@@ -60,12 +61,29 @@ class SimUtils {
         create(actorTypeName, simId, repoName)
     }
 
-    static SimHandle create(String transactionName, String repositoryName, String simId) {
-        return create(
-                new ActorTransactionTypeFactory().getTransactionType(transactionName),
-                RepoUtils.getRepository(new SimSystemConfig().repoName),
-                new SimId(simId)
-        )
+    static SimHandle create(transaction, repository, simId) {
+        TransactionType ttype
+        if (transaction instanceof TransactionType)
+            ttype = transaction
+        else if (transaction instanceof String)
+            ttype = new ActorTransactionTypeFactory().getTransactionType(transaction)
+        else
+            throw new ToolkitRuntimeException("Cannot interpret transaction parameter - type is ${transaction?.class?.name}")
+        Repository repo
+        if (repository instanceof Repository)
+            repo = repository
+        else if (repository instanceof String)
+            repo = RepoUtils.getRepository(repository)
+        else
+            throw new ToolkitRuntimeException("Cannot interpret repository parameter - type is ${repository?.class?.name}")
+        SimId id
+        if (simId instanceof SimId)
+            id = simId
+        else if (simId instanceof String)
+            id = new SimId(simId)
+        else
+            throw new ToolkitRuntimeException("Cannot interpret simId parameter - type is ${simId?.class?.name}")
+        return create(ttype, repo, id)
     }
 
     static SimHandle create(TransactionType transactionType, Repository repository, SimId simId) {
