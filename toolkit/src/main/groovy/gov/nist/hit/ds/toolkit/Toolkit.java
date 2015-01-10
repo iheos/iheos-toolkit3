@@ -4,6 +4,7 @@ import gov.nist.hit.ds.toolkit.environment.Environment;
 import gov.nist.hit.ds.toolkit.environment.UserSession;
 import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.toolkit.installation.PropertyManager;
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -27,6 +28,15 @@ public class Toolkit {
     private static boolean testEnv = false;
     static Logger logger = Logger.getLogger(Toolkit.class);
 
+    private static void initializeStatus() {
+        logger.info("Toolkit initialization:");
+        logger.info("...properties file at " + toolkitPropertiesFile);
+        logger.info("...war file at " + warRootFile);
+        logger.info("...external cache at " + externalCacheFile);
+        logger.info("...property manager is " + ((propertyManager==null) ? "null" : "not null"));
+        logger.info("...test environment is " + testEnv);
+        logger.info("...initialized is " + initialized);
+    }
     /**
      * At RUNTIME:
      * toolkit.properties resides at WAR-INF/toolkit.properties
@@ -43,8 +53,23 @@ public class Toolkit {
      */
 
     static public void initialize() {
+        try {
+            initialize1();
+            initializeStatus();
+        } catch (Throwable t) {
+            logger.fatal("Initialization failed: " + ExceptionUtil.exception_details(t));
+            initializeStatus();
+        }
+    }
+
+    static private void initialize1() {
         if (initialized) return;
         initialized = true;
+//        try {
+//            Installation.installation().initialize();
+//        } catch (IOException e) {
+//            logger.fatal(e);
+//        }
         URL resource = new Toolkit().getClass().getResource("/toolkit.properties");
         if (resource == null) {
             logger.fatal("Cannot load toolkit.properties");
@@ -75,14 +100,19 @@ public class Toolkit {
             propertyManager = new PropertyManager();
             propertyManager.loadProperties(toolkitPropertiesFile);
 
-            try { Installation.installation().initialize(); }
-            catch (RuntimeException e) { throw e; }
-            catch (Exception e) { throw new RuntimeException(e); }
+//            try { Installation.installation().initialize(); }
+//            catch (RuntimeException e) { throw e; }
+//            catch (Exception e) { throw new RuntimeException(e); }
             if (warRootFile == null) {
                 String msg = "Location of WAR file root not initialized";
                 logger.fatal(msg);
                 throw new RuntimeException(msg);
             }
+
+            try { Installation.installation().initialize(); }
+            catch (RuntimeException e) { throw e; }
+            catch (Exception e) { throw new RuntimeException(e); }
+
             if ( externalCacheFile == null) {
                 externalCacheFile = Installation.installation().externalCache;
                 if ( externalCacheFile == null) {

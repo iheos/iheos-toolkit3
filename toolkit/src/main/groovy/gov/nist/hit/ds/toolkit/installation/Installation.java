@@ -49,8 +49,10 @@ public class Installation {
 	 * @throws IOException 
 	 */
 	public void initialize() throws InitializationFailedException, IOException {
-		if (initialized == true)
+		if (initialized)
 			return;
+        initialized = true;
+        Toolkit.initialize();
 
 		propertyServiceMgr = new PropertyServiceManager();
 
