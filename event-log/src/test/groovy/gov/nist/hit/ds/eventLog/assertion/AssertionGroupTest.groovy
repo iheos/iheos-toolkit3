@@ -44,7 +44,7 @@ class AssertionGroupTest extends Specification {
         def asser = ag.fail('bye', true)
 
         then:
-        asser.msg == ''
+        asser.msg == 'bye'
         asser.status == AssertionStatus.ERROR
         ag.assertions.size() == 1
         ag.worstStatus == AssertionStatus.ERROR
