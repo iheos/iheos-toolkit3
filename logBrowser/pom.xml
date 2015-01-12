@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>logBrowser</artifactId>
+  <version>3.0.0</version>
 
 
     <!-- POM file generated with GWT webAppCreator -->

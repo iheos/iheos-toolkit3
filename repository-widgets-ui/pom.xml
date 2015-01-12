@@ -11,6 +11,7 @@
 
 
     <artifactId>repository-widgets-ui</artifactId>
+  <version>3.0.0</version>
 
     <properties>
         <!-- Convenience property to set the GWT version -->
