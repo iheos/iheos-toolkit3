@@ -798,6 +798,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 // Render Status cell
                 TableCellBuilder statusCellTD = row.startTD();
+                statusCellTD.align("right");
                 HasCell<TxMessageBundle, SafeHtml> statusCell = new MessageDetailCell(messageKey,2);
                 this.renderCell(statusCellTD, createContext(2), statusCell, rowValue);
                 statusCellTD.endTD();
@@ -816,6 +817,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 // Render Proxy cell
                 TableCellBuilder proxyCell = row.startTD();
+                proxyCell.align("right");
 //                if(!itemsToExpandToggle.contains(rowValue))
                     this.renderCell(proxyCell, createContext(5), new MessageDetailCell(messageKey,5), rowValue);
                 proxyCell.endTD();
@@ -845,11 +847,13 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 // Render length cell
                 TableCellBuilder lengthCell = row.startTD();
+                lengthCell.align("right");
                 this.renderCell(lengthCell, createContext(10), new MessageDetailCell(messageKey,10), rowValue);
                 lengthCell.endTD();
 
                 // Render responseTime cell
                 TableCellBuilder responseCell = row.startTD();
+                responseCell.align("right");
                 this.renderCell(responseCell, createContext(11), new MessageDetailCell(messageKey,11), rowValue);
                 responseCell.endTD();
 
