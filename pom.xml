@@ -20,7 +20,6 @@
     <modules>
         <module>repository-tools</module>
         <module>gui-core</module>
-        <module>toolkit2-build</module>
     </modules>
 
 
