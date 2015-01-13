@@ -106,7 +106,7 @@ public class Installation {
 	}
 
 	public File testLogFile() {
-		return new File(externalCache + sep + "TestLogCache");
+		return new File(externalCache + sep + "user_sessions");
 	}
 
 }

@@ -1,5 +1,8 @@
 package gov.nist.toolkit.testengine;
 
+import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsException.XdsParameterException;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.registrysupport.logging.RegistryResponseLog;
 import gov.nist.toolkit.sitemanagement.CombinedSiteLoader;
@@ -8,26 +11,16 @@ import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.soap.axis2.Soap;
 import gov.nist.toolkit.testengine.logrepository.LogRepository;
 import gov.nist.toolkit.testengine.logrepository.LogRepositoryFactory;
+import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.xdstest2logging.LogFileContent;
 import gov.nist.toolkit.xdstest2logging.TestDetails;
 import gov.nist.toolkit.xdstest2logging.TestStepLogContent;
-import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.hit.ds.xdsException.XdsParameterException;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import org.apache.log4j.Logger;
 
 import javax.xml.parsers.FactoryConfigurationError;
-
-import org.apache.log4j.Logger;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 
 public class XdsTest {
@@ -190,10 +183,10 @@ public class XdsTest {
 		if (testkitdir != null)
 			testkit = new File(testkitdir);
 		if (logdirstr != null) {
-			File testLogCache = Installation.installation().testLogFile();
+			File userSessions = Installation.installation().testLogFile();
 			logRepository = new LogRepositoryFactory().
 					getRepository(
-							testLogCache,   // location
+							userSessions,   // location
 							null,           // user
 							LogRepositoryFactory.IO_format.JAVA_SERIALIZATION,   // IO format
 							LogRepositoryFactory.Id_type.TIME_ID,                // ID type

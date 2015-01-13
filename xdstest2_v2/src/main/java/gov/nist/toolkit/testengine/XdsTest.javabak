@@ -190,10 +190,10 @@ public class XdsTest {
 		if (testkitdir != null)
 			testkit = new File(testkitdir);
 		if (logdirstr != null) {
-			File testLogCache = Installation.installation().testLogFile();
+			File userSessions = Installation.installation().testLogFile();
 			logRepository = new LogRepositoryFactory().
 					getRepository(
-							testLogCache,   // location
+							userSessions,   // location
 							null,           // user
 							LogRepositoryFactory.IO_format.JAVA_SERIALIZATION,   // IO format
 							LogRepositoryFactory.Id_type.TIME_ID,                // ID type

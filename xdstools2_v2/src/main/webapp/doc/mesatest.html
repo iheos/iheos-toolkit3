@@ -21,7 +21,7 @@ you to save your test data in.  Its only significance is that it is separate fro
 data can be kept separate.  A test session can represent a different user or tests run against a different 
 system.  The tool does not give it any significance other then being separate from the others. If you configured
 the External_Cache to be /usr/bill/toolkit and created a test session with name bill then the resulting log files
-will be found in /usr/bill/toolkit/TestLogCache/bill.  The contents of that directory is identical to the old
+will be found in /usr/bill/toolkit/user_sessions/bill.  The contents of that directory is identical to the old
 xdstest tool.
 
 <p>To start using the panel, select a test session or add a new one. A test session name will become a 
@@ -32,7 +32,7 @@ you will see the following directory structure after running a few tests:
 <pre>
 /usr/bill/toolkit/
                   actors.xml
-                  TestLogCache/bill/tests/11903/log.xml
+                  user_sessions/bill/tests/11903/log.xml
 </pre>
 
 where I entered for a Test Session the string <i>bill</i>.

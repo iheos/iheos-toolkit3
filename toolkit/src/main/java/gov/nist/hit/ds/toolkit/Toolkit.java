@@ -139,7 +139,7 @@ public class Toolkit {
      * environment
      * repository
      * tk_props (hidden)
-     * testLogCache
+     * userSessions
      */
 
 
@@ -153,7 +153,17 @@ public class Toolkit {
     static public File testkitFile() { return new File(toolkitxFile(), "testkit"); }
     static public File xdstestFile() { return new File(toolkitxFile(), "xdstest"); }
 
+    // Manage admin password
     static public String getPassword() { return propertyManager.getPassword(); }
+    static public void savePassword(String password) {
+        try {
+            propertyManager.savePassword(password);
+        } catch (IOException e) {
+            logger.fatal("setCurrentEnvironmentName failed: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
     static public String getHost() { return propertyManager.getToolkitHost(); }
     static public String getPort() { return propertyManager.getToolkitPort(); }
     static public String getTlsPort() { return propertyManager.getToolkitTlsPort(); }
@@ -181,7 +191,6 @@ public class Toolkit {
     static public List<String> getUserSessions() { return new UserSession(externalCacheFile()).names(); }
     static public void addUserSession(String name) { new UserSession(externalCacheFile()).add(name); }
     static public void deleteUserSession(String name) { new UserSession(externalCacheFile()).delete(name); }
-
 
     // Manage repository types
     static public File externalRepositoriesTypesFile() { return new File(new File(externalCacheFile(), "repositories"), "types"); }

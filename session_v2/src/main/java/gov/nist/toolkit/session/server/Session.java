@@ -269,14 +269,14 @@ public class Session implements SecurityParams {
 	public void setMesaSessionName(String name) {
 		mesaSessionName = name;
 
-		File testLogCache;
+		File userSessions;
 		try {
-			testLogCache = Installation.installation().propertyServiceManager().getTestLogCache();
+			userSessions = Installation.installation().propertyServiceManager().getTestLogCache();
 		} catch (Exception e) {
 			return;
 		}
 
-		mesaSessionCache = new File(testLogCache + File.separator + mesaSessionName);
+		mesaSessionCache = new File(userSessions + File.separator + mesaSessionName);
 		mesaSessionCache.mkdirs();
 	}
 
@@ -596,14 +596,14 @@ public class Session implements SecurityParams {
 			return null;
 
 		if (sessionProperties == null) {
-			File testLogCache;
+			File userSessions;
 			try {
-				testLogCache = Installation.installation().propertyServiceManager().getTestLogCache();
+				userSessions = Installation.installation().propertyServiceManager().getTestLogCache();
 			} catch (Exception e) {
 				return null;
 			}
 
-			sessionProperties = new SessionPropertyManager(testLogCache.toString());
+			sessionProperties = new SessionPropertyManager(userSessions.toString());
 		}
 
 		return sessionProperties;

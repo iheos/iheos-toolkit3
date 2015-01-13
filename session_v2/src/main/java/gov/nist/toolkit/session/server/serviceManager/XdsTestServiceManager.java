@@ -16,7 +16,7 @@ import gov.nist.toolkit.results.client.*;
 import gov.nist.toolkit.session.server.CodesConfigurationBuilder;
 import gov.nist.toolkit.session.server.Session;
 import gov.nist.toolkit.session.server.TestSessionNotSelectedException;
-import gov.nist.toolkit.session.server.services.TestLogCache;
+import gov.nist.toolkit.session.server.services.UserSessions;
 import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.testengine.*;
@@ -49,8 +49,8 @@ public class XdsTestServiceManager extends CommonServiceManager {
 		this.session = session;
 	}
 
-	TestLogCache getTestLogCache() throws IOException {
-		return new TestLogCache(Installation.installation().propertyServiceManager().getTestLogCache());
+	UserSessions getTestLogCache() throws IOException {
+		return new UserSessions(Installation.installation().propertyServiceManager().getTestLogCache());
 	}
 
 	/**
@@ -451,11 +451,11 @@ public class XdsTestServiceManager extends CommonServiceManager {
 	}
 
 	/**
-	 * Return the contents of all the log.xml files found under external_cache/TestLogCache/<sessionName>.  If there
+	 * Return the contents of all the log.xml files found under external_cache/user_sessions/<sessionName>.  If there
 	 * are multiple sections to the test then load them all. Each element of the
 	 * returned list (Result object) represents the output of all steps in a single section of the test.
 	 * @param sessionName - not the servlet session but instead the dir name
-	 * under external_cache/TestLogCache identifying the user of the service
+	 * under external_cache/user_sessions identifying the user of the service
 	 * @param testName like 12355
 	 * @return
 	 * @throws Exception
