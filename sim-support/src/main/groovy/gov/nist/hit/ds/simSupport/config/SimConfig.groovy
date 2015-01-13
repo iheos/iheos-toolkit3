@@ -2,6 +2,8 @@ package gov.nist.hit.ds.simSupport.config
 import gov.nist.hit.ds.actorTransaction.*
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import groovy.transform.ToString
+import groovy.util.logging.Log4j
+
 /**
  * Definition for an actor simulator. This focuses on a single
  * actor.  The class Simulator is a collection of ActorSimConfig 
@@ -9,6 +11,7 @@ import groovy.transform.ToString
  * @author bill
  *
  */
+@Log4j
 @ToString(excludes="serialVersionUID, expires, isExpired, actorState")
 public class SimConfig {
 	ActorType actorType;
@@ -24,6 +27,7 @@ public class SimConfig {
 
 	public TransactionSimConfigElement get(String name) {
 		if (name == null) return null;
+        log.debug "Transaction names are ${transactions.collect { it.name}}"
         return transactions.find { it.name == name}
 	}
 	
@@ -104,7 +108,7 @@ public class SimConfig {
     public String toString() {
         StringBuffer buf = new StringBuffer();
 
-        buf.append("ActorSimulatorConfig:");
+        buf.append("SimConfig:");
         for (TransactionSimConfigElement asce : transactions) {
             buf.append("\n\t").append(asce);
         }

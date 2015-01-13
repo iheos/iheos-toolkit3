@@ -27,7 +27,7 @@ class Pnr implements Transaction {
 
     def Pnr(SimHandle _simHamdle) { simHandle = _simHamdle}
 
-    def schema(SimHandle simHandle) { simHandle.actorSimConfig.get('prb').isSchemaCheck() }
+    def schema(SimHandle simHandle) { simHandle.actorSimConfig.get('prb')?.isSchemaCheck() }
 
     @Override
     ValidationStatus validateRequest() {

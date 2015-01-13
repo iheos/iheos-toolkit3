@@ -13,6 +13,7 @@ class TransactionType /* implements IsSerializable, Serializable */ {
     public String requestAction
     public String responseAction
     public String acceptRequestClassName
+    public ActorType actorType
     public String sendRequestClassName
     public boolean multiPart
     public boolean soap

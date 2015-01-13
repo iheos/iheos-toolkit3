@@ -20,7 +20,8 @@ class PnrTest extends Specification {
     <transaction name="Provide and Register" id="prb" code="prb">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
-        <implClass value="Pnr"/>
+        <implClass value="gov.nist.hit.ds.dsSims.eb.transactions.Pnr"/>
+        <params multipart="true" soap="true"/>
     </transaction>
     <actor name="Document Recipient" id="docrec">
         <implClass value="gov.nist.hit.ds.simSupport.factories.DocumentRecipientActorFactory"/>
@@ -59,7 +60,7 @@ class PnrTest extends Specification {
     def 'Test full validation'() {
         setup:
         def header = getClass().classLoader.getResource('pnr/PnRSoapHeader.txt').text
-        def body = getClass().classLoader.getResource('pnr/PnR1DocSoapBody.xml').text
+        def body = getClass().classLoader.getResource('pnr/PnR1DocSoapBody.txt').text
 
         when:
         run(header,body)
