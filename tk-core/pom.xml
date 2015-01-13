@@ -30,6 +30,7 @@
         <module>../installation</module>
         <module>../tk-initialization</module>
         <module>../tk</module>
+        <module>../session</module>
     </modules>
     
     <dependencies>

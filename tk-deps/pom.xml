@@ -77,10 +77,15 @@
             for building the entire toolkit.  Individual
             sub-projects may override these for use in local
             development. -->
-            <dependency>
+            <!-- <dependency>
                 <groupId>gov.nist.toolkit</groupId>
                 <artifactId>actorfactory_v2</artifactId>
                 <version>2.7.0-SNAPSHOT</version>
+            </dependency> -->
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>session</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
