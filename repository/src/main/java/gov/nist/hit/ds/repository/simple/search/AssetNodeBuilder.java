@@ -113,13 +113,25 @@ public class AssetNodeBuilder {
 				// parent.setLocation(a.getPath().toString());
 				parent.setRelativePath(a.getPropFileRelativePart());
 			}
-			parent.setContentAvailable(a.hasContent());
+
+            String offsetIndicator = a.getProperty("_offset");
+
+            if (offsetIndicator==null) {
+                parent.setContentAvailable(a.hasContent());
+                if (Depth.CHILDREN.equals(getRetrieveDepth())) {
+                    getChildren(repos,parent);
+                } else {
+                    addChildIndicator(repos, parent);
+                }
+            } else {
+                parent.getExtendedProps().put("_offset",offsetIndicator);
+                // logger.fine(">>> HAS more parent-level nodes");
+                parent.addChild(new AssetNode("","","","HASCHILDREN","","",""));
+            }
+
+
 			
-			if (Depth.CHILDREN.equals(getRetrieveDepth())) {
-				getChildren(repos,parent);				
-			} else {
-				addChildIndicator(repos, parent);
-			}
+
 
 			topLevelAssets.add(parent);
 		}
