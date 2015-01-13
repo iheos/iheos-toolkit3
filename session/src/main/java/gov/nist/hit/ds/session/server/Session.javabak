@@ -1,4 +1,4 @@
-package gov.nist.toolkit.session.server;
+package gov.nist.hit.ds.session.server;
 
 import gov.nist.toolkit.actorfactory.SimCache;
 import gov.nist.toolkit.actorfactory.SimDb;
@@ -14,8 +14,8 @@ import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.results.client.AssertionResults;
 import gov.nist.toolkit.results.client.SiteSpec;
 import gov.nist.toolkit.securityCommon.SecurityParams;
-import gov.nist.toolkit.session.server.serviceManager.QueryServiceManager;
-import gov.nist.toolkit.session.server.serviceManager.XdsTestServiceManager;
+import QueryServiceManager;
+import XdsTestServiceManager;
 import gov.nist.toolkit.simcommon.server.ExtendedPropertyManager;
 import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
@@ -39,22 +39,22 @@ import org.apache.log4j.Logger;
 
 /**
  * The session object is used in one of four ways depending on the context:
- * 
+ *
  * 1) GUI - each GUI session is represented by a session object. It is managed
  * through the Servlet session mechanism. It is managed by the class
  * ToolkitServiceImpl. This is a single threaded use of the session instance.
- * 
+ *
  * 2) Simulators - on session object is used and shared by all simulator
  * instances. It is managed by the class SimServlet. This is a multi-threaded
  * use of the session instance.
- * 
+ *
  * 3) ValServlet - RESTful service for access to validators. Just like
  * simulators above.
- * 
+ *
  * 4) Dashboard - coming soon.
- * 
+ *
  * @author bill
- * 
+ *
  */
 public class Session implements SecurityParams {
 
@@ -273,7 +273,7 @@ public class Session implements SecurityParams {
 
 	/**
 	 * Get id of current Session
-	 * 
+	 *
 	 * @return
 	 */
 	public String getId() {
@@ -500,8 +500,8 @@ public class Session implements SecurityParams {
 		p.load(fis);
 		return p.getProperty("DSIG_keystore_alias");
 	}
-	
-	
+
+
 
 	public List<String> getEnvironmentNames() {
 		logger.debug(getId() + ": " + "getEnvironmentNames");
@@ -532,7 +532,7 @@ public class Session implements SecurityParams {
 
 	/**
 	 * Sets name of current environment (for this session)
-	 * 
+	 *
 	 * @throws
 	 */
 	public void setEnvironment(String name) {
