@@ -1,6 +1,6 @@
 package gov.nist.toolkit.valregmsg.registry;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.util.ArrayList;
 import java.util.List;

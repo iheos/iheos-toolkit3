@@ -2,8 +2,8 @@ package gov.nist.hit.ds.session.server;
 
 //import gov.nist.hit.ds.envSetting.EnvSetting;
 //import gov.nist.hit.ds.securityCommon.SecurityParams;
-//import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+//import gov.nist.hit.ds.xdsExceptions.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.tk.TkLoader;
 import gov.nist.toolkit.tk.client.TkProps;

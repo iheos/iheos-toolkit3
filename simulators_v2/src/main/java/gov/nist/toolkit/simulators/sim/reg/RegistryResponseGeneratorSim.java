@@ -5,7 +5,7 @@ import gov.nist.toolkit.registrymsgformats.registry.Response;
 import gov.nist.toolkit.simulators.support.SimCommon;
 import gov.nist.toolkit.simulators.support.TransactionSimulator;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 
 public class RegistryResponseGeneratorSim extends TransactionSimulator implements RegistryResponseGeneratingSim {

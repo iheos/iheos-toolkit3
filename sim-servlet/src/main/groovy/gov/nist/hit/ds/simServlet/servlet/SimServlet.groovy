@@ -17,7 +17,7 @@ import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.core.*
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.utilities.io.Io
-import gov.nist.hit.ds.xdsException.ExceptionUtil
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import org.apache.axiom.om.OMElement
 import org.apache.log4j.Logger
 

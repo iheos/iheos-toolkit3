@@ -6,7 +6,7 @@
 
 package gov.nist.hit.ds.http.axis2soap;
 
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 
 import java.io.InputStream;
 import java.io.StringBufferInputStream;

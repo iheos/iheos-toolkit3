@@ -3,7 +3,7 @@ package gov.nist.toolkit.actorfactory;
 import gov.nist.toolkit.installation.PropertyServiceManager;
 import gov.nist.toolkit.results.ResultBuilder;
 import gov.nist.toolkit.results.client.Result;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

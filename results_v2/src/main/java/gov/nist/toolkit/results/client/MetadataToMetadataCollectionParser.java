@@ -11,7 +11,7 @@ import gov.nist.toolkit.registrymetadata.client.ObjectRef;
 import gov.nist.toolkit.registrymetadata.client.SubmissionSet;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
-import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

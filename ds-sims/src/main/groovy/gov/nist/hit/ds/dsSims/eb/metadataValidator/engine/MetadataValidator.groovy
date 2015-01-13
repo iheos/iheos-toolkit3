@@ -18,7 +18,7 @@ import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
 import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
-import gov.nist.hit.ds.xdsException.XdsInternalException
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 import org.apache.axiom.om.OMElement
 //@groovy.transform.TypeChecked
 class MetadataValidator extends ValComponentBase {

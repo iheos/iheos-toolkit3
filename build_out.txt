@@ -27,7 +27,7 @@
 [WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:utilities:jar:3.0.0-SNAPSHOT
 [WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
-[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:xdsException:jar:3.0.0-SNAPSHOT
+[WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:xds-exceptions:jar:3.0.0-SNAPSHOT
 [WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-source-plugin is missing. @ gov.nist.hit.ds:toolkit3:3.0.0-SNAPSHOT, C:\Users\skb1\Documents\core_merge_develop\pom.xml, line 299, column 21
 [WARNING] 
 [WARNING] Some problems were encountered while building the effective model for gov.nist.hit.ds:toolkit:jar:3.0.0-SNAPSHOT
@@ -53,7 +53,7 @@
 [INFO] 
 [INFO] toolkit3
 [INFO] common-datatypes
-[INFO] xdsException
+[INFO] xds-exceptions
 [INFO] utilities
 [INFO] toolkit
 [INFO] repository
@@ -137,44 +137,44 @@ Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
 [INFO] Installing C:\Users\skb1\Documents\core_merge_develop\common-datatypes\target\common-datatypes-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\common-datatypes\3.0.0-SNAPSHOT\common-datatypes-3.0.0-SNAPSHOT-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building xdsException 3.0.0-SNAPSHOT
+[INFO] Building xds-exceptions 3.0.0-SNAPSHOT
 [INFO] ------------------------------------------------------------------------
 [INFO] 
-[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ xdsException ---
-[INFO] Deleting C:\Users\skb1\Documents\core_merge_develop\xdsException\target
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ xds-exceptions ---
+[INFO] Deleting C:\Users\skb1\Documents\core_merge_develop\xds-exceptions\target
 [INFO] 
-[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ xdsException ---
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ xds-exceptions ---
 [INFO] Using 'UTF-8' encoding to copy filtered resources.
-[INFO] skip non existing resourceDirectory C:\Users\skb1\Documents\core_merge_develop\xdsException\src\main\resources
+[INFO] skip non existing resourceDirectory C:\Users\skb1\Documents\core_merge_develop\xds-exceptions\src\main\resources
 [INFO] 
-[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ xdsException ---
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ xds-exceptions ---
 [INFO] Changes detected - recompiling the module!
 [INFO] Using Groovy-Eclipse compiler to compile both Java and Groovy files
 [INFO] 
-[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ xdsException ---
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ xds-exceptions ---
 [INFO] Using 'UTF-8' encoding to copy filtered resources.
-[INFO] skip non existing resourceDirectory C:\Users\skb1\Documents\core_merge_develop\xdsException\src\test\resources
+[INFO] skip non existing resourceDirectory C:\Users\skb1\Documents\core_merge_develop\xds-exceptions\src\test\resources
 [INFO] 
-[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ xdsException ---
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ xds-exceptions ---
 [INFO] No sources to compile
 [INFO] 
-[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ xdsException ---
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ xds-exceptions ---
 [INFO] No tests to run.
 [INFO] 
-[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ xdsException ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0-SNAPSHOT.jar
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ xds-exceptions ---
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\xds-exceptions\target\xds-exceptions-3.0.0-SNAPSHOT.jar
 [INFO] 
-[INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ xdsException >>>
+[INFO] >>> maven-source-plugin:2.2.1:jar (attach-sources) @ xds-exceptions >>>
 [INFO] 
-[INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ xdsException <<<
+[INFO] <<< maven-source-plugin:2.2.1:jar (attach-sources) @ xds-exceptions <<<
 [INFO] 
-[INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ xdsException ---
-[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0-SNAPSHOT-sources.jar
+[INFO] --- maven-source-plugin:2.2.1:jar (attach-sources) @ xds-exceptions ---
+[INFO] Building jar: C:\Users\skb1\Documents\core_merge_develop\xds-exceptions\target\xds-exceptions-3.0.0-SNAPSHOT-sources.jar
 [INFO] 
-[INFO] --- maven-install-plugin:2.4:install (default-install) @ xdsException ---
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xdsException\3.0.0-SNAPSHOT\xdsException-3.0.0-SNAPSHOT.jar
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xdsException\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xdsException\3.0.0-SNAPSHOT\xdsException-3.0.0-SNAPSHOT.pom
-[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xdsException\target\xdsException-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xdsException\3.0.0-SNAPSHOT\xdsException-3.0.0-SNAPSHOT-sources.jar
+[INFO] --- maven-install-plugin:2.4:install (default-install) @ xds-exceptions ---
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xds-exceptions\target\xds-exceptions-3.0.0-SNAPSHOT.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xds-exceptions\3.0.0-SNAPSHOT\xds-exceptions-3.0.0-SNAPSHOT.jar
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xds-exceptions\pom.xml to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xds-exceptions\3.0.0-SNAPSHOT\xds-exceptions-3.0.0-SNAPSHOT.pom
+[INFO] Installing C:\Users\skb1\Documents\core_merge_develop\xds-exceptions\target\xds-exceptions-3.0.0-SNAPSHOT-sources.jar to C:\Users\skb1\.m2\repository\gov\nist\hit\ds\xds-exceptions\3.0.0-SNAPSHOT\xds-exceptions-3.0.0-SNAPSHOT-sources.jar
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
 [INFO] Building utilities 3.0.0-SNAPSHOT
@@ -33301,7 +33301,7 @@ Tests run: 39, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] toolkit3 .......................................... SUCCESS [0.452s]
 [INFO] common-datatypes .................................. SUCCESS [2.356s]
-[INFO] xdsException ...................................... SUCCESS [0.436s]
+[INFO] xds-exceptions ...................................... SUCCESS [0.436s]
 [INFO] utilities ......................................... SUCCESS [1.560s]
 [INFO] toolkit ........................................... SUCCESS [0.375s]
 [INFO] repository ........................................ SUCCESS [11.701s]

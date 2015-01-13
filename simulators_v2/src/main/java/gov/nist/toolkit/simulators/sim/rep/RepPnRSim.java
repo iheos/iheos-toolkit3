@@ -20,7 +20,7 @@ import gov.nist.toolkit.valregmsg.message.MultipartContainer;
 import gov.nist.toolkit.valregmsg.message.StoredDocumentInt;
 import gov.nist.toolkit.valregmsg.service.SoapActionFactory;
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine;
-import gov.nist.hit.ds.xdsException.XDSMissingDocumentException;
+import gov.nist.hit.ds.xdsExceptions.XDSMissingDocumentException;
 
 import java.io.File;
 import java.util.HashMap;

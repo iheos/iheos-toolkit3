@@ -2,8 +2,8 @@ package gov.nist.hit.ds.dsSims.eb.metadataValidator.field
 
 import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
 import gov.nist.hit.ds.dsSims.eb.metadata.MetadataParser
-import gov.nist.hit.ds.xdsException.MetadataException
-import gov.nist.hit.ds.xdsException.MetadataValidationException
+import gov.nist.hit.ds.xdsExceptions.MetadataException
+import gov.nist.hit.ds.xdsExceptions.MetadataValidationException
 import org.apache.axiom.om.OMElement
 
 public class StructureTest extends TestSupport {

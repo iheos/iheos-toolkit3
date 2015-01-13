@@ -8,7 +8,7 @@
 package gov.nist.toolkit.utilities.xsl;
 
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import javax.xml.transform.TransformerConfigurationException;
 import java.io.File;

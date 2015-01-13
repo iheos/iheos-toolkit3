@@ -1,6 +1,6 @@
 package gov.nist.toolkit.testengine;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.testengine.transactions.*;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;

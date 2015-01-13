@@ -2,7 +2,7 @@ package gov.nist.hit.ds.httpSoap.components.parsers;
 
 import gov.nist.hit.ds.httpSoap.datatypes.SoapMessage;
 import gov.nist.hit.ds.utilities.xml.Parse;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 import org.apache.axiom.om.OMElement;
 
 /**

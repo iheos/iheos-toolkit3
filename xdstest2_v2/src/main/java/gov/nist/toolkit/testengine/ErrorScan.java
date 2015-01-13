@@ -2,7 +2,7 @@ package gov.nist.toolkit.testengine;
 
 import gov.nist.toolkit.testkitutilities.TestkitWalker;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.io.File;
 

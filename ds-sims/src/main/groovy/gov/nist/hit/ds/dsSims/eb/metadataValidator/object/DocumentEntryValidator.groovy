@@ -14,7 +14,7 @@ import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
-import gov.nist.hit.ds.xdsException.MetadataException
+import gov.nist.hit.ds.xdsExceptions.MetadataException
 
 //@groovy.transform.TypeChecked
 public class DocumentEntryValidator extends AbstractRegistryObjectValidator {

@@ -10,8 +10,8 @@ import gov.nist.toolkit.valregmetadata.datatype.FormatValidator;
 import gov.nist.toolkit.valregmetadata.datatype.OidFormat;
 import gov.nist.toolkit.valregmetadata.datatype.UuidFormat;
 import gov.nist.toolkit.valsupport.client.ValidationContext;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.util.ArrayList;
 import java.util.HashSet;

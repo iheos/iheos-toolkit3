@@ -2,7 +2,7 @@ package gov.nist.toolkit.http.util;
 
 import gov.nist.toolkit.http.httpclient.HttpClientInfo;
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.io.File;
 import java.io.IOException;

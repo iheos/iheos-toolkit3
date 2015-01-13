@@ -2,7 +2,7 @@ package gov.nist.toolkit.valregmsg.registry.storedquery.generic;
 
 import gov.nist.toolkit.registrymetadata.Metadata;
 import gov.nist.toolkit.registrysupport.logging.LoggerException;
-import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
 
 import java.util.List;
 

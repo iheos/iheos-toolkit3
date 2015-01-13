@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.httpSoapValidator.datatypes;
 
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 import org.apache.axiom.om.OMElement;
 
 public class SoapMessage {

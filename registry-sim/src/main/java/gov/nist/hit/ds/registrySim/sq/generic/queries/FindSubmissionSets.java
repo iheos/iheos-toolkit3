@@ -8,10 +8,10 @@ import gov.nist.hit.ds.registrySim.sq.generic.support.StoredQuery;
 import gov.nist.hit.ds.registrySim.sq.generic.support.StoredQuerySupport;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.registrysupport.logging.LoggerException;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.MetadataValidationException;
-import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataValidationException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 import java.util.ArrayList;
 import java.util.List;

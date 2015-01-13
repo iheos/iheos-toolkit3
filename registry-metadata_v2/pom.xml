@@ -49,7 +49,7 @@
 		</dependency>
 				<dependency>
 			<groupId>gov.nist.hit.ds</groupId>
-			<artifactId>xdsException</artifactId>
+			<artifactId>xds-exceptions</artifactId>
 		</dependency>
 	</dependencies>
 <build>

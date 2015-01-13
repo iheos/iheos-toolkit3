@@ -1,6 +1,6 @@
 package gov.nist.toolkit.utilities.io;
 
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

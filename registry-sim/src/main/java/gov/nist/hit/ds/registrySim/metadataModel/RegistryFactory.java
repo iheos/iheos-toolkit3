@@ -2,7 +2,7 @@ package gov.nist.hit.ds.registrySim.metadataModel;
 
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
-import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -10,8 +10,8 @@ import gov.nist.toolkit.simcommon.client.config.SimulatorConfigElement;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.sitemanagement.client.TransactionBean;
 import gov.nist.toolkit.sitemanagement.client.TransactionBean.RepositoryType;
-import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
-import gov.nist.hit.ds.xdsException.NoSessionException;
+import gov.nist.hit.ds.xdsExceptions.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsExceptions.NoSessionException;
 
 import java.io.File;
 import java.util.Arrays;

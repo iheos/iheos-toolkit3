@@ -3,8 +3,8 @@ package gov.nist.toolkit.valregmsg.registry.storedquery.support;
 import gov.nist.toolkit.docref.SqDocRef;
 import gov.nist.toolkit.valregmsg.registry.And;
 import gov.nist.toolkit.valregmsg.registry.SQCodedTerm;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

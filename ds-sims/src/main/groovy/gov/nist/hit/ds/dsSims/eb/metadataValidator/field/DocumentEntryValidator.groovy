@@ -2,8 +2,8 @@ package gov.nist.hit.ds.dsSims.eb.metadataValidator.field
 
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.object.ExternalIdentifierValidator
 import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
-import gov.nist.hit.ds.xdsException.MetadataException
-import gov.nist.hit.ds.xdsException.XdsInternalException
+import gov.nist.hit.ds.xdsExceptions.MetadataException
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 import org.apache.axiom.om.OMElement
 
 public class DocumentEntryValidator extends ValidatorCommon {

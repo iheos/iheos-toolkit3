@@ -16,8 +16,8 @@ import gov.nist.hit.ds.dsSims.eb.metadata.client.MetadataCollection
 import gov.nist.hit.ds.dsSims.eb.metadata.store.RegistryFactory
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
-import gov.nist.hit.ds.xdsException.MetadataException
-import gov.nist.hit.ds.xdsException.XdsInternalException
+import gov.nist.hit.ds.xdsExceptions.MetadataException
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMAttribute
 import org.apache.axiom.om.OMElement

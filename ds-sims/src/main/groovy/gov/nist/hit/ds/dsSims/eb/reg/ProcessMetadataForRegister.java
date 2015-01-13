@@ -6,7 +6,7 @@ import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.dsSims.eb.metadata.Metadata;
 import gov.nist.hit.ds.dsSims.eb.metadata.ProcessMetadataInterface;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
-import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
 

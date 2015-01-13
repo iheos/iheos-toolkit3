@@ -16,7 +16,7 @@ import gov.nist.hit.ds.simSupport.datatypes.SimEndpoint;
 import gov.nist.hit.ds.simSupport.event.EventBuilder;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.xml.Parse;
-import gov.nist.hit.ds.xdsException.XMLParserException;
+import gov.nist.hit.ds.xdsExceptions.XMLParserException;
 import gov.nist.hit.ds.xmlValidator.XmlMessage;
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Level;

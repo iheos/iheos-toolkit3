@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.soapSupport.core;
 
 import gov.nist.hit.ds.utilities.xml.OMFormatter;
-import gov.nist.hit.ds.xdsException.XMLParserException;
+import gov.nist.hit.ds.xdsExceptions.XMLParserException;
 import org.apache.axiom.om.OMElement;
 
 /**

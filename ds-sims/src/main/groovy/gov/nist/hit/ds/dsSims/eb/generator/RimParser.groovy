@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.eb.generator
 
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 
 /**

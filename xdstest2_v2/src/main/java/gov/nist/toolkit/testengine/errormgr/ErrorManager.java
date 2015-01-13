@@ -1,7 +1,7 @@
 package gov.nist.toolkit.testengine.errormgr;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 
 import java.util.ArrayList;
 import java.util.List;

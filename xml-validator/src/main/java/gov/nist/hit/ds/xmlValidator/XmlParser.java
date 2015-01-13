@@ -10,7 +10,7 @@ import gov.nist.hit.ds.simSupport.engine.v2compatibility.MessageValidatorEngine;
 import gov.nist.hit.ds.utilities.string.StringUtil;
 import gov.nist.hit.ds.utilities.xml.Parse;
 import gov.nist.hit.ds.utilities.xml.XmlText;
-import gov.nist.hit.ds.xdsException.XMLParserException;
+import gov.nist.hit.ds.xdsExceptions.XMLParserException;
 
 import org.apache.axiom.om.OMElement;
 

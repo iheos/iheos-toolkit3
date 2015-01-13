@@ -1,7 +1,7 @@
 package gov.nist.toolkit.xdstest2logging;
 
 import gov.nist.toolkit.utilities.io.LinesOfFile;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.io.File;
 import java.io.IOException;

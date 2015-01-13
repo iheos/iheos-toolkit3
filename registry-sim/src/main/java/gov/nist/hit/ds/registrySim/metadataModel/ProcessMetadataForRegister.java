@@ -7,7 +7,7 @@ import gov.nist.hit.ds.registryMetadataValidator.field.SubmissionStructure;
 import gov.nist.hit.ds.registrySim.metadataModel.RegIndex.AssocType;
 import gov.nist.hit.ds.simSupport.engine.SimComponentBase;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
-import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package gov.nist.toolkit.valregmetadata.field;
 
-import gov.nist.hit.ds.xdsException.XdsValidationException;
+import gov.nist.hit.ds.xdsExceptions.XdsValidationException;
 
 abstract public class ValidationEngine {
 	StringBuffer errorBuffer = null;

@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.toolkit.environment;
 
 import gov.nist.hit.ds.utilities.io.Io;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 import java.io.File;
 import java.util.ArrayList;

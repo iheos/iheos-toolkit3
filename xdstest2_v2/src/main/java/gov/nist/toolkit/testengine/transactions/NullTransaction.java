@@ -1,8 +1,8 @@
 package gov.nist.toolkit.testengine.transactions;
 
 import gov.nist.toolkit.testengine.StepContext;
-import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import org.apache.axiom.om.OMElement;
 

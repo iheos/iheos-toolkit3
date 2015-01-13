@@ -2,8 +2,8 @@ package gov.nist.toolkit.testengine.test;
 
 import gov.nist.toolkit.testengine.XdsTest;
 import gov.nist.toolkit.testkitutilities.TestEnvConfig;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsParameterException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.XdsParameterException;
 
 import java.io.File;
 import java.util.Arrays;

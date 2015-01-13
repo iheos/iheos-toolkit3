@@ -80,7 +80,7 @@
          <module>../validators-registry-message_v2</module>
          <module>../validators-registry-metadata_v2</module>
          <module>../validators-support_v2</module>
-         <module>../xdsException</module>
+         <module>../xds-exceptions</module>
          <module>../xdstest-gui_v2</module>
          <module>../xdstest2_v2</module>
          <module>../xdstest2-logging_v2</module>
@@ -107,7 +107,7 @@
          <dependencies>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>xdsException</artifactId>
+          <artifactId>xds-exceptions</artifactId>
           <version>3.0.0-SNAPSHOT</version>
       </dependency>
              <dependency>

@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.eb.metadata;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 

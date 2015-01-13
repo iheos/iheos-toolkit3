@@ -1,7 +1,7 @@
 package gov.nist.toolkit.testengine;
 
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.hit.ds.xdsException.XdsIOException;
+import gov.nist.hit.ds.xdsExceptions.XdsIOException;
 
 import java.io.IOException;
 import java.io.InputStream;

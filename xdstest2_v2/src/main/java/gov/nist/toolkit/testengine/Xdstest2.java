@@ -6,7 +6,7 @@ import gov.nist.toolkit.sitemanagement.Sites;
 import gov.nist.toolkit.sitemanagement.client.Site;
 import gov.nist.toolkit.testengine.errormgr.AssertionResults;
 import gov.nist.toolkit.testengine.logrepository.LogRepository;
-import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsExceptions.EnvironmentNotSelectedException;
 import gov.nist.toolkit.xdstest2logging.LogFileContent;
 import gov.nist.toolkit.xdstest2logging.StepGoals;
 import gov.nist.toolkit.xdstest2logging.TestDetails;

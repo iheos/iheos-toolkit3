@@ -3,7 +3,7 @@ package gov.nist.toolkit.testengine;
 import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.results.client.Result;
 import gov.nist.toolkit.results.client.ResultSummary;
-import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
 
 import java.io.File;
 import java.io.FileInputStream;

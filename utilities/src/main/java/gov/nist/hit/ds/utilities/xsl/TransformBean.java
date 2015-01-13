@@ -8,7 +8,7 @@
 package gov.nist.hit.ds.utilities.xsl;
 
 
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 import java.io.File;
 

@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.registrysupport.logging;
 
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 public class LoggerException extends ToolkitRuntimeException 
 {

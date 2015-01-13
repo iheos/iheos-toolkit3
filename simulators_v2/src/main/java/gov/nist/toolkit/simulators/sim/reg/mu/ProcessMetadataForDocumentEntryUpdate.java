@@ -13,7 +13,7 @@ import gov.nist.toolkit.simulators.sim.reg.store.ProcessMetadataForRegister;
 import gov.nist.toolkit.simulators.sim.reg.store.ProcessMetadataInterface;
 import gov.nist.toolkit.simulators.sim.reg.store.RegIndex.AssocType;
 import gov.nist.toolkit.simulators.sim.reg.store.RegIndex.StatusValue;
-import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
 
 import java.util.List;
 

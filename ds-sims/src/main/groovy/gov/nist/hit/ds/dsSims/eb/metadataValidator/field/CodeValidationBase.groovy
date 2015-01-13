@@ -7,8 +7,8 @@ import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
 import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
 import gov.nist.hit.ds.toolkit.installation.Installation
 import gov.nist.hit.ds.utilities.xml.XmlUtil
-import gov.nist.hit.ds.xdsException.MetadataException
-import gov.nist.hit.ds.xdsException.XdsInternalException
+import gov.nist.hit.ds.xdsExceptions.MetadataException
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 import gov.nist.toolkit.utilities.io.Io
 import gov.nist.toolkit.utilities.xml.Util
 import org.apache.axiom.om.OMContainer

@@ -5,7 +5,7 @@ import gov.nist.toolkit.errorrecording.TextErrorRecorder;
 import gov.nist.toolkit.errorrecording.TextErrorRecorder.ErrorInfo;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.valccda.CcdaValidator;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 
 import java.io.File;
 import java.io.InputStream;

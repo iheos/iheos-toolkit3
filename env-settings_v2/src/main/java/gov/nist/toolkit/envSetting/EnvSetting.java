@@ -1,8 +1,8 @@
 package gov.nist.toolkit.envSetting;
 
 import gov.nist.toolkit.installation.Installation;
-import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
-import gov.nist.hit.ds.xdsException.NoSessionException;
+import gov.nist.hit.ds.xdsExceptions.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsExceptions.NoSessionException;
 
 import java.io.File;
 import java.util.HashMap;

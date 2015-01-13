@@ -4,7 +4,7 @@ import java.io.File;
 
 import gov.nist.toolkit.results.client.XdstestLogId;
 import gov.nist.toolkit.testengine.LogMap;
-import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
 
 public interface ILoggerIO {
 

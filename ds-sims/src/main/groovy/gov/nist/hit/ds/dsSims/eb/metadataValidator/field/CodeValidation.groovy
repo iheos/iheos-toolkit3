@@ -2,7 +2,7 @@ package gov.nist.hit.ds.dsSims.eb.metadataValidator.field
 
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
-import gov.nist.hit.ds.xdsException.XdsInternalException
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 
 //this gets invoked from both Validator.java and directly from Repository.  Should optimize the implementation so that codes.xml
 //gets cached in memory.

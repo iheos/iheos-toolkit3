@@ -6,7 +6,7 @@
 
 package gov.nist.toolkit.utilities.xsl;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

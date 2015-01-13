@@ -5,7 +5,7 @@
 package gov.nist.toolkit.utilities.xml;
 
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

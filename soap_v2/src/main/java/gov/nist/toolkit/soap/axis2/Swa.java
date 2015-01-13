@@ -3,8 +3,8 @@ package gov.nist.toolkit.soap.axis2;
 import gov.nist.toolkit.registrysupport.MetadataSupport;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.Util;
-import gov.nist.hit.ds.xdsException.HttpCodeException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.HttpCodeException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.io.FilterInputStream;
 import java.io.IOException;

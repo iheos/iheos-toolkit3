@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.simServlet;
 
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import org.apache.log4j.Logger;
 import org.mentawai.util.CharResponseWrapper;
 

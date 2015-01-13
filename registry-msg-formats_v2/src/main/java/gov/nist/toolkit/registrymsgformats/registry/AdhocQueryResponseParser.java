@@ -1,7 +1,7 @@
 package gov.nist.toolkit.registrymsgformats.registry;
 
 import gov.nist.toolkit.registrysupport.MetadataSupport;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.util.List;
 

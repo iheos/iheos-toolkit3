@@ -32,7 +32,7 @@ import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder.Depth;
 import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse;
 import gov.nist.hit.ds.toolkit.installation.Installation;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import net.timewalker.ffmq3.FFMQConstants;
 import org.codehaus.jackson.map.ObjectMapper;
 

@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.dsSims.eb.schema
 
 import gov.nist.hit.ds.soapSupport.SoapFaultException
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
-import gov.nist.hit.ds.xdsException.XdsInternalException
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 import groovy.util.logging.Log4j
 import org.apache.xerces.parsers.DOMParser
 import org.xml.sax.ErrorHandler

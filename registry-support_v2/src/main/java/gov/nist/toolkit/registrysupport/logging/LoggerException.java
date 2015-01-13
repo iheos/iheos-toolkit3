@@ -1,6 +1,6 @@
 package gov.nist.toolkit.registrysupport.logging;
 
-import gov.nist.hit.ds.xdsException.*;
+import gov.nist.hit.ds.xdsExceptions.*;
 
 public class LoggerException extends XdsInternalException 
 {

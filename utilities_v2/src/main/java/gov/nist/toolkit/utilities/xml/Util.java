@@ -1,8 +1,8 @@
 package gov.nist.toolkit.utilities.xml;
 
 import gov.nist.toolkit.utilities.io.Io;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

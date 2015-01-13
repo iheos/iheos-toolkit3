@@ -1,8 +1,8 @@
 package gov.nist.toolkit.dsig;
 
 import gov.nist.toolkit.securityCommon.SecurityParams;
-import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
-import gov.nist.hit.ds.xdsException.LoadKeystoreException;
+import gov.nist.hit.ds.xdsExceptions.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsExceptions.LoadKeystoreException;
 
 import java.io.File;
 import java.io.FileInputStream;

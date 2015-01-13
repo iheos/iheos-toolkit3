@@ -2,7 +2,7 @@ package gov.nist.toolkit.xdstools3.server;
 
 import gov.nist.hit.ds.http.parser.*;
 import gov.nist.hit.ds.session.server.Session;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.*;
