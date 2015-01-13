@@ -91,7 +91,7 @@ class SimUtils {
     static SimHandle create(TransactionType transactionType, Repository repository, SimId simId) {
         ActorType actorType = transactionType.actorType
         if (!actorType) throw new ToolkitRuntimeException("Transaction Type ${transactionType.name} is not owned by an actorType")
-        def simHandle = create(actorType.name, simId, repository.getDisplayName())
+        def simHandle = create(actorType.name, simId, repository.id.idString)
         simHandle.transactionType = transactionType
         return simHandle
     }
