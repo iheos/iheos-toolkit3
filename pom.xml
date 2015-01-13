@@ -16,8 +16,9 @@
 
 
     <modules>
+        <module>engine</module>
         <module>repository-tools</module>
-        <module>gui-core</module>
+        <module>xdstools3</module>
     </modules>
 
 

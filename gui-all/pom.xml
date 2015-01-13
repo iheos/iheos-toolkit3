@@ -9,18 +9,18 @@
     </parent>
 
 
-    <artifactId>gui-core</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+    <artifactId>gui-all</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
 
     <modules>
         <module>../xdstools3</module>
-        <module>../docentryeditor</module>
+        <module>../doc-entry-editor</module>
     </modules>
 
 
-  <scm>
-    <tag>v3.0.2a</tag>
-  </scm>
+    <scm>
+        <tag>v3.0.2a</tag>
+    </scm>
 </project>
