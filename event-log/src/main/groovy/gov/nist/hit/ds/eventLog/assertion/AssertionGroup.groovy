@@ -133,10 +133,8 @@ public class AssertionGroup  {
     public Assertion fail(String failureMsg, boolean required) {
         Assertion a = new Assertion();
         a.with {
-            expected = ''
-            found = failureMsg
+            msg = failureMsg
             status = AssertionStatus.ERROR
-            //msg = failureMsg
         }
         addAssertion(a, required);
         return a;
@@ -145,10 +143,9 @@ public class AssertionGroup  {
     public Assertion fail(String failureMsg, String _found, boolean required) {
         Assertion a = new Assertion();
         a.with {
-            expected = failureMsg
+            msg = failureMsg
             found = _found
             status = AssertionStatus.ERROR
-            //msg = failureMsg
         }
         addAssertion(a, required);
         return a;
@@ -157,8 +154,6 @@ public class AssertionGroup  {
     public Assertion internalError(String failureMsg) {
         Assertion a = new Assertion();
         a.with {
-            expected = ""
-            found = ""
             status = AssertionStatus.INTERNALERROR
             msg = failureMsg
         }
@@ -199,9 +194,10 @@ public class AssertionGroup  {
         return a;
     }
 
-    public Assertion assertHasValue(String value, boolean required) {
+    public Assertion assertHasValue(String _msg, String value, boolean required) {
         Assertion a = new Assertion();
         a.with {
+            msg = _msg
             expected = 'Non-empty string'
             found = value
         }
@@ -221,7 +217,7 @@ public class AssertionGroup  {
         return a;
     }
 
-    public Assertion assertTrue(boolean ok, boolean required) {
+    public Assertion assertTrue(ok, boolean required) {
         Assertion a = new Assertion();
         if (ok) {
             a.expected = dashes
@@ -238,7 +234,7 @@ public class AssertionGroup  {
     public Assertion assertTrue(boolean ok, String found, boolean required) {
         Assertion a = new Assertion();
         if (ok) {
-            a.expected = dashes
+            a.expected = ''
             a.found = found
         } else {
             a.expected = 'True'
@@ -291,11 +287,23 @@ public class AssertionGroup  {
         return a;
     }
 
-    public Assertion msg(String msg) {
+    public Assertion infoMsg(String _msg) {
+        Assertion a = new Assertion();
+        a.with {
+            msg = _msg
+            expected = ''
+            found = ''
+            status = AssertionStatus.INFO
+        }
+        addAssertion(a, false);
+        return a;
+    }
+
+    public Assertion msg(String _msg) {
         Assertion a = new Assertion();
         a.with {
             expected = ''
-            found = msg
+            found = _msg
             status = AssertionStatus.SUCCESS
         }
         addAssertion(a, false);

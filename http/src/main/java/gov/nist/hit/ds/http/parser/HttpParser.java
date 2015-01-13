@@ -1,7 +1,5 @@
 package gov.nist.hit.ds.http.parser;
 
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
-import gov.nist.hit.ds.eventLog.errorRecording.SystemErrorRecorder;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
@@ -15,7 +13,7 @@ public class HttpParser {
 	byte[] input;
 	int from;
 	int to = 0;
-	IAssertionGroup er = null;
+//	IAssertionGroup er = null;
 	String charset = null;
 	HttpMessage message = new HttpMessage();
 	MultipartParser multiparser;
@@ -95,30 +93,8 @@ public class HttpParser {
 		return message.multipart;
 	} 
 
-	public void setErrorRecorder(IAssertionGroup er) {
-		this.er = er;
-	}
-
 	public HttpParser() {
 
-	}
-
-	public HttpParser(HttpServletRequest request) throws IOException, HttpParseException {
-		// This is the default toString() since it shows an object id (helps understand recursion)
-		logger.debug("new HttpParser(" + this.toString() + ")");
-		init(request);
-	}
-
-	public HttpParser(HttpServletRequest request, boolean appendixV) throws IOException, HttpParseException {
-		logger.debug("new HttpParser(" + this.toString() + ")");
-		this.appendixV = appendixV;
-		init(request);
-	}
-
-	public HttpParser(HttpServletRequest request, IAssertionGroup er) throws IOException, HttpParseException {
-		logger.debug("new HttpParser(" + this.toString() + ")");
-		this.er = er;
-		init(request);
 	}
 
 	public void init(HttpServletRequest request) throws IOException, HttpParseException {
@@ -129,38 +105,19 @@ public class HttpParser {
 			message.addHeader(name, value);
 		}
 		
-		if (er == null) {
-			// caller must not be interested in the ErrorRecorder results
-			er = new SystemErrorRecorder();
-		}
+//		if (er == null) {
+//			// caller must not be interested in the ErrorRecorder results
+//			er = new SystemErrorRecorder();
+//		}
 
 		message.bodyBytes = Io.getBytesFromInputStream(request.getInputStream());
 
 		tryMultipart();
 		
-		er.detail("Message " + ((isMultipart()) ? "is" : "is not" ) + " a multipart");
+//		er.detail("Message " + ((isMultipart()) ? "is" : "is not" ) + " a multipart");
 	}
 
-	public HttpParser(byte[] msg) throws HttpParseException, HttpHeaderParseException, ParseException {
-		logger.debug("new HttpParser(" + this.toString() + ")");
-		er = null;
-		init(msg, null, er);
-	}
-
-	public HttpParser(byte[] msg, IAssertionGroup er) throws HttpParseException, HttpHeaderParseException, ParseException  {
-		logger.debug("new HttpParser(" + this.toString() + ")");
-		this.er = er;
-		init(msg, null, er);
-	}
-	
-	public HttpParser(byte[] msg, IAssertionGroup er, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException  {
-		logger.debug("new HttpParser(" + this.toString() + ")");
-		this.er = er;
-		this.appendixV = appendixV;
-		init(msg, null, er);
-	}
-	
-	public void init(byte[] msg, HttpMessage hmessage, IAssertionGroup er) throws ParseException, HttpParseException  {
+	public void init(byte[] msg, HttpMessage hmessage) throws ParseException, HttpParseException  {
 		input = msg;
 		if (hmessage != null)
 			message = hmessage;
@@ -168,14 +125,14 @@ public class HttpParser {
 		tryMultipart();
 
 		if (isMultipart()) {
-			er.detail("Multipart parsed");
+//			er.detail("Multipart parsed");
 			for (Enumeration<String> en=message.getHeaderNames(); en.hasMoreElements(); ) {
 				String hdr = en.nextElement();
 				String hdrVal = message.getHeader(hdr);
 				System.out.println(hdrVal);
 			}
 		} else {
-			er.detail("Simple Part parsed");
+//			er.detail("Simple Part parsed");
 			for (Enumeration<String> en=message.getHeaderNames(); en.hasMoreElements(); ) {
 				String hdr = en.nextElement();
 				String hdrVal = message.getHeader(hdr);
@@ -186,22 +143,25 @@ public class HttpParser {
 
 	public void tryMultipart()  {
 		try {
-			multiparser = new MultipartParser(this, er, appendixV);
+			multiparser = new MultipartParser(this, appendixV);
 			message.multipart = multiparser.message;
 			logger.debug("HttpParser(" + this.toString() + ") - isMultipart=" + isMultipart() );
 		} catch (ParseException e) {
 			// not a multipart
 			System.out.println(ExceptionUtil.exception_details(e));
 			message.multipart = null;
-		} catch (HttpHeaderParseException e) {
+		}
+        catch (HttpHeaderParseException e) {
 			// not a multipart
 			System.out.println(ExceptionUtil.exception_details(e));
 			message.multipart = null;
-		} catch (HttpParseException e) {
+		}
+        catch (HttpParseException e) {
 			// not a multipart
 			System.out.println(ExceptionUtil.exception_details(e));
 			message.multipart = null;
-		} catch (Throwable e) {
+		}
+        catch (Throwable e) {
 			System.out.println(ExceptionUtil.exception_details(e));
 			message.multipart = null;
 		}
@@ -269,7 +229,7 @@ public class HttpParser {
 			header = header.trim();
 			message.addHeader(header);
 			to = findStartOfNextHeader();
-			er.detail("Header: " + header);
+//			er.detail("Header: " + header);
 			return header;
 		}
 	}
@@ -315,15 +275,15 @@ public class HttpParser {
 		charset = contentTypeHeader.getParam("charset");
 		if (charset == null || charset.equals("")) {
 			charset = "UTF-8";
-			if (er != null) {
-				er.detail(getPartLabel() + "No CharSet found in Content-Type header, assuming " + charset);
-				er.detail(getPartLabel() + "Content-Type header is " + contentTypeString);
-			}
+//			if (er != null) {
+//				er.detail(getPartLabel() + "No CharSet found in Content-Type header, assuming " + charset);
+//				er.detail(getPartLabel() + "Content-Type header is " + contentTypeString);
+//			}
 		} else {
-			if (er != null) {
-				er.detail(getPartLabel() + "CharSet is " + charset);
-				er.detail(getPartLabel() + "Content-Type header is " + contentTypeString);
-			}
+//			if (er != null) {
+//				er.detail(getPartLabel() + "CharSet is " + charset);
+//				er.detail(getPartLabel() + "Content-Type header is " + contentTypeString);
+//			}
 		}
 
 	}

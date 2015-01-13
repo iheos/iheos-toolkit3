@@ -23,7 +23,7 @@ class CodingValidator extends ValComponentBase {
     }
 
     @Validation(id='fhircode010', msg='Validating code root', ref='')
-    def code010() { infoFound("Root should be ${elementName}"); assertEquals(elementName, coding.name()) }
+    def code010() { infoFound("Root should be \"${elementName}\""); assertEquals(elementName, coding.name()) }
 
     @Validation(id='fhircode020', msg='Code has value in system.@value', ref='')
     def code020() { assertHasValue(coding.system.@value.text())}

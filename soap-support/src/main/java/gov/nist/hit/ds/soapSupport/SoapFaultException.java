@@ -6,8 +6,6 @@ import gov.nist.hit.ds.eventLog.assertion.Assertion;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup;
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus;
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 
 public class SoapFaultException extends Exception {
     /**
@@ -50,22 +48,22 @@ public class SoapFaultException extends Exception {
      *
      ***************************************************/
 
-    public SoapFaultException(IAssertionGroup er, FaultCode faultCode, String faultString, String faultTransaction, String faultDetail) {
+    public SoapFaultException(FaultCode faultCode, String faultString, String faultTransaction, String faultDetail) {
         super(faultCode.toString() + ": " + faultString);
         this.faultCode = faultCode;
         this.faultString = faultString;
         this.faultTransaction = faultTransaction;
         this.faultDetail = faultDetail;
-        if (er != null)
-            er.err(XdsErrorCode.Code.SoapFault, this);
+//        if (er != null)
+//            er.err(XdsErrorCode.Code.SoapFault, this);
     }
 
-    public SoapFaultException(IAssertionGroup er, FaultCode faultCode, String faultString) {
-        this(er, faultCode, faultString, null, null);
+    public SoapFaultException(FaultCode faultCode, String faultString) {
+        this(faultCode, faultString, null, null);
     }
 
-    public SoapFaultException(IAssertionGroup er, FaultCode faultCode, ErrorContext errorContext) {
-        this(er, faultCode, errorContext.toString(), null, null);
+    public SoapFaultException(FaultCode faultCode, ErrorContext errorContext) {
+        this(faultCode, errorContext.toString(), null, null);
     }
 
     public SoapFaultException(AssertionGroup ag, FaultCode faultCode, ErrorContext errorContext) {

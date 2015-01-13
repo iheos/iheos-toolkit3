@@ -1,5 +1,5 @@
 package gov.nist.hit.ds.dsSims.fhir.mhd.validators
-import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.HashValidator
+import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.HashValidator
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
@@ -27,7 +27,7 @@ class MhdDocRefValidator extends ValComponentBase {
     @Validation(id='mhd010', msg='Validating classCode', ref='')
     def mhd010() {
         infoFound(true)
-        dr.class.children().each { new CodingValidator(simHandle, it).asSelf().run() }
+        dr.class.children().each { new CodingValidator(simHandle, it).asSelf(this).run() }
     }
 
     ///////////////////////////
@@ -61,7 +61,7 @@ class MhdDocRefValidator extends ValComponentBase {
     @Validation(id='mhd040', msg='Validating confidentialityCode', ref='')
     def mhd040() {
         infoFound(true)
-        dr.confidentiality.children().each { new CodingValidator(simHandle, it).asSelf().run() }}
+        dr.confidentiality.children().each { new CodingValidator(simHandle, it).asSelf(this).run() }}
 
     ///////////////////////////
     // CreationTime
@@ -84,7 +84,7 @@ class MhdDocRefValidator extends ValComponentBase {
     def mhd050() {
         infoFound(true)
         dr.context.event.children().each {
-            new CodingValidator(simHandle, it).asSelf().run()
+            new CodingValidator(simHandle, it).asSelf(this).run()
         }
     }
 
@@ -116,7 +116,7 @@ class MhdDocRefValidator extends ValComponentBase {
         dr.hash.each {
             def value = it.@value.text()
             assertHasValue(value)
-            new HashValidator(simHandle, value).asSelf().run()
+            new HashValidator(simHandle, value).asSelf(this).run()
         }
     }
 
@@ -131,7 +131,7 @@ class MhdDocRefValidator extends ValComponentBase {
     def mhd080() {
         infoFound(true)
         dr.context.facilityType.children().each {
-            new CodingValidator(simHandle, it).asSelf().run()
+            new CodingValidator(simHandle, it).asSelf(this).run()
         }
     }
 
@@ -207,7 +207,7 @@ class MhdDocRefValidator extends ValComponentBase {
     def mhd140() {
         authenticatorTags().each {
             containedPractitioners(it).each { practitioner ->
-                new PractitionerNameValidator(simHandle, practitioner.name).asSelf().run()
+                new PractitionerNameValidator(simHandle, practitioner.name).asSelf(this).run()
             }
         }
     }
@@ -237,7 +237,7 @@ class MhdDocRefValidator extends ValComponentBase {
     @Validation(id='mhd160', msg='Validating subject', ref='')
     def mhd160() {
         infoFound(true)
-        new SubjectValidator(simHandle, dr).asSelf().run()
+        new SubjectValidator(simHandle, dr).asSelf(this).run()
     }
 
     ///////////////////////////
@@ -287,7 +287,7 @@ class MhdDocRefValidator extends ValComponentBase {
     @Validation(id='mhd210', msg='Validating sourcePatient', ref='')
     def mhd210() {
         sourcePatients().each { patient ->
-            new PatientIdentifierValidator(simHandle, patient.identifier).asSelf().run()
+            new PatientIdentifierValidator(simHandle, patient.identifier).asSelf(this).run()
 
         }
     }
@@ -309,7 +309,7 @@ class MhdDocRefValidator extends ValComponentBase {
     def mhd220() {
         infoFound(true)
         practiceSettingCodeExtensions().each {
-            new CodingValidator(simHandle, it.valueCoding, 'valueCoding').asSelf().run()
+            new CodingValidator(simHandle, it.valueCoding, 'valueCoding').asSelf(this).run()
         }
     }
 
@@ -324,7 +324,7 @@ class MhdDocRefValidator extends ValComponentBase {
     def mhd230() {
         infoFound(true)
         dr.type.each {
-            new CodingValidator(simHandle, it.coding).asSelf().run()
+            new CodingValidator(simHandle, it.coding).asSelf(this).run()
         }
     }
 
@@ -339,7 +339,7 @@ class MhdDocRefValidator extends ValComponentBase {
     def mhd240() {
         infoFound(true)
         dr.masterIdentifier.each {
-            new MasterIdentifierValidator(simHandle, dr).asSelf().run()
+            new MasterIdentifierValidator(simHandle, dr).asSelf(this).run()
         }
     }
 

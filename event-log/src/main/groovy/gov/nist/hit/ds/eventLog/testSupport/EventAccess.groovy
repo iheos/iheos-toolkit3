@@ -3,6 +3,7 @@ package gov.nist.hit.ds.eventLog.testSupport
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
+import gov.nist.hit.ds.utilities.io.Io
 
 /**
  * Created by bmajur on 7/13/14.
@@ -61,6 +62,12 @@ class EventAccess {
 
     File propertiesFile(String agName) {
         new File(new File(eventDir(), 'Validators'), "${agName}.props.txt")
+    }
+
+    Properties properties(String agName) {
+        Properties props = new Properties()
+        props.load(Io.getInputStreamFromFile(propertiesFile(agName)))
+        return props
     }
 
     File propertiesFile(String agName, subGroups) {

@@ -5,6 +5,7 @@ import gov.nist.hit.ds.eventLog.EventFactory
 import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.Repository
+import gov.nist.hit.ds.repository.shared.data.AssetNode
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
@@ -65,5 +66,15 @@ class SimHandle {
         event.fault = fault
         complete = true
         return this
+    }
+
+    AssetNode getAssetNode(String assetType) {
+        AssetNode assetNode = new AssetNode()
+        Asset a = event.eventAsset
+        assetNode.assetId = a.id.idString
+        assetNode.reposSrc = a.source
+        assetNode.repId = a.repository.idString
+        assetNode.type = assetType
+        return assetNode
     }
 }

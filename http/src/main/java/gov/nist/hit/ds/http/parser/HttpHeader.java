@@ -1,13 +1,7 @@
 package gov.nist.hit.ds.http.parser;
 
 
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HttpHeader {
 	private String line;
@@ -16,7 +10,6 @@ public class HttpHeader {
 	private Map<String, String> params;
 	private List<String> unnamedParams;
 	boolean parsed;
-	IAssertionGroup er = null;
 
 	public HttpHeader(String line) throws  ParseException {
 		if (line == null)
@@ -26,17 +19,6 @@ public class HttpHeader {
 		parse();
 	}
 
-	public HttpHeader(String line, IAssertionGroup er) throws ParseException {
-		if (line == null)
-			line = "";
-		this.line = line;
-		this.er = er;
-		parsed = false;
-		if (er != null)
-			er.detail("Parsing HttpHeader: " + line.trim());
-		parse();
-	}
-	
 	public String asString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append("Header: ").append("name=").append(name);

@@ -109,7 +109,7 @@ class RimParser {
 
     def parseSlots(xml) {
         def attributes = []
-        xml.Slot.each { slot ->
+        xml.SlotModel.each { slot ->
             def atts = [ : ]
             atts['name'] = slot.@name
             def values = []
@@ -124,14 +124,14 @@ class RimParser {
 
     def parseClassifications(xml) {
         def attributes = []
-        xml.Classification.each { classification ->
+        xml.ClassificationModel.each { classification ->
             String classScheme = classification.@classificationScheme
             def classType = rimGenerator.classSchemesReverse[classScheme]
             if (!classType) throw new ToolkitRuntimeException("Classification scheme ${classScheme} unknown.")
             def atts = [ : ]
             atts['name'] = classType
             atts['code'] = classification.@nodeRepresentation
-            atts['system'] = classification.Slot.ValueList.Value.text()
+            atts['system'] = classification.SlotModel.ValueList.Value.text()
             atts['display'] = classification.Name.LocalizedString.@value
             attributes << atts
         }
@@ -140,7 +140,7 @@ class RimParser {
 
     def parseExternalIdentifiers(xml) {
         def attributes = []
-        xml.ExternalIdentifier.each { identifier ->
+        xml.ExternalIdentifierModel.each { identifier ->
             String eiScheme = identifier.@identificationScheme
             def idType = rimGenerator.eiSchemesReverse[eiScheme]
             if (!idType) throw new ToolkitRuntimeException("ExternalIdentifier scheme ${eiScheme} unknown.")
@@ -165,10 +165,10 @@ class RimParser {
 
     def labelRegistryPackages(xml, classification) {
         def rpClassifications = []
-        rpClassifications << xml.Classification.findAll {
+        rpClassifications << xml.ClassificationModel.findAll {
             it.@classificationNode == classification
         }.collect { it.@classifiedObject }
-        rpClassifications << xml.RegistryPackage.Classification.findAll {
+        rpClassifications << xml.RegistryPackage.ClassificationModel.findAll {
             it.@classificationNode == classification
         }.collect { it.@classifiedObject }
         return rpClassifications.flatten()

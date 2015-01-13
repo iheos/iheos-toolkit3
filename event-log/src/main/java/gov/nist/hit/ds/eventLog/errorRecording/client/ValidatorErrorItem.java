@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.eventLog.errorRecording.client;
 
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**

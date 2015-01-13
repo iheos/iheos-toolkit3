@@ -1,13 +1,15 @@
 package gov.nist.hit.ds.dsSims.eb.transactions
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.dsSims.eb.topLevel.ValidatorManager
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
-import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.core.Endpoint
+import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
 import spock.lang.Specification
 /**
  * Created by bmajur on 9/24/14.
@@ -26,46 +28,44 @@ class PnrTest extends Specification {
     </actor>
 </ActorsTransactions>
 '''
-    def factory = new ActorTransactionTypeFactory()
-    def simId = new SimId('PnrTest')
-    def actorType = 'docrec'
-    def transactionName = 'prb'
+    def simId
     def repoName = 'Sim'
     def endpoint = new Endpoint('http://localhost:8080/xdstools3/sim/1234/docrec/prb')
-    def header = 'x'
-    def body = 'y'.getBytes()
     File repoDataDir
     RepositorySource repoSource
     SimHandle simHandle
+    def factory = new ActorTransactionTypeFactory()
 
-    void setup() {
+    def setup() {
         SimSupport.initialize()
-        factory.clear()
-        factory.loadFromString(config)
+        new ActorTransactionTypeFactory().clear()
+        new ActorTransactionTypeFactory().loadFromString(config)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simHandle = SimUtils.create(actorType, simId)
+        simId = new SimId('PnrTest')
+        SimUtils.recreate('docrec', simId, repoName)
     }
 
-    // TODO: How to pass in options/selections???
+    ValidatorManager vMan
+    ValidateMessageResponse response
 
-//    def cleanup() {
-//        new SimUtils().delete(simId, repoName)
-//    }
+    def run(String header, String body) {
+        vMan = new ValidatorManager()
+        response = vMan.validateMessage(ValidatorManager.soapAction, header, body.getBytes())
+        simHandle = vMan.simHandle
+    }
 
-    def 'Test'() {
+
+    def 'Test full validation'() {
         setup:
-        def header = 'x'
-        def body = 'y'.getBytes()
-        def transactionType = factory.getTransactionType(transactionName)
-        simHandle.event.inOut.reqHdr = header
-        simHandle.event.inOut.reqBody = body
+        def header = getClass().classLoader.getResource('pnr/PnRSoapHeader.txt').text
+        def body = getClass().classLoader.getResource('pnr/PnR1DocSoapBody.xml').text
+
         when:
-        def runner = new TransactionRunner(simId, repoName, transactionType)
-        runner.acceptRequest()
+        run(header,body)
 
         then:
-        true
+        response.validationStatus == ValidationStatus.OK
     }
 
 }
