@@ -63,6 +63,7 @@ class ValidatorManager implements MessageValidator {
             response.setEventAssetId(new AssetId(simHandle.event.eventAsset.id.idString))
             response.setRepositoryId(new AssetId(RepoUtils.getRepository(repositoryName).id.idString))
             response.setValidationStatus((simHandle.event.hasErrors()) ? ValidationStatus.ERROR : ValidationStatus.OK)
+            SimUtils.close(simHandle)
             return response
         }
         throw new ToolkitRuntimeException("Do not understand validation type ${validationType}")
