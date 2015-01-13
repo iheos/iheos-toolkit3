@@ -40,7 +40,10 @@ import javax.jms.Destination;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
-import javax.jms.QueueConnectionFactory;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicSession;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.io.File;
@@ -556,19 +559,19 @@ public class PresentationData implements IsSerializable, Serializable  {
 
 
     /**
-     * Gets updates from the JMS queue.
-     * @param queue The JMS queue.
+     * Gets updates from the JMS destination.
+     * @param destination The JMS destination.
      * @param filterLocation The backend filter, or a canned query, location.
      * @return Updates in a map of assetNodes.
      * @throws RepositoryException
      */
-    public static Map<String,AssetNode> getLiveUpdates(String queue, String filterLocation) throws RepositoryException {
+    public static Map<String,AssetNode> getLiveUpdates(String destination, String filterLocation) throws RepositoryException {
         //ArrayList<AssetNode> result = new ArrayList<AssetNode>();
         Map<String,AssetNode> result =  new HashMap<String,AssetNode>();
 
         MessageConsumer consumer = null;
-        javax.jms.QueueSession session = null;
-        javax.jms.QueueConnection connection = null;
+        TopicSession session = null;
+        TopicConnection connection = null;
         String txDetail = null;
         String repId = null;
         String acs = null;
@@ -592,18 +595,17 @@ public class PresentationData implements IsSerializable, Serializable  {
             Context context = new InitialContext(env);
 
             // Lookup a connection factory in the context
-            javax.jms.QueueConnectionFactory factory = (QueueConnectionFactory) context.lookup(FFMQConstants.JNDI_QUEUE_CONNECTION_FACTORY_NAME);
+            javax.jms.TopicConnectionFactory factory = (TopicConnectionFactory) context.lookup(FFMQConstants.JNDI_TOPIC_CONNECTION_FACTORY_NAME);
 
-            connection = factory.createQueueConnection();
+            connection = factory.createTopicConnection();
 
-            session = connection.createQueueSession(false,
-                    javax.jms.Session.AUTO_ACKNOWLEDGE);
+            session = connection.createTopicSession(false, javax.jms.Session.AUTO_ACKNOWLEDGE);
             connection.start();
 
-            Destination destination = session.createQueue((queue==null||("".equals(queue)))?TXMON_QUEUE:queue);
+            Topic topic = session.createTopic((destination==null||("".equals(destination)))?TXMON_QUEUE:destination);
 
             // Create a MessageConsumer from the Session to the Topic or Queue
-            consumer = session.createConsumer(destination);
+            consumer = session.createSubscriber(topic);
 
             // Wait for a message
             Message message = consumer.receive(1000*30);
