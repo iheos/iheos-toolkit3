@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.testClient.metadataValidator.datatype;
 
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.testClient.logging.ErrorRecorder;
+import gov.nist.hit.ds.testClient.logging.XdsErrorCode;
 import org.apache.axiom.om.OMElement;
 
 public abstract class FormatValidator {

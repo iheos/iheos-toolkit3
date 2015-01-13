@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.testClient.metadataValidator.field;
 
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext;
 import gov.nist.hit.ds.ebMetadata.Metadata;
+import gov.nist.hit.ds.testClient.logging.ValidationContext;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 
 //this gets invoked from both Validator.java and directly from Repository.  Should optimize the implementation so that codes.xml

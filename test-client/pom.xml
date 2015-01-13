@@ -15,10 +15,6 @@
     <dependencies>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>site-management</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
             <artifactId>eb-metadata</artifactId>
         </dependency>
         <dependency>
@@ -40,9 +36,19 @@
             <version>1.2.17</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-api</artifactId>
+            <version>1.2.13</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.ws.commons.axiom</groupId>
             <artifactId>axiom-impl</artifactId>
-            <version>1.2.14</version>
+            <version>1.2.13</version>
         </dependency>
         <dependency>
             <groupId>org.apache.ws.commons.axiom</groupId>
@@ -65,9 +71,36 @@
             <version>1.3.1</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.ws.commons.axiom</groupId>
-            <artifactId>axiom-api</artifactId>
-            <version>1.2.14</version>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.xmlschema</groupId>
+            <artifactId>xmlschema-core</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.neethi</groupId>
+            <artifactId>neethi</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-transport-local</artifactId>
+            <version>1.6.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-transport-http</artifactId>
+            <version>1.5.6</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
         </dependency>
 
     </dependencies>

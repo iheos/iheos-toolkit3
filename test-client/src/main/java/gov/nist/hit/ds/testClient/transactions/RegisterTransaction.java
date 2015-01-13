@@ -16,6 +16,8 @@ public class RegisterTransaction extends BasicTransaction {
 		//		this.xds_version = xds_version;
 	}
 
+    public RegisterTransaction() {}
+
 	String transactionName() {
 		if (async) return "r.as";
 		if (xds_version == BasicTransaction.xds_b) return "r.b";

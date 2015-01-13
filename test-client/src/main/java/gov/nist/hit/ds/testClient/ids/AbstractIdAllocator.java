@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class IdAllocator {
+public abstract class AbstractIdAllocator {
 	TestConfig testConfig;
 
 	String mgmt_dir; 
@@ -22,7 +22,7 @@ public abstract class IdAllocator {
 	protected File uniqueIdIncrFile;
 	File sourceIdFile;
 
-	abstract String allocate() throws XdsInternalException;
+	abstract public String allocate() throws XdsInternalException;
 
 	// object_type is ExtrinsicObject or RegistryPackage
 	//
@@ -30,7 +30,7 @@ public abstract class IdAllocator {
 	// 
 	//
 	
-	public IdAllocator(TestConfig config) {
+	public AbstractIdAllocator(TestConfig config) {
 		testConfig = config;
 		mgmt_dir = testConfig.testmgmt_dir; 
 		patientIdFile = new File(mgmt_dir +  File.separator + "patientid.txt");

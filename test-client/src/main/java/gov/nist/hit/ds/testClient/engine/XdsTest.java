@@ -1,13 +1,14 @@
 package gov.nist.hit.ds.testClient.engine;
 
-import gov.nist.hit.ds.siteManagement.client.Site;
-import gov.nist.hit.ds.siteManagement.loader.CombinedSiteLoader;
-import gov.nist.hit.ds.siteManagement.loader.Sites;
 import gov.nist.hit.ds.testClient.eb.RegistryResponseLog;
 import gov.nist.hit.ds.testClient.logRepository.LogRepository;
 import gov.nist.hit.ds.testClient.logRepository.LogRepositoryFactory;
 import gov.nist.hit.ds.testClient.logging.LogFileContent;
 import gov.nist.hit.ds.testClient.logging.TestStepLogContent;
+import gov.nist.hit.ds.testClient.site.CombinedSiteLoader;
+import gov.nist.hit.ds.testClient.site.Site;
+import gov.nist.hit.ds.testClient.site.Sites;
+import gov.nist.hit.ds.testClient.soap.Soap;
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.hit.ds.xdsException.XdsInternalException;

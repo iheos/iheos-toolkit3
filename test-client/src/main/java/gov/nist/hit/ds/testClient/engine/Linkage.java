@@ -12,7 +12,7 @@ import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.xpath.AXIOMXPath;
-
+import org.apache.commons.codec.binary.Base64;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.FactoryConfigurationError;
 import java.io.File;
@@ -416,7 +416,8 @@ public class Linkage extends BasicLinkage {
 					String result = xpathExpression.stringValueOf(step_ele);
 
 					if (base64decode)
-						result = Base64Coder.decodeString(result);
+                        result = new String(Base64.decodeBase64(result));
+//						result = Base64Coder.decodeString(result);
 
 					addLinkage(symbol, result);
 					if (metadata_ele != null)
@@ -430,7 +431,8 @@ public class Linkage extends BasicLinkage {
 					String result = xpathExpression.stringValueOf(root);
 
 					if (base64decode)
-						result = Base64Coder.decodeString(result);
+                        result = new String(Base64.decodeBase64(result));
+//						result = Base64Coder.decodeString(result);
 
 					addLinkage(symbol, result);
 					if (metadata_ele != null)

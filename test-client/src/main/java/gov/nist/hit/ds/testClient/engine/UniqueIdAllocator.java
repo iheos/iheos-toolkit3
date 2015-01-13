@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.testClient.engine;
 
-import gov.nist.hit.ds.testClient.ids.IdAllocator;
+import gov.nist.hit.ds.testClient.ids.AbstractIdAllocator;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
 import gov.nist.toolkit.utilities.io.Io;
@@ -18,7 +18,7 @@ import java.io.PrintStream;
  * @author bill
  *
  */
-public class UniqueIdAllocator extends IdAllocator {
+public class UniqueIdAllocator extends AbstractIdAllocator {
 	
 	private UniqueIdAllocator(TestConfig config) {
 		super(config);
@@ -124,7 +124,7 @@ public class UniqueIdAllocator extends IdAllocator {
 		return base + "." + String.valueOf(cnt);
 	}
 	
-	public  String allocate() {
+	public String allocate() {
 		return uida.alloc();
 	}
 }

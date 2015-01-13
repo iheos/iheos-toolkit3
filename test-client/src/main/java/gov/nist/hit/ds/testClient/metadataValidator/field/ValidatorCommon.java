@@ -1,12 +1,8 @@
 package gov.nist.hit.ds.testClient.metadataValidator.field;
 
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder;
-import gov.nist.hit.ds.eventLog.errorRecording.client.ValidatorErrorItem;
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
-import gov.nist.hit.ds.eventLog.errorRecording.factories.ErrorRecorderBuilder;
+import gov.nist.hit.ds.testClient.logging.*;
 import gov.nist.hit.ds.testClient.registry.RegistryErrorListGenerator;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import org.apache.axiom.om.OMElement;

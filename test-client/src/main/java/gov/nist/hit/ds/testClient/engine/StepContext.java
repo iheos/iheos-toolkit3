@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 public class StepContext extends BasicContext implements ErrorReportingInterface {
 	OMElement output = null;
-	OMElement test_step_output = null;
+	public OMElement test_step_output = null;
 //	boolean expectedstatus = true;
 	TransactionStatus expectedStatus = new TransactionStatus();
 	String expectedErrorMessage = "";
@@ -20,7 +20,7 @@ public class StepContext extends BasicContext implements ErrorReportingInterface
 	String stepId;
 	boolean useAltPatientId = false;
 	TestConfig testConfig;
-	TransactionSettings transactionSettings = null;
+	public TransactionSettings transactionSettings = null;
 	
 	public void setTransationSettings(TransactionSettings ts) {
 		this.transactionSettings = ts;

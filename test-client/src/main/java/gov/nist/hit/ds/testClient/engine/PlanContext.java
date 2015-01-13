@@ -3,6 +3,7 @@ package gov.nist.hit.ds.testClient.engine;
 import gov.nist.hit.ds.testClient.logging.LogFileContent;
 import gov.nist.hit.ds.testClient.logging.NotALogFileException;
 import gov.nist.hit.ds.testClient.logging.SectionLogMap;
+import gov.nist.hit.ds.testClient.transactions.BasicTransaction;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import gov.nist.hit.ds.xdsException.MetadataValidationException;
 import gov.nist.hit.ds.xdsException.XdsException;
@@ -16,15 +17,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PlanContext extends BasicContext {
 	OMElement results_document = null;
 	String defaultRegistryEndpoint = null;
-	Map<String, String> externalLinkage = null;
+	Map<String, String> externalLinkage = new HashMap<>();
 	Map<String, Object> externalLinkage2 = null;  // for binary stuff like certificates
 	SectionLogMap previousSectionLogs;
 	LogFileContent currentSectionLog;

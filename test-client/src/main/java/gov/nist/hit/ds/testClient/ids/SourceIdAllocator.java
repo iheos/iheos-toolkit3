@@ -7,7 +7,7 @@ import gov.nist.toolkit.utilities.io.Io;
 
 import java.io.IOException;
 
-public class SourceIdAllocator extends IdAllocator {
+public class SourceIdAllocator extends AbstractIdAllocator {
 	
 	public SourceIdAllocator(TestConfig config) {
 		super(config);

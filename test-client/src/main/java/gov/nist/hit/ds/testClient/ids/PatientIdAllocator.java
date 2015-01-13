@@ -13,7 +13,7 @@ import java.io.PrintStream;
  * @author bill
  *
  */
-public class PatientIdAllocator extends IdAllocator {
+public class PatientIdAllocator extends AbstractIdAllocator {
 	static String current_pid = null; 
 
 	static Logger logger = Logger.getLogger(PatientIdAllocator.class);
