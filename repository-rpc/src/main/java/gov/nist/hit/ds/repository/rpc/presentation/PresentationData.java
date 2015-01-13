@@ -608,7 +608,7 @@ public class PresentationData implements IsSerializable, Serializable  {
             consumer = session.createSubscriber(topic);
 
             // Wait for a message
-            Message message = consumer.receive(1000*30);
+            Message message = consumer.receive(1000*30); // 1000*30 In milliseconds, some value is required because the console control will not return when the process exits in dev mode.
 
             if (message instanceof MapMessage) {
                 txDetail = (String)((MapMessage)message).getObject("txDetail");
