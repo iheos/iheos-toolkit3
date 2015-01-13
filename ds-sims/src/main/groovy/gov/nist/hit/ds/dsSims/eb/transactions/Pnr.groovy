@@ -16,7 +16,6 @@ import gov.nist.hit.ds.toolkit.Toolkit
 import gov.nist.hit.ds.toolkit.environment.Environment
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.utilities.xml.OMFormatter
-import gov.nist.hit.ds.utilities.xml.Util
 import org.apache.axiom.om.OMElement
 
 /**
@@ -41,11 +40,9 @@ class Pnr implements Transaction {
         def soapVal = new SoapMessageValidator(simHandle, new String(soapEnvelopeBytes))
         soapVal.asPeer().run()
 
-        def soapBody = soapVal.body.toString()
-        OMElement soapBodyEle = Util.parse_xml(soapBody)
-        OMElement root = (OMElement) soapBodyEle.childElements.next()
-        String rootStr = OMFormatter.toString()
-        Metadata m = MetadataParser.parse(root)
+        OMElement soapBodyEle = soapVal.body
+        OMElement msgRoot = (OMElement) soapBodyEle.childElements.next()
+        Metadata m = MetadataParser.parse(soapBodyEle)
         ValidationContext vc = new ValidationContext()
         vc.isPnR = true
         vc.isRequest = true
@@ -53,7 +50,7 @@ class Pnr implements Transaction {
 
         // Schema
         if (schema(simHandle)) {
-            new EbSchemaValidator(simHandle, rootStr, MetadataTypes.METADATA_TYPE_PRb, Toolkit.schemaFile()).asPeer().run()
+            new EbSchemaValidator(simHandle, new OMFormatter(msgRoot).toString(), MetadataTypes.METADATA_TYPE_PRb, Toolkit.schemaFile()).asPeer().run()
         }
 
         // Metadata Validator
