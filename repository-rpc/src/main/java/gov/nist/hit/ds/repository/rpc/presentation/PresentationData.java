@@ -141,6 +141,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 
                 aDst.setRepId(aSrc.getRepository().getIdString());
                 aDst.setAssetId(aSrc.getId().getIdString());
+                if (aSrc.getAssetType()!=null)
+                    aDst.setType(aSrc.getAssetType().getKeyword());
                 aDst.setDescription(aSrc.getDescription());
                 aDst.setDisplayName(aSrc.getDisplayName());
                 aDst.setMimeType(aSrc.getMimeType());
@@ -177,7 +179,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 			Installation.installation().initialize();
 		} catch (Throwable t) {
 			logger.warning(t.toString());
-            throw new RepositoryException(t.toString());
+            throw new RepositoryException("Installation initialization exception: " + t.toString());
 		}
 		return Configuration.configuration().isRepositorySystemInitialized();
 	}
@@ -222,8 +224,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 		
 		AssetNodeBuilder anb = new AssetNodeBuilder(Depth.PARENT_ONLY);
 		for (Repository repos : reposList) {
+
 			try {
-				tmp = anb.build(repos, PropertyKey.CREATED_DATE);
+				tmp = anb.build(repos, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE},0);
 				if (tmp!=null && !tmp.isEmpty()) {
 					for (AssetNode an : tmp) {
 						result.add(an);	
@@ -401,6 +404,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 		
 		aDst.setRepId(aSrc.getRepository().getIdString());
 		aDst.setAssetId(aSrc.getId().getIdString());
+        if (aSrc.getAssetType()!=null)
+            aDst.setType(aSrc.getAssetType().getKeyword());
 		aDst.setDescription(aSrc.getDescription());
 		aDst.setDisplayName(aSrc.getDisplayName());
 		aDst.setMimeType(aSrc.getMimeType());
@@ -468,6 +473,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 	
 			aDst.setRepId(aSrc.getRepository().getIdString());
 			aDst.setAssetId(aSrc.getId().getIdString());
+            if (aSrc.getAssetType()!=null)
+                aDst.setType(aSrc.getAssetType().getKeyword());
 			aDst.setDescription(aSrc.getDescription());
 			aDst.setDisplayName(aSrc.getDisplayName());
 			aDst.setMimeType(aSrc.getMimeType());

@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
  */
 @SuppressWarnings("serial")
 public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServices {
-    static Logger logger = Logger.getLogger(PreConnectathonTabServiceImpl.class);
+    static Logger logger = Logger.getLogger(MHDServicesImpl.class);
 
     // Used only for non-servlet use (Dashboard is good example)
     //    private String sessionID = null;
@@ -47,7 +47,7 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
      * @return
      */
     @Override
-    public String convertMHDToXDS() {
+    public AssetNode convertMHDToXDS() {
         String rootDirPath = getServletContext().getContextPath();
         String uploadedFileContents = new String(getSession().getlastUpload()).trim();
         return Caller.getInstance().convertMHDtoXDS(rootDirPath, uploadedFileContents);

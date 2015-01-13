@@ -5,10 +5,10 @@ import com.smartgwt.client.widgets.menu.MenuItem;
 import com.smartgwt.client.widgets.menu.events.ClickHandler;
 import com.smartgwt.client.widgets.menu.events.MenuItemClickEvent;
 import com.smartgwt.client.widgets.tab.Tab;
+import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.util.eventBus.CloseAllTabsEvent;
 import gov.nist.toolkit.xdstools3.client.util.eventBus.CloseOtherTabsEvent;
 import gov.nist.toolkit.xdstools3.client.util.eventBus.CloseTabEvent;
-import gov.nist.toolkit.xdstools3.client.manager.Manager;
 
 public abstract class GenericCloseableTab extends GenericTab {
     Menu tabMenu = new Menu();
@@ -23,6 +23,7 @@ public abstract class GenericCloseableTab extends GenericTab {
         tabMenu.setItems(closeTabBtn, closeOtherTabsBtn, closeAllTabBtn);
         bindUI();
     }
+
 
     private void bindUI(){
         final Tab tab=this;

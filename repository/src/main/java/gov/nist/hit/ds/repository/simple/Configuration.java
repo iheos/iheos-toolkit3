@@ -5,6 +5,8 @@ import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
 import gov.nist.hit.ds.repository.api.Type;
+import gov.nist.hit.ds.repository.api.TypeIterator;
+import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 import gov.nist.hit.ds.toolkit.installation.Installation;
 
 import java.io.File;
@@ -12,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 
@@ -31,14 +34,15 @@ public class Configuration {
 	public static final String REPOSITORY_PROP_FILE_BASENAME = "repository";
 	public static final String REPOSITORY_PROP_FILE = REPOSITORY_PROP_FILE_BASENAME + PROPERTIES_FILE_EXT;
 	public static final String REPOSITORY_SOURCE_ATTRIBUTES = "access." + STD_PROPERTIES_FILE_EXT;
+    private static final String REPOSITORY_SOURCE_DIRNAME = "repositories";
     /* Configuration warning */
     public static final String CONFIGURATION_WARNING = "Configuration warning";
 
 	private static ArrayList<RepositorySource> repositorySources = new ArrayList<RepositorySource>();
+    // A cache of all read/writable asset domain types
+    private static final ConcurrentHashMap<SimpleTypeId,Type> rwTypesCache = new ConcurrentHashMap<>();
 	static final Logger logger = Logger.getLogger(Configuration.class.getName());
-	private static final String REPOSITORY_SOURCE_DIRNAME = "repositories";
 
-	
 	static Configuration me = null;
 
 	static public Configuration configuration() throws RepositoryException {
@@ -50,6 +54,8 @@ public class Configuration {
 	
 	private Configuration() throws RepositoryException {
 		File f = null;
+
+        // The read-only source can be optional
 		try {
 			
 			f = new File(getClass().getClassLoader().getResource("WEB-INF/" + REPOSITORY_SOURCE_DIRNAME).getFile());
@@ -59,6 +65,7 @@ public class Configuration {
 			logger.info("No resident repository source found in WAR/" + REPOSITORY_SOURCE_DIRNAME);
 		}
 
+        // The read-write source must exist
         String ecDir = null;
         try {
             ecDir = Installation.installation().getExternalCache().toString();
@@ -66,15 +73,31 @@ public class Configuration {
             logger.warning(ex.toString());
         }
 
-        System.out.println("EC = " + ecDir);
+        logger.info("EC = " + ecDir);
 		
-		f = new File( ecDir + File.separator + REPOSITORY_SOURCE_DIRNAME); 
-		addSource(f,Access.RW_EXTERNAL);		
+		f = new File(ecDir, REPOSITORY_SOURCE_DIRNAME);
+		RepositorySource rs = addSource(f,Access.RW_EXTERNAL);
+
+
+        // Cache available types in the r/w source
+        TypeIterator typeIterator = new SimpleTypeIterator(rs);
+
+        while (typeIterator.hasNextType()) {
+            Type t = typeIterator.nextType();
+            SimpleTypeId typeId = new SimpleTypeId(t.getKeyword(),t.getDomain());
+//            logger.info("keyword: " + t.getKeyword() + " domain: "+ t.getDomain());
+            getRwTypesCache().put(typeId,t);
+        }
+        logger.info("Cached " + getRwTypesCache().size() + " types from the " + Access.RW_EXTERNAL.name() +" repository source.");
+
+
 	}
 		
-	private void addSource(File f, Access access) throws RepositoryException {
+	private RepositorySource addSource(File f, Access access) throws RepositoryException {
+        RepositorySource rs = null;
+
 		if (f.exists()) {
-			RepositorySource rs = new RepositorySource(f,access);
+			rs = new RepositorySource(f,access);
 			rs.setValid(true);
 
 			getRepositorySources().add(rs);
@@ -82,6 +105,8 @@ public class Configuration {
 			throw new RepositoryException(RepositoryException.IO_ERROR + ": path does not exist (" + f.toString() + ")");
 			// logger.warn(CONFIGURATION_WARNING + ": no "+ access.toString() +" repository source found ("+ f.toString() +")");
 		}
+
+        return rs;
 	}
 	
 
@@ -215,7 +240,7 @@ public class Configuration {
 	}
 	
 	public File getRepositoryLocation(File repositoryLocation, ArtifactId id) throws RepositoryException {
-		File hostLocation = new File(getRepositoriesDataDir(repositoryLocation) + File.separator + id.getIdString());
+		File hostLocation = new File(getRepositoriesDataDir(repositoryLocation), id.getIdString());
 		if (exists(hostLocation)) {
 			return hostLocation;
 		}
@@ -241,7 +266,7 @@ public class Configuration {
 		File hostLocation = null;
 				
 		for (RepositorySource rs : getRepositorySources()) {
-			hostLocation = new File(getRepositoriesDataDir(rs.getLocation()) + File.separator + reposId.getIdString());
+			hostLocation = new File(getRepositoriesDataDir(rs.getLocation()), reposId.getIdString());
 			if (exists(hostLocation)) {
 				return rs;
 			}
@@ -265,7 +290,7 @@ public class Configuration {
 					"Repository Id may not be null.");
 	
 		}
-				return  new File(getRepositoriesDataDir(getRepositorySrc(Access.RW_EXTERNAL).getLocation()) + File.separator + id.getIdString()); 		
+				return  new File(getRepositoriesDataDir(getRepositorySrc(Access.RW_EXTERNAL).getLocation()), id.getIdString());
 	}
 
 	public boolean repositoryExists(ArtifactId id) throws RepositoryException {
@@ -275,7 +300,7 @@ public class Configuration {
 	
 	static public boolean repositoryExists(RepositorySource source, ArtifactId id) throws RepositoryException {
 		File repositoryRoot = 
-				new File(Configuration.getRepositoriesDataDir(source.getLocation()).toString()  + File.separator + id.getIdString());
+				new File(Configuration.getRepositoriesDataDir(source.getLocation()).toString(), id.getIdString());
 		return repositoryRoot.exists() && repositoryRoot.isDirectory();
 	}
 
@@ -316,9 +341,7 @@ public class Configuration {
 	}
 	
 	public static File getRepositoryTypesDir(File sourcePath) throws RepositoryException {
-		return new File(
-				sourcePath + File.separator + 
-				Configuration.REPOSITORY_TYPES_DIR);
+		return new File(sourcePath, Configuration.REPOSITORY_TYPES_DIR);
 	}
 	
 	public static File getRepositoriesDataDir(RepositorySource rs) throws RepositoryException {
@@ -327,9 +350,7 @@ public class Configuration {
 	}
 
 	public static File getRepositoriesDataDir(File sourcePath) throws RepositoryException {
-		return new File(
-				sourcePath + File.separator + 
-				Configuration.REPOSITORY_DATA_DIR);
+		return new File(sourcePath, Configuration.REPOSITORY_DATA_DIR);
 	}
 	
 	/*
@@ -366,5 +387,16 @@ public class Configuration {
 		
 	}
 
-	
+    public static ConcurrentHashMap<SimpleTypeId, Type> getRwTypesCache() {
+        return rwTypesCache;
+    }
+
+
+    public static Type getType(SimpleTypeId typeId) {
+//        logger.info("Looking for type: " + typeId.getId() + " id2: " + typeId.getId2() + " <inventory sz: " + getRwTypesCache().size() + ">");
+        Type t = getRwTypesCache().get(typeId);
+//        logger.info("found=" + (t!=null));
+        return  t;
+    }
+
 }

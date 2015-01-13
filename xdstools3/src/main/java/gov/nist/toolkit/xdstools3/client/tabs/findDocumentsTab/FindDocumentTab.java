@@ -7,6 +7,7 @@ import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
 import com.smartgwt.client.widgets.form.fields.SpacerItem;
 import com.smartgwt.client.widgets.layout.VStack;
+import gov.nist.toolkit.xdstools3.client.customWidgets.CodedTermEditableGridWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.SAMLComboBox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSCheckbox;
@@ -54,7 +55,7 @@ public class FindDocumentTab extends GenericCloseableTab {
         final GenericRunButtonNoForm runButton = new GenericRunButtonNoForm();
 
         // Add to layout
-        findDocsPanel.addMembers(l1, pid, l2, options, l3, endpoints, runButton, output);
+        findDocsPanel.addMembers(l1, pid, l2, options, l3, endpoints, runButton, output,new CodedTermEditableGridWidget());
 
         // Add listeners
         runButton.addClickHandler(new ClickHandler() {

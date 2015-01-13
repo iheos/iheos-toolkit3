@@ -211,7 +211,7 @@ public class SearchTerm implements IsSerializable, Serializable {
 	private static String safeValue(String userInput) {
 		if (userInput!=null && !"".equals(userInput)) {
 			String safeStr = userInput.replaceAll("'", "");
-			return safeStr.replaceAll("\"", "");			
+			return safeStr; // safeStr.replaceAll("\"", "");
 		}
 		return userInput;
 	}

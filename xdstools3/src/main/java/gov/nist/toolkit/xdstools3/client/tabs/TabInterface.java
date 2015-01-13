@@ -1,5 +1,6 @@
 package gov.nist.toolkit.xdstools3.client.tabs;
 
+import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.Label;
 
@@ -10,9 +11,20 @@ import com.smartgwt.client.widgets.Label;
  *
  */
 public interface TabInterface {
-	
-	public VLayout getPanel();
+
+	public VLayout getContentsPanel();
 	public void setHeader(String s);
+	public void removeHeaderTitle();
 	public Label createSubtitle1(String s);
-	
+
+	public void createResultsPanel();
+	public void setResultsPanel(Canvas canvas);
+	public VLayout getResultsPanel();
+
+	public void setHelpButton(Canvas container, String contents);
+	public void hideHelpButton();
+	public void setHelpWindowContents(String contents);
+	public VLayout getHelpPanel();
+
+	public String getTabName();
 }
