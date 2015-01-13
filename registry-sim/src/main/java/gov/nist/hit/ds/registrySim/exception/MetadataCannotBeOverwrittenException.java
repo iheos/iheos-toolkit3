@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.registrySim.exception;
 
-import gov.nist.hit.ds.xdsException.ToolkitException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitException;
 
 /**
  * Created by bmajur on 1/2/14.

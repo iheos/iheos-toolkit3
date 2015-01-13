@@ -4,7 +4,7 @@ import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.dsSims.eb.metadata.Metadata
 import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
-import gov.nist.hit.ds.xdsException.MetadataException
+import gov.nist.hit.ds.xdsExceptions.MetadataException
 
 public class PatientId {
 	List<String> patient_ids;

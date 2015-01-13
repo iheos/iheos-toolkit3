@@ -10,7 +10,7 @@ import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase;
 import gov.nist.hit.ds.utilities.html.HttpMessageContent;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.xml.XmlText;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;

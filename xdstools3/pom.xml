@@ -48,11 +48,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.google.gwt.inject</groupId>
-            <artifactId>gin</artifactId>
-            <version>1.5.0</version>
-        </dependency>
-        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
         </dependency>
@@ -74,8 +69,12 @@
             <scope>runtime</scope>
             <version>${gwtVersion}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.gwt.inject</groupId>
+            <artifactId>gin</artifactId>
+        </dependency>
 
-        <!-- SmartGWT dependencies and custom theme XdstoolsTheme-->
+        <!-- SmartGWT dependencies -->
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt</artifactId>
@@ -86,74 +85,53 @@
             <artifactId>smartgwt-skins</artifactId>
             <version>4.1p</version>
         </dependency>
-        <dependency>
-            <groupId>com.smartgwt</groupId>
-            <artifactId>smartgwt-custom-theme</artifactId>
-            <version>4.1p</version>
-        </dependency>
 
         <!-- Jersey dependencies -->
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>1.9</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>1.9</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xdsException</artifactId>
-            <version>3.0.0</version>
+            <artifactId>xds-exceptions</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>toolkit</artifactId>
-            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>installation</artifactId>
-            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>tk-initialization</artifactId>
-            <version>3.0.0</version>
         </dependency>
         <dependency>
-            <groupId>gov.nist.toolkit</groupId>
-            <artifactId>session_v2</artifactId>
-            <version>2.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.toolkit</groupId>
-            <artifactId>actorfactory_v2</artifactId>
-            <version>2.7.0</version>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>session</artifactId>
         </dependency>
 
         <!-- begin repository related -->
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-widgets-ui</artifactId>
-            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-widgets-ui</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.0-SNAPSHOT</version>
+            <!-- for some reason, the source classifier requires an explicit version -->
             <classifier>sources</classifier>
             <scope>compile</scope>
         </dependency>
         <!-- end repository related -->
 
-     </dependencies>
+    </dependencies>
 
 
-     <build>
-         <!-- Generate compiled stuff in the folder used for developing mode -->
+    <build>
+        <!-- Generate compiled stuff in the folder used for developing mode -->
         <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
 
         <plugins>
@@ -312,7 +290,7 @@
 
     </build>
 
-  <scm>
-    <tag>v3.0.2a</tag>
-  </scm>
+    <scm>
+        <tag>v3.0.2a</tag>
+    </scm>
 </project>

@@ -4,8 +4,8 @@ import gov.nist.hit.ds.docRef.EbRim;
 import gov.nist.hit.ds.docRef.SqDocRef;
 import gov.nist.hit.ds.registrysupport.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.MetadataValidationException;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.MetadataValidationException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

@@ -387,3 +387,7 @@ footer ul li a:visited{
     margin-top:5px;
     height:30px;
 }
+
+.gwt-form-margin {
+    margin-left:10px;
+}

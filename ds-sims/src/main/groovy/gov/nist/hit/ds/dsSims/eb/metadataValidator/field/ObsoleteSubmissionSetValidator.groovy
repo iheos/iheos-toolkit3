@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.field
 
 import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport
-import gov.nist.hit.ds.xdsException.MetadataException
+import gov.nist.hit.ds.xdsExceptions.MetadataException
 import org.apache.axiom.om.OMElement
 
 public class ObsoleteSubmissionSetValidator extends ValidatorCommon {

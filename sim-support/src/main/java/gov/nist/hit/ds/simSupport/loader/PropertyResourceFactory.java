@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.simSupport.loader;
 
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;

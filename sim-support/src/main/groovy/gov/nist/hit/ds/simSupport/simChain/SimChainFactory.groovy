@@ -7,7 +7,7 @@ import gov.nist.hit.ds.simSupport.loader.SimComponentPropFormatParser
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponent
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import org.apache.log4j.Logger
 
 /**

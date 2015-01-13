@@ -23,9 +23,9 @@ import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.other.StringHashMapUtil;
 import gov.nist.hit.ds.valSupport.ValidationException;
 import gov.nist.hit.ds.valSupport.fields.UuidValidator;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 import java.awt.*;
 import java.util.ArrayList;

@@ -6,14 +6,14 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-core</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.0-SNAPSHOT</version>
         <relativePath>../tk-core/pom.xml</relativePath>
     </parent>
 
 
     <groupId>gov.nist.hit.ds</groupId>
     <artifactId>repository-shared</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.0-SNAPSHOT</version>
 
 
     <dependencies>

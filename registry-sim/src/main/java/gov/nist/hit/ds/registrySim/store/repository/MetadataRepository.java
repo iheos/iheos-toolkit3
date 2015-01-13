@@ -5,7 +5,7 @@ import gov.nist.hit.ds.repository.api.*;
 import gov.nist.hit.ds.repository.simple.SimpleId;
 import gov.nist.hit.ds.repository.simple.SimpleType;
 import gov.nist.hit.ds.simSupport.client.Simulator;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 /**
  * Generate/reference the repository where metadata is stored.  This is used by

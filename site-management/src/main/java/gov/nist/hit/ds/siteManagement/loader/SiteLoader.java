@@ -4,7 +4,7 @@ import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean;
 import gov.nist.hit.ds.siteManagement.client.TransactionCollection;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;

@@ -11,7 +11,7 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 /**
  * An abstract class that makes use of the SimComponent interface easier

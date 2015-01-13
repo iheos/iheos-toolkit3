@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.dsSims.eb.metadata;
 
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;

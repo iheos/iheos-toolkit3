@@ -11,8 +11,8 @@ import gov.nist.hit.ds.registrySim.sq.generic.queries.GetDocuments;
 import gov.nist.hit.ds.registrySim.sq.generic.support.QueryReturnType;
 import gov.nist.hit.ds.registrySim.sq.generic.support.StoredQuerySupport;
 import gov.nist.hit.ds.registrysupport.logging.LoggerException;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.toolkit.installation;
 
+import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.hit.ds.utilities.io.Io;
 import org.apache.log4j.Logger;
 
@@ -65,6 +66,15 @@ public class PropertyManager {
 	public String getPassword() {
 		loadProperties();
 		return (String) toolkitProperties.get("Admin_password");
+	}
+
+	/**
+	 * Save admin password
+	 * @param newPassword new password entered by the user
+	 */
+	public void savePassword(String newPassword) throws IOException {
+		toolkitProperties.setProperty("Admin_password", newPassword);
+		saveProperties(Toolkit.getToolkitPropertiesFile());
 	}
 
     @Deprecated

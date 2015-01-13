@@ -90,6 +90,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         uploadForm.setMethod(FormPanel.METHOD_POST);
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setAction("fileUploadServlet");
+        uploadForm.setStyleName("gwt-form-margin");
         fileUploadItem = new FileUpload();
         fileUploadItem.setName("upload1FormElement");
         fileUploadItem.setWidth("400px");
@@ -97,8 +98,8 @@ public class MHDValidatorTab extends GenericCloseableTab {
 
         // ------- Create the first form ------
         DynamicForm form = new DynamicForm();
-        form.setFields(messageTypeLabel, messageTypeSelect, uploadLabel);
         form.setCellPadding(10);
+        form.setFields(messageTypeLabel, messageTypeSelect, uploadLabel);
 
         // Run button
         runBtn = new Button("Run");

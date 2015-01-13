@@ -12,7 +12,7 @@ import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
 import gov.nist.hit.ds.soapSupport.core.SoapFault
-import gov.nist.hit.ds.xdsException.ExceptionUtil
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import org.apache.log4j.Logger
 
 import java.lang.reflect.Method

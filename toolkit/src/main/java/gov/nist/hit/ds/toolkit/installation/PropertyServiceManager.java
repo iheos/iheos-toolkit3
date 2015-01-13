@@ -105,25 +105,25 @@ public class PropertyServiceManager {
 
 
 	public File getTestLogCache()  {
-		String testLogCache = getPropertyManager().getExternalCache() + File.separator + "TestLogCache";
+		String userSessions = getPropertyManager().getExternalCache() + File.separator + "user_sessions";
 		File f;
 
 		//		// internal is obsolete
-		//		if ("internal".equals(testLogCache)) {
-		//			testLogCache = getWarHome() + "SessionCache" + 
+		//		if ("internal".equals(userSessions)) {
+		//			userSessions = getWarHome() + "SessionCache" +
 		//					File.separator +
 		//					getSession().getId() + File.separator + 
 		//					"TestLog";
-		//			f = new File(testLogCache);
+		//			f = new File(userSessions);
 		//			f.mkdirs();
 		//			return f;
 		//		}
 
-		f = new File(testLogCache);
+		f = new File(userSessions);
 		f.mkdirs();
 
 		if (!( f.exists() && f.isDirectory() && f.canWrite()  )) {
-			String msg = "Cannot access Test Log Cache [" + testLogCache + "] - either it doesn't exist, isn't a directory or isn't writable";
+			String msg = "Cannot access Test Log Cache [" + userSessions + "] - either it doesn't exist, isn't a directory or isn't writable";
 			logger.warn(msg);
 			throw new RuntimeException(msg);
 		}
@@ -168,8 +168,8 @@ public class PropertyServiceManager {
 
 	public boolean isTestLogCachePrivate() {
 		return true;
-		//		String testLogCache = getPropertyManager().getExternalCache() + File.separator + "TestLogCache";
-		//		return !"internal".equals(testLogCache);
+		//		String userSessions = getPropertyManager().getExternalCache() + File.separator + "user_sessions";
+		//		return !"internal".equals(userSessions);
 	}
 
 	public String getImplementationVersion() {

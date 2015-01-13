@@ -3,7 +3,7 @@ import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.FormatValidator
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.FormatValidatorCalledIncorrectlyException
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
-import gov.nist.hit.ds.xdsException.XdsInternalException
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 
 @Deprecated
 public class SlotValidator {

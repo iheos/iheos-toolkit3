@@ -3,7 +3,7 @@ package gov.nist.hit.ds.simSupport.simChain
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
 import gov.nist.hit.ds.simSupport.simEngine.SimStep;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 /**
  * Define a simulator chain - made up of

@@ -2,9 +2,9 @@ package gov.nist.hit.ds.registrySim.sq.generic.support;
 
 import gov.nist.hit.ds.registryMetadata.Metadata;
 import gov.nist.hit.ds.registrysupport.logging.LoggerException;
-import gov.nist.hit.ds.xdsException.MetadataValidationException;
-import gov.nist.hit.ds.xdsException.XMLParserException;
-import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsExceptions.MetadataValidationException;
+import gov.nist.hit.ds.xdsExceptions.XMLParserException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
 
 import java.util.List;
 

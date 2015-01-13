@@ -3,7 +3,7 @@ package gov.nist.toolkit.sitemanagement
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import org.junit.Before
 import org.junit.Test
 

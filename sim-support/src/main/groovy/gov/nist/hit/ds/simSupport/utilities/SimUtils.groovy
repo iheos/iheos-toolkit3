@@ -21,7 +21,7 @@ import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.loader.SeparateSiteLoader
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import gov.nist.hit.ds.utilities.xml.OMFormatter
-import gov.nist.hit.ds.xdsException.ToolkitException
+import gov.nist.hit.ds.xdsExceptions.ToolkitException
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 /**

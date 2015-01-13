@@ -10,9 +10,9 @@ import gov.nist.hit.ds.registrySim.sq.generic.support.QueryReturnType;
 import gov.nist.hit.ds.registrySim.sq.generic.support.SQCodeAnd;
 import gov.nist.hit.ds.registrySim.sq.generic.support.SQCodeOr;
 import gov.nist.hit.ds.registrySim.sq.generic.support.StoredQuerySupport;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.MetadataValidationException;
-import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataValidationException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
 
 import java.util.List;
 
