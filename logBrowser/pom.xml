@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>logBrowser</artifactId>
+  <version>3.0.0-SNAPSHOT</version>
 
 
     <!-- POM file generated with GWT webAppCreator -->
@@ -202,7 +203,7 @@
                                 </goals>
                             </pluginExecutionFilter>
                             <action>
-                                <ignore></ignore>
+                                <ignore />
                             </action>
                         </pluginExecution>
                     </pluginExecutions>
@@ -214,4 +215,8 @@
 
     </build>
 
+
+  <scm>
+    <tag>v3.0.2a</tag>
+  </scm>
 </project>

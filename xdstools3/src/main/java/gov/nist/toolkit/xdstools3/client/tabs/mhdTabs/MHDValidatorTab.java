@@ -57,6 +57,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
      */
     public MHDValidatorTab() {
         super(header);
+        getContentsPanel().setWidth(420);
     }
 
     /**
@@ -67,6 +68,8 @@ public class MHDValidatorTab extends GenericCloseableTab {
     @Override
     protected Widget createContents() {
         container =new VLayout();
+
+       
 
         // Message type transactions
         HeaderItem messageTypeLabel=new HeaderItem();
@@ -101,8 +104,13 @@ public class MHDValidatorTab extends GenericCloseableTab {
         // Run button
         runBtn = new Button("Run");
         runBtn.disable();
-
-        // Create Help Link
+/*
+        // ------- Create the form ------
+        DynamicForm form = new DynamicForm();
+        form.setFields(l1,reportingLevelSelect,l2, messageTypeSelect, l3);
+        form.setCellPadding(10);
+*/
+        // Create Help Link and populates it with text from resources
         setHelpButton(getHelpPanel(), Resources.INSTANCE.helpContentsSample().getText());
 
         // Initial event summary widget parameters
