@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.simSupport.utilities
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.ActorType
 import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.repoSupport.RepoUtils
 import gov.nist.hit.ds.repository.api.ArtifactId
@@ -69,6 +70,7 @@ class SimUtils {
             ttype = new ActorTransactionTypeFactory().getTransactionType(transaction)
         else
             throw new ToolkitRuntimeException("Cannot interpret transaction parameter - type is ${transaction?.class?.name}")
+
         Repository repo
         if (repository instanceof Repository)
             repo = repository
@@ -87,9 +89,10 @@ class SimUtils {
     }
 
     static SimHandle create(TransactionType transactionType, Repository repository, SimId simId) {
-        def simHandle = create(simId)
+        ActorType actorType = transactionType.actorType
+        if (!actorType) throw new ToolkitRuntimeException("Transaction Type ${transactionType.name} is not owned by an actorType")
+        def simHandle = create(actorType.name, simId, repository.getDisplayName())
         simHandle.transactionType = transactionType
-        simHandle.repository = repository
         return simHandle
     }
 

@@ -65,6 +65,7 @@ class ActorTransactionTypeDAO {
             if (!tt)
                 throw new ToolkitRuntimeException("Transaction [${trans}] not defined - ${fact.transactionByName.keySet()}")
             actorType.getTransactionTypes().add(tt)
+            tt.actorType = actorType
         }
         at.property.each {
             String name = it.@name.text()

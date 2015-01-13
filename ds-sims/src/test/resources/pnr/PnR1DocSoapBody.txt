@@ -1,3 +1,8 @@
+--MIMEBoundaryurn_uuid_AFBE87CB65FD88AC4B1220879854348
+Content-Type: application/xop+xml; charset=UTF-8; type="application/soap+xml"
+Content-Transfer-Encoding: binary
+Content-ID: <0.urn:uuid:806D8FD2D542EDCC2C1199332890719@apache.org>
+
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope"
                   xmlns:wsa="http://www.w3.org/2005/08/addressing">
     <soapenv:Header>
@@ -306,3 +311,13 @@
 </xdsb:ProvideAndRegisterDocumentSetRequest>
     </soapenv:Body>
 </soapenv:Envelope>
+
+--MIMEBoundaryurn_uuid_AFBE87CB65FD88AC4B1220879854348
+Content-Type: text/plain
+Content-Transfer-Encoding: binary
+Content-ID: <1.urn:uuid:806D8FD2D542EDCC2C1199332890776@apache.org>
+
+This is my document.
+
+It is great!
+--MIMEBoundaryurn_uuid_AFBE87CB65FD88AC4B1220879854348--
