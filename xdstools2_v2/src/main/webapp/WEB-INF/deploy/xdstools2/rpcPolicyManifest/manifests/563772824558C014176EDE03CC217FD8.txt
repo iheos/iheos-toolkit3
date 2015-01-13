@@ -1,2 +1,0 @@
-serviceClass: gov.nist.toolkit.xdstools2.client.ToolkitService
-path: 1779DF9FD85B4C449D8E8806AF2821F6.gwt.rpc

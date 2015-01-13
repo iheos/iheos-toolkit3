@@ -16,7 +16,7 @@
 
     <modules>
         <module>../xdstools3</module>
-        <module>../doc-entry-editor</module>
+        <module>../docentryeditor</module>
     </modules>
 
 
