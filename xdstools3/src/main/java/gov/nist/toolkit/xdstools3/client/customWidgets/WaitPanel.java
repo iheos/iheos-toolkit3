@@ -1,7 +1,5 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.widgets.HTMLPane;
 
 /**

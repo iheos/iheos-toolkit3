@@ -35,7 +35,8 @@ public abstract class GenericCloseableToolTab extends GenericCloseableTab implem
         createResultsPanel();
 
         // display attributes
-        mainPanel.setLayoutMargin(10);
+        mainPanel.setLayoutMargin(20);
+        resultsPanel.setLayoutMargin(10);
     }
 
     @Override
@@ -57,12 +58,12 @@ public abstract class GenericCloseableToolTab extends GenericCloseableTab implem
         headerLabel.setStyleName("h3");
 
         // add a spacer to separate the title from the help button
-    LayoutSpacer spacer = new LayoutSpacer();
-    spacer.setHeight(30);
+        LayoutSpacer spacer = new LayoutSpacer();
+        spacer.setHeight(30);
 
-    // add components to main contentsPanel
-    titleAndHelpButton.addMembers(headerLabel, spacer);
-    titleAndHelpButton.setHeight(30);
+        // add components to main contentsPanel
+        titleAndHelpButton.addMembers(headerLabel, spacer);
+        titleAndHelpButton.setHeight(30);
         mainPanel.addMember(titleAndHelpButton);
         setPane(mainPanel);
     }
@@ -71,7 +72,7 @@ public abstract class GenericCloseableToolTab extends GenericCloseableTab implem
     /**
      * Creates a subtitle. Other, smaller subtitle functions can be later created in the same manner.
      * @param s
-    @Override
+     @Override
      */
     public IconLabel createSubtitle1(String s){
         return Formatter.createSubtitle1(s);

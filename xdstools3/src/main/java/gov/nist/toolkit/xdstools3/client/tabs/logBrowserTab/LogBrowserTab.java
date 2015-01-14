@@ -4,6 +4,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
@@ -56,10 +57,7 @@ public class LogBrowserTab extends GenericCloseableTab {
         super(header);
 
         try {
-            getPane().clear();
-            getPane().redraw();
-            getPane().addChild(createContent(target));
-            getPane().redraw();
+            setPane((Canvas) createContent(target));
 
         } catch (Throwable t) {
             t.printStackTrace();

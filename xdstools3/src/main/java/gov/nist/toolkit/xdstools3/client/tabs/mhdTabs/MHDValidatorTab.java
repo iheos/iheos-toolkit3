@@ -10,7 +10,6 @@ import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.HeaderItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
@@ -18,6 +17,8 @@ import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButtonNoForm;
+import gov.nist.toolkit.xdstools3.client.customWidgets.forms.GenericForm;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
@@ -67,12 +68,10 @@ public class MHDValidatorTab extends GenericCloseableToolTab {
      */
     @Override
     protected Widget createContents() {
-        container =new VLayout();
-
-       
+        container = new VLayout();
 
         // Message type transactions
-        HeaderItem messageTypeLabel=new HeaderItem();
+        HeaderItem messageTypeLabel = new HeaderItem();
         messageTypeLabel.setDefaultValue("1. Select the type of MHD message to validate");
         messageTypeSelect = new SelectItem();
         messageTypeSelect.setShowTitle(false);
@@ -97,19 +96,12 @@ public class MHDValidatorTab extends GenericCloseableToolTab {
         uploadForm.add(fileUploadItem);
 
         // ------- Create the first form ------
-        DynamicForm form = new DynamicForm();
-        form.setCellPadding(10);
+        GenericForm form = new GenericForm();
         form.setFields(messageTypeLabel, messageTypeSelect, uploadLabel);
 
         // Run button
-        runBtn = new Button("Run");
-        runBtn.disable();
-/*
-        // ------- Create the form ------
-        DynamicForm form = new DynamicForm();
-        form.setFields(l1,reportingLevelSelect,l2, messageTypeSelect, l3);
-        form.setCellPadding(10);
-*/
+        runBtn = new GenericRunButtonNoForm();
+
         // Create Help Link and populates it with text from resources
         setHelpButton(getHelpPanel(), Resources.INSTANCE.helpContentsSample().getText());
 
