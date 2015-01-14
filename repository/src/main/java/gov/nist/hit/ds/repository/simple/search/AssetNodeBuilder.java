@@ -95,7 +95,11 @@ public class AssetNodeBuilder {
 			
 		List<AssetNode> topLevelAssets = new ArrayList<AssetNode>();
 
-        AssetIterator iter = getTopLevelAssetIterator(repos, orderByKeys, offset, getChildFetchSize(repos.getType().getKeyword(), SimpleType.REPOSITORY));
+        String keyword = repos.getType().getKeyword();
+        String domain = SimpleType.REPOSITORY;
+        PropertyKey[] propertyKeys = getSortOrderPropertyKeys(keyword, domain);
+        
+        AssetIterator iter = getTopLevelAssetIterator(repos, propertyKeys, offset, getChildFetchSize(keyword, domain));
 
 		while (iter.hasNextAsset()) {
 
