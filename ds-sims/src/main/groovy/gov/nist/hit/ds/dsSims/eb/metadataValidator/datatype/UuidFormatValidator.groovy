@@ -8,8 +8,8 @@ public class UuidFormatValidator extends AbstractFormatValidator {
 
     String formatName() { return 'UUID' }
 
-    public UuidFormatValidator(SimHandle _simHandle) {
-        super(_simHandle, '')
+    public UuidFormatValidator(SimHandle _simHandle, String value) {
+        super(_simHandle, value)
         simHandle = _simHandle
     }
 

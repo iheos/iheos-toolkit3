@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.dsSims.eb.topLevel
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.TransactionType
+import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.httpSoap.components.parsers.SoapMessageParser
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser
 import gov.nist.hit.ds.repoSupport.RepoUtils
@@ -14,9 +15,12 @@ import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
 import gov.nist.hit.ds.tkapis.validation.ValidateTransactionResponse
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import groovy.util.logging.Log4j
+
 /**
  * Created by bmajur on 8/28/14.
  */
+@Log4j
 class ValidatorManager implements MessageValidator {
     SimHandle simHandle
     String simId  = 'validation'
@@ -39,30 +43,64 @@ class ValidatorManager implements MessageValidator {
 
     @Override
     ValidateMessageResponse validateMessage(String validationType, String msgHeader, byte[] msgBody) {
+        def exceptionMessages = []
         if (soapAction == validationType) {
-            def httpMessage = new HttpMessageContent(msgHeader, msgBody)
-            def hsParser = new HttpSoapParser(httpMessage)
-            byte[] soapEnv = hsParser.getSoapEnvelope()
+            def httpMessage
+            def hsParser
+            byte[] soapEnv
+            String action = null
+            def transactionType
+            def isRequest
 
-            String action = new SoapMessageParser(new String(soapEnv)).parse().getSoapAction();
+            try {
+                httpMessage = new HttpMessageContent(msgHeader, msgBody)
+                hsParser = new HttpSoapParser(httpMessage)
+                soapEnv = hsParser.getSoapEnvelope()
+                action = new SoapMessageParser(new String(soapEnv)).parse().getSoapAction();
+            } catch (Exception e) {
+                exceptionMessages << e.getMessage()
+            }
 
-            def (transactionType, isRequest) = getTransactionType(action)
-            if (!transactionType) throw new ToolkitRuntimeException("Unknown SOAPAction ${action}")
+            if (!action) exceptionMessages << "No WS:Action found in message."
+            else
+                (transactionType, isRequest) = getTransactionType(action)
 
-            simHandle = SimUtils.create(transactionType, repositoryName, simId)
+            if (!transactionType) {
+                exceptionMessages << "Unknown SOAPAction ${action}"
+                exceptionMessages << "SOAPActions are configured in actorTransactions.xml."
+                exceptionMessages << "Known actions are: " + ActorTransactionTypeFactory.knownRequestActions
+                simHandle = SimUtils.open(simId, repositoryName)
+            } else {
+                simHandle = SimUtils.create(transactionType, repositoryName, simId)
+            }
+
+            log.info("exceptionMessage are ${exceptionMessages}")
+
+            assert simHandle.event
+
             simHandle.event.inOut.reqHdr = msgHeader
             simHandle.event.inOut.reqBody = msgBody
 
-            TransactionRunner runner = new TransactionRunner(simHandle)
-            if (isRequest)
-                runner.validateRequest()
-            else
-                runner.validateResponse()
+            // TODO: need something more specific than Fault for this kind of problem
+            simHandle.event.fault = new Fault("Validation failed", '','unknown', exceptionMessages.toString())
 
             ValidateMessageResponse response = new ValidateMessageResponse()
-            response.setEventAssetId(new AssetId(simHandle.event.eventAsset.id.idString))
-            response.setRepositoryId(new AssetId(RepoUtils.getRepository(repositoryName).id.idString))
-            response.setValidationStatus((simHandle.event.hasErrors()) ? ValidationStatus.ERROR : ValidationStatus.OK)
+
+            if (transactionType) {
+                TransactionRunner runner = new TransactionRunner(simHandle)
+                if (isRequest)
+                    runner.validateRequest()
+                else
+                    runner.validateResponse()
+                response.setEventAssetId(new AssetId(simHandle.event.eventAsset.id.idString))
+                response.setRepositoryId(new AssetId(RepoUtils.getRepository(repositoryName).id.idString))
+                response.setValidationStatus((simHandle.event.hasErrors()) ? ValidationStatus.ERROR : ValidationStatus.OK)
+            } else {
+                response.setEventAssetId(new AssetId(simHandle.event.eventAsset.id.idString))
+                response.setRepositoryId(new AssetId(RepoUtils.getRepository(repositoryName).id.idString))
+                response.setValidationStatus(ValidationStatus.ERROR)
+            }
+
             SimUtils.close(simHandle)
             return response
         }
@@ -70,6 +108,7 @@ class ValidatorManager implements MessageValidator {
     }
 
     private getTransactionType(action) {
+        if (!action) return [null, null]
         TransactionType transactionType
         boolean isRequest = true
         transactionType = new ActorTransactionTypeFactory().getTransactionTypeFromRequestAction(action)
