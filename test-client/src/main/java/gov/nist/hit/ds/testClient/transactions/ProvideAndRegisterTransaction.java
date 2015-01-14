@@ -17,7 +17,6 @@ import org.apache.axiom.om.OMText;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -115,36 +114,36 @@ public class ProvideAndRegisterTransaction extends RegisterTransaction {
 		}
 	}
 
-	ArrayList<String> singleton(String value) {
-		ArrayList<String> al = new ArrayList<String>();
-		al.add(value);
-		return al;
-	}
-
-	String htmlize(String xml) {
-		return xml.replaceAll("<", "&lt;");
-	}
-
-	String file_extension(String path) {
-		String[] parts = path.split("/");
-		String filename;
-		if (parts.length < 2)
-			filename = path;
-		else
-			filename = parts[parts.length-1];
-		int dot = filename.indexOf(".");
-		if (dot == -1)
-			return "";
-		return filename.substring(dot+1);
-	}
-
-	OMElement getHeader(OMElement envelope) {
-		return XmlUtil.firstChildWithLocalName(envelope, "Header");
-	}
-
-	OMElement getBody(OMElement envelope) {
-		return XmlUtil.firstChildWithLocalName(envelope, "Body");
-	}
+//	ArrayList<String> singleton(String value) {
+//		ArrayList<String> al = new ArrayList<String>();
+//		al.add(value);
+//		return al;
+//	}
+//
+//	String htmlize(String xml) {
+//		return xml.replaceAll("<", "&lt;");
+//	}
+//
+//	String file_extension(String path) {
+//		String[] parts = path.split("/");
+//		String filename;
+//		if (parts.length < 2)
+//			filename = path;
+//		else
+//			filename = parts[parts.length-1];
+//		int dot = filename.indexOf(".");
+//		if (dot == -1)
+//			return "";
+//		return filename.substring(dot+1);
+//	}
+//
+//	OMElement getHeader(OMElement envelope) {
+//		return XmlUtil.firstChildWithLocalName(envelope, "Header");
+//	}
+//
+//	OMElement getBody(OMElement envelope) {
+//		return XmlUtil.firstChildWithLocalName(envelope, "Body");
+//	}
 
 	protected void parseInstruction(OMElement part) throws XdsInternalException {
 		String part_name = part.getLocalName();

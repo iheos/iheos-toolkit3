@@ -12,7 +12,7 @@ import org.apache.axiom.om.OMNode;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class OmLogger implements ILogger {
+public class OmLogger  {
 
 	/* (non-Javadoc)
 	 * @see gov.nist.toolkit.testengine.ILogger#add_simple_element(org.apache.axiom.om.OMElement, java.lang.String)
