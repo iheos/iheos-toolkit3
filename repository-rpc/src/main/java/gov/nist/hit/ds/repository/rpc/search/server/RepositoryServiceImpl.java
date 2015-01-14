@@ -73,9 +73,9 @@ RepositoryService {
     }
 
     @Override
-	public List<AssetNode> getAssetTree(String[][] reposData)
+	public List<AssetNode> getAssetTree(String[][] reposData, int offset)
 			throws RepositoryConfigException {
-		return PresentationData.getTree(reposData);
+		return PresentationData.getTree(reposData, offset);
 	}
 
 	

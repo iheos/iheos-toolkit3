@@ -1911,7 +1911,7 @@ public class DbIndexContainer implements IndexContainer, Index {
                     String repId = assetList.get(0).getRepId();
 
                     AssetNode an = new AssetNode(repId,"","","...","","",reposSrc);
-                    an.getExtendedProps().put("_offset",""+offset+segmentSize);
+                    an.getExtendedProps().put("_offset",""+ (offset+segmentSize));
 //                    an.addChild(new AssetNode(repId, "", "", "HASCHILDREN", "", "", reposSrc));
                     assetList.add(an);
                 }

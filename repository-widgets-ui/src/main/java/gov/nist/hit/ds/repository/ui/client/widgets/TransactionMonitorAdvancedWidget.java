@@ -1184,6 +1184,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                                                         }
                                                     }
                                                 } catch (Throwable t) {
+                                                    t.printStackTrace();
                                                     setValidationResponseResult("request", "Exception/UI", t.toString());
                                                     setValidationResponseResult("response", "Exception/UI", t.toString());
                                                 }

@@ -98,7 +98,7 @@ public class AssetNodeBuilder {
         String keyword = repos.getType().getKeyword();
         String domain = SimpleType.REPOSITORY;
         PropertyKey[] propertyKeys = getSortOrderPropertyKeys(keyword, domain);
-        
+
         AssetIterator iter = getTopLevelAssetIterator(repos, propertyKeys, offset, getChildFetchSize(keyword, domain));
 
 		while (iter.hasNextAsset()) {

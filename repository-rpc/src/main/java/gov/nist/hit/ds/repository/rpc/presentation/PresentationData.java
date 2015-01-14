@@ -36,7 +36,6 @@ import gov.nist.hit.ds.xdsException.ExceptionUtil;
 import net.timewalker.ffmq3.FFMQConstants;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import javax.jms.Destination;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
@@ -48,6 +47,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.io.File;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -218,7 +218,7 @@ public class PresentationData implements IsSerializable, Serializable  {
      * @return Gets a list representing the asset relationship.
      * @see gov.nist.hit.ds.repository.shared.data.AssetNode
      */
-	public static List<AssetNode> getTree(String[][] reposData) {
+	public static List<AssetNode> getTree(String[][] reposData, int offset) {
 		
 		Repository[] reposList = RepositoryHelper.getReposList(reposData);
 		
@@ -229,7 +229,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 		for (Repository repos : reposList) {
 
 			try {
-				tmp = anb.build(repos, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE},0);
+				tmp = anb.build(repos, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE},offset);
 				if (tmp!=null && !tmp.isEmpty()) {
 					for (AssetNode an : tmp) {
 						result.add(an);	
@@ -608,7 +608,7 @@ public class PresentationData implements IsSerializable, Serializable  {
             consumer = session.createSubscriber(topic);
 
             // Wait for a message
-            Message message = consumer.receive(1000*30); // 1000*30 In milliseconds, some value is required because the console control will not return when the process exits in dev mode.
+            Message message = consumer.receive(1000*5); // 1000*30 In milliseconds, some value is required because the console control will not return when the process exits in dev mode.
 
             if (message instanceof MapMessage) {
                 txDetail = (String)((MapMessage)message).getObject("txDetail");
@@ -798,7 +798,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                     AssetNode an = ContentHelper.getContent(artifact);
                     if (an!=null) {
                         if (artifact.getType().endsWith("HdrType") && an.getTxtContent()!=null) {
-                            messageHeader = an.getTxtContent();
+                            messageHeader = new String(an.getRawContent(), StandardCharsets.UTF_8);
                         } else if (artifact.getType().endsWith("BodyType") && an.getRawContent()!=null) {
                             messageBody = an.getRawContent();
                         }

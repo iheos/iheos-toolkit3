@@ -112,13 +112,15 @@ public class LogBrowserWidget extends Composite {
     protected ArrayList<String> propNames = new ArrayList<String>();
     protected Map<String, String> reposProps = new HashMap<String,String>();
     AssetTreeItem lbPreviousTreeItem = null;
+    TreeItem previousTreeItem = null;
+
     AssetTreeItem treeItemTarget = null;
     HTML tabTitle = new HTML(Feature.TRANSACTION_MONITOR.toString());
     int txMonTab = -1;
     final VerticalPanel treeHolder = new VerticalPanel();
     Image refreshTreeImg = new Image();
 
-
+    final Tree tree = new Tree();
 
     TransactionMonitorFilterAdvancedWidget txFilter = null;
 
@@ -868,7 +870,7 @@ public class LogBrowserWidget extends Composite {
 
 						    
                            if (targetContext==null) {
-							reposService.getAssetTree(new String[][]{{reposData[0][0],reposData[0][1]}}, treeSetup);
+							reposService.getAssetTree(new String[][]{{reposData[0][0],reposData[0][1]}},0, treeSetup);
                            }
 						
 							if (reposLbx.getItemCount()>0) {
@@ -961,17 +963,21 @@ public class LogBrowserWidget extends Composite {
         closeSummaryTab();
 
 
+        String[] compositeKey = getReposCompositeKey();
+
+        reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}},0, treeSetup);
+
+    }
+
+    private String[] getReposCompositeKey() {
         ListBox lbx = reposLbx; // ((ListBox)event.getSource());
         int idx = lbx.getSelectedIndex();
 
         // reposService.getAssetTree(new String[][]{{lbx.getItemText(idx),lbx.getValue(idx)}}, treeSetup);
-        String[] compositeKey = lbx.getValue(idx).split("\\^");
-
-        reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, treeSetup);
-
+        return lbx.getValue(idx).split("\\^");
     }
-	  
-	  protected TabPanel addTab(Widget w, String lbl) {
+
+    protected TabPanel addTab(Widget w, String lbl) {
 	      	
 	      	TabPanel tp = new TabPanel();
 	      	tp.setVisible(true);
@@ -989,13 +995,16 @@ public class LogBrowserWidget extends Composite {
           AssetNode parentAn = null;
 
           if (item.getParentItem()!=null) {
+                // Child expansion
               parentAn = (AssetNode)item.getParentItem().getUserObject();
+          } else {
+                // No parent, treat as repository root top-level
           }
 
           final String offsetValue = focusAn.getExtendedProps().get("_offset");
           if ((focusAn!=null && offsetValue!=null)) {
 
-              // Close the item immediately
+//              Close the item immediately
               item.setState(false, false);
 
               final AsyncCallback<List<AssetNode>> addImmediateChildrenByOffset = new AsyncCallback<List<AssetNode>>() {
@@ -1005,7 +1014,7 @@ public class LogBrowserWidget extends Composite {
                   }
 
                   public void onSuccess(List<AssetNode> a) {
-                      logger.info("--- got: " + ((a!=null)?a.size():"null"));
+                      logger.info("offsetValue: " + offsetValue + " --- got: " + ((a!=null)?a.size():"null"));
 
                       for (AssetNode childAn : a) {
                           AssetTreeItem treeItem = createTreeItem(childAn, null, false, false);
@@ -1018,7 +1027,8 @@ public class LogBrowserWidget extends Composite {
                           if (item.getParentItem()!=null) {
                               item.getParentItem().addItem(treeItem); // Offset based retrieval adds an item to parent
                           } else {
-//                              tree.addItem(treeItem); // TODO look at this in detail, how to add to root-level?
+                              tree.addItem(treeItem); // TODO look at this in detail, how to add to root-level?
+
                           }
 //                          logger.info("adding --- " + treeItem.getAssetNode().getDisplayName() + " child count: " + item.getChildCount());
                       }
@@ -1038,8 +1048,15 @@ public class LogBrowserWidget extends Composite {
               };
 
               try {
+                  int offsetVal = Integer.parseInt(offsetValue);
+                  if (parentAn!=null) { // parent node exists
+                      reposService.getImmediateChildren(parentAn, offsetVal , addImmediateChildrenByOffset);
+                  } else { // top level
+                      String[] compositeKey = getReposCompositeKey();
+                      reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, offsetVal, addImmediateChildrenByOffset);
+                  }
 
-                      reposService.getImmediateChildren(parentAn, Integer.parseInt(offsetValue), addImmediateChildrenByOffset);
+
 
               } catch (RepositoryConfigException e) {
                   e.printStackTrace();
@@ -1148,7 +1165,6 @@ public class LogBrowserWidget extends Composite {
 
 
 	  protected Widget popTreeWidget(List<AssetNode> anList, AssetNode target, Boolean expandLeaf, final AsyncCallback<AssetNode> contentSetup) {
-          final Tree tree = new Tree();
             tree.clear();
 
 		    final PopupPanel menu = new PopupPanel(true);
@@ -1159,8 +1175,14 @@ public class LogBrowserWidget extends Composite {
                 public void onOpen(OpenEvent<TreeItem> event) {
 
                     final TreeItem item = event.getTarget();
-                    logger.info("___________ calling popTreeItem");
-                    popTreeItem(item, true);
+
+                    if (previousTreeItem!=item) {
+//                        logger.info("___________ calling popTreeItem");
+                        popTreeItem(item, true);
+                        previousTreeItem = item;
+                    } /* else {
+                        logger.fine("___________ caught same treeItem event");
+                    } */
 
 
                 }
@@ -1483,7 +1505,9 @@ public class LogBrowserWidget extends Composite {
 			// westContent.add(propsWidget, DockPanel.SOUTH);
 			
 			// westContent.add(propsWidget);
-			if (an.isContentAvailable()) {
+            if ("transaction".equals(an.getType())) {
+
+            } else if (an.isContentAvailable()) {
 				if ("text/csv".equals(an.getMimeType())) {
                     // Create a list data provider.
                        final ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
@@ -1628,7 +1652,7 @@ public class LogBrowserWidget extends Composite {
 	        	AssetTreeItem treeItem = createTreeItem(child, target, expandLeaf, openItem);
 	        	if (expandLeaf && !(treeItem.getChildCount() == 1 && "HASCHILDREN".equals(treeItem.getChild(0).getText()))) {
                     if (openItem)
-		    		    treeItem.setState(true); // Open node
+		    		    treeItem.setState(true,false); // Open node
 		        	if (isSameAssetReference(target, child)) {
 		        		treeItemTarget = treeItem;
 		        		treeItemTarget.setSelected(true);
