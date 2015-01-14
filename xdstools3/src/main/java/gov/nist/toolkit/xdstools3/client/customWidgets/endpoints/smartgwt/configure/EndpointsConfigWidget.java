@@ -128,7 +128,6 @@ public class EndpointsConfigWidget extends HLayout {
         grid.setEditEvent(ListGridEditEvent.DOUBLECLICK);
         grid.setListEndEditAction(RowEndEditAction.NEXT);
         grid.setAutoSaveEdits(false);
-        draw();
 
         return grid;
     }

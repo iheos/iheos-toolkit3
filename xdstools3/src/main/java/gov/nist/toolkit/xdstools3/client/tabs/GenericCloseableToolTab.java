@@ -12,7 +12,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.HelpButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.design.Formatter;
 import gov.nist.toolkit.xdstools3.client.customWidgets.design.IconLabel;
 
-public abstract class GenericToolTab extends GenericTab implements ToolTabInterface {
+public abstract class GenericCloseableToolTab extends GenericCloseableTab implements ToolTabInterface {
 
     private VLayout mainPanel = new VLayout();
     private VLayout helpPanel = new VLayout(); // this is the right panel
@@ -24,7 +24,7 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
     private HelpButton helpButton;
     protected WaitPanel waitPanel = new WaitPanel();
 
-    public GenericToolTab(String header) {
+    public GenericCloseableToolTab(String header) {
         super(header);
         setHeader(header);
 
@@ -66,7 +66,6 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
         mainPanel.addMember(titleAndHelpButton);
         setPane(mainPanel);
     }
-
 
 
     /**

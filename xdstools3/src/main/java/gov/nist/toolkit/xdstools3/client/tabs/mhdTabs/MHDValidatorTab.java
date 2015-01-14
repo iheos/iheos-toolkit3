@@ -22,7 +22,7 @@ import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 import gov.nist.toolkit.xdstools3.client.resources.Resources;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  * This class is the UI implementation for the MHD Validator tab.
  * @author oherrmann
  */
-public class MHDValidatorTab extends GenericCloseableTab {
+public class MHDValidatorTab extends GenericCloseableToolTab {
     private Logger logger=Logger.getLogger(MHDValidatorTab.class.getName());
 
     // RPC services declaration

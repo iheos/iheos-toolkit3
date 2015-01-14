@@ -13,9 +13,9 @@ import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 
-public abstract class AbstractRegistryAndRepositoryTab extends GenericCloseableTab {
+public abstract class AbstractRegistryAndRepositoryTab extends GenericCloseableToolTab {
     private PatientIDWidget patientIDWidget;
     private EndpointWidget sites;
     private Button runBtn;

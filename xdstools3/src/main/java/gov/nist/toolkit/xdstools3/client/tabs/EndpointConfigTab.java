@@ -9,10 +9,7 @@ public class EndpointConfigTab extends GenericCloseableTab {
 
 	public EndpointConfigTab() {
 		super(header);
-	}
-
-	protected EndpointsConfigWidget createContents(){
-        return new EndpointsConfigWidget();
+		setPane(new EndpointsConfigWidget());
 	}
 
     @Override

@@ -8,13 +8,13 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButtonNoForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.healthcareCodes.HealthcareCodeWidget;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 
 /**
  * Created by dazais on 5/14/2014.
  */
-public class MPQTab extends GenericCloseableTab {
+public class MPQTab extends GenericCloseableToolTab {
     static String header = "Multi-Patient Find Documents (MPQ)";
 
     public MPQTab() {

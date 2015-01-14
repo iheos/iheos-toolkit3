@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -28,12 +29,11 @@ public class AdminSettingsTab extends GenericCloseableTab {
 
 	public AdminSettingsTab() {
         super(title);
+        setPane((Canvas) createContents());
         populateFields();
     }
 
 
-
-    @Override
     protected Widget createContents() {
 
         // ------  First form to hold most settings -----

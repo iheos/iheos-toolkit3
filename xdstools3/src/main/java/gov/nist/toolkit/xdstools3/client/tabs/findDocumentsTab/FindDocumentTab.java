@@ -14,11 +14,11 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSCheckbox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButtonNoForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 
-public class FindDocumentTab extends GenericCloseableTab {
+public class FindDocumentTab extends GenericCloseableToolTab {
     static String header = "Find Documents";
     private boolean runButtonState = false; // the Run button is disabled until all required fields are filled
 

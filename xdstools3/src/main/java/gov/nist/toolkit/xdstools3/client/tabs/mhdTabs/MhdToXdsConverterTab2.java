@@ -17,14 +17,14 @@ import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 
 import java.util.logging.Logger;
 
 /**
  * Tab to handle a file conversion from mhd to xds
  */
-public class MhdToXdsConverterTab2 extends GenericCloseableTab {
+public class MhdToXdsConverterTab2 extends GenericCloseableToolTab {
     private Logger logger=Logger.getLogger(MhdToXdsConverterTab2.class.getName());
     private EventAggregatorWidget eventMessageAggregatorWidget;
 

@@ -14,8 +14,9 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 
-public class FindFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab {
+public class FindFoldersTab extends GenericCloseableToolTab {
     private static final String header="Find Folders";
     private PatientIDWidget patientIDWidget;
     private EndpointWidget sites;
