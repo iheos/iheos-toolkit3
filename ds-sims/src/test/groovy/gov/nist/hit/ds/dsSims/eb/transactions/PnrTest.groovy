@@ -57,16 +57,28 @@ class PnrTest extends Specification {
     }
 
 
-    def 'Test full validation'() {
+    def 'Test good message'() {
         setup:
-        def header = getClass().classLoader.getResource('pnr/PnRSoapHeader.txt').text
-        def body = getClass().classLoader.getResource('pnr/PnR1DocSoapBody.txt').text
+        def header = getClass().classLoader.getResource('pnr/good/PnRSoapHeader.txt').text
+        def body = getClass().classLoader.getResource('pnr/good/PnR1DocSoapBody.txt').text
 
         when:
         run(header,body)
 
         then:
         response.validationStatus == ValidationStatus.OK
+    }
+
+    def 'Test wrong boundary'() {
+        setup:
+        def header = getClass().classLoader.getResource('pnr/wrongboundary/PnRSoapHeader.txt').text
+        def body = getClass().classLoader.getResource('pnr/wrongboundary/PnR1DocSoapBody.txt').text
+
+        when:
+        run(header,body)
+
+        then:
+        response.validationStatus != ValidationStatus.OK
     }
 
 }

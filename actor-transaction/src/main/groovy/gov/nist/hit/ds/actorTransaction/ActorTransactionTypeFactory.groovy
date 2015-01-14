@@ -8,10 +8,10 @@ import groovy.util.logging.Log4j
  */
 @Log4j
 class ActorTransactionTypeFactory {
-    private static Map<String, TransactionType> transactionByName
-    private static Map<String, ActorType> actorByName
-    private static Map<String, TransactionType> transactionByRequestAction
-    private static Map<String, TransactionType> transactionByResponseAction
+    static Map<String, TransactionType> transactionByName
+    static Map<String, ActorType> actorByName
+    static Map<String, TransactionType> transactionByRequestAction
+    static Map<String, TransactionType> transactionByResponseAction
 
     ActorTransactionTypeFactory() { init() }
 
@@ -52,6 +52,10 @@ class ActorTransactionTypeFactory {
 
     TransactionType getTransactionTypeFromRequestAction(String action) { return transactionByRequestAction.get(action)}
     TransactionType getTransactionTypeFromResponseAction(String action) { return transactionByResponseAction.get(action)}
+
+    static List<String> getKnownRequestActions() {
+        transactionByRequestAction.collect { action, trans -> action }
+    }
 
     void loadFromResource(String resourceName) { new ActorTransactionTypeDAO(this).loadFromResource(resourceName) }
     void loadFromString(String config) { new ActorTransactionTypeDAO(this).loadFromString(config)}
