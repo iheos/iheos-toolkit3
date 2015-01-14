@@ -177,6 +177,7 @@ class SimUtils {
     }
 
     static Repository buildRepository(String repositoryName) {
+        log.debug("Build repoName ${repositoryName}")
         return RepoUtils.getRepository(repositoryName, new SimpleType('simRepos'))
     }
 
