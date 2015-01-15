@@ -229,11 +229,8 @@ public class MHDValidatorTab extends GenericCloseableToolTab {
         if (!validationResultsPanel.isVisible()){
             validationResultsPanel.setVisible(true);
         }
-        // TODO might want to use reporting level
-        // reportingLevelSelect.getSelectedReportingLevel();
         eventMessageAggregatorWidget.setEventAssetNode(assetNode);
         validationResultsPanel.redraw();
-//        waitPanel.hide();
         container.hideMember(waitPanel);
     }
 

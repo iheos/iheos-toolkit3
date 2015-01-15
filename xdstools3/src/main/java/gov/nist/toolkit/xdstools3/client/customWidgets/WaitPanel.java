@@ -31,7 +31,8 @@ public class WaitPanel extends HTMLPane {
      */
     public WaitPanel(String message){
         setWaitMessage(message);
-        setHeight(42);
+        setHeight(62);
+        setMargin(10);
     }
 
     /**
