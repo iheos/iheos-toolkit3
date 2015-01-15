@@ -41,6 +41,6 @@ public class WaitPanel extends HTMLPane {
      * @param message custom wait message
      */
     public void setWaitMessage(String message){
-        setContents("<div class='wait-message'><img src='images/icons/wait.gif' style='width:24px;'/> "+message+"</div>");
+        setContents("<div class='wait-message'><img src='images/icons/loading.gif'/> "+message+"</div>");
     }
 }
