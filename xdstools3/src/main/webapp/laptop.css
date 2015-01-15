@@ -51,9 +51,11 @@ See the loading condition dependent on the size of the viewport, inside Xdstools
     font-size: 12px;
     height: 26px;
 }
+/* padding around menu titles */
 nav ul li a {
-    padding: 6px 15px; /* padding around menu titles */
+    padding: 6px 15px;
 }
+/* different padding for the buttons on the right because the icons already make them taller */
 .right-side-button{
     padding: 4px 15px;
 }
