@@ -1231,17 +1231,22 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             if (an.getCsv() !=null) {
                 String[][] csvData = an.getCsv();
 
+                if (resultStr!=null) {
+                    SafeHtmlBuilder resultShb = new SafeHtmlBuilder();
+                    resultShb.appendEscaped(resultStr);
 
-                SafeHtmlBuilder resultShb = new SafeHtmlBuilder();
-                resultShb.appendEscaped(resultStr);
+                    csvData[0][12] =  resultShb.toSafeHtml().asString();
+                    an.setCsv(csvData);
 
-                csvData[0][12] =  resultShb.toSafeHtml().asString();
-                an.setCsv(csvData);
+                }
 
-                SafeHtmlBuilder shb = new SafeHtmlBuilder();
-                shb.appendEscaped(validationDetail);
+                if (validationDetail!=null) {
 
-                an.getExtendedProps().put("validationDetail",shb.toSafeHtml().asString());
+                    SafeHtmlBuilder shb = new SafeHtmlBuilder();
+                    shb.appendEscaped(validationDetail);
+
+                    an.getExtendedProps().put("validationDetail",shb.toSafeHtml().asString());
+                }
             }
         }
     }
