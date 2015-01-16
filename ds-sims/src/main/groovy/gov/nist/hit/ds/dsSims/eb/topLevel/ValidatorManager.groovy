@@ -43,7 +43,7 @@ class ValidatorManager implements MessageValidator {
 
     @Override
     ValidateMessageResponse validateMessage(String validationType, String msgHeader, byte[] msgBody) {
-        return validationMessage(validationType, msgHeader, msgBody, ValidationLevel.ERROR)
+        return validateMessage(validationType, msgHeader, msgBody, ValidationLevel.ERROR)
     }
         @Override
     ValidateMessageResponse validateMessage(String validationType, String msgHeader, byte[] msgBody, ValidationLevel validationLevel) {
