@@ -50,7 +50,7 @@ class Pnr implements Transaction {
 
         // Schema
         if (schema(simHandle)) {
-            new EbSchemaValidator(simHandle, new OMFormatter(msgRoot).toString(), MetadataTypes.METADATA_TYPE_PRb, Toolkit.schemaFile()).asPeer().run()
+            new EbSchemaValidator(simHandle, new OMFormatter(msgRoot).toString(), MetadataTypes.METADATA_TYPE_PRb_WIRE, Toolkit.schemaFile()).asPeer().run()
         }
 
         // Metadata Validator

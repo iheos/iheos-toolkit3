@@ -8,15 +8,15 @@ public class UuidFormatValidator extends AbstractFormatValidator {
 
     String formatName() { return 'UUID' }
 
-    public UuidFormatValidator(SimHandle _simHandle, String value) {
-        super(_simHandle, value)
+    public UuidFormatValidator(SimHandle _simHandle, String context) {
+        super(_simHandle, context)
         simHandle = _simHandle
     }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='rouuid010', msg='Validate UUID format', ref='ITI TF-3: Table 4.1-3 and section 4.1.12.3')
 	def rouuid010() {
-        infoFound(value)
+        infoFound("value is ${value}")
         assertTrue(isUuid(value))
 	}
 

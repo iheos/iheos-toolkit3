@@ -2,6 +2,7 @@ package gov.nist.hit.ds.dsSims.eb.transactions
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.dsSims.eb.topLevel.ValidatorManager
 import gov.nist.hit.ds.repository.api.RepositorySource
+import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
@@ -52,7 +53,7 @@ class PnrTest extends Specification {
 
     def run(String header, String body) {
         vMan = new ValidatorManager()
-        response = vMan.validateMessage(ValidatorManager.soapAction, header, body.getBytes())
+        response = vMan.validateMessage(ValidatorManager.soapAction, header, body.getBytes(), ValidationLevel.ERROR)
         simHandle = vMan.simHandle
     }
 
@@ -81,4 +82,15 @@ class PnrTest extends Specification {
         response.validationStatus != ValidationStatus.OK
     }
 
+    def 'Not parsing soap action'() {
+        setup:
+        def header = getClass().classLoader.getResource('pnr/nosoapaction/Request Header.txt').text
+        def body = getClass().classLoader.getResource('pnr/nosoapaction/Request Body.bytes').text
+
+        when:
+        run(header,body)
+
+        then:
+        response.validationStatus != ValidationStatus.OK
+    }
 }

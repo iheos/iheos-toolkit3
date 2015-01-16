@@ -4,6 +4,7 @@ import gov.nist.hit.ds.eventLog.assertion.AssertionGroupDAO
 import gov.nist.hit.ds.eventLog.assertion.AssertionStatus
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.RepositoryException
+import gov.nist.hit.ds.repository.shared.ValidationLevel
 import groovy.util.logging.Log4j
 
 /**
@@ -20,6 +21,7 @@ class Event {
     ArtifactsDAO artDAO
     Asset validatorsAsset
     int displayOrder = 1
+    ValidationLevel validationLevel = ValidationLevel.ERROR
 
     ResultsStack resultsStack = new ResultsStack()
 
@@ -40,7 +42,7 @@ class Event {
     def initResults(Asset parentAsset, validatorName) {
         if (!parentAsset) parentAsset = eventDAO.validatorsAsset
         def result = new ValidatorResults(parentAsset, validatorName, this)
-        result.assertionGroup = new AssertionGroup()
+        result.assertionGroup = new AssertionGroup(validationLevel)
         result.assertionGroup.validatorName = validatorName
         result.aDAO = new AssertionGroupDAO(result.assertionGroup, parentAsset, nextDisplayOrder());
         resultsStack.push(result)

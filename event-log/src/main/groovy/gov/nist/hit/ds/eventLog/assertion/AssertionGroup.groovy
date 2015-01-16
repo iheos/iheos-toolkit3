@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.eventLog.assertion
 
 import gov.nist.hit.ds.repository.api.Asset
+import gov.nist.hit.ds.repository.shared.ValidationLevel
 import groovy.util.logging.Log4j
 import org.apache.log4j.Logger
 /**
@@ -23,8 +24,11 @@ public class AssertionGroup  {
 
     private static Logger logger = Logger.getLogger(AssertionGroup);
     private final static String dashes = "---";
+    ValidationLevel validationLevel = ValidationLevel.ERROR
 
     AssertionGroup() {}
+
+    AssertionGroup(ValidationLevel _validationLevel) { validationLevel = _validationLevel }
 
     def errorAssertionIds() { assertions.findAll { it.failed()}.collect { it.id } }
 
@@ -46,13 +50,26 @@ public class AssertionGroup  {
         log.debug("New Assertion is ${asser} (required=${required})")
         if (required && asser.getStatus().ordinal() > worstStatus.ordinal())
             worstStatus = asser.getStatus();
-        if (!asser.defaultMsg) removeDefaultMsg()
-        log.debug("...adding assertion to ${toString()}")
-//        log.debug("...worstStatus now ${worstStatus}")
-        assertions.add(asser);
-        assertionIds << asser.id
+//        if (isLogable(asser)) {
+            if (!asser.defaultMsg) removeDefaultMsg()
+            log.debug("...adding assertion to ${toString()}")
+            assertions.add(asser);
+            assertionIds << asser.id
+//        }
         if (asser.failed()) log.debug("...Failed (${(required) ? '' : 'not '} required)")
         asser
+    }
+
+    boolean isLogable() {
+        if (validationLevel == ValidationLevel.ERROR) return worstStatus.ordinal() >= AssertionStatus.ERROR.ordinal()
+        if (validationLevel == ValidationLevel.WARNING) return worstStatus.ordinal() >= AssertionStatus.WARNING.ordinal()
+        return true
+    }
+
+    boolean isLogable(Assertion a) {
+        if (validationLevel == ValidationLevel.ERROR) return a.status.ordinal() >= AssertionStatus.ERROR.ordinal()
+        if (validationLevel == ValidationLevel.WARNING) return a.status.ordinal() >= AssertionStatus.WARNING.ordinal()
+        return true
     }
 
     def removeDefaultMsg() {

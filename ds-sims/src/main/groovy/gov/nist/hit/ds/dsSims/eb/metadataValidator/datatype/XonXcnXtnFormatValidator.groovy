@@ -48,20 +48,20 @@ public class XonXcnXtnFormatValidator extends AbstractFormatValidator {
     @ErrorCode(code= XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='roxonxcnxtn040', msg='Validate XON', ref='ITI TF-3: Table 4.1-6 (intendedRecipient)')
     def roxonxcnxtn040() {
-        new XonFormatValidator(simHandle, context + ": intendedRecipient(Organization Name)", parts[0]).asSelf(this).run()
+        new XonFormatValidator(simHandle, context + ": intendedRecipient(Organization Name)").validate(parts[0])
     }
 
     @Guard(methodNames=['xcnPresent'])
     @ErrorCode(code= XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='roxonxcnxtn050', msg='Validate XCN', ref='ITI TF-3: Table 4.1-6 (intendedRecipient)')
     def roxonxcnxtn050() {
-        new XcnFormatValidator(simHandle, context + ": intendedRecipient(Extended Person Name)", parts[1]).asSelf(this).run()
+        new XcnFormatValidator(simHandle, context + ": intendedRecipient(Extended Person Name)").validate(parts[1])
     }
 
     @Guard(methodNames=['xtnPresent'])
     @ErrorCode(code= XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='roxonxcnxtn060', msg='Validate XCN', ref='ITI TF-3: Table 4.1-6 (intendedRecipient)')
     def roxonxcnxtn060() {
-        new XtnFormatValidator(simHandle, context + ": intendedRecipient(Telecommunication)", parts[2]).asSelf(this).run()
+        new XtnFormatValidator(simHandle, context + ": intendedRecipient(Telecommunication)").validate(parts[2])
     }
 }

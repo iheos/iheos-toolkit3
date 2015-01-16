@@ -10,6 +10,7 @@ public class MetadataTypes {
     final public static int METADATA_TYPE_RET     = 3;
     final public static int METADATA_TYPE_PRb     = 4;
     final public static int METADATA_TYPE_REGISTRY_RESPONSE3 = 5;
+    final public static int METADATA_TYPE_PRb_WIRE     = 6;
 
     static String[] names = new String[11];
 
@@ -21,6 +22,7 @@ public class MetadataTypes {
             names[3] = "METADATA_TYPE_RET";
             names[4] = "METADATA_TYPE_PRb";
             names[5] = "METADATA_TYPE_REGISTRY_RESPONSE3";
+            names[6] = "METADATA_TYPE_PRb_WIRE";
         }
 
         if (type < 7)

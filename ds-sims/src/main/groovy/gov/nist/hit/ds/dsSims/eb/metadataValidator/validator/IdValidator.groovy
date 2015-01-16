@@ -25,7 +25,7 @@ class IdValidator extends ValComponentBase {
         infoFound("Id ${attName}")
         assertHasValue(attValue)
         if (!attValue) return
-        if (vc.isSQ && vc.isResponse) new UuidFormatValidator(simHandle, attValue).asSelf(this).run()
-        else if(attValue.startsWith("urn:uuid:")) new UuidFormatValidator(simHandle, attValue).asSelf(this).run()
+        if (vc.isSQ && vc.isResponse) new UuidFormatValidator(simHandle, '').validate(attValue)
+        else if(attValue.startsWith("urn:uuid:")) new UuidFormatValidator(simHandle, '').validate(attValue)
     }
 }
