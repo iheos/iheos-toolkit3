@@ -41,10 +41,10 @@ public class HomeBox extends VStack {
 
         if (isUnderConstruction){
             Label underConstructionLabel = new Label("Under construction");
-            underConstructionLabel.setWidth(180);
+            underConstructionLabel.setWidth(150);
             underConstructionLabel.setLayoutAlign(VerticalAlignment.CENTER);
             underConstructionLabel.setStyleName("under-construction-label");
-            button.setWidth(250);
+            button.setWidth(280);
             HStack stack = new HStack();
             stack.setAutoHeight();
             stack.addMembers(button, underConstructionLabel);
