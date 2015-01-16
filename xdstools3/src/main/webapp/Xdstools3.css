@@ -186,7 +186,7 @@ p {
     box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
 }
 .app-padding.navbar-inner{
-    width:1024px;
+    width:1200px;
     margin:auto;
 }
 nav{
@@ -349,10 +349,10 @@ footer ul li a:visited{
     padding:20px;
     padding-top:10px;
     padding-bottom:15px;
-    margin-left:20px;
-    margin-right:20px;
-    margin-top:5px;
-    margin-bottom:5px;
+    margin-left:45px;
+    margin-right:45px;
+    margin-top:20px;
+    margin-bottom:20px;
     box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
     background: #f4f4ff; /* Old browsers */
     background: -moz-linear-gradient(top,  #fbf9ff 0%, #f2f7ff 55%, #e5e8ff 100%); /* FF3.6+ */

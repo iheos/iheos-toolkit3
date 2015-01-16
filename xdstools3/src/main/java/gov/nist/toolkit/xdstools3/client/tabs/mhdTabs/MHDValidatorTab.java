@@ -58,7 +58,7 @@ public class MHDValidatorTab extends GenericCloseableToolTab {
      */
     public MHDValidatorTab() {
         super(header);
-        getContentsPanel().setWidth(420);
+        getContentsPanel().setWidth(440);
     }
 
     /**
@@ -121,7 +121,6 @@ public class MHDValidatorTab extends GenericCloseableToolTab {
         container.addMember(runBtn);
         container.addMember(waitPanel);
         container.hideMember(waitPanel);
-        container.setMinWidth(800);
 
         bindUI();
 
@@ -243,7 +242,7 @@ public class MHDValidatorTab extends GenericCloseableToolTab {
         try {
             // Initialize the widget
             eventMessageAggregatorWidget = new EventAggregatorWidget(Manager.EVENT_BUS, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
-            eventMessageAggregatorWidget.setSize("990px", "300px");
+            eventMessageAggregatorWidget.setSize("1110px", "600px");
             return eventMessageAggregatorWidget;
 
         } catch (Throwable t) {

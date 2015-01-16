@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-// TODO put each session and env in a separate ribbonbar
 public class Toolbar extends RibbonBar {
     //static Logger logger = Logger.getLogger(Toolbar.class);
     private SelectOtherItem sessionsComboBox;
@@ -40,7 +39,7 @@ public class Toolbar extends RibbonBar {
         envListBox = new SelectItem();
         envListBox.setShowTitle(false);
         envListBox.setShowOptionsFromDataSource(false);
-        envListBox.setWidth("150");
+        envListBox.setWidth("250");
         envListBox.setDefaultToFirstOption(true);
 
         // Retrieve Environment data from server
@@ -53,7 +52,7 @@ public class Toolbar extends RibbonBar {
         // create sessions drop-down
         sessionsComboBox = new SelectOtherItem();
         sessionsComboBox.setShowTitle(false);
-        sessionsComboBox.setWidth(603);
+        sessionsComboBox.setWidth(679);
         sessionsComboBox.setOtherTitle("Enter a new session name...");
         sessionsComboBox.setSelectOtherPrompt("Register a new session name:");
         sessionsComboBox.setTitle("Session");

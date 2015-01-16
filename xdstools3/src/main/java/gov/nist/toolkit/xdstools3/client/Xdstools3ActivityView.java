@@ -76,7 +76,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         HLayout tabsetStack = new HLayout();
         tabsetStack.setLayoutBottomMargin(27);
         tabsetStack.addMembers(new LayoutSpacer(), topTabSet,new LayoutSpacer());
-        topTabSet.setWidth(1024);
+        topTabSet.setWidth(1200);
         Tab homeTab = new HomeTab("Home");
         topTabSet.addTab(homeTab);
         tabsetStack.setZIndex(-1);
