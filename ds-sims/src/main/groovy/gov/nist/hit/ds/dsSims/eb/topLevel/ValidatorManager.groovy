@@ -15,6 +15,7 @@ import gov.nist.hit.ds.tkapis.validation.MessageValidator
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
 import gov.nist.hit.ds.tkapis.validation.ValidateTransactionResponse
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
+import gov.nist.hit.ds.xdsException.ExceptionUtil
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 /**
@@ -62,7 +63,7 @@ class ValidatorManager implements MessageValidator {
                 soapEnv = hsParser.getSoapEnvelope()
                 action = new SoapMessageParser(new String(soapEnv)).parse().getSoapAction();
             } catch (Exception e) {
-                exceptionMessages << e.getMessage()
+                exceptionMessages << ExceptionUtil.exception_details(e)
             }
 
             if (!action) exceptionMessages << "No WS:Action found in message."
@@ -88,6 +89,7 @@ class ValidatorManager implements MessageValidator {
 
             // TODO: need something more specific than Fault for this kind of problem
             // TODO: also, multiple Fault assets generated - huh?
+            // This style of fault creation does not trigger error labeling in log browser
             if (!transactionType)
                 simHandle.event.fault = new Fault("Validation failed", '','unknown', exceptionMessages.toString())
 

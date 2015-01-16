@@ -35,9 +35,17 @@ class Pnr implements Transaction {
         headerVal.asPeer().run()
 
         // SOAP
-        def soapParser = new HttpSoapParser(new HttpMessageContent(headerVal.header, headerVal.body))
-        def soapEnvelopeBytes  = soapParser.getSoapEnvelope()
-        def soapVal = new SoapMessageValidator(simHandle, new String(soapEnvelopeBytes))
+        def soapParser
+        def soapEnvelopeBytes
+        def soapVal
+        try {
+            soapParser = new HttpSoapParser(new HttpMessageContent(headerVal.header, headerVal.body))
+            soapEnvelopeBytes = soapParser.getSoapEnvelope()
+            soapVal = new SoapMessageValidator(simHandle, new String(soapEnvelopeBytes))
+        } catch (Exception e) {
+            simHandle.event.assertionGroup.internalError(e)
+            return ValidationStatus.ERROR
+        }
         soapVal.asPeer().run()
 
         OMElement soapBodyEle = soapVal.body
@@ -59,7 +67,38 @@ class Pnr implements Transaction {
 
     @Override
     ValidationStatus validateResponse() {
-        return null
+        // Header
+        def headerVal = new HttpHeaderValidator(simHandle)
+        headerVal.asPeer().run()
+
+        // SOAP
+        def soapParser
+        def soapEnvelopeBytes
+        def soapVal
+        try {
+            soapParser = new HttpSoapParser(new HttpMessageContent(headerVal.header, headerVal.body))
+            soapEnvelopeBytes = soapParser.getSoapEnvelope()
+            soapVal = new SoapMessageValidator(simHandle, new String(soapEnvelopeBytes))
+        } catch (Exception e) {
+            simHandle.event.assertionGroup.internalError(e)
+            return ValidationStatus.ERROR
+        }
+        soapVal.asPeer().run()
+
+        OMElement soapBodyEle = soapVal.body
+        OMElement msgRoot = (OMElement) soapBodyEle.childElements.next()
+        Metadata m = MetadataParser.parse(soapBodyEle)
+        ValidationContext vc = new ValidationContext()
+        vc.isPnR = true
+        vc.isRequest = false
+        Environment environment = Environment.getDefaultEnvironment()
+
+        // Schema
+        if (schema(simHandle)) {
+            new EbSchemaValidator(simHandle, new OMFormatter(msgRoot).toString(), MetadataTypes.METADATA_TYPE_PRb_WIRE, Toolkit.schemaFile()).asPeer().run()
+        }
+        // Metadata Validator
+        new MetadataVal(simHandle, m, vc, environment, null).asPeer().run()
     }
 
     @Override

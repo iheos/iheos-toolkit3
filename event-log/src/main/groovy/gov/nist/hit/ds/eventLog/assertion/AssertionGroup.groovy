@@ -2,6 +2,7 @@ package gov.nist.hit.ds.eventLog.assertion
 
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.shared.ValidationLevel
+import gov.nist.hit.ds.xdsException.ExceptionUtil
 import groovy.util.logging.Log4j
 import org.apache.log4j.Logger
 /**
@@ -166,6 +167,10 @@ public class AssertionGroup  {
         }
         addAssertion(a, required);
         return a;
+    }
+
+    public Assertion internalError(Throwable t) {
+        return internalError(ExceptionUtil.exception_details(e))
     }
 
     public Assertion internalError(String failureMsg) {
