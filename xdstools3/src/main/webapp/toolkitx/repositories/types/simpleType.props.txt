@@ -3,5 +3,5 @@
 keyword=simpleType
 domain=asset
 description=simpleType desc
-childSortOrder={"CREATED_DATE":"DESCENDING"}
+#childSortOrder={"CREATED_DATE":"DESCENDING"}
 #childFetchSize=2
