@@ -2,7 +2,7 @@ package gov.nist.hit.ds.simSupport.site
 import gov.nist.hit.ds.actorTransaction.*
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.config.RetrieveTransactionSimConfigElement
-import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.ServerTransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.simulator.SimConfigFactory
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
@@ -69,7 +69,7 @@ class SiteFactoryTest extends Specification {
         def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
 
         when:
-        def endpoints = actorSimConfig.getTransactions().findAll { it instanceof TransactionSimConfigElement }
+        def endpoints = actorSimConfig.getTransactions().findAll { it instanceof ServerTransactionSimConfigElement }
         println endpoints
 
         then:

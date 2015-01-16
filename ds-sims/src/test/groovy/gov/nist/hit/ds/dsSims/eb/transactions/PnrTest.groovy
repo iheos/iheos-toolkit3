@@ -53,7 +53,7 @@ class PnrTest extends Specification {
 
     def run(String header, String body) {
         vMan = new ValidatorManager()
-        response = vMan.validateMessage(ValidatorManager.soapAction, header, body.getBytes(), ValidationLevel.ERROR)
+        response = vMan.validateMessage(ValidatorManager.soapAction, header, body.getBytes(), ValidationLevel.INFO)
         simHandle = vMan.simHandle
     }
 
@@ -92,5 +92,29 @@ class PnrTest extends Specification {
 
         then:
         response.validationStatus != ValidationStatus.OK
+    }
+
+    def 'Unknown error'() {
+        setup:
+        def header = getClass().classLoader.getResource('pnr/unknownerror/Header.txt').text
+        def body = getClass().classLoader.getResource('pnr/unknownerror/Message.bytes').text
+
+        when:
+        run(header,body)
+
+        then:
+        response.validationStatus != ValidationStatus.OK
+    }
+
+    def 'Response message'() {
+        setup:
+        def header = getClass().classLoader.getResource('pnr/responsemessage/Request Header.txt').text
+        def body = getClass().classLoader.getResource('pnr/responsemessage/Request Body.bytes').text
+
+        when:
+        run(header,body)
+
+        then:
+        response.validationStatus == ValidationStatus.OK
     }
 }

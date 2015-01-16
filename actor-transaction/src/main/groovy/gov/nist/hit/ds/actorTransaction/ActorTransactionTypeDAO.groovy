@@ -18,6 +18,7 @@ class ActorTransactionTypeDAO {
     }
 
     void loadFromString(String config) {
+        log.info("Loading ActorTransaction types from String")
         def records = new XmlSlurper().parseText(config)
         def transactions = records.transaction
         def actors = records.actor

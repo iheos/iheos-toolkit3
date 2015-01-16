@@ -3,7 +3,7 @@ package gov.nist.hit.ds.simServlet
 import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.simServlet.servlet.SimServlet
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.ServerTransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.manager.ActorSimConfigManager
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import spock.lang.Specification
@@ -105,12 +105,12 @@ Host: localhost:9085'''
         def simHandle = SimUtils.create('docrec', realSimId)
         // Cancel all message validation
         def actorSimConfigManager = new ActorSimConfigManager(simHandle.actorSimConfig)
-        List<TransactionSimConfigElement> configs = actorSimConfigManager.getSimConfigElements()
+        List<ServerTransactionSimConfigElement> configs = actorSimConfigManager.getSimConfigElements()
         configs.each { config ->
-            config.setBool(TransactionSimConfigElement.SCHEMACHECK, false)
-            config.setBool(TransactionSimConfigElement.MODELCHECK, false)
-            config.setBool(TransactionSimConfigElement.CODINGCHECK, false)
-            config.setBool(TransactionSimConfigElement.SOAPCHECK, false)
+            config.setBool(ServerTransactionSimConfigElement.SCHEMACHECK, false)
+            config.setBool(ServerTransactionSimConfigElement.MODELCHECK, false)
+            config.setBool(ServerTransactionSimConfigElement.CODINGCHECK, false)
+            config.setBool(ServerTransactionSimConfigElement.SOAPCHECK, false)
         }
         actorSimConfigManager.save(simHandle.configAsset)
     }

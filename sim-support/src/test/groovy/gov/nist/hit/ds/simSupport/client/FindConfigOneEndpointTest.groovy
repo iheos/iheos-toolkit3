@@ -2,7 +2,7 @@ package gov.nist.hit.ds.simSupport.client
 
 import gov.nist.hit.ds.actorTransaction.*
 import gov.nist.hit.ds.simSupport.config.AbstractConfigElement
-import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.ServerTransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import org.junit.Before
@@ -61,7 +61,7 @@ public class FindConfigOneEndpointTest {
 	public void startUp() {
 		sConfig = new SimConfig(new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg"))
 				sConfig.add(
-						new TransactionSimConfigElement(
+						new ServerTransactionSimConfigElement(
 								new EndpointType(
 										new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb"),
 										TlsType.TLS,

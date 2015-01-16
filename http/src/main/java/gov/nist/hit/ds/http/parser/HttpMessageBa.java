@@ -185,7 +185,7 @@ public class HttpMessageBa implements HttpServletRequest {
 	public void addHeader(String header) throws HttpParseException {
 		String[] parts = header.split(":",2);
 		if (parts.length != 2) {
-			if (!header.startsWith("POST")) {
+			if (!header.startsWith("POST") && !header.startsWith("HTTP")) {
 				throw new HttpParseException("Header [" + header + "] does not parse");
 			} else {
 				String[] postParts = header.split(" ");
