@@ -5,6 +5,7 @@ import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.httpSoap.components.parsers.SoapMessageParser
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser
 import gov.nist.hit.ds.repoSupport.RepoUtils
+import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.repository.shared.id.AssetId
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
@@ -16,7 +17,6 @@ import gov.nist.hit.ds.tkapis.validation.ValidateTransactionResponse
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
-
 /**
  * Created by bmajur on 8/28/14.
  */
@@ -43,6 +43,10 @@ class ValidatorManager implements MessageValidator {
 
     @Override
     ValidateMessageResponse validateMessage(String validationType, String msgHeader, byte[] msgBody) {
+        return validationMessage(validationType, msgHeader, msgBody, ValidationLevel.ERROR)
+    }
+        @Override
+    ValidateMessageResponse validateMessage(String validationType, String msgHeader, byte[] msgBody, ValidationLevel validationLevel) {
         def exceptionMessages = []
         if (soapAction == validationType) {
             def httpMessage
@@ -78,11 +82,14 @@ class ValidatorManager implements MessageValidator {
 
             assert simHandle.event
 
+            simHandle.event.validationLevel = validationLevel
             simHandle.event.inOut.reqHdr = msgHeader
             simHandle.event.inOut.reqBody = msgBody
 
             // TODO: need something more specific than Fault for this kind of problem
-            simHandle.event.fault = new Fault("Validation failed", '','unknown', exceptionMessages.toString())
+            // TODO: also, multiple Fault assets generated - huh?
+            if (!transactionType)
+                simHandle.event.fault = new Fault("Validation failed", '','unknown', exceptionMessages.toString())
 
             ValidateMessageResponse response = new ValidateMessageResponse()
 

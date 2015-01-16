@@ -114,7 +114,7 @@ public abstract class ValComponentBase implements ValComponent {
 
     ValidationEngine getValidationEngine() { return validationEngine }
 
-    void withNewAssertionGroup() { ag = new AssertionGroup() }
+//    void withNewAssertionGroup() { ag = new AssertionGroup() }
 
     /******************************************
      *

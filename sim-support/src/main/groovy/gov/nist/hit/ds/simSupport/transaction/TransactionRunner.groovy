@@ -3,6 +3,7 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.Fault
+import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
@@ -171,6 +172,7 @@ class TransactionRunner {
 
     public void runTest() {
         try {
+            simHandle.event.validationLevel = ValidationLevel.INFO
             runner(simHandle)
             event.flushAll()
         } catch (Throwable t) {

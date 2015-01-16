@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.eventLog.assertion
 
+import gov.nist.hit.ds.repository.shared.ValidationLevel
 import spock.lang.*
 
 /**
@@ -11,6 +12,7 @@ class AssertionGroupTest extends Specification {
 
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.assertIn(['one', 'two'] as String[], 'two', true)
@@ -26,6 +28,7 @@ class AssertionGroupTest extends Specification {
 
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.assertIn(['one', 'two'] as String[], 'too', true)
@@ -39,6 +42,7 @@ class AssertionGroupTest extends Specification {
     def "fail"() {
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.fail('bye', true)
@@ -53,6 +57,7 @@ class AssertionGroupTest extends Specification {
     def "Assert Equals"() {
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.assertEquals('bye', 'bye', true)
@@ -68,6 +73,7 @@ class AssertionGroupTest extends Specification {
     def "Not Assert Equals"() {
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.assertEquals('bye', 'by', true)
@@ -83,6 +89,7 @@ class AssertionGroupTest extends Specification {
     def "Assert True"() {
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.assertTrue(true, true)
@@ -96,6 +103,7 @@ class AssertionGroupTest extends Specification {
     def "Not Assert True"() {
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.assertTrue(false, true)
@@ -111,6 +119,7 @@ class AssertionGroupTest extends Specification {
     def "Assert NotNull"() {
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.assertNotNull('one', true)
@@ -126,6 +135,7 @@ class AssertionGroupTest extends Specification {
     def "Not Assert NotNull"() {
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.assertNotNull(null, true)
@@ -141,6 +151,7 @@ class AssertionGroupTest extends Specification {
     def "InfoFound boolean"() {
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.infoFound(true)
@@ -155,6 +166,7 @@ class AssertionGroupTest extends Specification {
     def "Not InfoFound boolean"() {
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.infoFound(false)
@@ -169,6 +181,7 @@ class AssertionGroupTest extends Specification {
     def "InfoFound string"() {
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.infoFound('hi')
@@ -183,6 +196,7 @@ class AssertionGroupTest extends Specification {
     def "Not InfoFound string"() {
         setup:
         def ag = new AssertionGroup()
+        ag.validationLevel = ValidationLevel.INFO
 
         when:
         def asser = ag.infoFound(false)

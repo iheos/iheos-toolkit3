@@ -1,0 +1,7 @@
+POST /tf6/services/xdsrepositoryb HTTP/1.1
+Content-Type: multipart/related; boundary="MIMEBoundary_d021d9642fc5e25ff9acdf642db2e558fb6bf240c54562bc"; type="application/xop+xml"; start="<0.c021d9642fc5e25ff9acdf642db2e558fb6bf240c54562bc@apache.org>"; start-info="application/soap+xml"; action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"
+User-Agent: Axis2
+Host: localhost:8001
+Transfer-Encoding: chunked
+X-Forwarded-For: 127.0.0.1
+

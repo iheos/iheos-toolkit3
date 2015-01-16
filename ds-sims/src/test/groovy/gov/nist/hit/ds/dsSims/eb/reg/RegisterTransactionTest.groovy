@@ -3,6 +3,7 @@ package gov.nist.hit.ds.dsSims.eb.reg
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
+import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
@@ -77,6 +78,7 @@ Host: localhost:9085'''
         SimId simId = new SimId('RegisterTransactionTest')
         String endpoint = 'http://localhost:8080/tools/sim/123/reg/rb'
         SimHandle simHandle = SimUtils.recreate('reg', simId)
+        simHandle.event.validationLevel = ValidationLevel.INFO
         simHandle.transactionType = new ActorTransactionTypeFactory().getTransactionType('rb')
 
         then:
