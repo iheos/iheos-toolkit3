@@ -4,7 +4,7 @@ import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.config.RepositoryUniqueIdSimConfigElement
 import gov.nist.hit.ds.simSupport.config.RetrieveTransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.config.SimConfig
-import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.ServerTransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
@@ -39,7 +39,7 @@ class SimConfigFactory {
             if (it.transType.isRetrieve) {
                 actorSimConfig.add(new RetrieveTransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorType, it)))
             } else {
-                actorSimConfig.add(new TransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorType, it)))
+                actorSimConfig.add(new ServerTransactionSimConfigElement(it, endpointBuilder.makeEndpoint(actorType, it)))
             }
         }
         return actorSimConfig

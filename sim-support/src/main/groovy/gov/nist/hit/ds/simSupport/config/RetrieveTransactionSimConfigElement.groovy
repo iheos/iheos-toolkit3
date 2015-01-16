@@ -7,7 +7,7 @@ import gov.nist.hit.ds.utilities.other.UuidAllocator
 /**
  * Created by bill on 10/13/14.
  */
-class RetrieveTransactionSimConfigElement extends TransactionSimConfigElement {
+class RetrieveTransactionSimConfigElement extends ServerTransactionSimConfigElement {
     String repositoryUniqueId
 
     RetrieveTransactionSimConfigElement(EndpointType _type, EndpointValue _endpoint) {
