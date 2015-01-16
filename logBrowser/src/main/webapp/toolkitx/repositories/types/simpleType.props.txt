@@ -1,0 +1,7 @@
+# simpleType
+
+keyword=simpleType
+domain=asset
+description=simpleType desc
+#childSortOrder={"CREATED_DATE":"DESCENDING"}
+#childFetchSize=2
