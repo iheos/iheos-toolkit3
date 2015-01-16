@@ -775,7 +775,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 				|| DbIndexContainer.repId.equals(property)
 				|| DbIndexContainer.assetType.equals(property)) {
 				sqlStr +=
-                        " values(?,?,?,?)"
+                        ") "
+                        + "values(?,?,?,?)"
                         // ") select ?,?,?,? from sysibm.sysdummy1 "
                         //+" where not exists (select count(*) from " + repContainerLabel + " where " + repId + "=? and  " + DbIndexContainer.assetId + " =?)"
                         ;
@@ -798,7 +799,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
 		}
 
-        logger.fine("returning: " + rsData[1]);
+//        logger.fine("returning: " + rsData[1]);
 				
 		return rsData[1];
 		
