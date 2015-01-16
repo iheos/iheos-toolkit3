@@ -54,6 +54,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	/**
 	 * The name of the internal index container or the database table name
 	 */
+    public static final String repositoryIndexId = "REPOSITORYINDEXID";
 	private static final String repContainerLabel = "repositoryIndex";		
 	private static final String assetId = PnIdentifier.getQuotedIdentifer(PropertyKey.ASSET_ID);
 	private static final String locationId = PropertyKey.LOCATION.toString();
@@ -84,7 +85,8 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * The index container definition
 	 */
 	private static final String repContainerDefinition = 
-	"(repositoryIndexId integer not null  generated always as identity," 	/* (Internal use) This is the primary key */
+	"("
+    + repositoryIndexId + " integer not null primary key generated always as identity," 	/* (Internal use) This is the primary key  */
 	+ repId + " varchar(128) not null,"								/* This is the repository Id as it appears on the filesystem */
 	+ assetId + " varchar(512)," /* */								/* This is the asset Id of the asset under the repository folder */
 	+ createdDate + " varchar(32)," 								/* Asset created date */
@@ -190,6 +192,8 @@ public class DbIndexContainer implements IndexContainer, Index {
         if (!reposIndexMap.containsKey(reposId)) {
             logger.fine("putting repos " + reposId);
             reposIndexMap.put(reposId, intArray[reposIndexMap.size()]);
+        } else {
+            logger.fine("repos <" + reposId + "> is already queued for indexing");
         }
         synchronized (reposIndexMap.get(reposId)) { // repos
 
@@ -225,7 +229,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 
                     String indexOnlyNewPropertyValue = null;
                     if (repos.getProperties()!=null)
-                       indexOnlyNewPropertyValue = (String)repos.getProperties().get("indexOnlyNewItems");
+                       indexOnlyNewPropertyValue = repos.getProperties().getProperty(PropertyKey.INDEX_ONLY_NEW_ITEMS.toString());
 
                     if (indexOnlyNewAssets || Boolean.parseBoolean(indexOnlyNewPropertyValue)) {
                            // totalAssetsIndexed = appendIndex(repos, iter);
@@ -673,7 +677,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 				
 				try {
 					
-					String index = "create unique index \"repAssetUniqueIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " (" + SearchTerm.getValueAsCsv(new String[]{"repositoryIndexId"}, false) + ")";  // ,"+ repId +"," +  assetId +" These may not be unique anymore with multiple rep sources
+					String index = "create unique index \"repAssetUniqueIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " (" + SearchTerm.getValueAsCsv(new String[]{repositoryIndexId}, false) + ")";  // ,"+ repId +"," +  assetId +" These may not be unique anymore with multiple rep sources
 					dbc.internalCmd(index);
 
 //					index = "create index \"repAssetIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ repId +"," +  assetId +"," + assetType +",reposAcs,hash,"+ locationId + "," + parentId + ")";
@@ -682,10 +686,14 @@ public class DbIndexContainer implements IndexContainer, Index {
                     index = "create index \"repAcsIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{assetId, locationId, indexSession, createdDate, displayOrder},false)  + ")";
                     dbc.internalCmd(index);
 
-                    index = "create index \"repAcsIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{repId, reposAcs, parentId},false)  + ")";
+                    index = "create index \"repAcsParentIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{repId, reposAcs, parentId},false)  + ")";
                     dbc.internalCmd(index);
 
-                    index = "create unique index \"repStatusIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{"repositoryIndexId", hash, lastModifiedTime},false)  + ")";
+                    index = "create unique index \"repAssetIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{repId, assetId},false)  + ")";
+                    dbc.internalCmd(index);
+
+
+                    index = "create unique index \"repStatusIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{repositoryIndexId, hash, lastModifiedTime},false)  + ")";
                     dbc.internalCmd(index);
 
 
@@ -766,11 +774,21 @@ public class DbIndexContainer implements IndexContainer, Index {
 			if (DbIndexContainer.assetId.equals(property)
 				|| DbIndexContainer.repId.equals(property)
 				|| DbIndexContainer.assetType.equals(property)) {
-				sqlStr += ") values(?,?,?,?)";
-				 rsData = dbc.executePreparedId(sqlStr, new String[]{repositoryId,assetId,assetType, locationStr});
+				sqlStr +=
+                        " values(?,?,?,?)"
+                        // ") select ?,?,?,? from sysibm.sysdummy1 "
+                        //+" where not exists (select count(*) from " + repContainerLabel + " where " + repId + "=? and  " + DbIndexContainer.assetId + " =?)"
+                        ;
+
+				 rsData = dbc.executePreparedId(sqlStr, new String[]{repositoryId,assetId,assetType, locationStr, /*repositoryId, assetId*/});
 			} else {
-				sqlStr += "," +  property + ") values(?,?,?,?,?)";
-				rsData = dbc.executePreparedId(sqlStr, new String[]{repositoryId,assetId, assetType, locationStr, value});
+				sqlStr += "," +  property + ") "
+                          + " values(?,?,?,?,?)"
+//                        +"select ?,?,?,?,? from sysibm.sysdummy1 "
+                        // +"where not exists (select count(*) from " + repContainerLabel + " where " + repId + "=? and  " + DbIndexContainer.assetId + " =?)"
+                        ;
+
+				rsData = dbc.executePreparedId(sqlStr, new String[]{repositoryId,assetId, assetType, locationStr, value, /*repositoryId, assetId*/});
 			}
 
 			logger.fine("rows affected:" + rsData[0]);
@@ -778,7 +796,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
-		} 
+		}
+
+        logger.fine("returning: " + rsData[1]);
 				
 		return rsData[1];
 		
@@ -794,7 +814,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			
 				// Path based
-				String sqlStr = "update "+ repContainerLabel + " set "+propCol+"=? where repositoryIndexId="+idKey						   
+				String sqlStr = "update "+ repContainerLabel + " set "+propCol+"=? where "+repositoryIndexId+"="+idKey
 						+" and ("+propCol+" is null or "+propCol+" != ?)";
 				
 				int[] rsData = dbc.executePreparedId(sqlStr, new String[]{value, value});				
@@ -1424,7 +1444,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			String compositeId = reposId + "_" +  repos.getSource().getAccess().name();			
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 
-			String sqlStr = "select repositoryIndexId,"
+			String sqlStr = "select "+repositoryIndexId+","
                     + hash +","
                     + lastModifiedTime
                     + " from " + repContainerLabel
@@ -1463,7 +1483,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 		try {
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 
-			String sqlStr = "select repositoryIndexId,location,hash from " + repContainerLabel 
+			String sqlStr = "select "+repositoryIndexId+",location,hash from " + repContainerLabel
 					+" where " + DbIndexContainer.repId + "=? and reposAcs=?";
 							
 			ResultSet rs = dbc.executeQuery(sqlStr, new String[]{repos.getId().getIdString(),repos.getSource().getAccess().name()});
@@ -1579,7 +1599,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			ResultSet rs = dbc.executeQuery(sqlStr, new String[]{repId,id});
 			*/
 			
-			String sqlStr = "select repositoryIndexId,hash from " + repContainerLabel 
+			String sqlStr = "select "+repositoryIndexId+",hash from " + repContainerLabel
 					+" where " + DbIndexContainer.repId + "=? and reposAcs=? and " + DbIndexContainer.locationId +"=?";
 							
 			ResultSet rs = dbc.executeQuery(sqlStr, new String[]{repos.getId().getIdString(),repos.getSource().getAccess().name(), relatviePartStr});
