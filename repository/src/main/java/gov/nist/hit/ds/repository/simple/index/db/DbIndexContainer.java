@@ -1922,7 +1922,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			}
 
             // Add an ellipses node as an indication of more records
-            logger.info("offset: " + offset + ", fetchSize: " + fetchSize + ", segmentSize: " + segmentSize + ", totalRecordSize: " + totalRecordSize);
+//            logger.info("offset: " + offset + ", fetchSize: " + fetchSize + ", segmentSize: " + segmentSize + ", totalRecordSize: " + totalRecordSize);
 
             if ((offset+fetchSize>0) && offset+segmentSize<totalRecordSize) {
 

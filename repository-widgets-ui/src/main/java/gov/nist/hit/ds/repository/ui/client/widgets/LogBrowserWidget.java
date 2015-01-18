@@ -1582,7 +1582,7 @@ public class LogBrowserWidget extends Composite {
 					Image img = new Image();					
 					img.setUrl(GWT.getModuleBaseForStaticFiles() + "images/nocontent.png");
                     if (an.getMimeType()!=null) { // Mime-type exists, but no content file
-                        imgText.setText("Document is missing!");
+                        imgText.setText("Formatting error");
                         imgText.setStyleName("serverResponseLabelError");
                     } else {
                         imgText.setText("No document");
