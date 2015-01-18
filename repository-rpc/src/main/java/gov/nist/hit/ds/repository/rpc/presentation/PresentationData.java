@@ -103,7 +103,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 						rtList.add(new RepositoryTag(r.getId().getIdString(), r.getType().getKeyword(),  acs.name(), r.getDisplayName(), ContentHelper.getSortedMapString(r.getProperties())));
 					}
 				} catch (RepositoryException ex) {
-					logger.warning(ex.toString());
+					logger.info(ex.toString());
 				}			
 			}
 						
@@ -205,7 +205,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 				} else
 					indexProps.addAll(srcProps);
 			} catch (RepositoryException e) {
-				e.printStackTrace();
+				logger.info(e.toString());
 			}
 		}
 		Collections.sort(indexProps);
@@ -684,7 +684,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                     headerMsg.setParentId(ioHeaderId); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
                     headerMsg.setType("raw_" + msgType);
                     headerMsg.setRepId(repId);
-                    logger.info("*** setting repos src:" + acs);
+//                    logger.info("*** setting repos src:" + acs);
                     headerMsg.setReposSrc(acs);
                     headerMsg.setRelativePath(headerLoc);
                     headerMsg.setCsv(ContentHelper.processCsvContent(txDetail));
@@ -779,7 +779,8 @@ public class PresentationData implements IsSerializable, Serializable  {
         try {
 
             logger.info("before first getIm-children");
-            List<AssetNode> children = AssetHelper.getImmediateChildren(transaction); // Input/output level children = // Request/response
+//            List<AssetNode> children = AssetHelper.getImmediateChildren(transaction); // Input/output level children = // Request/response
+            List<AssetNode> children = transaction.getChildren();
             logger.info("after getIm-children");
 
             String messageHeader = "";
@@ -789,7 +790,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 
             for (AssetNode child : children) {
                 logger.info("child=" + child.getDisplayName() + " type="+ child.getType());
-                List<AssetNode> artifacts = AssetHelper.getImmediateChildren(child);
+//                List<AssetNode> artifacts = AssetHelper.getImmediateChildren(child);
+                List<AssetNode> artifacts = child.getChildren();
+
                 for (AssetNode artifact : artifacts) {
                     logger.info("artifact=" + artifact.getDisplayName() + " type="+ artifact.getType()); /*
                     [ERROR] Sep 09, 2014 4:38:30 PM gov.nist.hit.ds.repository.rpc.presentation.PresentationData validateMessage

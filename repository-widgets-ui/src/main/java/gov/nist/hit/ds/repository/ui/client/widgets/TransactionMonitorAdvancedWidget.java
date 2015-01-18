@@ -63,7 +63,7 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 
 public class TransactionMonitorAdvancedWidget extends Composite {
-    public static final int CELLTABLE_PAGE_SIZE = 60;
+    public static final int CELLTABLE_PAGE_SIZE = 512;
     /**
 	 *
 	 * @author Sunil.Bhaskarla
@@ -169,13 +169,16 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                         activateListener();
                     }
                 };
-                timer.schedule(1000*15);
+                timer.schedule(1000*3);
             }
 
         }
 
         @Override
         public void onSuccess(Map<String,AssetNode> anMap) {
+            if (getListenerEnabled()) {
+                activateListener();
+            }
             logger.finest("good connection");
             if (getJmsHostAddress()==null || "".equals(jmsHostAddress)) {
                 if (anMap.get("parentLoc")!=null)
@@ -184,9 +187,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             popTx(anMap,null);
             getTxTable().redraw();
             eventBus.fireEvent(new ListenerStatusEvent(getListening()));
-            if (getListenerEnabled()) {
-                activateListener();
-            }
+
         }
     };
 
@@ -327,7 +328,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         logger.fine("entering resizeMessageDetailArea");
         try {
             if (txMonitorMainSplitPanel.getParent()!=null) {
-                logger.info("resizing...");
+//                logger.info("resizing...");
                 long containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
                 long containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
 
@@ -1145,6 +1146,21 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                                     transaction.setReposSrc(requestViewerWidget.getRepositorySrc());
                                     transaction.setAssetId(requestViewerWidget.getIoHeaderId());
 //                                    Window.alert(transaction.getAssetId() + " src:" + transaction.getReposSrc());
+
+                                    AssetNode request = new AssetNode();
+                                    request.setDisplayName("Request");
+                                    request.setType("tran-request");
+                                    request.addChild(requestViewerWidget.getHeaderAssetNode());
+                                    request.addChild(requestViewerWidget.getMessageAssetNode());
+
+                                    AssetNode response = new AssetNode();
+                                    response.setDisplayName("Response"); // Carefully check this usage in the map below
+                                    response.setType("tran-response");
+                                    response.addChild(responseViewerWidget.getHeaderAssetNode());
+                                    response.addChild(responseViewerWidget.getMessageAssetNode());
+
+                                    transaction.addChild(request);
+                                    transaction.addChild(response);
 
                                     setValidationResponseResult("request", "Processing...", "");
                                     setValidationResponseResult("response", "Processing...", "");
