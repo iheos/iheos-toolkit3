@@ -25,7 +25,7 @@ public class HelpButton extends IButton {
         final Canvas helpWindowContainer = helpContainer;
         helpWindowContents = helpContents;
         setTitle("Help");
-        setIcon("icons/glyphicons/help-icon.png");
+        setIcon("icons/glyphicons/16px-blue/glyphicons-help-16px.png");
 
         // When clicked, display a new Help Window. Contents of the Help Window must be set in the
         // tab from which the call is made.

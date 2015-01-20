@@ -328,6 +328,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         else if(tabName.equals(TabNamesManager.getInstance().getHelpTabCode())){
             tab = new HelpTab();
         }
+        else if(tabName.equals(TabNamesManager.getInstance().getContactTabCode())){
+            tab = new ContactTab();
+        }
         else{
             // unknown tab
             topTabSet.selectTab(0); // todo we can create a 404
@@ -441,9 +444,11 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getSubmitRetrieveTabCode()+"'>XDS.b Submit/Retrieve</a></li>" +
                 "</ul>" +
                 "</li>" + */
+                // In order to obtain blue icons for that section, use this online tool: http://fa2png.io/ and color #0000aa (shade of blue).
                 "<div style='float:right;'>" +
-                "<li><a class='right-side-button' href='#'><img class='icon-link' src='images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
-                "<li><a class='right-side-button' href='#TabPlace:"+ TabNamesManager.getInstance().getHelpTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
+                "<li><a class='right-side-button' href='#'><img class='icon-link' src='images/icons/glyphicons/16px-blue/glyphicons-download-16px.png'/> Download</a></li>" +
+                "<li><a class='right-side-button' href='#TabPlace:"+ TabNamesManager.getInstance().getHelpTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/16px-blue/glyphicons-help-16px.png'/> Help</a></li>" +
+                "<li><a class='right-side-button' href='#TabPlace:"+ TabNamesManager.getInstance().getContactTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/16px-blue/glyphicons-11-envelope-16px.png'/> Contact us</a></li>" +
                 "</div>" +
                 "<ul>" +
                 "</div>" +
