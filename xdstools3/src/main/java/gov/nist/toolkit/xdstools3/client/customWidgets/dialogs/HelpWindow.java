@@ -13,7 +13,7 @@ public class HelpWindow extends Window {
 
     public HelpWindow (String contents){
         setTitle("Help");
-        setWidth(570);
+        setWidth(690);
         setHeight(190);
         setCanDragScroll(true);
         setContents(contents);
@@ -28,6 +28,7 @@ public class HelpWindow extends Window {
         l.setWidth100();
         l.setHeight100();
         l.setPadding(10);
+        l.setLeft(20);
         l.setValign(VerticalAlignment.TOP);
         addItem(l);
     }

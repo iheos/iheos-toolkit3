@@ -9,7 +9,7 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointDS;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
-public class MessageValidatorTab extends GenericCloseableTab {
+public class MessageValidatorTab extends GenericCloseableToolTab {
     private static String title = "Message Validator";
 
 

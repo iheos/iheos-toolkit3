@@ -20,7 +20,7 @@ import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 import java.util.LinkedHashMap;
@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  * Tab implementation to submit test data, handle Repository Test data,
  * Registry Test Data and MHD Test Data.
  */
-public class SubmitTestDataTab extends GenericCloseableTab {
+public class SubmitTestDataTab extends GenericCloseableToolTab {
     private Logger logger=Logger.getLogger(SubmitTestDataTab.class.getName());
     // RPC Services declaration
     private final static TestDataSubmissionServicesAsync testDataSubmissionServices = GWT

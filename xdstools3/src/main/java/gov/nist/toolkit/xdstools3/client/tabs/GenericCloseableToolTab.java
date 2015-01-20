@@ -12,7 +12,7 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.HelpButton;
 import gov.nist.toolkit.xdstools3.client.customWidgets.design.Formatter;
 import gov.nist.toolkit.xdstools3.client.customWidgets.design.IconLabel;
 
-public abstract class GenericToolTab extends GenericTab implements ToolTabInterface {
+public abstract class GenericCloseableToolTab extends GenericCloseableTab implements ToolTabInterface {
 
     private VLayout mainPanel = new VLayout();
     private VLayout helpPanel = new VLayout(); // this is the right panel
@@ -24,7 +24,7 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
     private HelpButton helpButton;
     protected WaitPanel waitPanel = new WaitPanel();
 
-    public GenericToolTab(String header) {
+    public GenericCloseableToolTab(String header) {
         super(header);
         setHeader(header);
 
@@ -35,7 +35,8 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
         createResultsPanel();
 
         // display attributes
-        mainPanel.setLayoutMargin(10);
+        mainPanel.setLayoutMargin(20);
+        resultsPanel.setLayoutMargin(10);
     }
 
     @Override
@@ -57,22 +58,21 @@ public abstract class GenericToolTab extends GenericTab implements ToolTabInterf
         headerLabel.setStyleName("h3");
 
         // add a spacer to separate the title from the help button
-    LayoutSpacer spacer = new LayoutSpacer();
-    spacer.setHeight(30);
+        LayoutSpacer spacer = new LayoutSpacer();
+        spacer.setHeight(30);
 
-    // add components to main contentsPanel
-    titleAndHelpButton.addMembers(headerLabel, spacer);
-    titleAndHelpButton.setHeight(30);
+        // add components to main contentsPanel
+        titleAndHelpButton.addMembers(headerLabel, spacer);
+        titleAndHelpButton.setHeight(30);
         mainPanel.addMember(titleAndHelpButton);
         setPane(mainPanel);
     }
 
 
-
     /**
      * Creates a subtitle. Other, smaller subtitle functions can be later created in the same manner.
      * @param s
-    @Override
+     @Override
      */
     public IconLabel createSubtitle1(String s){
         return Formatter.createSubtitle1(s);

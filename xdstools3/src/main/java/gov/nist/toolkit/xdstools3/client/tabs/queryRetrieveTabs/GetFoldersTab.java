@@ -15,8 +15,9 @@ import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithToolti
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 
-public class GetFoldersTab extends gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab {
+public class GetFoldersTab extends GenericCloseableToolTab {
     private static final String header="Get Folders";
     protected EndpointWidget sites;
     protected Button runBtn;

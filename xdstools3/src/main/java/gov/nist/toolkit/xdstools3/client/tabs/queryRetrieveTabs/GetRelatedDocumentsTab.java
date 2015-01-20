@@ -17,12 +17,12 @@ import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithTooltipWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 import java.util.LinkedHashMap;
 
-public class GetRelatedDocumentsTab extends GenericCloseableTab {
+public class GetRelatedDocumentsTab extends GenericCloseableToolTab {
     private static final String header="Get Related Documents";
 
     private GenericTextItemWithTooltipWidget docEntryUUID;

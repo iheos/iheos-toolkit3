@@ -11,6 +11,8 @@ public class GenericRunButtonNoForm extends Button {
 	
 	public GenericRunButtonNoForm(){
 		setTitle("Run");
+		setMargin(10);
+		setHeight(42);
         setDisabled(true);
 		}
 }

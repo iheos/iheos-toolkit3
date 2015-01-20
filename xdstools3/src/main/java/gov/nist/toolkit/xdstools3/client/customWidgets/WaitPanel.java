@@ -1,7 +1,5 @@
 package gov.nist.toolkit.xdstools3.client.customWidgets;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.widgets.HTMLPane;
 
 /**
@@ -33,7 +31,8 @@ public class WaitPanel extends HTMLPane {
      */
     public WaitPanel(String message){
         setWaitMessage(message);
-        setHeight(42);
+        setHeight(62);
+        setMargin(10);
     }
 
     /**
