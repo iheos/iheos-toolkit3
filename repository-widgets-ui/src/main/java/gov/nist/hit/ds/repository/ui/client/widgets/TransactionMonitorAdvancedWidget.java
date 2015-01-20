@@ -49,6 +49,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.event.ListenerStatusEvent;
 import gov.nist.hit.ds.repository.ui.client.event.NewTxMessageEvent;
@@ -103,6 +104,8 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
 
     private Boolean autoShowFirstMessage = false;
+
+    private ValidationLevel validationLevel = ValidationLevel.ERROR; // default
 
     /*
     Sample 2-way Exchange pattern txDetail:
@@ -700,9 +703,14 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                     } else if (COLUMN_HEADER_VALIDATION.equals(columns[index])) {
 
                         String validationDetail = o.getMessageDetailMap().get(getMessageKey()).getAnMap().get("header").getExtendedProps().get("validationDetail");
-                        shb.appendHtmlConstant("<span title='" + ((validationDetail!=null)?validationDetail:"")  + "'>");
-                        shb.appendEscaped(o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index));
-                        shb.appendHtmlConstant("</span>");
+
+                        if ("validationResponse".equals(validationDetail)) {
+                            shb.appendHtmlConstant(o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index));
+                        } else {
+                            shb.appendHtmlConstant("<span title='" + ((validationDetail!=null)?validationDetail:"")  + "'>");
+                            shb.appendEscaped(o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index));
+                            shb.appendHtmlConstant("</span>");
+                        }
 
                     }  /* else if (COLUMN_HEADER_ROW_FORWARDED_TO.equals(columns[index])) {
                         shb.appendEscaped(o.getMessageDetailMap().get(getMessageKey()).getAnMap().get("header").getExtendedProps().get("toIp"));
@@ -1167,7 +1175,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                                     getTxTable().redraw();
 
                                     try {
-                                        reposService.validateMessage(valName,transaction, new AsyncCallback<Map<String, AssetNode>>() {
+                                        reposService.validateMessage(valName, getValidationLevel(), transaction, new AsyncCallback<Map<String, AssetNode>>() {
                                             @Override
                                             public void onFailure(Throwable caught) {
                                                 String msg = caught.toString();
@@ -1189,14 +1197,12 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                                                     if (result!=null) {
 //                                                    Window.alert(result.get("resType").getExtendedProps().get("result"));
                                                         if (result.get("Request")!=null) {
-                                                            String resultStr = result.get("Request").getExtendedProps().get("result");
-                                                            String validationDetail = result.get("Request").getExtendedProps().get("validationDetail");
-                                                            setValidationResponseResult("request", resultStr , validationDetail);
+                                                            AssetNode an = result.get("Request");
+                                                            setValidationResponseResult("request", an);
                                                         }
                                                         if (result.get("Response")!=null) {
-                                                            String resultStr = result.get("Response").getExtendedProps().get("result");
-                                                            String validationDetail = result.get("Response").getExtendedProps().get("validationDetail");
-                                                            setValidationResponseResult("response", resultStr , validationDetail);
+                                                            AssetNode an = result.get("Response");
+                                                            setValidationResponseResult("response", an);
                                                         }
                                                     }
                                                 } catch (Throwable t) {
@@ -1210,6 +1216,9 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                                     } catch (Throwable t) {
                                         logger.warning(t.toString());
+                                        setValidationResponseResult("request", "Exception", t.toString());
+                                        setValidationResponseResult("response", "Exception", t.toString());
+
                                     }
 
                                 }
@@ -1239,6 +1248,43 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         return  null;
     }
 
+    private void setValidationResponseResult(String rowStr, AssetNode resultNode) {
+        if (resultNode==null)
+            return;
+
+        String resultStr = resultNode.getExtendedProps().get("result");
+
+        TxMessageBundle txMessageBundle = findTxMessageBundle(requestViewerWidget.getIoHeaderId());
+        AssetNode an = txMessageBundle.getMessageDetailMap().get(rowStr).getAnMap().get("header");
+
+        if (an!=null) {
+            if (an.getCsv() !=null) {
+                String[][] csvData = an.getCsv();
+
+                if (resultStr!=null) {
+                    SafeHtmlBuilder resultShb = new SafeHtmlBuilder();
+
+                    resultShb.appendHtmlConstant("<a href='"
+                            + GWT.getHostPageBaseURL()
+                            + GWT.getModuleName()
+                            + ".html?reposSrc=RW_EXTERNAL&reposId=" + resultNode.getRepId() + "&assetId=" + resultNode.getAssetId()
+                            + "' target='_blank'>" // Open link in new tab
+                    );
+                    resultShb.appendEscaped(resultStr);
+                    resultShb.appendHtmlConstant("</a>&nbsp;");
+
+                    csvData[0][12] =  resultShb.toSafeHtml().asString();
+
+                    an.getExtendedProps().put("validationDetail","validationResponse"); // This will use the html constant text generated above, otherwise the text will be HTML escaped
+                    an.setCsv(csvData);
+                }
+
+            }
+        }
+
+
+    }
+
     private void setValidationResponseResult(String rowStr, String resultStr, String validationDetail) {
         TxMessageBundle txMessageBundle = findTxMessageBundle(requestViewerWidget.getIoHeaderId());
         AssetNode an = txMessageBundle.getMessageDetailMap().get(rowStr).getAnMap().get("header");
@@ -1249,6 +1295,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 if (resultStr!=null) {
                     SafeHtmlBuilder resultShb = new SafeHtmlBuilder();
+
                     resultShb.appendEscaped(resultStr);
 
                     csvData[0][12] =  resultShb.toSafeHtml().asString();
@@ -1676,4 +1723,11 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         this.jmsHostAddress = jmsHostAddress;
     }
 
+    public ValidationLevel getValidationLevel() {
+        return validationLevel;
+    }
+
+    public void setValidationLevel(ValidationLevel validationLevel) {
+        this.validationLevel = validationLevel;
+    }
 }

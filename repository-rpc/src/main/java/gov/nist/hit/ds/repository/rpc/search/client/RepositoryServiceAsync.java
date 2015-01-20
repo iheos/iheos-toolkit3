@@ -3,6 +3,7 @@ package gov.nist.hit.ds.repository.rpc.search.client;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.aggregation.AssertionAggregation;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.shared.id.AssetId;
@@ -34,7 +35,7 @@ public interface RepositoryServiceAsync {
     void getTxUpdates(String queue, String filterLocation, AsyncCallback<Map<String,AssetNode>> callback) throws RepositoryConfigException;
     void getJmsHostAddress(AsyncCallback<String> callback) throws RepositoryConfigException;
     void getValidatorNames(AsyncCallback<List<String>> callback);
-    void validateMessage(String validatorName, AssetNode transaction, AsyncCallback<Map<String,AssetNode>> callback) throws RepositoryConfigException;
+    void validateMessage(String validatorName, ValidationLevel validationLevel, AssetNode transaction, AsyncCallback<Map<String,AssetNode>> callback) throws RepositoryConfigException;
     void aggregateAssertions(RepositoryId repositoryId, AssetId eventId, SimpleTypeId parentAssetType, SimpleTypeId detailAssetType, SearchCriteria detailAssetFilterCriteria, String[] displayColumns , AsyncCallback<AssertionAggregation> callback) throws RepositoryConfigException;
 }
 

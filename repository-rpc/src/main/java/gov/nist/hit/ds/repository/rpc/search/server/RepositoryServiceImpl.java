@@ -10,6 +10,7 @@ import gov.nist.hit.ds.repository.rpc.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.NoServletSessionException;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.aggregation.AssertionAggregation;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.shared.id.AssetId;
@@ -182,8 +183,8 @@ RepositoryService {
     }
 
     @Override
-    public Map<String, AssetNode> validateMessage(String validatorName, AssetNode transaction) throws RepositoryConfigException {
-        return PresentationData.validateMessage(validatorName,transaction);
+    public Map<String, AssetNode> validateMessage(String validatorName, ValidationLevel validationLevel, AssetNode transaction) throws RepositoryConfigException {
+        return PresentationData.validateMessage(validatorName, validationLevel, transaction);
     }
 
     @Override

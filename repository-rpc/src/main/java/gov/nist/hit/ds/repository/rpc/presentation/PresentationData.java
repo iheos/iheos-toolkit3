@@ -2,7 +2,6 @@ package gov.nist.hit.ds.repository.rpc.presentation;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.dsSims.eb.factories.MessageValidatorFactory;
-import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.ContentHelper;
 import gov.nist.hit.ds.repository.RepositoryHelper;
 import gov.nist.hit.ds.repository.api.ArtifactId;
@@ -21,6 +20,7 @@ import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigEx
 import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
 import gov.nist.hit.ds.repository.shared.SearchTerm;
+import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
@@ -766,9 +766,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 
     }
 
-    public static Map<String,AssetNode> validateMessage(String validatorName, AssetNode transaction) throws RepositoryConfigException {
+    public static Map<String,AssetNode> validateMessage(String validatorName, ValidationLevel validationLevel, AssetNode transaction) throws RepositoryConfigException {
 
-        logger.info("Entering validateMessage fn: " + validatorName + " transId: " + transaction.getAssetId());
+        logger.info("Entering validateMessage fn: " + validatorName + " transId: " + transaction.getAssetId() + " validationLevel: " + validationLevel.name());
         Map<String,AssetNode> result = new HashMap<String, AssetNode>();
 
 //
@@ -811,7 +811,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                 ValidateMessageResponse valMessageResponse = null;
                 String valExceptionStr = null;
                 try {
-                    valMessageResponse = validatorFactory.getMessageValidator().validateMessage(validatorName,messageHeader,messageBody);
+                    valMessageResponse = validatorFactory.getMessageValidator().validateMessage(validatorName, messageHeader,messageBody, validationLevel);
 
                 } catch (Throwable t) {
 //                    valExceptionStr = t.toString();

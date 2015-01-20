@@ -273,7 +273,7 @@ public class AssetNodeBuilder {
         try {
             Parameter p = new Parameter();
 
-            p.setDescription("Type file must exist in the types dir. Type: " + keyword + "domain: " + domain);
+            p.setDescription("Type file must exist in the types dir. Type: " + keyword + ", domain: " + domain);
             p.assertNotNull(Configuration.configuration().getType(new SimpleTypeId(keyword, domain)));
 
 
