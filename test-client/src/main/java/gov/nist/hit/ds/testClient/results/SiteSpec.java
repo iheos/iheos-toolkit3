@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.testClient.results;
 
-import gov.nist.hit.ds.actorTransaction.ActorType;
+import gov.nist.hit.ds.testClient.site.ATFactory;
 
 /**
  * Lightweight recording of the selected Site parameters. Does
@@ -13,14 +13,14 @@ import gov.nist.hit.ds.actorTransaction.ActorType;
 public class SiteSpec  {
 
 	public String name = "";
-	public ActorType actorType = null;
+	public ATFactory.ActorType actorType = null;
 	public String homeId = "";
 	public String homeName = "";
 	public boolean isTls = false;
 	public boolean isSaml = false;
 	public boolean isAsync = false;
 
-	public SiteSpec(String name, ActorType actorType, SiteSpec toClone) {
+	public SiteSpec(String name, ATFactory.ActorType actorType, SiteSpec toClone) {
 		this.name = name;
 		this.actorType = actorType;
 		
@@ -49,17 +49,17 @@ public class SiteSpec  {
 		return buf.toString();
 	}
 	
-	public boolean isGW() {
-		return actorType.isGW();
-	}
-	
-	public boolean isIG() {
-		return actorType.isIGActor();
-	}
-	
-	public boolean isRG() {
-		return actorType.isRGActor();
-	}
+//	public boolean isGW() {
+//		return actorType.isGW();
+//	}
+//
+//	public boolean isIG() {
+//		return actorType.isIGActor();
+//	}
+//
+//	public boolean isRG() {
+//		return actorType.isRGActor();
+//	}
 	
 	public String getTypeName() {
 		return actorType.getShortName();
@@ -69,7 +69,7 @@ public class SiteSpec  {
 		return name;
 	}
 
-	public ActorType getActorType() {
+	public ATFactory.ActorType getActorType() {
 		return actorType;
 	}
 
@@ -93,7 +93,7 @@ public class SiteSpec  {
 		this.name = name;
 	}
 
-	public void setActorType(ActorType actorType) {
+	public void setActorType(ATFactory.ActorType actorType) {
 		this.actorType = actorType;
 	}
 }

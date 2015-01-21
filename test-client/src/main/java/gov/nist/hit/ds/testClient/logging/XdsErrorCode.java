@@ -1,10 +1,8 @@
 package gov.nist.hit.ds.testClient.logging;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
+public class XdsErrorCode   {
 
-public class XdsErrorCode implements IsSerializable  {
-
-	static public enum Code implements IsSerializable {
+	static public enum Code  {
 		NoCode,
 		SoapFault,
 		XDSMissingDocument,

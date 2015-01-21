@@ -3,20 +3,22 @@ package gov.nist.hit.ds.testClient.transactions;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataParser;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
+import gov.nist.hit.ds.testClient.eb.DocumentHandler;
 import gov.nist.hit.ds.testClient.engine.StepContext;
+import gov.nist.hit.ds.testClient.soap.SoapActionFactory;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsException.MetadataException;
 import gov.nist.hit.ds.xdsException.XdsException;
 import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMText;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ProvideAndRegisterTransaction extends RegisterTransaction {
 	boolean use_xop = true;
@@ -26,19 +28,32 @@ public class ProvideAndRegisterTransaction extends RegisterTransaction {
 		super(s_ctx, instruction, instruction_output);
 	}
 
+    public ProvideAndRegisterTransaction()  {}
+
 	protected  String getBasicTransactionName() {
 		return "pr";
 	}
 
 	public void run(OMElement metadata_element)
 			throws XdsException {
+        Map<String, DocumentHandler> documents = new HashMap<String, DocumentHandler>();
+        for (String id : document_id_filenames.keySet() ) {
+            String filename = (String) document_id_filenames.get(id);
 
-		validate_xds_version();
+            if (nameUuidMap != null) {
+                String newId = nameUuidMap.get(id);
+                if (newId != null && !id.equals(""))
+                    id = newId;
+            }
+            DataHandler dataHandler = new DataHandler(new FileDataSource(filename));
+            DocumentHandler documentHandler = new DocumentHandler(dataHandler);
+            documents.put(id, documentHandler);
+            run(metadata_element, documents);
+        }
 
-		if (metadata_filename == null)
-			throw new XdsInternalException("No MetadataFile element found for RegisterTransaction instruction within step " + this.s_ctx.get("step_id"));
+    }
 
-
+    public OMElement run(OMElement metadata_element, Map<String, DocumentHandler> documents) throws XdsInternalException, MetadataException {
 		OMElement body = null;
 		OMElement pnr = XmlUtil.om_factory.createOMElement("ProvideAndRegisterDocumentSetRequest", MetadataSupport.xdsB);
 		if (no_convert)
@@ -47,16 +62,13 @@ public class ProvideAndRegisterTransaction extends RegisterTransaction {
 			Metadata metadata = MetadataParser.parse(metadata_element);
 			pnr.addChild(metadata.getV3SubmitObjectsRequest());
 		}
-		for (String id : document_id_filenames.keySet() ) {
-			String filename = (String) document_id_filenames.get(id);
-
+		for (String id : documents.keySet() ) {
 			if (nameUuidMap != null) {
 				String newId = nameUuidMap.get(id);
 				if (newId != null && !id.equals(""))
 					id = newId;
 			}
-
-			DataHandler dataHandler = new DataHandler(new FileDataSource(filename));
+			DataHandler dataHandler = documents.get(id).getDataHandler();
 			OMText t = MetadataSupport.om_factory.createOMText(dataHandler, true);
 			t.setOptimize(use_xop);
 			OMElement document = MetadataSupport.om_factory.createOMElement("Document", MetadataSupport.xdsB);
@@ -68,7 +80,7 @@ public class ProvideAndRegisterTransaction extends RegisterTransaction {
 //			log_metadata(pnr);
 
 		if (testConfig.prepare_only)
-			return;
+			return null;
 
 		body = pnr;
 		try {
@@ -83,15 +95,18 @@ public class ProvideAndRegisterTransaction extends RegisterTransaction {
 
 
 			if (result == null) {
-				testLog.add_name_value(instruction_output, "Result", "None");
+                if (testLog != null)
+				    testLog.add_name_value(instruction_output, "Result", "None");
 				s_ctx.set_error("Result was null");
 			} else {
-				testLog.add_name_value(instruction_output, "Result", result);
+                if (testLog != null)
+    				testLog.add_name_value(instruction_output, "Result", result);
 
-				validate_registry_response(
-						result,
-						(xds_version == xds_a) ? MetadataTypes.METADATA_TYPE_R : MetadataTypes.METADATA_TYPE_SQ);
+//				validate_registry_response(
+//						result,
+//						(xds_version == xds_a) ? MetadataTypes.METADATA_TYPE_R : MetadataTypes.METADATA_TYPE_SQ);
 			}
+            return result;
 
 		}
 		catch (Exception e) {
@@ -99,36 +114,36 @@ public class ProvideAndRegisterTransaction extends RegisterTransaction {
 		}
 	}
 
-	ArrayList<String> singleton(String value) {
-		ArrayList<String> al = new ArrayList<String>();
-		al.add(value);
-		return al;
-	}
-
-	String htmlize(String xml) {
-		return xml.replaceAll("<", "&lt;");
-	}
-
-	String file_extension(String path) {
-		String[] parts = path.split("/");
-		String filename;
-		if (parts.length < 2)
-			filename = path;
-		else
-			filename = parts[parts.length-1];
-		int dot = filename.indexOf(".");
-		if (dot == -1)
-			return "";
-		return filename.substring(dot+1);
-	}
-
-	OMElement getHeader(OMElement envelope) {
-		return XmlUtil.firstChildWithLocalName(envelope, "Header");
-	}
-
-	OMElement getBody(OMElement envelope) {
-		return XmlUtil.firstChildWithLocalName(envelope, "Body");
-	}
+//	ArrayList<String> singleton(String value) {
+//		ArrayList<String> al = new ArrayList<String>();
+//		al.add(value);
+//		return al;
+//	}
+//
+//	String htmlize(String xml) {
+//		return xml.replaceAll("<", "&lt;");
+//	}
+//
+//	String file_extension(String path) {
+//		String[] parts = path.split("/");
+//		String filename;
+//		if (parts.length < 2)
+//			filename = path;
+//		else
+//			filename = parts[parts.length-1];
+//		int dot = filename.indexOf(".");
+//		if (dot == -1)
+//			return "";
+//		return filename.substring(dot+1);
+//	}
+//
+//	OMElement getHeader(OMElement envelope) {
+//		return XmlUtil.firstChildWithLocalName(envelope, "Header");
+//	}
+//
+//	OMElement getBody(OMElement envelope) {
+//		return XmlUtil.firstChildWithLocalName(envelope, "Body");
+//	}
 
 	protected void parseInstruction(OMElement part) throws XdsInternalException {
 		String part_name = part.getLocalName();

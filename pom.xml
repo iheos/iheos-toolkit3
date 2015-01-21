@@ -23,6 +23,7 @@
         <module>toolkit2-build</module>
         <module>eb-metadata</module>
         <module>test-client</module>
+        <module>eb-docsrc-sim</module>
         <!-- still in use by xdstools3. -->
     </modules>
 

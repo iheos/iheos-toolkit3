@@ -1,7 +1,5 @@
 package gov.nist.hit.ds.testClient.site;
 
-import gov.nist.hit.ds.actorTransaction.TransactionType;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +13,10 @@ import java.util.Map;
  */
 public class TransactionOfferings  {
 	// regular and tls
-	public Map<TransactionType, List<gov.nist.hit.ds.testClient.site.Site>> map = new HashMap<TransactionType, List<gov.nist.hit.ds.testClient.site.Site>>();
-	public Map<TransactionType, List<gov.nist.hit.ds.testClient.site.Site>> tmap = new HashMap<TransactionType, List<gov.nist.hit.ds.testClient.site.Site>>();
+	public Map<ATFactory.TransactionType, List<Site>> map = new HashMap<ATFactory.TransactionType, List<Site>>();
+	public Map<ATFactory.TransactionType, List<gov.nist.hit.ds.testClient.site.Site>> tmap = new HashMap<ATFactory.TransactionType, List<gov.nist.hit.ds.testClient.site.Site>>();
 	
-	public boolean hasTransaction(TransactionType tt, boolean isTLS) {
+	public boolean hasTransaction(ATFactory.TransactionType tt, boolean isTLS) {
 		if (isTLS) {
 			return tmap.containsKey(tt);
 		} else {
@@ -31,11 +29,11 @@ public class TransactionOfferings  {
 		
 		buf.append("TransactionOfferings:\n");
 		buf.append("Non-TLS\n");
-		for (TransactionType t : map.keySet()) {
+		for (ATFactory.TransactionType t : map.keySet()) {
 			buf.append("\t").append(t).append("\n");
 		}
 		buf.append("TLS\n");
-		for (TransactionType t : tmap.keySet()) {
+		for (ATFactory.TransactionType t : tmap.keySet()) {
 			buf.append("\t").append(t).append("\n");
 		}
 		
