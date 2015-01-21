@@ -68,7 +68,7 @@ public class SectionLogMap {
 				}
 				buf.append(reports.toString());
 			} catch (Exception e) {
-				System.out.println("Cannot find Reports for section " + section);
+				System.out.println("Cannot findSimple Reports for section " + section);
 			}
 		}
 

@@ -927,7 +927,7 @@ public class Validator {
 
 		for (String name : path) {
 			OMElement ele = XmlUtil.firstChildWithLocalName(current_ele, name);
-			if (ele == null) throw new Exception("find_nexted_element: Cannot find element " + name + " in path " + path);
+			if (ele == null) throw new Exception("find_nexted_element: Cannot findSimple element " + name + " in path " + path);
 			current_ele = ele;
 		}
 

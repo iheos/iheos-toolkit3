@@ -16,7 +16,7 @@ import javax.inject.Inject;
  * GIN counterpart of Guice's Module for GWT. It binds the various classes and providers
  * using a Guice module. The module class looks almost exactly like it would in regular
  * Guice. (GinModule and AbstractGinModule are used instead of Module and AbstractModule.)
- * If GIN can't find a binding for a class, it falls back to calling GWT.create()
+ * If GIN can't findSimple a binding for a class, it falls back to calling GWT.create()
  * on that class. What this means that image bundles and translated messages
  * will just magically work.
  *

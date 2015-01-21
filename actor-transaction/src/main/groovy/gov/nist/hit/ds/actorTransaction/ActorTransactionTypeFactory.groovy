@@ -24,10 +24,10 @@ class ActorTransactionTypeFactory {
 
     static def init() {
         if (actorByName) return
-        transactionByName = new HashMap<String, TransactionType>()
+        transactionByName = new HashMap<>()
         actorByName = new HashMap<String, ActorType>()
-        transactionByRequestAction = new HashMap<String, TransactionType>()
-        transactionByResponseAction = new HashMap<String, TransactionType>()
+        transactionByRequestAction = new HashMap<>()
+        transactionByResponseAction = new HashMap<>()
     }
 
     ActorType getActorTypeIfAvailable(String type) { return actorByName.get(type) }

@@ -119,7 +119,7 @@ public class RetrieveB {
 
 		OMElement registry_response = XmlUtil.firstChildWithLocalName(result, "RegistryResponse") ;
 		if (registry_response == null) {
-			throw new XdsInternalException("Did not find RegistryResponse within RetrieveDocumentSetResponse");
+			throw new XdsInternalException("Did not findSimple RegistryResponse within RetrieveDocumentSetResponse");
 		} 
 
 		// schema validate

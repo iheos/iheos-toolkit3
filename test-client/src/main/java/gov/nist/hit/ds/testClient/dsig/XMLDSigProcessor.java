@@ -281,7 +281,7 @@ public class XMLDSigProcessor {
 		NodeList nl = 
 			doc.getElementsByTagNameNS(XMLSignature.XMLNS, "Signature");
 		if (nl.getLength() == 0) {
-			throw new Exception("Cannot find Signature element");
+			throw new Exception("Cannot findSimple Signature element");
 		}
 
 		// Create a DOM XMLSignatureFactory that will be used to unmarshal the 

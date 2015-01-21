@@ -82,7 +82,7 @@ public class MetadataCollection implements Serializable /*, RegistryValidationIn
 			
 			Ro obj = getObjectById(id);
 			if (obj == null) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "mergeDelta: cannot find object " + id, this, null);
+				er.err(XdsErrorCode.Code.XDSRegistryError, "mergeDelta: cannot findSimple object " + id, this, null);
 				return false;
 			}
 			

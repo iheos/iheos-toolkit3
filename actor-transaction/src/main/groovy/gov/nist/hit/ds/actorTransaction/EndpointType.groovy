@@ -42,10 +42,10 @@ public class EndpointType {
 		tls = TlsType.NOTLS;
 		async = AsyncType.SYNC;
 		if (parts == null || parts.length < 1)  {
-			transType = actorType.find(label);
+			transType = actorType.findSimple(label);
 			return;
 		}
-		transType = actorType.find(parts[0]);
+		transType = actorType.findSimple(parts[0]);
 		int i=1;
 		tls = (i < parts.length && "TLS".equalsIgnoreCase(parts[i])) ? TlsType.TLS : TlsType.NOTLS;
 		if (isTls()) i++;

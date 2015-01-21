@@ -124,7 +124,7 @@ public class CodeValidationBase {
 				break;
 			}
 		}
-		if (mime_type_section == null) throw new XdsInternalException("CodeValidation2.java: Configuration Error: Cannot find mime type table");
+		if (mime_type_section == null) throw new XdsInternalException("CodeValidation2.java: Configuration Error: Cannot findSimple mime type table");
 
 		mime_map = new HashMap<String, String>();
 		ext_map = new HashMap<String, String>();

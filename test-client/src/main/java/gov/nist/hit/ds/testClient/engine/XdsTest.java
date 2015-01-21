@@ -203,7 +203,7 @@ public class XdsTest {
 		loadTestKitVersion();
 		
 		// these properties are needed by the DSIG package in gov.nist.registry.common2.dsig
-		// specifically the KeyStoreAccessObject which need to know there to find the 
+		// specifically the KeyStoreAccessObject which need to know there to findSimple the
 		// keystore for signing SAML assertions
 		
 		try {

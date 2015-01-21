@@ -487,7 +487,7 @@ public abstract class BasicTransaction {
 				}
 			}
 			if (!error_message_found) {
-				s_ctx.set_error("Did not find expected string in error messages: " + s_ctx.getExpectedErrorMessage() + "\n");
+				s_ctx.set_error("Did not findSimple expected string in error messages: " + s_ctx.getExpectedErrorMessage() + "\n");
 				step_failure = true;
 			}
 		}
@@ -1017,14 +1017,14 @@ public abstract class BasicTransaction {
 			throw new XdsInternalException(e.getMessage());
 		}
 		if (res == null) {
-			fail ("Cannot find referenced instruction output");
-			throw new XdsInternalException("Cannot find referenced instruction output");
+			fail ("Cannot findSimple referenced instruction output");
+			throw new XdsInternalException("Cannot findSimple referenced instruction output");
 		}
 
 		OMElement result = XmlUtil.firstChildWithLocalName(res, "Result");
 		if (result == null) {
-			fail("Cannot find <Result/>");
-			throw new XdsInternalException("Cannot find <Result/>");
+			fail("Cannot findSimple <Result/>");
+			throw new XdsInternalException("Cannot findSimple <Result/>");
 		}
 
 		Metadata m = MetadataParser.parseNonSubmission(result.getFirstElement());
