@@ -55,7 +55,7 @@ class SimulatorDAO {
             EndpointType etype = new EndpointType(simConfig.actorType, label)
 
             assert etype.transType
-            ServerTransactionSimConfigElement transElement = new ServerTransactionSimConfigElement(etype, new EndpointValue(endpointString))
+            TransactionSimConfigElement transElement = new TransactionSimConfigElement(etype, new EndpointValue(endpointString))
             simConfig.add(transElement)
 
             transElement.clear() // remove defaults
@@ -74,9 +74,9 @@ class SimulatorDAO {
 
     def updateModel(SimConfig simConfig, String updateConfig) {
         SimConfig update = toModel(updateConfig)
-        simConfig.transactions.each { ServerTransactionSimConfigElement transElement ->
+        simConfig.transactions.each { TransactionSimConfigElement transElement ->
             def name = transElement.name
-            ServerTransactionSimConfigElement updateTransaction = update.transactions.find { it.name == name}
+            TransactionSimConfigElement updateTransaction = update.transactions.find { it.name == name}
             if (!updateTransaction) return
             transElement.elements = updateTransaction.elements
         }

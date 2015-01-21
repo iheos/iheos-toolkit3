@@ -7,7 +7,7 @@ import groovy.util.logging.Log4j
 // base class appropriate to all and a server and client classes
 
 @Log4j
-public class ServerTransactionSimConfigElement extends AbstractTransactionSimConfigElement {
+public class TransactionSimConfigElement extends AbstractTransactionSimConfigElement {
     EndpointValue endpointValue;
     EndpointType endpointType;
 
@@ -22,7 +22,7 @@ public class ServerTransactionSimConfigElement extends AbstractTransactionSimCon
 
     // The displayName attribute is used as the transaction displayName which is contained
     // in the EndpointLabel
-	ServerTransactionSimConfigElement(EndpointType type, EndpointValue endpoint) {
+	TransactionSimConfigElement(EndpointType type, EndpointValue endpoint) {
 		this.name = type.getTransType().getCode();
         this.endpointType = type;
 		this.endpointValue = endpoint;
