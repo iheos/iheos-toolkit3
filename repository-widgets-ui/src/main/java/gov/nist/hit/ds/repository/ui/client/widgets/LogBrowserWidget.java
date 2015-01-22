@@ -1513,8 +1513,19 @@ public class LogBrowserWidget extends Composite {
 			// westContent.remove(propsWidget);
 			SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
 			String propsTxt = (an.getProps()!=null)?an.getProps().trim():"";
+
 			// margin-top:0px;margin-left:3px;
 			propsContent.appendHtmlConstant("<div style='margin:3px;'>Asset Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
+            propsContent.appendHtmlConstant("Web Address:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>");
+            propsContent.appendEscaped(""
+                    + GWT.getHostPageBaseURL()
+                    + GWT.getModuleName()
+                    + ".html?reposSrc="
+                    + an.getReposSrc()
+                    +"&reposId=" + an.getRepId()
+                    +"&assetId=" + an.getAssetId())
+            .appendHtmlConstant("</span></pre>");
+
 			if (an.getRelativePath()!=null) {
 				propsContent.appendHtmlConstant("<!-- <br/>Asset Relative Location:<br/><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>" + an.getRelativePath()  + "</span>-->");
 			}
