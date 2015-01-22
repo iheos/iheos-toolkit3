@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.testClient.engine;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 public interface ErrorReportingInterface {
 	public void fail(String msg) throws XdsInternalException;

@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.ebDocsrcSim.engine;
 
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;

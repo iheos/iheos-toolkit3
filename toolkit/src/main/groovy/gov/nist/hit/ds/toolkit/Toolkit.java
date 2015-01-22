@@ -4,7 +4,7 @@ import gov.nist.hit.ds.toolkit.environment.Environment;
 import gov.nist.hit.ds.toolkit.environment.UserSession;
 import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.toolkit.installation.PropertyManager;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 

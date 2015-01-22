@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.testClient.engine;
 
 import gov.nist.hit.ds.testClient.transactions.*;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;

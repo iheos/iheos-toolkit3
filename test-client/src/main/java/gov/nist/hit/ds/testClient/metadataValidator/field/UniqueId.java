@@ -3,7 +3,7 @@ package gov.nist.hit.ds.testClient.metadataValidator.field;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.testClient.registry.RegistryErrorListGenerator;
-import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
 
 import java.util.ArrayList;
 

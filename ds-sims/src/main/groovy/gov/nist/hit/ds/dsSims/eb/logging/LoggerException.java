@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.eb.logging;
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 public class LoggerException extends XdsInternalException
 {

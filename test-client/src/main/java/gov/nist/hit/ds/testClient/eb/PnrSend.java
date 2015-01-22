@@ -6,8 +6,8 @@ import gov.nist.hit.ds.testClient.engine.StepContext;
 import gov.nist.hit.ds.testClient.engine.TransactionSettings;
 import gov.nist.hit.ds.testClient.transactions.BasicTransaction;
 import gov.nist.hit.ds.testClient.transactions.ProvideAndRegisterTransaction;
-import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import java.util.ArrayList;

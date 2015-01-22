@@ -6,7 +6,7 @@ import gov.nist.hit.ds.testClient.ids.AbstractIdAllocator;
 import gov.nist.hit.ds.testClient.ids.PatientIdAllocator;
 import gov.nist.hit.ds.testClient.ids.SourceIdAllocator;
 import gov.nist.hit.ds.testClient.support.OMGenerator;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import java.util.HashMap;

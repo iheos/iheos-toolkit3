@@ -9,9 +9,9 @@ import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import gov.nist.hit.ds.toolkit.environment.EnvironmentAccess
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
-import gov.nist.hit.ds.xdsException.XdsException
-import gov.nist.hit.ds.xdsException.XdsInternalException
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.XdsException
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 import org.apache.axiom.om.OMElement
 
 /**

@@ -5,7 +5,7 @@ import gov.nist.hit.ds.testClient.logging.Report;
 import gov.nist.hit.ds.testClient.logging.SectionLogMap;
 import gov.nist.hit.ds.testClient.logging.TestStepLogContent;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import javax.xml.namespace.QName;

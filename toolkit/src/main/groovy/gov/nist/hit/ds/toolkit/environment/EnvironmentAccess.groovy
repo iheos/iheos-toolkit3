@@ -2,8 +2,8 @@ package gov.nist.hit.ds.toolkit.environment
 
 import gov.nist.hit.ds.toolkit.Toolkit
 import gov.nist.hit.ds.utilities.io.Io
-import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.EnvironmentNotSelectedException
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import org.apache.commons.io.FilenameUtils
 
 /**

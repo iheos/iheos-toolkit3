@@ -2,7 +2,7 @@ package gov.nist.hit.ds.ebDocsrcSim.soap;
 
 import gov.nist.hit.ds.toolkit.environment.SecurityParams;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.*;
+import gov.nist.hit.ds.xdsExceptions.*;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMAbstractFactory;

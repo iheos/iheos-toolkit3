@@ -4,7 +4,6 @@ package gov.nist.hit.ds.session.server;
 //import gov.nist.hit.ds.securityCommon.SecurityParams;
 //import gov.nist.hit.ds.xdsExceptions.EnvironmentNotSelectedException;
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
-import gov.nist.toolkit.installation.Installation;
 import gov.nist.toolkit.tk.TkLoader;
 import gov.nist.toolkit.tk.client.TkProps;
 import org.apache.log4j.Logger;
@@ -419,13 +418,13 @@ public class Session /*implements SecurityParams*/ {
 //		return names;
 //	}
 
-	public TkProps tkProps() {
-		try {
-			return TkLoader.tkProps(Installation.installation().getTkPropsFile());
-		} catch (Throwable t) {
-			return new TkProps();
-		}
-	}
+//	public TkProps tkProps() {
+//		try {
+//			return TkLoader.tkProps(Installation.installation().getTkPropsFile());
+//		} catch (Throwable t) {
+//			return new TkProps();
+//		}
+//	}
 
 	/**
 	 * Sets name of current environment (for this session)

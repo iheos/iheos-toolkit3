@@ -2,7 +2,7 @@ package gov.nist.hit.ds.testClient.logRepository;
 
 import gov.nist.hit.ds.testClient.logging.LogMap;
 import gov.nist.hit.ds.testClient.results.XdstestLogId;
-import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
 
 import java.io.File;
 

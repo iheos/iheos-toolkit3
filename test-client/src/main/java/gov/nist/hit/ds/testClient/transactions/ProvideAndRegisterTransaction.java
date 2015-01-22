@@ -7,10 +7,10 @@ import gov.nist.hit.ds.testClient.eb.DocumentHandler;
 import gov.nist.hit.ds.testClient.engine.StepContext;
 import gov.nist.hit.ds.testClient.soap.SoapActionFactory;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMText;
 

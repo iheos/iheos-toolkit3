@@ -3,7 +3,7 @@ package gov.nist.hit.ds.testClient.metadataValidator.object;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.testClient.logging.ErrorRecorder;
 import gov.nist.hit.ds.testClient.logging.ValidationContext;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 public class RegistryObject extends AbstractRegistryObject {

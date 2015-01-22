@@ -15,6 +15,10 @@
     <dependencies>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>sim-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
             <artifactId>eb-metadata</artifactId>
         </dependency>
         <dependency>
@@ -23,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xdsException</artifactId>
+            <artifactId>xds-exceptions</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>

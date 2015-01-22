@@ -5,7 +5,7 @@ package gov.nist.hit.ds.ebMetadata;
  */
 
 import gov.nist.hit.ds.utilities.other.UuidAllocator;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 

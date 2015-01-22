@@ -8,7 +8,7 @@ import gov.nist.hit.ds.testClient.soap.Soap;
 import gov.nist.hit.ds.testClient.soap.SoapActionFactory;
 import gov.nist.hit.ds.testClient.transactions.BasicTransaction;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.*;
+import gov.nist.hit.ds.xdsExceptions.*;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;

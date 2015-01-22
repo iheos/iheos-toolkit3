@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.testClient.ids;
 
 import gov.nist.hit.ds.testClient.engine.TestConfig;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.utilities.io.Io;
 import org.apache.log4j.Logger;
 

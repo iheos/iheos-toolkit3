@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.testClient.engine;
 
-import gov.nist.hit.ds.xdsException.XdsIOException;
+import gov.nist.hit.ds.xdsExceptions.XdsIOException;
 import gov.nist.toolkit.utilities.io.Io;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMText;

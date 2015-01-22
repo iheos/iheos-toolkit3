@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.testClient.logging;
 
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.util.*;
 

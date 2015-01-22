@@ -10,9 +10,9 @@ import gov.nist.hit.ds.testClient.site.Site;
 import gov.nist.hit.ds.testClient.site.Sites;
 import gov.nist.hit.ds.testClient.soap.Soap;
 import gov.nist.hit.ds.toolkit.Toolkit;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.hit.ds.xdsException.XdsParameterException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsParameterException;
 import gov.nist.toolkit.utilities.io.Io;
 import org.apache.log4j.Logger;
 

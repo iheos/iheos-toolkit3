@@ -2,7 +2,7 @@ package gov.nist.hit.ds.testClient.engine;
 
 import gov.nist.hit.ds.testClient.ids.AbstractIdAllocator;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.utilities.io.Io;
 
 import java.io.FileNotFoundException;

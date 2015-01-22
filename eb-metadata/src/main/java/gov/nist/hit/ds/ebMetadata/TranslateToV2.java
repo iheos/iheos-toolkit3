@@ -4,7 +4,7 @@ package gov.nist.hit.ds.ebMetadata;
  * Created by bmajur on 7/7/14.
  */
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;

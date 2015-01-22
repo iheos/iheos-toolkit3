@@ -4,7 +4,7 @@ import gov.nist.hit.ds.ebDocsrcSim.engine.*;
 import gov.nist.hit.ds.ebDocsrcSim.soap.Soap;
 import gov.nist.hit.ds.ebDocsrcSim.soap.SoapActionFactory;
 import gov.nist.hit.ds.utilities.xml.OMFormatter;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;

@@ -9,7 +9,7 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ErrorCode
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
-import gov.nist.hit.ds.xdsException.MetadataException
+import gov.nist.hit.ds.xdsExceptions.MetadataException
 /**
  * Created by bmajur on 12/23/14.
  */

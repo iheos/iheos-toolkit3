@@ -3,7 +3,7 @@ package gov.nist.hit.ds.toolkit.installation;
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.string.StringUtil;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;

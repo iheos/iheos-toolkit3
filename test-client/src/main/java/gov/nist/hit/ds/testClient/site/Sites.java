@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.testClient.site;
 
-import gov.nist.hit.ds.xdsException.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
 
 import java.util.*;
 

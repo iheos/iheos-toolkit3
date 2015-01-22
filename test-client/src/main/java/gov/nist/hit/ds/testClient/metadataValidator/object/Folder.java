@@ -6,7 +6,7 @@ import gov.nist.hit.ds.testClient.logging.ErrorRecorder;
 import gov.nist.hit.ds.testClient.logging.ValidationContext;
 import gov.nist.hit.ds.testClient.logging.XdsErrorCode;
 import gov.nist.hit.ds.testClient.metadataValidator.datatype.DtmFormat;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import java.util.*;

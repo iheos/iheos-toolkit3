@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.testClient.soap;
 
-import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
-import gov.nist.hit.ds.xdsException.LoadKeystoreException;
-import gov.nist.hit.ds.xdsException.XdsFormatException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsExceptions.LoadKeystoreException;
+import gov.nist.hit.ds.xdsExceptions.XdsFormatException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;
 
@@ -28,9 +28,9 @@ public interface SoapInterface {
 	 * This does not yet handle async.
 	 * @param bodyBytes
 	 * @return
-	 * @throws gov.nist.hit.ds.xdsException.XdsException
+	 * @throws gov.nist.hit.ds.xdsExceptions.XdsException
 	 * @throws org.apache.axis2.AxisFault
-	 * @throws gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException
+	 * @throws gov.nist.hit.ds.xdsExceptions.EnvironmentNotSelectedException
 	 */
 	public abstract void soapCallWithWSSEC() throws XdsInternalException,
 			AxisFault, EnvironmentNotSelectedException, LoadKeystoreException;
