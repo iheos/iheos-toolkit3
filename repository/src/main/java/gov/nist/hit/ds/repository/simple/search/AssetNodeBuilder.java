@@ -153,18 +153,19 @@ public class AssetNodeBuilder {
 
         criteria.append(new SearchTerm(PropertyKey.PARENT_ID, Operator.EQUALTO,new String[]{null}));
 
-        return new SearchResultIterator(new Repository[]{repos}, criteria, orderByKeys,offset,fetchSize);
+        return new SearchResultIterator(new Repository[]{repos}, criteria, orderByKeys,offset,fetchSize,true);
     }
 
     public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent) throws RepositoryException {
-        return getImmediateChildren(repos, parent, null, 0);
+        return getImmediateChildren(repos, parent, null, 0, true);
     }
 
-    public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent, int offset) throws RepositoryException {
-        return getImmediateChildren(repos, parent, null, offset);
+    public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent, int offset, boolean addEllipses) throws RepositoryException {
+        return getImmediateChildren(repos, parent, null, offset, addEllipses);
     }
 
-    public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent, SearchCriteria detailCriteria, int offset) throws RepositoryException {
+
+    public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent, SearchCriteria detailCriteria, int offset, boolean addEllipses) throws RepositoryException {
 		List<AssetNode> children = new ArrayList<AssetNode>();
 
         if (parent.getExtendedProps().get("_offset")!=null) // This is a placeholder leaf node
@@ -204,7 +205,7 @@ public class AssetNodeBuilder {
             propertyKeys = getSortOrderPropertyKeys(keyword, domain);
             int childFetchSize = getChildFetchSize(keyword, domain);
 
-			iter = new SearchResultIterator(new Repository[]{repos}, criteria, propertyKeys,offset,childFetchSize);
+			iter = new SearchResultIterator(new Repository[]{repos}, criteria, propertyKeys,offset,childFetchSize,addEllipses);
 			while (iter.hasNextAsset()) {
 				Asset a = iter.nextAsset();
 				AssetNode child = new AssetNode(a.getRepository().getIdString()
@@ -293,11 +294,15 @@ public class AssetNodeBuilder {
      * @throws RepositoryException
      */
 	public AssetNode getParentChain(Repository repos, AssetNode target, boolean initial) throws RepositoryException {
-		SearchCriteria criteria = new SearchCriteria(Criteria.OR);
-		criteria.append(new SearchTerm(PropertyKey.ASSET_ID, Operator.EQUALTO, target.getParentId()));
-		criteria.append(new SearchTerm(PropertyKey.LOCATION,Operator.EQUALTO, target.getParentId()));
+        if (repos==null)
+            return target;
 
- 		
+		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+		criteria.append(new SearchTerm(PropertyKey.ASSET_ID, Operator.EQUALTO, target.getParentId()));
+
+ 		String reposId = repos.getId().toString();
+        String reposSrc = repos.getSource().getAccess().name();
+
 		AssetIterator iter;
 		try {
 			if (initial) {
@@ -323,15 +328,49 @@ public class AssetNodeBuilder {
 						parent.setRelativePath(a.getPropFileRelativePart());
 					}
 					parent.setContentAvailable(a.hasContent());
-					
-					List<AssetNode> children = getImmediateChildren(repos, parent);
+
+
 					List<AssetNode> childrenUpdate = new ArrayList<AssetNode>();
-					for (AssetNode c : children) {
-						if (c.getRelativePath()!=null && c.getRelativePath().equals(target.getRelativePath())) {
-							childrenUpdate.add(target);
-						} else
-							childrenUpdate.add(c);
-					}
+
+                    int childFetchSize = (initial)?getChildFetchSize(parent.getType(),SimpleType.ASSET):0;
+                    boolean hasOffsetFetch = (childFetchSize>0);
+
+                    if (!hasOffsetFetch) {
+                        List<AssetNode> children = getImmediateChildren(repos, parent);
+                        addTargetChild(target, childrenUpdate, children);
+                    } else {
+                        // Pick the right segment
+
+                        boolean hit = false;
+                        int offset = 0;
+
+                        while (!hit) {
+                            List<AssetNode> children = getImmediateChildren(repos, parent, offset, true);
+                            if (children.size()>0) {
+                                for (AssetNode c : children) {
+                                    if (c.getRelativePath()!=null && c.getRelativePath().equals(target.getRelativePath())) {
+                                        hit = true;
+                                    }
+                                }
+
+                                if (!hit) {
+                                    AssetNode an = new AssetNode(reposId,"","","...","","",reposSrc);
+                                    an.getExtendedProps().put("_offset",""+ (offset));
+                                    an.getExtendedProps().put("_stopFlag","true");
+                                    an.addChild(new AssetNode("","","","HASCHILDREN","","",""));
+
+                                    childrenUpdate.add(an);
+
+                                    offset += (childFetchSize);
+
+                                } else {
+                                    addTargetChild(target, childrenUpdate, children);
+                                }
+                            }
+                        }
+
+                    }
+
 					parent.addChildren(childrenUpdate);
 					
 					return getParentChain(repos, parent, false);
@@ -343,6 +382,15 @@ public class AssetNodeBuilder {
 		}
 		return target;
 	}
+
+    private void addTargetChild(AssetNode target, List<AssetNode> childrenUpdate, List<AssetNode> children) {
+        for (AssetNode c : children) {
+            if (c.getRelativePath()!=null && c.getRelativePath().equals(target.getRelativePath())) {
+                childrenUpdate.add(target);
+            } else
+                childrenUpdate.add(c);
+        }
+    }
 
     /**
      * Gets the parent chain in the context of the entire repository tree (not just the parent chain) from a target asset node.
@@ -444,7 +492,7 @@ public class AssetNodeBuilder {
 
             PropertyKey[] propertyKeys = getSortOrderPropertyKeys(keyword, domain);
 
-			iter = new SearchResultIterator(new Repository[]{repos}, criteria, propertyKeys,0,0);
+			iter = new SearchResultIterator(new Repository[]{repos}, criteria, propertyKeys,0,0, true);
 			
 			while (iter.hasNextAsset()) {
 				Asset a = iter.nextAsset();

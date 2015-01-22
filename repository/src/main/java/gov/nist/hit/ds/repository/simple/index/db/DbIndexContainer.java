@@ -1698,10 +1698,23 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @throws RepositoryException 
 	 */
 	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
-		return getAssetsBySearch(repositories, searchCriteria, null, false,0,0);
+		return getAssetsBySearch(repositories, searchCriteria, null, false,0,0,true);
 	}
-	
-	/**
+
+    /**
+     *
+     * @param repositories
+     * @param searchCriteria
+     * @param addEllipses
+     * @return
+     * @throws RepositoryException
+     */
+    public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, boolean addEllipses) throws RepositoryException {
+        return getAssetsBySearch(repositories, searchCriteria, null, false,0,0,addEllipses);
+    }
+
+
+    /**
 	 * Get a hit count of records that match the searchCriteria against the index container 
 	 *
      * @param repos
@@ -1749,8 +1762,8 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @return
      * @throws RepositoryException
      */
-    public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByStr) throws RepositoryException {
-        return getAssetsBySearch(repositories,searchCriteria,orderByStr,false,0,0);
+    public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByStr, boolean addEllipses) throws RepositoryException {
+        return getAssetsBySearch(repositories,searchCriteria,orderByStr,false,0,0,addEllipses);
     }
 
     /**
@@ -1759,10 +1772,13 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @param searchCriteria
      * @param orderByPk
      * @param searchCriteriaLocationOnly
+     * @param offset
+     * @param fetchSize
+     * @param addEllipses
      * @return
      * @throws RepositoryException
      */
-	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByPk, boolean searchCriteriaLocationOnly, final int offset, final int fetchSize) throws RepositoryException {
+	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByPk, boolean searchCriteriaLocationOnly, final int offset, final int fetchSize, boolean addEllipses) throws RepositoryException {
 		Repository[] fRep = new Repository[repositories.length];
 		int cx=0;
         String locations[] = searchCriteria.getPropertyValue(PropertyKey.LOCATION.getPropertyName(), SearchTerm.Operator.EQUALTO);
@@ -1883,7 +1899,7 @@ public class DbIndexContainer implements IndexContainer, Index {
                 rs = dbc.executeQuery(sqlStr); // Limit records
 
 
-                List<AssetNode> assetList = popAssetNode(rs,offset,fetchSize,recordSize);
+                List<AssetNode> assetList = popAssetNode(rs,offset,fetchSize,recordSize,addEllipses);
                 logger.fine("Cached row set size: " + assetList.size());
                 rs.close();
 
@@ -1906,10 +1922,11 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @param rs
      * @param offset
      * @param totalRecordSize
+     * @param addEllipses
      * @return
      * @throws SQLException
      */
-	private List<AssetNode> popAssetNode(final ResultSet rs, final int offset, final int fetchSize, final int totalRecordSize) throws SQLException {
+	private List<AssetNode> popAssetNode(final ResultSet rs, final int offset, final int fetchSize, final int totalRecordSize, boolean addEllipses) throws SQLException {
 		List<AssetNode> assetList = new ArrayList<AssetNode>();
 		
 		if (rs!=null) {
@@ -1924,17 +1941,18 @@ public class DbIndexContainer implements IndexContainer, Index {
             // Add an ellipses node as an indication of more records
 //            logger.info("offset: " + offset + ", fetchSize: " + fetchSize + ", segmentSize: " + segmentSize + ", totalRecordSize: " + totalRecordSize);
 
-            if ((offset+fetchSize>0) && offset+segmentSize<totalRecordSize) {
+            if (addEllipses) {
+                if ((offset+fetchSize>0) && offset+segmentSize<totalRecordSize) {
 
 
-                if (assetList.size()>0) {
-                     String reposSrc =   assetList.get(0).getReposSrc();
-                    String repId = assetList.get(0).getRepId();
+                    if (assetList.size()>0) {
+                        String reposSrc =   assetList.get(0).getReposSrc();
+                        String repId = assetList.get(0).getRepId();
 
-                    AssetNode an = new AssetNode(repId,"","","...","","",reposSrc);
-                    an.getExtendedProps().put("_offset",""+ (offset+segmentSize));
-//                    an.addChild(new AssetNode(repId, "", "", "HASCHILDREN", "", "", reposSrc));
-                    assetList.add(an);
+                        AssetNode an = new AssetNode(repId,"","","...","","",reposSrc);
+                        an.getExtendedProps().put("_offset",""+ (offset+segmentSize));
+                        assetList.add(an);
+                    }
                 }
             }
 		}

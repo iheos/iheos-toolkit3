@@ -236,7 +236,9 @@ public class LogBrowserWidget extends Composite {
      * @throws RepositoryConfigException
      */
     public LogBrowserWidget(EventBus eventBus, final AssetNode target) throws RepositoryConfigException {
-        configure(eventBus, new Feature[]{Feature.BROWSE}, target);
+        final Feature[] features = new Feature[]{Feature.BROWSE};
+        configure(eventBus, features, target);
+        initFeaturePanel(features);
     }
 
     /**
@@ -288,7 +290,8 @@ public class LogBrowserWidget extends Composite {
 
 	public LogBrowserWidget(EventBus eventBus, final Feature[] features) throws RepositoryConfigException {
         configure(eventBus, features, null);
-	      
+
+        initFeaturePanel(features);
 		 //// Use this in embedded mode: RootLayoutPanel.get().add(featureTlp);
 	}
 
@@ -352,7 +355,7 @@ public class LogBrowserWidget extends Composite {
             }
         });
 
-        initFeaturePanel(features);
+
     }
 
     private void initFeaturePanel(Feature[] features) {
@@ -1044,7 +1047,9 @@ public class LogBrowserWidget extends Composite {
 //                          logger.info(" offsetValue: " + offsetValue);
 
                           if (item.getParentItem()!=null) {
-                              item.getParentItem().addItem(treeItem); // Offset based retrieval adds an item to parent
+                              int index = item.getParentItem().getChildIndex(item);
+
+                              item.getParentItem().insertItem(index, treeItem); // .addItem(treeItem); // Offset based retrieval adds an item to parent
                           } else {
                               if (tree!=null) {
                                 tree.addItem(treeItem);
@@ -1072,8 +1077,9 @@ public class LogBrowserWidget extends Composite {
 
               try {
                   int offsetVal = Integer.parseInt(offsetValue);
+                  boolean stopFlag = Boolean.parseBoolean(focusAn.getExtendedProps().get("_stopFlag"));
                   if (parentAn!=null) { // parent node exists
-                      reposService.getImmediateChildren(parentAn, offsetVal , addImmediateChildrenByOffset);
+                      reposService.getImmediateChildren(parentAn, offsetVal, (!stopFlag), addImmediateChildrenByOffset);
                   } else { // top level
                       String[] compositeKey = getReposCompositeKey();
                       reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, offsetVal, addImmediateChildrenByOffset);
@@ -1085,8 +1091,8 @@ public class LogBrowserWidget extends Composite {
                   e.printStackTrace();
               }
 
-              logger.info("2 _offset prop found for assetId: " + focusAn.getAssetId());
-              logger.info("2 parent exists? " + (item.getParentItem()!=null));
+//              logger.info("2 _offset prop found for assetId: " + focusAn.getAssetId());
+//              logger.info("2 parent exists? " + (item.getParentItem()!=null));
 
 
 

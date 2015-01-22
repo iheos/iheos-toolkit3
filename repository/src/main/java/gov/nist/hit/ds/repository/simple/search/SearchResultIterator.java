@@ -51,13 +51,13 @@ public class SearchResultIterator implements AssetIterator {
      */
     public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
 
-        init(repositories, searchCriteria, null, false,0 ,0);
+        init(repositories, searchCriteria, null, false,0 ,0, true);
     }
 
     public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, boolean searchCriteriaLocationOnly, boolean loadProperties) throws RepositoryException {
 
         setLoadProperties(loadProperties);
-        init(repositories, searchCriteria, null, searchCriteriaLocationOnly,0,0);
+        init(repositories, searchCriteria, null, searchCriteriaLocationOnly,0,0, true);
     }
 
     /**
@@ -68,35 +68,35 @@ public class SearchResultIterator implements AssetIterator {
      */
     public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, String[] orderBy) throws RepositoryException {
 
-        init(repositories, searchCriteria, orderBy, false, 0, 0);
+        init(repositories, searchCriteria, orderBy, false, 0, 0, true);
     }
 
     public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, String[] orderBy, int offset, int fetchNext) throws RepositoryException {
 
-        init(repositories, searchCriteria, orderBy, false, offset, fetchNext);
+        init(repositories, searchCriteria, orderBy, false, offset, fetchNext, true);
     }
 
     public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, PropertyKey[] orderByKeys) throws RepositoryException {
 
         String[] orderKeys = PropertyKey.getStrings(orderByKeys);
 
-        init(repositories, searchCriteria, orderKeys, false, 0, 0);
+        init(repositories, searchCriteria, orderKeys, false, 0, 0, true);
 
     }
 
-    public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, PropertyKey[] orderByKeys, int offset, int fetchNext) throws RepositoryException {
+    public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, PropertyKey[] orderByKeys, int offset, int fetchNext, boolean addEllipses) throws RepositoryException {
 
         String[] orderKeys = PropertyKey.getStrings(orderByKeys);
 
-        init(repositories, searchCriteria, orderKeys, false, offset, fetchNext);
+        init(repositories, searchCriteria, orderKeys, false, offset, fetchNext,addEllipses);
 
     }
 
     private void init(Repository[] repositories, SearchCriteria searchCriteria,
-                      String[] orderBy, boolean searchCriteriaLocationOnly, int offset, int fetchNext) throws RepositoryException {
+                      String[] orderBy, boolean searchCriteriaLocationOnly, int offset, int fetchNext, boolean addEllipses) throws RepositoryException {
         DbIndexContainer dbc = new DbIndexContainer();
 
-        crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy, searchCriteriaLocationOnly, offset, fetchNext);
+        crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy, searchCriteriaLocationOnly, offset, fetchNext, addEllipses);
         if (crs == null)
             totalRecords = 0;
         else

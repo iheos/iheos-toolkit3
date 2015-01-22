@@ -101,6 +101,17 @@ RepositoryService {
 	}
 
     @Override
+    public List<AssetNode> getImmediateChildren(AssetNode an, int offset, boolean stopFlag)
+            throws RepositoryConfigException {
+        try {
+            return AssetHelper.getImmediateChildren(an,offset,stopFlag);
+        } catch (Exception re) {
+            throw new RepositoryConfigException(re.toString());
+        }
+    }
+
+
+    @Override
     public AssetNode getChildren(AssetNode an) throws RepositoryConfigException {
         try {
             return AssetHelper.getChildren(an);

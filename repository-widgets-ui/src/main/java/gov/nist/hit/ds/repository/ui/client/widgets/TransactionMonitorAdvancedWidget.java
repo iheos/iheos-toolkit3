@@ -761,11 +761,6 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                         return "<<";
                     } else
                         return ">>";
-//                    SafeHtmlBuilder shb = new SafeHtmlBuilder();
-//
-//                    shb.appendHtmlConstant("<span style=\"width:32px;height:32px;\">Expand&nbsp;</span>");
-//                    return shb.toSafeHtml();
-
                 }
             };
 
