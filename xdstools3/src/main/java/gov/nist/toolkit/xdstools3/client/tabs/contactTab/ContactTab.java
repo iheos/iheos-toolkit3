@@ -18,7 +18,8 @@ public class ContactTab extends GenericCloseableTab {
         VStack mainStack = new VStack();
         Label tabHeader = Formatter.createTabHeaderWithoutLeftPadding(header);
         mainStack.addMembers(tabHeader, createHTMLPanel());
-        mainStack.setMargin(30);
+        mainStack.setLayoutLeftMargin(50); mainStack.setLayoutRightMargin(50);
+        mainStack.setLayoutTopMargin(20); mainStack.setLayoutBottomMargin(20);
         setPane(mainStack);
 	}
 
@@ -31,7 +32,7 @@ public class ContactTab extends GenericCloseableTab {
         htmlFlow.setContents(Resources.INSTANCE.getContactPageContents().getText());
         return htmlFlow;
 	}
-    
+
 
     /**
      * Creates a panel that contains the points of contact displayed as a table
