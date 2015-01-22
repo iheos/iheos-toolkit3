@@ -83,7 +83,7 @@ public class KeyStoreAccessObject {
 			}
 			
 			String pathToKeystoreProperties = keystoreDir + File.separator + "keystore.properties";
-			// String path = cache_root + File.separator + "environment" + File.separator + environmentName + File.separator + "keystore" + File.separator + "keystore.properties";
+			// String path = cache_root + File.separator + "environment" + File.separator + name + File.separator + "keystore" + File.separator + "keystore.properties";
 			
 			try {
 				

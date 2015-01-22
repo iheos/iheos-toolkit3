@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.ebDocsrcSim.soap;
+package gov.nist.hit.ds.toolkit.environment;
 
 import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
 

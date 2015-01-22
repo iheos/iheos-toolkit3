@@ -19,6 +19,7 @@
     <name>toolkit2</name>
 
     <repositories>
+<!--
         <repository>
             <id>internal-nist-repo-releases</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
@@ -35,6 +36,7 @@
             <id>internal-nist-repo-maven-central</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/central/</url>
         </repository>
+-->
     </repositories>
 
     <properties>

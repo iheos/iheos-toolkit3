@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.config
 import gov.nist.hit.ds.actorTransaction.*
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
+import gov.nist.hit.ds.toolkit.environment.EnvironmentAccess
 import groovy.transform.ToString
 import groovy.util.logging.Log4j
 
@@ -16,6 +17,7 @@ import groovy.util.logging.Log4j
 public class SimConfig {
 	ActorType actorType;
 	List<TransactionSimConfigElement> transactions = new ArrayList<TransactionSimConfigElement>();
+    EnvironmentAccess environmentAccess = null  // used only by source actor simulators
 
 	def SimConfig() { }
 

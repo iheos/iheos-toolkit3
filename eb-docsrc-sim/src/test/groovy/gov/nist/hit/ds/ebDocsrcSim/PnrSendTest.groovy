@@ -2,7 +2,7 @@ package gov.nist.hit.ds.ebDocsrcSim
 
 import gov.nist.hit.ds.ebDocsrcSim.engine.DocumentHandler
 import gov.nist.hit.ds.ebDocsrcSim.engine.PnrSend
-import gov.nist.hit.ds.ebDocsrcSim.soap.EnvironmentAccess
+import gov.nist.hit.ds.toolkit.environment.EnvironmentAccess
 import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import gov.nist.hit.ds.utilities.xml.Util
