@@ -50,7 +50,7 @@ import java.util.logging.Logger;
 /**
  * Main class of the application which is the Activity for Activity-Places design, the view and a bit of a controller.
  */
-// TabContainer was added for v2-v3 integration purposes, AcceptsOneWidget to avoid an entire MVP architecture (fuse Activity and View in one single class)
+// AcceptsOneWidget was added to avoid creating an entire MVP architecture (fuse Activity and View in one single class)
 public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOneWidget {
     private ToolbarServiceAsync propertiesService = GWT.create(ToolbarService.class);
     private Logger logger= Logger.getLogger(this.getClass().getName());
