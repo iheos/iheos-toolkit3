@@ -212,13 +212,15 @@ public class PresentationData implements IsSerializable, Serializable  {
 		return indexProps;
 	}
 
+
     /**
      *
-     * @param reposData An array of repositories.
-     * @return Gets a list representing the asset relationship.
-     * @see gov.nist.hit.ds.repository.shared.data.AssetNode
+     * @param reposData
+     * @param offset
+     * @param stopFlag
+     * @return @see gov.nist.hit.ds.repository.shared.data.AssetNode
      */
-	public static List<AssetNode> getTree(String[][] reposData, int offset) {
+	public static List<AssetNode> getTree(String[][] reposData, int offset, boolean addEllipses) {
 		
 		Repository[] reposList = RepositoryHelper.getReposList(reposData);
 		
@@ -229,7 +231,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 		for (Repository repos : reposList) {
 
 			try {
-				tmp = anb.build(repos, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE},offset);
+				tmp = anb.build(repos, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE},offset, addEllipses);
 				if (tmp!=null && !tmp.isEmpty()) {
 					for (AssetNode an : tmp) {
 						result.add(an);	

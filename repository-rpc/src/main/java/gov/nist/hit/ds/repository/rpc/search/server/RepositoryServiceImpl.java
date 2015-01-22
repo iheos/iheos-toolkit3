@@ -76,11 +76,18 @@ RepositoryService {
     @Override
 	public List<AssetNode> getAssetTree(String[][] reposData, int offset)
 			throws RepositoryConfigException {
-		return PresentationData.getTree(reposData, offset);
+		return PresentationData.getTree(reposData, offset, true);
 	}
 
-	
-	@Override
+    @Override
+    public List<AssetNode> getAssetTree(String[][] reposData, int offset, boolean addEllipses)
+            throws RepositoryConfigException {
+        return PresentationData.getTree(reposData, offset, addEllipses);
+    }
+
+
+
+    @Override
 	public AssetNode getAssetTxtContent(AssetNode an)
 			throws RepositoryConfigException {
 		try {
@@ -101,10 +108,10 @@ RepositoryService {
 	}
 
     @Override
-    public List<AssetNode> getImmediateChildren(AssetNode an, int offset, boolean stopFlag)
+    public List<AssetNode> getImmediateChildren(AssetNode an, int offset, boolean addEllipses)
             throws RepositoryConfigException {
         try {
-            return AssetHelper.getImmediateChildren(an,offset,stopFlag);
+            return AssetHelper.getImmediateChildren(an,offset,addEllipses);
         } catch (Exception re) {
             throw new RepositoryConfigException(re.toString());
         }

@@ -34,10 +34,11 @@ public interface RepositoryService extends RemoteService  {
 	public List<AssetNode> search(String[][] repos, SearchCriteria sc) throws RepositoryConfigException;
     public Boolean searchHit(String[][] repos, SearchCriteria sc, Boolean newIndexOnly) throws RepositoryConfigException;
 	public List<AssetNode> getAssetTree(String[][] repos, int offset) throws RepositoryConfigException;
+    public List<AssetNode> getAssetTree(String[][] repos, int offset, boolean addEllipses) throws RepositoryConfigException;
     public AssetNode getAssetNode(String reposSrc, String reposId, String assetId) throws RepositoryConfigException;
 	public AssetNode getAssetTxtContent(AssetNode an) throws RepositoryConfigException;
 	public List<AssetNode> getImmediateChildren(AssetNode an, int offset) throws RepositoryConfigException;
-    public List<AssetNode> getImmediateChildren(AssetNode an, int offset, boolean stopFlag) throws RepositoryConfigException;
+    public List<AssetNode> getImmediateChildren(AssetNode an, int offset, boolean addEllipses) throws RepositoryConfigException;
     public AssetNode getChildren(AssetNode an) throws RepositoryConfigException;
 	public AssetNode getParentChain(AssetNode an) throws RepositoryConfigException;
     public List<AssetNode> getParentChainInTree(AssetNode an) throws RepositoryConfigException;

@@ -81,21 +81,33 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 	    this.eventBus = eventBus;
 
         // All composites must call initWidget() in their constructors.
-	     initWidget(setupMainPanel());
+	     initWidget(setupMainPanel(false));
+
+    }
+
+    public TransactionMonitorFilterAdvancedWidget(EventBus eventBus, boolean viewerOnly)  {
+        this.eventBus = eventBus;
+
+        // All composites must call initWidget() in their constructors.
+        initWidget(setupMainPanel(viewerOnly));
 
     }
 
 
 
-    private Widget setupMainPanel() {
+    private Widget setupMainPanel(boolean viewerOnly) {
         SplitLayoutPanel mainSplitPanel = new SplitLayoutPanel(3);
 
+        if (viewerOnly) {
+            mainSplitPanel.add(setupFilterSelectionAndMonitorPanel(viewerOnly)); // Filter selection and results stack panel
+        } else {
+            setSouthStackPanel(createFilteredMonitorPanel());
+            //// getSouthStackPanel().setVisible(Boolean.FALSE);
+            mainSplitPanel.addSouth(getSouthStackPanel(), Math.round(.5 * Window.getClientHeight()));
 
-        setSouthStackPanel(createFilteredMonitorPanel());
-        //// getSouthStackPanel().setVisible(Boolean.FALSE);
-        mainSplitPanel.addSouth(getSouthStackPanel(), Math.round(.5 * Window.getClientHeight()));
+            mainSplitPanel.add(setupFilterSelectionAndMonitorPanel(viewerOnly)); // Filter selection and results stack panel
 
-        mainSplitPanel.add(setupFilterSelectionAndMonitorPanel()); // Filter selection and results stack panel
+        }
 
         return mainSplitPanel;
     }
@@ -197,7 +209,7 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
     */
 
 
-    private Widget setupFilterSelectionAndMonitorPanel() {
+    private Widget setupFilterSelectionAndMonitorPanel(boolean viewerOnly) {
 
         // SplitLayoutPanel filterSplitPanel = new SplitLayoutPanel(2);
 
@@ -208,28 +220,35 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
 
         // Add live monitor section
-        setTxMonitorLive(createLiveTxMonitorWidget());
+        setTxMonitorLive(createLiveTxMonitorWidget(viewerOnly));
 
+        String monitorLabel = "Proxy Monitor";
 
-        // eventBus.addHandler(BackendFilteredMessageEvent.TYPE
+        if (!viewerOnly) {
+            // eventBus.addHandler(BackendFilteredMessageEvent.TYPE
 
-        eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
-            @Override
-            public void onNewTxMessage(NewTxMessageEvent event) {
+            eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
+                @Override
+                public void onNewTxMessage(NewTxMessageEvent event) {
 
-                // no longer needed with built-in pager control
-                // getLiveCounterTxt().setText("("+ (event.getMessageCount()) + ")");
-                filter(event.getAnMap());
-                // getTxFilter().popTx(event.getAnMap());
-            }
-        });
+                    // no longer needed with built-in pager control
+                    // getLiveCounterTxt().setText("("+ (event.getMessageCount()) + ")");
+                    filter(event.getAnMap());
+                    // getTxFilter().popTx(event.getAnMap());
+                }
+            });
 
-        eventBus.addHandler(ListenerStatusEvent.TYPE, new ListenerStatusEventHandler() {
-            @Override
-            public void onListenerStatus(ListenerStatusEvent event) {
-                updateListenerStatusIndicator(event.getListening());
-            }
-        });
+            eventBus.addHandler(ListenerStatusEvent.TYPE, new ListenerStatusEventHandler() {
+                @Override
+                public void onListenerStatus(ListenerStatusEvent event) {
+                    updateListenerStatusIndicator(event.getListening());
+                }
+            });
+
+        } else {
+            monitorLabel = "Transaction Viewer";
+        }
+
 
 
         /*
@@ -279,7 +298,7 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
 
         // Live-Monitor panel
-        stackPanel.add(getTxMonitorLive(), createPanelHeader("", createMonitorHeaderOptions(), null, hPanel), HEADER_SIZE);
+        stackPanel.add(getTxMonitorLive(), createPanelHeader("", createMonitorHeaderOptions(monitorLabel), null, hPanel), HEADER_SIZE);
 
         // filterSplitPanel.add(stackPanel);
 
@@ -361,12 +380,12 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
     }
 
-    private List<Widget> createMonitorHeaderOptions() {
+    private List<Widget> createMonitorHeaderOptions(String monitorLabel) {
         List<Widget> options = new ArrayList<Widget>();
 
         options.add(getListenerStatusIndicator());
 
-        HTML headerText = new HTML("Proxy Monitor");
+        HTML headerText = new HTML(monitorLabel);
         headerText.getElement().getStyle().setWidth(TransactionMonitorWidget.MESSAGE_LEFT_MARGIN, Style.Unit.PX);
         options.add(headerText);
 
@@ -427,8 +446,8 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
 
 
-    private TransactionMonitorAdvancedWidget createLiveTxMonitorWidget() {
-        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus,true /*enableListener*/,false /*enable Filter, automatically set when filter is applied*/ , false/*showDetail*/);
+    private TransactionMonitorAdvancedWidget createLiveTxMonitorWidget(boolean viewerOnly) {
+        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus, !viewerOnly /*enableListener*/,false /*enable Filter, automatically set when filter is applied*/ , viewerOnly/*showDetail*/);
         txMonitor.setAutoShowFirstMessage(false);
         txMonitor.getElement().getStyle()
                 .setProperty("border", "none");

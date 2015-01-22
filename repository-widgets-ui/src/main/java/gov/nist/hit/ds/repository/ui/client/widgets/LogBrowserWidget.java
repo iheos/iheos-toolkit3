@@ -124,6 +124,8 @@ public class LogBrowserWidget extends Composite {
 
     LogBrowserWidget searchLbWidget;
     final SimpleEventBus searchLbEventBus = new SimpleEventBus();
+    final SimpleEventBus tranViewerEventBus = new SimpleEventBus();
+    final TransactionMonitorFilterAdvancedWidget transactionViewer = new TransactionMonitorFilterAdvancedWidget(tranViewerEventBus,true);
 
     // Temp
 
@@ -1052,7 +1054,18 @@ public class LogBrowserWidget extends Composite {
                               item.getParentItem().insertItem(index, treeItem); // .addItem(treeItem); // Offset based retrieval adds an item to parent
                           } else {
                               if (tree!=null) {
-                                tree.addItem(treeItem);
+                                  int index = -1;
+                                  int ct = tree.getItemCount();
+                                  for (int cx=0; cx<ct; cx++) {
+                                      if (tree.getItem(cx).equals(item)) {
+                                          index = cx;
+                                          break;
+                                      }
+                                  }
+                                  if (index>-1) {
+                                      tree.insertItem(index,treeItem);
+                                  }
+
                               } else {
                                   logger.warning("tree widget is null!");
                               }
@@ -1061,14 +1074,15 @@ public class LogBrowserWidget extends Composite {
 //                          logger.info("adding --- " + treeItem.getAssetNode().getDisplayName() + " child count: " + item.getChildCount());
                       }
 
-                        item.remove(); // Remove ellipses
+                      // Remove ellipses
+                      if (item.getParentItem()!=null) {
+                          item.remove();
+                      } else if (tree!=null) {
+                          tree.removeItem(item);
+                      }
 
-//                      if (item.getParentItem()!=null) {
-//                          item.getParentItem().removeItem(item);
-//                          item.remove();
-//                      } else {
-//                          tree.removeItem(item);
-//                      }
+
+
 
 
                   }
@@ -1082,7 +1096,7 @@ public class LogBrowserWidget extends Composite {
                       reposService.getImmediateChildren(parentAn, offsetVal, (!stopFlag), addImmediateChildrenByOffset);
                   } else { // top level
                       String[] compositeKey = getReposCompositeKey();
-                      reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, offsetVal, addImmediateChildrenByOffset);
+                      reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, offsetVal, (!stopFlag), addImmediateChildrenByOffset);
                   }
 
 
@@ -1544,7 +1558,77 @@ public class LogBrowserWidget extends Composite {
 			
 			// westContent.add(propsWidget);
             if ("transaction".equals(an.getType())) {
-                // TODO: Load transaction viewer
+
+
+                final AsyncCallback<AssetNode> addChildren = new AsyncCallback<AssetNode>() {
+
+                    public void onFailure(Throwable a) {
+                        Window.alert(a.toString());
+                    }
+
+                    public void onSuccess(AssetNode parent) {
+                        if (parent.getChildren().size()>0) {
+                            AssetNode ioMessage =  parent.getChildren().get(0);
+                            List<AssetNode> messages =  ioMessage.getChildren();
+                            // Prepare data set
+                            Map<String,AssetNode> anMap = new HashMap<String,AssetNode>();
+                            for (AssetNode message : messages) {
+
+
+                                anMap.put("parentLoc",message); //
+
+                                for (AssetNode artifact : message.getChildren()) {
+                                    if (artifact.getType()!=null) {
+
+
+                                      if (artifact.getType().endsWith("HdrType")) {
+
+                                          StringBuffer buf = new StringBuffer();
+                                          // TODO: Refactor to allow common reference
+                                           final String[][] columns = {{"","Timestamp","Status","Artifact","Message From","Proxy","Forwarded To","Path","ContentType","Method","Length","Response Time"}};
+
+
+
+
+                                          artifact.setCsv(columns);
+                                          artifact.getExtendedProps().put("proxyDetail","");
+                                          artifact.getExtendedProps().put("fromIp","");
+                                          artifact.getExtendedProps().put("toIp","");
+                                          artifact.getExtendedProps().put("type",artifact.getType());
+                                          artifact.setParentId(ioMessage.getAssetId()); // indirect reference
+                                          artifact.setType("raw_" + artifact.getType());
+
+                                          anMap.put("header",artifact);
+                                      } else if (artifact.getType().endsWith("BodyType")) {
+                                          artifact.setType("raw_" + artifact.getType());
+                                          anMap.put("body",artifact);
+                                      }
+                                    }
+
+                                }
+
+                            }
+
+                            if (anMap.size()>0) {
+                                transactionViewer.getTxMonitorLive().popTx(anMap,null);
+                            }
+
+                        }
+
+                    }
+
+                };
+
+                try {
+                    reposService.getChildren(an, addChildren);
+                } catch (RepositoryConfigException e) {
+                    e.printStackTrace();
+                }
+
+
+                // Load transaction viewer
+                contentPanel.add(transactionViewer);
+
             } else if (an.isContentAvailable()) {
 				if ("text/csv".equals(an.getMimeType())) {
                     // Create a list data provider.
