@@ -29,11 +29,11 @@ public interface ErrorRecorder  {
 	public void warning(String dts, String name, String found, String expected, String RFC);
 	public void info(String dts, String name, String found, String expected, String RFC);
 	public void summary(String msg, boolean success, boolean part);
-	public void finish();
-	public void showErrorInfo();
+//	public void finish();
+//	public void showErrorInfo();
 	public boolean hasErrors();
-	public int getNbErrors();
-	public void concat(IAssertionGroup er);
+//	public int getNbErrors();
+//	public void concat(IAssertionGroup er);
 	public List<ValidatorErrorItem> getErrMsgs();
 	
 //	public IAssertionGroup buildNewErrorRecorder();  // some code only accepts ErrorRecorder.  This gets around this

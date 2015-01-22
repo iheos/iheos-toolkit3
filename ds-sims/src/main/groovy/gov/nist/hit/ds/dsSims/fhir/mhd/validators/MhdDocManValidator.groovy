@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.fhir.mhd.validators
 
-import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.OidValidator
+import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.OidValidator
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
@@ -53,7 +53,7 @@ class MhdDocManValidator extends ValComponentBase {
     @Validation(id='mhd040', msg='Validating contentTypeCode', ref='')
     def mhdm040() {
         infoFound(true)
-        dr.type.children().each { new CodingValidator(simHandle, it).asSelf().run() }}
+        dr.type.children().each { new CodingValidator(simHandle, it).asSelf(this).run() }}
 
     ///////////////////////////
     // homeCommunityId
@@ -86,7 +86,7 @@ class MhdDocManValidator extends ValComponentBase {
     @Validation(id='mhdm160', msg='Validating subject', ref='')
     def mhdm160() {
         infoFound(true)
-        new SubjectValidator(simHandle, dr).asSelf().run()
+        new SubjectValidator(simHandle, dr).asSelf(this).run()
     }
 
     ///////////////////////////
@@ -102,7 +102,7 @@ class MhdDocManValidator extends ValComponentBase {
         dr.hash.each {
             def value = it.@value.text()
             assertHasValue(value)
-            new OidValidator(simHandle, value).asSelf().run()
+            new OidValidator(simHandle, value).asSelf(this).run()
         }
     }
 
@@ -128,7 +128,7 @@ class MhdDocManValidator extends ValComponentBase {
     def mhdm500() {
         infoFound(true)
         dr.masterIdentifier.each {
-            new MasterIdentifierValidator(simHandle, dr).asSelf().run()
+            new MasterIdentifierValidator(simHandle, dr).asSelf(this).run()
         }
     }
 

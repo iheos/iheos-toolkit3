@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.fhir.mhd.validators
 
-import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.OidValidator
+import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.OidValidator
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
@@ -38,6 +38,6 @@ class MasterIdentifierValidator extends ValComponentBase {
     def mhdmi040() {
         def text = dr.masterIdentifier.value.@value.text()
         assertStartsWith(text, 'urn:oid:')
-        new OidValidator(simHandle, text.substring(8)).asSelf().run()
+        new OidValidator(simHandle, text.substring(8)).asSelf(this).run()
     }
 }

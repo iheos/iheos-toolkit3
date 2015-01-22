@@ -1,65 +1,77 @@
 package gov.nist.hit.ds.eventLog.assertion
-
 import gov.nist.hit.ds.repository.AssetHelper
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.RepositoryException
+import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.repository.simple.SimpleType
 import gov.nist.hit.ds.utilities.csv.CSVEntry
 import gov.nist.hit.ds.utilities.csv.CSVTable
 import groovy.util.logging.Log4j
 
 @Log4j
-public class AssertionGroupDAO {
+class AssertionGroupDAO {
     Asset parentAsset
     AssertionGroup ag
-    int order = 1;
+    int order = 1
 
-    AssertionGroupDAO(AssertionGroup _ag, Asset _parentAsset) {
+    AssertionGroupDAO(AssertionGroup _ag, Asset _parentAsset, int _order) {
         ag = _ag
         parentAsset = _parentAsset
+        order = _order
+        log.debug("New AssertionGroupDAO")
     }
-//    def init(Asset parentAsset) { this.parentAsset = parentAsset }
 
     Asset getAsset() { ag.asset }
 
     // return AssertionGroup (csv file) Asset
-    public Asset save() throws RepositoryException {
-        if (!ag.saveInLog) return null;
+    Asset save() throws RepositoryException {
+        log.debug("AssertionGroupDAO - save")
+        if (!ag.isLogable()) return null
+        if (!ag.saveInLog) return null
         if (!ag.validatorName) return null
         if (!parentAsset) { log.debug('Not flushing - no parent asset'); return null }
+
+        def assertions = (ag.validationLevel != ValidationLevel.INFO) ? assertions = scrubAssertions(ag.assertions) : ag.assertions
+
+//        if (ag.validatorName == 'TopLevel') assert ag.validationLevel == ValidationLevel.ERROR && ag.worstStatus == AssertionStatus.SUCCESS
         if (ag.asset) {
             // update
-            log.debug("Setting status on ${ag.asset.getId().idString}")
-//            propigateStatus(ag.asset, ag.getWorstStatus().name(), 'event')
+            log.debug("AssertionGroupDAO - Setting status on ${ag.asset.getId().idString}")
             Asset a = ag.asset
-//            a.setProperty(PropertyKey.STATUS, ag.getWorstStatus().name())
-            a.updateContent(asTable(ag.assertions).toString().getBytes())
+            a.updateContent(asTable(assertions).toString().getBytes())
             return a
         } else {
             // create
+            log.debug("AssertionGroupDAO - create")
             Asset a = AssetHelper.createChildAsset(parentAsset, ag.validatorName, "", new SimpleType("assertionGroup"))
             ag.asset = a
-//            propigateStatus(ag.asset, ag.getWorstStatus().name(), 'event')
+            log.debug("AssertionGroupDAO - order is ${order}")
             a.setOrder(order++)
-//            a.setProperty(PropertyKey.STATUS, ag.getWorstStatus().name())
-            a.setContent(asTable(ag.assertions).toString().getBytes(), "text/csv")
+            a.setContent(asTable(assertions).toString().getBytes(), "text/csv")
             return a
         }
     }
 
-//    def propigateStatus(Asset a, String statusValue, String untilType) {
-//        log.debug("Propigating status ${statusValue}")
-//        while (a) {
-//            log.debug("...to ${a.getId().idString}")
-//            a.autoFlush = true
-//            a.setProperty(PropertyKey.STATUS, statusValue)
-//            if (statusValue == AssertionStatus.ERROR.name()) {
-//                a.setProperty(PropertyKey.COLOR, 'red')
-//            }
-//            if (a.getProperty(PropertyKey.ASSET_TYPE) == untilType) break
-//            a = RepoUtils.parent(a)
-//        }
-//    }
+    // if a ...text assertion (msg) is an error, keep previous ... elements and previous no ... element
+    static scrubAssertions(List<Assertion> aa) {
+        def ra = aa.reverse()
+        def partOfError = false
+        return ra.findAll {
+            if (isError(it)) {
+                if(isContinuation(it)) partOfError = true
+                return true
+            }
+            if (partOfError) {
+                if (!isError(it) && !isContinuation(it)) partOfError = false
+                return true
+            }
+            return false
+        }.reverse()
+    }
+
+    static isContinuation(Assertion a) { a.msg.startsWith('.')}
+
+    static isError(Assertion a) { a.status in [AssertionStatus.ERROR, AssertionStatus.FAULT, AssertionStatus.INTERNALERROR, AssertionStatus.WARNING]}
 
     AssertionStatus worstAssertionStatus() { (ag == null) ? AssertionStatus.SUCCESS : ag.getWorstStatus() }
 

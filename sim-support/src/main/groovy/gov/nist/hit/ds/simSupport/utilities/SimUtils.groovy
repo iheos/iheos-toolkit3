@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.simSupport.utilities
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.ActorType
+import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.repoSupport.RepoUtils
 import gov.nist.hit.ds.repository.api.ArtifactId
 import gov.nist.hit.ds.repository.api.Asset
@@ -21,7 +23,8 @@ import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.loader.SeparateSiteLoader
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import gov.nist.hit.ds.utilities.xml.OMFormatter
-import gov.nist.hit.ds.xdsExceptions.ToolkitException
+import gov.nist.hit.ds.xdsException.ToolkitException
+import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 /**
@@ -59,6 +62,39 @@ class SimUtils {
         create(actorTypeName, simId, repoName)
     }
 
+    static SimHandle create(transaction, repository, simId) {
+        TransactionType ttype
+        if (transaction instanceof TransactionType)
+            ttype = transaction
+        else if (transaction instanceof String)
+            ttype = new ActorTransactionTypeFactory().getTransactionType(transaction)
+        else
+            throw new ToolkitRuntimeException("Cannot interpret transaction parameter - type is ${transaction?.class?.name}")
+
+        Repository repo
+        if (repository instanceof Repository)
+            repo = repository
+        else if (repository instanceof String)
+            repo = RepoUtils.getRepository(repository)
+        else
+            throw new ToolkitRuntimeException("Cannot interpret repository parameter - type is ${repository?.class?.name}")
+        SimId id
+        if (simId instanceof SimId)
+            id = simId
+        else if (simId instanceof String)
+            id = new SimId(simId)
+        else
+            throw new ToolkitRuntimeException("Cannot interpret simId parameter - type is ${simId?.class?.name}")
+        return create(ttype, repo, id)
+    }
+
+    static SimHandle create(TransactionType transactionType, Repository repository, SimId simId) {
+        ActorType actorType = transactionType.actorType
+        if (!actorType) throw new ToolkitRuntimeException("Transaction Type ${transactionType.name} is not owned by an actorType")
+        def simHandle = create(actorType.name, simId, repository.id.idString)
+        simHandle.transactionType = transactionType
+        return simHandle
+    }
 
     static SimHandle create(String actorTypeName, SimId simId, String repoName) {
         SimSystemConfig simSystemConfig = new SimSystemConfig()
@@ -141,6 +177,7 @@ class SimUtils {
     }
 
     static Repository buildRepository(String repositoryName) {
+        log.debug("Build repoName ${repositoryName}")
         return RepoUtils.getRepository(repositoryName, new SimpleType('simRepos'))
     }
 

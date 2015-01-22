@@ -145,7 +145,10 @@ class RepoUtils {
         while(iter.hasNextRepository()) {
             Repository r = iter.nextRepository()
             r.setSource(source)
-            if (r.getDisplayName() == repositoryName) return r
+            if (r.id.idString == repositoryName) {
+                log.debug("Found repository ${repositoryName}")
+                return r
+            }
         }
         RepoUtils.log.debug("Creating Repository ${repositoryName}")
         return mkRepository(repositoryName, type)

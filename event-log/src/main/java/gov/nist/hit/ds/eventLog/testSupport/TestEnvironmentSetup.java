@@ -1,9 +1,8 @@
 package gov.nist.hit.ds.eventLog.testSupport;
 
-import gov.nist.hit.ds.repository.api.RepositoryException;
-import gov.nist.hit.ds.repository.simple.Configuration;
-import gov.nist.hit.ds.toolkit.installation.InitializationFailedException;
 import gov.nist.hit.ds.toolkit.installation.Installation;
+import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.api.RepositoryException;
 
 import java.io.File;
 
@@ -12,7 +11,7 @@ public class TestEnvironmentSetup {
 	File InstallationPath;						// Path containing the WAR folder (for External_Cache)
 	File RepositoryRoot; 
 	
-	public TestEnvironmentSetup setup() throws InitializationFailedException {
+	public TestEnvironmentSetup setup() {
 		//
 		// Assets stored in temporary repositories will be cleaned up after test run
 		// 
@@ -24,7 +23,7 @@ public class TestEnvironmentSetup {
 
 		File externalCache = new File(InstallationPath, "external_cache");
 
-		Installation.installation().setExternalCache(externalCache); // Prefix only if externalCache is not expected to be absolute path, which in this case the EC_Dir is relative.
+        Installation.installation().setExternalCache(externalCache); // Prefix only if externalCache is not expected to be absolute path, which in this case the EC_Dir is relative.
 
 		setRepositoriesPath(new File(externalCache, "/repositories"));
 		setRepositoryRoot(RepositoriesPath);

@@ -37,6 +37,11 @@ public class EbSchemaValidation {
                 schemaLocation = "urn:ihe:iti:xds-b:2007 " + localSchema + "/v3/XDS.b_DocumentRepository.xsd " +
                         "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0 " + localSchema + "/v3/rs.xsd";
                 break;
+            case MetadataTypes.METADATA_TYPE_PRb_WIRE:
+                schemaLocation = "urn:ihe:iti:xds-b:2007 " + localSchema + "/v3/XDS.b_DocumentRepositoryWireFormat.xsd " +
+                        "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0 " + localSchema + "/v3/rs.xsd" +
+                " http://www.w3.org/2004/08/xop/include " + localSchema + "/v3/xop.xsd";
+                break;
             default:
                 throw new XdsInternalException("SchemaValidation: invalid metadata type = " + metadataType);
         }

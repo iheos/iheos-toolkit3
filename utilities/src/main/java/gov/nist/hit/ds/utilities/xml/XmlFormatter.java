@@ -134,9 +134,11 @@ public class XmlFormatter {
         }
         return true;
     }
+
+    static boolean isQuote(char a) { return a == '"' || a == '\''; }
     
     void hyperlinkUuid() {
-        if (in.charAt(currentPos+45) != '"')
+        if (!isQuote(in.charAt(currentPos+45)))
             return;  // not valid uuid
         String uuid = in.substring(currentPos, currentPos+44); // uuid is 45 chars
         buf.append("<a href=\"" + uriPrefix + uuid + "\">" + uuid + "</a>");
@@ -159,6 +161,8 @@ public class XmlFormatter {
     void next() {
         currentPos++;
     }
+
+    static final String quotes = "'\"";
     
     int findNext(int startAt, char ch) {
         for (int i=startAt; cvalid(i); i++) {
@@ -167,11 +171,23 @@ public class XmlFormatter {
         }
         return -1;
     }
-    
+
+    int findNext(int startAt, String choices) {
+        for (int i=startAt; cvalid(i); i++) {
+            if (choices.indexOf(c(i)) != -1)
+                return i;
+        }
+        return -1;
+    }
+
     int findNext(char ch) {
         return findNext(currentPos, ch);
     }
-    
+
+    int findNext(String choices) {
+        return findNext(currentPos, choices);
+    }
+
     int findPrev(int startAt, char ch) {
         for (int i=startAt; cvalid(i); i--) {
             if (c(i) == ch)
@@ -179,11 +195,23 @@ public class XmlFormatter {
         }
         return -1;
     }
-    
+
+    int findPrev(int startAt, String choices) {
+        for (int i=startAt; cvalid(i); i--) {
+            if (choices.indexOf(c(i)) != -1)
+                return i;
+        }
+        return -1;
+    }
+
     int findPrev(char ch) {
         return findPrev(currentPos, ch);
     }
-    
+
+    int findPrev(String choices) {
+        return findPrev(currentPos, choices);
+    }
+
     int parmStart(int eq) {
         int i = eq;
         // pass spaces
@@ -202,11 +230,11 @@ public class XmlFormatter {
     int parmEnd(int eq) {
         int i = eq;
         // pass spaces
-        while (cvalid(i) && c(i) != '"') i++;
+        while (cvalid(i) && !isQuote(c(i))) i++;
         // pass "
         i++;
         // find end of quote
-        while (cvalid(i) && c(i) != '"') i++;
+        while (cvalid(i) && !isQuote(c(i))) i++;
         return i;
     }
     
@@ -259,15 +287,15 @@ public class XmlFormatter {
     }
     
     void handleUri() {
-        int start = findNext('"');
-        int end = findNext(start+1,'"');
+        int start = findNext(quotes);
+        int end = findNext(start+1,quotes);
         start++;
         String uri = in.substring(start,end);
         if (!in.substring(start, start+9).equals("urn:uuid:"))
             return;
         diagln("uri is " + uri);
         char c;
-        while ((c=co(0))!='"') {
+        while (!isQuote(c=co(0))) {
             out(c);
             next();
         }
@@ -275,7 +303,7 @@ public class XmlFormatter {
         next();
         
         buf.append("<a target=\"mainFrame\" href=\"" + uriPrefix + uri +"\">");
-        while ((c=co(0))!='"') {
+        while (!isQuote(c=co(0))) {
             out(c);
             next();
         }
@@ -406,13 +434,13 @@ public class XmlFormatter {
 	    }
 
 	    isClosed = isClosed(b, i);
-	    inString = (c == '"') ? false : true;
+	    inString = !isQuote(c);
 
 	    i++;
 	    c = b.charAt(i);
 	    if (c == '<') inElement = true;
 	    else if (c == '>') inElement = false;
-	    else if (c == '"')	inString = (inString) ? false : true;
+	    else if (isQuote(c))	inString = !inString;
 	}
 	/*	for (int i=0; i<b.length(); i++ ) {
 	    if (b.charAt(i) == '>' && b.charAt(i+1) == ' ' && b.charAt(i+2) == '<') {

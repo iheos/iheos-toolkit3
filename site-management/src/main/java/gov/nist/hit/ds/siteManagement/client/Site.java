@@ -1,10 +1,8 @@
 package gov.nist.hit.ds.siteManagement.client;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
@@ -16,7 +14,7 @@ import java.util.Set;
 // Transaction names are listed in TransactionCollection.java
 
 
-public class Site  implements IsSerializable, Serializable {
+public class Site  implements  Serializable {
     private static final long serialVersionUID = 1L;
     private String name = null;
     TransactionCollection transactions = new TransactionCollection(false);
@@ -123,7 +121,7 @@ public class Site  implements IsSerializable, Serializable {
     // Used for testing
     public void addTransaction(String transactionName, String endpoint, boolean isSecure, boolean isAsync) {
         TransactionType ttype = new ActorTransactionTypeFactory().getTransactionType(transactionName);
-        addTransaction(new TransactionBean(ttype, RepositoryType.NONE, endpoint, isSecure, isAsync));
+        addTransaction(new TransactionBean(ttype, TransactionBean.RepositoryType.NONE, endpoint, isSecure, isAsync));
     }
 
     public void addTransaction(TransactionBean transbean) {
@@ -149,7 +147,7 @@ public class Site  implements IsSerializable, Serializable {
      */
     public TransactionBean getRepositoryBean(boolean isSecure) {
         for (TransactionBean b : repositories.transactions) {
-            if (b.repositoryType == RepositoryType.REPOSITORY && b.isSecure == isSecure)
+            if (b.repositoryType == TransactionBean.RepositoryType.REPOSITORY && b.isSecure == isSecure)
                 return b;
         }
         return null;
@@ -160,7 +158,7 @@ public class Site  implements IsSerializable, Serializable {
     }
 
     // endpoint is for retrieve
-    public void addRepository(String repositoryUniqueId, RepositoryType repositoryType, String endpoint, boolean isSecure, boolean isAsync) {
+    public void addRepository(String repositoryUniqueId, TransactionBean.RepositoryType repositoryType, String endpoint, boolean isSecure, boolean isAsync) {
         TransactionBean bean = new TransactionBean(repositoryUniqueId, repositoryType, endpoint, isSecure, isAsync);
         log.debug("Adding repository to Site " + name + ": " + bean);
         addRepository(bean);
@@ -203,7 +201,7 @@ public class Site  implements IsSerializable, Serializable {
         if (name != null && name.equals("allRepositories")) return 0;
         for (TransactionBean b : repositories.transactions) {
             log.debug("TransactionBean: " + b.toString());
-            if (b.repositoryType == RepositoryType.REPOSITORY)
+            if (b.repositoryType == TransactionBean.RepositoryType.REPOSITORY)
                 cnt++;
         }
         return cnt;
@@ -212,7 +210,7 @@ public class Site  implements IsSerializable, Serializable {
     public Set<String> repositoryUniqueIds() {
         Set<String> ids = new HashSet<String>();
         for (TransactionBean b : repositories.transactions) {
-            if (b.repositoryType == RepositoryType.REPOSITORY) {
+            if (b.repositoryType == TransactionBean.RepositoryType.REPOSITORY) {
                 ids.add(b.name); // repositoryUniqueId since this is a retrieve
             }
         }

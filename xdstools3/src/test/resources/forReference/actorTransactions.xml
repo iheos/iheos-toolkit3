@@ -19,7 +19,7 @@
         <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.FeedTransaction"/>
     </transaction>
     <actor name="Document Registry" id="reg">
-        <implClass value="gov.nist.hit.ds.simSupport.factories.DocumentRegistryActorFactory"/>
+        <implClass value="gov.nist.hit.ds.simSupport.factory.DocumentRegistryActorFactory"/>
         <transaction id="rb"/>
     </actor>
 </ActorsTransactions>

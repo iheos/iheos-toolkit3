@@ -33,9 +33,12 @@ public abstract class ValComponentBase implements ValComponent {
     String name;
     String description;
     ValidationEngine validationEngine;
+    String dots = '...'
 
     enum Relation { NONE, PEER, CHILD, SELF}
     Relation parentRelation = Relation.PEER
+    ValComponentBase parent = null
+    int level = 0
 
     ValComponentBase() {}
 
@@ -48,7 +51,12 @@ public abstract class ValComponentBase implements ValComponent {
 
     ValComponentBase asPeer() { parentRelation = Relation.PEER; return this }
     ValComponentBase asChild() { parentRelation = Relation.CHILD; return this }
-    ValComponentBase asSelf() { parentRelation = Relation.SELF; return this }
+    ValComponentBase asSelf(ValComponentBase _parent) {
+        parent = _parent
+        level = parent.level + 1
+        parentRelation = Relation.SELF
+        return this
+    }
 
     void runValidationEngine() throws SoapFaultException, RepositoryException {
         if (!name) name = this.class.simpleName
@@ -106,7 +114,7 @@ public abstract class ValComponentBase implements ValComponent {
 
     ValidationEngine getValidationEngine() { return validationEngine }
 
-    void withNewAssertionGroup() { ag = new AssertionGroup() }
+//    void withNewAssertionGroup() { ag = new AssertionGroup() }
 
     /******************************************
      *
@@ -124,6 +132,12 @@ public abstract class ValComponentBase implements ValComponent {
      * @throws SoapFaultException
      *
      */
+
+    public boolean infoMsg(String msg) throws SoapFaultException {
+        Assertion a = ag.infoMsg(msg);
+        recordAssertion(a);
+        return true;
+    }
 
     public boolean infoFound(boolean found) throws SoapFaultException {
         Assertion a = ag.infoFound(found);
@@ -196,7 +210,14 @@ public abstract class ValComponentBase implements ValComponent {
     }
 
     public Assertion assertHasValue(String value) throws SoapFaultException {
-        Assertion a = ag.assertHasValue(value, currentValidationMethod().required);
+        Assertion a = ag.assertHasValue('', value, currentValidationMethod().required);
+        log.debug("Assertion: ${a}")
+        recordAssertion(a);
+        return a
+    }
+
+    public Assertion assertHasValue(String msg, String value) throws SoapFaultException {
+        Assertion a = ag.assertHasValue(msg, value, currentValidationMethod().required);
         log.debug("Assertion: ${a}")
         recordAssertion(a);
         return a
@@ -209,7 +230,7 @@ public abstract class ValComponentBase implements ValComponent {
         return a
     }
 
-    public Assertion assertTrue(boolean value) throws SoapFaultException {
+    public Assertion assertTrue(value) throws SoapFaultException {
         Assertion a = ag.assertTrue(value, currentValidationMethod().required);
         recordAssertion(a);
         return a
@@ -220,6 +241,8 @@ public abstract class ValComponentBase implements ValComponent {
         recordAssertion(a);
         return a
     }
+
+    public Assertion success() throws SoapFaultException { assertTrue(true, '') }
 
     public Assertion assertMoreThan(int reference, int value) throws SoapFaultException {
         Assertion a = ag.assertMoreThan(reference, value, currentValidationMethod().required);
@@ -233,7 +256,7 @@ public abstract class ValComponentBase implements ValComponent {
         return true;
     }
 
-    public Assertion assertFalse(boolean value) throws SoapFaultException {
+    public Assertion assertFalse(def value) throws SoapFaultException {
         Assertion a = ag.assertTrue(!value, currentValidationMethod().required);
         recordAssertion(a);
         return a
@@ -363,7 +386,11 @@ public abstract class ValComponentBase implements ValComponent {
         if (!validationMethod.required)
             a.setRequiredOptional(RequiredOptional.O)
         a.setId(id);
-        a.setMsg(vf.msg());
+        def msgPrefix = []
+        level.times { msgPrefix << dots}
+        msgPrefix = msgPrefix.join()
+        if (!a.msg)
+            a.msg = msgPrefix + vf.msg();
         a.setReference(vf.ref());
         if (a.getStatus().isError())
             a.setCode(currentValidationMethod().errorCode)
