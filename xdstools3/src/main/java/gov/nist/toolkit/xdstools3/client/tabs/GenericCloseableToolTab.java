@@ -52,10 +52,7 @@ public abstract class GenericCloseableToolTab extends GenericCloseableTab implem
     @Override
     public void setHeader(String s){
         // create the header of the tab
-        headerLabel.setHeight(30);
-        headerLabel.setWidth(200);
-        headerLabel.setContents(s);
-        headerLabel.setStyleName("h3");
+        headerLabel = Formatter.createTabHeader(s);
 
         // add a spacer to separate the title from the help button
         LayoutSpacer spacer = new LayoutSpacer();
