@@ -56,6 +56,7 @@ import gov.nist.hit.ds.repository.ui.client.event.NewTxMessageEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -375,7 +376,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         try {
 
             String parentId = anMap.get("header").getParentId();
-            TxMessageBundle txMessageBundle = findTxMessageBundle(parentId);
+            TxMessageBundle txMessageBundle = null; // findTxMessageBundle(parentId);
             Boolean newBundle = false;
 
             List<TxMessageBundle> rowList = dataProvider.getList();
@@ -398,12 +399,32 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
 
             String anType = anMap.get("header").getType();
-            if (anType!=null)
+            if (anType!=null) {
                 if (anType.indexOf("REQUEST")>-1) {
                     txMessageBundle.getMessageDetailMap().put("request",txRow);
-                } else if (anType.indexOf("RESPONSE")>-1) {
-                    txMessageBundle.getMessageDetailMap().put("response",txRow);
+
+
+                    Map<String,AssetNode> respAnMap = new HashMap<String,AssetNode>();
+                    respAnMap.put("parentLoc",anMap.get("parentLoc"));
+                    respAnMap.put("header",anMap.get("respHeader"));
+                    if (anMap.get("respBody")!=null) {
+                        respAnMap.put("body",anMap.get("respBody"));
+                    }
+
+                    TxDetailRow respTxRow = new TxDetailRow();
+                    respTxRow.setAnMap(respAnMap);
+
+                    txMessageBundle.getMessageDetailMap().put("response",respTxRow);
                 }
+//                else if (anType.indexOf("RESPONSE")>-1) {
+//                    txMessageBundle.getMessageDetailMap().put("response",txRow);
+//                }
+
+
+
+
+
+            }
 
 
             if (newBundle) {

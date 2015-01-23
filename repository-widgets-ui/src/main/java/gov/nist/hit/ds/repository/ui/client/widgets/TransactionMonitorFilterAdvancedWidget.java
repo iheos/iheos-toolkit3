@@ -604,7 +604,11 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
                         } */
 
 
-                        Boolean liveBundleLoaded = getTxMonitorLive().isTxMessageBundleLoaded(parentId);
+                        /////// Dual popTx
+                        getTxFilter().popTx(anMap,null);
+
+                        /////// Single popTx
+                        /* Boolean liveBundleLoaded = getTxMonitorLive().isTxMessageBundleLoaded(parentId);
 
 
                         if (filteredBundleLoaded) { // likely to be a response with a request already in filtered section
@@ -619,7 +623,8 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
                             // case #3
                             logger.info("case #3");
                             getTxFilter().popTx(getTxMonitorLive().getAnMap(parentId,"request"),anMap);
-                        }
+                        } */
+                        /////// single popTx
 
                     } else {
                         logger.info("case: Not hit!");

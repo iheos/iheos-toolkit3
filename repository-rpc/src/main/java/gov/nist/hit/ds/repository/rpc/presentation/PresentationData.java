@@ -585,6 +585,19 @@ public class PresentationData implements IsSerializable, Serializable  {
         String proxyDetail = null;
         String fromIp = null;
         String toIp = null;
+
+        String respTxDetail = null;
+        String respRepId = null;
+        String respAcs = null;
+        String respParentLoc = null; // This is the artifact (header/body) parent location
+        String respHeaderLoc = null;
+        String respBodyLoc = null;
+        String respIoHeaderId = null;
+        String respMsgType = null;
+        String respProxyDetail = null;
+        String respFromIp = null;
+        String respToIp = null;
+
         Map<String,String> jmsConfig = getJmsConfig();
         boolean jmsDebug = Boolean.parseBoolean(jmsConfig.get("jmsDebug"));
 
@@ -613,19 +626,32 @@ public class PresentationData implements IsSerializable, Serializable  {
             Message message = consumer.receive(); // 1000*30 Timeout in milliseconds, some value is required because the console control will not return when the process exits in dev mode.
 
             if (message instanceof MapMessage) {
-                txDetail = (String)((MapMessage)message).getObject("txDetail");
+                txDetail = (String)((MapMessage)message).getObject("REQUEST_txDetail");
 
-                repId = (String)((MapMessage)message).getObject("repId");
-                acs = (String)((MapMessage)message).getObject("acs");
-                parentLoc = (String)((MapMessage)message).getObject("parentLoc"); /* relative propFilePath, ex. of Request */
-                headerLoc = (String)((MapMessage)message).getObject("headerLoc");
-                bodyLoc = (String)((MapMessage)message).getObject("bodyLoc");
-                ioHeaderId = (String)((MapMessage)message).getObject("ioHeaderId");
-                msgType = (String)((MapMessage)message).getObject("msgType");
-                proxyDetail = (String)((MapMessage)message).getObject("proxyDetail");
-                fromIp = (String)((MapMessage)message).getObject("messageFromIpAddress");
-                toIp = (String)((MapMessage)message).getObject("forwardedToIpAddress");
+                repId = (String)((MapMessage)message).getObject("REQUEST_repId");
+                acs = (String)((MapMessage)message).getObject("REQUEST_acs");
+                parentLoc = (String)((MapMessage)message).getObject("REQUEST_parentLoc"); /* relative propFilePath, ex. of Request */
+                headerLoc = (String)((MapMessage)message).getObject("REQUEST_headerLoc");
+                bodyLoc = (String)((MapMessage)message).getObject("REQUEST_bodyLoc");
+                ioHeaderId = (String)((MapMessage)message).getObject("REQUEST_ioHeaderId");
+                msgType = (String)((MapMessage)message).getObject("REQUEST_msgType");
+                proxyDetail = (String)((MapMessage)message).getObject("REQUEST_proxyDetail");
+                fromIp = (String)((MapMessage)message).getObject("REQUEST_messageFromIpAddress");
+                toIp = (String)((MapMessage)message).getObject("REQUEST_forwardedToIpAddress");
 
+
+                respTxDetail = (String)((MapMessage)message).getObject("RESPONSE_txDetail");
+
+                respRepId = (String)((MapMessage)message).getObject("RESPONSE_repId");
+                respAcs = (String)((MapMessage)message).getObject("RESPONSE_acs");
+                respParentLoc = (String)((MapMessage)message).getObject("RESPONSE_parentLoc"); /* relative propFilePath, ex. of Request */
+                respHeaderLoc = (String)((MapMessage)message).getObject("RESPONSE_headerLoc");
+                respBodyLoc = (String)((MapMessage)message).getObject("RESPONSE_bodyLoc");
+                respIoHeaderId = (String)((MapMessage)message).getObject("RESPONSE_ioHeaderId");
+                respMsgType = (String)((MapMessage)message).getObject("RESPONSE_msgType");
+                respProxyDetail = (String)((MapMessage)message).getObject("RESPONSE_proxyDetail");
+                respFromIp = (String)((MapMessage)message).getObject("RESPONSE_messageFromIpAddress");
+                respToIp = (String)((MapMessage)message).getObject("RESPONSE_forwardedToIpAddress");
             } else {
                 // Print error message if Message was not recognized
                 logger.finest("JMS Message type not known or Possible timeout ");
@@ -707,12 +733,52 @@ public class PresentationData implements IsSerializable, Serializable  {
                         result.put("body",bodyMsg);
                     }
 
-                    if (filterLocation!=null && !"".equals(filterLocation)) {
-                        logger.fine("backend filtering using: " + filterLocation);
-                        filterMessage(filterLocation, parentLoc, headerMsg);
-                    }
+//                    if (filterLocation!=null && !"".equals(filterLocation)) {
+//                        logger.fine("backend filtering using: " + filterLocation);
+//                        filterMessage(filterLocation, parentLoc, headerMsg);
+//                    }
 
                     result.put("header",headerMsg);
+
+
+                    // Response
+
+                    AssetNode respParentHdr = new AssetNode();
+                    respParentHdr.setRelativePath(parentLoc);
+                    result.put("respParentLoc",parentHdr); // Make same as request
+
+                    AssetNode respHeaderMsg = new AssetNode();
+                    respHeaderMsg.setParentId(ioHeaderId); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
+                    respHeaderMsg.setType("raw_" + respMsgType);
+                    respHeaderMsg.setRepId(repId);
+//                    logger.info("*** setting repos src:" + acs);
+                    respHeaderMsg.setReposSrc(acs);
+                    respHeaderMsg.setRelativePath(respHeaderLoc );
+                    respHeaderMsg.setCsv(ContentHelper.processCsvContent(respTxDetail));
+                    //headerMsg.setProps(proxyDetail);
+                    respHeaderMsg.getExtendedProps().put("proxyDetail",respTxDetail );
+                    respHeaderMsg.getExtendedProps().put("fromIp",respFromIp );
+                    respHeaderMsg.getExtendedProps().put("toIp",respToIp );
+                    respHeaderMsg.getExtendedProps().put("type",respMsgType );
+
+
+                    if (respBodyLoc !=null) {
+                        AssetNode respBodyMsg = new AssetNode();
+                        respBodyMsg.setParentId(respIoHeaderId );
+                        respBodyMsg.setType("raw_"+respMsgType );
+                        respBodyMsg.setRepId(repId);
+                        respBodyMsg.setReposSrc(acs);
+                        respBodyMsg.setRelativePath(respBodyLoc );
+                        result.put("respBody",respBodyMsg);
+                    }
+
+//                    if (filterLocation!=null && !"".equals(filterLocation)) {
+//                        logger.fine("backend filtering using: " + filterLocation);
+//                        filterMessage(filterLocation, parentLoc, headerMsg);
+//                    }
+
+                    result.put("respHeader",respHeaderMsg);
+
                 }
 
                 return result;
