@@ -1575,35 +1575,38 @@ public class LogBrowserWidget extends Composite {
                             for (AssetNode message : messages) {
 
 
-                                anMap.put("parentLoc",message); //
+//                                anMap.put("parentLoc",message); //
 
                                 for (AssetNode artifact : message.getChildren()) {
-                                    if (artifact.getType()!=null) {
 
+                                     String msgTypeStr = artifact.getExtendedProps().get("type");
 
                                       if (artifact.getType().endsWith("HdrType")) {
 
-                                          StringBuffer buf = new StringBuffer();
-                                          // TODO: Refactor to allow common reference
-                                           final String[][] columns = {{"","Timestamp","Status","Artifact","Message From","Proxy","Forwarded To","Path","ContentType","Method","Length","Response Time"}};
+                                          artifact.setParentId(ioMessage.getAssetId()); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
+                                          artifact.setType("raw_" + msgTypeStr);
 
+                                          String key = null;
+                                          if ("REQUEST".equals(msgTypeStr)) {
+                                              key = "header";
+                                          } else {
+                                              key = "respHeader";
+                                          }
+                                          anMap.put(key,artifact);
 
-
-
-                                          artifact.setCsv(columns);
-                                          artifact.getExtendedProps().put("proxyDetail","");
-                                          artifact.getExtendedProps().put("fromIp","");
-                                          artifact.getExtendedProps().put("toIp","");
-                                          artifact.getExtendedProps().put("type",artifact.getType());
-                                          artifact.setParentId(ioMessage.getAssetId()); // indirect reference
-                                          artifact.setType("raw_" + artifact.getType());
-
-                                          anMap.put("header",artifact);
                                       } else if (artifact.getType().endsWith("BodyType")) {
-                                          artifact.setType("raw_" + artifact.getType());
-                                          anMap.put("body",artifact);
+                                          artifact.setParentId(ioMessage.getAssetId()); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
+                                          artifact.setType("raw_" + msgTypeStr);
+
+                                          String key = null;
+                                          if ("REQUEST".equals(msgTypeStr)) {
+                                              key = "body";
+                                          } else {
+                                              key = "respBody";
+                                          }
+                                          anMap.put(key,artifact);
                                       }
-                                    }
+
 
                                 }
 

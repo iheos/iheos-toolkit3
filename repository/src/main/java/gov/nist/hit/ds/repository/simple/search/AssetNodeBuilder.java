@@ -567,6 +567,23 @@ public class AssetNodeBuilder {
 					child.setRelativePath(a.getPropFileRelativePart());
 				}
 				child.setContentAvailable(a.hasContent());
+
+                // TODO use direct relationship later, rather than copying values to header
+                if (child.getType()!=null) {
+
+                    if (child.getType().endsWith("HdrType")) {
+                        child.setCsv(ContentHelper.processCsvContent(a.getProperty("txDetailCsv")));
+
+                        child.getExtendedProps().put("proxyDetail",a.getProperty("proxyDetail"));
+                        child.getExtendedProps().put("fromIp",a.getProperty("fromIp"));
+                        child.getExtendedProps().put("toIp",a.getProperty("toIp"));
+                        child.getExtendedProps().put("type",a.getProperty("msgType"));
+                    } else if (child.getType().endsWith("BodyType")) {
+                        child.getExtendedProps().put("type",a.getProperty("msgType"));
+                    }
+
+                }
+
 				parent.addChild(child);
 				getChildren(repos,child);
 			}
