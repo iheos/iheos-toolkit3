@@ -24,6 +24,7 @@
         <module>../http-soap</module>
         <module>../sim-servlet</module>
         <module>../ds-sims</module>
+        <module>../eb-metadata</module>
     </modules>
 
 </project>

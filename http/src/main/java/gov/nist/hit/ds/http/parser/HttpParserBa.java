@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.http.parser;
 
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
@@ -16,7 +15,7 @@ public class HttpParserBa {
 	int from;
 	int to = 0;
 	boolean parsed = false;
-	IAssertionGroup er = null;
+//	IAssertionGroup er = null;
 	String charset = null;
 	HttpMessageBa message = new HttpMessageBa();  // Holds the parsed message
 	MultipartParserBa multiparser;
@@ -68,9 +67,9 @@ public class HttpParserBa {
 		return message.multipart;
 	} 
 
-	public void setErrorRecorder(IAssertionGroup er) {
-		this.er = er;
-	}
+//	public void setErrorRecorder(IAssertionGroup er) {
+//		this.er = er;
+//	}
 
 	public HttpParserBa() {
 
@@ -85,10 +84,10 @@ public class HttpParserBa {
 		init(request);
 	}
 
-	public HttpParserBa(HttpServletRequest request, IAssertionGroup er) throws IOException, HttpParseException {
-		this.er = er;
-		init(request);
-	}
+//	public HttpParserBa(HttpServletRequest request, IAssertionGroup er) throws IOException, HttpParseException {
+//		this.er = er;
+//		init(request);
+//	}
 
 	public void init(HttpServletRequest request) throws IOException, HttpParseException {
 		for (@SuppressWarnings("unchecked")
@@ -104,14 +103,14 @@ public class HttpParserBa {
 	}
 
 	public HttpParserBa(byte[] msg) throws HttpParseException, ParseException  {
-		er = null;
+//		er = null;
 		init(msg, null);
 	}
 
-	public HttpParserBa(byte[] msg, IAssertionGroup er) throws HttpParseException, ParseException   {
-		this.er = er;
-		init(msg, null);
-	}
+//	public HttpParserBa(byte[] msg, IAssertionGroup er) throws HttpParseException, ParseException   {
+////		this.er = er;
+//		init(msg, null);
+//	}
 
 	public void init(byte[] msg, HttpMessageBa hmessage) throws HttpParseException, ParseException  {
 		input = msg;
@@ -123,7 +122,7 @@ public class HttpParserBa {
 
 	public void tryMultipart() throws HttpParseException {
 		try {
-			multiparser = new MultipartParserBa(this, er, appendixV);
+			multiparser = new MultipartParserBa(this, appendixV);
 			message.multipart = multiparser.message;
 		} catch (ParseException e) {
 			// not a multipart
@@ -238,15 +237,15 @@ public class HttpParserBa {
 		charset = contentTypeHeader.getParam("charset");
 		if (charset == null || charset.equals("")) {
 			charset = "UTF-8";
-			if (er != null) {
-				er.detail(getPartLabel() + "No CharSet found in Content-Type header, assuming " + charset);
-				er.detail(getPartLabel() + "Content-Type header is " + contentTypeString);
-			}
+//			if (er != null) {
+//				er.detail(getPartLabel() + "No CharSet found in Content-Type header, assuming " + charset);
+//				er.detail(getPartLabel() + "Content-Type header is " + contentTypeString);
+//			}
 		} else {
-			if (er != null) {
-				er.detail(getPartLabel() + "CharSet is " + charset);
-				er.detail(getPartLabel() + "Content-Type header is " + contentTypeString);
-			}
+//			if (er != null) {
+//				er.detail(getPartLabel() + "CharSet is " + charset);
+//				er.detail(getPartLabel() + "Content-Type header is " + contentTypeString);
+//			}
 		}
 
 	}

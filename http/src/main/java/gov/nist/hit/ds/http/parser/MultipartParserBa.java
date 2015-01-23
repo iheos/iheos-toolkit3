@@ -1,8 +1,5 @@
 package gov.nist.hit.ds.http.parser;
 
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 
 import java.util.List;
@@ -10,7 +7,7 @@ import java.util.List;
 public class MultipartParserBa {
 		HttpParserBa hp;
 		HttpHeader contentTypeHeader;
-		IAssertionGroup er = null;
+//		IAssertionGroup er = null;
 		boolean appendixV = true;
 		MultipartMessageBa message = new MultipartMessageBa();
 
@@ -19,9 +16,9 @@ public class MultipartParserBa {
 			parse();
 		}
 
-		public MultipartParserBa(HttpParserBa hp, IAssertionGroup er, boolean appendixV) throws ParseException, HttpHeaderParseException, HttpParseException {
+		public MultipartParserBa(HttpParserBa hp, boolean appendixV) throws ParseException, HttpHeaderParseException, HttpParseException {
 			this.hp = hp;
-			this.er = er;
+//			this.er = er;
 			this.appendixV = appendixV;
 			parse();
 		}
@@ -123,8 +120,8 @@ public class MultipartParserBa {
 				throw new ParseException("Not a Multipart");
 			message.boundary = contentTypeHeader.getParam("boundary");
 			
-			if (er != null)
-				er.detail("boundary string = " + message.boundary);
+//			if (er != null)
+//				er.detail("boundary string = " + message.boundary);
 			
 			if (message.boundary == null || message.boundary.equals(""))
 				throw new ParseException("No boundary");
@@ -136,8 +133,8 @@ public class MultipartParserBa {
 			while(true) {
 				from = indexOf(body, pboundary.getBytes(), to);
 				if (from == -1) {
-					if (message.parts.size() == 0 && er != null)
-						er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Multipart boundary [" + pboundary + "] not found in message body", "http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html"), this);
+//					if (message.parts.size() == 0 && er != null)
+//						er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Multipart boundary [" + pboundary + "] not found in message body", "http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html"), this);
 					break;
 				}
 				from = afterBoundary(body, from);
@@ -147,59 +144,61 @@ public class MultipartParserBa {
 				if (to == -1)
 					break;
 
-				PartParserBa pp = new PartParserBa(trim(subarray(body, from, to)), er, appendixV);
+				PartParserBa pp = new PartParserBa(trim(subarray(body, from, to)), appendixV);
 				message.parts.add(pp.part);
 			}
 
 			if (message.parts.size() == 0) {
-				if (er != null)
-					er.err(XdsErrorCode.Code.NoCode, new ErrorContext("No Parts found in Multipart", ""), this);
+//				if (er != null)
+//					er.err(XdsErrorCode.Code.NoCode, new ErrorContext("No Parts found in Multipart", ""), this);
 				return;
-			} else
-				if (er != null)
-					er.detail("multipart has " + message.parts.size() + " parts");
+			}
+//            else
+//				if (er != null)
+//					er.detail("multipart has " + message.parts.size() + " parts");
 
 			String contentTypeString = hp.message.getHeader("content-type");
 			HttpHeader contentTypeHeader = new HttpHeader(contentTypeString);
 			message.startPartId = contentTypeHeader.getParam("start");
 			if (message.startPartId == null || message.startPartId.equals("")) {
-				if (er != null)
-					er.detail("No start parameter found on Content-Type header - using first Part");
+//				if (er != null)
+//					er.detail("No start parameter found on Content-Type header - using first Part");
 				PartBa startPart = message.parts.get(0);
 				message.startPartId = startPart.getContentId();
 			} else {
 				if (!PartParser.isWrappedIn(message.startPartId, "<", ">")) {
-					if (er != null)
-						er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Content-Type header has start parameter but it is not wrapped in <   >", "http://www.w3.org/TR/2005/REC-xop10-20050125/  Example 2"), this);
-				} else {
+//					if (er != null)
+//						er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Content-Type header has start parameter but it is not wrapped in <   >", "http://www.w3.org/TR/2005/REC-xop10-20050125/  Example 2"), this);
+				}
+                else {
 					message.startPartId = PartParser.unWrap(message.startPartId);
 				}
 			}
-			if (er != null)
-				er.detail("Start Part identified as [" + message.startPartId + "]");
+//			if (er != null)
+//				er.detail("Start Part identified as [" + message.startPartId + "]");
 
 			if (appendixV) {
 				String contentTypeValue = contentTypeHeader.getValue();
 				if (contentTypeValue == null) contentTypeValue = "";
-				if (er != null)
-					er.detail("ContentType is " + contentTypeValue);
+//				if (er != null)
+//					er.detail("ContentType is " + contentTypeValue);
 				if (!"multipart/related".equals(contentTypeValue.toLowerCase()))
-					if (er != null) {
-						er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Content-Type header must have value " + "multipart/related" + " - found instead " + contentTypeValue, "http://www.w3.org/TR/soap12-mtom - Section 3.2"), this);
-					} else {
+//					if (er != null) {
+//						er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Content-Type header must have value " + "multipart/related" + " - found instead " + contentTypeValue, "http://www.w3.org/TR/soap12-mtom - Section 3.2"), this);
+//					} else {
 						throw new HttpParseException("Content-Type header must have value " + "multipart/related" + " - found instead " + contentTypeValue);
-					}
+//					}
 				String type = contentTypeHeader.getParam("type");
-				if (er != null)
-					er.detail("ContentType type param is " + type);
+//				if (er != null)
+//					er.detail("ContentType type param is " + type);
 				if (type == null) type = "";
 				if (!"application/xop+xml".equals(type.toLowerCase()))
-					if (er != null) {
-						er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Content-Type header must have type parameter equal to application/xop+xml - found instead " + type + ". Full content-type header was " + contentTypeString, "http://www.w3.org/TR/soap12-mtom - Section 3.2"), this);
-					} else {
+//					if (er != null) {
+//						er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Content-Type header must have type parameter equal to application/xop+xml - found instead " + type + ". Full content-type header was " + contentTypeString, "http://www.w3.org/TR/soap12-mtom - Section 3.2"), this);
+//					} else {
 						throw new HttpParseException("Content-Type header must have type parameter equal to application/xop+xml - found instead " + type + ". Full content-type header was " + contentTypeString);
 					}
-			}
+//			}
 
 		}
 

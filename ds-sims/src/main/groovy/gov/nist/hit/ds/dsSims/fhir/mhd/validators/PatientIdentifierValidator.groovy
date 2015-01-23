@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.fhir.mhd.validators
 
-import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.OidValidator
+import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.OidValidator
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
@@ -10,7 +10,7 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
  */
 class PatientIdentifierValidator extends ValComponentBase {
     def identifier
-    def simHandle
+    SimHandle simHandle
 
     PatientIdentifierValidator(SimHandle _simHandle, _identifier) {
         super(_simHandle.event)
@@ -29,7 +29,7 @@ class PatientIdentifierValidator extends ValComponentBase {
         def text = identifier.system.@value.text()
         assertStartsWith(text, 'urn:oid:')
         if (text.startsWith('urn:oid:'))
-            new OidValidator(simHandle, text.substring(8)).asSelf().run()
+            new OidValidator(simHandle, text.substring(8)).asSelf(this).run()
     }
 
     @Validation(id='fhirpatient040', msg='Patient identifier has value', ref='')

@@ -23,6 +23,7 @@
             <id>gwt-maven</id>
             <url>http://gwt-maven.googlecode.com/svn/trunk/mavenrepo/</url>
         </repository>
+<!--
         <repository>
             <id>internal-nist-repo-releases</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
@@ -35,6 +36,7 @@
             <id>internal-nist-repo-snapshots</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
         </repository>
+-->
     </repositories>
 
     <distributionManagement>

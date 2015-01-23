@@ -31,25 +31,4 @@ class EventTest extends Specification {
         event.artifacts.artifactMap[name] == value
     }
 
-//    def 'Assertion'() {
-//        setup:
-//        def event = new EventFactory().buildEvent(null)
-//        event.addPeerResults('name')
-//
-//        when:
-//        def assertion = new Assertion()
-//        assertion.with {
-//            found = 'dog'
-//            expected = 'cat'
-//            msg = 'here kitty'
-//            code = 'decode ring'
-//            location = 'home'
-//            requiredOptional = RequiredOptional.R
-//        }
-//        event.assertionGroup.addAssertion(assertion)
-//
-//        then:
-//        event.assertionGroup.assertions[0] == assertion
-//        event.assertionGroup.assertions.size() == 1
-//    }
 }

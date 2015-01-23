@@ -1,8 +1,6 @@
 package gov.nist.hit.ds.dsSims.eb.schema
 
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.dsSims.eb.schema.EbSchemaValidator
-import gov.nist.hit.ds.dsSims.eb.schema.MetadataTypes
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId

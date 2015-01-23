@@ -60,6 +60,6 @@ class PatientValidator extends ValComponentBase {
 
     @Validation(id='patient050', msg='Verify patient identifier attributes', ref='')
     def patient050() {
-        patient.identifier.each { new PatientIdentifierValidator(simHandle, it).asSelf().run() }
+        patient.identifier.each { new PatientIdentifierValidator(simHandle, it).asSelf(this).run() }
     }
 }

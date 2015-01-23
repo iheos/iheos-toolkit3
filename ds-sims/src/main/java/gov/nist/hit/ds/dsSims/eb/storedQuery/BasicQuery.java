@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.dsSims.eb.storedQuery;
 
-import gov.nist.hit.ds.dsSims.eb.metadata.Metadata;
+import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.xdsExceptions.MetadataException;
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;

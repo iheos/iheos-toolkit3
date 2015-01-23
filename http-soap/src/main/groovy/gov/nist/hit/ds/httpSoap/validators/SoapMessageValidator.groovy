@@ -6,6 +6,7 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.utilities.xml.Parse
+import gov.nist.hit.ds.utilities.xml.XmlUtil
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 import org.apache.axiom.om.OMNamespace
@@ -74,6 +75,15 @@ public class SoapMessageValidator extends ValComponentBase {
     @Fault(code=FaultCode.Sender)
     @Validation(id="Soap050", msg="Header must be present and be first child of Envelope", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")
     public void verifySOAPHeaderElement() throws SoapFaultException { assertEquals('Header', header?.getLocalName()) }
+
+    @Fault(code=FaultCode.Sender)
+    @Validation(id="Soap055", msg="SOAP Action", ref="")
+    public void Soap055() throws SoapFaultException {
+        if (!header) return
+        OMElement actionEle = XmlUtil.firstChildWithLocalName(header, 'Action')
+        if (!actionEle) return
+        infoFound(actionEle.getText())
+    }
 
     @Fault(code=FaultCode.Sender)
     @Validation(id="Soap060", msg="Body must be present, must be second child of Envelope", ref="http://www.w3.org/TR/2007/REC-soap12-part1-20070427/#soapenv")

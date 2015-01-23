@@ -159,7 +159,7 @@ public class TransactionBean implements IsSerializable, Serializable {
         }
 
 		// displayName can be trans displayName or repository uid
-		transType = actorType.find("retrieve");
+		transType = actorType.findSimple("retrieve");
 		this.repositoryType = repositoryType;
 		this.endpoint = endpoint;
 		this.isSecure = isSecure;

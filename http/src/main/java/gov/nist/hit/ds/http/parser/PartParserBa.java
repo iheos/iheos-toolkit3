@@ -1,20 +1,17 @@
 package gov.nist.hit.ds.http.parser;
 
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext;
-import gov.nist.hit.ds.eventLog.errorRecording.IAssertionGroup;
-import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 
 public class PartParserBa extends HttpParserBa {
-	IAssertionGroup er = null;
+//	IAssertionGroup er = null;
 	PartBa part = new PartBa();
 	
-	public PartParserBa(byte[] msg) throws HttpParseException, HttpHeaderParseException, ParseException {
-		init(msg, part);
-		initPart();
-	}
+//	public PartParserBa(byte[] msg) throws HttpParseException, HttpHeaderParseException, ParseException {
+//		init(msg, part);
+//		initPart();
+//	}
 	
-	public PartParserBa(byte[] msg, IAssertionGroup er, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException {
+	public PartParserBa(byte[] msg, boolean appendixV) throws HttpParseException, HttpHeaderParseException, ParseException {
 		this.appendixV = appendixV;
 		init(msg, part);
 		initPart();
@@ -32,9 +29,9 @@ public class PartParserBa extends HttpParserBa {
 				throw new HttpParseException("Part has no Content-ID header");
 			part.contentID = part.contentID.trim();
 			if (!isWrappedIn(part.contentID, "<",">")) {
-				if (er != null)
-					er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Part Content-ID header value must be wrapped in <   >: Content-ID is " + part.contentID, "http://www.w3.org/TR/2005/REC-xop10-20050125/  Example 2"), this);
-				else
+//				if (er != null)
+//					er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Part Content-ID header value must be wrapped in <   >: Content-ID is " + part.contentID, "http://www.w3.org/TR/2005/REC-xop10-20050125/  Example 2"), this);
+//				else
 					throw new HttpParseException("Part Content-ID header value must be wrapped in <   >: Content-ID is " + part.contentID);
 			} else {
 				part.contentID = unWrap(part.contentID);

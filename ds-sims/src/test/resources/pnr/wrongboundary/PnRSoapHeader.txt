@@ -1,0 +1,5 @@
+POST /axis2/services/xdsrepositoryb HTTP/1.1
+Content-Type: multipart/related; boundary=urn_uuid_AFBE87CB65FD88AC4B1220879854348; type="application/xop+xml"; start="0.urn:uuid:806D8FD2D542EDCC2C1199332890719@apache.org"; start-info="application/soap+xml"; action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"
+User-Agent: Axis2
+Host: localhost:5000
+Transfer-Encoding: chunked

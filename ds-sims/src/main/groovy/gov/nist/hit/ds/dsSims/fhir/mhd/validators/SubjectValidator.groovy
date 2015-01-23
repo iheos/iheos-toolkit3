@@ -65,7 +65,7 @@ class SubjectValidator  extends ValComponentBase {
     def mhdsub190() {
         subjectTags().each {
             containedPatients(it).each { patient ->
-                new PatientValidator(simHandle, patient).asSelf().run()
+                new PatientValidator(simHandle, patient).asSelf(this).run()
             }
         }
     }

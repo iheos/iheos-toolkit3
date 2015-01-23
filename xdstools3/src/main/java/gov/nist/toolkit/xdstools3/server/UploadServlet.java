@@ -26,7 +26,8 @@ public class UploadServlet extends HttpServlet {
 
 		HttpParser hp;
 		try {
-			hp = new HttpParser(request, false);
+			hp = new HttpParser();
+                        hp.init(request);
 //			filename = extractFileName(hp.getMultipartParser().getMultipartMessage().asMessage());
 //			if(!(filename.endsWith(".xml") || filename.endsWith(".json"))){
 //				throw new IOException("Invalid file format exception - must be xml or json");

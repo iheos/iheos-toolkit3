@@ -27,7 +27,7 @@
         <module>../site-management</module>
         <module>../tk-apis</module>
         <module>../sim-support</module>
-        <module>../installation</module>
+<!--        <module>../installation</module>  -->
         <module>../tk-initialization</module>
         <module>../tk</module>
         <module>../session</module>

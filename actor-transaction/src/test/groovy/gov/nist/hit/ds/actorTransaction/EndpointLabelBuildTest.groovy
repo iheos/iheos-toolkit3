@@ -51,7 +51,7 @@ public class EndpointLabelBuildTest {
 
 	@Test
 	public void buildTest()  {
-		TransactionType register = actorType.find("rb");
+		TransactionType register = actorType.findSimple("rb");
 		EndpointType label;
 		label = new EndpointType(
 				register,

@@ -1,6 +1,8 @@
 package gov.nist.hit.ds.eventLog.assertion
 
 import gov.nist.hit.ds.repository.api.Asset
+import gov.nist.hit.ds.repository.shared.ValidationLevel
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import groovy.util.logging.Log4j
 import org.apache.log4j.Logger
 /**
@@ -23,8 +25,11 @@ public class AssertionGroup  {
 
     private static Logger logger = Logger.getLogger(AssertionGroup);
     private final static String dashes = "---";
+    ValidationLevel validationLevel = ValidationLevel.ERROR
 
     AssertionGroup() {}
+
+    AssertionGroup(ValidationLevel _validationLevel) { validationLevel = _validationLevel }
 
     def errorAssertionIds() { assertions.findAll { it.failed()}.collect { it.id } }
 
@@ -46,13 +51,26 @@ public class AssertionGroup  {
         log.debug("New Assertion is ${asser} (required=${required})")
         if (required && asser.getStatus().ordinal() > worstStatus.ordinal())
             worstStatus = asser.getStatus();
-        if (!asser.defaultMsg) removeDefaultMsg()
-        log.debug("...adding assertion to ${toString()}")
-//        log.debug("...worstStatus now ${worstStatus}")
-        assertions.add(asser);
-        assertionIds << asser.id
+//        if (isLogable(asser)) {
+            if (!asser.defaultMsg) removeDefaultMsg()
+            log.debug("...adding assertion to ${toString()}")
+            assertions.add(asser);
+            assertionIds << asser.id
+//        }
         if (asser.failed()) log.debug("...Failed (${(required) ? '' : 'not '} required)")
         asser
+    }
+
+    boolean isLogable() {
+        if (validationLevel == ValidationLevel.ERROR) return worstStatus.ordinal() >= AssertionStatus.ERROR.ordinal()
+        if (validationLevel == ValidationLevel.WARNING) return worstStatus.ordinal() >= AssertionStatus.WARNING.ordinal()
+        return true
+    }
+
+    boolean isLogable(Assertion a) {
+        if (validationLevel == ValidationLevel.ERROR) return a.status.ordinal() >= AssertionStatus.ERROR.ordinal()
+        if (validationLevel == ValidationLevel.WARNING) return a.status.ordinal() >= AssertionStatus.WARNING.ordinal()
+        return true
     }
 
     def removeDefaultMsg() {
@@ -133,10 +151,8 @@ public class AssertionGroup  {
     public Assertion fail(String failureMsg, boolean required) {
         Assertion a = new Assertion();
         a.with {
-            expected = ''
-            found = failureMsg
+            msg = failureMsg
             status = AssertionStatus.ERROR
-            //msg = failureMsg
         }
         addAssertion(a, required);
         return a;
@@ -145,20 +161,21 @@ public class AssertionGroup  {
     public Assertion fail(String failureMsg, String _found, boolean required) {
         Assertion a = new Assertion();
         a.with {
-            expected = failureMsg
+            msg = failureMsg
             found = _found
             status = AssertionStatus.ERROR
-            //msg = failureMsg
         }
         addAssertion(a, required);
         return a;
     }
 
+    public Assertion internalError(Throwable t) {
+        return internalError(ExceptionUtil.exception_details(e))
+    }
+
     public Assertion internalError(String failureMsg) {
         Assertion a = new Assertion();
         a.with {
-            expected = ""
-            found = ""
             status = AssertionStatus.INTERNALERROR
             msg = failureMsg
         }
@@ -199,9 +216,10 @@ public class AssertionGroup  {
         return a;
     }
 
-    public Assertion assertHasValue(String value, boolean required) {
+    public Assertion assertHasValue(String _msg, String value, boolean required) {
         Assertion a = new Assertion();
         a.with {
+            msg = _msg
             expected = 'Non-empty string'
             found = value
         }
@@ -221,7 +239,7 @@ public class AssertionGroup  {
         return a;
     }
 
-    public Assertion assertTrue(boolean ok, boolean required) {
+    public Assertion assertTrue(ok, boolean required) {
         Assertion a = new Assertion();
         if (ok) {
             a.expected = dashes
@@ -238,7 +256,7 @@ public class AssertionGroup  {
     public Assertion assertTrue(boolean ok, String found, boolean required) {
         Assertion a = new Assertion();
         if (ok) {
-            a.expected = dashes
+            a.expected = ''
             a.found = found
         } else {
             a.expected = 'True'
@@ -291,11 +309,23 @@ public class AssertionGroup  {
         return a;
     }
 
-    public Assertion msg(String msg) {
+    public Assertion infoMsg(String _msg) {
+        Assertion a = new Assertion();
+        a.with {
+            msg = _msg
+            expected = ''
+            found = ''
+            status = AssertionStatus.INFO
+        }
+        addAssertion(a, false);
+        return a;
+    }
+
+    public Assertion msg(String _msg) {
         Assertion a = new Assertion();
         a.with {
             expected = ''
-            found = msg
+            found = _msg
             status = AssertionStatus.SUCCESS
         }
         addAssertion(a, false);

@@ -1,0 +1,23 @@
+<actor type='docsrc'>
+  <environment name="NA2015"/>
+  <transaction name='prb'>
+    <endpoint value='http://localhost:8080/xdstools3/sim/validation/docrec/prb' />
+    <settings>
+      <boolean name='schemaCheck' value='true' />
+      <boolean name='modelCheck' value='true' />
+      <boolean name='codingCheck' value='true' />
+      <boolean name='soapCheck' value='true' />
+    </settings>
+    <webService value='prb' />
+  </transaction>
+  <transaction name='prb'>
+    <endpoint value='https://localhost:8080/xdstools3/sim/validation/docrec/prb' />
+    <settings>
+      <boolean name='schemaCheck' value='true' />
+      <boolean name='modelCheck' value='true' />
+      <boolean name='codingCheck' value='true' />
+      <boolean name='soapCheck' value='true' />
+    </settings>
+    <webService value='prb_TLS' />
+  </transaction>
+</actor>

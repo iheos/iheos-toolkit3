@@ -7,35 +7,33 @@ import groovy.util.logging.Log4j
  * Created by bill on 4/16/14.
  */
 @Log4j
-@ToString(includeFields=true, includes="shortName, transactionTypes, props")
+@ToString(includeFields=true, includes="shortName, directionalTransactionTypes, props")
 class ActorType /* implements IsSerializable, Serializable */{
     String name
     String shortName
     String actorSimFactoryClassName
-    List<TransactionType> transactionTypes = new ArrayList<TransactionType>()
+    List<DirectionalTransactionType> directionalTransactionTypes = new ArrayList<>()
     Map<String, String> props = new HashMap<String, String>()
 
     public String getName() { return name }
     public String getShortName() { return shortName }
-    public void setTransactionTypes(List<TransactionType> tt) { transactionTypes = tt }
+//    public void setTransactionTypes(List<DirectionalTransactionType> tt) { directionalTransactionTypes = tt }
 
     boolean hasTransaction(TransactionType transactionType) {
-        transactionTypes.find { it == transactionType }
+        directionalTransactionTypes.find { it.transactionType == transactionType }
     }
 
-    String getActorProperty(String key) { return props.get(key) }
+//    String getActorProperty(String key) { return props.get(key) }
     void putActorProperty(String key, String value) { props.put(key, value) }
     boolean containsKey(String key) { return props.containsKey(key) }
 
-    TransactionType find(String transactionTypeName) {
-        transactionTypes.find {
-            it.identifiedBy(transactionTypeName)
+    TransactionType findSimple(String transactionTypeName) { findDirectional(transactionTypeName)?.transactionType }
+
+    DirectionalTransactionType findDirectional(String transactionTypeName) {
+        directionalTransactionTypes.find {
+            it.transactionType.identifiedBy(transactionTypeName)
         }
     }
-
-//    String toString() {
-//        return "ActorType: ${displayName} (${shortName} with ${properties.keySet()})"
-//    }
 
     void check() throws InvalidActorTypeDefinitionException {
         String val;
@@ -50,14 +48,14 @@ class ActorType /* implements IsSerializable, Serializable */{
 //        val = actorSimFactoryClassName;
 //        if (val == null || val.equals(""))
 //            throw new InvalidActorTypeDefinitionException("${typeName}: actorSimFactoryClass not defined");
-        if (transactionTypes.size() == 0)
+        if (directionalTransactionTypes.size() == 0)
             throw new InvalidActorTypeDefinitionException("${typeName}: must define at least one transaction");
     }
 
     List<EndpointType> endpointTypes() {
-        return transactionTypes.collect { ttype ->
-           [ new EndpointType(ttype, TlsType.NOTLS, AsyncType.SYNC) ,
-             new EndpointType(ttype, TlsType.TLS, AsyncType.SYNC) ]
+        return directionalTransactionTypes.collect { ttype ->
+           [ new EndpointType(ttype.transactionType, TlsType.NOTLS, AsyncType.SYNC) ,
+             new EndpointType(ttype.transactionType, TlsType.TLS, AsyncType.SYNC) ]
         }.flatten()
     }
 

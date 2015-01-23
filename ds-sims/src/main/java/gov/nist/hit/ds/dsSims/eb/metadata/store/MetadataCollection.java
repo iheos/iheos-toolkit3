@@ -1,10 +1,10 @@
 package gov.nist.hit.ds.dsSims.eb.metadata.store;
 
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataParser;
+import gov.nist.hit.ds.ebMetadata.Metadata;
+import gov.nist.hit.ds.ebMetadata.MetadataParser;
+import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
-import gov.nist.hit.ds.dsSims.eb.metadata.Metadata;
-import gov.nist.hit.ds.dsSims.eb.metadata.MetadataSupport;
 import gov.nist.hit.ds.utilities.other.UuidAllocator;
 import gov.nist.hit.ds.xdsExceptions.MetadataException;
 import gov.nist.hit.ds.xdsExceptions.MetadataValidationException;
@@ -82,7 +82,7 @@ public class MetadataCollection implements Serializable /*, RegistryValidationIn
 			
 			Ro obj = getObjectById(id);
 			if (obj == null) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "mergeDelta: cannot find object " + id, this, null);
+				er.err(XdsErrorCode.Code.XDSRegistryError, "mergeDelta: cannot findSimple object " + id, this, null);
 				return false;
 			}
 			
