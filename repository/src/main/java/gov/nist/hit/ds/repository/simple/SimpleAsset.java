@@ -895,7 +895,7 @@ public class SimpleAsset implements Asset, Flushable {
      * @throws RepositoryException
      */
 	@Override
-	public File getPropFile(ArtifactId id, PropertyKey propertyKey) throws RepositoryException {
+	public synchronized File getPropFile(ArtifactId id, PropertyKey propertyKey) throws RepositoryException {
 		
 		if (!getSource().getLocation().exists())
 			throw new RepositoryException(RepositoryException.CONFIGURATION_ERROR + " : " +
@@ -916,15 +916,28 @@ public class SimpleAsset implements Asset, Flushable {
             }
 		}
 
+
+
+
+
+        // New file
         String firstPrefName = getDisplayName();
 
+        // Try to use a short suffix based on the Id
+//        String suffix = getId().getIdString();
+//        if (suffix!=null && suffix.indexOf("-")>-1) {
+//            suffix = suffix.substring(suffix.lastIndexOf("-"));
+//
+//            firstPrefName += suffix;
+//        }
+
 		// New file
-        if (getId()!=null && !(getId().getUserFriendlyName()==null)) {
-            String userFriendlyName =  getId().getUserFriendlyName();
-            if (!"".equals(userFriendlyName)) {
-                    firstPrefName = userFriendlyName;
-            }
-        }
+//        if (getId()!=null && !(getId().getUserFriendlyName()==null)) {
+//            String userFriendlyName =  getId().getUserFriendlyName();
+//            if (!"".equals(userFriendlyName)) {
+//                    firstPrefName = userFriendlyName;
+//            }
+//        }
 		
 		String names[] = new String[] {firstPrefName, getDescription()};
 
