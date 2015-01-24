@@ -1,19 +1,19 @@
 package gov.nist.hit.ds.ebDocsrcSim.engine
-
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.AsyncType
 import gov.nist.hit.ds.actorTransaction.TlsType
 import gov.nist.hit.ds.ebDocsrcSim.transactions.AbstractTransaction
+import gov.nist.hit.ds.ebDocsrcSim.transactions.PnrRequest
 import gov.nist.hit.ds.ebDocsrcSim.transactions.ProvideAndRegisterTransaction
 import gov.nist.hit.ds.ebMetadata.MetadataSupport
-import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.toolkit.environment.EnvironmentAccess
+import gov.nist.hit.ds.utilities.xml.Util
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import gov.nist.hit.ds.xdsExceptions.XdsException
 import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 import org.apache.axiom.om.OMElement
-
 /**
  * Created by bmajur on 1/13/15.
  *
@@ -32,8 +32,8 @@ class PnrSend  {
         environmentAccess = _environmentAccess
     }
 
-    PnrSend(SimConfig simConfig, String transactionName, boolean tls, OMElement _metadata_element, Map<String, DocumentHandler> _documents) {
-        metadata_element = _metadata_element
+    PnrSend(SimHandle simHandle, String transactionName, boolean tls, String metadata, Map<String, DocumentHandler> _documents) {
+        metadata_element = Util.parse_xml(metadata)
         documents = _documents
         EndpointValue endpointValue = simConfig.getEndpoint(
                 ActorTransactionTypeFactory.getTransactionType(transactionName),
@@ -41,7 +41,11 @@ class PnrSend  {
                 AsyncType.SYNC)
         if (!endpointValue) throw new ToolkitRuntimeException("Transaction ${transactionName} with TLS ${tls} not configured")
         endpoint = endpointValue.value
-        environmentAccess = simConfig.environmentAccess
+        environmentAccess = simHandle.actorSimConfig.environmentAccess
+    }
+
+    PnrSend(SimHandle simHandle, PnrRequest request) {
+        this(simHandle, request.transactionName, request.tls, request.metadata, request.documents)
     }
 
     // return is [result, logOutput]
