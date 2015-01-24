@@ -22,6 +22,7 @@ import gov.nist.hit.ds.repository.shared.SearchCriteria;
 import gov.nist.hit.ds.repository.shared.SearchTerm;
 import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
 import gov.nist.hit.ds.repository.simple.SimpleId;
@@ -54,6 +55,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -192,7 +194,21 @@ public class PresentationData implements IsSerializable, Serializable  {
      * @return An aggregate list of all indexable property names as specified by the asset domain type files in the {@code types} folder.
      */
 	public static List<String> getIndexablePropertyNames() {
-		List<String> indexProps = new ArrayList<String>(); 
+		List<String> indexProps = new ArrayList<String>();
+
+        // Use cached types
+//        Set<SimpleTypeId> types = Configuration.getRwTypesCache().keySet();
+//        for (SimpleTypeId type : types) {
+//            String index = Configuration.getType(type).getIndex();
+//
+//            String[] indexableProperties = index.split(",");
+//            if (indexableProperties!=null)
+//                for (String s : indexableProperties) {
+//                    indexProps.add(s);
+//                }
+//
+//        }
+
 		for (Access acs : RepositorySource.Access.values()) {
 			try {
 				List<String> srcProps = DbIndexContainer.getIndexableProperties(Configuration.getRepositorySrc(acs));
@@ -208,6 +224,8 @@ public class PresentationData implements IsSerializable, Serializable  {
 				logger.info(e.toString());
 			}
 		}
+
+
 		Collections.sort(indexProps);
 		return indexProps;
 	}
@@ -585,6 +603,8 @@ public class PresentationData implements IsSerializable, Serializable  {
         String proxyDetail = null;
         String fromIp = null;
         String toIp = null;
+        String from = null;
+        String to = null;
 
         String respTxDetail = null;
         String respRepId = null;
@@ -597,6 +617,9 @@ public class PresentationData implements IsSerializable, Serializable  {
         String respProxyDetail = null;
         String respFromIp = null;
         String respToIp = null;
+        String respFrom = null;
+        String respTo = null;
+
 
         Map<String,String> jmsConfig = getJmsConfig();
         boolean jmsDebug = Boolean.parseBoolean(jmsConfig.get("jmsDebug"));
@@ -638,6 +661,9 @@ public class PresentationData implements IsSerializable, Serializable  {
                 proxyDetail = (String)((MapMessage)message).getObject("REQUEST_proxyDetail");
                 fromIp = (String)((MapMessage)message).getObject("REQUEST_messageFromIpAddress");
                 toIp = (String)((MapMessage)message).getObject("REQUEST_forwardedToIpAddress");
+                from = (String)((MapMessage)message).getObject("REQUEST_messageFrom");
+                to = (String)((MapMessage)message).getObject("REQUEST_forwardedTo");
+
 
 
                 respTxDetail = (String)((MapMessage)message).getObject("RESPONSE_txDetail");
@@ -652,6 +678,9 @@ public class PresentationData implements IsSerializable, Serializable  {
                 respProxyDetail = (String)((MapMessage)message).getObject("RESPONSE_proxyDetail");
                 respFromIp = (String)((MapMessage)message).getObject("RESPONSE_messageFromIpAddress");
                 respToIp = (String)((MapMessage)message).getObject("RESPONSE_forwardedToIpAddress");
+                respFrom = (String)((MapMessage)message).getObject("RESPONSE_messageFrom");
+                respTo = (String)((MapMessage)message).getObject("RESPONSE_forwardedTo");
+
             } else {
                 // Print error message if Message was not recognized
                 logger.finest("JMS Message type not known or Possible timeout ");
@@ -720,6 +749,8 @@ public class PresentationData implements IsSerializable, Serializable  {
                     headerMsg.getExtendedProps().put("proxyDetail",proxyDetail);
                     headerMsg.getExtendedProps().put("fromIp",fromIp);
                     headerMsg.getExtendedProps().put("toIp",toIp);
+                    headerMsg.getExtendedProps().put("from",from);
+                    headerMsg.getExtendedProps().put("to",to);
                     headerMsg.getExtendedProps().put("type",msgType);
 
 
@@ -759,6 +790,8 @@ public class PresentationData implements IsSerializable, Serializable  {
                     respHeaderMsg.getExtendedProps().put("proxyDetail",respTxDetail );
                     respHeaderMsg.getExtendedProps().put("fromIp",respFromIp );
                     respHeaderMsg.getExtendedProps().put("toIp",respToIp );
+                    respHeaderMsg.getExtendedProps().put("from",respFrom);
+                    respHeaderMsg.getExtendedProps().put("to",respTo);
                     respHeaderMsg.getExtendedProps().put("type",respMsgType );
 
 

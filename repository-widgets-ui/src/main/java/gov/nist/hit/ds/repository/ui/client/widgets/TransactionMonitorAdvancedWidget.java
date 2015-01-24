@@ -1558,14 +1558,14 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 } else if (COLUMN_HEADER_ROW_MESSAGE_FROM.equals(columns[this.index])) {
 
-                    shb.appendHtmlConstant("<span title='" + headerMsg.getExtendedProps().get("fromIp")  + "'>"); // .getProps()
-                    shb.appendEscaped(o.getCsvData().get(this.index));
+                    shb.appendHtmlConstant("<span title='" + o.getCsvData().get(this.index)  + "'>"); // .getProps()
+                    shb.appendEscaped(headerMsg.getExtendedProps().get("from"));
                     shb.appendHtmlConstant("</span>");
 
                 } else if (COLUMN_HEADER_ROW_FORWARDED_TO.equals(columns[this.index])) {
 
                     shb.appendHtmlConstant("<span title='" + o.getCsvData().get(this.index)  + "'>"); // .getProps()
-                    shb.appendEscaped(headerMsg.getExtendedProps().get("toIp"));
+                    shb.appendEscaped(headerMsg.getExtendedProps().get("to"));
                     shb.appendHtmlConstant("</span>");
 
                 } else if (COLUMN_HEADER_PATH.equals(columns[this.index])) {

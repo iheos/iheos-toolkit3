@@ -577,8 +577,10 @@ public class AssetNodeBuilder {
                         if (a.getProperty("txDetailCsv")!=null) {
                             child.setCsv(ContentHelper.processCsvContent(a.getProperty("txDetailCsv")));
                             child.getExtendedProps().put("proxyDetail",a.getProperty("proxyDetail"));
-                            child.getExtendedProps().put("fromIp",a.getProperty("messageFromIpAddress"));
+                            child.getExtendedProps().put("fromIp", a.getProperty("messageFromIpAddress"));
                             child.getExtendedProps().put("toIp",a.getProperty("forwardedToIpAddress"));
+                            child.getExtendedProps().put("from",a.getProperty("messageFrom"));
+                            child.getExtendedProps().put("to",a.getProperty("forwardedTo"));
                             child.getExtendedProps().put("type",a.getProperty("msgType"));
                         }
                     } else if (child.getType().endsWith("BodyType")) {

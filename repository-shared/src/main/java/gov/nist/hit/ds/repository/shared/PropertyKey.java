@@ -109,13 +109,10 @@ public enum PropertyKey {
             return "hash";
         }
     },
-    /**
-     * This property is used to indicate that a certain repository elects to index new items only. To re-index all contents, either touch the file's lastModifiedTime or add an option in toolkit UI.
-     */
-    INDEX_ONLY_NEW_ITEMS(false) {
+    INDEX_CURRENT_DAY_ITEMS(false) {
         @Override
         public String toString() {
-            return "indexOnlyNewItems";
+            return "indexCurrentDayItems";
         }
     },
     INDEX_SESSION(true) {
