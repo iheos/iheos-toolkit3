@@ -82,6 +82,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
     private Boolean listenerEnabled;
     private Boolean listening;
     private Boolean filterEnabled;
+    private Boolean viewerOnly;
 
     private SplitLayoutPanel southPanel = new SplitLayoutPanel(2);
     private SplitLayoutPanel txMonitorMainSplitPanel = new SplitLayoutPanel(3);
@@ -285,11 +286,12 @@ public class TransactionMonitorAdvancedWidget extends Composite {
      * @param enableListener
      * @param showTxDetail
      */
-    public TransactionMonitorAdvancedWidget(EventBus eventBus, Boolean enableListener, Boolean enableFilter, Boolean showTxDetail)  {
+    public TransactionMonitorAdvancedWidget(EventBus eventBus, Boolean enableListener, Boolean enableFilter, Boolean showTxDetail, Boolean viewerOnly)  {
         setEventBus(eventBus);
         setShowTxDetail(showTxDetail);
         setListenerEnabled(enableListener);
         setFilterEnabled(enableFilter);
+        setViewerOnly(viewerOnly);
 
         requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
         responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
@@ -308,7 +310,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             @Override
             public void onResize(ResizeEvent event) {
 
-                resizeMessageDetailArea();
+                resizeMessageDetailArea(getViewerOnly());
 
             }
         });
@@ -328,13 +330,19 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         return getListening();
     }
 
-    private void resizeMessageDetailArea() {
+    private void resizeMessageDetailArea(Boolean viewerOnly) {
         logger.fine("entering resizeMessageDetailArea");
         try {
             if (txMonitorMainSplitPanel.getParent()!=null) {
 //                logger.info("resizing...");
+
                 long containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
                 long containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
+
+                if (viewerOnly) {
+                    containerWidth =  txMonitorMainSplitPanel.getElement().getClientWidth();
+                    containerHeight = txMonitorMainSplitPanel.getElement().getClientHeight();
+                }
 
                 long messageDetailViewerHeight = getMessageDetailHeight(containerHeight);
                 txMonitorMainSplitPanel.setWidgetSize(southPanel, messageDetailViewerHeight);
@@ -1606,7 +1614,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             } catch (Throwable t) {
 
                 logger.warning("getValue failed: " +t.toString() + " o parentId:" + o.getParentId() + " o messageDetailMap sz:" + o.getMessageDetailMap().size());
-//                t.printStackTrace();
+                t.printStackTrace();
                 shb.appendEscaped(" ");
              }
 
@@ -1647,7 +1655,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
     public void setShowTxDetail(Boolean showTxDetail) {
         this.showTxDetail = showTxDetail;
-        resizeMessageDetailArea();
+        resizeMessageDetailArea(getViewerOnly());
 
     }
     public Boolean getListenerEnabled() {
@@ -1745,5 +1753,13 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
     public void setValidationLevel(ValidationLevel validationLevel) {
         this.validationLevel = validationLevel;
+    }
+
+    public Boolean getViewerOnly() {
+        return viewerOnly;
+    }
+
+    public void setViewerOnly(Boolean viewerOnly) {
+        this.viewerOnly = viewerOnly;
     }
 }

@@ -948,20 +948,38 @@ public class LogBrowserWidget extends Composite {
                                 }
 
                                 public void onSuccess(List<AssetNode> topLevelAssets) {
+
                                     treeHolder.clear();
                                     treeHolder.add(popTreeWidget(topLevelAssets, targetContext, true, contentSetup));
 
-                                    if (targetContext.getTxtContent()!=null) {
-                                        displayAssetContent(targetContext, centerPanel, propsWidget);
-                                    } else {
-                                        reposService.getAssetTxtContent(targetContext, contentSetup);
-                                    }
+
+
+
+
+
+
+                                        if ("event".equals(targetContext.getType())) {
+
+                                            String valType = "validators";
+                                            String id = targetContext.getAssetId();
+                                            String[] displayColumns = new String[]{"ID","STATUS","MSG"};
+                                            showEventMessagesWidget(targetContext.getRepId(), id, valType, displayColumns);
+                                         } else {
+                                            if (targetContext.getTxtContent()!=null) {
+                                                displayAssetContent(targetContext, centerPanel, propsWidget);
+                                            } else {
+                                                reposService.getAssetTxtContent(targetContext, contentSetup);
+                                            }
+                                        }
+
+
 
                                 }
                             });
 
-                        } catch (RepositoryConfigException rce) {
-                            Window.alert(rce.toString());
+                        } catch (Throwable t) {
+                            Window.alert(t.toString());
+                            t.printStackTrace();
                         }
 
                     }
@@ -983,7 +1001,6 @@ public class LogBrowserWidget extends Composite {
         treeHolder.add(new HTML("&nbsp;Loading..."));
         centerPanel.clear();
         closeSummaryTab();
-
 
         String[] compositeKey = getReposCompositeKey();
 
@@ -1403,13 +1420,16 @@ public class LogBrowserWidget extends Composite {
 					}
 
                     // Pre-load, load items for future use in case of Event type
-                    if ("event".equals(an.getType())  || "validators".equals(an.getType())) {
+//                    if (multiContentTabPanel.getWidgetCount() > 1) {
+                        if ("event".equals(an.getType())  || "validators".equals(an.getType())) {
 
-                        if ((assetTreeItem.getChildCount() == 1 && "HASCHILDREN".equals(assetTreeItem.getChild(0).getText())))
-                            popTreeItemDeep(assetTreeItem, false);
-                    }
+                            if ((assetTreeItem.getChildCount() == 1 && "HASCHILDREN".equals(assetTreeItem.getChild(0).getText())))
+                                popTreeItemDeep(assetTreeItem, false);
+                        }
 
-                    if (an.getExtendedProps().get("_offset")==null) {
+//                    }
+
+                    if (contentSetup!=null && an.getExtendedProps().get("_offset")==null) {
                         // Load content on selection
                         reposService.getAssetTxtContent(an, contentSetup);
                     }
@@ -1441,6 +1461,7 @@ public class LogBrowserWidget extends Composite {
 		    	}
 		    	tree.addItem(treeItem);
 		    }
+
 		    
 		    return tree;
 	  }

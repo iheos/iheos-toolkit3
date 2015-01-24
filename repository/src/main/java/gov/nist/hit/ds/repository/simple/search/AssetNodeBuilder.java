@@ -241,9 +241,10 @@ public class AssetNodeBuilder {
 				
 				children.add(child);				
 			}			
-		} catch (RepositoryException e) {
-			logger.warning(e.toString());
-		}
+		} catch (Throwable t) {
+            logger.warning(t.toString());
+            t.printStackTrace();
+        }
 
 		return children;
 		
@@ -385,9 +386,10 @@ public class AssetNodeBuilder {
 					
 				}
 			} 
-		} catch (Exception ex) {
-			logger.warning(ex.toString());
-		}
+		} catch (Throwable t) {
+            logger.warning(t.toString());
+            t.printStackTrace();
+        }
 		return target;
 	}
 
@@ -572,12 +574,13 @@ public class AssetNodeBuilder {
                 if (child.getType()!=null) {
 
                     if (child.getType().endsWith("HdrType")) {
-                        child.setCsv(ContentHelper.processCsvContent(a.getProperty("txDetailCsv")));
-
-                        child.getExtendedProps().put("proxyDetail",a.getProperty("proxyDetail"));
-                        child.getExtendedProps().put("fromIp",a.getProperty("fromIp"));
-                        child.getExtendedProps().put("toIp",a.getProperty("toIp"));
-                        child.getExtendedProps().put("type",a.getProperty("msgType"));
+                        if (a.getProperty("txDetailCsv")!=null) {
+                            child.setCsv(ContentHelper.processCsvContent(a.getProperty("txDetailCsv")));
+                            child.getExtendedProps().put("proxyDetail",a.getProperty("proxyDetail"));
+                            child.getExtendedProps().put("fromIp",a.getProperty("messageFromIpAddress"));
+                            child.getExtendedProps().put("toIp",a.getProperty("forwardedToIpAddress"));
+                            child.getExtendedProps().put("type",a.getProperty("msgType"));
+                        }
                     } else if (child.getType().endsWith("BodyType")) {
                         child.getExtendedProps().put("type",a.getProperty("msgType"));
                     }
@@ -589,8 +592,9 @@ public class AssetNodeBuilder {
 			}
 			
 			
-		} catch (RepositoryException e) {
-			logger.warning(e.toString());
+		} catch (Throwable t) {
+			logger.warning(t.toString());
+            t.printStackTrace();
 		}
 
         return parent;

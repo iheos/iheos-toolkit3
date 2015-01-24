@@ -113,7 +113,7 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
     }
 
     private Widget createFilteredMonitorPanel() {
-        TransactionMonitorAdvancedWidget txMonitorFilter = new TransactionMonitorAdvancedWidget(eventBus,false,false,true);
+        TransactionMonitorAdvancedWidget txMonitorFilter = new TransactionMonitorAdvancedWidget(eventBus,false,false,true,false);
         txMonitorFilter.setAutoShowFirstMessage(true);
         txMonitorFilter.getElement().getStyle()
                 .setProperty("border", "none");
@@ -220,7 +220,12 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
 
         // Add live monitor section
-        setTxMonitorLive(createLiveTxMonitorWidget(viewerOnly));
+        if (viewerOnly) {
+            setTxMonitorLive(createLiveTxMonitorWidget(viewerOnly));
+        } else {
+            setTxMonitorLive(createLiveTxMonitorWidget());
+        }
+
 
         String monitorLabel = "Proxy Monitor";
 
@@ -444,10 +449,18 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
     }
 
+    private TransactionMonitorAdvancedWidget createLiveTxMonitorWidget() {
+        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus, true /*enableListener*/,false /*enable Filter, automatically set when filter is applied*/ , false/*showDetail*/, false);
+        txMonitor.setAutoShowFirstMessage(false);
+        txMonitor.getElement().getStyle()
+                .setProperty("border", "none");
+
+        return txMonitor;
+    }
 
 
     private TransactionMonitorAdvancedWidget createLiveTxMonitorWidget(boolean viewerOnly) {
-        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus, !viewerOnly /*enableListener*/,false /*enable Filter, automatically set when filter is applied*/ , viewerOnly/*showDetail*/);
+        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus, !viewerOnly /*enableListener*/,false /*enable Filter, automatically set when filter is applied*/ , !viewerOnly/*showDetail*/, viewerOnly);
         txMonitor.setAutoShowFirstMessage(false);
         txMonitor.getElement().getStyle()
                 .setProperty("border", "none");
