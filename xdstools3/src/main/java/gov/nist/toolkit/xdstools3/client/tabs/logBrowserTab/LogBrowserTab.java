@@ -109,7 +109,7 @@ public class LogBrowserTab extends GenericCloseableTab {
                 }
             }
 
-            logBrowserWidget.setSize("1000px", "600px");
+            logBrowserWidget.setSize("1170px", "600px");
 
             vStack.addMember(logBrowserWidget);
         } catch (Throwable t) {

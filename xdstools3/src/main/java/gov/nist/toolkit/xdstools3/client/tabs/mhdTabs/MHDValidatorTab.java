@@ -103,7 +103,7 @@ public class MHDValidatorTab extends GenericCloseableToolTab {
         runBtn = new GenericRunButtonNoForm();
 
         // Create Help Link and populates it with text from resources
-        setHelpButton(getHelpPanel(), Resources.INSTANCE.helpContentsSample().getText());
+        setHelpButton(getHelpPanel(), Resources.INSTANCE.getMHDValidatorHelpContents().getText());
 
         // Initial event summary widget parameters
         String id = null;

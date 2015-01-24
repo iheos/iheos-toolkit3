@@ -31,6 +31,7 @@ import gov.nist.toolkit.xdstools3.client.tabs.*;
 import gov.nist.toolkit.xdstools3.client.tabs.MPQTab.MPQTab;
 import gov.nist.toolkit.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
 import gov.nist.toolkit.xdstools3.client.tabs.connectathonTabs.*;
+import gov.nist.toolkit.xdstools3.client.tabs.contactTab.ContactTab;
 import gov.nist.toolkit.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.toolkit.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
 import gov.nist.toolkit.xdstools3.client.tabs.homeTab.HomeTab;
@@ -49,7 +50,7 @@ import java.util.logging.Logger;
 /**
  * Main class of the application which is the Activity for Activity-Places design, the view and a bit of a controller.
  */
-// TabContainer was added for v2-v3 integration purposes, AcceptsOneWidget to avoid an entire MVP architecture (fuse Activity and View in one single class)
+// AcceptsOneWidget was added to avoid creating an entire MVP architecture (fuse Activity and View in one single class)
 public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOneWidget {
     private ToolbarServiceAsync propertiesService = GWT.create(ToolbarService.class);
     private Logger logger= Logger.getLogger(this.getClass().getName());
@@ -328,6 +329,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         else if(tabName.equals(TabNamesManager.getInstance().getHelpTabCode())){
             tab = new HelpTab();
         }
+        else if(tabName.equals(TabNamesManager.getInstance().getContactTabCode())){
+            tab = new ContactTab();
+        }
         else{
             // unknown tab
             topTabSet.selectTab(0); // todo we can create a 404
@@ -441,9 +445,11 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getSubmitRetrieveTabCode()+"'>XDS.b Submit/Retrieve</a></li>" +
                 "</ul>" +
                 "</li>" + */
+                // In order to obtain blue icons for that section, use this online tool: http://fa2png.io/ and color #0000aa (shade of blue).
                 "<div style='float:right;'>" +
-                "<li><a class='right-side-button' href='#'><img class='icon-link' src='images/icons/glyphicons/download-icon.png'/> Download</a></li>" +
-                "<li><a class='right-side-button' href='#TabPlace:"+ TabNamesManager.getInstance().getHelpTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/help-icon.png'/> Help</a></li>" +
+               // "<li><a class='right-side-button' href='#'><img class='icon-link' src='images/icons/glyphicons/16px-blue/glyphicons-download-16px.png'/> Download</a></li>" +
+               // "<li><a class='right-side-button' href='#TabPlace:"+ TabNamesManager.getInstance().getHelpTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/16px-blue/glyphicons-help-16px.png'/> Help</a></li>" +
+                "<li><a class='right-side-button' href='#TabPlace:"+ TabNamesManager.getInstance().getContactTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/16px-blue/glyphicons-11-envelope-16px.png'/> Contact us</a></li>" +
                 "</div>" +
                 "<ul>" +
                 "</div>" +
