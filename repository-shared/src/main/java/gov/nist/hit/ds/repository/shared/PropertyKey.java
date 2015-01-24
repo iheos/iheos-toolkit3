@@ -67,6 +67,12 @@ public enum PropertyKey {
             return "columnWidths";
         }
     },
+    COMPARE_HASH(false) {
+        @Override
+        public String toString() {
+            return "compareHash";
+        }
+    },
     CREATED_DATE(false) {
         @Override
         public String toString() {
