@@ -27,6 +27,7 @@ public class UploadServlet extends HttpServlet {
 		HttpParser hp;
 		try {
 			hp = new HttpParser();
+            hp.appendixV = false;
                         hp.init(request);
 //			filename = extractFileName(hp.getMultipartParser().getMultipartMessage().asMessage());
 //			if(!(filename.endsWith(".xml") || filename.endsWith(".json"))){
