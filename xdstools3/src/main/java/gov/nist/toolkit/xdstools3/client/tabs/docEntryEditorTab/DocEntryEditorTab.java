@@ -12,7 +12,8 @@ public class DocEntryEditorTab extends GenericCloseableTab {
         super(header);
         HTMLPane pane = new HTMLPane();
         pane.setShowEdges(false);
-        pane.setContentsURL("http://hit-dev.nist.gov:12090/docentryeditor/");
+        pane.setContentsURL("http://ihexds.nist.gov:12093/docentryeditor-integ/");
+        //http://hit-dev.nist.gov:12090/docentryeditor-integ/ - this URL has a cert issue
         pane.setContentsType(ContentsType.PAGE);
         this.setPane(pane);
     }

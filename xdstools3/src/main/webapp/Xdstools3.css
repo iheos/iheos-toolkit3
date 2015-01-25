@@ -111,11 +111,17 @@ h2,
 }
 h3,
 .h3 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     color: #021a4c;
-    padding-left:20px;
+    padding-left:15px;
     padding-top:15px;
+    padding-bottom:30px;
+}
+.h3-nopadding {
+    font-size: 18px;
+    font-weight: bold;
+    color: #021a4c;
     padding-bottom:10px;
 }
 h4,
@@ -377,6 +383,9 @@ footer ul li a:visited{
     font-style: italic;
     color: orangered;
 }
+
+
+/* ----------- Misc. ----------- */
 .wait-message {
     margin-top:5px;
     /*height:30px;*/
@@ -385,3 +394,4 @@ footer ul li a:visited{
 .gwt-form-margin {
     margin-left:10px;
 }
+
