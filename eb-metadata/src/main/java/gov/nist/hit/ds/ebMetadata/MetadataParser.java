@@ -72,4 +72,9 @@ public class MetadataParser {
 	static public Metadata parse(OMElement e)  throws MetadataException,XdsInternalException, MetadataValidationException {
 		return new Metadata(e);
 	}
+
+    static public Metadata parse(String metadata) throws XdsInternalException, MetadataException {
+        OMElement ele = Util.parse_xml(metadata);
+        return parse(ele);
+    }
 }
