@@ -1,15 +1,11 @@
 package gov.nist.hit.ds.ebDocsrcSim
-
 import gov.nist.hit.ds.ebDocsrcSim.engine.DocumentHandler
 import gov.nist.hit.ds.ebDocsrcSim.engine.PnrSend
-import gov.nist.hit.ds.toolkit.environment.EnvironmentAccess
 import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import gov.nist.hit.ds.utilities.xml.Util
 import org.apache.axiom.om.OMElement
 import spock.lang.Specification
-
-
 /**
  * Created by bmajur on 1/13/15.
  */
@@ -37,26 +33,27 @@ class PnrSendTest extends Specification {
         then: !fault
     }
 
-    def 'Test against PR with TLS'() {
-        setup:
-        def endpoint = 'https://ihexds.nist.gov:12091/tf6/services/xdsrepositoryb'
-        metadata_element = MetadataSupport.om_factory.createOMElement("Message", null)
-        String submission = getClass().classLoader.getResource('PnR1Doc.xml').text
-        OMElement submissionEle = Util.parse_xml(submission)
-        documents['Document01'] = new DocumentHandler(new File(getClass().classLoader.getResource('hello.txt').toURI()))
-        def environmentAccess = new EnvironmentAccess(new File(getClass().classLoader.getResource('NA2015').toURI()))
-
-        when:
-        PnrSend pnr = new PnrSend(submissionEle, documents, endpoint, environmentAccess)
-        def logs = pnr.run()
-        println '**************      LOGS      ******************'
-        logs.each { println new OMFormatter(it).toString() }
-
-        def log = new XmlSlurper().parseText(new OMFormatter(logs[0]).toString())
-        def fault = log.name() == 'Fault'
-
-        then: !fault
-    }
+    // TODO: This is an integration test (relies on PR). Move to separate IT module
+//    def 'Test against PR with TLS'() {
+//        setup:
+//        def endpoint = 'https://ihexds.nist.gov:12091/tf6/services/xdsrepositoryb'
+//        metadata_element = MetadataSupport.om_factory.createOMElement("Message", null)
+//        String submission = getClass().classLoader.getResource('PnR1Doc.xml').text
+//        OMElement submissionEle = Util.parse_xml(submission)
+//        documents['Document01'] = new DocumentHandler(new File(getClass().classLoader.getResource('hello.txt').toURI()))
+//        def environmentAccess = new EnvironmentAccess(new File(getClass().classLoader.getResource('NA2015').toURI()))
+//
+//        when:
+//        PnrSend pnr = new PnrSend(submissionEle, documents, endpoint, environmentAccess)
+//        def logs = pnr.run()
+//        println '**************      LOGS      ******************'
+//        logs.each { println new OMFormatter(it).toString() }
+//
+//        def log = new XmlSlurper().parseText(new OMFormatter(logs[0]).toString())
+//        def fault = log.name() == 'Fault'
+//
+//        then: !fault
+//    }
 
     def 'Environment check'() {
         when:
@@ -82,3 +79,4 @@ class PnrSendTest extends Specification {
         propertiesFile.exists()
     }
 }
+
