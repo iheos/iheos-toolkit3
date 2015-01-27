@@ -79,6 +79,4 @@ class PnrSendTest extends Specification {
         propertiesFile.exists()
     }
 }
-        propertiesFile.exists()
-    }
-}
+
