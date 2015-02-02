@@ -33,7 +33,7 @@ class   CreateSim {
             throw new WebApplicationException(Response.Status.BAD_REQUEST)
         def simId = new SimId(simIdString)
         SimApi.create(actorTypeName, simId)
-        SimApi.updateConfig(simId, message)
-        return '<foo/>'
+        return SimApi.updateConfig(simId, message)
+//        return '<foo/>'
     }
 }

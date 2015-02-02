@@ -44,7 +44,7 @@
         </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>httpSoap</artifactId>
+          <artifactId>http-soap</artifactId>
       </dependency>
       <dependency>
           <groupId>gov.nist.hit.ds</groupId>

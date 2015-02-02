@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.simServlet.scripts
 
+import gov.nist.hit.ds.utilities.xml.OMFormatter
+import groovy.xml.StreamingMarkupBuilder
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
 
@@ -31,16 +33,47 @@ class Create {
             requestContentType = XML
             body = config
 
-            response.success = { resp ->
-                println resp.getData()
+            response.success = { resp, xml ->
+                println 'Sim Created'
+                println prettyPrint(xml)
+            }
+            response.failure = { resp ->
+                println 'Failure'
+                println resp.statusLine
+                resp.getHeaders().each { println it }
+            }
+            response.'404' = {
+                println 'Not found'
             }
         }
+
         http = new HTTPBuilder('http://localhost:9080')
-        http.get( path: '/xdstools3/rest/sim/config/1', contentType : XML) { resp, reader ->
+
+        http.get( path : '/xdstools3/rest/sim/config/1',
+                contentType : XML ) { resp, xml ->
+
             println "response status: ${resp.statusLine}"
-            println 'Response data: -----'
-            System.out << reader
-            println '\n--------------------'
+            println 'Headers: -----------'
+            resp.headers.each { h ->
+                println " ${h.name} : ${h.value}"
+            }
+            println ''
+            println prettyPrint(xml)
+//            def smb = new StreamingMarkupBuilder();
+//
+//            String o = smb.bind {
+//                xml1 -> xml1.mkp.yield xml
+//            }
+//            println new OMFormatter(o).toString()
         }
+    }
+
+    static prettyPrint(xml) {
+        def smb = new StreamingMarkupBuilder();
+
+        String o = smb.bind {
+            xml1 -> xml1.mkp.yield xml
+        }
+        new OMFormatter(o).toString()
     }
 }

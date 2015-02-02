@@ -18,7 +18,9 @@ class SimConfig {
     String getConfig(@PathParam('simid') String simIdString) {
         println "GET for SIMConfig ${simIdString}"
         SimId simId = new SimId(simIdString)
-        return new SimApi().getConfig(simId)
+        def ret = new SimApi().getConfig(simId)
+        println "return is \n${ret}"
+        return ret
     }
 
 //    @POST

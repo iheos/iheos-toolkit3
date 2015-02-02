@@ -24,7 +24,7 @@ class SimApi {
         return new String(simHandle.configAsset.content)
     }
 
-    static updateConfig(SimId simId, String configXml) {
+    static String updateConfig(SimId simId, String configXml) {
         SimHandle simHandle = SimUtils.open(simId)
         SimulatorDAO dao = new SimulatorDAO()
         // updates actorSimConfig with only the entries
@@ -33,6 +33,7 @@ class SimApi {
         // push update
         String updatedConfig = dao.toXML(simHandle.actorSimConfig)
         SimUtils.storeConfig(simHandle, updatedConfig)
+        return updatedConfig
     }
 
 }
