@@ -96,6 +96,10 @@ class SimUtils {
         return simHandle
     }
 
+    static SimHandle createSimForUser(String actorTypeName, SimId simId, String userName) {
+        create(actorTypeName, simId, userName)
+    }
+
     static SimHandle create(String actorTypeName, SimId simId, String repoName) {
         SimSystemConfig simSystemConfig = new SimSystemConfig()
         log.debug(simSystemConfig.toString())

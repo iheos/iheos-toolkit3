@@ -14,25 +14,25 @@ class PnrSendTest extends Specification {
     OMElement metadata_element
     Map<String, DocumentHandler> documents = [ : ]
 
-    def 'Test against PR'() {
-        setup:
-        def endpoint = 'http://ihexds.nist.gov:12090/tf6/services/xdsrepositoryb'
-        metadata_element = MetadataSupport.om_factory.createOMElement("Message", null)
-        String submission = getClass().classLoader.getResource('PnR1Doc.xml').text
-        OMElement submissionEle = Util.parse_xml(submission)
-        documents['Document01'] = new DocumentHandler(new File(getClass().classLoader.getResource('hello.txt').toURI()))
-
-        when:
-        PnrSend pnr = new PnrSend(submissionEle, documents, endpoint, null)
-        def logs = pnr.run()
-        println '**************      LOGS      ******************'
-        logs.each { println new OMFormatter(it).toString() }
-
-        def log = new XmlSlurper().parseText(new OMFormatter(logs[0]).toString())
-        def fault = log.name() == 'Fault'
-
-        then: !fault
-    }
+//    def 'Test against PR'() {
+//        setup:
+//        def endpoint = 'http://ihexds.nist.gov:12090/tf6/services/xdsrepositoryb'
+//        metadata_element = MetadataSupport.om_factory.createOMElement("Message", null)
+//        String submission = getClass().classLoader.getResource('PnR1Doc.xml').text
+//        OMElement submissionEle = Util.parse_xml(submission)
+//        documents['Document01'] = new DocumentHandler(new File(getClass().classLoader.getResource('hello.txt').toURI()))
+//
+//        when:
+//        PnrSend pnr = new PnrSend(submissionEle, documents, endpoint, null)
+//        def logs = pnr.run()
+//        println '**************      LOGS      ******************'
+//        logs.each { println new OMFormatter(it).toString() }
+//
+//        def log = new XmlSlurper().parseText(new OMFormatter(logs[0]).toString())
+//        def fault = log.name() == 'Fault'
+//
+//        then: !fault
+//    }
 
     // TODO: This is an integration test (relies on PR). Move to separate IT module
 //    def 'Test against PR with TLS'() {

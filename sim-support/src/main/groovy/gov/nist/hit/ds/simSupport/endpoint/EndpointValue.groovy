@@ -8,4 +8,6 @@ class EndpointValue {
 
     EndpointValue(String value) { this.value = value }
     String getValue() { return value }
+
+    String toString() { value }
 }

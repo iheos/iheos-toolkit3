@@ -1,14 +1,23 @@
-package gov.nist.hit.ds.simSupport
+package gov.nist.hit.ds.simSupport.utilities
+
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.AsyncType
+import gov.nist.hit.ds.actorTransaction.TlsType
+import gov.nist.hit.ds.repoSupport.RepoUtils
+import gov.nist.hit.ds.repository.simple.SimpleId
+import gov.nist.hit.ds.repository.simple.SimpleType
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
-import gov.nist.hit.ds.simSupport.utilities.SimSupport
-import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import spock.lang.Specification
+
 /**
- * Created by bmajur on 9/22/14.
+ * Tests Simulator layout in repository.
+ * The static utility classes RepoUtils and SimUtils are the primary targets of these tests.
+ *
+ * Created by bmajur on 2/2/15.
  */
-class SimulatorFactoryTest extends Specification {
+class SimArchTest extends Specification {
     static String config = '''
 <ActorsTransactions>
     <transaction name="Stored Query" code="sq" asyncCode="sq.as">
@@ -48,54 +57,38 @@ class SimulatorFactoryTest extends Specification {
 </ActorsTransactions>
 '''
     def factory = new ActorTransactionTypeFactory()
-    def simId = new SimId('1234')
     def actorType = 'docrec'
-    def repoName = 'Sim'
-    def ss = new SimSystemConfig()
+    def simId = new SimId('mydocrec')
 
-    void setup() {
+    def setup() { // Initialize repository system
         SimSupport.initialize()
         factory.clear()
         factory.loadFromString(config)
     }
 
-    def create() { SimUtils.create(actorType, simId, repoName) }
-//    def load() { return new SimService().load(simId) }
-    def delete() { new SimUtils().delete(simId, repoName) }
-    def exists() { SimUtils.exists(simId, repoName)}
-
-    def 'Delete of missing sim should pass'() {
-        when: delete()
-
-        then:  !exists()
-
-        when: delete()
-
-        then: !exists()
-    }
-
-    def 'Create should create sim'() {
-        when: create()
-
-        then: exists()
-
-        when: delete()
-
-        then: !exists()
-    }
-
-    def 'Attempt to create second copy of sim should not cause error'() {
-        when: create()
-        then: exists()
-        when: create()
-        then: exists()
-        when: delete()
-        then: !exists()
-    }
-
-//    def 'Create'() {
-//        when: create()
-//        then: exists()
+//    def 'Create user'() { // User is used as repository name
+//        when:  'Create user (repository)'
+//        def userName = 'bill'
+//        def repoName = userName
+//        def repoType = new SimpleType('user')
+//        def repoArtifactId = new SimpleId(userName)
+//        def user = RepoUtils.mkRepository(userName, repoType)
+//
+//        then:
+//        RepoUtils.repositoryExists(repoArtifactId)
+//
+//        when: 'Create sim (for user)'
+//        SimHandle simHandle = SimUtils.createSimForUser(actorType, simId, userName)  // create sim for user
+//
+//        then:
+//        SimUtils.exists(simId, userName)
+//
+//        when: 'Pull config and verify tail of endpoint -> bill/mydocrec/docrec/prb'
+//        EndpointValue endpointVal = simHandle.actorSimConfig.getEndpoint(factory.getTransactionTypeIfAvailable('prb'), TlsType.NOTLS, AsyncType.SYNC)
+//        String endpoint = endpointVal.toString()
+//
+//        then:
+//        endpoint.contains('bill/mydocrec/docrec/prb')
 //    }
 
 }
