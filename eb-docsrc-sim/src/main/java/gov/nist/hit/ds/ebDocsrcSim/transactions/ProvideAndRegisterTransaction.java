@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.ebDocsrcSim.transactions;
 
-import gov.nist.hit.ds.ebDocsrcSim.engine.DocumentHandler;
+import gov.nist.hit.ds.dsSims.eb.transactionSupport.DocumentHandler;
 import gov.nist.hit.ds.ebDocsrcSim.soap.SoapActionFactory;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataParser;
@@ -15,7 +15,7 @@ import org.apache.axiom.om.OMText;
 import javax.activation.DataHandler;
 import java.util.Map;
 
-public class ProvideAndRegisterTransaction extends AbstractTransaction {
+public class ProvideAndRegisterTransaction extends AbstractClientTransaction {
     boolean use_xop = true;
 
     public ProvideAndRegisterTransaction()  {}

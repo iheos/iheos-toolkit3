@@ -1,9 +1,15 @@
 package gov.nist.hit.ds.simServlet.api
 
+import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.TransactionType
+import gov.nist.hit.ds.dsSims.eb.transactionSupport.EbSendRequest
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
+
 /**
  * API used by REST calls
  * Created by bmajur on 10/23/14.
@@ -34,6 +40,18 @@ class SimApi {
         String updatedConfig = dao.toXML(simHandle.actorSimConfig)
         SimUtils.storeConfig(simHandle, updatedConfig)
         return updatedConfig
+    }
+
+    static void send(SimIdentifier simIdentifier, EbSendRequest request) {
+        ActorTransactionTypeFactory factory = new ActorTransactionTypeFactory()
+        TransactionType ttype = factory.getTransactionTypeIfAvailable(request.transactionName)
+        if (!ttype) throw new ToolkitRuntimeException("send: no transaction type")
+        SimHandle simHandle = SimUtils.open(simIdentifier)
+        simHandle.transactionType = ttype
+        simHandle.event.inOut.reqHdr = 'xxx'
+        simHandle.event.inOut.reqBody = 'XXX'.bytes
+        SimUtils.sendTransactionRequest(simHandle, request)
+        SimUtils.close(simHandle)
     }
 
 }

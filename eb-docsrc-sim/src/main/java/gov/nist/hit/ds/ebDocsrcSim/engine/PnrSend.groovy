@@ -2,8 +2,9 @@ package gov.nist.hit.ds.ebDocsrcSim.engine
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.AsyncType
 import gov.nist.hit.ds.actorTransaction.TlsType
-import gov.nist.hit.ds.ebDocsrcSim.transactions.AbstractTransaction
-import gov.nist.hit.ds.ebDocsrcSim.transactions.PnrRequest
+import gov.nist.hit.ds.dsSims.eb.transactionSupport.DocumentHandler
+import gov.nist.hit.ds.ebDocsrcSim.transactions.AbstractClientTransaction
+import gov.nist.hit.ds.dsSims.eb.transactionSupport.EbSendRequest
 import gov.nist.hit.ds.ebDocsrcSim.transactions.ProvideAndRegisterTransaction
 import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
@@ -44,7 +45,7 @@ class PnrSend  {
         environmentAccess = simHandle.actorSimConfig.environmentAccess
     }
 
-    PnrSend(SimHandle simHandle, PnrRequest request) {
+    PnrSend(SimHandle simHandle, EbSendRequest request) {
         this(simHandle, request.transactionName, request.tls, request.metadata, request.documents)
     }
 
@@ -55,7 +56,7 @@ class PnrSend  {
         trans.nameUuidMap = null;
         trans.instruction_output = logOutput;
         trans.endpoint = endpoint;
-        trans.xds_version = AbstractTransaction.xds_b;
+        trans.xds_version = AbstractClientTransaction.xds_b;
         TransactionSettings ts = new TransactionSettings();
         ts.securityParams = environmentAccess
         trans.transactionSettings = ts;

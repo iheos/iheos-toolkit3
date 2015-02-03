@@ -218,6 +218,7 @@ class SimUtils {
     }
 
     static runTransaction(SimHandle simHandle) { new TransactionRunner(simHandle).acceptRequest() }
+    static sendTransactionRequest(SimHandle simHandle, request) { new TransactionRunner(simHandle).sendRequest(request) }
     static validateTransactionRequest(SimHandle simHandle) { new TransactionRunner(simHandle).validateRequest() }
     static validateTransactionResponse(SimHandle simHandle) { new TransactionRunner(simHandle).validateResponse() }
 

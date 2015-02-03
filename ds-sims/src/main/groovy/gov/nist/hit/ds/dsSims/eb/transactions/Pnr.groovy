@@ -4,6 +4,7 @@ import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.MetadataVal
 import gov.nist.hit.ds.dsSims.eb.schema.EbSchemaValidator
 import gov.nist.hit.ds.dsSims.eb.schema.MetadataTypes
+import gov.nist.hit.ds.dsSims.eb.transactionSupport.EbSendRequest
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.ebMetadata.MetadataParser
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser
@@ -16,11 +17,13 @@ import gov.nist.hit.ds.toolkit.Toolkit
 import gov.nist.hit.ds.toolkit.environment.Environment
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.utilities.xml.OMFormatter
+import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 
 /**
  * Created by bmajur on 9/24/14.
  */
+@Log4j
 class Pnr implements Transaction {
     SimHandle simHandle
 
@@ -106,8 +109,18 @@ class Pnr implements Transaction {
         println("Running PnR transaction")
     }
 
+    EbSendRequest ebSendRequest
+
+    // must be used for sendRequest
+    Pnr(SimHandle _simHandle, EbSendRequest _ebSendRequest) {
+        log.debug("send constructor called")
+        simHandle = _simHandle
+        ebSendRequest = _ebSendRequest
+    }
+
     @Override
     ValidationStatus sendRequest() {
+        log.debug("Sending request to ${ebSendRequest.transactionName}")
         return null
     }
 }

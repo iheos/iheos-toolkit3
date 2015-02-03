@@ -1,9 +1,12 @@
-package gov.nist.hit.ds.ebDocsrcSim.transactions
-import gov.nist.hit.ds.ebDocsrcSim.engine.DocumentHandler
+package gov.nist.hit.ds.dsSims.eb.transactionSupport
+
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
+
 /**
  * Created by bmajur on 1/24/15.
  */
-class PnrRequest {
+class EbSendRequest {
+    SimIdentifier simIdentifier
     String metadata = null
     String transactionName
     Map<String, DocumentHandler> documents = [ : ]

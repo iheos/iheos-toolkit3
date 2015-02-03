@@ -67,7 +67,7 @@ class TransactionRunner {
     def validateRequest() {runPMethod('validateRequest', [simHandle])}
     def validateResponse() {runPMethod('validateResponse', [simHandle])}
     SimHandle acceptRequest() { runPMethod('acceptRequest', [simHandle]); return simHandle }  // used for production (from servlet)
-    SimHandle sendRequest() { runPMethod('sendRequest', [simHandle]); return simHandle }
+    SimHandle sendRequest(request) { runPMethod('sendRequest', [simHandle, request]); return simHandle }
 
     SimHandle testRun() { runAMethod('run'); return simHandle }  // used for unit tests - run method on validator
 

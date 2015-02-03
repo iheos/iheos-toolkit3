@@ -15,7 +15,7 @@ import spock.lang.Specification
 /**
  * Created by bmajur on 9/24/14.
  */
-class PnrTest extends Specification {
+class PnrRecipientTest extends Specification {
     static String config = '''
 <ActorsTransactions>
     <transaction name="Provide and Register" id="prb" code="prb">

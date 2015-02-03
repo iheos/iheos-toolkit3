@@ -19,6 +19,7 @@
         <module>engine</module>
         <module>repository-tools</module>
         <module>xdstools3</module>
+        <module>eb-IT</module>
     </modules>
 
 

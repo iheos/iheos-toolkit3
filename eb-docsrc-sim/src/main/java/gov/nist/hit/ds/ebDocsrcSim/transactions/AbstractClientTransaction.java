@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractTransaction {
+public abstract class AbstractClientTransaction {
 	public OMElement instruction_output;
 	public StepContext s_ctx;
 	OmLogger testLog = new TestLogFactory().getLogger();
@@ -21,7 +21,7 @@ public abstract class AbstractTransaction {
 	public boolean no_convert = false;
 	static public final short xds_none = 0;
 	static public final short xds_b = 2;
-	public short xds_version = AbstractTransaction.xds_none;
+	public short xds_version = AbstractClientTransaction.xds_none;
 	public String endpoint = null;
 	protected boolean soap_1_2 = true;
 	protected boolean async = false;
@@ -36,7 +36,7 @@ public abstract class AbstractTransaction {
 
 	protected abstract String getRequestAction();
 
-    protected AbstractTransaction() {  }
+    protected AbstractClientTransaction() {  }
 
 
 	String getResponseAction() {
