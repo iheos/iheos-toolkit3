@@ -3,8 +3,11 @@ package gov.nist.hit.ds.simServlet
 import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.simServlet.servlet.SimServlet
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.manager.ActorSimConfigManager
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.simSupport.utilities.SimEventAccess
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import spock.lang.Specification
 /**
@@ -48,12 +51,13 @@ It is great!
 
 --MIMEBoundaryurn_uuid_806D8FD2D542EDCC2C1199332890718--'''
 
-    def simId = new SimId('PnrSoapTest')
+    def simId
     def simServlet
 
     def setup() {
         simServlet = new SimServlet()
         simServlet.init()
+        simId = new SimIdentifier(SimUtils.defaultRepoName, 'PnrSoapTest')
         def simHandle = SimUtils.create('docrec', simId)
         // Cancel everything but SOAP validation
         def actorSimConfigManager = new ActorSimConfigManager(simHandle.actorSimConfig)
@@ -73,9 +77,9 @@ It is great!
 // TODO: This test throws errors that are not detected
     def 'PnR Soap should be accepted'() {
         when:
-        def simHandle = simServlet.runPost(simId, header, body.getBytes(), [], null)
+        SimHandle simHandle = simServlet.runPost(simId, header, body.getBytes(), [], null)
         def fault = simHandle.getEvent().getFault()
-        def eventAccess = new EventAccess(simHandle.simId.id, simHandle.event)
+        def eventAccess = new SimEventAccess(simHandle.simIdentifier, simHandle.event)
 
         then:
         fault == null

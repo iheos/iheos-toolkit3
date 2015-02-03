@@ -1,9 +1,11 @@
 package gov.nist.hit.ds.dsSims.fhir
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.dsSims.fhir.mhd.validators.MhdDocRefValidator
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -29,17 +31,20 @@ class MhdDocRefTest extends Specification {
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     def repoName = 'MhdDocRefTest'
+    ActorTransactionTypeFactory factory = new ActorTransactionTypeFactory()
+    TransactionType ttype
+    def actorTypeString = 'mhd'
 
     def setup() {
         SimSupport.initialize()
-        new ActorTransactionTypeFactory().clear()
-        new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
+        factory.clear()
+        factory.loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('test')
-        SimUtils.create('mhd', simId, repoName)
+        simId = new SimIdentifier(repoName, 'test')
+        SimUtils.create(actorTypeString, simId)
     }
 
     def 'Should collect two authenticator ref values'() {
@@ -82,7 +87,7 @@ class MhdDocRefTest extends Specification {
 
         when:
         def xml = new XmlSlurper().parseText(text)
-        def validator = new MhdDocRefValidator(SimUtils.create(new SimId('tmp')), xml)
+        def validator = new MhdDocRefValidator(SimUtils.create(actorTypeString, new SimIdentifier(SimUtils.defaultRepoName, 'tmp')), xml)
 
         then:
         validator.authenticatorRefValues() == ['#auth1', '#auth2']
@@ -132,7 +137,7 @@ class MhdDocRefTest extends Specification {
 '''
         when:
         def xml = new XmlSlurper().parseText(text)
-        def validator = new MhdDocRefValidator(SimUtils.create(new SimId('tmp')), xml)
+        def validator = new MhdDocRefValidator(SimUtils.create(actorTypeString, new SimIdentifier(SimUtils.defaultRepoName, 'tmp')), xml)
 
         then:
         validator.sourcePatientExtensions().size() == 1
@@ -150,7 +155,7 @@ class MhdDocRefTest extends Specification {
         Closure closure = { simHandle ->
             new MhdDocRefValidator(simHandle, xml).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
+        def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.simHandle.event.addArtifact('Metadata', '')
         transRunner.runTest()
 

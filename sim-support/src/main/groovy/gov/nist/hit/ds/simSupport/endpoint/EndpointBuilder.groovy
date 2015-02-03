@@ -3,6 +3,7 @@ package gov.nist.hit.ds.simSupport.endpoint
 import gov.nist.hit.ds.actorTransaction.ActorType
 import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import groovy.util.logging.Log4j
 /**
@@ -13,6 +14,7 @@ class EndpointBuilder {
     String server
     String port
     String base
+    String user
     SimId simId = null
     String actorCode
     String transCode
@@ -20,23 +22,27 @@ class EndpointBuilder {
 
     EndpointBuilder() { log.debug("EndpointBuilder")}
 
-    EndpointBuilder(String server, String port, String base, SimId simId) {
+    EndpointBuilder(String server, String port, String base, String user, SimId simId) {
         this.server = server
         this.port = port
         this.base = base
+        this.user = user
         this.simId = simId
     }
 
-    public String toString() { [server: server, port: port, base: base, simId: simId?.id, actorCode: actorCode, transCode: transCode].toString() }
+    SimIdentifier getSimIdentifier() { new SimIdentifier(user, simId)}
+
+    public String toString() { [server: server, port: port, base: base, user: user, simId: simId?.id, actorCode: actorCode, transCode: transCode].toString() }
 
     EndpointValue makeEndpoint(ActorType actor, EndpointType endpointLabel) {
         server = clean(server)
         port = clean(port)
         base = clean(base)
+        user = clean(user)
         def actorName = clean(actor.name)
         def secure = (endpointLabel.tls) ? 's' : ''
         String val;
-        val = "http${secure}://${server}:${port}/${base}/${simId.getId()}/${actorName}/${endpointLabel.transType.code}"
+        val = "http${secure}://${server}:${port}/${base}/sim/${user}/${simId.getId()}/${actorName}/${endpointLabel.transType.code}"
         return new EndpointValue(val)
     }
 
@@ -54,8 +60,14 @@ class EndpointBuilder {
     }
 
     EndpointBuilder parse(String endpoint) {
-        // http, serverport are actually wrong
-        def (http, serverPort, basePart, simStr, simid, actor, trans) = endpoint.tokenize('/')
+        def http
+        def serverPort
+        def basePart
+        def simStr
+        def simid
+        def actor
+        def trans
+        (http, serverPort, basePart, simStr, user, simid, actor, trans) = endpoint.split('/')
         if (simid)
             simId = new SimId(simid)
         actorCode = actor

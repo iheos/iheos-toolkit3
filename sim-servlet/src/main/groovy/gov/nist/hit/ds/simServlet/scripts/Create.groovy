@@ -28,7 +28,7 @@ class Create {
   </transaction>
 </actor>
 '''
-        def http = new HTTPBuilder('http://localhost:9080/xdstools3/rest/sim/create/1')
+        def http = new HTTPBuilder('http://localhost:9080/xdstools3/rest/sim/create/bill/1')
         http.request(Method.POST, XML) { request ->
             requestContentType = XML
             body = config
@@ -49,7 +49,7 @@ class Create {
 
         http = new HTTPBuilder('http://localhost:9080')
 
-        http.get( path : '/xdstools3/rest/sim/config/1',
+        http.get( path : '/xdstools3/rest/sim/config/bill/1',
                 contentType : XML ) { resp, xml ->
 
             println "response status: ${resp.statusLine}"

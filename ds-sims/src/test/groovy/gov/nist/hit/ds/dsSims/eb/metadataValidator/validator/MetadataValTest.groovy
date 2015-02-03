@@ -6,6 +6,7 @@ import gov.nist.hit.ds.ebMetadata.MetadataParser
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
@@ -34,7 +35,7 @@ class MetadataValTest extends Specification {
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     def repoName = 'MetadataValTest'
 
     def setup() {
@@ -43,8 +44,8 @@ class MetadataValTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('test')
-        SimUtils.recreate('ebxml', simId, repoName)
+        simId = new SimIdentifier(repoName, 'test')
+        SimUtils.recreate('ebxml', simId)
     }
 
     def assertionGroup
@@ -62,7 +63,7 @@ class MetadataValTest extends Specification {
             simHandle.event.addArtifact('Metadata', submission)
             new MetadataVal(simHandle, metadata, vc, environment, validationInterface).run()
         }
-        transRunner = new TransactionRunner('rb', simId, repoName, closure)
+        transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.runTest()
 
         println "Failed assertions are ${transRunner.simHandle.event.errorAssertionIds()}"

@@ -4,7 +4,9 @@ import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.utilities.SimEventAccess
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import spock.lang.Specification
@@ -29,7 +31,7 @@ class ValidatorOptionalTest extends Specification {
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     def repoName = 'Sim'
 
     def setup() {
@@ -38,8 +40,8 @@ class ValidatorOptionalTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('ValidatorOptionalTest')
-        SimUtils.create('reg', simId, repoName)
+        simId = new SimIdentifier(repoName, 'ValidatorOptionalTest')
+        SimUtils.create('reg', simId)
     }
 
     def 'Failing optional validation should not fail test'() {
@@ -47,8 +49,8 @@ class ValidatorOptionalTest extends Specification {
         Closure closure = { simHandle ->
             new OptionalTestValidator(simHandle.event).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then: 'Even though validation fails - it is optional so it does not fail the overall test'

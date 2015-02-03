@@ -11,6 +11,7 @@ import gov.nist.hit.ds.repository.simple.SimpleAsset
 import gov.nist.hit.ds.repository.simple.SimpleId
 import gov.nist.hit.ds.repository.simple.SimpleType
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
@@ -36,6 +37,9 @@ class SimUtils {
     static final siteAssetName = 'site'
     static final eventsAssetName = 'Events'
 
+    static final defaultActorType = null
+    static final defaultRepoName = 'unknown'
+
     // TODO: if already exists - verify actorTypeName
 
     /**
@@ -44,32 +48,35 @@ class SimUtils {
      * @return SimHandle
      */
 
-    static SimHandle create(SimId simId) {
-        return create(null, simId, SimSystemConfig.repoName)
+    static SimHandle create(SimIdentifier simId) {
+        return create(defaultActorType, simId.simId, simId.repoName)
     }
 
-    static SimHandle recreate(String actorTypeName, SimId simId) {
-        delete(simId)
-        create(actorTypeName, simId)
+    static SimHandle create(SimId simId, String repoName) {
+        return create(defaultActorType, simId, repoName)
     }
 
-    static SimHandle create(String actorTypeName, SimId simId) {
-        return create(actorTypeName, simId, new SimSystemConfig().repoName)
+    static SimHandle recreate(String actorTypeName, SimIdentifier simIdent) {
+        delete(simIdent)
+        create(actorTypeName, simIdent)
     }
 
     static SimHandle recreate(String actorTypeName, SimId simId, String repoName) {
-        delete(simId)
+        delete(new SimIdentifier(SimUtils.defaultRepoName, simId))
         create(actorTypeName, simId, repoName)
     }
 
-    static SimHandle create(transaction, repository, simId) {
-        TransactionType ttype
-        if (transaction instanceof TransactionType)
-            ttype = transaction
-        else if (transaction instanceof String)
-            ttype = new ActorTransactionTypeFactory().getTransactionType(transaction)
-        else
-            throw new ToolkitRuntimeException("Cannot interpret transaction parameter - type is ${transaction?.class?.name}")
+    // Seems odd to do lookup on transaction instead of actor.  This is needed for
+    // validation manager where transaction is all that is known.
+    // Should not be used anywhere else
+    static SimHandle create(TransactionType ttype, repository, simId) {
+//        TransactionType ttype
+//        if (transaction instanceof TransactionType)
+//            ttype = transaction
+//        else if (transaction instanceof String)
+//            ttype = new ActorTransactionTypeFactory().getTransactionType(transaction)
+//        else
+//            throw new ToolkitRuntimeException("Cannot interpret transaction parameter - type is ${transaction?.class?.name}")
 
         Repository repo
         if (repository instanceof Repository)
@@ -100,42 +107,57 @@ class SimUtils {
         create(actorTypeName, simId, userName)
     }
 
+    static  SimHandle create(String actorTypeName, SimIdentifier simIdent) {
+        create(actorTypeName, simIdent.simId, simIdent.repoName)
+    }
+
     static SimHandle create(String actorTypeName, SimId simId, String repoName) {
-        SimSystemConfig simSystemConfig = new SimSystemConfig()
-        log.debug(simSystemConfig.toString())
+//        assert actorTypeName
+        assert simId
+        assert repoName
+        def user = repoName
         Repository repo = buildRepository(repoName)
-        if (exists(simId, repoName)) {
+        if (exists(simId, repoName)) { // exists but might not be initialized
             log.debug("Sim ${simId.id} exists.")
+            //initialize(user, simId, actorTypeName, simAsset)
             return open(simId.id, repoName)
         }
         log.debug("Creating sim ${simId.id}")
-
         Asset simAsset = RepoUtils.mkAsset(simId.id, new SimpleType('sim'), repo)
 
-        if (actorTypeName) {
-            SimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
-            storeConfig(new SimulatorDAO().toXML(actorSimConfig), simAsset)
-            Site site = new SimSiteFactory().buildSite(actorSimConfig, simId.id)
-            OMElement siteEle = new SeparateSiteLoader().siteToXML(site)
-            storeSite(new OMFormatter(siteEle).toString(), simAsset)
-        }
-
-        RepoUtils.mkChild(eventsAssetName, simAsset)
+        initialize(user, simId, actorTypeName, simAsset)
 
         return open(simId.id, repoName)
     }
 
-    static SimHandle open(SimId simId) {
-        return open(simId.id, SimSystemConfig.repoName)
+    static initialize(String user, SimId simId, String actorTypeName, Asset simAsset) {
+        RepoUtils.mkChild(eventsAssetName, simAsset)
+        if (!actorTypeName) return
+        SimSystemConfig simSystemConfig = new SimSystemConfig()
+        log.debug(simSystemConfig.toString())
+        SimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, user, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
+        storeConfig(new SimulatorDAO().toXML(actorSimConfig), simAsset)
+        Site site = new SimSiteFactory().buildSite(actorSimConfig, simId.id)
+        OMElement siteEle = new SeparateSiteLoader().siteToXML(site)
+        storeSite(new OMFormatter(siteEle).toString(), simAsset)
     }
+
+//    @Deprecated
+//    static SimHandle open(SimId simId) {
+//        return open(simId.id, SimSystemConfig.repoName)
+//    }
 
     static SimHandle open(String simId, String repositoryName) {
         Repository repository = RepoUtils.getRepository(repositoryName)
         return open(new SimId(simId), repository)
     }
 
+    static SimHandle open(SimIdentifier simIdent) {
+        open(simIdent.simId, RepoUtils.getRepository(simIdent.repoName))
+    }
 
     static SimHandle open(SimId simId, Repository repository) {
+        assert repository
         Asset simAsset = sim(simId, repository)
         if (!simAsset) return null
         def simHandle = new SimHandle()
@@ -147,9 +169,11 @@ class SimUtils {
         try {
             simHandle.siteAsset = RepoUtils.child(siteAssetName, simAsset)
         } catch (RepositoryException e) {}
+//        assert simHandle.siteAsset
         try {
             simHandle.configAsset = RepoUtils.child(configAssetName, simAsset)
         } catch (RepositoryException e) {}
+//        assert simHandle.configAsset
         simHandle.eventLogAsset = RepoUtils.child(eventsAssetName, simAsset)
         simHandle.repository = repository
         if (simHandle.configAsset)
@@ -169,8 +193,8 @@ class SimUtils {
         simHandle.event.flushAll()
     }
 
-    static def delete(SimId simId) {
-        delete(simId, new SimSystemConfig().repoName)
+    static def delete(SimIdentifier simIdent) {
+        delete(simIdent.simId, simIdent.repoName)
     }
 
     static def delete(SimId simId, String repositoryName) {

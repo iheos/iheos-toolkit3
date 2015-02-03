@@ -66,7 +66,7 @@ class SiteFactoryTest extends Specification {
     def 'ActorSimConfig should have 4 transactions'() {
         given:
         def actorType = atFactory.getActorType('rep')
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
+        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', 'user', new SimId('1234'), actorType)
 
         when:
         def endpoints = actorSimConfig.getTransactions().findAll { it instanceof TransactionSimConfigElement }
@@ -79,7 +79,7 @@ class SiteFactoryTest extends Specification {
     def 'ActorSimConfig should have 1 Repository Declarations'() {
         given:
         def actorType = atFactory.getActorType('rep')
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
+        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', 'user', new SimId('1234'), actorType)
 
         when:
         def repositories = actorSimConfig.getTransactions().findAll {
@@ -95,7 +95,7 @@ class SiteFactoryTest extends Specification {
         def siteFactory = new SimSiteFactory()
         def aTfactory = new ActorTransactionTypeFactory()
         def actorType = atFactory.getActorType('rep')
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
+        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', 'user', new SimId('1234'), actorType)
 
         when:
         Site site = siteFactory.buildSite(actorSimConfig, 'mysite')
@@ -111,7 +111,7 @@ class SiteFactoryTest extends Specification {
         def siteFactory = new SimSiteFactory()
         def actorType = atFactory.getActorType('rep')
 //        ActorType actorType = aTfactory.getActorType(actorTypeName)
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
+        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', 'user', new SimId('1234'), actorType)
 
         when: ''
         Site site = siteFactory.buildSite(actorSimConfig, 'mysite')

@@ -5,6 +5,7 @@ import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -32,7 +33,14 @@ class TransactionRunner {
 
     TransactionRunner() {}
 
+    TransactionRunner(SimIdentifier simIdent, TransactionType _transactionType) {
+        this(simIdent.simId, simIdent.repoName, _transactionType)
+    }
+
     TransactionRunner(SimId _simId, String repositoryName, TransactionType _transactionType) {
+        assert _simId
+        assert repositoryName
+        assert _transactionType
         log.debug("TransactionRunner: transactionType is ${_transactionType}")
         transactionType = _transactionType
         simId = _simId
@@ -43,10 +51,14 @@ class TransactionRunner {
     }
 
     TransactionRunner(SimHandle _simHandle) {
+        assert _simHandle
         simHandle = _simHandle
         event = simHandle.event
+        assert event
         transactionType = simHandle.transactionType
+        assert transactionType
         implClassName = simHandle.transactionType?.acceptRequestClassName
+        assert implClassName
         log.debug("TransactionRunner: transactionType is ${simHandle.transactionType} implClass is ${implClassName}")
     }
 
@@ -63,21 +75,21 @@ class TransactionRunner {
 
     def init() {
         transCode = endpointBuilder.transCode
-        def simId = endpointBuilder.simId
+        def simIdentifier = endpointBuilder.simIdentifier
 
         assert repoName
-        assert simId
+        assert simIdentifier
         assert transCode
-        init2(simId, transCode, repoName)
+        init2(simIdentifier, transCode, repoName)
 
         implClassName = transactionType.implementationClassName
         log.debug("transactionClassName is ${implClassName}")
     }
 
 
-    private init2(simId, transactionCode, repositoryName) {
-        log.debug("TransactionRunner using repo ${repositoryName}")
-        simHandle = SimUtils.open(simId.id, repositoryName)
+    private init2(SimIdentifier simIdent, transactionCode, repositoryName) {
+        log.debug("TransactionRunner using repo ${simIdent.repoName}")
+        simHandle = SimUtils.open(simIdent)
         event = simHandle.event
 
         // Lookup transaction implementation class
@@ -96,10 +108,10 @@ class TransactionRunner {
             clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
         } catch (ClassNotFoundException e) {
             throw new ToolkitRuntimeException("Class [${implClassName}] cannot be loaded.")
-            String actorTrans = transCode
-            event.fault = new Fault("Class [${implClassName}] cannot be loaded.", FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(e))
-            SimUtils.close(simHandle)
-            throw e
+//            String actorTrans = transCode
+//            event.fault = new Fault("Class [${implClassName}] cannot be loaded.", FaultCode.Receiver.toString(), actorTrans, ExceptionUtil.exception_details(e))
+//            SimUtils.close(simHandle)
+//            throw e
         }
         Object[] params = new Object[1]
         params[0] = simHandle
@@ -163,10 +175,9 @@ class TransactionRunner {
     // Unit Test support - testRun individual validator/simulator component
 
     Closure runner
-    TransactionRunner(String transactionCode, SimId simId, repositoryName, Closure runner)  {
-        repoName = repositoryName
+    TransactionRunner(String transactionCode, SimIdentifier simIdent, Closure runner)  {
         transactionType = new ActorTransactionTypeFactory().getTransactionType(transactionCode)
-        init2(simId, transactionCode, repositoryName)
+        init2(simIdent, transactionCode, simIdent.repoName)
         this.runner = runner
     }
 

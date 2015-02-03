@@ -54,7 +54,7 @@ class ValidatorManager implements MessageValidator {
             def hsParser
             byte[] soapEnv
             String action = null
-            def transactionType
+            TransactionType transactionType
             def isRequest
 
             try {

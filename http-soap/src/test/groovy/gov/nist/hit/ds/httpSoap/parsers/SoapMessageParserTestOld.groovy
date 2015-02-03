@@ -5,6 +5,7 @@ import gov.nist.hit.ds.httpSoap.validators.SoapMessageValidator
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -65,7 +66,7 @@ class SoapMessageParserTestOld extends Specification {
   </soapenv:Body>
 </soapenv:Envelope>'''
         when:
-        def simId = new SimId('123')
+        def simId = new SimIdentifier(SimUtils.defaultRepoName, '123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).run()
@@ -89,7 +90,7 @@ class SoapMessageParserTestOld extends Specification {
   </soapenv:Header>
 </soapenv:Envelope>'''
         when:
-        def simId = new SimId('123')
+        def simId = new SimIdentifier(SimUtils.defaultRepoName, '123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).run()
@@ -116,7 +117,7 @@ class SoapMessageParserTestOld extends Specification {
   </soapenv:Body>
 </soapenv:Envelope>'''
         when:
-        def simId = new SimId('123')
+        def simId = new SimIdentifier(SimUtils.defaultRepoName, '123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).run()
@@ -147,7 +148,7 @@ class SoapMessageParserTestOld extends Specification {
   </soapenv:Body>
 </soapenv:Envelope'''
         when:
-        def simId = new SimId('123')
+        def simId = new SimIdentifier(SimUtils.defaultRepoName, '123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).run()

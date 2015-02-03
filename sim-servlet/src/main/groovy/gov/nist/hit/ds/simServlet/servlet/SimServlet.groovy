@@ -6,7 +6,9 @@ import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser
 import gov.nist.hit.ds.simServlet.WrapMtom
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
+import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
@@ -59,7 +61,7 @@ public class SimServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        Endpoint endpoint = new Endpoint("http://host:port" + request.getRequestURI());
+        EndpointValue endpoint = new EndpointValue("http://host:port" + request.getRequestURI());
         logger.info("\n\n\n===============================================================================\nPost to ${endpoint}\n\n\n");
         List<String> options = parseOptionsFromURI(request.getRequestURI());
         logger.debug("Request options are " + options);
@@ -76,7 +78,7 @@ public class SimServlet extends HttpServlet {
 
         SimHandle simHandle;
         try {
-            simHandle = runPost(parseSimIdFromURI(request.getRequestURI()), header, body, options, response);
+            simHandle = runPost(endpoint.simIdentifier(), header, body, options, response);
         } catch (Throwable t) {
             logger.fatal("runPost threw exception " + ExceptionUtil.exception_details(t));
             return;
@@ -108,9 +110,9 @@ public class SimServlet extends HttpServlet {
         logger.info("\n===============================================================================");
     }
 
-    protected SimHandle runPost(SimId simId, String header, byte[] body, List<String> options, HttpServletResponse response) {
+    SimHandle runPost(SimIdentifier simIdent, String header, byte[] body, List<String> options, HttpServletResponse response) {
         SimHandle simHandle;
-        simHandle = runPost2(simId, new HttpMessageContent(header, body), options, response);
+        simHandle = runPost2(simIdent, new HttpMessageContent(header, body), options, response);
         Fault fault = simHandle.getEvent().getFault();
         if (fault == null) {
             logger.debug("No Fault - sending response");
@@ -132,7 +134,7 @@ public class SimServlet extends HttpServlet {
     // Surface errors
     //    invalid endpoint
     //    sim does not exist
-    protected SimHandle runPost2(SimId simId, HttpMessageContent content, List<String> options, HttpServletResponse response) {
+    protected SimHandle runPost2(SimIdentifier simIdent, HttpMessageContent content, List<String> options, HttpServletResponse response) {
         byte[] soapEnvelopeBytes;
         SoapHeader soapHeader;
         String to;
@@ -146,21 +148,21 @@ public class SimServlet extends HttpServlet {
             to = soapHeader.getTo();
         } catch (Throwable t) {
             soapEnvironment = buildSoapEnvironment(response);
-            return sendFault(simId, "Internal Error parsing SOAP Header\n" + ExceptionUtil.exception_details(t), FaultCode.Receiver, soapEnvironment, content, soapParser.isMultiPart());
+            return sendFault(simIdent, "Internal Error parsing SOAP Header\n" + ExceptionUtil.exception_details(t), FaultCode.Receiver, soapEnvironment, content, soapParser.isMultiPart());
         }
         soapEnvironment = buildSoapEnvironment(soapHeader, response);
         if (to == null || to.equals(""))
-            return sendFault(simId, "No To endpoint found in SOAP header", FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
+            return sendFault(simIdent, "No To endpoint found in SOAP header", FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
         EndpointBuilder endpointBuilder = new EndpointBuilder().parse(to);
         SimId toSimId = endpointBuilder.getSimId();
         if (toSimId == null)
-            return sendFault(new SimId(errorSimId), "Could not parse To endpoint found in SOAP header. Endpoint is [" + to + "]", FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
-        if (!toSimId.getId().equals(simId.getId())) {
+            return sendFault(new SimIdentifier(SimUtils.defaultRepoName, errorSimId), "Could not parse To endpoint found in SOAP header. Endpoint is [" + to + "]", FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
+        if (!toSimId.getId().equals(simIdent.simId.getId())) {
             // SimId mismatch between URI and SOAP Header To field
-            String msg = "SimId mismatch: URI has " + simId.getId() + " and To Header has " + toSimId.getId();
+            String msg = "SimId mismatch: URI has " + simIdent.simId.getId() + " and To Header has " + toSimId.getId();
             logger.debug(msg);
             // This is going into a special simulator log for collecting addressing errors
-            return sendFault(new SimId(errorSimId), msg, FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
+            return sendFault(new SimIdentifier(SimUtils.defaultRepoName, errorSimId), msg, FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
         }
 
         SimHandle simHandle;
@@ -171,10 +173,10 @@ public class SimServlet extends HttpServlet {
         boolean hasErrorToReturn;
         if (errorToReturn != null && !errorToReturn.equals("")) {
             logger.info("Should return forced error - " + errorToReturn);
-            simHandle = SimUtils.open(simId);
+            simHandle = SimUtils.open(simIdent);
             hasErrorToReturn = true;
         } else {
-            simHandle = SimUtils.open(simId);
+            simHandle = SimUtils.open(simIdent);
             hasErrorToReturn = false;
         }
 
@@ -183,9 +185,9 @@ public class SimServlet extends HttpServlet {
                 logger.info("Auto Creating sim " + simId.getId());
                 simHandle = autoCreateSim(endpointBuilder);
             } else {
-                logger.debug("Sim " + simId.getId() + " does not exist");
+                logger.debug("Sim " + simIdent.simId.getId() + " does not exist");
                 // Sim does not exist
-                return sendFault(new SimId(errorSimId), "Simulator with ID " + simId.getId() + " does not exist.", FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
+                return sendFault(new SimIdentifier(simIdent.repoName, errorSimId), "Simulator with ID " + simIdent.simId.getId() + " does not exist.", FaultCode.Sender, soapEnvironment, content, soapParser.isMultiPart());
             }
         }
         simHandle.setSoapEnvironment(soapEnvironment);
@@ -240,13 +242,13 @@ public class SimServlet extends HttpServlet {
         simHandle.getEvent().getInOut().setRespHdr("content-type: " + contentTypeHeader);
     }
 
-    SimHandle sendFault(SimId simId, String faultMsg, FaultCode code, SoapEnvironment soapEnvironment, HttpMessageContent content, boolean multiPart) {
-        SimHandle simHandle = SimUtils.create(simId);
+    static SimHandle sendFault(SimIdentifier simIdent, String faultMsg, FaultCode code, SoapEnvironment soapEnvironment, HttpMessageContent content, boolean multiPart) {
+        SimHandle simHandle = SimUtils.create(simIdent);
         simHandle.setRequestIsMultipart(multiPart);
         return sendFault(simHandle, faultMsg, code, soapEnvironment, content);
     }
 
-    SimHandle sendFault(SimHandle simHandle, String faultMsg, FaultCode code, SoapEnvironment soapEnvironment, HttpMessageContent content) {
+    static SimHandle sendFault(SimHandle simHandle, String faultMsg, FaultCode code, SoapEnvironment soapEnvironment, HttpMessageContent content) {
         simHandle.setSoapEnvironment(soapEnvironment);
         simHandle.getEvent().setFault(new Fault(faultMsg, code.toString(), "Unknown", ""));
         logRequest(simHandle, content);
@@ -254,16 +256,16 @@ public class SimServlet extends HttpServlet {
         return simHandle;
     }
 
-    void logRequest(SimHandle simHandle, HttpMessageContent content) {
+    static void logRequest(SimHandle simHandle, HttpMessageContent content) {
         simHandle.getEvent().getInOut().setReqHdr(content.getHeader());
         simHandle.getEvent().getInOut().setReqBody(content.getBody());
     }
 
-    SimHandle autoCreateSim(EndpointBuilder builder) {
-        return SimUtils.create(builder.getActorCode(), builder.getSimId());
+    static SimHandle autoCreateSim(EndpointBuilder builder) {
+        return SimUtils.create(builder.getActorCode(), builder.simIdentifier);
     }
 
-    private void runTransaction(SimHandle simHandle) {
+    static private void runTransaction(SimHandle simHandle) {
         try {
             def runner = new TransactionRunner(simHandle)
             runner.validateRequest()
@@ -280,22 +282,27 @@ public class SimServlet extends HttpServlet {
     }
 
     // xdstools3/sim/simid/option1/option2
-    List<String> parseOptionsFromURI(String uri) {
+    static List<String> parseOptionsFromURI(String uri) {
         String[] parts = uri.split("/");
         return Arrays.asList(parts).subList(6, parts.length);
     }
 
-    SimId parseSimIdFromURI(String uri) {
-        String[] parts = uri.split("/");
-        logger.debug("Parsing " + uri + " to get simId");
-        if (parts.length < 4) {
-            logger.info("Badly formed uri - cannot extract simId from " + uri);
-            return new SimId(errorSimId);
-        }
-        logger.debug("simId is " + parts[3]);
-        return new SimId(parts[3]);
+    // this is not the full uri, just the part following the port/
+    static SimIdentifier parseSimIdentFromURI(String uri) {
+        return new EndpointValue(uri).simIdentifier()
+//        String[] parts = uri.split("/");
+//        logger.debug("Parsing " + uri + " to get simId");
+//        if (parts.length < 4) {
+//            logger.info("Badly formed uri - cannot extract simId from " + uri);
+//            return new SimId(errorSimId);
+//        }
+//        logger.debug("simId is " + parts[3]);
+//        return new SimId(parts[3]);
     }
 
+    static String parseUserFromURI(String uri) {
+        new EndpointValue(uri).user
+    }
 
     SoapEnvironment buildSoapEnvironment(SoapHeader soapHeader, HttpServletResponse response) {
         SoapEnvironment soapEnvironment = new SoapEnvironment();

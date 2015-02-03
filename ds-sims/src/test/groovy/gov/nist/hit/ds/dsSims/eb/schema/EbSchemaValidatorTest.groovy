@@ -4,6 +4,7 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -31,7 +32,7 @@ class EbSchemaValidatorTest extends Specification {
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     def repoName = 'EbSchemaValidatorTest'
 
     def setup() {
@@ -40,8 +41,8 @@ class EbSchemaValidatorTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('test')
-        SimUtils.recreate('ebxml', simId, repoName)
+        simId = new SimIdentifier(repoName, 'test')
+        SimUtils.recreate('ebxml', simId)
     }
 
     def 'Good Example'() {
@@ -53,7 +54,7 @@ class EbSchemaValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new EbSchemaValidator(simHandle, text, MetadataTypes.METADATA_TYPE_PRb, localSchema).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
+        def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.simHandle.event.addArtifact('Metadata', '')
         transRunner.runTest()
 
@@ -70,7 +71,7 @@ class EbSchemaValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new EbSchemaValidator(simHandle, text, MetadataTypes.METADATA_TYPE_PRb, localSchema).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
+        def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.simHandle.event.addArtifact('Metadata', '')
         transRunner.runTest()
 
@@ -87,7 +88,7 @@ class EbSchemaValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new EbSchemaValidator(simHandle, text, MetadataTypes.METADATA_TYPE_PRb, localSchema).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
+        def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.simHandle.event.addArtifact('Metadata', '')
         transRunner.runTest()
 

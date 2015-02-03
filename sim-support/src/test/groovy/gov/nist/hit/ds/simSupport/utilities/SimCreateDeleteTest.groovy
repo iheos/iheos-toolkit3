@@ -51,7 +51,6 @@ class SimCreateDeleteTest extends Specification {
     def simId = new SimId('1234')
     def actorType = 'docrec'
     def repoName = 'Sim'
-    def ss = new SimSystemConfig()
 
     void setup() {
         SimSupport.initialize()
@@ -60,7 +59,6 @@ class SimCreateDeleteTest extends Specification {
     }
 
     def create() { SimUtils.create(actorType, simId, repoName) }
-//    def load() { return new SimService().load(simId) }
     def delete() { new SimUtils().delete(simId, repoName) }
     def exists() { SimUtils.exists(simId, repoName)}
 
@@ -93,9 +91,9 @@ class SimCreateDeleteTest extends Specification {
         then: !exists()
     }
 
-//    def 'Create'() {
-//        when: create()
-//        then: exists()
-//    }
+    def 'Create'() {
+        when: create()
+        then: exists()
+    }
 
 }

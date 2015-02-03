@@ -56,13 +56,13 @@ class EndpointBuilderEndpointTest extends Specification {
 
     def 'Build simple endpoint'() {
         when:
-        def builder = new EndpointBuilder('localhost', '8080', 'xdstools2/sims', new SimId('123'))
+        def builder = new EndpointBuilder('localhost', '8080', 'xdstools2', 'user', new SimId('123'))
         def transType = new ActorTransactionTypeFactory().getTransactionType('rb')
         def elabel = new EndpointType(transType, TlsType.NOTLS, AsyncType.SYNC)
         def endpoint = builder.makeEndpoint(atFactory.getActorType('reg'), elabel)
 
         then:
-        endpoint.value == 'http://localhost:8080/xdstools2/sims/123/reg/rb'
+        endpoint.value == 'http://localhost:8080/xdstools2/sim/user/123/reg/rb'
     }
 
 }

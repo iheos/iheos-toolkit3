@@ -17,9 +17,18 @@ class EventAccess {
     Event event
 
     EventAccess(String simid, Event event) {
+        this(simid, 'Sim', event)
+//        repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
+//        repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
+//        simsDir = new File(repoDataDir, 'Sim')
+//        this.simid = simid
+//        this.event = event
+    }
+
+    EventAccess(String simid, String repoName, Event event) {
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simsDir = new File(repoDataDir, 'Sim')
+        simsDir = new File(repoDataDir, repoName)
         this.simid = simid
         this.event = event
     }

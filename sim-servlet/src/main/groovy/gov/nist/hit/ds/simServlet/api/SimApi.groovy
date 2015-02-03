@@ -10,22 +10,22 @@ import gov.nist.hit.ds.simSupport.utilities.SimUtils
  */
 class SimApi {
 
-    static SimHandle create(String actorTypeName, SimId simId) {
-        SimUtils.create(actorTypeName, simId)
+    static SimHandle create(String actorTypeName, String username, SimId simId) {
+        SimUtils.create(actorTypeName, simId, username)
     }
 
-    static delete(SimId simId) {
-        SimUtils.delete(simId)
+    static delete(String username, SimId simId) {
+        SimUtils.delete(simId, username)
     }
 
     // return is an XML blob
-    static String getConfig(SimId simId) {
-        SimHandle simHandle = SimUtils.open(simId)
+    static String getConfig(String username, SimId simId) {
+        SimHandle simHandle = SimUtils.open(simId.toString(), username)
         return new String(simHandle.configAsset.content)
     }
 
-    static String updateConfig(SimId simId, String configXml) {
-        SimHandle simHandle = SimUtils.open(simId)
+    static String updateConfig(String username, SimId simId, String configXml) {
+        SimHandle simHandle = SimUtils.open(simId.toString(), username)
         SimulatorDAO dao = new SimulatorDAO()
         // updates actorSimConfig with only the entries
         // that are allowed to be updated

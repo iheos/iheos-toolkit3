@@ -3,6 +3,7 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -28,7 +29,7 @@ class CxFormatValidatorTest extends Specification {
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     def repoName = 'CxFormatValidatorTest'
 
     def setup() {
@@ -37,8 +38,8 @@ class CxFormatValidatorTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('test')
-        SimUtils.recreate('ebxml', simId, repoName)
+        simId = new SimIdentifier(repoName, 'test')
+        SimUtils.recreate('ebxml', simId)
     }
 
     def assertionGroup
@@ -48,7 +49,7 @@ class CxFormatValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new CxFormatValidator(simHandle, 'context').validate(value)
         }
-        transRunner = new TransactionRunner('rb', simId, repoName, closure)
+        transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.simHandle.event.addArtifact('Metadata', '')
         transRunner.runTest()
 

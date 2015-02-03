@@ -57,38 +57,40 @@ class SimArchTest extends Specification {
 </ActorsTransactions>
 '''
     def factory = new ActorTransactionTypeFactory()
-    def actorType = 'docrec'
+    def actorTypeName = 'docrec'
+    def actorType
     def simId = new SimId('mydocrec')
 
     def setup() { // Initialize repository system
         SimSupport.initialize()
         factory.clear()
         factory.loadFromString(config)
+        actorType = factory.getActorType(actorTypeName)
     }
 
-//    def 'Create user'() { // User is used as repository name
-//        when:  'Create user (repository)'
-//        def userName = 'bill'
-//        def repoName = userName
-//        def repoType = new SimpleType('user')
-//        def repoArtifactId = new SimpleId(userName)
-//        def user = RepoUtils.mkRepository(userName, repoType)
-//
-//        then:
-//        RepoUtils.repositoryExists(repoArtifactId)
-//
-//        when: 'Create sim (for user)'
-//        SimHandle simHandle = SimUtils.createSimForUser(actorType, simId, userName)  // create sim for user
-//
-//        then:
-//        SimUtils.exists(simId, userName)
-//
-//        when: 'Pull config and verify tail of endpoint -> bill/mydocrec/docrec/prb'
-//        EndpointValue endpointVal = simHandle.actorSimConfig.getEndpoint(factory.getTransactionTypeIfAvailable('prb'), TlsType.NOTLS, AsyncType.SYNC)
-//        String endpoint = endpointVal.toString()
-//
-//        then:
-//        endpoint.contains('bill/mydocrec/docrec/prb')
-//    }
+    def 'Create sim for user'() { // User is used as repository name
+        when:  'Create user (repository)'
+        def userName = 'bill'
+        def repoName = userName
+        def repoType = new SimpleType('user')
+        def repoArtifactId = new SimpleId(userName)
+        def user = RepoUtils.mkRepository(userName, repoType)
+
+        then:
+        RepoUtils.repositoryExists(repoArtifactId)
+
+        when: 'Create sim (for user)'
+        SimHandle simHandle = SimUtils.createSimForUser(actorTypeName, simId, userName)  // create sim for user
+
+        then:
+        SimUtils.exists(simId, userName)
+
+        when: 'Pull config and verify tail of endpoint -> bill/mydocrec/docrec/prb'
+        EndpointValue endpointVal = simHandle.actorSimConfig.getEndpoint(factory.getTransactionTypeIfAvailable('prb'), TlsType.NOTLS, AsyncType.SYNC)
+        String endpoint = endpointVal.toString()
+
+        then:
+        endpoint.contains('bill/mydocrec/docrec/prb')
+    }
 
 }

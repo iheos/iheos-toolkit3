@@ -7,6 +7,7 @@ import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.Repository
 import gov.nist.hit.ds.repository.shared.data.AssetNode
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.soapSupport.core.SoapEnvironment
@@ -33,6 +34,10 @@ class SimHandle {
     boolean open = false
     def options = []
     boolean complete = false
+
+    SimIdentifier getSimIdentifier() {
+        new SimIdentifier(repository.id.idString, simId)
+    }
 
     // Event creation is lazy so create doesn't build unused event
     Event getEvent() {

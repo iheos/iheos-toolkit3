@@ -4,6 +4,7 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -30,7 +31,7 @@ class DtmFormatValidatorTest extends Specification {
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     def repoName = 'DtmFormatValidatorTest'
 
     def setup() {
@@ -39,8 +40,8 @@ class DtmFormatValidatorTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('test')
-        SimUtils.recreate('ebxml', simId, repoName)
+        simId = new SimIdentifier(repoName, 'test')
+        SimUtils.recreate('ebxml', simId)
     }
 
     def assertionGroup
@@ -50,7 +51,7 @@ class DtmFormatValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new DtmFormatValidator(simHandle, 'context').validate(value)
         }
-        transRunner = new TransactionRunner('rb', simId, repoName, closure)
+        transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.simHandle.event.addArtifact('Metadata', '')
         transRunner.runTest()
 

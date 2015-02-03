@@ -14,14 +14,18 @@ import groovy.util.logging.Log4j
 @Log4j
 class ValidationApi {
     def factory = new ActorTransactionTypeFactory()
-    def config = new SimSystemConfig()
+//    def config = new SimSystemConfig()
 
     AssetNode validateRequest(String transactionName, String content, String headers) {
+        validateRequest('unknown', transactionName, content, headers)
+    }
+
+    AssetNode validateRequest(String repoName, String transactionName, String content, String headers) {
         def simId = new SimId('ValidationApi')
-        def simHandle = SimUtils.create(simId)
         def transactionType = factory.getTransactionType(transactionName)
+        def simHandle = SimUtils.create(transactionType, repoName, simId)
         simHandle.transactionType = transactionType
-        simHandle.repository = RepoUtils.getRepository(config.repoName)
+        simHandle.repository = RepoUtils.getRepository(repoName)
         simHandle.event.inOut.reqHdr = headers
         simHandle.event.inOut.reqBody = content.getBytes()
         def runner = new TransactionRunner(simHandle)

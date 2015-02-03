@@ -5,8 +5,10 @@ import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.utilities.SimEventAccess
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import spock.lang.Specification
@@ -97,7 +99,7 @@ Content-Type: application/atom+xml
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     String repoName = 'sim'
 
     def setup() {
@@ -106,8 +108,8 @@ Content-Type: application/atom+xml
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('SubmitModelValidatorTest')
-        SimUtils.recreate('NotUsed', simId, repoName)
+        simId = new SimIdentifier(SimUtils.defaultRepoName, 'SubmitModelValidatorTest')
+        SimUtils.recreate('NotUsed', simId)
     }
 
     def 'Test contentType parsing'() {
@@ -128,10 +130,10 @@ Content-Type: application/atom+xml
             SubmitModel sm = ft.buildSubmitModel(true, new String(simHandle.event.inOut.reqBody))
             new SubmitModelValidator(simHandle, sm).asPeer().run()
         }
-        def transRunner = new TransactionRunner('mh', simId, repoName,  closure)
+        def transRunner = new TransactionRunner('mh', simId, closure)
         transRunner.simHandle.event.inOut.reqHdr = feedHeader
         transRunner.simHandle.event.inOut.reqBody = feed.getBytes()
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
@@ -150,7 +152,7 @@ Content-Type: application/atom+xml
             SubmitModel sm = ft.buildSubmitModel(true, new String(simHandle.event.inOut.reqBody))
             new SubmitModelValidator(simHandle, sm).asPeer().run()
         }
-        def transRunner = new TransactionRunner('mh', simId, repoName,  closure)
+        def transRunner = new TransactionRunner('mh', simId, closure)
         transRunner.simHandle.event.inOut.reqHdr = feedHeader
         transRunner.simHandle.event.inOut.reqBody = emptyFeed.getBytes()
         transRunner.runTest()
@@ -184,7 +186,7 @@ Content-Type: application/atom+xml
             SubmitModel sm = ft.buildSubmitModel(true, new String(simHandle.event.inOut.reqBody))
             new SubmitModelValidator(simHandle, sm).asPeer().run()
         }
-        def transRunner = new TransactionRunner('mh', simId, repoName,  closure)
+        def transRunner = new TransactionRunner('mh', simId, closure)
         transRunner.simHandle.event.inOut.reqHdr = feedHeader
         transRunner.simHandle.event.inOut.reqBody = manifestOnlyFeed.getBytes()
         transRunner.runTest()
@@ -220,7 +222,7 @@ Content-Type: application/atom+xml
             SubmitModel sm = ft.buildSubmitModel(true, new String(simHandle.event.inOut.reqBody))
             new SubmitModelValidator(simHandle, sm).asPeer().run()
         }
-        def transRunner = new TransactionRunner('mh', simId, repoName,  closure)
+        def transRunner = new TransactionRunner('mh', simId, closure)
         transRunner.simHandle.event.inOut.reqHdr = feedHeader
         transRunner.simHandle.event.inOut.reqBody = docRefOnlyfeed.getBytes()
         transRunner.runTest()
@@ -290,7 +292,7 @@ Content-Type: application/atom+xml
             SubmitModel sm = ft.buildSubmitModel(true, new String(simHandle.event.inOut.reqBody))
             new SubmitModelValidator(simHandle, sm).asPeer().run()
         }
-        def transRunner = new TransactionRunner('mh', simId, repoName,  closure)
+        def transRunner = new TransactionRunner('mh', simId, closure)
         transRunner.simHandle.event.inOut.reqHdr = feedHeader
         transRunner.simHandle.event.inOut.reqBody = missingBinaryFeed.getBytes()
         transRunner.runTest()
@@ -355,7 +357,7 @@ Content-Type: application/atom+xml
             SubmitModel sm = ft.buildSubmitModel(true, new String(simHandle.event.inOut.reqBody))
             new SubmitModelValidator(simHandle, sm).asPeer().run()
         }
-        def transRunner = new TransactionRunner('mh', simId, repoName,  closure)
+        def transRunner = new TransactionRunner('mh', simId, closure)
         transRunner.simHandle.event.inOut.reqHdr = feedHeader
         transRunner.simHandle.event.inOut.reqBody = missingEntryWrappers.getBytes()
         transRunner.runTest()
@@ -430,7 +432,7 @@ Content-Type: application/atom+xml
             SubmitModel sm = ft.buildSubmitModel(true, new String(simHandle.event.inOut.reqBody))
             new SubmitModelValidator(simHandle, sm).asPeer().run()
         }
-        def transRunner = new TransactionRunner('mh', simId, repoName,  closure)
+        def transRunner = new TransactionRunner('mh', simId, closure)
         transRunner.simHandle.event.inOut.reqHdr = feedHeader
         transRunner.simHandle.event.inOut.reqBody = badContentRef.getBytes()
         transRunner.runTest()

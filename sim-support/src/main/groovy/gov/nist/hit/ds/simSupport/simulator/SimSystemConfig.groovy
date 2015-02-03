@@ -16,7 +16,7 @@ class SimSystemConfig {
         host = Installation.installation().propertyServiceManager().getToolkitHost()
         port = Installation.installation().propertyServiceManager().getToolkitPort()
         tlsPort = Installation.installation().propertyServiceManager().getToolkitTlsPort()
-        service = 'xdstools3/sim'
+        service = 'xdstools3'
         if (!repoName)
             repoName = 'Sim'
     }

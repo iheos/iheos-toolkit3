@@ -5,7 +5,9 @@ import gov.nist.hit.ds.httpSoap.validators.SoapMessageValidator
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.utilities.SimEventAccess
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.SoapFaultException
@@ -31,7 +33,7 @@ class SoapMessageValidator2Test extends Specification {
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     def repName = 'Sim'
 
     def setup() {
@@ -40,8 +42,8 @@ class SoapMessageValidator2Test extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('SoapMessageValidator2Test')
-        SimUtils.create('reg', simId, repName)
+        simId = new SimIdentifier(repName, 'SoapMessageValidator2Test')
+        SimUtils.create('reg', simId)
     }
 
     def 'SoapMessageValidator should succeed'() {
@@ -64,9 +66,9 @@ class SoapMessageValidator2Test extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repName, closure)
+        def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.runTest()
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
 
         then:
         !transRunner.simHandle.event.hasErrors()
@@ -92,8 +94,8 @@ class SoapMessageValidator2Test extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
@@ -112,8 +114,8 @@ class SoapMessageValidator2Test extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
@@ -141,8 +143,8 @@ class SoapMessageValidator2Test extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
@@ -174,8 +176,8 @@ class SoapMessageValidator2Test extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
@@ -200,8 +202,8 @@ class SoapMessageValidator2Test extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
@@ -233,8 +235,8 @@ class SoapMessageValidator2Test extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
@@ -265,8 +267,8 @@ class SoapMessageValidator2Test extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
@@ -297,8 +299,8 @@ class SoapMessageValidator2Test extends Specification {
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:

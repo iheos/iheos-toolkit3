@@ -14,11 +14,11 @@ import groovy.util.logging.Log4j
 @Log4j
 class SimConfigFactory {
 
-    SimConfig buildSim(String server, String port, String base, SimId simId, ActorType actorType) {
+    SimConfig buildSim(String server, String port, String base, String user, SimId simId, ActorType actorType) {
         log.debug("SimConfigFactory: actorType ${actorType.name}")
         SimConfig actorSimConfig = new SimConfig(actorType)
 
-        EndpointBuilder endpointBuilder = new EndpointBuilder(server, port, base, simId)
+        EndpointBuilder endpointBuilder = new EndpointBuilder(server, port, base, user, simId)
 
         // Not clear that properties are being used at the moment
         actorType.props.each { name, value ->

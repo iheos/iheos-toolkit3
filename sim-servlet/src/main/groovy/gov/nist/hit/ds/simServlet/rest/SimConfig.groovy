@@ -5,22 +5,28 @@ import gov.nist.hit.ds.simSupport.client.SimId
 
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.Response
 
 /**
  * Created by bmajur on 10/26/14.
  */
 
-@Path('/sim/config/{simid}')
+@Path('/sim/config/{username}/{simid}')
 class SimConfig {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    String getConfig(@PathParam('simid') String simIdString) {
-        println "GET for SIMConfig ${simIdString}"
-        SimId simId = new SimId(simIdString)
-        def ret = new SimApi().getConfig(simId)
-        println "return is \n${ret}"
-        return ret
+    String getConfig(@PathParam('username') String username, @PathParam('simid') String simIdString) {
+        try {
+            println "GET for SIMConfig ${simIdString}"
+            SimId simId = new SimId(simIdString)
+            def ret = new SimApi().getConfig(username, simId)
+            println "return is \n${ret}"
+            return ret
+        } catch (Throwable t) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST)
+        }
+
     }
 
 //    @POST

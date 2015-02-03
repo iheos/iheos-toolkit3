@@ -4,8 +4,10 @@ import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.utilities.SimEventAccess
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.SoapFaultException
@@ -61,8 +63,8 @@ class TransactionFailureTest extends Specification {
 
     def 'Should fail with fault'() {
         when: ''
-        def simId = new SimId(simIdStr)
-        def simHandle = SimUtils.recreate('reg', simId, repoName)
+        def simId = new SimIdentifier(SimUtils.defaultRepoName, simIdStr)
+        def simHandle = SimUtils.recreate('reg', simId)
         def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tools/sim/123/act/fault')
         simHandle.transactionType = factory.getTransactionType(endpointBuilder.transCode)
 
@@ -71,7 +73,7 @@ class TransactionFailureTest extends Specification {
 
         when:
         def runner = new TransactionRunner(simHandle)
-        def eventAccess = new EventAccess(simId.id, simHandle.event)
+        def eventAccess = new SimEventAccess(simId, simHandle.event)
         runner.testRun()
 
         then:
@@ -87,8 +89,8 @@ class TransactionFailureTest extends Specification {
 
     def 'Should fail with error'() {
         when: ''
-        def simId = new SimId(simIdStr)
-        def simHandle = SimUtils.recreate('reg', simId, repoName)
+        def simId = new SimIdentifier(SimUtils.defaultRepoName, simIdStr)
+        def simHandle = SimUtils.recreate('reg', simId)
         def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tk/sim/123/reg/error')
         simHandle.transactionType = factory.getTransactionType(endpointBuilder.transCode)
 
@@ -97,7 +99,7 @@ class TransactionFailureTest extends Specification {
 
         when:
         def runner = new TransactionRunner(simHandle)
-        def eventAccess = new EventAccess(simId.id, simHandle.event)
+        def eventAccess = new SimEventAccess(simId, simHandle.event)
         runner.testRun()
 
         then:
