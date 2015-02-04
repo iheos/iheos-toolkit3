@@ -13,3 +13,5 @@ mvn install:install-file -Dfile=jms-1.1.jar -DgroupId=javax.jms -DartifactId=jms
 mvn install:install-file -Dfile=smartgwt-4.1p.jar -DgroupId=com.smartgwt -DartifactId=smartgwt -Dversion=4.1p -Dpackaging=jar
 
 mvn install:install-file -Dfile=smartgwt-skins-4.1p.jar -DgroupId=com.smartgwt -DartifactId=smartgwt-skins -Dversion=4.1p -Dpackaging=jar
+
+mvn install:install-file -Dfile=httpcore-4.4.jar -DgroupId=org.apache.httpcomponents -DartifactId=httpcore -Dversion=4.4 -Dpackaging=jar
