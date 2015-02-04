@@ -4,12 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>docentryeditor-standalone</artifactId>
+    <artifactId>docentryeditor-integ</artifactId>
     <groupId>gov.nist.hit.ds</groupId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
-
-    <name>doc-entry-editor-standalone</name>
 
     <properties>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
@@ -45,7 +43,6 @@
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>docentryeditor</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-            <classifier>classes</classifier>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -79,7 +76,7 @@
     </dependencies>
 
     <build>
-        <finalName>docentryeditor</finalName>
+        <finalName>docentryeditor-integ</finalName>
         <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
         <!-- Generate compiled stuff in the folder used for developing mode -->
         <!--<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>-->
@@ -98,21 +95,11 @@
                             <goal>compile</goal>
                         </goals>
                     </execution>
-                    <!--<execution>-->
-                    <!--<id>run-gwt-tests</id>-->
-                    <!--<phase>test</phase>-->
-                    <!--<goals>-->
-                    <!--<goal>test</goal>-->
-                    <!--</goals>-->
-                    <!--</execution>-->
                 </executions>
                 <configuration>
-                    <compileSourcesArtifacts>
-                        <compileSourcesArtifact>gov.nist.hit.ds:docentryeditor</compileSourcesArtifact>
-                    </compileSourcesArtifacts>
-                    <runTarget>DocEntryEditorAppStandalone.html</runTarget>
+                    <runTarget>DocEntryEditorAppInteg.html</runTarget>
                     <modules>
-                        <module>${project.groupId}.docentryeditorstandalone.DocEntryEditorStandalone</module>
+                        <module>${project.groupId}.docentryeditorinteg.DocEntryEditorInteg</module>
                     </modules>
                 </configuration>
             </plugin>
