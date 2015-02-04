@@ -84,8 +84,8 @@ public class WelcomePanel extends VerticalLayoutContainer {
 //		this.add(htmlWelcome);
 		this.add(htmlExplanationTitle);
 		this.add(htmlExplanation);
-		this.add(buttonsHContainer);
-		this.add(warningPanel);
+		this.add(buttonsHContainer,new VerticalLayoutData(1,-1));
+		this.add(warningPanel,new VerticalLayoutData(1,-1));
         this.setScrollMode(ScrollSupport.ScrollMode.AUTO);
 	}
 

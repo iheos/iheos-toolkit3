@@ -5,12 +5,13 @@ import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppImages;
 
 /**
  * Widget to display a warning message in a red bordered panel at the bottom of the page
  */
-public class PageWarningPanel extends ContentPanel{
+public class PageWarningPanel extends VerticalLayoutContainer{
     /**
      * Default constructor
      */
@@ -25,13 +26,13 @@ public class PageWarningPanel extends ContentPanel{
         // render the icon warning message
         HorizontalLayoutContainer hlc=new HorizontalLayoutContainer();
         hlc.add(i, new HorizontalLayoutContainer.HorizontalLayoutData(-1, -1, new Margins(0, 0, 0, 5)));
-        hlc.add(l, new HorizontalLayoutContainer.HorizontalLayoutData(-1, -1, new Margins(0, 0, 0, 5)));
+        hlc.add(l, new HorizontalLayoutContainer.HorizontalLayoutData(1, -1, new Margins(0, 0, 0, 5)));
 
         // set the red bordered warning panel
-        this.add(hlc);
-        this.setHeaderVisible(false);
-        this.setBodyBorder(false);
-        this.setHeight(100);
+        this.add(hlc, new VerticalLayoutData(1,125));
+//        this.setHeaderVisible(false);
+//        this.setBodyBorder(false);
+//        this.setHeight(100);
         this.setStyleName("warning-panel");
     }
 }

@@ -27,6 +27,7 @@ public class MetadataEditorAppView extends Viewport {
 
     SubmissionPanelView submissionPanelView;
     SubmissionPanelPresenter submissionPanelPresenter;
+    private final SimpleContainer simple;
 
     public MetadataEditorAppView() {
         super();
@@ -64,9 +65,10 @@ public class MetadataEditorAppView extends Viewport {
         con.setWestWidget(submissionMVP.getDisplay(), westData);
 
 
-        SimpleContainer simple = new SimpleContainer();
+        simple = new SimpleContainer();
         simple.add(con, new MarginData(0, 0, /*8*/0, 0));
-        add(con);
+        simple.setWidget(con);
+        add(simple);
 
 //        north.start();
         submissionMVP.start();
@@ -82,4 +84,7 @@ public class MetadataEditorAppView extends Viewport {
         return new GenericMVP<SubmissionMenuData, SubmissionPanelView, SubmissionPanelPresenter>(submissionPanelView, submissionPanelPresenter);
     }
 
+    public void setMarginTop(int marginTop) {
+        simple.getWidget().setLayoutData(new MarginData(0,0,80,0));
+    }
 }

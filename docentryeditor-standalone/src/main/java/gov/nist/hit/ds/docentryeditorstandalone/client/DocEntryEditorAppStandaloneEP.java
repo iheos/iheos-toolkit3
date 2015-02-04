@@ -10,6 +10,8 @@ import gov.nist.hit.ds.docentryeditor.client.MetadataEditorApp;
 public class DocEntryEditorAppStandaloneEP implements EntryPoint {
     @Override
     public void onModuleLoad() {
-        RootPanel.get("editorAppContainer").add(new MetadataEditorApp().asWidget());
+        MetadataEditorApp app = new MetadataEditorApp();
+        app.getAppView().setMarginTop(80);
+        RootPanel.get("editorAppContainer").add(app);
     }
 }

@@ -6,25 +6,29 @@
 
 <html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
-  <!--                                                               -->
-  <!-- Consider inlining CSS to reduce the number of requested files -->
-  <!--                                                               -->
-  <!-- <link type="text/css" rel="stylesheet" href="ExtGWT/css/gxt-all.css"> -->
-  <link type="text/css" rel="stylesheet" href="XDS-MetadataEditor.css">
+    <!--                                                               -->
+    <!-- Consider inlining CSS to reduce the number of requested files -->
+    <!--                                                               -->
+    <!-- <link type="text/css" rel="stylesheet" href="ExtGWT/css/gxt-all.css"> -->
+    <link type="text/css" rel="stylesheet" href="XDS-MetadataEditor.css">
+    <!-- ----------- Conditional CSS that optimizes display for actual browser viewport size ----------- -->
+    <!-- See here for more info on how to edit: http://css-tricks.com/resolution-specific-stylesheets/ -->
+    <link rel='stylesheet' media='screen and (max-width: 1500px)' href='laptop.css' />
+    <link rel='stylesheet' media='screen and (min-width: 1501px)' href='desktop.css' />
 
-  <!--                                           -->
-  <!-- Any title is fine                         -->
-  <!--                                           -->
-  <title>XDS Metadata Editor</title>
+    <!--                                           -->
+    <!-- Any title is fine                         -->
+    <!--                                           -->
+    <title>XDS Metadata Editor</title>
 
-  <!--                                           -->
-  <!-- This script loads your compiled module.   -->
-  <!-- If you add any GWT meta tags, they must   -->
-  <!-- be added before this line.                -->
-  <!--                                           -->
-  <script type="text/javascript" language="javascript" src="xdseditor/xdseditor.nocache.js"></script>
+    <!--                                           -->
+    <!-- This script loads your compiled module.   -->
+    <!-- If you add any GWT meta tags, they must   -->
+    <!-- be added before this line.                -->
+    <!--                                           -->
+    <script type="text/javascript" language="javascript" src="xdseditor/xdseditor.nocache.js"></script>
 </head>
 
 <!--                                           -->
@@ -39,10 +43,10 @@
 
 <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
 <noscript>
-  <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
-    Your web browser must have JavaScript enabled
-    in order for this application to display correctly.
-  </div>
+    <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+        Your web browser must have JavaScript enabled
+        in order for this application to display correctly.
+    </div>
 </noscript>
 
 <!--   <table width="100%" >
@@ -59,9 +63,9 @@
        </tr>
    </table>-->
 <header id='appheader'>
-  <div id='apptitle'>XDS Document Entry Editor</div>
-  <div id='appversion'>Version 1.0.0 &alpha;</div>
-  <div id='appsubtitle'>IHE USA Cleveland Connectathon Jan. 2015</div>
+    <div id='apptitle'>XDS Document Entry Editor</div>
+    <div id='appversion'>Version 1.0.0 &alpha;</div>
+    <div id='appsubtitle'>IHE USA Cleveland Connectathon Jan. 2015</div>
 </header>
 
 <div id="editorAppContainer"></div>

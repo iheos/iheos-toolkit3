@@ -54,6 +54,10 @@ public class MetadataEditorApp implements IsWidget {
         return activityPanel;
     }
 
+    public MetadataEditorAppView getAppView(){
+        return appView;
+    }
+
     public static MetadataEditorGinInjector getInjector() {
         return injector;
     }
