@@ -27,12 +27,18 @@ class ActorType /* implements IsSerializable, Serializable */{
     void putActorProperty(String key, String value) { props.put(key, value) }
     boolean containsKey(String key) { return props.containsKey(key) }
 
-    TransactionType findSimple(String transactionTypeName) { findDirectional(transactionTypeName)?.transactionType }
+    TransactionType findTransactionType(String transactionTypeName, boolean send) { findDirectional(transactionTypeName, send)?.transactionType }
 
-    DirectionalTransactionType findDirectional(String transactionTypeName) {
+    DirectionalTransactionType findDirectional(String transactionTypeName, boolean send) {
         directionalTransactionTypes.find {
-            it.transactionType.identifiedBy(transactionTypeName)
+            it.transactionType.identifiedBy(transactionTypeName) && it.client == send
         }
+    }
+
+    TransactionType getTransactionTypeFromRequestAction(String action, boolean client) {
+        directionalTransactionTypes.find { dtt ->
+            action == dtt.transactionType.requestAction && client == dtt.client
+        }?.transactionType
     }
 
     void check() throws InvalidActorTypeDefinitionException {

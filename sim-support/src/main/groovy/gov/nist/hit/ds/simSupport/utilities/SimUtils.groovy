@@ -248,11 +248,11 @@ class SimUtils {
     private static store(String xmlEle, String name, Asset parent) {
         SimpleAsset a = RepoUtils.getChildIfAvailable(name, parent)
         if (!a) {
-            println "Storing content ${xmlEle}"
+            log.debug "Storing content ${xmlEle}"
             a = RepoUtils.mkChild(name, parent)
             a.setContent(xmlEle, 'text/xml')
         } else {
-            println "Updating content ${xmlEle}"
+            log.debug "Updating content ${xmlEle}"
             a.setAutoFlush(true)
             a.updateContent(xmlEle)
         }

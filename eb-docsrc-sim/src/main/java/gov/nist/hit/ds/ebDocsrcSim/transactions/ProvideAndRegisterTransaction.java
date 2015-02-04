@@ -5,6 +5,7 @@ import gov.nist.hit.ds.ebDocsrcSim.soap.SoapActionFactory;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataParser;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
+import gov.nist.hit.ds.simSupport.simulator.SimHandle;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import gov.nist.hit.ds.xdsExceptions.MetadataException;
@@ -18,14 +19,17 @@ import java.util.Map;
 public class ProvideAndRegisterTransaction extends AbstractClientTransaction {
     boolean use_xop = true;
 
-    public ProvideAndRegisterTransaction()  {}
+    public ProvideAndRegisterTransaction(SimHandle simHandle)  {
+        this.simHandle = simHandle;
+    }
 
     public OMElement run(OMElement metadata_element, Map<String, DocumentHandler> documents) throws XdsInternalException, MetadataException {
         OMElement pnr = XmlUtil.om_factory.createOMElement("ProvideAndRegisterDocumentSetRequest", MetadataSupport.xdsB);
         if (no_convert)
             pnr.addChild(metadata_element);
         else {
-            Metadata metadata = MetadataParser.parse(metadata_element);
+            Metadata metadata = MetadataParser.parseNonSubmission(metadata_element);
+            //MetadataParser.parse(metadata_element);
             pnr.addChild(metadata.getV3SubmitObjectsRequest());
         }
         for (String id : documents.keySet() ) {
