@@ -66,7 +66,7 @@ Host: localhost:9085'''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope"
     xmlns:wsa="http://www.w3.org/2005/08/addressing">
     <soapenv:Header>
-        <wsa:To soapenv:mustUnderstand="true">http://localhost:9085/xdstools3/sim/NoSim/docrec/pnr</wsa:To>
+        <wsa:To soapenv:mustUnderstand="true">http://localhost:9085/xdstools3/sim/user/NoSim/docrec/pnr</wsa:To>
         <wsa:MessageID>urn:uuid:806D8FD2D542EDCC2C1199332890651</wsa:MessageID>
         <wsa:Action>urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b</wsa:Action>
     </soapenv:Header>
@@ -96,7 +96,7 @@ Host: localhost:9085'''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope"
     xmlns:wsa="http://www.w3.org/2005/08/addressing">
     <soapenv:Header>
-        <wsa:To soapenv:mustUnderstand="true">http://localhost:9085/xdstools3/sim/target23/docrec/xyzzy</wsa:To>
+        <wsa:To soapenv:mustUnderstand="true">http://localhost:9085/xdstools3/sim/user/target23/docrec/xyzzy</wsa:To>
         <wsa:MessageID>urn:uuid:806D8FD2D542EDCC2C1199332890651</wsa:MessageID>
         <wsa:Action>xyzzy</wsa:Action>
     </soapenv:Header>
@@ -136,7 +136,7 @@ Host: localhost:9085'''
 
     def 'Extract simId from URI'() {
         when:
-        TransactionType ttype = factory.getTransactionTypeIfAvailable('prb')
+        TransactionType ttype = factory.getTransactionTypeIfAvailable('rb')
 
         then:
         ttype
@@ -150,7 +150,7 @@ Host: localhost:9085'''
 
     def 'Extract username from URI'() {
         when:
-        TransactionType ttype = factory.getTransactionTypeIfAvailable('prb')
+        TransactionType ttype = factory.getTransactionTypeIfAvailable('rb')
 
         then:
         ttype

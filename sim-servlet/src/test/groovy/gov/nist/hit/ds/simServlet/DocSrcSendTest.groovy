@@ -19,8 +19,8 @@ class DocSrcSendTest extends Specification {
 <sendRequest>
     <simReference>user/simid</simReference>
     <transactionName>prb</transactionName>
-    <tls value="true"/>
-    <metadata>meta content</metadata>
+    <tls value="false"/>
+    <metadata><foo/></metadata>
     <document id="Document01" mimeType="text/plain">doc content</document>
 </sendRequest>'''
     def simConfig = '''
