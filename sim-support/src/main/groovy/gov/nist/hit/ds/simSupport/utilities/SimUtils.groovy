@@ -72,7 +72,7 @@ class SimUtils {
         Asset simAsset = RepoUtils.mkAsset(simId.id, new SimpleType('sim'), repo)
 
         if (actorTypeName) {
-            SimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
+            SimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.tlsPort, simSystemConfig.service, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
             storeConfig(new SimulatorDAO().toXML(actorSimConfig), simAsset)
             Site site = new SimSiteFactory().buildSite(actorSimConfig, simId.id)
             OMElement siteEle = new SeparateSiteLoader().siteToXML(site)

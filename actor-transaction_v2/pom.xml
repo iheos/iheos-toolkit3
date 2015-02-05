@@ -11,6 +11,7 @@
 
 	<artifactId>actortransaction_v2</artifactId>
 
+<!--
     <distributionManagement>
         <snapshotRepository>
             <id>internal-nist-repo-snapshots</id>
@@ -21,6 +22,7 @@
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/releases/</url>
         </repository>
     </distributionManagement>
+-->
 
 	<dependencies>
 		<dependency>

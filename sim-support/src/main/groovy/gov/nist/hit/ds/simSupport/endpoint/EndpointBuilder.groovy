@@ -12,6 +12,7 @@ import groovy.util.logging.Log4j
 class EndpointBuilder {
     String server
     String port
+    String tlsPort
     String base
     SimId simId = null
     String actorCode
@@ -20,9 +21,10 @@ class EndpointBuilder {
 
     EndpointBuilder() { log.debug("EndpointBuilder")}
 
-    EndpointBuilder(String server, String port, String base, SimId simId) {
+    EndpointBuilder(String server, String port, String tlsPort, String base, SimId simId) {
         this.server = server
         this.port = port
+        this.tlsPort = tlsPort
         this.base = base
         this.simId = simId
     }
@@ -32,11 +34,13 @@ class EndpointBuilder {
     EndpointValue makeEndpoint(ActorType actor, EndpointType endpointLabel) {
         server = clean(server)
         port = clean(port)
+        tlsPort = clean(tlsPort)
         base = clean(base)
         def actorName = clean(actor.name)
         def secure = (endpointLabel.tls) ? 's' : ''
+        def thisPort = (secure) ? tlsPort : port
         String val;
-        val = "http${secure}://${server}:${port}/${base}/${simId.getId()}/${actorName}/${endpointLabel.transType.code}"
+        val = "http${secure}://${server}:${thisPort}/${base}/${simId.getId()}/${actorName}/${endpointLabel.transType.code}"
         return new EndpointValue(val)
     }
 

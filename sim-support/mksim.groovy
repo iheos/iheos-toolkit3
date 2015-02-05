@@ -16,7 +16,7 @@ aTfactory.clear()
 aTfactory.loadFromResource('at.xml')
 
 def actorTypeName = 'reg'
-def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'simwar', new SimId('1234'), actorTypeName)
+def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', '8081', 'simwar', new SimId('1234'), actorTypeName)
 println actorSimConfig
 OMElement simEle = actorSimConfig.toXML()
 println new OMFormatter(simEle).toString()

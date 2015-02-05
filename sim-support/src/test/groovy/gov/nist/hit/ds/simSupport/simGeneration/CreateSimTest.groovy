@@ -64,7 +64,7 @@ class CreateSimTest extends Specification {
 
         when:
         SimConfigFactory factory = new SimConfigFactory()
-        SimConfig actorSimConfig = factory.buildSim(server, port, base, simId, atFactory.getActorType(actorTypeName))
+        SimConfig actorSimConfig = factory.buildSim(server, port, port, base, simId, atFactory.getActorType(actorTypeName))
 
         then:
         actorSimConfig
@@ -81,7 +81,7 @@ class CreateSimTest extends Specification {
 
         when:
         SimConfigFactory factory = new SimConfigFactory()
-        SimConfig actorSimConfig = factory.buildSim(server, port, base, simId, atFactory.getActorType(actorTypeName))
+        SimConfig actorSimConfig = factory.buildSim(server, port, port, base, simId, atFactory.getActorType(actorTypeName))
         EndpointValue endpoint = actorSimConfig.getEndpoint(
                 new ActorTransactionTypeFactory().getTransactionType("rb"),
                 TlsType.TLS,
