@@ -61,13 +61,14 @@ class EndpointBuilder {
 
     EndpointBuilder parse(String endpoint) {
         def http
+        def blank
         def serverPort
         def basePart
         def simStr
         def simid
         def actor
         def trans
-        (http, serverPort, basePart, simStr, user, simid, actor, trans) = endpoint.split('/')
+        (http, blank, serverPort, basePart, simStr, user, simid, actor, trans) = endpoint.split('/')
         if (simid)
             simId = new SimId(simid)
         actorCode = actor

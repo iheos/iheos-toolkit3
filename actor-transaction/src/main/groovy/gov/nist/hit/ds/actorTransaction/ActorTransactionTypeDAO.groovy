@@ -28,6 +28,7 @@ class ActorTransactionTypeDAO {
 
     void parseTransaction(tt) {
         TransactionType ttype = new TransactionType()
+        def id = tt.@id.text()
         ttype.name = tt.@name.text()
         ttype.code = tt.@code.text()
         ttype.isRetrieve = tt.@isRetrieve.text() == 'true'
@@ -39,9 +40,13 @@ class ActorTransactionTypeDAO {
             ttype.multiPart = params.@multipart.text() == 'true'
             ttype.soap = params.@soap.text() == 'true'
         }
+
+        // transactions can be looked up by name, code, asyncCode, or id
         fact.transactionByName.put(ttype.name, ttype)
         fact.transactionByName.put(ttype.code, ttype)
         fact.transactionByName.put(ttype.asyncCode, ttype)
+        fact.transactionById.put(id, ttype)
+
         fact.transactionByRequestAction.put(ttype.requestAction, ttype)
         fact.transactionByResponseAction.put(ttype.responseAction, ttype)
         tt.property.each {
@@ -60,13 +65,13 @@ class ActorTransactionTypeDAO {
         actorType.shortName = at.@id
         actorType.actorSimFactoryClassName = at.simFactoryClass.@class
         at.transaction.each { trans ->
-            String transId = trans.@id
+            String transId = trans.@id.text()
             log.debug("...${transId}")
-            TransactionType tt = fact.transactionByName.get(transId)
+            TransactionType tt = fact.transactionById.get(transId)
             if (!tt)
-                throw new ToolkitRuntimeException("Transaction [${trans}] not defined - ${fact.transactionByName.keySet()}")
-            boolean send = at.@type == 'client'
-            actorType.getDirectionalTransactionTypes().add(new DirectionalTransactionType(tt, send))
+                throw new ToolkitRuntimeException("Actor type ${actorType.name} references Transaction type by id [${transId}] which is not defined - ${fact.transactionByName.keySet()}")
+            boolean client = at.@type.text() == 'client'
+            actorType.getDirectionalTransactionTypes().add(new DirectionalTransactionType(tt, client))
             tt.actorType = actorType
         }
         at.property.each {

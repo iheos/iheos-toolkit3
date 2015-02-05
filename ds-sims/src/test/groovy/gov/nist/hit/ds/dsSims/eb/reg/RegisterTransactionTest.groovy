@@ -78,7 +78,7 @@ Host: localhost:9085'''
     def 'Register Transaction should succeed'() {
         when: ''
         SimIdentifier simId = new SimIdentifier(SimUtils.defaultRepoName, 'RegisterTransactionTest')
-        String endpoint = 'http://localhost:8080/tools/sim/123/reg/rb'
+        String endpoint = 'http://localhost:8080/tools/sim/user/123/reg/rb'
         SimHandle simHandle = SimUtils.recreate('reg', simId)
         simHandle.event.validationLevel = ValidationLevel.INFO
         simHandle.transactionType = new ActorTransactionTypeFactory().getTransactionType('rb')

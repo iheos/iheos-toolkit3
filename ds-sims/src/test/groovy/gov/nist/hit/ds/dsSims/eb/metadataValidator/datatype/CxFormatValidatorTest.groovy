@@ -14,7 +14,7 @@ import spock.lang.Specification
 class CxFormatValidatorTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
-    <transaction name="Register" code="rb" asyncCode="r.as">
+    <transaction name="Register" code="rb" asyncCode="r.as" id="rb">
        <implClass value="RegisterTransaction"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>

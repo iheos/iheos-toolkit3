@@ -16,27 +16,27 @@ import spock.lang.Specification
 class SiteFactoryTest extends Specification {
     static String config = '''
 <ActorsTransactions>
-    <transaction name="Stored Query" code="sq.b" asyncCode="sq.as">
+    <transaction name="Stored Query" code="sq.b" asyncCode="sq.as" id="sq.b">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
         <implClass value="unused"/>
     </transaction>
-    <transaction name="Register" code="r.b" asyncCode="r.as">
+    <transaction name="Register" code="r.b" asyncCode="r.as" id="r.b">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <implClass value="unused"/>
     </transaction>
-    <transaction name="Provide and Register" code="pr.b" asyncCode="pr.as">
+    <transaction name="Provide and Register" code="pr.b" asyncCode="pr.as" id="pr.b">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
         <implClass value="unused"/>
     </transaction>
-    <transaction name="Retrieve" code="ret.b" asyncCode="ret.as" isRetrieve="true">
+    <transaction name="Retrieve" code="ret.b" asyncCode="ret.as" isRetrieve="true" id="ret.b">
         <request action="urn:ihe:iti:2007:RetrieveDocumentSet"/>
         <response action="urn:ihe:iti:2007:RetrieveDocumentSetResponse"/>
         <implClass value="unused"/>
     </transaction>
-    <transaction name="Update" code="update" asyncCode="update.as">
+    <transaction name="Update" code="update" asyncCode="update.as" id="update">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
         <implClass value="unused"/>

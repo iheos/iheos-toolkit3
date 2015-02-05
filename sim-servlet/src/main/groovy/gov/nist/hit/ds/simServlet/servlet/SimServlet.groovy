@@ -20,6 +20,7 @@ import gov.nist.hit.ds.soapSupport.core.*
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.utilities.io.Io
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
+import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 import org.apache.log4j.Logger
 
@@ -193,7 +194,9 @@ public class SimServlet extends HttpServlet {
         simHandle.setSoapEnvironment(soapEnvironment);
         simHandle.setRequestIsMultipart(soapParser.isMultiPart());
         simHandle.setEndpointBuilder(endpointBuilder);
-        TransactionType transactionType = factory.getTransactionTypeFromRequestAction(soapHeader.getAction());
+//        TransactionType transactionType = factory.getTransactionTypeFromRequestAction(soapHeader.getAction());
+        logger.debug("actorType is ${simHandle.actorSimConfig.actorType}")
+        TransactionType transactionType = simHandle.actorSimConfig.actorType.getTransactionTypeFromRequestAction(soapHeader.getAction(), false)
         if (transactionType == null) {
             simHandle.getEvent().setFault(new Fault("Unknown wsa:Action [" + soapHeader.getAction() + "]", FaultCode.Sender.toString(), "Unknown", ""));
             logRequest(simHandle, content);

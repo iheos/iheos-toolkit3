@@ -109,18 +109,9 @@ class Pnr implements Transaction {
         println("Running PnR transaction")
     }
 
-    EbSendRequest ebSendRequest
-
-    // must be used for sendRequest
-    Pnr(SimHandle _simHandle, EbSendRequest _ebSendRequest) {
-        log.debug("send constructor called")
-        simHandle = _simHandle
-        ebSendRequest = _ebSendRequest
-    }
 
     @Override
     ValidationStatus sendRequest() {
-        log.debug("Sending request to ${ebSendRequest.transactionName}")
         return null
     }
 }

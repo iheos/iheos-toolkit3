@@ -19,6 +19,10 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>sim-servlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
             <artifactId>sim-support</artifactId>
         </dependency>
         <dependency>

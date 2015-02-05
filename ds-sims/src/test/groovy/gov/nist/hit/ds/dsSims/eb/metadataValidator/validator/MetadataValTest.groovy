@@ -5,7 +5,6 @@ import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.ebMetadata.MetadataParser
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
-import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
@@ -20,7 +19,7 @@ import spock.lang.Specification
 class MetadataValTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
-    <transaction name="Register" code="rb" asyncCode="r.as">
+    <transaction name="Register" code="rb" asyncCode="r.as" id="rb">
        <implClass value="RegisterTransaction"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>

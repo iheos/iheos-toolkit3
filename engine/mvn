@@ -1,0 +1,9 @@
+Script started on Thu Feb  5 09:21:24 2015
+install: illegal option -- r
+usage: install [-bCcpSsv] [-B suffix] [-f flags] [-g group] [-m mode]
+               [-o owner] file1 file2
+       install [-bCcpSsv] [-B suffix] [-f flags] [-g group] [-m mode]
+               [-o owner] file1 ... fileN directory
+       install -d [-v] [-g group] [-m mode] [-o owner] directory ...
+
+Script done on Thu Feb  5 09:21:24 2015

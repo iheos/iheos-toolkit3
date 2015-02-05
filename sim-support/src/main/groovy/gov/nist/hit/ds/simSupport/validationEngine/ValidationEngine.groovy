@@ -122,7 +122,7 @@ public class ValidationEngine {
             evalGuard(validationMethod)
         }
 
-//        def valMethod = validationMethods.findSimple { validationMethod ->
+//        def valMethod = validationMethods.findTransactionType { validationMethod ->
 //            if (!(validationMethod.runable() && dependenciesSatisfied(validationMethod.dependsOnId))) return false
 //            log.debug("For ${validationMethod.id}...")
 //            evalGuard(validationMethod)// determines FOUND status

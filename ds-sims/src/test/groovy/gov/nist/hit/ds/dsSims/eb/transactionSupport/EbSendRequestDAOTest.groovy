@@ -12,7 +12,7 @@ class EbSendRequestDAOTest extends Specification {
     <simReference>user/simid</simReference>
     <transactionName>prb</transactionName>
     <tls value="true"/>
-    <metadata>meta content</metadata>
+    <metadata><foo/></metadata>
     <document id="Document01" mimeType="text/plain">doc content</document>
 </sendRequest>'''
 
@@ -27,7 +27,7 @@ class EbSendRequestDAOTest extends Specification {
         then:
         request.simIdentifier.repoName == 'user'
         request.simIdentifier.simId.id == 'simid'
-        request.metadata == 'meta content'
+        request.metadata.startsWith('<foo')
         request.transactionName == 'prb'
         request.tls
         request.documents['Document01'].content == 'doc content'

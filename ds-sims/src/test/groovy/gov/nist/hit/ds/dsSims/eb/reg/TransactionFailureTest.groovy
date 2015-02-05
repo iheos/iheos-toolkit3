@@ -19,13 +19,13 @@ import spock.lang.Specification
 class TransactionFailureTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
-    <transaction name="Fault" code="fault" asyncCode="fault.as">
+    <transaction name="Fault" code="fault" asyncCode="fault.as" id="fault">
        <implClass value="gov.nist.hit.ds.dsSims.eb.bad.FailsWithFaultValidator"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <params multiPart="false" soap="true"/>
     </transaction>
-    <transaction name="Error" code="error" asyncCode="errof.as">
+    <transaction name="Error" code="error" asyncCode="errof.as" id="error">
        <implClass value="gov.nist.hit.ds.dsSims.eb.bad.FailsWithErrorValidator"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
@@ -65,7 +65,7 @@ class TransactionFailureTest extends Specification {
         when: ''
         def simId = new SimIdentifier(SimUtils.defaultRepoName, simIdStr)
         def simHandle = SimUtils.recreate('reg', simId)
-        def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tools/sim/123/act/fault')
+        def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tools/sim/user/123/act/fault')
         simHandle.transactionType = factory.getTransactionType(endpointBuilder.transCode)
 
         then:
@@ -91,7 +91,7 @@ class TransactionFailureTest extends Specification {
         when: ''
         def simId = new SimIdentifier(SimUtils.defaultRepoName, simIdStr)
         def simHandle = SimUtils.recreate('reg', simId)
-        def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tk/sim/123/reg/error')
+        def endpointBuilder = new EndpointBuilder().parse('http://localhost:8080/tk/sim/user/123/reg/error')
         simHandle.transactionType = factory.getTransactionType(endpointBuilder.transCode)
 
         then:

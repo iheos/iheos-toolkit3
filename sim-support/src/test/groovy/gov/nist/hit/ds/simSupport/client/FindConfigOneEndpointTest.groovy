@@ -72,7 +72,7 @@ public class FindConfigOneEndpointTest {
 						);
         actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         cEles = sConfig.findConfigs(
-                [ actorType.findSimple("rb") ],
+                [ actorType.findSimple("rb", false) ],
                 [ TlsType.TLS ],
                 [ AsyncType.ASYNC, AsyncType.SYNC ]);
 	}

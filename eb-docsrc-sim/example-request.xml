@@ -8,7 +8,7 @@
         <!-- XML blocks placed here will be inserted into the SOAP Header -->
     </soapHeaderBlocks>
     <metadata>
-        <!-- Metadata to send -->
+        <!-- Metadata to client -->
     </metadata>
     <documents>
         <!-- Include as many document elements as appropriate 

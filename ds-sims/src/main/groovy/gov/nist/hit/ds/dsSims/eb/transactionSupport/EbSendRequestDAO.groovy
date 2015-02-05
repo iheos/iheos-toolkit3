@@ -2,6 +2,7 @@ package gov.nist.hit.ds.dsSims.eb.transactionSupport
 
 import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
+import groovy.xml.StreamingMarkupBuilder
 
 /**
  * Created by bmajur on 2/3/15.
@@ -22,7 +23,9 @@ class EbSendRequestDAO {
 
         request.tls = xml.tls.@value.text().compareToIgnoreCase('true') == 0
 
-        request.metadata = xml.metadata.text()
+        def outputBuilder = new StreamingMarkupBuilder()
+        String metadataString = outputBuilder.bind{ mkp.yield xml.metadata.children()[0] }
+        request.metadata = metadataString
         if (!request.metadata) throw new ToolkitRuntimeException("EbSendRequestDAO.toModel: metadata not present")
 
         xml.document.each {

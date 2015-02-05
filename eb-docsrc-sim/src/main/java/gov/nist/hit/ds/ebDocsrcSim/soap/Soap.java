@@ -452,6 +452,7 @@ public class Soap  {
 //			}
 
         operationClient.addMessageContext(outMsgCtx);
+        System.out.println("Contexts are: \n" + operationClient.getOperationContext().getMessageContexts().toString());
 
         boolean block = !async;
 
@@ -778,7 +779,7 @@ public class Soap  {
         return soapCall();
     }
 
-    void loadInHeader() throws XdsInternalException {
+    public void loadInHeader() throws XdsInternalException {
         if (serviceClient == null)
             return;
         OperationContext oc = serviceClient.getLastOperationContext();
@@ -799,7 +800,7 @@ public class Soap  {
         inHeader = Util.deep_copy(in.getEnvelope().getHeader());
     }
 
-    void loadOutHeader() throws XdsInternalException {
+    public void loadOutHeader() throws XdsInternalException {
         if (serviceClient == null)
             return;
         OperationContext oc = serviceClient.getLastOperationContext();

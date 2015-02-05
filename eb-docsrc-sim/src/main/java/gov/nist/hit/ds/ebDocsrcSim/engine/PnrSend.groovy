@@ -7,6 +7,7 @@ import gov.nist.hit.ds.ebDocsrcSim.transactions.AbstractClientTransaction
 import gov.nist.hit.ds.dsSims.eb.transactionSupport.EbSendRequest
 import gov.nist.hit.ds.ebDocsrcSim.transactions.ProvideAndRegisterTransaction
 import gov.nist.hit.ds.ebMetadata.MetadataSupport
+import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.toolkit.environment.EnvironmentAccess
@@ -25,18 +26,20 @@ class PnrSend  {
     String endpoint;
     EnvironmentAccess environmentAccess
     OMElement logOutput = MetadataSupport.om_factory.createOMElement("Log", null);
+    SimHandle simHandle;
 
-    PnrSend(OMElement _metadata_element, Map<String, DocumentHandler> _documents, String _endpoint, EnvironmentAccess _environmentAccess) {
+    private PnrSend(OMElement _metadata_element, Map<String, DocumentHandler> _documents, String _endpoint, EnvironmentAccess _environmentAccess) {
         metadata_element = _metadata_element
         documents = _documents
         endpoint = _endpoint
         environmentAccess = _environmentAccess
     }
 
-    PnrSend(SimHandle simHandle, String transactionName, boolean tls, String metadata, Map<String, DocumentHandler> _documents) {
+    private PnrSend(SimHandle simHandle, String transactionName, boolean tls, String metadata, Map<String, DocumentHandler> _documents) {
+        this.simHandle = simHandle
         metadata_element = Util.parse_xml(metadata)
         documents = _documents
-        EndpointValue endpointValue = simConfig.getEndpoint(
+        EndpointValue endpointValue = simHandle.actorSimConfig.getEndpoint(
                 ActorTransactionTypeFactory.getTransactionType(transactionName),
                 (tls) ? TlsType.TLS : TlsType.NOTLS,
                 AsyncType.SYNC)
@@ -51,7 +54,7 @@ class PnrSend  {
 
     // return is [result, logOutput]
     List<OMElement> run() throws XdsException {
-        ProvideAndRegisterTransaction trans = new ProvideAndRegisterTransaction();
+        ProvideAndRegisterTransaction trans = new ProvideAndRegisterTransaction(simHandle);
         trans.no_convert = false;
         trans.nameUuidMap = null;
         trans.instruction_output = logOutput;
@@ -71,7 +74,9 @@ class PnrSend  {
         List<OMElement> results = new ArrayList<>();
         try {
             OMElement result = trans.run(metadata_element, documents);
+            results.add(result)
         } catch (XdsInternalException e) {
+            simHandle.event.fault = new Fault(e.message, 'CODE', "PNR", e.details)
             OMElement err_ele = MetadataSupport.om_factory.createOMElement("Fault", null);
             err_ele.setText(e.getMessage());
             results.add(err_ele);

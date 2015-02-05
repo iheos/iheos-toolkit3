@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response
 /**
  * Created by bmajur on 2/3/15.
  */
-@Path('/sim/send/{username}/{simid}')
+@Path('/sim/client/{username}/{simid}')
 class   Send {
     @POST
     @Consumes(MediaType.APPLICATION_XML)

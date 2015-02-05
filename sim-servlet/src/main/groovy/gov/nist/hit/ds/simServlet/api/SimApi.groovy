@@ -36,22 +36,24 @@ class SimApi {
         // updates actorSimConfig with only the entries
         // that are allowed to be updated
         dao.updateModel(simHandle.actorSimConfig, configXml)
-        // push update
-        String updatedConfig = dao.toXML(simHandle.actorSimConfig)
-        SimUtils.storeConfig(simHandle, updatedConfig)
-        return updatedConfig
+//        // push update
+//        String updatedConfig = dao.toXML(simHandle.actorSimConfig)
+//        SimUtils.storeConfig(simHandle, updatedConfig)
+//        return updatedConfig
+        // just accept update
+        SimUtils.storeConfig(simHandle, configXml)
+        return configXml
     }
 
-    static void send(SimIdentifier simIdentifier, EbSendRequest request) {
+    static SimHandle send(SimIdentifier simIdentifier, EbSendRequest request) {
         ActorTransactionTypeFactory factory = new ActorTransactionTypeFactory()
         TransactionType ttype = factory.getTransactionTypeIfAvailable(request.transactionName)
-        if (!ttype) throw new ToolkitRuntimeException("send: no transaction type")
+        if (!ttype) throw new ToolkitRuntimeException("client: no transaction type")
         SimHandle simHandle = SimUtils.open(simIdentifier)
         simHandle.transactionType = ttype
-        simHandle.event.inOut.reqHdr = 'xxx'
-        simHandle.event.inOut.reqBody = 'XXX'.bytes
         SimUtils.sendTransactionRequest(simHandle, request)
         SimUtils.close(simHandle)
+        return simHandle
     }
 
 }

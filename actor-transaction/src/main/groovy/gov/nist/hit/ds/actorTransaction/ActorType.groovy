@@ -27,6 +27,7 @@ class ActorType /* implements IsSerializable, Serializable */{
     void putActorProperty(String key, String value) { props.put(key, value) }
     boolean containsKey(String key) { return props.containsKey(key) }
 
+    TransactionType findSimple(String transactionTypeName, boolean send) { return findTransactionType(transactionTypeName, send)}
     TransactionType findTransactionType(String transactionTypeName, boolean send) { findDirectional(transactionTypeName, send)?.transactionType }
 
     DirectionalTransactionType findDirectional(String transactionTypeName, boolean send) {
