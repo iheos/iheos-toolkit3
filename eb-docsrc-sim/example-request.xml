@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SendRequest>
+    <!-- Notice the endpoint is missing. It is configured when Document Source simulator is created -->
+    <!-- Notice the Environment is missing.  It is also configured when Document Source simulator is created -->
+    <simId>123</simId>
+    <tls>no</tls>   <!-- yes|no - appropriate endpoint pulled from simulator config -->
+    <soapHeaderBlocks>
+        <!-- XML blocks placed here will be inserted into the SOAP Header -->
+    </soapHeaderBlocks>
+    <metadata>
+        <!-- Metadata to client -->
+    </metadata>
+    <documents>
+        <!-- Include as many document elements as appropriate 
+             ids must match up with ids on ExtrinsicObject elements in metadata 
+        -->
+        <document>
+            <id>Document01</id>
+            <content>base64 encoded content</content>
+        </document>
+    </documents>
+</SendRequest>
