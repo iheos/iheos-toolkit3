@@ -34,15 +34,24 @@ See the loading condition dependent on the size of the viewport, inside Xdstools
     color: #fc0;
     text-shadow: none;
 }
-/* Version of the application, at the right side of the dark blue bar */
-#appversion{
-    font-size: 14px;
-    margin-left: 10px;
+/* Name of the Connectathon event (or "Standard release"), if applicable, the release was made for.
+Displayed to the right side of the dark blue bar. */
+#appevent{
+    font-size: 13px;
     color: #fc0;
     text-shadow: none;
     float:right;
-    padding-top:45px;
-    padding-right:20px;
+    margin-right:20px;
+    margin-top:10px;
+}
+/* Version of the application, at the right side of the dark blue bar */
+#appversion{
+    font-size: 13px;
+    color: #fc0;
+    text-shadow: none;
+    float:right;
+    margin-right:20px;
+    margin-top:-25px;
 }
 
 
