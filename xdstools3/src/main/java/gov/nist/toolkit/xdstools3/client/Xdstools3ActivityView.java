@@ -60,7 +60,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
     private HLayout container;
     private String tabId;
     private HTMLFlow header= new HTMLFlow();
-    private String appSubtitle=null;
+    private String toolkitEvent=null;
     private String toolkitVersion=null;
 
     /**
@@ -115,16 +115,16 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
      * binds the UI Actions
      */
     private void bindUI() {
-        propertiesService.getToolkitAppSubtitle(new AsyncCallback<String>() {
+        propertiesService.getToolkitEvent(new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable throwable) {
-                new PopupMessageV3("Error loading app subtitle property. See log for more information.");
-                logger.warning("Error loading app subtitle property. "+throwable.getMessage());
+                new PopupMessageV3("Error loading Connectathon event name from properties. See log for more information.");
+                logger.warning("Error loading Connectathon event name from properties. " + throwable.getMessage());
             }
 
             @Override
             public void onSuccess(String s) {
-                appSubtitle=s;
+                toolkitEvent = s;
                 setHeader();
             }
         });
@@ -392,9 +392,10 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
      */
     private String getHeaderHtmlContent() {
         return "<header id='appheader'>" +
-                "<div id='apptitle'>Document Sharing Test Tools</div>" +
+                "<div id='apptitle'>Document Sharing Toolkit</div>" +
+                "<div id='appevent'>"+ toolkitEvent +"</div>" +
+                "<div id='appsubtitle'>Testing platform for healthcare interoperability</div>" +
                 "<div id='appversion'>"+ toolkitVersion +"</div>" +
-                "<div id='appsubtitle'>"+ appSubtitle +"</div>" +
                 "</header>" +
                 "<nav class='navbar'>" +
                 "<div class='app-padding navbar-inner'>" +

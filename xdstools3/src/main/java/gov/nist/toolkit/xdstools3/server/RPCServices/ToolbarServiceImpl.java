@@ -27,8 +27,8 @@ public class ToolbarServiceImpl extends RemoteServiceServlet implements ToolbarS
         Caller.getInstance().addTestSession(sessionName); return Caller.getInstance().retrieveTestSessions();}
 
     // HEADER Services
-    public String getToolkitAppSubtitle(){
-        return Caller.getInstance().getToolkitAppSubtitle();
+    public String getToolkitEvent(){
+        return Caller.getInstance().getToolkitConnectathonEvent();
     }
 
     public String getToolkitVersion(){

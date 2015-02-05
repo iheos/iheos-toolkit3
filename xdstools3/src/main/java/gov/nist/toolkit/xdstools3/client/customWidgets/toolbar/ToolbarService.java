@@ -20,7 +20,7 @@ public interface ToolbarService extends RemoteService {
     public String[] deleteTestSession(String sessionName);
 
     // header app properties services
-    public String getToolkitAppSubtitle();
+    public String getToolkitEvent();
     public String getToolkitVersion();
 
 }

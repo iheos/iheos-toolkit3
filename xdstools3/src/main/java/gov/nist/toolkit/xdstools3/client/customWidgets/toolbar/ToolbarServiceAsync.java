@@ -19,6 +19,6 @@ public interface ToolbarServiceAsync {
     void deleteTestSession(String sessionName, AsyncCallback<String[]> async);
 
     // header app properties services
-    void getToolkitAppSubtitle(AsyncCallback<String> async);
+    void getToolkitEvent(AsyncCallback<String> async);
     void getToolkitVersion(AsyncCallback<String> async);
 }
