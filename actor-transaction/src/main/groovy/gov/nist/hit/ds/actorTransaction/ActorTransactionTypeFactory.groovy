@@ -42,7 +42,7 @@ class ActorTransactionTypeFactory {
     ActorType getActorType(String type) {
         ActorType actorType = actorByName.get(type)
         if (actorType) return actorType
-        throw new ToolkitRuntimeException("ActorType ${type} does not exist.")
+        throw new ToolkitRuntimeException("ActorType ${type} does not exist. These are defined: ${actorByName.keySet()}")
     }
 
     static TransactionType getTransactionType(String type) {

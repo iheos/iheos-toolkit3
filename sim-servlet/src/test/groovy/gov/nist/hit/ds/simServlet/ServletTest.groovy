@@ -34,7 +34,7 @@ Host: localhost:9085'''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope"
     xmlns:wsa="http://www.w3.org/2005/08/addressing">
     <soapenv:Header>
-        <wsa:To soapenv:mustUnderstand="true">http://localhost:9085/axis2/services/repositoryBonedoc</wsa:To>
+        <wsa:To soapenv:mustUnderstand="true">http://localhost:9085/xdstools3/sim/user/simid/act/tr</wsa:To>
         <wsa:MessageID>urn:uuid:806D8FD2D542EDCC2C1199332890651</wsa:MessageID>
         <wsa:Action>urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b</wsa:Action>
     </soapenv:Header>
@@ -82,7 +82,7 @@ Host: localhost:9085'''
 <soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope"
     xmlns:wsa="http://www.w3.org/2005/08/addressing">
     <soapenv:Header>
-        <wsa:To soapenv:mustUnderstand="true">http://localhost:9085/xdstools3/sim/target23/docreg/rb</wsa:To>
+        <wsa:To soapenv:mustUnderstand="true">http://localhost:9085/xdstools3/sim/user/target23/docreg/rb</wsa:To>
         <wsa:MessageID>urn:uuid:806D8FD2D542EDCC2C1199332890651</wsa:MessageID>
         <wsa:Action>urn:ihe:iti:2007:RegisterDocumentSet-b</wsa:Action>
     </soapenv:Header>
@@ -116,7 +116,8 @@ Host: localhost:9085'''
         simServlet = new SimServlet()
         simServlet.init()
         realSimId = new SimIdentifier(repoName, simIdString)
-        simHandle = SimUtils.create('docrec', realSimId)
+        SimUtils.delete(realSimId)
+        simHandle = SimUtils.create('reg', realSimId)
         // Cancel all message validation
         def actorSimConfigManager = new ActorSimConfigManager(simHandle.actorSimConfig)
         List<TransactionSimConfigElement> configs = actorSimConfigManager.getSimConfigElements()
