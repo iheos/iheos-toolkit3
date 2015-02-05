@@ -160,7 +160,7 @@ public class MHDValidatorTab extends GenericCloseableToolTab {
                             runBtn.enable();
                         } else {
                             runBtn.disable();
-                            SC.warn("Invalid file format - must be xml or json");
+                            SC.warn("Invalid file format. The uploaded file must be XML or JSON.");
                         }
                     }
                 }
