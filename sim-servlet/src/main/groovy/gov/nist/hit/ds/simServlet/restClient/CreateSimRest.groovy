@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simServlet.restClient
 
 import gov.nist.hit.ds.utilities.xml.OMFormatter
+import groovy.util.logging.Log4j
 import groovy.xml.StreamingMarkupBuilder
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
@@ -10,13 +11,14 @@ import static groovyx.net.http.ContentType.XML
 /**
  * Created by bmajur on 2/4/15.
  */
+@Log4j
 class CreateSimRest {
 
     static String run(String config, host, port, username, simid) {
         def returnvalue
 
         def http = new HTTPBuilder("http://${host}:${port}/xdstools3/rest/sim/create/${username}/${simid}")
-        println http.getUri()
+        log.debug("CreateSimRest: ${http.getUri()}")
         http.request(Method.POST, XML) { request ->
             requestContentType = XML
             body = config.trim()
@@ -31,7 +33,7 @@ class CreateSimRest {
                 resp.getHeaders().each { println it }
             }
             response.'404' = {
-                returnvalue = 'Not found'
+                returnvalue = 'Create Sim failed: Service Not found'
             }
         }
 
@@ -46,6 +48,7 @@ class CreateSimRest {
                 println " ${h.name} : ${h.value}"
             }
             returnvalue = prettyPrint(xml)
+
         }
         return returnvalue
     }

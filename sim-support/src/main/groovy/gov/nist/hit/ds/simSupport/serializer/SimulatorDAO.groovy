@@ -14,7 +14,7 @@ import groovy.xml.MarkupBuilder
 @Log4j
 class SimulatorDAO {
 
-    String toXML(SimConfig config) {
+    static String toXML(SimConfig config) {
         def writer = new StringWriter()
         def xml = new MarkupBuilder(writer)
         xml.actor(type: config.actorType.shortName) {
@@ -43,7 +43,7 @@ class SimulatorDAO {
         return writer.toString()
     }
 
-    SimConfig toModel(String xmlText) {
+    static SimConfig toModel(String xmlText) {
         def actor = new XmlSlurper().parseText(xmlText)
         SimConfig simConfig = new SimConfig()
 
@@ -78,7 +78,7 @@ class SimulatorDAO {
         return simConfig
     }
 
-    def updateModel(SimConfig simConfig, String updateConfig) {
+    static def updateModel(SimConfig simConfig, String updateConfig) {
         SimConfig update = toModel(updateConfig)
         simConfig.transactions.each { TransactionSimConfigElement transElement ->
             def name = transElement.name
@@ -89,7 +89,7 @@ class SimulatorDAO {
         simConfig.environmentAccess = update.environmentAccess
     }
 
-    boolean bool(String value) {
+    static boolean bool(String value) {
         if (value.compareToIgnoreCase('true') == 0) return true
         return false
     }
