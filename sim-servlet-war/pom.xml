@@ -29,11 +29,17 @@
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
         </dependency>
-        <dependency>
-            <groupId>me.soliveirajr</groupId>
-            <artifactId>mentawai</artifactId>
-            <version>2.5.4</version>
-        </dependency>
+        <!--
+            DO NOT RE-ENABLE THIS
+            It depends on an older version of slf4j-log4j12 which breaks the repository code.
+            Seems to build fine without this.  I leave it here as a warning.
+            FORGIVE HOPE ALL WHO ENTER HERE!
+        -->
+        <!--<dependency>-->
+            <!--<groupId>me.soliveirajr</groupId>-->
+            <!--<artifactId>mentawai</artifactId>-->
+            <!--<version>2.5.4</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
@@ -124,7 +130,13 @@
                 <version>2.8.0-01</version>
                 <extensions>true</extensions>
             </plugin>
-
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <packagingExcludes>WEB-INF/lib/slf4j-log4j12-1.5.10.jar</packagingExcludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
