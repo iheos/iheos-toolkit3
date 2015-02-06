@@ -4,11 +4,11 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-core</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.4a-test</version>
         <relativePath>../tk-core/pom.xml</relativePath>
     </parent>
 
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.4a-test</version>
     <artifactId>repository-tools</artifactId>
     <packaging>pom</packaging>
     
@@ -21,6 +21,6 @@
 
 
   <scm>
-    <tag>v3.0.2a</tag>
+    <tag>v3.0.4a-test</tag>
   </scm>
 </project>
