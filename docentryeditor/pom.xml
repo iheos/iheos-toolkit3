@@ -61,11 +61,14 @@
             <groupId>com.sencha.gxt</groupId>
             <artifactId>gxt</artifactId>
             <version>3.1.1</version>
+            <!-- 3.1.2 was not available in maven central,
+            I believe as it is the latest version it might be under a commercial licensing -->
         </dependency>
+        <!-- dependency adding the missing gxt theme -->
         <dependency>
-        <groupId>com.sencha.gxt</groupId>
-        <artifactId>gxt-theme-neptune</artifactId>
-        <version>3.1.0</version>
+            <groupId>com.sencha.gxt</groupId>
+            <artifactId>gxt-theme-neptune</artifactId>
+            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
