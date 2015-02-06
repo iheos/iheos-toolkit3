@@ -13,6 +13,7 @@ import com.sencha.gxt.widget.core.client.box.ConfirmMessageBox;
 import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutPack;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import gov.nist.hit.ds.docentryeditor.client.MetadataEditorRequestFactory;
 import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
@@ -87,13 +88,13 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
             if (editorDriver.hasErrors()) {
                 final ConfirmMessageBox cmb = new ConfirmMessageBox("Error", "There are errors in your editor. Are you sure you want to download a copy of these data? They may not be usable.");
                 cmb.show();
-                cmb.addHideHandler(new HideEvent.HideHandler() {
-                    public void onHide(HideEvent event) {
-                        if (cmb.getHideButton() == cmb.getButtonById(PredefinedButton.YES.name())) {
+                cmb.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
+                    public void onDialogHide(DialogHideEvent event) {
+                        if (event.getHideButton() == PredefinedButton.YES) {
                             // perform YES action
                             save();
                             cmb.hide();
-                        } else if (cmb.getHideButton() == cmb.getButtonById(PredefinedButton.NO.name())) {
+                        } else if (event.getHideButton() == PredefinedButton.NO) {
                             // perform NO action
                         }
                     }
@@ -109,13 +110,13 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
         } else {
             final ConfirmMessageBox cmb = new ConfirmMessageBox("", "Data has not changed. Are you sure you want to download a copy of this metadata entry?");
             cmb.show();
-            cmb.addHideHandler(new HideEvent.HideHandler() {
-                public void onHide(HideEvent event) {
-                    if (cmb.getHideButton() == cmb.getButtonById(PredefinedButton.YES.name())) {
+            cmb.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
+                public void onDialogHide(DialogHideEvent event) {
+                    if (event.getHideButton() == PredefinedButton.YES) {
                         // perform YES action
                         save();
                         cmb.hide();
-                    } else if (cmb.getHideButton() == cmb.getButtonById(PredefinedButton.NO.name())) {
+                    } else if (event.getHideButton() == PredefinedButton.NO) {
                         // perform NO action
                     }
                 }

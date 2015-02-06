@@ -13,6 +13,7 @@ import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
@@ -179,10 +180,13 @@ public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
      * @return PredefinedCodedTermComboBox as a Widget.
      */
     public Widget getDisplay() {
+        SimpleContainer scon=new SimpleContainer();
         HorizontalLayoutContainer hcon = new HorizontalLayoutContainer();
-        hcon.add(super.asWidget(), new HorizontalLayoutContainer.HorizontalLayoutData(1, 0.1, new Margins(0, 2, 0, 0)));
+        hcon.add(super.asWidget(), new HorizontalLayoutContainer.HorizontalLayoutData(1, -1, new Margins(0, 2, 0, 0)));
         hcon.add(editCustomedValueBtn, new HorizontalLayoutContainer.HorizontalLayoutData(-1, -1, new Margins(0, 1, 0, 2)));
-        return hcon;
+        scon.setHeight(22);
+        scon.add(hcon);
+        return scon;
     }
 
     /**

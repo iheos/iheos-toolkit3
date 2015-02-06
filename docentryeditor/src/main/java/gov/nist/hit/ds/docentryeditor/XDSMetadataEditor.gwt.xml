@@ -14,6 +14,10 @@
     <inherits name='com.google.gwt.activity.Activity'/>
     <inherits name='com.google.gwt.place.Place'/>
     <inherits name="com.google.gwt.xml.XML"/>
+    <inherits name="com.google.gwt.user.Debug"/>
+    <inherits name='com.google.web.bindery.requestfactory.RequestFactory'/>
+    <!-- http://code.google.com/p/google-gin -->
+    <inherits name="com.google.gwt.inject.Inject"/>
 
     <!-- Inherit the default GWT style sheet. You can change -->
     <!-- the theme of your GWT application by uncommenting -->
@@ -24,20 +28,16 @@
     <!--<inherits name="com.google.gwt.user.theme.dark.Dark"/>-->
     <!--<inherits name='com.google.gwt.user.theme.clean.Clean'/>  -->
 
-    <inherits name="com.sencha.gxt.theme.base.Base"/>
-    <!--<inherits name='com.sencha.gxt.theme.blue.Blue'/>-->
-    <!--<inherits name='com.sencha.gxt.theme.gray.Gray' />-->
-    <!--<inherits name="com.sencha.gxt.theme.neptune.Theme" />-->
-
-    <!--<stylesheet src="XDS-MetadataEditor.css"/>-->
-
-    <inherits name="com.google.gwt.user.Debug"/>
-    <inherits name='com.google.web.bindery.requestfactory.RequestFactory'/>
 
     <!-- Other module inherits -->
     <inherits name='com.sencha.gxt.ui.GXT'/>
-    <!-- http://code.google.com/p/google-gin -->
-    <inherits name="com.google.gwt.inject.Inject"/>
+    <!--<inherits name="com.sencha.gxt.theme.neptune.Theme" />-->
+    <!--<inherits name="com.sencha.gxt.theme.base.Base"/>-->
+    <!--<inherits name='com.sencha.gxt.theme.blue.Blue'/>-->
+    <inherits name='com.sencha.gxt.theme.gray.Gray' />
+
+    <!--<stylesheet src="XDS-MetadataEditor.css"/>-->
+
 
     <!-- ********************************* Logging ****************************** -->
     <inherits name="com.google.gwt.logging.Logging"/>
@@ -54,6 +54,7 @@
     <set-property name="gwt.logging.simpleRemoteHandler"
                   value="DISABLED"/>
 
+    <set-property name="gxt.user.agent" value="chrome"/>
 
     <!-- <inherits name="com.googlecode.objectify.Objectify" /> -->
 

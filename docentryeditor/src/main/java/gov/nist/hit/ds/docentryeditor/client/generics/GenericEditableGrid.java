@@ -12,10 +12,7 @@ import com.sencha.gxt.widget.core.client.box.ConfirmMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import com.sencha.gxt.widget.core.client.event.CompleteEditEvent;
-import com.sencha.gxt.widget.core.client.event.HideEvent;
-import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import com.sencha.gxt.widget.core.client.event.ShowEvent;
+import com.sencha.gxt.widget.core.client.event.*;
 import com.sencha.gxt.widget.core.client.form.Field;
 import com.sencha.gxt.widget.core.client.grid.CheckBoxSelectionModel;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
@@ -249,10 +246,10 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
                 final ConfirmMessageBox d = new ConfirmMessageBox("Confirm delete action",
                         "Are you sure you want to delete these values?");
                 d.show();
-                d.addHideHandler(new HideEvent.HideHandler() {
+                d.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
                     @Override
-                    public void onHide(HideEvent event) {
-                        if (d.getHideButton() == d.getButtonById(Dialog.PredefinedButton.YES.name())) {
+                    public void onDialogHide(DialogHideEvent event) {
+                        if (event.getHideButton() == Dialog.PredefinedButton.YES) {
                             deleteItemAction();
                             if (getStore().size() < storeMaxLength && storeMaxLength != 0) {
                                 enableNewButton();
@@ -268,10 +265,10 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
                 final ConfirmMessageBox d = new ConfirmMessageBox("Confirm clear action",
                         "Are you sure you want to delete all values from this grid?");
                 d.show();
-                d.addHideHandler(new HideEvent.HideHandler() {
+                d.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
                     @Override
-                    public void onHide(HideEvent event) {
-                        if (d.getHideButton() == d.getButtonById(Dialog.PredefinedButton.YES.name())) {
+                    public void onDialogHide(DialogHideEvent event) {
+                        if (event.getHideButton() == Dialog.PredefinedButton.YES) {
                             clearStoreAction();
                             enableNewButton();
                         }

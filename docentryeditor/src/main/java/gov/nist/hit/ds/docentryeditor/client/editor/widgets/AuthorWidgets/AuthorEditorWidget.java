@@ -21,6 +21,7 @@ import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer.HorizontalLayoutData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
@@ -486,11 +487,11 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
                 final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthInstitutions.getSelectionModel()
                         .getSelectedItem().getString());
                 cdd.show();
-                cdd.addHideHandler(new HideEvent.HideHandler() {
+                cdd.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
 
                     @Override
-                    public void onHide(HideEvent event) {
-                        if (cdd.getHideButton() == cdd.getButtonById(PredefinedButton.YES.name())) {
+                    public void onDialogHide(DialogHideEvent event) {
+                        if (event.getHideButton() == PredefinedButton.YES) {
                             // perform YES action
                             authorInstitutions.getStore().remove(
                                     listViewAuthInstitutions.getSelectionModel().getSelectedItem());
@@ -527,11 +528,11 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
                 final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthRoles.getSelectionModel()
                         .getSelectedItem().getString());
                 cdd.show();
-                cdd.addHideHandler(new HideEvent.HideHandler() {
+                cdd.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
 
                     @Override
-                    public void onHide(HideEvent event) {
-                        if (cdd.getHideButton() == cdd.getButtonById(PredefinedButton.YES.name())) {
+                    public void onDialogHide(DialogHideEvent event) {
+                        if (event.getHideButton() == PredefinedButton.YES) {
                             // perform YES action
                             authorRoles.getStore().remove(listViewAuthRoles.getSelectionModel().getSelectedItem());
                         }
@@ -567,11 +568,11 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
                 final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthSpecialties.getSelectionModel()
                         .getSelectedItem().getString());
                 cdd.show();
-                cdd.addHideHandler(new HideEvent.HideHandler() {
+                cdd.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
 
                     @Override
-                    public void onHide(HideEvent event) {
-                        if (cdd.getHideButton() == cdd.getButtonById(PredefinedButton.YES.name())) {
+                    public void onDialogHide(DialogHideEvent event) {
+                        if (event.getHideButton() == PredefinedButton.YES) {
                             // perform YES action
                             authorSpecialties.getStore().remove(
                                     listViewAuthSpecialties.getSelectionModel().getSelectedItem());
@@ -607,11 +608,11 @@ public class AuthorEditorWidget extends Composite implements Editor<Author> {
                 final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthTelecommunications.getSelectionModel()
                         .getSelectedItem().getString());
                 cdd.show();
-                cdd.addHideHandler(new HideEvent.HideHandler() {
+                cdd.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
 
                     @Override
-                    public void onHide(HideEvent event) {
-                        if (cdd.getHideButton() == cdd.getButtonById(PredefinedButton.YES.name())) {
+                    public void onDialogHide(DialogHideEvent event) {
+                        if (event.getHideButton() == PredefinedButton.YES) {
                             // perform YES action
                             authorTelecommunications.getStore().remove(
                                     listViewAuthTelecommunications.getSelectionModel().getSelectedItem());

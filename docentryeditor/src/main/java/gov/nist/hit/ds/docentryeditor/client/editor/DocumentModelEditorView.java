@@ -10,6 +10,8 @@ import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.client.editor.ListStoreEditor;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -135,19 +137,23 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         homeBtn = new HomeButton();
         container.add(homeBtn);
 
-        FramedPanel fp1 = new FramedPanel();
-        FramedPanel fp2 = new FramedPanel();
+        SimpleContainer fp1 = new SimpleContainer();
+        SimpleContainer fp2 = new SimpleContainer();
 
         fp1.add(requiredFields);
         fp2.add(optionalFields);
 
-        fp1.setHeadingText("Required Fields");
-        fp2.setHeadingText("Optional Fields");
+        fp1.setTitle("Required fields");
+        fp2.setTitle("Optional fields");
+//        fp1.setHeadingText("Required Fields");
+//        fp2.setHeadingText("Optional Fields");
 
         // Adding required and optional fields panels to the main container of
         // editor view
-        container.add(fp1, new VerticalLayoutData(1, -1, new Margins(10, 10, 10, 10)));
-        container.add(fp2, new VerticalLayoutData(1, -1, new Margins(10, 10, 10, 10)));
+        container.add(new HtmlLayoutContainer("<h2>Required fields</h2>"));
+        container.add(fp1, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        container.add(new HtmlLayoutContainer("<h2>Optional fields</h2>"));
+        container.add(fp2, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         // //////////////////////////////////////
         // Simple fields label and options (init)
@@ -209,11 +215,11 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         simpleRequiredFieldsContainer.add(idLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(languageCodeLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(mimeTypeLabel, new VerticalLayoutData(1, -1));
-        simpleRequiredFieldsContainer.add(classCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        simpleRequiredFieldsContainer.add(formatCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        simpleRequiredFieldsContainer.add(healthcareFacilityTypeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        simpleRequiredFieldsContainer.add(practiceSettingCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        simpleRequiredFieldsContainer.add(typeCodeLabel, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        simpleRequiredFieldsContainer.add(classCodeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
+        simpleRequiredFieldsContainer.add(formatCodeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
+        simpleRequiredFieldsContainer.add(healthcareFacilityTypeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
+        simpleRequiredFieldsContainer.add(practiceSettingCodeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
+        simpleRequiredFieldsContainer.add(typeCodeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
 
 		/* REQUIRED container added to a fieldset */
         FieldSet fieldSet_general_fields_required = new FieldSet();
@@ -319,18 +325,18 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // Adding and ordering fieldsets in REQUIRED panel
         // /////////////////////////////////////////////////////////
         /* simple required fields added to FramedPanel container */
-        requiredFields.add(fieldSet_general_fields_required);
+        requiredFields.add(fieldSet_general_fields_required, new VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
         requiredFields.add(creationTime.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         // /////////////////////////////////////////////////////////
         // Adding and ordering fieldsets in OPTIONAL fields panel
         // /////////////////////////////////////////////////////////
         /* simple optional fields added to FramedPanel container */
-        optionalFields.add(fieldSet_fileProperties);
-        optionalFields.add(fieldSet_repoAttributes);
+        optionalFields.add(fieldSet_fileProperties, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(fieldSet_repoAttributes, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         optionalFields.add(titlesGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         optionalFields.add(commentsGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(fieldSet_authors);
+        optionalFields.add(fieldSet_authors, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         optionalFields.add(legalAuthenticator.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         optionalFields.add(sourcePatientId.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         optionalFields.add(sourcePatientInfo.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));

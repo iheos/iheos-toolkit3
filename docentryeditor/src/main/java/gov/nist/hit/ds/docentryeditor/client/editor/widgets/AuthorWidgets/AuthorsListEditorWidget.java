@@ -12,7 +12,9 @@ import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.FieldSet;
@@ -39,7 +41,7 @@ public class AuthorsListEditorWidget extends ListStoreEditor<Author> implements 
     private static final AuthorProperties authorprops = GWT.create(AuthorProperties.class);
     // Widget's container.
     @Ignore
-    private VerticalLayoutContainer authorGridEditorWidget;
+    private SimpleContainer authorGridEditorWidget;
 
     // Widget that handles the list of Authors.
     @Ignore
@@ -102,9 +104,11 @@ public class AuthorsListEditorWidget extends ListStoreEditor<Author> implements 
 
         VerticalLayoutContainer vcon = new VerticalLayoutContainer();
         vcon.add(listViewAuthors, new VerticalLayoutContainer.VerticalLayoutData(1, 150));
-        vcon.add(authorFS, new VerticalLayoutContainer.VerticalLayoutData(0.99, -1, new Margins(10, 0, 0, 0)));
+        vcon.add(authorFS, new VerticalLayoutContainer.VerticalLayoutData(0.999, -1, new Margins(10, 0, 0, 0)));
         vcon.add(authorCP, new VerticalLayoutContainer.VerticalLayoutData(-1, 30));
-        authorGridEditorWidget = vcon;
+        authorGridEditorWidget = new SimpleContainer();
+        authorGridEditorWidget.setHeight(475);
+        authorGridEditorWidget.add(vcon);
     }
 
     /**
@@ -179,12 +183,11 @@ public class AuthorsListEditorWidget extends ListStoreEditor<Author> implements 
                 final ConfirmDeleteDialog cdd = new ConfirmDeleteDialog(listViewAuthors.getSelectionModel().getSelectedItem().getAuthorPerson()
                         .getString());
                 cdd.show();
-                cdd.addHideHandler(new HideEvent.HideHandler() {
-
+                cdd.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
                     @Override
-                    public void onHide(HideEvent event) {
+                    public void onDialogHide(DialogHideEvent event) {
                         // If YES button is click then deletion is performed.
-                        if (cdd.getHideButton() == cdd.getButtonById(Dialog.PredefinedButton.YES.name())) {
+                        if (event.getHideButton() == Dialog.PredefinedButton.YES) {
                             getStore().remove(listViewAuthors.getSelectionModel().getSelectedItem());
                             author.editNew();
                         }
