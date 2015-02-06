@@ -16,7 +16,7 @@
 
     <!-- Defines the location of the development trunk, used by maven-release-plugin -->
     <scm>
-        <developerConnection>scm:hg:https://bitbucket.org/iheos/toolkit/branch/release/ihe</developerConnection>
+        <developerConnection>scm:hg:https://bitbucket.org/iheos/toolkit/branch/develop</developerConnection>
         <tag>v3.0.4a-test</tag>
     </scm>
 
@@ -273,7 +273,7 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <goals>deploy</goals> <!-- auto deploy app to server, skip deploy-site goal -->
                     <!-- Define location of tagged releases and release parameters -->
-                    <tagBase>https://svn.mycompany.com/repos/myapplication/releases</tagBase>
+                    <tagBase>https://bitbucket.org/iheos/toolkit/branch/release/ihe</tagBase>
                     <tagNameFormat>v@{project.version}</tagNameFormat> <!-- format of the tag that will be present on Bitbucket -->
                     <!-- This enables to select the profiles to be run. No profiles are defined for the moment -->
                     <!-- <releaseProfiles>releases</releaseProfiles> -->
