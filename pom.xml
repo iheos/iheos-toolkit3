@@ -20,6 +20,10 @@
         <tag>v3.0.4a-test</tag>
     </scm>
 
+    <!-- This provides the username and password for Bitbucket, taken from Maven settings.xml file. -->
+    <properties>
+        <project.scm.id>bitbucket</project.scm.id>
+    </properties>
 
     <modules>
         <module>engine</module>
