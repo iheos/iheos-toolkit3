@@ -133,9 +133,10 @@ class SimUtils {
     static initialize(String user, SimId simId, String actorTypeName, Asset simAsset) {
         RepoUtils.mkChild(eventsAssetName, simAsset)
         if (!actorTypeName) return
-        SimSystemConfig simSystemConfig = new SimSystemConfig()
-        log.debug(simSystemConfig.toString())
-        SimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, user, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
+//        SimSystemConfig simSystemConfig = new SimSystemConfig()
+//        log.debug(simSystemConfig.toString())
+//        SimConfig actorSimConfig = new SimConfigFactory().buildSim(simSystemConfig.host, simSystemConfig.port, simSystemConfig.service, user, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
+        SimConfig actorSimConfig = new SimConfigFactory().buildSim(new SimSystemConfig(), user, simId, new ActorTransactionTypeFactory().getActorType(actorTypeName))
         storeConfig(new SimulatorDAO().toXML(actorSimConfig), simAsset)
         Site site = new SimSiteFactory().buildSite(actorSimConfig, simId.id)
         OMElement siteEle = new SeparateSiteLoader().siteToXML(site)

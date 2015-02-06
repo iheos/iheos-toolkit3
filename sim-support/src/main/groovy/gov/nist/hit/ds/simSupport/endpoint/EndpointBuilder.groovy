@@ -4,6 +4,7 @@ import gov.nist.hit.ds.actorTransaction.ActorType
 import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.SimIdentifier
+import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import groovy.util.logging.Log4j
 /**
@@ -13,6 +14,7 @@ import groovy.util.logging.Log4j
 class EndpointBuilder {
     String server
     String port
+    String tlsPort
     String base
     String user
     SimId simId = null
@@ -22,10 +24,21 @@ class EndpointBuilder {
 
     EndpointBuilder() { log.debug("EndpointBuilder")}
 
+    // TLS endpoints cannot be generated through this constructor
+    // Useful for unit tests only
     EndpointBuilder(String server, String port, String base, String user, SimId simId) {
         this.server = server
         this.port = port
         this.base = base
+        this.user = user
+        this.simId = simId
+    }
+
+    EndpointBuilder(SimSystemConfig config, String user, SimId simId) {
+        server = config.host
+        port = config.port
+        tlsPort = config.tlsPort
+        base = config.service
         this.user = user
         this.simId = simId
     }
@@ -41,8 +54,9 @@ class EndpointBuilder {
         user = clean(user)
         def actorName = clean(actor.name)
         def secure = (endpointLabel.tls) ? 's' : ''
+        def theport = (endpointLabel.tls) ? tlsPort : port
         String val;
-        val = "http${secure}://${server}:${port}/${base}/sim/${user}/${simId.getId()}/${actorName}/${endpointLabel.transType.code}"
+        val = "http${secure}://${server}:${theport}/${base}/sim/${user}/${simId.getId()}/${actorName}/${endpointLabel.transType.code}"
         return new EndpointValue(val)
     }
 
