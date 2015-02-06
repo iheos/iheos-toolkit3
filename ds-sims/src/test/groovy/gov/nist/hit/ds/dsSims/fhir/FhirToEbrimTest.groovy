@@ -1,12 +1,6 @@
 package gov.nist.hit.ds.dsSims.fhir
 
-import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.DocumentEntryModel
-import gov.nist.hit.ds.dsSims.fhir.mhd.translators.FhirToEbrim
-import gov.nist.hit.ds.ebMetadata.Metadata
-import org.hl7.fhir.instance.model.DocumentReference
-import org.hl7.fhir.instance.model.Resource
 import spock.lang.Specification
-
 /**
  * Created by bmajur on 9/8/14.
  */
@@ -14,7 +8,7 @@ class FhirToEbrimTest extends Specification {
 
     // TODO - testRun schema
     // TODO - testRun metadata validator
-    def 'Minimal'() {
+   /* def 'Minimal'() {
         setup:
         def res
         def url = getClass().classLoader.getResource('mhd/minimal_docref.xml')
@@ -100,6 +94,6 @@ class FhirToEbrimTest extends Specification {
         de.size()
         de.sourcePatientInfo()
         de.title()
-    }
+    }*/
 
 }
