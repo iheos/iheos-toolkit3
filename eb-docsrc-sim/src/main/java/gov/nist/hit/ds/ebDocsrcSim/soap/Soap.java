@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.ebDocsrcSim.soap;
 
+import gov.nist.hit.ds.simSupport.simulator.SimHandle;
 import gov.nist.hit.ds.toolkit.environment.SecurityParams;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsExceptions.*;
@@ -74,6 +75,7 @@ public class Soap  {
 
     OMElement inHeader = null;
     OMElement outHeader = null;
+    public SimHandle simHandle;
 
     public void setSecurityParams(SecurityParams securityParams) {
         this.securityParams = securityParams;
@@ -511,6 +513,13 @@ public class Soap  {
         loadOutHeader();
         loadInHeader();
 
+//        simHandle.getEvent().getInOut().setReqHdr(outHeader.toString());
+        simHandle.getEvent().getInOut().setReqHdr(new OMFormatter(outMsgCtx.getEnvelope().getHeader()).toString());
+        simHandle.getEvent().getInOut().setReqBody(new OMFormatter(outMsgCtx.getEnvelope().getBody()).toString().getBytes());
+
+        simHandle.getEvent().getInOut().setRespHdr(new OMFormatter(inMsgCtx.getEnvelope().getHeader()).toString());
+        simHandle.getEvent().getInOut().setRespBody(new OMFormatter(inMsgCtx.getEnvelope().getBody()).toString().getBytes());
+
         serviceClient.cleanupTransport();
         serviceClient.cleanup();
 
@@ -618,6 +627,22 @@ public class Soap  {
             return inMsgCxt;
         }
         return operationClient.getMessageContext("In");
+
+    }
+
+    MessageContext getOutputMessageContext() throws XdsInternalException,
+            AxisFault {
+        if (operationClient == null) {
+            Object out = serviceClient.getServiceContext()
+                    .getLastOperationContext().getMessageContexts().get("Out");
+            if (!(out instanceof MessageContext))
+                throw new XdsInternalException(
+                        "Soap: Out MessageContext of type "
+                                + out.getClass().getName()
+                                + " instead of MessageContext");
+            return (MessageContext) out;
+        }
+        return operationClient.getMessageContext("Out");
 
     }
 

@@ -3,6 +3,7 @@ package gov.nist.hit.ds.ebDocsrcSim.transactions;
 import gov.nist.hit.ds.ebDocsrcSim.engine.*;
 import gov.nist.hit.ds.ebDocsrcSim.soap.Soap;
 import gov.nist.hit.ds.ebDocsrcSim.soap.SoapActionFactory;
+import gov.nist.hit.ds.simSupport.simulator.SimHandle;
 import gov.nist.hit.ds.utilities.xml.OMFormatter;
 import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.utilities.xml.Util;
@@ -29,6 +30,7 @@ public abstract class AbstractClientTransaction {
 	boolean useAddressing;
 	public Map<String, String> nameUuidMap = null;
 	private Soap soap;
+    SimHandle simHandle;
 
 	public List<OMElement> additionalHeaders = new ArrayList<>();
 
@@ -45,6 +47,7 @@ public abstract class AbstractClientTransaction {
 
 	protected OMElement soapCall(OMElement requestBody) throws Exception {
 		soap = new Soap();
+        soap.simHandle = simHandle;
 		soap.setAsync(async);
 //		if (testConfig.saml) {
 //			soap.setRepositoryLocation(testConfig.testmgmt_dir + File.separator + "rampart" + File.separator + "client_repositories" );
@@ -101,10 +104,10 @@ public abstract class AbstractClientTransaction {
 				s_ctx.set_fault(e);
 		}
 		finally {
+            logSoapRequest(soap);
 			soap.clearHeaders();
 		}
 
-		logSoapRequest(soap);
 
         return results;
 	}

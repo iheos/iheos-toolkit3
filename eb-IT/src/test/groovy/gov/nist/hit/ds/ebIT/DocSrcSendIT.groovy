@@ -24,6 +24,10 @@ import spock.lang.Specification
  * Created by bmajur on 2/3/15.
  */
 class DocSrcSendIT extends Specification {
+    def userName = 'Tester'
+    def clientSimName = 'DocSrcSendTest'
+    def clientSimId = new SimId(clientSimName)
+
     def metadata = '''
 <xdsb:ProvideAndRegisterDocumentSetRequest xmlns:xdsb="urn:ihe:iti:xds-b:2007">
     <lcm:SubmitObjectsRequest xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0">
@@ -34,10 +38,11 @@ class DocSrcSendIT extends Specification {
 '''
     def requestXml = """
 <sendRequest>
-    <simReference>user/simid</simReference>
+    <simReference>${userName}/${clientSimName}</simReference>
     <transactionName>prb</transactionName>
     <tls value="false"/>
     <metadata>${metadata}</metadata>
+    <extraHeaders><foo/><bar/></extraHeaders>
     <document id="Document01" mimeType="text/plain">doc content</document>
 </sendRequest>
 """
@@ -104,21 +109,19 @@ class DocSrcSendIT extends Specification {
 </actor>"""
     }
 
-    def repoName = 'Tester'
-    def clientSimId = new SimId('DocSrcSendTest')
     def serverSimId = new SimId('DocRec1')
     def simIdent
     ActorTransactionTypeFactory factory = new ActorTransactionTypeFactory()
 
     def setup() {
         new SimServlet().init()
-        SimApi.delete(repoName, clientSimId)  // necessary to make sure create actually creates new, default is to keep old if present
-        simIdent = new SimIdentifier(repoName, clientSimId)
+        SimApi.delete(userName, clientSimId)  // necessary to make sure create actually creates new, default is to keep old if present
+        simIdent = new SimIdentifier(userName, clientSimId)
     }
 
     def 'Send'() {
         when: 'setup server via rest interface'
-        def configXml = CreateSimRest.run(serverSimConfig('http://example.com'), 'localhost', '9080', SimSystemConfig.service, repoName, serverSimId.id)
+        def configXml = CreateSimRest.run(serverSimConfig('http://example.com'), 'localhost', '9080', SimSystemConfig.service, userName, serverSimId.id)
         def serverSimConfig = SimulatorDAO.toModel(configXml)
         def serverEndpoint = serverSimConfig.getEndpoint(factory.getTransactionTypeIfAvailable('prb'),TlsType.NOTLS, AsyncType.SYNC)
 
@@ -127,8 +130,8 @@ class DocSrcSendIT extends Specification {
         serverEndpoint.value.startsWith('http')
 
         when: 'create client locally'
-        SimApi.create('docsrc', repoName, clientSimId)
-        def updatedConfig = SimApi.updateConfig(repoName, clientSimId, clientSimConfig(serverEndpoint))
+        SimApi.create('docsrc', userName, clientSimId)
+        def updatedConfig = SimApi.updateConfig(userName, clientSimId, clientSimConfig(serverEndpoint))
         def xml = new XmlSlurper().parseText(updatedConfig)
         def updatedEndpoint = xml.transaction[0].endpoint.@value.text()
 

@@ -28,6 +28,9 @@ class EbSendRequestDAO {
         request.metadata = metadataString
         if (!request.metadata) throw new ToolkitRuntimeException("EbSendRequestDAO.toModel: metadata not present")
 
+        String extraHeadersString = outputBuilder.bind{ mkp.yield xml.extraHeaders }
+        request.extraHeaders = extraHeadersString
+
         xml.document.each {
             def id = it.@id.text()
             def mimeType = it.@mimeType.text()

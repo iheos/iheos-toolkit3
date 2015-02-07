@@ -18,7 +18,6 @@ import java.util.Map;
 
 public class ProvideAndRegisterTransaction extends AbstractClientTransaction {
     boolean use_xop = true;
-    SimHandle simHandle;
 
     public ProvideAndRegisterTransaction(SimHandle simHandle)  {
         this.simHandle = simHandle;

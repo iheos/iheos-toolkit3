@@ -9,6 +9,7 @@ class EbSendRequest {
     SimIdentifier simIdentifier
     String metadata = null
     String transactionName
+    String extraHeaders
     Map<String, DocumentHandler> documents = [ : ]
     boolean tls
 }
