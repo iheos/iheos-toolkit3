@@ -14,10 +14,10 @@ import static groovyx.net.http.ContentType.XML
 @Log4j
 class CreateSimRest {
 
-    static String run(String config, host, port, username, simid) {
+    static String run(String config, host, port, service, username, simid) {
         def returnvalue
 
-        def http = new HTTPBuilder("http://${host}:${port}/xdstools3/rest/sim/create/${username}/${simid}")
+        def http = new HTTPBuilder("http://${host}:${port}/${service}/rest/sim/create/${username}/${simid}")
         log.debug("CreateSimRest: ${http.getUri()}")
         http.request(Method.POST, XML) { request ->
             requestContentType = XML
@@ -39,7 +39,7 @@ class CreateSimRest {
 
         http = new HTTPBuilder("http://${host}:${port}")
 
-        http.get( path : "/xdstools3/rest/sim/config/${username}/${simid}",
+        http.get( path : "/${service}/rest/sim/config/${username}/${simid}",
                 contentType : XML ) { resp, xml ->
 
             println "response status: ${resp.statusLine}"

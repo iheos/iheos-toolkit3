@@ -12,12 +12,13 @@ import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import spock.lang.Specification
 
 /**
  * Created by bmajur on 2/3/15.
  */
-class DocSrcSendTest extends Specification {
+class DocSrcSendIT extends Specification {
     def metadata = '''
 <xdsb:ProvideAndRegisterDocumentSetRequest xmlns:xdsb="urn:ihe:iti:xds-b:2007">
     <lcm:SubmitObjectsRequest xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0">
@@ -112,7 +113,7 @@ class DocSrcSendTest extends Specification {
 
     def 'Send'() {
         when: 'setup server via rest interface'
-        def configXml = CreateSimRest.run(serverSimConfig('http://example.com'), 'localhost', '9080', repoName, serverSimId.id)
+        def configXml = CreateSimRest.run(serverSimConfig('http://example.com'), 'localhost', '9080', SimSystemConfig.service, repoName, serverSimId.id)
         def serverSimConfig = SimulatorDAO.toModel(configXml)
         def serverEndpoint = serverSimConfig.getEndpoint(factory.getTransactionTypeIfAvailable('prb'),TlsType.NOTLS, AsyncType.SYNC)
 

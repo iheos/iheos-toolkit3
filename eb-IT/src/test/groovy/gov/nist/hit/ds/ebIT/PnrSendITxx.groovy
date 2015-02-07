@@ -11,7 +11,7 @@ import spock.lang.Specification
  * Created by bmajur on 1/13/15.
  */
 // TODO: Move to IT module
-class PnrSendIT extends Specification {
+class PnrSendITxx extends Specification {
     OMElement metadata_element
     Map<String, DocumentHandler> documents = [ : ]
 
