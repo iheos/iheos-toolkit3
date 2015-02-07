@@ -42,8 +42,7 @@ class Pnr implements Transaction {
     @Override
     ValidationStatus sendRequest() {
         log.debug("Sending request to ${ebSendRequest.transactionName}")
-        def sender = new PnrSend(simHandle, ebSendRequest)
-        def results = sender.run()
+        def results = new PnrSend(simHandle, ebSendRequest).run()
         def result = results[0]
         result = new OMFormatter(result).toString()
         simHandle.event.inOut.respBody = result.bytes

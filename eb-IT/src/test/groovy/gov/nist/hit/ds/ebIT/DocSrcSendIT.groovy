@@ -16,6 +16,11 @@ import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import spock.lang.Specification
 
 /**
+ *
+ * Test sending PnR to Document Recipient sim. TLS is not used.
+ *
+ *
+ *
  * Created by bmajur on 2/3/15.
  */
 class DocSrcSendIT extends Specification {

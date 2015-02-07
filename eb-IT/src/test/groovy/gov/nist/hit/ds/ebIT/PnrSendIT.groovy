@@ -10,12 +10,11 @@ import spock.lang.Specification
 /**
  * Created by bmajur on 1/13/15.
  */
-// TODO: Move to IT module
-class PnrSendITxx extends Specification {
+class PnrSendIT extends Specification {
     OMElement metadata_element
     Map<String, DocumentHandler> documents = [ : ]
 
-    def 'Test against PR'() {
+    def 'Test against PR without TLS'() {
         setup:
         def endpoint = 'http://ihexds.nist.gov:12090/tf6/services/xdsrepositoryb'
         metadata_element = MetadataSupport.om_factory.createOMElement("Message", null)

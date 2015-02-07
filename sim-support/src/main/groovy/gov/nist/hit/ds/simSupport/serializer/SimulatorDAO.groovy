@@ -78,7 +78,7 @@ class SimulatorDAO {
         return simConfig
     }
 
-    static def updateModel(SimConfig simConfig, String updateConfig) {
+    static updateModel(SimConfig simConfig, String updateConfig) {
         SimConfig update = toModel(updateConfig)
         simConfig.transactions.each { TransactionSimConfigElement transElement ->
             def name = transElement.name

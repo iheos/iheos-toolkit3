@@ -35,12 +35,13 @@ class SimApi {
         SimulatorDAO dao = new SimulatorDAO()
         // updates actorSimConfig with only the entries
         // that are allowed to be updated
-        dao.updateModel(simHandle.actorSimConfig, configXml)
+//        SimulatorDAO.updateModel(simHandle.actorSimConfig, configXml)
 //        // push update
 //        String updatedConfig = dao.toXML(simHandle.actorSimConfig)
 //        SimUtils.storeConfig(simHandle, updatedConfig)
 //        return updatedConfig
-        // just accept update
+
+        // just accept new config - overwrite existing
         SimUtils.storeConfig(simHandle, configXml)
         return configXml
     }
