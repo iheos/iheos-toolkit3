@@ -16,7 +16,7 @@ class Create {
         def config = '''
 <actor type='docrec'>
   <transaction name='prb'>
-    <endpoint value='http://localhost:8080/xdstools3/sim/PnrSoapTest/docrec/prb' readOnly='true' />
+    <endpoint value='http://localhost:9080/xdstools3/sim/PnrSoapTest/docrec/prb' readOnly='true' />
     <settings>
       <boolean name='schemaCheck' value='true' />
       <boolean name='modelCheck' value='false' />
@@ -44,6 +44,9 @@ class Create {
             }
             response.'404' = {
                 println 'Not found'
+            }
+            response.failure = { resp ->
+                print resp
             }
         }
 

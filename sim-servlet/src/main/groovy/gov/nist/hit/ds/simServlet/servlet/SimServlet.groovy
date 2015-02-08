@@ -8,8 +8,10 @@ import gov.nist.hit.ds.simServlet.WrapMtom
 import gov.nist.hit.ds.simServlet.rest.TransactionReportBuilder
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.SimIdentifier
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
+
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
@@ -21,7 +23,6 @@ import gov.nist.hit.ds.soapSupport.core.*
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.utilities.io.Io
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
-import groovy.util.logging.Log4j
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
 import org.apache.axiom.om.OMElement
@@ -101,20 +102,31 @@ public class SimServlet extends HttpServlet {
             logger.error("Error writing response - " + ExceptionUtil.exception_details(e));
         }
 
-        String callbackURI = simHandle.getActorSimConfig().getMessageCallback();
-        if (callbackURI != null && !callbackURI.equals("")) {
+        callback(simHandle)
+        logger.info("\n===============================================================================");
+    }
+
+    def callback(SimHandle simHandle) {
+        TransactionSimConfigElement transactionElement = simHandle.transactionElement()
+        assert transactionElement
+        String callbackURI = transactionElement.getCallBack()
+        if (callbackURI) {
+            assert callbackURI.startsWith("http")
             String payload = new TransactionReportBuilder().build(simHandle);
             logger.info("Callback to ${callbackURI} with payload ${payload}");
             def http = new HTTPBuilder( callbackURI )
-            http.request(Method.POST, XML) {
-                body = payload.bytes
+            http.request(Method.POST, XML) { request ->
+                requestContentType = XML
+                body = payload
 
                 response.success = { resp ->
                     logger.info "POST Success: ${resp.statusLine}"
                 }
+                response.failure = { resp ->
+                    logger.error("POST Failure: ${resp.statusLine}")
+                }
             }
         }
-        logger.info("\n===============================================================================");
     }
 
     SimHandle runPost(SimIdentifier simIdent, String header, byte[] body, List<String> options, HttpServletResponse response) {

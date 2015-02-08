@@ -29,6 +29,7 @@ class EndpointBuilder {
     EndpointBuilder(String server, String port, String base, String user, SimId simId) {
         this.server = server
         this.port = port
+        this.tlsPort = tlsPort
         this.base = base
         this.user = user
         this.simId = simId
@@ -50,6 +51,7 @@ class EndpointBuilder {
     EndpointValue makeEndpoint(ActorType actor, EndpointType endpointLabel) {
         server = clean(server)
         port = clean(port)
+        tlsPort = clean(tlsPort)
         base = clean(base)
         user = clean(user)
         def actorName = clean(actor.name)
@@ -61,6 +63,7 @@ class EndpointBuilder {
     }
 
     String clean(String val) {
+        if (!val) return val
         def x = val.trim()
         if (x.size() == 0) return x
         x = (x.charAt(0) == '/') ? clean(x.substring(1)) : x

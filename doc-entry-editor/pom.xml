@@ -39,6 +39,7 @@
 -->
     </repositories>
 
+<!--
     <distributionManagement>
         <snapshotRepository>
             <id>internal-nist-repo-snapshots</id>
@@ -50,6 +51,7 @@
         </repository>
     </distributionManagement>
 
+-->
 
     <dependencies>
         <dependency>

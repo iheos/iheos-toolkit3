@@ -2,6 +2,8 @@ package gov.nist.hit.ds.simSupport.utilities
 
 import gov.nist.hit.ds.repoSupport.RepoUtils
 import gov.nist.hit.ds.repository.api.Repository
+import gov.nist.hit.ds.repository.api.RepositoryFactory
+import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.repository.simple.SimpleType
 import gov.nist.hit.ds.toolkit.Toolkit
@@ -15,6 +17,8 @@ import gov.nist.hit.ds.toolkit.installation.Installation
  * Initialization of Repository facilities supporting validators and simulators.
  */
 class SimSupport {
+    static RepositorySource repoSource
+    static RepositoryFactory repoFactory
     static Repository eventRepo
 //    static Repository simRepo
     static eventLogName = 'EventLog'

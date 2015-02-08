@@ -135,6 +135,7 @@ class DocSrcSendIT extends Specification {
         def xml = new XmlSlurper().parseText(updatedConfig)
         def updatedEndpoint = xml.transaction[0].endpoint.@value.text()
 
+        // TODO - make this a separate unit test
         then:  'verify that update occured'
         updatedEndpoint.contains('DocRec')
 
