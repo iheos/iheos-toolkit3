@@ -142,6 +142,8 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
         public void onSuccess(AssetNode an) {
             logger.info("in content load" + an.getType());
+            requestViewerWidget.clear();
+            responseViewerWidget.clear();
             if (an.getTxtContent()!=null) {
 //                HTML txtContent = new HTML("<pre>" + an.getTxtContent() + "</pre>");
                 if ("reqHdrType".equals(an.getType())) {
