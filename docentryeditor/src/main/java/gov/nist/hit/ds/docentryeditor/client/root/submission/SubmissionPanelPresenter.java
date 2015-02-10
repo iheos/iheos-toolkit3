@@ -71,7 +71,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
             @Override
             public void onXdsEditorLoaded(XdsEditorLoadedEvent event) {
                 if (currentlyEdited != null) {
-//                    startEditing();
+                    ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
                 } else {
                     logger.info("No Document Entry in Submission Set");
                     createNewDocumentEntry();
@@ -82,7 +82,6 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
             @Override
             public void onLoadPrefilledDocEntryHandler(LoadPrefilledDocEntryEvent event) {
                 createPreFilledDocumentEntry();
-                loadDocumentEntry(currentlyEdited);
             }
         });
     }
@@ -126,9 +125,9 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
         logger.info("Create new pre-filled document entry");
         currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, prefilledDocEntry);
         nextIndex++;
-        if (!(placeController.getWhere() instanceof EditorPlace)) {
-            placeController.goTo(new EditorPlace());
-        }
+//        if (!(placeController.getWhere() instanceof EditorPlace)) {
+//            placeController.goTo(new EditorPlace());
+//        }
         view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
         view.getTree().expandAll();
         view.getTree().getSelectionModel().select(currentlyEdited, false);
@@ -140,7 +139,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
             @Override
             public void onSaveCurrentlyEditedDocumentEvent(SaveCurrentlyEditedDocumentEvent event) {
                 currentlyEdited.setModel(event.getDocumentEntry());
-                save();
+//                save();
             }
         });
     }
@@ -183,7 +182,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     }
 
     /**
-     * This method loads a document entry into the editor user interface, that is loaded if not already.
+     * This method loads a document entry into the editor user interface, which is loaded if not already.
      */
     private void startEditing() {
         logger.info("Start editing selected document entry");

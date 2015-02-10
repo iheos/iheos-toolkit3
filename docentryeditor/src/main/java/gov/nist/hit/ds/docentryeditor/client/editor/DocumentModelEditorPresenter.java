@@ -16,10 +16,7 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.Verti
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import gov.nist.hit.ds.docentryeditor.client.MetadataEditorRequestFactory;
-import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
-import gov.nist.hit.ds.docentryeditor.client.event.SaveCurrentlyEditedDocumentEvent;
-import gov.nist.hit.ds.docentryeditor.client.event.SaveFileEvent;
-import gov.nist.hit.ds.docentryeditor.client.event.StartEditXdsDocumentEvent;
+import gov.nist.hit.ds.docentryeditor.client.event.*;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractPresenter;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 
@@ -29,7 +26,7 @@ import java.util.logging.Logger;
 public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentModelEditorView> {
 
     protected static Logger logger = Logger.getLogger(DocumentModelEditorPresenter.class.getName());
-    protected XdsDocumentEntry model;
+    protected XdsDocumentEntry model=new XdsDocumentEntry();
     EditorDriver editorDriver = GWT.create(EditorDriver.class);
 
     @Inject
@@ -37,7 +34,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 
     @Override
     public void init() {
-        model = new XdsDocumentEntry();
+//        model = new XdsDocumentEntry();
         initDriver(model);
         requestFactory.initialize(eventBus);
         bind();
@@ -47,9 +44,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
         this.model = model;
         editorDriver.initialize(view);
         getView().authors.getAuthorWidget().initEditorDriver();
-//		getView().title.initEditorDriver();
-//		getView().comment.initEditorDriver();
-//		getView().confidentialityCode.initEditorDriver();
+        logger.info("Init driver with: ");
         logger.info(model.toString());
         editorDriver.edit(model);
         refreshGridButtonsDisplay();
@@ -60,9 +55,9 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
 
             @Override
             public void onStartEditXdsDocument(StartEditXdsDocumentEvent event) {
-//                logger.info("Start Edit: "+event.getDocument().toXML());
                 logger.info("Received Start Edit Event");
                 logger.info("null? "+event.getDocument());
+                model=event.getDocument();
                 initDriver(event.getDocument());
                 getView().authors.editNewAuthor();
             }
@@ -72,7 +67,6 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
             @Override
             public void onFileSave(SaveFileEvent event) {
                 doSave();
-                ((MetadataEditorEventBus) eventBus).fireSaveCurrentlyEditedDocumentEvent(new SaveCurrentlyEditedDocumentEvent(model));
             }
         });
     }
@@ -187,6 +181,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
      * Method which actually handle saving (on server) and download for the edited metadata file.
      */
     private void save() {
+        ((MetadataEditorEventBus) eventBus).fireSaveCurrentlyEditedDocumentEvent(new SaveCurrentlyEditedDocumentEvent(model));
         String filename = model.getFileName().toString();
         requestFactory.saveFileRequestContext().saveAsXMLFile(filename, model.toXML()).fire(new Receiver<String>() {
 
@@ -214,6 +209,11 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
         });
 
 
+    }
+
+    public void rollbackChanges() {
+        logger.info("Cancel doc. entry changes.");
+        ((MetadataEditorEventBus) eventBus).fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
     }
 
     interface EditorDriver extends SimpleBeanEditorDriver<XdsDocumentEntry, DocumentModelEditorView> {

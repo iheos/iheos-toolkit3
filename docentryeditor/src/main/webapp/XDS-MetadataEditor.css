@@ -1,4 +1,7 @@
 /** Add css rules here for your application. */
+body{
+    min-width:900px;
+}
 /* Main app title */
 #apptitle {
     margin-bottom: 5px;

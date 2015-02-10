@@ -1,6 +1,8 @@
 package gov.nist.hit.ds.docentryeditor.client.home;
 
+import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.event.shared.EventBus;
 import com.sencha.gxt.cell.core.client.ButtonCell;
 import com.sencha.gxt.core.client.dom.ScrollSupport;
 import com.sencha.gxt.core.client.util.Margins;
@@ -10,6 +12,7 @@ import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import gov.nist.hit.ds.docentryeditor.client.MetadataEditorGinInjector;
+import gov.nist.hit.ds.docentryeditor.client.editor.EditorPlace;
 import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
 import gov.nist.hit.ds.docentryeditor.client.event.NewFileLoadedEvent;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppImages;
@@ -21,10 +24,14 @@ import javax.inject.Inject;
 
 public class WelcomePanel extends VerticalLayoutContainer {
 
-	MetadataEditorEventBus eventBus= MetadataEditorGinInjector.instance.getEventBus();
+    @Inject
+    protected EventBus eventBus;
 
 	@Inject
 	FileUploadDialog fileUploadDialog;
+
+    @Inject
+    PlaceController placeController;
 
 	private ToggleButton newFolderBtn;
 	private ToggleButton newDocEntryBtn;
@@ -51,22 +58,23 @@ public class WelcomePanel extends VerticalLayoutContainer {
 				"To start, use the buttons below or the left panel to create Document Entry objects. <br/><br/>");
 
 		// set home buttons to create xds elements
-		newFolderBtn = new ToggleButton("New folder (not implemented yet)");
+		newFolderBtn = new ToggleButton("New folder");
 		newFolderBtn.setIcon(AppImages.INSTANCE.folder());
 		newFolderBtn.setIconAlign(ButtonCell.IconAlign.TOP);
 		// temporary disable new folder btn until it s implemented.
 		newFolderBtn.disable();
-		newDocEntryBtn = new ToggleButton("New document entry");
+		newDocEntryBtn = new ToggleButton("New doc. entry");
 		newDocEntryBtn.setIcon(AppImages.INSTANCE.filePlus());
 		newDocEntryBtn.setIconAlign(ButtonCell.IconAlign.TOP);
-		loadPreFilledDocEntryBtn = new ToggleButton("Load pre-filled document entry (not working yet)");
+		loadPreFilledDocEntryBtn = new ToggleButton("Load pre-filled doc. entry");
 		loadPreFilledDocEntryBtn.setIcon(AppImages.INSTANCE.preFilled());
 		loadPreFilledDocEntryBtn.setIconAlign(ButtonCell.IconAlign.TOP);
 		// temporary disable new folder btn until it s implemented.
 //		loadPreFilledDocEntryBtn.disable();
-		loadDocEntryFileBtn = new ToggleButton("Load document entry from file");
+		loadDocEntryFileBtn = new ToggleButton("Upload doc. entry");
 		loadDocEntryFileBtn.setIcon(AppImages.INSTANCE.load());
 		loadDocEntryFileBtn.setIconAlign(ButtonCell.IconAlign.TOP);
+        loadPreFilledDocEntryBtn.setMinWidth(50);
 
 		// add home buttons to a Horizontal container
 		HorizontalLayoutContainer buttonsHContainer= new HorizontalLayoutContainer();
@@ -84,8 +92,8 @@ public class WelcomePanel extends VerticalLayoutContainer {
 //		this.add(htmlWelcome);
 		this.add(htmlExplanationTitle);
 		this.add(htmlExplanation);
-		this.add(buttonsHContainer,new VerticalLayoutData(1,-1));
-		this.add(warningPanel,new VerticalLayoutData(1,-1));
+		this.add(buttonsHContainer, new VerticalLayoutData(1, -1));
+		this.add(warningPanel, new VerticalLayoutData(1, -1));
         this.setScrollMode(ScrollSupport.ScrollMode.AUTO);
 	}
 
@@ -93,13 +101,14 @@ public class WelcomePanel extends VerticalLayoutContainer {
 		newDocEntryBtn.addSelectHandler(new SelectEvent.SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent selectEvent) {
-				eventBus.fireNewFileLoadedEvent(new NewFileLoadedEvent(new XdsDocumentEntry()));
+                ((MetadataEditorEventBus) eventBus).fireNewFileLoadedEvent(new NewFileLoadedEvent(new XdsDocumentEntry()));
 			}
 		});
 		loadPreFilledDocEntryBtn.addSelectHandler(new SelectEvent.SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent selectEvent) {
-				eventBus.fireLoadPreFilledDocEntryEvent();
+                placeController.goTo(new EditorPlace());
+                ((MetadataEditorEventBus) eventBus).fireLoadPreFilledDocEntryEvent();
 			}
 		});
 		loadDocEntryFileBtn.addSelectHandler(new SelectEvent.SelectHandler() {

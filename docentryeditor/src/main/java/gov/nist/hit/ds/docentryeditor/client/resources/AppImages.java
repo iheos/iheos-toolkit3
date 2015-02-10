@@ -51,4 +51,7 @@ public interface AppImages extends ClientBundle {
 
     @Source("baseResources/refresh.gif")
     ImageResource refresh();
+
+    @Source("baseResources/back-16.png")
+    ImageResource back();
 }

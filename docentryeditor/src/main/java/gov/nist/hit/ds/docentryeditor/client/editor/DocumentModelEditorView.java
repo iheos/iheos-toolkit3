@@ -5,11 +5,13 @@ import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.cell.core.client.ButtonCell;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.client.editor.ListStoreEditor;
-import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer.HorizontalLayoutData;
 import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -20,19 +22,17 @@ import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.FieldSet;
 import com.sencha.gxt.widget.core.client.form.validator.RegExValidator;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
-import gov.nist.hit.ds.docentryeditor.client.editor.widgets.*;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.AuthorWidgets.AuthorsListEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.CodedTermWidgets.CodedTermsEditableGridWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.CodedTermWidgets.PredefinedCodedTermComboBox;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.IdentifierWidgets.IdentifierOIDEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.IdentifierWidgets.IdentifierString256EditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.InternationalStringWidgets.InternationalStringEditableGrid;
+import gov.nist.hit.ds.docentryeditor.client.editor.widgets.*;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueDTMEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueIntegerEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueString256EditorWidget;
-import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractView;
-import gov.nist.hit.ds.docentryeditor.client.home.WelcomePlace;
 import gov.nist.hit.ds.docentryeditor.client.parse.PredefinedCodes;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppImages;
 import gov.nist.hit.ds.docentryeditor.client.widgets.HomeButton;
@@ -114,6 +114,13 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
     ListStoreEditor<CodedTerm> eventCode;
     CodedTermsEditableGridWidget eventCodesGrid;
     private HomeButton homeBtn;
+    private TextButton saveButton;
+    private TextButton cancelButton;
+    private HorizontalLayoutContainer editorButtonsToolbar;
+    private HorizontalLayoutContainer secondToolbar;
+    private TextButton cancelButton2;
+    private HomeButton homeBtn2;
+    private TextButton saveButton2;
 
     @Override
     protected Map<String, Widget> getPathToWidgetsMap() {
@@ -134,8 +141,41 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         container.getElement().setMargins(10);
         container.setBorders(false);
 
+        editorButtonsToolbar = new HorizontalLayoutContainer();
         homeBtn = new HomeButton();
-        container.add(homeBtn);
+        homeBtn.setHeight(30);
+        homeBtn.setWidth(130);
+        saveButton = new TextButton("Save");
+        saveButton.setHeight(30);
+        saveButton.setWidth(60);
+        cancelButton = new TextButton("Cancel changes");
+        cancelButton.setHeight(30);
+        cancelButton.setWidth(110);
+        cancelButton.setIcon(AppImages.INSTANCE.back());
+        cancelButton.setIconAlign(ButtonCell.IconAlign.LEFT);
+
+        editorButtonsToolbar.add(homeBtn, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
+        editorButtonsToolbar.add(saveButton, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
+        editorButtonsToolbar.add(cancelButton, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
+
+        secondToolbar = new HorizontalLayoutContainer();
+        homeBtn2 = new HomeButton();
+        homeBtn2.setHeight(30);
+        homeBtn2.setWidth(130);
+        saveButton2 = new TextButton("Save");
+        saveButton2.setHeight(30);
+        saveButton2.setWidth(60);
+        cancelButton2 = new TextButton("Cancel changes");
+        cancelButton2.setHeight(30);
+        cancelButton2.setWidth(110);
+        cancelButton2.setIcon(AppImages.INSTANCE.back());
+        cancelButton2.setIconAlign(ButtonCell.IconAlign.LEFT);
+        secondToolbar.add(homeBtn2, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
+        secondToolbar.add(saveButton2, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
+        secondToolbar.add(cancelButton2, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
+        SimpleContainer secondToolbarContainer = new SimpleContainer();
+        secondToolbarContainer.setHeight(35);
+        secondToolbarContainer.add(secondToolbar);
 
         SimpleContainer fp1 = new SimpleContainer();
         SimpleContainer fp2 = new SimpleContainer();
@@ -147,9 +187,9 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         fp2.setTitle("Optional fields");
 //        fp1.setHeadingText("Required Fields");
 //        fp2.setHeadingText("Optional Fields");
-
         // Adding required and optional fields panels to the main container of
         // editor view
+        container.add(editorButtonsToolbar, new VerticalLayoutData(-1,30));
         container.add(new HtmlLayoutContainer("<h2>Required fields</h2>"));
         container.add(fp1, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         container.add(new HtmlLayoutContainer("<h2>Optional fields</h2>"));
@@ -344,6 +384,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         optionalFields.add(eventCodesGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         optionalFields.add(serviceStartTime.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         optionalFields.add(serviceStopTime.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
+        optionalFields.add(secondToolbarContainer);
 
         setWidgetsInfo();
 
@@ -363,6 +404,23 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 form.forceLayout();
             }
         });
+        SelectHandler saveHandler = new SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent selectEvent) {
+                logger.info("Save document entry changes.");
+                presenter.doSave();
+            }
+        };
+        saveButton.addSelectHandler(saveHandler);
+        saveButton2.addSelectHandler(saveHandler);
+        SelectHandler cancelHandler = new SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent selectEvent) {
+                presenter.rollbackChanges();
+            }
+        };
+        cancelButton.addSelectHandler(cancelHandler);
+        cancelButton2.addSelectHandler(cancelHandler);
 //        ((MetadataEditorEventBus) presenter.getEventBus()).fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
     }
 

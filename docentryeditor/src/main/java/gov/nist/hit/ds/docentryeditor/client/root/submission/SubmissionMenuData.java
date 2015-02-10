@@ -64,6 +64,20 @@ public class SubmissionMenuData {
         this.model = model;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SubmissionMenuData)) return false;
+
+        SubmissionMenuData that = (SubmissionMenuData) o;
+
+        if (!key.equals(that.key)) return false;
+        if (!model.equals(that.model)) return false;
+        if (!value.equals(that.value)) return false;
+
+        return true;
+    }
+
     public interface SubmissionMenuDataProperties extends PropertyAccess<SubmissionMenuData> {
 
         ModelKeyProvider<SubmissionMenuData> key();
