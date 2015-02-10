@@ -160,52 +160,52 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // /////////////////////////////////////
         // ID Field (required)
         FieldLabel idLabel = new FieldLabel(id, "Entry UUID");
-        idLabel.setLabelWidth(125);
+        idLabel.setLabelWidth(135);
 
         // Filename field
         FieldLabel filenameLabel = new FieldLabel(fileName, "File name");
-        filenameLabel.setLabelWidth(125);
+        filenameLabel.setLabelWidth(135);
 
         // Hash Field (required)
         FieldLabel hashLabel = new FieldLabel(hash, "Hash");
-        hashLabel.setLabelWidth(125);
+        hashLabel.setLabelWidth(135);
 
         // Language Code Field (required)
         FieldLabel languageCodeLabel = new FieldLabel(languageCode, "Language Code");
-        languageCodeLabel.setLabelWidth(125);
+        languageCodeLabel.setLabelWidth(135);
 
 
         // Mime Type Field (required)
         FieldLabel mimeTypeLabel = new FieldLabel(mimeType, "Mime Type");
-        mimeTypeLabel.setLabelWidth(125);
+        mimeTypeLabel.setLabelWidth(135);
 
         // Class Code Field (required)
         FieldLabel classCodeLabel = new FieldLabel(classCode.getDisplay(), "Class Code");
-        classCodeLabel.setLabelWidth(125);
+        classCodeLabel.setLabelWidth(135);
 
         // Format Code Field (required)
         FieldLabel formatCodeLabel = new FieldLabel(formatCode.getDisplay(), "Format Code");
-        formatCodeLabel.setLabelWidth(125);
-
-        // practiceSettingCode Field (required)
-        FieldLabel healthcareFacilityTypeLabel = new FieldLabel(healthcareFacilityType.getDisplay(), "Healthcare Facility");
-        healthcareFacilityTypeLabel.setLabelWidth(125);
+        formatCodeLabel.setLabelWidth(135);
 
         // healthcare facility Code Field (required)
+        FieldLabel healthcareFacilityTypeLabel = new FieldLabel(healthcareFacilityType.getDisplay(), "Healthcare Facility");
+        healthcareFacilityTypeLabel.setLabelWidth(135);
+
+        // practiceSettingCode Field (required)
         FieldLabel practiceSettingCodeLabel = new FieldLabel(practiceSettingCode.getDisplay(), "Practice Setting Code");
-        practiceSettingCodeLabel.setLabelWidth(125);
+        practiceSettingCodeLabel.setLabelWidth(135);
 
         // type Code Field (required)
         FieldLabel typeCodeLabel = new FieldLabel(typeCode.getDisplay(), "Type Code");
-        typeCodeLabel.setLabelWidth(125);
+        typeCodeLabel.setLabelWidth(135);
 
         // Repository Unique ID Field (optional)
         FieldLabel repositoryLabel = new FieldLabel(repoUId, "Repository Unique ID");
-        repositoryLabel.setLabelWidth(125);
+        repositoryLabel.setLabelWidth(135);
 
         // URI Field (optional)
         FieldLabel uriLabel = new FieldLabel(uri, "URI");
-        uriLabel.setLabelWidth(125);
+        uriLabel.setLabelWidth(135);
 
         // ////////////////////////////////////////////////////
         // --- Adding REQUIRED simple fields labels to containers
@@ -258,12 +258,12 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         /* ********************************* */
         // Patient ID Fields (required)
         FieldLabel patientIdLabel = new FieldLabel(patientID, "Patient ID");
-        patientIdLabel.setLabelWidth(125);
+        patientIdLabel.setLabelWidth(135);
         simpleRequiredFieldsContainer.add(patientIdLabel, new VerticalLayoutData(1, -1));
 
         // Unique ID Fieds (required)
         FieldLabel uniqueIdLabel = new FieldLabel(uniqueId, "Unique ID");
-        uniqueIdLabel.setLabelWidth(125);
+        uniqueIdLabel.setLabelWidth(135);
         simpleRequiredFieldsContainer.add(uniqueIdLabel, new VerticalLayoutData(1, -1));
 
 		/* ********************************** */

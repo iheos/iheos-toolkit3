@@ -107,7 +107,7 @@ public class AuthorsListEditorWidget extends ListStoreEditor<Author> implements 
         vcon.add(authorFS, new VerticalLayoutContainer.VerticalLayoutData(0.999, -1, new Margins(10, 0, 0, 0)));
         vcon.add(authorCP, new VerticalLayoutContainer.VerticalLayoutData(-1, 30));
         authorGridEditorWidget = new SimpleContainer();
-        authorGridEditorWidget.setHeight(475);
+        authorGridEditorWidget.setHeight(485);
         authorGridEditorWidget.add(vcon);
     }
 

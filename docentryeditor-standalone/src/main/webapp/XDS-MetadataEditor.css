@@ -104,3 +104,7 @@ span.title {
     /*font-size:18px;*/
     color:red;
 }
+
+.form-margin {
+    padding:2px;
+}

@@ -212,9 +212,8 @@ public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
             setHeight(180);
 
             FramedPanel fpanel = new FramedPanel();
+            fpanel.setBorders(false);
             fpanel.setHeaderVisible(false);
-            VerticalLayoutContainer vcon = new VerticalLayoutContainer();
-            fpanel.add(vcon);
 
             editor = new CodedTermEditorWidget();
             editor.initEditorDriver();
@@ -231,7 +230,9 @@ public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
             fpanel.addButton(cancelButton);
             fpanel.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.CENTER);
 
+            VerticalLayoutContainer vcon = new VerticalLayoutContainer();
             vcon.add(editor, new VerticalLayoutContainer.VerticalLayoutData(1, 1, new Margins(10)));
+            fpanel.add(vcon);
 
             add(fpanel);
 

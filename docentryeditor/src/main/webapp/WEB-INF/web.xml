@@ -8,7 +8,7 @@
 
 	<servlet>
 		<servlet-name>uploadServlet</servlet-name>
-		<!-- Le chemin vers la servlet -->
+		<!-- servlet path -->
 		<servlet-class>gov.nist.hit.ds.docentryeditor.server.UploadFileServlet</servlet-class>
 	</servlet>
 

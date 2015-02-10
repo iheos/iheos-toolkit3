@@ -11,6 +11,7 @@
     <properties>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <gwtVersion>2.6.1</gwtVersion>
+        <!-- GWT 2.7.0 is not fully compatible w/ GXT 3.1.1-->
         <mavenCompilerPluginVersion>3.1</mavenCompilerPluginVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
@@ -64,12 +65,12 @@
             <!-- 3.1.2 was not available in maven central,
             I believe as it is the latest version it might be under a commercial licensing -->
         </dependency>
-        <!-- dependency adding the missing gxt theme -->
-        <dependency>
-            <groupId>com.sencha.gxt</groupId>
-            <artifactId>gxt-theme-neptune</artifactId>
-            <version>3.1.0</version>
-        </dependency>
+        <!-- dependency adding the missing gxt theme (new theme) -->
+        <!--<dependency>-->
+            <!--<groupId>com.sencha.gxt</groupId>-->
+            <!--<artifactId>gxt-theme-neptune</artifactId>-->
+            <!--<version>3.1.1</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>

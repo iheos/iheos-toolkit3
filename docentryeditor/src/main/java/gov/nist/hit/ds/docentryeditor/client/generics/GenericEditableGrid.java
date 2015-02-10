@@ -8,6 +8,7 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.fx.client.Draggable;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.ConfirmMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -98,6 +99,8 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
 
         // clazzM = parametrizedClass;
         pane.setHeadingText(gridTitle);
+        pane.setBorders(false);
+        pane.setCollapsible(true);
 
         this.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
 
@@ -105,7 +108,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         this.setBorders(false);
 
         this.addStyleName("grid-minheight");
-        this.setHeight(200);
+        this.setHeight(250);
 //        pane.addStyleName("grid-minheight");
 //        gridContainer.addStyleName("grid-minheight");
 
@@ -381,13 +384,18 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         pane.setHeight(height);
     }
 
+    /**
+     * This method calculates approximately the height of the grid widget based on the number of elements
+     * supposed to be registered in the grid.
+     * @param storeMaxLength estimated number of elements supposed to be stored in the grid.
+     */
     protected void setStoreMaxLength(int storeMaxLength) {
         this.storeMaxLength = storeMaxLength;
         if (storeMaxLength == 1) {
-            this.setHeight(70 + (hasToolbar == true ? 25 : 0) + (hasExtraWidget == true ? 20 : 0));
+            this.setHeight(85 + (hasToolbar == true ? 35 : 0) + (hasExtraWidget == true ? 30 : 0));
         } else {
             if (storeMaxLength < 11) {
-                this.setHeight((20 * storeMaxLength) + (hasToolbar == true ? 20 : 0) + (hasExtraWidget == true ? 20 : 0));
+                this.setHeight((30 * storeMaxLength) + (hasToolbar == true ? 35 : 0) + (hasExtraWidget == true ? 30 : 0));
             }
         }
     }
