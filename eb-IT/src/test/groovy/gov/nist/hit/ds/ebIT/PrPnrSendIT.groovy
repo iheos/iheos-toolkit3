@@ -97,7 +97,7 @@ class PrPnrSendIT extends Specification {
 
         when: 'create client locally'
         SimApi.create('docsrc', userName, clientSimId)
-        SimApi.updateConfig(userName, clientSimId, clientSimConfig(endpoint, tlsEndpoint))
+        SimApi.setConfig(userName, clientSimId, clientSimConfig(endpoint, tlsEndpoint))
 
         and: 'send PnR to PR'
         EbSendRequest request = EbSendRequestDAO.toModel(requestXml)
@@ -122,7 +122,7 @@ class PrPnrSendIT extends Specification {
 
         when: 'create client locally'
         SimApi.create('docsrc', userName, clientSimId)
-        SimApi.updateConfig(userName, clientSimId, clientSimConfig(endpoint, tlsEndpoint))
+        SimApi.setConfig(userName, clientSimId, clientSimConfig(endpoint, tlsEndpoint))
 
         and: 'send PnR to PR'
         EbSendRequest request = EbSendRequestDAO.toModel(requestXml)

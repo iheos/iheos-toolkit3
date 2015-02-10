@@ -13,7 +13,7 @@ class ActorTransactionTypeDAO {
     ActorTransactionTypeDAO(ActorTransactionTypeFactory _fact) { fact = _fact }
 
     void loadFromResource(String resourceName) {
-        log.info("Loading ActorTransaction types from ${resourceName}")
+        log.info("Loading ActorTransaction types from ${this.getClass().getClassLoader().getResource(resourceName).toURI()}")
         loadFromString(this.class.getClassLoader().getResourceAsStream(resourceName).text)
     }
 
@@ -31,6 +31,7 @@ class ActorTransactionTypeDAO {
         def id = tt.@id.text()
         ttype.name = tt.@name.text()
         ttype.code = tt.@code.text()
+        ttype.id = tt.@id.text()
         ttype.isRetrieve = tt.@isRetrieve.text() == 'true'
         ttype.asyncCode = tt.@asyncCode.text()
         ttype.requestAction = tt.request.@action.text()
@@ -64,16 +65,20 @@ class ActorTransactionTypeDAO {
         actorType.name = at.@id
         actorType.shortName = at.@id
         actorType.actorSimFactoryClassName = at.simFactoryClass.@class
+        def directions = [] as Set
         at.transaction.each { trans ->
             String transId = trans.@id.text()
             log.debug("...${transId}")
             TransactionType tt = fact.transactionById.get(transId)
             if (!tt)
                 throw new ToolkitRuntimeException("Actor type ${actorType.name} references Transaction type by id [${transId}] which is not defined - ${fact.transactionByName.keySet()}")
-            boolean client = at.@type.text() == 'client'
+            boolean client = trans.@type.text() == 'client'
+            directions.add(client)
             actorType.getDirectionalTransactionTypes().add(new DirectionalTransactionType(tt, client))
             tt.actorType = actorType
         }
+        if (directions.size() == 2)
+            throw new ToolkitRuntimeException("Actor type ${actorType.name} is inconsistent - all transactions must be server or all transactions must be client")
         at.property.each {
             String name = it.@name.text()
             String value = it.@value.text()

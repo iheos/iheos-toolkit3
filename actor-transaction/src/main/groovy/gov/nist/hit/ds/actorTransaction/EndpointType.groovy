@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
  *
  */
 public class EndpointType {
+    ActorType actorType
+    String label
 	TransactionType transType;
 	TlsType tls;
 	AsyncType async;
@@ -36,21 +38,32 @@ public class EndpointType {
 	 * Parse a display lqbel for an endpoint. An example is:  Register_TLS_ASYNC
 	 * @param label
 	 */
-	public EndpointType(ActorType actorType, String label)  {
+	public EndpointType(ActorType _actorType, String _label)  {
+        actorType = _actorType
+        label = _label
         if (actorType == null) throw new ToolkitRuntimeException("ActorType is null");
 		String[] parts = label.split("_");
 		tls = TlsType.NOTLS;
 		async = AsyncType.SYNC;
 		if (parts == null || parts.length < 1)  {
+            // may be client or server - check
 			transType = actorType.findTransactionType(label, false);
-			return;
+            if (transType) return
+            transType = actorType.findTransactionType(label, true)
+            return
 		}
+        // again, may be client or server - check both
 		transType = actorType.findTransactionType(parts[0], false);
+        if (!transType) transType = actorType.findTransactionType(parts[0], true)
 		int i=1;
 		tls = (i < parts.length && "TLS".equalsIgnoreCase(parts[i])) ? TlsType.TLS : TlsType.NOTLS;
 		if (isTls()) i++;
 		async = (i < parts.length && "ASYNC".equalsIgnoreCase(parts[i])) ? AsyncType.ASYNC : AsyncType.SYNC;
 	}
+
+    boolean isValid() { transType }
+
+    String nonValidErrorMsg() { "EndpointLabel:  ${actorType} does not contain transaction for label ${label}"}
 	
 	public String label() {
 		return transType.code + ((isTls()) ? "_TLS" : "") + ((isAsync()) ? "_ASYNC" : "");

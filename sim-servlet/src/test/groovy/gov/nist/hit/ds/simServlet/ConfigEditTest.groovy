@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.simServlet
 
+import gov.nist.hit.ds.actorTransaction.AsyncType
+import gov.nist.hit.ds.actorTransaction.TlsType
 import gov.nist.hit.ds.simServlet.api.SimApi
 import gov.nist.hit.ds.simServlet.servlet.SimServlet
 import gov.nist.hit.ds.simSupport.client.SimId
@@ -194,7 +196,7 @@ class ConfigEditTest extends Specification {
         when: '''Create a sim'''
         def api = new SimApi()
         api.delete(simId3.repoName, simId3.simId)
-        simHandle = api.create('docrec', simId3.repoName, simId3.simId)
+        simHandle = api.createServer('docrec', simId3.repoName, simId3.simId)
 
         and: '''Get config (XML) through API'''
         def config = api.getConfig(repoName, simHandle.simId)
@@ -215,6 +217,50 @@ class ConfigEditTest extends Specification {
 
         then: '''Verify change has been changed'''
         getMsgCallback(config3) == 'http://foo/bar'
+    }
+
+    def updatingConfig = '''
+<actor type='docrec'>
+  <transaction name='prb'>
+    <endpoint value='http://localhost:8080/foo' />
+    <settings>
+      <boolean name='schemaCheck' value='true' />
+      <boolean name='modelCheck' value='true' />
+      <boolean name='codingCheck' value='true' />
+      <boolean name='soapCheck' value='true' />
+      <text name='msgCallback' value='' />
+    </settings>
+    <webService value='prb' />
+  </transaction>
+  <transaction name='prb'>
+    <endpoint value='https://localhost:8443/foo' />
+    <settings>
+      <boolean name='schemaCheck' value='true' />
+      <boolean name='modelCheck' value='true' />
+      <boolean name='codingCheck' value='true' />
+      <boolean name='soapCheck' value='true' />
+      <text name='msgCallback' value='' />
+    </settings>
+    <webService value='prb_TLS' />
+  </transaction>
+</actor>'''
+
+    def 'Update of endpoints through simapi for server should be ignored'() {
+        when: '''Create a sim'''
+        def api = new SimApi()
+        api.delete(simId3.repoName, simId3.simId)
+        simHandle = api.createServer('docrec', simId3.repoName, simId3.simId)
+
+        and: '''Get config (XML) through API'''
+        def initialConfig = api.getConfig(repoName, simHandle.simId)
+        println 'Config as Read' + initialConfig
+
+        and: '''Update config - set schemaCheck to false'''
+        def config2 = SimApi.updateConfig(simId3.repoName, simId3.simId, updatingConfig)
+        println 'Config as Updated' + config2
+
+        then:
+        !simHandle.actorSimConfig.getEndpoint(simHandle.actorSimConfig.get('prb').transactionType, TlsType.NOTLS, AsyncType.SYNC).value.contains('foo')
     }
 
 }

@@ -7,7 +7,6 @@ import groovy.util.logging.Log4j
  * Created by bill on 4/16/14.
  */
 @Log4j
-@ToString(includeFields=true, includes="shortName, directionalTransactionTypes, props")
 class ActorType /* implements IsSerializable, Serializable */{
     String name
     String shortName
@@ -35,6 +34,14 @@ class ActorType /* implements IsSerializable, Serializable */{
             it.transactionType.identifiedBy(transactionTypeName) && it.client == send
         }
     }
+
+    // Since actor type must contain all client or all server ends of transactions
+    // all we do is test the first transaction
+    boolean isClient() {
+        directionalTransactionTypes.first()?.client
+    }
+
+    String toString() { "ActorType: ${name} as  ${(isClient() ? 'client' : 'server')}" }
 
     TransactionType getTransactionTypeFromRequestAction(String action, boolean client) {
         directionalTransactionTypes.find { dtt ->

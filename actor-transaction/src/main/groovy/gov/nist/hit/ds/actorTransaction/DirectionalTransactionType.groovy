@@ -13,4 +13,5 @@ class DirectionalTransactionType {
 
     DirectionalTransactionType(TransactionType _transactionType, boolean _client) { transactionType = _transactionType; client = _client }
 
+    String toString() { "${transactionType}: ${(client) ? 'client' : 'server'}"}
 }

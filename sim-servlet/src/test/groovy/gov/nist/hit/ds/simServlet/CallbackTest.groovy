@@ -56,7 +56,7 @@ It is great!
         simId = new SimIdentifier(SimUtils.defaultRepoName, 'PnrSoapTest')
         def simApi = new SimApi()
         simApi.delete(simId.repoName, simId.simId)
-        def simHandle = simApi.create('docrec', simId.repoName, simId.simId)
+        def simHandle = simApi.createServer('docrec', simId.repoName, simId.simId)
         SimUtils.close(simHandle)
     }
 

@@ -1,7 +1,11 @@
 package gov.nist.hit.ds.simServlet.rest
 
+import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.actorTransaction.ActorType
 import gov.nist.hit.ds.simServlet.api.SimApi
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import groovy.util.logging.Log4j
 import org.xml.sax.SAXParseException
 
 import javax.ws.rs.*
@@ -12,6 +16,7 @@ import javax.ws.rs.core.Response
  * Created by bmajur on 11/19/14.
  */
 
+@Log4j
 @Path('/sim/create/{username}/{simid}')
 class   CreateSim {
     @POST
@@ -34,8 +39,17 @@ class   CreateSim {
             if (!actorTypeName)
                 throw new WebApplicationException(Response.Status.BAD_REQUEST)
             def simId = new SimId(simIdString)
-            SimApi.create(actorTypeName, username, simId)
-            return SimApi.updateConfig(username, simId, message)
+//            SimHandle simHandle = SimApi.create(actorTypeName, username, simId)
+//            log.info("Initial config is ${simHandle.actorSimConfig.toString()}")
+            ActorType actorType = new ActorTransactionTypeFactory().getActorType(actorTypeName)
+//            log.info("Creating sim for ${actorType}")
+
+            SimHandle simHandle
+            if (actorType?.isClient())
+                simHandle = SimApi.createClient(actorTypeName, username, simId, message)  // endpoints updated
+            else
+                simHandle = SimApi.createServer(actorTypeName, username, simId, message)   // endpoints not updated
+            return new String(simHandle.configAsset.content)
 //        return '<foo/>'
         } catch (Throwable t) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST)

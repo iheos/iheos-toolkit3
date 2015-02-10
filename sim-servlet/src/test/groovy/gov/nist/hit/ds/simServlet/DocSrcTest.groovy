@@ -18,7 +18,7 @@ class DocSrcTest extends Specification {
     def setup() {
         new SimServlet().init()
         SimApi.delete(repoName, simId)  // necessary to make sure create actually creates new, default is to keep old if present
-        simHandle = SimApi.create('docsrc', repoName, simId)
+        simHandle = SimApi.createServer('docsrc', repoName, simId)
     }
 
     def 'Create test'() {

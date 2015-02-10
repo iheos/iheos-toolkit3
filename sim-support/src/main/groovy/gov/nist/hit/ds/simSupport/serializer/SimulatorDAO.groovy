@@ -4,6 +4,7 @@ import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.config.*
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import gov.nist.hit.ds.toolkit.environment.EnvironmentAccess
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 import groovy.xml.MarkupBuilder
 /**
@@ -58,9 +59,12 @@ class SimulatorDAO {
             def ws = trans.webService
             assert ws
             def label = ws.@value.text()
+            log.debug("Endpoint label is ${label}")
             EndpointType etype = new EndpointType(simConfig.actorType, label)
 
-            assert etype.transType
+            if (!etype.isValid())
+                throw new ToolkitRuntimeException("Endpoint ${endpointString}: ${etype.nonValidErrorMsg()}")
+
             TransactionSimConfigElement transElement = new TransactionSimConfigElement(etype, new EndpointValue(endpointString))
             simConfig.add(transElement)
 
@@ -78,13 +82,17 @@ class SimulatorDAO {
         return simConfig
     }
 
+    // elements update-able but endpoints are not
     static updateModel(SimConfig simConfig, String updateConfig) {
+        log.debug("Updating config for ${simConfig}")
         SimConfig update = toModel(updateConfig)
         simConfig.transactions.each { TransactionSimConfigElement transElement ->
             def name = transElement.name
             TransactionSimConfigElement updateTransaction = update.transactions.find { it.name == name}
             if (!updateTransaction) return
+//            log.debug("...${name} updated with ${updateTransaction.endpointValue}")
             transElement.elements = updateTransaction.elements
+//            transElement.endpointValue = updateTransaction.endpointValue
         }
         simConfig.environmentAccess = update.environmentAccess
     }

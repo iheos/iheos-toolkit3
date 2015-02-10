@@ -65,7 +65,7 @@ class DocSrcSendTest extends Specification {
 
     def 'Send'() {
         when:
-        SimHandle simHandle = SimApi.create('docsrc', repoName, simId)
+        SimHandle simHandle = SimApi.createServer('docsrc', repoName, simId)
         SimApi.updateConfig(repoName, simId, simConfig)
         EbSendRequest request = EbSendRequestDAO.toModel(requestXml)
         SimApi.send(simIdent, request)

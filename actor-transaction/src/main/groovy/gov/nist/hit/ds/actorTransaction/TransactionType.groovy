@@ -9,6 +9,7 @@ import groovy.transform.ToString
 class TransactionType /* implements IsSerializable, Serializable */ {
     public String name
     public String code
+    public String id
     public String asyncCode
     public String requestAction
     public String responseAction
@@ -70,5 +71,5 @@ class TransactionType /* implements IsSerializable, Serializable */ {
             throw new InvalidTransactionTypeDefinitionException("implClass not defined");
     }
 
-
+    String toString() { "${name}:${id}" }
 }

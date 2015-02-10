@@ -16,8 +16,20 @@ import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
  */
 class SimApi {
 
-    static SimHandle create(String actorTypeName, String username, SimId simId) {
+    static SimHandle createServer(String actorTypeName, String username, SimId simId) {
         SimUtils.create(actorTypeName, simId, username)
+    }
+
+    static SimHandle createServer(String actorTypeName, String username, SimId simId, String configXml) {
+        SimHandle simHandle = createServer(actorTypeName, username, simId)
+        updateConfig(username, simId, configXml)
+        return simHandle
+    }
+
+    static SimHandle createClient(String actorTypeName, String username, SimId simId, String configXml) {
+        SimHandle simHandle = SimUtils.create(actorTypeName, simId, username)
+        setConfig(username, simId, configXml)
+        return simHandle
     }
 
     static delete(String username, SimId simId) {
@@ -30,20 +42,26 @@ class SimApi {
         return new String(simHandle.configAsset.content)
     }
 
+    // Used to set the config of a client sim.  The requester controls the
+    // endpoints so all aspects are under control of the requester
+    static String setConfig(String username, SimId simId, String configXml) {
+        SimHandle simHandle = SimUtils.open(simId.toString(), username)
+        SimUtils.storeConfig(simHandle, configXml)
+        configXml
+    }
+
+    // Used to update config of a server sim.  Most parameters are updateable
+    // but endpoints are not. They are controlled by the simulator manager
     static String updateConfig(String username, SimId simId, String configXml) {
         SimHandle simHandle = SimUtils.open(simId.toString(), username)
         SimulatorDAO dao = new SimulatorDAO()
         // updates actorSimConfig with only the entries
         // that are allowed to be updated
         SimulatorDAO.updateModel(simHandle.actorSimConfig, configXml)
-//        // push update
-//        String updatedConfig = dao.toXML(simHandle.actorSimConfig)
-//        SimUtils.storeConfig(simHandle, updatedConfig)
-//        return updatedConfig
-
-        // just accept new config - overwrite existing
-        SimUtils.storeConfig(simHandle, configXml)
-        return configXml
+        // push update
+        String updatedConfig = dao.toXML(simHandle.actorSimConfig)
+        SimUtils.storeConfig(simHandle, updatedConfig)
+        return updatedConfig
     }
 
     static SimHandle send(SimIdentifier simIdentifier, EbSendRequest request) {
