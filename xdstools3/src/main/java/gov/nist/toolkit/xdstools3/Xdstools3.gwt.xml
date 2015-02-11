@@ -35,12 +35,12 @@
 
 
     <!-- Uncomment this line to force GWT compiler to only generate javascript
-        for Safari/Chrome browsers -->
-    <set-property name="user.agent" value="safari" />
+        for Ie10 browsers. Chrome is always supported. -->
+    <set-property name="user.agent" value="ie9" />
 
 
     <!-- Uncomment this line to force GWT compiler to only generate javascript
-        for Firefox browsers -->
+        for Firefox browsers. Chrome is always supported. -->
     <!-- <set-property name="user.agent" value="gecko1_8" /> -->
 
 
