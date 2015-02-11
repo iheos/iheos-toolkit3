@@ -38,28 +38,28 @@
     <!-- ============== Application servlet classes ============== -->
     <servlet>
         <servlet-name>mhdTabsServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.MHDServicesImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.MHDServicesImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>preConnectathonTabServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.PreConnectathonTabServiceImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.PreConnectathonTabServiceImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>loginServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.LoginServiceImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.LoginServiceImpl</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>toolbarServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.ToolbarServiceImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.ToolbarServiceImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>fileUploadServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.UploadServlet</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.UploadServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>testDataSubmissionServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.TestDataSubmissionServicesImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.TestDataSubmissionServicesImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>repositoryServlet</servlet-name>
@@ -71,7 +71,7 @@
     </servlet>
     <servlet>
         <servlet-name>adminSettingsServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.AdminSettingsImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.AdminSettingsImpl</servlet-class>
     </servlet>
 
 

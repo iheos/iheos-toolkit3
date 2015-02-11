@@ -8,7 +8,6 @@
         <version>3.0.4a-SNAPSHOT</version>
     </parent>
 
-    <groupId>gov.nist.toolkit</groupId>
     <artifactId>xdstools3</artifactId>
   <version>3.0.4a-SNAPSHOT</version>
     <packaging>war</packaging>
