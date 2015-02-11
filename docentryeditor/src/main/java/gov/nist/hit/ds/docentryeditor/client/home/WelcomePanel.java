@@ -107,7 +107,6 @@ public class WelcomePanel extends VerticalLayoutContainer {
 		loadPreFilledDocEntryBtn.addSelectHandler(new SelectEvent.SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent selectEvent) {
-                placeController.goTo(new EditorPlace());
                 ((MetadataEditorEventBus) eventBus).fireLoadPreFilledDocEntryEvent();
 			}
 		});

@@ -60,17 +60,19 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 nextIndex++;
                 view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
                 view.getTree().expandAll();
-                if (!(placeController.getWhere() instanceof EditorPlace)) {
-                    logger.info(placeController.getWhere().toString());
-                    placeController.goTo(new EditorPlace());
-                }
+//                if (!(placeController.getWhere() instanceof EditorPlace)) {
+//                    logger.info(placeController.getWhere().toString());
+//                    placeController.goTo(new EditorPlace());
+//                }
                 view.getTree().getSelectionModel().select(currentlyEdited, false);
             }
         });
         ((MetadataEditorEventBus) getEventBus()).addXdsEditorLoadedEventtHandler(new XdsEditorLoadedEvent.XdsEditorLoadedEventHandler() {
             @Override
             public void onXdsEditorLoaded(XdsEditorLoadedEvent event) {
+                logger.info("... receive Doc. Entry Editor loaded event.");
                 if (currentlyEdited != null) {
+                    logger.info("A document is already selected. Loading it...");
                     ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
                 } else {
                     logger.info("No Document Entry in Submission Set");
@@ -95,9 +97,6 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
         nextIndex++;
         view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
         view.getTree().expandAll();
-        if (!(placeController.getWhere() instanceof EditorPlace)) {
-            placeController.goTo(new EditorPlace());
-        }
         view.getTree().getSelectionModel().select(currentlyEdited, false);
     }
 
@@ -125,9 +124,6 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
         logger.info("Create new pre-filled document entry");
         currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, prefilledDocEntry);
         nextIndex++;
-//        if (!(placeController.getWhere() instanceof EditorPlace)) {
-//            placeController.goTo(new EditorPlace());
-//        }
         view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
         view.getTree().expandAll();
         view.getTree().getSelectionModel().select(currentlyEdited, false);
@@ -185,10 +181,10 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
      * This method loads a document entry into the editor user interface, which is loaded if not already.
      */
     private void startEditing() {
-        logger.info("Start editing selected document entry");
         if(!(placeController.getWhere() instanceof EditorPlace)){
             placeController.goTo(new EditorPlace());
         }
+        logger.info("Fire Start Edit selected ("+currentlyEdited.getValue()+") document entry event...");
         ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
     }
 

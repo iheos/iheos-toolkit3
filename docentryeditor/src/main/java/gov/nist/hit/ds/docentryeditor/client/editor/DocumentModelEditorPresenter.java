@@ -35,29 +35,27 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
     @Override
     public void init() {
 //        model = new XdsDocumentEntry();
+        bind();
         initDriver(model);
         requestFactory.initialize(eventBus);
-        bind();
     }
 
     private void initDriver(XdsDocumentEntry model) {
         this.model = model;
         editorDriver.initialize(view);
         getView().authors.getAuthorWidget().initEditorDriver();
-        logger.info("Init driver with: ");
-        logger.info(model.toString());
+        logger.info("Init driver with: "+model.toString());
         editorDriver.edit(model);
         refreshGridButtonsDisplay();
     }
 
     private void bind() {
-        getEventBus().addHandler(StartEditXdsDocumentEvent.TYPE, new StartEditXdsDocumentEvent.StartEditXdsDocumentHandler() {
+        ((MetadataEditorEventBus) getEventBus()).addStartEditXdsDocumentHandler(new StartEditXdsDocumentEvent.StartEditXdsDocumentHandler() {
 
             @Override
             public void onStartEditXdsDocument(StartEditXdsDocumentEvent event) {
-                logger.info("Received Start Edit Event");
-                logger.info("null? "+event.getDocument());
-                model=event.getDocument();
+                logger.info("... receive Start Edit Event");
+                model = event.getDocument();
                 initDriver(event.getDocument());
                 getView().authors.editNewAuthor();
             }
@@ -77,6 +75,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
     public void doSave() {
         if (editorDriver.isDirty()) {
             model = editorDriver.flush();
+            logger.info("Saving document entry: ");
             logger.info(model.toXML());
 
             if (editorDriver.hasErrors()) {

@@ -2,6 +2,7 @@ package gov.nist.hit.ds.docentryeditor.client.editor;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.LayoutRegion;
@@ -18,6 +19,7 @@ import gov.nist.hit.ds.docentryeditor.client.generics.GenericMVP;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 
 import javax.inject.Inject;
+import java.util.logging.Logger;
 
 public class EditorActivity extends AbstractActivity {
 
@@ -36,7 +38,7 @@ public class EditorActivity extends AbstractActivity {
     @Inject
     ValidationPresenter validationPresenter;
     @Inject
-    MetadataEditorEventBus eventBus;
+    MetadataEditorEventBus metadataEditorEventBus;
 
     SimpleContainer sc;
     BorderLayoutContainer blc;
@@ -49,8 +51,18 @@ public class EditorActivity extends AbstractActivity {
         validationMVP = buildValidationMVP();
         validationMVP.init();
         displayer.display(getContainer(), panel, eventBus);
-//        this.eventBus.fireEditNewEvent(new EditNewEvent());
-        this.eventBus.fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
+//        this.metadataEditorEventBus.fireEditNewEvent(new EditNewEvent());
+        Timer t = new Timer() {
+            @Override
+            public void run() {
+                Logger.getLogger(this.getClass().getName()).info("Fire Doc. Entry Editor UI loaded event...");
+                metadataEditorEventBus.fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
+            }
+        };
+
+        // Schedule the timer to run once in 1 milliseconds.
+        t.schedule(1);
+
     }
 
     /**

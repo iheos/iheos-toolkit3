@@ -32,6 +32,8 @@ import gov.nist.hit.ds.docentryeditor.client.editor.widgets.*;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueDTMEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueIntegerEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueString256EditorWidget;
+import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
+import gov.nist.hit.ds.docentryeditor.client.event.XdsEditorLoadedEvent;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractView;
 import gov.nist.hit.ds.docentryeditor.client.parse.PredefinedCodes;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppImages;
@@ -407,7 +409,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         SelectHandler saveHandler = new SelectHandler() {
             @Override
             public void onSelect(SelectEvent selectEvent) {
-                logger.info("Save document entry changes.");
+//                logger.info("Save document entry changes.");
                 presenter.doSave();
             }
         };
@@ -421,7 +423,6 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         };
         cancelButton.addSelectHandler(cancelHandler);
         cancelButton2.addSelectHandler(cancelHandler);
-//        ((MetadataEditorEventBus) presenter.getEventBus()).fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
     }
 
     /**
