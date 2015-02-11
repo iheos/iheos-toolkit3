@@ -175,7 +175,7 @@ public class MetadataCollection implements Serializable /*, RegistryValidationIn
 				uid = ro.uid;
 			}
 			
-			System.out.println("Delete " + id);
+//			System.out.println("Delete " + id);
 
 			synchronized(regIndex) {
 				// delete entry in registry index

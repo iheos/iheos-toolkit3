@@ -44,7 +44,7 @@ public abstract class ValComponentBase implements ValComponent {
 
     ValComponentBase(Event _event) {
         event = _event
-        log.debug "ValComponentBase() - ${this.class.name} - ${event}"
+//        log.debug "ValComponentBase() - ${this.class.name} - ${event}"
     }
 
     ValComponentBase(SimHandle simHandle) { this(simHandle.event)}
@@ -60,14 +60,14 @@ public abstract class ValComponentBase implements ValComponent {
 
     void runValidationEngine() throws SoapFaultException, RepositoryException {
         if (!name) name = this.class.simpleName
-        log.info("Validator: ${parentRelation} ${name}")
+//        log.info("Validator: ${parentRelation} ${name}")
         if (event == null) log.error("Validator ${name} not initialized correctly, must call super(event) in constructor.")
-        log.debug("resultsStack before init: ${event.resultsStack}")
+//        log.debug("resultsStack before init: ${event.resultsStack}")
         if (parentRelation == Relation.NONE) throw new ToolkitRuntimeException("Validation ${name} has no established relationhip to parent")
         if (parentRelation == Relation.PEER) event.addPeerResults(name)
         else if (parentRelation == Relation.CHILD) event.addChildResults(name)
         else if (parentRelation == Relation.SELF) event.addSelfResults(name)
-        log.debug("resultsStack after init: ${event.resultsStack}")
+//        log.debug("resultsStack after init: ${event.resultsStack}")
         try {
 
         runBefore()
@@ -189,7 +189,7 @@ public abstract class ValComponentBase implements ValComponent {
 
     public Assertion assertEquals(String expected, String found) throws SoapFaultException {
         Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
-        log.debug("Assertion: ${a}")
+//        log.debug("Assertion: ${a}")
         recordAssertion(a);
         return a
     }
@@ -204,28 +204,28 @@ public abstract class ValComponentBase implements ValComponent {
 
     public Assertion assertEquals(int expected, int found) throws SoapFaultException {
         Assertion a = ag.assertEquals(expected, found, currentValidationMethod().required);
-        log.debug("Assertion: ${a}")
+//        log.debug("Assertion: ${a}")
         recordAssertion(a);
         return a
     }
 
     public Assertion assertHasValue(String value) throws SoapFaultException {
         Assertion a = ag.assertHasValue('', value, currentValidationMethod().required);
-        log.debug("Assertion: ${a}")
+//        log.debug("Assertion: ${a}")
         recordAssertion(a);
         return a
     }
 
     public Assertion assertHasValue(String msg, String value) throws SoapFaultException {
         Assertion a = ag.assertHasValue(msg, value, currentValidationMethod().required);
-        log.debug("Assertion: ${a}")
+//        log.debug("Assertion: ${a}")
         recordAssertion(a);
         return a
     }
 
     public Assertion assertStartsWith(String value, String prefix) throws SoapFaultException {
         Assertion a = ag.assertStartsWith(value, prefix, currentValidationMethod().required);
-        log.debug("Assertion: ${a}")
+//        log.debug("Assertion: ${a}")
         recordAssertion(a);
         return a
     }
@@ -378,7 +378,7 @@ public abstract class ValComponentBase implements ValComponent {
     private void recordAssertion(Assertion a, Validation vf)
             throws SoapFaultException {
 
-        log.debug("Recording validation ${vf.id()}")
+//        log.debug("Recording validation ${vf.id()}")
         idsAsserted.add(vf.id());
         ValidationMethod validationMethod = currentValidationMethod()
 
@@ -401,6 +401,7 @@ public abstract class ValComponentBase implements ValComponent {
             Fault f = new Fault(vf.msg(), validationMethod.faultCode.toString(), '??', '')
             event.fault = f
             event.flush()
+            log.debug("Assertion ${a}")
 
             throw new SoapFaultException(
                     ag,
@@ -408,6 +409,7 @@ public abstract class ValComponentBase implements ValComponent {
                     new ErrorContext("${a.getMsg()} - ${a.expectedFoundString()}", new AssertionDAO().buildSemiDivided(vf.ref()))
             );
         }
+        log.debug("Assertion ${a}")
     }
 
 //    private void recordAssertion(Assertion a, ValidationRef vr) {

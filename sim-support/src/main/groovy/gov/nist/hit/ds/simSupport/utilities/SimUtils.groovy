@@ -179,7 +179,7 @@ class SimUtils {
         simHandle.repository = repository
         if (simHandle.configAsset)
             simHandle.actorSimConfig = loadConfig(simHandle.configAsset)
-        println "Open ActorSimConfig: ${simHandle.actorSimConfig}"
+        log.debug("Open ActorSimConfig: ${simHandle.actorSimConfig}")
 
         // Made event creation lazy so that creating Sim does not create an empty event
 //        def event = new EventFactory().buildEvent(simHandle.repository, simHandle.eventLogAsset)
