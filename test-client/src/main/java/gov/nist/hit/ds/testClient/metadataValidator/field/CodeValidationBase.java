@@ -7,8 +7,8 @@ import gov.nist.hit.ds.testClient.logging.ValidationContext;
 import gov.nist.hit.ds.testClient.logging.XdsErrorCode;
 import gov.nist.hit.ds.testClient.metadataValidator.object.Classification;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMContainer;
@@ -124,7 +124,7 @@ public class CodeValidationBase {
 				break;
 			}
 		}
-		if (mime_type_section == null) throw new XdsInternalException("CodeValidation2.java: Configuration Error: Cannot find mime type table");
+		if (mime_type_section == null) throw new XdsInternalException("CodeValidation2.java: Configuration Error: Cannot findSimple mime type table");
 
 		mime_map = new HashMap<String, String>();
 		ext_map = new HashMap<String, String>();

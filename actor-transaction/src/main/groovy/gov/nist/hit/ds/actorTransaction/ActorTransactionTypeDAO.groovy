@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.actorTransaction
 
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 
 /**
@@ -62,10 +62,11 @@ class ActorTransactionTypeDAO {
         at.transaction.each { trans ->
             String transId = trans.@id
             log.debug("...${transId}")
-            def tt = fact.transactionByName.get(transId)
+            TransactionType tt = fact.transactionByName.get(transId)
             if (!tt)
                 throw new ToolkitRuntimeException("Transaction [${trans}] not defined - ${fact.transactionByName.keySet()}")
-            actorType.getTransactionTypes().add(tt)
+            boolean send = at.@type == 'client'
+            actorType.getDirectionalTransactionTypes().add(new DirectionalTransactionType(tt, send))
             tt.actorType = actorType
         }
         at.property.each {

@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.testClient.soap;
 
-import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsExceptions.EnvironmentNotSelectedException;
 
 import java.io.File;
 import java.io.IOException;

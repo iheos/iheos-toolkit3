@@ -4,9 +4,9 @@ import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.ebMetadata.MetadataTables;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.MetadataValidationException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataValidationException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMElement;
 
@@ -927,7 +927,7 @@ public class Validator {
 
 		for (String name : path) {
 			OMElement ele = XmlUtil.firstChildWithLocalName(current_ele, name);
-			if (ele == null) throw new Exception("find_nexted_element: Cannot find element " + name + " in path " + path);
+			if (ele == null) throw new Exception("find_nexted_element: Cannot findSimple element " + name + " in path " + path);
 			current_ele = ele;
 		}
 

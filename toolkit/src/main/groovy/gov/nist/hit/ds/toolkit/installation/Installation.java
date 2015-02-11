@@ -3,7 +3,7 @@ package gov.nist.hit.ds.toolkit.installation;
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.hit.ds.utilities.io.Io;
 import gov.nist.hit.ds.utilities.string.StringUtil;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -72,6 +72,7 @@ public class Installation {
 
 
 				ClassLoader cl = getClass().getClassLoader();
+                // TODO: get rid of reference to tk_props.txt
                 String tkPropsLoc = externalCacheString + "/" + "tk_props.txt";
 				URL url = cl.getResource(tkPropsLoc); // Use of a standard backslash in URL works best. A File.separator mixed with URL causes a problem for Windows.
 				if (url == null) {
@@ -91,6 +92,7 @@ public class Installation {
 			} else {
 				externalCache = new File(externalCacheString);
 			}
+            Toolkit.externalCacheFile = externalCache;
             logger.debug("External Cache location is <" + externalCache + ">");
 		}
 

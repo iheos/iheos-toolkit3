@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.testClient.dsig;
 
 import gov.nist.hit.ds.testClient.soap.SecurityParams;
-import gov.nist.hit.ds.xdsException.EnvironmentNotSelectedException;
-import gov.nist.hit.ds.xdsException.LoadKeystoreException;
+import gov.nist.hit.ds.xdsExceptions.EnvironmentNotSelectedException;
+import gov.nist.hit.ds.xdsExceptions.LoadKeystoreException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -83,7 +83,7 @@ public class KeyStoreAccessObject {
 			}
 			
 			String pathToKeystoreProperties = keystoreDir + File.separator + "keystore.properties";
-			// String path = cache_root + File.separator + "environment" + File.separator + environmentName + File.separator + "keystore" + File.separator + "keystore.properties";
+			// String path = cache_root + File.separator + "environment" + File.separator + name + File.separator + "keystore" + File.separator + "keystore.properties";
 			
 			try {
 				

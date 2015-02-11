@@ -3,7 +3,7 @@ package gov.nist.hit.ds.testClient.soap;
 import gov.nist.hit.ds.testClient.dsig.XMLDSigProcessor;
 import gov.nist.hit.ds.testClient.support.WsDocRef;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.*;
+import gov.nist.hit.ds.xdsExceptions.*;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMAbstractFactory;
@@ -215,8 +215,8 @@ public class Soap implements SoapInterface {
 		envelope.getBody().addChild(body);
 
 		setSoapHeader(envelope.getHeader());
-		if (useWSSEC) {
-			// TODO: SAML disabled
+//		if (useWSSEC) {
+//			// TODO: SAML disabled
 //			try {
 //				//TODO replace by parameters found in security params!
 //				String store = securityParams.getKeystore().getAbsolutePath();
@@ -244,8 +244,8 @@ public class Soap implements SoapInterface {
 //						"!! error while trying to generate security header !!",
 //						e);
 //			}
-
-		}
+//
+//		}
 
 		return envelope;
 	}

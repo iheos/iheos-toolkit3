@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.actorTransaction
 
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 
 /**
@@ -24,10 +24,10 @@ class ActorTransactionTypeFactory {
 
     static def init() {
         if (actorByName) return
-        transactionByName = new HashMap<String, TransactionType>()
+        transactionByName = new HashMap<>()
         actorByName = new HashMap<String, ActorType>()
-        transactionByRequestAction = new HashMap<String, TransactionType>()
-        transactionByResponseAction = new HashMap<String, TransactionType>()
+        transactionByRequestAction = new HashMap<>()
+        transactionByResponseAction = new HashMap<>()
     }
 
     ActorType getActorTypeIfAvailable(String type) { return actorByName.get(type) }
@@ -40,7 +40,7 @@ class ActorTransactionTypeFactory {
         throw new ToolkitRuntimeException("ActorType ${type} does not exist.")
     }
 
-    TransactionType getTransactionType(String type) {
+    static TransactionType getTransactionType(String type) {
         TransactionType transactionType = transactionByName.get(type)
         if (transactionType) return transactionType
         throw new ToolkitRuntimeException("TransactionType ${type} does not exist. Types ${transactionByName.keySet()} are defined")

@@ -4,7 +4,7 @@ import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.testClient.logging.ErrorRecorder;
 import gov.nist.hit.ds.testClient.logging.XdsErrorCode;
-import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
 
 import java.util.ArrayList;
 import java.util.List;

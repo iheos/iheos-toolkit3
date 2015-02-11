@@ -11,8 +11,8 @@ import gov.nist.hit.ds.testClient.metadataValidator.datatype.FormatValidator;
 import gov.nist.hit.ds.testClient.metadataValidator.datatype.OidFormat;
 import gov.nist.hit.ds.testClient.metadataValidator.datatype.UuidFormat;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import java.util.ArrayList;

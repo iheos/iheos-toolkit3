@@ -2,11 +2,11 @@ package gov.nist.hit.ds.testClient.engine;
 
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
-import gov.nist.hit.ds.testClient.ids.IdAllocator;
+import gov.nist.hit.ds.testClient.ids.AbstractIdAllocator;
 import gov.nist.hit.ds.testClient.ids.PatientIdAllocator;
 import gov.nist.hit.ds.testClient.ids.SourceIdAllocator;
 import gov.nist.hit.ds.testClient.support.OMGenerator;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import java.util.HashMap;
@@ -24,7 +24,7 @@ public class TestMgmt extends OMGenerator {
 		HashMap<String, String> unique_ids = new HashMap<String, String>();    // object id field => uniqueID assigned
 
 
-			IdAllocator allocator = UniqueIdAllocator.getInstance(testConfig);
+			AbstractIdAllocator allocator = UniqueIdAllocator.getInstance(testConfig);
 			// for all ExtrinsicObjects
 			allocator.assign(metadata, "ExtrinsicObject", MetadataSupport.XDSDocumentEntry_uniqueid_uuid, unique_ids, no_assign_uid_to);
 
@@ -41,7 +41,7 @@ public class TestMgmt extends OMGenerator {
 	public HashMap<String, String> assignPatientId(Metadata metadata, String forced_patient_id) throws XdsInternalException {
 		HashMap<String, String> ids = new HashMap<String, String>();    // object id field => patientID assigned
 
-		IdAllocator allocator = (forced_patient_id == null) ? new PatientIdAllocator(testConfig) : new PatientIdAllocator(testConfig, forced_patient_id);
+		AbstractIdAllocator allocator = (forced_patient_id == null) ? new PatientIdAllocator(testConfig) : new PatientIdAllocator(testConfig, forced_patient_id);
 		// for all ExtrinsicObjects
 		String pid = allocator.assign(metadata, "ExtrinsicObject", MetadataSupport.XDSDocumentEntry_patientid_uuid, ids, null);
 
@@ -58,7 +58,7 @@ public class TestMgmt extends OMGenerator {
 	public HashMap<String, String> assignSourceId(Metadata metadata) throws XdsInternalException {
 		HashMap<String, String> ids = new HashMap<String, String>();    // object id field => patientID assigned
 
-		IdAllocator allocator = new SourceIdAllocator(testConfig);
+		AbstractIdAllocator allocator = new SourceIdAllocator(testConfig);
 
 		// for all SubmissionSets
 		allocator.assign(metadata, "RegistryPackage", MetadataSupport.XDSSubmissionSet_sourceid_uuid, ids, null);

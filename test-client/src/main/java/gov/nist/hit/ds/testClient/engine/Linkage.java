@@ -4,15 +4,15 @@ import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataParser;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.utilities.xml.Parse;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.xpath.AXIOMXPath;
-
+import org.apache.commons.codec.binary.Base64;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.FactoryConfigurationError;
 import java.io.File;
@@ -410,13 +410,14 @@ public class Linkage extends BasicLinkage {
 						}
 					}
 					if (step_ele == null)
-						throw new XdsInternalException("Linkage:compileUseXPath(): Cannot find TestStep " + step + " in " + getLogFileName(testdir));
+						throw new XdsInternalException("Linkage:compileUseXPath(): Cannot findSimple TestStep " + step + " in " + getLogFileName(testdir));
 
 					AXIOMXPath xpathExpression = new AXIOMXPath (xpath);
 					String result = xpathExpression.stringValueOf(step_ele);
 
 					if (base64decode)
-						result = Base64Coder.decodeString(result);
+                        result = new String(Base64.decodeBase64(result));
+//						result = Base64Coder.decodeString(result);
 
 					addLinkage(symbol, result);
 					if (metadata_ele != null)
@@ -430,7 +431,8 @@ public class Linkage extends BasicLinkage {
 					String result = xpathExpression.stringValueOf(root);
 
 					if (base64decode)
-						result = Base64Coder.decodeString(result);
+                        result = new String(Base64.decodeBase64(result));
+//						result = Base64Coder.decodeString(result);
 
 					addLinkage(symbol, result);
 					if (metadata_ele != null)
@@ -513,7 +515,7 @@ public class Linkage extends BasicLinkage {
 					if (instruction_output != null)
 						transaction_output = find_previous_instruction_output(instruction_output, step_id, null);
 					if (transaction_output == null) {
-						throw new XdsInternalException("Linkage compiler: cannot find transaction output in this log file for " + format_section_and_step(step_id, section_name));
+						throw new XdsInternalException("Linkage compiler: cannot findSimple transaction output in this log file for " + format_section_and_step(step_id, section_name));
 					}
 				}
 
@@ -549,7 +551,7 @@ public class Linkage extends BasicLinkage {
 					}
 				}
 				if (!foundit)
-					throw new XdsInternalException("Linkage Compiler: cannot find definition of id " + id + 
+					throw new XdsInternalException("Linkage Compiler: cannot findSimple definition of id " + id +
 							" from " + test_dir + " step " + step_id + " section " + section_name);
 			}
 
@@ -581,7 +583,7 @@ public class Linkage extends BasicLinkage {
 	FactoryConfigurationError, MetadataException {
 		// symbol => id_value
 		//linkage = new HashMap<String, String>();
-		int use_id;  // just to find references
+		int use_id;  // just to findSimple references
 		OMElement metadata_ele = (m == null) ? null : m.getRoot();
 		for (int i=0; i<use_object_ref.size(); i++) {
 			OMElement use = (OMElement) use_object_ref.get(i);
@@ -608,7 +610,7 @@ public class Linkage extends BasicLinkage {
 
 			OMElement result = XmlUtil.firstChildWithLocalName(transaction_output, "Result");
 			if (result == null)
-				throw new XdsInternalException("Cannot find Result section in log of step " + step_id + " in test directory " + test_dir);
+				throw new XdsInternalException("Cannot findSimple Result section in log of step " + step_id + " in test directory " + test_dir);
 
 			Metadata m = MetadataParser.parseNonSubmission(result.getFirstElement());
 
@@ -656,11 +658,11 @@ public class Linkage extends BasicLinkage {
 		OMElement transaction_output = find_transaction_in_log(step_id, test_dir);
 
 		if (transaction_output == null) 
-			throw new XdsInternalException("Linkage:findResultInLog(): Cannot find *Transaction in log of step " + step_id + " in " + test_dir + "/log.xml");
+			throw new XdsInternalException("Linkage:findResultInLog(): Cannot findSimple *Transaction in log of step " + step_id + " in " + test_dir + "/log.xml");
 
 		OMElement result = XmlUtil.firstChildWithLocalName(transaction_output, "Result");
 		if (result == null) 
-			throw new XdsInternalException("Linkage:findResultInLog(): Cannot find Result in log of step " + step_id + " in " + test_dir + "/log.xml");
+			throw new XdsInternalException("Linkage:findResultInLog(): Cannot findSimple Result in log of step " + step_id + " in " + test_dir + "/log.xml");
 
 		if (debug) 
 			System.out.println("findResultInLog\n" + result.toString());

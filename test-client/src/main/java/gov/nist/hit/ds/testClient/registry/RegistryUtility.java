@@ -4,8 +4,8 @@ import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.testClient.logging.ValidationContext;
 import gov.nist.hit.ds.testClient.metadataValidator.field.MetadataValidator;
 import gov.nist.hit.ds.utilities.xml.SchemaValidation;
-import gov.nist.hit.ds.xdsException.SchemaValidationException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.SchemaValidationException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import java.io.ByteArrayOutputStream;

@@ -10,7 +10,6 @@ import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.HeaderItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
@@ -18,11 +17,13 @@ import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
+import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButtonNoForm;
+import gov.nist.toolkit.xdstools3.client.customWidgets.forms.GenericForm;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.client.manager.Manager;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 import gov.nist.toolkit.xdstools3.client.resources.Resources;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
@@ -31,7 +32,7 @@ import java.util.logging.Logger;
  * This class is the UI implementation for the MHD Validator tab.
  * @author oherrmann
  */
-public class MHDValidatorTab extends GenericCloseableTab {
+public class MHDValidatorTab extends GenericCloseableToolTab {
     private Logger logger=Logger.getLogger(MHDValidatorTab.class.getName());
 
     // RPC services declaration
@@ -57,7 +58,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
      */
     public MHDValidatorTab() {
         super(header);
-        getContentsPanel().setWidth(420);
+        getContentsPanel().setWidth(440);
     }
 
     /**
@@ -67,12 +68,10 @@ public class MHDValidatorTab extends GenericCloseableTab {
      */
     @Override
     protected Widget createContents() {
-        container =new VLayout();
-
-       
+        container = new VLayout();
 
         // Message type transactions
-        HeaderItem messageTypeLabel=new HeaderItem();
+        HeaderItem messageTypeLabel = new HeaderItem();
         messageTypeLabel.setDefaultValue("1. Select the type of MHD message to validate");
         messageTypeSelect = new SelectItem();
         messageTypeSelect.setShowTitle(false);
@@ -90,27 +89,21 @@ public class MHDValidatorTab extends GenericCloseableTab {
         uploadForm.setMethod(FormPanel.METHOD_POST);
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setAction("fileUploadServlet");
+        uploadForm.setStyleName("gwt-form-margin");
         fileUploadItem = new FileUpload();
         fileUploadItem.setName("upload1FormElement");
         fileUploadItem.setWidth("400px");
         uploadForm.add(fileUploadItem);
 
         // ------- Create the first form ------
-        DynamicForm form = new DynamicForm();
+        GenericForm form = new GenericForm();
         form.setFields(messageTypeLabel, messageTypeSelect, uploadLabel);
-        form.setCellPadding(10);
 
         // Run button
-        runBtn = new Button("Run");
-        runBtn.disable();
-/*
-        // ------- Create the form ------
-        DynamicForm form = new DynamicForm();
-        form.setFields(l1,reportingLevelSelect,l2, messageTypeSelect, l3);
-        form.setCellPadding(10);
-*/
+        runBtn = new GenericRunButtonNoForm();
+
         // Create Help Link and populates it with text from resources
-        setHelpButton(getHelpPanel(), Resources.INSTANCE.helpContentsSample().getText());
+        setHelpButton(getHelpPanel(), Resources.INSTANCE.getMHDValidatorHelpContents().getText());
 
         // Initial event summary widget parameters
         String id = null;
@@ -128,7 +121,6 @@ public class MHDValidatorTab extends GenericCloseableTab {
         container.addMember(runBtn);
         container.addMember(waitPanel);
         container.hideMember(waitPanel);
-        container.setMinWidth(800);
 
         bindUI();
 
@@ -168,7 +160,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
                             runBtn.enable();
                         } else {
                             runBtn.disable();
-                            SC.warn("Invalid file format - must be xml or json");
+                            SC.warn("Invalid file format. The uploaded file must be XML or JSON.");
                         }
                     }
                 }
@@ -236,11 +228,8 @@ public class MHDValidatorTab extends GenericCloseableTab {
         if (!validationResultsPanel.isVisible()){
             validationResultsPanel.setVisible(true);
         }
-        // TODO might want to use reporting level
-        // reportingLevelSelect.getSelectedReportingLevel();
         eventMessageAggregatorWidget.setEventAssetNode(assetNode);
         validationResultsPanel.redraw();
-//        waitPanel.hide();
         container.hideMember(waitPanel);
     }
 
@@ -253,7 +242,7 @@ public class MHDValidatorTab extends GenericCloseableTab {
         try {
             // Initialize the widget
             eventMessageAggregatorWidget = new EventAggregatorWidget(Manager.EVENT_BUS, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
-            eventMessageAggregatorWidget.setSize("990px", "300px");
+            eventMessageAggregatorWidget.setSize("1110px", "600px");
             return eventMessageAggregatorWidget;
 
         } catch (Throwable t) {

@@ -2,8 +2,8 @@ package gov.nist.hit.ds.testClient.logRepository;
 
 import gov.nist.hit.ds.testClient.logging.LogMap;
 import gov.nist.hit.ds.testClient.results.XdstestLogId;
-import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.log4j.Logger;
 
 import java.io.*;

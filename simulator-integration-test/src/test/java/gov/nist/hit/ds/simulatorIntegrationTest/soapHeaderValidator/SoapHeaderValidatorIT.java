@@ -18,7 +18,7 @@ import gov.nist.hit.ds.simSupport.client.SimId;
 import gov.nist.hit.ds.simSupport.event.EventBuilder;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.xml.Util;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 import java.io.File;
 import java.io.IOException;

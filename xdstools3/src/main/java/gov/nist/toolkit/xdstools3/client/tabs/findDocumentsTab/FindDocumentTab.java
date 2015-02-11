@@ -7,17 +7,18 @@ import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
 import com.smartgwt.client.widgets.form.fields.SpacerItem;
 import com.smartgwt.client.widgets.layout.VStack;
+import gov.nist.toolkit.xdstools3.client.customWidgets.CodedTermEditableGridWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.SAMLComboBox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSCheckbox;
 import gov.nist.toolkit.xdstools3.client.customWidgets.buttons.GenericRunButtonNoForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
 
-public class FindDocumentTab extends GenericCloseableTab {
+public class FindDocumentTab extends GenericCloseableToolTab {
     static String header = "Find Documents";
     private boolean runButtonState = false; // the Run button is disabled until all required fields are filled
 
@@ -54,7 +55,7 @@ public class FindDocumentTab extends GenericCloseableTab {
         final GenericRunButtonNoForm runButton = new GenericRunButtonNoForm();
 
         // Add to layout
-        findDocsPanel.addMembers(l1, pid, l2, options, l3, endpoints, runButton, output);
+        findDocsPanel.addMembers(l1, pid, l2, options, l3, endpoints, runButton, output,new CodedTermEditableGridWidget());
 
         // Add listeners
         runButton.addClickHandler(new ClickHandler() {

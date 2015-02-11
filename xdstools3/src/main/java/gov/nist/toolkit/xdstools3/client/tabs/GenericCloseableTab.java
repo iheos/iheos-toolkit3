@@ -10,7 +10,10 @@ import gov.nist.toolkit.xdstools3.client.util.eventBus.CloseAllTabsEvent;
 import gov.nist.toolkit.xdstools3.client.util.eventBus.CloseOtherTabsEvent;
 import gov.nist.toolkit.xdstools3.client.util.eventBus.CloseTabEvent;
 
-public abstract class GenericCloseableTab extends GenericToolTab {
+/**
+ * Structure for closeable tabs
+ */
+public abstract class GenericCloseableTab extends GenericTab {
     Menu tabMenu = new Menu();
     MenuItem closeTabBtn=new MenuItem("Close tab");
     MenuItem closeOtherTabsBtn=new MenuItem("Close other tabs");

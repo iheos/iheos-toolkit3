@@ -9,7 +9,7 @@ import gov.nist.hit.ds.eventLog.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.eventLog.testSupport.LogMessage;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.*;
+import gov.nist.hit.ds.xdsExceptions.*;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;

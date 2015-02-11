@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.testClient.metadataValidator.field;
 
-import gov.nist.hit.ds.xdsException.XdsValidationException;
+import gov.nist.hit.ds.xdsExceptions.XdsValidationException;
 
 abstract public class ValidationEngine {
 	StringBuffer errorBuffer = null;
@@ -13,7 +13,7 @@ abstract public class ValidationEngine {
 	
 	/**
 	 * Run and throw exception if errors found
-	 * @throws gov.nist.hit.ds.xdsException.XdsValidationException
+	 * @throws gov.nist.hit.ds.xdsExceptions.XdsValidationException
 	 */
 	public void runWithException() throws XdsValidationException {
 		run();

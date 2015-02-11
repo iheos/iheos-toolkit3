@@ -5,3 +5,11 @@ mvn install:install-file -Dfile=ebxmlrr-common-1.0.jar -DgroupId=com.sun.ebxml -
 mvn install:install-file -Dfile=commons-io-2.4.jar -DgroupId=org.apache.commons.io -DartifactId=commons-io -Dversion=2.4 -Dpackaging=jar
 
 mvn install:install-file -Dfile=wsseTool-1.3.1-20130822.161029-1.jar -DgroupId=gov.nist.toolkit -DartifactId=wsseTool -Dversion=1.3.1 -Dpackaging=jar
+
+mvn install:install-file -Dfile=ffmq3-core-3.0.5.jar -DgroupId=net.timewalker.ffmq3 -DartifactId=ffmq3-core -Dversion=3.0.5 -Dpackaging=jar
+
+mvn install:install-file -Dfile=jms-1.1.jar -DgroupId=javax.jms -DartifactId=jms -Dversion=1.1 -Dpackaging=jar
+
+mvn install:install-file -Dfile=smartgwt-4.1p.jar -DgroupId=com.smartgwt -DartifactId=smartgwt -Dversion=4.1p -Dpackaging=jar
+
+mvn install:install-file -Dfile=smartgwt-skins-4.1p.jar -DgroupId=com.smartgwt -DartifactId=smartgwt-skins -Dversion=4.1p -Dpackaging=jar

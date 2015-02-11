@@ -3,7 +3,6 @@ package gov.nist.toolkit.xdstools3.client.tabs.homeTab;
 
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.layout.HStack;
-import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 import gov.nist.toolkit.xdstools3.client.tabs.GenericTab;
@@ -16,7 +15,8 @@ public class HomeTab extends GenericTab {
     }
 
     protected HStack createContents(){
-        /*HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
+        /*
+        HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
         queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
         queriesAndRetrieves.addItem("Find Documents", true);
         queriesAndRetrieves.addItem("MPQ Find Documents", true);
@@ -64,10 +64,9 @@ public class HomeTab extends GenericTab {
         vstack2.addMembers(tools); // sendTestData, simulators
 
         HStack hstack = new HStack();
-        LayoutSpacer spacer = new LayoutSpacer();
-        spacer.setHeight(30);
         hstack.addMembers(vstack1, vstack2);
         hstack.setAlign(Alignment.CENTER);
+        hstack.setLayoutTopMargin(20);
         return hstack;
     }
 

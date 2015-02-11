@@ -2,7 +2,7 @@ package gov.nist.hit.ds.dsSims.eb.metadataValidator.factory
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.codes.AllCodes
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.parser.CodesParser
 import gov.nist.hit.ds.toolkit.environment.Environment
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import gov.nist.toolkit.utilities.xml.Util
 import org.apache.axiom.om.OMElement
 

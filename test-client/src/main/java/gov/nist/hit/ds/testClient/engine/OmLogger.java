@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.testClient.engine;
 
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMElement;

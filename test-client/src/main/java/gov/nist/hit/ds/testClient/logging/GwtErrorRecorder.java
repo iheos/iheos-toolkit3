@@ -1,6 +1,6 @@
 package gov.nist.hit.ds.testClient.logging;
 
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;

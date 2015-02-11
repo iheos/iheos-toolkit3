@@ -3,8 +3,8 @@ package gov.nist.hit.ds.testClient.metadataValidator.field;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.testClient.metadataValidator.object.ExternalIdentifier;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import java.util.Arrays;

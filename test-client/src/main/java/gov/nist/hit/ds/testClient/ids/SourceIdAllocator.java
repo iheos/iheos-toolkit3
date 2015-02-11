@@ -1,13 +1,13 @@
 package gov.nist.hit.ds.testClient.ids;
 
 import gov.nist.hit.ds.testClient.engine.TestConfig;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.utilities.io.Io;
 
 import java.io.IOException;
 
-public class SourceIdAllocator extends IdAllocator {
+public class SourceIdAllocator extends AbstractIdAllocator {
 	
 	public SourceIdAllocator(TestConfig config) {
 		super(config);

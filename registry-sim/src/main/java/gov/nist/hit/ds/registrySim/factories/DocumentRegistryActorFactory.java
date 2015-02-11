@@ -16,7 +16,7 @@ import gov.nist.hit.ds.simSupport.factory.GenericActorSimBuilder;
 import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean.RepositoryType;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 import java.util.Arrays;
 import java.util.List;

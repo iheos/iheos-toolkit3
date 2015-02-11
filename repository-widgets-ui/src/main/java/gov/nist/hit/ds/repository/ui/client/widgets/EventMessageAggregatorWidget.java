@@ -179,7 +179,7 @@ public class EventMessageAggregatorWidget extends Composite {
                 setError("Event assetId "+ getEventAssetId() +" could not be found in "+ getExternalRepositoryId() +": " + arg0.getMessage());
             }
             public void onSuccess(List<AssetNode> result) {
-                logger.fine("agg main event find success");
+                logger.fine("agg main event findSimple success");
                 if (result.size()==1) { // Only one is expected
                     AssetNode an = result.get(0);
                     logger.fine("agg main event size match success");

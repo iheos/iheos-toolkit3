@@ -2,7 +2,7 @@ package gov.nist.hit.ds.http.parser;
 
 import gov.nist.hit.ds.http.parser.HttpHeader.HttpHeaderParseException;
 import gov.nist.hit.ds.utilities.io.Io;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +17,7 @@ public class HttpParser {
 	String charset = null;
 	HttpMessage message = new HttpMessage();
 	MultipartParser multiparser;
-	boolean appendixV = true;
+	public boolean appendixV = true;
 	static final Logger logger = Logger.getLogger(HttpParser.class);
 
 	
@@ -125,6 +125,7 @@ public class HttpParser {
 		tryMultipart();
 
 		if (isMultipart()) {
+            logger.debug("Multipart parsed");
 //			er.detail("Multipart parsed");
 			for (Enumeration<String> en=message.getHeaderNames(); en.hasMoreElements(); ) {
 				String hdr = en.nextElement();
@@ -132,6 +133,7 @@ public class HttpParser {
 				System.out.println(hdrVal);
 			}
 		} else {
+            logger.debug("Simple Part parsed");
 //			er.detail("Simple Part parsed");
 			for (Enumeration<String> en=message.getHeaderNames(); en.hasMoreElements(); ) {
 				String hdr = en.nextElement();

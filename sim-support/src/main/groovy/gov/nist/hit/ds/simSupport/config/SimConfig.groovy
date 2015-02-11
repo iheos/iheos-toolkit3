@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.simSupport.config
 import gov.nist.hit.ds.actorTransaction.*
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
+import gov.nist.hit.ds.toolkit.environment.EnvironmentAccess
 import groovy.transform.ToString
 import groovy.util.logging.Log4j
 
@@ -15,17 +16,18 @@ import groovy.util.logging.Log4j
 @ToString(excludes="serialVersionUID, expires, isExpired, actorState")
 public class SimConfig {
 	ActorType actorType;
-	List<ServerTransactionSimConfigElement> transactions = new ArrayList<ServerTransactionSimConfigElement>();
+	List<TransactionSimConfigElement> transactions = new ArrayList<TransactionSimConfigElement>();
+    EnvironmentAccess environmentAccess = null  // used only by source actor simulators
 
 	def SimConfig() { }
 
 	def SimConfig(ActorType actorType) { this.actorType = actorType; }
 	
-	def add(List<ServerTransactionSimConfigElement> elementList) { transactions.addAll(elementList); }
+	def add(List<TransactionSimConfigElement> elementList) { transactions.addAll(elementList); }
 
-	def add(ServerTransactionSimConfigElement confElement) { transactions.add(confElement); }
+	def add(TransactionSimConfigElement confElement) { transactions.add(confElement); }
 
-	public ServerTransactionSimConfigElement get(String name) {
+	public TransactionSimConfigElement get(String name) {
 		if (name == null) return null;
         log.debug "Transaction names are ${transactions.collect { it.name}}"
         return transactions.find { it.name == name}
@@ -39,7 +41,7 @@ public class SimConfig {
 	 * @return endpoint or null if no endpoint matches the type information.
 	 */
 	EndpointValue getEndpoint(TransactionType transType, TlsType tlsType, AsyncType asyncType) {
-        List<ServerTransactionSimConfigElement> configs = findConfigs(
+        List<TransactionSimConfigElement> configs = findConfigs(
                 new ArrayList<TransactionType>(Arrays.asList(transType)),
                 new ArrayList<TlsType>(Arrays.asList(tlsType)),
                 new ArrayList<AsyncType>(Arrays.asList(asyncType)));
@@ -55,14 +57,14 @@ public class SimConfig {
 	 * @param asyncTypes
 	 * @return
 	 */
-    public List<ServerTransactionSimConfigElement> findConfigs(List<TransactionType> transTypes, List<TlsType> tlsTypes, List<AsyncType> asyncTypes)  {
-        List<ServerTransactionSimConfigElement> simEles = new ArrayList<ServerTransactionSimConfigElement>();
+    public List<TransactionSimConfigElement> findConfigs(List<TransactionType> transTypes, List<TlsType> tlsTypes, List<AsyncType> asyncTypes)  {
+        List<TransactionSimConfigElement> simEles = new ArrayList<TransactionSimConfigElement>();
 
         TTypes tTypes = new TTypes(transTypes);
         Tls tls = new Tls(tlsTypes);
         Async async = new Async(asyncTypes);
 
-        for (ServerTransactionSimConfigElement endp : getTransactions()) {
+        for (TransactionSimConfigElement endp : getTransactions()) {
             EndpointType elabel = endp.getEndpointType();
             if (!tTypes.has(elabel.getTransType())) continue;
             if (!tls.has(elabel.getTlsType())) continue;
@@ -76,7 +78,7 @@ public class SimConfig {
         StringBuffer buf = new StringBuffer();
 
         buf.append("SimConfig:");
-        for (ServerTransactionSimConfigElement asce : transactions) {
+        for (TransactionSimConfigElement asce : transactions) {
             buf.append("\n\t").append(asce);
         }
 

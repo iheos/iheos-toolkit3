@@ -42,7 +42,9 @@ public class Caller implements Serializable {
         return instance;
     }
 
+
     // ------------------ Header app properties -------------------------
+
     public String getToolkitAppSubtitle() {
         return Toolkit.getToolkitAppSubtitle();
     }

@@ -24,17 +24,21 @@ public class PartParser extends HttpParser {
 			HttpHeader contentIDHeader = new HttpHeader(contentIDHeaderString);
 			part.contentID = contentIDHeader.getValue();
 			logger.debug("new PartParser(" + this.toString() + ") - contentId = " + part.contentID);
-			if (part.contentID == null || part.contentID.equals(""))
-				throw new HttpParseException("Part has no Content-ID header");
-			part.contentID = part.contentID.trim();
-			if (!isWrappedIn(part.contentID, "<",">")) {
+			if (part.contentID == null || part.contentID.equals("")) {
+                logger.debug("Part has no Content-ID header");
+//            throw new HttpParseException("Part has no Content-ID header");
+            } else {
+                part.contentID = part.contentID.trim();
+                if (!isWrappedIn(part.contentID, "<", ">")) {
 //				if (er != null)
 //					er.err(XdsErrorCode.Code.NoCode, new ErrorContext("Part Content-ID header value must be wrapped in <   >: Content-ID is " + part.contentID, "http://www.w3.org/TR/2005/REC-xop10-20050125/  Example 2"), this);
 //				else
-					throw new HttpParseException("Part Content-ID header value must be wrapped in <   >: Content-ID is " + part.contentID);
-			} else {
-				part.contentID = unWrap(part.contentID);
-			}
+                    throw new HttpParseException("Part Content-ID header value must be wrapped in <   >: Content-ID is " + part.contentID);
+
+                } else {
+                    part.contentID = unWrap(part.contentID);
+                }
+            }
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

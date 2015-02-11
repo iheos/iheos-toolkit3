@@ -7,8 +7,8 @@
 package gov.nist.toolkit.http.httpclient;
 
 import gov.nist.hit.ds.utilities.xml.XML;
-import gov.nist.hit.ds.xdsException.HttpCodeException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.HttpCodeException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.http.axis2soap.MultipartMap;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.XmlUtil;

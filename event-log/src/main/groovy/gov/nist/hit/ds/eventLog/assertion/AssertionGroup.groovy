@@ -2,7 +2,7 @@ package gov.nist.hit.ds.eventLog.assertion
 
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.shared.ValidationLevel
-import gov.nist.hit.ds.xdsException.ExceptionUtil
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import groovy.util.logging.Log4j
 import org.apache.log4j.Logger
 /**

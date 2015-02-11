@@ -10,7 +10,7 @@
     </transaction>
     <actor name="Document Recipient" id="docrec">
         <implClass value=""/>
-        <transaction id="prb"/>
+        <transaction id="prb" type="server"/>
     </actor>
     <!--
         MHD
@@ -39,5 +39,9 @@
     <actor name="Document Registry" id="reg">
         <implClass value=""/>
         <transaction id="rb"/>
+    </actor>
+    <actor name="Document Source" id="docsrc">
+        <implClass value=""/>
+        <transaction id="prb" type="client"/>
     </actor>
 </ActorsTransactions>

@@ -4,7 +4,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
@@ -159,7 +159,7 @@ public class TransactionBean implements IsSerializable, Serializable {
         }
 
 		// displayName can be trans displayName or repository uid
-		transType = actorType.find("retrieve");
+		transType = actorType.findSimple("retrieve");
 		this.repositoryType = repositoryType;
 		this.endpoint = endpoint;
 		this.isSecure = isSecure;

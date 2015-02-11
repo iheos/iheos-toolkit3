@@ -30,7 +30,7 @@
             </dependency>
           <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <artifactId>xdsException</artifactId>
+                <artifactId>xds-exceptions</artifactId>
             </dependency>
           <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
@@ -44,6 +44,10 @@
          <dependency>
             <groupId>com.sun.ebxml</groupId>
             <artifactId>ebxmlrr-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
         </dependency>
     </dependencies>
     <build>

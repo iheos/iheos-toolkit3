@@ -6,9 +6,9 @@ import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.utilities.other.UuidAllocator;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.MetadataValidationException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataValidationException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.utilities.io.Io;
 import gov.nist.toolkit.utilities.xml.OMFormatter;
 import org.apache.axiom.om.OMElement;
@@ -82,7 +82,7 @@ public class MetadataCollection implements Serializable /*, RegistryValidationIn
 			
 			Ro obj = getObjectById(id);
 			if (obj == null) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "mergeDelta: cannot find object " + id, this, null);
+				er.err(XdsErrorCode.Code.XDSRegistryError, "mergeDelta: cannot findSimple object " + id, this, null);
 				return false;
 			}
 			

@@ -4,7 +4,7 @@ import gov.nist.hit.ds.toolkit.environment.Environment;
 import gov.nist.hit.ds.toolkit.environment.UserSession;
 import gov.nist.hit.ds.toolkit.installation.Installation;
 import gov.nist.hit.ds.toolkit.installation.PropertyManager;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class Toolkit {
     private static File toolkitPropertiesFile = null;
     private static File warRootFile = null;
-    private static File externalCacheFile = null;
+    public static File externalCacheFile = null;
     private static PropertyManager propertyManager;
     private static boolean initialized = false;
     private static boolean testEnv = false;
@@ -191,7 +191,7 @@ public class Toolkit {
     static public String getPort() { return propertyManager.getToolkitPort(); }
     static public String getTlsPort() { return propertyManager.getToolkitTlsPort(); }
     static public String getGazelleConfigURL() { return propertyManager.getToolkitGazelleConfigURL(); }
-    static public File externalCacheFile() { return new File(propertyManager.getExternalCache()); }
+    static public File externalCacheFile() { return externalCacheFile; /*new File(propertyManager.getExternalCache());*/ }
     static public boolean useActorsFile() { return propertyManager.isUseActorsFile(); }
     static public String getDefaultAssigningAuthority() { return propertyManager.getDefaultAssigningAuthority(); }
     static public String getEnableAllCiphers() { return propertyManager.getToolkitEnableAllCiphers(); }

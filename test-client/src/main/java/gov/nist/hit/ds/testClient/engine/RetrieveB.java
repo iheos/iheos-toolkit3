@@ -2,11 +2,19 @@ package gov.nist.hit.ds.testClient.engine;
 
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
+import gov.nist.hit.ds.testClient.registry.RegistryResponseParser;
+import gov.nist.hit.ds.testClient.registry.RegistryUtility;
+import gov.nist.hit.ds.testClient.soap.Soap;
+import gov.nist.hit.ds.testClient.soap.SoapActionFactory;
 import gov.nist.hit.ds.testClient.transactions.BasicTransaction;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.*;
+import gov.nist.hit.ds.xdsExceptions.*;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import org.apache.axiom.om.OMElement;
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.addressing.EndpointReference;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.client.ServiceClient;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.FactoryConfigurationError;
@@ -119,7 +127,7 @@ public class RetrieveB {
 
 		OMElement registry_response = XmlUtil.firstChildWithLocalName(result, "RegistryResponse") ;
 		if (registry_response == null) {
-			throw new XdsInternalException("Did not find RegistryResponse within RetrieveDocumentSetResponse");
+			throw new XdsInternalException("Did not findSimple RegistryResponse within RetrieveDocumentSetResponse");
 		} 
 
 		// schema validate

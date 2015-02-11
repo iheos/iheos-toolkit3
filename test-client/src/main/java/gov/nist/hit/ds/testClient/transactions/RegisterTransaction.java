@@ -3,9 +3,9 @@ package gov.nist.hit.ds.testClient.transactions;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataParser;
 import gov.nist.hit.ds.testClient.engine.StepContext;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import org.apache.axiom.om.OMElement;
 
@@ -15,6 +15,8 @@ public class RegisterTransaction extends BasicTransaction {
 		super(s_ctx, instruction, instruction_output);
 		//		this.xds_version = xds_version;
 	}
+
+    public RegisterTransaction() {}
 
 	String transactionName() {
 		if (async) return "r.as";

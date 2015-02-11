@@ -4,7 +4,7 @@ import gov.nist.hit.ds.testClient.logging.LogFileContent;
 import gov.nist.hit.ds.testClient.logging.SectionLogMap;
 import gov.nist.hit.ds.testClient.logging.SectionTestPlanFileMap;
 import gov.nist.hit.ds.utilities.io.LinesOfFile;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.log4j.Logger;
 
 import java.io.File;

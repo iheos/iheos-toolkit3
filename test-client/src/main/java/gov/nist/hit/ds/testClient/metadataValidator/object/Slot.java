@@ -6,7 +6,7 @@ import gov.nist.hit.ds.testClient.logging.XdsErrorCode;
 import gov.nist.hit.ds.testClient.metadataValidator.datatype.FormatValidator;
 import gov.nist.hit.ds.testClient.metadataValidator.datatype.FormatValidatorCalledIncorrectlyException;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 

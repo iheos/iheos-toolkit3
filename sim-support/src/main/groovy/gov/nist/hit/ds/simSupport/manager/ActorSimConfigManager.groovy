@@ -2,7 +2,7 @@ package gov.nist.hit.ds.simSupport.manager
 
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.simSupport.config.SimConfig
-import gov.nist.hit.ds.simSupport.config.ServerTransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
 
 /**
@@ -23,5 +23,5 @@ class ActorSimConfigManager {
         a.updateContent(new SimulatorDAO().toXML(actorSimConfig))
     }
 
-    List<ServerTransactionSimConfigElement> getSimConfigElements() { actorSimConfig.transactions }
+    List<TransactionSimConfigElement> getSimConfigElements() { actorSimConfig.transactions }
 }

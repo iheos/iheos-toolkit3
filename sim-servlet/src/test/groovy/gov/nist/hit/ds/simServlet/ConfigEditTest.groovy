@@ -3,7 +3,7 @@ package gov.nist.hit.ds.simServlet
 import gov.nist.hit.ds.simServlet.api.SimApi
 import gov.nist.hit.ds.simServlet.servlet.SimServlet
 import gov.nist.hit.ds.simSupport.client.SimId
-import gov.nist.hit.ds.simSupport.config.ServerTransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.manager.ActorSimConfigManager
 import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -47,7 +47,7 @@ class ConfigEditTest extends Specification {
         println actorSimConfigManager
         def configs = actorSimConfigManager.getSimConfigElements()
         def config = configs.first()
-        config.setBool(ServerTransactionSimConfigElement.SCHEMACHECK, false)
+        config.setBool(TransactionSimConfigElement.SCHEMACHECK, false)
         actorSimConfigManager.save(simHandle.configAsset)
 
         and: '''Reload sim configuration'''
@@ -57,7 +57,7 @@ class ConfigEditTest extends Specification {
         def config2 = config2s.first()
 
         then: '''Schema Check setting should have persisted'''
-        !config2.getBool(ServerTransactionSimConfigElement.SCHEMACHECK).value
+        !config2.getBool(TransactionSimConfigElement.SCHEMACHECK).value
     }
 
     def bool(String str) { str.toLowerCase().equals('true')}

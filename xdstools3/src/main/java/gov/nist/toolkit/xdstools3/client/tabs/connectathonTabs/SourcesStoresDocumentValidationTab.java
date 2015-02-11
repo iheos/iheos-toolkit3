@@ -14,10 +14,10 @@ import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.GenericTextItemWithTooltipWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
 import gov.nist.toolkit.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
 
-public class SourcesStoresDocumentValidationTab extends GenericCloseableTab {
+public class SourcesStoresDocumentValidationTab extends GenericCloseableToolTab {
     private final static String header = "Sources Stores Document Validation";
     private GenericTextItemWithTooltipWidget subSetUUID;
     private EndpointWidget sites;

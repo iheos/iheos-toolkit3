@@ -3,6 +3,7 @@ import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.config.*
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
+import gov.nist.hit.ds.toolkit.environment.EnvironmentAccess
 import groovy.util.logging.Log4j
 import groovy.xml.MarkupBuilder
 /**
@@ -17,6 +18,7 @@ class SimulatorDAO {
         def writer = new StringWriter()
         def xml = new MarkupBuilder(writer)
         xml.actor(type: config.actorType.shortName) {
+            if (config.environmentAccess) xml.environment(name: config.environmentAccess.name)
             config.transactions.each { transaction ->
                 xml.transaction(name: transaction.name) {
                     xml.endpoint(value: transaction.endpointValue.value)
@@ -44,8 +46,12 @@ class SimulatorDAO {
     SimConfig toModel(String xmlText) {
         def actor = new XmlSlurper().parseText(xmlText)
         SimConfig simConfig = new SimConfig()
+
         simConfig.actorType = new ActorTransactionTypeFactory().getActorType(actor.@type.text())
         assert simConfig.actorType
+
+        String environmentName = actor.environment.@name.text()
+        if (environmentName) simConfig.environmentAccess = new EnvironmentAccess(environmentName)
 
         actor.transaction.each { trans ->
             def endpointString = trans.endpoint.@value.text()
@@ -55,7 +61,7 @@ class SimulatorDAO {
             EndpointType etype = new EndpointType(simConfig.actorType, label)
 
             assert etype.transType
-            ServerTransactionSimConfigElement transElement = new ServerTransactionSimConfigElement(etype, new EndpointValue(endpointString))
+            TransactionSimConfigElement transElement = new TransactionSimConfigElement(etype, new EndpointValue(endpointString))
             simConfig.add(transElement)
 
             transElement.clear() // remove defaults
@@ -74,12 +80,13 @@ class SimulatorDAO {
 
     def updateModel(SimConfig simConfig, String updateConfig) {
         SimConfig update = toModel(updateConfig)
-        simConfig.transactions.each { ServerTransactionSimConfigElement transElement ->
+        simConfig.transactions.each { TransactionSimConfigElement transElement ->
             def name = transElement.name
-            ServerTransactionSimConfigElement updateTransaction = update.transactions.find { it.name == name}
+            TransactionSimConfigElement updateTransaction = update.transactions.find { it.name == name}
             if (!updateTransaction) return
             transElement.elements = updateTransaction.elements
         }
+        simConfig.environmentAccess = update.environmentAccess
     }
 
     boolean bool(String value) {

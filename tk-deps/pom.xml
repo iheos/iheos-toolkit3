@@ -14,18 +14,18 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-            <jdk.version>1.7</jdk.version>
-            <junit.version>4.11</junit.version>
-            <gwtVersion>2.5.1</gwtVersion>
-            <mavenCompilerPluginVersion>3.1</mavenCompilerPluginVersion>
-            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-            <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
-            <maven-source-plugin.version>2.3</maven-source-plugin.version>
-            <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
-            <maven-release-plugin.version>2.5</maven-release-plugin.version>
-            <maven-war-plugin.version>2.4</maven-war-plugin.version>
-            <nexus-staging-maven-plugin.version>1.6.2</nexus-staging-maven-plugin.version>
-            <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
+        <jdk.version>1.7</jdk.version>
+        <junit.version>4.11</junit.version>
+        <gwtVersion>2.5.1</gwtVersion>
+        <mavenCompilerPluginVersion>3.1</mavenCompilerPluginVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+        <maven-source-plugin.version>2.3</maven-source-plugin.version>
+        <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
+        <maven-release-plugin.version>2.5.1</maven-release-plugin.version>
+        <maven-war-plugin.version>2.4</maven-war-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.2</nexus-staging-maven-plugin.version>
+        <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
     </properties>
 
 
@@ -47,11 +47,18 @@
             <id>jboss-maven2-release-repository</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/jboss-thirdparty-releases/</url>
         </repository>
+         Avoid commenting out our Nexus thirdparty repository. It contains jars that sometimes
+        become unavailable on Maven Central. As an alternative, use the JBoss public repository.
         <repository>
             <id>internal-nist-repo-third-party</id>
             <url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>
         </repository>
         -->
+        <repository>
+            <id>repository.jboss.org-public</id>
+            <name>JBoss.org Maven repository</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public</url>
+        </repository>
         <repository>
             <id>maven-central</id>
             <url>http://repo1.maven.org/maven2</url>
@@ -80,9 +87,9 @@
             sub-projects may override these for use in local
             development. -->
             <dependency>
-                <groupId>gov.nist.toolkit</groupId>
-                <artifactId>actorfactory_v2</artifactId>
-                <version>2.7.0-SNAPSHOT</version>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>session</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
@@ -111,7 +118,12 @@
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <artifactId>httpSoap</artifactId>
+                <artifactId>xds-exceptions</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>http-soap</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -180,17 +192,27 @@
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>1.9</version>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>installation</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>repository-widgets-ui</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
 
 
-    <!-- External Jars -->
+            <!-- External Jars -->
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>2.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.9</version>
             </dependency>
             <dependency>
                 <groupId>xmlpull</groupId>
@@ -287,6 +309,7 @@
                 <artifactId>commons-lang</artifactId>
                 <version>2.3</version>
             </dependency>
+            <!-- GWT dependencies -->
             <dependency>
                 <groupId>com.google.gwt</groupId>
                 <artifactId>gwt-user</artifactId>
@@ -299,6 +322,13 @@
                 <scope>runtime</scope>
                 <version>2.5.1</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.gwt.inject</groupId>
+                <artifactId>gin</artifactId>
+                <version>1.5.0</version>
+            </dependency>
+            <!--  -->
+
             <dependency>
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity</artifactId>
@@ -354,6 +384,17 @@
                 <artifactId>groovy-all</artifactId>
                 <version>2.0.0</version>
             </dependency>
+            <dependency>
+                <groupId>com.smartgwt</groupId>
+                <artifactId>smartgwt</artifactId>
+                <version>4.1p</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smartgwt</groupId>
+                <artifactId>smartgwt-skins</artifactId>
+                <version>4.1p</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

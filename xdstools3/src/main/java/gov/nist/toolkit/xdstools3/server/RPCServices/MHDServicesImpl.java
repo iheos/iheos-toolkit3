@@ -2,8 +2,8 @@ package gov.nist.toolkit.xdstools3.server.RPCServices;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
-import gov.nist.toolkit.actorfactory.SiteServiceManager;
-import gov.nist.toolkit.session.server.Session;
+//import gov.nist.toolkit.actorfactory.SiteServiceManager;
+import gov.nist.hit.ds.session.server.Session;
 import gov.nist.toolkit.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.toolkit.xdstools3.client.tabs.mhdTabs.MHDTabsServices;
 import gov.nist.toolkit.xdstools3.server.Caller;
@@ -21,13 +21,13 @@ public class MHDServicesImpl extends RemoteServiceServlet implements MHDTabsServ
     //    private String sessionID = null;
     private Session standAloneSession = null;  // needed for standalone use not part of servlet
 
-    public SiteServiceManager siteServiceManager;
+    //public SiteServiceManager siteServiceManager;
 
     /**
      * Default constructor
      */
     public MHDServicesImpl() {
-        siteServiceManager = SiteServiceManager.getSiteServiceManager();   // One copy shared between sessions
+       // siteServiceManager = SiteServiceManager.getSiteServiceManager();   // One copy shared between sessions
     }
 
     /**

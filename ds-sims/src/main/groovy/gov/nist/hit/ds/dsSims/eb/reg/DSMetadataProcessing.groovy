@@ -7,7 +7,7 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.SoapFaultException
-import gov.nist.hit.ds.xdsException.MetadataException
+import gov.nist.hit.ds.xdsExceptions.MetadataException
 import org.apache.axiom.om.OMElement
 
 /**

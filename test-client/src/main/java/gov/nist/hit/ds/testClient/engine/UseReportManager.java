@@ -5,7 +5,7 @@ import gov.nist.hit.ds.testClient.logging.Report;
 import gov.nist.hit.ds.testClient.logging.SectionLogMap;
 import gov.nist.hit.ds.testClient.logging.TestStepLogContent;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import javax.xml.namespace.QName;
@@ -140,14 +140,14 @@ public class UseReportManager  {
 			if (log == null) 
 				log = priorTests.get(ur.section);
 			if (log == null)
-				throw new XdsInternalException("UseReportManager#resolve: cannot find log for section " + ur.section + "\n" + toString() + "\n" + previousLogs.toString() + "\n");
+				throw new XdsInternalException("UseReportManager#resolve: cannot findSimple log for section " + ur.section + "\n" + toString() + "\n" + previousLogs.toString() + "\n");
 			TestStepLogContent stepLog = log.getStepLog(ur.step);
 			if (stepLog == null)
-				throw new XdsInternalException("UseReportManager#resolve: cannot find log for step " + ur.step + " in section " + ur.section + "\n" + toString() + "\n" + previousLogs.toString() + "\n");
+				throw new XdsInternalException("UseReportManager#resolve: cannot findSimple log for step " + ur.step + " in section " + ur.section + "\n" + toString() + "\n" + previousLogs.toString() + "\n");
 
 			OMElement reportEles = stepLog.getReports();
 			if (reportEles == null)
-				throw new XdsInternalException("UseReportManager#resolve: cannot find Reports section for step  " + ur.step + " in section " + ur.section + "\n" + toString() + "\n" + previousLogs.toString() + "\n");	
+				throw new XdsInternalException("UseReportManager#resolve: cannot findSimple Reports section for step  " + ur.step + " in section " + ur.section + "\n" + toString() + "\n" + previousLogs.toString() + "\n");
 
 			String reportName = ur.reportName;
 			for (OMElement rep : XmlUtil.childrenWithLocalName(reportEles, "Report")) {

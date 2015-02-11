@@ -21,7 +21,7 @@
     </properties>
 
     <modules>
-        <module>../httpSoap</module>
+        <module>../http-soap</module>
         <module>../sim-servlet</module>
         <module>../ds-sims</module>
         <module>../eb-metadata</module>

@@ -16,6 +16,7 @@
         <module>../tk-deps</module>
         <module>../tk-core</module>
         <module>../docshare-sims</module>
+        <module>../eb-docsrc-sim</module>
     </modules>
     
     <dependencies>

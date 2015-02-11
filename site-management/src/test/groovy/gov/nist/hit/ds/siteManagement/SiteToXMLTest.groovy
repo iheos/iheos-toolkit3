@@ -5,7 +5,7 @@ import gov.nist.hit.ds.siteManagement.client.Site;
 import gov.nist.hit.ds.siteManagement.client.TransactionBean;
 import gov.nist.hit.ds.siteManagement.loader.CombinedSiteLoader;
 import gov.nist.hit.ds.siteManagement.loader.Sites;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import org.apache.axiom.om.OMElement;
 import org.junit.Before;
 import org.junit.Test;

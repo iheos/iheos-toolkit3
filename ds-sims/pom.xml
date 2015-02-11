@@ -18,6 +18,10 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>sim-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
             <artifactId>tk-apis</artifactId>
         </dependency>
         <dependency>
@@ -34,7 +38,7 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>httpSoap</artifactId>
+            <artifactId>http-soap</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
@@ -42,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>xdsException</artifactId>
+            <artifactId>xds-exceptions</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
@@ -59,10 +63,6 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>soap-support</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>sim-support</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>

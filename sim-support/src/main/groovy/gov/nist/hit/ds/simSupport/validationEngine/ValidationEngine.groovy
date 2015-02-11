@@ -7,8 +7,8 @@ import gov.nist.hit.ds.eventLog.errorRecording.ErrorContext
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
-import gov.nist.hit.ds.xdsException.ExceptionUtil
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 import org.apache.log4j.Logger
 
@@ -122,7 +122,7 @@ public class ValidationEngine {
             evalGuard(validationMethod)
         }
 
-//        def valMethod = validationMethods.find { validationMethod ->
+//        def valMethod = validationMethods.findSimple { validationMethod ->
 //            if (!(validationMethod.runable() && dependenciesSatisfied(validationMethod.dependsOnId))) return false
 //            log.debug("For ${validationMethod.id}...")
 //            evalGuard(validationMethod)// determines FOUND status

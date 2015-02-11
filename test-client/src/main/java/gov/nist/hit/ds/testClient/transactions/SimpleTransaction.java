@@ -1,7 +1,8 @@
 package gov.nist.hit.ds.testClient.transactions;
 
 import gov.nist.hit.ds.testClient.engine.StepContext;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.testClient.registry.RegistryResponseParser;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMElement;

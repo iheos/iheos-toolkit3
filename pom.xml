@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -18,17 +16,29 @@
 
 
     <modules>
+        <module>engine</module>
         <module>repository-tools</module>
-        <module>gui-core</module>
-        <module>toolkit2-build</module>
-        <module>eb-metadata</module>
-        <module>test-client</module>
-        <!-- still in use by xdstools3. -->
+        <module>xdstools3</module>
     </modules>
 
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>session</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>security-common</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>gov.nist.hit.ds</groupId>
+                <artifactId>env-settings</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+            </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>http-soap-validator</artifactId>
@@ -249,12 +259,19 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>${maven-release-plugin.version}</version>
                 <configuration>
+                    <tagBase>https://svn.mycompany.com/repos/myapplication/releases</tagBase>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
                     <releaseProfiles>releases</releaseProfiles>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.9.2</version>
+                <configuration>
+                    <tag>v@{project.version}</tag>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
@@ -297,7 +314,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -339,4 +356,9 @@
     </profiles>
 
 
+
+    <scm>
+        <developerConnection>scm:hg:https://bitbucket.org/iheos/toolkit/branch/release/ihe</developerConnection>
+        <tag>v3.0.2a</tag>
+    </scm>
 </project>

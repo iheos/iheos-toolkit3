@@ -3,13 +3,17 @@ package gov.nist.hit.ds.testClient.transactions;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataParser;
 import gov.nist.hit.ds.testClient.engine.StepContext;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.addressing.EndpointReference;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.client.ServiceClient;
 
 import java.io.File;
 

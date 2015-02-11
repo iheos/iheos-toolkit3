@@ -955,7 +955,7 @@ public enum ActorsCollectionsDataSamples {
                 "is not the focus of this test.\n");
         collectionsReadme.put("12327", "R.b Accept Document Replace, Document in Folder\n" +
                 "\n" +
-                "A Document Registry, when accepting a Document Replace, must find all\n" +
+                "A Document Registry, when accepting a Document Replace, must findSimple all\n" +
                 "Folders the original document is a member of and add the replacement\n" +
                 "document to those folders.\n" +
                 "\n" +
@@ -1066,7 +1066,7 @@ public enum ActorsCollectionsDataSamples {
                 "\n" +
                 "But, the SubmissionSet and DocumentEntry are missing the Classification\n" +
                 "(label) that indicates Limited Metadata is provided.  As a result\n" +
-                "the Document Recipient expects to find full metadata.\n" +
+                "the Document Recipient expects to findSimple full metadata.\n" +
                 "\n" +
                 "In this metadata, both the SubmissionSet and DocumentEntry\n" +
                 "conform to the Limited Metadata specification.  The\n" +
@@ -1093,7 +1093,7 @@ public enum ActorsCollectionsDataSamples {
                 "for both sections. " );
         collectionsReadme.put("15500", "XCPD Find Patient Messages\n" +
                 "\n" +
-                "Tests the ability of a responding gateway to respond to a find patient request (305). This tests the response message (306).\n" +
+                "Tests the ability of a responding gateway to respond to a findSimple patient request (305). This tests the response message (306).\n" +
                 "\n" +
                 "The test is composed of three steps stored in three different XML files:\n" +
                 "- 1. test1_findpatient_dob_gender_name\n" +

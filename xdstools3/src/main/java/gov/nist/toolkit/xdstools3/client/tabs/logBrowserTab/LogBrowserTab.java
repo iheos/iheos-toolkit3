@@ -4,6 +4,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
@@ -41,7 +42,7 @@ public class LogBrowserTab extends GenericCloseableTab {
     public LogBrowserTab() {
         super(header);
         try {
-            setFieldsCanvas(createContent(null));
+            getPane().addChild(createContent(null));
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -55,20 +56,12 @@ public class LogBrowserTab extends GenericCloseableTab {
     public LogBrowserTab(AssetNode target) {
         super(header);
 
-
         try {
-
-            getPane().clear();
-            getContentsPanel().clear();
-            getPane().redraw();
-            getContentsPanel().addMember(createContent(target));
-            setPane(getContentsPanel());
-            getPane().redraw();
+            setPane((Canvas) createContent(target));
 
         } catch (Throwable t) {
             t.printStackTrace();
         }
-
 
     }
 
@@ -78,7 +71,6 @@ public class LogBrowserTab extends GenericCloseableTab {
      *
      * @return tab UI as a Widget
      */
-    @Override
     protected Widget createContents() {
         Widget w = new HTML("");
         w.setSize("1px","1px");
@@ -117,7 +109,7 @@ public class LogBrowserTab extends GenericCloseableTab {
                 }
             }
 
-            logBrowserWidget.setSize("1000px", "600px");
+            logBrowserWidget.setSize("1170px", "600px");
 
             vStack.addMember(logBrowserWidget);
         } catch (Throwable t) {

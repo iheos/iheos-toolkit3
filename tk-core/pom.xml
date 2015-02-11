@@ -14,7 +14,7 @@
     
     <modules>
         <module>../repo-support</module>
-        <module>../xdsException</module>
+        <module>../xds-exceptions</module>
         <module>../common-datatypes</module>
         <module>../utilities</module>
         <module>../toolkit</module>
@@ -30,6 +30,7 @@
 <!--        <module>../installation</module>  -->
         <module>../tk-initialization</module>
         <module>../tk</module>
+        <module>../session</module>
     </modules>
     
     <dependencies>

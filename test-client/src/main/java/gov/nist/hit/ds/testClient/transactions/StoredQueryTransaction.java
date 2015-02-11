@@ -2,9 +2,9 @@ package gov.nist.hit.ds.testClient.transactions;
 
 import gov.nist.hit.ds.testClient.engine.StepContext;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.XdsException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;

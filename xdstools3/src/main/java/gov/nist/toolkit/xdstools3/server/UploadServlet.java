@@ -1,13 +1,11 @@
 package gov.nist.toolkit.xdstools3.server;
 
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.toolkit.http.*;
-import gov.nist.toolkit.session.server.Session;
+import gov.nist.hit.ds.http.parser.*;
+import gov.nist.hit.ds.session.server.Session;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import org.apache.log4j.Logger;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.Map;
 
@@ -28,7 +26,9 @@ public class UploadServlet extends HttpServlet {
 
 		HttpParser hp;
 		try {
-			hp = new HttpParser(request, false);
+			hp = new HttpParser();
+            hp.appendixV = false;
+                        hp.init(request);
 //			filename = extractFileName(hp.getMultipartParser().getMultipartMessage().asMessage());
 //			if(!(filename.endsWith(".xml") || filename.endsWith(".json"))){
 //				throw new IOException("Invalid file format exception - must be xml or json");

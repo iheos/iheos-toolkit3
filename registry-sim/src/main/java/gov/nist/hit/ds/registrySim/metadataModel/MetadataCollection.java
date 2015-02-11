@@ -17,9 +17,9 @@ import gov.nist.hit.ds.utilities.other.UuidAllocator;
 import gov.nist.hit.ds.utilities.xml.OMFormatter;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.valSupport.client.ValidationContext;
-import gov.nist.hit.ds.xdsException.MetadataException;
-import gov.nist.hit.ds.xdsException.MetadataValidationException;
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataValidationException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 
 import java.io.File;
 import java.io.IOException;

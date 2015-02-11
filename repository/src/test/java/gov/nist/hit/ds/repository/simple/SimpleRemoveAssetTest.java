@@ -8,7 +8,7 @@ import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositoryFactory;
 import gov.nist.hit.ds.repository.api.RepositorySource.Access;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 
 import org.junit.BeforeClass;
 import org.junit.Test;

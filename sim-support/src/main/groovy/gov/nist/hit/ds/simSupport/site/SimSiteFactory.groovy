@@ -4,7 +4,7 @@ import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.simSupport.config.SimConfig
 import gov.nist.hit.ds.simSupport.config.RetrieveTransactionSimConfigElement
-import gov.nist.hit.ds.simSupport.config.ServerTransactionSimConfigElement
+import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
 import groovy.util.logging.Log4j
@@ -21,13 +21,13 @@ class SimSiteFactory {
 
         // This code depends on the rule that a Site can have only a single Repository
 
-        def allTransactions = actorSimConfig.getTransactions().findAll { it instanceof ServerTransactionSimConfigElement }
+        def allTransactions = actorSimConfig.getTransactions().findAll { it instanceof TransactionSimConfigElement }
         def retrieveTransactions = allTransactions.findAll { it instanceof  RetrieveTransactionSimConfigElement }
         def notRetrieveTransactions = allTransactions.findAll { !(it instanceof  RetrieveTransactionSimConfigElement) }
 
         // Add transactions
 
-        notRetrieveTransactions.each { ServerTransactionSimConfigElement transaction ->
+        notRetrieveTransactions.each { TransactionSimConfigElement transaction ->
             String transactionName = transaction.getTransactionName()
             String endpoint = transaction.endpointValue.value
             EndpointType endpointLabel = transaction.getEndpointType()

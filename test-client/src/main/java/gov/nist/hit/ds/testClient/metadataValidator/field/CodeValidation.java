@@ -1,9 +1,9 @@
 package gov.nist.hit.ds.testClient.metadataValidator.field;
 
 import gov.nist.hit.ds.ebMetadata.Metadata;
-import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder;
+import gov.nist.hit.ds.testClient.logging.ErrorRecorder;
 import gov.nist.hit.ds.testClient.registry.RegistryErrorListGenerator;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 //this gets invoked from both Validator.java and directly from Repository.  Should optimize the implementation so that codes.xml
 //gets cached in memory.

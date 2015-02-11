@@ -2,8 +2,8 @@ package gov.nist.hit.ds.testClient.engine;
 
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.MetadataValidationException;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.MetadataValidationException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import javax.xml.namespace.QName;
@@ -114,14 +114,17 @@ public class BasicContext {
 	}
 
 	void error(OMElement test_step_output, String msg) throws XdsInternalException {
-		testLog.add_name_value(test_step_output, "Error", msg + " (stepId=" + get("step_id") + ")");
+        if (testLog != null)
+		    testLog.add_name_value(test_step_output, "Error", msg + " (stepId=" + get("step_id") + ")");
 		error(msg);
 		throw new XdsInternalException("Error " + msg);
 	}
 
 	void fault(OMElement test_step_output, String code, String msg) throws XdsInternalException {
-		testLog.add_name_value(test_step_output, "SOAPFault", code + ": " + msg);
-		testLog.add_name_value(test_step_output, "Error ", code + ": " + msg);
+        if (testLog != null) {
+            testLog.add_name_value(test_step_output, "SOAPFault", code + ": " + msg);
+            testLog.add_name_value(test_step_output, "Error ", code + ": " + msg);
+        }
 		error(msg);
 		throw new XdsInternalException(msg);
 	}

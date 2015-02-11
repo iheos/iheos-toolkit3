@@ -10,7 +10,7 @@ import gov.nist.hit.ds.testClient.metadataValidator.object.DocumentEntry;
 import gov.nist.hit.ds.testClient.metadataValidator.object.Folder;
 import gov.nist.hit.ds.testClient.metadataValidator.object.SubmissionSet;
 import gov.nist.hit.ds.testClient.registry.RegistryValidationInterface;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
 import java.util.HashSet;

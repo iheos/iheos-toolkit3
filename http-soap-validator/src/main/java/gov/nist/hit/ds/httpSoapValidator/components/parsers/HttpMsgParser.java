@@ -10,7 +10,7 @@ import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase;
 import gov.nist.hit.ds.soapSupport.FaultCode;
 import gov.nist.hit.ds.soapSupport.SoapFaultException;
 import gov.nist.hit.ds.utilities.html.HttpMessageContent;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 
 public class HttpMsgParser extends ValComponentBase {
 	String header = null;

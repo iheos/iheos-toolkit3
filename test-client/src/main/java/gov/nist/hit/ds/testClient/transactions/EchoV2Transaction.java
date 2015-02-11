@@ -2,10 +2,14 @@ package gov.nist.hit.ds.testClient.transactions;
 
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.testClient.engine.StepContext;
-import gov.nist.hit.ds.xdsException.*;
+import gov.nist.hit.ds.xdsExceptions.*;
 import gov.nist.toolkit.commondatatypes.client.MetadataTypes;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMElement;
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.addressing.EndpointReference;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.client.ServiceClient;
 
 import java.io.File;
 import java.util.Iterator;

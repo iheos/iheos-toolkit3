@@ -10,8 +10,8 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
-import gov.nist.hit.ds.xdsException.ExceptionUtil
-import gov.nist.hit.ds.xdsException.ToolkitRuntimeException
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 import org.apache.commons.lang.ArrayUtils
 

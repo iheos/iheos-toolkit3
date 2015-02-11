@@ -1,17 +1,18 @@
 package gov.nist.hit.ds.testClient.engine;
 
-import gov.nist.hit.ds.siteManagement.client.Site;
-import gov.nist.hit.ds.siteManagement.loader.CombinedSiteLoader;
-import gov.nist.hit.ds.siteManagement.loader.Sites;
 import gov.nist.hit.ds.testClient.eb.RegistryResponseLog;
 import gov.nist.hit.ds.testClient.logRepository.LogRepository;
 import gov.nist.hit.ds.testClient.logRepository.LogRepositoryFactory;
 import gov.nist.hit.ds.testClient.logging.LogFileContent;
 import gov.nist.hit.ds.testClient.logging.TestStepLogContent;
+import gov.nist.hit.ds.testClient.site.CombinedSiteLoader;
+import gov.nist.hit.ds.testClient.site.Site;
+import gov.nist.hit.ds.testClient.site.Sites;
+import gov.nist.hit.ds.testClient.soap.Soap;
 import gov.nist.hit.ds.toolkit.Toolkit;
-import gov.nist.hit.ds.xdsException.ExceptionUtil;
-import gov.nist.hit.ds.xdsException.XdsInternalException;
-import gov.nist.hit.ds.xdsException.XdsParameterException;
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsParameterException;
 import gov.nist.toolkit.utilities.io.Io;
 import org.apache.log4j.Logger;
 
@@ -203,7 +204,7 @@ public class XdsTest {
 		loadTestKitVersion();
 		
 		// these properties are needed by the DSIG package in gov.nist.registry.common2.dsig
-		// specifically the KeyStoreAccessObject which need to know there to find the 
+		// specifically the KeyStoreAccessObject which need to know there to findSimple the
 		// keystore for signing SAML assertions
 		
 		try {

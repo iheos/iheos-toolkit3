@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.testClient.logging;
 
 
-import gov.nist.hit.ds.xdsException.XdsInternalException;
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 
 import java.util.*;
 
@@ -68,7 +68,7 @@ public class SectionLogMap {
 				}
 				buf.append(reports.toString());
 			} catch (Exception e) {
-				System.out.println("Cannot find Reports for section " + section);
+				System.out.println("Cannot findSimple Reports for section " + section);
 			}
 		}
 

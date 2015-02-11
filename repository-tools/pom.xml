@@ -13,10 +13,14 @@
     <packaging>pom</packaging>
     
     <modules>
-        <module>../logBrowser</module>
+        <module>../log-browser</module>
 		<module>../repository-rpc</module>
         <module>../repository-widgets-ui</module>
         <module>../GwtResizableDraggableColumns</module>
     </modules>
 
+
+  <scm>
+    <tag>v3.0.2a</tag>
+  </scm>
 </project>

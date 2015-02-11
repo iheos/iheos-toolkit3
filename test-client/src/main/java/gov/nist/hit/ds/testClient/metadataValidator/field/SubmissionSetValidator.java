@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.testClient.metadataValidator.field;
 
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
-import gov.nist.hit.ds.xdsException.MetadataException;
+import gov.nist.hit.ds.xdsExceptions.MetadataException;
 import org.apache.axiom.om.OMElement;
 
 import java.util.Arrays;

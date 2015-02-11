@@ -18,8 +18,9 @@ import gov.nist.hit.ds.testClient.site.ATFactory;
 import gov.nist.hit.ds.testClient.soap.Soap;
 import gov.nist.hit.ds.testClient.soap.SoapActionFactory;
 import gov.nist.hit.ds.utilities.datatypes.Hl7Date;
+import gov.nist.hit.ds.utilities.xml.OMFormatter;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
-import gov.nist.hit.ds.xdsException.*;
+import gov.nist.hit.ds.xdsExceptions.*;
 import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
@@ -34,13 +35,13 @@ import java.util.*;
 
 public abstract class BasicTransaction {
 	protected OMElement instruction;
-	protected OMElement instruction_output;
-	PlanContext planContext = null;
-	protected StepContext s_ctx;
+	public OMElement instruction_output;
+	public PlanContext planContext = null;
+	public StepContext s_ctx;
 	OmLogger testLog = new TestLogFactory().getLogger();
 
 	boolean step_failure = false;
-	boolean no_convert = false;
+	public boolean no_convert = false;
 	boolean isSaml = false ;
 	protected boolean parse_metadata = true;
 	// metadata building linkage
@@ -55,8 +56,8 @@ public abstract class BasicTransaction {
 	static public final short xds_none = 0;
 	static public final short xds_a = 1;
 	static public final short xds_b = 2;
-	short xds_version = BasicTransaction.xds_none;
-	protected String endpoint = null;
+	public short xds_version = BasicTransaction.xds_none;
+	public String endpoint = null;
 	HashMap<String, String> local_linkage_data ;  // dangerous, most of linkage kept inside Linkage class
 	Linkage linkage = null;
 	protected String metadata_filename = null;
@@ -75,27 +76,47 @@ public abstract class BasicTransaction {
 
 	protected String repositoryUniqueId = null;
 	private final static Logger logger = Logger.getLogger(BasicTransaction.class);
-	Map<String, String> nameUuidMap = null;
+	public Map<String, String> nameUuidMap = null;
 	private Soap soap;
 
 	//	Metadata metadata = null;
 	OMElement request_element;
 	//	OMElement submission = null;
 
-	List<OMElement> additionalHeaders = null;
+	public List<OMElement> additionalHeaders = new ArrayList<>();
 	List<OMElement> wsSecHeaders = null;
 	ReportManager reportManager = null;
 	UseReportManager useReportManager = null;
-	TestConfig testConfig;
+	public TestConfig testConfig = new TestConfig();
 
-	TransactionSettings transactionSettings = null;
+	public TransactionSettings transactionSettings = null;
 
 	protected abstract void run(OMElement request) throws Exception;
 	protected abstract void parseInstruction(OMElement part) throws XdsInternalException, MetadataException;
 	protected abstract String getRequestAction();
 	protected abstract String getBasicTransactionName(); // trans name without possible .as suffix
 
-	public void setTransactionSettings(TransactionSettings ts) {
+    // to force sub-classes to use following constructor
+    protected BasicTransaction() {  }
+
+    protected BasicTransaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
+        this.s_ctx = s_ctx;
+        this.instruction = instruction;
+        this.instruction_output = instruction_output;
+
+        use_id = new ArrayList<>();
+        use_xpath = new ArrayList<>();
+        use_object_ref = new ArrayList<>();
+        use_repository_unique_id = new ArrayList<>();
+        data_refs = new ArrayList<>();
+        assertions = new ArrayList<>();
+        local_linkage_data = new HashMap<>();
+        isSQ = false;
+
+    }
+
+
+    public void setTransactionSettings(TransactionSettings ts) {
 		this.transactionSettings = ts;
 	}
 	
@@ -143,7 +164,7 @@ public abstract class BasicTransaction {
 	public void doRun() throws Exception {
 		Iterator<OMElement> elements = instruction.getChildElements();
 		while (elements.hasNext()) {
-			OMElement part = (OMElement) elements.next();
+			OMElement part =  elements.next();
 			parseInstruction(part);
 		}
 
@@ -259,7 +280,7 @@ public abstract class BasicTransaction {
 	}
 
 	public String toString() {
-		String exceptionString = "";
+		String exceptionString;
 
 		try {
 			throw new Exception("foo");
@@ -302,26 +323,6 @@ public abstract class BasicTransaction {
 		if (xds_version == BasicTransaction.xds_b)
 			return "XDS.b";
 		return "Unknown";
-	}
-
-
-	// to force sub-classes to use following constructor
-	private BasicTransaction() {  }
-
-	protected BasicTransaction(StepContext s_ctx, OMElement instruction, OMElement instruction_output) {
-		this.s_ctx = s_ctx;
-		this.instruction = instruction;
-		this.instruction_output = instruction_output;
-
-		use_id = new ArrayList<OMElement>();
-		use_xpath = new ArrayList<OMElement>();
-		use_object_ref = new ArrayList<OMElement>();
-		use_repository_unique_id = new ArrayList<OMElement>();
-		data_refs = new ArrayList<OMElement>();
-		assertions = new ArrayList<OMElement>();
-		local_linkage_data = new HashMap<String, String>();
-		isSQ = false;
-
 	}
 
 	String xds_version_name() {
@@ -487,7 +488,7 @@ public abstract class BasicTransaction {
 				}
 			}
 			if (!error_message_found) {
-				s_ctx.set_error("Did not find expected string in error messages: " + s_ctx.getExpectedErrorMessage() + "\n");
+				s_ctx.set_error("Did not findSimple expected string in error messages: " + s_ctx.getExpectedErrorMessage() + "\n");
 				step_failure = true;
 			}
 		}
@@ -1017,14 +1018,14 @@ public abstract class BasicTransaction {
 			throw new XdsInternalException(e.getMessage());
 		}
 		if (res == null) {
-			fail ("Cannot find referenced instruction output");
-			throw new XdsInternalException("Cannot find referenced instruction output");
+			fail ("Cannot findSimple referenced instruction output");
+			throw new XdsInternalException("Cannot findSimple referenced instruction output");
 		}
 
 		OMElement result = XmlUtil.firstChildWithLocalName(res, "Result");
 		if (result == null) {
-			fail("Cannot find <Result/>");
-			throw new XdsInternalException("Cannot find <Result/>");
+			fail("Cannot findSimple <Result/>");
+			throw new XdsInternalException("Cannot findSimple <Result/>");
 		}
 
 		Metadata m = MetadataParser.parseNonSubmission(result.getFirstElement());
@@ -1121,7 +1122,7 @@ public abstract class BasicTransaction {
 		return SoapActionFactory.getResponseAction(getRequestAction());
 	}
 
-	protected void soapCall(OMElement requestBody) throws Exception {
+	protected OMElement soapCall(OMElement requestBody) throws Exception {
 		soap = new Soap();
 		testConfig.soap = soap;
 		if(transactionSettings.siteSpec != null && transactionSettings.siteSpec.isSaml){
@@ -1160,24 +1161,33 @@ public abstract class BasicTransaction {
 		}
 		*/
 
+        OMElement results = null;
 		try {
-			testLog.add_name_value(instruction_output, "InputMetadata", requestBody);
+            if (testLog != null && instruction_output != null)
+			    testLog.add_name_value(instruction_output, "InputMetadata", requestBody);
 
-			soap.setSecurityParams(s_ctx.getTransactionSettings().securityParams);
+            if (s_ctx.getTransactionSettings().securityParams != null)
+			    soap.setSecurityParams(s_ctx.getTransactionSettings().securityParams);
 			
 			String patientId = planContext.getExtraLinkage().get("$patientid$");
 			
-			soap.soapCall(requestBody, 
+			results = soap.soapCall(requestBody,
 					endpoint, 
 					useMtom, //mtom
 					useAddressing,  // WS-Addressing
 					soap_1_2,  // SOAP 1.2
 					getRequestAction(),
-					getResponseAction(), patientId
+					getResponseAction(),
+                    patientId
 			);
 		}
 		catch (AxisFault e) {
-			s_ctx.set_error("SOAPFault: " + e.getMessage() + "\nEndpoint is " + endpoint);
+            OMElement e1 = e.getDetail();
+            OMElement e2 = e.getFaultNodeElement();
+            String e1m = new OMFormatter(e1).toString();
+            String e2m = new OMFormatter(e2).toString();
+
+			s_ctx.set_error("SOAPFault: " + e.getMessage() + "\nEndpoint is " + endpoint + "\n" + e1m + "\n" + e2m);
 			if ( !s_ctx.expectFault())
 				s_ctx.set_fault(e);
 		}
@@ -1201,8 +1211,10 @@ public abstract class BasicTransaction {
 			}
 
 		}
+        return results;
 	}
 	public void logSoapRequest(Soap soap) {
+        if (testLog == null) return;
 		try {
 			testLog.add_name_value(instruction_output, "OutHeader", soap.getOutHeader());
 			testLog.add_name_value(instruction_output, "OutAction", getRequestAction());

@@ -3,7 +3,9 @@ package gov.nist.toolkit.xdstools3.client.tabs.preConnectathonTestsTab;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
-import com.smartgwt.client.widgets.*;
+import com.smartgwt.client.widgets.HTMLFlow;
+import com.smartgwt.client.widgets.HTMLPane;
+import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
@@ -11,14 +13,14 @@ import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VStack;
 import gov.nist.toolkit.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.toolkit.xdstools3.client.customWidgets.TLSAndSAML.TLSAndSAMLForm;
-import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableTab;
 import gov.nist.toolkit.xdstools3.client.manager.TabNamesManager;
+import gov.nist.toolkit.xdstools3.client.tabs.GenericCloseableToolTab;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class PreConnectathonTestsTab extends GenericCloseableTab {
+public class PreConnectathonTestsTab extends GenericCloseableToolTab {
     static final Logger logger = Logger.getLogger(PreConnectathonTestsTab.class.getName());
     private final static PreConnectathonTabServiceAsync toolkitService = GWT
             .create(PreConnectathonTabService.class);

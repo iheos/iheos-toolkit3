@@ -5,6 +5,7 @@ import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 /**
+ * API used by REST calls
  * Created by bmajur on 10/23/14.
  */
 class SimApi {

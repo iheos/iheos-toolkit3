@@ -2,7 +2,7 @@ package gov.nist.hit.ds.dsSims.eb.metadataValidator.model
 
 import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.utilities.xml.XmlUtil
-import gov.nist.hit.ds.xdsException.XdsInternalException
+import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 import org.apache.axiom.om.OMContainer
 import org.apache.axiom.om.OMElement
 
