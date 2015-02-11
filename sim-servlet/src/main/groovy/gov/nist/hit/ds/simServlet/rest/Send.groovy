@@ -1,7 +1,13 @@
 package gov.nist.hit.ds.simServlet.rest
 
+import gov.nist.hit.ds.dsSims.eb.transactionSupport.EbSendRequestDAO
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.simServlet.api.SimApi
 import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.client.SimIdentifier
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.utilities.xml.OMFormatter
+import groovy.xml.StreamingMarkupBuilder
 import org.xml.sax.SAXParseException
 
 import javax.ws.rs.Consumes
@@ -37,11 +43,20 @@ class   Send {
             if (!actorTypeName)
                 throw new WebApplicationException(Response.Status.BAD_REQUEST)
             def simId = new SimId(simIdString)
-            SimApi.create(actorTypeName, username, simId)
-            return SimApi.updateConfig(username, simId, message)
-//        return '<foo/>'
+            SimIdentifier simIdentifier = new SimIdentifier(username, simIdString)
+            SimHandle simHandle = SimApi.send(simIdentifier, EbSendRequestDAO.toModel(message))
+            Event event = simHandle.event
+            def reqHdr = event.inOut.reqHdr
+            def reqBody = event.inOut.reqBody
+            def resHdr = event.inOut.respHdr
+            def resBody = "<soapenv:Body xmlns:soapenv=\"http://www.w3.org/2003/05/soap-envelope\">${event.inOut.respBody}</soapenv:Body>"
+            def request = "<Request><SoapHeader>${reqHdr}</SoapHeader><SoapBody>${reqBody}</SoapBody></Request>"
+            def response = "<Response><SoapHeader>${resHdr}</SoapHeader><SoapBody>${resBody}</SoapBody></Response>"
+            String responseStr = "<Log>${request}${response}</Log>"
+            return new OMFormatter(responseStr).toString()
         } catch (Throwable t) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST)
         }
     }
+
 }
