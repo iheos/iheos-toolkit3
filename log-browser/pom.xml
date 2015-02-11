@@ -5,12 +5,12 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-deps</artifactId>
-        <version>3.0.4a-test</version>
+        <version>3.0.4a-SNAPSHOT</version>
         <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
     <artifactId>log-browser</artifactId>
-  <version>3.0.4a-test</version>
+  <version>3.0.4a-SNAPSHOT</version>
 
 
     <!-- POM file generated with GWT webAppCreator -->
@@ -84,12 +84,12 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-widgets-ui</artifactId>
-            <version>3.0.4a-test</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-widgets-ui</artifactId>
-            <version>3.0.4a-test</version>
+            <version>3.0.4a-SNAPSHOT</version>
             <classifier>sources</classifier>
             <scope>compile</scope>
         </dependency>

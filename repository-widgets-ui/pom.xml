@@ -5,13 +5,13 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-deps</artifactId>
-        <version>3.0.4a-test</version>
+        <version>3.0.4a-SNAPSHOT</version>
         <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
 
     <artifactId>repository-widgets-ui</artifactId>
-  <version>3.0.4a-test</version>
+  <version>3.0.4a-SNAPSHOT</version>
 
     <properties>
         <!-- Convenience property to set the GWT version -->
@@ -80,19 +80,19 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>xds-exceptions</artifactId>
-            <version>3.0.4a-test</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
 
 
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-shared</artifactId>
-            <version>3.0.4a-test</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-shared</artifactId>
-            <version>3.0.4a-test</version>
+            <version>3.0.4a-SNAPSHOT</version>
             <classifier>sources</classifier>
             <scope>compile</scope>
         </dependency>
@@ -100,12 +100,12 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-rpc</artifactId>
-            <version>3.0.4a-test</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-rpc</artifactId>
-            <version>3.0.4a-test</version>
+            <version>3.0.4a-SNAPSHOT</version>
             <classifier>sources</classifier>
             <scope>compile</scope>
         </dependency>
@@ -113,12 +113,12 @@
         <dependency>
             <groupId>fr.mikrosimage.gwt</groupId>
             <artifactId>GwtResizableDraggableColumns</artifactId>
-            <version>3.0.4a-test</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>fr.mikrosimage.gwt</groupId>
             <artifactId>GwtResizableDraggableColumns</artifactId>
-            <version>3.0.4a-test</version>
+            <version>3.0.4a-SNAPSHOT</version>
             <classifier>sources</classifier>
             <scope>compile</scope>
         </dependency>

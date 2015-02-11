@@ -5,12 +5,12 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>toolkit3</artifactId>
-        <version>3.0.5a-test-SNAPSHOT</version>
+        <version>3.0.4a-SNAPSHOT</version>
     </parent>
 
     <groupId>gov.nist.toolkit</groupId>
     <artifactId>xdstools3</artifactId>
-  <version>3.0.4a-test</version>
+  <version>3.0.4a-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
@@ -130,7 +130,7 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-widgets-ui</artifactId>
-            <version>3.0.4a-test</version>
+            <version>3.0.4a-SNAPSHOT</version>
             <!-- for some reason, the source classifier requires an explicit version -->
             <classifier>sources</classifier>
             <scope>compile</scope>

@@ -5,11 +5,11 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-deps</artifactId>
-        <version>3.0.4a-test</version>
+        <version>3.0.4a-SNAPSHOT</version>
         <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
-    <version>3.0.4a-test</version>
+    <version>3.0.4a-SNAPSHOT</version>
     <artifactId>toolkit</artifactId>
 
 
@@ -39,7 +39,7 @@
 	<dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>common-datatypes</artifactId>
-            <version>3.0.4a-test</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
          <dependency>
             <groupId>com.sun.ebxml</groupId>
