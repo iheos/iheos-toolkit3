@@ -1,0 +1,15 @@
+# repository type simpleTranRepos
+
+# must match filename
+keyword=simpleTranRepos
+
+# repository|asset
+domain=repository 
+   
+description=The most basic repository type
+
+
+childSortOrder={"CREATED_DATE":"DESCENDING"}
+
+childFetchSize=10
+

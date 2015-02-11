@@ -1,0 +1,5 @@
+# tranIoMessage
+
+keyword=tranIoMessage
+domain=asset
+description=tranIoMessage desc

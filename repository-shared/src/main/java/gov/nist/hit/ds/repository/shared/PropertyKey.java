@@ -67,6 +67,12 @@ public enum PropertyKey {
             return "columnWidths";
         }
     },
+    COMPARE_HASH(false) {
+        @Override
+        public String toString() {
+            return "compareHash";
+        }
+    },
     CREATED_DATE(false) {
         @Override
         public String toString() {
@@ -101,6 +107,12 @@ public enum PropertyKey {
         @Override
         public String toString() {
             return "hash";
+        }
+    },
+    INDEX_CURRENT_DAY_ITEMS(false) {
+        @Override
+        public String toString() {
+            return "indexCurrentDayItems";
         }
     },
     INDEX_SESSION(true) {

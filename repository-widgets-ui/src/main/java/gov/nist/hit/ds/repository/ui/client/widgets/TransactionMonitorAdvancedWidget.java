@@ -49,12 +49,14 @@ import com.google.web.bindery.event.shared.EventBus;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.event.ListenerStatusEvent;
 import gov.nist.hit.ds.repository.ui.client.event.NewTxMessageEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +65,7 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 
 public class TransactionMonitorAdvancedWidget extends Composite {
-    public static final int CELLTABLE_PAGE_SIZE = 60;
+    public static final int CELLTABLE_PAGE_SIZE = 512;
     /**
 	 *
 	 * @author Sunil.Bhaskarla
@@ -80,6 +82,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
     private Boolean listenerEnabled;
     private Boolean listening;
     private Boolean filterEnabled;
+    private Boolean viewerOnly;
 
     private SplitLayoutPanel southPanel = new SplitLayoutPanel(2);
     private SplitLayoutPanel txMonitorMainSplitPanel = new SplitLayoutPanel(3);
@@ -103,6 +106,8 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
 
     private Boolean autoShowFirstMessage = false;
+
+    private ValidationLevel validationLevel = ValidationLevel.ERROR; // default
 
     /*
     Sample 2-way Exchange pattern txDetail:
@@ -137,6 +142,8 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
         public void onSuccess(AssetNode an) {
             logger.info("in content load" + an.getType());
+            requestViewerWidget.clear();
+            responseViewerWidget.clear();
             if (an.getTxtContent()!=null) {
 //                HTML txtContent = new HTML("<pre>" + an.getTxtContent() + "</pre>");
                 if ("reqHdrType".equals(an.getType())) {
@@ -169,13 +176,16 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                         activateListener();
                     }
                 };
-                timer.schedule(1000*15);
+                timer.schedule(1000*3);
             }
 
         }
 
         @Override
         public void onSuccess(Map<String,AssetNode> anMap) {
+            if (getListenerEnabled()) {
+                activateListener();
+            }
             logger.finest("good connection");
             if (getJmsHostAddress()==null || "".equals(jmsHostAddress)) {
                 if (anMap.get("parentLoc")!=null)
@@ -184,9 +194,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             popTx(anMap,null);
             getTxTable().redraw();
             eventBus.fireEvent(new ListenerStatusEvent(getListening()));
-            if (getListenerEnabled()) {
-                activateListener();
-            }
+
         }
     };
 
@@ -280,11 +288,12 @@ public class TransactionMonitorAdvancedWidget extends Composite {
      * @param enableListener
      * @param showTxDetail
      */
-    public TransactionMonitorAdvancedWidget(EventBus eventBus, Boolean enableListener, Boolean enableFilter, Boolean showTxDetail)  {
+    public TransactionMonitorAdvancedWidget(EventBus eventBus, Boolean enableListener, Boolean enableFilter, Boolean showTxDetail, Boolean viewerOnly)  {
         setEventBus(eventBus);
         setShowTxDetail(showTxDetail);
         setListenerEnabled(enableListener);
         setFilterEnabled(enableFilter);
+        setViewerOnly(viewerOnly);
 
         requestViewerWidget = new MessageViewerWidget(eventBus, "Request", null);
         responseViewerWidget = new MessageViewerWidget(eventBus, "Response", null);
@@ -303,7 +312,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             @Override
             public void onResize(ResizeEvent event) {
 
-                resizeMessageDetailArea();
+                resizeMessageDetailArea(getViewerOnly());
 
             }
         });
@@ -323,13 +332,19 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         return getListening();
     }
 
-    private void resizeMessageDetailArea() {
+    private void resizeMessageDetailArea(Boolean viewerOnly) {
         logger.fine("entering resizeMessageDetailArea");
         try {
             if (txMonitorMainSplitPanel.getParent()!=null) {
-                logger.info("resizing...");
+//                logger.info("resizing...");
+
                 long containerWidth =  txMonitorMainSplitPanel.getParent().getElement().getClientWidth(); // Window.getClientWidth())
                 long containerHeight = txMonitorMainSplitPanel.getParent().getElement().getClientHeight(); // Window.getClientHeight()
+
+                if (viewerOnly) {
+                    containerWidth =  txMonitorMainSplitPanel.getElement().getClientWidth();
+                    containerHeight = txMonitorMainSplitPanel.getElement().getClientHeight();
+                }
 
                 long messageDetailViewerHeight = getMessageDetailHeight(containerHeight);
                 txMonitorMainSplitPanel.setWidgetSize(southPanel, messageDetailViewerHeight);
@@ -371,7 +386,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         try {
 
             String parentId = anMap.get("header").getParentId();
-            TxMessageBundle txMessageBundle = findTxMessageBundle(parentId);
+            TxMessageBundle txMessageBundle = null; // findTxMessageBundle(parentId);
             Boolean newBundle = false;
 
             List<TxMessageBundle> rowList = dataProvider.getList();
@@ -394,12 +409,32 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
 
             String anType = anMap.get("header").getType();
-            if (anType!=null)
+            if (anType!=null) {
                 if (anType.indexOf("REQUEST")>-1) {
                     txMessageBundle.getMessageDetailMap().put("request",txRow);
-                } else if (anType.indexOf("RESPONSE")>-1) {
-                    txMessageBundle.getMessageDetailMap().put("response",txRow);
+
+
+                    Map<String,AssetNode> respAnMap = new HashMap<String,AssetNode>();
+                    respAnMap.put("parentLoc",anMap.get("parentLoc"));
+                    respAnMap.put("header",anMap.get("respHeader"));
+                    if (anMap.get("respBody")!=null) {
+                        respAnMap.put("body",anMap.get("respBody"));
+                    }
+
+                    TxDetailRow respTxRow = new TxDetailRow();
+                    respTxRow.setAnMap(respAnMap);
+
+                    txMessageBundle.getMessageDetailMap().put("response",respTxRow);
                 }
+//                else if (anType.indexOf("RESPONSE")>-1) {
+//                    txMessageBundle.getMessageDetailMap().put("response",txRow);
+//                }
+
+
+
+
+
+            }
 
 
             if (newBundle) {
@@ -618,6 +653,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 // Render responseTime cell
                 TableCellBuilder responseCell = row.startTD();
+                responseCell.align("center");
                 if(!itemsToExpandToggle.contains(rowValue))
                     this.renderCell(responseCell, createContext(11), new MessageDetailCell("response",11), rowValue);
                 responseCell.endTD();
@@ -698,9 +734,14 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                     } else if (COLUMN_HEADER_VALIDATION.equals(columns[index])) {
 
                         String validationDetail = o.getMessageDetailMap().get(getMessageKey()).getAnMap().get("header").getExtendedProps().get("validationDetail");
-                        shb.appendHtmlConstant("<span title='" + ((validationDetail!=null)?validationDetail:"")  + "'>");
-                        shb.appendEscaped(o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index));
-                        shb.appendHtmlConstant("</span>");
+
+                        if ("validationResponse".equals(validationDetail)) {
+                            shb.appendHtmlConstant(o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index));
+                        } else {
+                            shb.appendHtmlConstant("<span title='" + ((validationDetail!=null)?validationDetail:"")  + "'>");
+                            shb.appendEscaped(o.getMessageDetailMap().get(getMessageKey()).getCsvData().get(index));
+                            shb.appendHtmlConstant("</span>");
+                        }
 
                     }  /* else if (COLUMN_HEADER_ROW_FORWARDED_TO.equals(columns[index])) {
                         shb.appendEscaped(o.getMessageDetailMap().get(getMessageKey()).getAnMap().get("header").getExtendedProps().get("toIp"));
@@ -751,11 +792,6 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                         return "<<";
                     } else
                         return ">>";
-//                    SafeHtmlBuilder shb = new SafeHtmlBuilder();
-//
-//                    shb.appendHtmlConstant("<span style=\"width:32px;height:32px;\">Expand&nbsp;</span>");
-//                    return shb.toSafeHtml();
-
                 }
             };
 
@@ -798,6 +834,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 // Render Status cell
                 TableCellBuilder statusCellTD = row.startTD();
+//                statusCellTD.align("right");
                 HasCell<TxMessageBundle, SafeHtml> statusCell = new MessageDetailCell(messageKey,2);
                 this.renderCell(statusCellTD, createContext(2), statusCell, rowValue);
                 statusCellTD.endTD();
@@ -816,6 +853,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 // Render Proxy cell
                 TableCellBuilder proxyCell = row.startTD();
+//                proxyCell.align("right");
 //                if(!itemsToExpandToggle.contains(rowValue))
                     this.renderCell(proxyCell, createContext(5), new MessageDetailCell(messageKey,5), rowValue);
                 proxyCell.endTD();
@@ -845,11 +883,13 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 // Render length cell
                 TableCellBuilder lengthCell = row.startTD();
+                lengthCell.align("right");
                 this.renderCell(lengthCell, createContext(10), new MessageDetailCell(messageKey,10), rowValue);
                 lengthCell.endTD();
 
                 // Render responseTime cell
                 TableCellBuilder responseCell = row.startTD();
+                responseCell.align("center");
                 this.renderCell(responseCell, createContext(11), new MessageDetailCell(messageKey,11), rowValue);
                 responseCell.endTD();
 
@@ -1140,36 +1180,61 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                                     transaction.setReposSrc(requestViewerWidget.getRepositorySrc());
                                     transaction.setAssetId(requestViewerWidget.getIoHeaderId());
 //                                    Window.alert(transaction.getAssetId() + " src:" + transaction.getReposSrc());
+
+                                    AssetNode request = new AssetNode();
+                                    request.setDisplayName("Request");
+                                    request.setType("tran-request");
+                                    request.addChild(requestViewerWidget.getHeaderAssetNode());
+                                    request.addChild(requestViewerWidget.getMessageAssetNode());
+
+                                    AssetNode response = new AssetNode();
+                                    response.setDisplayName("Response"); // Carefully check this usage in the map below
+                                    response.setType("tran-response");
+                                    response.addChild(responseViewerWidget.getHeaderAssetNode());
+                                    response.addChild(responseViewerWidget.getMessageAssetNode());
+
+                                    transaction.addChild(request);
+                                    transaction.addChild(response);
+
+                                    setValidationResponseResult("request", "Processing...", "");
+                                    setValidationResponseResult("response", "Processing...", "");
+                                    getTxTable().redraw();
+
                                     try {
-                                        reposService.validateMessage(valName,transaction, new AsyncCallback<Map<String, AssetNode>>() {
+                                        reposService.validateMessage(valName, getValidationLevel(), transaction, new AsyncCallback<Map<String, AssetNode>>() {
                                             @Override
                                             public void onFailure(Throwable caught) {
                                                 String msg = caught.toString();
                                                 Window.alert(msg);
                                                 setValidationResponseResult("request", "RPC Fail", msg);
                                                 setValidationResponseResult("response", "RPC Fail", msg);
+                                                getTxTable().redraw();
                                             }
 
                                             @Override
                                             public void onSuccess(Map<String, AssetNode> result) {
 //                                                Window.alert((result==null)?"null":""+result.size()  +  " req rs:" + result.get("Request").getExtendedProps().get("result") );
-                                                if (result!=null && result.size()==0) {
-                                                    Window.alert("No validation response was received.");
-                                                    setValidationResponseResult("request", "No data", "Empty set");
-                                                    setValidationResponseResult("response", "No data", "Empty set");
-                                                }
-                                                if (result!=null) {
+                                                try {
+                                                    if (result!=null && result.size()==0) {
+                                                        Window.alert("No validation response was received.");
+                                                        setValidationResponseResult("request", "No data", "Empty set");
+                                                        setValidationResponseResult("response", "No data", "Empty set");
+                                                    }
+                                                    if (result!=null) {
 //                                                    Window.alert(result.get("resType").getExtendedProps().get("result"));
-                                                    if (result.get("Request")!=null) {
-                                                        String resultStr = result.get("Request").getExtendedProps().get("result");
-                                                        String validationDetail = result.get("Request").getExtendedProps().get("validationDetail");
-                                                        setValidationResponseResult("request", resultStr , validationDetail);
+                                                        if (result.get("Request")!=null) {
+                                                            AssetNode an = result.get("Request");
+                                                            setValidationResponseResult("request", an);
+                                                        }
+                                                        if (result.get("Response")!=null) {
+                                                            AssetNode an = result.get("Response");
+                                                            setValidationResponseResult("response", an);
+                                                        }
                                                     }
-                                                    if (result.get("Response")!=null) {
-                                                        String resultStr = result.get("Response").getExtendedProps().get("result");
-                                                        String validationDetail = result.get("Response").getExtendedProps().get("validationDetail");
-                                                        setValidationResponseResult("response", resultStr , validationDetail);
-                                                    }
+                                                } catch (Throwable t) {
+                                                    t.printStackTrace();
+                                                    setValidationResponseResult("request", "Exception/UI", t.toString());
+                                                    setValidationResponseResult("response", "Exception/UI", t.toString());
                                                 }
                                                 getTxTable().redraw();
                                             }
@@ -1177,6 +1242,9 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                                     } catch (Throwable t) {
                                         logger.warning(t.toString());
+                                        setValidationResponseResult("request", "Exception", t.toString());
+                                        setValidationResponseResult("response", "Exception", t.toString());
+
                                     }
 
                                 }
@@ -1206,6 +1274,43 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         return  null;
     }
 
+    private void setValidationResponseResult(String rowStr, AssetNode resultNode) {
+        if (resultNode==null)
+            return;
+
+        String resultStr = resultNode.getExtendedProps().get("result");
+
+        TxMessageBundle txMessageBundle = findTxMessageBundle(requestViewerWidget.getIoHeaderId());
+        AssetNode an = txMessageBundle.getMessageDetailMap().get(rowStr).getAnMap().get("header");
+
+        if (an!=null) {
+            if (an.getCsv() !=null) {
+                String[][] csvData = an.getCsv();
+
+                if (resultStr!=null) {
+                    SafeHtmlBuilder resultShb = new SafeHtmlBuilder();
+
+                    resultShb.appendHtmlConstant("<a href='"
+                            + GWT.getHostPageBaseURL()
+                            + GWT.getModuleName()
+                            + ".html?reposSrc=RW_EXTERNAL&reposId=" + resultNode.getRepId() + "&assetId=" + resultNode.getAssetId()
+                            + "' target='_blank'>" // Open link in new tab
+                    );
+                    resultShb.appendEscaped(resultStr);
+                    resultShb.appendHtmlConstant("</a>&nbsp;");
+
+                    csvData[0][12] =  resultShb.toSafeHtml().asString();
+
+                    an.getExtendedProps().put("validationDetail","validationResponse"); // This will use the html constant text generated above, otherwise the text will be HTML escaped
+                    an.setCsv(csvData);
+                }
+
+            }
+        }
+
+
+    }
+
     private void setValidationResponseResult(String rowStr, String resultStr, String validationDetail) {
         TxMessageBundle txMessageBundle = findTxMessageBundle(requestViewerWidget.getIoHeaderId());
         AssetNode an = txMessageBundle.getMessageDetailMap().get(rowStr).getAnMap().get("header");
@@ -1214,12 +1319,23 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             if (an.getCsv() !=null) {
                 String[][] csvData = an.getCsv();
 
-                SafeHtmlBuilder shb = new SafeHtmlBuilder();
-                shb.appendEscaped(resultStr);
+                if (resultStr!=null) {
+                    SafeHtmlBuilder resultShb = new SafeHtmlBuilder();
 
-                csvData[0][12] = shb.toSafeHtml().asString(); // TODO: make constant
-                an.setCsv(csvData);
-                an.getExtendedProps().put("validationDetail",validationDetail);
+                    resultShb.appendEscaped(resultStr);
+
+                    csvData[0][12] =  resultShb.toSafeHtml().asString();
+                    an.setCsv(csvData);
+
+                }
+
+                if (validationDetail!=null) {
+
+                    SafeHtmlBuilder shb = new SafeHtmlBuilder();
+                    shb.appendEscaped(validationDetail);
+
+                    an.getExtendedProps().put("validationDetail",shb.toSafeHtml().asString());
+                }
             }
         }
     }
@@ -1444,14 +1560,14 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
                 } else if (COLUMN_HEADER_ROW_MESSAGE_FROM.equals(columns[this.index])) {
 
-                    shb.appendHtmlConstant("<span title='" + headerMsg.getExtendedProps().get("fromIp")  + "'>"); // .getProps()
-                    shb.appendEscaped(o.getCsvData().get(this.index));
+                    shb.appendHtmlConstant("<span title='" + o.getCsvData().get(this.index)  + "'>"); // .getProps()
+                    shb.appendEscaped(headerMsg.getExtendedProps().get("from"));
                     shb.appendHtmlConstant("</span>");
 
                 } else if (COLUMN_HEADER_ROW_FORWARDED_TO.equals(columns[this.index])) {
 
                     shb.appendHtmlConstant("<span title='" + o.getCsvData().get(this.index)  + "'>"); // .getProps()
-                    shb.appendEscaped(headerMsg.getExtendedProps().get("toIp"));
+                    shb.appendEscaped(headerMsg.getExtendedProps().get("to"));
                     shb.appendHtmlConstant("</span>");
 
                 } else if (COLUMN_HEADER_PATH.equals(columns[this.index])) {
@@ -1500,7 +1616,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
             } catch (Throwable t) {
 
                 logger.warning("getValue failed: " +t.toString() + " o parentId:" + o.getParentId() + " o messageDetailMap sz:" + o.getMessageDetailMap().size());
-//                t.printStackTrace();
+                t.printStackTrace();
                 shb.appendEscaped(" ");
              }
 
@@ -1541,7 +1657,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
     public void setShowTxDetail(Boolean showTxDetail) {
         this.showTxDetail = showTxDetail;
-        resizeMessageDetailArea();
+        resizeMessageDetailArea(getViewerOnly());
 
     }
     public Boolean getListenerEnabled() {
@@ -1633,4 +1749,19 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         this.jmsHostAddress = jmsHostAddress;
     }
 
+    public ValidationLevel getValidationLevel() {
+        return validationLevel;
+    }
+
+    public void setValidationLevel(ValidationLevel validationLevel) {
+        this.validationLevel = validationLevel;
+    }
+
+    public Boolean getViewerOnly() {
+        return viewerOnly;
+    }
+
+    public void setViewerOnly(Boolean viewerOnly) {
+        this.viewerOnly = viewerOnly;
+    }
 }

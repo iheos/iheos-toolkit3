@@ -10,6 +10,7 @@ import gov.nist.hit.ds.repository.rpc.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.NoServletSessionException;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.aggregation.AssertionAggregation;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.shared.id.AssetId;
@@ -73,13 +74,20 @@ RepositoryService {
     }
 
     @Override
-	public List<AssetNode> getAssetTree(String[][] reposData)
+	public List<AssetNode> getAssetTree(String[][] reposData, int offset)
 			throws RepositoryConfigException {
-		return PresentationData.getTree(reposData);
+		return PresentationData.getTree(reposData, offset, true);
 	}
 
-	
-	@Override
+    @Override
+    public List<AssetNode> getAssetTree(String[][] reposData, int offset, boolean addEllipses)
+            throws RepositoryConfigException {
+        return PresentationData.getTree(reposData, offset, addEllipses);
+    }
+
+
+
+    @Override
 	public AssetNode getAssetTxtContent(AssetNode an)
 			throws RepositoryConfigException {
 		try {
@@ -98,6 +106,17 @@ RepositoryService {
 			throw new RepositoryConfigException(re.toString());
 		}
 	}
+
+    @Override
+    public List<AssetNode> getImmediateChildren(AssetNode an, int offset, boolean addEllipses)
+            throws RepositoryConfigException {
+        try {
+            return AssetHelper.getImmediateChildren(an,offset,addEllipses);
+        } catch (Exception re) {
+            throw new RepositoryConfigException(re.toString());
+        }
+    }
+
 
     @Override
     public AssetNode getChildren(AssetNode an) throws RepositoryConfigException {
@@ -182,8 +201,8 @@ RepositoryService {
     }
 
     @Override
-    public Map<String, AssetNode> validateMessage(String validatorName, AssetNode transaction) throws RepositoryConfigException {
-        return PresentationData.validateMessage(validatorName,transaction);
+    public Map<String, AssetNode> validateMessage(String validatorName, ValidationLevel validationLevel, AssetNode transaction) throws RepositoryConfigException {
+        return PresentationData.validateMessage(validatorName, validationLevel, transaction);
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -54,6 +53,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.SimpleEventBus;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryTag;
@@ -112,15 +112,20 @@ public class LogBrowserWidget extends Composite {
     protected ArrayList<String> propNames = new ArrayList<String>();
     protected Map<String, String> reposProps = new HashMap<String,String>();
     AssetTreeItem lbPreviousTreeItem = null;
+    TreeItem previousTreeItem = null;
+
     AssetTreeItem treeItemTarget = null;
     HTML tabTitle = new HTML(Feature.TRANSACTION_MONITOR.toString());
     int txMonTab = -1;
     final VerticalPanel treeHolder = new VerticalPanel();
     Image refreshTreeImg = new Image();
 
-
-
     TransactionMonitorFilterAdvancedWidget txFilter = null;
+
+    LogBrowserWidget searchLbWidget;
+    final SimpleEventBus searchLbEventBus = new SimpleEventBus();
+    final SimpleEventBus tranViewerEventBus = new SimpleEventBus();
+    final TransactionMonitorFilterAdvancedWidget transactionViewer = new TransactionMonitorFilterAdvancedWidget(tranViewerEventBus,true);
 
     // Temp
 
@@ -233,7 +238,9 @@ public class LogBrowserWidget extends Composite {
      * @throws RepositoryConfigException
      */
     public LogBrowserWidget(EventBus eventBus, final AssetNode target) throws RepositoryConfigException {
-        configure(eventBus, new Feature[]{Feature.BROWSE}, target);
+        final Feature[] features = new Feature[]{Feature.BROWSE};
+        configure(eventBus, features, target);
+        initFeaturePanel(features);
     }
 
     /**
@@ -285,7 +292,8 @@ public class LogBrowserWidget extends Composite {
 
 	public LogBrowserWidget(EventBus eventBus, final Feature[] features) throws RepositoryConfigException {
         configure(eventBus, features, null);
-	      
+
+        initFeaturePanel(features);
 		 //// Use this in embedded mode: RootLayoutPanel.get().add(featureTlp);
 	}
 
@@ -349,7 +357,7 @@ public class LogBrowserWidget extends Composite {
             }
         });
 
-        initFeaturePanel(features);
+
     }
 
     private void initFeaturePanel(Feature[] features) {
@@ -400,7 +408,6 @@ public class LogBrowserWidget extends Composite {
                         logger.warning("InContextAssetClickedEvent:" + t.toString());
                         t.printStackTrace();
                     }
-
                 }
             });
 
@@ -445,7 +452,7 @@ public class LogBrowserWidget extends Composite {
              * local test only
              * C:\e\artrep_test_resources\Installation\IHE-Testing\xdstools2_environment\repositories\data\Sim\123\Events\2014_07_29_13_17_30_089
              */
-            String id = "f721daed-d17c-4109-b2ad-c1e4a8293281"; // "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
+            String id = null; // "f721daed-d17c-4109-b2ad-c1e4a8293281", "052c21b6-18c2-48cf-a3a7-f371d6dd6caf";
             String type = "validators";
             String[] displayColumns = new String[]{"ID","STATUS","MSG"};
 
@@ -650,29 +657,30 @@ public class LogBrowserWidget extends Composite {
     }
 
 	  protected SplitLayoutPanel setupSearchFeature() {
-		    SplitLayoutPanel searchMainLayoutPanel = new SplitLayoutPanel(5); // Search-main panel
+		    final SplitLayoutPanel searchMainLayoutPanel = new SplitLayoutPanel(5); // Search-main panel
 		    searchMainLayoutPanel.getElement().getStyle()
 	        .setProperty("border", "3px solid #e7e7e7"); //
 
-		    final SplitLayoutPanel searchLbSplitPanel = new SplitLayoutPanel(1);
-			final ScrollPanel searchLbCenterPanel = new ScrollPanel();
-			SplitLayoutPanel searchLbWestContent = new SplitLayoutPanel(2);
+//          final VerticalPanel searchLbTreeHolder = new VerticalPanel();
+//		    final SplitLayoutPanel searchLbSplitPanel = new SplitLayoutPanel(1);
+          final LayoutPanel searchLbCenterPanel = new LayoutPanel();
+//			SplitLayoutPanel searchLbWestContent = new SplitLayoutPanel(2);
 		    			
-			final VerticalPanel searchLbTreeHolder = new VerticalPanel();
-			final HTML searchLbPropsWidget = new HTML();
-			// searchLbTreeHolder.add(new HTML("&nbsp;Loading..."));
-			ScrollPanel sp = new ScrollPanel(searchLbTreeHolder);
-			ScrollPanel spProps = new ScrollPanel(searchLbPropsWidget);
-			searchLbWestContent.addSouth(spProps, Math.round(0.2 * Window.getClientHeight()));
-			searchLbWestContent.add(sp); 
 
-			searchLbSplitPanel.getElement().getStyle().setVisibility(Visibility.HIDDEN);
-			searchLbSplitPanel.addWest(searchLbWestContent, 300); // 400  -- Math.round(.15 * Window.getClientWidth())
-			searchLbSplitPanel.add(searchLbCenterPanel);
+//			final HTML searchLbPropsWidget = new HTML();
+			// searchLbTreeHolder.add(new HTML("&nbsp;Loading..."));
+//			ScrollPanel sp = new ScrollPanel(searchLbTreeHolder);
+//			ScrollPanel spProps = new ScrollPanel(searchLbPropsWidget);
+//			searchLbWestContent.addSouth(spProps, Math.round(0.2 * Window.getClientHeight()));
+//			searchLbWestContent.add(sp);
+
+//			searchLbSplitPanel.getElement().getStyle().setVisibility(Visibility.HIDDEN);
+//			searchLbSplitPanel.addWest(searchLbWestContent, 300); // 400  -- Math.round(.15 * Window.getClientWidth())
+//			searchLbSplitPanel.add(searchLbCenterPanel);
 			
 		    ScrollPanel searchPanel = new ScrollPanel(); 				// Search parameters 
 		    
-		    SearchWidget searchWidget = new SearchWidget(eventBus, new SearchWidget.Option[]{
+		    SearchWidget searchWidget = new SearchWidget(searchLbEventBus, new SearchWidget.Option[]{
                     SearchWidget.Option.QUICK_SEARCH,
                     SearchWidget.Option.SEARCH_CRITERIA_REPOSITORIES,
                     SearchWidget.Option.CRITERIA_BUILDER_MODE
@@ -685,9 +693,21 @@ public class LogBrowserWidget extends Composite {
 
 		    searchPanel.add(searchWidget);
 		    searchMainLayoutPanel.addWest(searchPanel, WESTERNBAR); // 632, Math.round(0.40 * Window.getClientWidth())
-		    searchMainLayoutPanel.add(searchLbSplitPanel);
+            searchMainLayoutPanel.add(searchLbCenterPanel);
 
-		    
+//		    searchMainLayoutPanel.add(searchLbSplitPanel);
+
+//            try {
+//                searchLbWidget = new LogBrowserWidget(searchLbEventBus, new Feature[]{Feature.BROWSE});
+//                searchLbWidget.setVisible(false); // Hide on startup
+//                searchMainLayoutPanel.add(searchLbWidget);
+//            } catch (RepositoryConfigException e) {
+//                e.printStackTrace();
+//            }
+
+
+
+          /*
 		    final AsyncCallback<AssetNode> searchLbContentSetup = new AsyncCallback<AssetNode>() {
 				public void onFailure(Throwable arg0) {
 					searchLbSplitPanel.getElement().getStyle().setVisibility(Visibility.VISIBLE);
@@ -702,34 +722,38 @@ public class LogBrowserWidget extends Composite {
 				}
 				
 			};
+    */
 
-		    
-		    eventBus.addHandler(SearchResultAssetClickedEvent.TYPE, new SearchResultAssetClickedEventHandler() {
-				public void onAssetClick(SearchResultAssetClickedEvent event) {
+          searchLbEventBus.addHandler(SearchResultAssetClickedEvent.TYPE, new SearchResultAssetClickedEventHandler() {
+              public void onAssetClick(SearchResultAssetClickedEvent event) {
 //                    Window.alert("from search click");
-					try {
-						final AssetNode target = event.getValue();
+                  try {
+                      final AssetNode target = event.getValue();
 
-                        reposService.getParentChainInTree(target, new AsyncCallback<List<AssetNode>>() {
+                      searchLbCenterPanel.clear();
 
-                            public void onFailure(Throwable arg0) {
-                                searchLbPropsWidget.setHTML("Search result action could not be synchronized with the tree: " + arg0.toString());
-                            }
+                      searchLbCenterPanel.add(new LogBrowserWidget(searchLbEventBus, target));
 
-                            public void onSuccess(List<AssetNode> topLevelAssets) {
-                                searchLbTreeHolder.clear();
-                                searchLbTreeHolder.add(popTreeWidget(topLevelAssets, target, true, searchLbContentSetup));
-                                reposService.getAssetTxtContent(target, searchLbContentSetup);
-                            }
-                        });
+//                        reposService.getParentChainInTree(target, new AsyncCallback<List<AssetNode>>() {
+//
+//                            public void onFailure(Throwable arg0) {
+//                                searchLbPropsWidget.setHTML("Search result action could not be synchronized with the tree: " + arg0.toString());
+//                            }
+//
+//                            public void onSuccess(List<AssetNode> topLevelAssets) {
+//                                searchLbTreeHolder.clear();
+//                                searchLbTreeHolder.add(popTreeWidget(topLevelAssets, target, true, searchLbContentSetup));
+//                                reposService.getAssetTxtContent(target, searchLbContentSetup);
+//                            }
+//                        });
 
 
-					} catch (RepositoryConfigException e) {
-						e.printStackTrace();
-					}
+                  } catch (Throwable t) {
+                      t.printStackTrace();
+                  }
 
-				}
-			}); 
+              }
+          });
 
 		    						    
 		    return searchMainLayoutPanel;
@@ -868,7 +892,7 @@ public class LogBrowserWidget extends Composite {
 
 						    
                            if (targetContext==null) {
-							reposService.getAssetTree(new String[][]{{reposData[0][0],reposData[0][1]}}, treeSetup);
+							reposService.getAssetTree(new String[][]{{reposData[0][0],reposData[0][1]}},0, treeSetup);
                            }
 						
 							if (reposLbx.getItemCount()>0) {
@@ -924,20 +948,38 @@ public class LogBrowserWidget extends Composite {
                                 }
 
                                 public void onSuccess(List<AssetNode> topLevelAssets) {
+
                                     treeHolder.clear();
                                     treeHolder.add(popTreeWidget(topLevelAssets, targetContext, true, contentSetup));
 
-                                    if (targetContext.getTxtContent()!=null) {
-                                        displayAssetContent(targetContext, centerPanel, propsWidget);
-                                    } else {
-                                        reposService.getAssetTxtContent(targetContext, contentSetup);
-                                    }
+
+
+
+
+
+
+                                        if ("event".equals(targetContext.getType())) {
+
+                                            String valType = "validators";
+                                            String id = targetContext.getAssetId();
+                                            String[] displayColumns = new String[]{"ID","STATUS","MSG"};
+                                            showEventMessagesWidget(targetContext.getRepId(), id, valType, displayColumns);
+                                         } else {
+                                            if (targetContext.getTxtContent()!=null) {
+                                                displayAssetContent(targetContext, centerPanel, propsWidget);
+                                            } else {
+                                                reposService.getAssetTxtContent(targetContext, contentSetup);
+                                            }
+                                        }
+
+
 
                                 }
                             });
 
-                        } catch (RepositoryConfigException rce) {
-                            Window.alert(rce.toString());
+                        } catch (Throwable t) {
+                            Window.alert(t.toString());
+                            t.printStackTrace();
                         }
 
                     }
@@ -960,18 +1002,21 @@ public class LogBrowserWidget extends Composite {
         centerPanel.clear();
         closeSummaryTab();
 
+        String[] compositeKey = getReposCompositeKey();
 
+        reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}},0, treeSetup);
+
+    }
+
+    private String[] getReposCompositeKey() {
         ListBox lbx = reposLbx; // ((ListBox)event.getSource());
         int idx = lbx.getSelectedIndex();
 
         // reposService.getAssetTree(new String[][]{{lbx.getItemText(idx),lbx.getValue(idx)}}, treeSetup);
-        String[] compositeKey = lbx.getValue(idx).split("\\^");
-
-        reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, treeSetup);
-
+        return lbx.getValue(idx).split("\\^");
     }
-	  
-	  protected TabPanel addTab(Widget w, String lbl) {
+
+    protected TabPanel addTab(Widget w, String lbl) {
 	      	
 	      	TabPanel tp = new TabPanel();
 	      	tp.setVisible(true);
@@ -989,13 +1034,16 @@ public class LogBrowserWidget extends Composite {
           AssetNode parentAn = null;
 
           if (item.getParentItem()!=null) {
+                // Child expansion
               parentAn = (AssetNode)item.getParentItem().getUserObject();
+          } else {
+                // No parent, treat as repository root top-level
           }
 
           final String offsetValue = focusAn.getExtendedProps().get("_offset");
           if ((focusAn!=null && offsetValue!=null)) {
 
-              // Close the item immediately
+//              Close the item immediately
               item.setState(false, false);
 
               final AsyncCallback<List<AssetNode>> addImmediateChildrenByOffset = new AsyncCallback<List<AssetNode>>() {
@@ -1005,7 +1053,9 @@ public class LogBrowserWidget extends Composite {
                   }
 
                   public void onSuccess(List<AssetNode> a) {
-                      logger.info("--- got: " + ((a!=null)?a.size():"null"));
+//                      logger.info("widgetCount: " + treeHolder.getWidgetCount() +  " offsetValue: " + offsetValue + " --- got: " + ((a!=null)?a.size():"null"));
+
+                      final Tree tree = (Tree)treeHolder.getWidget(0);
 
                       for (AssetNode childAn : a) {
                           AssetTreeItem treeItem = createTreeItem(childAn, null, false, false);
@@ -1016,21 +1066,40 @@ public class LogBrowserWidget extends Composite {
 //                          logger.info(" offsetValue: " + offsetValue);
 
                           if (item.getParentItem()!=null) {
-                              item.getParentItem().addItem(treeItem); // Offset based retrieval adds an item to parent
+                              int index = item.getParentItem().getChildIndex(item);
+
+                              item.getParentItem().insertItem(index, treeItem); // .addItem(treeItem); // Offset based retrieval adds an item to parent
                           } else {
-//                              tree.addItem(treeItem); // TODO look at this in detail, how to add to root-level?
+                              if (tree!=null) {
+                                  int index = -1;
+                                  int ct = tree.getItemCount();
+                                  for (int cx=0; cx<ct; cx++) {
+                                      if (tree.getItem(cx).equals(item)) {
+                                          index = cx;
+                                          break;
+                                      }
+                                  }
+                                  if (index>-1) {
+                                      tree.insertItem(index,treeItem);
+                                  }
+
+                              } else {
+                                  logger.warning("tree widget is null!");
+                              }
+
                           }
 //                          logger.info("adding --- " + treeItem.getAssetNode().getDisplayName() + " child count: " + item.getChildCount());
                       }
 
-                        item.remove();
+                      // Remove ellipses
+                      if (item.getParentItem()!=null) {
+                          item.remove();
+                      } else if (tree!=null) {
+                          tree.removeItem(item);
+                      }
 
-//                      if (item.getParentItem()!=null) {
-//                          item.getParentItem().removeItem(item);
-//                          item.remove();
-//                      } else {
-//                          tree.removeItem(item);
-//                      }
+
+
 
 
                   }
@@ -1038,15 +1107,23 @@ public class LogBrowserWidget extends Composite {
               };
 
               try {
+                  int offsetVal = Integer.parseInt(offsetValue);
+                  boolean stopFlag = Boolean.parseBoolean(focusAn.getExtendedProps().get("_stopFlag"));
+                  if (parentAn!=null) { // parent node exists
+                      reposService.getImmediateChildren(parentAn, offsetVal, (!stopFlag), addImmediateChildrenByOffset);
+                  } else { // top level
+                      String[] compositeKey = getReposCompositeKey();
+                      reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, offsetVal, (!stopFlag), addImmediateChildrenByOffset);
+                  }
 
-                      reposService.getImmediateChildren(parentAn, Integer.parseInt(offsetValue), addImmediateChildrenByOffset);
+
 
               } catch (RepositoryConfigException e) {
                   e.printStackTrace();
               }
 
-              logger.info("2 _offset prop found for assetId: " + focusAn.getAssetId());
-              logger.info("2 parent exists? " + (item.getParentItem()!=null));
+//              logger.info("2 _offset prop found for assetId: " + focusAn.getAssetId());
+//              logger.info("2 parent exists? " + (item.getParentItem()!=null));
 
 
 
@@ -1148,8 +1225,7 @@ public class LogBrowserWidget extends Composite {
 
 
 	  protected Widget popTreeWidget(List<AssetNode> anList, AssetNode target, Boolean expandLeaf, final AsyncCallback<AssetNode> contentSetup) {
-          final Tree tree = new Tree();
-            tree.clear();
+            Tree tree = new Tree(); // Keep this here because both search tab and log browser tab need their own tree
 
 		    final PopupPanel menu = new PopupPanel(true);
 		    
@@ -1159,8 +1235,14 @@ public class LogBrowserWidget extends Composite {
                 public void onOpen(OpenEvent<TreeItem> event) {
 
                     final TreeItem item = event.getTarget();
-                    logger.info("___________ calling popTreeItem");
-                    popTreeItem(item, true);
+
+                    if (previousTreeItem!=item) {
+//                        logger.info("___________ calling popTreeItem");
+                        popTreeItem(item, true);
+                        previousTreeItem = item;
+                    } /* else {
+                        logger.fine("___________ caught same treeItem event");
+                    } */
 
 
                 }
@@ -1338,13 +1420,16 @@ public class LogBrowserWidget extends Composite {
 					}
 
                     // Pre-load, load items for future use in case of Event type
-                    if ("event".equals(an.getType())  || "validators".equals(an.getType())) {
+//                    if (multiContentTabPanel.getWidgetCount() > 1) {
+                        if ("event".equals(an.getType())  || "validators".equals(an.getType())) {
 
-                        if ((assetTreeItem.getChildCount() == 1 && "HASCHILDREN".equals(assetTreeItem.getChild(0).getText())))
-                            popTreeItemDeep(assetTreeItem, false);
-                    }
+                            if ((assetTreeItem.getChildCount() == 1 && "HASCHILDREN".equals(assetTreeItem.getChild(0).getText())))
+                                popTreeItemDeep(assetTreeItem, false);
+                        }
 
-                    if (an.getExtendedProps().get("_offset")==null) {
+//                    }
+
+                    if (contentSetup!=null && an.getExtendedProps().get("_offset")==null) {
                         // Load content on selection
                         reposService.getAssetTxtContent(an, contentSetup);
                     }
@@ -1376,15 +1461,14 @@ public class LogBrowserWidget extends Composite {
 		    	}
 		    	tree.addItem(treeItem);
 		    }
+
 		    
 		    return tree;
 	  }
 
     private boolean isSameAssetReference(AssetNode target, AssetNode an) {
         return (an != null && target != null)
-                && (an.getRelativePath() != null && an.getRelativePath().equals(target.getRelativePath()) || (an.getFullPath()!=null && an.getFullPath().equals(target.getFullPath())))
-
-                ;
+                && (an.getRelativePath() != null && an.getRelativePath().equals(target.getRelativePath()) || (an.getFullPath()!=null && an.getFullPath().equals(target.getFullPath())));
     }
 
     private void showEventMessagesWidget(String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
@@ -1464,8 +1548,19 @@ public class LogBrowserWidget extends Composite {
 			// westContent.remove(propsWidget);
 			SafeHtmlBuilder propsContent =  new SafeHtmlBuilder();
 			String propsTxt = (an.getProps()!=null)?an.getProps().trim():"";
+
 			// margin-top:0px;margin-left:3px;
 			propsContent.appendHtmlConstant("<div style='margin:3px;'>Asset Properties:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>").appendEscaped(propsTxt).appendHtmlConstant("</span></pre>");
+            propsContent.appendHtmlConstant("Web Address:<pre style='margin-top:0px;'><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>");
+            propsContent.appendEscaped(""
+                    + GWT.getHostPageBaseURL()
+                    + GWT.getModuleName()
+                    + ".html?reposSrc="
+                    + an.getReposSrc()
+                    +"&reposId=" + an.getRepId()
+                    +"&assetId=" + an.getAssetId())
+            .appendHtmlConstant("</span></pre>");
+
 			if (an.getRelativePath()!=null) {
 				propsContent.appendHtmlConstant("<!-- <br/>Asset Relative Location:<br/><span style='font-family:courier,fixed;font-size: 12px;color:maroon'>" + an.getRelativePath()  + "</span>-->");
 			}
@@ -1483,7 +1578,82 @@ public class LogBrowserWidget extends Composite {
 			// westContent.add(propsWidget, DockPanel.SOUTH);
 			
 			// westContent.add(propsWidget);
-			if (an.isContentAvailable()) {
+            if ("transaction".equals(an.getType())) {
+
+
+                final AsyncCallback<AssetNode> addChildren = new AsyncCallback<AssetNode>() {
+
+                    public void onFailure(Throwable a) {
+                        Window.alert(a.toString());
+                    }
+
+                    public void onSuccess(AssetNode parent) {
+                        if (parent.getChildren().size()>0) {
+                            AssetNode ioMessage =  parent.getChildren().get(0);
+                            List<AssetNode> messages =  ioMessage.getChildren();
+                            // Prepare data set
+                            Map<String,AssetNode> anMap = new HashMap<String,AssetNode>();
+                            for (AssetNode message : messages) {
+
+
+//                                anMap.put("parentLoc",message); //
+
+                                for (AssetNode artifact : message.getChildren()) {
+
+                                     String msgTypeStr = artifact.getExtendedProps().get("type");
+
+                                      if (artifact.getType().endsWith("HdrType")) {
+
+                                          artifact.setParentId(ioMessage.getAssetId()); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
+                                          artifact.setType("raw_" + msgTypeStr);
+
+                                          String key = null;
+                                          if ("REQUEST".equals(msgTypeStr)) {
+                                              key = "header";
+                                          } else {
+                                              key = "respHeader";
+                                          }
+                                          anMap.put(key,artifact);
+
+                                      } else if (artifact.getType().endsWith("BodyType")) {
+                                          artifact.setParentId(ioMessage.getAssetId()); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
+                                          artifact.setType("raw_" + msgTypeStr);
+
+                                          String key = null;
+                                          if ("REQUEST".equals(msgTypeStr)) {
+                                              key = "body";
+                                          } else {
+                                              key = "respBody";
+                                          }
+                                          anMap.put(key,artifact);
+                                      }
+
+
+                                }
+
+                            }
+
+                            if (anMap.size()>0) {
+                                transactionViewer.getTxMonitorLive().popTx(anMap,null);
+                            }
+
+                        }
+
+                    }
+
+                };
+
+                try {
+                    reposService.getChildren(an, addChildren);
+                } catch (RepositoryConfigException e) {
+                    e.printStackTrace();
+                }
+
+
+                // Load transaction viewer
+                contentPanel.add(transactionViewer);
+
+            } else if (an.isContentAvailable()) {
 				if ("text/csv".equals(an.getMimeType())) {
                     // Create a list data provider.
                        final ListDataProvider<List<SafeHtml>> dataProvider  = new ListDataProvider<List<SafeHtml>>();
@@ -1537,7 +1707,7 @@ public class LogBrowserWidget extends Composite {
 					Image img = new Image();					
 					img.setUrl(GWT.getModuleBaseForStaticFiles() + "images/nocontent.png");
                     if (an.getMimeType()!=null) { // Mime-type exists, but no content file
-                        imgText.setText("Document is missing!");
+                        imgText.setText("Formatting error");
                         imgText.setStyleName("serverResponseLabelError");
                     } else {
                         imgText.setText("No document");
@@ -1628,7 +1798,7 @@ public class LogBrowserWidget extends Composite {
 	        	AssetTreeItem treeItem = createTreeItem(child, target, expandLeaf, openItem);
 	        	if (expandLeaf && !(treeItem.getChildCount() == 1 && "HASCHILDREN".equals(treeItem.getChild(0).getText()))) {
                     if (openItem)
-		    		    treeItem.setState(true); // Open node
+		    		    treeItem.setState(true,false); // Open node
 		        	if (isSameAssetReference(target, child)) {
 		        		treeItemTarget = treeItem;
 		        		treeItemTarget.setSelected(true);

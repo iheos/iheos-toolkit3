@@ -1,8 +1,10 @@
 package gov.nist.hit.ds.tkapis.validation;
 
-import gov.nist.hit.ds.repository.shared.id.AssetId;
 
 import java.util.List;
+
+import gov.nist.hit.ds.repository.shared.id.AssetId;
+import gov.nist.hit.ds.repository.shared.ValidationLevel;
 
 /**
  * Created by bmajur on 8/28/14.
@@ -30,6 +32,18 @@ public interface MessageValidator {
      * @return
      */
     ValidateMessageResponse validateMessage(String validatorName, String msgHeader, byte[] messageBody);
+
+
+    /**
+     *
+     * @param validatorName
+     * @param msgHeader
+     * @param messageBody
+     * @param validationLevel
+     * @return
+     */
+    ValidateMessageResponse validateMessage(String validatorName, String msgHeader, byte[] messageBody, ValidationLevel validationLevel);
+
 
     /**
      * Validate a message already stored in an Event.

@@ -168,7 +168,6 @@ public class SimpleTypeIterator implements TypeIterator, FilenameFilter {
 				
 			}			
 		}
-
 				
 		return val;
 	}
