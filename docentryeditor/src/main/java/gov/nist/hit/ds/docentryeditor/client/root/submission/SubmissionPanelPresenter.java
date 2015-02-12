@@ -1,27 +1,24 @@
 package gov.nist.hit.ds.docentryeditor.client.root.submission;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.web.bindery.requestfactory.shared.Receiver;
-import com.sencha.gxt.core.client.util.Margins;
-import com.sencha.gxt.widget.core.client.Dialog;
-import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import gov.nist.hit.ds.docentryeditor.client.MetadataEditorRequestFactory;
 import gov.nist.hit.ds.docentryeditor.client.editor.EditorPlace;
 import gov.nist.hit.ds.docentryeditor.client.event.*;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractPresenter;
 import gov.nist.hit.ds.docentryeditor.client.home.WelcomePlace;
-import gov.nist.hit.ds.docentryeditor.client.parse.*;
+import gov.nist.hit.ds.docentryeditor.client.parse.PreParse;
+import gov.nist.hit.ds.docentryeditor.client.parse.XdsParser;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppResources;
-import gov.nist.hit.ds.docentryeditor.shared.model.*;
+import gov.nist.hit.ds.docentryeditor.shared.model.String256;
+import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 
 import javax.inject.Inject;
 
 /**
+ * This class presents the submission panel. It handles the mechanic of the submission set tree of the SubmissionPanelView.
+ *
+ * @see gov.nist.hit.ds.docentryeditor.client.root.submission.SubmissionPanelView
+ * @see gov.nist.hit.ds.docentryeditor.client.root.submission.SubmissionMenuData
  * Created by onh2 on 7/11/2014.
  */
 public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelView> {
@@ -46,6 +43,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
      * Method that handles the different event fired in the event bus.
      */
     private void bind() {
+        // this event catches handle the navigation back to the home page.
         ((MetadataEditorEventBus) getEventBus()).adddBackToHomePageEventHandler(new BackToHomePageEvent.BackToHomePageEventHandler() {
             @Override
             public void onBackToHomePage(BackToHomePageEvent event) {
@@ -53,6 +51,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 placeController.goTo(new WelcomePlace());
             }
         });
+        // this event catches that a Document entry has been loaded from the user's file system.
         ((MetadataEditorEventBus) getEventBus()).addFileLoadedHandler(new NewFileLoadedEvent.NewFileLoadedHandler() {
             @Override
             public void onNewFileLoaded(NewFileLoadedEvent event) {
@@ -60,26 +59,29 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 nextIndex++;
                 view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
                 view.getTree().expandAll();
-//                if (!(placeController.getWhere() instanceof EditorPlace)) {
-//                    logger.info(placeController.getWhere().toString());
-//                    placeController.goTo(new EditorPlace());
-//                }
                 view.getTree().getSelectionModel().select(currentlyEdited, false);
             }
         });
+        // this catches that the XDS Document entry editor view has loaded.
         ((MetadataEditorEventBus) getEventBus()).addXdsEditorLoadedEventtHandler(new XdsEditorLoadedEvent.XdsEditorLoadedEventHandler() {
             @Override
             public void onXdsEditorLoaded(XdsEditorLoadedEvent event) {
                 logger.info("... receive Doc. Entry Editor loaded event.");
                 if (currentlyEdited != null) {
+                    // if a doc. entry is currently under edition, an event is fired to transfer it to the editor.
                     logger.info("A document is already selected. Loading it...");
                     ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
                 } else {
+                    // if no doc. entry is currently under edition, it means the app (editor view) has been loaded from
+                    // by its URL from the browser navigation bar (external link).
                     logger.info("No Document Entry in Submission Set");
+                    // a new doc. entry is create in the submission tree.
                     createNewDocumentEntry();
                 }
             }
         });
+        // this catches that a new pre-filled doc. entry creation has been required
+        // from another place than the submission panel.
         ((MetadataEditorEventBus) getEventBus()).addLoadPreFilledDocEntryEventHandler(new LoadPrefilledDocEntryEvent.LoadPrefilledDocEntryEventHandler() {
             @Override
             public void onLoadPrefilledDocEntryHandler(LoadPrefilledDocEntryEvent event) {
@@ -135,44 +137,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
             @Override
             public void onSaveCurrentlyEditedDocumentEvent(SaveCurrentlyEditedDocumentEvent event) {
                 currentlyEdited.setModel(event.getDocumentEntry());
-//                save();
-            }
-        });
-    }
-
-    private void save() {
-//        String xmlFileContent=new String();
-//        for (SubmissionMenuData submissionMenuData:view.getTreeStore().getAll()){
-//            if (submissionMenuData.getValue().startsWith("Document")){
-//                xmlFileContent+=submissionMenuData.getModel().toXML()+"\n";
-//                logger.info(xmlFileContent);
-//            }
-//        }
-//        xmlFileContent.replaceAll("<\\?xml version=\"1\\.0\" encoding=\"UTF-8\"\\?>"," ");
-//        logger.info(xmlFileContent);
-//        if (!xmlFileContent.isEmpty()) {
-        requestFactory.saveFileRequestContext().saveAsXMLFile(currentlyEdited.getModel().getFileName().toString(), currentlyEdited.getModel().toXML()).fire(new Receiver<String>() {
-
-            @Override
-            public void onSuccess(String response) {
-                logger.info("saveAsXMLFile call succeed");
-                logger.info("Generated filename sent to the client \n" + response);
-                logger.info("File's URL: " + GWT.getHostPageBaseURL() + "files/" + response);
-                Window.open(GWT.getHostPageBaseURL() + "files/" + response, response + " Metadata File", "enabled");
-                Dialog d = new Dialog();
-                HTMLPanel htmlP = new HTMLPanel("<a href='" + GWT.getHostPageBaseURL() + "files/" + response + "'>"
-                        + GWT.getHostPageBaseURL() + "files/" + response + "</a>");
-                VerticalLayoutContainer vp = new VerticalLayoutContainer();
-                vp.add(new Label("Your download is in progress, please allow this application to open popups with your browser..."),
-                        new VerticalLayoutContainer.VerticalLayoutData(1, 1, new Margins(10, 5, 10, 5)));
-                vp.add(htmlP, new VerticalLayoutContainer.VerticalLayoutData(1, 1, new Margins(10, 5, 10, 5)));
-                d.add(vp);
-
-                d.setPredefinedButtons(Dialog.PredefinedButton.OK);
-                d.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.CENTER);
-                d.setHideOnButtonClick(true);
-                d.setHeadingText("XML Metadata File Download");
-                d.show();
+                //  save(); // not done yet
             }
         });
     }
@@ -188,6 +153,10 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
         ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
     }
 
+    /**
+     * Getter that return the entity currently under edition.
+     * @return SubmissionMenuData.
+     */
     public SubmissionMenuData getCurrentlyEdited(){
         return currentlyEdited;
     }

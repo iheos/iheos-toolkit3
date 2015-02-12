@@ -425,6 +425,61 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         cancelButton2.addSelectHandler(cancelHandler);
     }
 
+    public void refreshGridButtonsDisplay() {
+        if (serviceStartTime.getStoreMaxSize() != 0 && serviceStartTime.getStore().size() >= serviceStartTime.getStoreMaxSize()) {
+            serviceStartTime.disableNewButton();
+        } else {
+            serviceStartTime.enableNewButton();
+        }
+        if (serviceStopTime.getStoreMaxSize() != 0 && serviceStopTime.getStore().size() >= serviceStopTime.getStoreMaxSize()) {
+            serviceStopTime.disableNewButton();
+        } else {
+            serviceStopTime.enableNewButton();
+        }
+        if (commentsGrid != null)
+            if (commentsGrid.getStoreMaxSize() != 0 && commentsGrid.getStore().size() >= commentsGrid.getStoreMaxSize()) {
+                commentsGrid.disableNewButton();
+            } else {
+                commentsGrid.enableNewButton();
+            }
+        if (confidentialityCodesGrid != null)
+            if (confidentialityCodesGrid.getStoreMaxSize() != 0 && confidentialityCodesGrid.getStore().size() >= confidentialityCodesGrid.getStoreMaxSize()) {
+                confidentialityCodesGrid.disableNewButton();
+            } else {
+                confidentialityCodesGrid.enableNewButton();
+            }
+        if (eventCodesGrid != null)
+            if (eventCodesGrid.getStoreMaxSize() != 0 && eventCodesGrid.getStore().size() >= eventCodesGrid.getStoreMaxSize()) {
+                eventCodesGrid.disableNewButton();
+            } else {
+                eventCodesGrid.enableNewButton();
+            }
+        if (legalAuthenticator != null)
+            if (legalAuthenticator.getStoreMaxSize() != 0 && legalAuthenticator.getStore().size() >= legalAuthenticator.getStoreMaxSize()) {
+                legalAuthenticator.disableNewButton();
+            } else {
+                legalAuthenticator.enableNewButton();
+            }
+        if (sourcePatientId != null)
+            if (sourcePatientId.getStoreMaxSize() != 0 && sourcePatientId.getStore().size() >= sourcePatientId.getStoreMaxSize()) {
+                sourcePatientId.disableNewButton();
+            } else {
+                sourcePatientId.enableNewButton();
+            }
+        if (sourcePatientInfo != null)
+            if (sourcePatientInfo.getStoreMaxSize() != 0 && sourcePatientInfo.getStore().size() >= sourcePatientInfo.getStoreMaxSize()) {
+                sourcePatientInfo.disableNewButton();
+            } else {
+                sourcePatientInfo.enableNewButton();
+            }
+        if (titlesGrid != null)
+            if (titlesGrid.getStoreMaxSize() != 0 && titlesGrid.getStore().size() >= titlesGrid.getStoreMaxSize()) {
+                titlesGrid.disableNewButton();
+            } else {
+                titlesGrid.enableNewButton();
+            }
+    }
+
     /**
      * Sets information about each widgets to guide the user. Tooltips, empty texts and validators
      */

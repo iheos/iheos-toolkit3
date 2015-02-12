@@ -5,6 +5,9 @@ import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 
 import javax.inject.Inject;
 
+/**
+ * Class that represents and build the Model View Presenter objects for the Document entry editor view.
+ */
 public class DocumentModelEditorMVP extends AbstractMVP<XdsDocumentEntry, DocumentModelEditorView, DocumentModelEditorPresenter> {
 
     @Inject

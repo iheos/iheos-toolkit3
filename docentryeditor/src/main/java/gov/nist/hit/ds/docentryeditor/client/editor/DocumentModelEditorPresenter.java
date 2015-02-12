@@ -14,7 +14,6 @@ import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutP
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
-import com.sencha.gxt.widget.core.client.event.HideEvent;
 import gov.nist.hit.ds.docentryeditor.client.MetadataEditorRequestFactory;
 import gov.nist.hit.ds.docentryeditor.client.event.*;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractPresenter;
@@ -23,6 +22,9 @@ import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 import javax.inject.Inject;
 import java.util.logging.Logger;
 
+/**
+ * This class is the presenter that handles all the actions and events related to the Document Entry Editor view.
+ */
 public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentModelEditorView> {
 
     protected static Logger logger = Logger.getLogger(DocumentModelEditorPresenter.class.getName());
@@ -32,6 +34,9 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
     @Inject
     MetadataEditorRequestFactory requestFactory;
 
+    /**
+     * Method that initializes the editor and the request factory on document entry editor view start.
+     */
     @Override
     public void init() {
 //        model = new XdsDocumentEntry();
@@ -40,16 +45,24 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
         requestFactory.initialize(eventBus);
     }
 
+    /**
+     * Method that initializes the editor with a document entry object.
+     * @param model
+     */
     private void initDriver(XdsDocumentEntry model) {
         this.model = model;
         editorDriver.initialize(view);
         getView().authors.getAuthorWidget().initEditorDriver();
         logger.info("Init driver with: "+model.toString());
         editorDriver.edit(model);
-        refreshGridButtonsDisplay();
+        getView().refreshGridButtonsDisplay();
     }
 
+    /**
+     * Method that ties actions and view together. It mostly handles gwt event form the event bus.
+     */
     private void bind() {
+        // this event provides the presenter a document entry to edit and triggers its display in doc entry editor view.
         ((MetadataEditorEventBus) getEventBus()).addStartEditXdsDocumentHandler(new StartEditXdsDocumentEvent.StartEditXdsDocumentHandler() {
 
             @Override
@@ -117,64 +130,15 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
         }
     }
 
+    /**
+     * Getter that returns the XDS Document Entry editor object in edition.
+     * @return XDS Document Entry Editor.
+     */
     public XdsDocumentEntry getModel() {
         return model;
     }
 
-    private void refreshGridButtonsDisplay() {
-        if (getView().serviceStartTime.getStoreMaxSize() != 0 && getView().serviceStartTime.getStore().size() >= getView().serviceStartTime.getStoreMaxSize()) {
-            getView().serviceStartTime.disableNewButton();
-        } else {
-            getView().serviceStartTime.enableNewButton();
-        }
-        if (getView().serviceStopTime.getStoreMaxSize() != 0 && getView().serviceStopTime.getStore().size() >= getView().serviceStopTime.getStoreMaxSize()) {
-            getView().serviceStopTime.disableNewButton();
-        } else {
-            getView().serviceStopTime.enableNewButton();
-        }
-        if (getView().commentsGrid != null)
-            if (getView().commentsGrid.getStoreMaxSize() != 0 && getView().commentsGrid.getStore().size() >= getView().commentsGrid.getStoreMaxSize()) {
-                getView().commentsGrid.disableNewButton();
-            } else {
-                getView().commentsGrid.enableNewButton();
-            }
-        if (getView().confidentialityCodesGrid != null)
-            if (getView().confidentialityCodesGrid.getStoreMaxSize() != 0 && getView().confidentialityCodesGrid.getStore().size() >= getView().confidentialityCodesGrid.getStoreMaxSize()) {
-                getView().confidentialityCodesGrid.disableNewButton();
-            } else {
-                getView().confidentialityCodesGrid.enableNewButton();
-            }
-        if (getView().eventCodesGrid != null)
-            if (getView().eventCodesGrid.getStoreMaxSize() != 0 && getView().eventCodesGrid.getStore().size() >= getView().eventCodesGrid.getStoreMaxSize()) {
-                getView().eventCodesGrid.disableNewButton();
-            } else {
-                getView().eventCodesGrid.enableNewButton();
-            }
-        if (getView().legalAuthenticator != null)
-            if (getView().legalAuthenticator.getStoreMaxSize() != 0 && getView().legalAuthenticator.getStore().size() >= getView().legalAuthenticator.getStoreMaxSize()) {
-                getView().legalAuthenticator.disableNewButton();
-            } else {
-                getView().legalAuthenticator.enableNewButton();
-            }
-        if (getView().sourcePatientId != null)
-            if (getView().sourcePatientId.getStoreMaxSize() != 0 && getView().sourcePatientId.getStore().size() >= getView().sourcePatientId.getStoreMaxSize()) {
-                getView().sourcePatientId.disableNewButton();
-            } else {
-                getView().sourcePatientId.enableNewButton();
-            }
-        if (getView().sourcePatientInfo != null)
-            if (getView().sourcePatientInfo.getStoreMaxSize() != 0 && getView().sourcePatientInfo.getStore().size() >= getView().sourcePatientInfo.getStoreMaxSize()) {
-                getView().sourcePatientInfo.disableNewButton();
-            } else {
-                getView().sourcePatientInfo.enableNewButton();
-            }
-        if (getView().titlesGrid != null)
-            if (getView().titlesGrid.getStoreMaxSize() != 0 && getView().titlesGrid.getStore().size() >= getView().titlesGrid.getStoreMaxSize()) {
-                getView().titlesGrid.disableNewButton();
-            } else {
-                getView().titlesGrid.enableNewButton();
-            }
-    }
+
 
     /**
      * Method which actually handle saving (on server) and download for the edited metadata file.
@@ -206,15 +170,19 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
                 d.show();
             }
         });
-
-
     }
 
+    /**
+     * Method that cancels the changes made to the document entry object since the last save.
+     */
     public void rollbackChanges() {
         logger.info("Cancel doc. entry changes.");
         ((MetadataEditorEventBus) eventBus).fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
     }
 
+    /**
+     * Interface of a XDS Document Entry Editor Driver
+     */
     interface EditorDriver extends SimpleBeanEditorDriver<XdsDocumentEntry, DocumentModelEditorView> {
 
     }

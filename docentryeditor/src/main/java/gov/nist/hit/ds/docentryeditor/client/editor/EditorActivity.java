@@ -45,17 +45,17 @@ public class EditorActivity extends AbstractActivity {
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-
         editorMVP = buildEditorMVP();
         editorMVP.init();
         validationMVP = buildValidationMVP();
         validationMVP.init();
         displayer.display(getContainer(), panel, eventBus);
-//        this.metadataEditorEventBus.fireEditNewEvent(new EditNewEvent());
+        // timer to solve a gwt issue (ugly)
         Timer t = new Timer() {
             @Override
             public void run() {
                 Logger.getLogger(this.getClass().getName()).info("Fire Doc. Entry Editor UI loaded event...");
+                // signal that the document entry editor view has loaded.
                 metadataEditorEventBus.fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
             }
         };
@@ -98,9 +98,6 @@ public class EditorActivity extends AbstractActivity {
         return sc.asWidget();
     }
 
-    /**
-     * @return
-     */
     public GenericMVP<XdsDocumentEntry, DocumentModelEditorView, DocumentModelEditorPresenter> buildEditorMVP() {
         return new GenericMVP<XdsDocumentEntry, DocumentModelEditorView, DocumentModelEditorPresenter>(editorView, editorPresenter);
     }

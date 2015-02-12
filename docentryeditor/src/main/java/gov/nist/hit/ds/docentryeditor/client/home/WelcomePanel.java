@@ -38,11 +38,17 @@ public class WelcomePanel extends VerticalLayoutContainer {
 	private ToggleButton loadPreFilledDocEntryBtn;
 	private ToggleButton loadDocEntryFileBtn;
 
+    /**
+     * Default constructor.
+     */
 	public WelcomePanel() {
 		buildUI();
 		bindUI();
 	}
 
+    /**
+     * Method that builds the widget.
+     */
 	private void buildUI() {
 // set container's parameters
 		this.setStyleName("padding-10");
@@ -97,6 +103,9 @@ public class WelcomePanel extends VerticalLayoutContainer {
         this.setScrollMode(ScrollSupport.ScrollMode.AUTO);
 	}
 
+    /**
+     * Method that ties actions with the view.
+     */
 	private void bindUI() {
 		newDocEntryBtn.addSelectHandler(new SelectEvent.SelectHandler() {
 			@Override
