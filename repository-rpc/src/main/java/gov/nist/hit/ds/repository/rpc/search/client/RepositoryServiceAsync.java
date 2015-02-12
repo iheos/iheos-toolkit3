@@ -3,6 +3,7 @@ package gov.nist.hit.ds.repository.rpc.search.client;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.aggregation.AssertionAggregation;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.shared.id.AssetId;
@@ -20,9 +21,11 @@ public interface RepositoryServiceAsync {
 	void search(String[][] repos, SearchCriteria sc, AsyncCallback<List<AssetNode>> callback);
     void searchHit(String[][] repos, SearchCriteria sc, Boolean newIndexOnly, AsyncCallback<Boolean> callback);
     void getAssetNode(String reposSrc, String reposId, String assetId, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
-    void getAssetTree(String[][] repos, AsyncCallback<List<AssetNode>> callback);
+    void getAssetTree(String[][] repos, int offset, AsyncCallback<List<AssetNode>> callback);
+    void getAssetTree(String[][] repos, int offset, boolean addEllipses, AsyncCallback<List<AssetNode>> callback);
 	void getAssetTxtContent(AssetNode an, AsyncCallback<AssetNode> callback);
 	void getImmediateChildren(AssetNode an, int offset, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
+    void getImmediateChildren(AssetNode an, int offset, boolean addEllipses, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
     void getChildren(AssetNode an, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
 	void getParentChain(AssetNode an, AsyncCallback<AssetNode> callback) throws RepositoryConfigException;
     void getParentChainInTree(AssetNode an, AsyncCallback<List<AssetNode>> callback) throws RepositoryConfigException;
@@ -34,7 +37,7 @@ public interface RepositoryServiceAsync {
     void getTxUpdates(String queue, String filterLocation, AsyncCallback<Map<String,AssetNode>> callback) throws RepositoryConfigException;
     void getJmsHostAddress(AsyncCallback<String> callback) throws RepositoryConfigException;
     void getValidatorNames(AsyncCallback<List<String>> callback);
-    void validateMessage(String validatorName, AssetNode transaction, AsyncCallback<Map<String,AssetNode>> callback) throws RepositoryConfigException;
+    void validateMessage(String validatorName, ValidationLevel validationLevel, AssetNode transaction, AsyncCallback<Map<String,AssetNode>> callback) throws RepositoryConfigException;
     void aggregateAssertions(RepositoryId repositoryId, AssetId eventId, SimpleTypeId parentAssetType, SimpleTypeId detailAssetType, SearchCriteria detailAssetFilterCriteria, String[] displayColumns , AsyncCallback<AssertionAggregation> callback) throws RepositoryConfigException;
 }
 

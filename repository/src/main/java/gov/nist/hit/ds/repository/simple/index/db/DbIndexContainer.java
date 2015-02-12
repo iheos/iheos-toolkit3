@@ -3,12 +3,16 @@ package gov.nist.hit.ds.repository.simple.index.db;
 
 import gov.nist.hit.ds.repository.api.Asset;
 import gov.nist.hit.ds.repository.api.Parameter;
-import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.api.Repository;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.api.RepositorySource;
 import gov.nist.hit.ds.repository.api.Type;
 import gov.nist.hit.ds.repository.api.TypeIterator;
+import gov.nist.hit.ds.repository.shared.PnIdentifier;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SearchTerm;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.simple.BaseRepository;
 import gov.nist.hit.ds.repository.simple.IdFactory;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
@@ -17,17 +21,15 @@ import gov.nist.hit.ds.repository.simple.SimpleTypeIterator;
 import gov.nist.hit.ds.repository.simple.index.Index;
 import gov.nist.hit.ds.repository.simple.index.IndexContainer;
 import gov.nist.hit.ds.repository.simple.index.db.IndexerThread.IndexStatus;
-import gov.nist.hit.ds.repository.shared.data.AssetNode;
-import gov.nist.hit.ds.repository.shared.PnIdentifier;
-import gov.nist.hit.ds.repository.shared.SearchCriteria;
-import gov.nist.hit.ds.repository.shared.SearchTerm;
 import gov.nist.hit.ds.utilities.io.Hash;
 
 import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	/**
 	 * The name of the internal index container or the database table name
 	 */
+    public static final String repositoryIndexId = "REPOSITORYINDEXID";
 	private static final String repContainerLabel = "repositoryIndex";		
 	private static final String assetId = PnIdentifier.getQuotedIdentifer(PropertyKey.ASSET_ID);
 	private static final String locationId = PropertyKey.LOCATION.toString();
@@ -78,13 +81,15 @@ public class DbIndexContainer implements IndexContainer, Index {
     private static final ConcurrentHashMap<String, Object> reposIndexMap = new ConcurrentHashMap<String, Object>();
     private static Repository reposInContext = null;
     private static final Integer[] intArray = new Integer[]{new Integer(0), new Integer(1), new Integer(2), new Integer(3), new Integer(4), new Integer(5), new Integer(6), new Integer(7), new Integer(8), new Integer(9), new Integer(10), new Integer(11)};
+    static Boolean containerExists = null;
 
 	/* Use an upgrade script to update existing tables in case a newer version of TTT (new ArtRep API) runs against an older copy of the repositoryIndex table in the database */
 	/**
 	 * The index container definition
 	 */
 	private static final String repContainerDefinition = 
-	"(repositoryIndexId integer not null  generated always as identity," 	/* (Internal use) This is the primary key */
+	"("
+    + repositoryIndexId + " integer not null primary key generated always as identity," 	/* (Internal use) This is the primary key  */
 	+ repId + " varchar(128) not null,"								/* This is the repository Id as it appears on the filesystem */
 	+ assetId + " varchar(512)," /* */								/* This is the asset Id of the asset under the repository folder */
 	+ createdDate + " varchar(32)," 								/* Asset created date */
@@ -183,19 +188,23 @@ public class DbIndexContainer implements IndexContainer, Index {
 		*/
 
         int totalAssetsIndexed = -1;
-//		if (iter.getSize()<=maxIndexFast) {
-
 
         // Mark index
         if (!reposIndexMap.containsKey(reposId)) {
             logger.fine("putting repos " + reposId);
             reposIndexMap.put(reposId, intArray[reposIndexMap.size()]);
+        } else {
+            logger.fine("repos <" + reposId + "> is already queued for indexing");
         }
         synchronized (reposIndexMap.get(reposId)) { // repos
 
             try {
-                if (!doesIndexContainerExist()) {
+                if (containerExists==null) {
+                    containerExists =  Boolean.valueOf(doesIndexContainerExist());
+                }
+                if (containerExists!=null && !containerExists) {
                     createIndexContainer();
+                    containerExists = Boolean.valueOf(true);
                     logger.fine("New index container created.");
                 }
             } catch (RepositoryException re) {
@@ -203,16 +212,39 @@ public class DbIndexContainer implements IndexContainer, Index {
                 // Fine if it already exists by the time we got a chance to create it
             }
 
+            boolean indexCurrentDayItems = false;
+            boolean compareHash = false;
 
-            if (!isIndexOutOfDate(repos)) {
-                logger.fine("Repository " + repos.getId() + " is already up to date.");
-                return -1;
+            if (repos.getProperties()!=null) {
+                indexCurrentDayItems = Boolean.parseBoolean(repos.getProperties().getProperty(PropertyKey.INDEX_CURRENT_DAY_ITEMS.toString()));
+                compareHash = Boolean.parseBoolean(repos.getProperties().getProperty(PropertyKey.COMPARE_HASH.toString()));
             }
+            logger.info(reposId + " property: "+PropertyKey.INDEX_CURRENT_DAY_ITEMS.toString() +" = " + indexCurrentDayItems);
+            logger.info(reposId + " property: "+PropertyKey.COMPARE_HASH.toString() +" = " + compareHash);
 
             try {
 
+                if (!isIndexOutOfDate(repos)) {
+                    logger.fine("Repository " + repos.getId() + " is already up to date.");
+                    return -1;
+                }
+
                 if (locations!=null) {
                    logger.fine("indexAsset:" + indexAsset(repos, locations));
+                } if (indexCurrentDayItems) {
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
+                    Date date = new Date();
+                    String todayStr = sdf.format(date);
+
+
+                    iter = new SimpleAssetIterator(repos, todayStr);
+
+                    String relativeLocationLike = "/" + todayStr + "%";
+                    totalAssetsIndexed = appendIndex(repos,iter,relativeLocationLike);
+
+                    logger.info("appended index items: " + totalAssetsIndexed);
+
                 } else {
                     iter = new SimpleAssetIterator(repos);
 
@@ -223,22 +255,16 @@ public class DbIndexContainer implements IndexContainer, Index {
                         return -1;
                     }
 
-                    String indexOnlyNewPropertyValue = null;
-                    if (repos.getProperties()!=null)
-                       indexOnlyNewPropertyValue = (String)repos.getProperties().get("indexOnlyNewItems");
+                    totalAssetsIndexed = indexRepository(repos, iter, compareHash);
 
-                    if (indexOnlyNewAssets || Boolean.parseBoolean(indexOnlyNewPropertyValue)) {
-                           // totalAssetsIndexed = appendIndex(repos, iter);
-                        totalAssetsIndexed = indexOnlyNewAssets(repos,iter);
-                    } else {
-                        totalAssetsIndexed = indexRepository(repos, iter);
-                    }
 
                 }
             } finally {
                 try {
-                    reposIndexMap.remove(reposId);
-                    logger.fine("removed " + reposId);
+                    if (reposIndexMap.containsKey(reposId)) {
+                        reposIndexMap.remove(reposId);
+                        logger.fine("removed " + reposId);
+                    }
                 } catch (Throwable t) {
                     logger.warning(t.toString());
                 }
@@ -303,19 +329,16 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @return
      * @throws RepositoryException
      */
-    private int appendIndex(Repository repos, SimpleAssetIterator iter) throws RepositoryException {
+    private int appendIndex(Repository repos, SimpleAssetIterator iter, String locationLike) throws RepositoryException {
         if (repos==null) return -1;
 
         int totalAssetsIndexed = 0;
-        String reposId = repos.getId().getIdString();
         Map<String, String> unIndexed = new HashMap<String,String>();
         Map<String, Asset> unIndexedAsset = new HashMap<String,Asset>();
 
         if (iter!=null && iter.hasNextAsset()) {
 
-            Map<String, String> reposDbIndex = getIndexedHash(repos);
-            Map<String, String> reposFsIndex = new HashMap<String,String>();
-            Map<String, Asset> assetMap = new HashMap<String,Asset>();
+            Map<String, String> reposDbIndex = getIndexedHash(repos, locationLike);
 
             while (iter.hasNextAsset()) {
 
@@ -324,75 +347,21 @@ public class DbIndexContainer implements IndexContainer, Index {
                 String key = a.getPropFileRelativePart();
 
                 if (!reposDbIndex.containsKey(key)) {
-                    unIndexed.put(key,getAssetPropertyHash(a));
+                    unIndexed.put(key,""); // getAssetPropertyHash(a)
                     unIndexedAsset.put(key, a);
                     totalAssetsIndexed++;
                 }
             }
 
             if (!unIndexed.isEmpty()) {
+
                 List<String> aList = new ArrayList<String>();
                 aList.addAll(unIndexed.keySet());
 
-                ExecutorService svc = Executors.newCachedThreadPool();
-
-                svc.execute(new Thread(new IndexerThread(repos, aList, unIndexed, unIndexedAsset)));
-
-                svc.shutdown();
-                boolean svcStatus = false;
-                try {
-                    svcStatus = svc.awaitTermination(15,TimeUnit.MINUTES);
-                } catch (InterruptedException e) {
-                    logger.warning("svc termination failed!");
-                }
-
-                logger.info("indexNew svc exit status: " + svcStatus);
-            }
-
-        }
-        return totalAssetsIndexed;
-    }
-
-    /**
-     * Forward only index: A quick indexing method
-     * Indexes only new content without verifying previous content
-     */
-    private int indexOnlyNewAssets(Repository repos, SimpleAssetIterator iter) throws  RepositoryException {
-        logger.fine("Entering indexOnlyNewAssets");
-        if (repos==null) {
-            logger.finest("Repos is null");
-            return -1;
-        }
-
-
-        Map<String, String> unIndexed = new HashMap<String,String>();
-        Map<String, String> reposDbIndex = getIndexedHash(repos);
-        Map<String, Asset> unIndexedAsset = new HashMap<String,Asset>();
-        List<String> aList = new ArrayList<String>();
-        int totalAssetsIndexed = 0;
-
-        if (iter!=null && iter.hasNextAsset()) {
-            Asset a = iter.nextAsset();
-
-            String key = a.getPropFileRelativePart();
-
-            if (!reposDbIndex.containsKey(key)) {
-                unIndexed.put(key,getAssetPropertyHash(a));
-                unIndexedAsset.put(key, a);
-                aList.add(key);
-            }
-
-            if (!unIndexed.isEmpty()) {
                 beginIndexing(repos, unIndexed, unIndexedAsset, aList);
-                totalAssetsIndexed++;
-            } else {
-                logger.fine("Nothing new to index in repos: " + repos.getDisplayName() + " Id: " + repos.getId());
             }
 
         }
-
-
-        logger.fine("Leaving indexOnlyNewAssets");
         return totalAssetsIndexed;
     }
 
@@ -400,10 +369,11 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * Full indexing method
 	 * @param repos The repository object
 	 * @param iter A SimpleAssetIterator to the repository on the file system
+     * @param compareHash
 	 * @return An int value of the number of assets updated or added to the database 
 	 * @throws RepositoryException
 	 */
-	private int indexRepository(Repository repos, SimpleAssetIterator iter) throws RepositoryException {
+	private int indexRepository(Repository repos, SimpleAssetIterator iter, boolean compareHash) throws RepositoryException {
         if (repos==null) {
             logger.finest("Repos is null");
             return -1;
@@ -424,26 +394,38 @@ public class DbIndexContainer implements IndexContainer, Index {
 			try {
 
 				Map<String, String> reposFsIndex = new HashMap<String,String>();
-				String fullIndex = getFsHash(repos, iter, assetMap, reposFsIndex);								
-				
-				Map<String,Object> reposData = getReposDbIndexProperties(repos);
-				if (fullIndex!=null && !"".equals(fullIndex)) {
-					if (reposData != null) {
-						if (fullIndex.equals(reposData.get(hash))) {
-							repositorySynced = true; 	
-						} else {
-							repositorySynced = false; 
-							setReposHash(repos, fullIndex, true);							
-						}
-					} else {
-						repositorySynced = false; 
-						setReposHash(repos, fullIndex, false);
-					}					
-				}
-								
+				String fullIndex = popFsAsset(repos, iter
+                        , assetMap /* this contains a map of all the assets */
+                        , reposFsIndex /* this contains hash of an asset keyed by location */
+                        , compareHash);
+
+                Map<String,Object> reposData = getReposDbIndexProperties(repos);
+                if (compareHash) {
+                    if (fullIndex!=null && !"".equals(fullIndex)) {
+                        if (reposData != null) {
+                            if (fullIndex.equals(reposData.get(hash))) {
+                                repositorySynced = true;
+                            } else {
+                                repositorySynced = false;
+                                setReposHash(repos, fullIndex, true);
+                            }
+                        } else {
+                            repositorySynced = false;
+                            setReposHash(repos, fullIndex, false);
+                        }
+                    }
+                } else {
+                    if (reposData != null) {
+                        setReposHash(repos, fullIndex, true);
+                    } else {
+                        setReposHash(repos, fullIndex, false);
+                    }
+                }
+
+
 				if (!repositorySynced) {
 					
-					Map<String, String> reposDbIndex = getIndexedHash(repos);
+					Map<String, String> reposDbIndex = getIndexedHash(repos); /* this contains a map of all assets indexed in the db */
 					
 					if (reposDbIndex.size()==0) {
 						repositorySynced = false;
@@ -453,15 +435,15 @@ public class DbIndexContainer implements IndexContainer, Index {
 						totalAssetsIndexed = reposFsIndex.size();
 					} else {
 						for (String key : reposFsIndex.keySet()) {
-							if ((reposDbIndex.get(key)==null) || !reposDbIndex.get(key).equals(reposFsIndex.get(key))) {							
-								unIndexed.put(key, reposFsIndex.get(key));
+							if ((reposDbIndex.get(key)==null) || (compareHash && !reposDbIndex.get(key).equals(reposFsIndex.get(key)))) {
+								unIndexed.put(key, (compareHash)?reposFsIndex.get(key):""); // getAssetPropertyHash(assetMap.get(key))
 								unIndexedAsset.put(key, assetMap.get(key));
 								aList.add(key);					
 								totalAssetsIndexed++;
 							} 
 						}					
 						
-						cleanupStaleItems(repos, reposFsIndex, reposDbIndex);
+						cleanupStaleItems(repos, reposFsIndex, reposDbIndex, compareHash);
 						
 						if (unIndexed.size()>0) {
 							repositorySynced = false;
@@ -595,12 +577,13 @@ public class DbIndexContainer implements IndexContainer, Index {
 		return ct;
 		
 	}
-	
+
 	/**
 	 * @return Returns whether the index container exists in the database
 	 */
 	@Override
 	public boolean doesIndexContainerExist() throws RepositoryException {
+
 		DbContext dbc = new DbContext();
 		dbc.setConnection(DbConnection.getInstance().getConnection());
 
@@ -673,7 +656,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 				
 				try {
 					
-					String index = "create unique index \"repAssetUniqueIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " (" + SearchTerm.getValueAsCsv(new String[]{"repositoryIndexId"}, false) + ")";  // ,"+ repId +"," +  assetId +" These may not be unique anymore with multiple rep sources
+					String index = "create unique index \"repAssetUniqueIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " (" + SearchTerm.getValueAsCsv(new String[]{repositoryIndexId}, false) + ")";  // ,"+ repId +"," +  assetId +" These may not be unique anymore with multiple rep sources
 					dbc.internalCmd(index);
 
 //					index = "create index \"repAssetIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ repId +"," +  assetId +"," + assetType +",reposAcs,hash,"+ locationId + "," + parentId + ")";
@@ -682,11 +665,15 @@ public class DbIndexContainer implements IndexContainer, Index {
                     index = "create index \"repAcsIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{assetId, locationId, indexSession, createdDate, displayOrder},false)  + ")";
                     dbc.internalCmd(index);
 
-                    index = "create index \"repAcsIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{repId, reposAcs, parentId},false)  + ")";
+                    index = "create index \"repAcsParentIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{repId, reposAcs, parentId},false)  + ")";
                     dbc.internalCmd(index);
 
-                    index = "create unique index \"repStatusIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{"repositoryIndexId", hash, lastModifiedTime},false)  + ")";
+                    index = "create unique index \"repAssetIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{repId, assetId, locationId},false)  + ")";
                     dbc.internalCmd(index);
+
+
+//                    index = "create unique index \"repStatusIdx" + repContainerDefinition.hashCode() + "\" on " + repContainerLabel + " ("+ SearchTerm.getValueAsCsv(new String[]{repositoryIndexId, hash, lastModifiedTime},false)  + ")";
+//                    dbc.internalCmd(index);
 
 
 				} catch (SQLException e) {
@@ -766,11 +753,22 @@ public class DbIndexContainer implements IndexContainer, Index {
 			if (DbIndexContainer.assetId.equals(property)
 				|| DbIndexContainer.repId.equals(property)
 				|| DbIndexContainer.assetType.equals(property)) {
-				sqlStr += ") values(?,?,?,?)";
-				 rsData = dbc.executePreparedId(sqlStr, new String[]{repositoryId,assetId,assetType, locationStr});
+				sqlStr +=
+                        ") "
+                        + "values(?,?,?,?)"
+                        // ") select ?,?,?,? from sysibm.sysdummy1 "
+                        //+" where not exists (select count(*) from " + repContainerLabel + " where " + repId + "=? and  " + DbIndexContainer.assetId + " =?)"
+                        ;
+
+				 rsData = dbc.executePreparedId(sqlStr, new String[]{repositoryId,assetId,assetType, locationStr, /*repositoryId, assetId*/});
 			} else {
-				sqlStr += "," +  property + ") values(?,?,?,?,?)";
-				rsData = dbc.executePreparedId(sqlStr, new String[]{repositoryId,assetId, assetType, locationStr, value});
+				sqlStr += "," +  property + ") "
+                          + " values(?,?,?,?,?)"
+//                        +"select ?,?,?,?,? from sysibm.sysdummy1 "
+                        // +"where not exists (select count(*) from " + repContainerLabel + " where " + repId + "=? and  " + DbIndexContainer.assetId + " =?)"
+                        ;
+
+				rsData = dbc.executePreparedId(sqlStr, new String[]{repositoryId,assetId, assetType, locationStr, value, /*repositoryId, assetId*/});
 			}
 
 			logger.fine("rows affected:" + rsData[0]);
@@ -778,7 +776,9 @@ public class DbIndexContainer implements IndexContainer, Index {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RepositoryException(RepositoryException.INDEX_ERROR, e);
-		} 
+		}
+
+//        logger.fine("returning: " + rsData[1]);
 				
 		return rsData[1];
 		
@@ -794,7 +794,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 			
 				// Path based
-				String sqlStr = "update "+ repContainerLabel + " set "+propCol+"=? where repositoryIndexId="+idKey						   
+				String sqlStr = "update "+ repContainerLabel + " set "+propCol+"=? where "+repositoryIndexId+"="+idKey
 						+" and ("+propCol+" is null or "+propCol+" != ?)";
 				
 				int[] rsData = dbc.executePreparedId(sqlStr, new String[]{value, value});				
@@ -1167,7 +1167,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 		ArrayList<String> indexableAssetProperties = null;
 		try {
 			indexableAssetProperties = new ArrayList<String>();
-			
+
 			it = new SimpleTypeIterator(rs);
 			while (it.hasNextType()) {
 				Type t = it.nextType();
@@ -1260,10 +1260,11 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @param iter
 	 * @param assetMap
 	 * @param reposFsIndex
+     * @param compareHash
 	 * @return Returns the hash of the entire repository and populates the assetMap and reposFsIndex based on the given iterator
 	 * @throws RepositoryException
 	 */
-	private String getFsHash(Repository repos, SimpleAssetIterator iter, Map<String, Asset> assetMap, Map<String, String> reposFsIndex) throws RepositoryException {
+	private String popFsAsset(Repository repos, SimpleAssetIterator iter, Map<String, Asset> assetMap, Map<String, String> reposFsIndex, boolean compareHash) throws RepositoryException {
 			 
 			try {
 				String reposHash = "";
@@ -1271,18 +1272,26 @@ public class DbIndexContainer implements IndexContainer, Index {
 				while (iter.hasNextAsset()) {
 					Asset a = iter.nextAsset();
 					assetMap.put(a.getPropFileRelativePart(), a);
-					
-					try {
-						String hash = getAssetPropertyHash(a);
-						reposFsIndex.put(a.getPropFileRelativePart()
-                                , hash);
-						reposHash += hash;
-					} catch (Exception ex) {
-						logger.warning("Quick hash calc failed: " + ex.toString());					
-					}			
+
+                    if (compareHash) {
+                        try {
+                            String hash = getAssetPropertyHash(a);
+                            reposFsIndex.put(a.getPropFileRelativePart()
+                                    , hash);
+                            reposHash += hash;
+                        } catch (Exception ex) {
+                            logger.warning("Quick hash calc failed: " + ex.toString());
+                        }
+
+                    } else {
+                        reposFsIndex.put(a.getPropFileRelativePart(),"");
+                    }
 				}
-				
-				return getHash(reposHash.getBytes());
+
+                if (compareHash)
+				    return getHash(reposHash.getBytes());
+                else
+                    return PropertyKey.COMPARE_HASH.toString();
 				
 			} catch (Exception ex) {
 				logger.warning(ex.toString());
@@ -1312,7 +1321,7 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @throws SQLException
      */
 	private void cleanupStaleItems(Repository repos,
-			Map<String, String> reposFsIndex, Map<String, String> reposDbIndex)
+			Map<String, String> reposFsIndex, Map<String, String> reposDbIndex, boolean compareHash)
 			throws SQLException {
 		// build a stale list
 		boolean staleItems = false;
@@ -1325,7 +1334,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			ps = dbc.prepareBulkUpdate("delete from " + repContainerLabel + " where " + repId + "=? and reposAcs=? and location=?");
 			
 			for (String key : reposDbIndex.keySet()) {
-				if (!reposFsIndex.containsKey(key) || !reposDbIndex.get(key).equals(reposFsIndex.get(key))) {
+				if (!reposFsIndex.containsKey(key) || (compareHash && !reposDbIndex.get(key).equals(reposFsIndex.get(key)))) {
 					staleItems = true;
 					dbc.setBulkParameters(ps, new String[]{reposId, repos.getSource().getAccess().name(), key});
 				}
@@ -1424,7 +1433,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			String compositeId = reposId + "_" +  repos.getSource().getAccess().name();			
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 
-			String sqlStr = "select repositoryIndexId,"
+			String sqlStr = "select "+repositoryIndexId+","
                     + hash +","
                     + lastModifiedTime
                     + " from " + repContainerLabel
@@ -1450,23 +1459,33 @@ public class DbIndexContainer implements IndexContainer, Index {
 
 		return rsData;		
 	}
-	
+
+    private Map<String, String> getIndexedHash(Repository repos) {
+            return getIndexedHash(repos,null);
+    }
 	/**
 	 * 
 	 * @param repos
 	 * @return Returns a map with asset location and its hash as a key-value pair
 	 */
-	private Map<String, String> getIndexedHash(Repository repos) {
+	private Map<String, String> getIndexedHash(Repository repos, String locationLike) {
 		Map<String, String> reposIndex = new HashMap<String,String>();
 		DbContext dbc = new DbContext();
 
 		try {
+            ResultSet rs = null;
+
 			dbc.setConnection(DbConnection.getInstance().getConnection());
 
-			String sqlStr = "select repositoryIndexId,location,hash from " + repContainerLabel 
-					+" where " + DbIndexContainer.repId + "=? and reposAcs=?";
-							
-			ResultSet rs = dbc.executeQuery(sqlStr, new String[]{repos.getId().getIdString(),repos.getSource().getAccess().name()});
+			String sqlStr = "select "+repositoryIndexId+",location,hash from " + repContainerLabel
+					+" where " + DbIndexContainer.repId + "=? and reposAcs=? ";
+
+            if (locationLike!=null) {
+                sqlStr += " and location like ?";
+                rs = dbc.executeQuery(sqlStr, new String[]{repos.getId().getIdString(),repos.getSource().getAccess().name(),locationLike});
+            } else {
+                rs = dbc.executeQuery(sqlStr, new String[]{repos.getId().getIdString(),repos.getSource().getAccess().name()});
+            }
 
 			if (rs!=null) {
 				while (rs.next()) {
@@ -1579,7 +1598,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 			ResultSet rs = dbc.executeQuery(sqlStr, new String[]{repId,id});
 			*/
 			
-			String sqlStr = "select repositoryIndexId,hash from " + repContainerLabel 
+			String sqlStr = "select "+repositoryIndexId+",hash from " + repContainerLabel
 					+" where " + DbIndexContainer.repId + "=? and reposAcs=? and " + DbIndexContainer.locationId +"=?";
 							
 			ResultSet rs = dbc.executeQuery(sqlStr, new String[]{repos.getId().getIdString(),repos.getSource().getAccess().name(), relatviePartStr});
@@ -1677,10 +1696,23 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @throws RepositoryException 
 	 */
 	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
-		return getAssetsBySearch(repositories, searchCriteria, null, false,0,0);
+		return getAssetsBySearch(repositories, searchCriteria, null, false,0,0,true);
 	}
-	
-	/**
+
+    /**
+     *
+     * @param repositories
+     * @param searchCriteria
+     * @param addEllipses
+     * @return
+     * @throws RepositoryException
+     */
+    public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, boolean addEllipses) throws RepositoryException {
+        return getAssetsBySearch(repositories, searchCriteria, null, false,0,0,addEllipses);
+    }
+
+
+    /**
 	 * Get a hit count of records that match the searchCriteria against the index container 
 	 *
      * @param repos
@@ -1728,8 +1760,8 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @return
      * @throws RepositoryException
      */
-    public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByStr) throws RepositoryException {
-        return getAssetsBySearch(repositories,searchCriteria,orderByStr,false,0,0);
+    public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByStr, boolean addEllipses) throws RepositoryException {
+        return getAssetsBySearch(repositories,searchCriteria,orderByStr,false,0,0,addEllipses);
     }
 
     /**
@@ -1738,10 +1770,13 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @param searchCriteria
      * @param orderByPk
      * @param searchCriteriaLocationOnly
+     * @param offset
+     * @param fetchSize
+     * @param addEllipses
      * @return
      * @throws RepositoryException
      */
-	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByPk, boolean searchCriteriaLocationOnly, final int offset, final int fetchSize) throws RepositoryException {
+	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByPk, boolean searchCriteriaLocationOnly, final int offset, final int fetchSize, boolean addEllipses) throws RepositoryException {
 		Repository[] fRep = new Repository[repositories.length];
 		int cx=0;
         String locations[] = searchCriteria.getPropertyValue(PropertyKey.LOCATION.getPropertyName(), SearchTerm.Operator.EQUALTO);
@@ -1862,7 +1897,7 @@ public class DbIndexContainer implements IndexContainer, Index {
                 rs = dbc.executeQuery(sqlStr); // Limit records
 
 
-                List<AssetNode> assetList = popAssetNode(rs,offset,fetchSize,recordSize);
+                List<AssetNode> assetList = popAssetNode(rs,offset,fetchSize,recordSize,addEllipses);
                 logger.fine("Cached row set size: " + assetList.size());
                 rs.close();
 
@@ -1885,10 +1920,11 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @param rs
      * @param offset
      * @param totalRecordSize
+     * @param addEllipses
      * @return
      * @throws SQLException
      */
-	private List<AssetNode> popAssetNode(final ResultSet rs, final int offset, final int fetchSize, final int totalRecordSize) throws SQLException {
+	private List<AssetNode> popAssetNode(final ResultSet rs, final int offset, final int fetchSize, final int totalRecordSize, boolean addEllipses) throws SQLException {
 		List<AssetNode> assetList = new ArrayList<AssetNode>();
 		
 		if (rs!=null) {
@@ -1901,19 +1937,20 @@ public class DbIndexContainer implements IndexContainer, Index {
 			}
 
             // Add an ellipses node as an indication of more records
-            logger.info("offset: " + offset + ", fetchSize: " + fetchSize + ", segmentSize: " + segmentSize + ", totalRecordSize: " + totalRecordSize);
+//            logger.info("offset: " + offset + ", fetchSize: " + fetchSize + ", segmentSize: " + segmentSize + ", totalRecordSize: " + totalRecordSize);
 
-            if ((offset+fetchSize>0) && offset+segmentSize<totalRecordSize) {
+            if (addEllipses) {
+                if ((offset+fetchSize>0) && offset+segmentSize<totalRecordSize) {
 
 
-                if (assetList.size()>0) {
-                     String reposSrc =   assetList.get(0).getReposSrc();
-                    String repId = assetList.get(0).getRepId();
+                    if (assetList.size()>0) {
+                        String reposSrc =   assetList.get(0).getReposSrc();
+                        String repId = assetList.get(0).getRepId();
 
-                    AssetNode an = new AssetNode(repId,"","","...","","",reposSrc);
-                    an.getExtendedProps().put("_offset",""+offset+segmentSize);
-//                    an.addChild(new AssetNode(repId, "", "", "HASCHILDREN", "", "", reposSrc));
-                    assetList.add(an);
+                        AssetNode an = new AssetNode(repId,"","","...","","",reposSrc);
+                        an.getExtendedProps().put("_offset",""+ (offset+segmentSize));
+                        assetList.add(an);
+                    }
                 }
             }
 		}

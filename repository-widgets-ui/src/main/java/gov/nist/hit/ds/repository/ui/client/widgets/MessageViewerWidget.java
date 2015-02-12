@@ -96,12 +96,16 @@ public class MessageViewerWidget extends Composite {
     public void setHeaderContent(Widget w) {
         headerPanel.clear();
         headerPanel.add(w);
-
     }
+
     public void setMessageContent(Widget w) {
         messagePanel.clear();
         messagePanel.add(w);
+    }
 
+    public void clear() {
+        headerPanel.clear();
+        messagePanel.clear();
     }
 
     public String getRepId() {

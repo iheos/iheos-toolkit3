@@ -2,7 +2,6 @@ package gov.nist.hit.ds.repository.rpc.presentation;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.dsSims.eb.factories.MessageValidatorFactory;
-import gov.nist.hit.ds.repository.AssetHelper;
 import gov.nist.hit.ds.repository.ContentHelper;
 import gov.nist.hit.ds.repository.RepositoryHelper;
 import gov.nist.hit.ds.repository.api.ArtifactId;
@@ -21,7 +20,9 @@ import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigEx
 import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
 import gov.nist.hit.ds.repository.shared.SearchTerm;
+import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
+import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
 import gov.nist.hit.ds.repository.simple.SimpleId;
@@ -36,21 +37,25 @@ import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import net.timewalker.ffmq3.FFMQConstants;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import javax.jms.Destination;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
-import javax.jms.QueueConnectionFactory;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicSession;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.io.File;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -100,7 +105,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 						rtList.add(new RepositoryTag(r.getId().getIdString(), r.getType().getKeyword(),  acs.name(), r.getDisplayName(), ContentHelper.getSortedMapString(r.getProperties())));
 					}
 				} catch (RepositoryException ex) {
-					logger.warning(ex.toString());
+					logger.info(ex.toString());
 				}			
 			}
 						
@@ -189,7 +194,21 @@ public class PresentationData implements IsSerializable, Serializable  {
      * @return An aggregate list of all indexable property names as specified by the asset domain type files in the {@code types} folder.
      */
 	public static List<String> getIndexablePropertyNames() {
-		List<String> indexProps = new ArrayList<String>(); 
+		List<String> indexProps = new ArrayList<String>();
+
+        // Use cached types
+//        Set<SimpleTypeId> types = Configuration.getRwTypesCache().keySet();
+//        for (SimpleTypeId type : types) {
+//            String index = Configuration.getType(type).getIndex();
+//
+//            String[] indexableProperties = index.split(",");
+//            if (indexableProperties!=null)
+//                for (String s : indexableProperties) {
+//                    indexProps.add(s);
+//                }
+//
+//        }
+
 		for (Access acs : RepositorySource.Access.values()) {
 			try {
 				List<String> srcProps = DbIndexContainer.getIndexableProperties(Configuration.getRepositorySrc(acs));
@@ -202,20 +221,24 @@ public class PresentationData implements IsSerializable, Serializable  {
 				} else
 					indexProps.addAll(srcProps);
 			} catch (RepositoryException e) {
-				e.printStackTrace();
+				logger.info(e.toString());
 			}
 		}
+
+
 		Collections.sort(indexProps);
 		return indexProps;
 	}
 
+
     /**
      *
-     * @param reposData An array of repositories.
-     * @return Gets a list representing the asset relationship.
-     * @see gov.nist.hit.ds.repository.shared.data.AssetNode
+     * @param reposData
+     * @param offset
+     * @param stopFlag
+     * @return @see gov.nist.hit.ds.repository.shared.data.AssetNode
      */
-	public static List<AssetNode> getTree(String[][] reposData) {
+	public static List<AssetNode> getTree(String[][] reposData, int offset, boolean addEllipses) {
 		
 		Repository[] reposList = RepositoryHelper.getReposList(reposData);
 		
@@ -226,7 +249,7 @@ public class PresentationData implements IsSerializable, Serializable  {
 		for (Repository repos : reposList) {
 
 			try {
-				tmp = anb.build(repos, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE},0);
+				tmp = anb.build(repos, new PropertyKey[]{PropertyKey.DISPLAY_ORDER, PropertyKey.CREATED_DATE},offset, addEllipses);
 				if (tmp!=null && !tmp.isEmpty()) {
 					for (AssetNode an : tmp) {
 						result.add(an);	
@@ -556,19 +579,19 @@ public class PresentationData implements IsSerializable, Serializable  {
 
 
     /**
-     * Gets updates from the JMS queue.
-     * @param queue The JMS queue.
+     * Gets updates from the JMS destination.
+     * @param destination The JMS destination.
      * @param filterLocation The backend filter, or a canned query, location.
      * @return Updates in a map of assetNodes.
      * @throws RepositoryException
      */
-    public static Map<String,AssetNode> getLiveUpdates(String queue, String filterLocation) throws RepositoryException {
+    public static Map<String,AssetNode> getLiveUpdates(String destination, String filterLocation) throws RepositoryException {
         //ArrayList<AssetNode> result = new ArrayList<AssetNode>();
         Map<String,AssetNode> result =  new HashMap<String,AssetNode>();
 
         MessageConsumer consumer = null;
-        javax.jms.QueueSession session = null;
-        javax.jms.QueueConnection connection = null;
+        TopicSession session = null;
+        TopicConnection connection = null;
         String txDetail = null;
         String repId = null;
         String acs = null;
@@ -580,6 +603,24 @@ public class PresentationData implements IsSerializable, Serializable  {
         String proxyDetail = null;
         String fromIp = null;
         String toIp = null;
+        String from = null;
+        String to = null;
+
+        String respTxDetail = null;
+        String respRepId = null;
+        String respAcs = null;
+        String respParentLoc = null; // This is the artifact (header/body) parent location
+        String respHeaderLoc = null;
+        String respBodyLoc = null;
+        String respIoHeaderId = null;
+        String respMsgType = null;
+        String respProxyDetail = null;
+        String respFromIp = null;
+        String respToIp = null;
+        String respFrom = null;
+        String respTo = null;
+
+
         Map<String,String> jmsConfig = getJmsConfig();
         boolean jmsDebug = Boolean.parseBoolean(jmsConfig.get("jmsDebug"));
 
@@ -592,35 +633,53 @@ public class PresentationData implements IsSerializable, Serializable  {
             Context context = new InitialContext(env);
 
             // Lookup a connection factory in the context
-            javax.jms.QueueConnectionFactory factory = (QueueConnectionFactory) context.lookup(FFMQConstants.JNDI_QUEUE_CONNECTION_FACTORY_NAME);
+            javax.jms.TopicConnectionFactory factory = (TopicConnectionFactory) context.lookup(FFMQConstants.JNDI_TOPIC_CONNECTION_FACTORY_NAME);
 
-            connection = factory.createQueueConnection();
+            connection = factory.createTopicConnection();
 
-            session = connection.createQueueSession(false,
-                    javax.jms.Session.AUTO_ACKNOWLEDGE);
+            session = connection.createTopicSession(false, javax.jms.Session.AUTO_ACKNOWLEDGE);
             connection.start();
 
-            Destination destination = session.createQueue((queue==null||("".equals(queue)))?TXMON_QUEUE:queue);
+            Topic topic = session.createTopic((destination==null||("".equals(destination)))?TXMON_QUEUE:destination);
 
             // Create a MessageConsumer from the Session to the Topic or Queue
-            consumer = session.createConsumer(destination);
+            consumer = session.createSubscriber(topic);
 
             // Wait for a message
-            Message message = consumer.receive(1000*30);
+            Message message = consumer.receive(); // 1000*30 Timeout in milliseconds, some value is required because the console control will not return when the process exits in dev mode.
 
             if (message instanceof MapMessage) {
-                txDetail = (String)((MapMessage)message).getObject("txDetail");
+                txDetail = (String)((MapMessage)message).getObject("REQUEST_txDetail");
 
-                repId = (String)((MapMessage)message).getObject("repId");
-                acs = (String)((MapMessage)message).getObject("acs");
-                parentLoc = (String)((MapMessage)message).getObject("parentLoc"); /* relative propFilePath, ex. of Request */
-                headerLoc = (String)((MapMessage)message).getObject("headerLoc");
-                bodyLoc = (String)((MapMessage)message).getObject("bodyLoc");
-                ioHeaderId = (String)((MapMessage)message).getObject("ioHeaderId");
-                msgType = (String)((MapMessage)message).getObject("msgType");
-                proxyDetail = (String)((MapMessage)message).getObject("proxyDetail");
-                fromIp = (String)((MapMessage)message).getObject("messageFromIpAddress");
-                toIp = (String)((MapMessage)message).getObject("forwardedToIpAddress");
+                repId = (String)((MapMessage)message).getObject("REQUEST_repId");
+                acs = (String)((MapMessage)message).getObject("REQUEST_acs");
+                parentLoc = (String)((MapMessage)message).getObject("REQUEST_parentLoc"); /* relative propFilePath, ex. of Request */
+                headerLoc = (String)((MapMessage)message).getObject("REQUEST_headerLoc");
+                bodyLoc = (String)((MapMessage)message).getObject("REQUEST_bodyLoc");
+                ioHeaderId = (String)((MapMessage)message).getObject("REQUEST_ioHeaderId");
+                msgType = (String)((MapMessage)message).getObject("REQUEST_msgType");
+                proxyDetail = (String)((MapMessage)message).getObject("REQUEST_proxyDetail");
+                fromIp = (String)((MapMessage)message).getObject("REQUEST_messageFromIpAddress");
+                toIp = (String)((MapMessage)message).getObject("REQUEST_forwardedToIpAddress");
+                from = (String)((MapMessage)message).getObject("REQUEST_messageFrom");
+                to = (String)((MapMessage)message).getObject("REQUEST_forwardedTo");
+
+
+
+                respTxDetail = (String)((MapMessage)message).getObject("RESPONSE_txDetail");
+
+                respRepId = (String)((MapMessage)message).getObject("RESPONSE_repId");
+                respAcs = (String)((MapMessage)message).getObject("RESPONSE_acs");
+                respParentLoc = (String)((MapMessage)message).getObject("RESPONSE_parentLoc"); /* relative propFilePath, ex. of Request */
+                respHeaderLoc = (String)((MapMessage)message).getObject("RESPONSE_headerLoc");
+                respBodyLoc = (String)((MapMessage)message).getObject("RESPONSE_bodyLoc");
+                respIoHeaderId = (String)((MapMessage)message).getObject("RESPONSE_ioHeaderId");
+                respMsgType = (String)((MapMessage)message).getObject("RESPONSE_msgType");
+                respProxyDetail = (String)((MapMessage)message).getObject("RESPONSE_proxyDetail");
+                respFromIp = (String)((MapMessage)message).getObject("RESPONSE_messageFromIpAddress");
+                respToIp = (String)((MapMessage)message).getObject("RESPONSE_forwardedToIpAddress");
+                respFrom = (String)((MapMessage)message).getObject("RESPONSE_messageFrom");
+                respTo = (String)((MapMessage)message).getObject("RESPONSE_forwardedTo");
 
             } else {
                 // Print error message if Message was not recognized
@@ -682,7 +741,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                     headerMsg.setParentId(ioHeaderId); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
                     headerMsg.setType("raw_" + msgType);
                     headerMsg.setRepId(repId);
-                    logger.info("*** setting repos src:" + acs);
+//                    logger.info("*** setting repos src:" + acs);
                     headerMsg.setReposSrc(acs);
                     headerMsg.setRelativePath(headerLoc);
                     headerMsg.setCsv(ContentHelper.processCsvContent(txDetail));
@@ -690,6 +749,8 @@ public class PresentationData implements IsSerializable, Serializable  {
                     headerMsg.getExtendedProps().put("proxyDetail",proxyDetail);
                     headerMsg.getExtendedProps().put("fromIp",fromIp);
                     headerMsg.getExtendedProps().put("toIp",toIp);
+                    headerMsg.getExtendedProps().put("from",from);
+                    headerMsg.getExtendedProps().put("to",to);
                     headerMsg.getExtendedProps().put("type",msgType);
 
 
@@ -703,12 +764,54 @@ public class PresentationData implements IsSerializable, Serializable  {
                         result.put("body",bodyMsg);
                     }
 
-                    if (filterLocation!=null && !"".equals(filterLocation)) {
-                        logger.fine("backend filtering using: " + filterLocation);
-                        filterMessage(filterLocation, parentLoc, headerMsg);
-                    }
+//                    if (filterLocation!=null && !"".equals(filterLocation)) {
+//                        logger.fine("backend filtering using: " + filterLocation);
+//                        filterMessage(filterLocation, parentLoc, headerMsg);
+//                    }
 
                     result.put("header",headerMsg);
+
+
+                    // Response
+
+                    AssetNode respParentHdr = new AssetNode();
+                    respParentHdr.setRelativePath(parentLoc);
+                    result.put("respParentLoc",parentHdr); // Make same as request
+
+                    AssetNode respHeaderMsg = new AssetNode();
+                    respHeaderMsg.setParentId(ioHeaderId); // NOTE: this is an indirect reference: ioHeaderId is two levels up that links both the request and response
+                    respHeaderMsg.setType("raw_" + respMsgType);
+                    respHeaderMsg.setRepId(repId);
+//                    logger.info("*** setting repos src:" + acs);
+                    respHeaderMsg.setReposSrc(acs);
+                    respHeaderMsg.setRelativePath(respHeaderLoc );
+                    respHeaderMsg.setCsv(ContentHelper.processCsvContent(respTxDetail));
+                    //headerMsg.setProps(proxyDetail);
+                    respHeaderMsg.getExtendedProps().put("proxyDetail",respTxDetail );
+                    respHeaderMsg.getExtendedProps().put("fromIp",respFromIp );
+                    respHeaderMsg.getExtendedProps().put("toIp",respToIp );
+                    respHeaderMsg.getExtendedProps().put("from",respFrom);
+                    respHeaderMsg.getExtendedProps().put("to",respTo);
+                    respHeaderMsg.getExtendedProps().put("type",respMsgType );
+
+
+                    if (respBodyLoc !=null) {
+                        AssetNode respBodyMsg = new AssetNode();
+                        respBodyMsg.setParentId(respIoHeaderId );
+                        respBodyMsg.setType("raw_"+respMsgType );
+                        respBodyMsg.setRepId(repId);
+                        respBodyMsg.setReposSrc(acs);
+                        respBodyMsg.setRelativePath(respBodyLoc );
+                        result.put("respBody",respBodyMsg);
+                    }
+
+//                    if (filterLocation!=null && !"".equals(filterLocation)) {
+//                        logger.fine("backend filtering using: " + filterLocation);
+//                        filterMessage(filterLocation, parentLoc, headerMsg);
+//                    }
+
+                    result.put("respHeader",respHeaderMsg);
+
                 }
 
                 return result;
@@ -764,9 +867,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 
     }
 
-    public static Map<String,AssetNode> validateMessage(String validatorName, AssetNode transaction) throws RepositoryConfigException {
+    public static Map<String,AssetNode> validateMessage(String validatorName, ValidationLevel validationLevel, AssetNode transaction) throws RepositoryConfigException {
 
-        logger.info("Entering validateMessage fn: " + validatorName + " transId: " + transaction.getAssetId());
+        logger.info("Entering validateMessage fn: " + validatorName + " transId: " + transaction.getAssetId() + " validationLevel: " + validationLevel.name());
         Map<String,AssetNode> result = new HashMap<String, AssetNode>();
 
 //
@@ -777,7 +880,8 @@ public class PresentationData implements IsSerializable, Serializable  {
         try {
 
             logger.info("before first getIm-children");
-            List<AssetNode> children = AssetHelper.getImmediateChildren(transaction); // Input/output level children = // Request/response
+//            List<AssetNode> children = AssetHelper.getImmediateChildren(transaction); // Input/output level children = // Request/response
+            List<AssetNode> children = transaction.getChildren();
             logger.info("after getIm-children");
 
             String messageHeader = "";
@@ -787,7 +891,9 @@ public class PresentationData implements IsSerializable, Serializable  {
 
             for (AssetNode child : children) {
                 logger.info("child=" + child.getDisplayName() + " type="+ child.getType());
-                List<AssetNode> artifacts = AssetHelper.getImmediateChildren(child);
+//                List<AssetNode> artifacts = AssetHelper.getImmediateChildren(child);
+                List<AssetNode> artifacts = child.getChildren();
+
                 for (AssetNode artifact : artifacts) {
                     logger.info("artifact=" + artifact.getDisplayName() + " type="+ artifact.getType()); /*
                     [ERROR] Sep 09, 2014 4:38:30 PM gov.nist.hit.ds.repository.rpc.presentation.PresentationData validateMessage
@@ -796,7 +902,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                     AssetNode an = ContentHelper.getContent(artifact);
                     if (an!=null) {
                         if (artifact.getType().endsWith("HdrType") && an.getTxtContent()!=null) {
-                            messageHeader = an.getTxtContent();
+                            messageHeader = new String(an.getRawContent(), StandardCharsets.UTF_8);
                         } else if (artifact.getType().endsWith("BodyType") && an.getRawContent()!=null) {
                             messageBody = an.getRawContent();
                         }
@@ -806,7 +912,7 @@ public class PresentationData implements IsSerializable, Serializable  {
                 ValidateMessageResponse valMessageResponse = null;
                 String valExceptionStr = null;
                 try {
-                    valMessageResponse = validatorFactory.getMessageValidator().validateMessage(validatorName,messageHeader,messageBody);
+                    valMessageResponse = validatorFactory.getMessageValidator().validateMessage(validatorName, messageHeader,messageBody, validationLevel);
 
                 } catch (Throwable t) {
 //                    valExceptionStr = t.toString();

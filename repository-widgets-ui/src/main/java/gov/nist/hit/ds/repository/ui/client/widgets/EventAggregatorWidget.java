@@ -791,6 +791,16 @@ public class EventAggregatorWidget extends Composite {
 
     public void setEventAssetNode(AssetNode eventAssetNode) {
         if (eventAssetNode!=null) {
+
+            logger.info("type: " + eventAssetNode.getType() + " children count: " + eventAssetNode.getChildren().size());
+
+            if (eventAssetNode.getChildren().size()>0) {
+                AssetNode child0 = eventAssetNode.getChildren().get(0);
+                logger.info("child.displayName: " + child0.getDisplayName());
+                logger.info("child.type: " + child0.getType());
+                logger.info("child idx(0) count: " + child0.getChildren().size());
+            }
+
             this.eventAssetNode = eventAssetNode;
             setEventAssetId(eventAssetNode.getAssetId());
             setExternalRepositoryId(eventAssetNode.getRepId());

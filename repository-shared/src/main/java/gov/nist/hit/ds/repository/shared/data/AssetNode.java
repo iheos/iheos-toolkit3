@@ -222,5 +222,4 @@ public class AssetNode implements IsSerializable, Serializable {
         this.rawContent = rawContent;
     }
 
-
 }
