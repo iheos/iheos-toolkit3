@@ -165,6 +165,9 @@ class Event {
     def getErrorAssertionIds() {
         allAssetionGroups.collect { it.errorAssertionIds() }.flatten()
     }
+    boolean assertionFailed(id) {
+        allAssetionGroups.find { it.assertionFailed(id )}
+    }
 
     int nextDisplayOrder() { displayOrder++ }
 

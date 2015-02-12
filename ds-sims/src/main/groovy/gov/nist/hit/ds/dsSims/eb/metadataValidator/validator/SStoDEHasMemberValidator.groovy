@@ -3,6 +3,7 @@ package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.ebMetadata.MetadataUtilities
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
+import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ErrorCode
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
@@ -18,7 +19,8 @@ class SStoDEHasMemberValidator extends ValComponentBase {
     List<OMElement> assocs // all the associations that link the above documententry to the SS
     @Delegate MetadataUtilities metadataUtilities
 
-    SStoDEHasMemberValidator(Metadata _m, OMElement _doc, List<OMElement> _assocs) {
+    SStoDEHasMemberValidator(SimHandle _simHandle, Metadata _m, OMElement _doc, List<OMElement> _assocs) {
+        super(_simHandle)
         m = _m
         doc = _doc
         assocs = _assocs
@@ -38,7 +40,7 @@ class SStoDEHasMemberValidator extends ValComponentBase {
         }
     }
 
-    boolean single() { assocs.size() == 1 }
+    boolean single() { assocs.size() == 1}
 
     @Guard(methodNames=['single'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
@@ -58,7 +60,7 @@ class SStoDEHasMemberValidator extends ValComponentBase {
         }
     }
 
-    boolean sssPresent() { assocs.size() == 1 && has_sss_slot(assocs[0])}
+    boolean sssPresent() { assocs.size() == 1 && has_sss_slot(assocs[0]) }
 
     @Guard(methodNames=['sssPresent'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)

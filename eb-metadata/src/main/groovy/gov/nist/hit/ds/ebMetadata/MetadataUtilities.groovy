@@ -15,8 +15,14 @@ class MetadataUtilities {
 
     MetadataUtilities(Metadata _m) { m = _m}
 
-    String assocTag(OMElement obj) { assocTag(m.getId(obj)) }
-    String assocTag(String id) { "Association(" + id + ")" }
+    String assocTag(OMElement obj) { "${simpleAssocType(m.getAssocType(obj))}(" + id(obj) + ")" }
+    String assocTag(String id) { "${simpleAssocType(m.getAssocType(object(id)))}(" + id + ")" }
+
+    String assocTypeTag(String type) { "Association(${type})"}
+    String assocTypeTag(OMElement assoc) {
+        if (assoc.localName == 'Association') assocTypeTag(m.getAssocType(assoc))
+        else ''
+    }
 
     String docEntryTag(OMElement obj) { docEntryTag(m.getId(obj)) }
     String docEntryTag(String id) { "DocumentEntry(" + id + ")" }
@@ -26,6 +32,7 @@ class MetadataUtilities {
 
     String ssTag(OMElement obj) { ssTag(m.getId(obj)) }
     String ssTag(String id) { "SubmissionSet(${id})" }
+
 
     String attributeValue(OMElement ele, QName qName) { ele.getAttributeValue(qName)}
     String attributeValue(String id, QName qName) { object(id).getAttributeValue(qName)}
@@ -349,11 +356,6 @@ class MetadataUtilities {
         }
     }
 
-    String assocTypeTag(String type) { "Association(${assoc_type(type)})"}
-    String assocTypeTag(OMElement assoc) {
-        if (assoc.localName == 'Association') assocTypeTag(m.getAssocType(assoc))
-        else ''
-    }
 
     String assoc_type(String type) {
         if (m.isVersion2())
@@ -417,13 +419,13 @@ class MetadataUtilities {
         m.getSlots(id(parent)).findAll { m.getSlotName(it) == slotName}
     }
 
-//    boolean has_sss_slot(OMElement assoc) {
-//        return get_sss_slot(assoc) != null;
-//    }
-//
-//    OMElement get_sss_slot(OMElement assoc) {
-//        return m.getSlot(assoc, "SubmissionSetStatus");
-//    }
+    boolean has_sss_slot(OMElement assoc) {
+        return get_sss_slot(assoc) != null;
+    }
+
+    OMElement get_sss_slot(OMElement assoc) {
+        m.getSlot(assoc, "SubmissionSetStatus");
+    }
 
     OMElement find_ss_hasmember_assoc(String target) {
         return find_assoc(m.getSubmissionSetId(), "HasMember", target);
