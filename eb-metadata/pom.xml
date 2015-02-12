@@ -37,6 +37,11 @@
             <artifactId>axiom-dom</artifactId>
             <version>1.2.10</version>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+        </dependency>
+
 
     </dependencies>
     <build>

@@ -67,6 +67,7 @@ public class ValidationEngine {
         log.debug("...Validation Method is ${validationMethod}")
         try {
             validationMethod.method.invoke(validationObject);
+            validationObject.flush()
         } catch (InvocationTargetException ite) {
 //            logException(ite)
             try {

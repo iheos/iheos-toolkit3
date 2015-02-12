@@ -5,6 +5,7 @@ import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ErrorCode
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 
 public class DtmFormatValidator extends AbstractFormatValidator {
 
@@ -15,9 +16,9 @@ public class DtmFormatValidator extends AbstractFormatValidator {
 	}
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='rodtm010', msg='HL7 V2 DateTime format (CX) format', ref='ITI TF-3: Table 4.2.3.1.7-2')
+    @Validation(id='rodtm010', msg='HL7 V2 DateTime format (DTM) format', ref='ITI TF-3: Table 4.2.3.1.7-2')
     def rodtm010() {
-        infoFound("${context} is ${value}")
+        found(value)
         parse()
     }
 
@@ -43,7 +44,8 @@ public class DtmFormatValidator extends AbstractFormatValidator {
     @Validation(id='rodtm020', msg='Valid number of characters', ref='ITI TF-3: Table 4.2.3.1.7-2')
     def rodtm020() {
         int size = value.length();
-        infoFound("${size} characters")
+        found("${size}")
+        expected '4|6|8|10|12|14'
         assertTrue(size == 4 || size == 6 || size == 8 || size == 10 || size == 12 || size == 14)
     }
 
@@ -54,15 +56,17 @@ public class DtmFormatValidator extends AbstractFormatValidator {
     }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='rodtm040', msg='Year', ref='ITI TF-3: Table 4.2.3.1.7-2')
+    @Validation(id='rodtm040', msg='Year',  ref='ITI TF-3: Table 4.2.3.1.7-2')
     def rodtm040() {
+        found(year)
         assertTrue(year)
     }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='rodtm050', msg='Month', ref='ITI TF-3: Table 4.2.3.1.7-2')
+    @Validation(id='rodtm050', msg='Month', required=RequiredOptional.O, ref='ITI TF-3: Table 4.2.3.1.7-2')
     def rodtm050() {
         if (!month) return
+        found(month)
         def monthi = month.toInteger()
         assertTrue(monthi > 0 && monthi <= 12)
     }
@@ -71,6 +75,7 @@ public class DtmFormatValidator extends AbstractFormatValidator {
     @Validation(id='rodtm060', msg='Day', ref='ITI TF-3: Table 4.2.3.1.7-2')
     def rodtm060() {
         if (!day) return
+        found(day)
         def dayi = day.toInteger()
         assertTrue(dayi > 0 && dayi <= 31)
     }
@@ -79,6 +84,7 @@ public class DtmFormatValidator extends AbstractFormatValidator {
     @Validation(id='rodtm070', msg='Hour', ref='ITI TF-3: Table 4.2.3.1.7-2')
     def rodtm070() {
         if (!hour) return
+        found(hour)
         def houri = hour.toInteger()
         assertTrue(houri > 0 && houri <= 24)
     }
@@ -87,6 +93,7 @@ public class DtmFormatValidator extends AbstractFormatValidator {
     @Validation(id='rodtm080', msg='Minute', ref='ITI TF-3: Table 4.2.3.1.7-2')
     def rodtm080() {
         if (!minute) return
+        found(minute)
         def minutei = minute.toInteger()
         assertTrue(minutei > 0 && minutei <= 60)
     }
@@ -95,6 +102,7 @@ public class DtmFormatValidator extends AbstractFormatValidator {
     @Validation(id='rodtm090', msg='Second', ref='ITI TF-3: Table 4.2.3.1.7-2')
     def rodtm090() {
         if (!second) return
+        found(second)
         def secondi = second.toInteger()
         assertTrue(secondi > 0 && secondi <= 60)
     }

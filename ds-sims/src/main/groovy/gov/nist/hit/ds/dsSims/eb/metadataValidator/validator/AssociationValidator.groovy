@@ -33,6 +33,12 @@ public class AssociationValidator extends AbstractRegistryObjectVal  {
     }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
+    @Validation(id='roas005', msg='Validate Association', ref='')
+    def roas005() {
+        infoFound("ID ${model.id}")
+    }
+
+    @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='roas010', msg='Validate Association ID', ref='')
     def roas010() {
         new IdValidator(simHandle, vc, "entryUUID", model.id).asSelf(this).run()
@@ -47,7 +53,7 @@ public class AssociationValidator extends AbstractRegistryObjectVal  {
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='roas030', msg='Validate targetObject', ref='')
     def roas030() {
-        new IdValidator(simHandle, vc, "targetObject", model.target).asSelf(this).run()
+         new IdValidator(simHandle, vc, "targetObject", model.target).asSelf(this).run()
     }
 
     boolean muReq() { vc.isMU && vc.isRequest }
@@ -57,6 +63,7 @@ public class AssociationValidator extends AbstractRegistryObjectVal  {
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='roas040', msg='Validate MetadataUpdate type', ref='ITI TF-3 Table 4.1-2.1')
     def roas040() {
+        found("associationType ${model.type}")
         boolean basicType = AssociationModel.assocTypes.contains(model.type)
         boolean muType = AssociationModel.assocTypesMU.contains(model.type)
         if (!basicType && !muType)
@@ -67,6 +74,7 @@ public class AssociationValidator extends AbstractRegistryObjectVal  {
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='roas050', msg='Validate associationType', ref='ITI TF-3 Table 4.1-2.1')
     def roas050() {
+        found("associationType ${model.type}")
         if (vc.isResponse) {
             if (!AssociationModel.assocTypes.contains(model.type) && !AssociationModel.assocTypesMU.contains(model.type))
                 fail(model.identifyingString() + ": associationType " + model.type + " unknown. Known assocationTypes are " + AssociationModel.assocTypes + " and " + AssociationModel.assocTypesMU)

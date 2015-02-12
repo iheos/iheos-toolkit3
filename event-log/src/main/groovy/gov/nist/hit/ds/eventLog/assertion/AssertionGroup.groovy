@@ -2,6 +2,7 @@ package gov.nist.hit.ds.eventLog.assertion
 
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.shared.ValidationLevel
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import groovy.util.logging.Log4j
 import org.apache.log4j.Logger
@@ -242,8 +243,7 @@ public class AssertionGroup  {
     public Assertion assertTrue(ok, boolean required) {
         Assertion a = new Assertion();
         if (ok) {
-            a.expected = dashes
-            a.found = 'Ok'
+//            a.found = 'Ok'
         } else {
             a.expected = 'True'
             a.found = (ok) ? 'True' : 'False'
@@ -255,6 +255,7 @@ public class AssertionGroup  {
 
     public Assertion assertTrue(boolean ok, String found, boolean required) {
         Assertion a = new Assertion();
+        a.requiredOptional = (required) ? RequiredOptional.R : RequiredOptional.O
         if (ok) {
             a.expected = ''
             a.found = found

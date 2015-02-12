@@ -1,7 +1,9 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype
 
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
+import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.repository.api.RepositorySource
+import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.SimIdentifier
@@ -40,6 +42,7 @@ class DtmFormatValidatorTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
+        Event.defaultValidationLevel = ValidationLevel.INFO
         simId = new SimIdentifier(repoName, 'test')
         SimUtils.recreate('ebxml', simId)
     }
