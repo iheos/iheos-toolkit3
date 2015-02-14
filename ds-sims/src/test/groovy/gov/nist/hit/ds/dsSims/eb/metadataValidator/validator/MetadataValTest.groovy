@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
+import gov.nist.hit.ds.dsSims.eb.reg.UnconnectedRegistryValidation
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.ebMetadata.MetadataParser
 import gov.nist.hit.ds.repository.api.RepositorySource
@@ -55,7 +56,7 @@ class MetadataValTest extends Specification {
         ValidationContext vc = new ValidationContext()
         vc.isPnR = true
         vc.isRequest = true
-        def validationInterface = null
+        def validationInterface = new UnconnectedRegistryValidation()
         Environment environment = Environment.getDefaultEnvironment()
 
         Closure closure = { SimHandle simHandle ->

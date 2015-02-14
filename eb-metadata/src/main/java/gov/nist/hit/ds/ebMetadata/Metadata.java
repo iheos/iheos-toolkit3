@@ -53,22 +53,40 @@ public class Metadata {
     }
 
     public String format() {
-        StringBuffer buf = new StringBuffer();
+        OMElement wrapper = MetadataSupport.om_factory.createOMElement("RegistryObjectList", MetadataSupport.ebRIMns3);
 
         for (OMElement e : submissionSets)
-            buf.append(new OMFormatter(e).toString()).append("\n");
+            wrapper.addChild(e);
 
         for (OMElement e : extrinsicObjects)
-            buf.append(new OMFormatter(e).toString()).append("\n");
+            wrapper.addChild(e);
 
         for (OMElement e : folders)
-            buf.append(new OMFormatter(e).toString()).append("\n");
+            wrapper.addChild(e);
 
         for (OMElement e : associations)
-            buf.append(new OMFormatter(e).toString()).append("\n");
+            wrapper.addChild(e);
 
-        return buf.toString();
+        return new OMFormatter(wrapper).toString();
     }
+
+//    public String format() {
+//        StringBuffer buf = new StringBuffer();
+//
+//        for (OMElement e : submissionSets)
+//            buf.append(new OMFormatter(e).toString()).append("\n");
+//
+//        for (OMElement e : extrinsicObjects)
+//            buf.append(new OMFormatter(e).toString()).append("\n");
+//
+//        for (OMElement e : folders)
+//            buf.append(new OMFormatter(e).toString()).append("\n");
+//
+//        for (OMElement e : associations)
+//            buf.append(new OMFormatter(e).toString()).append("\n");
+//
+//        return buf.toString();
+//    }
 
     public String toString() { return format(); }
 //        StringBuffer buf = new StringBuffer();
@@ -582,14 +600,18 @@ public class Metadata {
     public OMElement addSubmissionSet(OMElement ss) {
         submissionSet = ss;
         submissionSets.add(ss);
-        allObjects.add(ss);
-        return ss;
+        return addRegistryPackage(ss);
     }
 
     public OMElement addFolder(OMElement fol) {
         folders.add(fol);
-        allObjects.add(fol);
-        return fol;
+        return addRegistryPackage(fol);
+    }
+
+    public OMElement addRegistryPackage(OMElement rp) {
+        allObjects.add(rp);
+        registryPackages.add(rp);
+        return rp;
     }
 
     public OMElement addAssociation(OMElement a) {
@@ -629,6 +651,15 @@ public class Metadata {
 
         addSubmissionSet(ss);
         return ss;
+    }
+
+    public OMElement mkRegistryPackage(String id) {
+        OMElement rp = MetadataSupport.om_factory.createOMElement(MetadataSupport.registrypackage_qnamens);
+        rp.addAttribute("id", id, null);
+        rp.addAttribute("lid", id, null);
+
+        addRegistryPackage(rp);
+        return rp;
     }
 
     public OMElement mkFolder(String id) {
@@ -871,6 +902,19 @@ public class Metadata {
                     slot, "ValueList");
             if (value_list == null)
                 continue;
+            for (OMElement value_ele : XmlUtil.childrenWithLocalName(
+                    value_list, "Value")) {
+                values.add(value_ele.getText());
+            }
+        }
+        return values;
+    }
+
+    public List<String> getSlotValues(OMElement slot) {
+        List<String> values = new ArrayList<String>();
+        OMElement value_list = XmlUtil.firstChildWithLocalName(
+                slot, "ValueList");
+        if (value_list != null) {
             for (OMElement value_ele : XmlUtil.childrenWithLocalName(
                     value_list, "Value")) {
                 values.add(value_ele.getText());

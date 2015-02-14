@@ -49,14 +49,20 @@ class MetadataUtilities {
     List<OMElement> submissionSets() { m.getSubmissionSets() }
     List<String> submissionSetIds() { m.getSubmissionSetIds() }
 
-    List<OMElement> registryPackages() { m.registryPackages }
-    List<String> registryPackageIds() { m.registryPackageIds }
+    // These don't work like you'd think they do
+//    List<OMElement> registryPackages() { m.registryPackages }
+//    List<String> registryPackageIds() { m.registryPackageIds }
 
     List<OMElement> associations() { m.associations }
     List<String> associationIds() { m.associationIds }
 
+    String objectTag(String id) { objectType(id) + "(" + id + ")" }
+    String objectTag(OMElement ele) { objectTag(m.getId(ele)) }
+
     OMElement object(String id) { m.getObjectById(id) }
-    def id(OMElement ele) { ele.getAttributeValue(MetadataSupport.id_qname) }
+    String id(OMElement ele) { ele.getAttributeValue(MetadataSupport.id_qname) }
+
+    String slotTag(OMElement ele) { "Slot(${m.getSlotName(ele)})"}
 
     boolean isSubmissionSet(String id) {
         if (id == null)
@@ -309,14 +315,6 @@ class MetadataUtilities {
         return "Unknown";
     }
 
-    String objectDescription(String id) {
-        return objectType(id) + "(" + id + ")";
-    }
-
-    String objectDescription(OMElement ele) {
-        return objectDescription(m.getId(ele));
-    }
-
     String simpleAssocType(String qualifiedType) {
         if (qualifiedType == null)
             return "";
@@ -413,6 +411,10 @@ class MetadataUtilities {
 
     List<String> slotValues(OMElement parent, String slotName) {
         m.getSlotValues(parent, slotName)
+    }
+
+    List<String> slotValues(OMElement slot) {
+        m.getSlotValues(slot)
     }
 
     List<OMElement> slotsWithName(OMElement parent, String slotName) {

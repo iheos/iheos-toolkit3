@@ -19,7 +19,6 @@ public class SubmissionStructureValidator extends ValComponentBase {
     Metadata m;
     ValidationContext vc
     RegistryValidationInterface rvi;
-    boolean hasMemberError = false;
     @Delegate MetadataUtilities metadataUtilities
 
 
@@ -32,18 +31,28 @@ public class SubmissionStructureValidator extends ValComponentBase {
         metadataUtilities = new MetadataUtilities(m)
     }
 
-    @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='rosubstr010', msg='RegistryPackage, DocumentEntry, Association objects must have IDs', ref='ebRIM 2.4.1')
+    @Validation(id='rosubstr005', msg='SubmissionSet, DocumentEntry, Folder and Association objects must have IDs', ref='ebRIM 2.4.1')
+    def rosubstr005() {
+        if (rvi.connected)
+            infoMsg('Validating Registry content as needed')
+        else
+            infoMsg('Registry not available - not validating its content')
+    }
+        @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
+    @Validation(id='rosubstr010', msg='SubmissionSet, DocumentEntry, Folder and Association objects must have IDs', ref='ebRIM 2.4.1')
     def rosubstr010() {
-        infoFound("${m.getExtrinsicObjects().size() + m.getRegistryPackages().size() + m.getAssociations().size()} objects to scan")
+        infoFound("${m.getExtrinsicObjects().size() + m.getSubmissionSets().size() + m.getFolders().size() + m.getAssociations().size()} objects to scan")
+        submissionSetIds().each { id ->
+            expected('valid id')
+            assertHasValue("${dots}SubmissionSet.id", id)
+        }
         extrinsicObjectIds().each { id ->
             expected('valid id')
             assertHasValue("${dots}ExtrinsicObject.id", id)
         }
-
-        registryPackageIds().each { id ->
+        folderIds().each { id ->
             expected('valid id')
-            assertHasValue("${dots}RegistryPackage.id", id)
+            assertHasValue("${dots}Folder.id", id)
         }
         associationIds().each { id ->
             expected('valid id')
@@ -65,6 +74,16 @@ public class SubmissionStructureValidator extends ValComponentBase {
     }
     boolean submission() { vc.isSubmit() && vc.isRequest }
 
+    @Guard(methodNames=['submission', 'hasSubmissionSet'])
+    @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
+    @Validation(id='rosubstr022', msg='Must contain objects beyond SubmissionSet', ref='ITI TF-3: 4.1.4')
+    def rosubstr022() {
+        def count = m.getExtrinsicObjects().size() + m.getSubmissionSets().size() + m.getFolders().size() + m.getAssociations().size()
+        found("${count-1} other object(s)")
+        expected('Objects besides SubmissionSet')
+        if (count == 1) fail('Only SubmissionSet found')
+    }
+
     @Guard(methodNames=['submission'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='rosubstr025', msg='Has single SubmissionSet', ref='ITI TF-3: 4.1.4')
@@ -73,57 +92,34 @@ public class SubmissionStructureValidator extends ValComponentBase {
             fail("Submission does not contain a SubmissionSet")
         } else if (submissionSets().size() > 1) {
             fail("Submission contains multiple SubmissionSets")
-        }
-        found("${submissionSets().size()} SubmissionSets")
+        } else
+            found("${submissionSets().size()} SubmissionSets")
     }
 
-    @Guard(methodNames=['submission'])
+    boolean hasSubmissionSet() { submissionSets().size() }
+
+    @Guard(methodNames=['submission', 'hasSubmissionSet'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='rosubstr040', msg='All DocumentEntries linked to SubmissionSet', ref='ITI TF-3: 4.1.4.1')
     def rosubstr040() {
+        infoMsg('Validating DocumentEntires are linked to SubmissionSet')
         docEntries().each { doc ->
             List<OMElement> assocs = ss_DE_Assocs(doc)
-            new SStoDEHasMemberValidator(m, doc, assocs).asSelf().run()
+            new SStoDEHasMemberValidator(simHandle, m, doc, assocs).asSelf(this).run()
         }
     }
-
-    @Guard(methodNames=['submission'])
-    @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='rosubstr042', msg='All DocumentEntries linked to SubmissionSet', ref='ITI TF-3: 4.1.4.1')
-    def rosubstr042() {
-        if (!has_sss_slot(assoc)) {
-            fail(assocTag(assoc) +
-                    ": links a DocumentEntry to the SubmissionSet but does not have a " +
-                    "SubmissionSetStatus Slot with value Original")
-            hasMemberError = true;
-        } else if (!is_sss_original(assoc)) {
-            fail(assocTag(assoc) +
-                    ": links a DocumentEntry to the SubmissionSet but does not have a " +
-                    "SubmissionSetStatus Slot with value Original")
-            hasMemberError = true;
-        } else {
-            found("${docEntryDesc(doc)} linked to SubmissionSet with ${associationDesc(assoc)}")
-//                    success()
-        }
-
-    }
-
 
     @Guard(methodNames=['submission'])
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='rosubstr050', msg='All Folders linked to SubmissionSet', ref='ITI TF-3: 4.1.4.2')
     def rosubstr050() {
-        List<OMElement> fols = m.getFolders();
-
-        boolean ok = true
         m.getFolders().each { fol ->
-            if ( !has_assoc(m.getSubmissionSetId(), assoc_type("HasMember"), m.getId(fol))) {
+            infoMsg(folderTag(fol))
+            if (has_assoc(m.getSubmissionSetId(), assoc_type("HasMember"), m.getId(fol))) {
+            } else {
                 fail("Folder " + m.getId(fol) + " is not linked to the SubmissionSet with a " + assoc_type("HasMember") + " Association")
-                hasMemberError = true;
-                ok = false
             }
         }
-        if (ok) success()
     }
 
     @Guard(methodNames=['submission'])
@@ -143,14 +139,14 @@ public class SubmissionStructureValidator extends ValComponentBase {
                 continue;
 
             if (!isUUID(source) && !submissionContains(source)) {
-                fail(objectDescription(assoc) + ": sourceObject has value " + source +
-                        " which is not in the submission but cannot be in registry since it is not in UUID format")
+                fail(objectTag(assoc) + ": sourceObject has value " + source +
+                        " which is not in the submission but cannot be in the receiving actor since it is not in UUID format")
                 ok = false
             }
 
             if (!isUUID(target) && !submissionContains(target)) {
-                fail(objectDescription(assoc) + ": targetObject has value " + target +
-                        " which is not in the submission but cannot be in registry since it is not in UUID format")
+                fail(objectTag(assoc) + ": targetObject has value " + target +
+                        " which is not in the submission but cannot be in the receiving actor since it is not in UUID format")
                 ok = false
             }
         }
@@ -208,14 +204,14 @@ public class SubmissionStructureValidator extends ValComponentBase {
         new PatientIdValidator(simHandle, m).asSelf(this).run();
     }
 
-    boolean errorsFound() { hasMemberError }
-
-    @Guard(methodNames=['errorsFound'])
-    @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='rosubstr100', msg='Verify Patient ID consistency', ref='')
-    def rosubstr100() {
-        log_hasmember_usage()
-    }
+//    boolean errorsFound() { hasMemberError }
+//
+//    @Guard(methodNames=['errorsFound'])
+//    @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
+//    @Validation(id='rosubstr100', msg='Verify Patient ID consistency', ref='')
+//    def rosubstr100() {
+//        log_hasmember_usage()
+//    }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='rosubstr110', msg='Verify RegistryPackages are Folders or SubmissionSets', ref='ITI TF-3: 4.1.9.1')
@@ -249,9 +245,9 @@ public class SubmissionStructureValidator extends ValComponentBase {
             infoMsg(dots + assocTag(assoc) + " is a Folder to DocumentEntry HasMember association");
         } else {
             fail(dots + assocTag(assoc) + " do not understand this HasMember association:")
-            fail(dots + dots + "sourceObject is " + objectDescription(source))
-            fail(dots + dots + " and targetObject is " + objectDescription(target))
-            hasMemberError = true;
+            m.getSlots(id(assoc)).each { fail("${dots}${dots}has ${slotTag(it)}(${slotValues(it)})") }
+            fail(dots + dots + "sourceObject is " + objectTag(source))
+            fail(dots + dots + " and targetObject is " + objectTag(target))
             return false
         }
         return true
@@ -268,17 +264,17 @@ public class SubmissionStructureValidator extends ValComponentBase {
 
         boolean ok = true
         if (!isDocumentEntry(source)) {
-            fail(dots + objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in submission with its sourceObject attribute, it references " + objectDescription(source))
+            fail(dots + objectTag(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in submission with its sourceObject attribute, it references " + objectTag(source))
             ok = false
         }
 
         if (containsObject(target)) {
-            fail(dots + objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectDescription(target) + " which is in the submission")
+            fail(dots + objectTag(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectTag(target) + " which is in the submission")
             ok = false
         }
 
         if (!isUUID(target)) {
-            fail(dots + objectDescription(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectDescription(target) + " which is a symbolic ID that cannot reference an object in the registry")
+            fail(dots + objectTag(assoc) + ": with type " + simpleAssocType(type) + " must reference a DocumentEntry in the registry with its targetObject attribute, it references " + objectTag(target) + " which is a symbolic ID that cannot reference an object in the registry")
             ok = false
         }
         return ok
@@ -331,7 +327,6 @@ public class SubmissionStructureValidator extends ValComponentBase {
                 String hm = assoc_type("HasMember");
                 if ( !a_type.equals(hm)) {
                     er.err(XdsErrorCode.Code.XDSRegistryMetadataError, "Association referencing SubmissionSet has type " + a_type + " but only type " + assoc_type("HasMember") + " is allowed", this, "ITI TF-3: 4.1.4");
-                    hasMemberError = true;
                 }
                 if (target_is_included_is_doc) {
                     if ( ! m.hasSlot(assoc, "SubmissionSetStatus")) {
@@ -528,7 +523,6 @@ public class SubmissionStructureValidator extends ValComponentBase {
             } else {
                 // is not folder
                 er.err(XdsErrorCode.Code.XDSRegistryMetadataError, source + " is not a Folder in submission and cannot already be in registry", this, assocsRef);
-                hasMemberError = true;
             }
             // try to verify that target is a DocumentEntry
             if (m.isDocument(target)) {
@@ -539,11 +533,9 @@ public class SubmissionStructureValidator extends ValComponentBase {
             } else {
                 // is not DocumentEntry
                 er.err(XdsErrorCode.Code.XDSRegistryMetadataError, source + " is not a DocumentEntry in submission and cannot already be in registry", this, assocsRef);
-                hasMemberError = true;
             }
         } else {
             er.err(XdsErrorCode.Code.XDSRegistryMetadataError, assocTag(assocId) + ": only Folder to DocumentEntry associations can be members of SubmissionSet (linked to SubmissionSet object via HasMember association", this, assocsRef);
-            hasMemberError = true;
         }
     }
 

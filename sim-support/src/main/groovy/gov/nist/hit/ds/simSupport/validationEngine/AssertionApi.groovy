@@ -25,22 +25,25 @@ class AssertionApi {
     String found
     String expected
     String code
+    String msg
 
     def clear() {
         found = null
         expected = null
+        msg = null
         code = 'Ok'
     }
 
     def found(_found) { found = _found }
     def expected(_expected) { expected = _expected}
+    def newMsg(_msg) { msg = _msg }
 
     def flush() {
         if (found || expected) {
-            println "flushing"
             Assertion a = new Assertion()
             a.expected = expected
             a.found = found
+            if (msg) a.msg = msg
             ag.addAssertion(a, false)
             recordAssertion(a)
         }

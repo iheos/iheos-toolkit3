@@ -1,11 +1,9 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.CxFormatValidator
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.eventLog.Event
-import gov.nist.hit.ds.eventLog.assertion.AssertionGroup
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.repository.simple.Configuration
@@ -14,7 +12,6 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
-import gov.nist.hit.ds.utilities.xml.OMFormatter
 import org.apache.axiom.om.OMElement
 import spock.lang.Specification
 
