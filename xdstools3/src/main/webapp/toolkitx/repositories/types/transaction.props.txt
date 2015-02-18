@@ -1,0 +1,6 @@
+# transaction
+
+keyword=transaction
+domain=asset
+description=transaction
+

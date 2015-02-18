@@ -51,10 +51,12 @@ public class AssetNodeBuilder {
     /**
      * Build a top-level tree using the sort order as specified by the repository type.
      * @param repos
+     * @param offset
+     * @param addEllipses
      * @return
      * @throws RepositoryException
      */
-    public List<AssetNode> build(Repository repos, int offset) throws RepositoryException {
+    public List<AssetNode> build(Repository repos, int offset, boolean addEllipses) throws RepositoryException {
 
         String jsonStr = getReposChildSortOrder(repos);
         if (jsonStr!=null && !"".equals(jsonStr)) {
@@ -63,7 +65,7 @@ public class AssetNodeBuilder {
 
                 if (o!=null && !o.isEmpty()) {
                     logger.fine("Size from JsonStr to HashMap is: " + o.size());
-                    return build(repos, PropertyKey.getPropertyKeys(o), offset);
+                    return build(repos, PropertyKey.getPropertyKeys(o), offset, addEllipses);
 
                 }
 
@@ -73,7 +75,7 @@ public class AssetNodeBuilder {
 
         }
 
-        return build(repos,null,offset);
+        return build(repos,null,offset, addEllipses);
     }
 
     private String getReposChildSortOrder(Repository repos) throws RepositoryException {
@@ -84,18 +86,25 @@ public class AssetNodeBuilder {
     }
 
 
+
     /**
      * Build a top-level tree using the sort order as specified by the parameter.
      * @param repos
      * @param orderByKeys
+     * @param offset
+     * @param addEllipses
      * @return
      * @throws RepositoryException
      */
-	public List<AssetNode> build(Repository repos, PropertyKey[] orderByKeys, int offset) throws RepositoryException {
+	public List<AssetNode> build(Repository repos, PropertyKey[] orderByKeys, int offset, boolean addEllipses) throws RepositoryException {
 			
 		List<AssetNode> topLevelAssets = new ArrayList<AssetNode>();
 
-        AssetIterator iter = getTopLevelAssetIterator(repos, orderByKeys, offset, getChildFetchSize(repos.getType().getKeyword(), SimpleType.REPOSITORY));
+        String keyword = repos.getType().getKeyword();
+        String domain = SimpleType.REPOSITORY;
+        PropertyKey[] propertyKeys = getSortOrderPropertyKeys(keyword, domain);
+
+        AssetIterator iter = getTopLevelAssetIterator(repos, propertyKeys, offset, getChildFetchSize(keyword, domain),addEllipses);
 
 		while (iter.hasNextAsset()) {
 
@@ -113,13 +122,25 @@ public class AssetNodeBuilder {
 				// parent.setLocation(a.getPath().toString());
 				parent.setRelativePath(a.getPropFileRelativePart());
 			}
-			parent.setContentAvailable(a.hasContent());
+
+            String offsetIndicator = a.getProperty("_offset");
+
+            if (offsetIndicator==null) {
+                parent.setContentAvailable(a.hasContent());
+                if (Depth.CHILDREN.equals(getRetrieveDepth())) {
+                    getChildren(repos,parent);
+                } else {
+                    addChildIndicator(repos, parent);
+                }
+            } else {
+                parent.getExtendedProps().put("_offset",offsetIndicator);
+                // logger.fine(">>> HAS more parent-level nodes");
+                parent.addChild(new AssetNode("","","","HASCHILDREN","","",""));
+            }
+
+
 			
-			if (Depth.CHILDREN.equals(getRetrieveDepth())) {
-				getChildren(repos,parent);				
-			} else {
-				addChildIndicator(repos, parent);
-			}
+
 
 			topLevelAssets.add(parent);
 		}
@@ -129,26 +150,27 @@ public class AssetNodeBuilder {
 	}
 
     private AssetIterator getTopLevelAssetIterator(Repository repos) throws RepositoryException {
-        return getTopLevelAssetIterator(repos,null,0,0);
+        return getTopLevelAssetIterator(repos,null,0,0,true);
     }
 
-    private AssetIterator getTopLevelAssetIterator(Repository repos, PropertyKey[] orderByKeys, int offset, int fetchSize) throws RepositoryException {
+    private AssetIterator getTopLevelAssetIterator(Repository repos, PropertyKey[] orderByKeys, int offset, int fetchSize, boolean addEllipses) throws RepositoryException {
         SearchCriteria criteria = new SearchCriteria(Criteria.AND);
 
         criteria.append(new SearchTerm(PropertyKey.PARENT_ID, Operator.EQUALTO,new String[]{null}));
 
-        return new SearchResultIterator(new Repository[]{repos}, criteria, orderByKeys,offset,fetchSize);
+        return new SearchResultIterator(new Repository[]{repos}, criteria, orderByKeys,offset,fetchSize,addEllipses);
     }
 
     public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent) throws RepositoryException {
-        return getImmediateChildren(repos, parent, null, 0);
+        return getImmediateChildren(repos, parent, null, 0, true);
     }
 
-    public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent, int offset) throws RepositoryException {
-        return getImmediateChildren(repos, parent, null, offset);
+    public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent, int offset, boolean addEllipses) throws RepositoryException {
+        return getImmediateChildren(repos, parent, null, offset, addEllipses);
     }
 
-    public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent, SearchCriteria detailCriteria, int offset) throws RepositoryException {
+
+    public List<AssetNode> getImmediateChildren(Repository repos, AssetNode parent, SearchCriteria detailCriteria, int offset, boolean addEllipses) throws RepositoryException {
 		List<AssetNode> children = new ArrayList<AssetNode>();
 
         if (parent.getExtendedProps().get("_offset")!=null) // This is a placeholder leaf node
@@ -188,7 +210,7 @@ public class AssetNodeBuilder {
             propertyKeys = getSortOrderPropertyKeys(keyword, domain);
             int childFetchSize = getChildFetchSize(keyword, domain);
 
-			iter = new SearchResultIterator(new Repository[]{repos}, criteria, propertyKeys,offset,childFetchSize);
+			iter = new SearchResultIterator(new Repository[]{repos}, criteria, propertyKeys,offset,childFetchSize,addEllipses);
 			while (iter.hasNextAsset()) {
 				Asset a = iter.nextAsset();
 				AssetNode child = new AssetNode(a.getRepository().getIdString()
@@ -219,9 +241,10 @@ public class AssetNodeBuilder {
 				
 				children.add(child);				
 			}			
-		} catch (RepositoryException e) {
-			logger.warning(e.toString());
-		}
+		} catch (Throwable t) {
+            logger.warning(t.toString());
+            t.printStackTrace();
+        }
 
 		return children;
 		
@@ -257,7 +280,7 @@ public class AssetNodeBuilder {
         try {
             Parameter p = new Parameter();
 
-            p.setDescription("Type file must exist in the types dir. Type: " + keyword + "domain: " + domain);
+            p.setDescription("Type file must exist in the types dir. Type: " + keyword + ", domain: " + domain);
             p.assertNotNull(Configuration.configuration().getType(new SimpleTypeId(keyword, domain)));
 
 
@@ -277,11 +300,15 @@ public class AssetNodeBuilder {
      * @throws RepositoryException
      */
 	public AssetNode getParentChain(Repository repos, AssetNode target, boolean initial) throws RepositoryException {
-		SearchCriteria criteria = new SearchCriteria(Criteria.OR);
-		criteria.append(new SearchTerm(PropertyKey.ASSET_ID, Operator.EQUALTO, target.getParentId()));
-		criteria.append(new SearchTerm(PropertyKey.LOCATION,Operator.EQUALTO, target.getParentId()));
+        if (repos==null)
+            return target;
 
- 		
+		SearchCriteria criteria = new SearchCriteria(Criteria.AND);
+		criteria.append(new SearchTerm(PropertyKey.ASSET_ID, Operator.EQUALTO, target.getParentId()));
+
+ 		String reposId = repos.getId().toString();
+        String reposSrc = repos.getSource().getAccess().name();
+
 		AssetIterator iter;
 		try {
 			if (initial) {
@@ -307,26 +334,74 @@ public class AssetNodeBuilder {
 						parent.setRelativePath(a.getPropFileRelativePart());
 					}
 					parent.setContentAvailable(a.hasContent());
-					
-					List<AssetNode> children = getImmediateChildren(repos, parent);
+
+
 					List<AssetNode> childrenUpdate = new ArrayList<AssetNode>();
-					for (AssetNode c : children) {
-						if (c.getRelativePath()!=null && c.getRelativePath().equals(target.getRelativePath())) {
-							childrenUpdate.add(target);
-						} else
-							childrenUpdate.add(c);
-					}
+
+                    int childFetchSize = (initial)?getChildFetchSize(parent.getType(),SimpleType.ASSET):0;
+                    boolean hasOffsetFetch = (childFetchSize>0);
+
+                    if (!hasOffsetFetch) {
+                        List<AssetNode> children = getImmediateChildren(repos, parent);
+                        addTargetChild(target, childrenUpdate, children);
+                    } else {
+                        // Pick the right segment
+
+                        boolean hit = false;
+                        int offset = 0;
+
+                        while (!hit) {
+                            List<AssetNode> children = getImmediateChildren(repos, parent, offset, true);
+                            if (children.size()>0) {
+                                for (AssetNode c : children) {
+//                                    if (c.getRelativePath()!=null && c.getRelativePath().equals(target.getRelativePath())) {
+                                    if (c.getAssetId()!=null && c.getAssetId().equals(target.getAssetId())) {
+                                        hit = true;
+                                    }
+                                }
+
+                                if (!hit) {
+                                    AssetNode an = new AssetNode(reposId,"","","...","","",reposSrc);
+                                    an.getExtendedProps().put("_offset",""+ (offset));
+                                    an.getExtendedProps().put("_stopFlag","true");
+                                    an.addChild(new AssetNode("","","","HASCHILDREN","","",""));
+
+                                    childrenUpdate.add(an);
+
+                                    offset += (childFetchSize);
+
+                                } else {
+                                    addTargetChild(target, childrenUpdate, children);
+                                }
+                            } else {
+                                break;
+                            }
+                        }
+
+                    }
+
 					parent.addChildren(childrenUpdate);
 					
 					return getParentChain(repos, parent, false);
 					
 				}
 			} 
-		} catch (Exception ex) {
-			logger.warning(ex.toString());
-		}
+		} catch (Throwable t) {
+            logger.warning(t.toString());
+            t.printStackTrace();
+        }
 		return target;
 	}
+
+    private void addTargetChild(AssetNode target, List<AssetNode> childrenUpdate, List<AssetNode> children) {
+        for (AssetNode c : children) {
+//            if (c.getRelativePath()!=null && c.getRelativePath().equals(target.getRelativePath())) {
+            if (c.getAssetId()!=null && c.getAssetId().equals(target.getAssetId())) {
+                childrenUpdate.add(target);
+            } else
+                childrenUpdate.add(c);
+        }
+    }
 
     /**
      * Gets the parent chain in the context of the entire repository tree (not just the parent chain) from a target asset node.
@@ -352,37 +427,85 @@ public class AssetNodeBuilder {
 
         // 2. Insert the parent chain of interest in the root context tree
         List<AssetNode> topLevelAssets = new ArrayList<AssetNode>();
-        AssetIterator iter = getTopLevelAssetIterator(repos);
 
-        while (iter.hasNextAsset()) {
 
-            Asset a = iter.nextAsset();
-            AssetNode parent = null;
 
-            if (a.getId()!=null && a.getId().getIdString().equals(parentChain.getAssetId())) {
-                parent = parentChain;
-            } else {
-                parent = new AssetNode(a.getRepository().getIdString()
-                        ,a.getId().getIdString()
-                        ,(a.getAssetType()==null)?null:a.getAssetType().toString()
-                        ,a.getDisplayName()
-                        ,a.getDescription()
-                        ,a.getMimeType()
-                        ,a.getSource().getAccess().name());
-                parent.setParentId(a.getProperty(PropertyKey.PARENT_ID));
-                parent.setColor(a.getProperty(PropertyKey.COLOR));
-                if (a.getPath()!=null) {
-                    // parent.setLocation(a.getPath().toString());
-                    parent.setRelativePath(a.getPropFileRelativePart());
+        int childFetchSize = getChildFetchSize(repos.getType().getKeyword(),SimpleType.REPOSITORY);
+        boolean hasOffsetFetch = (childFetchSize>0);
+
+        if (!hasOffsetFetch) {
+
+            AssetIterator iter = getTopLevelAssetIterator(repos);
+            while (iter.hasNextAsset()) {
+
+                Asset a = iter.nextAsset();
+                AssetNode parent = null;
+
+                if (a.getId()!=null && a.getId().getIdString().equals(parentChain.getAssetId())) {
+                    parent = parentChain;
+                } else {
+                    parent = new AssetNode(a.getRepository().getIdString()
+                            ,a.getId().getIdString()
+                            ,(a.getAssetType()==null)?null:a.getAssetType().toString()
+                            ,a.getDisplayName()
+                            ,a.getDescription()
+                            ,a.getMimeType()
+                            ,a.getSource().getAccess().name());
+                    parent.setParentId(a.getProperty(PropertyKey.PARENT_ID));
+                    parent.setColor(a.getProperty(PropertyKey.COLOR));
+                    if (a.getPath()!=null) {
+                        // parent.setLocation(a.getPath().toString());
+                        parent.setRelativePath(a.getPropFileRelativePart());
+                    }
+                    parent.setContentAvailable(a.hasContent());
+
+                    addChildIndicator(repos, parent);
+
                 }
-                parent.setContentAvailable(a.hasContent());
 
-                addChildIndicator(repos, parent);
+                topLevelAssets.add(parent);
+            }
+        } else {
+            // Pick the right segment
 
+            boolean hit = false;
+            int offset = 0;
+
+            setRetrieveDepth(Depth.PARENT_ONLY);
+
+            while (!hit) {
+                List<AssetNode> topLevelAssetsTemp = build(repos,offset,true);
+
+                if (topLevelAssetsTemp.size()>0) {
+                    for (AssetNode c : topLevelAssetsTemp) {
+                        if (c.getAssetId()!=null && c.getAssetId().equals(parentChain.getAssetId())) {
+                            hit = true;
+                        }
+                    }
+
+                    if (!hit) {
+                        AssetNode an = new AssetNode(repos.getId().getIdString(),"","","...","","",repos.getSource().getAccess().name());
+                        an.getExtendedProps().put("_offset",""+ (offset));
+                        an.getExtendedProps().put("_stopFlag","true");
+                        an.addChild(new AssetNode("","","","HASCHILDREN","","",""));
+
+                        topLevelAssets.add(an);
+
+                        offset += (childFetchSize);
+
+                    } else {
+                        addTargetChild(parentChain, topLevelAssets, topLevelAssetsTemp);
+                    }
+
+
+                } else {
+                    break;
+                }
             }
 
-            topLevelAssets.add(parent);
+
         }
+
 
         return topLevelAssets;
 
@@ -428,7 +551,7 @@ public class AssetNodeBuilder {
 
             PropertyKey[] propertyKeys = getSortOrderPropertyKeys(keyword, domain);
 
-			iter = new SearchResultIterator(new Repository[]{repos}, criteria, propertyKeys,0,0);
+			iter = new SearchResultIterator(new Repository[]{repos}, criteria, propertyKeys,0,0, true);
 			
 			while (iter.hasNextAsset()) {
 				Asset a = iter.nextAsset();
@@ -446,13 +569,34 @@ public class AssetNodeBuilder {
 					child.setRelativePath(a.getPropFileRelativePart());
 				}
 				child.setContentAvailable(a.hasContent());
+
+                // TODO use direct relationship later, rather than copying values to header
+                if (child.getType()!=null) {
+
+                    if (child.getType().endsWith("HdrType")) {
+                        if (a.getProperty("txDetailCsv")!=null) {
+                            child.setCsv(ContentHelper.processCsvContent(a.getProperty("txDetailCsv")));
+                            child.getExtendedProps().put("proxyDetail",a.getProperty("proxyDetail"));
+                            child.getExtendedProps().put("fromIp", a.getProperty("messageFromIpAddress"));
+                            child.getExtendedProps().put("toIp",a.getProperty("forwardedToIpAddress"));
+                            child.getExtendedProps().put("from",a.getProperty("messageFrom"));
+                            child.getExtendedProps().put("to",a.getProperty("forwardedTo"));
+                            child.getExtendedProps().put("type",a.getProperty("msgType"));
+                        }
+                    } else if (child.getType().endsWith("BodyType")) {
+                        child.getExtendedProps().put("type",a.getProperty("msgType"));
+                    }
+
+                }
+
 				parent.addChild(child);
 				getChildren(repos,child);
 			}
 			
 			
-		} catch (RepositoryException e) {
-			logger.warning(e.toString());
+		} catch (Throwable t) {
+			logger.warning(t.toString());
+            t.printStackTrace();
 		}
 
         return parent;

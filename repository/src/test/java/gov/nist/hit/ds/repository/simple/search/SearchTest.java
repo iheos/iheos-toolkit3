@@ -350,6 +350,7 @@ public class SearchTest {
 				count++;
 				childIter.nextAsset();
 			}
+            System.out.println("count: " + count);
 			assertTrue(count==2);
 			
 

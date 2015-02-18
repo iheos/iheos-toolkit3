@@ -12,12 +12,11 @@ See the loading condition dependent on the size of the viewport, inside Xdstools
 /* Large dark blue bar */
 #appheader {
     float: none;
-    font-family: Verdana;
+    font-family: Oxygen;
     font-weight: 400;
     background-color: #021a4c;
     margin: 0px;
-    padding:10px;
-    padding-left:20px;
+    padding: 10px 20px;
 }
 /* Main app title. Ex: Document Sharing Toolkit */
 #apptitle {
@@ -41,7 +40,7 @@ Displayed to the right side of the dark blue bar. */
     color: #fc0;
     text-shadow: none;
     float:right;
-    margin-right:20px;
+    /*padding-right:20px;*/
     margin-top:5px;
 }
 /* Version of the application, to the right side of the dark blue bar */
@@ -50,7 +49,7 @@ Displayed to the right side of the dark blue bar. */
     color: #fc0;
     text-shadow: none;
     float:right;
-    margin-right:20px;
+    /*padding-right:20px;*/
     margin-top:-20px;
 }
 

@@ -5,7 +5,21 @@
 
 <web-app>
 
-  <!-- Servlets -->
+    <!-- ============== Toolkit initialization ============== -->
+
+    <servlet>
+        <servlet-name>Initialization</servlet-name>
+        <servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Initialization</servlet-name>
+        <url-pattern>/init</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- Servlets -->
 <!--  begin repository tools -->
 	<servlet>
 		<servlet-name>searchServlet</servlet-name>

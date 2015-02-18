@@ -85,12 +85,12 @@
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt</artifactId>
-            <version>4.1p</version>
+            <version>5.0p</version>
         </dependency>
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt-skins</artifactId>
-            <version>4.1p</version>
+            <version>5.0p</version>
         </dependency>
 
         <!-- Jersey dependencies -->

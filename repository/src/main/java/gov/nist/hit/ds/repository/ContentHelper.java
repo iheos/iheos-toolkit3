@@ -78,6 +78,8 @@ public class ContentHelper {
 
         if (aSrc==null) {
             throw new RepositoryException(RepositoryException.IO_ERROR + "Asset not found by either location: " + an.getRelativePath() + " fullPath:" + an.getFullPath());
+        } else {
+            aSrc.setAutoFlush(false);
         }
 
 		/* this should not be required

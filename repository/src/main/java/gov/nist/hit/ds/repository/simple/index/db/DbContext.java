@@ -113,7 +113,7 @@ public class DbContext {
 
 		logger.fine("IndexContainer SQL: " +sqlStr);
 		if (connection!=null) {
-			PreparedStatement statement = connection.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement statement = connection.prepareStatement(sqlStr, Statement.RETURN_GENERATED_KEYS); // Statement.RETURN_GENERATED_KEYS, new String[]{DbIndexContainer.repositoryIndexId}
 			int parameterIndex=1;
 			for (String p : params) {
 				logger.fine("Setting param: "+parameterIndex + " to <" + p + ">");			

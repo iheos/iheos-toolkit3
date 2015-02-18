@@ -80,6 +80,12 @@
             <version>1</version>
         </dependency>
 
+        <!-- for the cache actorTransactions.xml -->
+
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>tk-initialization</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>

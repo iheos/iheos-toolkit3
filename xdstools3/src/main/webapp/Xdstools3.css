@@ -5,6 +5,10 @@ author Diane Azais, Olivier Herrmann, Julien Perugini
 2014
 */
 
+/*
+The width of the app is set through this CSS for the navigation bar (navbar) and
+through the width of the set of tabs in Xdstools3ActivityView.java.
+*/
 
 
 /* ----------- Global styles ----------- */
