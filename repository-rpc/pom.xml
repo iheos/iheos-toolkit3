@@ -5,24 +5,24 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-deps</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.4a-SNAPSHOT</version>
         <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
 
     <artifactId>repository-rpc</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.4a-SNAPSHOT</version>
 
 	<dependencies>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>toolkit</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
 		<dependency>
 			<groupId>gov.nist.hit.ds</groupId>
 			<artifactId>utilities</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>3.0.4a-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>gov.nist.hit.ds</groupId>
@@ -31,17 +31,17 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-shared</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>ds-sims</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -139,6 +139,6 @@
 	</build>
 
   <scm>
-    <tag>v3.0.2a</tag>
+    <tag>v3.0.4a-test</tag>
   </scm>
 </project>

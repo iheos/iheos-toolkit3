@@ -19,8 +19,4 @@
         <module>../doc-entry-editor</module>
     </modules>
 
-
-    <scm>
-        <tag>v3.0.2a</tag>
-    </scm>
 </project>
