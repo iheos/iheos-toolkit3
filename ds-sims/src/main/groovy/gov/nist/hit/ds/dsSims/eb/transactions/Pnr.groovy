@@ -2,6 +2,7 @@ package gov.nist.hit.ds.dsSims.eb.transactions
 
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.MetadataVal
+import gov.nist.hit.ds.dsSims.eb.reg.UnconnectedRegistryValidation
 import gov.nist.hit.ds.dsSims.eb.schema.EbSchemaValidator
 import gov.nist.hit.ds.dsSims.eb.schema.MetadataTypes
 import gov.nist.hit.ds.dsSims.eb.transactionSupport.EbSendRequest
@@ -65,7 +66,7 @@ class Pnr implements Transaction {
         }
 
         // Metadata Validator
-        new MetadataVal(simHandle, m, vc, environment, null).asPeer().run()
+        new MetadataVal(simHandle, m, vc, environment, new UnconnectedRegistryValidation()).asPeer().run()
     }
 
     @Override
@@ -101,7 +102,7 @@ class Pnr implements Transaction {
             new EbSchemaValidator(simHandle, new OMFormatter(msgRoot).toString(), MetadataTypes.METADATA_TYPE_PRb_WIRE, Toolkit.schemaFile()).asPeer().run()
         }
         // Metadata Validator
-        new MetadataVal(simHandle, m, vc, environment, null).asPeer().run()
+        new MetadataVal(simHandle, m, vc, environment, new UnconnectedRegistryValidation()).asPeer().run()
     }
 
     @Override

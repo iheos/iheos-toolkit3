@@ -96,11 +96,14 @@ class MetadataValTest extends Specification {
         root.SubmitObjectsRequest[0].RegistryObjectList[0].Association.replaceNode {}
         def outputBuilder = new StreamingMarkupBuilder()
         submission = outputBuilder.bind{ mkp.yield root }
-        when: run(submission)
+
+        when:
+        run(submission)
+        println transRunner.simHandle.event.errorAssertionIds
 
         then:
         transRunner.simHandle.event.hasErrors()
-        transRunner.simHandle.event.errorAssertionIds().sort() == ['rosubstr040'].sort()
+        transRunner.simHandle.event.errorAssertionIds().sort() == ['ssdehm010'].sort()
     }
 
     def 'SS Missing'() {
@@ -113,7 +116,7 @@ class MetadataValTest extends Specification {
 
         then:
         transRunner.simHandle.event.hasErrors()
-        transRunner.simHandle.event.errorAssertionIds().sort() == ['rosubstr025', 'rosubstr040', 'rosubstr060', 'rosubstr070'].sort()
+        transRunner.simHandle.event.errorAssertionIds().sort() == ['rosubstr025', 'rosubstr060', 'rosubstr070'].sort()
     }
 
     def 'Doc only'() {
@@ -129,7 +132,7 @@ class MetadataValTest extends Specification {
 
         then:
         transRunner.simHandle.event.hasErrors()
-        transRunner.simHandle.event.errorAssertionIds().sort() == ['rosubstr025', 'rosubstr040'].sort()
+        transRunner.simHandle.event.errorAssertionIds().sort() == ['rosubstr025'].sort()
     }
 
 }

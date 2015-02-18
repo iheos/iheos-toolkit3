@@ -147,7 +147,7 @@ class MhdDocRefTest extends Specification {
         validator.sourcePatients().first().name() == 'Patient'
     }
 
-    def 'ClassCode test'() {
+    def 'Various validators test'() {
         def text = getClass().getResource('/mhd/full_docref.xml').text
 
         when:
@@ -158,18 +158,19 @@ class MhdDocRefTest extends Specification {
         def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.simHandle.event.addArtifact('Metadata', '')
         transRunner.runTest()
+        println transRunner.simHandle.event.errorAssertionIds()
 
         then:
-        transRunner.simHandle.event.getAssertions('mhd140')
-        transRunner.simHandle.event.getAssertions('mhd150')
-        transRunner.simHandle.event.getAssertions('mhd190')
-        transRunner.simHandle.event.getAssertions('mhd200')
-        transRunner.simHandle.event.getAssertions('mhd210')
-        transRunner.simHandle.event.getAssertions('mhd220')
-        transRunner.simHandle.event.getAssertions('mhd230')
-        transRunner.simHandle.event.getAssertions('mhdmi040')
-        transRunner.simHandle.event.getAssertions('fhirpract010')
-        transRunner.simHandle.event.getAssertions('fhirpatient010')
+        transRunner.simHandle.event.getAssertions('mhd045')  // creationTime
+        transRunner.simHandle.event.getAssertions('mhd150')  // mimeType
+        transRunner.simHandle.event.getAssertions('mhd190')  // startTime
+        transRunner.simHandle.event.getAssertions('mhd200')  // endTime
+        transRunner.simHandle.event.getAssertions('mhd080')  // hcftc
+        transRunner.simHandle.event.getAssertions('mhd220')  // practiceSettingCode
+        transRunner.simHandle.event.getAssertions('mhd230')  // typeCode
+        transRunner.simHandle.event.getAssertions('mhdmi040')  // masterIdentifier is OID
+        transRunner.simHandle.event.getAssertions('fhirpract010')  // Practitioner root is name
+        transRunner.simHandle.event.getAssertions('fhirpatient010')  // Root is identifier
         !transRunner.simHandle.event.hasErrors()
     }
 

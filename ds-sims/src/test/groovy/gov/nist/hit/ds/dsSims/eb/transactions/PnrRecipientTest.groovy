@@ -31,7 +31,7 @@ class PnrRecipientTest extends Specification {
 </ActorsTransactions>
 '''
     def simId
-    def repoName = 'Sim'
+    def repoName = 'PnrRecipientTest'
     def endpoint = new Endpoint('http://localhost:8080/xdstools3/sim/1234/docrec/prb')
     File repoDataDir
     RepositorySource repoSource
@@ -65,6 +65,7 @@ class PnrRecipientTest extends Specification {
 
         when:
         run(header,body)
+        println simHandle.event.errorAssertionIds()
 
         then:
         response.validationStatus == ValidationStatus.OK
