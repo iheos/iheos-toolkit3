@@ -80,19 +80,23 @@ public class AssetHelper {
      * @throws RepositoryException
      */
     public static List<AssetNode> getImmediateChildren(AssetNode an) throws RepositoryException {
-        return getImmediateChildren(an,null,0);
+        return getImmediateChildren(an,null,0, true);
     }
 
     public static List<AssetNode> getImmediateChildren(AssetNode an, int offset) throws RepositoryException {
-        return getImmediateChildren(an,null,offset);
+        return getImmediateChildren(an,null,offset, true);
     }
 
-    private static List<AssetNode> getImmediateChildren(AssetNode an, SearchCriteria searchCriteria, int offset) throws RepositoryException {
+    public static List<AssetNode> getImmediateChildren(AssetNode an, int offset, boolean addEllipses) throws RepositoryException {
+        return getImmediateChildren(an,null,offset, addEllipses);
+    }
+
+    private static List<AssetNode> getImmediateChildren(AssetNode an, SearchCriteria searchCriteria, int offset, boolean addEllipses) throws RepositoryException {
         Repository repos = RepositoryHelper.composeRepositoryObject(an.getRepId(), an.getReposSrc());
 
         AssetNodeBuilder anb = new AssetNodeBuilder();
         try {
-            return anb.getImmediateChildren(repos, an, searchCriteria, offset);
+            return anb.getImmediateChildren(repos, an, searchCriteria, offset, addEllipses);
         } catch (RepositoryException re) {
             logger.warning(re.toString());
         }
@@ -345,7 +349,7 @@ public class AssetHelper {
 
         if (an.getChildren().size() == 1 && "HASCHILDREN".equals(an.getChildren().get(0).getDisplayName())) {
 
-            List<AssetNode> children = getImmediateChildren(an, detailAssetFilterCriteria, 0);
+            List<AssetNode> children = getImmediateChildren(an, detailAssetFilterCriteria, 0, true);
 
             for (AssetNode child : children) {
                 try {

@@ -188,12 +188,21 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	public boolean accept(File dir, String name) {
 		if (name.equals("repository." + Configuration.PROPERTIES_FILE_EXT)) return false;  // not an asset
 		File f = new File(dir + File.separator + name);
-		if (f.isDirectory()) return true; // Look for child assets
+
+		if (f.isDirectory()) {
+
+            if (time!=null) {
+                return (f.toString().indexOf(time)>-1);
+
+            }
+            return true; // Look for child assets
+        }
+
 		if (f.isFile() && !name.endsWith(Configuration.PROPERTIES_FILE_EXT)) return false;  // not an asset property file
 		// parent restriction?
 
-        /* TODO: work this out later because the precision in use by sdf may not be enough
-        if (time == null) {
+
+        /* if (time == null) {
             return true;    // no time restriction
         } else {
 
@@ -203,8 +212,7 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
             if (assetLastModifiedDate.compareTo(time)<0) {
                 return false;
 
-        }
-        */
+        } */
 
 		if (type == null) {
             return true;    // no type restriction

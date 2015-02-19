@@ -5,17 +5,21 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
@@ -27,6 +31,7 @@ import gov.nist.hit.ds.repository.rpc.search.client.RepositoryServiceAsync;
 import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
 import gov.nist.hit.ds.repository.shared.SearchTerm;
+import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.ui.client.event.ListenerStatusEvent;
 import gov.nist.hit.ds.repository.ui.client.event.ListenerStatusEventHandler;
@@ -76,27 +81,39 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 	    this.eventBus = eventBus;
 
         // All composites must call initWidget() in their constructors.
-	     initWidget(setupMainPanel());
+	     initWidget(setupMainPanel(false));
+
+    }
+
+    public TransactionMonitorFilterAdvancedWidget(EventBus eventBus, boolean viewerOnly)  {
+        this.eventBus = eventBus;
+
+        // All composites must call initWidget() in their constructors.
+        initWidget(setupMainPanel(viewerOnly));
 
     }
 
 
 
-    private Widget setupMainPanel() {
+    private Widget setupMainPanel(boolean viewerOnly) {
         SplitLayoutPanel mainSplitPanel = new SplitLayoutPanel(3);
 
+        if (viewerOnly) {
+            mainSplitPanel.add(setupFilterSelectionAndMonitorPanel(viewerOnly)); // Filter selection and results stack panel
+        } else {
+            setSouthStackPanel(createFilteredMonitorPanel());
+            //// getSouthStackPanel().setVisible(Boolean.FALSE);
+            mainSplitPanel.addSouth(getSouthStackPanel(), Math.round(.5 * Window.getClientHeight()));
 
-        setSouthStackPanel(createFilteredMonitorPanel());
-        //// getSouthStackPanel().setVisible(Boolean.FALSE);
-        mainSplitPanel.addSouth(getSouthStackPanel(), Math.round(.5 * Window.getClientHeight()));
+            mainSplitPanel.add(setupFilterSelectionAndMonitorPanel(viewerOnly)); // Filter selection and results stack panel
 
-        mainSplitPanel.add(setupFilterSelectionAndMonitorPanel()); // Filter selection and results stack panel
+        }
 
         return mainSplitPanel;
     }
 
     private Widget createFilteredMonitorPanel() {
-        TransactionMonitorAdvancedWidget txMonitorFilter = new TransactionMonitorAdvancedWidget(eventBus,false,false,true);
+        TransactionMonitorAdvancedWidget txMonitorFilter = new TransactionMonitorAdvancedWidget(eventBus,false,false,true,false);
         txMonitorFilter.setAutoShowFirstMessage(true);
         txMonitorFilter.getElement().getStyle()
                 .setProperty("border", "none");
@@ -109,7 +126,7 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
 
         ///////////////////// Add filter section
-        stackPanel.add(createFilterWidget(), createPanelHeader("", createCriteriaOptions(), null), HEADER_SIZE); // Not the filter monitor but the filter selection
+        stackPanel.add(createFilterWidget(), createPanelHeader("", createCriteriaOptions(), null, null), HEADER_SIZE); // Not the filter monitor but the filter selection
 
         // filterSplitPanel.addWest(stackPanel, Math.round(.3 * Window.getClientWidth()));
         // stackPanel = new StackLayoutPanel(Style.Unit.EM);
@@ -117,7 +134,7 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
 
         // This is the filtered results section
-        stackPanel.add(txMonitorFilter, createPanelHeader("",createFilterHeaderOptions(),null), HEADER_SIZE);
+        stackPanel.add(txMonitorFilter, createPanelHeader("",createFilterHeaderOptions(),null, null), HEADER_SIZE);
 
         stackPanel.showWidget(1); // Show the filter results section
 
@@ -192,7 +209,7 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
     */
 
 
-    private Widget setupFilterSelectionAndMonitorPanel() {
+    private Widget setupFilterSelectionAndMonitorPanel(boolean viewerOnly) {
 
         // SplitLayoutPanel filterSplitPanel = new SplitLayoutPanel(2);
 
@@ -203,28 +220,40 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
 
         // Add live monitor section
-        setTxMonitorLive(createLiveTxMonitorWidget());
+        if (viewerOnly) {
+            setTxMonitorLive(createLiveTxMonitorWidget(viewerOnly));
+        } else {
+            setTxMonitorLive(createLiveTxMonitorWidget());
+        }
 
 
-        // eventBus.addHandler(BackendFilteredMessageEvent.TYPE
+        String monitorLabel = "Proxy Monitor";
 
-        eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
-            @Override
-            public void onNewTxMessage(NewTxMessageEvent event) {
+        if (!viewerOnly) {
+            // eventBus.addHandler(BackendFilteredMessageEvent.TYPE
 
-                // no longer needed with built-in pager control
-                // getLiveCounterTxt().setText("("+ (event.getMessageCount()) + ")");
-                filter(event.getAnMap());
-                // getTxFilter().popTx(event.getAnMap());
-            }
-        });
+            eventBus.addHandler(NewTxMessageEvent.TYPE, new NewTxMessageEventHandler() {
+                @Override
+                public void onNewTxMessage(NewTxMessageEvent event) {
 
-        eventBus.addHandler(ListenerStatusEvent.TYPE, new ListenerStatusEventHandler() {
-            @Override
-            public void onListenerStatus(ListenerStatusEvent event) {
-                updateListenerStatusIndicator(event.getListening());
-            }
-        });
+                    // no longer needed with built-in pager control
+                    // getLiveCounterTxt().setText("("+ (event.getMessageCount()) + ")");
+                    filter(event.getAnMap());
+                    // getTxFilter().popTx(event.getAnMap());
+                }
+            });
+
+            eventBus.addHandler(ListenerStatusEvent.TYPE, new ListenerStatusEventHandler() {
+                @Override
+                public void onListenerStatus(ListenerStatusEvent event) {
+                    updateListenerStatusIndicator(event.getListening());
+                }
+            });
+
+        } else {
+            monitorLabel = "Transaction Viewer";
+        }
+
 
 
         /*
@@ -239,8 +268,42 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
         });
         */
 
+        HorizontalPanel hPanel = new HorizontalPanel();
+//        hPanel.setWidth("50%");
+        hPanel.setSpacing(0);
+        hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        hPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+
+        HTML label = new HTML("Validation Detail: ");
+
+//        label.getElement().getStyle().setMarginLeft(30, Style.Unit.PCT);
+        hPanel.add(label);
+
+        for (final ValidationLevel validationLevel : ValidationLevel.values()) {
+            RadioButton r = new RadioButton("validationLevel", validationLevel.toString());
+            if (validationLevel.ordinal()==0) {
+//                r.getElement().getStyle().setMarginLeft(75, Style.Unit.PCT);
+            }
+            if ("ERROR".equals(validationLevel.name())) {
+                r.setValue(true); // Set default check option
+            }
+            r.setFormValue(validationLevel.name());
+
+            r.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    getTxMonitorLive().setValidationLevel(validationLevel);
+                }
+            });
+
+            hPanel.add(r);
+        }
+
+
+
+
         // Live-Monitor panel
-        stackPanel.add(getTxMonitorLive(), createPanelHeader("", createMonitorHeaderOptions(), null), HEADER_SIZE);
+        stackPanel.add(getTxMonitorLive(), createPanelHeader("", createMonitorHeaderOptions(monitorLabel), null, hPanel), HEADER_SIZE);
 
         // filterSplitPanel.add(stackPanel);
 
@@ -322,12 +385,12 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
     }
 
-    private List<Widget> createMonitorHeaderOptions() {
+    private List<Widget> createMonitorHeaderOptions(String monitorLabel) {
         List<Widget> options = new ArrayList<Widget>();
 
         options.add(getListenerStatusIndicator());
 
-        HTML headerText = new HTML("Proxy Monitor");
+        HTML headerText = new HTML(monitorLabel);
         headerText.getElement().getStyle().setWidth(TransactionMonitorWidget.MESSAGE_LEFT_MARGIN, Style.Unit.PX);
         options.add(headerText);
 
@@ -386,10 +449,8 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
 
     }
 
-
-
     private TransactionMonitorAdvancedWidget createLiveTxMonitorWidget() {
-        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus,true /*enableListener*/,false /*enable Filter, automatically set when filter is applied*/ , false/*showDetail*/);
+        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus, true /*enableListener*/,false /*enable Filter, automatically set when filter is applied*/ , false/*showDetail*/, false);
         txMonitor.setAutoShowFirstMessage(false);
         txMonitor.getElement().getStyle()
                 .setProperty("border", "none");
@@ -397,11 +458,20 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
         return txMonitor;
     }
 
-    private Widget createPanelHeader(String text, List<Widget> options, ImageResource icon) {
+
+    private TransactionMonitorAdvancedWidget createLiveTxMonitorWidget(boolean viewerOnly) {
+        TransactionMonitorAdvancedWidget txMonitor = new TransactionMonitorAdvancedWidget(eventBus, !viewerOnly /*enableListener*/,false /*enable Filter, automatically set when filter is applied*/ , !viewerOnly/*showDetail*/, viewerOnly);
+        txMonitor.setAutoShowFirstMessage(false);
+        txMonitor.getElement().getStyle()
+                .setProperty("border", "none");
+
+        return txMonitor;
+    }
+
+    private Widget createPanelHeader(String text, List<Widget> options, ImageResource icon, Widget rightPanel) {
 
         // Add the image and text to a horizontal panel
         HorizontalPanel hPanel = new HorizontalPanel();
-        //hPanel.setWidth("100%");
         hPanel.setSpacing(0);
         hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         hPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
@@ -425,7 +495,21 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
             }
 
 
-        FocusPanel spStackHeaderWrapper = new FocusPanel(hPanel); // This wrapper will span out fully to 100% width
+        FlexTable panelTable = new FlexTable();
+        if (rightPanel!=null) {
+
+            panelTable.setWidth("100%");
+
+            hPanel.getElement().getStyle().setMarginLeft(0, Style.Unit.PX);
+            panelTable.setWidget(0,0, hPanel);
+            panelTable.getFlexCellFormatter().setHorizontalAlignment(0,0, HasHorizontalAlignment.ALIGN_LEFT);
+
+            panelTable.setWidget(0,1, rightPanel);
+            panelTable.getFlexCellFormatter().setHorizontalAlignment(0,1, HasHorizontalAlignment.ALIGN_RIGHT);
+        }
+
+
+        FocusPanel spStackHeaderWrapper = new FocusPanel((rightPanel==null)?hPanel:panelTable); // This wrapper will span out fully to 100% width
         spStackHeaderWrapper.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -436,11 +520,16 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
                         getTxMonitorLive().getTxTable().redraw();
                     }
                 };
-                timer.schedule(500); // Stack panel should be expanded/restored by now
+                timer.schedule(1000); // Stack panel should be expanded/restored by now
 
 //                getTxMonitorLive().getTxTable().onResize();
             }
         });
+
+
+
+
+
         return spStackHeaderWrapper;
     }
 
@@ -528,7 +617,11 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
                         } */
 
 
-                        Boolean liveBundleLoaded = getTxMonitorLive().isTxMessageBundleLoaded(parentId);
+                        /////// Dual popTx
+                        getTxFilter().popTx(anMap,null);
+
+                        /////// Single popTx
+                        /* Boolean liveBundleLoaded = getTxMonitorLive().isTxMessageBundleLoaded(parentId);
 
 
                         if (filteredBundleLoaded) { // likely to be a response with a request already in filtered section
@@ -543,7 +636,8 @@ public class TransactionMonitorFilterAdvancedWidget extends Composite {
                             // case #3
                             logger.info("case #3");
                             getTxFilter().popTx(getTxMonitorLive().getAnMap(parentId,"request"),anMap);
-                        }
+                        } */
+                        /////// single popTx
 
                     } else {
                         logger.info("case: Not hit!");

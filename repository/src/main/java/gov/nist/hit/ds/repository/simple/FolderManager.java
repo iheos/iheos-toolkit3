@@ -125,7 +125,7 @@ public class FolderManager {
 		return new File[]{residingFolder,null};
 	}
 	
-	public File[] getFile(File dir, String[] names, ArtifactId id, boolean retrieveById) throws RepositoryException {
+	public synchronized File[] getFile(File dir, String[] names, ArtifactId id, boolean retrieveById) throws RepositoryException {
 
         Parameter param = new Parameter();
 

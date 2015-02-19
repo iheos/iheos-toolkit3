@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.NoServletSessionException;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.aggregation.AssertionAggregation;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.repository.shared.id.AssetId;
@@ -32,10 +33,12 @@ public interface RepositoryService extends RemoteService  {
 	public Boolean setRepositoryConfig() throws RepositoryConfigException;
 	public List<AssetNode> search(String[][] repos, SearchCriteria sc) throws RepositoryConfigException;
     public Boolean searchHit(String[][] repos, SearchCriteria sc, Boolean newIndexOnly) throws RepositoryConfigException;
-	public List<AssetNode> getAssetTree(String[][] repos) throws RepositoryConfigException;
+	public List<AssetNode> getAssetTree(String[][] repos, int offset) throws RepositoryConfigException;
+    public List<AssetNode> getAssetTree(String[][] repos, int offset, boolean addEllipses) throws RepositoryConfigException;
     public AssetNode getAssetNode(String reposSrc, String reposId, String assetId) throws RepositoryConfigException;
 	public AssetNode getAssetTxtContent(AssetNode an) throws RepositoryConfigException;
 	public List<AssetNode> getImmediateChildren(AssetNode an, int offset) throws RepositoryConfigException;
+    public List<AssetNode> getImmediateChildren(AssetNode an, int offset, boolean addEllipses) throws RepositoryConfigException;
     public AssetNode getChildren(AssetNode an) throws RepositoryConfigException;
 	public AssetNode getParentChain(AssetNode an) throws RepositoryConfigException;
     public List<AssetNode> getParentChainInTree(AssetNode an) throws RepositoryConfigException;
@@ -47,7 +50,7 @@ public interface RepositoryService extends RemoteService  {
     public Map<String,AssetNode> getTxUpdates(String queue, String filterLocation) throws RepositoryConfigException;
     public String getJmsHostAddress() throws RepositoryConfigException;
     public List<String> getValidatorNames();
-    public Map<String,AssetNode> validateMessage(String validatorName, AssetNode transaction) throws RepositoryConfigException;
+    public Map<String,AssetNode> validateMessage(String validatorName, ValidationLevel validationLevel, AssetNode transaction) throws RepositoryConfigException;
     public AssertionAggregation aggregateAssertions(RepositoryId repositoryId, AssetId eventId, SimpleTypeId parentAssetType, SimpleTypeId detailAssetType, SearchCriteria detailAssetFilterCriteria, String[] displayColumns) throws RepositoryConfigException;
 
 }
