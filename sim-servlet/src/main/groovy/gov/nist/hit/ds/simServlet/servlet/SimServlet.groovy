@@ -102,12 +102,12 @@ public class SimServlet extends HttpServlet {
             logger.error("Error writing response - " + ExceptionUtil.exception_details(e));
         }
 
-        callback(simHandle)
+        callback(simHandle, endpoint)
         logger.info("\n===============================================================================");
     }
 
-    def callback(SimHandle simHandle) {
-        TransactionSimConfigElement transactionElement = simHandle.transactionElement()
+    def callback(SimHandle simHandle, EndpointValue endpoint) {
+        TransactionSimConfigElement transactionElement = simHandle.actorSimConfig.get(endpoint.trans)
         assert transactionElement
         String callbackURI = transactionElement.getCallBack()
         if (callbackURI) {

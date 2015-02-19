@@ -8,15 +8,15 @@ import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
  * Created by bmajur on 6/6/14.
  */
 class EndpointValue {
-    private String value
+    String value
     private boolean unParseable = false
-    private def hostport
-    private def context
-    private def sim
-    private def user
-    private def simid
-    private def actor
-    private def trans
+    def hostport
+    def context
+    def sim
+    def user
+    def simid
+    def actor
+    def trans
 
     EndpointValue(String value) {
         this.value = value
