@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
+import gov.nist.hit.ds.ebMetadata.Metadata;
+import gov.nist.hit.ds.ebMetadata.MetadataParser;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -35,7 +38,7 @@ public class UploadFileServlet extends HttpServlet {
 			throws ServletException {
 		try {
 			ServletFileUpload upload = new ServletFileUpload();
-			resp.setContentType("text/html");
+			resp.setContentType("text/plain");
 			FileItemIterator iterator = upload.getItemIterator(req);
 
 			while (iterator.hasNext()) {
@@ -52,9 +55,12 @@ public class UploadFileServlet extends HttpServlet {
 							ByteBuffer.wrap(encoded)).toString();
 
 					// Return file content to the client
-					resp.getOutputStream().print(filename+";^;^;"+fileContent);
+//					resp.getOutputStream().print(filename+";^;^;"+fileContent);
+                    logger.info(fileContent);
+					resp.getOutputStream().print(fileContent);
 
-					// This was the previous method...
+
+                    // This was the previous method...
 					// String filename=writeTemporaryFile(item);
 					// // Send file's random name and its location
 					// resp.getOutputStream().print(FILE_REPOSITORY + "/" +

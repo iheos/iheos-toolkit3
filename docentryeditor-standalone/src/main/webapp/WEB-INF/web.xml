@@ -5,6 +5,14 @@
 	version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
 
     <!-- Servlets -->
+    <servlet>
+        <servlet-name>gov.nist.hit.ds.docentryeditor.XDSMetadataEditor XdsParserServices</servlet-name>
+        <servlet-class>gov.nist.hit.ds.docentryeditor.server.XdsMetadataParser</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>gov.nist.hit.ds.docentryeditor.XDSMetadataEditor XdsParserServices</servlet-name>
+        <url-pattern>/xdseditor/xdsparser</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>uploadServlet</servlet-name>

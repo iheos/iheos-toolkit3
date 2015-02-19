@@ -249,12 +249,25 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         FieldLabel uriLabel = new FieldLabel(uri, "URI");
         uriLabel.setLabelWidth(135);
 
+		/* ********************************* */
+        /* identifiers options and fieldset */
+        /* ********************************* */
+        // Patient ID Fields (required)
+        FieldLabel patientIdLabel = new FieldLabel(patientID, "Patient ID");
+        patientIdLabel.setLabelWidth(135);
+
+        // Unique ID Fieds (required)
+        FieldLabel uniqueIdLabel = new FieldLabel(uniqueId, "Unique ID");
+        uniqueIdLabel.setLabelWidth(135);
+
         // ////////////////////////////////////////////////////
         // --- Adding REQUIRED simple fields labels to containers
         // ////////////////////////////////////////////////////
         VerticalLayoutContainer simpleRequiredFieldsContainer = new VerticalLayoutContainer();
         simpleRequiredFieldsContainer.add(filenameLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(idLabel, new VerticalLayoutData(1, -1));
+        simpleRequiredFieldsContainer.add(uniqueIdLabel, new VerticalLayoutData(1, -1));
+        simpleRequiredFieldsContainer.add(patientIdLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(languageCodeLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(mimeTypeLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(classCodeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
@@ -295,18 +308,6 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // Other fields and options (init)
         // //////////////////////////////////////////////////////
 
-		/* ********************************* */
-        /* identifiers options and fieldset */
-        /* ********************************* */
-        // Patient ID Fields (required)
-        FieldLabel patientIdLabel = new FieldLabel(patientID, "Patient ID");
-        patientIdLabel.setLabelWidth(135);
-        simpleRequiredFieldsContainer.add(patientIdLabel, new VerticalLayoutData(1, -1));
-
-        // Unique ID Fieds (required)
-        FieldLabel uniqueIdLabel = new FieldLabel(uniqueId, "Unique ID");
-        uniqueIdLabel.setLabelWidth(135);
-        simpleRequiredFieldsContainer.add(uniqueIdLabel, new VerticalLayoutData(1, -1));
 
 		/* ********************************** */
         /* coded terms options and fieldset */

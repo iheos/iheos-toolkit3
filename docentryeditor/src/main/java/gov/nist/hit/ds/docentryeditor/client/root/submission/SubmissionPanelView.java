@@ -103,6 +103,9 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         }
     }
 
+    /**
+     * This method ties the widgets with their actions in the view or with actions defined in the presenter.
+     */
     @Override
     protected void bindUI() {
         addEmptyDocEntry.addSelectionHandler(new SelectionHandler<Item>() {

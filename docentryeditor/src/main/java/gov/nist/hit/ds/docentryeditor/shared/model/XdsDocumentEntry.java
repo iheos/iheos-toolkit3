@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -84,7 +85,7 @@ public class XdsDocumentEntry implements Serializable {
      *
      * @see XdsDocumentEntry class DocumentModel
      */
-    private final ArrayList<ArrayList<String>> validationErrors = new ArrayList<ArrayList<String>>();
+    private ArrayList<ArrayList<String>> validationErrors = new ArrayList<ArrayList<String>>();
     /**
      * <b>ArrayList(Author) authors</b> - The author(s) of the document
      * [Optional].<br>
@@ -97,7 +98,7 @@ public class XdsDocumentEntry implements Serializable {
      * @see XdsDocumentEntry
      */
     @Nullable
-    private ArrayList<Author> authors;
+    private List<Author> authors;
     /**
      * <b>CodedTerm classCode</b> - The class code of the document [Mandatory].<br>
      * Type: {@link CodedTerm}</br> </p>
@@ -590,11 +591,11 @@ public class XdsDocumentEntry implements Serializable {
         this.comments = comments;
     }
 
-    public ArrayList<Author> getAuthors() {
+    public List<Author> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(ArrayList<Author> authors) {
+    public void setAuthors(List<Author> authors) {
         this.authors = authors;
     }
 
@@ -836,7 +837,7 @@ public class XdsDocumentEntry implements Serializable {
         }
         if (creationTime != null) {
             xml.append("\t<creationtime>\n");
-            xml.append(creationTime.toXML());
+//            xml.append(creationTime.toXML());
             xml.append("\t</creationtime>\n");
         }
         if (id != null && !id.equals("")) {
@@ -902,13 +903,13 @@ public class XdsDocumentEntry implements Serializable {
 
         if (getServiceStartTime() != null) {
             xml.append("\t<servicestarttime>\n");
-            xml.append(serviceStartTime.toXML());
+//            xml.append(serviceStartTime.toXML());
             xml.append("\t</servicestarttime>\n");
         }
 
         if (serviceStopTime != null) {
             xml.append("\t<servicestoptime>\n");
-            xml.append(serviceStopTime.toXML());
+//            xml.append(serviceStopTime.toXML());
             xml.append("\t</servicestoptime>\n");
         }
 

@@ -14,7 +14,7 @@ import gov.nist.hit.ds.docentryeditor.client.root.MetadataEditorAppView;
 import java.util.logging.Logger;
 
 /**
- * This is the class to use
+ * This is the class to use to create the application.
  */
 public class MetadataEditorApp implements IsWidget {
     private final static MetadataEditorGinInjector injector = MetadataEditorGinInjector.instance;
