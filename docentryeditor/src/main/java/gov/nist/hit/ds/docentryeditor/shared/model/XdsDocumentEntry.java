@@ -137,6 +137,7 @@ public class XdsDocumentEntry implements Serializable {
      */
     @NotNull
     @NotEmpty
+    // FIXME should not be a list
     private ArrayList<CodedTerm> confidentialityCodes;
     /**
      * <b>NameValueDTM creationTime</b> - The creation time of the document
@@ -536,6 +537,7 @@ public class XdsDocumentEntry implements Serializable {
     private Map<String, String> errorsMap = new HashMap<String, String>();
 
     public XdsDocumentEntry() {
+        languageCode=LanguageCode.ENGLISH_UNITED_STATES;
         classCode = new CodedTerm();
         creationTime = new NameValueDTM();
         creationTime.setName(new String256().setString("creationTime"));
@@ -837,7 +839,7 @@ public class XdsDocumentEntry implements Serializable {
         }
         if (creationTime != null) {
             xml.append("\t<creationtime>\n");
-//            xml.append(creationTime.toXML());
+            xml.append(creationTime.toXML());
             xml.append("\t</creationtime>\n");
         }
         if (id != null && !id.equals("")) {
@@ -903,13 +905,13 @@ public class XdsDocumentEntry implements Serializable {
 
         if (getServiceStartTime() != null) {
             xml.append("\t<servicestarttime>\n");
-//            xml.append(serviceStartTime.toXML());
+            xml.append(serviceStartTime.toXML());
             xml.append("\t</servicestarttime>\n");
         }
 
         if (serviceStopTime != null) {
             xml.append("\t<servicestoptime>\n");
-//            xml.append(serviceStopTime.toXML());
+            xml.append(serviceStopTime.toXML());
             xml.append("\t</servicestoptime>\n");
         }
 

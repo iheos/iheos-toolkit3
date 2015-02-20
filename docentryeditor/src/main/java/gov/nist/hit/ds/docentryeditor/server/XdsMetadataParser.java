@@ -73,14 +73,12 @@ public class XdsMetadataParser extends RemoteServiceServlet implements XdsParser
     }
 
     private XdsDocumentEntry parse(OMElement ele) {
-        Logger.getLogger(this.getClass().getName()).info("Start parsing doc entry");
         XdsDocumentEntry de=new XdsDocumentEntry();
         OMFormatter omf = new OMFormatter(ele);
         omf.noRecurse();
         String eoEleStr = omf.toHtml();
 
         de.setId(new String256(asString(m.getId(ele))));
-        Logger.getLogger(this.getClass().getName()).info(de.getId().toString());
 //        de.idX = eoEleStr;
         // not used in my model yet
 //        de.lid = asString(m.getLid(ele));
@@ -110,6 +108,9 @@ public class XdsMetadataParser extends RemoteServiceServlet implements XdsParser
         de.setHash(new String256(asString(m.getSlotValue(ele, "hash", 0))));
 //        de.hashX = new OMFormatter(m.getSlot(ele, "hash")).toHtml();
 
+        Logger.getLogger(this.getClass().getName()).info("LANGUAGE CODE:");
+        Logger.getLogger(this.getClass().getName()).info(asString(m.getSlotValue(ele, "languageCode", 0)));
+        Logger.getLogger(this.getClass().getName()).info(LanguageCode.getValueOf(asString(m.getSlotValue(ele, "languageCode", 0))).toString());
         de.setLanguageCode(LanguageCode.getValueOf(asString(m.getSlotValue(ele, "languageCode", 0))));
 //        de.langX = new OMFormatter(m.getSlot(ele, "languageCode")).toHtml();
 
@@ -179,33 +180,47 @@ public class XdsMetadataParser extends RemoteServiceServlet implements XdsParser
         schemes.add(MetadataSupport.XDSDocumentEntry_typeCode_uuid);
 
         Map<String, List<String>> codes = null;
-        /*
+
         try {
             codes = m.getCodesWithDisplayName(ele, schemes);
 
-            de.classCode = codes.get(MetadataSupport.XDSDocumentEntry_classCode_uuid);
+            String[] classCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_classCode_uuid).get(0).split("\\^");
+            de.setClassCode(new CodedTerm(classCodeStrings[0],classCodeStrings[1],classCodeStrings[2]));
+//            de.classCode = codes.get(MetadataSupport.XDSDocumentEntry_classCode_uuid);
 //            de.classCodeX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_classCode_uuid);
 
-            de.confCodes = codes.get(MetadataSupport.XDSDocumentEntry_confCode_uuid);
+            // TODO fix model first
+            String[] confidentialityCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_confCode_uuid).get(0).split("\\^");
+//            de.setConfidentialityCodes(new CodedTerm(confidentialityCodeStrings[0],confidentialityCodeStrings[1],confidentialityCodeStrings[2]));
+//            de.confCodes = codes.get(MetadataSupport.XDSDocumentEntry_confCode_uuid);
 //            de.confCodesX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_confCode_uuid);
 
-            de.eventCodeList = codes.get(MetadataSupport.XDSDocumentEntry_eventCode_uuid);
-//            de.eventCodeListX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_eventCode_uuid);
-
-            de.formatCode = codes.get(MetadataSupport.XDSDocumentEntry_formatCode_uuid);
+            String[] formatCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_formatCode_uuid).get(0).split("\\^");
+            de.setFormatCode(new CodedTerm(formatCodeStrings[0], formatCodeStrings[1], formatCodeStrings[2]));
+//            de.formatCode = codes.get(MetadataSupport.XDSDocumentEntry_formatCode_uuid);
 //            de.formatCodeX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_formatCode_uuid);
 
-            de.hcftc = codes.get(MetadataSupport.XDSDocumentEntry_hcftCode_uuid);
+            String[] hcftCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_hcftCode_uuid).get(0).split("\\^");
+            de.setHealthcareFacilityType(new CodedTerm(hcftCodeStrings[0], hcftCodeStrings[1], hcftCodeStrings[2]));
+//            de.hcftc = codes.get(MetadataSupport.XDSDocumentEntry_hcftCode_uuid);
 //            de.hcftcX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_hcftCode_uuid);
 
-            de.pracSetCode = codes.get(MetadataSupport.XDSDocumentEntry_psCode_uuid);
+            String[] practiceSettingCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_psCode_uuid).get(0).split("\\^");
+            de.setPracticeSettingCode(new CodedTerm(practiceSettingCodeStrings[0], practiceSettingCodeStrings[1], practiceSettingCodeStrings[2]));
+//            de.pracSetCode = codes.get(MetadataSupport.XDSDocumentEntry_psCode_uuid);
 //            de.pracSetCodeX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_psCode_uuid);
 
-            de.typeCode = codes.get(MetadataSupport.XDSDocumentEntry_typeCode_uuid);
+            String[] typeCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_typeCode_uuid).get(0).split("\\^");
+            de.setTypeCode(new CodedTerm(typeCodeStrings[0], typeCodeStrings[1], typeCodeStrings[2]));
+//            de.typeCode = codes.get(MetadataSupport.XDSDocumentEntry_typeCode_uuid);
 //            de.typeCodeX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_typeCode_uuid);
 
+
+//            de.eventCodeList = codes.get(MetadataSupport.XDSDocumentEntry_eventCode_uuid);
+//            de.eventCodeListX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_eventCode_uuid);
+
         } catch(Exception e) {}
-*/
+
         try {
             List<OMElement> authorClassifications = m.getClassifications(ele, MetadataSupport.XDSDocumentEntry_author_uuid);
             de.setAuthors(parseAuthors(authorClassifications));
@@ -219,7 +234,6 @@ public class XdsMetadataParser extends RemoteServiceServlet implements XdsParser
             de.getSourcePatientInfo().getValues().add(new String256(s));
         }
 //        de.sourcePatientInfoX = new OMFormatter(m.getSlot(ele, "sourcePatientInfo")).toHtml();
-        Logger.getLogger(this.getClass().getName()).info(de.toXML());
         return de;
     }
 
@@ -265,19 +279,12 @@ public class XdsMetadataParser extends RemoteServiceServlet implements XdsParser
 
     @Override
     public XdsMetadata parseXdsMetadata(String fileContent) {
-        Logger.getLogger(this.getClass().getName()).info("Server parse xds");
         docEntries=new ArrayList<XdsDocumentEntry>();
         try {
-        Logger.getLogger(this.getClass().getName()).info("before bill parser");
             m=MetadataParser.parse(fileContent);
-        Logger.getLogger(this.getClass().getName()).info(m.toString());
-        Logger.getLogger(this.getClass().getName()).info("after bill parser");
 
             for(OMElement eo : m.getExtrinsicObjects()){
-        Logger.getLogger(this.getClass().getName()).info("doc entry found");
-
                 docEntries.add(parse(eo));
-                Logger.getLogger(this.getClass().getName()).info(eo.toString());
             }
         } catch (XdsInternalException e) {
             Logger.getLogger(this.getClass().getName()).info(e.getMessage());
