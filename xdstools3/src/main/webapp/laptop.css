@@ -22,14 +22,12 @@ See the loading condition dependent on the size of the viewport, inside Xdstools
 #apptitle {
     margin-bottom: 5px;
     display: inline-block;
-    margin-left: 20px;
     font-size: 18px;
     color: #F3C60D;
 }
 /* Yellow subtitle inside dark blue bar. */
 #appsubtitle {
     font-size: 12px;
-    margin-left: 20px;
     color: #fc0;
     text-shadow: none;
 }
