@@ -12,7 +12,7 @@ See the loading condition dependent on the size of the viewport, inside Xdstools
 /* Large dark blue bar */
 #appheader {
     float: none;
-    font-family: Verdana;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     background-color: #021a4c;
     margin: 0px;
