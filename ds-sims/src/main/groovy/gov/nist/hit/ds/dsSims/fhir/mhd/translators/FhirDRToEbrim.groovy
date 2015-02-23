@@ -9,14 +9,14 @@ import org.hl7.fhir.instance.model.*
 /**
  * Created by bmajur on 9/8/14.
  */
-class FhirToEbrim {
+class FhirDRToEbrim {
     DocumentReference dr
     OMElement extrinsicObject
     Metadata m
     String logicalId
     def contains = [:]    // id -> value
 
-    FhirToEbrim(DocumentReference _documentReference, String _logicalId, Metadata _metadata) {
+    FhirDRToEbrim(DocumentReference _documentReference, String _logicalId, Metadata _metadata) {
         dr = _documentReference
         m = _metadata
         logicalId = _logicalId
@@ -212,6 +212,40 @@ class FhirToEbrim {
     }
 
     def parseAuthor(Practitioner practitioner) {
+        OMElement author = m.addIntClassification(extrinsicObject, MetadataSupport.XDSDocumentEntry_author_uuid)
+        parseAuthorPerson(practitioner, author)
+        parseAuthorInstitution(practitioner, author)
+    }
+
+    def parseAuthorRole(Practitioner practitioner, OMElement author) {
+        List<CodeableConcept> roleConcepts = practitioner.getRole()
+        def roleNames = roleConcepts.collect { CodeableConcept cc -> cc.textSimple }
+    }
+
+    def parseAuthorInstitution(Practitioner practitioner, OMElement author) {
+        ResourceReference organization = practitioner.getOrganization()
+        if (!organization) return
+        String reference = organization.referenceSimple
+        reference = noHash(reference)
+        Resource resource = contains[reference]
+        assert resource
+        assert resource instanceof Resource
+        assert resource instanceof Organization
+        Organization org = resource
+        def orgName = org.getNameSimple()
+        def orgIdentifier = org.getIdentifier()?.first()?.getValueSimple()
+        def aaId = org.getIdentifier()?.first()?.getSystemSimple()
+        def aaIdType = 'ISO'
+
+        def value
+        if (aaId)
+             value = "${orgName}^^^^^&${aaId}&${aaIdType}^^^^${orgIdentifier}"
+        else
+            value = "${orgName}^^^^^^^^^${orgIdentifier}"
+        m.addSlot(author, 'authorInstitution', value)
+    }
+
+    def parseAuthorPerson(Practitioner practitioner, OMElement author) {
         def identifier = practitioner?.identifier
         def identifierValue = ''
         def assigningAuthority = ''
@@ -232,9 +266,10 @@ class FhirToEbrim {
             assigningAuthority = "&${noURN(assigningAuthority)}&ISO"
         }
         def value = "${identifierValue}^${lastName}^${firstName}^^^${prefix}^^^${assigningAuthority}"
-        OMElement author = m.addIntClassification(extrinsicObject, MetadataSupport.XDSDocumentEntry_author_uuid)
         m.addSlot(author, 'authorPerson', value)
     }
+
+
 
     def parseAuthor(Patient patient) {
         assert false

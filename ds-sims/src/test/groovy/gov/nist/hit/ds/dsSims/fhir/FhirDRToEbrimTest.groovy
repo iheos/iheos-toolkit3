@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.dsSims.fhir
 
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.DocumentEntryModel
-import gov.nist.hit.ds.dsSims.fhir.mhd.translators.FhirToEbrim
+import gov.nist.hit.ds.dsSims.fhir.mhd.translators.FhirDRToEbrim
 import gov.nist.hit.ds.ebMetadata.Metadata
 import org.hl7.fhir.instance.model.DocumentReference
 import org.hl7.fhir.instance.model.Resource
@@ -10,7 +10,7 @@ import spock.lang.Specification
 /**
  * Created by bmajur on 9/8/14.
  */
-class FhirToEbrimTest extends Specification {
+class FhirDRToEbrimTest extends Specification {
 
     // TODO - testRun schema
     // TODO - testRun metadata validator
@@ -31,7 +31,7 @@ class FhirToEbrimTest extends Specification {
         Resource resource = (Resource) res
         DocumentReference documentReference = (DocumentReference) resource
         def metadata = new Metadata()
-        def converter = new FhirToEbrim(documentReference, 'Document1', metadata)
+        def converter = new FhirDRToEbrim(documentReference, 'Document1', metadata)
         converter.run()
         DocumentEntryModel de = new DocumentEntryModel(metadata, metadata.getExtrinsicObject(0))
 
@@ -71,7 +71,7 @@ class FhirToEbrimTest extends Specification {
         Resource resource = (Resource) res
         DocumentReference documentReference = (DocumentReference) resource
         def metadata = new Metadata()
-        def converter = new FhirToEbrim(documentReference, 'Document1', metadata)
+        def converter = new FhirDRToEbrim(documentReference, 'Document1', metadata)
         converter.run()
         DocumentEntryModel de = new DocumentEntryModel(metadata, metadata.getExtrinsicObject(0))
 
