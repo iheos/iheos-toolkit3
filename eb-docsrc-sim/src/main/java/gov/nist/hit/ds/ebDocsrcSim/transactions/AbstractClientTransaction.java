@@ -33,6 +33,7 @@ public abstract class AbstractClientTransaction {
     SimHandle simHandle;
 
 	public List<OMElement> additionalHeaders = new ArrayList<>();
+    public String messageId = null;
 
 	public TransactionSettings transactionSettings = null;
 
@@ -47,7 +48,9 @@ public abstract class AbstractClientTransaction {
 
 	protected OMElement soapCall(OMElement requestBody) throws Exception {
 		soap = new Soap();
+        soap.messageId = messageId;
         soap.simHandle = simHandle;
+
 		soap.setAsync(async);
 //		if (testConfig.saml) {
 //			soap.setRepositoryLocation(testConfig.testmgmt_dir + File.separator + "rampart" + File.separator + "client_repositories" );

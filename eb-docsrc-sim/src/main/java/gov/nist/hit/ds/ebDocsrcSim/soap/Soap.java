@@ -61,6 +61,7 @@ public class Soap  {
 
     List<OMElement> additionalHeaders = null;
     List<OMElement> secHeaders = null;
+    public String messageId = null;
     String endpoint;
     String action;
     OMElement body = null;
@@ -212,7 +213,9 @@ public class Soap  {
 
         envelope.getBody().addChild(body);
 
-        setSoapHeader(envelope.getHeader());
+        OMElement soapHeader = envelope.getHeader();
+
+        setSoapHeader(soapHeader);
 //		if (useWSSEC) {
 //			// TODO: SAML disabled
 //			try {
@@ -398,6 +401,9 @@ public class Soap  {
             outMsgCtx = new MessageContext();
         }
         // vbeera: modified code -END-
+
+        if (messageId != null)
+            outMsgCtx.setMessageID(messageId);
 
         Options options = outMsgCtx.getOptions();
         // options.setProperty(AddressingConstants.ADD_MUST_UNDERSTAND_TO_ADDRESSING_HEADERS,

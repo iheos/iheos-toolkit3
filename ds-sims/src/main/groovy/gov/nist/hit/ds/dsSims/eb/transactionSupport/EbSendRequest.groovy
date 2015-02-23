@@ -10,6 +10,7 @@ class EbSendRequest {
     String metadata = null
     String transactionName
     String extraHeaders
+    String messageId = null   // use default if null
     Map<String, DocumentHandler> documents = [ : ]
     boolean tls
 }
