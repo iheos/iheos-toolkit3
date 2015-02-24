@@ -23,6 +23,8 @@ class EbSendRequestDAO {
 
         request.tls = xml.tls.@value.text().compareToIgnoreCase('true') == 0
 
+        request.messageId = xml.messageId.text()
+
         def outputBuilder = new StreamingMarkupBuilder()
         String metadataString = outputBuilder.bind{ mkp.yield xml.metadata.children()[0] }
         request.metadata = metadataString

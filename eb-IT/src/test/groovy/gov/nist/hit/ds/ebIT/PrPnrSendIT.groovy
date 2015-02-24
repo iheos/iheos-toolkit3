@@ -107,6 +107,33 @@ class PrPnrSendIT extends Specification {
         simHandle.event.fault == null
     }
 
+    def 'Test against PR without TLS - custom messageId'() {
+        setup:
+        def requestXml = """
+<sendRequest>
+    <simReference>${userName}/${clientSimName}</simReference>
+    <transactionName>prb</transactionName>
+    <tls value="false"/>
+    <messageId>HiFrodo</messageId>
+    <metadata>${metadata}</metadata>
+    <extraHeaders><foo/><bar/></extraHeaders>
+    <document id="${documentId}" mimeType="text/plain">${document}</document>
+</sendRequest>
+"""
+
+        when: 'create client locally'
+        SimApi.createClient('docsrc', userName, clientSimId, clientSimConfig(endpoint, tlsEndpoint))
+//        SimApi.setConfig(userName, clientSimId, clientSimConfig(endpoint, tlsEndpoint))
+
+        and: 'send PnR to PR'
+        EbSendRequest request = EbSendRequestDAO.toModel(requestXml)
+        println "custom messageId is ${request.messageId}"
+        SimHandle simHandle = SimApi.send(simIdent, request)
+
+        then: 'basically successful'
+        simHandle.event.fault == null
+    }
+
     def 'Test against PR with TLS'() {
         setup:
         def requestXml = """
