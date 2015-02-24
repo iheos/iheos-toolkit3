@@ -86,6 +86,10 @@ public class XdsSubmissionSet implements Serializable {
     @NotNull
     private NameValueDTM submissionTime;
 
+    /**
+     * The title of the SubmissionSet.
+     * [Optional] regardless the standard (XDS DS, XDS DR, XDM MC, XDR DS, XDR MS).
+     */
     // FIXME List or not?
     private InternationalString title;
 

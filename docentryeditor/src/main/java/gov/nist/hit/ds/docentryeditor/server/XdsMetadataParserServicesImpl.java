@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @See XdsMetadata
  */
-public class XdsMetadataParser extends RemoteServiceServlet implements XdsParserServices{
+public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implements XdsParserServices{
     private List<XdsDocumentEntry> docEntries;
     private Metadata m;
 

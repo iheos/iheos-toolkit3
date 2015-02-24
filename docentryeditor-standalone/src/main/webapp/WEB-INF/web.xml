@@ -7,7 +7,7 @@
     <!-- Servlets -->
     <servlet>
         <servlet-name>gov.nist.hit.ds.docentryeditor.XDSMetadataEditor XdsParserServices</servlet-name>
-        <servlet-class>gov.nist.hit.ds.docentryeditor.server.XdsMetadataParser</servlet-class>
+        <servlet-class>gov.nist.hit.ds.docentryeditor.server.XdsMetadataParserServicesImpl</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>gov.nist.hit.ds.docentryeditor.XDSMetadataEditor XdsParserServices</servlet-name>

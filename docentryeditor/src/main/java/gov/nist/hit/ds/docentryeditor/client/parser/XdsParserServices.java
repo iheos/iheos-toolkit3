@@ -5,7 +5,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsMetadata;
 
 /**
- * Created by onh2 on 2/19/2015.
+ * RPC Services interface to parse an XDS document (ebRim XML File).
  */
 @RemoteServiceRelativePath("xdsparser")
 public interface XdsParserServices extends RemoteService{
