@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
+ * Bill's UUID format validator adapted for client side validation in the editor.
  * Created by onh2 on 8/28/2014.
  */
 public class UuidFormatClientValidator extends AbstractValidator<String> {

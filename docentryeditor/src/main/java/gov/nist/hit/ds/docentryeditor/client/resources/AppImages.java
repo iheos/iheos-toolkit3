@@ -5,6 +5,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
 /**
+ * Application image resources.
  */
 public interface AppImages extends ClientBundle {
     AppImages INSTANCE = GWT.create(AppImages.class);

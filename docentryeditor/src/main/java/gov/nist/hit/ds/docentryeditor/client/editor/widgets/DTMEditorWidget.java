@@ -13,10 +13,11 @@ import gov.nist.hit.ds.docentryeditor.shared.model.DTM;
  */
 @Deprecated
 public class DTMEditorWidget extends Composite implements Editor<DTM> {
-    VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
+    // --- UI Widgets
     String256EditorWidget dtm = new String256EditorWidget();
 
     public DTMEditorWidget() {
+        VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
         initWidget(vcontainer);
         dtm.setWidth("auto");
         this.setWidth("auto");

@@ -30,7 +30,11 @@ public class OIDEditorWidget extends Composite implements Editor<OID> {
         }
     }
 
-    public void addValidator(Validator<String> validator) {
+    /**
+     * Adds a field validator that is meants to check the input oid.
+     * @param validator
+     */
+    public void addOIDValidator(Validator<String> validator) {
         oid.addValidator(validator);
     }
 

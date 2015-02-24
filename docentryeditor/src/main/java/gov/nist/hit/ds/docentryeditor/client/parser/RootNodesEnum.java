@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.docentryeditor.client.parse;
+package gov.nist.hit.ds.docentryeditor.client.parser;
 
 enum RootNodesEnum {
     titles, comments, authors, mimetype, hash, id, classcode, confidentialitycode, creationtime, eventcode, formatcode, healthcarefacilitytype, languagecode, legalauthenticator, patientid, practicesettingcode, repositoryuniqueid, servicestarttime, servicestoptime, size, sourcepatientid, sourcepatientinfo, typecode, uniqueid, uri;

@@ -56,7 +56,7 @@ public class EditorActivity extends AbstractActivity {
             public void run() {
                 Logger.getLogger(this.getClass().getName()).info("Fire Doc. Entry Editor UI loaded event...");
                 // signal that the document entry editor view has loaded.
-                metadataEditorEventBus.fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
+                metadataEditorEventBus.fireXdsEditorLoadedEvent();
             }
         };
 
@@ -98,10 +98,18 @@ public class EditorActivity extends AbstractActivity {
         return sc.asWidget();
     }
 
+    /**
+     * Method that builds the Document Entry Editor (MVP).
+     * @return Document Entry Editor MVP.
+     */
     public GenericMVP<XdsDocumentEntry, DocumentModelEditorView, DocumentModelEditorPresenter> buildEditorMVP() {
         return new GenericMVP<XdsDocumentEntry, DocumentModelEditorView, DocumentModelEditorPresenter>(editorView, editorPresenter);
     }
 
+    /**
+     * Method that builds the Validation view (MVP).
+     * @return Validation view MVP.
+     */
     public GenericMVP<XdsDocumentEntry, ValidationView, ValidationPresenter> buildValidationMVP() {
         return new GenericMVP<XdsDocumentEntry, ValidationView, ValidationPresenter>(validationView, validationPresenter);
     }

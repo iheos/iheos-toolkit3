@@ -32,10 +32,8 @@ import gov.nist.hit.ds.docentryeditor.client.editor.widgets.*;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueDTMEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueIntegerEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueString256EditorWidget;
-import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
-import gov.nist.hit.ds.docentryeditor.client.event.XdsEditorLoadedEvent;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractView;
-import gov.nist.hit.ds.docentryeditor.client.parse.PredefinedCodes;
+import gov.nist.hit.ds.docentryeditor.client.parser.PredefinedCodes;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppImages;
 import gov.nist.hit.ds.docentryeditor.client.widgets.HomeButton;
 import gov.nist.hit.ds.docentryeditor.shared.model.CodedTerm;
@@ -535,7 +533,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         id.setEmptyText("ex: 123456789");
         id.setToolTipConfig(new ToolTipConfig("ID is a string", "It should contain less than 256 characters"));
         id.setAllowBlank(false);
-//        id.addValidator(new RegExValidator("[1-9][0-9]+", "Value is not correct. It is supposed to be a number."));
+//        id.addOIDValidator(new RegExValidator("[1-9][0-9]+", "Value is not correct. It is supposed to be a number."));
         id.addValidator(new UuidFormatClientValidator());
         // language code
         languageCode.setAllowBlank(false);
@@ -575,7 +573,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                 "As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210) "
                         + "OID format is \"[1-9](\\.[0-9]+)*]\""));
         repoUId.setAllowBlank(true);
-        repoUId.addValidator(new RegExValidator("^[1-9][0-9]*(\\.[1-9][0-9]*)+$", "Value is not correct. A repository unique ID is supposed to be a suite of numbers separated by periods."));
+        repoUId.addOIDValidator(new RegExValidator("^[1-9][0-9]*(\\.[1-9][0-9]*)+$", "Value is not correct. A repository unique ID is supposed to be a suite of numbers separated by periods."));
         // service start time
         serviceStartTime.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Service start time", "Represents the start time the service being documented took place " +
                 "(clinically significant, but not necessarily when the document was " +

@@ -14,7 +14,7 @@ import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutP
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
-import gov.nist.hit.ds.docentryeditor.client.MetadataEditorRequestFactory;
+import gov.nist.hit.ds.docentryeditor.client.utils.MetadataEditorRequestFactory;
 import gov.nist.hit.ds.docentryeditor.client.event.*;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractPresenter;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
@@ -144,7 +144,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
      * Method which actually handle saving (on server) and download for the edited metadata file.
      */
     private void save() {
-        ((MetadataEditorEventBus) eventBus).fireSaveCurrentlyEditedDocumentEvent(new SaveCurrentlyEditedDocumentEvent(model));
+        ((MetadataEditorEventBus) eventBus).fireSaveCurrentlyEditedDocumentEvent(model);
         String filename = model.getFileName().toString();
         requestFactory.saveFileRequestContext().saveAsXMLFile(filename, model.toXML()).fire(new Receiver<String>() {
 
@@ -177,7 +177,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
      */
     public void rollbackChanges() {
         logger.info("Cancel doc. entry changes.");
-        ((MetadataEditorEventBus) eventBus).fireXdsEditorLoadedEvent(new XdsEditorLoadedEvent());
+        ((MetadataEditorEventBus) eventBus).fireXdsEditorLoadedEvent();
     }
 
     /**

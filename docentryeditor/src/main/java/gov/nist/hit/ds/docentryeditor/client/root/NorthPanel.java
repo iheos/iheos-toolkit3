@@ -122,7 +122,7 @@ public class NorthPanel extends ContentPanel {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				eventBus.fireSaveFileEvent(new SaveFileEvent());
+				eventBus.fireSaveFileEvent();
 			}
 		});
 

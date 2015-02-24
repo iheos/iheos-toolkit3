@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.docentryeditor.client;
+package gov.nist.hit.ds.docentryeditor.client.utils;
 
 /*Imports*/
 
@@ -13,7 +13,7 @@ import gov.nist.hit.ds.docentryeditor.client.editor.EditorActivity;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.AuthorWidgets.AuthorsListEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
 import gov.nist.hit.ds.docentryeditor.client.home.WelcomeActivity;
-import gov.nist.hit.ds.docentryeditor.client.parse.XdsParser;
+import gov.nist.hit.ds.docentryeditor.client.parser.XdsParser;
 import gov.nist.hit.ds.docentryeditor.client.root.CenterPanel;
 import gov.nist.hit.ds.docentryeditor.client.root.MetadataEditorAppView;
 import gov.nist.hit.ds.docentryeditor.client.root.NorthPanel;

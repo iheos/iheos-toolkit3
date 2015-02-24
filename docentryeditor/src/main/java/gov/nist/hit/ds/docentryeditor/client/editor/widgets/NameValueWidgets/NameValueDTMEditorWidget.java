@@ -20,24 +20,37 @@ import java.util.Date;
 
 /**
  * <p>
- * <b>This class represents the widget which matches NameValue model type</b> <br>
+ * <b>This class represents the widget which matches the NameValueDTM model type</b> <br>
  * </p>
+ *
+ * @see gov.nist.hit.ds.docentryeditor.client.generics.GenericEditableListView
  */
 public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date> implements Editor<NameValueDTM> {
+    // instance of the property access for the DTM entity attributes (for the GXT Store).
     private final static DTMProperties props = GWT.create(DTMProperties.class);
 
+    // --- UI Widgets
     ListStoreEditor<DTM> values;
     @Ignore
     private DateField df;
 
+
+    /**
+     * NameValueDTM editable list default constructor.
+     * @param widgetTitle title of the widget (for the grid's panel header).
+     */
     public NameValueDTMEditorWidget(String widgetTitle) {
         super(widgetTitle, new ListStore<DTM>(props.key()), props.dtm());
 
+        // init list store that will handle the list of DTM objects
         values = new ListStoreEditor<DTM>(getStore());
 
         bind();
     }
 
+    /**
+     * Method binding the view with actions.
+     */
     private void bind() {
         // FIXME not working asked a question on stackoverflow waiting for answers
 //        editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<DTM>() {
@@ -59,10 +72,10 @@ public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date>
 //        });
     }
 
-    public void setListMaxSize(int maxSize) {
-        setStoreMaxLength(maxSize);
-    }
 
+    /**
+     * This method assigns a specific field editor to the editable list widget for its edition mode.
+     */
     @Override
     protected void buildEditingFields() {
         DateTimeFormat dtf = DateTimeFormat.getFormat("yyyyMMddHHmmss");
@@ -79,11 +92,27 @@ public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date>
         getColumnModel().getColumn(0).setCell(c);
     }
 
+    /**
+     * This method return the Model factory that must be used for this list editor.
+     * @return DTM factory.
+     */
     @Override
     protected GridModelFactory<DTM> getModelFactory() {
         return DTMFactory.instance;
     }
 
+    /**
+     * Defines the maximum number of element that can be stored in the widget.
+     * @param maxSize maximum number of element.
+     */
+    public void setListMaxSize(int maxSize) {
+        setStoreMaxLength(maxSize);
+    }
+
+    /**
+     * This method returns the list value provider.
+     * @return DTM value provider.
+     */
     @Override
     protected ValueProvider<DTM, Date> getValueProvider() {
         return props.dtm();

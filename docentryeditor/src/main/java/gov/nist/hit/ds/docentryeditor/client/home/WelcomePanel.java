@@ -11,10 +11,7 @@ import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import gov.nist.hit.ds.docentryeditor.client.MetadataEditorGinInjector;
-import gov.nist.hit.ds.docentryeditor.client.editor.EditorPlace;
 import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
-import gov.nist.hit.ds.docentryeditor.client.event.NewFileLoadedEvent;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppImages;
 import gov.nist.hit.ds.docentryeditor.client.widgets.PageWarningPanel;
 import gov.nist.hit.ds.docentryeditor.client.widgets.uploader.FileUploadDialog;
@@ -110,7 +107,7 @@ public class WelcomePanel extends VerticalLayoutContainer {
 		newDocEntryBtn.addSelectHandler(new SelectEvent.SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent selectEvent) {
-                ((MetadataEditorEventBus) eventBus).fireNewFileLoadedEvent(new NewFileLoadedEvent(new XdsDocumentEntry()));
+                ((MetadataEditorEventBus) eventBus).fireNewFileLoadedEvent(new XdsDocumentEntry());
 			}
 		});
 		loadPreFilledDocEntryBtn.addSelectHandler(new SelectEvent.SelectHandler() {

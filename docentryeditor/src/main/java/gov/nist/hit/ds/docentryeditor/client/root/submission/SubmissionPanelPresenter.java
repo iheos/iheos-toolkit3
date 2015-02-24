@@ -1,13 +1,13 @@
 package gov.nist.hit.ds.docentryeditor.client.root.submission;
 
 import com.google.gwt.place.shared.PlaceController;
-import gov.nist.hit.ds.docentryeditor.client.MetadataEditorRequestFactory;
+import gov.nist.hit.ds.docentryeditor.client.utils.MetadataEditorRequestFactory;
 import gov.nist.hit.ds.docentryeditor.client.editor.EditorPlace;
 import gov.nist.hit.ds.docentryeditor.client.event.*;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractPresenter;
 import gov.nist.hit.ds.docentryeditor.client.home.WelcomePlace;
-import gov.nist.hit.ds.docentryeditor.client.parse.PreParse;
-import gov.nist.hit.ds.docentryeditor.client.parse.XdsParser;
+import gov.nist.hit.ds.docentryeditor.client.parser.PreParse;
+import gov.nist.hit.ds.docentryeditor.client.parser.XdsParser;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppResources;
 import gov.nist.hit.ds.docentryeditor.shared.model.String256;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
@@ -44,7 +44,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
      */
     private void bind() {
         // this event catches handle the navigation back to the home page.
-        ((MetadataEditorEventBus) getEventBus()).adddBackToHomePageEventHandler(new BackToHomePageEvent.BackToHomePageEventHandler() {
+        ((MetadataEditorEventBus) getEventBus()).addBackToHomePageEventHandler(new BackToHomePageEvent.BackToHomePageEventHandler() {
             @Override
             public void onBackToHomePage(BackToHomePageEvent event) {
                 getView().getTree().getSelectionModel().deselectAll();
@@ -70,7 +70,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 if (currentlyEdited != null) {
                     // if a doc. entry is currently under edition, an event is fired to transfer it to the editor.
                     logger.info("A document is already selected. Loading it...");
-                    ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
+                    ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(currentlyEdited.getModel());
                 } else {
                     // if no doc. entry is currently under edition, it means the app (editor view) has been loaded from
                     // by its URL from the browser navigation bar (external link).
@@ -132,7 +132,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     }
 
     public void doSave() {
-        ((MetadataEditorEventBus) eventBus).fireSaveFileEvent(new SaveFileEvent());
+        ((MetadataEditorEventBus) eventBus).fireSaveFileEvent();
         ((MetadataEditorEventBus) eventBus).addSaveCurrentlyEditedDocumentHandler(new SaveCurrentlyEditedDocumentEvent.SaveCurrentlyEditedDocumentEventHandler() {
             @Override
             public void onSaveCurrentlyEditedDocumentEvent(SaveCurrentlyEditedDocumentEvent event) {
@@ -150,7 +150,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
             placeController.goTo(new EditorPlace());
         }
         logger.info("Fire Start Edit selected ("+currentlyEdited.getValue()+") document entry event...");
-        ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(new StartEditXdsDocumentEvent(currentlyEdited.getModel()));
+        ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(currentlyEdited.getModel());
     }
 
     /**

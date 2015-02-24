@@ -10,6 +10,9 @@ import com.google.gwt.user.client.ui.Widget;
 import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
 import gov.nist.hit.ds.docentryeditor.client.home.WelcomePlace;
 import gov.nist.hit.ds.docentryeditor.client.root.MetadataEditorAppView;
+import gov.nist.hit.ds.docentryeditor.client.utils.MetadataEditorActivityMapper;
+import gov.nist.hit.ds.docentryeditor.client.utils.MetadataEditorAppPlaceHistoryMapper;
+import gov.nist.hit.ds.docentryeditor.client.utils.MetadataEditorGinInjector;
 
 import java.util.logging.Logger;
 

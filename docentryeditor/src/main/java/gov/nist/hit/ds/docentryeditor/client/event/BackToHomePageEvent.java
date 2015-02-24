@@ -4,6 +4,7 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
+ * GWT Event to request to move back to the application Home page.
  * Created by onh2 on 1/20/2015.
  */
 public class BackToHomePageEvent extends GwtEvent<BackToHomePageEvent.BackToHomePageEventHandler> {
@@ -11,7 +12,6 @@ public class BackToHomePageEvent extends GwtEvent<BackToHomePageEvent.BackToHome
 
     public BackToHomePageEvent(){
     }
-
 
     @Override
     public Type<BackToHomePageEventHandler> getAssociatedType() {

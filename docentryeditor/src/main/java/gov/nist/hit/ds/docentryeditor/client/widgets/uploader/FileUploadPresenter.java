@@ -2,14 +2,12 @@ package gov.nist.hit.ds.docentryeditor.client.widgets.uploader;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.web.bindery.requestfactory.shared.Receiver;
-import gov.nist.hit.ds.docentryeditor.client.MetadataEditorRequestFactory;
-import gov.nist.hit.ds.docentryeditor.client.XdsParserServices;
-import gov.nist.hit.ds.docentryeditor.client.XdsParserServicesAsync;
+import gov.nist.hit.ds.docentryeditor.client.parser.XdsParserServices;
+import gov.nist.hit.ds.docentryeditor.client.parser.XdsParserServicesAsync;
 import gov.nist.hit.ds.docentryeditor.client.event.NewFileLoadedEvent;
 import gov.nist.hit.ds.docentryeditor.client.event.StartEditXdsDocumentEvent;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractPresenter;
-import gov.nist.hit.ds.docentryeditor.client.parse.XdsParser;
+import gov.nist.hit.ds.docentryeditor.client.parser.XdsParser;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsMetadata;
 
@@ -48,7 +46,7 @@ public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
                 getEventBus().fireEvent(new StartEditXdsDocumentEvent(model));
             }
         });
-//                XdsDocumentEntry model = xdsParser.parse(results.split(";\\^;\\^;")[1]);
+//                XdsDocumentEntry model = xdsParser.parser(results.split(";\\^;\\^;")[1]);
 //                model.setFileName(new String256().setString(results.split(";\\^;\\^;")[0]));
 
     }

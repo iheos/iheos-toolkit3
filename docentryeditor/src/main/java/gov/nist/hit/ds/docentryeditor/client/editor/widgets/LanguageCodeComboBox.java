@@ -12,12 +12,15 @@ import gov.nist.hit.ds.docentryeditor.shared.model.LanguageCode;
 
 /**
  * <p>
- * <b>This class represents the widget which matches LanguageCode model type</b>
+ * <b>This class represents the widget which matches LanguageCode model type.</b>
+ * It enables the edition of language by selecting an existing language.
  * <br/>
  * </p>
+ * @see gov.nist.hit.ds.docentryeditor.shared.model.LanguageCode
  */
 public class LanguageCodeComboBox extends ComboBox<LanguageCode> {
 
+    // --- UI Widgets
 	static ListStore<LanguageCode> languages = new ListStore<LanguageCode>(new ModelKeyProvider<LanguageCode>() {
 
 		@Override
@@ -29,6 +32,9 @@ public class LanguageCodeComboBox extends ComboBox<LanguageCode> {
 		}
 	});
 
+    /**
+     * Widget default constructor.
+     */
 	public LanguageCodeComboBox() {
 		super(languages, new LabelProvider<LanguageCode>() {
 
@@ -40,8 +46,10 @@ public class LanguageCodeComboBox extends ComboBox<LanguageCode> {
 
 		getStore().clear();
 
+        // create the list of value for the widget.
 		List<LanguageCode> l = new ArrayList<LanguageCode>(Arrays.asList(LanguageCode.values()));
 
+        // sort alphabetically the list of languages for the widget.
 		Collections.sort(l, new Comparator<LanguageCode>() {
 
 			@Override
@@ -50,6 +58,7 @@ public class LanguageCodeComboBox extends ComboBox<LanguageCode> {
 			}
 		});
 
+        // init the widget with the sorted list of languages.
 		getStore().addAll(l);
 
 		setTriggerAction(TriggerAction.ALL);

@@ -7,7 +7,7 @@ import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderL
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import com.sencha.gxt.widget.core.client.container.Viewport;
-import gov.nist.hit.ds.docentryeditor.client.MetadataEditorGinInjector;
+import gov.nist.hit.ds.docentryeditor.client.utils.MetadataEditorGinInjector;
 import gov.nist.hit.ds.docentryeditor.client.generics.GenericMVP;
 import gov.nist.hit.ds.docentryeditor.client.root.submission.SubmissionMenuData;
 import gov.nist.hit.ds.docentryeditor.client.root.submission.SubmissionPanelPresenter;

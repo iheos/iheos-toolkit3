@@ -41,7 +41,7 @@ public class IdentifierOIDEditorWidget extends Composite implements
      * @param validator input identifier oid value validator.
      */
     public void addValueFieldValidator(Validator validator) {
-        value.addValidator(validator);
+        value.addOIDValidator(validator);
     }
 
     /**

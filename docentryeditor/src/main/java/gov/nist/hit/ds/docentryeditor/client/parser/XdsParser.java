@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.docentryeditor.client.parse;
+package gov.nist.hit.ds.docentryeditor.client.parser;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.xml.client.Document;
@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * To do it, here are the following variables required
  * </p>
  * <ul>
- * <li>{@link #instance}: The parse object, this class is a singleton (Parse) ;</li>
+ * <li>{@link #instance}: The parser object, this class is a singleton (Parse) ;</li>
  * <li>{@link #documentXml}: The String which contains the XML data (String) ;</li>
  * <li>{@link #xdsDocumentEntry}: The document model which will be completed.</li>
  * </ul>
@@ -49,7 +49,7 @@ import java.util.logging.Logger;
  * <p>
  * <b>See below each method mentioned above.</b> <br>
  * {@link #parse(String)}</br> {@link #findElements()} <br>
- * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+ * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
  * </br> {@link #getDocumentParsed()}
  * </p>
  * <p/>
@@ -93,7 +93,7 @@ public class XdsParser {
     private final XdsDocumentEntry xdsDocumentEntry = new XdsDocumentEntry();
     /**
      * <b>String documentXml</b> - The data taken from the XML document and send
-     * by the server, this is the String to parse.<br>
+     * by the server, this is the String to parser.<br>
      * Type: String</br>
      *
      * @see XdsParser
@@ -116,8 +116,8 @@ public class XdsParser {
     }
 
     /**
-     * <b>Method parse</b> <br>
-     * Firstly, it calls {@link #getDocumentParsed()} method to parse the String
+     * <b>Method parser</b> <br>
+     * Firstly, it calls {@link #getDocumentParsed()} method to parser the String
      * {@link #documentXml} and to complete the {@link gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry}
      * {@link #xdsDocumentEntry} thanks to the {@link #findElements()} method.
      * </br>
@@ -150,7 +150,7 @@ public class XdsParser {
         documentXml = documentXml.replaceAll("&amp;", "&");
         documentXml = preParse.doPreParseUTF8(documentXml);
 
-        // parse the XML document into a DOM
+        // parser the XML document into a DOM
         document = XMLParser.parse(documentXml);
     }
 
@@ -162,7 +162,7 @@ public class XdsParser {
      * <b>Method findElements</b> <br>
      * It calls all parseType methods on each element from {@link gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry}
      * through
-     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
      * . </br>
      *
      * @throws String256Exception if there is a String256 with more than 256 characters
@@ -272,7 +272,7 @@ public class XdsParser {
      * <b>Method methodParseAuthors</b> <br>
      * To obtain the author(s) of the XML file (ArrayList of {@link Author}
      * ).</br>Called by
-     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
      * .
      *
      * @throws String256Exception if there is a String256 with more than 256 characters
@@ -399,7 +399,7 @@ public class XdsParser {
     /**
      * <b>Method parseString256</b> <br>
      * To obtain the element of type {@link String256}.</br>Called by
-     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
      * on each {@link String256} element.
      *
      * @param node (String): The name of the root node.
@@ -430,7 +430,7 @@ public class XdsParser {
     /**
      * <b>Method parseOID</b> <br>
      * To obtain the element of type {@link OID}.</br>Called by
-     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
      * on each OID element.
      *
      * @param node (String): The name of the root node.
@@ -523,7 +523,7 @@ public class XdsParser {
     /**
      * <b>Method parseIdentifierOID</b> <br>
      * To obtain the element of type {@link IdentifierOID}.</br>Called by
-     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
      * on each {@link IdentifierOID} element. </p>
      *
      * @param node (String) : The name of the root node.
@@ -581,7 +581,7 @@ public class XdsParser {
      * <b>Method parseArrayInternationalString</b> <br>
      * To obtain the element of type ArrayList(InternationalString) .</br>Called
      * by
-     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
      * on each ArrayList(InternationalString) element.
      *
      * @param node (String) : The name of the root node.
@@ -628,7 +628,7 @@ public class XdsParser {
     /**
      * <b>Method parseCodedTerm</b> <br>
      * To obtain the element of type CodedTerm.</br>Called by
-     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
      * on each {@link CodedTerm} element. </p>
      *
      * @param node (String) : The name of the root node.
@@ -644,7 +644,7 @@ public class XdsParser {
      * <p>
      * <b>Method parseArrayCodedTerm</b> <br>
      * To obtain the element of type ArrayList(CodedTerm).</br>Called by
-     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
      * on each ArrayList(CodedTerm) element.
      * </p>
      *
@@ -714,7 +714,7 @@ public class XdsParser {
     /**
      * <b>Method parseNameValueString256</b> <br>
      * To obtain the element of type {@link NameValueString256}.</br>Called by
-     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
      * on each {@link NameValueString256} element.
      *
      * @param node (String) : The name of the root node.
@@ -755,7 +755,7 @@ public class XdsParser {
     /**
      * <b>Method parseNameValueInteger</b> <br>
      * To obtain the element of type {@link NameValueInteger}.</br>Called by
-     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
      * on each {@link NameValueInteger} element.
      *
      * @param node (String) : The name of the root node.
@@ -794,7 +794,7 @@ public class XdsParser {
     /**
      * <b>Method parseNameValueDTM</b> <br>
      * To obtain the element of type {@link NameValueDTM}.</br>Called by
-     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parse.RootNodesEnum)}
+     * {@link #generalMethod(gov.nist.hit.ds.docentryeditor.client.parser.RootNodesEnum)}
      * on each {@link NameValueDTM} element.
      *
      * @param node (String) : The name of the root node.

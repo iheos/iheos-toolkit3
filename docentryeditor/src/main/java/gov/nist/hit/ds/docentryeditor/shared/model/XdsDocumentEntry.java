@@ -123,7 +123,7 @@ public class XdsDocumentEntry implements Serializable {
      * @see XdsDocumentEntry
      */
     @Nullable
-    private ArrayList<InternationalString> comments;
+    private List<InternationalString> comments;
     /**
      * <b>CodedTerm confidentialityCode</b> - The confidentiality code of the
      * document [Mandatory].<br>
@@ -164,7 +164,7 @@ public class XdsDocumentEntry implements Serializable {
      * @see XdsDocumentEntry
      */
     @Nullable
-    private ArrayList<CodedTerm> eventCode;
+    private List<CodedTerm> eventCode;
     /**
      * <b>String256 fileName</b> - The name of the metadata file which will be generated.
      * [Mandatory]<br/>
@@ -444,7 +444,8 @@ public class XdsDocumentEntry implements Serializable {
      * @see XdsDocumentEntry
      */
     @Nullable
-    private ArrayList<InternationalString> titles;
+    // FIXME Are you sure this is meant to be a list?
+    private List<InternationalString> titles;
     /**
      * <b>CodedTerm typeCode</b> - The type code of the document [Mandatory].<br>
      * Type: {@link CodedTerm}</br></p>
@@ -535,6 +536,10 @@ public class XdsDocumentEntry implements Serializable {
 
     // TODO Use a map for validation purpose (Map<String,(String|XdsError)>
     private Map<String, String> errorsMap = new HashMap<String, String>();
+    private String256 logicalId;
+    private String256 version;
+    private String256 availabilityStatus;
+    private String256 homeCommunityId;
 
     public XdsDocumentEntry() {
         languageCode=LanguageCode.ENGLISH_UNITED_STATES;
@@ -577,19 +582,27 @@ public class XdsDocumentEntry implements Serializable {
         eventCode = new ArrayList<CodedTerm>();
     }
 
-    public ArrayList<InternationalString> getTitles() {
+    public String256 getAvailabilityStatus() {
+        return availabilityStatus;
+    }
+
+    public void setAvailabilityStatus(String256 availabilityStatus) {
+        this.availabilityStatus = availabilityStatus;
+    }
+
+    public List<InternationalString> getTitles() {
         return titles;
     }
 
-    public void setTitles(ArrayList<InternationalString> titles) {
+    public void setTitles(List<InternationalString> titles) {
         this.titles = titles;
     }
 
-    public ArrayList<InternationalString> getComments() {
+    public List<InternationalString> getComments() {
         return comments;
     }
 
-    public void setComments(ArrayList<InternationalString> comments) {
+    public void setComments(List<InternationalString> comments) {
         this.comments = comments;
     }
 
@@ -634,11 +647,11 @@ public class XdsDocumentEntry implements Serializable {
         this.id = id;
     }
 
-    public ArrayList<CodedTerm> getEventCode() {
+    public List<CodedTerm> getEventCode() {
         return eventCode;
     }
 
-    public void setEventCode(ArrayList<CodedTerm> eventCode) {
+    public void setEventCode(List<CodedTerm> eventCode) {
         this.eventCode = eventCode;
     }
 
@@ -688,6 +701,22 @@ public class XdsDocumentEntry implements Serializable {
 
     public void setFileName(String256 fileName) {
         this.fileName = fileName;
+    }
+
+    public String256 getHomeCommunityId(){
+        return homeCommunityId;
+    }
+
+    public void setHomeCommunityId(String256 homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
+    }
+
+    public String256 getLogicalId(){
+        return logicalId;
+    }
+
+    public void setLogicalId(String256 logicalId) {
+        this.logicalId = logicalId;
     }
 
     public String256 getMimeType() {
@@ -784,6 +813,14 @@ public class XdsDocumentEntry implements Serializable {
 
     public void setUri(String256 uri) {
         this.uri = uri;
+    }
+
+    public String256 getVersion(){
+        return version;
+    }
+
+    public void setVersion(String256 version) {
+        this.version = version;
     }
 
     /**

@@ -7,9 +7,6 @@ import gov.nist.hit.ds.docentryeditor.client.event.NewFileLoadedEvent;
 
 import javax.inject.Inject;
 
-/**
- * Created by onh2 on 8/21/2014.
- */
 public class FileUploadDialog extends Dialog {
 
     @Inject

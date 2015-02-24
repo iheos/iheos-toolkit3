@@ -8,7 +8,6 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.fx.client.Draggable;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
-import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.ConfirmMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -74,7 +73,9 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     // private Class<M> clazzM;
 
+    // --- UI Widgets.
     private final VerticalLayoutContainer gridContainer = new VerticalLayoutContainer();
+    // Toolbar elements.
     private final ToolBar toolBar = new ToolBar();
     private final TextButton newItemButton = new TextButton();
     private final TextButton deleteItemsButton = new TextButton();
@@ -82,16 +83,23 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
     private final TextButton helpButton = new TextButton();
     private final ContentPanel pane = new ContentPanel();
     private final ToolTipConfig helpTooltipConfig = new ToolTipConfig();
+    // grid editing.
     protected GridRowEditing<M> editing;
-    boolean isAutoShow = true;
-    // Toolbar elements
-    private boolean hasToolbar = true;
+
+    // widget configuration variables.
     private int storeMaxLength = 0;
-
     private boolean checkBoxEnabled = false;
-    private boolean hasHelpButtonEnabled = false;
     private boolean hasExtraWidget = false;
+    // toolbar configuration variables.
+    private boolean hasToolbar = true;
+    private boolean hasHelpButtonEnabled = false;
+    private boolean toolTipAutoShow = true;
 
+    /**
+     * Generic editable grid (abstract class) constructor.
+     * @param gridTitle the title of the widget (for the grid's panel header).
+     * @param listStore the store that will handle the list a values (object) manipulated by the grid.
+     */
     public GenericEditableGrid(/* Class<M> parametrizedClass, */String gridTitle, ListStore<M> listStore) {
         super(listStore, new ColumnModel<M>(new ArrayList<ColumnConfig<M, ?>>()));
 
@@ -109,9 +117,8 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
 
         this.addStyleName("grid-minheight");
         this.setHeight(250);
-//        pane.addStyleName("grid-minheight");
-//        gridContainer.addStyleName("grid-minheight");
 
+        // toolbar configuration.
         newItemButton.setIcon(AppImages.INSTANCE.add());
         newItemButton.setToolTip("Add an new element");
         toolBar.add(newItemButton);
@@ -124,7 +131,8 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         helpButton.setIcon(AppImages.INSTANCE.help());
         helpButton.setTitle("Help?");
 
-        helpTooltipConfig.setTitleText("Widget help?");
+        // widget information help panel configuration.
+        helpTooltipConfig.setTitleText("Widget help");
         helpTooltipConfig.setAnchor(Style.Side.LEFT);
         helpTooltipConfig.setCloseable(true);
         helpTooltipConfig.setMouseOffsetX(0);
@@ -134,11 +142,11 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         gridContainer.add(super.asWidget(), new VerticalLayoutContainer.VerticalLayoutData(1, 1)); // VerticalLayoutData does not work here why?
         pane.setWidget(gridContainer);
 
-
+        // makes the grid editable.
         setEditable();
         buildEditingFields();
 
-        // some tries to make grid fit panel's height
+        // some tries to make grid fit panel's height.
         this.getView().setAdjustForHScroll(false);
         this.getView().setForceFit(true);
         pane.forceLayout();
@@ -147,16 +155,31 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         bindUI();
     }
 
+    /**
+     * Abstract method meant to build the model that will define the different columns of the grid.
+     * @return grid column model.
+     */
     protected abstract ColumnModel<M> buildColumnModel();
 
+    /**
+     * Abstract method meant to set a field widget for each column of the grid in edition mode.
+     */
     protected abstract void buildEditingFields();
 
+    /**
+     * This method adds an extra widget to the widget just after the grid.
+     * @param widget widget to add to the widget.
+     */
     protected void addWidget(Widget widget) {
         hasExtraWidget = true;
         widget.addStyleName("topBorder");
         gridContainer.add(widget, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(0, 4, 1, 4)));
     }
 
+    /**
+     * This method adds extra widgets to the widget just after the grid.
+     * @param widgets multiple widgets to add to the widget.
+     */
     protected void addWidgets(Widget... widgets) {
         hasExtraWidget = true;
         boolean firstDone = false;
@@ -169,6 +192,11 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         }
     }
 
+    /**
+     * Abstract method meant to return the desired ModelFactory for the editable grid.
+     * It is used for the create of a new "Model" instance.
+     * @return specific GridModelFactory
+     */
     protected abstract GridModelFactory<M> getModelFactory();
 
     /**
@@ -183,24 +211,31 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         editing.addEditor(columnConfig, field);
     }
 
+    /**
+     * This method renders the widget.
+     * @return Editable grid widget.
+     */
     public Widget getDisplay() {
         pane.setResize(true);
         return pane.asWidget();
     }
 
+    /**
+     * Method that binds the actions related to the help panel and the tooltip button of the widget.
+     */
     private void bindToolTips() {
         helpButton.getToolTip().addShowHandler(new ShowEvent.ShowHandler() {
             @Override
             public void onShow(ShowEvent event) {
-                if (isAutoShow)
+                if (toolTipAutoShow)
                     helpButton.getToolTip().hide();
             }
         });
         helpButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                if (isAutoShow) {
-                    isAutoShow = false;
+                if (toolTipAutoShow) {
+                    toolTipAutoShow = false;
                     helpButton.getToolTip().show();
                 } else {
                     helpButton.getToolTip().hide();
@@ -210,11 +245,14 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         helpButton.getToolTip().addHideHandler(new HideEvent.HideHandler() {
             @Override
             public void onHide(HideEvent event) {
-                isAutoShow = true;
+                toolTipAutoShow = true;
             }
         });
     }
 
+    /**
+     * Method that binds the widgets of the UI with actions.
+     */
     private void bindUI() {
         newItemButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
@@ -253,7 +291,7 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
                     @Override
                     public void onDialogHide(DialogHideEvent event) {
                         if (event.getHideButton() == Dialog.PredefinedButton.YES) {
-                            deleteItemAction();
+                            deleteSelectedItemAction();
                             if (getStore().size() < storeMaxLength && storeMaxLength != 0) {
                                 enableNewButton();
                             }
@@ -281,38 +319,60 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         });
     }
 
+    /**
+     * Method that clears the grid store.
+     */
     protected void clearStoreAction() {
         getStore().clear();
         getStore().commitChanges();
     }
 
-    protected void deleteItemAction() {
+    /**
+     * Method that delete the selected item from the grid.
+     */
+    protected void deleteSelectedItemAction() {
         for (M e : getSelectionModel().getSelectedItems()) {
             getStore().remove(e);
             getStore().commitChanges();
         }
     }
 
+    /**
+     * This method disable the editing option of the grid, which will not be editable anymore.
+     */
     public void disableEditing() {
         disableToolbar();
         // this.disable();
         editing.clearEditors();
     }
 
+    /**
+     * This method disables the new button of the widget (toolbar).
+     */
     public void disableNewButton() {
         newItemButton.disable();
     }
 
+    /**
+     * This method enables the new button of the widget (toolbar).
+     */
+    public void enableNewButton() {
+        newItemButton.enable();
+    }
+
+    /**
+     * This method "removes" the toolbar of the grid widget.
+     */
     public void disableToolbar() {
         hasToolbar = false;
         toolBar.disable();
         toolBar.setVisible(false);
     }
 
-    public void enableNewButton() {
-        newItemButton.enable();
-    }
-
+    /**
+     * This method returns the toolbar of the widget.
+     * @return grid's toolbar.
+     */
     public ToolBar getToolbar() {
         return toolBar;
     }
@@ -321,12 +381,109 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
         return checkBoxEnabled;
     }
 
+    /**
+     * This method makes the grid editable on double click on an entry of the grid (Default behavior).
+     */
+    protected void setEditable() {
+        setEditable(ClicksToEdit.TWO);
+    }
+
+    /**
+     * This method makes the grid editable on the specified number of click on an entry of the grid (ONE or TWO).
+     * @param clicksToEdit number of clicks on value to enter the grid edition mode.
+     */
+    protected void setEditable(ClicksToEdit clicksToEdit) {
+        // EDITING //
+        editing = new GridRowEditing<M>(this);
+        editing.setClicksToEdit(clicksToEdit);
+        editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<M>() {
+            @Override
+            public void onCompleteEdit(CompleteEditEvent<M> completeEditEvent) {
+                getStore().commitChanges();
+            }
+        });
+    }
+
+    /**
+     * This method enables to show or hide the widget header.
+     * @param visible
+     */
+    public void setHeaderVisible(boolean visible) {
+        pane.setHeaderVisible(visible);
+    }
+
+    /**
+     * This method enables to change the height of the widget.
+     * @param height
+     */
+    public void setHeight(int height) {
+        gridContainer.setHeight(height);
+        pane.setHeight(height);
+    }
+
+    /**
+     * This method calculates approximately the height of the grid widget based on the number of elements
+     * supposed to be registered in the grid.
+     * @param storeMaxLength estimated number of elements supposed to be stored in the grid.
+     */
+    protected void setStoreMaxLength(int storeMaxLength) {
+        this.storeMaxLength = storeMaxLength;
+        if (storeMaxLength == 1) {
+            this.setHeight(85 + (hasToolbar == true ? 35 : 0) + (hasExtraWidget == true ? 30 : 0));
+        } else {
+            if (storeMaxLength < 11) {
+                this.setHeight((30 * storeMaxLength) + (hasToolbar == true ? 35 : 0) + (hasExtraWidget == true ? 30 : 0));
+            }
+        }
+    }
+
+    /**
+     * This method sets the content of the widget help panel.
+     * @param helpContent
+     */
+    public void setWidgetHelpContent(String helpContent) {
+        helpTooltipConfig.setBodyHtml(helpContent);
+        if (!hasHelpButtonEnabled) {
+            toolBar.add(helpButton);
+            hasHelpButtonEnabled = true;
+        }
+        helpButton.setToolTipConfig(helpTooltipConfig);
+        Draggable d = new Draggable(helpButton.getToolTip());
+        d.setUseProxy(false);
+        bindToolTips();
+    }
+
+    /**
+     * This method sets the widget help panel.
+     * @param helpContent
+     */
+    public void setToolbarHelpButtonTooltip(ToolTipConfig helpContent) {
+        helpTooltipConfig.setBodyHtml(helpContent.getBodyHtml());
+        helpTooltipConfig.setTitleHtml(helpContent.getTitleHtml());
+        if (!hasHelpButtonEnabled) {
+            toolBar.add(helpButton);
+            hasHelpButtonEnabled = true;
+        }
+        helpButton.setToolTipConfig(helpTooltipConfig);
+        Draggable d = new Draggable(helpButton.getToolTip());
+        d.setUseProxy(false);
+        bindToolTips();
+    }
+
+    /**
+     * This method return the maximum number of elements that can be stored in the grid.
+     * @return number of elements that can be stored in the grid.
+     */
+    public int getStoreMaxSize() {
+        return storeMaxLength;
+    }
+
     //--------------------------------------------------------------------------------------------------------
-//  //----  SHOULD NOT BE USED WITH GIRD ROW EDITING, ONLY WITH GRID INLINE EDITING
-//    /**
-//     * This Method enables the grid's selection checkbox column (for
-//     * multiselection).
-//     */
+    //----  SHOULD NOT BE USED WITH GIRD ROW EDITING, ONLY WITH GRID INLINE EDITING
+    /**
+     * This Method enables the grid's selection checkbox column (for
+     * multiselection).
+     */
     public void setCheckBoxSelectionModel() {
         checkBoxEnabled = true;
         List<ColumnConfig<M, ?>> columnsConfigs = new ArrayList<ColumnConfig<M, ?>>();
@@ -349,83 +506,5 @@ public abstract class GenericEditableGrid<M> extends Grid<M> {
 
         setEditable();
     }
-
     //--------------------------------------------------------------------------------------------------------
-    protected void setEditable() {
-        // EDITING //
-        editing = new GridRowEditing<M>(this);
-        editing.setClicksToEdit(ClicksToEdit.TWO);
-        editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<M>() {
-            @Override
-            public void onCompleteEdit(CompleteEditEvent<M> completeEditEvent) {
-                getStore().commitChanges();
-            }
-        });
-    }
-
-    protected void setEditable(ClicksToEdit clicksToEdit) {
-        // EDITING //
-        editing = new GridRowEditing<M>(this);
-        editing.setClicksToEdit(clicksToEdit);
-        editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<M>() {
-            @Override
-            public void onCompleteEdit(CompleteEditEvent<M> completeEditEvent) {
-                getStore().commitChanges();
-            }
-        });
-    }
-
-    public void setHeaderVisible(boolean visible) {
-        pane.setHeaderVisible(visible);
-    }
-
-    public void setHeight(int height) {
-        gridContainer.setHeight(height);
-        pane.setHeight(height);
-    }
-
-    /**
-     * This method calculates approximately the height of the grid widget based on the number of elements
-     * supposed to be registered in the grid.
-     * @param storeMaxLength estimated number of elements supposed to be stored in the grid.
-     */
-    protected void setStoreMaxLength(int storeMaxLength) {
-        this.storeMaxLength = storeMaxLength;
-        if (storeMaxLength == 1) {
-            this.setHeight(85 + (hasToolbar == true ? 35 : 0) + (hasExtraWidget == true ? 30 : 0));
-        } else {
-            if (storeMaxLength < 11) {
-                this.setHeight((30 * storeMaxLength) + (hasToolbar == true ? 35 : 0) + (hasExtraWidget == true ? 30 : 0));
-            }
-        }
-    }
-
-    public void setToolbarHelpButton(String helpContent) {
-        helpTooltipConfig.setBodyHtml(helpContent);
-        if (!hasHelpButtonEnabled) {
-            toolBar.add(helpButton);
-            hasHelpButtonEnabled = true;
-        }
-        helpButton.setToolTipConfig(helpTooltipConfig);
-        Draggable d = new Draggable(helpButton.getToolTip());
-        d.setUseProxy(false);
-        bindToolTips();
-    }
-
-    public void setToolbarHelpButtonTooltip(ToolTipConfig helpContent) {
-        helpTooltipConfig.setBodyHtml(helpContent.getBodyHtml());
-        helpTooltipConfig.setTitleHtml(helpContent.getTitleHtml());
-        if (!hasHelpButtonEnabled) {
-            toolBar.add(helpButton);
-            hasHelpButtonEnabled = true;
-        }
-        helpButton.setToolTipConfig(helpTooltipConfig);
-        Draggable d = new Draggable(helpButton.getToolTip());
-        d.setUseProxy(false);
-        bindToolTips();
-    }
-
-    public int getStoreMaxSize() {
-        return storeMaxLength;
-    }
 }

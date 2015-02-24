@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.docentryeditor.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gov.nist.hit.ds.docentryeditor.client.XdsParserServices;
+import gov.nist.hit.ds.docentryeditor.client.parser.XdsParserServices;
 import gov.nist.hit.ds.docentryeditor.shared.model.*;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataParser;
@@ -11,7 +11,6 @@ import gov.nist.hit.ds.xdsExceptions.MetadataException;
 import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
-import javax.mail.Folder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,18 +21,24 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * Created by onh2 on 2/12/2015.
+ * This class is a parser meant to generate a XdsMetadata object from an ebRim Metadata
+ * XML file.
+ *
+ * @See XdsMetadata
  */
 public class XdsMetadataParser extends RemoteServiceServlet implements XdsParserServices{
     private List<XdsDocumentEntry> docEntries;
     private Metadata m;
 
-    public XdsMetadataParser(){}
-
-    public List<XdsDocumentEntry> getDocEntries(){
-        return docEntries;
-    }
-    public XdsMetadata parseDocEntries(String fileContent){
+    /**
+     * Method that returns a complete XdsMetadata object containing
+     * all the metadata information extracted from the given XML
+     * ebRim Metadata document.
+     * @param fileContent ebRim document XML.
+     * @return XdsMetadataObject
+     */
+    @Override
+    public XdsMetadata parseXdsMetadata(String fileContent) {
         docEntries=new ArrayList<XdsDocumentEntry>();
         try {
             m=MetadataParser.parse(fileContent);
@@ -42,65 +47,48 @@ public class XdsMetadataParser extends RemoteServiceServlet implements XdsParser
                 docEntries.add(parse(eo));
             }
         } catch (XdsInternalException e) {
+            Logger.getLogger(this.getClass().getName()).info(e.getMessage());
             e.printStackTrace();
         } catch (MetadataException e) {
+            Logger.getLogger(this.getClass().getName()).info(e.getMessage());
             e.printStackTrace();
         }
-        XdsMetadata m=new XdsMetadata();
-        m.setDocumentEntries(docEntries);
-        return m;
+        XdsMetadata metadata=new XdsMetadata();
+        metadata.setDocumentEntries(docEntries);
+        return metadata;
     }
 
-
-    public XdsMetadataParser(Metadata m, String label) {
-        this.m = m;
-
-        docEntries = new ArrayList<XdsDocumentEntry>();
-        for (OMElement eo : m.getExtrinsicObjects()) {
-            XdsDocumentEntry de = new XdsDocumentEntry();
-
-            parse(eo);
-
-            docEntries.add(de);
-        }
-    }
-
-    String splitLast(String in, String separator) {
-        String[] parts = in.split(separator);
-        if (parts.length <= 1)
-            return in;
-        return parts[parts.length - 1];
-    }
-
+    /**
+     * Method that parses an ebRim ExtrinsicObject from an ebRim Metadata document
+     * to create a XdsDocumentEntry object.
+     * @param ele ebRim ExtrinsicObject from a Metadata document.
+     * @return XdsDocumentEntry
+     */
     private XdsDocumentEntry parse(OMElement ele) {
         XdsDocumentEntry de=new XdsDocumentEntry();
         OMFormatter omf = new OMFormatter(ele);
         omf.noRecurse();
-        String eoEleStr = omf.toHtml();
 
         de.setId(new String256(asString(m.getId(ele))));
 //        de.idX = eoEleStr;
-        // not used in my model yet
-//        de.lid = asString(m.getLid(ele));
+        de.setLogicalId(new String256(asString(m.getLid(ele))));
 //        de.lidX = eoEleStr;
-        // not used in my model yet
-//        de.version = asString(m.getVersion(ele));
+
+        de.setVersion(new String256(asString(m.getVersion(ele))));
 //        de.versionX = new OMFormatter(MetadataSupport.firstChildWithLocalName(ele, "VersionInfo")).toHtml();
 
-        // not used in my model yet
-//        de.status = asString(m.getStatus(ele));
+        de.setAvailabilityStatus(new String256(asString(m.getStatus(ele))));
 //        de.statusX = eoEleStr;
 
-        // should be a list
+        de.setHomeCommunityId(new String256(asString(m.getHome(ele))));
+//        de.homeX = eoEleStr;
+
+        // FIXME should be a list
 //        de.title = asString(m.getNameValue(ele));
 //        de.titleX = new OMFormatter(MetadataSupport.firstChildWithLocalName(ele, "Name")).toHtml();
-        // should be a list
+        //FIXME should be a list
 //        de.comments = asString(m.getDescriptionValue(ele));
 //        de.commentsX = new OMFormatter(MetadataSupport.firstChildWithLocalName(ele, "Description")).toHtml();
-
-        // not used in my model yet
-//        de.home = asString(m.getHome(ele));
-//        de.homeX = eoEleStr;
 
         de.setMimeType(new String256(asString(m.getMimeType(ele))));
 //        de.mimeTypeX = eoEleStr;
@@ -146,12 +134,10 @@ public class XdsMetadataParser extends RemoteServiceServlet implements XdsParser
 
 //        parseExtra(de, ele);
 
-
         try {
             de.setPatientID(new IdentifierString256(new String256(asString(m.getPatientId(ele))),new String256("urn:uuid:6b5aea1a-874d-4603-a4bc-96a0a7b38446")));
-
 //            de.patientIdX = new OMFormatter(m.getExternalIdentifierElement(de.id, MetadataSupport.XDSXdsDocumentEntry_patientid_uuid)).toHtml();
-        de.setUniqueId(new IdentifierOID(new OID(new String256(asString(m.getUniqueIdValue(ele)))),new String256("urn:uuid:2e82c1f6-a085-4c72-9da3-8640a32e42ab")));
+            de.setUniqueId(new IdentifierOID(new OID(new String256(asString(m.getUniqueIdValue(ele)))),new String256("urn:uuid:2e82c1f6-a085-4c72-9da3-8640a32e42ab")));
 //            de.uniqueIdX = new OMFormatter(m.getExternalIdentifierElement(de.id, MetadataSupport.XDSXdsDocumentEntry_uniqueid_uuid)).toHtml();
         } catch (MetadataException e) {
             e.printStackTrace();
@@ -189,12 +175,6 @@ public class XdsMetadataParser extends RemoteServiceServlet implements XdsParser
 //            de.classCode = codes.get(MetadataSupport.XDSDocumentEntry_classCode_uuid);
 //            de.classCodeX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_classCode_uuid);
 
-            // TODO fix model first
-            String[] confidentialityCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_confCode_uuid).get(0).split("\\^");
-//            de.setConfidentialityCodes(new CodedTerm(confidentialityCodeStrings[0],confidentialityCodeStrings[1],confidentialityCodeStrings[2]));
-//            de.confCodes = codes.get(MetadataSupport.XDSDocumentEntry_confCode_uuid);
-//            de.confCodesX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_confCode_uuid);
-
             String[] formatCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_formatCode_uuid).get(0).split("\\^");
             de.setFormatCode(new CodedTerm(formatCodeStrings[0], formatCodeStrings[1], formatCodeStrings[2]));
 //            de.formatCode = codes.get(MetadataSupport.XDSDocumentEntry_formatCode_uuid);
@@ -215,7 +195,18 @@ public class XdsMetadataParser extends RemoteServiceServlet implements XdsParser
 //            de.typeCode = codes.get(MetadataSupport.XDSDocumentEntry_typeCode_uuid);
 //            de.typeCodeX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_typeCode_uuid);
 
+            List<CodedTerm> confidentialityCodes=new ArrayList<CodedTerm>();
+            for (String confCode:codes.get(MetadataSupport.XDSDocumentEntry_confCode_uuid)){
+                String[] confCodeStrings=confCode.split("\\^");
+                confidentialityCodes.add(new CodedTerm(confCodeStrings[0],confCodeStrings[1],confCodeStrings[2]));
+            }
 
+            List<CodedTerm> eventCodes=new ArrayList<CodedTerm>();
+            for(String eventCodeString:codes.get(MetadataSupport.XDSDocumentEntry_eventCode_uuid)){
+                String[] eventCodeStrings=eventCodeString.split("\\^");
+                eventCodes.add(new CodedTerm(eventCodeStrings[0],eventCodeStrings[1],eventCodeStrings[2]));
+            }
+            de.setEventCode(eventCodes);
 //            de.eventCodeList = codes.get(MetadataSupport.XDSDocumentEntry_eventCode_uuid);
 //            de.eventCodeListX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_eventCode_uuid);
 
@@ -237,18 +228,12 @@ public class XdsMetadataParser extends RemoteServiceServlet implements XdsParser
         return de;
     }
 
-    private Date formatDate(String sdate) {
-        DateFormat lFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        Date date=new Date();
-        try {
-            date = (Date)lFormatter.parse(sdate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }
-
-
+    /**
+     * Method that parses a list of ebRim author classification
+     * to return a list of Author java objects.
+     * @param authorClassifications list of ebRim author classification.
+     * @return a list of Author java objects.
+     */
     List<Author> parseAuthors(List<OMElement> authorClassifications) {
         List<Author> authors = new ArrayList<Author>();
 
@@ -272,29 +257,26 @@ public class XdsMetadataParser extends RemoteServiceServlet implements XdsParser
         return authors;
     }
 
-    String asString(String in) {
-        if (in == null) return "";
-        return in;
-    }
-
-    @Override
-    public XdsMetadata parseXdsMetadata(String fileContent) {
-        docEntries=new ArrayList<XdsDocumentEntry>();
+    private Date formatDate(String sdate) {
+        DateFormat lFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date=new Date();
         try {
-            m=MetadataParser.parse(fileContent);
-
-            for(OMElement eo : m.getExtrinsicObjects()){
-                docEntries.add(parse(eo));
-            }
-        } catch (XdsInternalException e) {
-            Logger.getLogger(this.getClass().getName()).info(e.getMessage());
-            e.printStackTrace();
-        } catch (MetadataException e) {
-            Logger.getLogger(this.getClass().getName()).info(e.getMessage());
+            date = (Date)lFormatter.parse(sdate);
+        } catch (ParseException e) {
             e.printStackTrace();
         }
-        XdsMetadata metadata=new XdsMetadata();
-        metadata.setDocumentEntries(docEntries);
-        return metadata;
+        return date;
+    }
+
+    private String splitLast(String in, String separator) {
+        String[] parts = in.split(separator);
+        if (parts.length <= 1)
+            return in;
+        return parts[parts.length - 1];
+    }
+
+    private String asString(String in) {
+        if (in == null) return "";
+        return in;
     }
 }

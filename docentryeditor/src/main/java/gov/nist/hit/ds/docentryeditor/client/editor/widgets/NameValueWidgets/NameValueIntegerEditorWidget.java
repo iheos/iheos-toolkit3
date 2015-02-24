@@ -18,6 +18,7 @@ import gov.nist.hit.ds.docentryeditor.shared.model.NameValueInteger;
  * <b>This class represents the widget which matches NameValueInteger model
  * type</b> <br>
  * </p>
+ * @see gov.nist.hit.ds.docentryeditor.client.generics.GenericEditableListView
  */
 public class NameValueIntegerEditorWidget extends GenericEditableListView<Integer, String> implements Editor<NameValueInteger> {
     ListStoreEditor<Integer> values;
@@ -25,11 +26,18 @@ public class NameValueIntegerEditorWidget extends GenericEditableListView<Intege
     @Ignore
     SpinnerField<Integer> value;
 
+    /**
+     * NameValueInteger editable list default constructor.
+     * @param widgetTitle title of the widget (for the grid's panel header).
+     */
     public NameValueIntegerEditorWidget(String widgetTitle) {
         super(widgetTitle, new ListStore<Integer>(new IntegerKeyProvider()), new IntegerValueProvider());
         values = new ListStoreEditor<Integer>(getStore());
     }
 
+    /**
+     * This method assigns a specific field editor to the editable list widget for its edition mode.
+     */
     @Override
     protected void buildEditingFields() {
         value = new SpinnerField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
@@ -62,15 +70,27 @@ public class NameValueIntegerEditorWidget extends GenericEditableListView<Intege
         addEditorConfig(converter, value);
     }
 
+    /**
+     * This method return the Model factory that must be used for this list editor.
+     * @return Integer factory.
+     */
     @Override
     protected GridModelFactory<Integer> getModelFactory() {
         return IntegerFactory.instance;
     }
 
+    /**
+     * Defines the maximum number of element that can be stored in the widget.
+     * @param listMaxSize maximum number of element.
+     */
     public void setListMaxSize(int listMaxSize) {
         this.setStoreMaxLength(listMaxSize);
     }
 
+    /**
+     * This method returns the list value provider.
+     * @return Integer ValueProvider.
+     */
     @Override
     protected ValueProvider<? super Integer, String> getValueProvider() {
         return new IntegerValueProvider();
@@ -84,7 +104,10 @@ public class NameValueIntegerEditorWidget extends GenericEditableListView<Intege
         }
     }
 
-    // Custom ValueProvider to deal with Integer
+    /**
+     * Class that defines an Integer ValueProvider.
+     * It is a custom ValueProvider to deal with Integer.
+     */
     public static class IntegerValueProvider implements ValueProvider<Integer, String> {
 
         @Override

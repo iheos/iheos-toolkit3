@@ -11,7 +11,7 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import gov.nist.hit.ds.docentryeditor.client.editor.properties.CodedTermProperties;
-import gov.nist.hit.ds.docentryeditor.client.parse.PredefinedCodes;
+import gov.nist.hit.ds.docentryeditor.client.parser.PredefinedCodes;
 import gov.nist.hit.ds.docentryeditor.client.generics.GenericEditableGrid;
 import gov.nist.hit.ds.docentryeditor.client.generics.GridModelFactory;
 import gov.nist.hit.ds.docentryeditor.shared.model.CodedTerm;
@@ -42,7 +42,7 @@ public class CodedTermsEditableGridWidget extends GenericEditableGrid<CodedTerm>
      *
      * @param gridTitle title of the widget (for the grid's panel header).
      * @param predefinedCode type of predefined codes used in the widget (enum PedefinedCodes).
-     * @see gov.nist.hit.ds.docentryeditor.client.parse.PredefinedCodes
+     * @see gov.nist.hit.ds.docentryeditor.client.parser.PredefinedCodes
      */
     public CodedTermsEditableGridWidget(String gridTitle, PredefinedCodes predefinedCode) {
         // use of the super constructor from GenericEditableGrid
@@ -160,7 +160,7 @@ public class CodedTermsEditableGridWidget extends GenericEditableGrid<CodedTerm>
      * of predefined coded terms in the combobox.
      */
     @Override
-    protected void deleteItemAction() {
+    protected void deleteSelectedItemAction() {
         for (CodedTerm e : getSelectionModel().getSelectedItems()) {
             getStore().remove(e);
             getStore().commitChanges();

@@ -1,9 +1,11 @@
 package gov.nist.hit.ds.docentryeditor.client.editor.widgets;
 
 import com.google.gwt.editor.client.Editor;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.sencha.gxt.widget.core.client.Composite;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.form.Field;
 import com.sencha.gxt.widget.core.client.form.Validator;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import gov.nist.hit.ds.docentryeditor.client.widgets.BoundedTextField;
@@ -15,9 +17,12 @@ import gov.nist.hit.ds.docentryeditor.shared.model.String256;
  * </p>
  */
 public class String256EditorWidget extends Composite implements Editor<String256> {
-
+    // --- UI Widgets
     BoundedTextField string = new BoundedTextField();
 
+    /**
+     * Widget default constructor.
+     */
     public String256EditorWidget() {
         VerticalLayoutContainer vcontainer = new VerticalLayoutContainer();
         initWidget(vcontainer);
@@ -55,6 +60,11 @@ public class String256EditorWidget extends Composite implements Editor<String256
         string.setAllowBlank(allowBlank);
     }
 
+    /**
+     * Adds a fields validator that will verify the input value
+     * during the edition (client side validation).
+     * @param fieldValidator
+     */
     public void addValidator(Validator<String> fieldValidator) {
         string.addValidator(fieldValidator);
     }

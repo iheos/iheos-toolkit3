@@ -1,9 +1,10 @@
 package gov.nist.hit.ds.docentryeditor.client;
 
 import com.google.gwt.junit.client.GWTTestCase;
-import gov.nist.hit.ds.docentryeditor.client.parse.PreParse;
-import gov.nist.hit.ds.docentryeditor.client.parse.XdsParser;
+import gov.nist.hit.ds.docentryeditor.client.parser.PreParse;
+import gov.nist.hit.ds.docentryeditor.client.parser.XdsParser;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppResources;
+import gov.nist.hit.ds.docentryeditor.client.utils.MetadataEditorGinInjector;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 
 public class XdsParsingTest extends GWTTestCase {

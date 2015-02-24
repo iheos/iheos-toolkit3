@@ -15,27 +15,32 @@ import gov.nist.hit.ds.docentryeditor.shared.model.String256;
 
 /**
  * <p>
- * <b>This class represents the widget which matches NameValueString256 model
- * type</b>
+ * <b>This class represents the widget which matches NameValueString256 model type</b>
  * </p>
+ * @see gov.nist.hit.ds.docentryeditor.client.generics.GenericEditableListView
  */
 public class NameValueString256EditorWidget extends GenericEditableListView<String256, String> implements Editor<NameValueString256> {
+    // instance of the property access for the String256 entity attributes (for the GXT Store).
     private final static String256Properties props = GWT.create(String256Properties.class);
 
+    // --- UI Widgets
     ListStoreEditor<String256> values;
     @Ignore
     BoundedTextField tf;
 
+    /**
+     * NameValueString256 editable list widget default constructor.
+     * @param widgetTitle title of the widget (for the grid's panel header).
+     */
     public NameValueString256EditorWidget(String widgetTitle) {
         super(widgetTitle, new ListStore<String256>(props.key()), props.string());
         values = new ListStoreEditor<String256>(getStore());
         bindUI();
     }
 
-    public void addFieldValidator(Validator<String> validator) {
-        tf.addValidator(validator);
-    }
-
+    /**
+     * Method binding the UI with actions.
+     */
     private void bindUI() {
 //        editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<String256>() {
 //            @Override
@@ -52,28 +57,8 @@ public class NameValueString256EditorWidget extends GenericEditableListView<Stri
     }
 
     /**
-     * Sets the widget's tool tip with the given config
-     *
-     * @param toolTip
+     * This method assigns a specific field editor to the editable list widget for its edition mode.
      */
-    public void setEditingFieldToolTip(String toolTip) {
-        tf.setToolTip(toolTip);
-    }
-
-    /**
-     * This method sets the default text to display in an empty field (defaults
-     * to null). It is done to help and guide the user during his input.
-     *
-     * @param emptyText Default text displayed in an empty value field when editing
-     */
-    public void setEmptyTexts(String emptyText) {
-        tf.setEmptyText(emptyText);
-    }
-
-    public void setListMaxSize(int maxSize) {
-        setStoreMaxLength(maxSize);
-    }
-
     @Override
     protected void buildEditingFields() {
         tf = new BoundedTextField();
@@ -88,12 +73,47 @@ public class NameValueString256EditorWidget extends GenericEditableListView<Stri
         return String256Factory.instance;
     }
 
+    /**
+     * Sets the widget's tool tip with the given config
+     * @param toolTip tips about the tool.
+     */
+    public void setEditingFieldToolTip(String toolTip) {
+        tf.setToolTip(toolTip);
+    }
+
+    /**
+     * This method sets the default text to display in an empty field (defaults
+     * to null). It is done to help and guide the user during his input.
+     * @param emptyText Default text displayed in an empty value field when editing
+     */
+    public void setEmptyTexts(String emptyText) {
+        tf.setEmptyText(emptyText);
+    }
+
+    /**
+     * Defines the maximum number of element that can be stored in the widget.
+     * @param maxSize maximum number of element.
+     */
+    public void setListMaxSize(int maxSize) {
+        setStoreMaxLength(maxSize);
+    }
+
+    /**
+     * This method add a Validator to the editable list entry editing widget.
+     * @param validator
+     */
+    public void addFieldValidator(Validator<String> validator) {
+        tf.addValidator(validator);
+    }
+
+    /**
+     * This method returns the list value provider.
+     * @return String256 ValueProvider.
+     */
     @Override
     protected ValueProvider<? super String256, String> getValueProvider() {
         return props.string();
     }
-
-
     //	/**
 //	 * Sets whether a field is valid when its value length = 0 (default to
 //	 * true). This will warn the user through the editor widget if he didn't
@@ -109,6 +129,4 @@ public class NameValueString256EditorWidget extends GenericEditableListView<Stri
 //		name.setAllowBlank(nameAllowsBlank);
 //		value.setAllowBlank(valueAllowsBlank);
 //	}
-
-
 }

@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.docentryeditor.client.parse;
+package gov.nist.hit.ds.docentryeditor.client.parser;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.xml.client.DOMException;
@@ -27,7 +27,7 @@ import com.google.gwt.xml.client.DOMException;
  * <p>
  * <b>How it works ?</b><br>
  * This class is a singleton which the only instance is called by a
- * {@link edu.tn.xds.metadata.editor.client.parse.XdsParser} object, then it enables to prepare the String thanks to
+ * {@link gov.nist.hit.ds.docentryeditor.client.parser.XdsParser} object, then it enables to prepare the String thanks to
  * cleanEscape and allowUTF called in the doPreParse method as follows:
  * {@link #doPreParseUTF8(String)}.</br>
  * </p>
@@ -42,7 +42,7 @@ import com.google.gwt.xml.client.DOMException;
  *
  *
  *
- * @see edu.tn.xds.metadata.editor.client.parse.XdsParser
+ * @see gov.nist.hit.ds.docentryeditor.client.parser.XdsParser
  *
  */
 public class PreParse {
@@ -51,12 +51,12 @@ public class PreParse {
 	 * <p>
 	 *
 	 * documentXml - The data taken from the XML document and send by the
-	 * server, this is the String to parse.<br>
+	 * server, this is the String to parser.<br>
 	 * Type : String</br>
 	 * </p>
 	 *
-	 * @see edu.tn.xds.metadata.editor.client.parse.PreParse
-	 * @see edu.tn.xds.metadata.editor.client.parse.XdsParser
+	 * @see gov.nist.hit.ds.docentryeditor.client.parser.PreParse
+	 * @see gov.nist.hit.ds.docentryeditor.client.parser.XdsParser
 	 */
 	private static String documentXml;
 
@@ -68,7 +68,7 @@ public class PreParse {
 	 * </p>
 	 *
 	 *
-	 * @see edu.tn.xds.metadata.editor.client.parse.PreParse
+	 * @see gov.nist.hit.ds.docentryeditor.client.parser.PreParse
 	 */
 	private final static PreParse myPreParse = new PreParse();
 
@@ -98,7 +98,7 @@ public class PreParse {
 	 * </p>
 	 *
 	 *
-	 * @see edu.tn.xds.metadata.editor.client.parse.PreParse
+	 * @see gov.nist.hit.ds.docentryeditor.client.parser.PreParse
 	 *
 	 */
 	private void cleanEscape() {
@@ -137,7 +137,7 @@ public class PreParse {
 	 * </p>
 	 *
 	 *
-	 * @see edu.tn.xds.metadata.editor.client.parse.PreParse
+	 * @see gov.nist.hit.ds.docentryeditor.client.parser.PreParse
 	 *
 	 */
 	private void allowUTF8() {

@@ -18,8 +18,8 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 import gov.nist.hit.ds.docentryeditor.client.editor.EditionMode;
-import gov.nist.hit.ds.docentryeditor.client.parse.PredefinedCodes;
-import gov.nist.hit.ds.docentryeditor.client.parse.PredefinedCodesParser;
+import gov.nist.hit.ds.docentryeditor.client.parser.PredefinedCodes;
+import gov.nist.hit.ds.docentryeditor.client.parser.PredefinedCodesParser;
 import gov.nist.hit.ds.docentryeditor.shared.model.CodedTerm;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 /**
  * ComboBox widget that handles predefined coded terms.
  *
- * @see gov.nist.hit.ds.docentryeditor.client.parse.PredefinedCodes
+ * @see gov.nist.hit.ds.docentryeditor.client.parser.PredefinedCodes
  */
 public class PredefinedCodedTermComboBox extends ComboBox<CodedTerm> {
 

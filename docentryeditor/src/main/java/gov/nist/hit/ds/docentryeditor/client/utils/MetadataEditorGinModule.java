@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.docentryeditor.client;
+package gov.nist.hit.ds.docentryeditor.client.utils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.inject.client.AbstractGinModule;
