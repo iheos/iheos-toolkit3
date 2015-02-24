@@ -1415,6 +1415,17 @@ public class Metadata {
         return ids;
     }
 
+    public OMElement getExtrinsicObject(String id) {
+        if (id == null) return null;
+        for (Iterator<OMElement> it = getExtrinsicObjects().iterator(); it
+                .hasNext();) {
+            OMElement ele = it.next();
+            String id2 = ele.getAttributeValue(MetadataSupport.id_qname);
+            if (id.equals(id2)) return ele;
+        }
+        return null;
+    }
+
     public List<String> getObjectRefIds() {
         List<String> ids = new ArrayList<String>();
 

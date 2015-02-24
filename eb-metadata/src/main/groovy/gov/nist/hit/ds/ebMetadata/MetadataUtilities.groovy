@@ -96,6 +96,15 @@ class MetadataUtilities {
         }
     }
 
+
+    String status(de) { de.getAttribute(MetadataSupport.id_qname)?.attributeValue?.split(':')?.last() }
+
+    /// value^display^system
+    List<String> classCodes(de) { m.getClassificationsCodesWithDisplayName(de, MetadataSupport.XDSDocumentEntry_classCode_uuid) }
+    List<String> confCodes(de) { m.getClassificationsCodesWithDisplayName(de, MetadataSupport.XDSDocumentEntry_confCode_uuid)}
+    List<String> eventCodes(de) { m.getClassificationsCodesWithDisplayName(de, MetadataSupport.XDSDocumentEntry_eventCode_uuid)}
+
+
     boolean submissionContains(String id) {
         return getObjectById(id) != null;
     }
