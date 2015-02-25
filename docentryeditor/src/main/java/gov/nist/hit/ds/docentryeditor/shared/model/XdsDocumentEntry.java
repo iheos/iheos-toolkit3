@@ -138,7 +138,7 @@ public class XdsDocumentEntry implements Serializable {
     @NotNull
     @NotEmpty
     // FIXME should not be a list
-    private ArrayList<CodedTerm> confidentialityCodes;
+    private List<CodedTerm> confidentialityCodes;
     /**
      * <b>NameValueDTM creationTime</b> - The creation time of the document
      * [Mandatory].<br>
@@ -622,12 +622,11 @@ public class XdsDocumentEntry implements Serializable {
         this.classCode = classCode;
     }
 
-    public ArrayList<CodedTerm> getConfidentialityCodes() {
+    public List<CodedTerm> getConfidentialityCodes() {
         return confidentialityCodes;
     }
 
-    public void setConfidentialityCodes(
-            ArrayList<CodedTerm> confidentialityCodes) {
+    public void setConfidentialityCodes(List<CodedTerm> confidentialityCodes) {
         this.confidentialityCodes = confidentialityCodes;
     }
 
@@ -1094,6 +1093,10 @@ public class XdsDocumentEntry implements Serializable {
                 ", typeCode=" + typeCode +
                 ", uniqueId=" + uniqueId +
                 ", uri=" + uri +
+                ", logicalId=" + logicalId +
+                ", version=" + version +
+                ", availabilityStatus=" + availabilityStatus +
+                ", homeCommunityId=" + homeCommunityId +
                 '}';
     }
 }

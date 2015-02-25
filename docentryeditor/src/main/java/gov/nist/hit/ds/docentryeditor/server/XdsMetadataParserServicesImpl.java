@@ -96,9 +96,6 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         de.setHash(new String256(asString(m.getSlotValue(ele, "hash", 0))));
 //        de.hashX = new OMFormatter(m.getSlot(ele, "hash")).toHtml();
 
-        Logger.getLogger(this.getClass().getName()).info("LANGUAGE CODE:");
-        Logger.getLogger(this.getClass().getName()).info(asString(m.getSlotValue(ele, "languageCode", 0)));
-        Logger.getLogger(this.getClass().getName()).info(LanguageCode.getValueOf(asString(m.getSlotValue(ele, "languageCode", 0))).toString());
         de.setLanguageCode(LanguageCode.getValueOf(asString(m.getSlotValue(ele, "languageCode", 0))));
 //        de.langX = new OMFormatter(m.getSlot(ele, "languageCode")).toHtml();
 
@@ -126,10 +123,14 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
 //        de.serviceStopTimeX = new OMFormatter(m.getSlot(ele, "serviceStopTime")).toHtml();
 
         de.setRepoUId(new OID(new String256(asString(m.getSlotValue(ele, "repositoryUniqueId", 0)))));
+        de.setUri(new String256(asString(m.getSlotValue(ele, "URI", 0))));
 //        de.repositoryUniqueIdX = new OMFormatter(m.getSlot(ele, "repositoryUniqueId")).toHtml();
 
-//        Logger.getLogger(this.getClass().getName()).info(asString(m.getSlotValue(ele, "size", 0)));
-//        de.getSize().getValues().add(Integer.parseInt(asString(m.getSlotValue(ele, "size", 0))));
+        String sizeString=asString(m.getSlotValue(ele, "size", 0));
+        if (sizeString!=null&&!sizeString.equals("")) {
+            de.getSize().getValues().clear();
+            de.getSize().getValues().add(Integer.parseInt(sizeString));
+        }
 //        de.sizeX = new OMFormatter(m.getSlot(ele, "size")).toHtml();
 
 //        parseExtra(de, ele);
@@ -200,6 +201,7 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
                 String[] confCodeStrings=confCode.split("\\^");
                 confidentialityCodes.add(new CodedTerm(confCodeStrings[0],confCodeStrings[1],confCodeStrings[2]));
             }
+            de.setConfidentialityCodes(confidentialityCodes);
 
             List<CodedTerm> eventCodes=new ArrayList<CodedTerm>();
             for(String eventCodeString:codes.get(MetadataSupport.XDSDocumentEntry_eventCode_uuid)){
