@@ -11,6 +11,7 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.tkapis.validation.MessageValidator
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
 import gov.nist.hit.ds.tkapis.validation.ValidateTransactionResponse
@@ -97,10 +98,11 @@ class ValidatorManager implements MessageValidator {
 
             if (transactionType) {
                 TransactionRunner runner = new TransactionRunner(simHandle)
-                if (isRequest)
-                    runner.validateRequest()
-                else
-                    runner.validateResponse()
+                    if (isRequest)
+                        runner.validateRequest()
+                    else
+                        runner.validateResponse()
+
                 response.setEventAssetId(new AssetId(simHandle.event.eventAsset.id.idString))
                 response.setRepositoryId(new AssetId(RepoUtils.getRepository(repositoryName).id.idString))
                 response.setValidationStatus((simHandle.event.hasErrors()) ? ValidationStatus.ERROR : ValidationStatus.OK)

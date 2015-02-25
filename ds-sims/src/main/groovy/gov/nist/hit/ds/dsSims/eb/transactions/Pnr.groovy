@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.dsSims.eb.transactions
 
+import gov.nist.hit.ds.dsSims.direct.DirectAddrBlockValidator
 import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.MetadataVal
 import gov.nist.hit.ds.dsSims.eb.reg.UnconnectedRegistryValidation
@@ -18,12 +19,15 @@ import gov.nist.hit.ds.toolkit.Toolkit
 import gov.nist.hit.ds.toolkit.environment.Environment
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.utilities.xml.OMFormatter
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 
 /**
  * Created by bmajur on 9/24/14.
  */
+
+// TODO: test with MTOM and MTOM/XOP encoding
 @Log4j
 class Pnr implements Transaction {
     SimHandle simHandle
@@ -34,6 +38,11 @@ class Pnr implements Transaction {
 
     @Override
     ValidationStatus validateRequest() {
+        ValidationContext vc = new ValidationContext()
+        vc.isPnR = true
+        vc.isRequest = true
+        vc.isDIRECT = simHandle.transactionType.getTransactionProperty('direct') == 'true'
+
         // Header
         def headerVal = new HttpHeaderValidator(simHandle)
         headerVal.asPeer().run()
@@ -53,11 +62,13 @@ class Pnr implements Transaction {
         soapVal.asPeer().run()
 
         OMElement soapBodyEle = soapVal.body
+        OMElement soapHeaderEle = soapVal.header
+
+            if (vc.isDIRECT)
+                new DirectAddrBlockValidator(simHandle, soapHeaderEle).asPeer().run()
+
         OMElement msgRoot = (OMElement) soapBodyEle.childElements.next()
         Metadata m = MetadataParser.parse(soapBodyEle)
-        ValidationContext vc = new ValidationContext()
-        vc.isPnR = true
-        vc.isRequest = true
         Environment environment = Environment.getDefaultEnvironment()
 
         // Schema
@@ -67,6 +78,7 @@ class Pnr implements Transaction {
 
         // Metadata Validator
         new MetadataVal(simHandle, m, vc, environment, new UnconnectedRegistryValidation()).asPeer().run()
+        return (simHandle.event.hasErrors() || simHandle.event.hasFault()) ? ValidationStatus.ERROR : ValidationStatus.OK
     }
 
     @Override

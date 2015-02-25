@@ -53,7 +53,11 @@ class PnrRecipientTest extends Specification {
 
     def run(String header, String body) {
         vMan = new ValidatorManager()
-        response = vMan.validateMessage(ValidatorManager.soapAction, header, body.getBytes(), ValidationLevel.INFO)
+        try {
+            response = vMan.validateMessage(ValidatorManager.soapAction, header, body.getBytes(), ValidationLevel.INFO)
+        } catch (Throwable t) {
+            SimUtils.close(simHandle)
+        }
         simHandle = vMan.simHandle
     }
 

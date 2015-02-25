@@ -246,7 +246,7 @@ class AssertionApi {
             a.setCode(validationMethod.faultCode.toString())
             a.setStatus(AssertionStatus.FAULT)
 
-            Fault f = new Fault(vf.msg(), validationMethod.faultCode.toString(), '??', '')
+            Fault f = new Fault(vf.msg(), validationMethod.faultCode.toString(), '??', a.id)
             base.event.fault = f
             base.event.flush()
             log.debug("Assertion ${a}")
@@ -254,7 +254,8 @@ class AssertionApi {
             throw new SoapFaultException(
                     ag,
                     base.currentValidationMethod().faultCode,
-                    new ErrorContext("${a.getMsg()} - ${a.expectedFoundString()}", new AssertionDAO().buildSemiDivided(vf.ref()))
+                    new ErrorContext("${a.getMsg()} - ${a.expectedFoundString()}", a.id)
+                    //new AssertionDAO().buildSemiDivided(vf.ref())
             );
         }
         log.debug("Assertion ${a}")
