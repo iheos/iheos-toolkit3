@@ -196,12 +196,12 @@ public class Author implements ModelElement, Serializable {
         String answer;
         answer = "\t\t<author>\n";
 
-        answer += "\t\t\t<authorPerson>" + authorPerson.toString() + "</authorPerson>\n";
+        answer += "\t\t\t<authorPerson>" + authorPerson.toString().replace("&","&amp;") + "</authorPerson>\n";
 
         if (!authorInstitutions.isEmpty()) {
             answer += "\t\t\t<authorInstitutions>\n";
             for (String256 str : authorInstitutions) {
-                answer = answer + "\t\t\t\t<authorInstitution>" + str.toString() + "</authorInstitution>\n";
+                answer = answer + "\t\t\t\t<authorInstitution>" + str.toString().replace("&","&amp;") + "</authorInstitution>\n";
             }
             answer = answer + "\t\t\t</authorInstitutions>\n";
         }
@@ -209,7 +209,7 @@ public class Author implements ModelElement, Serializable {
         if (!authorRoles.isEmpty()) {
             answer += "\t\t\t<authorRoles>\n";
             for (String256 str : authorRoles) {
-                answer = answer + "\t\t\t\t<authorRole>" + str.toString() + "</authorRole>\n";
+                answer = answer + "\t\t\t\t<authorRole>" + str.toString().replace("&", "&amp;") + "</authorRole>\n";
             }
             answer = answer + "\t\t\t</authorRoles>\n";
         }
@@ -217,7 +217,7 @@ public class Author implements ModelElement, Serializable {
         if (!authorSpecialties.isEmpty()) {
             answer += "\t\t\t<authorSpecialties>\n";
             for (String256 str : authorSpecialties) {
-                answer = answer + "\t\t\t\t<authorSpecialty>" + str.toString() + "</authorSpecialty>\n";
+                answer = answer + "\t\t\t\t<authorSpecialty>" + str.toString().replace("&","&amp;") + "</authorSpecialty>\n";
             }
             answer = answer + "\t\t\t</authorSpecialties>\n";
         }

@@ -27,6 +27,7 @@ public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
         logger.info("... file loaded, parsing metadata...");
         String s=results.replace("&lt;","<");
         s=s.replace("&gt;",">");
+        s=s.replace("&amp;","&");
         xdsParserServices.parseXdsMetadata(s, new AsyncCallback<XdsMetadata>() {
             @Override
             public void onFailure(Throwable throwable) {

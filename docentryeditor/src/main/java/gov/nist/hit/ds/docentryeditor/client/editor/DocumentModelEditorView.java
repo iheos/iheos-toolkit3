@@ -590,7 +590,8 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
                         "case the service was delivered during an encounter. This time is expressed as (date/time/UTC). " +
                         "If present, shall have a single value."));
         // source patient id
-        sourcePatientId.addFieldValidator(new RegExValidator("^[A-Za-z]*[0-9]+\\^{3}&[1-9][0-9]*(\\.[1-9][0-9]*)+(&ISO)$", "This value is not a correct source patient id."));
+        sourcePatientId.addFieldValidator(new RegExValidator("^(([A-Za-z])|([1-9]))*[0-9A-z]+\\^{3}&[1-9][0-9]*(\\.[1-9][0-9]*)+(&ISO)$", "This value is not a correct source patient id."));
+//        sourcePatientId.addFieldValidator(new RegExValidator("^[A-Za-z]*[0-9]+\\^{3}&[1-9][0-9]*(\\.[1-9][0-9]*)+(&ISO)$", "This value is not a correct source patient id."));
 //        sourcePatientId.setEmptyTexts("j98789^^^&1.2.3.4.343.1&ISO");
         sourcePatientId.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Source Patient ID", "The sourcePatientId represents the subject of care medical record " +
                 "Identifier (e.g., Patient Id) in the local patient Identifier Domain of the " +

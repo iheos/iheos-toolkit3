@@ -96,7 +96,7 @@ public class IdentifierString256 implements ModelElement, Serializable {
      */
     public String toXML() {
         String answer = null;
-        answer = "\t\t<identifier>\n\t\t\t<value>" + value.getString() + "</value>\n\t\t\t<idtype>" + idType.toString()
+        answer = "\t\t<identifier>\n\t\t\t<value>" + value.getString().replace("&","&amp;") + "</value>\n\t\t\t<idtype>" + idType.toString()
                 + "</idtype>\n\t\t</identifier>\n";
 
         return answer;

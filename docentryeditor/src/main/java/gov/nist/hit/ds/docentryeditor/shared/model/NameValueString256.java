@@ -92,7 +92,7 @@ public class NameValueString256 implements ModelElement, Serializable {
     public String toXML() {
         String answer = "\t\t<namevalue>\n\t\t\t<name>" + name.toString() + "</name>\n\t\t\t<values>\n";
         for (String256 str : values) {
-            answer = answer + "\t\t\t\t<value>" + str.toString() + "</value>\n";
+            answer = answer + "\t\t\t\t<value>" + str.toString().replace("&","&amp;") + "</value>\n";
         }
         answer = answer + "\t\t\t</values>\n\t\t</namevalue>\n";
 
