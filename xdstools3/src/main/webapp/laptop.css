@@ -7,7 +7,10 @@ See the loading condition dependent on the size of the viewport, inside Xdstools
 
 
 /* ----------- Main title header ----------- */
-
+#apptitle-wrapper{
+    width: 1300px;
+    margin: auto;
+}
 
 /* Large dark blue bar */
 #appheader {
@@ -15,41 +18,49 @@ See the loading condition dependent on the size of the viewport, inside Xdstools
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
     background-color: #021a4c;
-    margin: auto;
-    padding: 10px 20px;
+    padding:10px;
 }
 /* Main app title. Ex: Document Sharing Toolkit */
 #apptitle {
-    margin-bottom: 5px;
     display: inline-block;
-    font-size: 18px;
+    margin: 0 0 5px 20px;
+    font-size: 22px;
     color: #F3C60D;
 }
 /* Yellow subtitle inside dark blue bar. */
 #appsubtitle {
-    font-size: 12px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    margin-left: 20px;
     color: #fc0;
     text-shadow: none;
 }
 /* Name of the Connectathon event (or "Standard release"), if applicable, the release was made for.
 Displayed to the right side of the dark blue bar. */
 #appevent{
-    font-size: 11px;
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
     color: #fc0;
-    text-shadow: none;
-    float:right;
-    /*padding-right:20px;*/
-    margin-top:5px;
+    float: right;
+    text-align: right;
+    margin: 5px 20px 0 0;
+    width: 300px;
 }
-/* Version of the application, to the right side of the dark blue bar */
+
+/* Version of the application, at the right side of the dark blue bar */
 #appversion{
-    font-size: 11px;
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
     color: #fc0;
-    text-shadow: none;
-    float:right;
-    /*padding-right:20px;*/
-    margin-top:-20px;
+    text-align: right;
+    float: right;
+    margin:-20px 20px 0 0;
+    width:300px;
 }
+
+
 
 
 /* ----------- Navigation bar (yellow menu bar) ----------- */

@@ -392,10 +392,12 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
      */
     private String getHeaderHtmlContent() {
         return "<header id='appheader'>" +
+                "<div id='apptitle-wrapper'>" +
                 "<div id='apptitle'>Document Sharing Toolkit</div>" +
                 "<div id='appevent'>"+ toolkitEvent +"</div>" +
                 "<div id='appsubtitle'>Testing platform for healthcare interoperability</div>" +
                 "<div id='appversion'>"+ toolkitVersion +"</div>" +
+                "</div>" +   /* end apptitle-wrapper */
                 "</header>" +
                 "<nav class='navbar'>" +
                 "<div class='app-padding navbar-inner'>" +
