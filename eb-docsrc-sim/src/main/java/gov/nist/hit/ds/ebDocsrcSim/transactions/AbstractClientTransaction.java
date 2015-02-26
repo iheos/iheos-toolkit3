@@ -26,11 +26,11 @@ public abstract class AbstractClientTransaction {
 	public String endpoint = null;
 	protected boolean soap_1_2 = true;
 	protected boolean async = false;
-	boolean useMtom;
-	boolean useAddressing;
+	public boolean useMtom;
+	public boolean useAddressing;
 	public Map<String, String> nameUuidMap = null;
 	private Soap soap;
-    SimHandle simHandle;
+    public SimHandle simHandle;
 
 	public List<OMElement> additionalHeaders = new ArrayList<>();
     public String messageId = null;

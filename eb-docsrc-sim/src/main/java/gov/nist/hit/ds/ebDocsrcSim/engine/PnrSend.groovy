@@ -75,7 +75,7 @@ class PnrSend  {
         trans.nameUuidMap = null;
         trans.instruction_output = logOutput;
         trans.endpoint = endpoint;
-        trans.messageId = request.messageId
+        trans.messageId = (request.messageId) ? request.messageId : null
         trans.xds_version = AbstractClientTransaction.xds_b;
         addExtraHeaders(trans)
 
