@@ -1,7 +1,9 @@
-package gov.nist.hit.ds.ebDocsrcSim.transactions;
+package gov.nist.hit.ds.ebDocsrcSim.transaction;
 
+import gov.nist.hit.ds.dsSims.eb.transactionSupport.DataHandlerFactory;
 import gov.nist.hit.ds.dsSims.eb.transactionSupport.DocumentHandler;
-import gov.nist.hit.ds.ebDocsrcSim.soap.SoapActionFactory;
+import gov.nist.hit.ds.ebDocsrcSim.soap.SoapActionFactory
+import gov.nist.hit.ds.ebDocsrcSim.transactions.AbstractClientTransaction;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 import gov.nist.hit.ds.ebMetadata.MetadataParser;
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
@@ -38,7 +40,8 @@ public class ProvideAndRegisterTransaction extends AbstractClientTransaction {
                 if (newId != null && !id.equals(""))
                     id = newId;
             }
-            DataHandler dataHandler = documents.get(id).getDataHandler();
+            DataHandler dataHandler =  DataHandlerFactory.get(documents.get(id));
+                    //documents.get(id).getDataHandler();
             OMText t = MetadataSupport.om_factory.createOMText(dataHandler, true);
             t.setOptimize(use_xop);
             OMElement document = MetadataSupport.om_factory.createOMElement("Document", MetadataSupport.xdsB);

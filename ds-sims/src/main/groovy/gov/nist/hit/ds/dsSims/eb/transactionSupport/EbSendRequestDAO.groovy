@@ -40,7 +40,7 @@ class EbSendRequestDAO {
             if (!id) throw new ToolkitRuntimeException("EbSendRequestDAO.toModel: found document without id")
             if (!mimeType) throw new ToolkitRuntimeException("EbSendRequestDAO.toModel: found document without mimeType (id ${id}")
             if (!value) throw new ToolkitRuntimeException("EbSendRequestDAO.toModel: document ${id} has no content")
-            DocumentHandler handle = new DocumentHandler(value, mimeType)
+            DocumentHandler handle = new StringDocumentHandler(value, mimeType)
             request.documents[id] = handle
         }
 
