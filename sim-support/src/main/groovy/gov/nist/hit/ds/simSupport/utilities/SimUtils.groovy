@@ -250,7 +250,7 @@ class SimUtils {
         SimpleAsset a = RepoUtils.getChildIfAvailable(name, parent)
         if (!a) {
             log.debug "Storing content ${xmlEle}"
-            a = RepoUtils.mkChild(name, parent)
+            a = RepoUtils.mkChild(name, parent, new SimpleType('simpleType'))
             a.setContent(xmlEle, 'text/xml')
         } else {
             log.debug "Updating content ${xmlEle}"
