@@ -19,9 +19,6 @@ public class EndpointWidget extends HLayout {
     private boolean endpointValueSelected = false;
 
     public EndpointWidget() {
-        //formatting
-        //setAutoHeight();
-        // setmemebersmargin 15
 
         endpointGrid = createEndpointGrid();
         addMember(endpointGrid);

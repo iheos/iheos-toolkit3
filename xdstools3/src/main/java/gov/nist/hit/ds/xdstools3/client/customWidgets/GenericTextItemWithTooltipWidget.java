@@ -25,6 +25,5 @@ public class GenericTextItemWithTooltipWidget extends TextItem {
 		tooltip = tip;
 		icon.setPrompt(tooltip);
 	}
-	
 
 }
