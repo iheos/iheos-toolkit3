@@ -235,6 +235,15 @@ public class Caller implements Serializable {
         return TestDataHelper.instance.getTestDataSet();
     }
 
+
+    // ----------------------------- Query & Retrieve -------------------------------
+
+    public AssetNode findDocuments(String pid, boolean tls, boolean saml, boolean onDemand, String endpointID) throws ToolkitServerError {
+        // create class to hold all parameters
+        // TODO insert API call for Find Documents
+        return null;
+    }
+
 }
 
 

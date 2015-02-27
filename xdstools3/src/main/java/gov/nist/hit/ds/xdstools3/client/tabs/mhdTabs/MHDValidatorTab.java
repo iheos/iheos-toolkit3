@@ -1,7 +1,6 @@
 package gov.nist.hit.ds.xdstools3.client.tabs.mhdTabs;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -16,14 +15,12 @@ import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.layout.VLayout;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
-import gov.nist.hit.ds.repository.ui.client.widgets.EventAggregatorWidget;
+import gov.nist.hit.ds.xdstools3.client.customWidgets.buttons.GenericRunButtonNoForm;
 import gov.nist.hit.ds.xdstools3.client.customWidgets.forms.GenericForm;
-import gov.nist.hit.ds.xdstools3.client.manager.Manager;
+import gov.nist.hit.ds.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
 import gov.nist.hit.ds.xdstools3.client.resources.Resources;
 import gov.nist.hit.ds.xdstools3.client.tabs.GenericCloseableToolTab;
-import gov.nist.hit.ds.xdstools3.client.customWidgets.buttons.GenericRunButtonNoForm;
-import gov.nist.hit.ds.xdstools3.client.exceptions.ToolkitServerError;
 
 import java.util.LinkedHashMap;
 import java.util.logging.Logger;
@@ -33,22 +30,19 @@ import java.util.logging.Logger;
  * @author oherrmann
  */
 public class MHDValidatorTab extends GenericCloseableToolTab {
-    private Logger logger=Logger.getLogger(MHDValidatorTab.class.getName());
+    private Logger logger = Logger.getLogger(MHDValidatorTab.class.getName());
 
     // RPC services declaration
     private final static MHDTabsServicesAsync mhdToolkitService = GWT
             .create(MHDTabsServices.class);
 
-    // tab's title and header
     private static String header="MHD Validator";
 
     // UI components
     private FormPanel uploadForm;
     private SelectItem messageTypeSelect;
     private FileUpload fileUploadItem;
-    private VLayout validationResultsPanel;
     private Button runBtn;
-    private EventAggregatorWidget eventMessageAggregatorWidget;
     private VLayout container;
     // Variables
     private String selectedMessageType;
@@ -105,15 +99,6 @@ public class MHDValidatorTab extends GenericCloseableToolTab {
         // Create Help Link and populates it with text from resources
         setHelpButton(getHelpPanel(), Resources.INSTANCE.getMHDValidatorHelpContents().getText());
 
-        // Initial event summary widget parameters
-        String id = null;
-        String type = "validators";
-        String[] displayColumns = new String[]{"ID","STATUS","MSG"};
-
-        // Event summary widget
-        validationResultsPanel = new VLayout();
-        validationResultsPanel.addMember(setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT.OUT_OF_CONTEXT, "Sim", id, type, displayColumns));
-        setResultsPanel(validationResultsPanel);
 
         // Layout
         container.addMembers(form);
@@ -219,36 +204,5 @@ public class MHDValidatorTab extends GenericCloseableToolTab {
         selectedMessageType="sbmt";
     }
 
-    /**
-     * Method to display validation results
-     *
-     * @param assetNode Validation result from RPC validation
-     */
-    private void displayValidationResults(AssetNode assetNode) {
-        if (!validationResultsPanel.isVisible()){
-            validationResultsPanel.setVisible(true);
-        }
-        eventMessageAggregatorWidget.setEventAssetNode(assetNode);
-        validationResultsPanel.redraw();
-        container.hideMember(waitPanel);
-    }
-
-
-        /**
-         * Initializes the Event Message Widget to be populated with the validation result
-         */
-    protected Widget setupEventMessagesWidget(EventAggregatorWidget.ASSET_CLICK_EVENT assetClickEvent, String externalRepositoryId, String eventAssetId, String type, String[] displayColumns) {
-
-        try {
-            // Initialize the widget
-            eventMessageAggregatorWidget = new EventAggregatorWidget(Manager.EVENT_BUS, assetClickEvent, externalRepositoryId,eventAssetId,type,displayColumns);
-            eventMessageAggregatorWidget.setSize("1110px", "600px");
-            return eventMessageAggregatorWidget;
-
-        } catch (Throwable t) {
-            Window.alert("EventAggregatorWidget instance could not be created: " + t.toString());
-        }
-        return null;
-    }
 
 }

@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.xdstools3.client.tabs.findDocumentsTab;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -11,23 +13,35 @@ import com.smartgwt.client.widgets.form.fields.SpacerItem;
 import com.smartgwt.client.widgets.grid.events.SelectionChangedHandler;
 import com.smartgwt.client.widgets.grid.events.SelectionEvent;
 import com.smartgwt.client.widgets.layout.VStack;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.xdstools3.client.customWidgets.PatientIDWidget;
 import gov.nist.hit.ds.xdstools3.client.customWidgets.TLSAndSAML.SAMLComboBox;
 import gov.nist.hit.ds.xdstools3.client.customWidgets.TLSAndSAML.TLSCheckbox;
 import gov.nist.hit.ds.xdstools3.client.customWidgets.buttons.GenericRunButtonNoForm;
 import gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.select.EndpointWidget;
-import gov.nist.hit.ds.xdstools3.client.customWidgets.validationOutput.ValidationSummaryWidget;
+import gov.nist.hit.ds.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
 import gov.nist.hit.ds.xdstools3.client.tabs.GenericCloseableToolTab;
 
+import java.util.logging.Logger;
+
 
 public class FindDocumentTab extends GenericCloseableToolTab {
+    private Logger logger = Logger.getLogger(FindDocumentTab.class.getName());
+
     static String header = "Find Documents";
 
     // Global class fields
     PatientIDWidget pid;
     EndpointWidget endpoints;
     GenericRunButtonNoForm runButton;
+    TLSCheckbox tls;
+    SAMLComboBox saml;
+    CheckboxItem includeOnDemand;
+
+    // RPC services declaration
+    private final static FindDocumentTabServicesAsync findDocumentService = GWT
+            .create(FindDocumentTabServices.class);
 
 
 
@@ -40,21 +54,18 @@ public class FindDocumentTab extends GenericCloseableToolTab {
      */
     @Override
     protected VStack createContents(){
-        pid = new PatientIDWidget();
-        endpoints = new EndpointWidget();
-        runButton = new GenericRunButtonNoForm();
-
 
         // layout
         final VStack findDocsPanel = new VStack();
 
         // create components
         Label l1 = createSubtitle1("Step 1: Enter Patient ID");
+        pid = new PatientIDWidget();
 
         Label l2 = createSubtitle1("Step 2: Select TLS / SAML / On-Demand options");
-        TLSCheckbox tls = new TLSCheckbox(); tls.setEndRow(true);
-        SAMLComboBox saml = new SAMLComboBox(); saml.setEndRow(true);
-        CheckboxItem includeOnDemand = new CheckboxItem("includeOnDemand");
+        tls = new TLSCheckbox(); tls.setEndRow(true);
+        saml = new SAMLComboBox(); saml.setEndRow(true);
+        includeOnDemand = new CheckboxItem("includeOnDemand");
         includeOnDemand.setTitle("Include On-Demand document entries");
         SpacerItem space = new SpacerItem();
         DynamicForm options = new DynamicForm();
@@ -62,11 +73,12 @@ public class FindDocumentTab extends GenericCloseableToolTab {
         options.setCellPadding(10);
 
         Label l3 = createSubtitle1("Step 3: Select Endpoint");
+        endpoints = new EndpointWidget();
 
-        ValidationSummaryWidget output = new ValidationSummaryWidget();
+        runButton = new GenericRunButtonNoForm();
 
         // Add to layout
-        findDocsPanel.addMembers(l1, pid, l2, options, l3, endpoints, runButton, output); //new CodedTermEditableGridWidget()
+        findDocsPanel.addMembers(l1, pid, l2, options, l3, endpoints, runButton);
 
 
 
@@ -109,8 +121,31 @@ public class FindDocumentTab extends GenericCloseableToolTab {
         }
     }
 
+    /**
+     * Runs a Find Document query through RPC
+     */
     private void runQuery(){
+        try {
+            // TODO SAML is not implemented
+            // TODO not sure what the endpoints ID is returning
+                                                // pid.getValue(), tls, saml, onDemand, endpointID,
+            findDocumentService.findDocuments(pid.getValue(), tls.getValueAsBoolean(), false, includeOnDemand.getValueAsBoolean(),
+                    endpoints.getID(), new AsyncCallback<AssetNode>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    logger.warning(caught.getMessage());
+                }
 
+                @Override
+                public void onSuccess(AssetNode assetNode) {
+
+                    displayValidationResults(assetNode);
+                }
+            });
+        } catch (ToolkitServerError toolkitServerError) {
+            toolkitServerError.printStackTrace();
+            // TODO display error message to user
+        }
     }
 
     @Override

@@ -17,7 +17,6 @@ public interface ToolTabInterface {
 	public void removeHeaderTitle();
 	public Label createSubtitle1(String s);
 
-	public void createResultsPanel();
 	public void setResultsPanel(Canvas canvas);
 	public VLayout getResultsPanel();
 

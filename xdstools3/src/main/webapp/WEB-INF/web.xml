@@ -45,6 +45,10 @@
         <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.PreConnectathonTabServiceImpl</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>findDocumentTabServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.FindDocumentServicesImpl</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>loginServlet</servlet-name>
         <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.LoginServiceImpl</servlet-class>
     </servlet>
@@ -89,6 +93,11 @@
     <servlet-mapping>
         <servlet-name>mhdTabsServlet</servlet-name>
         <url-pattern>/xdstools3/mhd-tabs</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>findDocumentTabServlet</servlet-name>
+        <url-pattern>/xdstools3/finddocument-tab</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
