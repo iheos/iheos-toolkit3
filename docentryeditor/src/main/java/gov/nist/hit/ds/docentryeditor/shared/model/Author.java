@@ -152,25 +152,36 @@ public class Author implements ModelElement, Serializable {
      */
     @Override
     public String toString() {
-        String answer;
-        answer = "Author " + authorPerson.toString() + ", AuthorInstitutions=\"";
+        String author = "Author: " + authorPerson.toString() + ", AuthorInstitutions=\"";
 
+        int counter=0;
         for (String256 str : authorInstitutions) {
-            answer = answer + str.toString() + ",";
+            counter++;
+            author = author + str.toString();
+            if(counter<authorInstitutions.size()) {
+                author += ",";
+            }
         }
-        answer = answer + "\", AuthorRoles=\"";
+        author = author + "\", AuthorRoles=\"";
 
+        counter=0;
         for (String256 str : authorRoles) {
-            answer = answer + str.toString() + ",";
+            counter++;
+            author = author + str.toString();
+            if(counter<authorRoles.size())
+                author+=",";
         }
-        answer = answer + "\", AuthorSpecialties=\"";
+        author = author + "\", AuthorSpecialties=\"";
 
+        counter=0;
         for (String256 str : authorSpecialties) {
-            answer = answer + str.toString() + ",";
+            author = author + str.toString();
+            if (counter<authorSpecialties.size())
+                author+= ",";
         }
-        answer = answer + "\"";
+        author = author + "\"";
 
-        return answer;
+        return author;
     }
 
     public List<String256> getAuthorTelecommunications() {
@@ -193,46 +204,45 @@ public class Author implements ModelElement, Serializable {
      * @see Author class Author
      */
     public String toXML() {
-        String answer;
-        answer = "\t\t<author>\n";
+        String author = "\t\t<author>\n";
 
-        answer += "\t\t\t<authorPerson>" + authorPerson.toString().replace("&","&amp;") + "</authorPerson>\n";
+        author += "\t\t\t<authorPerson>" + authorPerson.toString().replace("&","&amp;") + "</authorPerson>\n";
 
         if (!authorInstitutions.isEmpty()) {
-            answer += "\t\t\t<authorInstitutions>\n";
+            author += "\t\t\t<authorInstitutions>\n";
             for (String256 str : authorInstitutions) {
-                answer = answer + "\t\t\t\t<authorInstitution>" + str.toString().replace("&","&amp;") + "</authorInstitution>\n";
+                author = author + "\t\t\t\t<authorInstitution>" + str.toString().replace("&","&amp;") + "</authorInstitution>\n";
             }
-            answer = answer + "\t\t\t</authorInstitutions>\n";
+            author = author + "\t\t\t</authorInstitutions>\n";
         }
 
         if (!authorRoles.isEmpty()) {
-            answer += "\t\t\t<authorRoles>\n";
+            author += "\t\t\t<authorRoles>\n";
             for (String256 str : authorRoles) {
-                answer = answer + "\t\t\t\t<authorRole>" + str.toString().replace("&", "&amp;") + "</authorRole>\n";
+                author = author + "\t\t\t\t<authorRole>" + str.toString().replace("&", "&amp;") + "</authorRole>\n";
             }
-            answer = answer + "\t\t\t</authorRoles>\n";
+            author = author + "\t\t\t</authorRoles>\n";
         }
 
         if (!authorSpecialties.isEmpty()) {
-            answer += "\t\t\t<authorSpecialties>\n";
+            author += "\t\t\t<authorSpecialties>\n";
             for (String256 str : authorSpecialties) {
-                answer = answer + "\t\t\t\t<authorSpecialty>" + str.toString().replace("&","&amp;") + "</authorSpecialty>\n";
+                author = author + "\t\t\t\t<authorSpecialty>" + str.toString().replace("&", "&amp;") + "</authorSpecialty>\n";
             }
-            answer = answer + "\t\t\t</authorSpecialties>\n";
+            author = author + "\t\t\t</authorSpecialties>\n";
         }
 
         if (!authorTelecommunications.isEmpty()) {
-            answer = answer + "\t\t\t<authorTelecommunications>\n";
+            author = author + "\t\t\t<authorTelecommunications>\n";
             for (String256 str : authorTelecommunications) {
-                answer = answer + "\t\t\t\t<authorTelecommunication>" + str.toString() + "</authorTelecommunication>\n";
+                author = author + "\t\t\t\t<authorTelecommunication>" + str.toString() + "</authorTelecommunication>\n";
             }
-            answer = answer + "\t\t\t</authorTelecommunications>\n";
+            author = author + "\t\t\t</authorTelecommunications>\n";
         }
 
-        answer += "\t\t</author>\n";
+        author += "\t\t</author>\n";
 
-        return answer;
+        return author;
     }
 
     /**

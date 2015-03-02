@@ -1,5 +1,8 @@
 package gov.nist.hit.ds.docentryeditor.shared.model;
 
+import gov.nist.hit.ds.ebMetadata.Metadata;
+import gov.nist.hit.ds.ebMetadata.MetadataSupport;
+import org.apache.axiom.om.OMElement;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.annotation.Nullable;
@@ -9,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * <b>This class represents the model which have to be respected by the xml
@@ -1066,14 +1070,14 @@ public class XdsDocumentEntry implements Serializable {
 
     @Override
     public String toString() {
-        return "XdsDocumentEntry{" +
-                "authors=" + authors +
-                ", classCode=" + classCode +
-                ", comments=" + comments +
-                ", confidentialityCodes=" + confidentialityCodes +
-                ", creationTime=" + creationTime +
-                ", eventCode=" + eventCode +
-                ", fileName=" + fileName +
+        return "XdsDocumentEntry[" +
+                "authors={" + authors +
+                "}, classCode=" + classCode +
+                ", comments={" + comments +
+                "}, confidentialityCodes={" + confidentialityCodes +
+                "}, creationTime=" + creationTime +
+                ", eventCode={" + eventCode +
+                "}, fileName=" + fileName +
                 ", formatCode=" + formatCode +
                 ", hash=" + hash +
                 ", healthcareFacilityType=" + healthcareFacilityType +
@@ -1088,15 +1092,16 @@ public class XdsDocumentEntry implements Serializable {
                 ", serviceStopTime=" + serviceStopTime +
                 ", size=" + size +
                 ", sourcePatientId=" + sourcePatientId +
-                ", sourcePatientInfo=" + sourcePatientInfo +
-                ", titles=" + titles +
-                ", typeCode=" + typeCode +
+                ", sourcePatientInfo={" + sourcePatientInfo +
+                "}, titles={" + titles +
+                "}, typeCode=" + typeCode +
                 ", uniqueId=" + uniqueId +
                 ", uri=" + uri +
                 ", logicalId=" + logicalId +
                 ", version=" + version +
                 ", availabilityStatus=" + availabilityStatus +
                 ", homeCommunityId=" + homeCommunityId +
-                '}';
+                ']';
     }
+
 }
