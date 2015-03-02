@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+/**
+ * Some icons are provided by Dave Gandy, based on Fontawesome, through Wikimedia Commons. License CC BY 3.0.
+ */
 public class Toolbar extends RibbonBar {
     //static Logger logger = Logger.getLogger(Toolbar.class);
     private SelectOtherItem sessionsComboBox;
@@ -75,12 +78,12 @@ public class Toolbar extends RibbonBar {
         sessionGroup.addControls(sessionForm);
 
         // Menu group: Site / Actors
-        IconButton endpointButton = getIconButton("View / Configure Endpoints", "icons/user_24x24.png", true);
+        IconButton endpointButton = getIconButton("View / Configure Endpoints", "icons/fontawesome-standalone/user.png", true);
 
         // Menu group: Admin
         // Behavior: Clicking on any of the buttons in the admin group opens a dialog to allow the user to log in as admin,
         // IF not logged in yet. Then follows to the link initially requested.
-        IconButton adminButton = getIconButton("Admin Settings", "icons/glyphicons/glyphicons_136_cogwheel.png", true);
+        IconButton adminButton = getIconButton("Admin Settings", "icons/fontawesome-standalone/cogwheel.png", true);
 
 
 
