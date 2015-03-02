@@ -75,7 +75,6 @@ Displayed to the right side of the dark blue bar. */
 nav ul li a {
     padding: 10px 15px;
 }
-/* different padding for the buttons on the right because the icons already make them taller */
-.right-side-button{
-    padding: 9px 15px;
+nav ul ul li {
+    font-size: 12px;
 }

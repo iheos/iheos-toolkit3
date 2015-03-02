@@ -402,7 +402,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<nav class='navbar'>" +
                 "<div class='app-padding navbar-inner'>" +
                 "<ul>" +
-                "<li><a href='#'>Home</a></li>" +
+                "<li><a href='#'>HOME</a></li>" +
                /* "<li><a href='#'>Queries & Retrieves</a>" +
                 "<ul>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getFindDocumentsTabCode()+"'>Find Document</a></li>" +
@@ -416,13 +416,13 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getGetSubmissionSetAndContentsTabCode()+"'>Get Submission Set and Contents</a></li>" +
                 "</ul>" +
                 "</li>" + */
-                "<li><a href='#'>MHD Tools</a>" +
+                "<li><a href='#'>MHD TOOLS</a>" +
                 "<ul>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMHDValidatorTabCode()+"'>MHD Validator</a></li>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMhdtoXdsConverterTabCode()+"'>MHD to XDS Converter</a></li>" +
                 "</ul>" +
                 "</li>" +
-                "<li><a href='#'>Tools</a>" +
+                "<li><a href='#'>TOOLS</a>" +
                 "<ul>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getMessageValidatorTabCode()+"'>Message Validator</a></li>" +
                 "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getDocumentMetadataEditorTabCode()+"'>Document Metadata Editor</a></li>" +
@@ -452,7 +452,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<div style='float:right;'>" +
                // "<li><a class='right-side-button' href='#'><img class='icon-link' src='images/icons/glyphicons/16px-blue/glyphicons-download-16px.png'/> Download</a></li>" +
                // "<li><a class='right-side-button' href='#TabPlace:"+ TabNamesManager.getInstance().getHelpTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/16px-blue/glyphicons-help-16px.png'/> Help</a></li>" +
-                "<li><a class='right-side-button' href='#TabPlace:"+ TabNamesManager.getInstance().getContactTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/16px-blue/glyphicons-11-envelope-16px.png'/> Contact us</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getContactTabCode()+"'><i class='fa fa-envelope fa-lg'></i>&nbsp; CONTACT US</a></li>" +
                 "</div>" +
                 "<ul>" +
                 "</div>" +
