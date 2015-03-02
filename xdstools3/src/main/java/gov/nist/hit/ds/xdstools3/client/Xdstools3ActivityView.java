@@ -452,7 +452,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
                 "<div style='float:right;'>" +
                // "<li><a class='right-side-button' href='#'><img class='icon-link' src='images/icons/glyphicons/16px-blue/glyphicons-download-16px.png'/> Download</a></li>" +
                // "<li><a class='right-side-button' href='#TabPlace:"+ TabNamesManager.getInstance().getHelpTabCode()+"'><img class='icon-link' src='images/icons/glyphicons/16px-blue/glyphicons-help-16px.png'/> Help</a></li>" +
-                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getContactTabCode()+"'><i class='fa fa-envelope fa-lg'></i>&nbsp; CONTACT US</a></li>" +
+                "<li><a href='#TabPlace:"+ TabNamesManager.getInstance().getContactTabCode()+"'><i class='fa fa-envelope'></i>&nbsp; CONTACT US</a></li>" +
                 "</div>" +
                 "<ul>" +
                 "</div>" +
