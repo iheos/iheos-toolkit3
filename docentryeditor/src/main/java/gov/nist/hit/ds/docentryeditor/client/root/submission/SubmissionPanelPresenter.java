@@ -1,8 +1,9 @@
 package gov.nist.hit.ds.docentryeditor.client.root.submission;
 
 import com.google.gwt.place.shared.PlaceController;
+import gov.nist.hit.ds.docentryeditor.client.editor.submissionSetEditor.SubmissionSetEditorPlace;
 import gov.nist.hit.ds.docentryeditor.client.utils.MetadataEditorRequestFactory;
-import gov.nist.hit.ds.docentryeditor.client.editor.EditorPlace;
+import gov.nist.hit.ds.docentryeditor.client.editor.documentEntryEditor.DocEntryEditorPlace;
 import gov.nist.hit.ds.docentryeditor.client.event.*;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractPresenter;
 import gov.nist.hit.ds.docentryeditor.client.home.WelcomePlace;
@@ -103,7 +104,8 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     }
 
     /**
-     * This method loads the editor interface with a selected document entry from the submission set tree.
+     * This method loads the document entry editor interface with a selected document entry
+     * from the submission set tree.
      *
      * @param selectedItem tree selected node
      */
@@ -112,6 +114,16 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
             currentlyEdited = selectedItem;
             startEditing();
         }
+    }
+
+    /**
+     * This method loads the submission set editor interface with the selected submission set
+     * from the submission set tree.
+     *
+     * @param selectedItem tree selected node
+     */
+    public void loadSubmissionSet(SubmissionMenuData selectedItem) {
+        placeController.goTo(new SubmissionSetEditorPlace());
     }
 
     /**
@@ -146,8 +158,8 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
      * This method loads a document entry into the editor user interface, which is loaded if not already.
      */
     private void startEditing() {
-        if(!(placeController.getWhere() instanceof EditorPlace)){
-            placeController.goTo(new EditorPlace());
+        if(!(placeController.getWhere() instanceof DocEntryEditorPlace)){
+            placeController.goTo(new DocEntryEditorPlace());
         }
         logger.info("Fire Start Edit selected ("+currentlyEdited.getValue()+") document entry event...");
         ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(currentlyEdited.getModel());
@@ -160,4 +172,6 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     public SubmissionMenuData getCurrentlyEdited(){
         return currentlyEdited;
     }
+
+
 }

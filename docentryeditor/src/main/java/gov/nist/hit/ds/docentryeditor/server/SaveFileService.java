@@ -52,7 +52,111 @@ public class SaveFileService implements Serializable {
         logger.info("Metadata xml file creation...");
 
         // return created file's name
-        return saveAsXMLFile(filename,fileContent);
+        // TODO remove hard coded xml when submission set will be handler by the editor
+        return saveAsXMLFile(filename,
+                "<xdsb:ProvideAndRegisterDocumentSetRequest xmlns:xdsb=\"urn:ihe:iti:xds-b:2007\">\n" +
+                "    <lcm:SubmitObjectsRequest xmlns:lcm=\"urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0\">\n" +
+                "        <rim:RegistryObjectList xmlns:rim=\"urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0\">"+
+                fileContent.replace("displayName","name")+
+                "<rim:RegistryPackage id=\"SubmissionSet01\"\n" +
+                "                                 objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:RegistryPackage\">\n" +
+                "                <rim:Slot name=\"submissionTime\">\n" +
+                "                    <rim:ValueList>\n" +
+                "                        <rim:Value>20041225235050</rim:Value>\n" +
+                "                    </rim:ValueList>\n" +
+                "                </rim:Slot>\n" +
+                "                <rim:Name>\n" +
+                "                    <rim:LocalizedString value=\"Physical\"/>\n" +
+                "                </rim:Name>\n" +
+                "                <rim:Description>\n" +
+                "                    <rim:LocalizedString value=\"Annual physical\"/>\n" +
+                "                </rim:Description>\n" +
+                "                <rim:Classification\n" +
+                "                        classificationScheme=\"urn:uuid:a7058bb9-b4e4-4307-ba5b-e3f0ab85e12d\"\n" +
+                "                        classifiedObject=\"SubmissionSet01\" nodeRepresentation=\"\"\n" +
+                "                        objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification\"\n" +
+                "                        id=\"id_11\">\n" +
+                "                    <rim:Slot name=\"authorPerson\">\n" +
+                "                        <rim:ValueList>\n" +
+                "                            <rim:Value>^Dopplemeyer^Sherry^^^</rim:Value>\n" +
+                "                        </rim:ValueList>\n" +
+                "                    </rim:Slot>\n" +
+                "                    <rim:Slot name=\"authorInstitution\">\n" +
+                "                        <rim:ValueList>\n" +
+                "                            <rim:Value>Cleveland Clinic</rim:Value>\n" +
+                "                            <rim:Value>Berea Community</rim:Value>\n" +
+                "                        </rim:ValueList>\n" +
+                "                    </rim:Slot>\n" +
+                "                    <rim:Slot name=\"authorRole\">\n" +
+                "                        <rim:ValueList>\n" +
+                "                            <rim:Value>Primary Surgon</rim:Value>\n" +
+                "                        </rim:ValueList>\n" +
+                "                    </rim:Slot>\n" +
+                "                    <rim:Slot name=\"authorSpecialty\">\n" +
+                "                        <rim:ValueList>\n" +
+                "                            <rim:Value>Orthopedic</rim:Value>\n" +
+                "                        </rim:ValueList>\n" +
+                "                    </rim:Slot>\n" +
+                "                </rim:Classification>\n" +
+                "                <rim:Classification\n" +
+                "                        classificationScheme=\"urn:uuid:aa543740-bdda-424e-8c96-df4873be8500\"\n" +
+                "                        classifiedObject=\"SubmissionSet01\" nodeRepresentation=\"History and Physical\"\n" +
+                "                        objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification\"\n" +
+                "                        id=\"id_12\">\n" +
+                "                    <rim:Slot name=\"codingScheme\">\n" +
+                "                        <rim:ValueList>\n" +
+                "                            <rim:Value>Connect-a-thon contentTypeCodes</rim:Value>\n" +
+                "                        </rim:ValueList>\n" +
+                "                    </rim:Slot>\n" +
+                "                    <rim:Name>\n" +
+                "                        <rim:LocalizedString value=\"History and Physical\"/>\n" +
+                "                    </rim:Name>\n" +
+                "                </rim:Classification>\n" +
+                "                <rim:ExternalIdentifier\n" +
+                "                        identificationScheme=\"urn:uuid:96fdda7c-d067-4183-912e-bf5ee74998a8\"\n" +
+                "                        value=\"2009.9.1.2456\"\n" +
+                "                        objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier\"\n" +
+                "                        id=\"id_13\" registryObject=\"SubmissionSet01\">\n" +
+                "                    <rim:Name>\n" +
+                "                        <rim:LocalizedString value=\"XDSSubmissionSet.uniqueId\"/>\n" +
+                "                    </rim:Name>\n" +
+                "                </rim:ExternalIdentifier>\n" +
+                "                <rim:ExternalIdentifier\n" +
+                "                        identificationScheme=\"urn:uuid:554ac39e-e3fe-47fe-b233-965d2a147832\"\n" +
+                "                        value=\"1.3.6.1.4.1.21367.2009.1.2.1\"\n" +
+                "                        objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier\"\n" +
+                "                        id=\"id_14\" registryObject=\"SubmissionSet01\">\n" +
+                "                    <rim:Name>\n" +
+                "                        <rim:LocalizedString value=\"XDSSubmissionSet.sourceId\"/>\n" +
+                "                    </rim:Name>\n" +
+                "                </rim:ExternalIdentifier>\n" +
+                "                <rim:ExternalIdentifier\n" +
+                "                        identificationScheme=\"urn:uuid:6b5aea1a-874d-4603-a4bc-96a0a7b38446\"\n" +
+                "                        value=\"76cc765a442f410^^^&amp;1.3.6.1.4.1.21367.2005.3.7&amp;ISO\"\n" +
+                "                        objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier\"\n" +
+                "                        id=\"id_15\" registryObject=\"SubmissionSet01\">\n" +
+                "                    <rim:Name>\n" +
+                "                        <rim:LocalizedString value=\"XDSSubmissionSet.patientId\"/>\n" +
+                "                    </rim:Name>\n" +
+                "                </rim:ExternalIdentifier>\n" +
+                "            </rim:RegistryPackage>\n" +
+                "            <rim:Classification classifiedObject=\"SubmissionSet01\"\n" +
+                "                                classificationNode=\"urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd\" id=\"ID_1216346_1\"\n" +
+                "                                objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification\"/>\n" +
+                "            <rim:Association\n" +
+                "                    associationType=\"urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember\"\n" +
+                "                    sourceObject=\"SubmissionSet01\" targetObject=\"Document01\" id=\"ID_1216346_2\"\n" +
+                "                    objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Association\">\n" +
+                "                <rim:Slot name=\"SubmissionSetStatus\">\n" +
+                "                    <rim:ValueList>\n" +
+                "                        <rim:Value>Original</rim:Value>\n" +
+                "                    </rim:ValueList>\n" +
+                "                </rim:Slot>\n" +
+                "            </rim:Association>\n" +
+                "        </rim:RegistryObjectList>\n" +
+                "    </lcm:SubmitObjectsRequest>\n" +
+                "</xdsb:ProvideAndRegisterDocumentSetRequest>"
+        );
 
 //        return filename;
     }
@@ -80,10 +184,114 @@ public class SaveFileService implements Serializable {
 
         FileOutputStream out;
 
+        // TODO Remove hard coded xml when submission set and association are done
+        String outS= "<xdsb:ProvideAndRegisterDocumentSetRequest xmlns:xdsb=\"urn:ihe:iti:xds-b:2007\">\n" +
+                "    <lcm:SubmitObjectsRequest xmlns:lcm=\"urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0\">\n" +
+                "        <rim:RegistryObjectList xmlns:rim=\"urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0\">"+
+                fileContent.replace("displayName","name")+
+                "<rim:RegistryPackage id=\"SubmissionSet01\"\n" +
+                "                                 objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:RegistryPackage\">\n" +
+                "                <rim:Slot name=\"submissionTime\">\n" +
+                "                    <rim:ValueList>\n" +
+                "                        <rim:Value>20041225235050</rim:Value>\n" +
+                "                    </rim:ValueList>\n" +
+                "                </rim:Slot>\n" +
+                "                <rim:Name>\n" +
+                "                    <rim:LocalizedString value=\"Physical\"/>\n" +
+                "                </rim:Name>\n" +
+                "                <rim:Description>\n" +
+                "                    <rim:LocalizedString value=\"Annual physical\"/>\n" +
+                "                </rim:Description>\n" +
+                "                <rim:Classification\n" +
+                "                        classificationScheme=\"urn:uuid:a7058bb9-b4e4-4307-ba5b-e3f0ab85e12d\"\n" +
+                "                        classifiedObject=\"SubmissionSet01\" nodeRepresentation=\"\"\n" +
+                "                        objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification\"\n" +
+                "                        id=\"id_11\">\n" +
+                "                    <rim:Slot name=\"authorPerson\">\n" +
+                "                        <rim:ValueList>\n" +
+                "                            <rim:Value>^Dopplemeyer^Sherry^^^</rim:Value>\n" +
+                "                        </rim:ValueList>\n" +
+                "                    </rim:Slot>\n" +
+                "                    <rim:Slot name=\"authorInstitution\">\n" +
+                "                        <rim:ValueList>\n" +
+                "                            <rim:Value>Cleveland Clinic</rim:Value>\n" +
+                "                            <rim:Value>Berea Community</rim:Value>\n" +
+                "                        </rim:ValueList>\n" +
+                "                    </rim:Slot>\n" +
+                "                    <rim:Slot name=\"authorRole\">\n" +
+                "                        <rim:ValueList>\n" +
+                "                            <rim:Value>Primary Surgon</rim:Value>\n" +
+                "                        </rim:ValueList>\n" +
+                "                    </rim:Slot>\n" +
+                "                    <rim:Slot name=\"authorSpecialty\">\n" +
+                "                        <rim:ValueList>\n" +
+                "                            <rim:Value>Orthopedic</rim:Value>\n" +
+                "                        </rim:ValueList>\n" +
+                "                    </rim:Slot>\n" +
+                "                </rim:Classification>\n" +
+                "                <rim:Classification\n" +
+                "                        classificationScheme=\"urn:uuid:aa543740-bdda-424e-8c96-df4873be8500\"\n" +
+                "                        classifiedObject=\"SubmissionSet01\" nodeRepresentation=\"History and Physical\"\n" +
+                "                        objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification\"\n" +
+                "                        id=\"id_12\">\n" +
+                "                    <rim:Slot name=\"codingScheme\">\n" +
+                "                        <rim:ValueList>\n" +
+                "                            <rim:Value>Connect-a-thon contentTypeCodes</rim:Value>\n" +
+                "                        </rim:ValueList>\n" +
+                "                    </rim:Slot>\n" +
+                "                    <rim:Name>\n" +
+                "                        <rim:LocalizedString value=\"History and Physical\"/>\n" +
+                "                    </rim:Name>\n" +
+                "                </rim:Classification>\n" +
+                "                <rim:ExternalIdentifier\n" +
+                "                        identificationScheme=\"urn:uuid:96fdda7c-d067-4183-912e-bf5ee74998a8\"\n" +
+                "                        value=\"2009.9.1.2456\"\n" +
+                "                        objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier\"\n" +
+                "                        id=\"id_13\" registryObject=\"SubmissionSet01\">\n" +
+                "                    <rim:Name>\n" +
+                "                        <rim:LocalizedString value=\"XDSSubmissionSet.uniqueId\"/>\n" +
+                "                    </rim:Name>\n" +
+                "                </rim:ExternalIdentifier>\n" +
+                "                <rim:ExternalIdentifier\n" +
+                "                        identificationScheme=\"urn:uuid:554ac39e-e3fe-47fe-b233-965d2a147832\"\n" +
+                "                        value=\"1.3.6.1.4.1.21367.2009.1.2.1\"\n" +
+                "                        objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier\"\n" +
+                "                        id=\"id_14\" registryObject=\"SubmissionSet01\">\n" +
+                "                    <rim:Name>\n" +
+                "                        <rim:LocalizedString value=\"XDSSubmissionSet.sourceId\"/>\n" +
+                "                    </rim:Name>\n" +
+                "                </rim:ExternalIdentifier>\n" +
+                "                <rim:ExternalIdentifier\n" +
+                "                        identificationScheme=\"urn:uuid:6b5aea1a-874d-4603-a4bc-96a0a7b38446\"\n" +
+                "                        value=\"76cc765a442f410^^^&amp;1.3.6.1.4.1.21367.2005.3.7&amp;ISO\"\n" +
+                "                        objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:ExternalIdentifier\"\n" +
+                "                        id=\"id_15\" registryObject=\"SubmissionSet01\">\n" +
+                "                    <rim:Name>\n" +
+                "                        <rim:LocalizedString value=\"XDSSubmissionSet.patientId\"/>\n" +
+                "                    </rim:Name>\n" +
+                "                </rim:ExternalIdentifier>\n" +
+                "            </rim:RegistryPackage>\n" +
+                "            <rim:Classification classifiedObject=\"SubmissionSet01\"\n" +
+                "                                classificationNode=\"urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd\" id=\"ID_1216346_1\"\n" +
+                "                                objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Classification\"/>\n" +
+                "            <rim:Association\n" +
+                "                    associationType=\"urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember\"\n" +
+                "                    sourceObject=\"SubmissionSet01\" targetObject=\"Document01\" id=\"ID_1216346_2\"\n" +
+                "                    objectType=\"urn:oasis:names:tc:ebxml-regrep:ObjectType:RegistryObject:Association\">\n" +
+                "                <rim:Slot name=\"SubmissionSetStatus\">\n" +
+                "                    <rim:ValueList>\n" +
+                "                        <rim:Value>Original</rim:Value>\n" +
+                "                    </rim:ValueList>\n" +
+                "                </rim:Slot>\n" +
+                "            </rim:Association>\n" +
+                "        </rim:RegistryObjectList>\n" +
+                "    </lcm:SubmitObjectsRequest>\n" +
+                "</xdsb:ProvideAndRegisterDocumentSetRequest>";
+
         try {
             out = new FileOutputStream(new File(FILE_REPOSITORY, fileName));
             logger.info("... writing file ("+fileName+") in "+FILE_REPOSITORY.getAbsolutePath()+"...");
-            out.write(fileContent.getBytes());
+            out.write(outS.getBytes());
             out.close();
         } catch (IOException e) {
             logger.warning("Error when writing metadata file on server.\n" + e.getMessage());

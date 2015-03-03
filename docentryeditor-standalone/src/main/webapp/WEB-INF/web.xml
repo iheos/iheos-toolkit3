@@ -6,11 +6,11 @@
 
     <!-- Servlets -->
     <servlet>
-        <servlet-name>gov.nist.hit.ds.docentryeditor.XDSMetadataEditor XdsParserServices</servlet-name>
+        <servlet-name>xdsParserServices</servlet-name>
         <servlet-class>gov.nist.hit.ds.docentryeditor.server.XdsMetadataParserServicesImpl</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>gov.nist.hit.ds.docentryeditor.XDSMetadataEditor XdsParserServices</servlet-name>
+        <servlet-name>xdsParserServices</servlet-name>
         <url-pattern>/xdseditor/xdsparser</url-pattern>
     </servlet-mapping>
 

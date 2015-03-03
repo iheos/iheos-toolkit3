@@ -134,6 +134,8 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
             public void onSelection(SelectionEvent<SubmissionMenuData> event) {
                 if (!tree.getSelectionModel().getSelectedItem().equals(submissionSetTreeNode)) {
                     presenter.loadDocumentEntry(event.getSelectedItem());
+                }else{
+                    presenter.loadSubmissionSet(event.getSelectedItem());
                 }
             }
         });

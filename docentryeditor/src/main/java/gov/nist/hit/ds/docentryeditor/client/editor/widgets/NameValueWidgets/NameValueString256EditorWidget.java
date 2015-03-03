@@ -10,6 +10,7 @@ import gov.nist.hit.ds.docentryeditor.client.editor.properties.String256Properti
 import gov.nist.hit.ds.docentryeditor.client.generics.GenericEditableListView;
 import gov.nist.hit.ds.docentryeditor.client.generics.GridModelFactory;
 import gov.nist.hit.ds.docentryeditor.client.widgets.BoundedTextField;
+import gov.nist.hit.ds.docentryeditor.shared.model.DTM;
 import gov.nist.hit.ds.docentryeditor.shared.model.NameValueString256;
 import gov.nist.hit.ds.docentryeditor.shared.model.String256;
 
@@ -34,6 +35,24 @@ public class NameValueString256EditorWidget extends GenericEditableListView<Stri
      */
     public NameValueString256EditorWidget(String widgetTitle) {
         super(widgetTitle, new ListStore<String256>(props.key()), props.string());
+        buildUI();
+    }
+
+    /**
+     * NameValueString256 editable list constructor.
+     * @param widgetTitle title of the widget (for the grid's panel header).
+     * @param listSize number of String256 objects that can be stored in the widget (list).
+     */
+    public NameValueString256EditorWidget(String widgetTitle,int listSize) {
+        super(widgetTitle, new ListStore<String256>(props.key()), props.string());
+        buildUI();
+        setStoreMaxLength(listSize);
+    }
+
+    /**
+     * Method that builds the widgets itself
+     */
+    private void buildUI() {
         values = new ListStoreEditor<String256>(getStore());
         bindUI();
     }

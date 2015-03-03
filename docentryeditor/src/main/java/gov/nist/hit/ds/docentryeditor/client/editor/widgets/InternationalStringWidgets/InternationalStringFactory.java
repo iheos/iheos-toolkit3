@@ -12,6 +12,7 @@ import gov.nist.hit.ds.docentryeditor.shared.model.String256;
  */
 public enum InternationalStringFactory implements GridModelFactory<InternationalString> {
     instance;
+    private int counter = 1;
 
     /**
      * This methods returns a new instance of InternationalString in order to avoid reflection in GWT.
@@ -21,7 +22,8 @@ public enum InternationalStringFactory implements GridModelFactory<International
     public InternationalString newInstance() {
         InternationalString is = GWT.create(InternationalString.class);
         is.setLangCode(LanguageCode.ENGLISH_UNITED_STATES);
-        is.setValue(new String256("New translation"));
+        is.setValue(new String256("New translation "+counter));
+        counter++;
         return is;
     }
 }

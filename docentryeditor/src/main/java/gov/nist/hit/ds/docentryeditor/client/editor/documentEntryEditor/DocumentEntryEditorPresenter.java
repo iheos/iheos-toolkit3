@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.docentryeditor.client.editor;
+package gov.nist.hit.ds.docentryeditor.client.editor.documentEntryEditor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
@@ -28,11 +28,11 @@ import java.util.logging.Logger;
 /**
  * This class is the presenter that handles all the actions and events related to the Document Entry Editor view.
  */
-public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentModelEditorView> {
+public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntryEditorView> {
 
-    protected static Logger logger = Logger.getLogger(DocumentModelEditorPresenter.class.getName());
+    protected static Logger logger = Logger.getLogger(DocumentEntryEditorPresenter.class.getName());
     protected XdsDocumentEntry model=new XdsDocumentEntry();
-    EditorDriver editorDriver = GWT.create(EditorDriver.class);
+    DocEntryEditorDriver editorDriver = GWT.create(DocEntryEditorDriver.class);
     private final static XdsParserServicesAsync xdsParserServicesAsync=GWT.create(XdsParserServices.class);
 
     @Inject
@@ -197,7 +197,7 @@ public class DocumentModelEditorPresenter extends AbstractPresenter<DocumentMode
     /**
      * Interface of a XDS Document Entry Editor Driver
      */
-    interface EditorDriver extends SimpleBeanEditorDriver<XdsDocumentEntry, DocumentModelEditorView> {
+    interface DocEntryEditorDriver extends SimpleBeanEditorDriver<XdsDocumentEntry, DocumentEntryEditorView> {
 
     }
 

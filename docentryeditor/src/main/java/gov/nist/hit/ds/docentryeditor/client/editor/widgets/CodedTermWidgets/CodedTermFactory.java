@@ -12,6 +12,7 @@ import gov.nist.hit.ds.docentryeditor.shared.model.String256;
  */
 public enum CodedTermFactory implements GridModelFactory<CodedTerm> {
     instance;
+    private int counter=0;
 
     /**
      * This methods returns a new instance of CodedTerm in order to avoid reflection in GWT.
@@ -19,10 +20,11 @@ public enum CodedTermFactory implements GridModelFactory<CodedTerm> {
      */
     @Override
     public CodedTerm newInstance() {
+        counter++;
         CodedTerm e = GWT.create(CodedTerm.class);
         e.setDisplayName(new String256("New Coded Term name"));
         e.setCodingScheme(new CodingScheme(new String256("New Coded Term coding scheme")));
-        e.setCode(new String256("New Coded term code"));
+        e.setCode(new String256("New Coded term code "+counter));
         return e;
     }
 }

@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.docentryeditor.client.editor;
+package gov.nist.hit.ds.docentryeditor.client.editor.documentEntryEditor;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -13,7 +13,6 @@ import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import gov.nist.hit.ds.docentryeditor.client.editor.validation.ValidationPresenter;
 import gov.nist.hit.ds.docentryeditor.client.editor.validation.ValidationView;
 import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
-import gov.nist.hit.ds.docentryeditor.client.event.XdsEditorLoadedEvent;
 import gov.nist.hit.ds.docentryeditor.client.generics.ActivityDisplayer;
 import gov.nist.hit.ds.docentryeditor.client.generics.GenericMVP;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
@@ -21,18 +20,18 @@ import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 import javax.inject.Inject;
 import java.util.logging.Logger;
 
-public class EditorActivity extends AbstractActivity {
+public class DocEntryEditorActivity extends AbstractActivity {
 
     @Inject
     ActivityDisplayer displayer;
 
-    GenericMVP<XdsDocumentEntry, DocumentModelEditorView, DocumentModelEditorPresenter> editorMVP;
+    GenericMVP<XdsDocumentEntry, DocumentEntryEditorView, DocumentEntryEditorPresenter> editorMVP;
     GenericMVP<XdsDocumentEntry, ValidationView, ValidationPresenter> validationMVP;
 
     @Inject
-    DocumentModelEditorView editorView;
+    DocumentEntryEditorView editorView;
     @Inject
-    DocumentModelEditorPresenter editorPresenter;
+    DocumentEntryEditorPresenter editorPresenter;
     @Inject
     ValidationView validationView;
     @Inject
@@ -102,8 +101,8 @@ public class EditorActivity extends AbstractActivity {
      * Method that builds the Document Entry Editor (MVP).
      * @return Document Entry Editor MVP.
      */
-    public GenericMVP<XdsDocumentEntry, DocumentModelEditorView, DocumentModelEditorPresenter> buildEditorMVP() {
-        return new GenericMVP<XdsDocumentEntry, DocumentModelEditorView, DocumentModelEditorPresenter>(editorView, editorPresenter);
+    public GenericMVP<XdsDocumentEntry, DocumentEntryEditorView, DocumentEntryEditorPresenter> buildEditorMVP() {
+        return new GenericMVP<XdsDocumentEntry, DocumentEntryEditorView, DocumentEntryEditorPresenter>(editorView, editorPresenter);
     }
 
     /**

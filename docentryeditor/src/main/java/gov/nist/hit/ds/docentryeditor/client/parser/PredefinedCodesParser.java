@@ -41,6 +41,8 @@ public enum PredefinedCodesParser {
     @SuppressWarnings("GwtInconsistentSerializableClass")
     private static final NodeList nodes = dom.getElementsByTagName(CONFIG_FILE_ROOT_NODE);
 
+    // list of existing content type codes.
+    private static final List<CodedTerm> contentTypeCodes = new ArrayList<CodedTerm>();
     // list of existing class codes.
     private static final List<CodedTerm> classCodes = new ArrayList<CodedTerm>();
     // list of existing format codes.
@@ -99,6 +101,13 @@ public enum PredefinedCodesParser {
                 logger.info("... type codes retrieved from file.");
             }
             return typeCodes;
+        } else if (predefinedCodes.equals(PredefinedCodes.CONTENT_TYPE_CODE)) {
+            if (contentTypeCodes.size() == 0) {
+                logger.info("Parsing codes file for content type codes...");
+                contentTypeCodes.addAll(parseNode(ConfigCodeNodes.contentTypeCode.toString()));
+                logger.info("... content type codes retrieved from file.");
+            }
+            return contentTypeCodes;
         } else if (predefinedCodes.equals(PredefinedCodes.CONFIDENTIALITY_CODES)) {
             if (confidentialityCodes.size() == 0) {
                 logger.info("Parsing codes file for confidentiality codes...");
@@ -181,7 +190,7 @@ public enum PredefinedCodesParser {
      * Enumeration of existing nodes for the codes parser.
      */
     private static enum ConfigCodeNodes {
-        classCode, formatCode, healthcareFacilityTypeCode, practiceSettingCode, typeCode, confidentialityCode, eventCodeList, mimeType;
+        classCode, formatCode, healthcareFacilityTypeCode, practiceSettingCode, typeCode, confidentialityCode, eventCodeList, mimeType, contentTypeCode;
 
         /**
          * Enumeration of existing nodes attributes for the codes parser.

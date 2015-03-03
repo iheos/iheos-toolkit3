@@ -28,6 +28,14 @@
             <param-value>WEB-INF/classes/symbolMaps/</param-value>
         </init-param>
     </servlet>
+    <servlet>
+        <servlet-name>xdsParserServices</servlet-name>
+        <servlet-class>gov.nist.hit.ds.docentryeditor.server.XdsMetadataParserServicesImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>xdsParserServices</servlet-name>
+        <url-pattern>/xdseditor/xdsparser</url-pattern>
+    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>requestFactoryServlet</servlet-name>

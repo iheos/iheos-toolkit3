@@ -10,6 +10,7 @@ import gov.nist.hit.ds.docentryeditor.shared.model.String256;
  */
 public enum String256Factory implements GridModelFactory<String256> {
     instance;
+    private int counter=0;
 
     /**
      * This methods returns a new instance of String256 in order to avoid reflection in GWT.
@@ -17,6 +18,9 @@ public enum String256Factory implements GridModelFactory<String256> {
      */
     @Override
     public String256 newInstance() {
-        return GWT.create(String256.class);
+        counter++;
+        String256 value=GWT.create(String256.class);
+        value.setString("new value "+counter);
+        return value;
     }
 }

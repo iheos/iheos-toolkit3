@@ -108,7 +108,7 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         while(serviceStartDateString.length()<14){
             serviceStartDateString += "0";
         }
-        serviceStartDate.getValues().add(new DTM(formatDate(serviceStartDateString)));
+        serviceStartDate.getValues().add(new DTM(parserDate(serviceStartDateString)));
         de.setServiceStartTime(serviceStartDate);
 //        de.serviceStartTimeX = new OMFormatter(m.getSlot(ele, "serviceStartTime")).toHtml();
 
@@ -118,7 +118,7 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         while(serviceStopDateString.length()<14){
             serviceStopDateString += "0";
         }
-        serviceStopDate.getValues().add(new DTM(formatDate(serviceStopDateString)));
+        serviceStopDate.getValues().add(new DTM(parserDate(serviceStopDateString)));
         de.setServiceStopTime(serviceStopDate);
 //        de.serviceStopTimeX = new OMFormatter(m.getSlot(ele, "serviceStopTime")).toHtml();
 
@@ -152,7 +152,7 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         while(creationTimeString.length()<14){
             creationTimeString+="0";
         }
-        creationTime.getValues().add(new DTM(formatDate(creationTimeString)));
+        creationTime.getValues().add(new DTM(parserDate(creationTimeString)));
         de.setCreationTime(creationTime);
 //        de.creationTimeX = new OMFormatter(m.getSlot(ele, "creationTime")).toHtml();
 
@@ -262,17 +262,33 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
     public String toEbRim(XdsDocumentEntry documentEntry){
         Metadata m=new Metadata();
         OMElement extObj=m.mkExtrinsicObject(documentEntry.getId().toString(),documentEntry.getMimeType().toString());
-        m.addDocumentEntryPatientId(extObj,documentEntry.getPatientID().toString());
-        m.addDocumentEntryUniqueId(extObj, documentEntry.getUniqueId().toString());
-        m.addSlot(extObj, "sourcePatientId", documentEntry.getSourcePatientId().getValues().get(0).getString());
+        m.addDocumentEntryPatientId(extObj,documentEntry.getPatientID().getValue().toString());
+        m.addDocumentEntryUniqueId(extObj, documentEntry.getUniqueId().getValue().toString());
+        if (documentEntry.getSourcePatientId().getValues().get(0)!=null) {
+            m.addSlot(extObj, "sourcePatientId", documentEntry.getSourcePatientId().getValues().get(0).getString());
+        }
+        OMElement sourcePatientInfo=m.addSlot(extObj, "sourcePatientInfo");
+        for(String256 value:documentEntry.getSourcePatientInfo().getValues()) {
+            m.addSlotValue(sourcePatientInfo, value.toString());
+        }
         m.addSlot(extObj, "repositoryUniqueId", documentEntry.getRepoUId().toString());
         m.addSlot(extObj, "hash", documentEntry.getHash().toString());
         m.addSlot(extObj,"languageCode",documentEntry.getLanguageCode().toString());
-        m.addSlot(extObj,"size",documentEntry.getSize().toString());
-        m.addSlot(extObj,"legalAuthenticator",documentEntry.getLegalAuthenticator().getValues().get(0).toString());
-//        m.addSlot(extObj,"creationTime",documentEntry.getCreationTime().getValues().get(0)./*/toString());
-//        m.addSlot(extObj,"serviceStartTime",documentEntry.getServiceStartTime().getValues().get(0)./*/toString());
-//        m.addSlot(extObj,"serviceStopTime",documentEntry.getServiceStopTime().getValues().get(0)./*/toString());
+        if(documentEntry.getSize().getValues().get(0)!=null) {
+            m.addSlot(extObj, "size", documentEntry.getSize().getValues().get(0).toString());
+        }
+        if(documentEntry.getLegalAuthenticator().getValues().get(0)!=null) {
+            m.addSlot(extObj, "legalAuthenticator", documentEntry.getLegalAuthenticator().getValues().get(0).toString());
+        }
+        if (documentEntry.getCreationTime().getValues().get(0) != null) {
+            m.addSlot(extObj,"creationTime",formatDate(documentEntry.getCreationTime().getValues().get(0).getDtm()));
+        }
+        if (documentEntry.getServiceStartTime().getValues().get(0)!=null) {
+            m.addSlot(extObj, "serviceStartTime", formatDate(documentEntry.getServiceStartTime().getValues().get(0).getDtm()));
+        }
+        if (documentEntry.getServiceStopTime().getValues().get(0)!=null) {
+            m.addSlot(extObj, "serviceStopTime", formatDate(documentEntry.getServiceStopTime().getValues().get(0).getDtm()));
+        }
         m.addSlot(extObj, "URI", documentEntry.getUri().toString());
         m.addExtClassification(extObj, MetadataSupport.XDSDocumentEntry_classCode_uuid, documentEntry.getClassCode().getCodingScheme().toString(), documentEntry.getClassCode().getDisplayName().toString(), documentEntry.getClassCode().getCode().toString());
         m.addExtClassification(extObj, MetadataSupport.XDSDocumentEntry_formatCode_uuid, documentEntry.getFormatCode().getCodingScheme().toString(), documentEntry.getFormatCode().getDisplayName().toString(), documentEntry.getFormatCode().getCode().toString());
@@ -285,11 +301,36 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         for(CodedTerm ct:documentEntry.getConfidentialityCodes()){
             m.addExtClassification(extObj,MetadataSupport.XDSDocumentEntry_confCode_uuid,ct.getCodingScheme().toString(),ct.getDisplayName().toString(),ct.getCode().toString());
         }
+        for(Author author:documentEntry.getAuthors()) {
+            OMElement authorClassification=m.addIntClassification(extObj, MetadataSupport.XDSDocumentEntry_author_uuid);
+            m.addSlot(authorClassification,"authorPerson",author.getAuthorPerson().toString());
+            OMElement authorInstitutionClassification=m.addSlot(authorClassification, "authorInstitution");
+            for(String256 institution:author.getAuthorInstitutions()) {
+                m.addSlotValue(authorInstitutionClassification,institution.toString());
+            }
+            OMElement authorRoleClassification=m.addSlot(authorClassification,"authorRole");
+            for (String256 role:author.getAuthorRoles()) {
+                m.addSlotValue(authorRoleClassification,role.toString());
+            }
+            OMElement authorSpecialtyClassification=m.addSlot(authorClassification,"authorSpecialty");
+            for (String256 specialty:author.getAuthorSpecialties()) {
+                m.addSlotValue(authorSpecialtyClassification,specialty.toString());
+            }
+            OMElement authorTelecommunicationClassification=m.addSlot(authorClassification,"authorTelecommunication");
+            for (String256 telecommunication:author.getAuthorTelecommunications()) {
+                m.addSlotValue(authorTelecommunicationClassification, telecommunication.toString());
+            }
+        }
         Logger.getLogger(this.getClass().getName()).info(m.getExtrinsicObject(0).toString());
         return m.getExtrinsicObject(0).toString();
     }
 
-    private Date formatDate(String sdate) {
+    private String formatDate(Date date){
+        DateFormat dFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        return dFormatter.format(date);
+    }
+
+    private Date parserDate(String sdate) {
         DateFormat lFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date=new Date();
         try {

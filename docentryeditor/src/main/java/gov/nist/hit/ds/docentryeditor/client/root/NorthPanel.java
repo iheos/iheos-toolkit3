@@ -12,11 +12,10 @@ import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer.HBoxLayoutAlign;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
-import gov.nist.hit.ds.docentryeditor.client.editor.DocumentModelEditorMVP;
+import gov.nist.hit.ds.docentryeditor.client.editor.documentEntryEditor.DocumentEntryEditorMVP;
 import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
 import gov.nist.hit.ds.docentryeditor.client.event.NewFileLoadedEvent;
 import gov.nist.hit.ds.docentryeditor.client.event.NewFileLoadedEvent.NewFileLoadedHandler;
-import gov.nist.hit.ds.docentryeditor.client.event.SaveFileEvent;
 import gov.nist.hit.ds.docentryeditor.client.event.XdsEditorLoadedEvent;
 import gov.nist.hit.ds.docentryeditor.client.widgets.uploader.FileUploadMVP;
 
@@ -33,7 +32,7 @@ public class NorthPanel extends ContentPanel {
 	@Inject
 	FileUploadMVP fileUploadMVP;
 	@Inject
-	DocumentModelEditorMVP documentModelEditorMVP;
+    DocumentEntryEditorMVP documentModelEditorMVP;
 	@Inject
 	MetadataEditorEventBus eventBus;
 	private Dialog loadingDialog;

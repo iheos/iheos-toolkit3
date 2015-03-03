@@ -44,7 +44,7 @@ public class XdsSubmissionSet implements Serializable {
 
     /**
      * A globally unique identifier used to identify the SubmissionSet.
-     * [Mandatory] regardless the standard (XDS DS, XDS DR, XDM MC, XDR DS, XDR MS).
+     * [Required R] regardless the standard (XDS DS, XDS DR, XDM MC, XDR DS, XDR MS).
      */
     @NotNull
     private String256 entryUUID;
@@ -74,14 +74,14 @@ public class XdsSubmissionSet implements Serializable {
     /**
      * OID identifying the instance of the creating entity
      * that contributed the SubmissionSet.
-     * [Mandatory] regardless the standard (XDS DS, XDS DR, XDM MC, XDR DS, XDR MS).
+     * [Required R] regardless the standard (XDS DS, XDS DR, XDM MC, XDR DS, XDR MS).
      */
     @NotNull
     private IdentifierOID sourceId;
 
     /**
      * Point in time at the creating entity when the SubmissionSet was created.
-     * [Mandatory] regardless the standard (XDS DS, XDS DR, XDM MC, XDR DS, XDR MS).
+     * [Required R] regardless the standard (XDS DS, XDS DR, XDM MC, XDR DS, XDR MS).
      */
     @NotNull
     private NameValueDTM submissionTime;
@@ -91,12 +91,12 @@ public class XdsSubmissionSet implements Serializable {
      * [Optional] regardless the standard (XDS DS, XDS DR, XDM MC, XDR DS, XDR MS).
      */
     // FIXME List or not?
-    private InternationalString title;
+    private List<InternationalString> title;
 
     /**
      * A globally unique identifier for the SubmissionSet
      * assigned by the creating entity.
-     * [Mandatory] regardless the standard (XDS DS, XDS DR, XDM MC, XDR DS, XDR MS).
+     * [Required R] regardless the standard (XDS DS, XDS DR, XDM MC, XDR DS, XDR MS).
      */
     @NotNull
     private IdentifierOID uniqueId;
@@ -115,7 +115,7 @@ public class XdsSubmissionSet implements Serializable {
         patientId=new IdentifierString256();
         sourceId=new IdentifierOID();
         submissionTime=new NameValueDTM();
-        title=new InternationalString();
+        title=new ArrayList<InternationalString>();
         uniqueId=new IdentifierOID();
     }
 
@@ -201,11 +201,11 @@ public class XdsSubmissionSet implements Serializable {
         this.submissionTime = submissionTime;
     }
 
-    public InternationalString getTitle() {
+    public List<InternationalString> getTitle() {
         return title;
     }
 
-    public void setTitle(InternationalString title) {
+    public void setTitle(List<InternationalString> title) {
         this.title = title;
     }
 

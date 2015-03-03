@@ -36,16 +36,39 @@ public class NameValueDTMEditorWidget extends GenericEditableListView<DTM, Date>
 
 
     /**
-     * NameValueDTM editable list default constructor.
+     * NameValueDTM editable list constructor.
      * @param widgetTitle title of the widget (for the grid's panel header).
      */
     public NameValueDTMEditorWidget(String widgetTitle) {
         super(widgetTitle, new ListStore<DTM>(props.key()), props.dtm());
-
         // init list store that will handle the list of DTM objects
         values = new ListStoreEditor<DTM>(getStore());
-
         bind();
+    }
+
+    /**
+     * NameValueDTM editable list constructor.
+     * @param widgetTitle title of the widget (for the grid's panel header).
+     * @param listSize number of DTM objects that can be stored in the widget (list).
+     */
+    public NameValueDTMEditorWidget(String widgetTitle,int listSize) {
+        this(widgetTitle);
+        setStoreMaxLength(listSize);
+    }
+
+    public NameValueDTMEditorWidget(String widgetTitle, boolean isToolbarVisible, int listSize) {
+        this(widgetTitle);
+        if(!isToolbarVisible){
+            disableToolbar();
+        }
+        setStoreMaxLength(listSize);
+    }
+
+    /**
+     * Method that constructs the widget itself.
+     */
+    private void buildUI() {
+
     }
 
     /**

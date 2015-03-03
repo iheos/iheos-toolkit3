@@ -1,41 +1,33 @@
-package gov.nist.hit.ds.docentryeditor.client.editor;
+package gov.nist.hit.ds.docentryeditor.client.editor.documentEntryEditor;
 
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.cell.core.client.ButtonCell;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.client.editor.ListStoreEditor;
-import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer.HorizontalLayoutData;
 import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.FieldSet;
 import com.sencha.gxt.widget.core.client.form.validator.RegExValidator;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.AuthorWidgets.AuthorsListEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.CodedTermWidgets.CodedTermsEditableGridWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.CodedTermWidgets.PredefinedCodedTermComboBox;
+import gov.nist.hit.ds.docentryeditor.client.editor.widgets.*;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.IdentifierWidgets.IdentifierOIDEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.IdentifierWidgets.IdentifierString256EditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.InternationalStringWidgets.InternationalStringEditableGrid;
-import gov.nist.hit.ds.docentryeditor.client.editor.widgets.*;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueDTMEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueIntegerEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueString256EditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractView;
 import gov.nist.hit.ds.docentryeditor.client.parser.PredefinedCodes;
-import gov.nist.hit.ds.docentryeditor.client.resources.AppImages;
-import gov.nist.hit.ds.docentryeditor.client.widgets.HomeButton;
 import gov.nist.hit.ds.docentryeditor.shared.model.CodedTerm;
 import gov.nist.hit.ds.docentryeditor.shared.model.InternationalString;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
@@ -44,14 +36,11 @@ import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPresenter> implements Editor<XdsDocumentEntry> {
+public class DocumentEntryEditorView extends AbstractView<DocumentEntryEditorPresenter> implements Editor<XdsDocumentEntry> {
     private final VerticalLayoutContainer form = new VerticalLayoutContainer();
 
     VerticalLayoutContainer requiredFields = new VerticalLayoutContainer();
     VerticalLayoutContainer optionalFields = new VerticalLayoutContainer();
-
-    @Inject
-    PlaceController placeController;
 
     /* simple fields declaration */
     @Inject
@@ -113,14 +102,12 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
     // ---- EventCodes WIDGETS
     ListStoreEditor<CodedTerm> eventCode;
     CodedTermsEditableGridWidget eventCodesGrid;
-    private HomeButton homeBtn;
-    private TextButton saveButton;
-    private TextButton cancelButton;
-    private HorizontalLayoutContainer editorButtonsToolbar;
-    private HorizontalLayoutContainer secondToolbar;
-    private TextButton cancelButton2;
-    private HomeButton homeBtn2;
-    private TextButton saveButton2;
+
+    // -- Button toolbars
+    @Inject
+    private EditorToolbar editorTopToolbar;
+    @Inject
+    private EditorToolbar editorBottomToolbar;
 
     @Override
     protected Map<String, Widget> getPathToWidgetsMap() {
@@ -141,42 +128,6 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         container.getElement().setMargins(10);
         container.setBorders(false);
 
-        editorButtonsToolbar = new HorizontalLayoutContainer();
-        homeBtn = new HomeButton();
-        homeBtn.setHeight(30);
-        homeBtn.setWidth(130);
-        saveButton = new TextButton("Save");
-        saveButton.setHeight(30);
-        saveButton.setWidth(60);
-        cancelButton = new TextButton("Cancel changes");
-        cancelButton.setHeight(30);
-        cancelButton.setWidth(110);
-        cancelButton.setIcon(AppImages.INSTANCE.back());
-        cancelButton.setIconAlign(ButtonCell.IconAlign.LEFT);
-
-        editorButtonsToolbar.add(homeBtn, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
-        editorButtonsToolbar.add(saveButton, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
-        editorButtonsToolbar.add(cancelButton, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
-
-        secondToolbar = new HorizontalLayoutContainer();
-        homeBtn2 = new HomeButton();
-        homeBtn2.setHeight(30);
-        homeBtn2.setWidth(130);
-        saveButton2 = new TextButton("Save");
-        saveButton2.setHeight(30);
-        saveButton2.setWidth(60);
-        cancelButton2 = new TextButton("Cancel changes");
-        cancelButton2.setHeight(30);
-        cancelButton2.setWidth(110);
-        cancelButton2.setIcon(AppImages.INSTANCE.back());
-        cancelButton2.setIconAlign(ButtonCell.IconAlign.LEFT);
-        secondToolbar.add(homeBtn2, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
-        secondToolbar.add(saveButton2, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
-        secondToolbar.add(cancelButton2, new HorizontalLayoutData(-1, -1, new Margins(0, 5, 0, 0)));
-        SimpleContainer secondToolbarContainer = new SimpleContainer();
-        secondToolbarContainer.setHeight(35);
-        secondToolbarContainer.add(secondToolbar);
-
         SimpleContainer fp1 = new SimpleContainer();
         SimpleContainer fp2 = new SimpleContainer();
 
@@ -185,11 +136,9 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
         fp1.setTitle("Required fields");
         fp2.setTitle("Optional fields");
-//        fp1.setHeadingText("Required Fields");
-//        fp2.setHeadingText("Optional Fields");
-        // Adding required and optional fields panels to the main container of
-        // editor view
-        container.add(editorButtonsToolbar, new VerticalLayoutData(-1,30));
+
+        // Adding required and optional fields panels to the main container of editor view
+        container.add(editorTopToolbar, new VerticalLayoutData(-1,30));
         container.add(new HtmlLayoutContainer("<h2>Required fields</h2>"));
         container.add(fp1, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         container.add(new HtmlLayoutContainer("<h2>Optional fields</h2>"));
@@ -199,64 +148,37 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         // Simple fields label and options (init)
         // /////////////////////////////////////
         // ID Field (required)
-        FieldLabel idLabel = new FieldLabel(id, "Entry UUID");
-        idLabel.setLabelWidth(135);
-
+        EditorFieldLabel idLabel = new EditorFieldLabel(id, "Entry UUID");
         // Filename field
-        FieldLabel filenameLabel = new FieldLabel(fileName, "File name");
-        filenameLabel.setLabelWidth(135);
-
+        EditorFieldLabel filenameLabel = new EditorFieldLabel(fileName, "File name");
         // Hash Field (required)
-        FieldLabel hashLabel = new FieldLabel(hash, "Hash");
-        hashLabel.setLabelWidth(135);
-
+        EditorFieldLabel hashLabel = new EditorFieldLabel(hash, "Hash");
         // Language Code Field (required)
-        FieldLabel languageCodeLabel = new FieldLabel(languageCode, "Language Code");
-        languageCodeLabel.setLabelWidth(135);
-
-
+        EditorFieldLabel languageCodeLabel = new EditorFieldLabel(languageCode, "Language Code");
         // Mime Type Field (required)
-        FieldLabel mimeTypeLabel = new FieldLabel(mimeType, "Mime Type");
-        mimeTypeLabel.setLabelWidth(135);
-
+        EditorFieldLabel mimeTypeLabel = new EditorFieldLabel(mimeType, "Mime Type");
         // Class Code Field (required)
-        FieldLabel classCodeLabel = new FieldLabel(classCode.getDisplay(), "Class Code");
-        classCodeLabel.setLabelWidth(135);
-
+        EditorFieldLabel classCodeLabel = new EditorFieldLabel(classCode.getDisplay(), "Class Code");
         // Format Code Field (required)
-        FieldLabel formatCodeLabel = new FieldLabel(formatCode.getDisplay(), "Format Code");
-        formatCodeLabel.setLabelWidth(135);
-
+        EditorFieldLabel formatCodeLabel = new EditorFieldLabel(formatCode.getDisplay(), "Format Code");
         // healthcare facility Code Field (required)
-        FieldLabel healthcareFacilityTypeLabel = new FieldLabel(healthcareFacilityType.getDisplay(), "Healthcare Facility");
-        healthcareFacilityTypeLabel.setLabelWidth(135);
-
+        EditorFieldLabel healthcareFacilityTypeLabel = new EditorFieldLabel(healthcareFacilityType.getDisplay(), "Healthcare Facility");
         // practiceSettingCode Field (required)
-        FieldLabel practiceSettingCodeLabel = new FieldLabel(practiceSettingCode.getDisplay(), "Practice Setting Code");
-        practiceSettingCodeLabel.setLabelWidth(135);
-
+        EditorFieldLabel practiceSettingCodeLabel = new EditorFieldLabel(practiceSettingCode.getDisplay(), "Practice Setting Code");
         // type Code Field (required)
-        FieldLabel typeCodeLabel = new FieldLabel(typeCode.getDisplay(), "Type Code");
-        typeCodeLabel.setLabelWidth(135);
-
+        EditorFieldLabel typeCodeLabel = new EditorFieldLabel(typeCode.getDisplay(), "Type Code");
         // Repository Unique ID Field (optional)
-        FieldLabel repositoryLabel = new FieldLabel(repoUId, "Repository Unique ID");
-        repositoryLabel.setLabelWidth(135);
-
+        EditorFieldLabel repositoryLabel = new EditorFieldLabel(repoUId, "Repository Unique ID");
         // URI Field (optional)
-        FieldLabel uriLabel = new FieldLabel(uri, "URI");
-        uriLabel.setLabelWidth(135);
+        EditorFieldLabel uriLabel = new EditorFieldLabel(uri, "URI");
 
 		/* ********************************* */
         /* identifiers options and fieldset */
         /* ********************************* */
         // Patient ID Fields (required)
-        FieldLabel patientIdLabel = new FieldLabel(patientID, "Patient ID");
-        patientIdLabel.setLabelWidth(135);
-
+        EditorFieldLabel patientIdLabel = new EditorFieldLabel(patientID, "Patient ID");
         // Unique ID Fieds (required)
-        FieldLabel uniqueIdLabel = new FieldLabel(uniqueId, "Unique ID");
-        uniqueIdLabel.setLabelWidth(135);
+        EditorFieldLabel uniqueIdLabel = new EditorFieldLabel(uniqueId, "Unique ID");
 
         // ////////////////////////////////////////////////////
         // --- Adding REQUIRED simple fields labels to containers
@@ -276,7 +198,7 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
 
 		/* REQUIRED container added to a fieldset */
         FieldSet fieldSet_general_fields_required = new FieldSet();
-        fieldSet_general_fields_required.setHeadingText("General details");
+        fieldSet_general_fields_required.setHeadingText("General");
         fieldSet_general_fields_required.setCollapsible(true);
         fieldSet_general_fields_required.add(simpleRequiredFieldsContainer);
 
@@ -385,7 +307,11 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         optionalFields.add(eventCodesGrid.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         optionalFields.add(serviceStartTime.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
         optionalFields.add(serviceStopTime.getDisplay(), new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        optionalFields.add(secondToolbarContainer);
+
+        SimpleContainer bottomToolbarContainer = new SimpleContainer();
+        bottomToolbarContainer.setHeight(35);
+        bottomToolbarContainer.add(editorBottomToolbar);
+        optionalFields.add(bottomToolbarContainer);
 
         setWidgetsInfo();
 
@@ -408,20 +334,19 @@ public class DocumentModelEditorView extends AbstractView<DocumentModelEditorPre
         SelectHandler saveHandler = new SelectHandler() {
             @Override
             public void onSelect(SelectEvent selectEvent) {
-//                logger.info("Save document entry changes.");
                 presenter.doSave();
             }
         };
-        saveButton.addSelectHandler(saveHandler);
-        saveButton2.addSelectHandler(saveHandler);
+        editorTopToolbar.addSaveHandler(saveHandler);
+        editorBottomToolbar.addSaveHandler(saveHandler);
         SelectHandler cancelHandler = new SelectHandler() {
             @Override
             public void onSelect(SelectEvent selectEvent) {
                 presenter.rollbackChanges();
             }
         };
-        cancelButton.addSelectHandler(cancelHandler);
-        cancelButton2.addSelectHandler(cancelHandler);
+        editorTopToolbar.addCancelHandler(cancelHandler);
+        editorBottomToolbar.addCancelHandler(cancelHandler);
     }
 
     public void refreshGridButtonsDisplay() {

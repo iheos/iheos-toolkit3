@@ -44,13 +44,21 @@ public abstract class AbstractView<P extends AbstractPresenter<?>> implements Is
 //        Window.addResizeHandler(resizeHandler);
     }
 
+    /**
+     * This is an abstract method supposed to build a collection of objects mapping a String key
+     * to a Widget.
+     * @return Map of widgets.
+     */
     protected abstract Map<String, Widget> getPathToWidgetsMap();
 
 
     public void start() {
     }
 
-    // abstract
+    /**
+     * This is an abstract method supposed to construct the view as a widget.
+     * @return view as a Widget.
+     */
     abstract protected Widget buildUI();
 
     abstract protected void bindUI();

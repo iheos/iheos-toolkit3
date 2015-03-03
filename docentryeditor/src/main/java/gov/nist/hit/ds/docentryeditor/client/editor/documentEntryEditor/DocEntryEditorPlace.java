@@ -1,4 +1,4 @@
-package gov.nist.hit.ds.docentryeditor.client.editor;
+package gov.nist.hit.ds.docentryeditor.client.editor.documentEntryEditor;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
@@ -8,14 +8,14 @@ import com.google.gwt.place.shared.PlaceTokenizer;
  * This enables the navigation within the application thanks to
  * the Activity-place design.
  */
-public class EditorPlace extends Place {
+public class DocEntryEditorPlace extends Place {
 	private String editorPlaceName;
 
-	public EditorPlace(String token) {
+	public DocEntryEditorPlace(String token) {
 		this.editorPlaceName = token;
 	}
 
-	public EditorPlace() {
+	public DocEntryEditorPlace() {
 		super();
 	}
 
@@ -23,15 +23,15 @@ public class EditorPlace extends Place {
 		return this.editorPlaceName;
 	}
 
-	public static class Tokenizer implements PlaceTokenizer<EditorPlace> {
+	public static class Tokenizer implements PlaceTokenizer<DocEntryEditorPlace> {
 		@Override
-		public String getToken(EditorPlace place) {
+		public String getToken(DocEntryEditorPlace place) {
 			return place.getActivityEditorPlaceName();
 		}
 
 		@Override
-		public EditorPlace getPlace(String token) {
-			return new EditorPlace(token);
+		public DocEntryEditorPlace getPlace(String token) {
+			return new DocEntryEditorPlace(token);
 		}
 	}
 
