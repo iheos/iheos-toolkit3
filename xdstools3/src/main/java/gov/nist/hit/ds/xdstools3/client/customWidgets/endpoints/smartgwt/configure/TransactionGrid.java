@@ -1,12 +1,16 @@
 package gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.configure;
 
 import com.smartgwt.client.data.DSRequest;
-import com.smartgwt.client.types.*;
+import com.smartgwt.client.types.ExportFormat;
+import com.smartgwt.client.types.GroupStartOpen;
+import com.smartgwt.client.types.ListGridEditEvent;
+import com.smartgwt.client.types.RowEndEditAction;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
+import com.smartgwt.client.widgets.grid.ListGridRecord;
 
 /**
- * Holds the configuration for the grids displaying a transaction.
+ * Holds the configuration for the grids displaying a transaction's properties.
  */
 public class TransactionGrid extends ListGrid {
 
@@ -56,9 +60,32 @@ public class TransactionGrid extends ListGrid {
         repositoryUniqueID.setHidden(true);
 
 
+        // Repository UID, homeCommunityID - test
+        //ListGridRecord record = new ListGridRecord();
+        //Record ruid = this.getRecordList().find("transactionCode", "Repository Unique ID");
+
 
         setFields(siteName, actorCode, actorType, transactionCode, transactionName, tls, notls, repositoryUniqueID);
     }
+
+
+    @Override
+    protected String getBaseStyle(ListGridRecord record, int rowNum, int colNum) {
+        if (getFieldName(colNum).equals("actorType")) {
+            if (record.getAttributeAsString("Actor Type") == "Document Registry"   //== "Repository Unique ID"
+           // && record.getAttributeAsString("unsecure") == "GREYED-OUT"
+            ){
+                System.out.println("found matches in smartgwt grid");
+
+                return "background-color: blue;";
+            } else {
+                return super.getBaseStyle(record, rowNum, colNum);
+            }
+        } else {
+            return super.getBaseStyle(record, rowNum, colNum);
+        }
+    }
+
 
     // TODO should be written into separate files instead of one
     public void exportAsXML() {

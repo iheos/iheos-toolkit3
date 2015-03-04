@@ -25,5 +25,10 @@
             <secure>https://ihexds.nist.gov:12081/tf6/services/xdsretrieve</secure>
             <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsretrieve</unsecure>
         </transaction>
+        <transaction transactionCode="ruid" transactionName="Repository Unique ID">
+            <localId>00005</localId>
+            <secure>1.19.6.24.109.42.1.5</secure>
+            <unsecure>GREYED-OUT</unsecure>
+        </transaction>
     </actor>
 </site>

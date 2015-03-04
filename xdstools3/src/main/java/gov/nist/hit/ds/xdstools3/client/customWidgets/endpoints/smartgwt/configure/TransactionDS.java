@@ -42,7 +42,6 @@ public class TransactionDS extends DataSource {
         DataSourceTextField actorType = new DataSourceTextField("actorType", "Actor Type");
         actorType.setValueXPath("parent::actor/@actorType");
         actorType.setValueMap("Document Registry", "Document Repository");
-        
 
 
         //---- transactions -----
@@ -56,6 +55,7 @@ public class TransactionDS extends DataSource {
 
         DataSourceTextField tls = new DataSourceTextField("secure", "TLS Endpoint");
         tls.setPrimaryKey(true);
+        tls.setDisplayField("sq-tls");
 
         DataSourceTextField notls = new DataSourceTextField("unsecure", "Non-TLS Endpoint");
 
