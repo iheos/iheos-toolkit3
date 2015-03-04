@@ -74,7 +74,7 @@ public class EndpointsConfigWidget extends VStack {
         buttonsLayout.setAlign(Alignment.CENTER);
         buttonsLayout.setLayoutMargin(10);
 
-        IButton saveButton = new IButton("Save");
+        IButton saveButton = new IButton("Save all");
         saveButton.setTop(250);
         saveButton.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
@@ -85,7 +85,7 @@ public class EndpointsConfigWidget extends VStack {
         });
         buttonsLayout.addMember(saveButton);
 
-        IButton newButton = new IButton("Add");
+        IButton newButton = new IButton("Add site");
         newButton.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 //TODO add a site
@@ -93,7 +93,7 @@ public class EndpointsConfigWidget extends VStack {
         });
         buttonsLayout.addMember(newButton);
 
-        IButton discardButton = new IButton("Discard");
+        IButton discardButton = new IButton("Discard changes");
         discardButton.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 //nestedGrid.discardAllEdits();
@@ -101,13 +101,6 @@ public class EndpointsConfigWidget extends VStack {
         });
         buttonsLayout.addMember(discardButton);
 
-        IButton closeButton = new IButton("Close");
-        closeButton.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                //grid.collapseRecord(record);
-            }
-        });
-        buttonsLayout.addMember(closeButton);
 
         return buttonsLayout;
     }
