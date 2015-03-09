@@ -39,14 +39,16 @@ public class EndpointsConfigWidget extends VStack {
 
             @Override
             protected Canvas getExpansionComponent(final ListGridRecord record) {
+                // Retrieve current site name from current grid record to generate a nested Widget with
+                // DataSource matching the site name
+                String siteName = record.getAttributeAsString("siteName");
 
-                // create the nested forms
-                final TransactionWidget nestedForm = new TransactionWidget();
+                // create the nested widget
+                SiteWidget siteWidget = new SiteWidget(siteName);
+                //old: nestedGrid.fetchRelatedData(record, EndpointConfigDS.getInstance());
+                siteWidget.fetchRelatedData(siteName);
 
-               // nestedForm.fetchRelatedData(record, EndpointConfigDS.getInstance());
-
-                return nestedForm;
-
+                return siteWidget;
             }
         };
 

@@ -25,11 +25,11 @@ public class EndpointConfigDS extends DataSource {
         setRecordXPath("/sites/site"); // this is the path to the record we want to display, inside the XML file holding the data
         setClientOnly(true);
 
-        DataSourceTextField endpointName = new DataSourceTextField("endpointName", "Endpoint Name");
-        endpointName.setRequired(true);
-        endpointName.setPrimaryKey(true);
+        DataSourceTextField siteName = new DataSourceTextField("siteName", "Site Name");
+        siteName.setRequired(true);
+        siteName.setPrimaryKey(true);
 
-        setFields(endpointName);
+        setFields(siteName);
 
     }
 }

@@ -1,50 +1,64 @@
 package gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.configure;
 
+import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.VLayout;
 
+import java.util.ArrayList;
+
 /**
+ * Contains the front-end code for one Site. This widget is composed of multiple forms, one per transaction type.
  * Created by dazais on 3/3/2015.
  */
-public class TransactionWidget extends VLayout {
+public class SiteWidget extends VLayout {
+    protected TransactionBasicForm docRegistryForm, docRepoForm, docSourceForm, srcRepoForm, docRecptForm, respGatewayForm, initGatewayForm;
 
-    public TransactionWidget(){
+
+    public SiteWidget(String datasourceID){
         setAlign(Alignment.CENTER);
         setMembersMargin(10);
         setLayoutTopMargin(10);
         setLayoutBottomMargin(10);
         setLayoutRightMargin(10);
 
+        // create the DataSource and the forms
+        SiteDS siteDS = DSFactory.getDataSource(datasourceID); // this should be created only once
+        docRegistryForm = new TransactionBasicForm(siteDS);
+        docRepoForm = new TransactionBasicForm(siteDS);
+        docSourceForm = new TransactionBasicForm(siteDS);
+        srcRepoForm = new TransactionBasicForm(siteDS);
+        docRecptForm = new TransactionBasicForm(siteDS);
+        respGatewayForm = new TransactionBasicForm(siteDS);
+        initGatewayForm = new TransactionBasicForm(siteDS);
+
 
         // ------ Document Registry fields ------
-        final DynamicForm docRegistryForm = new TransactionBasicForm();
         docRegistryForm.setGroupTitle("Document Registry");
 
-        TextItem pidFeedHost = new TextItem("pid-feed-host");
+        TextItem pidFeedHost = new TextItem("pidfeedhost");
         pidFeedHost.setTitle("Patient Identity Feed");
         pidFeedHost.setHint("Host");
         pidFeedHost.setWidth(400);
-        TextItem pidFeedPort = new TextItem("pid-feed-port");
+        TextItem pidFeedPort = new TextItem("pidfeedport");
         pidFeedPort.setShowTitle(false);
         pidFeedPort.setHint("Port");
-        pidFeedPort.setWidth(100);
-        BasicTextItem registerTls = new BasicTextItem("r-tls");
+        pidFeedPort.setWidth(50);
+        BasicTextItem registerTls = new BasicTextItem("rtls");
         registerTls.setTitle("Register");
-        BasicTextItem registerNoTls = new BasicTextItem("r-notls");
+        BasicTextItem registerNoTls = new BasicTextItem("rnotls");
         registerNoTls.setShowTitle(false);
-        BasicTextItem sqTls = new BasicTextItem("sq-tls");
+        BasicTextItem sqTls = new BasicTextItem("sqtls");
         sqTls.setTitle("Stored Query");
-        BasicTextItem sqNoTls = new BasicTextItem("sq-notls");
+        BasicTextItem sqNoTls = new BasicTextItem("sqnotls");
         sqNoTls.setShowTitle(false);
-        BasicTextItem updateTls = new BasicTextItem("update-tls");
+        BasicTextItem updateTls = new BasicTextItem("updatetls");
         updateTls.setTitle("Update");
-        BasicTextItem updateNoTls = new BasicTextItem("update-notls");
+        BasicTextItem updateNoTls = new BasicTextItem("updatenotls");
         updateNoTls.setShowTitle(false);
-        BasicTextItem mpqTls = new BasicTextItem("mpq-tls");
+        BasicTextItem mpqTls = new BasicTextItem("mpqtls");
         mpqTls.setTitle("Multi-Patient Query");
-        BasicTextItem mpqNoTls = new BasicTextItem("mpq-notls");
+        BasicTextItem mpqNoTls = new BasicTextItem("mpqnotls");
         mpqNoTls.setShowTitle(false);
 
         docRegistryForm.setFields(pidFeedHost, pidFeedPort, registerTls, registerNoTls, sqTls, sqNoTls, updateTls, updateNoTls,
@@ -52,94 +66,88 @@ public class TransactionWidget extends VLayout {
 
 
         // ------ Document Repository fields ------
-        final DynamicForm docRepoForm = new TransactionBasicForm();
         docRepoForm.setGroupTitle("Document Repository");
 
-        TextItem repoUuid = new TextItem("repo-uuid");
+        TextItem repoUuid = new TextItem("repouuid");
         repoUuid.setTitle("Repository Unique ID");
         repoUuid.setWidth(400);
-        BasicTextItem retrieveTls = new BasicTextItem("retrieve-tls");
+        BasicTextItem retrieveTls = new BasicTextItem("retrievetls");
         retrieveTls.setTitle("Retrieve");
-        BasicTextItem retrieveNoTls = new BasicTextItem("retrieve-notls");
+        BasicTextItem retrieveNoTls = new BasicTextItem("retrievenotls");
         retrieveNoTls.setShowTitle(false);
-        BasicTextItem pnrTls = new BasicTextItem("pnr-tls");
+        BasicTextItem pnrTls = new BasicTextItem("pnrtls");
         pnrTls.setTitle("Provide and Register");
-        BasicTextItem pnrNoTls = new BasicTextItem("pnr-notls");
+        BasicTextItem pnrNoTls = new BasicTextItem("pnrnotls");
         pnrNoTls.setShowTitle(false);
 
         docRepoForm.setFields(repoUuid, retrieveTls, retrieveNoTls, pnrTls, pnrNoTls);
 
 
         // ------ On-Demand Document Source Fields ------
-        final DynamicForm docSourceForm = new TransactionBasicForm();
         docSourceForm.setGroupTitle("On-Demand Document Source");
 
-        BasicTextItem docSrcRetrieveTls = new BasicTextItem("doc-src-retrieve-tls");
+        BasicTextItem docSrcRetrieveTls = new BasicTextItem("docsrcretrievetls");
         docSrcRetrieveTls.setTitle("On-Demand Document Source Retrieve");
-        BasicTextItem docSrcRetrieveNoTls = new BasicTextItem("doc-src-retrieve-notls");
+        BasicTextItem docSrcRetrieveNoTls = new BasicTextItem("docsrcretrievenotls");
         docSrcRetrieveNoTls.setShowTitle(false);
 
         docSourceForm.setFields(docSrcRetrieveTls, docSrcRetrieveNoTls);
 
 
         // ------ Integrated Source / Repository Fields ------
-        final DynamicForm srcRepoForm = new TransactionBasicForm();
         srcRepoForm.setGroupTitle("Integrated Source / Repository");
 
-        BasicTextItem srcRepoRetrieveTls = new BasicTextItem("src-repo-retrieve-tls");
+        BasicTextItem srcRepoRetrieveTls = new BasicTextItem("srcreporetrievetls");
         srcRepoRetrieveTls.setTitle("Integrated Source / Repository Retrieve");
-        BasicTextItem srcRepoRetrieveNoTls = new BasicTextItem("src-repo-retrieve-notls");
+        BasicTextItem srcRepoRetrieveNoTls = new BasicTextItem("srcreporetrievenotls");
         srcRepoRetrieveNoTls.setShowTitle(false);
 
         srcRepoForm.setFields(srcRepoRetrieveTls, srcRepoRetrieveNoTls);
 
 
         // ------ Document Recipient Fields ------
-        final DynamicForm docRecptForm = new TransactionBasicForm();
         docRecptForm.setGroupTitle("Document Recipient");
 
-        BasicTextItem xdrPnRTls = new BasicTextItem("xdr-pnr-tls");
+        BasicTextItem xdrPnRTls = new BasicTextItem("xdrpnrtls");
         xdrPnRTls.setTitle("XDR Provide and Register");
-        BasicTextItem xdrPnRNoTls = new BasicTextItem("xdr-pnr-notls");
+        BasicTextItem xdrPnRNoTls = new BasicTextItem("xdrpnrnotls");
         xdrPnRNoTls.setShowTitle(false);
 
         docRecptForm.setFields(xdrPnRTls, xdrPnRNoTls);
 
 
         // ------ Responding Gateway Fields ------
-        final DynamicForm respGatewayForm = new TransactionBasicForm();
         respGatewayForm.setGroupTitle("Responding Gateway");
 
-        TextItem homeCommunityId = new TextItem("hc-id");
+        TextItem homeCommunityId = new TextItem("hcid");
         homeCommunityId.setTitle("Home Community ID");
         homeCommunityId.setWidth(400);
-        BasicTextItem xcqTls = new BasicTextItem("xcq-tls");
+        BasicTextItem xcqTls = new BasicTextItem("xcqtls");
         xcqTls.setTitle("Cross-Community Query");
-        BasicTextItem xcqNoTls = new BasicTextItem("xcq-notls");
+        BasicTextItem xcqNoTls = new BasicTextItem("xcqnotls");
         xcqNoTls.setShowTitle(false);
-        BasicTextItem xcrTls = new BasicTextItem("xcr-tls");
+        BasicTextItem xcrTls = new BasicTextItem("xcrtls");
         xcrTls.setTitle("Cross-Community Retrieve");
-        BasicTextItem xcrNoTls = new BasicTextItem("xcr-notls");
+        BasicTextItem xcrNoTls = new BasicTextItem("xcrnotls");
         xcrNoTls.setShowTitle(false);
-        BasicTextItem xcpdTls = new BasicTextItem("xcpd-tls");
+        BasicTextItem xcpdTls = new BasicTextItem("xcpdtls");
         xcpdTls.setTitle("Cross-Community Patient Discovery");
-        BasicTextItem xcpdNoTls = new BasicTextItem("xcpd-notls");
+        BasicTextItem xcpdNoTls = new BasicTextItem("xcpdnotls");
         xcpdNoTls.setShowTitle(false);
 
         respGatewayForm.setFields(homeCommunityId, xcqTls, xcqNoTls, xcrTls, xcrNoTls, xcpdTls, xcpdNoTls);
 
 
         // ------ Initiating Gateway Fields ------
-        final DynamicForm initGatewayForm = new TransactionBasicForm();
         initGatewayForm.setGroupTitle("Initiating Gateway");
 
-        BasicTextItem igqTls = new BasicTextItem("igq-tls");
+        BasicTextItem igqTls = new BasicTextItem("igqtls");
         igqTls.setTitle("Initiating Gateway Query");
-        BasicTextItem igqNoTls = new BasicTextItem("igq-notls");
+        BasicTextItem igqNoTls = new BasicTextItem("igqnotls");
         igqNoTls.setShowTitle(false);
-        BasicTextItem igrTls = new BasicTextItem("igr-tls");
+        BasicTextItem igrTls = new BasicTextItem("igrtls");
         igrTls.setTitle("Initiating Gateway Retrieve");
-        BasicTextItem igrNoTls = new BasicTextItem("igr-notls");
+        BasicTextItem igrNoTls = new BasicTextItem("igrnotls");
         igrNoTls.setShowTitle(false);
 
         initGatewayForm.setFields(igqTls, igqNoTls, igrTls, igrNoTls);
@@ -149,4 +157,24 @@ public class TransactionWidget extends VLayout {
         addMembers(docRegistryForm, docRepoForm, docSourceForm, srcRepoForm, docRecptForm, respGatewayForm, initGatewayForm);
 
     }
+
+    public void fetchRelatedData(String currentSite){
+        // create the search criteria for the SiteDS (nested) DataSource
+        Criteria criteria = new Criteria("name", currentSite);
+        ArrayList<TransactionBasicForm> array = new ArrayList<TransactionBasicForm>();
+        array.add(docRegistryForm);
+        array.add(docRepoForm);
+        array.add(docSourceForm);
+        array.add(srcRepoForm);
+        array.add(docRecptForm);
+        array.add(respGatewayForm);
+        array.add(initGatewayForm);
+
+        for (TransactionBasicForm currentForm : array) {
+            currentForm.fetchRelatedData(criteria);
+        }
+    }
+
+
+
 }

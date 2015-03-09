@@ -12,13 +12,13 @@ import com.smartgwt.client.widgets.grid.ListGridRecord;
 /**
  * Holds the configuration for the grids displaying a transaction's properties.
  */
-public class TransactionGrid extends ListGrid {
+public class TransactionGrid_old extends ListGrid {
 
-    public TransactionGrid(){
+    public TransactionGrid_old(){
         super();
 
         // --- configuration ---
-        setDataSource(TransactionDS.getInstance());
+        setDataSource(SiteDS.getInstance());
 
         setHeight(200);
         setCanEdit(true);

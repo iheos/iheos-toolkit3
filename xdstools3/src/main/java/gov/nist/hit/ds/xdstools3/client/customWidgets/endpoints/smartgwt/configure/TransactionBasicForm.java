@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.configure;
 
+import com.smartgwt.client.data.*;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.widgets.form.DynamicForm;
 
@@ -10,7 +11,7 @@ import com.smartgwt.client.widgets.form.DynamicForm;
  */
 public class TransactionBasicForm extends DynamicForm {
 
-    public TransactionBasicForm(){
+    public TransactionBasicForm(DataSource ds){
 
         // Form display parameters
         setNumCols(3);
@@ -20,7 +21,24 @@ public class TransactionBasicForm extends DynamicForm {
         setOverflow(Overflow.VISIBLE);
 
         // DataSource configuration
-        setDataSource(TransactionDS.getInstance());
+        setDataSource(ds);
+    }
+
+
+    // fetch related data
+    public void fetchRelatedData(Criteria criteria) {
+        fetchData(criteria, new DSCallback() {
+            @Override
+            public void execute(DSResponse dsResponse, Object data, DSRequest dsRequest) {
+                Record record = new Record();
+
+                if (dsResponse.getData()[0] != null) {
+                    record = dsResponse.getData()[0];
+                }
+                // if record is empty, warn the user to contact the admin?
+                    setValues(record.toMap());
+            }
+        });
     }
 
 }

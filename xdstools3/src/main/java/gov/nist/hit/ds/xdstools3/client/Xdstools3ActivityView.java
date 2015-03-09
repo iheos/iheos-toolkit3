@@ -101,7 +101,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         container.draw();
 
         // Smartgwt Console - useful for development, mainly tracking RPC calls
-        //SC.showConsole();
+        SC.showConsole();
 
         bindUI();
     }
