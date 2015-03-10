@@ -207,8 +207,7 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
         SelectEvent.SelectHandler saveHandler = new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent selectEvent) {
-                // TODO
-//                presenter.doSave();
+                presenter.doSave();
             }
         };
         editorTopToolbar.addSaveHandler(saveHandler);
@@ -216,12 +215,39 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
         SelectEvent.SelectHandler cancelHandler = new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent selectEvent) {
-                // TODO
-//                presenter.rollbackChanges();
+                presenter.rollbackChanges();
             }
         };
         editorTopToolbar.addCancelHandler(cancelHandler);
         editorBottomToolbar.addCancelHandler(cancelHandler);
+    }
+
+    public void refreshGridButtonsDisplay() {
+        if (submissionTime.getStoreMaxSize() != 0 && submissionTime.getStore().size() >= submissionTime.getStoreMaxSize()) {
+            submissionTime.disableNewButton();
+        } else {
+            submissionTime.enableNewButton();
+        }
+        if (commentsGrid != null) {
+            if (commentsGrid.getStoreMaxSize() != 0 && commentsGrid.getStore().size() >= commentsGrid.getStoreMaxSize()) {
+                commentsGrid.disableNewButton();
+            } else {
+                commentsGrid.enableNewButton();
+            }
+        }
+        if (intendedRecipient != null) {
+            if (intendedRecipient.getStoreMaxSize() != 0 && intendedRecipient.getStore().size() >= intendedRecipient.getStoreMaxSize()) {
+                intendedRecipient.disableNewButton();
+            } else {
+                intendedRecipient.enableNewButton();
+            }
+        }
+        if (titleGrid != null)
+            if (titleGrid.getStoreMaxSize() != 0 && titleGrid.getStore().size() >= titleGrid.getStoreMaxSize()) {
+                titleGrid.disableNewButton();
+            } else {
+                titleGrid.enableNewButton();
+            }
     }
 
     private void setWidgetsInfo() {

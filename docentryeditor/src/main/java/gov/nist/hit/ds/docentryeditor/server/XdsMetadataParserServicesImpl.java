@@ -27,8 +27,22 @@ import java.util.logging.Logger;
  * @See XdsMetadata
  */
 public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implements XdsParserServices{
-    private List<XdsDocumentEntry> docEntries;
     private Metadata m;
+    private XdsMetadata xdsMetadata;
+
+    private List<String> schemes = new ArrayList<String>();
+    private Map<String, List<String>> codes = null;
+
+    public XdsMetadataParserServicesImpl(){
+        schemes.add(MetadataSupport.XDSDocumentEntry_classCode_uuid);
+        schemes.add(MetadataSupport.XDSDocumentEntry_confCode_uuid);
+        schemes.add(MetadataSupport.XDSDocumentEntry_eventCode_uuid);
+        schemes.add(MetadataSupport.XDSDocumentEntry_formatCode_uuid);
+        schemes.add(MetadataSupport.XDSDocumentEntry_hcftCode_uuid);
+        schemes.add(MetadataSupport.XDSDocumentEntry_psCode_uuid);
+        schemes.add(MetadataSupport.XDSDocumentEntry_typeCode_uuid);
+        schemes.add(MetadataSupport.XDSSubmissionSet_contentTypeCode_uuid);
+    }
 
     /**
      * Method that returns a complete XdsMetadata object containing
@@ -39,23 +53,68 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
      */
     @Override
     public XdsMetadata parseXdsMetadata(String fileContent) {
-        docEntries=new ArrayList<XdsDocumentEntry>();
+        xdsMetadata=new XdsMetadata();
+        //docEntries=new ArrayList<XdsDocumentEntry>();
         try {
             m=MetadataParser.parse(fileContent);
-
+            for(OMElement oe : m.getRegistryPackages()){
+                xdsMetadata.setSubmissionSet(parseSubmissionSet(oe));
+            }
             for(OMElement eo : m.getExtrinsicObjects()){
-                docEntries.add(parse(eo));
+                xdsMetadata.getDocumentEntries().add(parseDocumentEntry(eo));
             }
         } catch (XdsInternalException e) {
-            Logger.getLogger(this.getClass().getName()).info(e.getMessage());
+            Logger.getLogger(this.getClass().getName()).warning(e.getMessage());
             e.printStackTrace();
         } catch (MetadataException e) {
-            Logger.getLogger(this.getClass().getName()).info(e.getMessage());
+            Logger.getLogger(this.getClass().getName()).warning(e.getMessage());
             e.printStackTrace();
         }
-        XdsMetadata metadata=new XdsMetadata();
-        metadata.setDocumentEntries(docEntries);
-        return metadata;
+        return xdsMetadata;
+    }
+
+    private XdsSubmissionSet parseSubmissionSet(OMElement oe) {
+        XdsSubmissionSet subSet=new XdsSubmissionSet();
+        OMFormatter omf=new OMFormatter(oe);
+        omf.noRecurse();
+
+        subSet.setEntryUUID(new String256(m.getSubmissionSetId()));
+        String status = m.getStatus(oe);
+        if(status!= null) {
+            subSet.setAvailabilityStatus(new String256(status));
+        }
+        String home=m.getHome(oe);
+        if (home!=null){
+            subSet.setHomeCommunityId(new String256(home));
+        }
+        NameValueDTM submissionTime=new NameValueDTM();
+        submissionTime.getValues().clear();
+        String submissionTimeString=asString(m.getSlotValue(oe, "submissionTime", 0));
+        while(submissionTimeString.length()<14){
+            submissionTimeString += "0";
+        }
+        submissionTime.getValues().add(new DTM(parserDate(submissionTimeString)));
+        subSet.setSubmissionTime(submissionTime);
+        for(String s:m.getSlotValues(oe, "intendedRecipient")){
+            subSet.getIntendedRecipient().getValues().add(new String256(s));
+        }
+        try {
+            String patientId=m.getSubmissionSetPatientId();
+            if (patientId!=null) {
+                subSet.setPatientId(new IdentifierString256(new String256(patientId), new String256(MetadataSupport.XDSSubmissionSet_patientid_uuid)));
+            }
+            subSet.setUniqueId(new IdentifierOID(new OID(new String256(m.getSubmissionSetUniqueId())),new String256(MetadataSupport.XDSSubmissionSet_uniqueid_uuid)));
+            subSet.setSourceId(new IdentifierOID(new OID(new String256(m.getSubmissionSetSourceId(oe))),new String256(MetadataSupport.XDSSubmissionSet_sourceid_uuid)));
+            codes = m.getCodesWithDisplayName(oe, schemes);
+            String[] contentTypeCode = codes.get(MetadataSupport.XDSSubmissionSet_contentTypeCode_uuid).get(0).split("\\^");
+            subSet.setContentTypeCode(new CodedTerm(contentTypeCode[0],contentTypeCode[1],contentTypeCode[2]));
+            List<OMElement> authorClassifications = m.getClassifications(oe, MetadataSupport.XDSSubmissionSet_author_uuid);
+            subSet.setAuthors(parseAuthors(authorClassifications));
+        } catch (MetadataException e) {
+            e.printStackTrace();
+        } catch (Exception e) {e.printStackTrace();}
+        Logger.getLogger(this.getClass().getName()).info(subSet.toString());
+        return subSet;
     }
 
     /**
@@ -64,7 +123,7 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
      * @param ele ebRim ExtrinsicObject from a Metadata document.
      * @return XdsDocumentEntry
      */
-    private XdsDocumentEntry parse(OMElement ele) {
+    private XdsDocumentEntry parseDocumentEntry(OMElement ele) {
         XdsDocumentEntry de=new XdsDocumentEntry();
         OMFormatter omf = new OMFormatter(ele);
         omf.noRecurse();
@@ -155,18 +214,6 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         creationTime.getValues().add(new DTM(parserDate(creationTimeString)));
         de.setCreationTime(creationTime);
 //        de.creationTimeX = new OMFormatter(m.getSlot(ele, "creationTime")).toHtml();
-
-
-        List<String> schemes = new ArrayList<String>();
-        schemes.add(MetadataSupport.XDSDocumentEntry_classCode_uuid);
-        schemes.add(MetadataSupport.XDSDocumentEntry_confCode_uuid);
-        schemes.add(MetadataSupport.XDSDocumentEntry_eventCode_uuid);
-        schemes.add(MetadataSupport.XDSDocumentEntry_formatCode_uuid);
-        schemes.add(MetadataSupport.XDSDocumentEntry_hcftCode_uuid);
-        schemes.add(MetadataSupport.XDSDocumentEntry_psCode_uuid);
-        schemes.add(MetadataSupport.XDSDocumentEntry_typeCode_uuid);
-
-        Map<String, List<String>> codes = null;
 
         try {
             codes = m.getCodesWithDisplayName(ele, schemes);

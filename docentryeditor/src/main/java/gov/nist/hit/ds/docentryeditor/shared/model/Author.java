@@ -298,4 +298,21 @@ public class Author implements ModelElement, Serializable {
         return true;
     }
 
+    public Author copy() {
+        Author cp = new Author();
+        cp.setAuthorPerson(this.authorPerson.copy());
+        for (String256 institution : this.authorInstitutions){
+            cp.getAuthorInstitutions().add(institution.copy());
+        }
+        for (String256 speciality : this.authorSpecialties){
+            cp.getAuthorSpecialties().add(speciality.copy());
+        }
+        for (String256 role : this.authorRoles){
+            cp.getAuthorRoles().add(role.copy());
+        }
+        for (String256 telecommunication : this.authorTelecommunications){
+            cp.getAuthorTelecommunications().add(telecommunication.copy());
+        }
+        return cp;
+    }
 }

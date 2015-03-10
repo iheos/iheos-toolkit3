@@ -166,6 +166,10 @@ public class CodedTerm implements ModelElement, Serializable {
         return true;
     }
 
+    public CodedTerm copy() {
+        return new CodedTerm(this.code.toString(),this.displayName.toString(),this.codingScheme.toString());
+    }
+
 // Ajouter: abstract public AssertionGroup validateCode(String256 code);
 
 }

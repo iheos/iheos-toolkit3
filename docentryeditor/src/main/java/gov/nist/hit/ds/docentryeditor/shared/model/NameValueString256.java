@@ -150,4 +150,13 @@ public class NameValueString256 implements ModelElement, Serializable {
                 ", values=" + values +
                 '}';
     }
+
+    public NameValueString256 copy() {
+        NameValueString256 cp = new NameValueString256();
+        cp.setName(this.getName().copy());
+        for (String256 s : this.values){
+            cp.getValues().add(s.copy());
+        }
+        return cp;
+    }
 }

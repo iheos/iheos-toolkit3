@@ -5,6 +5,9 @@ import com.google.web.bindery.event.shared.SimpleEventBus;
 import gov.nist.hit.ds.docentryeditor.client.event.NewFileLoadedEvent.NewFileLoadedHandler;
 import gov.nist.hit.ds.docentryeditor.client.event.SaveFileEvent.SaveFileEventHandler;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
+import gov.nist.hit.ds.docentryeditor.shared.model.XdsMetadata;
+import gov.nist.hit.ds.docentryeditor.shared.model.XdsModelElement;
+import gov.nist.hit.ds.docentryeditor.shared.model.XdsSubmissionSet;
 
 /**
  * This is the application event bus. It is used through the entire application.
@@ -18,16 +21,16 @@ public class MetadataEditorEventBus extends SimpleEventBus {
      * @param handler
      * @return
      */
-    public HandlerRegistration addFileLoadedHandler(NewFileLoadedHandler handler) {
+    public HandlerRegistration addNewFileLoadedHandler(NewFileLoadedHandler handler) {
         return addHandler(NewFileLoadedEvent.TYPE, handler);
     }
 
     /**
      * Method that signals to the application that a new file has been loaded into the system.
-     * @param documentEntry
+     * @param xdsMetadata
      */
-    public void fireNewFileLoadedEvent(XdsDocumentEntry documentEntry) {
-        fireEvent(new NewFileLoadedEvent(documentEntry));
+    public void fireNewFileLoadedEvent(XdsMetadata xdsMetadata) {
+        fireEvent(new NewFileLoadedEvent(xdsMetadata));
     }
 
     /**
@@ -63,12 +66,29 @@ public class MetadataEditorEventBus extends SimpleEventBus {
         fireEvent(new StartEditXdsDocumentEvent(documentEntry));
     }
 
-    public HandlerRegistration addSaveCurrentlyEditedDocumentHandler(SaveCurrentlyEditedDocumentEvent.SaveCurrentlyEditedDocumentEventHandler handler) {
-        return addHandler(SaveCurrentlyEditedDocumentEvent.TYPE, handler);
+    /**
+     * This method adds an handler that will enable to trigger actions when the Submission set starts to be edited.
+     * @param handler
+     * @return
+     */
+    public HandlerRegistration addStartEditXdsSubmissionSetHandler(StartEditXdsSubmissionSetEvent.StartEditXdsSubmissionSetHandler handler) {
+        return addHandler(StartEditXdsSubmissionSetEvent.TYPE,handler);
     }
 
-    public void fireSaveCurrentlyEditedDocumentEvent(XdsDocumentEntry documentEntry) {
-        fireEvent(new SaveCurrentlyEditedDocumentEvent(documentEntry));
+    /**
+     * This methods signals a request to start editing a specific submission set.
+     * @param submissionSet
+     */
+    public void fireStartEditXdsSubmissionSetEvent(XdsSubmissionSet submissionSet) {
+        fireEvent(new StartEditXdsSubmissionSetEvent(submissionSet));
+    }
+
+    public HandlerRegistration addSaveCurrentlyEditedMetadataHandler(SaveCurrentlyEditedMetadataEvent.SaveCurrentlyEditedMetadataEventHandler handler) {
+        return addHandler(SaveCurrentlyEditedMetadataEvent.TYPE, handler);
+    }
+
+    public void fireSaveCurrentlyEditedMetadataEvent(XdsModelElement documentEntry) {
+        fireEvent(new SaveCurrentlyEditedMetadataEvent(documentEntry));
     }
 
     public HandlerRegistration addXdsEditorLoadedEventtHandler(XdsEditorLoadedEvent.XdsEditorLoadedEventHandler handler) {
@@ -100,5 +120,13 @@ public class MetadataEditorEventBus extends SimpleEventBus {
      */
     public void fireBackToHomePageEvent() {
         fireEvent(new BackToHomePageEvent());
+    }
+
+    public HandlerRegistration addCreateNewDocEntryEventHandler(CreateNewDocEntryEvent.CreateNewDocEntryEventHandler handler){
+        return addHandler(CreateNewDocEntryEvent.TYPE,handler);
+    }
+
+    public void fireCreateNewDocEntryEvent(XdsDocumentEntry documentEntry) {
+        fireEvent(new CreateNewDocEntryEvent(documentEntry));
     }
 }

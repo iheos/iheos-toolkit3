@@ -17,6 +17,7 @@ import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractView;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppImages;
 import gov.nist.hit.ds.docentryeditor.client.widgets.uploader.FileUploadDialog;
+import gov.nist.hit.ds.docentryeditor.shared.model.XdsSubmissionSet;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ import java.util.Map;
 public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> {
     private final static TreeStore<SubmissionMenuData> treeStore = new TreeStore<SubmissionMenuData>(SubmissionMenuData.props.key());
     private final static Tree<SubmissionMenuData, String> tree = new Tree<SubmissionMenuData, String>(treeStore, SubmissionMenuData.props.value());
-    private final static SubmissionMenuData submissionSetTreeNode = new SubmissionMenuData("subSet", "Submission set");
+    private final SubmissionMenuData submissionSetTreeNode = new SubmissionMenuData("subSet", "Submission set",new XdsSubmissionSet());
     private final ToolBar toolbar = new ToolBar();
 
     private final Menu addMenu = new Menu();
@@ -119,7 +120,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
             public void onSelect(SelectEvent event) {
                 tree.getStore().remove(tree.getSelectionModel().getSelectedItem());
                 tree.getSelectionModel().select(tree.getStore().getFirstChild(getSubmissionSetTreeNode()), false);
-//                presenter.loadDocumentEntry(tree.getStore().getFirstChild(getSubmissionSetTreeNode()));
+//                presenter.loadSelectedEntryEditor(tree.getStore().getFirstChild(getSubmissionSetTreeNode()));
             }
         });
         clearDocEntriesButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -132,11 +133,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         tree.getSelectionModel().addSelectionHandler(new SelectionHandler<SubmissionMenuData>() {
             @Override
             public void onSelection(SelectionEvent<SubmissionMenuData> event) {
-                if (!tree.getSelectionModel().getSelectedItem().equals(submissionSetTreeNode)) {
-                    presenter.loadDocumentEntry(event.getSelectedItem());
-                }else{
-                    presenter.loadSubmissionSet(event.getSelectedItem());
-                }
+                presenter.loadSelectedEntryEditor(event.getSelectedItem());
             }
         });
         addPrefilledDocEntry.addSelectionHandler(new SelectionHandler<Item>() {
@@ -163,7 +160,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         refreshButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent selectEvent) {
-                presenter.loadDocumentEntry(presenter.getCurrentlyEdited());
+                presenter.loadSelectedEntryEditor(presenter.getCurrentlyEdited());
             }
         });
 

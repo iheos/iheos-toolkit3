@@ -41,9 +41,9 @@ public class FileUploadPresenter extends AbstractPresenter<FileUploadView> {
                 logger.info("... file parsed.");
                 // logger.info("Metadata file: " + model.toXML());
 
-                getEventBus().fireEvent(new NewFileLoadedEvent(model));
+                getEventBus().fireEvent(new NewFileLoadedEvent(xdsMetadata));
                 //  This is the only way I found to make it work
-                getEventBus().fireEvent(new StartEditXdsDocumentEvent(model));
+//                getEventBus().fireEvent(new StartEditXdsDocumentEvent(model));
             }
         });
 //                XdsDocumentEntry model = xdsParser.parser(results.split(";\\^;\\^;")[1]);

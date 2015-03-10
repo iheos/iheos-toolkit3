@@ -113,4 +113,7 @@ public class OID /*extends String256*/ implements ModelElement, Serializable {
         return true;
     }
 
+    public OID copy() {
+        return new OID(this.oid.copy());
+    }
 }

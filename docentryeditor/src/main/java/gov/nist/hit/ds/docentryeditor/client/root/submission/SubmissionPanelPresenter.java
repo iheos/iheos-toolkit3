@@ -12,6 +12,7 @@ import gov.nist.hit.ds.docentryeditor.client.parser.XdsParser;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppResources;
 import gov.nist.hit.ds.docentryeditor.shared.model.String256;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
+import gov.nist.hit.ds.docentryeditor.shared.model.XdsSubmissionSet;
 
 import javax.inject.Inject;
 
@@ -53,9 +54,21 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
             }
         });
         // this event catches that a Document entry has been loaded from the user's file system.
-        ((MetadataEditorEventBus) getEventBus()).addFileLoadedHandler(new NewFileLoadedEvent.NewFileLoadedHandler() {
+        ((MetadataEditorEventBus) getEventBus()).addNewFileLoadedHandler(new NewFileLoadedEvent.NewFileLoadedHandler() {
             @Override
             public void onNewFileLoaded(NewFileLoadedEvent event) {
+                view.getTreeStore().getRootItems().get(0).setModel(event.getMetadata().getSubmissionSet());
+                currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, event.getMetadata().getDocumentEntries().get(0));
+                nextIndex++;
+                view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
+                view.getTree().expandAll();
+                view.getTree().getSelectionModel().select(currentlyEdited, false);
+            }
+        });
+        // this event catches that a Document entry has been loaded from the user's file system.
+        ((MetadataEditorEventBus) getEventBus()).addCreateNewDocEntryEventHandler(new CreateNewDocEntryEvent.CreateNewDocEntryEventHandler() {
+            @Override
+            public void onCreateNewDocumentEntry(CreateNewDocEntryEvent event) {
                 currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, event.getDocument());
                 nextIndex++;
                 view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
@@ -71,7 +84,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 if (currentlyEdited != null) {
                     // if a doc. entry is currently under edition, an event is fired to transfer it to the editor.
                     logger.info("A document is already selected. Loading it...");
-                    ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(currentlyEdited.getModel());
+                    ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent((XdsDocumentEntry) currentlyEdited.getModel());
                 } else {
                     // if no doc. entry is currently under edition, it means the app (editor view) has been loaded from
                     // by its URL from the browser navigation bar (external link).
@@ -89,6 +102,13 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 createPreFilledDocumentEntry();
             }
         });
+        ((MetadataEditorEventBus) eventBus).addSaveCurrentlyEditedMetadataHandler(new SaveCurrentlyEditedMetadataEvent.SaveCurrentlyEditedMetadataEventHandler() {
+            @Override
+            public void onSaveCurrentlyEditedDocumentEvent(SaveCurrentlyEditedMetadataEvent event) {
+//                currentlyEdited.setModel(event.getDocumentEntry());
+                //  save(); // not done yet
+            }
+        });
     }
 
     /**
@@ -104,26 +124,15 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     }
 
     /**
-     * This method loads the document entry editor interface with a selected document entry
-     * from the submission set tree.
+     * This method loads the adequate editor interface with the selected entry
+     * from the submission tree. It can be a XdsSubmissionSet, a XdsDocumentEntry
+     * or a XdsAssociation.
      *
-     * @param selectedItem tree selected node
+     * @param selectedItem selected tree node
      */
-    public void loadDocumentEntry(SubmissionMenuData selectedItem) {
-        if (!selectedItem.equals(view.getSubmissionSetTreeNode())) {
-            currentlyEdited = selectedItem;
-            startEditing();
-        }
-    }
-
-    /**
-     * This method loads the submission set editor interface with the selected submission set
-     * from the submission set tree.
-     *
-     * @param selectedItem tree selected node
-     */
-    public void loadSubmissionSet(SubmissionMenuData selectedItem) {
-        placeController.goTo(new SubmissionSetEditorPlace());
+    public void loadSelectedEntryEditor(SubmissionMenuData selectedItem) {
+        currentlyEdited = selectedItem;
+        startEditing();
     }
 
     /**
@@ -136,7 +145,8 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
         }
         //------------------------------------------- MIGHT CHANGE
         logger.info("Create new pre-filled document entry");
-        currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, prefilledDocEntry);
+        XdsDocumentEntry newDoc=prefilledDocEntry.copy();
+        currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, newDoc);
         nextIndex++;
         view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
         view.getTree().expandAll();
@@ -144,25 +154,28 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     }
 
     public void doSave() {
-        ((MetadataEditorEventBus) eventBus).fireSaveFileEvent();
-        ((MetadataEditorEventBus) eventBus).addSaveCurrentlyEditedDocumentHandler(new SaveCurrentlyEditedDocumentEvent.SaveCurrentlyEditedDocumentEventHandler() {
-            @Override
-            public void onSaveCurrentlyEditedDocumentEvent(SaveCurrentlyEditedDocumentEvent event) {
-                currentlyEdited.setModel(event.getDocumentEntry());
-                //  save(); // not done yet
-            }
-        });
+//        ((MetadataEditorEventBus) eventBus).fireSaveFileEvent();
+
     }
 
     /**
      * This method loads a document entry into the editor user interface, which is loaded if not already.
      */
     private void startEditing() {
-        if(!(placeController.getWhere() instanceof DocEntryEditorPlace)){
-            placeController.goTo(new DocEntryEditorPlace());
+        if(currentlyEdited.getModel() instanceof XdsDocumentEntry) {
+            if (!(placeController.getWhere() instanceof DocEntryEditorPlace)) {
+                placeController.goTo(new DocEntryEditorPlace());
+            }
+            logger.info("Fire Start Edit selected (" + currentlyEdited.getValue() + ") document entry event...");
+            ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent((XdsDocumentEntry) currentlyEdited.getModel());
+        }else if(currentlyEdited.getModel() instanceof XdsSubmissionSet){
+            if(!(placeController.getWhere() instanceof SubmissionSetEditorPlace)){
+                placeController.goTo(new SubmissionSetEditorPlace());
+            }
+            logger.info("Fire Start Edit selected (" + currentlyEdited.getValue() + ") submission set event...");
+            logger.info(currentlyEdited.getModel().toString());
+            ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsSubmissionSetEvent((XdsSubmissionSet) currentlyEdited.getModel());
         }
-        logger.info("Fire Start Edit selected ("+currentlyEdited.getValue()+") document entry event...");
-        ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent(currentlyEdited.getModel());
     }
 
     /**

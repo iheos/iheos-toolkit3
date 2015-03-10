@@ -150,4 +150,12 @@ public class NameValueDTM implements ModelElement, Serializable {
                 '}';
     }
 
+    public NameValueDTM copy() {
+        NameValueDTM cp = new NameValueDTM();
+        cp.setName(this.name.copy());
+        for(DTM vcp : this.values) {
+            cp.getValues().set(0,vcp.copy());
+        }
+        return cp;
+    }
 }

@@ -91,7 +91,7 @@ public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntr
      */
     public void doSave() {
         if (editorDriver.isDirty()) {
-            model = editorDriver.flush();
+            final XdsDocumentEntry tmp = editorDriver.flush();
             logger.info("Saving document entry: ");
             logger.info(model.toXML());
 
@@ -102,6 +102,7 @@ public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntr
                     public void onDialogHide(DialogHideEvent event) {
                         if (event.getHideButton() == PredefinedButton.YES) {
                             // perform YES action
+                            model=tmp;
                             save();
                             cmb.hide();
                         } else if (event.getHideButton() == PredefinedButton.NO) {
@@ -109,12 +110,8 @@ public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntr
                         }
                     }
                 });
-//				StringBuilder errorBuilder = new StringBuilder();
-//				for (EditorError error : editorDriver.getErrors()) {
-//					errorBuilder.append(error.getMessage() + "\n");
-//				}
-//				Window.alert(errorBuilder.toString());
             } else {
+                model=tmp;
                 save();
             }
         } else {
@@ -148,42 +145,42 @@ public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntr
      * Method which actually handle saving (on server) and download for the edited metadata file.
      */
     private void save() {
-        ((MetadataEditorEventBus) eventBus).fireSaveCurrentlyEditedDocumentEvent(model);
-        xdsParserServicesAsync.toEbRim(model, new AsyncCallback<String>() {
-            @Override
-            public void onFailure(Throwable throwable) {
-                logger.warning(throwable.getMessage());
-            }
-
-            @Override
-            public void onSuccess(String result) {
-                String filename = model.getFileName().toString();
-                requestFactory.saveFileRequestContext().saveAsXMLFile(filename, result).fire(new Receiver<String>() {
-
-                    @Override
-                    public void onSuccess(String response) {
-                        logger.info("saveAsXMLFile call succeed");
-                        logger.info("Generated filename sent to the client \n" + response);
-                        logger.info("File's URL: " + GWT.getHostPageBaseURL() + "files/" + response);
-                        Window.open(GWT.getHostPageBaseURL() + "files/" + response, response + " Metadata File", "enabled");
-                        Dialog d = new Dialog();
-                        HTMLPanel htmlP = new HTMLPanel("<a href='" + GWT.getHostPageBaseURL() + "files/" + response + "'>"
-                                + GWT.getHostPageBaseURL() + "files/" + response + "</a>");
-                        VerticalLayoutContainer vp = new VerticalLayoutContainer();
-                        vp.add(new Label("Your download is in progress, please allow this application to open popups with your browser..."),
-                                new VerticalLayoutData(1, 1, new Margins(10, 5, 10, 5)));
-                        vp.add(htmlP, new VerticalLayoutData(1, 1, new Margins(10, 5, 10, 5)));
-                        d.add(vp);
-
-                        d.setPredefinedButtons(PredefinedButton.OK);
-                        d.setButtonAlign(BoxLayoutPack.CENTER);
-                        d.setHideOnButtonClick(true);
-                        d.setHeadingText("XML Metadata File Download");
-                        d.show();
-                    }
-                });
-            }
-        });
+//        ((MetadataEditorEventBus) eventBus).fireSaveCurrentlyEditedMetadataEvent(model);
+//        xdsParserServicesAsync.toEbRim(model, new AsyncCallback<String>() {
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                logger.warning(throwable.getMessage());
+//            }
+//
+//            @Override
+//            public void onSuccess(String result) {
+//                String filename = model.getFileName().toString();
+//                requestFactory.saveFileRequestContext().saveAsXMLFile(filename, result).fire(new Receiver<String>() {
+//
+//                    @Override
+//                    public void onSuccess(String response) {
+//                        logger.info("saveAsXMLFile call succeed");
+//                        logger.info("Generated filename sent to the client \n" + response);
+//                        logger.info("File's URL: " + GWT.getHostPageBaseURL() + "files/" + response);
+//                        Window.open(GWT.getHostPageBaseURL() + "files/" + response, response + " Metadata File", "enabled");
+//                        Dialog d = new Dialog();
+//                        HTMLPanel htmlP = new HTMLPanel("<a href='" + GWT.getHostPageBaseURL() + "files/" + response + "'>"
+//                                + GWT.getHostPageBaseURL() + "files/" + response + "</a>");
+//                        VerticalLayoutContainer vp = new VerticalLayoutContainer();
+//                        vp.add(new Label("Your download is in progress, please allow this application to open popups with your browser..."),
+//                                new VerticalLayoutData(1, 1, new Margins(10, 5, 10, 5)));
+//                        vp.add(htmlP, new VerticalLayoutData(1, 1, new Margins(10, 5, 10, 5)));
+//                        d.add(vp);
+//
+//                        d.setPredefinedButtons(PredefinedButton.OK);
+//                        d.setButtonAlign(BoxLayoutPack.CENTER);
+//                        d.setHideOnButtonClick(true);
+//                        d.setHeadingText("XML Metadata File Download");
+//                        d.show();
+//                    }
+//                });
+//            }
+//        });
     }
 
     /**

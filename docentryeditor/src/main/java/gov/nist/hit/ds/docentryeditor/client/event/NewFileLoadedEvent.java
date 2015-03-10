@@ -4,18 +4,19 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import gov.nist.hit.ds.docentryeditor.client.event.NewFileLoadedEvent.NewFileLoadedHandler;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
+import gov.nist.hit.ds.docentryeditor.shared.model.XdsMetadata;
 
 public class NewFileLoadedEvent extends GwtEvent<NewFileLoadedHandler> {
 
     public static Type<NewFileLoadedHandler> TYPE = new Type<NewFileLoadedHandler>();
-    private final XdsDocumentEntry fileContent;
+    private final XdsMetadata metadata;
 
-    public NewFileLoadedEvent(XdsDocumentEntry fileContent) {
-        this.fileContent = fileContent;
+    public NewFileLoadedEvent(XdsMetadata metadata) {
+        this.metadata = metadata;
     }
 
-    public XdsDocumentEntry getDocument() {
-        return fileContent;
+    public XdsMetadata getMetadata() {
+        return metadata;
     }
 
     @Override

@@ -38,7 +38,7 @@ public class FileUploadDialog extends Dialog {
                 hide();
             }
         });
-        eventBus.addFileLoadedHandler(new NewFileLoadedEvent.NewFileLoadedHandler() {
+        eventBus.addNewFileLoadedHandler(new NewFileLoadedEvent.NewFileLoadedHandler() {
 
             @Override
             public void onNewFileLoaded(NewFileLoadedEvent event) {

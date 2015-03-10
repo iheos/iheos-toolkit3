@@ -118,4 +118,7 @@ public class String256 implements Serializable {
         return true;
     }
 
+    public String256 copy() {
+       return new String256(new String(this.string));
+    }
 }

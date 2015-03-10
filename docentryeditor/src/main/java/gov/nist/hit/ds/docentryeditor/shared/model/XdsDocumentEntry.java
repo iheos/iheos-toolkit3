@@ -76,7 +76,7 @@ import java.util.logging.Logger;
  *
  * @see ModelElement class ModelElement
  */
-public class XdsDocumentEntry implements Serializable {
+public class XdsDocumentEntry extends XdsModelElement implements ModelElement,Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * <b>ArrayList(ArrayList(String)) validationErrors</b> - The error(s) which
@@ -824,6 +824,51 @@ public class XdsDocumentEntry implements Serializable {
 
     public void setVersion(String256 version) {
         this.version = version;
+    }
+
+    public XdsDocumentEntry copy(){
+        XdsDocumentEntry doc=new XdsDocumentEntry();
+        doc.setId(this.id!=null ? this.id.copy() : null);
+        doc.setHomeCommunityId(this.homeCommunityId!=null ? this.homeCommunityId.copy():null);
+        doc.setUri(this.uri.copy());
+        for (Author cp : this.authors) {
+            doc.getAuthors().add(cp.copy());
+        }
+        doc.setAvailabilityStatus(this.availabilityStatus!=null ? this.availabilityStatus.copy():null);
+        doc.setClassCode(this.classCode.copy());
+        for (InternationalString cp : this.comments) {
+            doc.getComments().add(cp.copy());
+        }
+        for (CodedTerm cp : this.confidentialityCodes) {
+            doc.getConfidentialityCodes().add(cp.copy());
+        }
+        doc.setCreationTime(this.creationTime.copy());
+        for (CodedTerm cp : this.eventCode){
+            doc.getEventCode().add(cp.copy());
+        }
+        doc.setFileName(new String256(this.fileName.getString()));
+        doc.setFormatCode(this.formatCode.copy());
+        doc.setHash(this.hash.copy());
+        doc.setHealthcareFacilityType(this.healthcareFacilityType.copy());
+        doc.setLanguageCode(this.languageCode);
+        doc.setLegalAuthenticator(this.legalAuthenticator.copy());
+        doc.setLogicalId(this.logicalId!=null?this.logicalId.copy():null);
+        doc.setMimeType(this.mimeType.copy());
+        doc.setPatientID(this.patientID.copy());
+        doc.setPracticeSettingCode(this.practiceSettingCode.copy());
+        doc.setRepoUId(this.repoUId.copy());
+        doc.setServiceStartTime(this.serviceStartTime.copy());
+        doc.setServiceStopTime(this.serviceStopTime.copy());
+        doc.setSize(this.size.copy());
+        doc.setSourcePatientId(this.sourcePatientId.copy());
+        doc.setSourcePatientInfo(this.sourcePatientInfo.copy());
+        doc.setTypeCode(this.typeCode.copy());
+        for (InternationalString cp:this.titles) {
+            doc.getTitles().add(cp.copy());
+        }
+        doc.setUniqueId(this.uniqueId.copy());
+        doc.setVersion(this.version!=null?this.version.copy():null);
+        return doc;
     }
 
     /**

@@ -6,30 +6,25 @@ import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
+import gov.nist.hit.ds.docentryeditor.shared.model.ModelElement;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
+import gov.nist.hit.ds.docentryeditor.shared.model.XdsModelElement;
 
 /**
+ * This is the model class handled by the UI tree to manage the different element of the
+ * XDS Submission structure.
  * Created by onh2 on 7/11/2014.
  */
-public class SubmissionMenuData {
+public class SubmissionMenuData<M extends XdsModelElement> {
     public static final SubmissionMenuData.SubmissionMenuDataProperties props = GWT.create(SubmissionMenuData.SubmissionMenuDataProperties.class);
     private String key;
     private String value;
-    //    private Place place;
-    // FIXME this class will have to become generic and handle <M> instead of DocumentModel,
-    // thus it will be able to deal with SubmissionSet and Association also.
-    private XdsDocumentEntry model;
+    private M model;
 
-    public SubmissionMenuData(String key, String value) {
-        this.value = value;
-        this.key = key;
-    }
-
-    public SubmissionMenuData(String key, String value, XdsDocumentEntry model) {
+    public SubmissionMenuData(String key, String value, M model) {
         this.key = key;
         this.value = value;
         this.model = model;
-//        this.place = new EditorPlace();
     }
 
     public String getKey() {
@@ -48,19 +43,11 @@ public class SubmissionMenuData {
         this.value = value;
     }
 
-//    public Place getPlace() {
-//        return place;
-//    }
-//
-//    public void setPlace(Place place) {
-//        this.place = place;
-//    }
-
-    public XdsDocumentEntry getModel() {
+    public M getModel() {
         return model;
     }
 
-    public void setModel(XdsDocumentEntry model) {
+    public void setModel(M model) {
         this.model = model;
     }
 

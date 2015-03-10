@@ -141,4 +141,12 @@ public class NameValueInteger implements ModelElement, Serializable {
         return true;
     }
 
+    public NameValueInteger copy() {
+        NameValueInteger cp = new NameValueInteger();
+        cp.setName(this.name.copy());
+        for (Integer i:this.values){
+            cp.getValues().set(0,new Integer(i));
+        }
+        return cp;
+    }
 }

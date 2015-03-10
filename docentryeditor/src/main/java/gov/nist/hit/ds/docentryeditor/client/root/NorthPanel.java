@@ -91,16 +91,16 @@ public class NorthPanel extends ContentPanel {
             }
 
 		});
-		eventBus.addFileLoadedHandler(new NewFileLoadedHandler() {
+		eventBus.addNewFileLoadedHandler(new NewFileLoadedHandler() {
 
-			@Override
-			public void onNewFileLoaded(NewFileLoadedEvent event) {
-                if(loadingDialog!=null) {
+            @Override
+            public void onNewFileLoaded(NewFileLoadedEvent event) {
+                if (loadingDialog != null) {
                     loadingDialog.hide();
                     saveButton.enable();
                 }
-			}
-		});
+            }
+        });
         eventBus.addXdsEditorLoadedEventtHandler(new XdsEditorLoadedEvent.XdsEditorLoadedEventHandler() {
             @Override
             public void onXdsEditorLoaded(XdsEditorLoadedEvent event) {

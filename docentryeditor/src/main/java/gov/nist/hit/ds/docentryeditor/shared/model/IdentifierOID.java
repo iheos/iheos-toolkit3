@@ -140,4 +140,7 @@ public class IdentifierOID implements ModelElement, Serializable {
         return true;
     }
 
+    public IdentifierOID copy() {
+        return new IdentifierOID(this.value.copy(),this.idType.copy());
+    }
 }

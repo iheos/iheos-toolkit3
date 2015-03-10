@@ -143,4 +143,7 @@ public class IdentifierString256 implements ModelElement, Serializable {
         return true;
     }
 
+    public IdentifierString256 copy() {
+        return new IdentifierString256(this.value.copy(),this.getIdType().copy());
+    }
 }

@@ -191,10 +191,10 @@ public class DocumentEntryEditorView extends AbstractView<DocumentEntryEditorPre
         simpleRequiredFieldsContainer.add(languageCodeLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(mimeTypeLabel, new VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(classCodeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
+        simpleRequiredFieldsContainer.add(typeCodeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
         simpleRequiredFieldsContainer.add(formatCodeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
         simpleRequiredFieldsContainer.add(healthcareFacilityTypeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
         simpleRequiredFieldsContainer.add(practiceSettingCodeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
-        simpleRequiredFieldsContainer.add(typeCodeLabel, new VerticalLayoutData(1, -1/*, new Margins(0, 0, 5, 0)*/));
 
 		/* REQUIRED container added to a fieldset */
         FieldSet fieldSet_general_fields_required = new FieldSet();

@@ -1,6 +1,7 @@
 package gov.nist.hit.ds.docentryeditor.shared.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +18,9 @@ public class XdsMetadata implements Serializable{
     private XdsSubmissionSet submissionSet;
     private List<XdsDocumentEntry> documentEntries;
 
-    public XdsMetadata(){}
+    public XdsMetadata(){
+        documentEntries=new ArrayList<XdsDocumentEntry>();
+    }
 
     public XdsSubmissionSet getSubmissionSet() {
         return submissionSet;
