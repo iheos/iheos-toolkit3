@@ -1,7 +1,11 @@
 package gov.nist.hit.ds.docentryeditor.client.root.submission;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import gov.nist.hit.ds.docentryeditor.client.editor.submissionSetEditor.SubmissionSetEditorPlace;
+import gov.nist.hit.ds.docentryeditor.client.parser.XdsParserServices;
+import gov.nist.hit.ds.docentryeditor.client.parser.XdsParserServicesAsync;
 import gov.nist.hit.ds.docentryeditor.client.utils.MetadataEditorRequestFactory;
 import gov.nist.hit.ds.docentryeditor.client.editor.documentEntryEditor.DocEntryEditorPlace;
 import gov.nist.hit.ds.docentryeditor.client.event.*;
@@ -10,9 +14,8 @@ import gov.nist.hit.ds.docentryeditor.client.home.WelcomePlace;
 import gov.nist.hit.ds.docentryeditor.client.parser.PreParse;
 import gov.nist.hit.ds.docentryeditor.client.parser.XdsParser;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppResources;
-import gov.nist.hit.ds.docentryeditor.shared.model.String256;
-import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
-import gov.nist.hit.ds.docentryeditor.shared.model.XdsSubmissionSet;
+import gov.nist.hit.ds.docentryeditor.server.XdsMetadataParserServicesImpl;
+import gov.nist.hit.ds.docentryeditor.shared.model.*;
 
 import javax.inject.Inject;
 
@@ -34,6 +37,10 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     private SubmissionMenuData currentlyEdited;
     private int nextIndex = 1;
     private XdsDocumentEntry prefilledDocEntry;
+
+    // RPC services declaration
+    private final static XdsParserServicesAsync xdsParserServices = GWT
+            .create(XdsParserServices.class);
 
     @Override
     public void init() {
@@ -155,7 +162,24 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
 
     public void doSave() {
 //        ((MetadataEditorEventBus) eventBus).fireSaveFileEvent();
+        XdsMetadata m=new XdsMetadata();
+        m.setSubmissionSet((XdsSubmissionSet) view.getSubmissionSetTreeNode().getModel());
+        for (SubmissionMenuData subData:view.getTreeStore().getChildren(view.getSubmissionSetTreeNode())){
+            if (subData.getModel() instanceof XdsDocumentEntry) {
+                m.getDocumentEntries().add((XdsDocumentEntry) subData.getModel());
+            }
+        }
+        xdsParserServices.toEbRim(m, new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                logger.warning(throwable.getMessage());
+            }
 
+            @Override
+            public void onSuccess(String s) {
+                // TODO
+            }
+        });
     }
 
     /**

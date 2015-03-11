@@ -15,5 +15,5 @@ public interface XdsParserServicesAsync {
      * @param async asynchronous callback containing the java object set.
      */
     void parseXdsMetadata(String fileContent, AsyncCallback<XdsMetadata> async);
-    void toEbRim(XdsDocumentEntry xdsDocumentEntry,AsyncCallback<String> async);
+    void toEbRim(XdsMetadata xdsDocumentEntry,AsyncCallback<String> async);
 }

@@ -12,5 +12,5 @@ import gov.nist.hit.ds.docentryeditor.shared.model.XdsMetadata;
 public interface XdsParserServices extends RemoteService{
     public XdsMetadata parseXdsMetadata(String fileContent);
 
-    String toEbRim(XdsDocumentEntry xdsDocumentEntry);
+    String toEbRim(XdsMetadata xdsDocumentEntry);
 }
