@@ -48,6 +48,8 @@ public class TabNamesManager {
     private final String mhdToXdsConverterTabCode="MHD_CONVERTER";
     private final String logBrowserTabCode = "LOG_BROWSER";
     private final String contactTabCode = "CONTACT";
+    private final String QRSCombinedTabCode = "QRS_COMBINED";
+
 
 
     public String getFindDocumentsTabCode() {
@@ -87,4 +89,6 @@ public class TabNamesManager {
     public String getLogBrowserTabCode() {return logBrowserTabCode;}
     public String getHelpTabCode() {return helpTabCode;}
     public String getContactTabCode() {return contactTabCode;}
+    public String getQRSCombinedTabCode() {return QRSCombinedTabCode;}
+
 }

@@ -17,7 +17,7 @@ public class HomeTab extends GenericTab {
     protected HStack createContents(){
 
         HomeBox queriesAndRetrieves = new HomeBox("Queries and Retrieves");
-        queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
+       /* queriesAndRetrieves.setIcon("icons/glyphicons/glyphicons_027_search.png");
         queriesAndRetrieves.addItem("Find Documents", true);
         queriesAndRetrieves.addItem("MPQ Find Documents", true);
         queriesAndRetrieves.addItem("Get Documents", true);
@@ -26,7 +26,8 @@ public class HomeTab extends GenericTab {
         queriesAndRetrieves.addItem("Find Folders", true);
         queriesAndRetrieves.addItem("Get Folders", true);
         queriesAndRetrieves.addItem("Get Folder and Contents", true);
-        queriesAndRetrieves.addItem("Get Submission Set and Contents", true);
+        queriesAndRetrieves.addItem("Get Submission Set and Contents", true); */
+        queriesAndRetrieves.addItem("Query - Retrieve - Submit", true);
 
 
         HomeBox tools = new HomeBox("Tools");
@@ -45,7 +46,7 @@ public class HomeTab extends GenericTab {
         HomeBox mhdTools = new HomeBox("MHD Tools");
         mhdTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");
         mhdTools.addItem("MHD Validator", false);
-        mhdTools.addItem("MHD to XDS Converter", true);
+        //mhdTools.addItem("MHD to XDS Converter", true);
 
         HomeBox connectathonTools = new HomeBox("Connectathon Tools");
         connectathonTools.setIcon("icons/glyphicons/glyphicons_280_settings.png");

@@ -31,7 +31,6 @@ public class RetrieveDocumentsTab extends GenericCloseableToolTab {
     @Override
     protected Widget createContents() {
         VStack vStack=new VStack();
-
         Label l1=createSubtitle1("1. Enter Document UID");
         DynamicForm docUIDForm = new DynamicForm();
         docUID = new GenericTextItemWithTooltipWidget();

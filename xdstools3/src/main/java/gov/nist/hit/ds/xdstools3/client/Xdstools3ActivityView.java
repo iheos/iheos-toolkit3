@@ -28,6 +28,7 @@ import gov.nist.hit.ds.xdstools3.client.customWidgets.toolbar.ToolbarServiceAsyn
 import gov.nist.hit.ds.xdstools3.client.manager.Manager;
 import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
 import gov.nist.hit.ds.xdstools3.client.tabs.*;
+import gov.nist.hit.ds.xdstools3.client.tabs.QRSCombinedTab.QueryRetrieveSubmitCombinedTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.adminSettingsTab.AdminSettingsTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.connectathonTabs.*;
 import gov.nist.hit.ds.xdstools3.client.tabs.contactTab.ContactTab;
@@ -101,7 +102,7 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         container.draw();
 
         // Smartgwt Console - useful for development, mainly tracking RPC calls
-        SC.showConsole();
+        //SC.showConsole();
 
         bindUI();
     }
@@ -331,6 +332,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         }
         else if(tabName.equals(TabNamesManager.getInstance().getContactTabCode())){
             tab = new ContactTab();
+        }
+        else if(tabName.equals(TabNamesManager.getInstance().getQRSCombinedTabCode())){
+            tab = new QueryRetrieveSubmitCombinedTab();
         }
         else{
             // unknown tab

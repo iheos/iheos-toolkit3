@@ -26,7 +26,6 @@ public class HomeLinkButton extends IButton {
 
         // for some reason, setting these properties in the CSS does not override SmartGWT defaults
         setBorder("0");
-       // setWidth(400);
         setHeight(20);
 
         bindUI();
@@ -45,7 +44,7 @@ public class HomeLinkButton extends IButton {
                 else if (title == "Message Validator")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMessageValidatorTabCode()));
                 else if (title == "Document Metadata Editor")
-                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getDocumentMetadataEditorTabCode()));// FIXME => why null?
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getDocumentMetadataEditorTabCode()));
                 else if (title == "Pre-Connectathon Tests")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getPreConnectathonTestsTabCode()));
                 else if (title == "Get Documents")
@@ -80,6 +79,8 @@ public class HomeLinkButton extends IButton {
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getTestDataSubmissionTabCode()));
                 else if (title == "MHD to XDS Converter")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMhdtoXdsConverterTabCode()));
+                else if (title == "Query - Retrieve - Submit")
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getQRSCombinedTabCode()));
                 else SC.say("A link is missing. Please contact the support team.");
             }
         });
