@@ -35,9 +35,6 @@ public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntr
     DocEntryEditorDriver editorDriver = GWT.create(DocEntryEditorDriver.class);
     private final static XdsParserServicesAsync xdsParserServicesAsync=GWT.create(XdsParserServices.class);
 
-    @Inject
-    MetadataEditorRequestFactory requestFactory;
-
     /**
      * Method that initializes the editor and the request factory on document entry editor view start.
      */
@@ -46,7 +43,7 @@ public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntr
 //        model = new XdsDocumentEntry();
         bind();
         initDriver(model);
-        requestFactory.initialize(eventBus);
+//        requestFactory.initialize(eventBus);
     }
 
     /**
@@ -145,42 +142,7 @@ public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntr
      * Method which actually handle saving (on server) and download for the edited metadata file.
      */
     private void save() {
-//        ((MetadataEditorEventBus) eventBus).fireSaveCurrentlyEditedMetadataEvent(model);
-//        xdsParserServicesAsync.toEbRim(model, new AsyncCallback<String>() {
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                logger.warning(throwable.getMessage());
-//            }
-//
-//            @Override
-//            public void onSuccess(String result) {
-//                String filename = model.getFileName().toString();
-//                requestFactory.saveFileRequestContext().saveAsXMLFile(filename, result).fire(new Receiver<String>() {
-//
-//                    @Override
-//                    public void onSuccess(String response) {
-//                        logger.info("saveAsXMLFile call succeed");
-//                        logger.info("Generated filename sent to the client \n" + response);
-//                        logger.info("File's URL: " + GWT.getHostPageBaseURL() + "files/" + response);
-//                        Window.open(GWT.getHostPageBaseURL() + "files/" + response, response + " Metadata File", "enabled");
-//                        Dialog d = new Dialog();
-//                        HTMLPanel htmlP = new HTMLPanel("<a href='" + GWT.getHostPageBaseURL() + "files/" + response + "'>"
-//                                + GWT.getHostPageBaseURL() + "files/" + response + "</a>");
-//                        VerticalLayoutContainer vp = new VerticalLayoutContainer();
-//                        vp.add(new Label("Your download is in progress, please allow this application to open popups with your browser..."),
-//                                new VerticalLayoutData(1, 1, new Margins(10, 5, 10, 5)));
-//                        vp.add(htmlP, new VerticalLayoutData(1, 1, new Margins(10, 5, 10, 5)));
-//                        d.add(vp);
-//
-//                        d.setPredefinedButtons(PredefinedButton.OK);
-//                        d.setButtonAlign(BoxLayoutPack.CENTER);
-//                        d.setHideOnButtonClick(true);
-//                        d.setHeadingText("XML Metadata File Download");
-//                        d.show();
-//                    }
-//                });
-//            }
-//        });
+        ((MetadataEditorEventBus) eventBus).fireSaveFileEvent();
     }
 
     /**

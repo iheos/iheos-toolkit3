@@ -11,6 +11,7 @@ import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractPresente
 import gov.nist.hit.ds.docentryeditor.client.parser.XdsParserServices;
 import gov.nist.hit.ds.docentryeditor.client.parser.XdsParserServicesAsync;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsSubmissionSet;
+import gov.nist.hit.ds.ebMetadata.Metadata;
 
 /**
  * Created by onh2 on 3/2/2015.
@@ -19,9 +20,6 @@ public class SubmissionSetEditorPresenter extends AbstractPresenter<SubmissionSe
     private final static XdsParserServicesAsync xdsParserServicesAsync=GWT.create(XdsParserServices.class);
     protected XdsSubmissionSet model=new XdsSubmissionSet();
     private SubmissionSetEditorDriver editorDriver = GWT.create(SubmissionSetEditorDriver.class);
-
-//    @Inject
-//    MetadataEditorRequestFactory requestFactory;
 
     /**
      * Method that initializes the editor and the request factory on submission set activity start.
@@ -107,6 +105,7 @@ public class SubmissionSetEditorPresenter extends AbstractPresenter<SubmissionSe
      * Method which actually handle saving (on server) and download for the edited metadata file.
      */
     private void save() {
+        ((MetadataEditorEventBus) eventBus).fireSaveFileEvent();
 //        ((MetadataEditorEventBus) eventBus).fireSaveCurrentlyEditedMetadataEvent(model);
     }
 
