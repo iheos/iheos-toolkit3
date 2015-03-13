@@ -7,6 +7,7 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.*;
 import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
 import gov.nist.hit.ds.xdstools3.client.tabs.GenericCloseableToolTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.QRSCombinedTab.data.QRSDataFactory;
 
 /**
  * Created by dazais on 3/9/2015.
@@ -78,7 +79,7 @@ public class QueryRetrieveSubmitCombinedTab extends GenericCloseableToolTab {
         grid.setWidth("25%");
         grid.setShowAllRecords(true);
         grid.setLeaveScrollbarGap(false);
-        grid.setRecords(QueryRetrieveData.getRecords());
+        grid.setRecords(QRSDataFactory.getRecord(fieldName));
         ListGridField field = new ListGridField(fieldName, title);
         grid.setFields(field);
         return grid;
