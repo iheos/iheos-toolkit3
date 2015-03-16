@@ -7,6 +7,7 @@ import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsMetadata;
 
 /**
+ * This is a GwtEvent to request the creation of a new empty document entry.
  * Created by onh2 on 3/9/2015.
  */
 public class CreateNewDocEntryEvent extends GwtEvent<CreateNewDocEntryEvent.CreateNewDocEntryEventHandler> {

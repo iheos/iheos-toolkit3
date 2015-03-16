@@ -100,7 +100,7 @@ span.title {
     padding:10px;
 }
 .warning-message{
-    width:900px;
+    /*width:900px;*/
     /*font-size:18px;*/
     color:red;
 }

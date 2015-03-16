@@ -6,6 +6,7 @@ import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsSubmissionSet;
 
 /**
+ * This is a GwtEvent to request a Xds Submission set to be edited in the Submission Set editor.
  * Created by onh2 on 7/18/2014.
  */
 public class StartEditXdsSubmissionSetEvent extends GwtEvent<StartEditXdsSubmissionSetEvent.StartEditXdsSubmissionSetHandler> {

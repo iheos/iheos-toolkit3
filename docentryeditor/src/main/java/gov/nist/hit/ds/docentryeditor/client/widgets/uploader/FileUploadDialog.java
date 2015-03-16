@@ -7,6 +7,10 @@ import gov.nist.hit.ds.docentryeditor.client.event.NewFileLoadedEvent;
 
 import javax.inject.Inject;
 
+/**
+ * This class is an extend of Dialog. It is a Dialog widget to upload
+ * a ebRim xml file to the application.
+ */
 public class FileUploadDialog extends Dialog {
 
     @Inject

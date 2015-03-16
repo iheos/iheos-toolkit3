@@ -10,6 +10,12 @@ import gov.nist.hit.ds.docentryeditor.client.home.WelcomePlace;
 
 import javax.inject.Inject;
 
+/**
+ * Finds the activity to run for a given Place, used to configure an ActivityManager.
+ * It binds the Places with the right Activities.
+ *
+ * @see com.google.gwt.activity.shared.ActivityManager
+ */
 public class MetadataEditorActivityMapper implements ActivityMapper {
 
     MetadataEditorGinInjector injector = MetadataEditorGinInjector.instance;
@@ -19,6 +25,12 @@ public class MetadataEditorActivityMapper implements ActivityMapper {
         super();
     }
 
+    /**
+     * This method is supposed to return the right Activity for a given Place to load.
+     *
+     * @param place Place to load
+     * @return the right Activity for a given place to load.
+     */
     @Override
     public Activity getActivity(Place place) {
         AbstractActivity activity = null;

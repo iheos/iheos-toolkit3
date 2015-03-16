@@ -88,9 +88,8 @@ public class WelcomePanel extends VerticalLayoutContainer {
 
 		// Set home page warning panel
 		PageWarningPanel warningPanel = new PageWarningPanel("<strong style='font-size:1.15em'>Warning:</strong> This software is still under development.<br/>" +
-				"<ul><li>The functionalities Folder, Association and Submission Set are not implemented yet.</li>" +
-				"<li>The XML file format used to save a Document Entry is not yet conformant to the IHE ITI TF-3 Specifications.<br/>" +
-				"<a href='https://drive.google.com/file/d/0B3Mv6yHe9C3Za3ZBMVppY2RBSlE/view?usp=sharing' target='_blank'>Download a Document Entry XML file example.</a></li></ul>");
+				"<ul><li>The functionalities Folder and Association are not implemented yet.</li>" +
+				"</ul>");
 
 //		this.add(htmlWelcome);
 		this.add(htmlExplanationTitle);

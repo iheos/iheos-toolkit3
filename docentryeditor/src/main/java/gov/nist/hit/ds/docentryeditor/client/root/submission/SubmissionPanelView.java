@@ -87,7 +87,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         toolbar.add(refreshButton);
         toolbar.add(helpButton);
         vlc.add(toolbar);
-        buildTreeStore();
+        initTreeStore();
         tree.getStyle().setLeafIcon(AppImages.INSTANCE.file());
         tree.expandAll();
         tree.setAutoExpand(true);
@@ -98,7 +98,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         return cp;
     }
 
-    private void buildTreeStore() {
+    private void initTreeStore() {
         if (treeStore.getAll().isEmpty()) {
             treeStore.add(submissionSetTreeNode);
         }
@@ -127,7 +127,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
             @Override
             public void onSelect(SelectEvent event) {
                 tree.getStore().clear();
-                buildTreeStore();
+                initTreeStore();
             }
         });
         tree.getSelectionModel().addSelectionHandler(new SelectionHandler<SubmissionMenuData>() {

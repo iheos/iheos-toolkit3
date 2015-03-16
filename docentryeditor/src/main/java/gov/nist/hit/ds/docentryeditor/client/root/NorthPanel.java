@@ -22,6 +22,7 @@ import gov.nist.hit.ds.docentryeditor.client.widgets.uploader.FileUploadMVP;
 import javax.inject.Inject;
 import java.util.logging.Logger;
 
+// not used anymore
 public class NorthPanel extends ContentPanel {
 
     private final TextButton loadButton;

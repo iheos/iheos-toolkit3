@@ -34,6 +34,7 @@ public class SubmissionSetEditorActivity extends AbstractActivity{
     SimpleContainer sc;
     BorderLayoutContainer blc;
 
+    // method automatically called in the GWT Activity-Place design.
     @Override
     public void start(AcceptsOneWidget acceptsOneWidget, EventBus eventBus) {
         editorMVP=buildEditorMVP();
@@ -41,6 +42,12 @@ public class SubmissionSetEditorActivity extends AbstractActivity{
         displayer.display(getContainer(), acceptsOneWidget, eventBus);
     }
 
+    /**
+     * Build the editor layout with borderlayoutcontainer for the Submission Set.
+     * Made of a main panel for the editor itself and a collapsible and splittable validation panel underneath.
+     *
+     * @return widget editor container
+     */
     private Widget getContainer() {
         sc = new SimpleContainer();
         blc = new BorderLayoutContainer();
@@ -68,6 +75,10 @@ public class SubmissionSetEditorActivity extends AbstractActivity{
         return sc.asWidget();
     }
 
+    /**
+     * Method that builds the Submission Set Editor (view and presenter for a specific model => Submission Set).
+     * @return Submission Set Editor MVP.
+     */
     private GenericMVP<XdsSubmissionSet, SubmissionSetEditorView, SubmissionSetEditorPresenter> buildEditorMVP() {
         return new GenericMVP<XdsSubmissionSet,SubmissionSetEditorView,SubmissionSetEditorPresenter>(editorView,editorPresenter);
     }

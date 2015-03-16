@@ -2,8 +2,11 @@ package gov.nist.hit.ds.docentryeditor.client.root.submission;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.web.bindery.requestfactory.shared.Receiver;
@@ -167,8 +170,11 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
         view.getTree().getSelectionModel().select(currentlyEdited, false);
     }
 
+    /**
+     * This method save file on the server and enable the user to download it by displaying it in its browser.
+     */
     public void doSave() {
-//        ((MetadataEditorEventBus) eventBus).fireSaveFileEvent();
+        // set XdsMetadata object from the submission tree data.
         XdsMetadata m=new XdsMetadata();
         m.setSubmissionSet((XdsSubmissionSet) view.getSubmissionSetTreeNode().getModel());
         for (SubmissionMenuData subData:view.getTreeStore().getChildren(view.getSubmissionSetTreeNode())){
@@ -176,6 +182,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 m.getDocumentEntries().add((XdsDocumentEntry) subData.getModel());
             }
         }
+        // rpc server call to translate metadata java object into an ebRim xml String.
         xdsParserServices.toEbRim(m, new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable throwable) {
@@ -184,6 +191,15 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
 
             @Override
             public void onSuccess(String s) {
+                Dialog d = new Dialog();
+                HTMLPanel html = new HTMLPanel(SafeHtmlUtils.fromString(s));
+                d.add(html);
+                d.setPredefinedButtons(Dialog.PredefinedButton.OK);
+                d.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.CENTER);
+                d.setHideOnButtonClick(true);
+                d.setHeadingText("XML Metadata File ");
+                d.show();
+                // request factory server call to physically save the file on the server.
                 requestFactory.saveFileRequestContext().saveAsXMLFile(s).fire(new Receiver<String>() {
                     @Override
                     public void onSuccess(String response) {
@@ -199,7 +215,6 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                                 new VerticalLayoutContainer.VerticalLayoutData(1, 1, new Margins(10, 5, 10, 5)));
                         vp.add(htmlP, new VerticalLayoutContainer.VerticalLayoutData(1, 1, new Margins(10, 5, 10, 5)));
                         d.add(vp);
-
                         d.setPredefinedButtons(Dialog.PredefinedButton.OK);
                         d.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.CENTER);
                         d.setHideOnButtonClick(true);
@@ -238,6 +253,4 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     public SubmissionMenuData getCurrentlyEdited(){
         return currentlyEdited;
     }
-
-
 }

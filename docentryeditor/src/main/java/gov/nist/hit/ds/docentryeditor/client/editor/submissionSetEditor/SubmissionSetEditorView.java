@@ -33,6 +33,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * This class represents the view of the Submission Set editor.
+ * It only handles the different widgets used to build the final
+ * complete view of the editor.
+ * It work with a presenter to handle the XdsSubmissionSet model.
+ *
+ * @see gov.nist.hit.ds.docentryeditor.shared.model.XdsSubmissionSet
+ * @see gov.nist.hit.ds.docentryeditor.client.editor.submissionSetEditor.SubmissionSetEditorPresenter
  * Created by onh2 on 3/2/2015.
  */
 public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPresenter> implements Editor<XdsSubmissionSet>{
@@ -75,7 +82,7 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
     private EditorToolbar editorBottomToolbar;
 
     /**
-     * This is the abstract method implementation that build a collection of objects
+     * This is the abstract method implementation that builds a collection of objects
      * mapping a String key to a Widget for the Submission Set editor view.
      * @return Map of widgets for the Submission Set editor view.
      */
@@ -116,7 +123,7 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
         requiredFieldsContainer.add(requiredFields);
         optionalFieldsContainer.add(optionalFields);
 
-        // Adding required and optional fields panels to the main container of editor view
+        // Adding required and optional fields panels to the main container of editor view.
         container.add(editorTopToolbar, new VerticalLayoutContainer.VerticalLayoutData(-1,30));
         container.add(new HtmlLayoutContainer("<h2>Required fields</h2>"));
         container.add(requiredFieldsContainer, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
@@ -124,24 +131,24 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
         container.add(optionalFieldsContainer, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         // /////////////////////////////////////// //
-        // - Required "simple" fields
+        // - Required "simple" fields.
         EditorFieldLabel entryUUIDLabel = new EditorFieldLabel(entryUUID,"Entry UUID");
         EditorFieldLabel uniqueIdLabel = new EditorFieldLabel(uniqueId,"Unique ID");
         EditorFieldLabel sourceIdlabel = new EditorFieldLabel(sourceId,"Source ID");
         EditorFieldLabel patientIdLabel = new EditorFieldLabel(patientId,"Patient ID");
         EditorFieldLabel contentTypeCodeLabel = new EditorFieldLabel(contentTypeCode.getDisplay(),"Content type code");
 
-        // - Optional "simple" fields
+        // - Optional "simple" fields.
         EditorFieldLabel availabilityStatusLabel = new EditorFieldLabel(availabilityStatus,"Availability status");
         EditorFieldLabel homeCommunityIdLabel = new EditorFieldLabel(homeCommunityId,"Home community ID");
 
-        // - Optional widget fields
+        // - Optional widget fields.
         titleGrid = new InternationalStringEditableGrid("Titles");
         title = new ListStoreEditor<InternationalString>(titleGrid.getStore());
         commentsGrid = new InternationalStringEditableGrid("Comments");
         comments = new ListStoreEditor<InternationalString>(commentsGrid.getStore());
 
-        // - simple required fields container
+        // - simple required fields container.
         VerticalLayoutContainer simpleRequiredFieldsContainer = new VerticalLayoutContainer();
         simpleRequiredFieldsContainer.add(entryUUIDLabel, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(uniqueIdLabel, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
@@ -149,18 +156,18 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
         simpleRequiredFieldsContainer.add(patientIdLabel, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
         simpleRequiredFieldsContainer.add(contentTypeCodeLabel, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        // - simple optional fields container
+        // - simple optional fields container.
         VerticalLayoutContainer simpleOptionalFieldsContainer = new VerticalLayoutContainer();
         simpleOptionalFieldsContainer.add(availabilityStatusLabel, new VerticalLayoutContainer.VerticalLayoutData(1,-1));
         simpleOptionalFieldsContainer.add(homeCommunityIdLabel, new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
-        // - Required field set
+        // - Required field set.
         FieldSet fieldSet_simpleRequired = new FieldSet();
         fieldSet_simpleRequired.setHeadingText("General");
         fieldSet_simpleRequired.setCollapsible(true);
         fieldSet_simpleRequired.add(simpleRequiredFieldsContainer);
 
-        // - Optional field sets
+        // - Optional field sets.
         FieldSet fieldSet_simpleOptional = new FieldSet();
         fieldSet_simpleOptional.setHeadingText("?????");
         fieldSet_simpleOptional.setCollapsible(true);
@@ -171,19 +178,20 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
         fieldSet_authors.setCollapsible(true);
         fieldSet_authors.add(authors.asWidget());
 
-        // Add every required fields to the required fields panel
+        // Add every required fields to the required fields panel.
         requiredFields.add(fieldSet_simpleRequired,new VerticalLayoutContainer.VerticalLayoutData(1,-1, new Margins(0, 0, 10, 0)));
         requiredFields.add(submissionTime.getDisplay(),new VerticalLayoutContainer.VerticalLayoutData(1,-1, new Margins(0, 0, 10, 0)));
-        // Add every optional fields to the optional fields panel
+        // Add every optional fields to the optional fields panel.
         optionalFields.add(fieldSet_simpleOptional,new VerticalLayoutContainer.VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
         optionalFields.add(fieldSet_authors,new VerticalLayoutContainer.VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
         optionalFields.add(intendedRecipient.getDisplay(),new VerticalLayoutContainer.VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
         optionalFields.add(titleGrid.getDisplay(),new VerticalLayoutContainer.VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
         optionalFields.add(commentsGrid.getDisplay(),new VerticalLayoutContainer.VerticalLayoutData(1,-1,new Margins(0,0,10,0)));
 
+        // configure help information and client validations for the entire editor.
         setWidgetsInfo();
 
-        // Bottom toolbar container
+        // Bottom toolbar container.
         SimpleContainer bottomToolbarContainer = new SimpleContainer();
         bottomToolbarContainer.setHeight(35);
         bottomToolbarContainer.add(editorBottomToolbar);
@@ -196,6 +204,10 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
         return mainContainer;
     }
 
+    /**
+     * Implementation of the abstract method that binds together
+     * widgets actions (such as a button click) with presenter actions.
+     */
     @Override
     protected void bindUI() {
         mainContainer.addResizeHandler(new ResizeHandler() {
@@ -250,6 +262,10 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
             }
     }
 
+    /**
+     * Configures information about each widgets to guide the user as well as
+     * client side validations (Tooltips, empty texts and validators).
+     */
     private void setWidgetsInfo() {
         // TODO
     }

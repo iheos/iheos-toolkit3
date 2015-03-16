@@ -14,10 +14,10 @@ import gov.nist.hit.ds.docentryeditor.shared.model.XdsSubmissionSet;
 import gov.nist.hit.ds.ebMetadata.Metadata;
 
 /**
+ * This class is the presenter that handles all the actions and events related to the Submission Set Editor view.
  * Created by onh2 on 3/2/2015.
  */
 public class SubmissionSetEditorPresenter extends AbstractPresenter<SubmissionSetEditorView> {
-    private final static XdsParserServicesAsync xdsParserServicesAsync=GWT.create(XdsParserServices.class);
     protected XdsSubmissionSet model=new XdsSubmissionSet();
     private SubmissionSetEditorDriver editorDriver = GWT.create(SubmissionSetEditorDriver.class);
 
@@ -28,7 +28,7 @@ public class SubmissionSetEditorPresenter extends AbstractPresenter<SubmissionSe
     public void init() {
         bind();
         initDriver(model);
-//        requestFactory.initialize(eventBus);
+        // requestFactory.initialize(eventBus);
     }
 
     /**
@@ -106,7 +106,6 @@ public class SubmissionSetEditorPresenter extends AbstractPresenter<SubmissionSe
      */
     private void save() {
         ((MetadataEditorEventBus) eventBus).fireSaveFileEvent();
-//        ((MetadataEditorEventBus) eventBus).fireSaveCurrentlyEditedMetadataEvent(model);
     }
 
     /**
@@ -118,6 +117,13 @@ public class SubmissionSetEditorPresenter extends AbstractPresenter<SubmissionSe
         getView().authors.editNewAuthor();
     }
 
+    /**
+     * Getter that returns the XDS Submission Set object in edition.
+     * @return Xds Submission Set object being edited.
+     */
+    public XdsSubmissionSet getModel(){
+        return model;
+    }
 
     /**
      * Interface of a XDS Submission Set Editor Driver

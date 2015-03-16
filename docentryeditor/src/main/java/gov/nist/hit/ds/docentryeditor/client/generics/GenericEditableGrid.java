@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Generic widget for Inline Grid editing on double click. For each editable
+ * Generic widget for Row Grid editing on double click. For each editable
  * field of the grid the method
  * {@link #addColumnEditorConfig(ColumnConfig, Field) addColumnEditorConfig}
  * should be called.

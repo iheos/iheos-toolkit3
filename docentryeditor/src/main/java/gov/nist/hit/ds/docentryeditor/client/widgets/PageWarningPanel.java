@@ -29,10 +29,10 @@ public class PageWarningPanel extends VerticalLayoutContainer{
         hlc.add(l, new HorizontalLayoutContainer.HorizontalLayoutData(1, -1, new Margins(0, 0, 0, 5)));
 
         // set the red bordered warning panel
-        this.add(hlc, new VerticalLayoutData(1,125));
-//        this.setHeaderVisible(false);
-//        this.setBodyBorder(false);
-//        this.setHeight(100);
+        this.add(hlc, new VerticalLayoutData(1,100));
+        // this.setHeaderVisible(false);
+        // this.setBodyBorder(false);
+        // this.setHeight(100);
         this.setStyleName("warning-panel");
     }
 }

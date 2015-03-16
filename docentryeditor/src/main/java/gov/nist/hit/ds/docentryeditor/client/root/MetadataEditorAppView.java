@@ -21,7 +21,7 @@ import gov.nist.hit.ds.docentryeditor.client.root.submission.SubmissionPanelView
  */
 public class MetadataEditorAppView extends Viewport {
 
-    NorthPanel north; // interface for file loading and saving
+    // NorthPanel north; // interface for file loading and saving
     CenterPanel center; // main edtior fields
     GenericMVP<SubmissionMenuData, SubmissionPanelView, SubmissionPanelPresenter> submissionMVP;
 
@@ -41,10 +41,10 @@ public class MetadataEditorAppView extends Viewport {
         con.setBorders(true);
 
         // NORTH
-//        north = injector.getNorthPanel();
-//        BorderLayoutData northData = new BorderLayoutData(35);
-//        northData.setMargins(new Margins(5, 5, 5, 5));
-//        con.setNorthWidget(north, northData);
+        // north = injector.getNorthPanel();
+        // BorderLayoutData northData = new BorderLayoutData(35);
+        // northData.setMargins(new Margins(5, 5, 5, 5));
+        // con.setNorthWidget(north, northData);
 
         // CENTER
         center = new CenterPanel();
@@ -70,7 +70,7 @@ public class MetadataEditorAppView extends Viewport {
         simple.setWidget(con);
         add(simple);
 
-//        north.start();
+        //  north.start();
         submissionMVP.start();
     }
 

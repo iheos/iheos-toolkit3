@@ -27,23 +27,27 @@ import java.util.logging.Logger;
 
 /**
  * This class is the presenter that handles all the actions and events related to the Document Entry Editor view.
+ * It works with the DocumentEntryView to handle the XdsDocumentEntry model.
+ *
+ * @see gov.nist.hit.ds.docentryeditor.client.editor.documentEntryEditor.DocumentEntryEditorView
+ * @see gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry
  */
 public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntryEditorView> {
 
     protected static Logger logger = Logger.getLogger(DocumentEntryEditorPresenter.class.getName());
     protected XdsDocumentEntry model=new XdsDocumentEntry();
-    DocEntryEditorDriver editorDriver = GWT.create(DocEntryEditorDriver.class);
-    private final static XdsParserServicesAsync xdsParserServicesAsync=GWT.create(XdsParserServices.class);
+    private DocEntryEditorDriver editorDriver = GWT.create(DocEntryEditorDriver.class);
+    // private final static XdsParserServicesAsync xdsParserServicesAsync=GWT.create(XdsParserServices.class);
 
     /**
      * Method that initializes the editor and the request factory on document entry editor view start.
      */
     @Override
     public void init() {
-//        model = new XdsDocumentEntry();
+        // model = new XdsDocumentEntry();
         bind();
         initDriver(model);
-//        requestFactory.initialize(eventBus);
+        // requestFactory.initialize(eventBus);
     }
 
     /**
@@ -74,13 +78,13 @@ public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntr
                 getView().authors.editNewAuthor();
             }
         });
-        ((MetadataEditorEventBus) getEventBus()).addSaveFileEventHandler(new SaveFileEvent.SaveFileEventHandler() {
+        /*((MetadataEditorEventBus) getEventBus()).addSaveFileEventHandler(new SaveFileEvent.SaveFileEventHandler() {
 
             @Override
             public void onFileSave(SaveFileEvent event) {
                 doSave();
             }
-        });
+        });*/
     }
 
     /**
@@ -129,16 +133,6 @@ public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntr
     }
 
     /**
-     * Getter that returns the XDS Document Entry editor object in edition.
-     * @return XDS Document Entry Editor.
-     */
-    public XdsDocumentEntry getModel() {
-        return model;
-    }
-
-
-
-    /**
      * Method which actually handle saving (on server) and download for the edited metadata file.
      */
     private void save() {
@@ -151,6 +145,14 @@ public class DocumentEntryEditorPresenter extends AbstractPresenter<DocumentEntr
     public void rollbackChanges() {
         logger.info("Cancel doc. entry changes.");
         ((MetadataEditorEventBus) eventBus).fireXdsEditorLoadedEvent();
+    }
+
+    /**
+     * Getter that returns the XDS Document Entry object in edition.
+     * @return XDS Document Entry object being edited.
+     */
+    public XdsDocumentEntry getModel() {
+        return model;
     }
 
     /**

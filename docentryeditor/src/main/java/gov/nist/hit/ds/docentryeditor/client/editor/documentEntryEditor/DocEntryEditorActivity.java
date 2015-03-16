@@ -32,16 +32,19 @@ public class DocEntryEditorActivity extends AbstractActivity {
     DocumentEntryEditorView editorView;
     @Inject
     DocumentEntryEditorPresenter editorPresenter;
+
     @Inject
     ValidationView validationView;
     @Inject
     ValidationPresenter validationPresenter;
+
     @Inject
     MetadataEditorEventBus metadataEditorEventBus;
 
-    SimpleContainer sc;
-    BorderLayoutContainer blc;
+    private SimpleContainer sc;
+    private BorderLayoutContainer blc;
 
+    // this method is automatically called in the GWT Activity - Places process.
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         editorMVP = buildEditorMVP();
@@ -61,11 +64,10 @@ public class DocEntryEditorActivity extends AbstractActivity {
 
         // Schedule the timer to run once in 1 milliseconds.
         t.schedule(1);
-
     }
 
     /**
-     * Build editor layout with borderlayoutcontainer.
+     * Build editor layout with borderlayoutcontainer for the Document Entry.
      * Made of a main panel for the editor itself and a collapsible and splittable validation panel underneath.
      *
      * @return widget editor container

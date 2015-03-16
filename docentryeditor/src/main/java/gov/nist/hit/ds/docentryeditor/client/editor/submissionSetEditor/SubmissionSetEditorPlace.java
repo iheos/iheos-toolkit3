@@ -4,6 +4,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
 /**
+ * Place for the Submission Set editor.
+ * This enables the browser navigation (w/ URLs) through the application thanks to the Activity-place design.
  * Created by onh2 on 3/2/2015.
  */
 public class SubmissionSetEditorPlace extends Place {

@@ -20,8 +20,8 @@ public class MetadataEditorAppStandaloneEP implements EntryPoint {
     @Override
     public void onModuleLoad() {
         RootLayoutPanel.get(/*"editorAppContainer"*/).add(new MetadataEditorApp().asWidget());
-//        RootPanel.get("editorAppContainer").add(new MetadataEditorApp().asWidget());
-        //        RootLayoutPanel.get().add(activityPanel);
+        //  RootPanel.get("editorAppContainer").add(new MetadataEditorApp().asWidget());
+        //  RootLayoutPanel.get().add(activityPanel);
         logger.info("Application Started!");
     }
 

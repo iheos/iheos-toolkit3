@@ -26,7 +26,7 @@ public class MetadataEditorEventBus extends SimpleEventBus {
     }
 
     /**
-     * Method that signals to the application that a new file has been loaded into the system.
+     * Method that signals to the event bus to the application that a new file has been loaded into the system.
      * @param xdsMetadata
      */
     public void fireNewFileLoadedEvent(XdsMetadata xdsMetadata) {
@@ -43,7 +43,7 @@ public class MetadataEditorEventBus extends SimpleEventBus {
     }
 
     /**
-     * This method signals to the entire application that request to save a file has been made.
+     * This method signals to the event bus to the entire application that request to save a file has been made.
      */
     public void fireSaveFileEvent() {
         fireEvent(new SaveFileEvent());
@@ -59,7 +59,7 @@ public class MetadataEditorEventBus extends SimpleEventBus {
     }
 
     /**
-     * This methods signals a request to start editing a specific document entry.
+     * This methods signals to the event bus a request to start editing a specific document entry.
      * @param documentEntry
      */
     public void fireStartEditXdsDocumentEvent(XdsDocumentEntry documentEntry) {
@@ -76,7 +76,7 @@ public class MetadataEditorEventBus extends SimpleEventBus {
     }
 
     /**
-     * This methods signals a request to start editing a specific submission set.
+     * This methods signals to the event bus a request to start editing a specific submission set.
      * @param submissionSet
      */
     public void fireStartEditXdsSubmissionSetEvent(XdsSubmissionSet submissionSet) {
@@ -91,10 +91,19 @@ public class MetadataEditorEventBus extends SimpleEventBus {
         fireEvent(new SaveCurrentlyEditedMetadataEvent(documentEntry));
     }
 
+    /**
+     * This method adds an handler that will take of the actions that must be triggered
+     * when the document entry editor is loaded.
+     * @param handler
+     * @return
+     */
     public HandlerRegistration addXdsEditorLoadedEventtHandler(XdsEditorLoadedEvent.XdsEditorLoadedEventHandler handler) {
         return addHandler(XdsEditorLoadedEvent.TYPE, handler);
     }
 
+    /**
+     * This methods signals to the event bus that the Xds Document Entry Editor has loaded.
+     */
     public void fireXdsEditorLoadedEvent() {
         fireEvent(new XdsEditorLoadedEvent());
     }
@@ -116,16 +125,24 @@ public class MetadataEditorEventBus extends SimpleEventBus {
     }
 
     /**
-     * This method signals a request to navigate back to the home page of the application.
+     * This method signals to the event bus a request to navigate back to the home page of the application.
      */
     public void fireBackToHomePageEvent() {
         fireEvent(new BackToHomePageEvent());
     }
 
+    /**
+     * This method adds an event handler that will add the new document entry to the submission set tree.
+     * @param handler
+     * @return
+     */
     public HandlerRegistration addCreateNewDocEntryEventHandler(CreateNewDocEntryEvent.CreateNewDocEntryEventHandler handler){
         return addHandler(CreateNewDocEntryEvent.TYPE,handler);
     }
 
+    /**
+     * This method signals to the event bus a request to create a new empty document entry.
+     */
     public void fireCreateNewDocEntryEvent(XdsDocumentEntry documentEntry) {
         fireEvent(new CreateNewDocEntryEvent(documentEntry));
     }

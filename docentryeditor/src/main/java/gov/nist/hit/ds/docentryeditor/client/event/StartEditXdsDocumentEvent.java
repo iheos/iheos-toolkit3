@@ -5,7 +5,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 
 /**
- * Created by onh2 on 7/18/2014.
+ * This is a GwtEvent to request a Document entry to be edited in the Xds Document Entry editor.
  */
 public class StartEditXdsDocumentEvent extends GwtEvent<StartEditXdsDocumentEvent.StartEditXdsDocumentHandler> {
 

@@ -54,12 +54,13 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
     @Override
     public XdsMetadata parseXdsMetadata(String fileContent) {
         xdsMetadata=new XdsMetadata();
-        //docEntries=new ArrayList<XdsDocumentEntry>();
         try {
             m=MetadataParser.parse(fileContent);
             for(OMElement oe : m.getRegistryPackages()){
+                // parse and set the Submission Set (Registry Packages)
                 xdsMetadata.setSubmissionSet(parseSubmissionSet(oe));
             }
+            // parse and add the document entries (Extrinsic Objects)
             for(OMElement eo : m.getExtrinsicObjects()){
                 xdsMetadata.getDocumentEntries().add(parseDocumentEntry(eo));
             }
@@ -73,11 +74,17 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         return xdsMetadata;
     }
 
+    /**
+     * Method that parses an ebRim RegistryPackages from an ebRim Metadata document
+     * to create a XdsSubmissionSet object.
+     * @param oe ebRim RegistryPackages from a Metadata document.
+     * @return XdsSubmissionSet object
+     */
     private XdsSubmissionSet parseSubmissionSet(OMElement oe) {
-        XdsSubmissionSet subSet=new XdsSubmissionSet();
         OMFormatter omf=new OMFormatter(oe);
         omf.noRecurse();
 
+        XdsSubmissionSet subSet=new XdsSubmissionSet();
         subSet.setEntryUUID(new String256(m.getSubmissionSetId()));
         String status = m.getStatus(oe);
         if(status!= null) {
@@ -113,7 +120,7 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         } catch (MetadataException e) {
             e.printStackTrace();
         } catch (Exception e) {e.printStackTrace();}
-        Logger.getLogger(this.getClass().getName()).info(subSet.toString());
+        // Logger.getLogger(this.getClass().getName()).info(subSet.toString());
         return subSet;
     }
 
@@ -124,23 +131,15 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
      * @return XdsDocumentEntry
      */
     private XdsDocumentEntry parseDocumentEntry(OMElement ele) {
-        XdsDocumentEntry de=new XdsDocumentEntry();
         OMFormatter omf = new OMFormatter(ele);
         omf.noRecurse();
 
+        XdsDocumentEntry de=new XdsDocumentEntry();
         de.setId(new String256(asString(m.getId(ele))));
-//        de.idX = eoEleStr;
         de.setLogicalId(new String256(asString(m.getLid(ele))));
-//        de.lidX = eoEleStr;
-
         de.setVersion(new String256(asString(m.getVersion(ele))));
-//        de.versionX = new OMFormatter(MetadataSupport.firstChildWithLocalName(ele, "VersionInfo")).toHtml();
-
         de.setAvailabilityStatus(new String256(asString(m.getStatus(ele))));
-//        de.statusX = eoEleStr;
-
         de.setHomeCommunityId(new String256(asString(m.getHome(ele))));
-//        de.homeX = eoEleStr;
 
         // FIXME should be a list
 //        de.title = asString(m.getNameValue(ele));
@@ -150,16 +149,9 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
 //        de.commentsX = new OMFormatter(MetadataSupport.firstChildWithLocalName(ele, "Description")).toHtml();
 
         de.setMimeType(new String256(asString(m.getMimeType(ele))));
-//        de.mimeTypeX = eoEleStr;
-
         de.setHash(new String256(asString(m.getSlotValue(ele, "hash", 0))));
-//        de.hashX = new OMFormatter(m.getSlot(ele, "hash")).toHtml();
-
         de.setLanguageCode(LanguageCode.getValueOf(asString(m.getSlotValue(ele, "languageCode", 0))));
-//        de.langX = new OMFormatter(m.getSlot(ele, "languageCode")).toHtml();
-
         de.getLegalAuthenticator().getValues().add(new String256(asString(m.getSlotValue(ele, "legalAuthenticator", 0))));
-//        de.legalAuthX = new OMFormatter(m.getSlot(ele, "legalAuthenticator")).toHtml();
 
         NameValueDTM serviceStartDate=new NameValueDTM();
         serviceStartDate.getValues().clear();
@@ -169,7 +161,6 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         }
         serviceStartDate.getValues().add(new DTM(parserDate(serviceStartDateString)));
         de.setServiceStartTime(serviceStartDate);
-//        de.serviceStartTimeX = new OMFormatter(m.getSlot(ele, "serviceStartTime")).toHtml();
 
         NameValueDTM serviceStopDate=new NameValueDTM();
         serviceStopDate.getValues().clear();
@@ -179,31 +170,28 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         }
         serviceStopDate.getValues().add(new DTM(parserDate(serviceStopDateString)));
         de.setServiceStopTime(serviceStopDate);
-//        de.serviceStopTimeX = new OMFormatter(m.getSlot(ele, "serviceStopTime")).toHtml();
 
         de.setRepoUId(new OID(new String256(asString(m.getSlotValue(ele, "repositoryUniqueId", 0)))));
         de.setUri(new String256(asString(m.getSlotValue(ele, "URI", 0))));
-//        de.repositoryUniqueIdX = new OMFormatter(m.getSlot(ele, "repositoryUniqueId")).toHtml();
 
         String sizeString=asString(m.getSlotValue(ele, "size", 0));
         if (sizeString!=null&&!sizeString.equals("")) {
             de.getSize().getValues().clear();
             de.getSize().getValues().add(Integer.parseInt(sizeString));
         }
-//        de.sizeX = new OMFormatter(m.getSlot(ele, "size")).toHtml();
 
-//        parseExtra(de, ele);
+        // parseExtra(de, ele);
 
         try {
             de.setPatientID(new IdentifierString256(new String256(asString(m.getPatientId(ele))),new String256("urn:uuid:6b5aea1a-874d-4603-a4bc-96a0a7b38446")));
-//            de.patientIdX = new OMFormatter(m.getExternalIdentifierElement(de.id, MetadataSupport.XDSXdsDocumentEntry_patientid_uuid)).toHtml();
             de.setUniqueId(new IdentifierOID(new OID(new String256(asString(m.getUniqueIdValue(ele)))),new String256("urn:uuid:2e82c1f6-a085-4c72-9da3-8640a32e42ab")));
-//            de.uniqueIdX = new OMFormatter(m.getExternalIdentifierElement(de.id, MetadataSupport.XDSXdsDocumentEntry_uniqueid_uuid)).toHtml();
         } catch (MetadataException e) {
             e.printStackTrace();
         }
         de.getSourcePatientId().getValues().add(new String256(asString(m.getSlotValue(ele, "sourcePatientId", 0))));
-//        de.sourcePatientIdX = new OMFormatter(m.getSlot(ele, "sourcePatientId")).toHtml();
+        for(String s:m.getSlotValues(ele, "sourcePatientInfo")){
+            de.getSourcePatientInfo().getValues().add(new String256(s));
+        }
 
         NameValueDTM creationTime=new NameValueDTM();
         creationTime.getValues().clear();
@@ -213,35 +201,24 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         }
         creationTime.getValues().add(new DTM(parserDate(creationTimeString)));
         de.setCreationTime(creationTime);
-//        de.creationTimeX = new OMFormatter(m.getSlot(ele, "creationTime")).toHtml();
 
         try {
             codes = m.getCodesWithDisplayName(ele, schemes);
 
             String[] classCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_classCode_uuid).get(0).split("\\^");
             de.setClassCode(new CodedTerm(classCodeStrings[0],classCodeStrings[1],classCodeStrings[2]));
-//            de.classCode = codes.get(MetadataSupport.XDSDocumentEntry_classCode_uuid);
-//            de.classCodeX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_classCode_uuid);
 
             String[] formatCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_formatCode_uuid).get(0).split("\\^");
             de.setFormatCode(new CodedTerm(formatCodeStrings[0], formatCodeStrings[1], formatCodeStrings[2]));
-//            de.formatCode = codes.get(MetadataSupport.XDSDocumentEntry_formatCode_uuid);
-//            de.formatCodeX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_formatCode_uuid);
 
             String[] hcftCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_hcftCode_uuid).get(0).split("\\^");
             de.setHealthcareFacilityType(new CodedTerm(hcftCodeStrings[0], hcftCodeStrings[1], hcftCodeStrings[2]));
-//            de.hcftc = codes.get(MetadataSupport.XDSDocumentEntry_hcftCode_uuid);
-//            de.hcftcX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_hcftCode_uuid);
 
             String[] practiceSettingCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_psCode_uuid).get(0).split("\\^");
             de.setPracticeSettingCode(new CodedTerm(practiceSettingCodeStrings[0], practiceSettingCodeStrings[1], practiceSettingCodeStrings[2]));
-//            de.pracSetCode = codes.get(MetadataSupport.XDSDocumentEntry_psCode_uuid);
-//            de.pracSetCodeX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_psCode_uuid);
 
             String[] typeCodeStrings = codes.get(MetadataSupport.XDSDocumentEntry_typeCode_uuid).get(0).split("\\^");
             de.setTypeCode(new CodedTerm(typeCodeStrings[0], typeCodeStrings[1], typeCodeStrings[2]));
-//            de.typeCode = codes.get(MetadataSupport.XDSDocumentEntry_typeCode_uuid);
-//            de.typeCodeX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_typeCode_uuid);
 
             List<CodedTerm> confidentialityCodes=new ArrayList<CodedTerm>();
             for (String confCode:codes.get(MetadataSupport.XDSDocumentEntry_confCode_uuid)){
@@ -256,24 +233,15 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
                 eventCodes.add(new CodedTerm(eventCodeStrings[0],eventCodeStrings[1],eventCodeStrings[2]));
             }
             de.setEventCode(eventCodes);
-//            de.eventCodeList = codes.get(MetadataSupport.XDSDocumentEntry_eventCode_uuid);
-//            de.eventCodeListX = formatClassSrc(ele, MetadataSupport.XDSDocumentEntry_eventCode_uuid);
-
         } catch(Exception e) {}
-
         try {
             List<OMElement> authorClassifications = m.getClassifications(ele, MetadataSupport.XDSDocumentEntry_author_uuid);
             de.setAuthors(parseAuthors(authorClassifications));
-//            de.authorsX = new ArrayList<String>();
             for (OMElement auEle : authorClassifications) {
 //                de.authorsX.add(new OMFormatter(auEle).toHtml());
             }
         } catch (Exception e) {}
 
-        for(String s:m.getSlotValues(ele, "sourcePatientInfo")){
-            de.getSourcePatientInfo().getValues().add(new String256(s));
-        }
-//        de.sourcePatientInfoX = new OMFormatter(m.getSlot(ele, "sourcePatientInfo")).toHtml();
         return de;
     }
 
@@ -306,6 +274,12 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         return authors;
     }
 
+    /**
+     * This method generates formatted ebRim xml as a String for the metadata given in parameter.
+     *
+     * @param metadata XdsMetadata object to be translated to ebRim xml.
+     * @return ebRim xml of the metadata given in parameter as a String.
+     */
     public String toEbRim(XdsMetadata metadata){
         Metadata m=new Metadata();
         // Submission Set
@@ -332,10 +306,9 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
                 m.addSlotValue(intendedRecipient, r.toString());
             }
         }
-        // DocEntry
+        // DocEntries
         // FIXME authors, titles and comments are missing
         for (XdsDocumentEntry documentEntry : metadata.getDocumentEntries()) {
-//            XdsDocumentEntry documentEntry = metadata.getDocumentEntries().get(0);
             OMElement extObj = m.mkExtrinsicObject(documentEntry.getId().toString(), documentEntry.getMimeType().toString());
             m.addDocumentEntryPatientId(extObj, documentEntry.getPatientID().getValue().toString());
             m.addDocumentEntryUniqueId(extObj, documentEntry.getUniqueId().getValue().toString());
@@ -413,8 +386,7 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
             }
             m.addAssociation(m.mkAssociation(MetadataSupport.assoctype_has_member, subSet.getEntryUUID().toString(), documentEntry.getId().toString()));
         }
-        Logger.getLogger(this.getClass().getName()).info(m.format());
-//        return m.getExtrinsicObject(0).toString();
+        // Logger.getLogger(this.getClass().getName()).info(m.format());
         String result="<xdsb:ProvideAndRegisterDocumentSetRequest xmlns:xdsb=\"urn:ihe:iti:xds-b:2007\">\n" +
                 "    <lcm:SubmitObjectsRequest xmlns:lcm=\"urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0\">\n" +
                 "        <rim:RegistryObjectList xmlns:rim=\"urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0\">";

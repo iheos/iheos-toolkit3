@@ -6,6 +6,9 @@ import gov.nist.hit.ds.docentryeditor.client.event.NewFileLoadedEvent.NewFileLoa
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 import gov.nist.hit.ds.docentryeditor.shared.model.XdsMetadata;
 
+/**
+ * This is a GwtEvent to signal that a new ebRim file has been uploaded to the application.
+ */
 public class NewFileLoadedEvent extends GwtEvent<NewFileLoadedHandler> {
 
     public static Type<NewFileLoadedHandler> TYPE = new Type<NewFileLoadedHandler>();

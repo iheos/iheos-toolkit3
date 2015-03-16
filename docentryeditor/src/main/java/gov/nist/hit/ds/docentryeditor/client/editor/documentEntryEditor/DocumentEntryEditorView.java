@@ -35,7 +35,15 @@ import gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * This class represents the view of the Document Entry editor.
+ * It only handles the different widgets used to build the final
+ * complete view of the editor.
+ * It work with a presenter to handle the XdsDocumentEntry model.
+ *
+ * @see gov.nist.hit.ds.docentryeditor.shared.model.XdsDocumentEntry
+ * @see gov.nist.hit.ds.docentryeditor.client.editor.documentEntryEditor.DocumentEntryEditorPresenter
+ */
 public class DocumentEntryEditorView extends AbstractView<DocumentEntryEditorPresenter> implements Editor<XdsDocumentEntry> {
     private final VerticalLayoutContainer form = new VerticalLayoutContainer();
 
@@ -109,6 +117,11 @@ public class DocumentEntryEditorView extends AbstractView<DocumentEntryEditorPre
     @Inject
     private EditorToolbar editorBottomToolbar;
 
+    /**
+     * This is the abstract method implementation that builds a collection of objects
+     * mapping a String key to a Widget for the Document Entry editor view.
+     * @return Map of widgets for the Submission Set editor view.
+     */
     @Override
     protected Map<String, Widget> getPathToWidgetsMap() {
         Map<String, Widget> map = new HashMap<String, Widget>();
@@ -122,6 +135,11 @@ public class DocumentEntryEditorView extends AbstractView<DocumentEntryEditorPre
         return map;
     }
 
+    /**
+     * This is the implementation of an abstract method supposed to construct
+     * the Document Entry editor view as a widget.
+     * @return Submission Set editor view as a Widget.
+     */
     @Override
     protected Widget buildUI() {
         final VerticalLayoutContainer container = new VerticalLayoutContainer();
@@ -323,6 +341,10 @@ public class DocumentEntryEditorView extends AbstractView<DocumentEntryEditorPre
         return form;
     }
 
+    /**
+     * Implementation of the abstract method that binds together
+     * widgets actions (such as a button click) with presenter actions.
+     */
     @Override
     protected void bindUI() {
         form.addResizeHandler(new ResizeHandler() {
@@ -458,7 +480,7 @@ public class DocumentEntryEditorView extends AbstractView<DocumentEntryEditorPre
         id.setEmptyText("ex: 123456789");
         id.setToolTipConfig(new ToolTipConfig("ID is a string", "It should contain less than 256 characters"));
         id.setAllowBlank(false);
-//        id.addOIDValidator(new RegExValidator("[1-9][0-9]+", "Value is not correct. It is supposed to be a number."));
+        // id.addOIDValidator(new RegExValidator("[1-9][0-9]+", "Value is not correct. It is supposed to be a number."));
         id.addValidator(new UuidFormatClientValidator());
         // language code
         languageCode.setAllowBlank(false);
@@ -466,7 +488,7 @@ public class DocumentEntryEditorView extends AbstractView<DocumentEntryEditorPre
         languageCode.setToolTipConfig(new ToolTipConfig("LanguageCode from RFC3066", "Language code format is \"[a-z](2)-[A-Z](2)\""));
         // legal authenticator
         legalAuthenticator.setEditingFieldToolTip("A legal authenticator is a string256 in XCN format. It should be formatted as follow: \n<b>Identifier^LastName^FirstName[^SecondName[^FurtherGivenNames]][^Suffix][^Prefix]^AssigningAuthority</b>.");
-//        legalAuthenticator.setEmptyTexts("ex: 11375^Welby^Marcus^J^Jr. MD^Dr^^^&1.2.840.113619.6.197&ISO");
+        // legalAuthenticator.setEmptyTexts("ex: 11375^Welby^Marcus^J^Jr. MD^Dr^^^&1.2.840.113619.6.197&ISO");
         legalAuthenticator.addFieldValidator(new RegExValidator("^[0-9]+\\^(([A-Za-z]+\\.?\\s?)+\\^){3,7}\\^{2}&[0-9]+(\\.[0-9]+)*(&ISO)$"));
         legalAuthenticator.setToolbarHelpButtonTooltip(new ToolTipConfig("Help about legal authenticator", "Represents a participant who has legally authenticated or attested the" +
                 "document within the authorInstitution. Legal authentication implies that " +
@@ -516,8 +538,8 @@ public class DocumentEntryEditorView extends AbstractView<DocumentEntryEditorPre
                         "If present, shall have a single value."));
         // source patient id
         sourcePatientId.addFieldValidator(new RegExValidator("^(([A-Za-z])|([1-9]))*[0-9A-z]+\\^{3}&[1-9][0-9]*(\\.[1-9][0-9]*)+(&ISO)$", "This value is not a correct source patient id."));
-//        sourcePatientId.addFieldValidator(new RegExValidator("^[A-Za-z]*[0-9]+\\^{3}&[1-9][0-9]*(\\.[1-9][0-9]*)+(&ISO)$", "This value is not a correct source patient id."));
-//        sourcePatientId.setEmptyTexts("j98789^^^&1.2.3.4.343.1&ISO");
+        // sourcePatientId.addFieldValidator(new RegExValidator("^[A-Za-z]*[0-9]+\\^{3}&[1-9][0-9]*(\\.[1-9][0-9]*)+(&ISO)$", "This value is not a correct source patient id."));
+        // sourcePatientId.setEmptyTexts("j98789^^^&1.2.3.4.343.1&ISO");
         sourcePatientId.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Source Patient ID", "The sourcePatientId represents the subject of care medical record " +
                 "Identifier (e.g., Patient Id) in the local patient Identifier Domain of the " +
                 "Document Source. It shall contain two parts:" +

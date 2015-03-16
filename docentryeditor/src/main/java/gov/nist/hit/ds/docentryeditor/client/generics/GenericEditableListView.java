@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Generic widget for Row list grid editing on double click.
  * Created by onh2 on 6/11/2014.
  */
 public abstract class GenericEditableListView<M, N> extends GenericEditableGrid<M> {
@@ -36,34 +37,38 @@ public abstract class GenericEditableListView<M, N> extends GenericEditableGrid<
         columnsConfigs.add(cc1);
 
         return new ColumnModel<M>(columnsConfigs);
-//        return this.cm;
     }
 
     public void addEditorConfig(Field<N> field) {
-//        field.addHandler(new KeyDownHandler() {
-//            @Override
-//            public void onKeyDown(KeyDownEvent event) {
-//                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-//                    // TODO try to override completeEditing on enter key after a validation failure
-//                    editing.completeEditing();
-//                }
-//
-//            }
-//        }, KeyDownEvent.getType());
+        /*
+        field.addHandler(new KeyDownHandler() {
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    // TODO try to override completeEditing on enter key after a validation failure
+                    editing.completeEditing();
+                }
+
+            }
+        }, KeyDownEvent.getType());
+        */
         editing.addEditor(cc1, field);
     }
 
     public <O> void addEditorConfig(Converter<N, O> converter, final Field<O> field) {
-//        field.addHandler(new KeyDownHandler() {
-//            @Override
-//            public void onKeyDown(KeyDownEvent event) {
-//                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-//                    // TODO try to override completeEditing on enter key after a validation failure
-//                    editing.completeEditing();
-//                }
-//
-//            }
-//        }, KeyDownEvent.getType());
+        /*
+        // to handle the keyboard "ENTER" key to quit editing.
+        field.addHandler(new KeyDownHandler() {
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    // TODO try to override completeEditing on enter key after a validation failure
+                    editing.completeEditing();
+                }
+
+            }
+        }, KeyDownEvent.getType());
+        */
         editing.addEditor(cc1, converter, field);
     }
 
