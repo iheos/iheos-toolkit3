@@ -2,6 +2,7 @@ package gov.nist.hit.ds.xdstools3.server;
 
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.simSupport.api.ValidationApi;
+import gov.nist.hit.ds.siteManagement.loader.Sites;
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.hit.ds.xdstools3.client.exceptions.ToolkitServerError;
 import gov.nist.hit.ds.xdstools3.server.demo.ActorsCollectionsDataSamples;
@@ -244,6 +245,16 @@ public class Caller implements Serializable {
         return null;
     }
 
+
+    // --------------------------------- Sites / Actors / Endpoints ----------------------------------
+
+    /**
+     * Retrieve the full list of sites with their data
+     * @return
+     */
+    public Sites retrieveSites() {
+        return null;
+    }
 }
 
 

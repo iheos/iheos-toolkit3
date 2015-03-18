@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.siteManagement.loader;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.siteManagement.client.Site;
@@ -9,7 +10,7 @@ import gov.nist.hit.ds.xdsExceptions.XdsException;
 
 import java.util.*;
 
-public class Sites {
+public class Sites implements IsSerializable {
 	HashMap<String, Site> siteMap = new HashMap<String, Site>();   // siteName -> Site
 	String defaultSiteName;
 	static String all = "allRepositories";

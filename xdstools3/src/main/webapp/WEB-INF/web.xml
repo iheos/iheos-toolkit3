@@ -77,6 +77,10 @@
         <servlet-name>adminSettingsServlet</servlet-name>
         <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.AdminSettingsImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>endpointServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.EndpointImpl</servlet-class>
+    </servlet>
 
 
     <!-- ============== Servlet mappings ============== -->
@@ -134,7 +138,10 @@
         <servlet-name>downloadAssetServlet</servlet-name>
         <url-pattern>/repository/downloadAsset</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>endpointServlet</servlet-name>
+        <url-pattern>/xdstools3/sites</url-pattern>
+    </servlet-mapping>
 
 
     <!-- ============== Default page to serve ============== -->

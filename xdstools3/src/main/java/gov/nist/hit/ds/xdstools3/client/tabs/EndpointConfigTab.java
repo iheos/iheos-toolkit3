@@ -1,7 +1,7 @@
 package gov.nist.hit.ds.xdstools3.client.tabs;
 
 
-import gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointsConfigWidget;
+import gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointConfigWidget;
 import gov.nist.hit.ds.xdstools3.client.manager.TabNamesManager;
 
 public class EndpointConfigTab extends GenericCloseableTab {
@@ -9,7 +9,7 @@ public class EndpointConfigTab extends GenericCloseableTab {
 
 	public EndpointConfigTab() {
 		super(header);
-		setPane(new EndpointsConfigWidget());
+		setPane(new EndpointConfigWidget());
 	}
 
     @Override
