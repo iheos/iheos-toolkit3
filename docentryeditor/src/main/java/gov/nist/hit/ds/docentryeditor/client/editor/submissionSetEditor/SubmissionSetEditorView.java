@@ -12,6 +12,8 @@ import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.FieldSet;
+import com.sencha.gxt.widget.core.client.form.validator.RegExValidator;
+import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.AuthorWidgets.AuthorsListEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.CodedTermWidgets.CodedTermEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.CodedTermWidgets.PredefinedCodedTermComboBox;
@@ -23,6 +25,7 @@ import gov.nist.hit.ds.docentryeditor.client.editor.widgets.InternationalStringW
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueDTMEditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.NameValueWidgets.NameValueString256EditorWidget;
 import gov.nist.hit.ds.docentryeditor.client.editor.widgets.String256EditorWidget;
+import gov.nist.hit.ds.docentryeditor.client.editor.widgets.UuidFormatClientValidator;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractView;
 import gov.nist.hit.ds.docentryeditor.client.parser.PredefinedCodes;
 import gov.nist.hit.ds.docentryeditor.shared.model.InternationalString;
@@ -125,9 +128,10 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
 
         // Adding required and optional fields panels to the main container of editor view.
         container.add(editorTopToolbar, new VerticalLayoutContainer.VerticalLayoutData(-1,30));
-        container.add(new HtmlLayoutContainer("<h2>Required fields</h2>"));
+        container.add(new HtmlLayoutContainer("<h2>Submission Set Editor</h2>"));
+        container.add(new HtmlLayoutContainer("<h3>Required fields</h3>"));
         container.add(requiredFieldsContainer, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        container.add(new HtmlLayoutContainer("<h2>Optional fields</h2>"));
+        container.add(new HtmlLayoutContainer("<h3>Optional fields</h3>"));
         container.add(optionalFieldsContainer, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         // /////////////////////////////////////// //
@@ -169,7 +173,7 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
 
         // - Optional field sets.
         FieldSet fieldSet_simpleOptional = new FieldSet();
-        fieldSet_simpleOptional.setHeadingText("?????");
+        fieldSet_simpleOptional.setHeadingText("General");
         fieldSet_simpleOptional.setCollapsible(true);
         fieldSet_simpleOptional.add(simpleOptionalFieldsContainer);
 
@@ -264,9 +268,72 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
 
     /**
      * Configures information about each widgets to guide the user as well as
-     * client side validations (Tooltips, empty texts and validators).
+     * client side validations (Tooltips, empty texts and client validators).
      */
     private void setWidgetsInfo() {
-        // TODO
+        // availability status
+        availabilityStatus.setAllowBlank(true);
+        availabilityStatus.setEmptyText("ex: urn:oasis:names:tc:ebxml-regrep:StatusType:Approved");
+        availabilityStatus.setToolTipConfig(new ToolTipConfig("It represents the status of the SubmissionSet. Since the deprecation of SubmissionSets is not\n" +
+                "allowed, this value shall always be Approved.\n\nThe availabilityStatus value shall be \"urn:oasis:names:tc:ebxml-regrep:StatusType:Approved\""));
+        // home community id
+        homeCommunityId.setAllowBlank(true);
+        homeCommunityId.setEmptyText("ex: urn:oid:1.2.3");
+        homeCommunityId.addValidator(new RegExValidator("^urn:oid:[1-9][0-9]*(\\.[1-9][0-9]*)+(\\^[1-9][0-9]+)?$", "Value's format is not a correct. It is supposed to be a suite of figures separated by periods preceded by \"urn:oid:\"."));
+        homeCommunityId.setToolTipConfig(new ToolTipConfig("It is an OID URN.","It is a globally unique identifier for a community. It should be  an OID URN (ex: \"urn:oid:1.2.3\")."));
+        // comments
+        commentsGrid.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on comments","It contains comments associated with the SubmissionSet (Max length is unbounded)."));
+        // content type code
+        contentTypeCode.setEmptyText("Select a content type...");
+        contentTypeCode.clear();
+        contentTypeCode.setAllowBlank(false);
+        // entry uuid
+        entryUUID.setToolTipConfig(new ToolTipConfig("ID is a string", "It should contain less than 256 characters"));
+        entryUUID.setAllowBlank(false);
+        // entryUUID.addOIDValidator(new RegExValidator("[1-9][0-9]+", "Value is not correct. It is supposed to be a number."));
+        entryUUID.addValidator(new UuidFormatClientValidator());
+        // intended recipents
+        intendedRecipient.setToolbarHelpButtonTooltip(new ToolTipConfig("Help of intended recipients","It represents the organization(s) or person(s) for whom the SubmissionSet is intended at time of\n" +
+                "submission. Each slot value shall include at least one of the organization, person, or\n" +
+                "telecommunications address fields described below. It is highly recommended to define the\n" +
+                "organization for all the persons, avoiding errors in the transmission of the documents. " +
+                "Values shall be formatted as <b>XON|XCN|XTN</b>."));
+        intendedRecipient.setEmptyTexts("ex: \"Some Hospital^^^^^^^^^1.2.3.9.1789.45|^Wel^Marcus^^^Dr^MD|^^Internet^mwel@healthcare.example.org\"");
+        intendedRecipient.setEditingFieldToolTip("The value shall be a <b>XON|XCN|XTN</b>\n" +
+                "                where: <ul><li><b>XON</b> identifies the organization,</li> <li><b>XCN</b> identifies a person</li> <li><b>XTN</b> identifies the" +
+                "                telecommunications.</li></ul>" +
+                "                There is a \"<b>|</b>\" character separator between the organization and the person, and between the person and" +
+                "                the telecommunications address, which is required when the person or the telecommunications" +
+                "                address information is present.");
+        // patient id
+        patientId.setEmptyTexts("ex: 76cc^^1.3.6367.2005.3.7&ISO", "ex: urn:uuid:6b5aea1a-625s-5631-v4se-96a0a7b38446");
+        patientId.setToolTipConfigs(new ToolTipConfig("Patient ID is a String256 in HL7 CX format", "The required format is:" +
+                "IDNumber^^^&OIDofAssigningAuthority&ISO"), new ToolTipConfig(
+                "idType is a string256 in HL7 CX format", "The required format is: " +
+                "IDNumber^^^&OIDofAssigningAuthority&ISO"));
+        patientId.setAllowBlanks(false, false);
+        patientId.addValueFieldValidator(new RegExValidator("^(([A-Za-z])|([1-9]))*[0-9A-z]+\\^{3}&[1-9][0-9]*(\\.[1-9][0-9]*)+(&ISO)$", "Value's format is not a correct. \nIt should be like this: 6578946^^^&1.3.6.1.4.1.21367.2005.3.7&ISO."));
+        // source id
+        sourceId.setAllowBlanks(false,false);
+        sourceId.addValueFieldValidator(new RegExValidator("^[1-9][0-9]*(\\.[1-9][0-9]*)+(\\^[1-9][0-9]+)?$", "Value's format is not a correct. It is supposed to be a suite of figures separated by periods."));
+        sourceId.setEmptyTexts("ex: 1.3.6.1.4.1.21367.2005.3.7", "ex: 1.3.6.1.4.1.21367.2005.3.7");
+        sourceId.setToolTipConfigs(new ToolTipConfig("Source ID is an OID", "Source ID is the globally unique, immutable, identifier of the entity that contributed the SubmissionSet. It is an OID, as defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)<br/>Unique ID format is \"[1-9](\\.[0-9]+)*]\""),
+                new ToolTipConfig(
+                        "idType is an OID",
+                        "As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)<br/>Unique ID format is \"[1-9](\\.[0-9]+)*]\""));
+        // submission time
+        submissionTime.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Submission time", "Represents the point in time at the creating entity when the Submission Set was submitted.\n" +
+                "This shall be provided by the submitting system."));
+        // title
+        titleGrid.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on Titles", "Represents the title of the Submission Set. The format of a title shall be any string of length less than 256 characters.\n"));
+        // Unique ID
+        uniqueId.setAllowBlanks(false, false);
+        uniqueId.addValueFieldValidator(new RegExValidator("^[1-9][0-9]*(\\.[1-9][0-9]*)+(\\^[1-9][0-9]+)?$", "Value's format is not a correct. It is supposed to be a suite of figures separated by periods."));
+        uniqueId.setEmptyTexts("ex: 2008.8.1.35447^5846", "ex: 2008.8.1.35447");
+        uniqueId.setToolTipConfigs(
+                new ToolTipConfig("Unique ID is an OID", "As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)<br/>Unique ID format is \"[1-9](\\.[0-9]+)*]\""),
+                new ToolTipConfig(
+                        "idType is an OID",
+                        "As defined in the HL7 implementation for OID (http://www.hl7.org/implement/standards/product_brief.cfm?product_id=210)<br/>Unique ID format is \"[1-9](\\.[0-9]+)*]\""));
     }
 }

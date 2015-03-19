@@ -24,6 +24,8 @@ public class EditorToolbar extends HorizontalLayoutContainer {
         saveButton = new TextButton("Save");
         saveButton.setHeight(30);
         saveButton.setWidth(60);
+        saveButton.setIcon(AppImages.INSTANCE.saveBW());
+        saveButton.setIconAlign(ButtonCell.IconAlign.LEFT);
         cancelButton = new TextButton("Cancel changes");
         cancelButton.setHeight(30);
         cancelButton.setWidth(110);

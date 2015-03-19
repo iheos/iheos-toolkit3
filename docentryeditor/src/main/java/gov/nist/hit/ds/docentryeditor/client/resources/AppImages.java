@@ -32,6 +32,9 @@ public interface AppImages extends ClientBundle {
     @Source("baseResources/save-disk.png")
     ImageResource save();
 
+    @Source("baseResources/save-2.png")
+    ImageResource saveBW();
+
     @Source("baseResources/Warning-128.png")
     ImageResource warning();
 

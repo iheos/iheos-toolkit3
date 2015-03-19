@@ -157,9 +157,10 @@ public class DocumentEntryEditorView extends AbstractView<DocumentEntryEditorPre
 
         // Adding required and optional fields panels to the main container of editor view
         container.add(editorTopToolbar, new VerticalLayoutData(-1,30));
-        container.add(new HtmlLayoutContainer("<h2>Required fields</h2>"));
+        container.add(new HtmlLayoutContainer("<h2>Document Entry Editor</h2>"));
+        container.add(new HtmlLayoutContainer("<h3>Required fields</h3>"));
         container.add(fp1, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
-        container.add(new HtmlLayoutContainer("<h2>Optional fields</h2>"));
+        container.add(new HtmlLayoutContainer("<h3>Optional fields</h3>"));
         container.add(fp2, new VerticalLayoutData(1, -1, new Margins(0, 0, 10, 0)));
 
         // //////////////////////////////////////
