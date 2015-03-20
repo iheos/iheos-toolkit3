@@ -1,9 +1,10 @@
 package gov.nist.hit.ds.xdstools3.server.RPCServices;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gov.nist.hit.ds.siteManagement.loader.Sites;
 import gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.configure.EndpointService;
 import gov.nist.hit.ds.xdstools3.server.Caller;
+
+import java.util.Map;
 
 /**
  * Server side of the GWT RPC mechanism.
@@ -19,8 +20,13 @@ public class EndpointImpl extends RemoteServiceServlet implements EndpointServic
 	private static final long serialVersionUID = 1L;
 
 
-    @Override
+   /* @Override
     public Sites retrieveSites() {
         return Caller.getInstance().retrieveSites();
+    }*/
+
+    @Override
+    public Map<String, String> retrieveSiteAttributes() {
+        return Caller.getInstance().retrieveSiteAttributes();
     }
 }

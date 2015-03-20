@@ -46,7 +46,7 @@ public class EndpointConfigWidget extends VStack {
                 // create the nested widget
                 SiteWidget siteWidget = new SiteWidget(siteName);
                 //old: nestedGrid.fetchRelatedData(record, EndpointConfigDS.getInstance());
-                siteWidget.fetchRelatedData(siteName);
+                //siteWidget.fetchRelatedData(siteName);
 
                 return siteWidget;
             }

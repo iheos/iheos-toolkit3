@@ -21,7 +21,7 @@ public class TransactionBasicForm extends DynamicForm {
         setOverflow(Overflow.VISIBLE);
 
         // DataSource configuration
-        setDataSource(ds);
+        //setDataSource(ds);
     }
 
 

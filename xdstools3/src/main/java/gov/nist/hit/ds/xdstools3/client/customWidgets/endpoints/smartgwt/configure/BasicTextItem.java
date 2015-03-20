@@ -7,8 +7,8 @@ import com.smartgwt.client.widgets.form.fields.TextItem;
  */
 public class BasicTextItem extends TextItem {
 
-    public BasicTextItem(String title){
-        super();
+    public BasicTextItem(String id){
+        super(id);
         setWidth("*");
     }
 }

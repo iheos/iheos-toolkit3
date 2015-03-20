@@ -10,6 +10,7 @@ import gov.nist.hit.ds.xdstools3.server.demo.TestDataHelper;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -255,6 +256,46 @@ public class Caller implements Serializable {
     public Sites retrieveSites() {
         return null;
     }
+
+    public Map<String, String> retrieveSiteAttributes() {
+        // TODO needs real API
+        Map<String, String> test = new HashMap<>();
+        test.put("pidfeedhost", "https://ihexds.nist.gov");
+        test.put("pidfeedport", "12081");
+        test.put("rtls", "https://ihexds.nist.gov:12081/tf6/services/xdsregistryb");
+        test.put("rnotls", "http://ihexds.nist.gov:12080/tf6/services/xdsregistryb-notls");
+        test.put("sqtls", "https://ihexds.nist.gov");
+        test.put("sqnotls", "https://ihexds.nist.gov");
+        test.put("updatetls", "https://ihexds.nist.gov");
+        test.put("updateNotls", "https://ihexds.nist.gov");
+        test.put("mpqtls", "https://ihexds.nist.gov");
+        test.put("mpqNotls", "https://ihexds.nist.gov");
+        test.put("repouuid", "https://ihexds.nist.gov");
+        test.put("retrievetls", "https://ihexds.nist.gov");
+        test.put("retrievenotls", "https://ihexds.nist.gov");
+        test.put("pnrtls", "https://ihexds.nist.gov");
+        test.put("pnrnotls", "https://ihexds.nist.gov");
+        test.put("docsrcretrievetls", "https://ihexds.nist.gov");
+        test.put("docsrcretrievenotls", "https://ihexds.nist.gov");
+        test.put("srcreporetrievetls", "https://ihexds.nist.gov");
+        test.put("srcreporetrievenotls", "https://ihexds.nist.gov");
+        test.put("xdrpnrtls", "https://ihexds.nist.gov");
+        test.put("xdrpnrnotls", "https://ihexds.nist.gov");
+        test.put("hcid", "https://ihexds.nist.gov");
+        test.put("xcqtls", "https://ihexds.nist.gov");
+        test.put("xcqnotls", "https://ihexds.nist.gov");
+        test.put("xcrtls", "https://ihexds.nist.gov");
+        test.put("xcrnotls", "https://ihexds.nist.gov");
+        test.put("xcpdtls", "https://ihexds.nist.gov");
+        test.put("xcpdnotls", "https://ihexds.nist.gov");
+        test.put("igqtls", "https://ihexds.nist.gov");
+        test.put("igqnotls", "https://ihexds.nist.gov");
+        test.put("igrtls", "https://ihexds.nist.gov");
+        test.put("igrnotls", "https://ihexds.nist.gov");
+
+        return test;
+    }
+
 }
 
 

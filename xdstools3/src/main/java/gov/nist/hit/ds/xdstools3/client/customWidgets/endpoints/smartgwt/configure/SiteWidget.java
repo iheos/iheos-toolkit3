@@ -2,20 +2,62 @@ package gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.config
 
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.widgets.form.ValuesManager;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.VLayout;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Contains the front-end code for one Site. This widget is composed of multiple forms, one per transaction type.
  * Created by dazais on 3/3/2015.
  */
 public class SiteWidget extends VLayout {
-    protected TransactionBasicForm docRegistryForm, docRepoForm, docSourceForm, srcRepoForm, docRecptForm, respGatewayForm, initGatewayForm;
+    protected TransactionBasicForm docRegistryForm, docRepoForm, docSourceForm, srcRepoForm, docRecptForm, respGatewayForm,
+            initGatewayForm;
+    protected ValuesManager manager;
 
 
-    public SiteWidget(String datasourceID){
+    public SiteWidget(String datasourceID) {
+        buildUI(datasourceID);
+        setFormManager();
+        setData();
+    }
+
+
+    /**
+     * Uses class SiteWidgetData to retrieve the form data
+     */
+    private void setData(){
+        // todo this needs to be made into a factory to return one class per nested endpoint
+        // TODO the field and map codes are the same, they may be better managed through a utility class...
+        try {
+            Map<String, String> dataMap = SiteWidgetData.getInstance().getData();
+            manager.getItem("rtls").setValue("test"); // todo retrieve from the map by object key
+            //dataMap.get("rtls")
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Adds all forms to the Values Manager.
+     * The Values Manager centralizes the value management of several forms that needed to be split for display purposes,
+     * but are part of the same logical form.
+     */
+    private void setFormManager(){
+        manager = new ValuesManager();
+        manager.addMember(docRegistryForm);
+        manager.addMember(docRepoForm);
+        manager.addMember(docSourceForm);
+        manager.addMember(srcRepoForm);
+        manager.addMember(docRecptForm);
+        manager.addMember(respGatewayForm);
+        manager.addMember(initGatewayForm);
+    }
+
+    private void buildUI(String datasourceID) {
         setAlign(Alignment.CENTER);
         setMembersMargin(10);
         setLayoutTopMargin(10);
@@ -23,6 +65,7 @@ public class SiteWidget extends VLayout {
         setLayoutRightMargin(10);
 
         // create the DataSource and the forms
+        // todo the datasource should go away
         SiteDS siteDS = DSFactory.getDataSource(datasourceID); // this should be created only once
         docRegistryForm = new TransactionBasicForm(siteDS);
         docRepoForm = new TransactionBasicForm(siteDS);
@@ -155,7 +198,6 @@ public class SiteWidget extends VLayout {
 
         // ------- Add all the forms to the Vlayout -------
         addMembers(docRegistryForm, docRepoForm, docSourceForm, srcRepoForm, docRecptForm, respGatewayForm, initGatewayForm);
-
     }
 
     public void fetchRelatedData(String currentSite){
