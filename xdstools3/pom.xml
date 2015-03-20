@@ -106,12 +106,6 @@
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>toolkit</artifactId>
         </dependency>
-        <!--
-                <dependency>
-                    <groupId>gov.nist.hit.ds</groupId>
-                    <artifactId>installation</artifactId>
-                </dependency>
-        -->
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>tk-initialization</artifactId>
@@ -119,6 +113,10 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>session</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>site-management</artifactId>
         </dependency>
 
         <!-- begin repository related -->

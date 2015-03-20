@@ -5,9 +5,9 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.widgets.form.ValuesManager;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.VLayout;
+import gov.nist.hit.ds.xdstools3.shared.Site;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Contains the front-end code for one Site. This widget is composed of multiple forms, one per transaction type.
@@ -33,7 +33,7 @@ public class SiteWidget extends VLayout {
         // todo this needs to be made into a factory to return one class per nested endpoint
         // TODO the field and map codes are the same, they may be better managed through a utility class...
         try {
-            Map<String, String> dataMap = SiteWidgetData.getInstance().getData();
+            Site site = SiteWidgetData.getInstance().getData(); // TODO Site needs to be changed from dummy class to actual one located in sitemanagement/shared
             manager.getItem("rtls").setValue("test"); // todo retrieve from the map by object key
             //dataMap.get("rtls")
         } catch(Exception e){

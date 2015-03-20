@@ -2,6 +2,7 @@ package gov.nist.hit.ds.xdstools3.server;
 
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
 import gov.nist.hit.ds.simSupport.api.ValidationApi;
+import gov.nist.hit.ds.xdstools3.shared.Site;
 import gov.nist.hit.ds.siteManagement.loader.Sites;
 import gov.nist.hit.ds.toolkit.Toolkit;
 import gov.nist.hit.ds.xdstools3.client.exceptions.ToolkitServerError;
@@ -10,7 +11,6 @@ import gov.nist.hit.ds.xdstools3.server.demo.TestDataHelper;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -257,9 +257,9 @@ public class Caller implements Serializable {
         return null;
     }
 
-    public Map<String, String> retrieveSiteAttributes() {
-        // TODO needs real API
-        Map<String, String> test = new HashMap<>();
+    public Site retrieveSiteAttributes() {
+        // TODO
+        /*HashMap<String, String> test = new HashMap<>();
         test.put("pidfeedhost", "https://ihexds.nist.gov");
         test.put("pidfeedport", "12081");
         test.put("rtls", "https://ihexds.nist.gov:12081/tf6/services/xdsregistryb");
@@ -292,8 +292,8 @@ public class Caller implements Serializable {
         test.put("igqnotls", "https://ihexds.nist.gov");
         test.put("igrtls", "https://ihexds.nist.gov");
         test.put("igrnotls", "https://ihexds.nist.gov");
-
-        return test;
+*/
+        return new Site();
     }
 
 }

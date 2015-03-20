@@ -1,8 +1,7 @@
 package gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.configure;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import java.util.Map;
+import gov.nist.hit.ds.xdstools3.shared.Site;
 
 /**
  * Client side of the GWT RPC mechanism. This is the asynchronous interface.
@@ -15,5 +14,5 @@ import java.util.Map;
 public interface EndpointServiceAsync {
 
    // void retrieveSites(AsyncCallback<Sites> async);
-    void retrieveSiteAttributes(AsyncCallback<Map<String, String>> async);
+    void retrieveSiteAttributes(AsyncCallback<Site> async);
 }

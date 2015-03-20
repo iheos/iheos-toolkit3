@@ -2,9 +2,7 @@ package gov.nist.hit.ds.xdstools3.client.customWidgets.endpoints.smartgwt.config
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-
-import java.util.HashMap;
-import java.util.Map;
+import gov.nist.hit.ds.xdstools3.shared.Site;
 
 /**
  * Client side of the GWT RPC mechanism. This is the service class.
@@ -17,6 +15,6 @@ import java.util.Map;
 public interface EndpointService extends RemoteService {
 
    // public Sites retrieveSites();
-    public Map<String, String> retrieveSiteAttributes();
+    public Site retrieveSiteAttributes();
 
 }
