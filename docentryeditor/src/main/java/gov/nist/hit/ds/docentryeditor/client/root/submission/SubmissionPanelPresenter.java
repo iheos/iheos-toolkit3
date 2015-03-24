@@ -3,10 +3,8 @@ package gov.nist.hit.ds.docentryeditor.client.root.submission;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.web.bindery.requestfactory.shared.Receiver;
@@ -25,7 +23,6 @@ import gov.nist.hit.ds.docentryeditor.client.home.WelcomePlace;
 import gov.nist.hit.ds.docentryeditor.client.parser.PreParse;
 import gov.nist.hit.ds.docentryeditor.client.parser.XdsParser;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppResources;
-import gov.nist.hit.ds.docentryeditor.server.XdsMetadataParserServicesImpl;
 import gov.nist.hit.ds.docentryeditor.shared.model.*;
 
 import javax.inject.Inject;
@@ -44,6 +41,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     XdsParser xdsParser;
     @Inject
     MetadataEditorRequestFactory requestFactory;
+    private final SubmissionMenuData submissionSetTreeNode = new SubmissionMenuData("subSet", "Submission set",new XdsSubmissionSet());
 
     private SubmissionMenuData currentlyEdited;
     private int nextIndex = 1;
@@ -67,14 +65,14 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
         ((MetadataEditorEventBus) getEventBus()).addBackToHomePageEventHandler(new BackToHomePageEvent.BackToHomePageEventHandler() {
             @Override
             public void onBackToHomePage(BackToHomePageEvent event) {
-                getView().getTree().getSelectionModel().deselectAll();
-                placeController.goTo(new WelcomePlace());
+                goToHomePage();
             }
         });
         // this event catches that a Document entry has been loaded from the user's file system.
         ((MetadataEditorEventBus) getEventBus()).addNewFileLoadedHandler(new NewFileLoadedEvent.NewFileLoadedHandler() {
             @Override
             public void onNewFileLoaded(NewFileLoadedEvent event) {
+                clearSubmissionSet();
                 view.getTreeStore().getRootItems().get(0).setModel(event.getMetadata().getSubmissionSet());
                 currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, event.getMetadata().getDocumentEntries().get(0));
                 nextIndex++;
@@ -129,6 +127,16 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     }
 
     /**
+     * This method initialize the submission set tree by adding
+     * a root node (an empty submission set) to the tree.
+     */
+    public void initSubmissionSet() {
+        if (view.getTreeStore().getAll().isEmpty()) {
+            view.getTreeStore().add(submissionSetTreeNode);
+        }
+    }
+
+    /**
      * This method creates a new Document Entry and adds it to the submissionSet tree.
      */
     public void createNewDocumentEntry() {
@@ -171,13 +179,22 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     }
 
     /**
+     * Clear the submission set from all its data.
+     */
+    public void clearSubmissionSet() {
+        goToHomePage();
+        view.getTreeStore().clear();
+        initSubmissionSet();
+    }
+
+    /**
      * This method save file on the server and enable the user to download it by displaying it in its browser.
      */
     public void doSave() {
         // set XdsMetadata object from the submission tree data.
         XdsMetadata m=new XdsMetadata();
-        m.setSubmissionSet((XdsSubmissionSet) view.getSubmissionSetTreeNode().getModel());
-        for (SubmissionMenuData subData:view.getTreeStore().getChildren(view.getSubmissionSetTreeNode())){
+        m.setSubmissionSet((XdsSubmissionSet) getSubmissionSetTreeNode().getModel());
+        for (SubmissionMenuData subData:view.getTreeStore().getChildren(getSubmissionSetTreeNode())){
             if (subData.getModel() instanceof XdsDocumentEntry) {
                 m.getDocumentEntries().add((XdsDocumentEntry) subData.getModel());
             }
@@ -247,10 +264,28 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     }
 
     /**
+     * This method handle the navigation back to the home page of the application.
+     */
+    private void goToHomePage() {
+        getView().getTree().getSelectionModel().deselectAll();
+        placeController.goTo(new WelcomePlace());
+    }
+
+    /**
      * Getter that return the entity currently under edition.
      * @return SubmissionMenuData.
      */
     public SubmissionMenuData getCurrentlyEdited(){
         return currentlyEdited;
+    }
+
+    /**
+     * This method returns the root node of the submissions set tree.
+     * It is actually the Submission Set Node.
+     *
+     * @return Submission Set tree node data
+     */
+    public SubmissionMenuData getSubmissionSetTreeNode() {
+        return submissionSetTreeNode;
     }
 }

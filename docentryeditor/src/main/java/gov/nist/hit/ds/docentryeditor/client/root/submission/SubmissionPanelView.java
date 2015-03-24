@@ -17,7 +17,6 @@ import gov.nist.hit.ds.docentryeditor.client.event.MetadataEditorEventBus;
 import gov.nist.hit.ds.docentryeditor.client.generics.abstracts.AbstractView;
 import gov.nist.hit.ds.docentryeditor.client.resources.AppImages;
 import gov.nist.hit.ds.docentryeditor.client.widgets.uploader.FileUploadDialog;
-import gov.nist.hit.ds.docentryeditor.shared.model.XdsSubmissionSet;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -29,7 +28,6 @@ import java.util.Map;
 public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> {
     private final static TreeStore<SubmissionMenuData> treeStore = new TreeStore<SubmissionMenuData>(SubmissionMenuData.props.key());
     private final static Tree<SubmissionMenuData, String> tree = new Tree<SubmissionMenuData, String>(treeStore, SubmissionMenuData.props.value());
-    private final SubmissionMenuData submissionSetTreeNode = new SubmissionMenuData("subSet", "Submission set",new XdsSubmissionSet());
     private final ToolBar toolbar = new ToolBar();
 
     private final Menu addMenu = new Menu();
@@ -87,7 +85,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         toolbar.add(refreshButton);
         toolbar.add(helpButton);
         vlc.add(toolbar);
-        initTreeStore();
+        getPresenter().initSubmissionSet();
         tree.getStyle().setLeafIcon(AppImages.INSTANCE.file());
         tree.expandAll();
         tree.setAutoExpand(true);
@@ -96,12 +94,6 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
         cp.setWidget(vlc);
 
         return cp;
-    }
-
-    private void initTreeStore() {
-        if (treeStore.getAll().isEmpty()) {
-            treeStore.add(submissionSetTreeNode);
-        }
     }
 
     /**
@@ -119,15 +111,14 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
             @Override
             public void onSelect(SelectEvent event) {
                 tree.getStore().remove(tree.getSelectionModel().getSelectedItem());
-                tree.getSelectionModel().select(tree.getStore().getFirstChild(getSubmissionSetTreeNode()), false);
+                tree.getSelectionModel().select(tree.getStore().getFirstChild(presenter.getSubmissionSetTreeNode()), false);
 //                presenter.loadSelectedEntryEditor(tree.getStore().getFirstChild(getSubmissionSetTreeNode()));
             }
         });
         clearDocEntriesButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                tree.getStore().clear();
-                initTreeStore();
+                presenter.clearSubmissionSet();
             }
         });
         tree.getSelectionModel().addSelectionHandler(new SelectionHandler<SubmissionMenuData>() {
@@ -182,16 +173,6 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
      */
     public TreeStore<SubmissionMenuData> getTreeStore() {
         return treeStore;
-    }
-
-    /**
-     * This method returns the root node of the submissions set tree.
-     * It is actually the Submission Set Node.
-     *
-     * @return Submission Set tree node
-     */
-    public SubmissionMenuData getSubmissionSetTreeNode() {
-        return submissionSetTreeNode;
     }
 
 }
