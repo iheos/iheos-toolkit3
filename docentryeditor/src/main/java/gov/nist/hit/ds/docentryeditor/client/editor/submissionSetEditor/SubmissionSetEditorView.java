@@ -276,11 +276,6 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
         availabilityStatus.setEmptyText("ex: urn:oasis:names:tc:ebxml-regrep:StatusType:Approved");
         availabilityStatus.setToolTipConfig(new ToolTipConfig("It represents the status of the SubmissionSet. Since the deprecation of SubmissionSets is not\n" +
                 "allowed, this value shall always be Approved.\n\nThe availabilityStatus value shall be \"urn:oasis:names:tc:ebxml-regrep:StatusType:Approved\""));
-        // home community id
-        homeCommunityId.setAllowBlank(true);
-        homeCommunityId.setEmptyText("ex: urn:oid:1.2.3");
-        homeCommunityId.addValidator(new RegExValidator("^urn:oid:[1-9][0-9]*(\\.[1-9][0-9]*)+(\\^[1-9][0-9]+)?$", "Value's format is not a correct. It is supposed to be a suite of figures separated by periods preceded by \"urn:oid:\"."));
-        homeCommunityId.setToolTipConfig(new ToolTipConfig("It is an OID URN.","It is a globally unique identifier for a community. It should be  an OID URN (ex: \"urn:oid:1.2.3\")."));
         // comments
         commentsGrid.setToolbarHelpButtonTooltip(new ToolTipConfig("Help on comments","It contains comments associated with the SubmissionSet (Max length is unbounded)."));
         // content type code
@@ -290,9 +285,14 @@ public class SubmissionSetEditorView extends AbstractView<SubmissionSetEditorPre
         // entry uuid
         entryUUID.setToolTipConfig(new ToolTipConfig("ID is a string", "It should contain less than 256 characters"));
         entryUUID.setAllowBlank(false);
-        // entryUUID.addOIDValidator(new RegExValidator("[1-9][0-9]+", "Value is not correct. It is supposed to be a number."));
         entryUUID.addValidator(new UuidFormatClientValidator());
+        // home community id
+        homeCommunityId.setAllowBlank(true);
+        homeCommunityId.setEmptyText("ex: urn:oid:1.2.3");
+        homeCommunityId.addValidator(new RegExValidator("^urn:oid:[1-9][0-9]*(\\.[1-9][0-9]*)+(\\^[1-9][0-9]+)?$", "Value's format is not a correct. It is supposed to be a suite of figures separated by periods preceded by \"urn:oid:\"."));
+        homeCommunityId.setToolTipConfig(new ToolTipConfig("It is an OID URN.","It is a globally unique identifier for a community. It should be  an OID URN (ex: \"urn:oid:1.2.3\")."));
         // intended recipents
+        // TODO Add regex validator
         intendedRecipient.setToolbarHelpButtonTooltip(new ToolTipConfig("Help of intended recipients","It represents the organization(s) or person(s) for whom the SubmissionSet is intended at time of\n" +
                 "submission. Each slot value shall include at least one of the organization, person, or\n" +
                 "telecommunications address fields described below. It is highly recommended to define the\n" +

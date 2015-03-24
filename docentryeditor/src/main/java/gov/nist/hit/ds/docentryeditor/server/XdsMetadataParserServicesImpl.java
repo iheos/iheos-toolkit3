@@ -286,14 +286,14 @@ public class XdsMetadataParserServicesImpl extends RemoteServiceServlet implemen
         // FIXME authors, comments, titles are missing
         XdsSubmissionSet subSet=metadata.getSubmissionSet();
         OMElement regPackage=m.mkSubmissionSet(subSet.getEntryUUID().toString());
-        m.addSubmissionSetPatientId(regPackage,subSet.getPatientId().toString());
-        m.addSubmissionSetUniqueId(regPackage,subSet.getUniqueId().toString());
+        m.addSubmissionSetPatientId(regPackage,subSet.getPatientId().getValue().toString());
+        m.addSubmissionSetUniqueId(regPackage,subSet.getUniqueId().getValue().toString());
         m.addSlot(regPackage,"submissionTime",formatDate(subSet.getSubmissionTime().getValues().get(0).getDtm()));
         m.addExtClassification(regPackage,MetadataSupport.XDSSubmissionSet_contentTypeCode_uuid,
                 subSet.getContentTypeCode().getCodingScheme().toString(),
                 subSet.getContentTypeCode().getDisplayName().toString(),
                 subSet.getContentTypeCode().getCode().toString());
-        m.addExternalId(regPackage,MetadataSupport.XDSSubmissionSet_sourceid_uuid,subSet.getSourceId().toString(),"sourceId");
+        m.addExternalId(regPackage,MetadataSupport.XDSSubmissionSet_sourceid_uuid,subSet.getSourceId().getValue().toString(),"sourceId");
         if (subSet.getHomeCommunityId()!=null && !subSet.getHomeCommunityId().toString().equals("")){
             m.setHome(regPackage,subSet.getHomeCommunityId().toString());
         }
