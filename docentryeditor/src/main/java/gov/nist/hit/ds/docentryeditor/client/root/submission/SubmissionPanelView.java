@@ -33,9 +33,9 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
     private final Menu addMenu = new Menu();
     private final MenuItem addEmptyDocEntry = new MenuItem("Create an empty document entry");
     private final MenuItem addPrefilledDocEntry = new MenuItem("Create a pre-filled document entry");
-    private final MenuItem loadDocEntry = new MenuItem("Load a document entry from xml file");
+//    private final MenuItem loadDocEntry = new MenuItem("Load a document entry from xml file");
 
-    private final TextButton refreshButton = new TextButton();
+    private final TextButton loadFileButton = new TextButton();
     private final TextButton addDocEntryButton = new TextButton();
     private final TextButton removeDocEntryButton = new TextButton();
     private final TextButton clearDocEntriesButton = new TextButton();
@@ -62,27 +62,26 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
 
         VerticalLayoutContainer vlc = new VerticalLayoutContainer();
 
+        loadFileButton.setIcon(AppImages.INSTANCE.loadFile12px());
+        loadFileButton.setToolTip("Upload an existing ebRim file.");
         addDocEntryButton.setIcon(AppImages.INSTANCE.add());
-        addDocEntryButton.setToolTip("Create a new Document Entry");
+        addDocEntryButton.setToolTip("Create a new Document Entry.");
         addMenu.add(addEmptyDocEntry);
         addMenu.add(addPrefilledDocEntry);
-        addMenu.add(loadDocEntry);
         addDocEntryButton.setMenu(addMenu);
         removeDocEntryButton.setIcon(AppImages.INSTANCE.delete());
-        removeDocEntryButton.setToolTip("Remove this Document Entry");
+        removeDocEntryButton.setToolTip("Remove this Document Entry.");
         clearDocEntriesButton.setIcon(AppImages.INSTANCE.clear());
-        clearDocEntriesButton.setToolTip("Clear submission set from all document entries");
+        clearDocEntriesButton.setToolTip("Clear submission set from all document entries.");
         saveDocEntriesButton.setIcon(AppImages.INSTANCE.save());
-        saveDocEntriesButton.setToolTip("Download xml file with document entries");
-        refreshButton.setIcon(AppImages.INSTANCE.refresh());
-        refreshButton.setToolTip("Refresh display of the selected document entry in the editor");
+        saveDocEntriesButton.setToolTip("Download xml file with document entries.");
         helpButton.setIcon(AppImages.INSTANCE.help());
-        helpButton.setToolTip("Help");
+        helpButton.setToolTip("Help?");
+        toolbar.add(loadFileButton);
         toolbar.add(addDocEntryButton);
         toolbar.add(removeDocEntryButton);
         toolbar.add(clearDocEntriesButton);
         toolbar.add(saveDocEntriesButton);
-        toolbar.add(refreshButton);
         toolbar.add(helpButton);
         vlc.add(toolbar);
         getPresenter().initSubmissionSet();
@@ -133,10 +132,10 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
                 getPresenter().createPreFilledDocumentEntry();
             }
         });
-        loadDocEntry.addSelectionHandler(new SelectionHandler<Item>() {
+        loadFileButton.addSelectHandler(new SelectEvent.SelectHandler() {
 
             @Override
-            public void onSelection(SelectionEvent<Item> event) {
+            public void onSelect(SelectEvent event) {
                 fileUploadDialog.init();
                 fileUploadDialog.show();
             }
@@ -148,13 +147,6 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
                 presenter.doSave();
             }
         });
-        refreshButton.addSelectHandler(new SelectEvent.SelectHandler() {
-            @Override
-            public void onSelect(SelectEvent selectEvent) {
-                presenter.loadSelectedEntryEditor(presenter.getCurrentlyEdited());
-            }
-        });
-
     }
 
     /**

@@ -75,7 +75,7 @@ public class WelcomePanel extends VerticalLayoutContainer {
 		// temporary disable new folder btn until it s implemented.
 //		loadPreFilledDocEntryBtn.disable();
 		loadDocEntryFileBtn = new ToggleButton("Upload doc. entry");
-		loadDocEntryFileBtn.setIcon(AppImages.INSTANCE.load());
+		loadDocEntryFileBtn.setIcon(AppImages.INSTANCE.loadFile());
 		loadDocEntryFileBtn.setIconAlign(ButtonCell.IconAlign.TOP);
         loadPreFilledDocEntryBtn.setMinWidth(50);
 

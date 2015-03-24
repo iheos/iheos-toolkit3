@@ -51,11 +51,15 @@ public interface AppImages extends ClientBundle {
     ImageResource preFilled();
 
     @Source("baseResources/load-file.png")
-    ImageResource load();
+    ImageResource loadFile();
+
+    @Source("baseResources/load-file-16.png")
+    ImageResource loadFile12px();
 
     @Source("baseResources/refresh.gif")
     ImageResource refresh();
 
     @Source("baseResources/back-16.png")
     ImageResource back();
+
 }

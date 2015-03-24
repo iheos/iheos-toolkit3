@@ -74,11 +74,14 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
             public void onNewFileLoaded(NewFileLoadedEvent event) {
                 clearSubmissionSet();
                 view.getTreeStore().getRootItems().get(0).setModel(event.getMetadata().getSubmissionSet());
-                currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, event.getMetadata().getDocumentEntries().get(0));
-                nextIndex++;
-                view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
+                for (XdsDocumentEntry docEntry : event.getMetadata().getDocumentEntries()) {
+                    currentlyEdited = new SubmissionMenuData("DocEntry" + nextIndex, "Document Entry " + nextIndex, docEntry);
+                    nextIndex++;
+                    view.getTreeStore().add(view.getTreeStore().getRootItems().get(0), currentlyEdited);
+                }
+                currentlyEdited=submissionSetTreeNode;
                 view.getTree().expandAll();
-                view.getTree().getSelectionModel().select(currentlyEdited, false);
+                view.getTree().getSelectionModel().select(submissionSetTreeNode, false);
             }
         });
         // this event catches that a Document entry has been loaded from the user's file system.
@@ -99,8 +102,12 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
                 logger.info("... receive Doc. Entry Editor loaded event.");
                 if (currentlyEdited != null) {
                     // if a doc. entry is currently under edition, an event is fired to transfer it to the editor.
-                    logger.info("A document is already selected. Loading it...");
-                    ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent((XdsDocumentEntry) currentlyEdited.getModel());
+                    if (currentlyEdited.getModel() instanceof XdsDocumentEntry) {
+                        logger.info("A document is already selected. Loading it...");
+                        ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsDocumentEvent((XdsDocumentEntry) currentlyEdited.getModel());
+                    }else if (currentlyEdited.getModel() instanceof XdsSubmissionSet){
+                        ((MetadataEditorEventBus) getEventBus()).fireStartEditXdsSubmissionSetEvent((XdsSubmissionSet) currentlyEdited.getModel());
+                    }
                 } else {
                     // if no doc. entry is currently under edition, it means the app (editor view) has been loaded from
                     // by its URL from the browser navigation bar (external link).
@@ -184,6 +191,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     public void clearSubmissionSet() {
         goToHomePage();
         view.getTreeStore().clear();
+        nextIndex=1;
         initSubmissionSet();
     }
 
@@ -208,14 +216,6 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
 
             @Override
             public void onSuccess(String s) {
-                Dialog d = new Dialog();
-                HTMLPanel html = new HTMLPanel(SafeHtmlUtils.fromString(s));
-                d.add(html);
-                d.setPredefinedButtons(Dialog.PredefinedButton.OK);
-                d.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.CENTER);
-                d.setHideOnButtonClick(true);
-                d.setHeadingText("XML Metadata File ");
-                d.show();
                 // request factory server call to physically save the file on the server.
                 requestFactory.saveFileRequestContext().saveAsXMLFile(s).fire(new Receiver<String>() {
                     @Override
