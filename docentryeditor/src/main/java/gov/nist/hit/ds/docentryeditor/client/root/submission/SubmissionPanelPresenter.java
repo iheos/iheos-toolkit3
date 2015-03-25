@@ -189,7 +189,6 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
      * Clear the submission set from all its data.
      */
     public void clearSubmissionSet() {
-        goToHomePage();
         view.getTreeStore().clear();
         nextIndex=1;
         initSubmissionSet();
@@ -266,7 +265,7 @@ public class SubmissionPanelPresenter extends AbstractPresenter<SubmissionPanelV
     /**
      * This method handle the navigation back to the home page of the application.
      */
-    private void goToHomePage() {
+    public void goToHomePage() {
         getView().getTree().getSelectionModel().deselectAll();
         placeController.goTo(new WelcomePlace());
     }

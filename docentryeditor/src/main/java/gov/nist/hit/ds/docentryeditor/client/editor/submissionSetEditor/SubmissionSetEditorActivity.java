@@ -39,15 +39,15 @@ public class SubmissionSetEditorActivity extends AbstractActivity{
 
     // method automatically called in the GWT Activity-Place design.
     @Override
-    public void start(AcceptsOneWidget acceptsOneWidget, EventBus eventBus) {
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
         editorMVP=buildEditorMVP();
         editorMVP.init();
-        displayer.display(getContainer(), acceptsOneWidget, eventBus);
+        displayer.display(getContainer(), panel, eventBus);
         // timer to solve a gwt issue (ugly)
         Timer t = new Timer() {
             @Override
             public void run() {
-                Logger.getLogger(this.getClass().getName()).info("Fire Doc. Entry Editor UI loaded event...");
+                Logger.getLogger(this.getClass().getName()).info("Fire Editor UI loaded event...");
                 // signal that the editor view has loaded.
                 metadataEditorEventBus.fireXdsEditorLoadedEvent();
             }

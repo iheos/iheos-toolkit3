@@ -118,6 +118,7 @@ public class SubmissionPanelView extends AbstractView<SubmissionPanelPresenter> 
             @Override
             public void onSelect(SelectEvent event) {
                 presenter.clearSubmissionSet();
+                presenter.goToHomePage();
             }
         });
         tree.getSelectionModel().addSelectionHandler(new SelectionHandler<SubmissionMenuData>() {
