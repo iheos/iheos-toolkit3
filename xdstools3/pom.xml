@@ -5,11 +5,11 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>toolkit3</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.4a-SNAPSHOT</version>
     </parent>
 
-    <groupId>gov.nist.toolkit</groupId>
     <artifactId>xdstools3</artifactId>
+    <version>3.0.4a-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
@@ -47,13 +47,13 @@
 
 
     <dependencies>
-<!--
-         <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>javax.servlet</artifactId>
-            <version>5.1.12</version>
-        </dependency>
--->
+        <!--
+                 <dependency>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>javax.servlet</artifactId>
+                    <version>5.1.12</version>
+                </dependency>
+        -->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -85,12 +85,12 @@
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt</artifactId>
-            <version>4.1p</version>
+            <version>5.0p</version>
         </dependency>
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt-skins</artifactId>
-            <version>4.1p</version>
+            <version>5.0p</version>
         </dependency>
 
         <!-- Jersey dependencies -->
@@ -106,12 +106,6 @@
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>toolkit</artifactId>
         </dependency>
-<!--
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>installation</artifactId>
-        </dependency>
--->
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>tk-initialization</artifactId>
@@ -119,6 +113,10 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>session</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>site-management</artifactId>
         </dependency>
 
         <!-- begin repository related -->
@@ -129,7 +127,7 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-widgets-ui</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>3.0.4a-SNAPSHOT</version>
             <!-- for some reason, the source classifier requires an explicit version -->
             <classifier>sources</classifier>
             <scope>compile</scope>
@@ -300,6 +298,6 @@
     </build>
 
     <scm>
-        <tag>v3.0.2a</tag>
+        <tag>v3.0.4a-test</tag>
     </scm>
 </project>

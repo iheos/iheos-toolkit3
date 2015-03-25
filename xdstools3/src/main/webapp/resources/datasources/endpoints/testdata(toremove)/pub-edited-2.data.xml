@@ -1,0 +1,34 @@
+<!-- current example -->
+
+<site siteName="pub">
+<home>urn:oid:1.19.6.24.109.42.1.3</home>
+    <actor actorCode="reg" actorType="Document Registry">
+        <transaction transactionCode="sq.b" transactionName="Stored Query">
+            <localId>00001</localId>
+            <secure>https://ihexds.nist.gov:12081/tf6/services/xdsstoredquery</secure>
+            <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsstoredquery</unsecure>
+        </transaction>
+        <transaction transactionCode="r.b" transactionName="Register">
+            <localId>00002</localId>
+            <secure>https://ihexds.nist.gov:12081/tf6/services/xdsregistryb</secure>
+            <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsregistryb</unsecure>
+        </transaction>
+    </actor>
+    <actor actorCode="rep" actorType="Document Repository" uid="1.2.134.123.12">
+        <transaction transactionCode="pr.b" transactionName="Provide and Register">
+            <localId>00003</localId>
+            <secure>https://ihexds.nist.gov:12081/tf6/services/xdsprovregister</secure>
+            <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsprovregister</unsecure>
+        </transaction>
+        <transaction transactionCode="ret.b" transactionName="Retrieve">
+            <localId>00004</localId>
+            <secure>https://ihexds.nist.gov:12081/tf6/services/xdsretrieve</secure>
+            <unsecure>http://ihexds.nist.gov:12080/tf6/services/xdsretrieve</unsecure>
+        </transaction>
+        <transaction transactionCode="ruid" transactionName="Repository Unique ID">
+            <localId>00005</localId>
+            <secure>1.19.6.24.109.42.1.5</secure>
+            <unsecure>GREYED-OUT</unsecure>
+        </transaction>
+    </actor>
+</site>

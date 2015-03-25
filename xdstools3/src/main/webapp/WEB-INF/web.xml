@@ -25,7 +25,7 @@
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>gov.nist.toolkit.xdstools3;gov.nist.hit.ds.simServlet.rest</param-value>
+            <param-value>gov.nist.hit.ds.xdstools3;gov.nist.hit.ds.simServlet.rest</param-value>
         </init-param>
         <init-param>
             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
@@ -38,28 +38,32 @@
     <!-- ============== Application servlet classes ============== -->
     <servlet>
         <servlet-name>mhdTabsServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.MHDServicesImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.MHDServicesImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>preConnectathonTabServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.PreConnectathonTabServiceImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.PreConnectathonTabServiceImpl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>findDocumentTabServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.FindDocumentServicesImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>loginServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.LoginServiceImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.LoginServiceImpl</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>toolbarServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.ToolbarServiceImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.ToolbarServiceImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>fileUploadServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.UploadServlet</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.UploadServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>testDataSubmissionServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.TestDataSubmissionServicesImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.TestDataSubmissionServicesImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>repositoryServlet</servlet-name>
@@ -71,7 +75,11 @@
     </servlet>
     <servlet>
         <servlet-name>adminSettingsServlet</servlet-name>
-        <servlet-class>gov.nist.toolkit.xdstools3.server.RPCServices.AdminSettingsImpl</servlet-class>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.AdminSettingsImpl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>endpointServlet</servlet-name>
+        <servlet-class>gov.nist.hit.ds.xdstools3.server.RPCServices.EndpointImpl</servlet-class>
     </servlet>
 
 
@@ -89,6 +97,11 @@
     <servlet-mapping>
         <servlet-name>mhdTabsServlet</servlet-name>
         <url-pattern>/xdstools3/mhd-tabs</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>findDocumentTabServlet</servlet-name>
+        <url-pattern>/xdstools3/finddocument-tab</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -125,7 +138,10 @@
         <servlet-name>downloadAssetServlet</servlet-name>
         <url-pattern>/repository/downloadAsset</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>endpointServlet</servlet-name>
+        <url-pattern>/xdstools3/sites</url-pattern>
+    </servlet-mapping>
 
 
     <!-- ============== Default page to serve ============== -->

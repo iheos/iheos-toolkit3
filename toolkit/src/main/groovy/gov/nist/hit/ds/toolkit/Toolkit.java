@@ -199,7 +199,7 @@ public class Toolkit {
 
     // Environments
     static public String getCurrentEnvironmentName() { return propertyManager.getCurrentEnvironmentName(); }
-    static public String getToolkitAppSubtitle(){ return propertyManager.getToolkitAppSubtitle();}
+    static public String getToolkitConnectathonEvent(){ return propertyManager.getToolkitConnectathonEvent();}
     static public String getToolkitVersion(){ return propertyManager.getToolkitVersion();}
     static public void setCurrentEnvironmentName(String name) {
         try {

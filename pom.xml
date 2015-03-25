@@ -4,16 +4,26 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-deps</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.4a-SNAPSHOT</version>
         <relativePath>/tk-deps/pom.xml</relativePath>
     </parent>
 
     <artifactId>toolkit3</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.4a-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>toolkit3</name>
 
+    <!-- Defines the location of the development trunk, used by maven-release-plugin -->
+    <scm>
+        <developerConnection>scm:hg:https://bitbucket.org/iheos/toolkit/branch/develop</developerConnection>
+        <tag>v3.0.4a-test</tag>
+    </scm>
+
+    <!-- This provides the username and password for Bitbucket, taken from Maven settings.xml file. -->
+    <properties>
+        <project.scm.id>bitbucket</project.scm.id>
+    </properties>
 
     <modules>
         <module>engine</module>
@@ -28,7 +38,7 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>session</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
@@ -115,18 +125,18 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>tk-apis</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>utilities</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>toolkit</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
@@ -163,7 +173,7 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>actor-transaction</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
@@ -174,37 +184,37 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>common-datatypes</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
                 <artifactId>http</artifactId>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
                 <artifactId>soap-support</artifactId>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>sim-support</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
                 <artifactId>site-management</artifactId>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>event-log</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>repository</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.axis2</groupId>
@@ -217,6 +227,8 @@
 
     <build>
         <plugins>
+            <!-- Maven Compiler Plugin -->
+            <!-- Defines Java and Groovy versions -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -230,18 +242,18 @@
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-compiler</artifactId>
-                        <version>2.8.0-01</version>
+                        <version>${groovy.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-batch</artifactId>
                         <!-- Groovy version -->
-                        <version>2.1.8-01</version>
+                        <version>${groovy-eclipse-batch.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
 
-
+<!-- this is not used
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -255,16 +267,25 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
+
+            <!-- Maven Release Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>${maven-release-plugin.version}</version>
                 <configuration>
-                    <tagBase>https://svn.mycompany.com/repos/myapplication/releases</tagBase>
-                    <tagNameFormat>v@{project.version}</tagNameFormat>
-                    <releaseProfiles>releases</releaseProfiles>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <goals>deploy</goals> <!-- auto deploy app to server, skip deploy-site goal -->
+                    <!-- Define location of tagged releases and release parameters -->
+                    <tagBase>https://bitbucket.org/iheos/toolkit/branch/release/ihe</tagBase>
+                    <tagNameFormat>v@{project.version}</tagNameFormat> <!-- format of the tag that will be present on Bitbucket -->
+                    <!-- This enables to select the profiles to be run. No profiles are defined for the moment -->
+                    <!-- <releaseProfiles>releases</releaseProfiles> -->
                 </configuration>
             </plugin>
+            <!-- Not sure this is used -->
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-scm-plugin</artifactId>
@@ -273,6 +294,7 @@
                     <tag>v@{project.version}</tag>
                 </configuration>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
@@ -356,10 +378,4 @@
         </profile>
     </profiles>
 
-
-
-    <scm>
-        <developerConnection>scm:hg:https://bitbucket.org/iheos/toolkit/branch/release/ihe</developerConnection>
-        <tag>v3.0.2a</tag>
-    </scm>
 </project>
