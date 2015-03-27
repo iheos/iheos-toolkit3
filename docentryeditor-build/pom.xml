@@ -12,6 +12,10 @@
     <name>docentryeditor-build</name>
 
     <modules>
+        <!--<module>../xds-exceptions</module>-->
+        <!--<module>../common-datatypes</module>-->
+        <!--<module>../utilities</module>-->
+		<!--<module>../eb-metadata</module>-->
         <module>../docentryeditor</module>
         <module>../docentryeditor-integ</module>
         <module>../docentryeditor-standalone</module>
