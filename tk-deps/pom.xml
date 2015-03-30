@@ -4,7 +4,7 @@
 
     <artifactId>tk-deps</artifactId>
     <groupId>gov.nist.hit.ds</groupId>
-    <version>3.0.5a-engine</version>
+    <version>3.0.4a-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>tk-deps</name>
@@ -36,7 +36,7 @@
     <!-- Defines the location of the development trunk, used by maven-release-plugin -->
     <scm>
         <developerConnection>scm:hg:https://bitbucket.org/iheos/toolkit/branch/develop</developerConnection>
-        <tag>v3.0.5a-engine</tag>
+        <tag>v3.0.4a-test</tag>
     </scm>
 
 
@@ -97,27 +97,27 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>session</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>ds-sims</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>eb-metadata</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>repo-support</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>actor-transaction</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
@@ -127,77 +127,77 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>xds-exceptions</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>http-soap</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>utilities</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>toolkit</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>http</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>soap-support</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>sim-servlet</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>sim-support</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>site-management</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>event-log</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>repository</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>tk-apis</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>tk-initialization</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>tk</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>docshare-sims</artifactId>
-                <version>3.0.5a-engine</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>

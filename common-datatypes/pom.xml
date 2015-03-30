@@ -4,11 +4,11 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-deps</artifactId>
-        <version>3.0.5a-engine</version>
+        <version>3.0.4a-SNAPSHOT</version>
         <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
-    <version>3.0.5a-engine</version>
+    <version>3.0.4a-SNAPSHOT</version>
     <artifactId>common-datatypes</artifactId>
 
     <dependencies>

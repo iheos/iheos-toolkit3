@@ -3,7 +3,7 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-deps</artifactId>
-        <version>3.0.5a-engine</version>
+        <version>3.0.4a-SNAPSHOT</version>
         <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>site-management</artifactId>
-            <version>3.0.5a-engine</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>gov.nist.hit.ds</groupId>-->
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>utilities</artifactId>
-            <version>3.0.5a-engine</version>
+            <version>3.0.4a-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>

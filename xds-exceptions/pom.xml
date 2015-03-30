@@ -4,12 +4,12 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-deps</artifactId>
-        <version>3.0.5a-engine</version>
+        <version>3.0.4a-SNAPSHOT</version>
         <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
     <artifactId>xds-exceptions</artifactId>
-  <version>3.0.5a-engine</version>
+  <version>3.0.4a-SNAPSHOT</version>
 
     <dependencies>
       <dependency>
@@ -20,6 +20,6 @@
     </dependencies>
 
   <scm>
-    <tag>v3.0.5a-engine</tag>
+    <tag>v3.0.4a-test</tag>
   </scm>
 </project>
