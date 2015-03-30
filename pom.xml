@@ -14,16 +14,7 @@
 
     <name>toolkit3</name>
 
-    <!-- Defines the location of the development trunk, used by maven-release-plugin -->
-    <scm>
-        <developerConnection>scm:hg:https://bitbucket.org/iheos/toolkit/branch/develop</developerConnection>
-        <tag>v3.0.4a-test</tag>
-    </scm>
 
-    <!-- This provides the username and password for Bitbucket, taken from Maven settings.xml file. -->
-    <properties>
-        <project.scm.id>bitbucket</project.scm.id>
-    </properties>
 
     <modules>
         <module>engine</module>
@@ -268,32 +259,7 @@
             </plugin>
             -->
 
-            <!-- Maven Release Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>${maven-release-plugin.version}</version>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <goals>deploy</goals> <!-- auto deploy app to server, skip deploy-site goal -->
-                    <!-- Define location of tagged releases and release parameters -->
-                    <tagBase>https://bitbucket.org/iheos/toolkit/branch/release/ihe</tagBase>
-                    <tagNameFormat>v@{project.version}</tagNameFormat> <!-- format of the tag that will be present on Bitbucket -->
-                    <!-- This enables to select the profiles to be run. No profiles are defined for the moment -->
-                    <!-- <releaseProfiles>releases</releaseProfiles> -->
-                </configuration>
-            </plugin>
-            <!-- Not sure this is used -->
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-scm-plugin</artifactId>
-                <version>1.9.2</version>
-                <configuration>
-                    <tag>v@{project.version}</tag>
-                </configuration>
-            </plugin>
-            -->
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
@@ -347,34 +313,5 @@
         </pluginManagement>
     </build>
 
-
-    <profiles>
-        <profile>
-            <id>releases</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>${nexus-staging-maven-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>default-deploy</id>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>deploy</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <serverId>internal-nist-repo-releases</serverId>
-                            <nexusUrl>http://vm-070.nist.gov:8081/nexus</nexusUrl>
-                            <skipStaging>true</skipStaging>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>
