@@ -22,8 +22,14 @@ public class SaveFileService implements Serializable {
     private final Logger logger = Logger.getLogger(SaveFileService.class.getName());
 
     public SaveFileService(){
-//        String rootDirPath = System.getProperty("user.dir");
-        String rootDirPath= RequestFactoryServlet.getThreadLocalServletContext().getRealPath("/");
+        String rootDirPath;
+        if (RequestFactoryServlet.getThreadLocalServletContext()!=null){
+            // ~ For realsed version. System.getProperty("user.dir") returns null on our deployment system.
+            rootDirPath = RequestFactoryServlet.getThreadLocalServletContext().getRealPath("/");
+        }else {
+            // ~ For tests purpose
+            rootDirPath = System.getProperty("user.dir");
+        }
         logger.info("Root Path: " + rootDirPath);
         File fileFolder=new File(new File(rootDirPath),"/files/");
         if(!fileFolder.exists()) {
