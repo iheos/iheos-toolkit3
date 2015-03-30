@@ -5,12 +5,12 @@
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
         <artifactId>tk-deps</artifactId>
-        <version>3.0.4a-SNAPSHOT</version>
+        <version>3.0.5a-engine</version>
         <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
     <artifactId>repository</artifactId>
-    <version>3.0.4a-SNAPSHOT</version>
+    <version>3.0.5a-engine</version>
 
     <!--
    <parent>
@@ -42,12 +42,12 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-shared</artifactId>
-            <version>3.0.4a-SNAPSHOT</version>
+            <version>3.0.5a-engine</version>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-shared</artifactId>
-            <version>3.0.4a-SNAPSHOT</version>
+            <version>3.0.5a-engine</version>
             <classifier>sources</classifier>
             <scope>compile</scope>
         </dependency>
