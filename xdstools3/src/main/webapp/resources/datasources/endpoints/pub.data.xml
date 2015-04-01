@@ -1,0 +1,36 @@
+     <site name="pub">
+      <home>urn:oid:1.19.6.24.109.42.1.3</home>
+
+         <actor actorCode="reg" actorType="Document Registry">
+             <pid-feed>
+                 <host>https://ihexds.nist.gov</host>
+                 <port>12081</port>
+             </pid-feed>
+             <transaction transactionCode="r.b" transactionName="Register">
+                 <tls>https://ihexds.nist.gov:12081/tf6/services/xdsregistryb</tls>
+                 <notls>http://ihexds.nist.gov:12080/tf6/services/xdsregistryb</notls>
+             </transaction>
+             <transaction transactionCode="sq.b" transactionName="Stored Query">
+                 <tls>https://ihexds.nist.gov:12081/tf6/services/xdsstoredquery</tls>
+                 <notls>http://ihexds.nist.gov:12080/tf6/services/xdsstoredquery</notls>
+             </transaction>
+             <transaction transactionCode="update" transactionName="Update">
+                 <tls>https://ihexds.nist.gov:12081/tf6/services/xdsstoredquery</tls>
+                 <notls>http://ihexds.nist.gov:12080/tf6/services/xdsstoredquery</notls>
+             </transaction>
+             <transaction transactionCode="mpq" transactionName="Multi-Patient Query">
+                 <tls>https://ihexds.nist.gov:12081/tf6/services/xdsstoredquery</tls>
+                 <notls>http://ihexds.nist.gov:12080/tf6/services/xdsstoredquery</notls>
+             </transaction>
+         </actor>
+         <actor actorCode="rep" actorType="Document Repository" uid="1.2.134.123.12">
+             <transaction transactionCode="pr.b" transactionName="Provide and Register">
+                 <tls>https://ihexds.nist.gov:12081/tf6/services/xdsprovregister</tls>
+                 <notls>http://ihexds.nist.gov:12080/tf6/services/xdsprovregister</notls>
+             </transaction>
+             <transaction transactionCode="ret.b" transactionName="Retrieve">
+                 <tls>https://ihexds.nist.gov:12081/tf6/services/xdsretrieve</tls>
+                 <notls>http://ihexds.nist.gov:12080/tf6/services/xdsretrieve</notls>
+             </transaction>
+         </actor>
+   </site>

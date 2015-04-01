@@ -5,6 +5,10 @@ author Diane Azais, Olivier Herrmann, Julien Perugini
 2014
 */
 
+/*
+The width of the app is set through this CSS for the navigation bar (navbar) and
+through the width of the set of tabs in Xdstools3ActivityView.java.
+*/
 
 
 /* ----------- Global styles ----------- */
@@ -180,8 +184,10 @@ p {
 /* ----------- Navigation bar (yellow bar) ----------- */
 
 .navbar {
+    font-family: 'Roboto', sans-serif;
     background: #ffec9d;
     background-color: #ffec9d;
+    color: #021a4c;
     -webkit-filter: none;
     filter: none;
     border: 0px;
@@ -242,7 +248,7 @@ nav ul ul {
 nav ul ul li {
     float: none;
     border:2px solid #fc0;
-    border-top:0px;
+    border-top:0;
     position: relative;
 }
 nav ul ul li a {
@@ -343,9 +349,7 @@ footer ul li a{
 footer ul li a:hover{
     text-decoration:underline;
 }
-footer ul li a:visited{
-    color:#61c;
-}
+
 
 
 /* ----------- Home page ----------- */

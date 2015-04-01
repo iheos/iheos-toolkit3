@@ -145,9 +145,9 @@ public class PropertyManager {
 		return (String) toolkitProperties.getProperty("Enable_all_ciphers");
 	}
 
-	public String getToolkitAppSubtitle() {
+	public String getToolkitConnectathonEvent() {
 		loadProperties();
-		return (String) toolkitProperties.getProperty("Toolkit_App_Subtitle");
+		return (String) toolkitProperties.getProperty("Toolkit_event");
 	}
 
 	public String getToolkitVersion() {
