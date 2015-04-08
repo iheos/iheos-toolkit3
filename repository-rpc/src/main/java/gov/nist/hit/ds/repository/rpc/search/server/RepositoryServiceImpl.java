@@ -9,7 +9,10 @@ import gov.nist.hit.ds.repository.rpc.search.client.RepositoryService;
 import gov.nist.hit.ds.repository.rpc.search.client.RepositoryTag;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.NoServletSessionException;
 import gov.nist.hit.ds.repository.rpc.search.client.exception.RepositoryConfigException;
+import gov.nist.hit.ds.repository.shared.PnIdentifier;
+import gov.nist.hit.ds.repository.shared.PropertyKey;
 import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SortOrder;
 import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.aggregation.AssertionAggregation;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
@@ -59,7 +62,7 @@ RepositoryService {
 
 	@Override
 	public List<AssetNode> search(String[][] reposData, SearchCriteria sc) {
-		return AssetHelper.search(reposData, sc);
+		return AssetHelper.search(reposData, sc, new String[]{PnIdentifier.getQuotedIdentifer(PropertyKey.CREATED_DATE.toString()) + " " + SortOrder.DESCENDING}, false);
 	}
 
     @Override
