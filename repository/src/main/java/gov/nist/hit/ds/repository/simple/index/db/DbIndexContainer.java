@@ -1696,7 +1696,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 	 * @throws RepositoryException 
 	 */
 	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
-		return getAssetsBySearch(repositories, searchCriteria, null, false,0,0,true);
+		return getAssetsBySearch(repositories, searchCriteria, null, false,0,0,true, false);
 	}
 
     /**
@@ -1708,7 +1708,7 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @throws RepositoryException
      */
     public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, boolean addEllipses) throws RepositoryException {
-        return getAssetsBySearch(repositories, searchCriteria, null, false,0,0,addEllipses);
+        return getAssetsBySearch(repositories, searchCriteria, null, false,0,0,addEllipses, false);
     }
 
 
@@ -1761,10 +1761,11 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @throws RepositoryException
      */
     public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByStr, boolean addEllipses) throws RepositoryException {
-        return getAssetsBySearch(repositories,searchCriteria,orderByStr,false,0,0,addEllipses);
+        return getAssetsBySearch(repositories,searchCriteria,orderByStr,false,0,0,addEllipses, false);
     }
 
     /**
+     *
      *
      * @param repositories
      * @param searchCriteria
@@ -1773,19 +1774,22 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @param offset
      * @param fetchSize
      * @param addEllipses
+     * @param reIndex
      * @return
      * @throws RepositoryException
      */
-	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByPk, boolean searchCriteriaLocationOnly, final int offset, final int fetchSize, boolean addEllipses) throws RepositoryException {
+	public List<AssetNode> getAssetsBySearch(Repository[] repositories, SearchCriteria searchCriteria, String[] orderByPk, boolean searchCriteriaLocationOnly, final int offset, final int fetchSize, boolean addEllipses, boolean reIndex) throws RepositoryException {
 		Repository[] fRep = new Repository[repositories.length];
 		int cx=0;
-        String locations[] = searchCriteria.getPropertyValue(PropertyKey.LOCATION.getPropertyName(), SearchTerm.Operator.EQUALTO);
+
 		for (Repository repos : repositories) {
             if (searchCriteriaLocationOnly) {
+                String locations[] = searchCriteria.getPropertyValue(PropertyKey.LOCATION.getPropertyName(), SearchTerm.Operator.EQUALTO);
                 indexRep(repos, false, locations);
-            } else {
-                indexRep(repos,false, null); // false=full scan/reindex
+            } else if (reIndex) { // full scan/reindex
+                indexRep(repos,false, null);
             }
+
 
 			if (getHitCount(repos, searchCriteria) > 0) {
 				fRep[cx++] = repos;

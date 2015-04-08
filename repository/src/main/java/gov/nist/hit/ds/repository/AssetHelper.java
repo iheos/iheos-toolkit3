@@ -111,11 +111,13 @@ public class AssetHelper {
 
     /**
      * Searches for the criteria in the specified repositories.
+     *
      * @param reposData An array of repositories.
      * @param sc The search criteria.
+     * @param reIndex
      * @return List of asset nodes containing the search results.
      */
-    public static List<AssetNode> search(String[][] reposData, SearchCriteria sc) {
+    public static List<AssetNode> search(String[][] reposData, SearchCriteria sc, String[] orderBy, boolean reIndex) {
 
         ArrayList<AssetNode> result = new ArrayList<AssetNode>();
 
@@ -125,12 +127,12 @@ public class AssetHelper {
 
             AssetIterator iter = null;
 
-            iter = new SearchResultIterator(reposList, sc);
+            iter = new SearchResultIterator(reposList, sc, orderBy, reIndex);
 
             int recordCt = 0;
-            if (iter!=null && recordCt++ <= MAX_RESULTS) { // hard limit for now
+            if (iter!=null) {
 
-                while (iter.hasNextAsset()) {
+                while (iter.hasNextAsset() && ++recordCt <= MAX_RESULTS) { // hard limit for now
                     gov.nist.hit.ds.repository.api.Asset aSrc = iter.nextAsset();
 
                     AssetNode aDst = new AssetNode();
@@ -224,7 +226,7 @@ public class AssetHelper {
 
         String[][] repository = new String[][]{{repositoryId.getId(), "RW_EXTERNAL"}};
 
-        List<AssetNode> result = search(repository, searchCriteria);
+        List<AssetNode> result = search(repository, searchCriteria, null, true);
 
         String resultSz = ((result==null)?"null":""+result.size());
         logger.fine("agg main event find success" + eventId + " result sz: " + resultSz);
