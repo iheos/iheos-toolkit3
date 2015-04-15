@@ -109,10 +109,13 @@ public enum PropertyKey {
             return "hash";
         }
     },
-    INDEX_CURRENT_DAY_ITEMS(false) {
+    /*
+     A trailing slash is required
+     */
+    INDEX_CURRENT_DAY_RELATIVE_PATH(false) {
         @Override
         public String toString() {
-            return "indexCurrentDayItems";
+            return "indexCurrentDayItemsRelativePath";
         }
     },
     INDEX_SESSION(true) {

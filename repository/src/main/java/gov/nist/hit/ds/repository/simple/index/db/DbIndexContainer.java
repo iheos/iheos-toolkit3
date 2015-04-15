@@ -212,14 +212,17 @@ public class DbIndexContainer implements IndexContainer, Index {
                 // Fine if it already exists by the time we got a chance to create it
             }
 
-            boolean indexCurrentDayItems = false;
+            File indexCurrentDayItemsRelativePath = null;
             boolean compareHash = false;
 
             if (repos.getProperties()!=null) {
-                indexCurrentDayItems = Boolean.parseBoolean(repos.getProperties().getProperty(PropertyKey.INDEX_CURRENT_DAY_ITEMS.toString()));
+                String indexCurrentDayItemsRelativePathStr = repos.getProperties().getProperty(PropertyKey.INDEX_CURRENT_DAY_RELATIVE_PATH.toString());
+                if (indexCurrentDayItemsRelativePathStr!=null && !"".equals(indexCurrentDayItemsRelativePathStr)) {
+                    indexCurrentDayItemsRelativePath = new File(indexCurrentDayItemsRelativePathStr);
+                }
                 compareHash = Boolean.parseBoolean(repos.getProperties().getProperty(PropertyKey.COMPARE_HASH.toString()));
             }
-            logger.info(reposId + " property: "+PropertyKey.INDEX_CURRENT_DAY_ITEMS.toString() +" = " + indexCurrentDayItems);
+            logger.info(reposId + " property: "+PropertyKey.INDEX_CURRENT_DAY_RELATIVE_PATH.toString() +" = " + indexCurrentDayItemsRelativePath);
             logger.info(reposId + " property: "+PropertyKey.COMPARE_HASH.toString() +" = " + compareHash);
 
             try {
@@ -231,17 +234,16 @@ public class DbIndexContainer implements IndexContainer, Index {
 
                 if (locations!=null) {
                    logger.fine("indexAsset:" + indexAsset(repos, locations));
-                } if (indexCurrentDayItems) {
+                } else if (indexCurrentDayItemsRelativePath!=null) {
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd"); /* TODO: Make this format string a repository property later */
                     Date date = new Date();
                     String todayStr = sdf.format(date);
 
+                    iter = new SimpleAssetIterator(repos, todayStr, indexCurrentDayItemsRelativePath);
 
-                    iter = new SimpleAssetIterator(repos, todayStr);
 
-                    String relativeLocationLike = "/" + todayStr + "%";
-                    totalAssetsIndexed = appendIndex(repos,iter,relativeLocationLike);
+                    totalAssetsIndexed = appendIndex(repos,iter,indexCurrentDayItemsRelativePath,todayStr);
 
                     logger.info("appended index items: " + totalAssetsIndexed);
 
@@ -329,8 +331,10 @@ public class DbIndexContainer implements IndexContainer, Index {
      * @return
      * @throws RepositoryException
      */
-    private int appendIndex(Repository repos, SimpleAssetIterator iter, String locationLike) throws RepositoryException {
+    private int appendIndex(Repository repos, SimpleAssetIterator iter, File indexCurrentDayItemsRelativePath, String todayStr) throws RepositoryException {
         if (repos==null) return -1;
+
+        String locationLike = indexCurrentDayItemsRelativePath.toString() + todayStr + "%"; // Trailing slash is required
 
         int totalAssetsIndexed = 0;
         Map<String, String> unIndexed = new HashMap<String,String>();
@@ -338,7 +342,13 @@ public class DbIndexContainer implements IndexContainer, Index {
 
         if (iter!=null && iter.hasNextAsset()) {
 
-            Map<String, String> reposDbIndex = getIndexedHash(repos, locationLike);
+            Map<String, String> reposDbIndex = getIndexedHash(repos, "like", locationLike);
+
+
+            // This is to take care of items outside of the scan path that may already be indexed and we need to check for existence since append index only adds items and can cause a duplicate-key exception in the database
+            Map<String, String> reposDbIndexOther = getIndexedHash(repos, "not like", indexCurrentDayItemsRelativePath.toString());
+            reposDbIndex.putAll(reposDbIndexOther);
+
 
             while (iter.hasNextAsset()) {
 
@@ -1461,14 +1471,14 @@ public class DbIndexContainer implements IndexContainer, Index {
 	}
 
     private Map<String, String> getIndexedHash(Repository repos) {
-            return getIndexedHash(repos,null);
+            return getIndexedHash(repos,null,null);
     }
 	/**
 	 * 
 	 * @param repos
 	 * @return Returns a map with asset location and its hash as a key-value pair
 	 */
-	private Map<String, String> getIndexedHash(Repository repos, String locationLike) {
+	private Map<String, String> getIndexedHash(Repository repos, String op, String locationLike) {
 		Map<String, String> reposIndex = new HashMap<String,String>();
 		DbContext dbc = new DbContext();
 
@@ -1481,7 +1491,7 @@ public class DbIndexContainer implements IndexContainer, Index {
 					+" where " + DbIndexContainer.repId + "=? and reposAcs=? ";
 
             if (locationLike!=null) {
-                sqlStr += " and location like ?";
+                sqlStr += " and location "+ op +" ?";
                 rs = dbc.executeQuery(sqlStr, new String[]{repos.getId().getIdString(),repos.getSource().getAccess().name(),locationLike});
             } else {
                 rs = dbc.executeQuery(sqlStr, new String[]{repos.getId().getIdString(),repos.getSource().getAccess().name()});
