@@ -42,12 +42,14 @@ build/
 **.iml
 .idea
 
+# vim 
+*.swp
+
 # Custom test scripts
 *test.bat
 
-<<<<<<< local
-=======
 # intellij working directory
 out/
 
->>>>>>> other
+# Update from v2
+v2/src

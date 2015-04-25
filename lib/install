@@ -15,3 +15,8 @@ mvn install:install-file -Dfile=smartgwt-4.1p.jar -DgroupId=com.smartgwt -Dartif
 mvn install:install-file -Dfile=smartgwt-skins-4.1p.jar -DgroupId=com.smartgwt -DartifactId=smartgwt-skins -Dversion=4.1p -Dpackaging=jar
 
 mvn install:install-file -Dfile=httpcore-4.4.jar -DgroupId=org.apache.httpcomponents -DartifactId=httpcore -Dversion=4.4 -Dpackaging=jar
+
+mvn install:install-file -Dfile=dnsjava-2.1.4.jar -DgroupId=org.xbill -DartifactId=DNS -Dversion=2.1.4 -Dpackaging=jar
+
+mvn install:install-file -Dfile=edireader-4.7.3.jar -DgroupId=com.berryworks -DartifactId=edireader -Dversion=4.7.3 -Dpackaging=jar
+
