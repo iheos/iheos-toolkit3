@@ -14,7 +14,7 @@
     <packaging>war</packaging>
 
     <properties>
-        <v2.location>/Users/bill/workspace/toolkit</v2.location>
+        <v2.location>/Users/bill/t2</v2.location>
     </properties>
 
     <dependencies>
