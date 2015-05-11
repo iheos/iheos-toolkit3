@@ -69,4 +69,9 @@
     <welcome-file>logBrowser.html</welcome-file>
   </welcome-file-list>
 
+    <!-- ============== Listeners ========================== -->
+    <listener>
+        <listener-class>gov.nist.hit.ds.repository.simple.index.db.DbAppCtxListener</listener-class>
+    </listener>
+
 </web-app>
