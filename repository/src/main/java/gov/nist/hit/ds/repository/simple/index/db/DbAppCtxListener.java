@@ -1,7 +1,10 @@
 package gov.nist.hit.ds.repository.simple.index.db;
 
+import org.apache.derby.drda.NetworkServerControl;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.net.InetAddress;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.util.Enumeration;
@@ -14,10 +17,32 @@ public class DbAppCtxListener implements ServletContextListener  {
 
     private final Logger logger = Logger.getLogger(DbAppCtxListener.class
             .getName());
+    public final static String networkHostName = "localhost";
+    public final static int networkPort = NetworkServerControl.DEFAULT_PORTNUMBER;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        // On Application Startup, please
+        // On Application Startup
+
+        try {
+            logger.info("Starting Derby network server: " + networkHostName + ":"+  networkPort);
+            NetworkServerControl server = new NetworkServerControl
+                    (InetAddress.getByName(networkHostName), networkPort);
+            server.start(null);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
+    public static boolean pingNetworkServer() {
+        try {
+            NetworkServerControl server = new NetworkServerControl
+                    (InetAddress.getByName(networkHostName), networkPort);
+            server.ping();
+        } catch (Throwable t) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -48,6 +73,18 @@ public class DbAppCtxListener implements ServletContextListener  {
                 // logger.info("Not deregistering JDBC driver "+ driver + " as it does not belong to this webapp's ClassLoader");
             }
         }
+
+        // Shutdown network port
+        try {
+            logger.info("Shutting down Derby network server: " + networkHostName + ":"+  networkPort);
+            NetworkServerControl serverControl = new NetworkServerControl(InetAddress.getByName(networkHostName),networkPort);
+
+            serverControl.shutdown();
+
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+
     }
 
 }
