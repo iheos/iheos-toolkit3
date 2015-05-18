@@ -35,11 +35,11 @@ public class TransactionSimConfigElement extends AbstractTransactionSimConfigEle
         if (!getText(MSGCALLBACK)) addText(MSGCALLBACK, "");
 	}
 
-    boolean isSchemaCheck() { getValue(SCHEMACHECK); }
-    boolean isModelCheck() {  getValue(MODELCHECK); }
-    boolean isCodingCheck() { getValue(CODINGCHECK); }
-    boolean isSoapCheck() {   getValue(SOAPCHECK);  }
-    String getCallBack() {    getValue(MSGCALLBACK)}
+    boolean isSchemaCheck() { getBooleanValue(SCHEMACHECK); }
+    boolean isModelCheck() {  getBooleanValue(MODELCHECK); }
+    boolean isCodingCheck() { getBooleanValue(CODINGCHECK); }
+    boolean isSoapCheck() {   getBooleanValue(SOAPCHECK);  }
+    String getCallBack() {    getTextValue(MSGCALLBACK)}
 
     EndpointType getEndpointType() { return endpointType; }
     EndpointValue getEndpointValue() { return endpointValue; }
@@ -47,11 +47,12 @@ public class TransactionSimConfigElement extends AbstractTransactionSimConfigEle
     public String toString() {
         return ("TransSim "
                 + "name = " + name + " "
-                + endpointType.label() + " : " + endpointValue.getValue() + " "
+                + endpointType.label() + " = " + endpointValue.getValue() + " "
                 + SCHEMACHECK + "=" + isSchemaCheck() + " "
                 + MODELCHECK + "=" + isModelCheck() + " "
                 + CODINGCHECK + "=" + isCodingCheck() + " "
-                + SOAPCHECK + "=" + isSoapCheck())
+                + SOAPCHECK + "=" + isSoapCheck() + " "
+                + MSGCALLBACK + "=" + getCallBack())
                 ;
     }
 
