@@ -11,9 +11,7 @@ import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
-
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
-import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
@@ -35,7 +33,6 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.ContentType.XML
-
 /**
  * Servlet to service simulator input transactions.
  * @author bill
@@ -108,6 +105,7 @@ public class SimServlet extends HttpServlet {
 
     def callback(SimHandle simHandle, EndpointValue endpoint) {
         TransactionSimConfigElement transactionElement = simHandle.actorSimConfig.get(endpoint.trans)
+        logger.debug("transactionSimConfigElement is ${transactionElement}" )
         assert transactionElement
         String callbackURI = transactionElement.getCallBack()
         if (callbackURI) {

@@ -16,21 +16,22 @@ class CreateSimRest {
 
     static String run(String config, host, port, service, username, simid) {
         def returnvalue = null
+        def restUri = "http://${host}:${port}/${service}/rest/sim/create/${username}/${simid}"
 
-        def http = new HTTPBuilder("http://${host}:${port}/${service}/rest/sim/create/${username}/${simid}")
+        def http = new HTTPBuilder(restUri)
         log.debug("CreateSimRest: ${http.getUri()}")
         http.request(Method.POST, XML) { request ->
             requestContentType = XML
             body = config.trim()
 
             response.success = { resp, xml ->
-                println 'Sim Created'
+                log.debug 'Sim Created'
                 returnvalue = prettyPrint(xml)
             }
             response.failure = { resp ->
-                println 'Failure'
-                println resp.statusLine
-                resp.getHeaders().each { println it }
+                log.debug 'Failure'
+                log.debug resp.statusLine
+                resp.getHeaders().each { log.debug it }
             }
             response.'404' = {
                 returnvalue = null

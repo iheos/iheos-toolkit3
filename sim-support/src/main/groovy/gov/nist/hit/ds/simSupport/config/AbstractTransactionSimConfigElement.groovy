@@ -54,7 +54,8 @@ abstract class AbstractTransactionSimConfigElement {
         return text;
     }
 
-    boolean getValue(String name) { get(name)?.value }
+    boolean getBooleanValue(String name) { get(name)?.value }
+    String getTextValue(String name) { get(name)?.value }
 
     TransactionType getTransactionType() { return endpointType.getTransType(); }
 

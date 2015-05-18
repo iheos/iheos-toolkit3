@@ -1375,7 +1375,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         return  shb.toSafeHtml();
     }
     //  class to return main parent-transaction level detail
-    // move the column getValue index retrieval to MessageDetail
+    // move the column getBooleanValue index retrieval to MessageDetail
     class IndexedColumn extends Column<TxMessageBundle, SafeHtml> {
         private final int index;
         public IndexedColumn(int index) {
@@ -1385,7 +1385,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
         /*
         @Override
-        public SafeHtml getValue(TxMessageBundle o) {
+        public SafeHtml getBooleanValue(TxMessageBundle o) {
             SafeHtmlBuilder shb = new SafeHtmlBuilder();
                 shb.appendHtmlConstant("<span>Static text test</span>");
             return shb.toSafeHtml();
@@ -1499,7 +1499,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
             } catch (Throwable t) {
 
-                logger.warning("getValue failed: " +t.toString() + " o parentId:" + o.getParentId() + " o messageDetailMap sz:" + o.getMessageDetailMap().size());
+                logger.warning("getBooleanValue failed: " +t.toString() + " o parentId:" + o.getParentId() + " o messageDetailMap sz:" + o.getMessageDetailMap().size());
 //                t.printStackTrace();
                 shb.appendEscaped(" ");
              }
@@ -1514,7 +1514,7 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         //  super(new TextCell());
 
         @Override
-        public String getValue(TxDetailRow object) {
+        public String getBooleanValue(TxDetailRow object) {
 
             try {
                 return object.getCsvData().get(this.index);

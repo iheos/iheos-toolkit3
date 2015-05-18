@@ -964,7 +964,7 @@ public class LogBrowserWidget extends Composite {
         ListBox lbx = reposLbx; // ((ListBox)event.getSource());
         int idx = lbx.getSelectedIndex();
 
-        // reposService.getAssetTree(new String[][]{{lbx.getItemText(idx),lbx.getValue(idx)}}, treeSetup);
+        // reposService.getAssetTree(new String[][]{{lbx.getItemText(idx),lbx.getBooleanValue(idx)}}, treeSetup);
         String[] compositeKey = lbx.getValue(idx).split("\\^");
 
         reposService.getAssetTree(new String[][]{{compositeKey[0],compositeKey[1]}}, treeSetup);
