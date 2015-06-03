@@ -38,13 +38,16 @@ class   Send {
                 throw new WebApplicationException(Response.Status.BAD_REQUEST)
             }
             println "xml parsed"
-            def actorTypeName = xml.@type.text()
-            println "actor type is ${actorTypeName}"
-            if (!actorTypeName)
-                throw new WebApplicationException(Response.Status.BAD_REQUEST)
-            def simId = new SimId(simIdString)
+
+//            def simId = new SimId(simIdString)
             SimIdentifier simIdentifier = new SimIdentifier(username, simIdString)
             SimHandle simHandle = SimApi.send(simIdentifier, EbSendRequestDAO.toModel(message))
+
+//            def actorTypeName = xml.@type.text()
+//            println "actor type is ${actorTypeName}"
+//            if (!actorTypeName)
+//                throw new WebApplicationException(Response.Status.BAD_REQUEST)
+
             Event event = simHandle.event
             def reqHdr = event.inOut.reqHdr
             def reqBody = event.inOut.reqBody
