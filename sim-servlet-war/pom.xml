@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
@@ -8,9 +8,9 @@
         <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
-  <version>3.0.0-SNAPSHOT</version>
-  <artifactId>sim-servlet-war</artifactId>
-  <packaging>war</packaging>
+    <version>3.0.0-SNAPSHOT</version>
+    <artifactId>sim-servlet-war</artifactId>
+    <packaging>war</packaging>
 
     <properties>
         <!-- Convenience property to set the GWT version -->
@@ -21,6 +21,36 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>eb-docsrc-sim</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>ds-sims</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>sim-servlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>tk-initialization</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-dom</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>org.codehaus.groovy.modules.http-builder</groupId>
             <artifactId>http-builder</artifactId>
@@ -36,65 +66,76 @@
             FORGIVE HOPE ALL WHO ENTER HERE!
         -->
         <!--<dependency>-->
-            <!--<groupId>me.soliveirajr</groupId>-->
-            <!--<artifactId>mentawai</artifactId>-->
-            <!--<version>2.5.4</version>-->
+        <!--<groupId>me.soliveirajr</groupId>-->
+        <!--<artifactId>mentawai</artifactId>-->
+        <!--<version>2.5.4</version>-->
         <!--</dependency>-->
+
+
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
-        <groupId>com.google.gwt</groupId>
-        <artifactId>gwt-servlet</artifactId>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
         </dependency>
-      <dependency>
-          <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>http-soap</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>ds-sims</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>http</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>soap-support</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>sim-support</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>toolkit</artifactId>
-          <version>3.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-          <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>actor-transaction</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>xds-exceptions</artifactId>
-      </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.google.gwt</groupId>-->
+            <!--<artifactId>gwt-servlet</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>http-soap</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>ds-sims</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>http</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>soap-support</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>sim-support</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>eb-docsrc-sim</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>toolkit</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>actor-transaction</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>xds-exceptions</artifactId>-->
+        <!--</dependency>-->
 
-      <dependency>
-          <groupId>gov.nist.hit.ds</groupId>
-          <artifactId>event-log</artifactId>
-      </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>sim-servlet</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>gov.nist.hit.ds</groupId>
-            <artifactId>tk-initialization</artifactId>
-        </dependency>
-  </dependencies>
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>event-log</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>sim-servlet</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>gov.nist.hit.ds</groupId>-->
+            <!--<artifactId>tk-initialization</artifactId>-->
+        <!--</dependency>-->
+
+    </dependencies>
 
     <build>
         <plugins>
