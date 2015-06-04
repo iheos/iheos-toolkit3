@@ -67,7 +67,7 @@ public class SimServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         EndpointValue endpoint = new EndpointValue("http://host:port" + request.getRequestURI());
-        logger.info("\n\n\n===============================================================================\nPost to ${endpoint}\n\n\n");
+        logger.info("\n\n\n===============================================================================\nPost received to ${endpoint}\n\n\n");
         List<String> options = parseOptionsFromURI(request.getRequestURI());
         logger.debug("Request options are " + options);
         String header = headersAsString(request);

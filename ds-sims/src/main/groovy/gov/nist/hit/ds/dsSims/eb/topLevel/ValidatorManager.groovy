@@ -47,7 +47,7 @@ class ValidatorManager implements MessageValidator {
     ValidateMessageResponse validateMessage(String validationType, String msgHeader, byte[] msgBody) {
         return validateMessage(validationType, msgHeader, msgBody, ValidationLevel.ERROR)
     }
-        @Override
+
     ValidateMessageResponse validateMessage(String validationType, String msgHeader, byte[] msgBody, ValidationLevel validationLevel) {
         def exceptionMessages = []
         if (soapAction == validationType) {
