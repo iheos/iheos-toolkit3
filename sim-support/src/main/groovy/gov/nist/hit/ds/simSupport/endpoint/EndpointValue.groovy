@@ -34,16 +34,16 @@ class EndpointValue {
     String getValue() { return value }
 
     String requestURI() {  // similar to HttpRequest.getRequestURI()
-        if (unParseable) throw new ToolkitRuntimeException("Cannot act on un-parse-able endpoint")
+        if (unParseable) throw new ToolkitRuntimeException("EndpointValue#requestURI: Cannot act on un-parse-able endpoint")
         "/${context}/${sim}/${user}/${simid}/${actor}/${trans}"
     }
 
     SimIdentifier simIdentifier() {
-        if (unParseable) throw new ToolkitRuntimeException("Cannot act on un-parse-able endpoint")
+        if (unParseable) throw new ToolkitRuntimeException("EndpointValue#simIdentifier: Cannot act on un-parse-able endpoint")
         new SimIdentifier(user, simid)
     }
     SimId simId() {
-        if (unParseable) throw new ToolkitRuntimeException("Cannot act on un-parse-able endpoint")
+        if (unParseable) throw new ToolkitRuntimeException("EndpointValue#simId: Cannot act on un-parse-able endpoint")
         new SimId(simid)
     }
 
