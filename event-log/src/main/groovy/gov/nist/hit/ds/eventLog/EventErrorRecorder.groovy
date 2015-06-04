@@ -95,12 +95,10 @@ class EventErrorRecorder implements ErrorRecorder {
         assert false
     }
 
-    @Override
     void finish() {
         assert false
     }
 
-    @Override
     void showErrorInfo() {
         assert false
     }
@@ -110,7 +108,6 @@ class EventErrorRecorder implements ErrorRecorder {
         return false
     }
 
-    @Override
     int getNbErrors() {
         return 0
     }
