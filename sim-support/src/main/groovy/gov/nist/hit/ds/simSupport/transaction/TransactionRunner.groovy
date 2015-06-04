@@ -140,17 +140,17 @@ class TransactionRunner {
         try {
             clazz = new SimUtils().getClass().classLoader.loadClass(implClassName)
         } catch (Throwable t) {
-            simHandle.event.fault = new Fault("TransactionRunner: Configuration Error - cannot load transaction class ${implClassName}", FaultCode.Receiver.toString(), simHandle.transactionType?.code, "Transaction implementation class ${implClassName} does not exist.")
+            simHandle.event.fault = new Fault("TransactionRunner: Configuration Error - cannot load transaction class ${implClassName}", FaultCode.Receiver.toString(), simHandle.transactionType?.code, "Class loader threw exception - ${t.class.name} - ${t.message}")
             return
         }
         if (!clazz) {
-            simHandle.event.fault = new Fault('TransactionRunner: Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType.code, "Transaction implementation class ${implClassName} does not exist.")
+            simHandle.event.fault = new Fault('TransactionRunner: Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType?.code, "Transaction implementation class ${implClassName} does not exist.")
             return
         }
 
         log.debug "TransactionRunner: Class ${clazz.name} implements ${clazz.getInterfaces()}"
         if (!(ArrayUtils.contains(clazz.getInterfaces(), Transaction))) {
-            simHandle.event.fault = new Fault('TransactionRunner: Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType.code, "Transaction implementation class ${implClassName} does not implment interface Transaction.")
+            simHandle.event.fault = new Fault('TransactionRunner: Configuration Error', FaultCode.Receiver.toString(), simHandle.transactionType?.code, "Transaction implementation class ${implClassName} does not implment interface Transaction.")
             return
         }
 
