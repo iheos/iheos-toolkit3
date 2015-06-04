@@ -31,7 +31,7 @@ class   Send {
             def xml
             assert username
             assert simIdString
-            println "Message is ${message}"
+            println "Accepting REST msg: Message is:\n${message}"
             try {
                 xml = new XmlSlurper().parseText(message)
             } catch (SAXParseException spe) {
@@ -50,12 +50,27 @@ class   Send {
 
             Event event = simHandle.event
             def reqHdr = event.inOut.reqHdr
-            def reqBody = event.inOut.reqBody
+            String reqBody = new String(event.inOut.reqBody)
+
             def resHdr = event.inOut.respHdr
-            def resBody = "<soapenv:Body xmlns:soapenv=\"http://www.w3.org/2003/05/soap-envelope\">${event.inOut.respBody}</soapenv:Body>"
+            String resBody = "<soapenv:Body xmlns:soapenv=\"http://www.w3.org/2003/05/soap-envelope\">${new String(event.inOut.respBody)}</soapenv:Body>"
+
             def request = "<Request><SoapHeader>${reqHdr}</SoapHeader><SoapBody>${reqBody}</SoapBody></Request>"
             def response = "<Response><SoapHeader>${resHdr}</SoapHeader><SoapBody>${resBody}</SoapBody></Response>"
-            String responseStr = "<Log>${request}${response}</Log>"
+
+            def fault = ''
+            if (event.fault) {
+                fault = """
+<fault>
+<transaction>${event.fault.faultTransaction}</transaction>
+<code>${event.fault.faultCode}</code>
+<msg>${event.fault.faultMsg}</msg>
+<detail>${event.fault.faultDetail}</detail>
+</fault>
+"""
+            }
+
+            String responseStr = "<Log>${request}${response}${fault}</Log>"
             return new OMFormatter(responseStr).toString()
         } catch (Throwable t) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST)

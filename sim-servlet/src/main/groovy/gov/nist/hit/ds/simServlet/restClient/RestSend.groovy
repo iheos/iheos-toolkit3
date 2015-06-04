@@ -9,50 +9,33 @@ import groovyx.net.http.Method
 import static groovyx.net.http.ContentType.XML
 
 /**
- * Created by bmajur on 2/4/15.
+ * Created by bill on 6/3/15.
  */
 @Log4j
-class CreateSimRest {
+class RestSend {
 
-    static String run(String config, String host, String port, String service, String username, String simid) {
+    static String run(uri, message) {
         def returnvalue = null
-        def restUri = "http://${host}:${port}/${service}/rest/sim/create/${username}/${simid}"
-
-        def http = new HTTPBuilder(restUri)
-        log.debug("CreateSimRest: ${http.getUri()}")
+        def http = new HTTPBuilder(uri)
         http.request(Method.POST, XML) { request ->
             requestContentType = XML
-            body = config.trim()
+            body = message
 
             response.success = { resp, xml ->
-                log.debug 'Sim Created'
+                log.debug 'REST request sent'
                 returnvalue = prettyPrint(xml)
             }
             response.failure = { resp ->
-                log.debug 'Failure'
+                log.debug 'REST request failed'
                 log.debug resp.statusLine
                 resp.getHeaders().each { log.debug it }
             }
             response.'404' = {
+                log.debug "404 - Service does not exist"
                 returnvalue = null
             }
         }
         return returnvalue
-
-//        http = new HTTPBuilder("http://${host}:${port}")
-//
-//        http.get( path : "/${service}/rest/sim/config/${username}/${simid}",
-//                contentType : XML ) { resp, xml ->
-//
-//            println "response status: ${resp.statusLine}"
-//            println 'Headers: -----------'
-//            resp.headers.each { h ->
-//                println " ${h.name} : ${h.value}"
-//            }
-//            returnvalue = prettyPrint(xml)
-//
-//        }
-//        return returnvalue
     }
 
     static prettyPrint(xml) {
@@ -65,4 +48,3 @@ class CreateSimRest {
     }
 
 }
-
