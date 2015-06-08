@@ -7,6 +7,8 @@ import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.utilities.xml.OMFormatter
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
+import groovy.util.logging.Log4j
 import groovy.xml.StreamingMarkupBuilder
 import org.xml.sax.SAXParseException
 
@@ -22,6 +24,7 @@ import javax.ws.rs.core.Response
  * Created by bmajur on 2/3/15.
  */
 @Path('/sim/client/{username}/{simid}')
+@Log4j
 class   Send {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
@@ -35,12 +38,18 @@ class   Send {
             try {
                 xml = new XmlSlurper().parseText(message)
             } catch (SAXParseException spe) {
+                log.debug ExceptionUtil.exception_details(spe)
                 throw new WebApplicationException(Response.Status.BAD_REQUEST)
             }
             println "xml parsed"
 
 //            def simId = new SimId(simIdString)
             SimIdentifier simIdentifier = new SimIdentifier(username, simIdString)
+            if (!simIdentifier.isValid()) {
+                def msg = "Sim username (${username}) or simId (${simIdString}) is invalid - no such simulator"
+                log.error msg
+                throw new WebApplicationException(Response.Status.BAD_REQUEST)
+            }
             SimHandle simHandle = SimApi.send(simIdentifier, EbSendRequestDAO.toModel(message))
 
 //            def actorTypeName = xml.@type.text()
@@ -73,6 +82,7 @@ class   Send {
             String responseStr = "<Log>${request}${response}${fault}</Log>"
             return new OMFormatter(responseStr).toString()
         } catch (Throwable t) {
+            log.debug ExceptionUtil.exception_details(t)
             throw new WebApplicationException(Response.Status.BAD_REQUEST)
         }
     }

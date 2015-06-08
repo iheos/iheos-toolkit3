@@ -69,6 +69,8 @@ class SimApi {
         TransactionType ttype = factory.getTransactionTypeIfAvailable(request.transactionName)
         if (!ttype) throw new ToolkitRuntimeException("client: no transaction type")
         SimHandle simHandle = SimUtils.open(simIdentifier)
+        if (!simHandle)
+            throw new ToolkitRuntimeException("Sim(${simIdentifier}) does not exist")
         simHandle.transactionType = ttype
         SimUtils.sendTransactionRequest(simHandle, request)
         SimUtils.close(simHandle)

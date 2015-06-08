@@ -20,4 +20,6 @@ class SimIdentifier {
     boolean equals(SimIdentifier other) { other &&  other.repoName == repoName && other.simId.id == simId.id }
 
     String toString() { "${repoName} : ${simId.id}"}
+
+    boolean isValid() { repo && simId?.getId()}
 }
