@@ -23,6 +23,10 @@
     <dependencies>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
+            <artifactId>test-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.hit.ds</groupId>
             <artifactId>eb-docsrc-sim</artifactId>
         </dependency>
         <dependency>
