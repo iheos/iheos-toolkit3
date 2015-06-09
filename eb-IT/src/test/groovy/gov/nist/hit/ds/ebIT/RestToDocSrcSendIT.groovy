@@ -11,7 +11,7 @@ import spock.lang.Specification
 /**
  * There are three parts to the test environment.
  * 1) toolkit2 running on tomcat1(8080) hosting a DocRecipient
- * simulator.
+ * simulator.  docRecEndpoint below holds this endpoint.
  *
  * 2) engine running at localhost:9090/tk hosting a DocSrc simulator. Its
  * EC is /Users/bill/tmp/toolkit3.
@@ -21,7 +21,8 @@ import spock.lang.Specification
  *
  * 3) This test acting as a client of the DocSrc simulator.
  *
- * The goal of the test is to have the DocSrc send a PnR to the DocRec.
+ * The goal of the test is to have the DocSrc send a PnR to the DocRec and
+ * report back the results.
  *
  * Created by bill on 6/3/15.
  */
@@ -41,7 +42,8 @@ class RestToDocSrcSendIT extends Specification {
 </xdsb:ProvideAndRegisterDocumentSetRequest>
 '''
     // This is the endpoint for the DocRec supplied by v2 toolkit
-    def docRecEndpoint = 'http://localhost:8080/xdstools2/sim/09000c69-9a87-4a73-9231-be04f6886e12/rec/xdrpr'
+    def docRecEndpoint = 'http://localhost:8080/xdstools2/sim/fc2b1ce4-af8b-4c14-a384-cace253b5b1a/rec/xdrpr'
+    def docRecEndpointTls = 'https://localhost:8443/xdstools2/sim/fc2b1ce4-af8b-4c14-a384-cace253b5b1a/rec/xdrpr'
 
     // TODO: needs to delete DocSrc sim in engine
     def setup() {
@@ -67,9 +69,63 @@ class RestToDocSrcSendIT extends Specification {
 
         when: '''Tell engine, via REST, to send PnR from DocSrc to DocRec in v2 toolkit'''
         log.debug "Sending request to DocSrc sim"
-        def request = DocSrcUtils.createClientRequest(clientUserName, clientSimName, metadata)
+        def request = DocSrcUtils.createClientRequest(clientUserName, clientSimName, metadata, false)
         log.debug "Request is ${request}"
         def uri = "http://${host}:${port}/${service}/rest/sim/client/${clientUserName}/${clientSimName}"
+        log.debug "Sending it to REST service at ${uri}"
+        def response = RestSend.run(uri, request)
+        log.debug "Result from sending Pnr is: \n${response}"
+
+        then:
+        response
+    }
+
+    def 'Run with TLS'() {
+        when: '''Tell engine, via REST, to create DocSrc sim'''
+        log.info "Creating DocSrc sim"
+        def config = DocSrcUtils.createClientSimConfig(docRecEndpoint, docRecEndpointTls)
+        def host = 'localhost'
+        def port = '9090'  // this is where engine is running
+        def service = 'tk' // again this is local instance of engine
+        def result
+        result = CreateSimRest.run(config, host, port, service, clientUserName, clientSimName)
+        log.info "Result from creating DocSrc sim is: \n${result}"
+
+        then:
+        result
+
+        when: '''Tell engine, via REST, to send PnR from DocSrc to DocRec in v2 toolkit'''
+        log.info "Sending request to DocSrc sim"
+        def request = DocSrcUtils.createClientRequest(clientUserName, clientSimName, metadata, true)
+        log.info "Request is ${request}"
+        def uri = "http://${host}:${port}/${service}/rest/sim/client/${clientUserName}/${clientSimName}"
+        log.info "Sending it to REST service at ${uri}"
+        def response = RestSend.run(uri, request)
+        log.info "Result from sending Pnr is: \n${response}"
+
+        then:
+        response
+    }
+
+    def 'Run bad REST address'() {
+        when: '''Tell engine, via REST, to create DocSrc sim'''
+        log.debug "Creating DocSrc sim"
+        def config = DocSrcUtils.createClientSimConfig(docRecEndpoint, "")
+        def host = 'localhost'
+        def port = '9090'  // this is where engine is running
+        def service = 'tk' // again this is local instance of engine
+        def result
+        result = CreateSimRest.run(config, host, port, service, clientUserName, clientSimName)
+        log.debug "Result from creating DocSrc sim is: \n${result}"
+
+        then:
+        result
+
+        when: '''Tell engine, via REST, to send PnR from DocSrc to DocRec in v2 toolkit'''
+        log.debug "Sending request to DocSrc sim"
+        def request = DocSrcUtils.createClientRequest(clientUserName, clientSimName, metadata, false)
+        log.debug "Request is ${request}"
+        def uri = "http://${host}:${port}/${service}/rest/sim/client/${clientUserName}/${clientSimName}xxx"
         log.debug "Sending it to REST service at ${uri}"
         def response = RestSend.run(uri, request)
         log.debug "Result from sending Pnr is: \n${response}"
