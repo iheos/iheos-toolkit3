@@ -1,11 +1,13 @@
 package gov.nist.hit.ds.simServlet.rest
 
+import gov.nist.hit.ds.dsSims.eb.transactionSupport.EbSendRequest
 import gov.nist.hit.ds.dsSims.eb.transactionSupport.EbSendRequestDAO
 import gov.nist.hit.ds.eventLog.Event
 import gov.nist.hit.ds.simServlet.api.SimApi
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.client.SimIdentifier
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
+import gov.nist.hit.ds.utilities.xml.HtmlizeXml
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import groovy.util.logging.Log4j
@@ -50,7 +52,9 @@ class   Send {
                 log.error msg
                 throw new WebApplicationException(Response.Status.BAD_REQUEST)
             }
-            SimHandle simHandle = SimApi.send(simIdentifier, EbSendRequestDAO.toModel(message))
+            EbSendRequest erequest = EbSendRequestDAO.toModel(message)
+            println "request is ${erequest}"
+            SimHandle simHandle = SimApi.send(simIdentifier, erequest)
 
 //            def actorTypeName = xml.@type.text()
 //            println "actor type is ${actorTypeName}"
@@ -71,10 +75,10 @@ class   Send {
             if (event.fault) {
                 fault = """
 <fault>
-<transaction>${event.fault.faultTransaction}</transaction>
-<code>${event.fault.faultCode}</code>
-<msg>${event.fault.faultMsg}</msg>
-<detail>${event.fault.faultDetail}</detail>
+<transaction>${HtmlizeXml.run(event.fault.faultTransaction)}</transaction>
+<code>${HtmlizeXml.run(event.fault.faultCode)}</code>
+<msg>${HtmlizeXml.run(event.fault.faultMsg)}</msg>
+<detail>${HtmlizeXml.run(event.fault.faultDetail)}</detail>
 </fault>
 """
             }
