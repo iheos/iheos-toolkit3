@@ -73,12 +73,12 @@ class DocSrcUtils {
 </actor>"""
     }
 
-    static createClientRequest(clientUserName, clientSimName, metadata) {
+    static createClientRequest(clientUserName, clientSimName, metadata, tls) {
         """
 <sendRequest>
     <simReference>${clientUserName}/${clientSimName}</simReference>
     <transactionName>prb</transactionName>
-    <tls value="false"/>
+    <tls value="${(tls) ? 'true' : 'false'}"/>
     <metadata>${metadata}</metadata>
     <extraHeaders><foo/><bar/></extraHeaders>
     <document id="Document01" mimeType="text/plain">doc content</document>
