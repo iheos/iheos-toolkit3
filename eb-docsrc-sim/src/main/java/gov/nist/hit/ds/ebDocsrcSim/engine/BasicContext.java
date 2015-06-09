@@ -1,5 +1,6 @@
 package gov.nist.hit.ds.ebDocsrcSim.engine;
 
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
 import org.apache.axiom.om.OMElement;
 
@@ -18,7 +19,7 @@ public class BasicContext {
         if (testLog != null)
 		    testLog.add_name_value(test_step_output, "Error", msg);
 		error(msg);
-		throw new XdsInternalException("Error " + msg);
+		//throw new XdsInternalException("Error " + msg);
 	}
 
 	void fault(OMElement test_step_output, String code, String msg) throws XdsInternalException {
@@ -27,7 +28,8 @@ public class BasicContext {
             testLog.add_name_value(test_step_output, "Error ", code + ": " + msg);
         }
 		error(msg);
-		throw new XdsInternalException(msg);
+		System.out.println(ExceptionUtil.here("Fault recording"));
+		//throw new XdsInternalException(msg);
 	}
 
 }

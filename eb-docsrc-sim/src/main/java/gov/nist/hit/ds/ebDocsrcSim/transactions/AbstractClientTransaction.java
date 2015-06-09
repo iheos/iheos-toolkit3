@@ -80,6 +80,7 @@ public abstract class AbstractClientTransaction {
 		*/
 
         OMElement results = null;
+		Exception ex = null;
 		try {
             if (testLog != null && instruction_output != null)
 			    testLog.add_name_value(instruction_output, "Request", requestBody);
@@ -105,10 +106,12 @@ public abstract class AbstractClientTransaction {
 
 			s_ctx.set_error("SOAPFault: " + e.getMessage() + "\nEndpoint is " + endpoint + "\n" + e1m + "\n" + e2m);
 				s_ctx.set_fault(e);
+			ex = e;
 		}
 		finally {
             logSoapRequest(soap);
 			soap.clearHeaders();
+			if (ex != null) throw ex;
 		}
 
 
