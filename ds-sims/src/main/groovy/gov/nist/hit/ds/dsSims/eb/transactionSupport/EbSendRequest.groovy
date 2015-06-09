@@ -13,4 +13,8 @@ class EbSendRequest {
     String messageId = null   // use default if null
     Map<String, DocumentHandler> documents = [ : ]
     boolean tls
+
+    public String toString() {
+        "SendRequest: to(${simIdentifier} with TLS ${tls})"
+    }
 }

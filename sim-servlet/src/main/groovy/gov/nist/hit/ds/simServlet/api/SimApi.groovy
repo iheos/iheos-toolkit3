@@ -9,11 +9,13 @@ import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
+import groovy.util.logging.Log4j
 
 /**
  * API used by REST calls
  * Created by bmajur on 10/23/14.
  */
+@Log4j
 class SimApi {
 
     static SimHandle createServer(String actorTypeName, String username, SimId simId) {
@@ -65,6 +67,7 @@ class SimApi {
     }
 
     static SimHandle send(SimIdentifier simIdentifier, EbSendRequest request) {
+        log.info "SimApi: Send ${request}"
         ActorTransactionTypeFactory factory = new ActorTransactionTypeFactory()
         TransactionType ttype = factory.getTransactionTypeIfAvailable(request.transactionName)
         if (!ttype) throw new ToolkitRuntimeException("client: no transaction type")

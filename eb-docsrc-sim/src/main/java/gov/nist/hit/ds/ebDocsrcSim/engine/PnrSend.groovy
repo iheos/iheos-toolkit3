@@ -13,11 +13,13 @@ import gov.nist.hit.ds.utilities.xml.Util
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import gov.nist.hit.ds.xdsExceptions.XdsException
 import gov.nist.hit.ds.xdsExceptions.XdsInternalException
+import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 /**
  * Created by bmajur on 1/13/15.
  *
  */
+@Log4j
 class PnrSend  {
 //    OMElement metadata_element;
 //    Map<String, DocumentHandler> documents;
@@ -47,9 +49,10 @@ class PnrSend  {
 //        environmentAccess = simHandle.actorSimConfig.environmentAccess
 //    }
 
-    PnrSend(SimHandle _simHandle, EbSendRequest _request) { simHandle = _simHandle; request = _request }
-//        this(simHandle, request.transactionName, request.tls, request.metadata, request.documents)
-//    }
+    PnrSend(SimHandle _simHandle, EbSendRequest _request) {
+        simHandle = _simHandle; request = _request
+        log.info "PnrSend: ${request}"
+    }
 
     def endpoint() {
         EndpointValue endpointValue = simHandle.actorSimConfig.getEndpoint(
@@ -69,6 +72,8 @@ class PnrSend  {
     // return is [result, logOutput]
     List<OMElement> run() throws XdsException {
         String endpoint = endpoint()
+
+        log.info "Transaction being sent to ${endpoint}"
 
         ProvideAndRegisterTransaction trans = new ProvideAndRegisterTransaction(simHandle);
         trans.no_convert = false;
