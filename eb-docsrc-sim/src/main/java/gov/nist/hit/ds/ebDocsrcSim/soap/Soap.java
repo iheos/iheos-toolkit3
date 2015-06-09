@@ -487,47 +487,52 @@ public class Soap  {
         if (async)
             operationClient.setCallback(callback);
 
-        System.out
-                .println("******************************** BEFORE execute ****************************");
-        operationClient.execute(block); // execute sync or async
-        System.out
-                .println("******************************** AFTER execute ****************************");
+        MessageContext inMsgCtx = null;
+        try {
+            System.out
+                    .println("******************************** BEFORE execute ****************************");
+            operationClient.execute(block); // execute sync or async
+            System.out
+                    .println("******************************** AFTER execute ****************************");
 
-        if (async)
-            waitTillDone();
+            if (async)
+                waitTillDone();
 
-        MessageContext inMsgCtx = getInputMessageContext();
+            inMsgCtx = getInputMessageContext();
 
-        System.out.println("Operation is complete: "
-                + operationClient.getOperationContext().isComplete());
+            System.out.println("Operation is complete: "
+                    + operationClient.getOperationContext().isComplete());
 
-        if (async)
-            operationClient.complete(outMsgCtx);
+            if (async)
+                operationClient.complete(outMsgCtx);
+        } finally {
+            loadOutHeader();
+            simHandle.getEvent().getInOut().setReqHdr(new OMFormatter(outMsgCtx.getEnvelope().getHeader()).toString());
+            simHandle.getEvent().getInOut().setReqBody(new OMFormatter(outMsgCtx.getEnvelope().getBody()).toString().getBytes());
+            if (inMsgCtx != null ) {
+                inMsgCtx.getEnvelope().build();
 
-        inMsgCtx.getEnvelope().build();
+                OMElement soapBody = inMsgCtx.getEnvelope().getBody();
 
-        OMElement soapBody = inMsgCtx.getEnvelope().getBody();
+                soapBody.build();
 
-        soapBody.build();
+                result = soapBody.getFirstElement();
 
-        result = soapBody.getFirstElement();
+                new OMFormatter(result).toString(); // this forces full read before
+                // channel is closed
+                // removing it breaks the reading of MTOM formatted responses
 
-        new OMFormatter(result).toString(); // this forces full read before
-        // channel is closed
-        // removing it breaks the reading of MTOM formatted responses
+                loadInHeader();
 
-        loadOutHeader();
-        loadInHeader();
 
-//        simHandle.getEvent().getInOut().setReqHdr(outHeader.toString());
-        simHandle.getEvent().getInOut().setReqHdr(new OMFormatter(outMsgCtx.getEnvelope().getHeader()).toString());
-        simHandle.getEvent().getInOut().setReqBody(new OMFormatter(outMsgCtx.getEnvelope().getBody()).toString().getBytes());
+                simHandle.getEvent().getInOut().setRespHdr(new OMFormatter(inMsgCtx.getEnvelope().getHeader()).toString());
+                simHandle.getEvent().getInOut().setRespBody(new OMFormatter(inMsgCtx.getEnvelope().getBody()).toString().getBytes());
 
-        simHandle.getEvent().getInOut().setRespHdr(new OMFormatter(inMsgCtx.getEnvelope().getHeader()).toString());
-        simHandle.getEvent().getInOut().setRespBody(new OMFormatter(inMsgCtx.getEnvelope().getBody()).toString().getBytes());
+            }
 
-        serviceClient.cleanupTransport();
-        serviceClient.cleanup();
+            serviceClient.cleanupTransport();
+            serviceClient.cleanup();
+        }
 
     }
 
