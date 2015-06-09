@@ -112,22 +112,31 @@ public class DbConnection implements IndexDataSource {
 
 
             if (DbAppCtxListener.pingNetworkServer()) {
-                try {
-                    DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-                logger.info("Using Derby network server." );
-                bds.setJdbcUrl("jdbc:derby://" + DbAppCtxListener.networkHostName  + ":" + DbAppCtxListener.networkPort + "/" + ecDir +"/db;create=true");
+                registerNetworkDriver(ecDir);
             } else {
+
                 try {
-                    DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
+                    DbAppCtxListener.startDerbyNetworkServer();
+                    registerNetworkDriver(ecDir);
+
+                    // TODO: provide a shutdown database task from the toolkit management console
+
                 } catch (Throwable t) {
                     t.printStackTrace();
+
+                    // Fail over to embedded driver in case network service could not be booted
+
+                    try {
+                        DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
+                        logger.info("Using Derby embedded server." );
+                        bds.setJdbcUrl("jdbc:derby:" + ecDir +"/db;create=true");
+
+                    } catch (Exception ex) {
+                        logger.info(ex.toString());
+                    }
                 }
 
-                logger.info("Using Derby embedded server." );
-                bds.setJdbcUrl("jdbc:derby:" + ecDir +"/db;create=true");
+
             }
 
 
@@ -173,8 +182,18 @@ public class DbConnection implements IndexDataSource {
 		
 		
 	}
-	
-	@Override
+
+    private void registerNetworkDriver(String ecDir) {
+        try {
+            DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        logger.info("Using Derby network server." );
+        bds.setJdbcUrl("jdbc:derby://" + DbAppCtxListener.networkHostName  + ":" + DbAppCtxListener.networkPort + "/" + ecDir +"/db;create=true");
+    }
+
+    @Override
 	public Connection getConnection()  {
 		Connection cnx = null;
 		try {

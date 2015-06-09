@@ -25,13 +25,23 @@ public class DbAppCtxListener implements ServletContextListener  {
         // On Application Startup
 
         try {
-            logger.info("Starting Derby network server: " + networkHostName + ":"+  networkPort);
-            NetworkServerControl server = new NetworkServerControl
-                    (InetAddress.getByName(networkHostName), networkPort);
-            server.start(null);
+
+            if (pingNetworkServer()) {
+                logger.info("Derby network server was already started : " + networkHostName + ":"+  networkPort);
+            } else {
+                logger.info("Starting Derby network server: " + networkHostName + ":"+  networkPort);
+                startDerbyNetworkServer();
+            }
+
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    public static void startDerbyNetworkServer() throws Exception {
+        NetworkServerControl server = new NetworkServerControl
+                (InetAddress.getByName(networkHostName), networkPort);
+        server.start(null);
     }
 
     public static boolean pingNetworkServer() {
@@ -47,6 +57,12 @@ public class DbAppCtxListener implements ServletContextListener  {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+
+        /*
+        This method is only useful when the network service/embedded driver was started using the War application startup method. If the database was booted elsewhere (console management tool),
+        then the network service thread must be shutdown using that tool. The DB folder on disk will be locked and cannot be deleted until the database driver was shutdown properly.
+         */
+
         // ... First close any background tasks which may be using the DB ...
         // ... Then close any DB connection pools ...
 
@@ -73,10 +89,16 @@ public class DbAppCtxListener implements ServletContextListener  {
                 // logger.info("Not deregistering JDBC driver "+ driver + " as it does not belong to this webapp's ClassLoader");
             }
         }
+        logger.info("Shutting down Derby network server: " + networkHostName + ":"+  networkPort);
+        shutdownDerbyNetworkServer();
 
+
+    }
+
+    public static void shutdownDerbyNetworkServer() {
         // Shutdown network port
         try {
-            logger.info("Shutting down Derby network server: " + networkHostName + ":"+  networkPort);
+
             NetworkServerControl serverControl = new NetworkServerControl(InetAddress.getByName(networkHostName),networkPort);
 
             serverControl.shutdown();
@@ -84,7 +106,6 @@ public class DbAppCtxListener implements ServletContextListener  {
         } catch (Throwable t) {
             t.printStackTrace();
         }
-
     }
 
 }
