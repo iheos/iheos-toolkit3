@@ -62,8 +62,9 @@ class   Send {
 //                throw new WebApplicationException(Response.Status.BAD_REQUEST)
 
             Event event = simHandle.event
-            def reqHdr = event.inOut.reqHdr
-            String reqBody = new String(event.inOut.reqBody)
+            assert event
+            def reqHdr = event?.inOut?.reqHdr
+            String reqBody = new String(event?.inOut?.reqBody)
 
             def resHdr = event.inOut.respHdr
             String resBody = "<soapenv:Body xmlns:soapenv=\"http://www.w3.org/2003/05/soap-envelope\">${new String(event.inOut.respBody)}</soapenv:Body>"

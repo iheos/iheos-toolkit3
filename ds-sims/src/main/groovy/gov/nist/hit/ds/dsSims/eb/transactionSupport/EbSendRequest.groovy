@@ -15,6 +15,6 @@ class EbSendRequest {
     boolean tls
 
     public String toString() {
-        "SendRequest: to(${simIdentifier} with TLS ${tls})"
+        "SendRequest: to(${simIdentifier} with TLS ${tls})\n\tTransaction is ${transactionName}; MessageId is ${messageId}"
     }
 }

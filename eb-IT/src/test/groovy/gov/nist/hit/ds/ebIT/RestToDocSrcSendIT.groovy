@@ -29,8 +29,10 @@ import spock.lang.Specification
 @Log4j
 class RestToDocSrcSendIT extends Specification {
 
-    def clientUserName = 'RestToDocSrcSendIT'
-    def clientSimName = 'DocSrc'
+//    def clientUserName = 'RestToDocSrcSendIT'
+//    def clientSimName = 'DocSrc'
+    def clientUserName = 'ett'
+    def clientSimName = '3'
     def clientSimId = new SimId(clientSimName)
 
     def metadata = '''
@@ -42,8 +44,18 @@ class RestToDocSrcSendIT extends Specification {
 </xdsb:ProvideAndRegisterDocumentSetRequest>
 '''
     // This is the endpoint for the DocRec supplied by v2 toolkit
-    def docRecEndpoint = 'http://localhost:8080/xdstools2/sim/fc2b1ce4-af8b-4c14-a384-cace253b5b1a/rec/xdrpr'
-    def docRecEndpointTls = 'https://localhost:8443/xdstools2/sim/fc2b1ce4-af8b-4c14-a384-cace253b5b1a/rec/xdrpr'
+    def docRecEndpoint = 'http://localhost:8080/xdstools2/sim/15bf53fb-17c0-4f02-9d6b-de4b5e1c7b08/rec/xdrpr'
+//    def docRecEndpointTls = 'https://localhost:8443/xdstools2/sim/44547243-9a82-42ce-8390-b9a10bc898a4/rec/xdrpr'
+    def docRecEndpointTls = 'https://transport-testing.nist.gov:12081/ttt/sim/ce45c84c-fc5f-430e-b1cd-aadf592a67ca/rec/xdrpr'
+
+    // This is where the engine is running
+//    def host = 'localhost'
+//    def port = '9090'  // this is where engine is running
+//    def service = 'tk' // again this is local instance of engine
+    //http://hit-dev.nist.gov:11080
+    def host = 'hit-dev.nist.gov'
+    def port = '11080'  // this is where engine is running
+    def service = 'xdstools3' // again this is local instance of engine
 
     // TODO: needs to delete DocSrc sim in engine
     def setup() {
@@ -57,9 +69,6 @@ class RestToDocSrcSendIT extends Specification {
         when: '''Tell engine, via REST, to create DocSrc sim'''
         log.debug "Creating DocSrc sim"
         def config = DocSrcUtils.createClientSimConfig(docRecEndpoint, "")
-        def host = 'localhost'
-        def port = '9090'  // this is where engine is running
-        def service = 'tk' // again this is local instance of engine
         def result
         result = CreateSimRest.run(config, host, port, service, clientUserName, clientSimName)
         log.debug "Result from creating DocSrc sim is: \n${result}"
@@ -84,9 +93,6 @@ class RestToDocSrcSendIT extends Specification {
         when: '''Tell engine, via REST, to create DocSrc sim'''
         log.info "Creating DocSrc sim"
         def config = DocSrcUtils.createClientSimConfig(docRecEndpoint, docRecEndpointTls)
-        def host = 'localhost'
-        def port = '9090'  // this is where engine is running
-        def service = 'tk' // again this is local instance of engine
         def result
         result = CreateSimRest.run(config, host, port, service, clientUserName, clientSimName)
         log.info "Result from creating DocSrc sim is: \n${result}"
@@ -111,9 +117,6 @@ class RestToDocSrcSendIT extends Specification {
         when: '''Tell engine, via REST, to create DocSrc sim'''
         log.debug "Creating DocSrc sim"
         def config = DocSrcUtils.createClientSimConfig(docRecEndpoint, "")
-        def host = 'localhost'
-        def port = '9090'  // this is where engine is running
-        def service = 'tk' // again this is local instance of engine
         def result
         result = CreateSimRest.run(config, host, port, service, clientUserName, clientSimName)
         log.debug "Result from creating DocSrc sim is: \n${result}"
@@ -133,4 +136,29 @@ class RestToDocSrcSendIT extends Specification {
         then:
         response
     }
+
+    def 'Edge Request'() {
+        when: '''Tell engine, via REST, to create DocSrc sim'''
+        log.info "Creating DocSrc sim"
+        def config = DocSrcUtils.createClientSimConfig(docRecEndpoint, docRecEndpointTls)
+        def result
+        result = CreateSimRest.run(config, host, port, service, clientUserName, clientSimName)
+        log.info "Result from creating DocSrc sim is: \n${result}"
+
+        then:
+        result
+
+        when: '''Tell engine, via REST, to send PnR from DocSrc to DocRec in v2 toolkit'''
+        log.info "Sending request to DocSrc sim"
+        def request = getClass().getResource('/edgeRequest.xml').text
+        log.info "Request is ${request}"
+        def uri = "http://${host}:${port}/${service}/rest/sim/client/${clientUserName}/${clientSimName}"
+        log.info "Sending it to REST service at ${uri}"
+        def response = RestSend.run(uri, request)
+        log.info "Result from sending Pnr is: \n${response}"
+
+        then:
+        response
+    }
+
 }

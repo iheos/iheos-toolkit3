@@ -46,7 +46,7 @@ public class TransactionSimConfigElement extends AbstractTransactionSimConfigEle
 
     public String toString() {
         return ("TransSim "
-                + "name = " + name + " "
+//                + "name = " + name + " "
                 + endpointType.label() + " = " + endpointValue.getValue() + " "
                 + SCHEMACHECK + "=" + isSchemaCheck() + " "
                 + MODELCHECK + "=" + isModelCheck() + " "

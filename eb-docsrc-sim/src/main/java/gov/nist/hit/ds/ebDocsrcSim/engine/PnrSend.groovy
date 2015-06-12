@@ -2,6 +2,7 @@ package gov.nist.hit.ds.ebDocsrcSim.engine
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.AsyncType
 import gov.nist.hit.ds.actorTransaction.TlsType
+import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.ebDocsrcSim.transactions.AbstractClientTransaction
 import gov.nist.hit.ds.dsSims.eb.transactionSupport.EbSendRequest
 import gov.nist.hit.ds.ebDocsrcSim.transaction.ProvideAndRegisterTransaction
@@ -55,11 +56,17 @@ class PnrSend  {
     }
 
     def endpoint() {
+        TransactionType ttype = ActorTransactionTypeFactory.getTransactionType(request.transactionName)
+        log.info "Looking up endpoint for TransactionType ${ttype}"
+        log.info "Configured endpoint types are ${simHandle.actorSimConfig}"
         EndpointValue endpointValue = simHandle.actorSimConfig.getEndpoint(
-                ActorTransactionTypeFactory.getTransactionType(request.transactionName),
+                ttype,
                 (request.tls) ? TlsType.TLS : TlsType.NOTLS,
-                AsyncType.SYNC)
-        if (!endpointValue) throw new ToolkitRuntimeException("Transaction ${request.transactionName} with TLS ${request.tls} not configured")
+                AsyncType.SYNC
+        )
+        if (!endpointValue) {
+            throw new ToolkitRuntimeException("Transaction ${request.transactionName} with TLS ${request.tls} not configured")
+        }
         return endpointValue.value
     }
 
