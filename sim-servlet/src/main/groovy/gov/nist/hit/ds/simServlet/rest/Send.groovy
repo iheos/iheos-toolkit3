@@ -45,7 +45,6 @@ class   Send {
             }
             println "xml parsed"
 
-//            def simId = new SimId(simIdString)
             SimIdentifier simIdentifier = new SimIdentifier(username, simIdString)
             if (!simIdentifier.isValid()) {
                 def msg = "Sim username (${username}) or simId (${simIdString}) is invalid - no such simulator"
@@ -55,11 +54,6 @@ class   Send {
             EbSendRequest erequest = EbSendRequestDAO.toModel(message)
             println "request is ${erequest}"
             SimHandle simHandle = SimApi.send(simIdentifier, erequest)
-
-//            def actorTypeName = xml.@type.text()
-//            println "actor type is ${actorTypeName}"
-//            if (!actorTypeName)
-//                throw new WebApplicationException(Response.Status.BAD_REQUEST)
 
             Event event = simHandle.event
             assert event

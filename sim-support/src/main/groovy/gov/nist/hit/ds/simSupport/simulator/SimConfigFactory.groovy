@@ -15,10 +15,6 @@ import groovy.util.logging.Log4j
 class SimConfigFactory {
 
     SimConfig buildSim(SimSystemConfig config, String user, SimId simId, ActorType actorType) {
-//        buildSim(config.host, config.port, config.service, user, simId, actorType)
-//    }
-//
-//    SimConfig buildSim(String server, String port, String base, String user, SimId simId, ActorType actorType) {
         log.debug("SimConfigFactory: actorType ${actorType.name}")
         SimConfig actorSimConfig = new SimConfig(actorType)
 

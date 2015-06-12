@@ -381,6 +381,26 @@
                 <!--<version>1.6.2</version>-->
             </dependency>
             <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-transport-local</artifactId>
+                <version>1.6.2</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-transport-http</artifactId>
+                <version>1.6.2</version>
+                <scope>runtime</scope>
+            </dependency>
+            <!-- This is included to force version 4.4.1 which is required by modern groovy releases.
+            axis2-transport-http references 4.0 which breaks groovy's httpclient
+            -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>4.4.1</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.commons.io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>2.4</version>

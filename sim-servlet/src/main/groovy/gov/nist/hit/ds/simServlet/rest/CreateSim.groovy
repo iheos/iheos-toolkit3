@@ -39,10 +39,7 @@ class   CreateSim {
             if (!actorTypeName)
                 throw new WebApplicationException(Response.Status.BAD_REQUEST)
             def simId = new SimId(simIdString)
-//            SimHandle simHandle = SimApi.create(actorTypeName, username, simId)
-//            log.info("Initial config is ${simHandle.actorSimConfig.toString()}")
             ActorType actorType = new ActorTransactionTypeFactory().getActorType(actorTypeName)
-//            log.info("Creating sim for ${actorType}")
 
             SimHandle simHandle
             if (actorType?.isClient())
@@ -50,7 +47,6 @@ class   CreateSim {
             else
                 simHandle = SimApi.createServer(actorTypeName, username, simId, message)   // endpoints not updated
             return new String(simHandle.configAsset.content)
-//        return '<foo/>'
         } catch (Throwable t) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST)
         }

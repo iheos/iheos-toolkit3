@@ -4,6 +4,7 @@ import gov.nist.hit.ds.actorTransaction.EndpointType
 import gov.nist.hit.ds.simSupport.config.*
 import gov.nist.hit.ds.simSupport.endpoint.EndpointValue
 import gov.nist.hit.ds.toolkit.environment.EnvironmentAccess
+import gov.nist.hit.ds.xdsExceptions.ToolkitException
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 import groovy.xml.MarkupBuilder
@@ -52,18 +53,34 @@ class SimulatorDAO {
         assert simConfig.actorType
 
         String environmentName = actor.environment.@name.text()
-        if (environmentName) simConfig.environmentAccess = new EnvironmentAccess(environmentName)
+        // TODO - for now only applies to client sims and this checker does not have enough context
+        // to judge whether it is required
+//        if (!environmentName) throw new ToolkitRuntimeException('Simulator config does not reference an environment.')
+        try {
+            if (environmentName) simConfig.environmentAccess = new EnvironmentAccess(environmentName)
+        } catch (ToolkitRuntimeException tre) {
+            throw new ToolkitRuntimeException("Simulator config has bad environment reference: ${tre.message}")
+        }
 
+        def hasTransactions = false
         actor.transaction.each { trans ->
+            hasTransactions = true
+            def name = trans.@name.text()
+            if (!name) throw new ToolkitRuntimeException('Simulator config has bad transaction - no name specified')
             def endpointString = trans.endpoint.@value.text()
+            if (!endpointString) throw new ToolkitRuntimeException('Simulator config has bad transaction - no endpoint specified')
             def ws = trans.webService
-            assert ws
+            if (!ws) throw new ToolkitRuntimeException('Simulator config has bad transaction - no webService specification included')
             def label = ws.@value.text()
+            if (!label) throw new ToolkitRuntimeException('Simulator config has bad transaction - webService specification has no value')
             log.debug("Endpoint label is ${label}")
             EndpointType etype = new EndpointType(simConfig.actorType, label)
 
+            if (name != etype.transType.code)
+                throw new ToolkitRuntimeException("Simulator config has bad transaction - webService label ${etype.transType.code} does not match declared transaction ${name}")
+
             if (!etype.isValid())
-                throw new ToolkitRuntimeException("Endpoint ${endpointString}: ${etype.nonValidErrorMsg()}")
+                throw new ToolkitRuntimeException("Simulator config has bad transaction - Endpoint ${endpointString}: ${etype.nonValidErrorMsg()}")
 
             TransactionSimConfigElement transElement = new TransactionSimConfigElement(etype, new EndpointValue(endpointString))
             simConfig.add(transElement)
@@ -79,6 +96,7 @@ class SimulatorDAO {
                 setting.callback.each { transElement.add(new CallbackSimConfigElement(it.@value.text())) }
             }
         }
+        if (!hasTransactions) throw new ToolkitRuntimeException('Simulator config contains no configured transactions.')
         return simConfig
     }
 

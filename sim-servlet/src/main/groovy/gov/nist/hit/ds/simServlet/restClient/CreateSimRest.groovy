@@ -38,21 +38,6 @@ class CreateSimRest {
             }
         }
         return returnvalue
-
-//        http = new HTTPBuilder("http://${host}:${port}")
-//
-//        http.get( path : "/${service}/rest/sim/config/${username}/${simid}",
-//                contentType : XML ) { resp, xml ->
-//
-//            println "response status: ${resp.statusLine}"
-//            println 'Headers: -----------'
-//            resp.headers.each { h ->
-//                println " ${h.name} : ${h.value}"
-//            }
-//            returnvalue = prettyPrint(xml)
-//
-//        }
-//        return returnvalue
     }
 
     static prettyPrint(xml) {

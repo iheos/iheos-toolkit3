@@ -5,6 +5,7 @@ import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.toolkit.installation.Installation
 import spock.lang.Specification
 
 /**
