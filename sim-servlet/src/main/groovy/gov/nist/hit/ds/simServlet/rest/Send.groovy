@@ -40,7 +40,7 @@ class   Send {
             try {
                 xml = new XmlSlurper().parseText(message)
             } catch (SAXParseException spe) {
-                log.debug ExceptionUtil.exception_details(spe)
+                log.error ExceptionUtil.exception_details(spe)
                 throw new WebApplicationException(Response.Status.BAD_REQUEST)
             }
             println "xml parsed"
@@ -81,7 +81,7 @@ class   Send {
             String responseStr = "<Log>${request}${response}${fault}</Log>"
             return new OMFormatter(responseStr).toString()
         } catch (Throwable t) {
-            log.debug ExceptionUtil.exception_details(t)
+            log.error ExceptionUtil.exception_details(t)
             throw new WebApplicationException(Response.Status.BAD_REQUEST)
         }
     }

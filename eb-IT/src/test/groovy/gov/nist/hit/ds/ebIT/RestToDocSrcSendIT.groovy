@@ -44,7 +44,7 @@ class RestToDocSrcSendIT extends Specification {
 </xdsb:ProvideAndRegisterDocumentSetRequest>
 '''
     // This is the endpoint for the DocRec supplied by v2 toolkit
-    def docRecEndpoint = 'http://localhost:8080/xdstools2/sim/15bf53fb-17c0-4f02-9d6b-de4b5e1c7b08/rec/xdrpr'
+    def docRecEndpoint = 'http://localhost:8080/xdstools2/sim/c727eaed-b41a-487a-b597-d17e3207b18e/rec/xdrpr'
 //    def docRecEndpointTls = 'https://localhost:8443/xdstools2/sim/44547243-9a82-42ce-8390-b9a10bc898a4/rec/xdrpr'
     def docRecEndpointTls = 'https://transport-testing.nist.gov:12081/ttt/sim/ce45c84c-fc5f-430e-b1cd-aadf592a67ca/rec/xdrpr'
 
@@ -68,7 +68,7 @@ class RestToDocSrcSendIT extends Specification {
     def 'Run'() {
         when: '''Tell engine, via REST, to create DocSrc sim'''
         log.debug "Creating DocSrc sim"
-        def config = DocSrcUtils.createClientSimConfig(docRecEndpoint, "")
+        def config = DocSrcUtils.createClientSimConfig(docRecEndpoint, docRecEndpointTls)
         def result
         result = CreateSimRest.run(config, host, port, service, clientUserName, clientSimName)
         log.debug "Result from creating DocSrc sim is: \n${result}"
