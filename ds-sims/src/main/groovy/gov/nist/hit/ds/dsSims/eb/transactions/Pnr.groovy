@@ -6,7 +6,6 @@ import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.MetadataVal
 import gov.nist.hit.ds.dsSims.eb.reg.UnconnectedRegistryValidation
 import gov.nist.hit.ds.dsSims.eb.schema.EbSchemaValidator
 import gov.nist.hit.ds.dsSims.eb.schema.MetadataTypes
-import gov.nist.hit.ds.dsSims.eb.transactionSupport.EbSendRequest
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.ebMetadata.MetadataParser
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser
@@ -19,7 +18,6 @@ import gov.nist.hit.ds.toolkit.Toolkit
 import gov.nist.hit.ds.toolkit.environment.Environment
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.utilities.xml.OMFormatter
-import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 

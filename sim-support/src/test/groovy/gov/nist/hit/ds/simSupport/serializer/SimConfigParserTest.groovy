@@ -37,10 +37,10 @@ class SimConfigParserTest extends Specification {
         MHD
     -->
     <transaction name="Doc Reference Validation - XML" id="drv" code="drv">
-        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocRefTransaction"/>
+        <implClass value="gov.nist.hit.ds.fhirSims.mhd.validators.DocRefTransaction"/>
     </transaction>
     <transaction name="Doc Manifest Validation - XML" id="dmv" code="dmv">
-        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.DocManTransaction"/>
+        <implClass value="gov.nist.hit.ds.fhirSims.mhd.validators.DocManTransaction"/>
     </transaction>
     <actor name="MHD Document Recipient" id="mhddocrec">
         <implClass value=""/>
