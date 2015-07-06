@@ -5,19 +5,21 @@ import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.httpSoap.components.parsers.SoapMessageParser
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser
-import gov.nist.hit.ds.repoSupport.RepoUtils
 import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.repository.shared.id.AssetId
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
-import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.simSupport.validationEngine.EventErrorRecorder
 import gov.nist.hit.ds.tkapis.validation.MessageValidator
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
 import gov.nist.hit.ds.tkapis.validation.ValidateTransactionResponse
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
+import gov.nist.toolkit.valregmsg.validation.engine.ValidateMessageService
+import gov.nist.toolkit.valsupport.client.ValidationContext
+import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine
 import groovy.util.logging.Log4j
 
 /**
@@ -95,10 +97,20 @@ class ValidatorManagerV2 implements MessageValidator {
             if (!transactionType)
                 simHandle.event.fault = new Fault("Validation failed", '','unknown', exceptionMessages.toString())
 
+            //
+            // Crude V2 hook starts here
+            //
 
+            // TODO v2 and v3 have versions of ValidationContext
 
+            ValidationContext vc = new ValidationContext()
+            ValidateMessageService vms = new ValidateMessageService(null)
+            MessageValidatorEngine mvc = vms.runValidation(vc, msgHeader, msgBody, null, new EventErrorRecorder(simHandle.event))
 
-//            ValidateMessageResponse response = new ValidateMessageResponse()
+            println "MVC is ${mvc}"
+
+            ValidateMessageResponse response = new ValidateMessageResponse()
+            response.validationStatus = ValidationStatus.ERROR
 //
 //            if (transactionType) {
 //                TransactionRunner runner = new TransactionRunner(simHandle)

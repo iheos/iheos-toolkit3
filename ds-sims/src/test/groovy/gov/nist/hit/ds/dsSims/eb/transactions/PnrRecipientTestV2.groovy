@@ -12,6 +12,7 @@ import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
+import org.apache.log4j.BasicConfigurator
 import spock.lang.Specification
 /**
  * Created by bmajur on 9/24/14.
@@ -40,6 +41,7 @@ class PnrRecipientTestV2 extends Specification {
     def factory = new ActorTransactionTypeFactory()
 
     def setup() {
+        BasicConfigurator.configure()
         SimSupport.initialize()
         new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().loadFromString(config)
@@ -57,6 +59,7 @@ class PnrRecipientTestV2 extends Specification {
         try {
             response = vMan.validateMessage(ValidatorManager.soapAction, header, body.getBytes(), ValidationLevel.INFO)
         } catch (Throwable t) {
+            println "Exception thrown: ${t.class.name}: ${t.message}"
             SimUtils.close(simHandle)
         }
         simHandle = vMan.simHandle

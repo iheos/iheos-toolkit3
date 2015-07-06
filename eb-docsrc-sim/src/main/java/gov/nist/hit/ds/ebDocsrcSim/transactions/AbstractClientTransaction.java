@@ -5,8 +5,7 @@ import gov.nist.hit.ds.ebDocsrcSim.soap.Soap;
 import gov.nist.hit.ds.ebDocsrcSim.soap.SoapActionFactory;
 import gov.nist.hit.ds.simSupport.simulator.SimHandle;
 import gov.nist.hit.ds.utilities.xml.OMFormatter;
-import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
-import gov.nist.toolkit.utilities.xml.Util;
+import gov.nist.hit.ds.utilities.xml.Util;
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.AxisFault;
 
@@ -58,12 +57,7 @@ public abstract class AbstractClientTransaction {
 
 		if (additionalHeaders != null) {
 			for (OMElement hdr : additionalHeaders)
-				try {
 					soap.addHeader(Util.deep_copy(hdr));
-				} catch (XdsInternalException e) {
-					s_ctx.set_error(e.getMessage());
-					logSoapRequest(soap);
-				}
 		}
 		
 		/*

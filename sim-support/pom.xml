@@ -14,6 +14,14 @@
     <artifactId>sim-support</artifactId>
 
     <dependencies>
+
+        <!-- V2 dependencies -->
+        <dependency>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>error-recording</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
