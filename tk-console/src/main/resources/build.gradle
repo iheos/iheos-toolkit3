@@ -1,0 +1,1189 @@
+
+import java.security.cert.CertificateFactory
+import java.security.cert.Certificate
+import java.security.cert.X509Certificate
+import java.security.spec.X509EncodedKeySpec
+import java.security.PrivateKey
+import java.net.InetAddress
+
+import groovy.util.XmlSlurper
+import groovy.util.slurpersupport.GPathResult
+
+import gov.nist.diagnostics.TaskUtils
+import gov.nist.diagnostics.ValidationTask
+
+import gov.nist.hit.ds.toolkit.installation.Installation
+import gov.nist.hit.ds.toolkit.installation.PropertyServiceManager
+import gov.nist.hit.ds.toolkit.Toolkit
+
+import gov.nist.hit.ds.repository.api.Asset;
+import gov.nist.hit.ds.repository.api.AssetIterator;
+import gov.nist.hit.ds.repository.api.Repository;
+import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.ArtifactId;
+import gov.nist.hit.ds.repository.api.Asset;
+import gov.nist.hit.ds.repository.api.Repository;
+import gov.nist.hit.ds.repository.api.RepositoryException;
+import gov.nist.hit.ds.repository.api.RepositoryFactory;
+import gov.nist.hit.ds.repository.api.RepositorySource;
+import gov.nist.hit.ds.repository.api.RepositorySource.Access;
+
+import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.simple.SimpleType;
+import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder;
+import gov.nist.hit.ds.repository.simple.search.AssetNodeBuilder.Depth;
+import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
+import gov.nist.hit.ds.repository.simple.Configuration;
+import gov.nist.hit.ds.repository.simple.SimpleId;
+import gov.nist.hit.ds.repository.simple.SimpleRepository;
+import gov.nist.hit.ds.repository.simple.search.SearchResultIterator;
+
+import gov.nist.hit.ds.repository.shared.PropertyKey;
+import gov.nist.hit.ds.repository.shared.SearchCriteria;
+import gov.nist.hit.ds.repository.shared.SearchCriteria.Criteria;
+import gov.nist.hit.ds.repository.shared.SearchTerm;
+import gov.nist.hit.ds.repository.shared.SearchTerm.Operator;
+import gov.nist.hit.ds.repository.shared.data.AssetNode;
+
+import gov.nist.hit.ds.repository.rpc.presentation.PresentationData;
+import gov.nist.hit.ds.repository.rpc.search.client.RepositoryTag;
+
+import gov.nist.hit.ds.repository.RepositoryHelper;
+
+import java.io.File
+import java.io.FileReader
+import java.io.IOException
+import java.io.OutputStream
+import java.util.Properties
+
+
+
+project.description = 'This is the main Gradle script that maps validation task dependencies for the Toolkit Environment'	
+
+
+/******************************************************************************
+******************************************************************************
+******************** IMPORTANT ***************** IMPORTANT *******************
+******************************************************************************
+******************************************************************************
+
+##### The following task naming conventions must be observed:
+a. Tasks:	All validation tasks should be prefixed with "t_"
+
+##### Script overview:
+1. Defines the default tasks (when using the base 'gradle -I init.gradle' command)
+2. Defines the task dependencies
+3. Separation of concerns: 
+	a. boilerplating/reporting: 	 	init.gradle 
+	b. re-usable task methods: 			diagnostics plugin
+	c. machine-specific dependencies: 	gradle.properties:prop_libs
+
+Gradle References:
+About Gradle Tasks - http://www.gradle.org/docs/current/userguide/userguide_single.html#N101BE
+
+##### Running
+1. Listing tasks:
+-----
+C:\e\Packages\mygradlescripts\diagnostics\env-validation>gradle tasks
+ 
+(also: r tasks)
+
+
+2. Running a specific task:
+----
+C:\e\Packages\mygradlescripts\diagnostics\env-validation>r "get actorsFileName"
+
+******************************************************************************
+********************************************************************************/
+
+apply plugin: 'diagnostics'
+
+
+
+buildscript {
+	repositories {
+			flatDir(dir: prop_libs_plugin , name: 'libs directory')
+	  }
+	
+	dependencies {
+		classpath fileTree(dir: prop_libs_plugin, include: '*.jar')
+		classpath fileTree(dir: prop_libs_extra, include: '*.jar')
+		classpath fileTree(dir: prop_libs_toolkit, include: '*.jar')
+		classpath fileTree(dir: prop_libs_jee, include: '*.jar')
+		classpath files(["${prop_log_browser_cp}"]) // Use this for class files
+	}
+}
+
+
+apply from: 'taskUtils.gradle'		
+
+/*
+** Task
+*/	
+
+	task ('t_toolkitpropertiesv3'
+		,type: 		   gov.nist.diagnostics.FileExists
+		,group: 	  'tk-config' 		
+		,description: 'Toolkit property file'
+	)
+	.configure() {
+
+		doFirst() {
+			parameter['source'] = prop_log_browser_cp + File.separator + prop_toolkitpropertiesfile
+		}
+		onNoOutput() {			
+			report << [(ERROR):"Please check this path: ${parameter['source']}"]
+		}		
+		doLast() {
+			report << [(INFO):"Found ${ext.output}"]
+		} 
+	}
+		
+
+/*
+** Task
+*/	
+	
+	task ('t_getexternalcachedirv3'
+		,type: 		   gov.nist.diagnostics.GetExternalProperty
+		,group: 	  'tk-config' 		
+		,description: 'External Cache dir key/value property'
+	)
+	.configure() {
+
+		dependsOn('t_toolkitpropertiesv3')
+
+		doFirst() {			
+			parameter['source'] = input['t_toolkitpropertiesv3']
+			parameter['key'] = prop_key_ec  
+		}
+		
+		onComplete() {
+			//Make sure the resource (or the path retrieved) is accessible
+			try { 
+				if (TaskUtils.isFileLocatable(resource)) {
+					ext.output = resource							
+				} 
+				
+			} catch (e) {
+				report << [(ERROR):e.toString()]
+			}			
+		}
+		onSuccess() {
+			report << "${parameter['key']}=${ext.output}"
+		}
+	}
+
+
+
+/*
+** Init Toolkit
+*/
+
+	task ('t_initToolkitv3'
+	    ,type: 	gov.nist.diagnostics.GeneralTask
+		,group: 'tk-config'
+		,description: 'Toolkitv3 initialization task'
+	)
+	.configure() {
+
+		dependsOn('t_getexternalcachedirv3')
+		
+		doFirst() {			
+			parameter['source'] = input['t_getexternalcachedirv3']
+		}
+
+		onComplete() {		
+		
+			try {
+			
+				if (Installation.installation().getExternalCache()==null) {				
+					Installation.installation().setExternalCache(new File(resource))
+					
+					ext.output = resource
+					report << [(DEBUG): "EC_Dir: " + Installation.installation().getExternalCache()]
+					Installation.installation().initialize();
+					
+					Configuration.configuration()
+
+					File dataDir = Configuration.getRepositoriesDataDir(Configuration.getRepositorySrc(Access.RW_EXTERNAL))
+			
+					report << [(DEBUG):"Repository dataDir: ${dataDir}"]			
+					
+										
+				} 
+				
+			} catch (e) {
+			
+				report << [(ERROR):"${e}"]						
+				 // e.printStackTrace()
+				
+			}		
+			
+		}
+		
+		onSuccess() {	
+			report << [(DEBUG):"Init complete."]						
+		}		
+	}
+	
+
+/*
+** Get actors file name
+*/
+
+	task ('get actorsFileName'
+	    ,type: 	gov.nist.diagnostics.GeneralTask
+		,group: 'get'
+		,description: 'Get actors file name task'
+	)
+	.configure() {
+
+		dependsOn('t_initToolkitv3')
+		
+		doFirst() {			
+			parameter['source'] = input['t_initToolkitv3']
+		}
+		
+		onComplete() {			
+			ext.output =  new PropertyServiceManager().actorsFileName
+			report << [(INFO):"actors file: ${ext.output}"] // 
+			
+		}
+
+	
+	}	
+	
+	
+	// 
+
+
+/*
+** Task
+
+*/	
+
+	task ('list environments'
+		 ,type: 	gov.nist.diagnostics.GeneralTask		 ,group:'list'
+		 ,description:'List environments'
+		) << {
+		println 'TODO.'
+	}	
+
+
+/*
+** List sites
+*/
+
+	task ('list sites' 
+	    ,type: 	gov.nist.diagnostics.GeneralTask
+		,group: 'list'
+		,description: 'List sites task'
+	)
+	.configure() {
+
+		dependsOn('get actorsFileName')
+		
+		doFirst() {			
+			parameter['source'] = input['get actorsFileName'].toString()
+		}
+		
+		onComplete() {	
+
+			def GPathResult sites = TaskUtils.getXmlFromFile(resource,report)
+			sites.site.each {s ->
+				report << "${s.@name}"
+			}
+			report << [(INFO):"Sites: ${sites.site.size()}"] 
+
+			ext.output = [:]
+			ext.output << ['actorsFileName':resource]
+			ext.output << ['size':sites.site.size()]
+			
+					
+			
+		}
+	}	
+	
+	
+
+/*
+** List repositories
+*/
+
+	task ('t_listRepositories'
+	    ,type: 	gov.nist.diagnostics.GeneralTask
+		,group: 'tk'
+		,description: 'List repositories task'
+	)
+	.configure() {
+
+		dependsOn('t_initToolkitv3')
+		
+		doFirst() {			
+			parameter['source'] = input['t_initToolkitv3']
+		}
+		
+		onComplete() {	
+ 
+			def List<RepositoryTag> tags = new PresentationData().repositoryDisplayTags
+			
+			tags.each {tag->
+				report << tag.displayName
+			}
+			report << [(INFO):"Repositories: ${tags.size()}"] 
+			
+			ext.output = [:]
+			ext.output << ['repositories':tags]
+			ext.output << ['size':tags.size()]
+			
+					
+			
+		}
+	}	
+	
+
+/*
+** List repository node
+*/
+
+	task ('t_listRepositoryNode'
+	    ,type: 	gov.nist.diagnostics.GeneralTask
+		,group: 'tk'
+		,description: 'List repository node task'
+	)
+	.configure() {
+
+		dependsOn('t_initToolkitv3')
+		
+		doFirst() {			
+			parameter['source'] = input['t_initToolkitv3']
+		}
+		
+		onComplete() {	
+			
+			try {
+				def Repository repos = RepositoryHelper.composeRepositoryObject("ValidationRepo", RepositorySource.Access.RW_EXTERNAL.name())			
+				def AssetNodeBuilder anb = new AssetNodeBuilder()
+				List<AssetNode> tree = anb.build(repos, 0,false)							
+				
+				tree.each {an ->
+					report << an.repId + ":" + an.displayName
+				}
+				
+				
+				
+				ext.output = [:]
+				ext.output << ['tree':tree]
+				ext.output << ['size':tree.size()]
+			
+			} catch (Throwable t) {
+				t.printStackTrace()
+			}
+			//new PropertyKey[]{PropertyKey.CREATED_DATE},
+			
+			
+					
+			
+		}
+	}	
+		
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------------ */	
+/* ------------------------------------------------------------------------------------------------------------------ */
+
+/*
+** Task
+*/	
+
+	task ('t_toolkitproperties'
+		,type: 		   gov.nist.diagnostics.FileExists
+		,group: 	  'prelim' 		
+		,description: 'Main property file'
+	)
+	.configure() {
+
+		doFirst() {
+			parameter['source'] = prop_war + prop_webinf + prop_toolkitpropertiesfile
+		}
+		onNoOutput() {
+			report << 'Note: Please check if this package is installed on the same folder level as the Webserver\'s WEB-INF folder.'
+		}		
+		doLast() {
+			report << [(INFO):"Found ${ext.output}"]
+		} 
+
+	}
+
+	 
+/*
+** Task
+*/	
+	
+	task ('t_getexternalcachedir'
+		,type: 		   gov.nist.diagnostics.GetExternalProperty
+		,group: 	  'prelim' 		
+		,description: 'External Cache dir key/value property'
+	)
+	.configure() {
+
+		dependsOn('t_toolkitproperties')
+
+		doFirst() {			
+			parameter['source'] = input['t_toolkitproperties']
+			parameter['key'] = prop_key_ec  
+		}
+		
+		onComplete() {
+			//Make sure the resource (or the path retrieved) is accessible
+			try { 
+				if (TaskUtils.isFileLocatable(resource)) {
+					ext.output = resource
+				}
+			} catch (e) {
+				report << [(ERROR):e.toString()]
+			}
+		}
+		onSuccess() {
+			report << "${parameter['key']}=${ext.output}"
+		}
+	}
+	
+/*
+** Task
+*/	
+	
+	task ('t_getdns'
+		,type: 		   gov.nist.diagnostics.GetExternalProperty
+		,group: 	  'prelim' 		
+		,description: 'DNS Domain key/value property'
+	)
+	.configure() {
+
+		dependsOn('t_getexternalcachedir')
+		onlyIf {
+			nonNullInput(['t_getexternalcachedir'])
+		}
+
+		doFirst() {
+			//The ext.input is automatically wired by the init.gradle 
+			//and it contains the validated Output of the previous task
+			//Append the 'tk_props' file to the path retrieved earlier (a.p old .sh script)
+			parameter['source'] = input['t_getexternalcachedir'] + prop_tk
+			parameter['key'] = prop_key_dns		
+		}
+
+		onNoOutput() {
+			report << "Please verify the key/value as specified in the '${prop_gp}' file."
+		}
+		onSuccess() {
+			report << "${parameter['key']}=${ext.output}"
+			report << [(INFO):"Source: ${parameter['source']}"]			
+		}		
+	}
+
+	
+/*
+** Task
+*/
+	 task ('t_publiccerts'
+		 ,type: 		gov.nist.diagnostics.FileExists
+		 ,group: 	   'pub-cert'
+		 ,description: 'Can encrypt using public key for sending to the following domains'
+	 )
+	 .configure() {
+		dependsOn('t_getexternalcachedir')
+
+		doFirst() {
+			parameter['source'] = input['t_getexternalcachedir'] + prop_pubcertdir
+		}
+		onComplete() {Task t->
+				
+			def certFn = [] 
+			def p = ~/.*\${prop_publiccertext}/ 
+			//~/.*/ 
+			// ~/.*\.der/
+
+			def fileCt = [0,0,0] //pub,root,other
+            
+		    		
+			new File( t.resource ).eachFileMatch(p) {f->
+ 
+				try {
+					
+					Certificate cert = TaskUtils.getCert(f.absolutePath)
+
+					def String cn = TaskUtils.getCertCnIfValidDomainName(cert,report)
+					if (!TaskUtils.isNullishString(cn)) {
+						certFn << f.getName()
+						def String lineFmt = '' + ++fileCt[0] + '. '
+						def String blankFmt = '   '
+						
+						report <<  lineFmt +"Domain: ${cn}"
+						
+						if (!f.getName().toLowerCase().contains(cn)) {
+							report << blankFmt + 'Note: The file naming convention does not contain the CN!'
+						}
+						
+						cert.checkValidity()
+						//Keep this after checkValidty because of future tense message
+						report << blankFmt + "Cert expires on: ${cert.getNotAfter()}" //File: ${f.getName()},									
+						//def publicKey = TaskUtils.getPublic(cert.getPublicKey().getEncoded())	
+						//logger.debug  'publicKey is: ' + publicKey
+					} else {
+						logger.debug "(TTT) ${cn} is not a valid domain name!"
+					}
+						
+										 
+	  
+				} catch (e) {					
+					report << [(ERROR):'This file does not appear to be a valid certificate!']
+					logger.debug  e.toString()
+				}
+				
+			}
+			if (fileCt[0]>0) {
+				ext.output = certFn
+			} else {
+				report << [(ERROR):'No public (DER) certificates were found in the source directory.']
+				report << 'The certificate(s) must have a valid CN in the standard domain name format.'
+			} 				
+			report << [(INFO):"Source for the .der files: ${parameter['source']}"]
+			
+		}		 
+	 }
+
+	 
+	 
+	
+/*
+ ** Task
+ *echo "Checking config for signing messages..."
+if [[ -e $EC/direct/signing_cert/$DOMAIN.p12 ]]
+then
+	echo "Good, Found private cert for signing for domain $DOMAIN: " 
+	echo "    " $EC/direct/signing_cert/$DOMAIN.p12
+else
+	echo "Bad, Did not find private cert for signing for domain $DOMAIN: " 
+	echo "    " $EC/direct/signing_cert/$DOMAIN.p12
+fi
+*/
+	 
+	 
+	 	 
+	 task ('t_privatecert'
+		 ,type: 		gov.nist.diagnostics.FileExists
+		 ,group: 	   'private-cert'
+		 ,description: 'Private key file'
+	 )
+	 .configure() {
+		dependsOn('t_getexternalcachedir','t_getdns')
+		doFirst() {
+			parameter['source'] = input['t_getexternalcachedir'] + prop_privatecertdir + input['t_getdns'] + prop_privatecertext				
+		}
+		onSuccess() {
+			
+			report << [(INFO):"Found: ${parameter['source']}"]
+
+		}
+			
+	}		 
+	 
+/*	
+if [[ -e $EC/direct/signing_cert/password.txt ]]
+then
+	echo "Good, Found password file for private cert for signing for domain $DOMAIN: " 
+	echo "    " $EC/direct/signing_cert/password.txt
+else
+	echo "Bad, Did not password file for private cert for signing for domain $DOMAIN: " 
+	echo "    " $EC/direct/signing_cert/password.txt
+fi
+
+
+ */
+	 task ('t_verifypv'
+		 ,type: 		gov.nist.diagnostics.FileExists
+		 ,group: 	   'private-cert'
+		 ,description: 'Verification of the P12 file using the password file'
+	 )
+	 .configure() {
+		dependsOn('t_getexternalcachedir','t_getdns','t_privatecert')
+		doFirst() {
+			parameter['source'] = input['t_getexternalcachedir'] + prop_privatecertdir + prop_privatecertpwtxt				
+		}
+		onComplete() {
+			def f = resource			
+
+				try {
+					
+					Certificate cert = TaskUtils.getPrivate(input['t_privatecert'],parameter['source'],report)
+					cert.checkValidity()
+					//Keep this after checkValidty because of future tense message					
+					report << "Cert expires on: ${cert.getNotAfter()}"								
+	  				ext.output = resource
+					  
+				} catch (e) {					
+					report << [(ERROR):e.toString()]
+					report << [(INFO):"Cert: "+input['t_privatecert']]
+				}
+				report << [(INFO):"Found: ${parameter['source']}"]
+				 
+				
+
+		}
+		
+	 }
+	 
+/*
+ * Common closure for the next three pub-cert tasks
+ */
+	 
+def Closure checkPubCert = {Task t ->
+	try { 
+		t.resource = prop_war + prop_directpubcertdir + t.resource
+		if (TaskUtils.isFileLocatable(t.resource)) {
+			Certificate cert = TaskUtils.getCert(t.resource)
+			def String cn = TaskUtils.getCertCnIfValidDomainName(cert,t.report)
+			t.report << "CN: ${cn}"					
+			cert.checkValidity()
+			//Keep this after checkValidty because of future tense message
+			t.report << "Cert expires on: ${cert.getNotAfter()}" //File: ${f.getName()},
+			
+			if (!TaskUtils.isNullishString(cn)) {
+				t.ext.output = t.resource						
+			} 
+		}
+	} catch (e) {
+		t.report << [(ValidationTask.ERROR):e.toString()]
+	}
+
+}		 
+	
+/*
+** Task
+*/	
+	
+	task ('t_directpubcert'
+		,type: 		   gov.nist.diagnostics.GetExternalProperty
+		,group: 	  'download' 		
+		,description: 'Downloadable public cert for this domain'
+	)
+	.configure() {
+		dependsOn('t_getexternalcachedir')
+		onlyIf {
+			nonNullInput(['t_getexternalcachedir'])
+		}
+
+		doFirst() {
+			//The ext.input is automatically wired by the init.gradle 
+			//and it contains the validated Output of the previous task
+			//Append the 'tk_props' file to the path retrieved earlier (a.p old .sh script)
+			parameter['source'] = input['t_getexternalcachedir'] + prop_tk
+			parameter['key'] = prop_key_directpubcert		
+		}
+
+		onNoOutput() {
+			report << "Please verify the key/value as specified in the '${prop_gp}' file."
+		}
+		onComplete = checkPubCert
+		onSuccess() {
+			report << "${parameter['key']}=${ext.output}"
+			report << [(INFO):"Source: ${parameter['source']}"]			
+		}		
+	}
+
+
+
+	
+/*
+** Task
+*/	
+	
+	task ('t_directpubtrust'
+		,type: 		   gov.nist.diagnostics.GetExternalProperty
+		,group: 	  'download' 		
+		,description: 'Downloadable public trust anchor cert for this domain'
+	)
+	.configure() {Task t ->
+		dependsOn('t_getexternalcachedir')
+		onlyIf {
+			nonNullInput(['t_getexternalcachedir'])
+		}
+
+		doFirst() {
+			//The ext.input is automatically wired by the init.gradle 
+			//and it contains the validated Output of the previous task
+			//Append the 'tk_props' file to the path retrieved earlier (a.p old .sh script)
+			parameter['source'] = input['t_getexternalcachedir'] + prop_tk
+			parameter['key'] = prop_key_directpubtrust		
+		}
+
+		onNoOutput() {
+			report << "Please verify the key/value as specified in the '${prop_gp}' file."
+		}
+		onComplete = checkPubCert
+		onSuccess() {
+			report << "${parameter['key']}=${ext.output}"
+			report << [(INFO):"Source: ${parameter['source']}"]			
+		}		
+	}
+		
+
+
+/*
+** Task
+*/	
+	
+	task ('t_directpubinvtrust'
+		,type: 		   gov.nist.diagnostics.GetExternalProperty
+		,group: 	  'download' 		
+		,description: 'Downloadable public invalid relationship trust anchor cert'
+	)
+	.configure() {
+		dependsOn('t_getexternalcachedir')
+		onlyIf {
+			nonNullInput(['t_getexternalcachedir'])
+		}
+
+		doFirst() {
+			//The ext.input is automatically wired by the init.gradle 
+			//and it contains the validated Output of the previous task
+			//Append the 'tk_props' file to the path retrieved earlier (a.p old .sh script)
+			parameter['source'] = input['t_getexternalcachedir'] + prop_tk
+			parameter['key'] = prop_key_directpubinvtrust		
+		}
+
+		onNoOutput() {
+			report << "Please verify the key/value as specified in the '${prop_gp}' file."
+		}
+		onComplete = checkPubCert
+		onSuccess() {
+			report << "${parameter['key']}=${ext.output}"
+			report << [(INFO):"Source: ${parameter['source']}"]			
+		}		
+	}
+
+	
+			
+	
+/*
+** Task
+*/
+	 task ('t_privcert'
+		 ,type: 		gov.nist.diagnostics.FileExists
+		 ,group: 	   'privcert'
+		 ,description: 'Checking private key used for decryption'
+	 )
+	 .configure() {
+		doFirst() {
+			parameter['source'] = prop_war + prop_webinf + prop_privcertdir
+		}
+		onComplete() {Task t->
+				
+			def String certFn 
+			def p = ~/.*/  
+			//~/.*/ 
+			// ~/.*\.der/
+
+			def fileCt = 0
+            
+		    		
+			new File( t.resource ).eachFileMatch(p) {f->
+ 				certFn = f.getName()
+				fileCt++
+			}
+			
+
+            if (fileCt==1) {           
+                ext.output = certFn
+                report << [(INFO):"Found: ${certFn}"]
+                report << [(INFO):"Source: ${parameter['source']}"]
+            } else {
+                report << [(ERROR):"There should only be one (1) file in this directory; found ${fileCt}."]
+                report << [(INFO):"Source: ${parameter['source']}"]
+            }             			
+			
+			
+		}		 
+	 }
+
+	 /*
+	  * Task
+	  * When there are more than one servers to discover:
+	  *  1. Create a web server specific task, ex.: t_tomcat, t_websphere
+	  *  2. Create a web_config task to link the output from ONE preferred webserver 
+	  */
+	   task ('t_discoverwebserver'
+		   ,type: 		gov.nist.diagnostics.FileExists
+		   ,group: 	   'webconfig'
+		   ,description: 'Discovering web server configuration...'
+	   )	  
+	 .configure() {
+		 doFirst() {
+			 parameter['env-var'] = 'CATALINA_HOME'
+			 parameter['source'] = System.getenv()[parameter['env-var']]
+		 }
+		 onComplete() {
+			 logger.debug 'Seems to be running in a Tomcat environment...'
+			 try {
+				 resource += '/conf/server.xml'
+				 if (TaskUtils.isFileLocatable(resource)) {
+					 ext.output = [:]
+					 ext.output << ['type':'Tomcat']
+					 ext.output << ['server-config-file':resource]
+					 def GPathResult serverXml = TaskUtils.getXmlFromFile(resource,report)
+					 logger.debug "server sz:" + serverXml.size()
+					 def server = serverXml.Service.find{ it.@name.text().equals('Catalina')}
+					 if (server.size()==1) {
+						 def con = server.Connector.find{it.@protocol.equals('HTTP/1.1')}
+						 if(!TaskUtils.isNullishString(con.@port.text())) {
+							 ext.output << ['http-port':con.@port.text()]
+					 	 }
+						 con = server.Connector.find{it.@sslProtocol.equals('TLS')}
+						 if(!TaskUtils.isNullishString(con.@port.text())) {
+							 ext.output << ['secure-port':con.@port.text()]
+						 }
+
+					 }
+					 
+				 } else {
+					 report << [(ERROR):"server-config not found: ${resource}"]
+				 }
+	
+			 } catch (e) {
+			 	report << [(ERROR):e.toString()]
+			 }
+
+		 } 
+		 onNoOutput() {
+			 report << [(INFO):"System env. variable: ${parameter['env-var']}"]
+		 }
+		 onSuccess() {
+			 report << ext.output.toString()
+		 }
+	
+	 }
+
+ /*
+  * Example:
+  * tk_props.txt
+	direct.reporting.mail.smtp.port: 465
+	
+	toolkit.properties:
+	Toolkit_TLS_Port=8443
+	Toolkit_Port=8080
+  */
+	 
+ /*
+  ** Task
+  */
+   task ('t_httpport'
+	   ,type: 		gov.nist.diagnostics.GetExternalProperty
+	   ,group: 		'webconfig'
+	   ,description: 'Checking if http port in properties matches the web server...'
+   )
+ .configure() {
+	 dependsOn('t_toolkitproperties')
+	 dependsOn('t_discoverwebserver')
+	 doFirst() {
+		 parameter['source'] = input['t_toolkitproperties']
+		 parameter['key'] = prop_toolkit_port
+	 }
+	 onComplete() {
+		 if (resource.equals(input['t_discoverwebserver']['http-port'])) {
+			 ext.output = resource
+		 }
+	 }
+	 onNoOutput() {
+	 	report << [(ERROR):"Server port number does not match: ${input['t_discoverwebserver']['http-port']}, expected: ${resource} "]
+	 }
+ 	 onSuccess() {
+		  report << [(INFO):"${parameter['key']}: ${resource}"]
+	  }
+   }
+ 
+ /*
+  ** Task
+  */
+   task ('t_secureport'
+	   ,type: 		gov.nist.diagnostics.GetExternalProperty
+	   ,group: 		'webconfig'
+	   ,description: 'Checking if the secure port matches the web server'
+   )
+ .configure() {
+	 dependsOn('t_toolkitproperties')
+	  dependsOn('t_discoverwebserver')
+	 doFirst() {
+		 parameter['source'] = input['t_toolkitproperties']
+		 parameter['key'] = prop_tls_port
+	 }
+	 onComplete() {
+		 if (resource.equals(input['t_discoverwebserver']['secure-port'])) {
+			 ext.output = resource
+		 }
+	 }
+	 onNoOutput() {
+		 report << [(ERROR):"The server port number does not match: ${input['t_discoverwebserver']['secure-port']}, expected: ${resource} "]
+	 }
+	  onSuccess() {
+		  report << [(INFO):"${parameter['key']}: ${resource}"]
+	  }
+   }
+ 
+print_startHeader()
+
+/*
+Toolkit_Host=localhost
+println java.net.InetAddress.getLocalHost().getHostName()
+
+static InetAddress
+getByName(String host)
+          Determines the IP address of a host, given the host's name.
+          http://docs.oracle.com/javase/1.4.2/docs/api/java/net/InetAddress.html#getHostName%28%29
+          
+          equals(Object obj)
+          Compares this object against the specified object.
+*
+*/
+/*
+ ** Task
+ */
+
+   task ('t_hostname'
+	   ,type: 		gov.nist.diagnostics.GetExternalProperty
+	   ,group: 		'hostname'
+	   ,description: 'Configured host name matches the system hostname'
+   )
+ .configure() {
+	 dependsOn('t_toolkitproperties')
+	 doFirst() {
+		 parameter['source'] = input['t_toolkitproperties']
+		 parameter['key'] = prop_toolkit_hostname
+	 }
+	 onComplete() {
+		 def InetAddress systemInet = InetAddress.getLocalHost()
+		 def InetAddress propInet = InetAddress.getByName(resource).getLocalHost()
+		  
+		 logger.debug "propInet.getHostAddress(): ${propInet.getHostAddress()}"
+		 logger.debug "systemInet.getHostAddress(): ${systemInet.getHostAddress()}"
+		 
+		 if (systemInet.equals(propInet)) {
+			 ext.output = [:]
+			 ext.output << [(prop_toolkit_hostname):resource]
+			 ext.output << ['resolved-hostname':propInet.getHostName()]
+			 ext.output << ['get-by-name':InetAddress.getByName(resource).toString()]
+			 ext.output << ['ip':propInet.getHostAddress()]
+			 ext.output << ['isSiteLocalAddress':propInet.isSiteLocalAddress()]
+			 logger.debug "isLocal:${propInet.isLoopbackAddress()}"
+		 } else {
+		 	report << [(INFO):"Could not resolve the provided hostname ${resource} to the localhost"]
+		 }
+	 }
+	 onNoOutput() {
+		 report << [(ERROR):"Could not retrieve the key value ${prop_toolkit_hostname} ${resource}"]
+	 }
+	  onSuccess() {
+		  report << [(INFO):"${ext.output}"]
+	  }
+   }
+
+
+
+
+
+//Begin
+//Task Template
+ /*
+  ** Task 
+  */
+//	
+//   task ('t_$name'
+//	   ,type: 		gov.nist.diagnostics.GeneralTask
+//	   ,group: 		'$group'
+//	   ,description: '$desc'
+//   )
+// .configure() {
+//	 //The dependsOn method is used to map tasks dependencies 
+//	 //(usually on other tasks)
+//	 dependsOn('t_task')
+//	 
+//	 //The doFirst closure contains the necessary parameters for this task     
+//	 doFirst() {
+//		 parameter['source'] = input['t_taskname0']
+//	 }
+//	 
+//	 //The onlyIf closure contains predicates of this task
+//     onlyIf {
+//     }
+//	 
+//	 //Optional.
+//	 //The onComplete closure is executed when the task completes with 
+//	 //a handle to the resource object. Business rules can be defined in 
+//	 //this block to utilized the 'resource' and finally provide the output
+//	 //of this task via the ext.output property	 
+//	 onComplete() {
+//	 }
+//	 
+//	 //The onNoOutput is generally executed when the base task does not
+//	 //produce any output. Programatic exceptions are handled by the base task.
+//	 onNoOutput() {
+//		 report << [(ERROR):""]
+//	 }
+//	 
+//	 //The onSuccess is executed when the task produces an output 
+//	  onSuccess() {
+//		  report << [(INFO):"${resource}"]
+//	  }
+//   }
+//Task Template
+//End
+
+/*
+##### 	1. Default tasks to run on startup (in csv format)
+for Direct
+*/
+
+
+
+// this.class.classLoader.rootLoader.addURL( new URL("file://" + prop_log_browser_cp ))  
+//ClassLoaderTest.class.classLoader.addURL( new URL("file://" + prop_log_browser_cp ))
+
+
+ 
+/* Unit Test
+*/
+defaultTasks \
+	't_initToolkitv3' 
+	
+	
+
+/*	
+Good copy
+
+defaultTasks \
+		't_getdns'\
+		,'t_publiccerts'\
+		,'t_verifypv' \
+		,'t_directpubcert' \
+		,'t_directpubtrust' \
+		,'t_directpubinvtrust' \
+		,'t_privcert' \
+		,'t_httpport' \
+		,'t_secureport' \
+		,'t_hostname'  
+*/
+		
+	
+
+
+
+
+
+/*
+##### 	2. Validation Task Predicates
+*/
+
+/*
+t_getdns.onlyIf {
+				t_getexternalcachedir.hasProperty('validatedResource')
+}
+*/
+def print_startHeader() {
+	// println 'XDS Toolkit3 - Task Manager v1.0' 
+	// println new Date()
+	println ''
+
+}
+
+	
+	  
+
+/*******
+
+Host login:
+ssh -i ec2-setup/ttt.cer ubuntu@ttt.transparenthealth.org
+---
+ubuntu@ip-10-145-204-221:/var/lib/tomcat7/webapps/ttt/scripts$ sudo ./cert-check.sh
+
+************************************************************
+Looking in ../WEB-INF/toolkit.properties to find External Cache location
+External Cache is </home/ubuntu/tttdir/external_cache>
+
+Looking in tk_props.txt file (/home/ubuntu/tttdir/external_cache/tk_props.txt) for DNS domain name
+DOMAIN is <ttt.transparenthealth.org>
+
+************************************************************
+Can encrypt using public key for sending to the following domains:
+     ttt.transparenthealth.org
+which are represented by der files in /home/ubuntu/tttdir/external_cache/direct/encrypt_certs
+
+************************************************************
+Checking config for signing messages...
+Good, Found private cert for signing for domain ttt.transparenthealth.org:
+     /home/ubuntu/tttdir/external_cache/direct/signing_cert/ttt.transparenthealth.org.p12
+Good, Found password file for private cert for signing for domain ttt.transparenthealth.org:
+     /home/ubuntu/tttdir/external_cache/direct/signing_cert/password.txt
+
+************************************************************
+Examining the public certs we offer for download from TTT...
+   Looking in ../pubcert...
+     Good, found ttt.transparenthealth.org.der
+     which seems to be the public cert for this domain
+
+     Good, found transparenthealth.org.der
+     which seems to be the trust anchor cert for this domain
+
+     Good, found invalid-trust-relationship.der
+     which seems to be the invalid relationship trust anchor cert
+
+************************************************************
+Checking private key used for decryption...
+    Looking in ../WEB-INF/privcert
+    Good, only a single file found
+    Good, .p12 format found
+      Found ttt.transparenthealth.org.p12
+
+************************************************************
+ubuntu@ip-10-145-204-221:/var/lib/tomcat7/webapps/ttt/scripts$ date
+Tue Mar 19 18:22:10 UTC 2013
+---
+
+
+March 13, 2013
+Requirements
+Bill Majurski
+
+# Diagnostics
+## Direct
+### Certificates
+* label (der, p12) matches contents
+* filename matches CN
+* if cert new - rename to match CN according to toolkit standard
+* given domain name, verify that necessary certs are installed correctly
+* identify in output optional certs loaded (and what they may be used for)
+* Check/display cert expiration
+### Other
+* configed hostname matches host (toolkit.properties)
+* port(s) configed in tomcat (if tomcat being used) match toolkit.properties
+* default environment exists (toolkit.properties)
+* environment(s) properly configured
+* keystore password matches keystore
+* pointer to external cache references writeable directory
+* external cache is configured?
+---
+
+
+
+
+
+---
+http://docs.oracle.com/javase/1.4.2/docs/api/java/security/KeyFactory.html
+---
+13/03/25(MON) 12:45:49
+http://www.gradle.org/docs/current/userguide/custom_tasks.html
+
+http://www.gradle.org/docs/current/userguide/organizing_build_logic.html#sec:external_dependencies
+
+http://www.gradle.org/docs/current/userguide/organizing_build_logic.html#sec:external_dependencies
+
+******/
