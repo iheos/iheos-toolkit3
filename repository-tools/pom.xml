@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
     
     <modules>
-        <module>../log-browser</module>
+        <module>../tk-browser</module>
 		<module>../repository-rpc</module>
         <module>../repository-widgets-ui</module>
         <module>../GwtResizableDraggableColumns</module>

@@ -66,7 +66,7 @@
 	
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>logBrowser.html</welcome-file>
+    <welcome-file>browser.html</welcome-file>
   </welcome-file-list>
 
     <!-- ============== Listeners ========================== -->
