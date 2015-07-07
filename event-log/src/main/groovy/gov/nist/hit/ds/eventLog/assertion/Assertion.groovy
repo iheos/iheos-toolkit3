@@ -7,15 +7,15 @@ class Assertion {
     String id = "";
 //    String name = "";
     AssertionStatus status = AssertionStatus.SUCCESS;
-    def found = "";
-    def expected = "";
+    String found = "";
+    String expected = "";
     def reference = [];
-    def msg = "";
-    def code = "";
-    def location = "";
+    String msg = "";
+    String code = "";
+    String location = "";
     RequiredOptional requiredOptional = RequiredOptional.R;
-    def saved = false
-    def defaultMsg = false   // overwritten by real message
+    boolean saved = false
+    String defaultMsg = false   // overwritten by real message
 
     String expectedFoundString() {
         if (expected == '' && found == '') return ''

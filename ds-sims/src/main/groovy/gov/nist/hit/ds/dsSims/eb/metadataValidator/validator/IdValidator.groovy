@@ -1,11 +1,11 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.UuidFormatValidator
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
+import gov.nist.toolkit.valsupport.client.ValidationContext
 
 class IdValidator extends ValComponentBase {
     SimHandle simHandle

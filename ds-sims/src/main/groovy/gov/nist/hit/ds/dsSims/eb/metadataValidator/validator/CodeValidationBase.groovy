@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator;
 
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext;
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.factory.CodesFactory;
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.ClassificationModel;
 import gov.nist.hit.ds.ebMetadata.Metadata;
@@ -10,7 +9,8 @@ import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.toolkit.environment.Environment;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsExceptions.MetadataException;
-import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
+import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
+import gov.nist.toolkit.valsupport.client.ValidationContext;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;

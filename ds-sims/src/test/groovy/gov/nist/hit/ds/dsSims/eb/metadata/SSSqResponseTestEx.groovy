@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.dsSims.eb.metadata
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.generator.RimGenerator
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.SubmissionSetModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.SubmissionSetValidator
@@ -13,6 +12,7 @@ import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.utilities.xml.Parse
+import gov.nist.toolkit.valsupport.client.ValidationContext
 import org.apache.axiom.om.OMElement
 import spock.lang.Specification
 /**

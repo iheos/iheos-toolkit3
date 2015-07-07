@@ -12,6 +12,7 @@ import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
+import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import org.apache.log4j.BasicConfigurator
 import spock.lang.Specification
 /**
@@ -59,7 +60,7 @@ class PnrRecipientTestV2 extends Specification {
         try {
             response = vMan.validateMessage(ValidatorManager.soapAction, header, body.getBytes(), ValidationLevel.INFO)
         } catch (Throwable t) {
-            println "Exception thrown: ${t.class.name}: ${t.message}"
+            println ExceptionUtil.exception_details(t)
             SimUtils.close(simHandle)
         }
         simHandle = vMan.simHandle

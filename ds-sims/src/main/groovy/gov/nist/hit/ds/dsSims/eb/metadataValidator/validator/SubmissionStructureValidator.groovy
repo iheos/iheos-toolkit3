@@ -1,5 +1,4 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.ebMetadata.MetadataUtilities
@@ -10,6 +9,7 @@ import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ErrorCode
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
+import gov.nist.toolkit.valsupport.client.ValidationContext
 import org.apache.axiom.om.OMElement
 
 // TODO: Full Folder association validation not hooked up

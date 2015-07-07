@@ -11,6 +11,7 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.simSupport.validationEngine.EventErrorRecorder
+import gov.nist.hit.ds.simSupport.validationEngine.EventErrorRecorderBuilder
 import gov.nist.hit.ds.tkapis.validation.MessageValidator
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
 import gov.nist.hit.ds.tkapis.validation.ValidateTransactionResponse
@@ -105,7 +106,7 @@ class ValidatorManagerV2 implements MessageValidator {
 
             ValidationContext vc = new ValidationContext()
             ValidateMessageService vms = new ValidateMessageService(null)
-            MessageValidatorEngine mvc = vms.runValidation(vc, msgHeader, msgBody, null, new EventErrorRecorder(simHandle.event))
+            MessageValidatorEngine mvc = vms.runValidation(vc, msgHeader, msgBody, null, new EventErrorRecorderBuilder().buildNewErrorRecorder(simHandle.event))
 
             println "MVC is ${mvc}"
 

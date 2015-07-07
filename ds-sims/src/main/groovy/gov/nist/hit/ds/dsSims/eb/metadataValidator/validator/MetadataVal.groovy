@@ -1,13 +1,12 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.MetadataModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.parser.MetadataParser
-import gov.nist.hit.ds.dsSims.eb.reg.UnconnectedRegistryValidation
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.toolkit.environment.Environment
+import gov.nist.toolkit.valsupport.client.ValidationContext
 
 public class MetadataVal extends ValComponentBase {
 	Metadata m

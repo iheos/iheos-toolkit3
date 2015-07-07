@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.reg.UnconnectedRegistryValidation
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.ebMetadata.MetadataParser
@@ -12,6 +11,7 @@ import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.toolkit.environment.Environment
+import gov.nist.toolkit.valsupport.client.ValidationContext
 import groovy.xml.StreamingMarkupBuilder
 import spock.lang.Specification
 /**

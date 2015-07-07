@@ -1,10 +1,10 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.model
 
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.ebMetadata.MetadataSupport
 import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder
 import gov.nist.hit.ds.xdsExceptions.XdsInternalException
+import gov.nist.toolkit.valsupport.client.ValidationContext
 import org.apache.axiom.om.OMElement
 
 public class InternalClassificationModel extends AbstractRegistryObjectModel {

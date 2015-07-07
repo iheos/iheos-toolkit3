@@ -11,7 +11,7 @@ import java.lang.annotation.Target
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Validation {
 //	String version() default "ITI 2013";
-    RequiredOptional required() default RequiredOptional.R;
+    RequiredOptional required() // default RequiredOptional.R;
 	String msg();
 	String id()  // default "[unassigned]";
 	String[] ref() //default ["none"];

@@ -9,6 +9,7 @@ import gov.nist.toolkit.errorrecording.client.ValidatorErrorItem;
 import gov.nist.toolkit.errorrecording.client.XdsErrorCode;
 import gov.nist.toolkit.errorrecording.factories.ErrorRecorderBuilder;
 import gov.nist.toolkit.xdsexception.ToolkitRuntimeException;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,54 +20,74 @@ import java.util.List;
 public class EventErrorRecorder extends ValComponentBase implements ErrorRecorder {
     ErrorRecorderBuilder errorRecorderBuilder;
     List<ErrorRecorder> children = new ArrayList<>();
+    static Logger logger = Logger.getLogger(EventErrorRecorder.class);
 
-    public EventErrorRecorder(Event event) {  // only used by v3
+    // Should only be called from Factory class - EventErrorRecorderBuilder
+    protected EventErrorRecorder(Event event) {  // only used by v3
         super(event);
     }
 
-    public EventErrorRecorder(Object o) {
+    protected EventErrorRecorder(Object o) {
         this((Event) o );
     }
 
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, String location, String resource, Object log_message) {
-        Assertion a = new Assertion();
-        a.setStatus(AssertionStatus.ERROR);
-        a.setCode(code);
-        a.setMsg(msg);
-        a.setLocation(location);
-        a.setReference(resource);
-        event.getAssertionGroup().addAssertion(a, true);
+        String[] msgLines = msg.split("\\n");
+        if (msgLines == null) return;
+        for (int i=0; i<msgLines.length; i++) {
+            Assertion a = new Assertion();
+            a.setStatus(AssertionStatus.ERROR);
+            a.setCode(code.name());
+            a.setMsg(msgLines[i]);
+            a.setLocation(location);
+            a.setReference(resource);
+            event.getAssertionGroup().addAssertion(a, true);
+        }
     }
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, String location, String resource) {
-        Assertion a = new Assertion();
-        a.setStatus(AssertionStatus.ERROR);
-        a.setCode(code);
-        a.setMsg(msg);
-        a.setLocation(location);
-        a.setReference(resource);
-        event.getAssertionGroup().addAssertion(a, true);
+        String[] msgLines = msg.split("\\n");
+        if (msgLines == null) return;
+        for (int i=0; i<msgLines.length; i++) {
+            Assertion a = new Assertion();
+            a.setStatus(AssertionStatus.ERROR);
+            a.setCode(code.name());
+            a.setMsg(msgLines[i]);
+            a.setLocation(location);
+            a.setReference(resource);
+            event.getAssertionGroup().addAssertion(a, true);
+        }
     }
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, Object location, String resource) {
-        Assertion a = new Assertion();
-        a.setStatus(AssertionStatus.ERROR);
-        a.setCode(code);
-        a.setMsg(msg);
-        a.setLocation(location);
-        a.setReference(resource);
-        event.getAssertionGroup().addAssertion(a, true);
+        logger.debug(ExceptionUtil.here("ERR"));
+        logger.debug("ERR - code is " + code);
+        logger.debug("... location is " + location.getClass().getName());
+        logger.debug("...MSG START");
+        logger.debug(msg);
+        logger.debug("...MSG END");
+        String[] msgLines = msg.split("\\n");
+        if (msgLines == null) return;
+        for (int i=0; i<msgLines.length; i++) {
+            Assertion a = new Assertion();
+            if (location != null) a.setLocation(location.getClass().getName());
+            a.setStatus(AssertionStatus.ERROR);
+            a.setCode(code.name());
+            a.setMsg(msgLines[i]);
+            a.setReference(resource);
+            event.getAssertionGroup().addAssertion(a, true);
+        }
     }
 
     @Override
     public void err(XdsErrorCode.Code code, Exception e) {
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.ERROR);
-        a.setCode(code);
+        a.setCode(code.name());
         a.setMsg(e.getMessage());
         a.setLocation(ExceptionUtil.exception_details(e, 5));
         event.getAssertionGroup().addAssertion(a, true);
@@ -76,7 +97,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void err(XdsErrorCode.Code code, String msg, String location, String severity, String resource) {
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.ERROR);
-        a.setCode(code);
+        a.setCode(code.name());
         a.setMsg(msg);
         a.setLocation(location);
         a.setReference(resource);
@@ -111,7 +132,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void warning(XdsErrorCode.Code code, String msg, String location, String resource) {
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.WARNING);
-        a.setCode(code);
+        a.setCode(code.name());
         a.setMsg(msg);
         a.setLocation(location);
         a.setReference(resource);
@@ -216,13 +237,14 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public ErrorRecorder buildNewErrorRecorder() {
-        throw new ToolkitRuntimeException("Not Implemented");
+        return buildNewErrorRecorder(event);
     }
 
     @Override
     public ErrorRecorder buildNewErrorRecorder(Object o) {
+        logger.debug("buildNewErrorRecorder - errorRecorderBuilder is " + errorRecorderBuilder);
         if (o instanceof  Event) {
-            ErrorRecorder er =  errorRecorderBuilder.buildNewErrorRecorder();
+            ErrorRecorder er =  errorRecorderBuilder.buildNewErrorRecorder((Event) o);
             children.add(er);
             asPeer();
             if (er instanceof EventErrorRecorder) {

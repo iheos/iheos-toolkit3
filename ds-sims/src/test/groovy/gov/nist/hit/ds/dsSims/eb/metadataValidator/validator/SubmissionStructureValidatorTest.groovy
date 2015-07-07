@@ -1,7 +1,6 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.reg.UnconnectedRegistryValidation
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.eventLog.Event
@@ -13,6 +12,7 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.toolkit.valsupport.client.ValidationContext
 import org.apache.axiom.om.OMElement
 import spock.lang.Specification
 
