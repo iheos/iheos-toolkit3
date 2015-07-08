@@ -13,6 +13,7 @@ import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.toolkit.valsupport.client.ValidationContext
+import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory
 import org.apache.axiom.om.OMElement
 import spock.lang.Specification
 
@@ -53,7 +54,7 @@ class SubmissionStructureValidatorTest extends Specification {
         simId = new SimIdentifier(repoName, 'test')
         SimUtils.recreate('ebxml', simId)
         m = new Metadata()
-        vc = new ValidationContext()
+        vc = DefaultValidationContextFactory.validationContext()
         vc.isR = true
         vc.isRequest = true
         rvi = new UnconnectedRegistryValidation()

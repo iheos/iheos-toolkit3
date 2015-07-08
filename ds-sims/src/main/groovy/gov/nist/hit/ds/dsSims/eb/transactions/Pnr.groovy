@@ -18,6 +18,7 @@ import gov.nist.hit.ds.toolkit.environment.Environment
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import gov.nist.toolkit.valsupport.client.ValidationContext
+import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
 
@@ -36,7 +37,7 @@ class Pnr implements Transaction {
 
     @Override
     ValidationStatus validateRequest() {
-        ValidationContext vc = new ValidationContext()
+        ValidationContext vc = DefaultValidationContextFactory.validationContext()
         vc.isPnR = true
         vc.isRequest = true
         vc.isDIRECT = simHandle.transactionType.getTransactionProperty('direct') == 'true'
@@ -102,7 +103,7 @@ class Pnr implements Transaction {
         OMElement soapBodyEle = soapVal.body
         OMElement msgRoot = (OMElement) soapBodyEle.childElements.next()
         Metadata m = MetadataParser.parse(soapBodyEle)
-        ValidationContext vc = new ValidationContext()
+        ValidationContext vc = DefaultValidationContextFactory.validationContext()
         vc.isPnR = true
         vc.isRequest = false
         Environment environment = Environment.getDefaultEnvironment()

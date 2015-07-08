@@ -21,7 +21,7 @@ class Event {
     ArtifactsDAO artDAO
     Asset validatorsAsset
     int displayOrder = 1
-    static ValidationLevel defaultValidationLevel = ValidationLevel.ERROR
+    static ValidationLevel defaultValidationLevel = ValidationLevel.WARNING
     ValidationLevel validationLevel = defaultValidationLevel
 
     ResultsStack resultsStack = new ResultsStack()

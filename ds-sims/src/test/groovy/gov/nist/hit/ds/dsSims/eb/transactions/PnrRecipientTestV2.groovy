@@ -12,7 +12,9 @@ import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
+import gov.nist.hit.ds.toolkit.Toolkit
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
+import gov.nist.toolkit.installation.Installation
 import org.apache.log4j.BasicConfigurator
 import spock.lang.Specification
 /**
@@ -43,7 +45,10 @@ class PnrRecipientTestV2 extends Specification {
 
     def setup() {
         BasicConfigurator.configure()
+        // Initialize V3 toolkit
         SimSupport.initialize()
+        // Initialize V2 toolkit
+        Installation.installation().warHome(Toolkit.warRootFile)
         new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().loadFromString(config)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
@@ -66,6 +71,13 @@ class PnrRecipientTestV2 extends Specification {
         simHandle = vMan.simHandle
     }
 
+    def 'Test v2 initialization'() {
+        when:
+        File toolkitxFile = Installation.installation().toolkitxFile()
+
+        then:
+        !toolkitxFile.toString().startsWith('toolkitx')
+    }
 
     def 'Test good message'() {
         setup:

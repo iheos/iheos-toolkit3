@@ -26,6 +26,8 @@ public class AssertionGroup  {
 
     private static Logger logger = Logger.getLogger(AssertionGroup);
     private final static String dashes = "---";
+
+    // Don't log any messages less severe than this setting
     ValidationLevel validationLevel = ValidationLevel.ERROR
 
     AssertionGroup() {}

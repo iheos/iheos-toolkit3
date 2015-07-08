@@ -83,7 +83,7 @@ public class Toolkit {
             // If this is a test then set warRootFile to the resource directory within
             // thee test directory.
             if (toolkitPropertiesFile.getParent().endsWith("test-classes")) {
-                warRootFile = toolkitPropertiesFile.getParentFile().getParentFile();
+                warRootFile = toolkitPropertiesFile.getParentFile(); //.getParentFile();
                 logger.info("Test configuration");
                 testEnv = true;
             }

@@ -64,7 +64,6 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, Object location, String resource) {
-        logger.debug(ExceptionUtil.here("ERR"));
         logger.debug("ERR - code is " + code);
         logger.debug("... location is " + location.getClass().getName());
         logger.debug("...MSG START");
@@ -143,6 +142,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void sectionHeading(String msg) {
         Assertion a = new Assertion();
         a.setMsg(msg);
+        a.setLocation("SectionHeading");
         event.getAssertionGroup().addAssertion(a, true);
     }
 
@@ -150,6 +150,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void challenge(String msg) {
         Assertion a = new Assertion();
         a.setMsg(msg);
+        a.setLocation("Challenge");
         event.getAssertionGroup().addAssertion(a, true);
     }
 
@@ -157,6 +158,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void externalChallenge(String msg) {
         Assertion a = new Assertion();
         a.setMsg(msg);
+        a.setLocation("ExternalChallenge");
         event.getAssertionGroup().addAssertion(a, true);
     }
 
@@ -164,6 +166,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     public void detail(String msg) {
         Assertion a = new Assertion();
         a.setMsg(msg);
+        a.setLocation("Detail");
         event.getAssertionGroup().addAssertion(a, true);
     }
 
@@ -242,7 +245,6 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public ErrorRecorder buildNewErrorRecorder(Object o) {
-        logger.debug("buildNewErrorRecorder - errorRecorderBuilder is " + errorRecorderBuilder);
         if (o instanceof  Event) {
             ErrorRecorder er =  errorRecorderBuilder.buildNewErrorRecorder((Event) o);
             children.add(er);

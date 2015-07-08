@@ -12,6 +12,7 @@ import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.toolkit.environment.Environment
 import gov.nist.toolkit.valsupport.client.ValidationContext
+import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory
 import groovy.xml.StreamingMarkupBuilder
 import spock.lang.Specification
 /**
@@ -53,7 +54,7 @@ class MetadataValTest extends Specification {
 
     def run(String submission) {
         Metadata metadata = MetadataParser.parseNonSubmission(submission)
-        ValidationContext vc = new ValidationContext()
+        ValidationContext vc = DefaultValidationContextFactory.validationContext()
         vc.isPnR = true
         vc.isRequest = true
         def validationInterface = new UnconnectedRegistryValidation()

@@ -20,6 +20,7 @@ import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import gov.nist.toolkit.valregmsg.validation.engine.ValidateMessageService
 import gov.nist.toolkit.valsupport.client.ValidationContext
+import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine
 import groovy.util.logging.Log4j
 
@@ -102,9 +103,7 @@ class ValidatorManagerV2 implements MessageValidator {
             // Crude V2 hook starts here
             //
 
-            // TODO v2 and v3 have versions of ValidationContext
-
-            ValidationContext vc = new ValidationContext()
+            ValidationContext vc = DefaultValidationContextFactory.validationContext()
             ValidateMessageService vms = new ValidateMessageService(null)
             MessageValidatorEngine mvc = vms.runValidation(vc, msgHeader, msgBody, null, new EventErrorRecorderBuilder().buildNewErrorRecorder(simHandle.event))
 
