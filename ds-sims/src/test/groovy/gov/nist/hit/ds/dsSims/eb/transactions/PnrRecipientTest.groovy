@@ -11,6 +11,9 @@ import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.core.Endpoint
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
+import gov.nist.hit.ds.toolkit.Toolkit
+import gov.nist.toolkit.installation.Installation
+import org.apache.log4j.BasicConfigurator
 import spock.lang.Specification
 /**
  * Created by bmajur on 9/24/14.
@@ -35,17 +38,26 @@ class PnrRecipientTest extends Specification {
     def endpoint = new Endpoint('http://localhost:8080/xdstools3/sim/1234/docrec/prb')
     File repoDataDir
     RepositorySource repoSource
-    SimHandle simHandle
+    SimHandle simHandle = null
     def factory = new ActorTransactionTypeFactory()
 
     def setup() {
+        BasicConfigurator.configure()
+        // Initialize V3 toolkit
         SimSupport.initialize()
+        // Initialize V2 toolkit
+        Installation.installation().warHome(Toolkit.warRootFile)
         new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().loadFromString(config)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
         simId = new SimId('PnrTest')
         SimUtils.recreate('docrec', simId, repoName)
+    }
+
+    def cleanup() {
+        if (simHandle) SimUtils.close(simHandle)
+        simHandle = null
     }
 
     ValidatorManager vMan

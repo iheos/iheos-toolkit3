@@ -8,7 +8,11 @@ import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.manager.ActorSimConfigManager
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.utilities.SimEventAccess
+import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.toolkit.Toolkit
+import gov.nist.toolkit.installation.Installation
+import org.apache.log4j.BasicConfigurator
 import spock.lang.Specification
 /**
  * Created by bmajur on 10/7/14.
@@ -55,6 +59,11 @@ It is great!
     def simServlet
 
     def setup() {
+        BasicConfigurator.configure()
+        // Initialize V3 toolkit
+        SimSupport.initialize()
+        // Initialize V2 toolkit
+        Installation.installation().warHome(Toolkit.warRootFile)
         simServlet = new SimServlet()
         simServlet.init()
         simId = new SimIdentifier(SimUtils.defaultRepoName, 'PnrSoapTest')

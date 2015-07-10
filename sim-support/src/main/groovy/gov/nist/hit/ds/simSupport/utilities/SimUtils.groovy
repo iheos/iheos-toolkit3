@@ -173,7 +173,7 @@ class SimUtils {
     }
 
     static def close(SimHandle simHandle) {
-        assert simHandle.open
+        if (!simHandle.open) return
         simHandle.open = false
         simHandle.event.flushAll()
     }

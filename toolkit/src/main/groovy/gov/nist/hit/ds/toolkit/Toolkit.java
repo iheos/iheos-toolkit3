@@ -174,9 +174,13 @@ public class Toolkit {
 
 
     static private File toolkitxFile() {
-        if (testEnv)
+        File tc = new File(warRootFile, "test-classes");
+        if (tc.isDirectory())
             return new File(warRootFile, "test-classes/toolkitx");
         return new File(warRootFile, "toolkitx");
+//        if (testEnv)
+//            return new File(warRootFile, "test-classes/toolkitx");
+//        return new File(warRootFile, "toolkitx");
     }
 
     static public File schemaFile() { return new File(toolkitxFile(), "schema"); }

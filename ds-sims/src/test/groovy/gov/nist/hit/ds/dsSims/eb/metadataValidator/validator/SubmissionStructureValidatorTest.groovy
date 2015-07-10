@@ -12,6 +12,8 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.toolkit.Toolkit
+import gov.nist.toolkit.installation.Installation
 import gov.nist.toolkit.valsupport.client.ValidationContext
 import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory
 import org.apache.axiom.om.OMElement
@@ -45,7 +47,10 @@ class SubmissionStructureValidatorTest extends Specification {
     Metadata m
 
     def setup() {
+        // Initialize V3 toolkit
         SimSupport.initialize()
+        // Initialize V2 toolkit
+        Installation.installation().warHome(Toolkit.warRootFile)
         new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
