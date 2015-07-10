@@ -20,7 +20,7 @@ import spock.lang.Specification
 /**
  * Created by bmajur on 9/24/14.
  */
-class PnrRecipientTestV2 extends Specification {
+class PnrRecipientV2Test extends Specification {
     static String config = '''
 <ActorsTransactions>
     <transaction name="Provide and Register" id="prb" code="prb">
@@ -79,7 +79,7 @@ class PnrRecipientTestV2 extends Specification {
         !toolkitxFile.toString().startsWith('toolkitx')
     }
 
-    def 'Test good message'() {
+    def 'Test almost good message'() {
         setup:
         def header = getClass().classLoader.getResource('pnr/good/PnRSoapHeader.txt').text
         def body = getClass().classLoader.getResource('pnr/good/PnR1DocSoapBody.txt').text
@@ -89,7 +89,7 @@ class PnrRecipientTestV2 extends Specification {
         println simHandle.event.errorAssertionIds()
 
         then:
-        response.validationStatus == ValidationStatus.OK
+        response.validationStatus != ValidationStatus.OK
     }
 
     def 'Test wrong boundary'() {
@@ -137,6 +137,6 @@ class PnrRecipientTestV2 extends Specification {
         run(header,body)
 
         then:
-        response.validationStatus == ValidationStatus.OK
+        response.validationStatus != ValidationStatus.OK
     }
 }

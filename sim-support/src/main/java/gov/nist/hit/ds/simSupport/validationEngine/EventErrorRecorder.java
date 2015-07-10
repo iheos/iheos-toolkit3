@@ -34,6 +34,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, String location, String resource, Object log_message) {
+        logger.info(msg);
         String[] msgLines = msg.split("\\n");
         if (msgLines == null) return;
         for (int i=0; i<msgLines.length; i++) {
@@ -49,6 +50,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, String location, String resource) {
+        logger.info(msg);
         String[] msgLines = msg.split("\\n");
         if (msgLines == null) return;
         for (int i=0; i<msgLines.length; i++) {
@@ -64,11 +66,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, Object location, String resource) {
-        logger.debug("ERR - code is " + code);
-        logger.debug("... location is " + location.getClass().getName());
-        logger.debug("...MSG START");
-        logger.debug(msg);
-        logger.debug("...MSG END");
+        logger.info(msg);
         String[] msgLines = msg.split("\\n");
         if (msgLines == null) return;
         for (int i=0; i<msgLines.length; i++) {
@@ -84,6 +82,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(XdsErrorCode.Code code, Exception e) {
+        logger.info(e.getMessage());
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.ERROR);
         a.setCode(code.name());
@@ -94,6 +93,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, String location, String severity, String resource) {
+        logger.info(msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.ERROR);
         a.setCode(code.name());
@@ -106,6 +106,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(String code, String msg, String location, String severity, String resource) {
+        logger.info(msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.ERROR);
         a.setCode(code);
