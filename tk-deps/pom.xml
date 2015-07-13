@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>tk-deps</artifactId>
     <groupId>gov.nist.hit.ds</groupId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.4a-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>tk-deps</name>
@@ -26,7 +24,21 @@
         <maven-war-plugin.version>2.4</maven-war-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.2</nexus-staging-maven-plugin.version>
         <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
+        <groovy.version>2.8.0-01</groovy.version>
+        <groovy-eclipse-batch.version>2.1.8-01</groovy-eclipse-batch.version>
+
+        <!-- This provides the username and password for Bitbucket, taken from Maven settings.xml file. -->
+        <project.scm.id>bitbucket</project.scm.id>
     </properties>
+
+
+
+    <!-- Defines the location of the development trunk, used by maven-release-plugin -->
+    <scm>
+        <developerConnection>scm:hg:https://bitbucket.org/iheos/toolkit/branch/develop</developerConnection>
+        <tag>v3.0.4a-test</tag>
+    </scm>
+
 
 
     <repositories>
@@ -67,15 +79,16 @@
             <id>apache-central</id>
             <url>http://repo.maven.apache.org/maven2</url>
         </repository>
+        <!--<repository>-->
+            <!--<id>codehaus</id>-->
+            <!--<url>http://repository.codehaus.org/org/codehaus</url>-->
+        <!--</repository>-->
         <repository>
-            <id>codehaus</id>
-            <url>http://repository.codehaus.org/org/codehaus</url>
+            <id>gazelle-3rd-party</id>
+            <name>gazelle nexus</name>
+            <url>http://gazelle.ihe.net/nexus/content/repositories/thirdparty</url>
         </repository>
     </repositories>
-
-    <scm>
-        <connection>scm:hg:https://bitbucket.org/iheos/toolkit</connection>
-    </scm>
 
 
 
@@ -89,27 +102,27 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>session</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>ds-sims</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>eb-metadata</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>repo-support</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>actor-transaction</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
@@ -119,77 +132,77 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>xds-exceptions</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>http-soap</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>utilities</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>toolkit</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>http</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>soap-support</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>sim-servlet</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>sim-support</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>site-management</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>event-log</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>repository</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>tk-apis</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>tk-initialization</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>tk</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>docshare-sims</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
@@ -199,7 +212,7 @@
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>repository-widgets-ui</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.4a-SNAPSHOT</version>
             </dependency>
 
 
@@ -394,6 +407,11 @@
                 <artifactId>smartgwt-skins</artifactId>
                 <version>4.1p</version>
             </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP-java6</artifactId>
+                <version>2.2.5</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -403,7 +421,7 @@
             <plugin>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-eclipse-compiler</artifactId>
-                <version>2.8.0-01</version>
+                <version>${groovy.version}</version>
                 <extensions>true</extensions>
             </plugin>
             <plugin>
@@ -414,6 +432,89 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+
+            <!-- Maven Release Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <goals>deploy</goals> <!-- auto deploy app to server, skip deploy-site goal -->
+                    <!-- Define location of tagged releases and release parameters -->
+                    <tagBase>https://bitbucket.org/iheos/toolkit/branch/release/ihe</tagBase>
+                    <tagNameFormat>v@{project.version}</tagNameFormat> <!-- format of the tag that will be present on Bitbucket -->
+                    <!-- This enables to select the profiles to be run. No profiles are defined for the moment -->
+                    <!-- <releaseProfiles>releases</releaseProfiles> -->
+                </configuration>
+            </plugin>
+            <!-- Not sure this is used -->
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.9.2</version>
+                <configuration>
+                    <tag>v@{project.version}</tag>
+                </configuration>
+            </plugin>
+            -->
         </plugins>
     </build>
+
+
+    <profiles>
+        <profile>
+            <id>releases</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>${nexus-staging-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <serverId>internal-nist-repo-releases</serverId>
+                            <nexusUrl>http://vm-070.nist.gov:8081/nexus</nexusUrl>
+                            <skipStaging>true</skipStaging>
+                        </configuration>
+                    </plugin>
+
+                    <!-- OneJar plugin packages the module and its dependencies into a single jar -->
+                    <plugin>
+                        <groupId>org.dstovall</groupId>
+                        <artifactId>onejar-maven-plugin</artifactId>
+                        <version>1.4.4</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>one-jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
+
+    <!-- One-Jar is in the googlecode repository -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>onejar-maven-plugin.googlecode.com</id>
+            <url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+
 </project>
