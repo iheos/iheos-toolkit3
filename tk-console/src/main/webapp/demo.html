@@ -1,0 +1,338 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+          "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>Toolkit Console</title>
+    <meta name="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="jquery.console.js"></script>
+    <!-- Everything beyond this point is user-customized -->
+    <script type="text/javascript">
+		var taskArray;
+		var taskDetail = 'off';
+		var urlPrefix = '/'; /* '/tkConsole/' -- include trailing slash here */
+
+      $(document).ready(function(){
+         /* Fifth console */
+         var console5 = $('<div class="console1">');
+         $('body').append(console5);
+
+			$.ajax({
+			method: "GET",
+			url:urlPrefix+'tkRunTask', 
+			data:{taskName: $.trim('taskArray')},
+
+			success: 
+            function(resp) { // on success
+				//alert(resp);
+				taskArray = $.trim(resp).split(",");
+				//alert (taskArray.length + " " + taskArray[0]);
+    			
+            },
+
+            error: function(resp) { // on failure
+				alert("taskArray Request failed: " + resp);
+            }
+			});
+
+
+         var controller5  = console5.console({
+          promptLabel: 'Toolkit>',
+		  
+		  /**
+		  1. command line tool
+			Use Gradle Tooling API
+				- does Gradle Daemon create only one JVM process for the build?
+			Use antlr?
+			
+		  2. Web tool
+			Launch Jetty?			
+			Pass command to the shell and display the outputstream 
+			.run(resultNotify)?
+		  
+		  **/
+		  
+          commandHandle:function(line){
+			line = $.trim(line);
+			/*
+            if (line) { // Command text followed by a new line
+              return [{msg:"you typed " + line,className:"jquery-console-message-value"}];
+            } else { // Enter key was simply pushed without any text on the command line
+              var m = "type a color among (" + this.colors.join(", ") + ")";
+              return [{msg:m,className:"jquery-console-message-value"}];
+            }
+			*/
+
+			if (line) { // Command text followed by a new line
+
+				var condensedConsoleOptStr = line.toLowerCase().replace(/ /g,'');
+				var consoleOptIndex = condensedConsoleOptStr.indexOf(":");
+
+   				// return [{msg:"you typed " + line,className:"jquery-console-message-value"}];
+
+				if ("clear"==line) {
+					return ([{msg:"clear",className:"jquery-console-message-value"}]);
+				} else if ("help"==line) {
+					return ([{msg:"Enter 'tasks' for a list of available tasks or a task name.",className:"jquery-console-message-value"}]);
+				} else if ("exit"==line||"quit"==line) {
+
+ 					return ([{msg:"You may close this tab.",className:"jquery-console-message-value"}]);
+				} else if ("setverbose:on"==condensedConsoleOptStr) {
+					taskDetail = 'on';	
+	
+					return ([{msg:"Verbose is on.",className:"jquery-console-message-value"}]);
+				} else if ("setverbose:off"==condensedConsoleOptStr) {
+					taskDetail = 'off';
+
+					return ([{msg:"Verbose is off.",className:"jquery-console-message-value"}]);
+				} else if (condensedConsoleOptStr.indexOf("set")==0  ) {
+						
+							if ( (consoleOptIndex>-1) ) {
+
+							  if ( (":on"!=condensedConsoleOptStr.substring(consoleOptIndex) || ":off"!=condensedConsoleOptStr.substring(consoleOptIndex)))
+								return ([{msg:"Possible values are 'on', 'off'.",className:"jquery-console-message-value"}]);
+							} else {
+								return ([{msg:"Unknown console option.",className:"jquery-console-message-value"}]);
+							}
+				}
+            } else { // Enter key was simply pushed without any text on the command line
+					return [{msg:"",className:"jquery-console-message-value"}];
+				///line = "help";
+              //var m = "type a color among (" + this.colors.join(", ") + ")";
+              //return [{msg:m,className:"jquery-console-message-value"}];
+            }
+				
+				// Call servlet and get the response
+
+		var getResp;
+
+    	$.ajax({
+			method: "GET",
+			url:urlPrefix+'tkRunTask', 
+			data:{taskName: line, verbose: taskDetail},
+
+			success: 
+            function(resp) { // on success
+				//alert(resp);
+    			getResp = ([{msg:resp,className:"jquery-console-message-value"}]);
+            },
+
+            error: function(resp) { // on failure
+				//alert("Request failed: " + resp);
+				getResp = ( [{msg:resp+"Request failed",className:"jquery-console-message-value"}]);
+            },
+
+
+			async:false
+			});
+
+
+
+			 //alert(getResp);
+
+			return getResp;
+
+
+           
+          },
+          //colors: ["red","blue","green","black","yellow","white","grey","orange"],
+			colors: taskArray,
+          cols: 40,
+          completeHandle:function(prefix){
+			prefix = $.trim(prefix)
+            var colors = taskArray; //this.colors;
+            var ret = [];
+			var retTemp = [];
+            for (var i=0;i<colors.length;i++) {
+              var color=colors[i];
+              if (color.lastIndexOf(prefix,0) === 0) {
+					ret.push(color.substring(prefix.length));
+					retTemp.push(color)			
+			  }
+			  
+            }
+			
+			// Look and see if more than one partial matching entry is found, then return the full command string
+			if (ret.length>1) {
+				return retTemp;
+			}
+						
+            return ret;
+          },
+           autofocus:true,
+           animateScroll:true,
+           promptHistory:true
+		  
+        
+		});
+
+		/****
+
+		$('body').append("<hr/>");
+
+		var commandButtonBar = "<div style='width:100%'>"
+								+"<button class='cmdButton' onclick=\"typer.consoleInsert('list env')\">List Environments</button>&nbsp;"
+								+"<button class='cmdButton'>List Simulators</button>&nbsp;"
+							    +"<button class='cmdButton'>List Actors</button>"
+							  +"</div>";	
+		
+         $('body').append(commandButtonBar);
+		****/
+
+
+   /*** begin resize ***/
+	var $window = $(window);
+
+	function fullSize() {
+   	$('div.console1 div.jquery-console-inner').css({
+     	width:  "100%", 
+    	 height: ($window.height() - 16 ) + "px"
+   	});  
+	}
+
+
+	fullSize();
+	$window.resize(fullSize);
+
+	/*** end resize ***/
+
+
+
+         // End: on document ready fn
+       });
+	   
+    </script>
+    <style type="text/css" media="screen">
+	  .cmdButton { width: 89px;
+		font-family:monospace;  
+		word-wrap: normal;
+		}
+      div.console1,div.console2,div.console3 { margin-left:3px; word-wrap: break-word; }
+      /* First console */
+      div.console1 { font-size: 12px }
+	  div.console1 div.jquery-console-inner
+       { width:100%; background:#fff; /* This causes scrollbar clipping when width is 100% --- padding:0.5em;*/
+         overflow:auto }
+      div.console1 div.jquery-console-inner-bak
+       { width:900px; height:600px; background:#fff; padding:0.5em;
+         overflow:auto }
+      div.console1 div.jquery-console-inner-bak-dark
+       { width:900px; height:600px; background:#333; padding:0.5em;
+         overflow:auto }
+
+      div.console1 div.jquery-console-prompt-box
+       { color:#000; font-family:monospace; }
+
+      div.console1 div.jquery-console-focus span.jquery-console-cursor
+       { background:#fff; color:#000; }
+
+      div.console1 div.jquery-console-focus span.jquery-console-cursor-bak-dark
+       { background:#fefefe; color:#333; font-weight:bold }
+      div.console1 div.jquery-console-message-error
+       { color:#ef0505; font-family:sans-serif; font-weight:bold;
+         padding:0.1em; }
+	div.console1 div.jquery-console-message-value
+       { color:#000; font-family:monospace;
+         padding:0.1em; }
+      div.console1 div.jquery-console-message-value-bak-green
+       { color:#1ad027; font-family:monospace;
+         padding:0.1em; }
+      div.console1 div.jquery-console-message-type
+       { color:#52666f; font-family: monospace;
+         padding:0.1em; }
+      div.console1 span.jquery-console-prompt-label { 
+		font-weight:bold;
+		background-color:black;
+		color:white;
+		margin-right:4px; /* space between the prompt and the user command text */
+		}
+      /* Second console */
+      div.console2 { font-size: 14px; margin-top:1em }
+      div.console2 div.jquery-console-inner
+       { width:900px; height:200px; background:#efefef; padding:0.5em;
+         overflow:auto }
+      div.console2 div.jquery-console-prompt-box
+       { color:#444; font-family:monospace; }
+      div.console2 div.jquery-console-focus span.jquery-console-cursor
+       { background:#333; color:#eee; font-weight:bold }
+      div.console2 div.jquery-console-message-error
+       { color:#ef0505; font-family:sans-serif; font-weight:bold;
+         padding:0.1em; }
+      div.console2 div.jquery-console-message-success
+       { color:#187718; font-family:monospace;
+         padding:0.1em; }
+      div.console2 span.jquery-console-prompt-label { font-weight:bold }
+      /* Third console */
+      div.console3 { font-size: 14px; margin-top:1em }
+      div.console3 div.jquery-console-inner
+       { width:900px; height:200px; background:#efefef; padding:0.5em;
+         overflow:auto }
+      div.console3 div.jquery-console-prompt-box
+       { color:#444; font-family:monospace; }
+      div.console3 div.jquery-console-focus span.jquery-console-cursor
+       { background:#333; color:#eee; font-weight:bold }
+      div.console3 div.jquery-console-message-error
+       { color:#ef0505; font-family:sans-serif; font-weight:bold;
+         padding:0.1em; }
+      div.console3 div.jquery-console-message-success
+       { color:#187718; font-family:monospace;
+         padding:0.1em; }
+      div.console3 span.jquery-console-prompt-label {
+      font-weight:bold }
+      /* Fourth console */
+      div.console4 { font-size: 14px; margin-top:1em }
+      div.console4 div.jquery-console-inner
+       { width:900px; height:200px; background:#efefef; padding:0.5em;
+         overflow:auto }
+      div.console4 div.jquery-console-prompt-box
+       { color:#444; font-family:monospace; }
+      div.console4 div.jquery-console-focus span.jquery-console-cursor
+       { background:#444; color:#eee; font-weight:bold }
+      div.console4 div.jquery-console-message-error
+       { color:#ef0505; font-family:sans-serif; font-weight:bold;
+         padding:0.1em; }
+      div.console4 div.jquery-console-message-success
+       { color:#187718; font-family:monospace;
+         padding:0.1em; }
+      div.console4 span.jquery-console-prompt-label { font-weight:bold }
+      /* Sixth console */
+      div.console6 { font-size: 14px }
+      div.console6 div.jquery-console-inner
+       { width:900px; height:200px; background:#333; padding:0.5em;
+         overflow:auto }
+      div.console6 div.jquery-console-prompt-box
+       { color:#fff; font-family:monospace; }
+      div.console6 div.jquery-console-focus span.jquery-console-cursor
+       { background:#fefefe; color:#333; font-weight:bold }
+      div.console6 div.jquery-console-message-error
+       { color:#ef0505; font-family:sans-serif; font-weight:bold;
+         padding:0.1em; }
+      div.console6 div.jquery-console-message-value
+       { color:#1ad027; font-family:monospace;
+         padding:0.1em; }
+      div.console6 div.jquery-console-message-type
+       { color:#52666f; font-family:monospace;
+         padding:0.1em; }
+      div.console6 span.jquery-console-prompt-label { font-weight:bold }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <p>
+        <strong>Please enable JavaScript or upgrade your browser.</strong>
+      </p>
+    </noscript>
+	<!-- title -->
+    <!-- <h1>Toolkit Console</h1> -->
+<!--
+    <p>Tested on:</p>
+    <ul>
+      <li>Internet Explorer 6</li>
+      <li>Opera 10.01</li>
+      <li>Chromium 4.0.237.0 (Ubuntu build 31094)</li>
+      <li>Firefox 3.5.8</li>
+    </ul>
+-->
+
+  </body>
+</html>

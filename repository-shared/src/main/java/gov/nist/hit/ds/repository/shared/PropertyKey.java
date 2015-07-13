@@ -109,10 +109,13 @@ public enum PropertyKey {
             return "hash";
         }
     },
-    INDEX_CURRENT_DAY_ITEMS(false) {
+    /*
+     A trailing slash is required
+     */
+    INDEX_CURRENT_DAY_RELATIVE_PATH(false) {
         @Override
         public String toString() {
-            return "indexCurrentDayItems";
+            return "indexCurrentDayItemsRelativePath";
         }
     },
     INDEX_SESSION(true) {
@@ -221,15 +224,16 @@ public enum PropertyKey {
             List<String> orderBy = new ArrayList<String>(orderByKeys.length);
 
             for (PropertyKey pk : orderByKeys) {
-                String sortOrder = "";
-                if (SortOrder.UNSPECIFIED != pk.getSortOrder()) {
-                    sortOrder = pk.getSortOrder().toString();
-                }
-                String orderStr = pk.getPropertyName() + " " + sortOrder;
+                if (pk!=null) {
+                    String sortOrder = "";
+                    if (SortOrder.UNSPECIFIED != pk.getSortOrder()) {
+                        sortOrder = pk.getSortOrder().toString();
+                    }
+                    String orderStr = pk.getPropertyName() + " " + sortOrder;
 //                System.out.println("*** " + orderStr);
-                orderBy.add(orderStr);
+                    orderBy.add(orderStr);
+                }
             }
-
 
             orderKeys = orderBy.toArray(new String[orderBy.size()]);
 

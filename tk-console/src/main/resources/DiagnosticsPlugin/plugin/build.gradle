@@ -1,0 +1,40 @@
+apply plugin: 'groovy'
+
+dependencies {
+    compile gradleApi()
+	
+   // The following not required for Gradle 2.3?? It was required for Gradle 1.8.6
+	// groovy localGroovy()
+	
+	
+    //testCompile files('../../libs/junit-4.5.jar') //skb
+	testCompile  fileTree(dir: '../../libs', include: '*.jar') 
+	//files('../../libs/bcprov-jdk15on-148.jar') //skb
+	//testCompile files('libs/junit-4.5.jar')
+}
+
+
+
+
+/**********
+apply plugin: 'maven'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.11'
+}
+
+group = 'org.gradle'
+version = '1.0-SNAPSHOT'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
+}
+*****/

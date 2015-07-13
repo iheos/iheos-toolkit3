@@ -1,0 +1,302 @@
+/*
+ * This is where the input auto-wiring and the report boilerplating goes...
+ * Sunil Bhaskarla
+ * NIST
+ */
+
+
+useLogger(new CustomEventLogger())
+
+
+class CustomEventLogger extends BuildAdapter implements TaskExecutionListener {
+
+		def indentation = 2
+		def nestLevel = 2
+		def primaryLevel = 2
+		def pTaskGroup = ''
+		def pTaskValidated=false;
+		def taskPrefix = 't_'
+
+    public void beforeExecute(Task task) {
+		
+		//if (!task.name.startsWith(taskPrefix)) return;
+		//if (!task.hasProperty('tkTask')) return;
+		if (!task.hasProperty('eventType' )) return;
+		
+		task.logger.debug "Entering $task.name..."
+		
+		 if (task.group!=null && (task.group.equals(pTaskGroup) && !pTaskValidated)) {
+			 def msg = '(TK) Previous task was not validated.';
+			task.logger.debug msg
+			throw new StopExecutionException(msg)
+		}
+		
+		try {			
+			if (!getDependantTaskResult(task.project,task.getDependsOn(),task))
+				task.logger.debug '(TK) getDependantTaskResult returned unknown code.'
+	
+			/*	
+			on the web console space-to-nbsp need to be fixed first
+			if (pTaskGroup.equals(task.group)) {
+				task.ext.indentation_spacing = indentation * nestLevel
+			}
+			*/
+
+		} catch (IOException e) {
+				task.logger.debug e.toString()
+				task.logger.quiet "Skipping dependant tasks (${task.name})..."
+				throw new StopExecutionException("Dependant value failure")
+				
+		} catch (Exception e) {
+				println e
+		}
+	
+		
+    }
+
+
+
+    public void afterExecute(Task task, TaskState state) {
+		//if (!task.name.startsWith(taskPrefix)) return;
+		//if (!task.hasProperty('tkTask')) return;
+		if (!task.hasProperty('eventType' )) return;
+
+		pTaskGroup = task.group
+
+		
+				if (task.didWork) {
+		
+					pTaskValidated = task.hasProperty('output')
+
+					def project = task.project
+					if (project.hasProperty("verbose")) {
+						String[] opt = project.getProperty("verbose").split(":")
+						if (opt.length==2)
+						 if ("off".equals(opt[0])) {
+							if (task.name != opt[1])
+								return;
+						}
+					}
+
+
+
+					def taskDesc = task.description?:task.name  + " (no additional task description)"
+		
+					def taskResult = formatTaskPrinter(task,"$taskDesc") +
+								 (pTaskValidated?'ok':'unsuccessful')
+									
+					task.logger.quiet taskResult
+		
+					/*
+					*** This is the default catch-all case in case where the task was not 'validated'
+					***	and no other additional information was provided by the task handler.
+					*/
+					if (!pTaskValidated	&& task.report.size()==0) {							
+						task.logger.error indentPrinter(task,"Task malfunction: There is no additional information to display from '$task.name'.")
+					}
+					
+					
+				  	for (e in task.report) {
+						if (e instanceof Map) {				  						
+						    e.each {k, v ->
+								if (task.ERROR.equals(k))  
+									task.logger.error indentPrinter(task, task.eventType[task.ERROR] + "Error (${task.name}): ${v}")
+								else if (task.INFO.equals(k))  
+									task.logger.quiet indentPrinter(task, task.eventType[task.INFO] + "${v}")
+								else if (task.DEBUG.equals(k))
+									task.logger.debug "(TK) " + indentPrinter(task, "${v}")
+								else
+									task.logger.quiet indentPrinter(task, "${v}")
+							}
+				  		} else
+					  		task.logger.quiet indentPrinter(task, "${e.toString()}") 
+					}
+					if (task.report.size()>0)
+						println ''
+
+				
+				} else {				
+					task.logger.quiet "The task '$task.name' was not exectued due to configuration issues."
+					task.logger.quiet "Skipping other validation tasks..."
+				}
+		
+			   task.logger.debug "Exit $task.name."
+			
+    }
+    
+    public void buildFinished(BuildResult result) {
+			print_endFooter()
+    }
+
+
+	def boolean getDependantTaskResult(project, Set dp, Task t) throws IOException {
+	 try {		 
+			for (tdp in dp)
+			{
+
+				def Task task 
+	
+				 	try {
+						task = project.tasks[tdp.toString() ]
+
+
+				 if (task.hasProperty('eventType') /*tdp.toString().startsWith(taskPrefix)*/) {
+
+					task.logger.info "(TK) " + t.toString() +  ' depends on -->' + tdp.toString()
+
+					//This would be the place to counter the nonNullInput method
+					if (task.hasProperty('output')) {
+
+						t.input[task.name] = task.ext.output
+						
+						task.logger.debug "(TK) setting ${task.name} to ${t.input[task.name]}" 
+						
+					} else {
+						throw new java.io.IOException("The dependant task's output cannot be retrieved: ${task.name}")
+					}
+				}
+
+
+					} catch (UnknownTaskException ute) {
+					}
+
+			
+			}
+		} catch (IOException e) {
+			throw e
+		} catch (e) {
+			println "ex: " + e
+		}
+
+		return true
+	}
+
+	def print_endFooter() {
+        // println ''
+	}
+
+	def formatTaskPrinter(Task task,desc) {
+
+		def len = 75 - desc.length()
+
+		if  (task.hasProperty('indentation_spacing'))
+			len -= (task.ext.indentation_spacing - primaryLevel)
+
+		def dots = ''
+
+		len.times {dots += '.'}
+
+		return indentPrinter(task,desc) + dots
+	}
+
+	def indentPrinter(Task task,inStr='') {
+	  
+		def indent='';
+		def spacing = primaryLevel
+		if  (task.hasProperty('indentation_spacing'))
+			spacing = task.ext.indentation_spacing //+ primaryLevel
+		(spacing).times {
+			indent += " "
+		} 
+		
+		//return indent + inStr
+		return wrapLongLn(indent,indent+inStr)		
+	}
+	
+	def wrapLongLn(indent,inStr) {
+		
+		def wrappedLn = ''
+		def cx=0 
+    
+		if (inStr.length()==77) return inStr
+		
+		try {
+			
+			for (c in inStr.getChars()) {
+				wrappedLn += c
+				if (((++cx)%77)==0) {
+					wrappedLn += System.getProperty("line.separator")  + indent
+					cx=indent.length()
+				}
+			}
+	
+		} catch (e) {
+			return inStr
+		}
+		
+		/*
+		if (!inStr.equals(wrappedLn)) {
+			wrappedLn = wrappedLn + System.getProperty("line.separator") + indent + "*" //wrap indicator
+		}
+		*/
+//		if (!inStr.equals(wrappedLn)) {
+//			wrappedLn += System.getProperty("line.separator")
+//		} 
+		
+		return wrappedLn 
+	}
+
+}
+
+
+/************************
+
+def tcol = tasks.findAll {it.name.startsWith('t_')} 
+
+tcol.each()
+{taskName ->
+ //println "$taskName"
+}
+
+def callStackCt=0
+
+tcol.each() {task ->
+ task.doFirst {
+  logger.quiet    "Entering $task.name: ($task.description)..."  
+ }
+
+ task.doLast {
+ logger.quiet "Exit $task.name."
+
+  //logger.lifecycle  "EXITING $task.name."
+ }
+}
+
+********************/
+
+
+
+/* 
+@scrap-area
+------------------------------
+task 'listDirectory' {
+    def dir = new File('assemble')
+    enabled = dir.exists()
+    doLast {
+        println "List directory contents: ${dir.listFiles().join(',')}"
+    }
+}
+------------------------------
+
+        if (!propsFile.exists()) 
+					throw new StopExecutionException()
+------------------------------
+t_toolkitProps.onlyIf(new Spec() {
+    boolean isSatisfiedBy(task) {
+				propsFile.exists()
+    }
+})
+------------------------------
+------------------------------
+------------------------------
+------------------------------
+------------------------------
+------------------------------
+------------------------------
+------------------------------
+------------------------------
+------------------------------
+------------------------------
+------------------------------
+
+*/
