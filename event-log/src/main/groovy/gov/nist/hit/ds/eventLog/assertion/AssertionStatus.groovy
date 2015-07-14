@@ -21,4 +21,9 @@ public enum AssertionStatus {
         return (ordinal() >= ERROR.ordinal());
     }
 
+    public String forSaving() {
+        if (ordinal() == NONE.ordinal()) return ''
+        return name()
+    }
+
 }

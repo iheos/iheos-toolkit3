@@ -18,6 +18,7 @@ import gov.nist.hit.ds.tkapis.validation.ValidateTransactionResponse
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
+import gov.nist.toolkit.valregmsg.message.SoapMessageValidator
 import gov.nist.toolkit.valregmsg.validation.engine.ValidateMessageService
 import gov.nist.toolkit.valsupport.client.ValidationContext
 import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory
@@ -104,6 +105,7 @@ class ValidatorManagerV2 implements MessageValidator {
             //
 
             ValidationContext vc = DefaultValidationContextFactory.validationContext()
+            SoapMessageValidator.setValidationContextFromWSAction(vc, action)
             ValidateMessageService vms = new ValidateMessageService(null)
             MessageValidatorEngine mvc = vms.runValidation(vc, msgHeader, msgBody, null, new EventErrorRecorderBuilder().buildNewErrorRecorder(simHandle.event))
 

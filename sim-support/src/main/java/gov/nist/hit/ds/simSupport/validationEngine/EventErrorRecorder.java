@@ -150,6 +150,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     @Override
     public void challenge(String msg) {
         Assertion a = new Assertion();
+        a.setStatus(AssertionStatus.NONE);
         a.setMsg(msg);
         a.setLocation("Challenge");
         event.getAssertionGroup().addAssertion(a, true);
@@ -166,6 +167,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
     @Override
     public void detail(String msg) {
         Assertion a = new Assertion();
+        a.setStatus(AssertionStatus.NONE);
         a.setMsg(msg);
         a.setLocation("Detail");
         event.getAssertionGroup().addAssertion(a, true);
@@ -201,7 +203,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void finish() {
-
+//        throw new ToolkitRuntimeException("Not implemented");
     }
 
     @Override

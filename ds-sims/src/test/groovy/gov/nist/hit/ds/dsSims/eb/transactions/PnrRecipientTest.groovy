@@ -76,8 +76,8 @@ class PnrRecipientTest extends Specification {
 
     def 'Test good message'() {
         setup:
-        def header = getClass().classLoader.getResource('pnr/good/PnRSoapHeader.txt').text
-        def body = getClass().classLoader.getResource('pnr/good/PnR1DocSoapBody.txt').text
+        def header = getClass().classLoader.getResource('pnr/good/PnRHTTPHeader.txt').text
+        def body = getClass().classLoader.getResource('pnr/good/PnR1DocHTTPBody.txt').text
 
         when:
         run(header,body)
