@@ -2,6 +2,7 @@ package gov.nist.hit.ds.eventLog.assertion
 
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.shared.ValidationLevel
+import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import groovy.util.logging.Log4j
 import org.apache.log4j.Logger
@@ -25,6 +26,8 @@ public class AssertionGroup  {
 
     private static Logger logger = Logger.getLogger(AssertionGroup);
     private final static String dashes = "---";
+
+    // Don't log any messages less severe than this setting
     ValidationLevel validationLevel = ValidationLevel.ERROR
 
     AssertionGroup() {}
@@ -48,12 +51,12 @@ public class AssertionGroup  {
     public int size() { return assertions.size(); }
 
     Assertion addAssertion(Assertion asser, boolean required) {
-        log.debug("New Assertion is ${asser} (required=${required})")
+//        log.debug("New Assertion is ${asser} (required=${required})")
         if (required && asser.getStatus().ordinal() > worstStatus.ordinal())
             worstStatus = asser.getStatus();
 //        if (isLogable(asser)) {
             if (!asser.defaultMsg) removeDefaultMsg()
-            log.debug("...adding assertion to ${toString()}")
+//            log.debug("...adding assertion to ${toString()}")
             assertions.add(asser);
             assertionIds << asser.id
 //        }
@@ -242,8 +245,7 @@ public class AssertionGroup  {
     public Assertion assertTrue(ok, boolean required) {
         Assertion a = new Assertion();
         if (ok) {
-            a.expected = dashes
-            a.found = 'Ok'
+//            a.found = 'Ok'
         } else {
             a.expected = 'True'
             a.found = (ok) ? 'True' : 'False'
@@ -255,6 +257,7 @@ public class AssertionGroup  {
 
     public Assertion assertTrue(boolean ok, String found, boolean required) {
         Assertion a = new Assertion();
+        a.requiredOptional = (required) ? RequiredOptional.R : RequiredOptional.O
         if (ok) {
             a.expected = ''
             a.found = found

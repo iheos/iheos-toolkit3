@@ -1,0 +1,27 @@
+<actor type='xdsdocsrc'>
+    <transaction name='prb'>
+        <!-- example endpoint value -->
+        <endpoint value='http://localhost:8080/xdstools3/sim/unknown/target23/docrec/prb' />
+        <settings>
+            <!-- Checks applied to response only -->
+            <boolean name='schemaCheck' value='false' />
+            <boolean name='modelCheck' value='false' />
+            <boolean name='codingCheck' value='false' />
+            <boolean name='soapCheck' value='false' />
+            <!-- on response -->
+            <text name='msgCallback' value='' />
+        </settings>
+        <webService value='prb' />
+    </transaction>
+    <transaction name='prb'>
+        <endpoint value='https://localhost:8080/xdstools3/sim/unknown/target23/docrec/prb' />
+        <settings>
+            <boolean name='schemaCheck' value='false' />
+            <boolean name='modelCheck' value='false' />
+            <boolean name='codingCheck' value='false' />
+            <boolean name='soapCheck' value='false' />
+            <text name='msgCallback' value='' />
+        </settings>
+        <webService value='prb_TLS' />
+    </transaction>
+</actor>

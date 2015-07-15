@@ -8,7 +8,7 @@ import spock.lang.Specification
 class EndpointParserTest extends Specification {
 
     def 'Verify parser'() {
-        def endpoint = 'http://localhost:8080/base/sim/123/reg/sq'
+        def endpoint = 'http://localhost:8080/xdstools3/sim/user/123/reg/sq'
 
         when:
         def EndpointBuilder builder = new EndpointBuilder()

@@ -1,10 +1,11 @@
 package gov.nist.hit.ds.ebDocsrcSim.soap;
 
+import gov.nist.hit.ds.simSupport.simulator.SimHandle;
 import gov.nist.hit.ds.toolkit.environment.SecurityParams;
+import gov.nist.hit.ds.utilities.xml.OMFormatter;
+import gov.nist.hit.ds.utilities.xml.Util;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
 import gov.nist.hit.ds.xdsExceptions.*;
-import gov.nist.toolkit.utilities.xml.OMFormatter;
-import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.soap.SOAP11Constants;
@@ -60,6 +61,7 @@ public class Soap  {
 
     List<OMElement> additionalHeaders = null;
     List<OMElement> secHeaders = null;
+    public String messageId = null;
     String endpoint;
     String action;
     OMElement body = null;
@@ -74,6 +76,7 @@ public class Soap  {
 
     OMElement inHeader = null;
     OMElement outHeader = null;
+    public SimHandle simHandle;
 
     public void setSecurityParams(SecurityParams securityParams) {
         this.securityParams = securityParams;
@@ -210,7 +213,9 @@ public class Soap  {
 
         envelope.getBody().addChild(body);
 
-        setSoapHeader(envelope.getHeader());
+        OMElement soapHeader = envelope.getHeader();
+
+        setSoapHeader(soapHeader);
 //		if (useWSSEC) {
 //			// TODO: SAML disabled
 //			try {
@@ -397,6 +402,9 @@ public class Soap  {
         }
         // vbeera: modified code -END-
 
+        if (messageId != null)
+            outMsgCtx.setMessageID(messageId);
+
         Options options = outMsgCtx.getOptions();
         // options.setProperty(AddressingConstants.ADD_MUST_UNDERSTAND_TO_ADDRESSING_HEADERS,
         // Boolean.TRUE);
@@ -452,6 +460,7 @@ public class Soap  {
 //			}
 
         operationClient.addMessageContext(outMsgCtx);
+        System.out.println("Contexts are: \n" + operationClient.getOperationContext().getMessageContexts().toString());
 
         boolean block = !async;
 
@@ -478,40 +487,52 @@ public class Soap  {
         if (async)
             operationClient.setCallback(callback);
 
-        System.out
-                .println("******************************** BEFORE execute ****************************");
-        operationClient.execute(block); // execute sync or async
-        System.out
-                .println("******************************** AFTER execute ****************************");
+        MessageContext inMsgCtx = null;
+        try {
+            System.out
+                    .println("******************************** BEFORE execute ****************************");
+            operationClient.execute(block); // execute sync or async
+            System.out
+                    .println("******************************** AFTER execute ****************************");
 
-        if (async)
-            waitTillDone();
+            if (async)
+                waitTillDone();
 
-        MessageContext inMsgCtx = getInputMessageContext();
+            inMsgCtx = getInputMessageContext();
 
-        System.out.println("Operation is complete: "
-                + operationClient.getOperationContext().isComplete());
+            System.out.println("Operation is complete: "
+                    + operationClient.getOperationContext().isComplete());
 
-        if (async)
-            operationClient.complete(outMsgCtx);
+            if (async)
+                operationClient.complete(outMsgCtx);
+        } finally {
+            loadOutHeader();
+            simHandle.getEvent().getInOut().setReqHdr(new OMFormatter(outMsgCtx.getEnvelope().getHeader()).toString());
+            simHandle.getEvent().getInOut().setReqBody(new OMFormatter(outMsgCtx.getEnvelope().getBody()).toString().getBytes());
+            if (inMsgCtx != null ) {
+                inMsgCtx.getEnvelope().build();
 
-        inMsgCtx.getEnvelope().build();
+                OMElement soapBody = inMsgCtx.getEnvelope().getBody();
 
-        OMElement soapBody = inMsgCtx.getEnvelope().getBody();
+                soapBody.build();
 
-        soapBody.build();
+                result = soapBody.getFirstElement();
 
-        result = soapBody.getFirstElement();
+                new OMFormatter(result).toString(); // this forces full read before
+                // channel is closed
+                // removing it breaks the reading of MTOM formatted responses
 
-        new OMFormatter(result).toString(); // this forces full read before
-        // channel is closed
-        // removing it breaks the reading of MTOM formatted responses
+                loadInHeader();
 
-        loadOutHeader();
-        loadInHeader();
 
-        serviceClient.cleanupTransport();
-        serviceClient.cleanup();
+                simHandle.getEvent().getInOut().setRespHdr(new OMFormatter(inMsgCtx.getEnvelope().getHeader()).toString());
+                simHandle.getEvent().getInOut().setRespBody(new OMFormatter(inMsgCtx.getEnvelope().getBody()).toString().getBytes());
+
+            }
+
+            serviceClient.cleanupTransport();
+            serviceClient.cleanup();
+        }
 
     }
 
@@ -617,6 +638,22 @@ public class Soap  {
             return inMsgCxt;
         }
         return operationClient.getMessageContext("In");
+
+    }
+
+    MessageContext getOutputMessageContext() throws XdsInternalException,
+            AxisFault {
+        if (operationClient == null) {
+            Object out = serviceClient.getServiceContext()
+                    .getLastOperationContext().getMessageContexts().get("Out");
+            if (!(out instanceof MessageContext))
+                throw new XdsInternalException(
+                        "Soap: Out MessageContext of type "
+                                + out.getClass().getName()
+                                + " instead of MessageContext");
+            return (MessageContext) out;
+        }
+        return operationClient.getMessageContext("Out");
 
     }
 
@@ -778,7 +815,7 @@ public class Soap  {
         return soapCall();
     }
 
-    void loadInHeader() throws XdsInternalException {
+    public void loadInHeader() throws XdsInternalException {
         if (serviceClient == null)
             return;
         OperationContext oc = serviceClient.getLastOperationContext();
@@ -799,7 +836,7 @@ public class Soap  {
         inHeader = Util.deep_copy(in.getEnvelope().getHeader());
     }
 
-    void loadOutHeader() throws XdsInternalException {
+    public void loadOutHeader() throws XdsInternalException {
         if (serviceClient == null)
             return;
         OperationContext oc = serviceClient.getLastOperationContext();

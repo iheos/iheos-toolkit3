@@ -34,6 +34,10 @@ class SimHandle {
     def options = []
     boolean complete = false
 
+    SimIdentifier getSimIdentifier() {
+        new SimIdentifier(repository.id.idString, simId)
+    }
+
     // Event creation is lazy so create doesn't build unused event
     Event getEvent() {
         if (!event) {

@@ -1,0 +1,5 @@
+# userType
+
+keyword=user
+domain=repository
+description=Identifies Sim user

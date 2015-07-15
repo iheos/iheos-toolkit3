@@ -22,6 +22,6 @@ class RestTestServlet extends HttpServlet {
             return;
         }
 
-        println body
+        println "\n\nRESTTEST: ${body}\n"
     }
 }

@@ -8,12 +8,12 @@ import spock.lang.Specification
 class CreateActorTest extends Specification {
     static String config = '''
 <ActorsTransactions>
-    <transaction name="Stored Query" code="sq" asyncCode="sq.as">
+    <transaction name="Stored Query" code="sq" asyncCode="sq.as" id="sq">
         <implClass value="unused"/>
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
     </transaction>
-    <transaction name="Register"  code="rb" asyncCode="r.as">
+    <transaction name="Register"  code="rb" asyncCode="r.as" id="rb">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <implClass value="unused"/>

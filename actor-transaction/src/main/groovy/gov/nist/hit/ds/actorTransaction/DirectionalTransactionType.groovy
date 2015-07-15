@@ -7,10 +7,11 @@ package gov.nist.hit.ds.actorTransaction
  */
 class DirectionalTransactionType {
     TransactionType transactionType
-    boolean send  // send|receive
+    boolean client  // send|receive
 
     DirectionalTransactionType() {}
 
-    DirectionalTransactionType(TransactionType _transactionType, boolean _send) { transactionType = _transactionType; send = _send }
+    DirectionalTransactionType(TransactionType _transactionType, boolean _client) { transactionType = _transactionType; client = _client }
 
+    String toString() { "${transactionType}: ${(client) ? 'client' : 'server'}"}
 }

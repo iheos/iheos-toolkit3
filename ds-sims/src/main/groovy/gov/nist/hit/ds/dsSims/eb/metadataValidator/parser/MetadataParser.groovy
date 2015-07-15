@@ -1,8 +1,8 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.parser
 
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.*
 import gov.nist.hit.ds.ebMetadata.Metadata
+import gov.nist.toolkit.valsupport.client.ValidationContext
 import org.apache.axiom.om.OMElement
 
 /**

@@ -693,7 +693,7 @@ public class TransactionMonitorWidget extends Composite {
         //  super(new TextCell());
 
         @Override
-        public String getValue(TxDetailRow object) {
+        public String getBooleanValue(TxDetailRow object) {
 
             try {
                 return object.getCsvData().get(this.index);

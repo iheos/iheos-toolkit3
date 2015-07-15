@@ -11,7 +11,7 @@ public abstract class GenericEvent<? extends EventHandler> extends GwtEvent {
     private AssetNode an;
     private int rowNumber;
 
-    public AssetNode getValue() {
+    public AssetNode getBooleanValue() {
         return this.an;
     }
 

@@ -1,16 +1,18 @@
 package gov.nist.hit.ds.httpSoap.parsers
+
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.httpSoap.validators.SoapMessageValidator
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
-import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.simulator.SimIdentifier
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import org.apache.commons.io.FileUtils
 import spock.lang.Specification
+
 /**
  * Created by bmajur on 7/16/14.
  */
@@ -65,7 +67,7 @@ class SoapMessageParserTestOld extends Specification {
   </soapenv:Body>
 </soapenv:Envelope>'''
         when:
-        def simId = new SimId('123')
+        def simId = new SimIdentifier(SimUtils.defaultRepoName, '123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).run()
@@ -89,7 +91,7 @@ class SoapMessageParserTestOld extends Specification {
   </soapenv:Header>
 </soapenv:Envelope>'''
         when:
-        def simId = new SimId('123')
+        def simId = new SimIdentifier(SimUtils.defaultRepoName, '123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).run()
@@ -116,7 +118,7 @@ class SoapMessageParserTestOld extends Specification {
   </soapenv:Body>
 </soapenv:Envelope>'''
         when:
-        def simId = new SimId('123')
+        def simId = new SimIdentifier(SimUtils.defaultRepoName, '123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).run()
@@ -147,7 +149,7 @@ class SoapMessageParserTestOld extends Specification {
   </soapenv:Body>
 </soapenv:Envelope'''
         when:
-        def simId = new SimId('123')
+        def simId = new SimIdentifier(SimUtils.defaultRepoName, '123')
         SimUtils.create('reg', simId)
         Closure closure = { simHandle ->
             new SoapMessageValidator(simHandle, envelope).run()

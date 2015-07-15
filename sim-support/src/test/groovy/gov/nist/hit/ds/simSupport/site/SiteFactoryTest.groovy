@@ -4,6 +4,7 @@ import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.config.RetrieveTransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.simulator.SimConfigFactory
+import gov.nist.hit.ds.simSupport.simulator.SimSystemConfig
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
 import gov.nist.hit.ds.siteManagement.loader.SeparateSiteLoader
@@ -16,27 +17,27 @@ import spock.lang.Specification
 class SiteFactoryTest extends Specification {
     static String config = '''
 <ActorsTransactions>
-    <transaction name="Stored Query" code="sq.b" asyncCode="sq.as">
+    <transaction name="Stored Query" code="sq.b" asyncCode="sq.as" id="sq.b">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
         <implClass value="unused"/>
     </transaction>
-    <transaction name="Register" code="r.b" asyncCode="r.as">
+    <transaction name="Register" code="r.b" asyncCode="r.as" id="r.b">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <implClass value="unused"/>
     </transaction>
-    <transaction name="Provide and Register" code="pr.b" asyncCode="pr.as">
+    <transaction name="Provide and Register" code="pr.b" asyncCode="pr.as" id="pr.b">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
         <implClass value="unused"/>
     </transaction>
-    <transaction name="Retrieve" code="ret.b" asyncCode="ret.as" isRetrieve="true">
+    <transaction name="Retrieve" code="ret.b" asyncCode="ret.as" isRetrieve="true" id="ret.b">
         <request action="urn:ihe:iti:2007:RetrieveDocumentSet"/>
         <response action="urn:ihe:iti:2007:RetrieveDocumentSetResponse"/>
         <implClass value="unused"/>
     </transaction>
-    <transaction name="Update" code="update" asyncCode="update.as">
+    <transaction name="Update" code="update" asyncCode="update.as" id="update">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
         <implClass value="unused"/>
@@ -66,7 +67,8 @@ class SiteFactoryTest extends Specification {
     def 'ActorSimConfig should have 4 transactions'() {
         given:
         def actorType = atFactory.getActorType('rep')
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
+//        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', 'user', new SimId('1234'), actorType)
+        def actorSimConfig = new SimConfigFactory().buildSim(new SimSystemConfig(), 'user', new SimId('1234'), actorType)
 
         when:
         def endpoints = actorSimConfig.getTransactions().findAll { it instanceof TransactionSimConfigElement }
@@ -79,7 +81,8 @@ class SiteFactoryTest extends Specification {
     def 'ActorSimConfig should have 1 Repository Declarations'() {
         given:
         def actorType = atFactory.getActorType('rep')
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
+//        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', 'user', new SimId('1234'), actorType)
+        def actorSimConfig = new SimConfigFactory().buildSim(new SimSystemConfig(), 'user', new SimId('1234'), actorType)
 
         when:
         def repositories = actorSimConfig.getTransactions().findAll {
@@ -95,7 +98,8 @@ class SiteFactoryTest extends Specification {
         def siteFactory = new SimSiteFactory()
         def aTfactory = new ActorTransactionTypeFactory()
         def actorType = atFactory.getActorType('rep')
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
+//        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', 'user', new SimId('1234'), actorType)
+        def actorSimConfig = new SimConfigFactory().buildSim(new SimSystemConfig(), 'user', new SimId('1234'), actorType)
 
         when:
         Site site = siteFactory.buildSite(actorSimConfig, 'mysite')
@@ -111,7 +115,8 @@ class SiteFactoryTest extends Specification {
         def siteFactory = new SimSiteFactory()
         def actorType = atFactory.getActorType('rep')
 //        ActorType actorType = aTfactory.getActorType(actorTypeName)
-        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', new SimId('1234'), actorType)
+//        def actorSimConfig = new SimConfigFactory().buildSim('localhost', '8080', 'base', 'user', new SimId('1234'), actorType)
+        def actorSimConfig = new SimConfigFactory().buildSim(new SimSystemConfig(), 'user', new SimId('1234'), actorType)
 
         when: ''
         Site site = siteFactory.buildSite(actorSimConfig, 'mysite')

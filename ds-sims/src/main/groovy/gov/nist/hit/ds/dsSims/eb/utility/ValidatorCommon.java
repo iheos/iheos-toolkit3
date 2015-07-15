@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.dsSims.eb.utility;
 
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext;
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.codes.Code;
 import gov.nist.hit.ds.dsSims.eb.msgs.RegistryErrorListGenerator;
 import gov.nist.hit.ds.ebMetadata.Metadata;
@@ -9,6 +8,8 @@ import gov.nist.hit.ds.eventLog.errorRecording.ErrorRecorder;
 import gov.nist.hit.ds.eventLog.errorRecording.client.ValidatorErrorItem;
 import gov.nist.hit.ds.eventLog.errorRecording.client.XdsErrorCode;
 import gov.nist.hit.ds.utilities.xml.XmlUtil;
+import gov.nist.toolkit.valsupport.client.ValidationContext;
+import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory;
 import org.apache.axiom.om.OMElement;
 
 import java.util.Iterator;
@@ -17,7 +18,7 @@ import java.util.List;
 public class ValidatorCommon implements ErrorRecorder {
 	Metadata m;
 	RegistryErrorListGenerator rel;
-	ValidationContext valCtx = new ValidationContext();
+	ValidationContext valCtx = DefaultValidationContextFactory.validationContext();
 	
 	public static String NeedReference = "Need Reference";
 	

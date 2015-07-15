@@ -14,9 +14,11 @@ public class CxFormatValidator extends AbstractFormatValidator {
 	}
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
-    @Validation(id='rocx010', msg='CX format', ref='ITI TF-3: Table 4.2.3.1.7-2')
+    @Validation(id='rocx010', msg='Patient ID', ref='ITI TF-3: Table 4.2.3.1.7-2')
     def rocx010() {
-        infoFound(value)
+//        infoFound(value)
+        found(value)
+        expected('CX format')
         def error = ValidatorCommon.validate_CX_datatype(value)
         assertFalse(error)
     }
