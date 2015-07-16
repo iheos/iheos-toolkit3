@@ -1,0 +1,5 @@
+# userType
+
+keyword=userType
+domain=asset
+description=Identifies Sim user

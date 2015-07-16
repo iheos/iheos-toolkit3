@@ -3,11 +3,11 @@ package gov.nist.hit.ds.dsSims.eb.metadata
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.dsSims.eb.generator.RimGenerator
 import gov.nist.hit.ds.dsSims.eb.reg.DSMetadataProcessing
-import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
-import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.simulator.SimIdentifier
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.utilities.SimEventAccess
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.utilities.xml.Parse
@@ -34,7 +34,7 @@ class MetadataParserTestEx extends Specification {
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     def repoName = 'Sim'
 
     def setup() {
@@ -43,8 +43,8 @@ class MetadataParserTestEx extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('123')
-        SimUtils.create('reg', simId, repoName)
+        simId = new SimIdentifier(SimUtils.defaultRepoName, '123')
+        SimUtils.create('reg', simId)
     }
 
     def 'SubmissionSet passes metadata parser'() {
@@ -61,9 +61,9 @@ class MetadataParserTestEx extends Specification {
         Closure closure = { simHandle ->
             new DSMetadataProcessing(simHandle, xml).run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
+        def transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.simHandle.event.addArtifact('Metadata', ssXml)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:

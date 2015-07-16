@@ -3,6 +3,8 @@ package gov.nist.hit.ds.httpSoap.datatypes;
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
 import org.apache.axiom.om.OMElement;
 
+import java.util.Iterator;
+
 public class SoapMessage {
 	OMElement header;
 	OMElement body;
@@ -45,7 +47,13 @@ public class SoapMessage {
     public String getSoapAction() {
         if (header == null) throw new ToolkitRuntimeException("No SOAP Header");
         try {
-            return ((OMElement) header.getChildrenWithLocalName("Action").next()).getText();
+			Iterator<?> it = header.getChildrenWithLocalName("Action");
+			if (it.hasNext()) {
+				OMElement ele = (OMElement) it.next();
+				return ele.getText();
+			}
+			return "";
+//			return ((OMElement) header.getChildrenWithLocalName("Action").next()).getText();
         } catch (NullPointerException e) {
             throw new ToolkitRuntimeException("No SOAP Action");
         }

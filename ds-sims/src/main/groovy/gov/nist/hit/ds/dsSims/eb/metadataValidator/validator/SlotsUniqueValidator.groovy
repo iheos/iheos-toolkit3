@@ -21,11 +21,17 @@ class SlotsUniqueValidator extends ValComponentBase {
     @Validation(id = 'roslotu010', msg = 'Verify slot names unique', ref = 'ebRIM 3.0 section 2.8.2')
     def roslotu010() {
         List<String> names = new ArrayList<String>();
+        boolean legal = true
+        int count = 0
         for (SlotModel slot : slots) {
             if (names.contains(slot.getName())) {
-                fail("${model.identifyingString()} : Slot ${slot.getName()} is multiply defined");
+                fail("Slot ${slot.getName()} is multiply defined");
                 names.add(slot.getName());
+                legal = false
             }
+            count++
         }
+        found("${count}")
+        if (legal) { success() }
     }
 }

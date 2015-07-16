@@ -32,7 +32,7 @@ public class InitializationServlet extends HttpServlet {
         factory = new ActorTransactionTypeFactory();
         factory.clear();
         factory.loadFromResource("actorTransactions.xml");
-        SimSystemConfig.setRepoName(simRepositoryName);
+//        SimSystemConfig.setRepoName(simRepositoryName);
         logger.info("Toolkit initialized");
     }
 

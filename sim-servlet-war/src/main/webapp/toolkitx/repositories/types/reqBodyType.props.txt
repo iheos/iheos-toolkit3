@@ -1,0 +1,5 @@
+# reqBodyType
+
+keyword=reqBodyType
+domain=asset
+description=reqBodyType desc

@@ -1,5 +1,4 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.DtmFormatValidator
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.XonXcnXtnFormatValidator
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.SlotModel
@@ -9,6 +8,8 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.ErrorCode
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
+import gov.nist.toolkit.valsupport.client.ValidationContext
+
 /**
  * Created by bmajur on 12/23/14.
  */
@@ -25,18 +26,26 @@ public class SubmissionSetValidator extends AbstractRegistryObjectVal {
     }
 
     void run() {
-        if (vc.skipInternalStructure) return;
+//        if (vc.skipInternalStructure) return;
 
         if (vc.isXDR) vc.isXDRLimited = model.isMetadataLimited();
 
         runValidationEngine()
     }
 
+    @Validation(id='ross001', msg='Is Enabled', ref='')
+    def ross001() {
+        if (vc.skipInternalStructure) {
+            infoMsg('Skipping validation of internal structure')
+            quit()
+        }  // run no more rules
+    }
+
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='ross010', msg='Identify options', ref='')
     def ross010() {
-        if (vc.isXDRLimited) infoFound("Labeled as Limited Metadata");
-        if (vc.isXDRMinimal) infoFound("Labeled as Minimal Metadata (Direct)");
+        if (vc.isXDRLimited) infoMsg("Labeled as Limited Metadata");
+        if (vc.isXDRMinimal) infoMsg("Labeled as Minimal Metadata (Direct)");
     }
 
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
@@ -45,15 +54,21 @@ public class SubmissionSetValidator extends AbstractRegistryObjectVal {
         new TopAttsValidator(simHandle, model, vc, SubmissionSetModel.statusValues)
     }
 
-    // TODO: verify that if this rule passes the msg still shows in logs
-
     @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
+    @Validation(id='ross025', msg='Validating that Slots are unique', ref='ITI TF-3: Table 4.1-6')
+    def ross025() {
+        new SlotsUniqueValidator(simHandle, model.slots).asSelf(this).run()
+    }
+
+        @ErrorCode(code=XdsErrorCode.Code.XDSRegistryMetadataError)
     @Validation(id='ross030', msg='Validating that Slots present are legal', ref='ITI TF-3: Table 4.1-6')
     def ross030() {
-        new SlotsUniqueValidator(simHandle, model.slots).asSelf(this).run()
         for (SlotModel slot : model.getSlots()) {
-            if ( ! legal_slot_name(slot.getName()))
+            infoMsg('  ')
+            infoFound("${slot.getName()}")
+            if (!legal_slot_name(slot.getName())) {
                 fail(model.identifyingString() + ": " + slot.getName() + " is not a legal slot name for a SubmissionSet")
+            }
         }
     }
 

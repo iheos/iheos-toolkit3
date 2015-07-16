@@ -1,6 +1,5 @@
 package gov.nist.hit.ds.dsSims.eb.metadata
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.generator.RimGenerator
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.SubmissionSetModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.validator.SubmissionSetValidator
@@ -13,6 +12,8 @@ import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.utilities.xml.Parse
+import gov.nist.toolkit.valsupport.client.ValidationContext
+import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory
 import org.apache.axiom.om.OMElement
 import spock.lang.Specification
 /**
@@ -81,7 +82,7 @@ class SSSqResponseTestEx extends Specification {
         ]
 
         when:
-        ValidationContext vc = new ValidationContext()
+        ValidationContext vc = DefaultValidationContextFactory.validationContext()
         vc.isSQ = true
         vc.isResponse = true
         def transRunner = run(submissionSpec, vc)
@@ -103,7 +104,7 @@ class SSSqResponseTestEx extends Specification {
         ]
 
         when:
-        ValidationContext vc = new ValidationContext()
+        ValidationContext vc = DefaultValidationContextFactory.validationContext()
         vc.isSQ = true
         vc.isResponse = true
         def transRunner = run(submissionSpec, vc)
@@ -125,7 +126,7 @@ class SSSqResponseTestEx extends Specification {
         ]
 
         when:
-        ValidationContext vc = new ValidationContext()
+        ValidationContext vc = DefaultValidationContextFactory.validationContext()
         vc.isSQ = true
         vc.isResponse = true
         def transRunner = run(submissionSpec, vc)
@@ -146,7 +147,7 @@ class SSSqResponseTestEx extends Specification {
         ]
 
         when:
-        ValidationContext vc = new ValidationContext()
+        ValidationContext vc = DefaultValidationContextFactory.validationContext()
         vc.isSQ = true
         vc.isResponse = true
         def transRunner = run(submissionSpec, vc)
@@ -165,7 +166,7 @@ class SSSqResponseTestEx extends Specification {
         ]
 
         when:
-        ValidationContext vc = new ValidationContext()
+        ValidationContext vc = DefaultValidationContextFactory.validationContext()
         vc.isSQ = true
         vc.isResponse = true
         def transRunner = run(submissionSpec, vc)

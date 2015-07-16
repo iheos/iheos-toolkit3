@@ -16,7 +16,7 @@
         <implClass value="gov.nist.hit.ds.dsSims.eb.transactions.Reg"/>
     </transaction>
     <transaction name="Provide Document Bundle" id="pdb" code="pdb">
-        <implClass value="gov.nist.hit.ds.dsSims.fhir.mhd.validators.FeedTransaction"/>
+        <implClass value="gov.nist.hit.ds.fhirSims.mhd.validators.FeedTransaction"/>
     </transaction>
     <actor name="Document Registry" id="reg">
         <implClass value="gov.nist.hit.ds.simSupport.factory.DocumentRegistryActorFactory"/>

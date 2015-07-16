@@ -131,11 +131,11 @@ public class HttpMessageBa implements HttpServletRequest {
 			return null;
 		String lcHeaderName = headerName.toLowerCase();
 
-        logger.debug("looking for header " + lcHeaderName);
+        logger.trace("looking for header " + lcHeaderName);
 		for (int i=0; i<headers.size(); i++) {
-            logger.debug(headers.get(i).lcname);
+            logger.trace(headers.get(i).lcname);
 			if (lcHeaderName.equals(headers.get(i).lcname)) {
-                logger.debug("got it");
+                logger.trace("got it");
                 return headers.get(i).name + ": " + headers.get(i).value;
             }
 		}

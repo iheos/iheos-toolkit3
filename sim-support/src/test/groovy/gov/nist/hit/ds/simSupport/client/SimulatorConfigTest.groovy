@@ -72,7 +72,7 @@ public class SimulatorConfigTest {
 								TlsType.NOTLS,
 								AsyncType.ASYNC
 								),
-								new EndpointValue("http://example.com/async"))
+								new EndpointValue("http://example.com/xdstools3/sim/user/simid/actor/trans"))
 						);
 		sConfig.add(new TransactionSimConfigElement(
 								new EndpointType(
@@ -80,7 +80,7 @@ public class SimulatorConfigTest {
 										TlsType.TLS,
 										AsyncType.ASYNC
 										),
-										new EndpointValue("https://example.com/async"))
+										new EndpointValue("https://example.com/xdstools3/sim/user/simid/actor/trans"))
 						);
 		List<AbstractConfigElement> cEles = sConfig.findConfigs(
 				[ new ActorTransactionTypeFactory().getTransactionTypeIfAvailable("rb") ],
