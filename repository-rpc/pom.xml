@@ -44,39 +44,39 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+<!--            <version>4.11</version>  -->
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
-            <version>2.5.1</version>
+<!--            <version>2.5.1</version>  -->
         </dependency>
 
 		<!-- 3rd party -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.12</version>
+<!--			<version>1.9.12</version>  -->
 		</dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
+<!--            <version>1.7.5</version>  -->
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.5</version>
+<!--            <version>1.7.5</version>  -->
         </dependency>
 		<dependency>
 			<groupId>org.apache.commons.io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
+<!--			<version>2.4</version>  -->
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
+<!--			<version>3.1</version>  -->
 		</dependency>
 		<!--<dependency>-->
 			<!--<groupId>org.apache.derby</groupId>-->
@@ -96,12 +96,12 @@
         <dependency>
             <groupId>net.timewalker.ffmq3</groupId>
             <artifactId>ffmq3-core</artifactId>
-            <version>3.0.5</version>
+<!--            <version>3.0.5</version>  -->
         </dependency>
         <dependency>
             <groupId>javax.jms</groupId>
             <artifactId>jms</artifactId>
-            <version>1.1</version>
+<!--            <version>1.1</version>  -->
         </dependency>
         <!--
         <dependency>

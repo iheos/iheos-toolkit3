@@ -25,17 +25,17 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+<!--            <version>1.2.17</version>  -->
         </dependency>
         <dependency>
             <groupId>org.apache.ws.commons.axiom</groupId>
             <artifactId>axiom-impl</artifactId>
-            <version>1.2.14</version>
+<!--            <version>1.2.14</version>  -->
         </dependency>
         <dependency>
             <groupId>org.apache.ws.commons.axiom</groupId>
             <artifactId>axiom-dom</artifactId>
-            <version>1.2.10</version>
+<!--            <version>1.2.10</version>  -->
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
