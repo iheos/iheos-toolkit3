@@ -22,14 +22,17 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
+           <!-- <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>session</artifactId>
-            </dependency>
+            </dependency> -->
+            <!--
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>security-common</artifactId>
             </dependency>
+            -->
+            <!--
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>env-settings</artifactId>
@@ -38,24 +41,28 @@
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>http-soap-validator</artifactId>
             </dependency>
+            -->
+            <!--
             <dependency>
                 <groupId>com.sun.ebxml</groupId>
                 <artifactId>ebxmlrr-common</artifactId>
             </dependency>
+            -->
+            <!--
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
             </dependency>
+            -->
+            <!--
             <dependency>
                 <groupId>org.spockframework</groupId>
                 <artifactId>spock-core</artifactId>
-<!--                <version>0.7-groovy-2.0</version>  -->
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.spockframework</groupId>
                 <artifactId>spock-maven</artifactId>
-<!--                <version>0.7-groovy-2.0</version>  -->
             </dependency>
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
@@ -140,11 +147,13 @@
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>xdsExceptions</artifactId>
             </dependency>
+            -->
 
             <!--<dependency>-->
                 <!--<groupId>gov.nist.hit.ds</groupId>-->
                 <!--<artifactId>common-datatypes</artifactId>-->
             <!--</dependency>-->
+            <!--
             <dependency>
                 <groupId>gov.nist.hit.ds</groupId>
                 <artifactId>http</artifactId>
@@ -173,6 +182,7 @@
                 <groupId>org.apache.axis2</groupId>
                 <artifactId>axis2-kernel</artifactId>
             </dependency>
+            -->
         </dependencies>
     </dependencyManagement>
 
