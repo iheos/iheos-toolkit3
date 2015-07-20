@@ -10,7 +10,9 @@ import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -26,9 +28,11 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
     private ArtifactId repositoryId = null;
     private boolean[] selections = null;
     private Type type = null;
-
+    public static final String YYYY_MMDDKKMMSS_SSS = "yyyyMMddkkmmssSSS";
+    private String startScanTimeInMillis = null;
 
     private String time = null;
+    private File scanPathFragment = null;
 	private Repository repository;
 
     private static Logger logger = Logger.getLogger(SimpleAssetIterator.class.getName());
@@ -50,6 +54,7 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	 * @throws RepositoryException
 	 */
 	public SimpleAssetIterator(Repository repos, Type type) throws RepositoryException {
+
 		setRepository(repos);
 		this.repositoryId = repos.getId();
 		this.type = type;
@@ -60,10 +65,13 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 		assetFileNames = fList.toArray(new File[fList.size()]);				
 	}
 
-    public SimpleAssetIterator(Repository repos, String time) throws RepositoryException {
+    public SimpleAssetIterator(Repository repos, String time, File scanPathFragment) throws RepositoryException {
+
         setRepository(repos);
         this.repositoryId = repos.getId();
-        this.time = time;
+        setTime(time);
+        setScanPathFragment(scanPathFragment);
+
         // reposDir =  new File(Configuration.getRepositoriesDataDir(repos.getSource()).toString()  + File.separator + repositoryId.getIdString());
         reposDir = repos.getRoot();
         List<File> fList = setupList(reposDir);
@@ -187,15 +195,27 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	@Override
 	public boolean accept(File dir, String name) {
 		if (name.equals("repository." + Configuration.PROPERTIES_FILE_EXT)) return false;  // not an asset
-		File f = new File(dir + File.separator + name);
 
-		if (f.isDirectory()) {
+		File f = new File(dir, name);
 
-            if (time!=null) {
-                return (f.toString().indexOf(time)>-1);
+        if (couldBeAnInProgressFile(f))
+            return false;
 
-            }
-            return true; // Look for child assets
+
+        if (f.isDirectory()) {
+
+            if (getTime()!=null && getScanPathFragment()!=null) {
+                boolean basePath = "/".equals(getScanPathFragment());
+                if (basePath && f.toString().indexOf(getScanPathFragment().toString())>-1
+                        || (!basePath && f.toString().contains(getScanPathFragment().toString()) &&  !f.toString().endsWith(getScanPathFragment().toString()) )) {
+                    if (f.toString().indexOf(getTime())>-1) {
+                        return true;
+                    } else
+                        return false; // Skip older stuff
+                } else
+                     return true;
+            } else
+                return true;
         }
 
 		if (f.isFile() && !name.endsWith(Configuration.PROPERTIES_FILE_EXT)) return false;  // not an asset property file
@@ -236,7 +256,15 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 
 	}
 
-	/**
+    private boolean couldBeAnInProgressFile(File f) {
+        SimpleDateFormat sdf = new SimpleDateFormat(YYYY_MMDDKKMMSS_SSS);
+        String fileModifiedDate = sdf.format(f.lastModified());
+        if ( fileModifiedDate.compareTo(startScanTimeInMillis)>0)
+            return true;
+        return false;
+    }
+
+    /**
 	 * 
 	 * @return
 	 */
@@ -249,10 +277,18 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 	 * @param repository
 	 */
 	public void setRepository(Repository repository) {
+
+        setStartScanTimeInMillis();
+
 		this.repository = repository;
 	}
 
-	/**
+    private void setStartScanTimeInMillis() {
+        SimpleDateFormat sdf = new SimpleDateFormat(YYYY_MMDDKKMMSS_SSS);
+        startScanTimeInMillis = sdf.format(Calendar.getInstance().getTimeInMillis());
+    }
+
+    /**
 	 * 
 	 * @return
 	 */
@@ -269,6 +305,15 @@ public class SimpleAssetIterator implements AssetIterator, FilenameFilter {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+
+    public File getScanPathFragment() {
+        return scanPathFragment;
+    }
+
+    public void setScanPathFragment(File scanPathFragment) {
+        this.scanPathFragment = scanPathFragment;
     }
 
 

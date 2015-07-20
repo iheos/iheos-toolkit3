@@ -5,12 +5,12 @@
 
     <parent>
         <groupId>gov.nist.hit.ds</groupId>
-        <artifactId>toolkit3</artifactId>
-        <version>3.0.4a-SNAPSHOT</version>
+        <artifactId>tk-deps</artifactId>
+        <version>3.1.0-SNAPSHOT</version>
+        <relativePath>../tk-deps/pom.xml</relativePath>
     </parent>
 
     <artifactId>xdstools3</artifactId>
-    <version>3.0.4a-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
@@ -21,30 +21,25 @@
     </properties>
 
 
-    <repositories>
-        <!--
-        <repository>
-            <id>internal-nist-repo-third-party</id>
-            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>
-        </repository>
-        <repository>
-            <id>internal-nist-repo-snapshots</id>
-            <url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>
-        </repository>
-        -->
-        <repository>
-            <id>smartgwt</id>
-            <url>http://www.smartclient.com/maven2</url>
-        </repository>
-        <repository>
-            <id>apache-central</id>
-            <url>http://repo.maven.apache.org/maven2</url>
-        </repository>
-        <repository>
-            <id>codehaus</id>
-            <url>http://repository.codehaus.org/org/codehaus</url>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+
+        <!--<repository>-->
+            <!--<id>internal-nist-repo-third-party</id>-->
+            <!--<url>http://vm-070.nist.gov:8081/nexus/content/repositories/thirdparty/</url>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>internal-nist-repo-snapshots</id>-->
+            <!--<url>http://vm-070.nist.gov:8081/nexus/content/repositories/snapshots/</url>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>smartgwt</id>-->
+            <!--<url>http://www.smartclient.com/maven2</url>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>apache-central</id>-->
+            <!--<url>http://repo.maven.apache.org/maven2</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
 
     <dependencies>
@@ -63,19 +58,16 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
-            <version>${gwtVersion}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
             <scope>runtime</scope>
-            <version>${gwtVersion}</version>
         </dependency>
         <dependency>
             <groupId>com.google.gwt.inject</groupId>
@@ -86,12 +78,10 @@
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt</artifactId>
-            <version>5.0p</version>
         </dependency>
         <dependency>
             <groupId>com.smartgwt</groupId>
             <artifactId>smartgwt-skins</artifactId>
-            <version>5.0p</version>
         </dependency>
 
         <!-- Jersey dependencies -->
@@ -102,6 +92,10 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>xds-exceptions</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.toolkit</groupId>
+            <artifactId>common-datatypes</artifactId>
         </dependency>
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
@@ -128,7 +122,6 @@
         <dependency>
             <groupId>gov.nist.hit.ds</groupId>
             <artifactId>repository-widgets-ui</artifactId>
-            <version>3.0.4a-SNAPSHOT</version>
             <!-- for some reason, the source classifier requires an explicit version -->
             <classifier>sources</classifier>
             <scope>compile</scope>
@@ -299,6 +292,6 @@
     </build>
 
     <scm>
-        <tag>v3.0.4a-test</tag>
+        <tag>v3.0.0-test</tag>
     </scm>
 </project>

@@ -15,20 +15,12 @@ class TransactionReportBuilder {
 
         xml.transactionLog(type: simHandle.actorSimConfig.actorType.shortName, simId:simHandle.simId.id) {
             request() {
-                header() {
-                    simHandle.event.inOut.reqHdr
-                }
-                body() {
-                    simHandle.event.inOut.reqBody
-                }
+                header(simHandle.event.inOut.reqHdr)
+                body(new String(simHandle.event.inOut.reqBody))
             }
             response() {
-                header() {
-                    simHandle.event.inOut.respHdr
-                }
-                body() {
-                    simHandle.event.inOut.respBody
-                }
+                header(simHandle.event.inOut.respHdr)
+                body(new String(simHandle.event.inOut.respBody))
             }
         }
 

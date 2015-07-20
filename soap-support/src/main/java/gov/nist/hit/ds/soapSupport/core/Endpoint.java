@@ -1,5 +1,7 @@
 package gov.nist.hit.ds.soapSupport.core;
 
+// Use EndpointValue
+@Deprecated
 public class Endpoint {
 	String endpoint;
 

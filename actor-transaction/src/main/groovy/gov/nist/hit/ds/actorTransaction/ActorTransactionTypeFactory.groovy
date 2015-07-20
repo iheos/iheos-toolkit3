@@ -8,7 +8,10 @@ import groovy.util.logging.Log4j
  */
 @Log4j
 class ActorTransactionTypeFactory {
+    // TODO: these lookups are dangerous since they don't take direction into account
+    // lookup through actorType instead
     static Map<String, TransactionType> transactionByName
+    static Map<String, TransactionType> transactionById
     static Map<String, ActorType> actorByName
     static Map<String, TransactionType> transactionByRequestAction
     static Map<String, TransactionType> transactionByResponseAction
@@ -20,11 +23,13 @@ class ActorTransactionTypeFactory {
         actorByName.clear()
         transactionByRequestAction.clear()
         transactionByResponseAction.clear()
+        transactionById.clear()
     }
 
     static def init() {
         if (actorByName) return
         transactionByName = new HashMap<>()
+        transactionById = new HashMap<>()
         actorByName = new HashMap<String, ActorType>()
         transactionByRequestAction = new HashMap<>()
         transactionByResponseAction = new HashMap<>()
@@ -37,7 +42,7 @@ class ActorTransactionTypeFactory {
     ActorType getActorType(String type) {
         ActorType actorType = actorByName.get(type)
         if (actorType) return actorType
-        throw new ToolkitRuntimeException("ActorType ${type} does not exist.")
+        throw new ToolkitRuntimeException("ActorType ${type} does not exist. These are defined: ${actorByName.keySet()}")
     }
 
     static TransactionType getTransactionType(String type) {

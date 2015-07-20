@@ -67,12 +67,12 @@ public class FindConfigOneEndpointTest {
 										TlsType.TLS,
 										AsyncType.ASYNC
 										),
-										new EndpointValue("https://example.com/async")
+										new EndpointValue("https://example.com/xdstools3/sim/user/simid/actor/trans")
 								)
 						);
         actorType = new ActorTransactionTypeFactory().getActorTypeIfAvailable("reg");
         cEles = sConfig.findConfigs(
-                [ actorType.findSimple("rb") ],
+                [ actorType.findSimple("rb", false) ],
                 [ TlsType.TLS ],
                 [ AsyncType.ASYNC, AsyncType.SYNC ]);
 	}

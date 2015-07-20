@@ -9,22 +9,22 @@ public class EndpointLabelBuildTest {
     ActorType actorType;
     static String config = '''
 <ActorsTransactions>
-    <transaction name="Stored Query" code="sq" asyncCode="sq.as">
+    <transaction name="Stored Query" code="sq" asyncCode="sq.as" id="sq">
         <request action="urn:ihe:iti:2007:RegistryStoredQuery"/>
         <response action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
         <implClass value="unused"/>
     </transaction>
-    <transaction name="Register" code="rb" asyncCode="r.as">
+    <transaction name="Register" code="rb" asyncCode="r.as" id="rb">
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
         <implClass value="unused"/>
     </transaction>
-    <transaction name="Provide and Register" code="prb" asyncCode="pr.as">
+    <transaction name="Provide and Register" code="prb" asyncCode="pr.as" id="prb">
         <request action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse"/>
         <implClass value="unused"/>
     </transaction>
-    <transaction name="Update" code="update" asyncCode="update.as">
+    <transaction name="Update" code="update" asyncCode="update.as" id="update">
         <request action="urn:ihe:iti:2010:UpdateDocumentSet"/>
         <response action="urn:ihe:iti:2010:UpdateDocumentSetResponse"/>
         <implClass value="unused"/>
@@ -51,7 +51,7 @@ public class EndpointLabelBuildTest {
 
 	@Test
 	public void buildTest()  {
-		TransactionType register = actorType.findSimple("rb");
+		TransactionType register = actorType.findSimple("rb", false);
 		EndpointType label;
 		label = new EndpointType(
 				register,

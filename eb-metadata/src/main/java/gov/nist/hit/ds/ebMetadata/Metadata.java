@@ -53,48 +53,66 @@ public class Metadata {
     }
 
     public String format() {
-        StringBuffer buf = new StringBuffer();
+        OMElement wrapper = MetadataSupport.om_factory.createOMElement("RegistryObjectList", MetadataSupport.ebRIMns3);
 
         for (OMElement e : submissionSets)
-            buf.append(new OMFormatter(e).toString()).append("\n");
+            wrapper.addChild(e);
 
         for (OMElement e : extrinsicObjects)
-            buf.append(new OMFormatter(e).toString()).append("\n");
+            wrapper.addChild(e);
 
         for (OMElement e : folders)
-            buf.append(new OMFormatter(e).toString()).append("\n");
+            wrapper.addChild(e);
 
         for (OMElement e : associations)
-            buf.append(new OMFormatter(e).toString()).append("\n");
+            wrapper.addChild(e);
 
-        return buf.toString();
+        return new OMFormatter(wrapper).toString();
     }
 
-    public String toString() {
-        StringBuffer buf = new StringBuffer();
+//    public String format() {
+//        StringBuffer buf = new StringBuffer();
+//
+//        for (OMElement e : submissionSets)
+//            buf.append(new OMFormatter(e).toString()).append("\n");
+//
+//        for (OMElement e : extrinsicObjects)
+//            buf.append(new OMFormatter(e).toString()).append("\n");
+//
+//        for (OMElement e : folders)
+//            buf.append(new OMFormatter(e).toString()).append("\n");
+//
+//        for (OMElement e : associations)
+//            buf.append(new OMFormatter(e).toString()).append("\n");
+//
+//        return buf.toString();
+//    }
 
-        buf.append("ExtrinsicObjects\n");
-        for (OMElement e : extrinsicObjects)
-            buf.append(e).append("\n");
-
-        buf.append("Folders\n");
-        for (OMElement e : folders)
-            buf.append(e).append("\n");
-
-        buf.append("SubmissionSets\n");
-        for (OMElement e : submissionSets)
-            buf.append(e).append("\n");
-
-        buf.append("Associations\n");
-        for (OMElement e : associations)
-            buf.append(e).append("\n");
-
-        buf.append("ObjectRefs\n");
-        for (OMElement e : objectRefs)
-            buf.append(e).append("\n");
-
-        return buf.toString();
-    }
+    public String toString() { return format(); }
+//        StringBuffer buf = new StringBuffer();
+//
+//        buf.append("ExtrinsicObjects\n");
+//        for (OMElement e : extrinsicObjects)
+//            buf.append(e).append("\n");
+//
+//        buf.append("Folders\n");
+//        for (OMElement e : folders)
+//            buf.append(e).append("\n");
+//
+//        buf.append("SubmissionSets\n");
+//        for (OMElement e : submissionSets)
+//            buf.append(e).append("\n");
+//
+//        buf.append("Associations\n");
+//        for (OMElement e : associations)
+//            buf.append(e).append("\n");
+//
+//        buf.append("ObjectRefs\n");
+//        for (OMElement e : objectRefs)
+//            buf.append(e).append("\n");
+//
+//        return buf.toString();
+//    }
 
     boolean version2;
 
@@ -582,14 +600,18 @@ public class Metadata {
     public OMElement addSubmissionSet(OMElement ss) {
         submissionSet = ss;
         submissionSets.add(ss);
-        allObjects.add(ss);
-        return ss;
+        return addRegistryPackage(ss);
     }
 
     public OMElement addFolder(OMElement fol) {
         folders.add(fol);
-        allObjects.add(fol);
-        return fol;
+        return addRegistryPackage(fol);
+    }
+
+    public OMElement addRegistryPackage(OMElement rp) {
+        allObjects.add(rp);
+        registryPackages.add(rp);
+        return rp;
     }
 
     public OMElement addAssociation(OMElement a) {
@@ -629,6 +651,15 @@ public class Metadata {
 
         addSubmissionSet(ss);
         return ss;
+    }
+
+    public OMElement mkRegistryPackage(String id) {
+        OMElement rp = MetadataSupport.om_factory.createOMElement(MetadataSupport.registrypackage_qnamens);
+        rp.addAttribute("id", id, null);
+        rp.addAttribute("lid", id, null);
+
+        addRegistryPackage(rp);
+        return rp;
     }
 
     public OMElement mkFolder(String id) {
@@ -871,6 +902,19 @@ public class Metadata {
                     slot, "ValueList");
             if (value_list == null)
                 continue;
+            for (OMElement value_ele : XmlUtil.childrenWithLocalName(
+                    value_list, "Value")) {
+                values.add(value_ele.getText());
+            }
+        }
+        return values;
+    }
+
+    public List<String> getSlotValues(OMElement slot) {
+        List<String> values = new ArrayList<String>();
+        OMElement value_list = XmlUtil.firstChildWithLocalName(
+                slot, "ValueList");
+        if (value_list != null) {
             for (OMElement value_ele : XmlUtil.childrenWithLocalName(
                     value_list, "Value")) {
                 values.add(value_ele.getText());
@@ -1371,6 +1415,17 @@ public class Metadata {
         return ids;
     }
 
+    public OMElement getExtrinsicObject(String id) {
+        if (id == null) return null;
+        for (Iterator<OMElement> it = getExtrinsicObjects().iterator(); it
+                .hasNext();) {
+            OMElement ele = it.next();
+            String id2 = ele.getAttributeValue(MetadataSupport.id_qname);
+            if (id.equals(id2)) return ele;
+        }
+        return null;
+    }
+
     public List<String> getObjectRefIds() {
         List<String> ids = new ArrayList<String>();
 
@@ -1429,7 +1484,7 @@ public class Metadata {
 
     public void addSlot(OMElement ele, String slot_name, String slot_value) {
         OMElement slot = this.om_factory().createOMElement("Slot", null);
-        slot.addAttribute("displayName", slot_name, null);
+        slot.addAttribute("name", slot_name, null);
         OMElement value_list = this.om_factory().createOMElement("ValueList",
                 null);
         slot.addChild(value_list);
@@ -1443,7 +1498,7 @@ public class Metadata {
     // this depends on getV2 or getV3 to sort the attributes into the correct order
     public OMElement addSlot(OMElement ele, String slot_name) {
         OMElement slot = this.om_factory().createOMElement("Slot", null);
-        slot.addAttribute("displayName", slot_name, null);
+        slot.addAttribute("name", slot_name, null);
         OMElement value_list = this.om_factory().createOMElement("ValueList",
                 null);
         slot.addChild(value_list);
@@ -1454,7 +1509,7 @@ public class Metadata {
 
     public OMElement mkSlot(String slot_name) {
         OMElement slot = this.om_factory().createOMElement(MetadataSupport.slot_qnamens);
-        slot.addAttribute("displayName", slot_name, null);
+        slot.addAttribute("name", slot_name, null);
         OMElement value_list = this.om_factory().createOMElement(MetadataSupport.valuelist_qnamens);
         slot.addChild(value_list);
         return slot;
@@ -1510,7 +1565,7 @@ public class Metadata {
                     slot, "ValueList");
             if (value_list == null)
                 throw new MetadataException(
-                        "Slot without ValueList - slot displayName is " + slot_name
+                        "Slot without ValueList - slot name is " + slot_name
                                 + " of object " + id(ele), EbRim.Slot);
             for (@SuppressWarnings("unchecked")
                  Iterator<OMElement> it = value_list.getChildElements(); it.hasNext();) {
@@ -1763,6 +1818,7 @@ public class Metadata {
                 "targetObject", null, targetUuid));
         assoc.addAttribute(MetadataSupport.om_factory.createOMAttribute("id",
                 null, allocate_id()));
+        associations.add(assoc);
         return assoc;
     }
 

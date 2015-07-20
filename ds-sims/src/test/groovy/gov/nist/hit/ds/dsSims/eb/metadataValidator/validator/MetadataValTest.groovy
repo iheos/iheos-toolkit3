@@ -1,16 +1,20 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
+import gov.nist.hit.ds.dsSims.eb.reg.UnconnectedRegistryValidation
 import gov.nist.hit.ds.ebMetadata.Metadata
 import gov.nist.hit.ds.ebMetadata.MetadataParser
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
-import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.simulator.SimIdentifier
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
+import gov.nist.hit.ds.toolkit.Toolkit
 import gov.nist.hit.ds.toolkit.environment.Environment
+import gov.nist.toolkit.installation.Installation
+import gov.nist.toolkit.valsupport.client.ValidationContext
+import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory
 import groovy.xml.StreamingMarkupBuilder
 import spock.lang.Specification
 /**
@@ -19,7 +23,7 @@ import spock.lang.Specification
 class MetadataValTest extends Specification {
     def actorsTransactions = '''
 <ActorsTransactions>
-    <transaction name="Register" code="rb" asyncCode="r.as">
+    <transaction name="Register" code="rb" asyncCode="r.as" id="rb">
        <implClass value="RegisterTransaction"/>
         <request action="urn:ihe:iti:2007:RegisterDocumentSet-b"/>
         <response action="urn:ihe:iti:2007:RegisterDocumentSet-bResponse"/>
@@ -34,17 +38,20 @@ class MetadataValTest extends Specification {
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     def repoName = 'MetadataValTest'
 
     def setup() {
+        // Initialize V3 toolkit
         SimSupport.initialize()
+        // Initialize V2 toolkit
+        Installation.installation().warHome(Toolkit.warRootFile)
         new ActorTransactionTypeFactory().clear()
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('test')
-        SimUtils.recreate('ebxml', simId, repoName)
+        simId = new SimIdentifier(repoName, 'test')
+        SimUtils.recreate('ebxml', simId)
     }
 
     def assertionGroup
@@ -52,17 +59,17 @@ class MetadataValTest extends Specification {
 
     def run(String submission) {
         Metadata metadata = MetadataParser.parseNonSubmission(submission)
-        ValidationContext vc = new ValidationContext()
+        ValidationContext vc = DefaultValidationContextFactory.validationContext()
         vc.isPnR = true
         vc.isRequest = true
-        def validationInterface = null
+        def validationInterface = new UnconnectedRegistryValidation()
         Environment environment = Environment.getDefaultEnvironment()
 
         Closure closure = { SimHandle simHandle ->
             simHandle.event.addArtifact('Metadata', submission)
             new MetadataVal(simHandle, metadata, vc, environment, validationInterface).run()
         }
-        transRunner = new TransactionRunner('rb', simId, repoName, closure)
+        transRunner = new TransactionRunner('rb', simId, closure)
         transRunner.runTest()
 
         println "Failed assertions are ${transRunner.simHandle.event.errorAssertionIds()}"
@@ -95,11 +102,14 @@ class MetadataValTest extends Specification {
         root.SubmitObjectsRequest[0].RegistryObjectList[0].Association.replaceNode {}
         def outputBuilder = new StreamingMarkupBuilder()
         submission = outputBuilder.bind{ mkp.yield root }
-        when: run(submission)
+
+        when:
+        run(submission)
+        println transRunner.simHandle.event.errorAssertionIds
 
         then:
         transRunner.simHandle.event.hasErrors()
-        transRunner.simHandle.event.errorAssertionIds().sort() == ['rosubstr040'].sort()
+        transRunner.simHandle.event.errorAssertionIds().sort() == ['ssdehm010'].sort()
     }
 
     def 'SS Missing'() {
@@ -112,7 +122,7 @@ class MetadataValTest extends Specification {
 
         then:
         transRunner.simHandle.event.hasErrors()
-        transRunner.simHandle.event.errorAssertionIds().sort() == ['rosubstr025', 'rosubstr040', 'rosubstr060', 'rosubstr070'].sort()
+        transRunner.simHandle.event.errorAssertionIds().sort() == ['rosubstr025', 'rosubstr060', 'rosubstr070'].sort()
     }
 
     def 'Doc only'() {
@@ -128,7 +138,7 @@ class MetadataValTest extends Specification {
 
         then:
         transRunner.simHandle.event.hasErrors()
-        transRunner.simHandle.event.errorAssertionIds().sort() == ['rosubstr025', 'rosubstr040'].sort()
+        transRunner.simHandle.event.errorAssertionIds().sort() == ['rosubstr025'].sort()
     }
 
 }

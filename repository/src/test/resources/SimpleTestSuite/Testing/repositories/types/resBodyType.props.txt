@@ -1,0 +1,5 @@
+# resBodyType
+
+keyword=resBodyType
+domain=asset
+description=resBodyType desc

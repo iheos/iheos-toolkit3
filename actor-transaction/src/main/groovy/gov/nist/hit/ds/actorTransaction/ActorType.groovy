@@ -7,7 +7,6 @@ import groovy.util.logging.Log4j
  * Created by bill on 4/16/14.
  */
 @Log4j
-@ToString(includeFields=true, includes="shortName, directionalTransactionTypes, props")
 class ActorType /* implements IsSerializable, Serializable */{
     String name
     String shortName
@@ -27,12 +26,27 @@ class ActorType /* implements IsSerializable, Serializable */{
     void putActorProperty(String key, String value) { props.put(key, value) }
     boolean containsKey(String key) { return props.containsKey(key) }
 
-    TransactionType findSimple(String transactionTypeName) { findDirectional(transactionTypeName)?.transactionType }
+    TransactionType findSimple(String transactionTypeName, boolean send) { return findTransactionType(transactionTypeName, send)}
+    TransactionType findTransactionType(String transactionTypeName, boolean send) { findDirectional(transactionTypeName, send)?.transactionType }
 
-    DirectionalTransactionType findDirectional(String transactionTypeName) {
+    DirectionalTransactionType findDirectional(String transactionTypeName, boolean send) {
         directionalTransactionTypes.find {
-            it.transactionType.identifiedBy(transactionTypeName)
+            it.transactionType.identifiedBy(transactionTypeName) && it.client == send
         }
+    }
+
+    // Since actor type must contain all client or all server ends of transactions
+    // all we do is test the first transaction
+    boolean isClient() {
+        directionalTransactionTypes.first()?.client
+    }
+
+    String toString() { "ActorType: ${name} as  ${(isClient() ? 'client' : 'server')}" }
+
+    TransactionType getTransactionTypeFromRequestAction(String action, boolean client) {
+        directionalTransactionTypes.find { dtt ->
+            action == dtt.transactionType.requestAction && client == dtt.client
+        }?.transactionType
     }
 
     void check() throws InvalidActorTypeDefinitionException {

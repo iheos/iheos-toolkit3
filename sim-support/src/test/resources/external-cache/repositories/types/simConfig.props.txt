@@ -1,0 +1,5 @@
+# simConfig
+
+keyword=simConfig
+domain=asset
+description=Simulator Configuration

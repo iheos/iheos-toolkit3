@@ -22,7 +22,6 @@ import gov.nist.hit.ds.repository.shared.SearchCriteria;
 import gov.nist.hit.ds.repository.shared.SearchTerm;
 import gov.nist.hit.ds.repository.shared.ValidationLevel;
 import gov.nist.hit.ds.repository.shared.data.AssetNode;
-import gov.nist.hit.ds.repository.shared.id.SimpleTypeId;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.repository.simple.SimpleAssetIterator;
 import gov.nist.hit.ds.repository.simple.SimpleId;
@@ -55,7 +54,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -313,7 +311,7 @@ public class PresentationData implements IsSerializable, Serializable  {
      * @param queryLoc The relative path to load the criteria from.
      * @return The query parameters that can be directly executed by the {@code search} method.
      * @throws RepositoryException
-     * @see  gov.nist.hit.ds.repository.AssetHelper#search(String[][], gov.nist.hit.ds.repository.shared.SearchCriteria)
+     * @see  gov.nist.hit.ds.repository.AssetHelper#search(String[][], gov.nist.hit.ds.repository.shared.SearchCriteria, boolean)
      */
 	public static QueryParameters getSearchCriteria(String queryLoc)  throws RepositoryException {
 		Parameter param = new Parameter();		

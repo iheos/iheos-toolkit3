@@ -142,8 +142,6 @@ public class TransactionMonitorAdvancedWidget extends Composite {
 
         public void onSuccess(AssetNode an) {
             logger.info("in content load" + an.getType());
-            requestViewerWidget.clear();
-            responseViewerWidget.clear();
             if (an.getTxtContent()!=null) {
 //                HTML txtContent = new HTML("<pre>" + an.getTxtContent() + "</pre>");
                 if ("reqHdrType".equals(an.getType())) {
@@ -386,7 +384,13 @@ public class TransactionMonitorAdvancedWidget extends Composite {
         try {
 
             String parentId = anMap.get("header").getParentId();
-            TxMessageBundle txMessageBundle = null; // findTxMessageBundle(parentId);
+
+            if (findTxMessageBundle(parentId)!=null) { /* bundle is already loaded */
+                dataProvider.refresh();
+                return false;
+            }
+
+            TxMessageBundle txMessageBundle = null;
             Boolean newBundle = false;
 
             List<TxMessageBundle> rowList = dataProvider.getList();
@@ -1396,6 +1400,9 @@ public class TransactionMonitorAdvancedWidget extends Composite {
                     Map<String,AssetNode> anMap =  row.getMessageDetailMap().get("request").getAnMap();
                     int anLen = anMap.size();
                     if (anLen>0) {
+                        requestViewerWidget.clear();
+                        responseViewerWidget.clear();
+
                         AssetNode an = anMap.get("header");
 
                         //Window.alert("setup for" + selectedIndex + an.getParentId() + an.getType());

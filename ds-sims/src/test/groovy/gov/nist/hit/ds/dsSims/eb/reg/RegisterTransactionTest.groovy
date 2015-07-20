@@ -1,14 +1,14 @@
 package gov.nist.hit.ds.dsSims.eb.reg
 
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.repository.simple.Configuration
-import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.simulator.SimIdentifier
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.utilities.SimEventAccess
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import groovy.util.logging.Log4j
@@ -75,8 +75,8 @@ Host: localhost:9085'''
 
     def 'Register Transaction should succeed'() {
         when: ''
-        SimId simId = new SimId('RegisterTransactionTest')
-        String endpoint = 'http://localhost:8080/tools/sim/123/reg/rb'
+        SimIdentifier simId = new SimIdentifier(SimUtils.defaultRepoName, 'RegisterTransactionTest')
+        String endpoint = 'http://localhost:8080/tools/sim/user/123/reg/rb'
         SimHandle simHandle = SimUtils.recreate('reg', simId)
         simHandle.event.validationLevel = ValidationLevel.INFO
         simHandle.transactionType = new ActorTransactionTypeFactory().getTransactionType('rb')
@@ -103,7 +103,7 @@ Host: localhost:9085'''
         !simHandle.isOpen()
 
         when:
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
 
         then:
         !transRunner.simHandle.event.hasFault()

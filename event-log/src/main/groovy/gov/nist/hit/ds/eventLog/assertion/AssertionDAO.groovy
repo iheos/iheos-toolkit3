@@ -28,7 +28,8 @@ class AssertionDAO {
 
         entry.
                 add(a.id).    					                // 0
-                add(a.status.name()).				            // 1
+                add(a.status.forSaving()).				            // 1
+//                add(a.status.name()).				            // 1
                 add(nocomma(a.msg)).				            // 2
                 add(a.requiredOptional.name()).	                // 3
                 add(nocomma(a.expected)).			            // 4

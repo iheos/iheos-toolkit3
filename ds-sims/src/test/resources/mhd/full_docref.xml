@@ -34,6 +34,14 @@
         <div xmlns="http://www.w3.org/1999/xhtml"/>
     </text>
     <contained>
+        <Organization id="parma">
+            <identifier>
+                <value value="1.2.3.4.5.6.7.8.9.1789.45"/>
+            </identifier>
+            <name value="Parma General"/>
+        </Organization>
+    </contained>
+    <contained>
         <!-- only detail is Patient ID 
              referenced by <subject/> DocumentEntry.patientId 
              this is the Affinity Domain patientID -->
@@ -59,7 +67,7 @@
             </name>
             <gender>
                 <coding>
-                    <code value="M"> </code>
+                    <code value="M"/>
                 </coding>
             </gender>
             <birthDate value="1951-08-24T09:35:00"/>
@@ -80,6 +88,23 @@
                 <given value="Dave"/>
                 <prefix value="Dr"/>
             </name>
+            <!-- DocumentEntry.author.telecom -->
+            <telecom>
+                <system value="email"/>
+                <value value="dave@example.com"/>
+            </telecom>
+            <!-- DocumentEntry.author.authorInstitution -->
+            <organization>
+                <reference value="#parma"/>
+            </organization>
+            <!-- DocumentEntry.author.authorRole -->
+            <role>
+                <text value="MyRole"/>
+            </role>
+            <!-- DocumentEntry.author.authorSpecialty -->
+            <specialty>
+                <text value="MySpecialty"/>
+            </specialty>
         </Practitioner>
     </contained>
     <contained>
@@ -150,13 +175,13 @@
     <primaryLanguage value="en-US"/>
     <!-- DocumentEntry.mimeType -->
     <mimeType value="text/plain"/>
+    <!-- DocumentEntry.formatCode - not a coded value like in XDS -->
     <format value="urn:wustl:mir:ppoc:1999"/>
     <size value="12301"/>
     <hash value="e543712c0e10501972de13a5bfcbe826c49feb75"/>
     <location value="#binary1"/>
-    <!-- DocumentEntry.formatCode - e543712c0e10501972de13a5bfcbe826c49feb75
-         not a coded value like in XDS -->
     <context>
+        <!-- DocumentEntry.eventCodeList -->
         <event>
             <coding>
                 <system value="http://ihe.net/xds/connectathon/eventCodes"/>

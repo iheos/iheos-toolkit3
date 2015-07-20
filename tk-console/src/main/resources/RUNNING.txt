@@ -1,0 +1,22 @@
+Ubuntu:
+======
+Note: sudo is required to access the Tomcat CATALINA_HOME directory
+
+Normal
+sudo ./run-ubuntu.sh
+
+Debug
+sudo ./run-ubuntu.sh -d
+
+Build the Diagnostics Plugin (only if source has been updated) & Run
+sudo ./run-ubuntu.sh buildandrun
+
+
+Windows:
+========
+
+Normal
+r.bat
+
+Debug
+r.bat -d

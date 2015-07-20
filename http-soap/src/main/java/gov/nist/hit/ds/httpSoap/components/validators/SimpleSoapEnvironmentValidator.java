@@ -57,7 +57,7 @@ public class SimpleSoapEnvironmentValidator extends ValComponentBase {
 //					new ErrorContext(
 //							"Error parsing content-type header - <" + contentTypeString + ">"));
 //		}
-//		String contentTypeValue = contentTypeHeader.getValue();
+//		String contentTypeValue = contentTypeHeader.getBooleanValue();
 //		if (contentTypeValue == null) contentTypeValue = "";
 //		if (!"application/soap+xml".equals(contentTypeValue.toLowerCase()))
 //			throw new SoapFaultException(

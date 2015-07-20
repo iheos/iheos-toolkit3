@@ -21,7 +21,8 @@ class Event {
     ArtifactsDAO artDAO
     Asset validatorsAsset
     int displayOrder = 1
-    ValidationLevel validationLevel = ValidationLevel.ERROR
+    static ValidationLevel defaultValidationLevel = ValidationLevel.INFO
+    ValidationLevel validationLevel = defaultValidationLevel
 
     ResultsStack resultsStack = new ResultsStack()
 
@@ -163,6 +164,9 @@ class Event {
     def getAssertions(id) { resultsStack.getAssertions(id)}
     def getErrorAssertionIds() {
         allAssetionGroups.collect { it.errorAssertionIds() }.flatten()
+    }
+    boolean assertionFailed(id) {
+        allAssetionGroups.find { it.assertionFailed(id )}
     }
 
     int nextDisplayOrder() { displayOrder++ }

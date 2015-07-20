@@ -1,10 +1,10 @@
 package gov.nist.hit.ds.ebDocsrcSim.engine;
 
 import gov.nist.hit.ds.ebMetadata.MetadataSupport;
+import gov.nist.hit.ds.utilities.xml.OMFormatter;
+import gov.nist.hit.ds.utilities.xml.Util;
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil;
 import gov.nist.hit.ds.xdsExceptions.XdsInternalException;
-import gov.nist.toolkit.utilities.xml.OMFormatter;
-import gov.nist.toolkit.utilities.xml.Util;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMNode;
@@ -57,11 +57,7 @@ public class OmLogger  {
 	public void add_name_value(OMElement parent, String name, ArrayList<OMElement> data) {
 		for (OMElement ele : data) {
 			OMElement elel = MetadataSupport.om_factory.createOMElement(name, null);
-			try {
 				elel.addChild(Util.deep_copy(ele));
-			} catch (XdsInternalException e) {
-				e.printStackTrace();
-			}
 			parent.addChild(elel);
 		}
 	}

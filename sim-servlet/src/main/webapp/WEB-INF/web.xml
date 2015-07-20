@@ -52,12 +52,6 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <servlet>
-        <servlet-name>Initialization</servlet-name>
-        <servlet-class>gov.nist.hit.ds.tkInitialization.InitializationServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
     <!-- ============== Servlet mappings ============== -->
     <servlet-mapping>
         <servlet-name>SimRest</servlet-name>

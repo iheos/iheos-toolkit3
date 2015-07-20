@@ -1524,7 +1524,7 @@ public class SearchWidget extends Composite {
 	protected String[][] getSelectedRepos(int itemCt) {
 		String[][] selectedRepos = new String[itemCt][2];
 		for (int cx=0; cx<itemCt; cx++ ) {
-			// System.out.println(reposRight.getValue(cx) + " -- " + reposRight.getItemText(cx));
+			// System.out.println(reposRight.getBooleanValue(cx) + " -- " + reposRight.getItemText(cx));
 			if (null==reposRight.getValue(cx) || "".equals(reposRight.getValue(cx))) {
 				Window.alert(reposRight.getItemText(cx) +" value is null");
 			} else {

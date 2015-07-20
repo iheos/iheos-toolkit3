@@ -1,0 +1,63 @@
+
+
+
+
+/*
+** Task
+*/	
+
+
+	task ('taskHint'		 ,group:'task-utils'
+		 ,description:'Provides a hint on task provided a partial keyword'
+		) << {
+
+	def tcol = tasks.findAll {it.name.startsWith('t_')} 
+
+	tcol.each()
+	{t->
+ 		println "$t"
+		println t.description
+		println t.group
+		println ""
+	}
+
+	}	
+
+
+/*
+** Task
+*/	
+
+
+	task ('taskArray'		 ,group:'task-utils'
+		 ,description:'Provides a hint on task provided a partial keyword'
+		) << {
+
+	def tcol = tasks.findAll {it.hasProperty('eventType')} 
+
+	tcol.each()
+	{t->
+ 		print "$t.name,"
+	}
+	print "set verbose:,tasks,help,quit"
+
+	}	
+
+	
+
+/*
+** Task
+*/	
+
+
+	task ('taskExec'		 ,group:'task-utils'
+		 ,description:'Executes a task'
+		) << {
+	}	
+
+
+
+
+
+
+

@@ -163,7 +163,11 @@ public class LogBrowserWidget extends Composite {
     final AsyncCallback<List<AssetNode>> treeSetup = new AsyncCallback<List<AssetNode>>() {
 
         public void onFailure(Throwable a) {
-            Window.alert(a.toString());
+            treeHolder.clear();
+            treeHolder.add(new HTML("&nbsp;"));
+            propsWidget.setHTML("&nbsp;");
+            Window.alert("treeSetup error: " + a.toString());
+            a.printStackTrace();
         }
 
         public void onSuccess(List<AssetNode> a) {

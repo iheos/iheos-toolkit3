@@ -1,0 +1,9 @@
+# reqType
+
+keyword=reqType
+domain=asset
+description=request type desc
+
+# 2:59 PM 4/1/2014
+
+indexes=time, messageFrom, messageFromIpAddress, statuscode, forwardedTo, forwardedToIpAddress, proxyRuleMappingName, rule, msgType, contenttype, proxyPort, proxy, path, method, contentlength, duration

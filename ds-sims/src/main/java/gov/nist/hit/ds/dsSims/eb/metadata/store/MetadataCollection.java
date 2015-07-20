@@ -82,7 +82,7 @@ public class MetadataCollection implements Serializable /*, RegistryValidationIn
 			
 			Ro obj = getObjectById(id);
 			if (obj == null) {
-				er.err(XdsErrorCode.Code.XDSRegistryError, "mergeDelta: cannot findSimple object " + id, this, null);
+				er.err(XdsErrorCode.Code.XDSRegistryError, "mergeDelta: cannot findTransactionType object " + id, this, null);
 				return false;
 			}
 			
@@ -175,7 +175,7 @@ public class MetadataCollection implements Serializable /*, RegistryValidationIn
 				uid = ro.uid;
 			}
 			
-			System.out.println("Delete " + id);
+//			System.out.println("Delete " + id);
 
 			synchronized(regIndex) {
 				// delete entry in registry index

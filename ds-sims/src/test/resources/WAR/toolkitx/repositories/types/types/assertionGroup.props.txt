@@ -1,0 +1,10 @@
+# assertionGroup
+
+keyword=assertionGroup
+domain=asset
+description=simAssertions desc
+
+
+## This property value is expected to be a JSON-formatted string. For example: columnWidths={"ID":"50px"}
+
+columnWidths={"ID":"120px","R/O":"38px"}

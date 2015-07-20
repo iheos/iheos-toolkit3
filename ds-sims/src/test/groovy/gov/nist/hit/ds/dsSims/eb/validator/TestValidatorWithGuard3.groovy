@@ -16,11 +16,11 @@ class TestValidatorWithGuard3 extends ValComponentBase {
 
     @Guard(methodNames = ['guardMaybe'])
     @Validation(id="TV101", msg="A test Validation", ref="??")
-    def val1() { }
+    def val1() { found('val1()'); }
 
     @Guard(methodNames=['guardTrue'])
     @Validation(id="TV102", msg="A test Validation", ref="??")
-    def val2() { guardValue = true }
+    def val2() { found('val2()'); guardValue = true }
 
     boolean guardTrue() { return true }
 

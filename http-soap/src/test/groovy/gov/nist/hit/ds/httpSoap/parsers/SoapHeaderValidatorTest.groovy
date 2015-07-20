@@ -1,17 +1,19 @@
 package gov.nist.hit.ds.httpSoap.parsers
+
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.httpSoap.components.validators.SoapHeaderValidator
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
-import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.simulator.SimIdentifier
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.utilities.SimEventAccess
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.utilities.xml.Parse
 import org.apache.axiom.om.OMElement
 import spock.lang.Specification
+
 /**
  * Created by bmajur on 7/23/14.
  */
@@ -33,7 +35,7 @@ class SoapHeaderValidatorTest extends Specification {
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     def repoName = 'Sim'
 
     def setup() {
@@ -42,8 +44,8 @@ class SoapHeaderValidatorTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('SoapHeaderValidatorTest')
-        SimUtils.recreate('reg', simId, repoName)
+        simId = new SimIdentifier(repoName, 'SoapHeaderValidatorTest')
+        SimUtils.recreate('reg', simId)
     }
 
     def 'SoapHeaderValidator should succeed'() {
@@ -58,8 +60,8 @@ class SoapHeaderValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new SoapHeaderValidator(simHandle, xml).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
@@ -79,8 +81,8 @@ class SoapHeaderValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new SoapHeaderValidator(simHandle, xml).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:

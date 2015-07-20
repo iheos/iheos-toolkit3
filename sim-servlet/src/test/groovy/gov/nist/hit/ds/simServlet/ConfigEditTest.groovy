@@ -1,8 +1,10 @@
 package gov.nist.hit.ds.simServlet
 
+import gov.nist.hit.ds.actorTransaction.AsyncType
+import gov.nist.hit.ds.actorTransaction.TlsType
 import gov.nist.hit.ds.simServlet.api.SimApi
 import gov.nist.hit.ds.simServlet.servlet.SimServlet
-import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.simulator.SimIdentifier
 import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.manager.ActorSimConfigManager
 import gov.nist.hit.ds.simSupport.serializer.SimulatorDAO
@@ -13,15 +15,19 @@ import spock.lang.Specification
  * Created by bmajur on 10/7/14.
  */
 class ConfigEditTest extends Specification {
-    def simId1 = new SimId('ConfigEditTest1')
-    def simId2 = new SimId('ConfigEditTest2')
-    def simId3 = new SimId('ConfigEditTest3')
+    def repoName = SimUtils.defaultRepoName
+    SimIdentifier simId1
+    SimIdentifier simId2
+    SimIdentifier simId3
     def simServlet
     def simHandle
 
     def setup() {
         simServlet = new SimServlet()
         simServlet.init()
+        simId1 = new SimIdentifier(repoName, 'ConfigEditTest1')
+        simId2 = new SimIdentifier(repoName, 'ConfigEditTest2')
+        simId3 = new SimIdentifier(repoName, 'ConfigEditTest3')
         SimUtils.delete(simId1)
         SimUtils.delete(simId2)
     }
@@ -114,7 +120,7 @@ class ConfigEditTest extends Specification {
         def updater = new SimApi()
 
         and: '''Get config (XML) through API'''
-        def config = updater.getConfig(simHandle.simId)
+        def config = updater.getConfig(repoName, simHandle.simId)
 
         and: 'set schemaCheck to true'
         config = setSchemaCheck(config, true)
@@ -137,7 +143,7 @@ class ConfigEditTest extends Specification {
         def updater = new SimApi()
 
         and: '''Get config (XML) through API'''
-        def configString = updater.getConfig(simHandle.simId)
+        def configString = updater.getConfig(repoName, simHandle.simId)
         println 'Config as Read' + configString
 
         and: '''Update config - set schemaCheck to false'''
@@ -165,7 +171,7 @@ class ConfigEditTest extends Specification {
         def updater = new SimApi()
 
         and: '''Get config (XML) through API'''
-        def config = updater.getConfig(simHandle.simId)
+        def config = updater.getConfig(repoName, simHandle.simId)
         println 'Config as Read' + config
 
         and: '''Update config - set schemaCheck to false'''
@@ -176,10 +182,10 @@ class ConfigEditTest extends Specification {
         !getSchemaCheck(config2)
 
         when: 'Save out updates'
-        updater.updateConfig(simHandle.simId, config2)
+        updater.updateConfig(repoName, simHandle.simId, config2)
 
         and: '''Re-read updated config'''
-        def config3 = updater.getConfig(simHandle.simId)
+        def config3 = updater.getConfig(repoName, simHandle.simId)
 
         then: '''Verify change has been changed'''
         !getSchemaCheck(config3)
@@ -188,11 +194,11 @@ class ConfigEditTest extends Specification {
     def 'Update of text settings should be saved in config'() {
         when: '''Create a sim'''
         def api = new SimApi()
-        api.delete(simId3)
-        simHandle = api.create('docrec', simId3)
+        api.delete(simId3.repoName, simId3.simId)
+        simHandle = api.createServer('docrec', simId3.repoName, simId3.simId)
 
         and: '''Get config (XML) through API'''
-        def config = api.getConfig(simHandle.simId)
+        def config = api.getConfig(repoName, simHandle.simId)
         println 'Config as Read' + config
 
         and: '''Update config - set schemaCheck to false'''
@@ -203,13 +209,57 @@ class ConfigEditTest extends Specification {
         getMsgCallback(config2) == 'http://foo/bar'
 
         when: 'Save out updates'
-        api.updateConfig(simHandle.simId, config2)
+        api.updateConfig(repoName, simHandle.simId, config2)
 
         and: '''Re-read updated config'''
-        def config3 = api.getConfig(simHandle.simId)
+        def config3 = api.getConfig(repoName, simHandle.simId)
 
         then: '''Verify change has been changed'''
         getMsgCallback(config3) == 'http://foo/bar'
+    }
+
+    def updatingConfig = '''
+<actor type='docrec'>
+  <transaction name='prb'>
+    <endpoint value='http://localhost:8080/foo' />
+    <settings>
+      <boolean name='schemaCheck' value='true' />
+      <boolean name='modelCheck' value='true' />
+      <boolean name='codingCheck' value='true' />
+      <boolean name='soapCheck' value='true' />
+      <text name='msgCallback' value='' />
+    </settings>
+    <webService value='prb' />
+  </transaction>
+  <transaction name='prb'>
+    <endpoint value='https://localhost:8443/foo' />
+    <settings>
+      <boolean name='schemaCheck' value='true' />
+      <boolean name='modelCheck' value='true' />
+      <boolean name='codingCheck' value='true' />
+      <boolean name='soapCheck' value='true' />
+      <text name='msgCallback' value='' />
+    </settings>
+    <webService value='prb_TLS' />
+  </transaction>
+</actor>'''
+
+    def 'Update of endpoints through simapi for server should be ignored'() {
+        when: '''Create a sim'''
+        def api = new SimApi()
+        api.delete(simId3.repoName, simId3.simId)
+        simHandle = api.createServer('docrec', simId3.repoName, simId3.simId)
+
+        and: '''Get config (XML) through API'''
+        def initialConfig = api.getConfig(repoName, simHandle.simId)
+        println 'Config as Read' + initialConfig
+
+        and: '''Update config - set schemaCheck to false'''
+        def config2 = SimApi.updateConfig(simId3.repoName, simId3.simId, updatingConfig)
+        println 'Config as Updated' + config2
+
+        then:
+        !simHandle.actorSimConfig.getEndpoint(simHandle.actorSimConfig.get('prb').transactionType, TlsType.NOTLS, AsyncType.SYNC).value.contains('foo')
     }
 
 }

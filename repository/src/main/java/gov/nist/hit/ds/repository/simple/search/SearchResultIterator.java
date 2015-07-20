@@ -47,17 +47,32 @@ public class SearchResultIterator implements AssetIterator {
      *
      * @param repositories
      * @param searchCriteria
-     * @throws RepositoryException
+     * @throws gov.nist.hit.ds.repository.api.RepositoryException
      */
     public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria) throws RepositoryException {
+        this(repositories, searchCriteria, false);
+    }
 
-        init(repositories, searchCriteria, null, false,0 ,0, true);
+    /**
+     * This iterator retrieves a comprehensive set of search results including both the indexed and the non-indexed assets.
+     * Search results are provided in the same order as specified by the repository parameter, grouped by assetType.
+     * Search results are stored in a temporary table called Session.SearchResults, which is automatically cleaned-up when the db session is disconnected.
+     * To avoid page overloading with numerous results, we use a paging method to retrieve a reasonable amount of records each time rather than the entire set.
+     *
+     * @param repositories
+     * @param searchCriteria
+     * @param reIndex
+     * @throws RepositoryException
+     */
+    public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, boolean reIndex) throws RepositoryException {
+
+        init(repositories, searchCriteria, null, false,0 ,0, true, reIndex);
     }
 
     public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, boolean searchCriteriaLocationOnly, boolean loadProperties) throws RepositoryException {
 
         setLoadProperties(loadProperties);
-        init(repositories, searchCriteria, null, searchCriteriaLocationOnly,0,0, true);
+        init(repositories, searchCriteria, null, searchCriteriaLocationOnly,0,0, true, true);
     }
 
     /**
@@ -68,19 +83,24 @@ public class SearchResultIterator implements AssetIterator {
      */
     public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, String[] orderBy) throws RepositoryException {
 
-        init(repositories, searchCriteria, orderBy, false, 0, 0, true);
+        init(repositories, searchCriteria, orderBy, false, 0, 0, true, true);
+    }
+
+    public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, String[] orderBy, boolean reIndex) throws RepositoryException {
+
+        init(repositories, searchCriteria, orderBy, false, 0, 0, true, reIndex);
     }
 
     public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, String[] orderBy, int offset, int fetchNext) throws RepositoryException {
 
-        init(repositories, searchCriteria, orderBy, false, offset, fetchNext, true);
+        init(repositories, searchCriteria, orderBy, false, offset, fetchNext, true, true);
     }
 
     public SearchResultIterator(Repository[] repositories, SearchCriteria searchCriteria, PropertyKey[] orderByKeys) throws RepositoryException {
 
         String[] orderKeys = PropertyKey.getStrings(orderByKeys);
 
-        init(repositories, searchCriteria, orderKeys, false, 0, 0, true);
+        init(repositories, searchCriteria, orderKeys, false, 0, 0, true, true);
 
     }
 
@@ -88,15 +108,15 @@ public class SearchResultIterator implements AssetIterator {
 
         String[] orderKeys = PropertyKey.getStrings(orderByKeys);
 
-        init(repositories, searchCriteria, orderKeys, false, offset, fetchNext,addEllipses);
+        init(repositories, searchCriteria, orderKeys, false, offset, fetchNext,addEllipses, true);
 
     }
 
     private void init(Repository[] repositories, SearchCriteria searchCriteria,
-                      String[] orderBy, boolean searchCriteriaLocationOnly, int offset, int fetchNext, boolean addEllipses) throws RepositoryException {
+                      String[] orderBy, boolean searchCriteriaLocationOnly, int offset, int fetchNext, boolean addEllipses, boolean reIndex) throws RepositoryException {
         DbIndexContainer dbc = new DbIndexContainer();
 
-        crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy, searchCriteriaLocationOnly, offset, fetchNext, addEllipses);
+        crs = dbc.getAssetsBySearch(repositories, searchCriteria, orderBy, searchCriteriaLocationOnly, offset, fetchNext, addEllipses, reIndex);
         if (crs == null)
             totalRecords = 0;
         else

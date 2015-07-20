@@ -1,10 +1,10 @@
 package gov.nist.hit.ds.dsSims.eb.validator
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
-import gov.nist.hit.ds.eventLog.testSupport.EventAccess
 import gov.nist.hit.ds.repository.api.RepositorySource
 import gov.nist.hit.ds.repository.simple.Configuration
-import gov.nist.hit.ds.simSupport.client.SimId
+import gov.nist.hit.ds.simSupport.simulator.SimIdentifier
 import gov.nist.hit.ds.simSupport.transaction.TransactionRunner
+import gov.nist.hit.ds.simSupport.utilities.SimEventAccess
 import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import gov.nist.hit.ds.utilities.io.Io
@@ -30,7 +30,7 @@ class NestedValidatorTest extends Specification {
 
     File repoDataDir
     RepositorySource repoSource
-    SimId simId
+    SimIdentifier simId
     String repoName = 'sim'
 
     def setup() {
@@ -39,8 +39,8 @@ class NestedValidatorTest extends Specification {
         new ActorTransactionTypeFactory().loadFromString(actorsTransactions)
         repoSource = Configuration.getRepositorySrc(RepositorySource.Access.RW_EXTERNAL)
         repoDataDir = Configuration.getRepositoriesDataDir(repoSource)
-        simId = new SimId('123')
-        SimUtils.recreate('reg', simId, repoName)
+        simId = new SimIdentifier(SimUtils.defaultRepoName, '123')
+        SimUtils.recreate('reg', simId)
     }
 
     def 'Sequential validators should validate'() {
@@ -49,8 +49,8 @@ class NestedValidatorTest extends Specification {
             new TestValidator1(simHandle.event).asPeer().run()
             new TestValidator2(simHandle.event).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repoName,  closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
@@ -64,8 +64,8 @@ class NestedValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new TestValidator1WithSub(simHandle.event).asPeer().asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repoName,  closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:
@@ -79,8 +79,8 @@ class NestedValidatorTest extends Specification {
         Closure closure = { simHandle ->
             new TestValidator1ErrorWithSub(simHandle.event).asPeer().run()
         }
-        def transRunner = new TransactionRunner('rb', simId, repoName, closure)
-        def eventAccess = new EventAccess(simId.id, transRunner.simHandle.event)
+        def transRunner = new TransactionRunner('rb', simId, closure)
+        def eventAccess = new SimEventAccess(simId, transRunner.simHandle.event)
         transRunner.runTest()
 
         then:  '''correct files are created'''

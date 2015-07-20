@@ -4,7 +4,7 @@ import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.utilities.xml.XmlUtil
 import org.apache.axiom.om.OMElement
 /**
- * Generate and send a SOAP Fault.
+ * Generate and client a SOAP Fault.
  * TODO: comply with reference: http://www.w3.org/TR/2005/CR-ws-addr-soap-20050817
  * TODO: comply with coding of FaultTo
  * @author bill
@@ -17,7 +17,7 @@ public class SoapFault {
 	/**
 	 * Create SOAP fault.
 	 * Most simple usage:
-	 *    new SoapFault(SoapEnvironment, FaultCodes, String reason).send();
+	 *    new SoapFault(SoapEnvironment, FaultCodes, String reason).client();
 	 * @param soapEnv - SoapEnvironment describing return route.
 	 * @param code = FaultCodes
 	 * @param faultString - reason string

@@ -1,5 +1,4 @@
 package gov.nist.hit.ds.dsSims.eb.metadataValidator.validator
-import gov.nist.hit.ds.dsSims.eb.client.ValidationContext
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.datatype.*
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.DocumentEntryModel
 import gov.nist.hit.ds.dsSims.eb.metadataValidator.model.SlotModel
@@ -10,6 +9,8 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.ErrorCode
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Guard
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.xdsExceptions.MetadataException
+import gov.nist.toolkit.valsupport.client.ValidationContext
+
 /**
  * Created by bmajur on 12/23/14.
  */

@@ -1,0 +1,49 @@
+/*
+buildscript {
+    repositories {
+        maven {
+            url uri('../repo')
+        }
+    }
+    dependencies {
+        classpath group: 'org.gradle', name: 'customPlugin', version: '1.0-SNAPSHOT'
+    }
+}
+
+*/
+
+apply plugin: 'diagnostics'
+
+buildscript {
+	def prop_libs = 'C:/e/Packages/mygradlescripts/libs'
+	def prop_libs2 = 'C:/e/Packages/mygradlescripts/DiagnosticsPlugin/plugin/build/libs'
+	def prop_libs3 = 'C:/Packages/mygradlescripts/diagnostics/env-validation/libs'
+	
+			repositories {
+				    flatDir(dir: prop_libs, name: 'libs directory')
+  		}
+    
+    dependencies {
+        classpath fileTree(dir: prop_libs, include: '*.jar')
+		classpath fileTree(dir: prop_libs2, include: '*.jar')
+		classpath fileTree(dir: prop_libs3, include: '*.jar')
+		
+			//skb
+			//'org.gradle:customPlugin:1.0-SNAPSHOT'
+		  //  runtime fileTree(dir: 'lib', include: '*.jar')
+    }
+}
+
+
+
+task greeting(type: gov.nist.diagnostics.ScrapTask) 
+.configure() {
+	doFirst() {
+		ext.parameter['source'] = 'CATALINA_HOME'
+		
+	}
+	doLast() {
+		println report
+	}
+	
+}
