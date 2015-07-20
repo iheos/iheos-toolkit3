@@ -13,13 +13,15 @@ import gov.nist.hit.ds.simSupport.utilities.SimSupport
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
 import groovy.util.logging.Log4j
 import org.apache.commons.io.FileUtils
+import org.apache.log4j.Logger
 import spock.lang.Specification
 
 /**
  * Created by bmajur on 7/7/14.
  */
-@Log4j
+
 class RegisterTransactionTest extends Specification {
+    private static Logger log = Logger.getLogger(RegisterTransactionTest);
     def actorsTransactions = '''
 <ActorsTransactions>
     <transaction name="Register" id="rb" code="rb" asyncCode="r.as">

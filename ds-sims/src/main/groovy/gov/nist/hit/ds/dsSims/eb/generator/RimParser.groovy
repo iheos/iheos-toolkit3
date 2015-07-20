@@ -2,12 +2,14 @@ package gov.nist.hit.ds.dsSims.eb.generator
 
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 7/13/14.
  */
-@Log4j
+
 class RimParser {
+    private static Logger log = Logger.getLogger(RimParser);
     def rimGenerator
 
     RimParser() {

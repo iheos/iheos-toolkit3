@@ -6,12 +6,14 @@ import gov.nist.hit.ds.repository.simple.Configuration
 import gov.nist.hit.ds.repository.simple.SimpleId
 import gov.nist.hit.ds.repository.simple.SimpleType
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 7/5/14.
  */
-@Log4j
+
 class RepoUtils {
+    private static Logger log = Logger.getLogger(RepoUtils);
     static RepositorySource repoSource = null
     static RepositoryFactory repoFactory
 

@@ -10,6 +10,7 @@ import gov.nist.hit.ds.utilities.xml.HtmlizeXml
 import gov.nist.hit.ds.utilities.xml.OMFormatter
 import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 import org.xml.sax.SAXParseException
 
 import javax.ws.rs.Consumes
@@ -24,8 +25,9 @@ import javax.ws.rs.core.Response
  * Created by bmajur on 2/3/15.
  */
 @Path('/sim/client/{username}/{simid}')
-@Log4j
+
 class   Send {
+    private static Logger log = Logger.getLogger(Send);
     @POST
     @Consumes(MediaType.APPLICATION_XML)
 //    @Produces(MediaType.APPLICATION_XML)

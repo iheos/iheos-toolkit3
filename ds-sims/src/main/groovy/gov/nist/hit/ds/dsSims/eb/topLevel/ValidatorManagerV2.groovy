@@ -1,16 +1,15 @@
 package gov.nist.hit.ds.dsSims.eb.topLevel
-
 import gov.nist.hit.ds.actorTransaction.ActorTransactionTypeFactory
 import gov.nist.hit.ds.actorTransaction.TransactionType
 import gov.nist.hit.ds.eventLog.Fault
 import gov.nist.hit.ds.httpSoap.components.parsers.SoapMessageParser
 import gov.nist.hit.ds.httpSoap.parsers.HttpSoapParser
+import gov.nist.hit.ds.repoSupport.RepoUtils
 import gov.nist.hit.ds.repository.shared.ValidationLevel
 import gov.nist.hit.ds.repository.shared.id.AssetId
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
 import gov.nist.hit.ds.simSupport.utilities.SimUtils
-import gov.nist.hit.ds.simSupport.validationEngine.EventErrorRecorder
 import gov.nist.hit.ds.simSupport.validationEngine.EventErrorRecorderBuilder
 import gov.nist.hit.ds.tkapis.validation.MessageValidator
 import gov.nist.hit.ds.tkapis.validation.ValidateMessageResponse
@@ -23,13 +22,13 @@ import gov.nist.toolkit.valregmsg.validation.engine.ValidateMessageService
 import gov.nist.toolkit.valsupport.client.ValidationContext
 import gov.nist.toolkit.valsupport.engine.DefaultValidationContextFactory
 import gov.nist.toolkit.valsupport.engine.MessageValidatorEngine
-import groovy.util.logging.Log4j
-
+import org.apache.log4j.Logger
 /**
  * Created by bmajur on 8/28/14.
  */
-@Log4j
+
 class ValidatorManagerV2 implements MessageValidator {
+    private static Logger log = Logger.getLogger(ValidatorManagerV2);
     SimHandle simHandle
     String simId  = 'validation'
     String repositoryName  = 'ValidationRepo'
@@ -106,6 +105,7 @@ class ValidatorManagerV2 implements MessageValidator {
 
             ValidationContext vc = DefaultValidationContextFactory.validationContext()
             SoapMessageValidator.setValidationContextFromWSAction(vc, action)
+            // This is the v2 validation service manager
             ValidateMessageService vms = new ValidateMessageService(null)
             MessageValidatorEngine mvc = vms.runValidation(vc, msgHeader, msgBody, null, new EventErrorRecorderBuilder().buildNewErrorRecorder(simHandle.event))
 
@@ -113,22 +113,22 @@ class ValidatorManagerV2 implements MessageValidator {
 
             ValidateMessageResponse response = new ValidateMessageResponse()
             response.validationStatus = ValidationStatus.ERROR
-//
-//            if (transactionType) {
+
+            if (transactionType) {
 //                TransactionRunner runner = new TransactionRunner(simHandle)
 //                    if (isRequest)
 //                        runner.validateRequest()
 //                    else
 //                        runner.validateResponse()
-//
-//                response.setEventAssetId(new AssetId(simHandle.event.eventAsset.id.idString))
-//                response.setRepositoryId(new AssetId(RepoUtils.getRepository(repositoryName).id.idString))
-//                response.setValidationStatus((simHandle.event.hasErrors()) ? ValidationStatus.ERROR : ValidationStatus.OK)
-//            } else {
-//                response.setEventAssetId(new AssetId(simHandle.event.eventAsset.id.idString))
-//                response.setRepositoryId(new AssetId(RepoUtils.getRepository(repositoryName).id.idString))
-//                response.setValidationStatus(ValidationStatus.ERROR)
-//            }
+
+                response.setEventAssetId(new AssetId(simHandle.event.eventAsset.id.idString))
+                response.setRepositoryId(new AssetId(RepoUtils.getRepository(repositoryName).id.idString))
+                response.setValidationStatus((simHandle.event.hasErrors()) ? ValidationStatus.ERROR : ValidationStatus.OK)
+            } else {
+                response.setEventAssetId(new AssetId(simHandle.event.eventAsset.id.idString))
+                response.setRepositoryId(new AssetId(RepoUtils.getRepository(repositoryName).id.idString))
+                response.setValidationStatus(ValidationStatus.ERROR)
+            }
 
             SimUtils.close(simHandle)
             return response

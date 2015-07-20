@@ -8,12 +8,14 @@ import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.siteManagement.client.Site
 import gov.nist.hit.ds.siteManagement.client.TransactionBean
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 6/8/14.
  */
-@Log4j
+
 class SimSiteFactory {
+    private static Logger log = Logger.getLogger(SimSiteFactory);
 
     Site buildSite(SimConfig actorSimConfig, String name) {
         println(actorSimConfig)

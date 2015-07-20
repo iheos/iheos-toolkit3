@@ -2,12 +2,14 @@ package gov.nist.hit.ds.actorTransaction
 
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 8/27/14.
  */
-@Log4j
+
 class ActorTransactionTypeDAO {
+    static Logger log = Logger.getLogger(ActorTransactionTypeDAO.class);
     ActorTransactionTypeFactory fact
 
     ActorTransactionTypeDAO(ActorTransactionTypeFactory _fact) { fact = _fact }

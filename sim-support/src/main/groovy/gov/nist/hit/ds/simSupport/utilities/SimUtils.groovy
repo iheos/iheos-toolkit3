@@ -28,11 +28,14 @@ import gov.nist.hit.ds.xdsExceptions.ToolkitException
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
+import org.apache.log4j.Logger
+
 /**
  * Created by bmajur on 7/4/14.
  */
-@Log4j
+
 class SimUtils {
+    private static Logger log = Logger.getLogger(SimUtils);
     static final configAssetName = 'config'
     static final siteAssetName = 'site'
     static final eventsAssetName = 'Events'

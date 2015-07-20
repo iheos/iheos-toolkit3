@@ -9,13 +9,16 @@ import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.utilities.html.HttpMessageContent
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
+
 /**
  * Validate HTTP message.  Launches either MtomMessageValidator or SimpleSoapMessageValidator as appropriate.
  * @author bill
  *   
  */
-@Log4j
+
 public class HttpHeaderValidator extends ValComponentBase {
+    private static Logger log = Logger.getLogger(HttpHeaderValidator);
 	String header = null;
 	byte[] body;
 	HttpParserBa httpParser = null;

@@ -7,9 +7,11 @@ import gov.nist.hit.ds.repository.simple.SimpleType
 import gov.nist.hit.ds.utilities.csv.CSVEntry
 import gov.nist.hit.ds.utilities.csv.CSVTable
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
-@Log4j
+
 class AssertionGroupDAO {
+    private static Logger log = Logger.getLogger(AssertionGroupDAO);
     Asset parentAsset
     AssertionGroup ag
     int order = 1

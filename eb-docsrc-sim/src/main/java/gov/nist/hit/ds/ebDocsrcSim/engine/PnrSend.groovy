@@ -16,12 +16,15 @@ import gov.nist.hit.ds.xdsExceptions.XdsException
 import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
+import org.apache.log4j.Logger
+
 /**
  * Created by bmajur on 1/13/15.
  *
  */
-@Log4j
+
 class PnrSend  {
+    private static Logger log = Logger.getLogger(PnrSend);
 //    OMElement metadata_element;
 //    Map<String, DocumentHandler> documents;
 //    String endpoint;

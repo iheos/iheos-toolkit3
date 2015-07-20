@@ -4,11 +4,14 @@ import gov.nist.hit.ds.simSupport.validationEngine.ValComponentBase
 import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
+
 /**
  * Created by bmajur on 7/12/14.
  */
-@Log4j
+
 class FailsWithErrorValidator extends ValComponentBase {
+    private static Logger log = Logger.getLogger(FailsWithErrorValidator);
     SimHandle handle
 
     public FailsWithErrorValidator(SimHandle handle) {

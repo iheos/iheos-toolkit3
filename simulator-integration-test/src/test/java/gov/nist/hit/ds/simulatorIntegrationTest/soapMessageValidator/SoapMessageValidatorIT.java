@@ -1,8 +1,6 @@
 package gov.nist.hit.ds.simulatorIntegrationTest.soapMessageValidator;
 
-import gov.nist.hit.ds.actorTransaction.ActorType;
 import gov.nist.hit.ds.actorTransaction.ActorTypeFactory;
-import gov.nist.hit.ds.actorTransaction.TransactionType;
 import gov.nist.hit.ds.actorTransaction.TransactionTypeFactory;
 import gov.nist.hit.ds.eventLog.Event;
 import gov.nist.hit.ds.eventLog.assertion.Assertion;
@@ -11,7 +9,6 @@ import gov.nist.hit.ds.httpSoapValidator.components.parsers.SoapMessageParser;
 import gov.nist.hit.ds.httpSoapValidator.components.validators.SoapMessageValidator;
 import gov.nist.hit.ds.httpSoapValidator.datatypes.SoapMessage;
 import gov.nist.hit.ds.initialization.installation.InitializationFailedException;
-import gov.nist.hit.ds.initialization.installation.Installation;
 import gov.nist.hit.ds.repository.api.RepositoryException;
 import gov.nist.hit.ds.repository.simple.Configuration;
 import gov.nist.hit.ds.simSupport.client.SimId;
@@ -19,16 +16,14 @@ import gov.nist.hit.ds.simSupport.event.EventBuilder;
 import gov.nist.hit.ds.soapSupport.exceptions.SoapFaultException;
 import gov.nist.hit.ds.utilities.xml.Util;
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException;
-
-import java.io.File;
-import java.io.IOException;
-
-import javax.xml.parsers.FactoryConfigurationError;
-
 import org.apache.axiom.om.OMElement;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.xml.parsers.FactoryConfigurationError;
+import java.io.File;
+import java.io.IOException;
 
 public class SoapMessageValidatorIT {
 	File xmlInputFile;

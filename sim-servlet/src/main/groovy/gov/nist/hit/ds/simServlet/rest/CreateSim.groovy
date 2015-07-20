@@ -6,6 +6,7 @@ import gov.nist.hit.ds.simServlet.api.SimApi
 import gov.nist.hit.ds.simSupport.client.SimId
 import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 import org.xml.sax.SAXParseException
 
 import javax.ws.rs.*
@@ -16,9 +17,10 @@ import javax.ws.rs.core.Response
  * Created by bmajur on 11/19/14.
  */
 
-@Log4j
+
 @Path('/sim/create/{username}/{simid}')
 class   CreateSim {
+    private static Logger log = Logger.getLogger(CreateSim);
     @POST
     @Consumes(MediaType.APPLICATION_XML)
 //    @Produces(MediaType.APPLICATION_XML)

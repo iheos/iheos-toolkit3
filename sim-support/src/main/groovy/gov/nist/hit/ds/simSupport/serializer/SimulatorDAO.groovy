@@ -8,13 +8,16 @@ import gov.nist.hit.ds.xdsExceptions.ToolkitException
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 import groovy.xml.MarkupBuilder
+import org.apache.log4j.Logger
+
 /**
  * Created by bmajur on 9/23/14.
  */
 
 // TODO: needs unit tests
-@Log4j
+
 class SimulatorDAO {
+    private static Logger log = Logger.getLogger(SimulatorDAO);
 
     static String toXML(SimConfig config) {
         def writer = new StringWriter()

@@ -5,14 +5,16 @@ import groovy.util.logging.Log4j
 import groovy.xml.StreamingMarkupBuilder
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
+import org.apache.log4j.Logger
 
 import static groovyx.net.http.ContentType.XML
 
 /**
  * Created by bill on 6/3/15.
  */
-@Log4j
+
 class RestSend {
+    private static Logger log = Logger.getLogger(RestSend);
 
     static String run(uri, message) {
         def returnvalue = null

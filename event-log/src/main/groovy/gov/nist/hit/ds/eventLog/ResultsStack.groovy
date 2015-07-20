@@ -3,11 +3,14 @@ import gov.nist.hit.ds.eventLog.assertion.AssertionStatus
 import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.shared.PropertyKey
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
+
 /**
  * Created by bmajur on 12/6/14.
  */
-@Log4j
+
 class ResultsStack {
+    private static Logger log = Logger.getLogger(ResultsStack);
     List<ValidatorResults> stack = []
     List<ValidatorResults> backing = []  // entire history
 

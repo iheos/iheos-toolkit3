@@ -14,12 +14,15 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.utilities.xml.XmlUtil
 import groovy.util.logging.Log4j
 import org.apache.axiom.om.OMElement
+import org.apache.log4j.Logger
+
 /**
  * Created by bmajur on 10/7/14.
  */
 // TODO Errors not extracted from Repository correctly
-@Log4j
+
 class RegistryResponseGenerator {
+    private static Logger log = Logger.getLogger(RegistryResponseGenerator);
     SimHandle simHandle
     List<CSVRow> data
     String[] displayColumns = ["ID","STATUS", "EXPECTED", "FOUND", "MSG", "CODE"]
