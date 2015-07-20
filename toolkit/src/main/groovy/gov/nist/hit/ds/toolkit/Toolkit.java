@@ -129,6 +129,9 @@ public class Toolkit {
                 throw new RuntimeException(e);
             }
         }
+
+        gov.nist.toolkit.installation.Installation.installation().warHome(Toolkit.warRootFile);
+
     }
 
     /**
