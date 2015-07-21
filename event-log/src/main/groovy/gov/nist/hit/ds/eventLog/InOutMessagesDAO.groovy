@@ -4,9 +4,11 @@ import gov.nist.hit.ds.repository.api.Asset
 import gov.nist.hit.ds.repository.api.RepositoryException
 import gov.nist.hit.ds.repository.simple.SimpleType
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
-@Log4j
+
 class InOutMessagesDAO {
+    private static Logger log = Logger.getLogger(InOutMessagesDAO);
 	Asset inOutAsset;
 	final static String reqHdrType = "reqHdrType";
 	final static String reqBodyType = "reqBodyType";

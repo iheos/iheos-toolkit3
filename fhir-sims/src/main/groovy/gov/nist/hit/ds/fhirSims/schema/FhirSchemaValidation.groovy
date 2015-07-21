@@ -10,8 +10,9 @@ import org.xml.sax.SAXException
 /**
  * Created by bmajur on 11/18/14.
  */
-@Log4j
+
 public class FhirSchemaValidation {
+    private static Logger log = Logger.getLogger(FhirSchemaValidation);
 
     // empty string as result means no errors
     static public void run(String metadata, File localSchema, boolean includesFeed, ErrorHandler eHandler)  {

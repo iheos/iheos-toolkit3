@@ -15,12 +15,14 @@ import gov.nist.hit.ds.xdsExceptions.ExceptionUtil
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
 import org.apache.commons.lang.ArrayUtils
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 7/5/14.
  */
-@Log4j
+
 class TransactionRunner {
+    private static Logger log = Logger.getLogger(TransactionRunner);
 //    String endpoint
     EndpointBuilder endpointBuilder
     SimId simId

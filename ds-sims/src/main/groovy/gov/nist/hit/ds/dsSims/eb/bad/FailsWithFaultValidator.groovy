@@ -7,9 +7,11 @@ import gov.nist.hit.ds.simSupport.validationEngine.annotation.Validation
 import gov.nist.hit.ds.soapSupport.FaultCode
 import gov.nist.hit.ds.soapSupport.SoapFaultException
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
-@Log4j
+
 public class FailsWithFaultValidator extends ValComponentBase {
+    private static Logger log = Logger.getLogger(FailsWithFaultValidator);
     SimHandle handle
 
     public FailsWithFaultValidator(SimHandle handle) {

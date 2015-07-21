@@ -4,6 +4,7 @@ import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import gov.nist.hit.ds.xdsExceptions.XdsInternalException
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 import org.apache.xerces.parsers.DOMParser
 import org.xml.sax.ErrorHandler
 import org.xml.sax.InputSource
@@ -11,8 +12,9 @@ import org.xml.sax.SAXException
 /**
  * Created by bmajur on 11/18/14.
  */
-@Log4j
+
 public class EbSchemaValidation {
+    private static Logger log = Logger.getLogger(EbSchemaValidation);
 
     // empty string as result means no errors
     static public void run(String metadata, int metadataType, File localSchema, ErrorHandler eHandler)  {

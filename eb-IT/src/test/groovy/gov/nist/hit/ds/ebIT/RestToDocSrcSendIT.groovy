@@ -26,8 +26,9 @@ import spock.lang.Specification
  *
  * Created by bill on 6/3/15.
  */
-@Log4j
+
 class RestToDocSrcSendIT extends Specification {
+    private static Logger log = Logger.getLogger(RestToDocSrcSendIT);
 
 //    def clientUserName = 'RestToDocSrcSendIT'
 //    def clientSimName = 'DocSrc'

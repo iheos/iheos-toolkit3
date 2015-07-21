@@ -11,12 +11,14 @@ import gov.nist.hit.ds.soapSupport.SoapFaultException
 import gov.nist.hit.ds.utilities.datatypes.RequiredOptional
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 2/11/15.
  */
-@Log4j
+
 class AssertionApi {
+    static Logger log = Logger.getLogger(AssertionApi.class);
     ValComponentBase base
     AssertionGroup ag
     String dots = '...'

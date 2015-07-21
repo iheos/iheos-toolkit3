@@ -8,11 +8,14 @@ import gov.nist.hit.ds.simSupport.config.TransactionSimConfigElement
 import gov.nist.hit.ds.simSupport.endpoint.EndpointBuilder
 import gov.nist.hit.ds.xdsExceptions.ToolkitRuntimeException
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
+
 /**
  * Created by bmajur on 6/6/14.
  */
-@Log4j
+
 class SimConfigFactory {
+    private static Logger log = Logger.getLogger(SimConfigFactory);
 
     SimConfig buildSim(SimSystemConfig config, String user, SimId simId, ActorType actorType) {
         log.debug("SimConfigFactory: actorType ${actorType.name}")

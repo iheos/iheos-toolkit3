@@ -9,12 +9,14 @@ import gov.nist.hit.ds.simSupport.simulator.SimHandle
 import gov.nist.hit.ds.simSupport.transaction.Transaction
 import gov.nist.hit.ds.simSupport.transaction.ValidationStatus
 import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 
 /**
  * Created by bmajur on 7/7/14.
  */
-@Log4j
+
 class RegisterTransaction implements Transaction {
+    private static Logger log = Logger.getLogger(RegisterTransaction);
     protected Metadata m = null;
 //    public MetadataCollection mc;
 //    public MetadataCollection delta;
