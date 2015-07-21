@@ -34,7 +34,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, String location, String resource, Object log_message) {
-        logger.info(msg);
+        logger.info("ERROR - " + msg);
         String[] msgLines = msg.split("\\n");
         if (msgLines == null) return;
         for (int i=0; i<msgLines.length; i++) {
@@ -50,7 +50,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, String location, String resource) {
-        logger.info(msg);
+        logger.info("ERROR - " + msg);
         String[] msgLines = msg.split("\\n");
         if (msgLines == null) return;
         for (int i=0; i<msgLines.length; i++) {
@@ -66,7 +66,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, Object location, String resource) {
-        logger.info(msg);
+        logger.info("ERROR - " + msg);
         String[] msgLines = msg.split("\\n");
         if (msgLines == null) return;
         for (int i=0; i<msgLines.length; i++) {
@@ -82,7 +82,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(XdsErrorCode.Code code, Exception e) {
-        logger.info(e.getMessage());
+        logger.info("ERROR - " + e.getMessage());
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.ERROR);
         a.setCode(code.name());
@@ -93,7 +93,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(XdsErrorCode.Code code, String msg, String location, String severity, String resource) {
-        logger.info(msg);
+        logger.info("ERROR - " + msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.ERROR);
         a.setCode(code.name());
@@ -106,7 +106,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void err(String code, String msg, String location, String severity, String resource) {
-        logger.info(msg);
+        logger.info("ERROR - " + msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.ERROR);
         a.setCode(code);
@@ -119,6 +119,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void warning(String code, String msg, String location, String resource) {
+        logger.info("WARNING - " + msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.WARNING);
         a.setCode(code);
@@ -130,6 +131,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void warning(XdsErrorCode.Code code, String msg, String location, String resource) {
+        logger.info("WARNING - " + msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.WARNING);
         a.setCode(code.name());
@@ -141,6 +143,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void sectionHeading(String msg) {
+        logger.info("Section - " + msg);
         Assertion a = new Assertion();
         a.setMsg(msg);
         a.setLocation("SectionHeading");
@@ -149,6 +152,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void challenge(String msg) {
+        logger.info("Challenge - " + msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.NONE);
         a.setMsg(msg);
@@ -158,6 +162,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void externalChallenge(String msg) {
+        logger.info("ExternalChallenge - " + msg);
         Assertion a = new Assertion();
         a.setMsg(msg);
         a.setLocation("ExternalChallenge");
@@ -166,6 +171,7 @@ public class EventErrorRecorder extends ValComponentBase implements ErrorRecorde
 
     @Override
     public void detail(String msg) {
+        logger.info("Detail - " + msg);
         Assertion a = new Assertion();
         a.setStatus(AssertionStatus.NONE);
         a.setMsg(msg);

@@ -3,7 +3,18 @@ Content-Type: application/xop+xml; charset=UTF-8; type="application/soap+xml"
 Content-Transfer-Encoding: binary
 Content-ID: <0.c021d9642fc5e25ff9acdf642db2e558fb6bf240c54562bc@apache.org>
 
-<?xml version='1.0' encoding='UTF-8'?><soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope"><soapenv:Header xmlns:wsa="http://www.w3.org/2005/08/addressing"><wsa:To soapenv:mustUnderstand="true">http://localhost:8001/tf6/services/xdsrepositoryb</wsa:To><wsa:MessageID soapenv:mustUnderstand="true">urn:uuid:F61B2712BA55E65B541421267766024</wsa:MessageID><wsa:Action soapenv:mustUnderstand="true">urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b</wsa:Action></soapenv:Header><soapenv:Body><xdsb:ProvideAndRegisterDocumentSetRequest xmlns:xdsb="urn:ihe:iti:xds-b:2007"><lcm:SubmitObjectsRequest xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0"><rim:RegistryObjectList xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0"><rim:ExtrinsicObject id="urn:uuid:2ed1403b-8242-4187-beac-b5179e7f5f30" mimeType="text/plain" objectType="urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1"><rim:Slot name="creationTime"><rim:ValueList><rim:Value>20061224</rim:Value>
+<?xml version='1.0' encoding='UTF-8'?>
+<soapenv:Envelope xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">
+  <soapenv:Header xmlns:wsa="http://www.w3.org/2005/08/addressing">
+      <wsa:To soapenv:mustUnderstand="true">http://localhost:8001/tf6/services/xdsrepositoryb</wsa:To>
+      <wsa:MessageID soapenv:mustUnderstand="true">urn:uuid:F61B2712BA55E65B541421267766024</wsa:MessageID>
+  </soapenv:Header>
+  <soapenv:Body>
+    <xdsb:ProvideAndRegisterDocumentSetRequest xmlns:xdsb="urn:ihe:iti:xds-b:2007">
+        <lcm:SubmitObjectsRequest xmlns:lcm="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0">
+            <rim:RegistryObjectList xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0">
+                <rim:ExtrinsicObject id="urn:uuid:2ed1403b-8242-4187-beac-b5179e7f5f30" mimeType="text/plain" objectType="urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1">
+                    <rim:Slot name="creationTime"><rim:ValueList><rim:Value>20061224</rim:Value>
                
             </rim:ValueList>
             

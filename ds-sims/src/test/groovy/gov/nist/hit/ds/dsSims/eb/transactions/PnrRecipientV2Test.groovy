@@ -89,7 +89,7 @@ class PnrRecipientV2Test extends Specification {
         println simHandle.event.errorAssertionIds()
 
         then:
-        response.validationStatus != ValidationStatus.OK
+        response.validationStatus == ValidationStatus.OK
     }
 
     def 'Test bad action'() {
@@ -129,18 +129,6 @@ class PnrRecipientV2Test extends Specification {
         response.validationStatus != ValidationStatus.OK
     }
 
-    def 'Unknown error'() {
-        setup:
-        def header = getClass().classLoader.getResource('pnr/unknownerror/Header.txt').text
-        def body = getClass().classLoader.getResource('pnr/unknownerror/Message.bytes').text
-
-        when:
-        run(header,body)
-
-        then:
-        response.validationStatus != ValidationStatus.OK
-    }
-
     def 'Response message'() {
         setup:
         def header = getClass().classLoader.getResource('pnr/responsemessage/Request Header.txt').text
@@ -150,6 +138,6 @@ class PnrRecipientV2Test extends Specification {
         run(header,body)
 
         then:
-        response.validationStatus != ValidationStatus.OK
+        response.validationStatus == ValidationStatus.OK
     }
 }

@@ -105,6 +105,7 @@ class ValidatorManagerV2 implements MessageValidator {
 
             ValidationContext vc = DefaultValidationContextFactory.validationContext()
             SoapMessageValidator.setValidationContextFromWSAction(vc, action)
+            vc.hasSoap = true
             // This is the v2 validation service manager
             ValidateMessageService vms = new ValidateMessageService(null)
             MessageValidatorEngine mvc = vms.runValidation(vc, msgHeader, msgBody, null, new EventErrorRecorderBuilder().buildNewErrorRecorder(simHandle.event))
