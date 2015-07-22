@@ -37,7 +37,8 @@ public class HomeLinkButton extends IButton {
             public void onClick(ClickEvent event) {
                 // FIXME unsafe code if refactored
                 if (title == "Find Documents")
-                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFindDocumentsTabCode()));
+//                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFindDocumentsTabCode()));
+                    placeController.goTo(new TabPlace(TabNamesManager.getInstance().getFindDocumentsV2TabCode()));
 //                    Util.EVENT_BUS.fireEvent(new OpenTabEvent(TabNamesUtil.getInstance().getFindDocumentsTabCode()));
                 else if (title == "MPQ Find Documents")
                     placeController.goTo(new TabPlace(TabNamesManager.getInstance().getMpqFindDocumentsTabCode()));

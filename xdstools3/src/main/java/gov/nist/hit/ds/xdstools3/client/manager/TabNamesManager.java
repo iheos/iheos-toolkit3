@@ -22,6 +22,7 @@ public class TabNamesManager {
     }
 
     private final String findDocumentsTabCode = "FIND_DOCUMENTS";
+    private final String findDocumentsV2TabCode = "FIND_DOCUMENTS_V2";
     private final String mpqFindDocumentsTabCode = "MPQ_FIND_DOCUMENTS";
     private final String messageValidatorTabCode = "MESSAGE_VALIDATOR";
     private final String adminTabCode = "ADMIN";
@@ -54,6 +55,9 @@ public class TabNamesManager {
 
     public String getFindDocumentsTabCode() {
         return findDocumentsTabCode;
+    }
+    public String getFindDocumentsV2TabCode() {
+        return findDocumentsV2TabCode;
     }
     public String getAdminTabCode() {
         return adminTabCode;

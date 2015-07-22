@@ -27,6 +27,7 @@ public class HomeTab extends GenericTab {
         queriesAndRetrieves.addItem("Get Folders", true);
         queriesAndRetrieves.addItem("Get Folder and Contents", true);
         queriesAndRetrieves.addItem("Get Submission Set and Contents", true); */
+        queriesAndRetrieves.addItem("Find Documents", false);
         queriesAndRetrieves.addItem("Query - Retrieve - Submit", true);
 
 

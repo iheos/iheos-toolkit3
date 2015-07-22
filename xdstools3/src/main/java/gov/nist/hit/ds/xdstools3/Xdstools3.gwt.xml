@@ -31,6 +31,8 @@
     <inherits name='gov.nist.hit.ds.repository.ui.RepositoryWidgetsUI' />
     <!-- end repository related -->
 
+    <!-- ================= Inherit v2 module ================= -->
+    <inherits name='gov.nist.toolkit.xdstools2.Xdstools2_NOEP' />
 
 
     <!-- ============ Specify the app entry point class ============== -->
@@ -39,7 +41,7 @@
 
     <!-- Uncomment this line to force GWT compiler to only generate javascript
         for Ie10 browsers. Chrome is always supported. -->
-    <set-property name="user.agent" value="ie9" />
+    <set-property name="user.agent" value="safari" />
 
 
     <!-- Uncomment this line to force GWT compiler to only generate javascript

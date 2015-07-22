@@ -34,6 +34,7 @@ import gov.nist.hit.ds.xdstools3.client.tabs.connectathonTabs.*;
 import gov.nist.hit.ds.xdstools3.client.tabs.contactTab.ContactTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.docEntryEditorTab.DocEntryEditorTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.findDocumentsTab.FindDocumentTab;
+import gov.nist.hit.ds.xdstools3.client.tabs.findDocumentsTab.FindDocumentsV2Tab;
 import gov.nist.hit.ds.xdstools3.client.tabs.homeTab.HomeTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.logBrowserTab.LogBrowserTab;
 import gov.nist.hit.ds.xdstools3.client.tabs.mhdTabs.MHDValidatorTab;
@@ -266,6 +267,9 @@ public class Xdstools3ActivityView extends AbstractActivity implements AcceptsOn
         }
         else if (tabName.equals(TabNamesManager.getInstance().getFindDocumentsTabCode())) {
             tab = new FindDocumentTab();
+        }
+        else if (tabName.equals(TabNamesManager.getInstance().getFindDocumentsV2TabCode())) {
+            tab = new FindDocumentsV2Tab();
         }
         else if (tabName.equals(TabNamesManager.getInstance().getMpqFindDocumentsTabCode())) {
             tab = new MPQTab();
